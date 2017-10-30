@@ -740,7 +740,6 @@ model.addObject("toDate",toDate);
 
 	
 	
-public static String fromDateGvn, toDateGvn;
 	
 	@RequestMapping(value = "/showGateGvnDetails", method = RequestMethod.GET)
 	public ModelAndView showGateGvnDetails(HttpServletRequest request, HttpServletResponse response) {
@@ -750,17 +749,16 @@ public static String fromDateGvn, toDateGvn;
 
 			Constants.mainAct = 12;
 			Constants.subAct = 121;
-			System.out.println("before getting from date ==" + fromDateGvn);
-			System.out.println("before getting to date== " + toDateGvn);
+			
 
 			RestTemplate restTemplate = new RestTemplate();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			try {
 
-				if (fromDateGvn == null && toDate == null) {
-					fromDateGvn = request.getParameter("from_date");
-					toDateGvn = request.getParameter("to_date");
+			
+					String fromDateGvn = request.getParameter("from_date");
+					String toDateGvn = request.getParameter("to_date");
 
 					System.out.println("from date----------- =" + fromDateGvn);
 					System.out.println("to date---- " + toDateGvn);
@@ -768,14 +766,7 @@ public static String fromDateGvn, toDateGvn;
 
 					map.add("fromDate", fromDateGvn);
 					map.add("toDate", toDateGvn);
-				} else {
-					map.add("fromDate", fromDateGvn);
-					map.add("toDate", toDateGvn);
-					System.out.println("inside else");
-					System.out.println("from date----------- =" + fromDateGvn);
-					System.out.println("to date---- " + toDateGvn);
-
-				}
+				
 			} catch (Exception e) {
 				System.out.println("ex in getting dates ---line 780");
 			}
@@ -796,8 +787,7 @@ public static String fromDateGvn, toDateGvn;
 			}
 
 			model.addObject("gvnList", getGrnGvnDetails);
-			model.addObject("fromDate", fromDateGvn);
-			model.addObject("toDate", toDateGvn);
+			
 
 			System.out.println("grn details " + getGrnGvnDetails.toString());
 
@@ -811,6 +801,148 @@ public static String fromDateGvn, toDateGvn;
 		return model;
 
 	}
+	
+	
+	
+	@RequestMapping(value = "/insertGateGvnByCheckBoxes", method = RequestMethod.GET)//Using checkboxes to insert
+	public String insertGatevrnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
+
+		Constants.mainAct = 9;
+		Constants.subAct = 91;
+
+		System.out.println("from date in getGrnId " + fromDate);
+		try {
+			String[] grnIdList = request.getParameterValues("select_to_agree");
+
+			ModelAndView model = new ModelAndView("grngvn/gateGrn");
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			List<GrnGvn> postGrnGvnList = new ArrayList<GrnGvn>();
+
+			PostGrnGvnList postGrnList = new PostGrnGvnList();
+
+			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
+			System.out.println("grn details line 191 " + getGrnGvnDetails.toString());
+
+			/*
+			 * for Ajax String grnId = request.getParameter("checkbox_value");
+			 * 
+			 * System.out.println("grn values --------" + grnId);
+			 * 
+			 * grnId = grnId.substring(1, grnId.length() - 1);
+			 * 
+			 * grnId = grnId.substring(0, grnId.length() - 1);
+			 * System.out.println("grn values AFTER --------" + grnId); List<String> grnIds
+			 * = new ArrayList();
+			 * 
+			 * grnIds = Arrays.asList(grnId.split(","));
+			 * System.out.println("grn ids arraylist =" + grnIds.toString()); end for Ajax
+			 */
+			System.out.println("before for");
+
+			for (int i = 0; i < grnIdList.length; i++) {
+				System.out.println("grn id List" + grnIdList[i]);
+				int apLoginGate=Integer.parseInt(request.getParameter("approve_gate_login")+grnIdList[i]);
+				
+				System.out.println("approve login gate ="+apLoginGate);
+				
+				System.out.println("detail list = " + getGrnGvnDetails.get(i).getGrnGvnId());
+				for (int j = 0; j < getGrnGvnDetails.size(); j++) {
+
+					if (Integer.parseInt(grnIdList[i]) == getGrnGvnDetails.get(j).getGrnGvnId()) {
+
+						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						Calendar cal = Calendar.getInstance();
+						System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
+
+						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+						java.util.Date date = null;
+
+						try {
+							date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate());
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+
+						java.sql.Date grnGvnDate = new Date(date.getTime());
+
+						GrnGvn postGrnGvn = new GrnGvn();
+
+						postGrnGvn.setGrnGvnDate(grnGvnDate);// 1
+						postGrnGvn.setGrnGvnId(getGrnGvnDetails.get(j).getGrnGvnId());
+						postGrnGvn.setBillNo(getGrnGvnDetails.get(j).getBillNo());// 2
+						postGrnGvn.setFrId(getGrnGvnDetails.get(j).getFrId());// 3
+						postGrnGvn.setItemId(getGrnGvnDetails.get(j).getItemId());// 4
+						postGrnGvn.setItemRate(getGrnGvnDetails.get(j).getItemRate());// 5
+						postGrnGvn.setItemMrp(getGrnGvnDetails.get(j).getItemMrp());// 6
+						postGrnGvn.setGrnGvnQty(getGrnGvnDetails.get(j).getGrnGvnQty());// 7
+						postGrnGvn.setGrnType(getGrnGvnDetails.get(j).getGrnType());// 9
+						postGrnGvn.setIsGrn(getGrnGvnDetails.get(j).getIsGrn());// 10
+						postGrnGvn.setIsGrnEdit(getGrnGvnDetails.get(j).getIsGrnEdit());// 11
+						postGrnGvn.setGrnGvnEntryDateTime(getGrnGvnDetails.get(j).getGrnGvnEntryDateTime());// 12
+						postGrnGvn.setFrGrnGvnRemark(getGrnGvnDetails.get(j).getFrGrnGvnRemark());// 13
+						postGrnGvn.setGvnPhotoUpload1(getGrnGvnDetails.get(j).getGvnPhotoUpload1());// 14
+						postGrnGvn.setGvnPhotoUpload2(getGrnGvnDetails.get(j).getGvnPhotoUpload2());// 15
+						postGrnGvn.setGrnGvnStatus(2);// 16
+						postGrnGvn.setApprovedLoginGate(apLoginGate);// 17dateFormat.format(cal.getTime()));//18
+						postGrnGvn.setApprovedRemarkGate("Def: GVN Approved by Gate");// 19
+
+						postGrnGvn.setApprovedLoginStore(0);// 20
+						postGrnGvn.setApprovedDateTimeStore(getGrnGvnDetails.get(j).getApprovedDateTimeStore());// 21
+						postGrnGvn.setApprovedRemarkStore(getGrnGvnDetails.get(j).getApprovedRemarkStore());// 22
+						postGrnGvn.setApprovedLoginAcc(0);// 23
+						postGrnGvn.setGrnApprovedDateTimeAcc(getGrnGvnDetails.get(j).getGrnApprovedDateTimeAcc());// 24
+						postGrnGvn.setApprovedRemarkAcc(getGrnGvnDetails.get(j).getApprovedRemarkAcc());// 25
+
+						postGrnGvn.setDelStatus(0);// 26
+						postGrnGvn.setGrnGvnQtyAuto(0);// 27
+						postGrnGvn.setApproveimedDateTimeGate(dateFormat.format(cal.getTime()));
+
+						postGrnGvn.setGrnGvnAmt(getGrnGvnDetails.get(j).getGrnGvnAmt());
+
+						postGrnGvnList.add(postGrnGvn);
+
+						System.out.println("Done it inside if ");
+						System.out.println("grn ID=  " + grnIdList[i]);
+
+					} // end of if
+
+					else {
+
+						System.out.println("No match found " + getGrnGvnDetails.get(j).getGrnGvnId());
+					} // end of else
+
+				} // inner for
+
+				postGrnList.setGrnGvn(postGrnGvnList);
+
+			} // outer for
+			System.out.println("after for");
+
+			// postGrnList.setGrnGvn(postGrnGvnList);
+
+			System.out.println("post grn for rest----- " + postGrnList.toString());
+			System.out.println("post grn for rest size " + postGrnList.getGrnGvn().size());
+
+			Info info = restTemplate.postForObject(Constants.url + "insertGrnGvn", postGrnList, Info.class);
+
+			// System.out.println("Error in Getting grn details " + e.getMessage());
+
+		} catch (Exception e) {
+
+			System.out.println("Exce in Insert Grn " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		return "redirect:/showGateGrnDetails";
+
+	}
+	
 	
 	
 	
