@@ -609,7 +609,17 @@
 						</c:otherwise>
 					</c:choose>
 					<a href="${pageContext.request.contextPath}/showAccountGrn">Account GRN</a>
-
+					</li>
+					<c:choose>
+						<c:when test="${Constants.subAct==93}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/displayGrn">View GRN</a>
+					</li>
 
 				</ul>
 				<!-- END Submenu -->
@@ -679,7 +689,17 @@
 					</c:choose>
 					<a href="${pageContext.request.contextPath}/showAccountGvn">Account GVN</a>
 
-
+					</li>
+					<c:choose>
+						<c:when test="${Constants.subAct==124}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/displayGvn">View GvN</a>
+					</li>
 
 				</ul>
 				<!-- END Submenu -->
