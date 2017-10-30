@@ -789,11 +789,11 @@ model.addObject("toDate",toDate);
 			model.addObject("gvnList", getGrnGvnDetails);
 			
 
-			System.out.println("grn details " + getGrnGvnDetails.toString());
+			System.out.println("gvn  details " + getGrnGvnDetails.toString());
 
 		} catch (Exception e) {
 
-			System.out.println("Error in Getting grn details " + e.getMessage());
+			System.out.println("Error in Getting gvn details " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -809,12 +809,18 @@ model.addObject("toDate",toDate);
 
 		Constants.mainAct = 9;
 		Constants.subAct = 91;
+		
+		ModelAndView model = new ModelAndView("grngvn/gateGrn");
 
-		System.out.println("from date in getGrnId " + fromDate);
+
 		try {
 			String[] grnIdList = request.getParameterValues("select_to_agree");
+			
+			for(int k=0;k<grnIdList.length;k++) {
+				System.out.println("GVN id for gate approval "+grnIdList[k]);
+				
+			}
 
-			ModelAndView model = new ModelAndView("grngvn/gateGrn");
 
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -845,7 +851,7 @@ model.addObject("toDate",toDate);
 
 			for (int i = 0; i < grnIdList.length; i++) {
 				System.out.println("grn id List" + grnIdList[i]);
-				int apLoginGate=Integer.parseInt(request.getParameter("approve_gate_login")+grnIdList[i]);
+				int apLoginGate=Integer.parseInt(request.getParameter("approve_gate_login"+grnIdList[i]));
 				
 				System.out.println("approve login gate ="+apLoginGate);
 				
@@ -939,7 +945,7 @@ model.addObject("toDate",toDate);
 
 		}
 
-		return "redirect:/showGateGrnDetails";
+		return "redirect:/showGateGvnDetails";
 
 	}
 	
