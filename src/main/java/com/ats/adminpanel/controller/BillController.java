@@ -18,9 +18,14 @@ import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -37,6 +42,8 @@ import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.GenerateBill;
 import com.ats.adminpanel.model.GenerateBillList;
+import com.ats.adminpanel.model.GetSellBillDetail;
+import com.ats.adminpanel.model.GetSellBillHeader;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.billing.GetBillDetail;
@@ -67,6 +74,7 @@ public class BillController {
 
 	GenerateBillList generateBillList = new GenerateBillList();
 	List<String> frList = new ArrayList<>();
+	
 
 
 	public static List<GetBillDetail> billDetailsList;
@@ -74,7 +82,8 @@ public class BillController {
 
 	List<GetBillHeader> billHeadersList = new ArrayList<>();
 
-	
+	List<GetSellBillHeader> getSellBillHeaderList;
+	List<GetSellBillDetail>getSellBillDetailList;
 	
 	
 	
@@ -811,6 +820,127 @@ public class BillController {
 		return "redirect:/showBillList";
 		
 		}
+		
+		
+		//ganesh
+		
+	      
+		@RequestMapping(value = "/viewBill", method = RequestMethod.GET)
+		public ModelAndView viewBill(HttpServletRequest request,
+					HttpServletResponse response) {
+
+				ModelAndView model = new ModelAndView("billing/sellBillHeader");
+				
+				RestTemplate restTemplate = new RestTemplate();
+				allFrIdNameList = new AllFrIdNameList();
+				try {
+
+					allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+
+				} catch (Exception e) {
+					System.out.println("Exception in getAllFrIdName" + e.getMessage());
+					e.printStackTrace();
+
+				}
+				
+				model.addObject("allFrIdNameList", allFrIdNameList.getFrIdNamesList());
+				
+				return model;			
+		}
+		
+		
+		@RequestMapping(value = "/getSellBillHeader", method = RequestMethod.GET)
+		public @ResponseBody List<GetSellBillHeader> getSellBillHeader(HttpServletRequest request,
+			HttpServletResponse response) {
+					
+			
+			System.out.println("in method");
+			String fromDate=request.getParameter("fromDate");
+			String toDate=request.getParameter("toDate");
+			String selectedFr = request.getParameter("fr_id_list");
+			selectedFr=selectedFr.substring(1, selectedFr.length()-1);
+			selectedFr=selectedFr.replaceAll("\"", "");
+			
+				
+						RestTemplate restTemplate = new RestTemplate();
+						
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			
+			map.add("frId", selectedFr);
+			map.add("fromDate", fromDate);
+			map.add("toDate", toDate);
+			//getFrGrnDetail
+			try {
+			  
+			ParameterizedTypeReference<List<GetSellBillHeader>> typeRef = new ParameterizedTypeReference<List<GetSellBillHeader>>() {
+			};
+			ResponseEntity<List<GetSellBillHeader>> responseEntity = restTemplate.exchange(Constants.url + "getSellBillHeader",
+					HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			
+			getSellBillHeaderList = responseEntity.getBody();	
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+				System.out.println(e.getMessage());
+			}
+			
+			
+			 System.out.println("Sell Bill Header "+getSellBillHeaderList.toString());
+			
+				
+						
+			
+		
+		return getSellBillHeaderList;
+		
+		}
+		
+		@RequestMapping(value = "/viewBillDetails", method = RequestMethod.GET)
+		public ModelAndView viewBillDetails(HttpServletRequest request,
+					HttpServletResponse response) {
+
+				ModelAndView model = new ModelAndView("billing/sellBillDetail");
+				
+
+				System.out.println("in method");
+				
+				String sellBill_no=request.getParameter("sellBillNo");
+
+				String billDate=request.getParameter("billDate");
+				String frName=request.getParameter("frName");
+				
+				
+					
+							RestTemplate restTemplate = new RestTemplate();
+							
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				int sellBillNo=Integer.parseInt(sellBill_no);
+				map.add("sellBillNo", sellBillNo);
+				
+				try {
+				
+				ParameterizedTypeReference<List<GetSellBillDetail>> typeRef = new ParameterizedTypeReference<List<GetSellBillDetail>>() {
+				};
+				ResponseEntity<List<GetSellBillDetail>> responseEntity = restTemplate.exchange(Constants.url + "getSellBillDetail",
+						HttpMethod.POST, new HttpEntity<>(map), typeRef);
+				
+				getSellBillDetailList = responseEntity.getBody();	
+				}
+				catch (Exception e) {
+					e.printStackTrace();
+					System.out.println(e.getMessage());
+				}
+				
+				
+				 System.out.println("Sell Bill Detail "+getSellBillDetailList.toString());
+				
+				model.addObject("getSellBillDetailList",getSellBillDetailList);
+				model.addObject("sellBillNo", sellBillNo);	
+				model.addObject("billDate",billDate);
+				model.addObject("frName",frName);
+				
+				return model;			
+		}	
 		
 		
 		

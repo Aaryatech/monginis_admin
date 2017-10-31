@@ -550,6 +550,16 @@
 					<a href="${pageContext.request.contextPath}/showBillList">Bill List</a>
 					</li>
 					
+						<c:choose>
+						<c:when test="${Constants.subAct==84}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/viewBill">Sell Bill List</a>
+					</li>
 
 					
 
