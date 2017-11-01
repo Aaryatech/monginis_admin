@@ -95,7 +95,11 @@ div.panel {
 		<c:url var="insertAccGrnProcessAgree" value="/insertAccGrnProcessAgree" />
 
 		<c:url var="insertAccGrnProcessDisAgree" value="/insertAccGrnProcessDisAgree" />
+		
+		<c:url var="getDateForGrnAcc" value="/getDateForGrnAcc" />
 
+
+getDateForGrnAcc
 	
 
 	<%-- 	<c:url var="getGrnId" value="/getGrnId" />
@@ -170,8 +174,9 @@ div.panel {
 									<label class="col-sm-3 col-lg-2 control-label">From
 										Date</label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="dp1" size="16"
-											type="text" name="from_date" value="${fromDate}" required />
+										<input class="form-control date-picker" id="from_date" size="16"
+											type="text" name="from_date" value="${fromDate}" required 
+											onblur="getDate()" />
 									</div>
 								</div>
 
@@ -179,8 +184,9 @@ div.panel {
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">To Date</label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="dp2" size="16"
-											type="text" value="${toDate}" name="to_date" required />
+										<input class="form-control date-picker" id="to_date" size="16"
+											type="text" value="${toDate}" name="to_date" required 
+											onblur="getDate()" />
 									</div>
 								</div>
 
@@ -848,6 +854,37 @@ for (i = 0; i < acc.length; i++) {
   }
 }
 </script>
+
+<script type="text/javascript">
+
+function getDate(){
+	
+	
+	var fromDate=$("#from_date").val();
+	var toDate=$("#to_date").val();
+	
+	alert(fromDate);
+	alert(toDate);
+	
+	
+	$.getJSON('${getDateForGrnAcc}',
+			{
+			
+			fromDate : fromDate,
+			toDate:toDate,
+				
+				ajax : 'true',
+			
+
+}
+);
+
+	
+}
+
+
+</script>
+
 
 
 
