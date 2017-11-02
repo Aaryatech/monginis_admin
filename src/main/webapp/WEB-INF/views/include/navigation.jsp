@@ -13,7 +13,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
+ 
 <!--base css styles-->
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/bootstrap.min.css">
