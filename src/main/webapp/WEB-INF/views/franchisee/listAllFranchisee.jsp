@@ -87,7 +87,7 @@
 										<i class="fa fa-bars"></i>  Franchisees List
 									</h3>
 									<div class="box-tool">
-										<a href="${pageContext.request.contextPath}/resources/index.php/franchisee/list_all">Back to
+										<a href="${pageContext.request.contextPath}/listAllFranchisee">Back to
 											List</a> <a data-action="collapse" href="#"><i
 											class="fa fa-chevron-up"></i></a>
 									</div>
@@ -101,10 +101,16 @@
         <thead>
             <tr>
                 <th width="18" style="width:18px">#</th>
-                <th width="195" align="left">Name</th>
-                <th width="447" align="left">Image</th>
-                <th width="344" align="left">Owner</th>
+                <th width="100" align="left">Name</th>
+                <th width="180" align="left">Image</th>
+                <th width="70" align="left">Owner Name</th>
                 <th width="70" align="left">City</th>
+                 <th width="70" align="left">Mobile No.</th>
+                  <th width="70" align="left">Route</th>
+                   <th width="70" align="left">Rate Type</th>
+                   <th width="70" align="left">GST Type</th>
+                    <th width="80" align="left">Stock Type</th>
+                     <th width="70" align="left">Rating</th>
                 <th width="70" align="left">Status</th>
                 <th width="70" align="left">Action</th>
             </tr>
@@ -120,10 +126,91 @@
 													onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';"/>
 													
               
-              <c:out value="${franchiseeList.frImage}"/>
                 </td>
               <td align="left"><c:out value="${franchiseeList.frOwner}"/></td>
               <td align="left"><c:out value="${franchiseeList.frCity}"/></td>
+              <td align="left"><c:out value="${franchiseeList.frMob}"/></td>
+              <td align="left">
+               <c:forEach items="${routeList}" var="routeList">
+                
+               <c:choose>
+                    <c:when test="${routeList.routeId==franchiseeList.frRouteId}">
+                     <c:out value="${routeList.routeName}"/>
+                    </c:when>
+                   
+                  <c:otherwise></c:otherwise>
+                   </c:choose>
+              </c:forEach>
+             </td>
+              <td align="left">
+               <c:choose>
+                    <c:when test="${franchiseeList.frRateCat==1}">
+                          <c:out value="Local Rate"/> 
+                    </c:when>
+                    <c:when test="${franchiseeList.frRateCat==2}">
+                          <c:out value="Outstation Rate"/> 
+                    </c:when>
+                    <c:when test="${franchiseeList.frRateCat==3}">
+                          <c:out value="Special Rate"/> 
+                    </c:when>
+                    <c:otherwise></c:otherwise>
+              </c:choose>
+             </td>
+             
+                <td align="left">
+                 <c:choose>
+                    <c:when test="${franchiseeList.frGstType==0}">
+                          <c:out value="Composite"/> 
+                    </c:when>
+                     <c:when test="${franchiseeList.frGstType==2000000}">
+                          <c:out value="Above 20 Lakh"/> 
+                    </c:when>
+                     <c:when test="${franchiseeList.frGstType==7500000}">
+                          <c:out value="Above 75 Lakh"/> 
+                    </c:when>
+                <c:otherwise><c:out value="Composite"/> </c:otherwise>
+              </c:choose>
+                
+               
+                 <td align="left">
+                  <c:choose>
+                    <c:when test="${franchiseeList.stockType==1}">
+                          <c:out value="Type1"/> 
+                    </c:when>
+                    <c:when test="${franchiseeList.stockType==2}">
+                          <c:out value="Type2"/> 
+                    </c:when>
+                    <c:when test="${franchiseeList.stockType==3}">
+                          <c:out value="Type3"/> 
+                    </c:when>
+                    <c:when test="${franchiseeList.stockType==4}">
+                          <c:out value="Type4"/> 
+                    </c:when>
+                    <c:when test="${franchiseeList.stockType==5}">
+                          <c:out value="Type5"/> 
+                    </c:when>
+                    <c:when test="${franchiseeList.stockType==6}">
+                          <c:out value="Type6"/> 
+                    </c:when>
+                    <c:when test="${franchiseeList.stockType==7}">
+                          <c:out value="Type7"/> 
+                    </c:when>
+                    <c:otherwise></c:otherwise>
+              </c:choose>
+              <td align="left">
+               <c:choose>
+              <c:when test="${franchiseeList.frRate==0}">0.5</c:when>
+              <c:when test="${franchiseeList.frRate==1}">1</c:when>   
+              <c:when test="${franchiseeList.frRate==2}">1.5</c:when>
+              <c:when test="${franchiseeList.frRate==3}">2</c:when>
+              <c:when test="${franchiseeList.frRate==4}">2.5</c:when>
+               <c:when test="${franchiseeList.frRate==5}">3</c:when>
+               <c:when test="${franchiseeList.frRate==6}">3.5</c:when>
+               <c:when test="${franchiseeList.frRate==7}">4</c:when>
+               <c:when test="${franchiseeList.frRate==8}">4.5</c:when>
+               <c:when test="${franchiseeList.frRate==9}">5</c:when>
+              </c:choose>
+              
               <td align="left">
              <c:choose>
   <c:when test="${franchiseeList.delStatus==0}">

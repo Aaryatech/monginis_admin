@@ -169,7 +169,7 @@
 										<i class="fa fa-bars"></i> Update Configured Franchisee
 									</h3>
 									<div class="box-tool">
-										<a href="resources/index.php/franchisee/list_all">Back to
+										<a href="${pageContext.request.contextPath}/configureFranchiseesList">Back to
 											List</a> <a data-action="collapse" href="#"><i
 											class="fa fa-chevron-up"></i></a>
 									</div>
