@@ -202,8 +202,8 @@ public class PushOrderController {
 	System.out.println(dateFormat.format(utilDate)); //2016/11/16 12:08:43
 	
 	java.sql.Date date=new java.sql.Date(utilDate.getTime());
-	java.sql.Date productionDate=new java.sql.Date(tomarrow().getTime());
-	java.sql.Date deliveryDate=new java.sql.Date(tomarrow1().getTime());
+	java.sql.Date deliveryDate=new java.sql.Date(tomarrow().getTime());
+	//java.sql.Date deliveryDate=new java.sql.Date(tomarrow1().getTime());
 	
 	//get all Franchisee details
 	RestTemplate restTemplate = new RestTemplate();
@@ -240,7 +240,7 @@ public class PushOrderController {
 				order.setRefId(items.get(j).getId());
 				order.setItemId(String.valueOf(items.get(j).getId()));
 				order.setOrderQty(qty);
-				order.setProductionDate(productionDate);
+				order.setProductionDate(date);
 				order.setOrderDate(date);
 				order.setDeliveryDate(deliveryDate);
 				order.setMenuId(0);
@@ -283,6 +283,9 @@ public class PushOrderController {
 			
 		}
 	}
+		model.addObject("unSelectedMenuList", menuList);
+		model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
+		
 		return model;
 	}
 	void PlaceOrder( List<Orders> oList)
@@ -290,7 +293,7 @@ public class PushOrderController {
 //	RestTemplate restTemplate = new RestTemplate();
 	System.out.println( "Order list  :   "+oList.toString());
 
-	String url = Constants.url + "placeOrder";
+	String url = Constants.url + "placePushDumpOrder";
 
 	ObjectMapper mapperObj = new ObjectMapper();
 	String jsonStr = null;
@@ -334,7 +337,7 @@ System.out.println(e.getMessage());
 	return dt;
 	}
 	
-	public java.util.Date tomarrow1()
+	/*public java.util.Date tomarrow1()
 	{
 		
 	
@@ -344,7 +347,7 @@ System.out.println(e.getMessage());
 		c.add(Calendar.DATE, 2);
 		dt = c.getTime();
 	return dt;
-	}
+	}*/
 	
 	
 	

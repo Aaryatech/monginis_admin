@@ -275,8 +275,8 @@ public class DumpOrderController {
 		System.out.println(dateFormat.format(utilDate)); //2016/11/16 12:08:43
 		
 		java.sql.Date date=new java.sql.Date(utilDate.getTime());
-		java.sql.Date productionDate=new java.sql.Date(tomarrow().getTime());
-		java.sql.Date deliveryDate=new java.sql.Date(tomarrow1().getTime());
+		java.sql.Date deliveryDate=new java.sql.Date(tomarrow().getTime());
+		//java.sql.Date deliveryDate=new java.sql.Date(tomarrow1().getTime());
 		
 		//get all Franchisee details
 		RestTemplate restTemplate = new RestTemplate();
@@ -316,7 +316,7 @@ public class DumpOrderController {
 					order.setRefId(items.get(j).getId());
 					order.setItemId(String.valueOf(items.get(j).getId()));
 					order.setOrderQty(qty);
-					order.setProductionDate(productionDate);
+					order.setProductionDate(date);
 					order.setOrderDate(date);
 					order.setDeliveryDate(deliveryDate);
 					//order.setMenuId(0);
@@ -369,7 +369,7 @@ public class DumpOrderController {
 //		RestTemplate restTemplate = new RestTemplate();
 		System.out.println( "Order list  :   "+oList.toString());
 
-		String url = Constants.url + "placeOrder";
+		String url = Constants.url + "placePushDumpOrder";
 
 		ObjectMapper mapperObj = new ObjectMapper();
 		String jsonStr = null;
@@ -413,7 +413,7 @@ public class DumpOrderController {
 		return dt;
 		}
 		
-		public java.util.Date tomarrow1()
+		/*public java.util.Date tomarrow1()
 		{
 			
 		
@@ -423,7 +423,7 @@ public class DumpOrderController {
 			c.add(Calendar.DATE, 2);
 			dt = c.getTime();
 		return dt;
-		}
+		}*/
 		
 		
 }
