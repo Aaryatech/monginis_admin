@@ -60,6 +60,21 @@ public class ItemController {
 
 	public static CategoryListResponse categoryListResponse;
 
+	public static List<MCategoryList> itemsWithCategoriesList;
+	public static int settingValue;
+
+	public static List<FrItemStockConfigurePost> frItemStockConfigureList;
+
+	ArrayList<Item> itemList;
+
+	public static List<GetPrevItemStockResponse> getPrevItemStockResponsesList;
+
+	ArrayList<String> tempItemList;
+	public int catId = 0;
+
+	
+	
+	
 	@RequestMapping(value = "/addItem", method = RequestMethod.GET)
 	public ModelAndView showAddCategory(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("items/addnewitem");
@@ -112,18 +127,7 @@ public class ItemController {
 
 	// Franchisee Item Configuration -- new work 26/09
 
-	public static List<MCategoryList> itemsWithCategoriesList;
-	public static int settingValue;
-
-	public static List<FrItemStockConfigurePost> frItemStockConfigureList;
-
-	ArrayList<Item> itemList;
-
-	public static List<GetPrevItemStockResponse> getPrevItemStockResponsesList;
-
-	ArrayList<String> tempItemList;
-	public int catId = 0;
-
+	
 	@RequestMapping(value = "/showFrItemConfiguration")
 	public ModelAndView showFrItemConfiguration(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("Item Request");
@@ -247,58 +251,22 @@ public class ItemController {
 
 		getPrevItemStockResponsesList = responseEntity.getBody();
 
-		if (getPrevItemStockResponsesList.size() < 1) {
-
-			getPrevItemStockResponsesList = new ArrayList<GetPrevItemStockResponse>();
-
-			for (int i = 0; i < tempItemList.size(); i++) {
-
-				Item tempItem = tempItemList.get(i);
-
-				GetPrevItemStockResponse getPrevItemStockResponse = new GetPrevItemStockResponse();
-
-				getPrevItemStockResponse.setItemId(tempItem.getId());
-				getPrevItemStockResponse.setItemName(tempItem.getItemName());
-
-				List<StockDetail> stockDetailsList = new ArrayList<StockDetail>();
-
-				for (int j = 1; j <= settingValue; j++) {
-
-					StockDetail stockDetail = new StockDetail();
-
-					stockDetail.setFrStockId(0);
-					stockDetail.setMaxQty(0);
-					stockDetail.setMinQty(0);
-					stockDetail.setType(j);
-
-					stockDetailsList.add(stockDetail);
-
-				}
-
-				getPrevItemStockResponse.setStockDetails(stockDetailsList);
-
-				getPrevItemStockResponsesList.add(getPrevItemStockResponse);
-
-			}
-
-		}
-		//Sumit
-		/*else
-		{
-			//getPrevItemStockResponsesList = new ArrayList<GetPrevItemStockResponse>();
-
-			for (int i = 0; i < tempItemList.size(); i++) {
+	if (getPrevItemStockResponsesList.size() < tempItemList.size()) {
+			
+			List<GetPrevItemStockResponse> tempPrevItemStockList=new ArrayList<GetPrevItemStockResponse>();
+			
+			
+			for(int i=0;i<tempItemList.size();i++) {
 				
-				for (int k = 0; k < getPrevItemStockResponsesList.size(); k++)
-				{
-				Item tempItem = tempItemList.get(i);
-
-				GetPrevItemStockResponse getPrevItemStockResponse = getPrevItemStockResponsesList.get(k);
-
-				//getPrevItemStockResponse.setItemId(tempItem.getId());
-				//getPrevItemStockResponse.setItemName(tempItem.getItemName());
+				Item  tempItem =tempItemList.get(i);
 				
-
+				
+				GetPrevItemStockResponse tempItemStockResponse=new GetPrevItemStockResponse();
+				
+				tempItemStockResponse.setItemId(tempItem.getId());
+				tempItemStockResponse.setItemName(tempItem.getItemName());
+				
+				
 				List<StockDetail> stockDetailsList = new ArrayList<StockDetail>();
 
 				for (int j = 1; j <= settingValue; j++) {
@@ -315,15 +283,31 @@ public class ItemController {
 					stockDetailsList.add(stockDetail);
 					
 				}
-
-				getPrevItemStockResponse.setStockDetails(stockDetailsList);
-
-				getPrevItemStockResponsesList.add(getPrevItemStockResponse);
-
+				
+				tempItemStockResponse.setStockDetails(stockDetailsList);
+				
+				for(int j=0;j<getPrevItemStockResponsesList.size();j++) {
+					
+					if(getPrevItemStockResponsesList.get(j).getItemId()==tempItemList.get(i).getId()) {
+						
+						tempItemStockResponse=getPrevItemStockResponsesList.get(j);
+					}
+					
+				}
+			
+				tempPrevItemStockList.add(tempItemStockResponse);
+				
 			}
 			
-			}
-		}*/
+			System.out.println("\n\n ####### Updated Stock List is: "+tempPrevItemStockList.toString());
+		
+		
+
+			getPrevItemStockResponsesList = new ArrayList<GetPrevItemStockResponse>();
+
+			getPrevItemStockResponsesList=tempPrevItemStockList;
+		}
+		
 
 		itemList = new ArrayList<Item>(Arrays.asList(item));
 
@@ -337,7 +321,7 @@ public class ItemController {
 
 	}
 
-	@RequestMapping(value = "/frItemStockConfigurationProcess", method = RequestMethod.GET)
+	@RequestMapping(value = "/frItemStockConfigurationProcess", method = RequestMethod.POST)
 	public String frItemStockProcess(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView("items/itemlist");
 

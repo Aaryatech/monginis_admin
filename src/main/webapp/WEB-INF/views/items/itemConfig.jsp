@@ -106,7 +106,7 @@
 													<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 												</div>
 											</div>
-											` ${catId}
+											`
 
 
 											<div class="box-content">
@@ -174,7 +174,7 @@
 
 
 												<form action="frItemStockConfigurationProcess"
-													name="validation-from2" id="validation-from" method="get">
+													name="validation-from2" id="validation-from" method="post">
 
 
 													<c:set var="settingValue" value="${settingValue}" />
