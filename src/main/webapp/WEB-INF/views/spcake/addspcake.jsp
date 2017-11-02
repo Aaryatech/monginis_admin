@@ -94,7 +94,10 @@
 										<i class="fa fa-bars"></i> Add Special Cake
 										
 									</h3>
-
+                         <div class="box-tool">
+								<a href="${pageContext.request.contextPath}/showSpecialCake">Back to List</a> <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
 								</div>
 								<div class="box-content">
 									<form action="addSpCakeProcess" class="form-horizontal"
@@ -332,7 +335,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="total_gst_appli" id="total_gst_appli"
 											placeholder="Total GST Applicable" class="form-control"
-											data-rule-required="true" data-rule-number="true" />
+											data-rule-required="true" data-rule-number="true" disabled/>
 									</div>
 								</div>
 										<%-- 

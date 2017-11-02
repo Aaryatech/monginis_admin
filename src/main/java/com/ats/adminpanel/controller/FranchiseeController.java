@@ -851,7 +851,12 @@ public class FranchiseeController {
 		RestTemplate restTemplate = new RestTemplate();
 		AllFranchiseeList allFranchiseeList = restTemplate.getForObject(Constants.url + "getAllFranchisee",
 				AllFranchiseeList.class);
+		AllRoutesListResponse allRoutesListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
+				AllRoutesListResponse.class);
 
+		List<Route> routeList = new ArrayList<Route>();
+		routeList = allRoutesListResponse.getRoute();
+		
 		ModelAndView mav = new ModelAndView("franchisee/listAllFranchisee");
 		
 		List<FranchiseeList> franchiseeList = new ArrayList<FranchiseeList>();
@@ -859,6 +864,7 @@ public class FranchiseeController {
 		System.out.println("Franchisee List:"+franchiseeList.toString());
 		
 		mav.addObject("franchiseeList", franchiseeList);
+		mav.addObject("routeList", routeList);
 		mav.addObject("url",Constants.FR_IMAGE_URL);
 		return mav;
 	}
@@ -1460,14 +1466,26 @@ public class FranchiseeController {
 					//-----------------------------------------------------------------------
 					
 					String orderFromDate = request.getParameter("from_order_date");
+					System.out.println("orderFromDate: "+orderFromDate);
+					
 					String orderToDate = request.getParameter("to_order_date");
+					System.out.println("orderToDate: "+orderToDate);
+					
 					String deliveryFromDate = request.getParameter("from_delivery_date");
+					System.out.println("deliveryFromDate: "+deliveryFromDate);
+					
 					String deliveryToDate = request.getParameter("to_delivery_date");
-					
-					int spdayId = Integer.parseInt(request.getParameter("sp_day_id"));		
+					System.out.println("deliveryToDate: "+deliveryToDate);
+
+					int spdayId = Integer.parseInt(request.getParameter("sp_day_id"));
+					System.out.println("spdayId: "+spdayId);
+
 					int menuId = Integer.parseInt(request.getParameter("menu_id"));
+					System.out.println("menuId: "+menuId);
+
 					int catId = Integer.parseInt(request.getParameter("cat_id"));
-					
+					System.out.println("catId: "+catId);
+
 					RestTemplate rest = new RestTemplate();
 					
 					SpDayConfigure spDayConfigure=new SpDayConfigure();

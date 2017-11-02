@@ -99,7 +99,7 @@
 								<i class="fa fa-bars"></i> Edit Item
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/itemList">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							<!-- <div class="box-tool">
@@ -336,7 +336,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="total_gst_appli" id="total_gst_appli"
 											placeholder="Total GST Applicable" class="form-control"
-											data-rule-required="true" data-rule-number="true" />
+											data-rule-required="true" data-rule-number="true" disabled/>
 									</div>
 								</div>
 								<div class="form-group">

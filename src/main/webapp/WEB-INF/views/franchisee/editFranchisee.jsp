@@ -50,7 +50,7 @@
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 
 </head>
-<body>
+<body onload="changetextbox()">
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -96,7 +96,7 @@
 									</h3>
 									<div class="box-tool">
 										<a
-											href="${pageContext.request.contextPath}/resources/index.php/franchisee/list_all">Back
+											href="${pageContext.request.contextPath}/listAllFranchisee">Back
 											to List</a> <a data-action="collapse" href="#"><i
 											class="fa fa-chevron-up"></i></a>
 									</div>
@@ -620,7 +620,7 @@
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
 												<input type="submit" class="btn btn-primary" value="Submit">
-												<button type="button" class="btn">Cancel</button>
+											<!-- 	<button type="button" class="btn">Cancel</button> -->
 											</div>
 										</div>
 
@@ -719,4 +719,5 @@ function changetextbox()
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 </body>
+
 </html>

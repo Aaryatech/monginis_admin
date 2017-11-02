@@ -118,14 +118,14 @@ public class SpecialCakeController {
 		return model;
 	}
 
-	@RequestMapping(value = "/showSpecialCake")
+	/*@RequestMapping(value = "/showSpecialCake")
 
 	public ModelAndView redirectToSpecialcakeshow(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("spcake/spcakelist");
 
 		return model;
-	}
+	}*/
 
 	
 	
