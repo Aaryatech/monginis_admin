@@ -99,7 +99,7 @@ div.panel {
 		<c:url var="getDateForGrnAcc" value="/getDateForGrnAcc" />
 
 
-getDateForGrnAcc
+
 	
 
 	<%-- 	<c:url var="getGrnId" value="/getGrnId" />
@@ -148,7 +148,7 @@ getDateForGrnAcc
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Search GRN
+								<i class="fa fa-bars"></i>Search GRN for Account
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -298,7 +298,7 @@ getDateForGrnAcc
 
 																<c:when test="${grnList.grnGvnStatus==7}">
 																	<td><input type="checkbox" name="select_to_agree"
-																		disabled="disabled" id="${grnList.grnGvnId}"
+																		id="${grnList.grnGvnId}"
 																		value="${grnList.grnGvnId}"></></td>
 
 
@@ -418,7 +418,7 @@ getDateForGrnAcc
 																		<div class="panel" align="left">
 																			Franchisee Remark
 																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${grnList.frGrnGvnRemark}></textarea>
+																				class="form-control"${grnList.frGrnGvnRemark}></textarea>
 																			Gate remark
 																			<textarea name="t1" readonly="readonly"
 																				class="form-control">${grnList.approvedRemarkGate}</textarea>
@@ -455,7 +455,7 @@ getDateForGrnAcc
 																		<div class="panel" align="left">
 																			Franchisee Remark
 																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${grnList.frGrnGvnRemark}></textarea>
+																				class="form-control">${grnList.frGrnGvnRemark}</textarea>
 																			Gate remark
 																			<textarea name="t1" readonly="readonly"
 																				class="form-control">${grnList.approvedRemarkGate}</textarea>
@@ -487,7 +487,7 @@ getDateForGrnAcc
 																		<div class="panel" align="left">
 																			Franchisee Remark
 																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${grnList.frGrnGvnRemark}></textarea>
+																				class="form-control"> ${grnList.frGrnGvnRemark}</textarea>
 																			Gate remark
 																			<textarea name="t1" readonly="readonly"
 																				class="form-control">${grnList.approvedRemarkGate}</textarea>
@@ -500,9 +500,9 @@ getDateForGrnAcc
 																<c:when test="${grnList.grnGvnStatus==7}">
 
 																	<td><input class="btn btn-primary" value="Approve"
-																		id="callSubmit" disabled="disabled"
+																		id="callSubmit" 
 																		onclick="insertGrnCall(${grnList.grnGvnId})" /> <input
-																		class="accordion btn btn-primary" value="DisApprove" />
+																		class="accordion btn btn-primary" value="DisApprove" disabled="disabled" />
 																		<div class="panel" align="left">
 																			Enter Remark
 																			<textarea name="acc_remark${grnList.grnGvnId}"
@@ -514,7 +514,7 @@ getDateForGrnAcc
 																		<div class="panel" align="left">
 																			Franchisee Remark
 																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${grnList.frGrnGvnRemark}></textarea>
+																				class="form-control"${grnList.frGrnGvnRemark}></textarea>
 																			Gate remark
 																			<textarea name="t1" readonly="readonly"
 																				class="form-control">${grnList.approvedRemarkGate}</textarea>
@@ -546,7 +546,7 @@ getDateForGrnAcc
 																		<div class="panel" align="left">
 																			Franchisee Remark
 																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${grnList.frGrnGvnRemark}></textarea>
+																				class="form-control">${grnList.frGrnGvnRemark}</textarea>
 																			Gate remark
 																			<textarea name="t1" readonly="readonly"
 																				class="form-control">${grnList.approvedRemarkGate}</textarea>
@@ -704,7 +704,6 @@ function insertGrnDisAgree(grnGvnId){
 var grnId=grnGvnId;
 var approve_acc_login=$("#approve_acc_login"+grnGvnId).val();
 var acc_remark=$("#acc_remark"+grnGvnId).val();
-alert(acc_remark);
 
 if($("#acc_remark"+grnGvnId).val() == ''){
 	alert("Please Enter Grn Remark!");
@@ -725,7 +724,6 @@ else{
 			}
 );
 
-}
 	
 
 
@@ -735,6 +733,7 @@ callRefreshDisAgree();
 /* callSecondRefresh();
 callThirdRefresh();
 callfourthRefresh(); */
+}
 }
 
 
@@ -863,8 +862,6 @@ function getDate(){
 	var fromDate=$("#from_date").val();
 	var toDate=$("#to_date").val();
 	
-	alert(fromDate);
-	alert(toDate);
 	
 	
 	$.getJSON('${getDateForGrnAcc}',

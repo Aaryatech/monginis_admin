@@ -147,7 +147,7 @@ div.panel {
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Search GRN
+								<i class="fa fa-bars"></i>Search GRN for Gate
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -660,7 +660,7 @@ var approve_gate_login=$("#approve_gate_login"+grnGvnId).val();
 var gate_remark=$("#gate_remark"+grnId).val();
 
 if($("#gate_remark"+grnGvnId).val() == ''){
-	alert("Please Enter Grn Remark!");
+	alert("Please  Grn Remark!");
 	
 }
 else{
@@ -678,7 +678,7 @@ else{
 			}
 );
 
-}
+
 	
 
 
@@ -688,6 +688,7 @@ callRefreshDisAgree();
 /* callSecondRefresh();
 callThirdRefresh();
 callfourthRefresh(); */
+}
 }
 
 
@@ -816,8 +817,6 @@ function getDate(){
 	var fromDate=$("#from_date").val();
 	var toDate=$("#to_date").val();
 	
-	alert(fromDate);
-	alert(toDate);
 	
 	
 	$.getJSON('${getDateForGrnGate}',

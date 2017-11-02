@@ -340,9 +340,7 @@ div.panel {
 																			Franchisee Remark
 																			<textarea name="t1" readonly="readonly"
 																				class="form-control">${gvnList.frGrnGvnRemark}</textarea>
-																			Factory remark
-																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${gvnList.approvedRemarkGate}</textarea>
+																			
 																		</div></td>
 
 																</c:when>
@@ -369,9 +367,7 @@ div.panel {
 																			Franchisee Remark
 																			<textarea name="t1" readonly="readonly"
 																				class="form-control" > ${gvnList.frGrnGvnRemark}</textarea>
-																			Factory remark
-																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${gvnList.approvedRemarkGate}</textarea>
+																			
 																		</div></td>
 
 																</c:when>
@@ -397,17 +393,104 @@ div.panel {
 																			Franchisee Remark
 																			<textarea name="t1" readonly="readonly"
 																				class="form-control">${gvnList.frGrnGvnRemark}</textarea>
-																			Factory remark
+																			Account remark
 																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${gvnList.approvedRemarkGate}</textarea>
+																				class="form-control">${gvnList.approvedRemarkAcc}</textarea>
 																		</div></td>
 
 																</c:when>
 
 
 																<c:otherwise>
+																
+																
+																<c:choose>
+																
+																<c:when test="${gvnList.grnGvnStatus==3}">
+																
+																<td><input class="btn btn-primary" value="Approve"
+																		id="callSubmit" disabled="disabled"
+																		onclick="insertGrnCall(${gvnList.grnGvnId})" /> <input
+																		class="accordion btn btn-primary" value="DisApprove"
+																		disabled="disabled" />
+																		<div class="panel" align="left">
+																			Enter Remark
+																			<textarea name="acc_remark${gvnList.grnGvnId}"
+																				id="acc_remark${gvnList.grnGvnId}"></textarea>
+																			<input class="btn btn-primary" value="Submit"
+																				onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
 
-																	<td><input class="btn btn-primary" value="Approve"
+																		</div> <input class="accordion btn btn-primary" value="Show" />
+																		<div class="panel" align="left">
+																			Franchisee Remark
+																			<textarea name="t1" readonly="readonly"
+																				class="form-control">${gvnList.frGrnGvnRemark}</textarea>
+																			Dispatch remark
+																			<textarea name="t1" readonly="readonly"
+																				class="form-control">${gvnList.approvedRemarkGate}</textarea>
+																		</div></td>
+																
+																</c:when>
+																
+																
+																
+																<c:when test="${gvnList.grnGvnStatus==5}">
+																
+																<td><input class="btn btn-primary" value="Approve"
+																		id="callSubmit" disabled="disabled"
+																		onclick="insertGrnCall(${gvnList.grnGvnId})" /> <input
+																		class="accordion btn btn-primary" value="DisApprove"
+																		disabled="disabled" />
+																		<div class="panel" align="left">
+																			Enter Remark
+																			<textarea name="acc_remark${gvnList.grnGvnId}"
+																				id="acc_remark${gvnList.grnGvnId}"></textarea>
+																			<input class="btn btn-primary" value="Submit"
+																				onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
+
+																		</div> <input class="accordion btn btn-primary" value="Show" />
+																		<div class="panel" align="left">
+																			Franchisee Remark
+																			<textarea name="t1" readonly="readonly"
+																				class="form-control">${gvnList.frGrnGvnRemark}</textarea>
+																			Store remark
+																			<textarea name="t1" readonly="readonly"
+																				class="form-control">${gvnList.approvedRemarkStore}</textarea>
+																		</div></td>
+																
+																
+																</c:when>
+																
+																
+																<c:otherwise>
+																
+																<td><input class="btn btn-primary" value="Approve"
+																		id="callSubmit" disabled="disabled"
+																		onclick="insertGrnCall(${gvnList.grnGvnId})" /> <input
+																		class="accordion btn btn-primary" value="DisApprove"
+																		disabled="disabled" />
+																		<div class="panel" align="left">
+																			Enter Remark
+																			<textarea name="acc_remark${gvnList.grnGvnId}"
+																				id="acc_remark${gvnList.grnGvnId}"></textarea>
+																			<input class="btn btn-primary" value="Submit"
+																				onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
+
+																		</div> <input class="accordion btn btn-primary" value="Show" />
+																		<div class="panel" align="left">
+																			Franchisee Remark
+																			<textarea name="t1" readonly="readonly"
+																				class="form-control">${gvnList.frGrnGvnRemark}</textarea>
+																			
+																		</div></td>
+																
+																
+																</c:otherwise>
+																
+																
+																</c:choose>
+
+																	<%-- <td><input class="btn btn-primary" value="Approve"
 																		id="callSubmit" disabled="disabled"
 																		onclick="insertGrnCall(${gvnList.grnGvnId})" /> <input
 																		class="accordion btn btn-primary" value="DisApprove"
@@ -427,7 +510,7 @@ div.panel {
 																			Factory remark
 																			<textarea name="t1" readonly="readonly"
 																				class="form-control">${gvnList.approvedRemarkGate}</textarea>
-																		</div></td>
+																		</div></td> --%>
 																</c:otherwise>
 															</c:choose>
 
@@ -599,7 +682,7 @@ else{
 			}
 );
 
-}
+
 	
 
 
@@ -609,6 +692,7 @@ callRefreshDisAgree();
 /* callSecondRefresh();
 callThirdRefresh();
 callfourthRefresh(); */
+}
 }
 
 
@@ -679,36 +763,9 @@ function callRefresh(){
 
 </script>
 
-	<script type="text/javascript">
-
-function callSecondRefresh(){
-
-	window.location.reload();
-
 	
-}
 
 
-</script>
-
-	<script type="text/javascript">
-
-function callThirdRefresh(){
-	window.location.reload();
-
-}
-
-</script>
-
-	<script type="text/javascript">
-
-function callfourthRefresh(){
-	window.reload();
-
-
-}
-
-</script>
 	<!-- insertGrnAgree -->
 
 

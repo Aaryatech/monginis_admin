@@ -149,38 +149,20 @@ public class GrnGvnController {
 
 		ModelAndView model = new ModelAndView("grngvn/gateGrn");
 
-		/*
-		 * String fromDate = request.getParameter("from_date"); String toDate =
-		 * request.getParameter("to_date");
-		 */
+		
 
 		try {
 
-			/*
-			 * System.out.println("before getting from date ==" + fromDate);
-			 * System.out.println("before getting to date== " + toDate);
-			 */
+			
 			RestTemplate restTemplate = new RestTemplate();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			try {
 
-				// if (fromDate == null && toDate == null) {
-
-				/*
-				 * System.out.println("from date----------- =" + fromDate);
-				 * System.out.println("to date---- " + toDate); System.out.println("inside if");
-				 */
+				
 				map.add("fromDate", gateGrnFromDate);
 				map.add("toDate", gateGrnToDate);
-				/*
-				 * } else { map.add("fromDate", fromDate); map.add("toDate", toDate);
-				 * System.out.println("inside else");
-				 * System.out.println("from date----------- =" + fromDate);
-				 * System.out.println("to date---- " + toDate);
-				 * 
-				 * }
-				 */
+				
 			} catch (Exception e) {
 				System.out.println("ex in getting dates ---line 80");
 			}
@@ -480,7 +462,6 @@ public class GrnGvnController {
 
 	}
 
-	public static String fromDate_Acc, toDate_Acc;
 
 	@RequestMapping(value = "/showAccountGrnDetails", method = RequestMethod.GET)
 	public ModelAndView showAccountGrnDetails(HttpServletRequest request, HttpServletResponse response) {
@@ -669,6 +650,8 @@ public class GrnGvnController {
 
 	}
 
+	
+	
 	@RequestMapping(value = "/insertAccGrnProcessAgree", method = RequestMethod.GET)
 	public String insertAccGrnProcessAgree(HttpServletRequest request, HttpServletResponse response) {
 
@@ -698,7 +681,7 @@ public class GrnGvnController {
 
 			map.add("approvedLoginAcc", accApproveLogin);
 
-			map.add("grnApprovedDateTimeAcc", dateFormat.format(cal.getTime()));
+			map.add("approvedDateTimeAcc", dateFormat.format(cal.getTime()));
 
 			map.add("approvedRemarkAcc", "Def:Acc Grn Approved");
 
@@ -752,7 +735,7 @@ public class GrnGvnController {
 
 			map.add("approvedLoginAcc", accApproveLogin);
 
-			map.add("grnApprovedDateTimeAcc", dateFormat.format(cal.getTime()));
+			map.add("approvedDateTimeAcc", dateFormat.format(cal.getTime()));
 
 			map.add("approvedRemarkAcc", accRemark);
 
@@ -927,7 +910,7 @@ public class GrnGvnController {
 						postGrnGvn.setApprovedLoginStore(0);// 20
 						postGrnGvn.setApprovedDateTimeStore(getGrnGvnDetails.get(j).getApprovedDateTimeStore());// 21
 						postGrnGvn.setApprovedRemarkStore(getGrnGvnDetails.get(j).getApprovedRemarkStore());// 22
-						postGrnGvn.setApprovedLoginAcc(0);// 23
+						postGrnGvn.setApprovedLoginAcc(getGrnGvnDetails.get(j).getApprovedLoginAcc());// 23
 						postGrnGvn.setGrnApprovedDateTimeAcc(getGrnGvnDetails.get(j).getGrnApprovedDateTimeAcc());// 24
 						postGrnGvn.setApprovedRemarkAcc(getGrnGvnDetails.get(j).getApprovedRemarkAcc());// 25
 
@@ -972,6 +955,7 @@ public class GrnGvnController {
 
 		}
 		
+		
 		map.add("fromDate", gateGvnFromDate);
 		map.add("toDate", gateGvnToDate);
 		
@@ -992,6 +976,8 @@ public class GrnGvnController {
 		return model;
 
 	}
+	
+	
 
 	@RequestMapping(value = "/insertGateGvnProcessAgree", method = RequestMethod.GET)
 	public String insertGateGvnProcessAgree(HttpServletRequest request, HttpServletResponse response) {
@@ -1514,7 +1500,7 @@ public class GrnGvnController {
 
 			for (int i = 0; i < grnIdList.length; i++) {
 				System.out.println("grn id List" + grnIdList[i]);
-				int apLoginAcc = Integer.parseInt(request.getParameter("approve_store_login" + grnIdList[i]));
+				int apLoginAcc = Integer.parseInt(request.getParameter("approve_acc_login" + grnIdList[i]));
 
 				System.out.println("approve login apLoginAcc =" + apLoginAcc);
 
@@ -1657,7 +1643,7 @@ public class GrnGvnController {
 
 			map.add("approvedLoginAcc", accApproveLogin);
 
-			map.add("grnApprovedDateTimeAcc", dateFormat.format(cal.getTime()));
+			map.add("approvedDateTimeAcc", dateFormat.format(cal.getTime()));
 
 			map.add("approvedRemarkAcc", "Def:Gvn  Approved by Acc");
 
@@ -1715,7 +1701,7 @@ public class GrnGvnController {
 
 			map.add("approvedLoginAcc", accApproveLogin);
 
-			map.add("grnApprovedDateTimeAcc", dateFormat.format(cal.getTime()));
+			map.add("approvedDateTimeAcc", dateFormat.format(cal.getTime()));
 
 			map.add("approvedRemarkAcc", accremark);
 
