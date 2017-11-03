@@ -430,7 +430,9 @@ $.getJSON('${callSearchOrdersProcess}', {
 
  	tr.append($('<td></td>').html("<input type=number min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
   
-  	tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> <input type=button id=delete"+orders.orderId+" onClick=deleteOrder("+orders.orderId+"); Value=Delete>"));
+  	tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> "));
+  	
+  	//<input type=button id=delete"+orders.orderId+" onClick=deleteOrder("+orders.orderId+"); Value=Delete>
 
 
 	$('#table1 tbody').append(tr);
@@ -473,7 +475,7 @@ $.getJSON('${callSearchOrdersProcess}', {
 			}
 		}
 		</script>
-	<script type="text/javascript">
+	<!-- <script type="text/javascript">
 		function deleteOrder(orderId)
 		{
 			
@@ -494,7 +496,7 @@ $.getJSON('${callSearchOrdersProcess}', {
 
 		}
 		
-		</script>
+		</script> -->
 
 
 </body>

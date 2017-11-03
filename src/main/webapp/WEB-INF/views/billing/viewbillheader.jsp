@@ -450,9 +450,58 @@
 												data,
 												function(key, bill) {
 
+													var tr = $('<tr></tr>');
+
+												  	tr.append($('<td></td>').html(key+1));
+
+												  	tr.append($('<td></td>').html(bill.billNo));
+
+												  	tr.append($('<td></td>').html(bill.billDate));
+
+												  	tr.append($('<td></td>').html(bill.frName));
+
+												  	tr.append($('<td></td>').html(bill.taxableAmt));
+												  	
+												  	tr.append($('<td></td>').html(bill.totalTax));
+
+												  	tr.append($('<td></td>').html(bill.grandTotal));
+												  	
+												  	
+												  	
+												  	if (bill.status == 1) {
+												  		tr.append($('<td></td>').html("Pending"));
+												  		
+													} else if (bill.status == 2) {
+														tr.append($('<td></td>').html("Received"));
+													} else if (bill.status == 3) {
+														tr.append($('<td></td>').html("GVN Applied"));
+													} else if (bill.status == 4) {
+														tr.append($('<td></td>').html("GVN Approved"));
+													} else if (bill.status == 5) {
+														tr.append($('<td></td>').html("GRN Applied"));
+													} else if (bill.status == 6) {
+														tr.append($('<td></td>').html("GRN Approved"));
+													} else if (bill.status == 7) {
+														tr.append($('<td></td>').html("Closed"));
+													}
+												  	
+												  	
+												  	tr.append($('<td></td>').html(bill.remark));
+
+
+
+
+												 	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/updateBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='update' value='Update'/></a><a href='${pageContext.request.contextPath}/viewBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='view' value='View'/></a><a href='${pageContext.request.contextPath}/deleteBill/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='deleteBill' value='Delete'/></a>"));
+												  
+												  	//tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> <input type=button id=delete"+orders.orderId+" onClick=deleteOrder("+orders.orderId+"); Value=Delete>"));
+
+
+													$('#table1 tbody').append(tr);
+
 													
 													
-													var index = key + 1;
+													
+													/* var index = key + 1;
 													
 													var tr = "<tr>";
 
@@ -530,7 +579,7 @@
 													$('#table1 tbody').append(action);
 
 													$('#table1 tbody').append(trclosed);
-
+ */
 												})
 
 							});
