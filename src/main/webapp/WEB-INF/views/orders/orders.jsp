@@ -418,7 +418,7 @@ $.getJSON('${callSearchOrdersProcess}', {
 
 	var tr = $('<tr></tr>');
 
-  	tr.append($('<td></td>').html(key));
+  	tr.append($('<td></td>').html(key+1));
 
   	tr.append($('<td></td>').html(orders.frName));
 

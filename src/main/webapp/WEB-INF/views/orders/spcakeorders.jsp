@@ -391,17 +391,15 @@
 								}
 								$.each(data,function(key, spCakeOrder) {
 
-									$('#loader').hide();
+									
 									var len=data.length
 									
 									
-									
-									$('#table1 td').remove();
 
 									
 									var tr = $('<tr></tr>');
 
-								  	tr.append($('<td></td>').html(key));
+								  	tr.append($('<td></td>').html(key+1));
 
 								  	tr.append($('<td></td>').html(spCakeOrder.frName));
 
@@ -411,13 +409,10 @@
 
 								  	tr.append($('<td></td>').html(spCakeOrder.spfName));
 								  	
-								  	
 								  	tr.append($('<td></td>').html(spCakeOrder.spEvents));
 
-								  	
 								  	tr.append($('<td></td>').html(spCakeOrder.spDeliveryDate));
 
-								  	
 								  	tr.append($('<td></td>').html(spCakeOrder.spPrice));
 
 								  	tr.append($('<td></td>').html(spCakeOrder.spTotalAddRate));
@@ -426,15 +421,9 @@
 
 								  	tr.append($('<td></td>').html(totalValue));
 
-								  	
 								  	tr.append($('<td></td>').html("View"));
 
-								  	
 								  	tr.append($('<td></td>').html("PDF"));
-
-
-
-								 	
 
 									$('#table1 tbody').append(tr);
 									
@@ -443,89 +432,7 @@
 								});
 
 								}
-									
-									
-									
-									
-													
-													/* var index = key + 1;
-													
-													var tr = "<tr>";
-
-													var index = "<td>&nbsp;&nbsp;&nbsp;"
-															+ index + "</td>";
-															
-													var frName = "<td>&nbsp;&nbsp;&nbsp;"
-															+ spCakeOrder.frName
-															+ "</td>";
-															
-													var itemId = "<td>&nbsp;&nbsp;&nbsp;"
-															+ spCakeOrder.itemId
-															+ "</td>";
-															
-													var spName = "<td>&nbsp;&nbsp;&nbsp;"
-															+ spCakeOrder.spName
-															+ "</td>";
-															
-													var spfName = "<td>&nbsp;&nbsp;&nbsp;"
-															+ spCakeOrder.spfName
-															+ "</td>";
-															
-													var spEvents = "<td>&nbsp;&nbsp;&nbsp;"
-															+ spCakeOrder.spEvents
-															+ "</td>";
-															
-													var spDeliverydt = "<td>&nbsp;&nbsp;&nbsp;"
-															+ spCakeOrder.spDeliverydt
-															+ "</td>";
-															
-															var spPrice = "<td>&nbsp;&nbsp;&nbsp;"
-																+ spCakeOrder.spPrice
-																+ "</td>";
-																
-																var spAddrate = "<td>&nbsp;&nbsp;&nbsp;"
-																	+ spCakeOrder.spAddrate
-																	+ "</td>";
-																	
-																	var totalValue=parseFloat(spCakeOrder.spAddrate)+parseFloat(spCakeOrder.spPrice);
-																	var total = "<td>&nbsp;&nbsp;&nbsp;"
-																		+ totalValue
-																		+ "</td>";
-																		
-																		var view = "<td>&nbsp;&nbsp;&nbsp;"
-																			+ "View"
-																			+ "</td>";
-																			
-																			var pdf = "<td>&nbsp;&nbsp;&nbsp;"
-																				+ "PDF"
-																				+ "</td>";
-																				
-													
-													var trclosed = "</tr>";
-													
-													$('#table1 tbody').append(tr);
-													$('#table1 tbody').append(index);
-													$('#table1 tbody').append(frName);
-													$('#table1 tbody').append(itemId);
-													$('#table1 tbody').append(spName);
-													$('#table1 tbody').append(spfName);
-													$('#table1 tbody').append(spEvents);
-													$('#table1 tbody').append(spDeliverydt);
-													$('#table1 tbody').append(spPrice);
-													$('#table1 tbody').append(spAddrate);
-													$('#table1 tbody').append(total);
-													$('#table1 tbody').append(view);
-													$('#table1 tbody').append(pdf);
-													$('#table1 tbody').append(trclosed);
-
-
-												})
-												var tbodyclosing="</tbody>";
-
-
-							});
-
-		} */
+											
 	</script>
 
 
