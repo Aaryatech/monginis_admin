@@ -392,8 +392,63 @@
 								$.each(data,function(key, spCakeOrder) {
 
 									$('#loader').hide();
+									var len=data.length
+									
+									
+									
+									$('#table1 td').remove();
+
+									
+									var tr = $('<tr></tr>');
+
+								  	tr.append($('<td></td>').html(key));
+
+								  	tr.append($('<td></td>').html(spCakeOrder.frName));
+
+								  	tr.append($('<td></td>').html(spCakeOrder.itemId));
+
+								  	tr.append($('<td></td>').html(spCakeOrder.spName));
+
+								  	tr.append($('<td></td>').html(spCakeOrder.spfName));
+								  	
+								  	
+								  	tr.append($('<td></td>').html(spCakeOrder.spEvents));
+
+								  	
+								  	tr.append($('<td></td>').html(spCakeOrder.spDeliveryDate));
+
+								  	
+								  	tr.append($('<td></td>').html(spCakeOrder.spPrice));
+
+								  	tr.append($('<td></td>').html(spCakeOrder.spTotalAddRate));
+								  	
+									var totalValue=parseFloat(spCakeOrder.spTotalAddRate) + parseFloat(spCakeOrder.spPrice);
+
+								  	tr.append($('<td></td>').html(totalValue));
+
+								  	
+								  	tr.append($('<td></td>').html("View"));
+
+								  	
+								  	tr.append($('<td></td>').html("PDF"));
+
+
+
+								 	
+
+									$('#table1 tbody').append(tr);
+									
+									})
+
+								});
+
+								}
+									
+									
+									
+									
 													
-													var index = key + 1;
+													/* var index = key + 1;
 													
 													var tr = "<tr>";
 
@@ -470,7 +525,7 @@
 
 							});
 
-		}
+		} */
 	</script>
 
 

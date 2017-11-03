@@ -11,7 +11,7 @@ public class SpCakeOrdersBean {
     private String spName;
     private String spfName;
     private String spEvents;
-    private Date spDeliveryDate;
+    private String spDeliveryDate;
     private float spPrice;
     private float spTotalAddRate;
     private String frName;
@@ -71,11 +71,12 @@ public class SpCakeOrdersBean {
 
    
 
-	public Date getSpDeliveryDate() {
+	
+	public String getSpDeliveryDate() {
 		return spDeliveryDate;
 	}
 
-	public void setSpDeliveryDate(Date spDeliveryDate) {
+	public void setSpDeliveryDate(String spDeliveryDate) {
 		this.spDeliveryDate = spDeliveryDate;
 	}
 
@@ -118,6 +119,7 @@ public class SpCakeOrdersBean {
 				+ ", spTotalAddRate=" + spTotalAddRate + ", frName=" + frName + ", itemId=" + itemId + "]";
 	}
 
+	
 	
 	
 }

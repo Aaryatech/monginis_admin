@@ -19,7 +19,7 @@
 
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/bootstrap.min.css">
- <link rel="stylesheet"
+<link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/assets/font-awesome/css/font-awesome.min.css">
 
 <link rel="stylesheet"
@@ -58,12 +58,9 @@
 
 
 
-<c:url var="callSearchOrdersProcess"
-		value="/searchOrdersProcess" />
-	<c:url var="callChangeQty"
-		value="/callChangeQty" />
-		<c:url var="callDeleteOrder"
-		value="/callDeleteOrder" />	
+	<c:url var="callSearchOrdersProcess" value="/searchOrdersProcess" />
+	<c:url var="callChangeQty" value="/callChangeQty" />
+	<c:url var="callDeleteOrder" value="/callDeleteOrder" />
 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
@@ -146,19 +143,19 @@
 								</div>
 
 								<div class="form-group">
-										<label for="textfield2"
-											class="col-xs-3 col-lg-2 control-label">Items</label>
-										<div class="col-sm-9 col-lg-10 controls">
-											<select class="form-control chosen" multiple="multiple" tabindex="6" name="item_id" id="item_id">
-												
-												<c:forEach items="${menuList}" var="menuList">
-											<option value="${menuList.menuId}">${menuList.menuTitle}</option>
-											
+									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Items</label>
+									<div class="col-sm-9 col-lg-10 controls">
+										<select class="form-control chosen" multiple="multiple"
+											tabindex="6" name="item_id" id="item_id">
+
+											<c:forEach items="${menuList}" var="menuList">
+												<option value="${menuList.menuId}">${menuList.menuTitle}</option>
+
 											</c:forEach>
-											
-											</select>
-										</div>
+
+										</select>
 									</div>
+								</div>
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Production
@@ -169,35 +166,34 @@
 									</div>
 								</div>
 
-								
+
 								<div align="center" class="form-group">
 									<div
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										<input  class="btn btn-primary" value="Submit"
-											id="callSubmit" onclick="callSearch()" >
+										<input class="btn btn-primary" value="Submit" id="callSubmit"
+											onclick="callSearch()">
 
-										
+
 									</div>
-									<div align="center" id="loader" style="display:none">
+									<div align="center" id="loader" style="display: none">
 
-	<span>
-	<h4><font color="#343690">Loading</font></h4></span>
-	<span class="l-1"></span>
-	<span class="l-2"></span>
-	<span class="l-3"></span>
-	<span class="l-4"></span>
-	<span class="l-5"></span>
-	<span class="l-6"></span>
-	</div>
+										<span>
+											<h4>
+												<font color="#343690">Loading</font>
+											</h4>
+										</span> <span class="l-1"></span> <span class="l-2"></span> <span
+											class="l-3"></span> <span class="l-4"></span> <span
+											class="l-5"></span> <span class="l-6"></span>
+									</div>
 								</div>
-								
-									
-								
 
-								
-																		
-									
-									
+
+
+
+
+
+
+
 								<div class="box">
 									<div class="box-title">
 										<h3>
@@ -223,11 +219,11 @@
 														<th width="159" align="left">Item Name</th>
 														<th width="159" align="left">Category</th>
 														<th width="159" align="left">Item Code</th>
-														<th width="159" align="left">Quantity</th> 
+														<th width="159" align="left">Quantity</th>
 														<th width="159" align="left">Action</th>
-													
+
 														<!-- <th width="91" align="left">Quantity</th> -->
-													<!-- 	<th width="105" align="left">MRP</th> -->
+														<!-- 	<th width="105" align="left">MRP</th> -->
 														<!-- <th width="423" align="left">isEdit</th>
 														<th width="88" align="left">edit Quantity</th>
 														<th width="423" align="left">is Positive</th> -->
@@ -238,13 +234,14 @@
 													</tr>
 												</thead>
 												<tbody>
-													<c:forEach items="${orderList}" var="orderList" varStatus="count">
+													<c:forEach items="${orderList}" var="orderList"
+														varStatus="count">
 
 														<tr>
-															<td><c:out value="${count.index+1}"/></td>
+															<td><c:out value="${count.index+1}" /></td>
 
 															<td align="left"><c:out value="${orderList.frName}" /></td>
-															
+
 															<td align="left"><c:out
 																	value="${orderList.itemName}" /></td>
 
@@ -253,12 +250,12 @@
 
 
 															<td align="left"><c:out value="${orderList.id}" /></td>
-															
+
 															<%-- <td align="left"><c:out
 																	value="${orderList.orderQty}" /></td>
 															<td align="left"><c:out value="" /></td> --%>
 
-<%-- 
+															<%-- 
 															<td align="left"><label><input type="radio"
 																	name="is_edit${orderList.orderId}"
 																	id="is_edit${orderList.orderId}" value="1" checked>
@@ -295,8 +292,8 @@
 											</table>
 										</div>
 									</div>
-									
-								
+
+
 								</div>
 							</form>
 						</div>
@@ -307,7 +304,7 @@
 			<footer>
 			<p>2017 © MONGINIS.</p>
 			</footer>
-			
+
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 				class="fa fa-chevron-up"></i></a>
@@ -379,98 +376,77 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+
+
+
+
+
+	<script type="text/javascript">
+
+function callSearch() {
+
+	
+	var itemIds=$("#item_id").val();
+	
+	var array=[];
+	
+
+	var frIds=$("#fr_id").val();
 		
-		
-		<script type="text/javascript">
-		function callSearch() {
-				
-			var itemIds=$("#item_id").val();
-			
-			var array=[];
-			
-		
-			var frIds=$("#fr_id").val();
-				
-		
-			var prodDate = document.getElementById("dp2").value;
-			$('#loader').show();
-					
-			
-			$.getJSON('${callSearchOrdersProcess}',
-							{
-								fr_id_list : JSON.stringify(frIds),
-								item_id_list : JSON.stringify(itemIds),
-								prod_date : prodDate,
-								
-								ajax : 'true'
-								
-							},
-							function(data) {
-								
-								$('#table1 td').remove();
-								$('#loader').hide();
-								if(data==""){
-									alert("No Orders Found");
-								}
 
-								$.each(data,function(key, orders) {
+	var prodDate = document.getElementById("dp2").value;
+	$('#loader').show();
 
-												
-													var index = key + 1;
-													
-													var tr = "<tr>";
+$.getJSON('${callSearchOrdersProcess}', {
 
-													var index = "<td>&nbsp;&nbsp;&nbsp;"
-															+ index + "</td>";
-															
-													var frName = "<td>&nbsp;&nbsp;&nbsp;"
-															+ orders.frName
-															+ "</td>";
-															
-													var itemName = "<td>&nbsp;&nbsp;&nbsp;"
-															+ orders.itemName
-															+ "</td>";
-															
-													var catName = "<td>&nbsp;&nbsp;&nbsp;"
-															+ orders.catName
-															+ "</td>";
-															
-													var itemCode = "<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-															+ orders.id
-															+ "</td>";
-															
-															 var itemQuantity = "<td><input type=number id="+orders.orderId+"  Value="+orders.orderQty+" disabled></td>";
-																var action = "<td><input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> <input type=button id=delete"+orders.orderId+" onClick=deleteOrder("+orders.orderId+"); Value=Delete></td>";
+	fr_id_list : JSON.stringify(frIds),
+	item_id_list : JSON.stringify(itemIds),
+	prod_date : prodDate,
+	
+	ajax : 'true'
 
-															
-															
-													
-													
-													var trclosed = "</tr>";
-													
-													$('#table1 tbody').append(tr);
-													$('#table1 tbody').append(index);
-													$('#table1 tbody').append(frName);
-													$('#table1 tbody').append(itemName);
-													$('#table1 tbody').append(catName);
-													$('#table1 tbody').append(itemCode);
-													$('#table1 tbody').append(itemQuantity);
-													$('#table1 tbody').append(action);
-											
-													$('#table1 tbody').append(trclosed);
+}, function(data) {
+
+	$('#loader').hide();
+	var len = data.length;
 
 
-												})
-												var tbodyclosing="</tbody>";
+	$('#table1 td').remove();
+
+	$.each(data,function(key, orders) {
+
+	var tr = $('<tr></tr>');
+
+  	tr.append($('<td></td>').html(key));
+
+  	tr.append($('<td></td>').html(orders.frName));
+
+  	tr.append($('<td></td>').html(orders.itemName));
+
+  	tr.append($('<td></td>').html(orders.catName));
+
+  	tr.append($('<td></td>').html(orders.id));
+
+ 	tr.append($('<td></td>').html("<input type=number min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
+  
+  	tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> <input type=button id=delete"+orders.orderId+" onClick=deleteOrder("+orders.orderId+"); Value=Delete>"));
 
 
-							});
+	$('#table1 tbody').append(tr);
 
-		}
-	</script>
-		
-		
-		<script type="text/javascript">
+})
+
+});
+
+}
+
+</script>
+
+
+
+
+	<script type="text/javascript">
 		function editQty(orderId)
 		{
 			var state=document.getElementById(orderId).disabled;
@@ -497,7 +473,7 @@
 			}
 		}
 		</script>
-			<script type="text/javascript">
+	<script type="text/javascript">
 		function deleteOrder(orderId)
 		{
 			
@@ -519,7 +495,7 @@
 		}
 		
 		</script>
-		
-		
+
+
 </body>
 </html>
