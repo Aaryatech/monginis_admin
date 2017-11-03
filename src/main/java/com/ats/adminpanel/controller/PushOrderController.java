@@ -58,6 +58,7 @@ public class PushOrderController {
 	List<Menu> menuList ;//= new ArrayList<Menu>();
 	List<String> selectedFrList;
 	ArrayList<Integer> selectedFrIdList;
+	List<Menu> selectedMenuList = new ArrayList<Menu>();
 	public static List<Item> items;
 	int menuId;
 	int selectedMainCatId;
@@ -90,17 +91,26 @@ public class PushOrderController {
 
 		}
 		List<AllFrIdName> selectedFrListAll = new ArrayList();
-		List<Menu> selectedMenuList = new ArrayList<Menu>();
+	
 
+			selectedMenuList = new ArrayList<Menu>();
+		
+		for(int i=0;i<menuList.size();i++)
+		{
+			if(menuList.get(i).getMenuId()==26||menuList.get(i).getMenuId()==31||menuList.get(i).getMenuId()==33||menuList.get(i).getMenuId()==34)
+			{
+				selectedMenuList.add(menuList.get(i));
+			}
+		}
 		System.out.println(" Fr " + allFrIdNameList.getFrIdNamesList());
 
 		
-		model.addObject("unSelectedMenuList", menuList);
+		model.addObject("unSelectedMenuList", selectedMenuList);
 		model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
 
 		return model;
 	}
-	
+	 
 	
 	
 	//Ajax call
