@@ -1,5 +1,7 @@
 package com.ats.adminpanel.model.production;
 
+import java.sql.Date;
+
 public class GetRegSpCakeOrderQty {
 
 	
@@ -11,6 +13,8 @@ public class GetRegSpCakeOrderQty {
 	private int itemId;
 	
 	private int menuId;
+	
+	private Date productionDate;
 	
 	private int itemGrp1;
 	private String itemName;
@@ -64,12 +68,21 @@ public class GetRegSpCakeOrderQty {
 		this.itemName = itemName;
 	}
 
+	public Date getProductionDate() {
+		return productionDate;
+	}
+
+	public void setProductionDate(Date productionDate) {
+		this.productionDate = productionDate;
+	}
+
 	@Override
 	public String toString() {
 		return "GetRegSpCakeOrderQty [rspId=" + rspId + ", qty=" + qty + ", itemId=" + itemId + ", menuId=" + menuId
-				+ ", itemGrp1=" + itemGrp1 + ", itemName=" + itemName + "]";
+				+ ", productionDate=" + productionDate + ", itemGrp1=" + itemGrp1 + ", itemName=" + itemName + "]";
 	}
 
+	 
 	 
 	
 }

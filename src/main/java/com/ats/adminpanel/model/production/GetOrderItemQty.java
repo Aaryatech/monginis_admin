@@ -1,11 +1,12 @@
 package com.ats.adminpanel.model.production;
 
 import java.io.Serializable;
+import java.sql.Date;
 
 
 
 
-public class GetOrderItemQty implements Serializable{
+public class GetOrderItemQty {
 
 	
 
@@ -21,6 +22,8 @@ public class GetOrderItemQty implements Serializable{
 	private int menuId;
 	
 	private int itemGrp1;
+	
+	private Date productionDate;
 
 	private String itemName;
 
@@ -73,12 +76,21 @@ public class GetOrderItemQty implements Serializable{
 		this.orderId = orderId;
 	}
 
+	public Date getProductionDate() {
+		return productionDate;
+	}
+
+	public void setProductionDate(Date productionDate) {
+		this.productionDate = productionDate;
+	}
+
 	@Override
 	public String toString() {
 		return "GetOrderItemQty [orderId=" + orderId + ", qty=" + qty + ", itemId=" + itemId + ", menuId=" + menuId
-				+ ", itemGrp1=" + itemGrp1 + ", itemName=" + itemName + "]";
+				+ ", itemGrp1=" + itemGrp1 + ", productionDate=" + productionDate + ", itemName=" + itemName + "]";
 	}
 
+	 
 	 
 
 	 
