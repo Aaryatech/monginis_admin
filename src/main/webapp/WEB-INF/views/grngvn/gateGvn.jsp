@@ -280,7 +280,8 @@ div.panel {
 																data-lightbox="image-1">Image 1</a></td>
 
 															<td><a href="${url}${gvnList.gvnPhotoUpload2}"
-																data-lightbox="image-1">Image 2</a> <c:choose>
+																data-lightbox="image-1">Image 2</a></td> 
+																<c:choose>
 																	<c:when test="${gvnList.grnGvnStatus==1}">
 																		<td align="left"><c:out value="Pending"></c:out></td>
 

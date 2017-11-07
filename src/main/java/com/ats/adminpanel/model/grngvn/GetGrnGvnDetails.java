@@ -93,6 +93,41 @@ int grnGvnId;
 	private String itemName;
 	
 	private String frName;
+	
+	
+	//newly Added
+	
+	private int isTallySync;
+		
+		
+		
+		private float baseRate;
+		
+		
+		private float sgstPer;
+		
+		
+		private float cgstPer;
+		
+		
+		private float igstPer;
+		
+		
+		private float taxableAmt;
+		
+		
+		private float totalTax;
+		
+		
+		
+		
+		private float roundUpAmt;
+		
+		
+		private float finalAmt;
+
+	
+	
 
 	public int getGrnGvnId() {
 		return grnGvnId;
@@ -334,6 +369,78 @@ int grnGvnId;
 		this.frName = frName;
 	}
 
+	public int getIsTallySync() {
+		return isTallySync;
+	}
+
+	public void setIsTallySync(int isTallySync) {
+		this.isTallySync = isTallySync;
+	}
+
+	public float getBaseRate() {
+		return baseRate;
+	}
+
+	public void setBaseRate(float baseRate) {
+		this.baseRate = baseRate;
+	}
+
+	public float getSgstPer() {
+		return sgstPer;
+	}
+
+	public void setSgstPer(float sgstPer) {
+		this.sgstPer = sgstPer;
+	}
+
+	public float getCgstPer() {
+		return cgstPer;
+	}
+
+	public void setCgstPer(float cgstPer) {
+		this.cgstPer = cgstPer;
+	}
+
+	public float getIgstPer() {
+		return igstPer;
+	}
+
+	public void setIgstPer(float igstPer) {
+		this.igstPer = igstPer;
+	}
+
+	public float getTaxableAmt() {
+		return taxableAmt;
+	}
+
+	public void setTaxableAmt(float taxableAmt) {
+		this.taxableAmt = taxableAmt;
+	}
+
+	public float getTotalTax() {
+		return totalTax;
+	}
+
+	public void setTotalTax(float totalTax) {
+		this.totalTax = totalTax;
+	}
+
+	public float getRoundUpAmt() {
+		return roundUpAmt;
+	}
+
+	public void setRoundUpAmt(float roundUpAmt) {
+		this.roundUpAmt = roundUpAmt;
+	}
+
+	public float getFinalAmt() {
+		return finalAmt;
+	}
+
+	public void setFinalAmt(float finalAmt) {
+		this.finalAmt = finalAmt;
+	}
+
 	@Override
 	public String toString() {
 		return "GetGrnGvnDetails [grnGvnId=" + grnGvnId + ", grnGvnDate=" + grnGvnDate + ", billNo=" + billNo
@@ -347,10 +454,11 @@ int grnGvnId;
 				+ ", approvedRemarkStore=" + approvedRemarkStore + ", approvedLoginAcc=" + approvedLoginAcc
 				+ ", grnApprovedDateTimeAcc=" + grnApprovedDateTimeAcc + ", approvedRemarkAcc=" + approvedRemarkAcc
 				+ ", delStatus=" + delStatus + ", grnGvnQtyAuto=" + grnGvnQtyAuto + ", itemName=" + itemName
-				+ ", frName=" + frName + "]";
+				+ ", frName=" + frName + ", isTallySync=" + isTallySync + ", baseRate=" + baseRate + ", sgstPer="
+				+ sgstPer + ", cgstPer=" + cgstPer + ", igstPer=" + igstPer + ", taxableAmt=" + taxableAmt
+				+ ", totalTax=" + totalTax + ", roundUpAmt=" + roundUpAmt + ", finalAmt=" + finalAmt + "]";
 	}
-	
-	
+
 	
 
 
