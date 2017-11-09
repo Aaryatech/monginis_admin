@@ -78,7 +78,18 @@ public class PostBillDetail {
 	
 	
 	
-	
+	 private int isGrngvnApplied;
+	    
+	    
+	    
+	    
+	    
+		public int getIsGrngvnApplied() {
+			return isGrngvnApplied;
+		}
+		public void setIsGrngvnApplied(int isGrngvnApplied) {
+			this.isGrngvnApplied = isGrngvnApplied;
+		}
 
 	public int getGrnType() {
 		return grnType;

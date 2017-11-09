@@ -211,6 +211,7 @@ public class BillController {
 					billDetail.setGrandTotal(grandTotal);
 					billDetail.setRemark("");
 					billDetail.setDelStatus(0);
+					billDetail.setIsGrngvnApplied(0);
 					
 					billDetail.setGrnType(gBill.getGrnType());//newly added
 					
@@ -593,14 +594,22 @@ public class BillController {
 
 				System.out.println(" *** get Bill response  " + billDetailsResponse.getGetBillDetails().toString());
 				System.out.println("fr Name==" + frName);
+				
+				for(int i=0;i<billDetailsList.size();i++) {
+					
+					model.addObject("billNo", billDetailsList.get(i).getBillNo());
+					model.addObject("billDate", billDetailsList.get(i).getBillDate());
+					
+				}
 
 				model.addObject("frName", frName);
-				model.addObject("billNo", billDetailsList.get(0).getBillNo());
-				model.addObject("billDate", billDetailsList.get(0).getBillDate());
+				/*model.addObject("billNo", billDetailsList.get(0).getBillNo());
+				model.addObject("billDate", billDetailsList.get(0).getBillDate());*/
 				model.addObject("billDetails", billDetailsList);
 
 			} catch (Exception e) {
 				System.out.println("bill controller error " + e.getMessage());
+				e.printStackTrace();
 			}
 
 			return model;
@@ -701,6 +710,8 @@ public class BillController {
 				postBillDetail.setRemark(getBillDetail.getRemark());
 				postBillDetail.setGrnType(getBillDetail.getGrnType());
 				postBillDetail.setExpiryDate(getBillDetail.getExpiryDate());
+				postBillDetail.setIsGrngvnApplied(getBillDetail.getIsGrngvnApplied());
+
 				
 				if (getBillDetail.getBillQty() != newBillQty) {
 							

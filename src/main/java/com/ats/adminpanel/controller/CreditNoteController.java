@@ -303,7 +303,12 @@ public class CreditNoteController {
 			System.out.println("taxable amt =" + totalCrnTaxableAmt);
 			
 		} catch (Exception e) {
-			// TODO: handle exception
+		
+			System.out.println("Error in  : Insert Credit "+e.getMessage());
+			
+			e.printStackTrace();
+			
+			
 		}
 
 		return model;

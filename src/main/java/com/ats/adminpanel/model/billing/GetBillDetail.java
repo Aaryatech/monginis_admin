@@ -35,10 +35,19 @@ public class GetBillDetail {
     private int grnType;
     private Date expiryDate;
     
+    private int isGrngvnApplied;
     
     
     
     
+    
+	public int getIsGrngvnApplied() {
+		return isGrngvnApplied;
+	}
+	public void setIsGrngvnApplied(int isGrngvnApplied) {
+		this.isGrngvnApplied = isGrngvnApplied;
+	}
+	
 	public int getGrnType() {
 		return grnType;
 	}

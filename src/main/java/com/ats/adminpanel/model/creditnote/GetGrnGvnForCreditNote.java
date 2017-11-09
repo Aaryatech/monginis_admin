@@ -1,6 +1,6 @@
 package com.ats.adminpanel.model.creditnote;
 
-import java.util.Date;
+import java.sql.Date;
 
 
 public class GetGrnGvnForCreditNote {
