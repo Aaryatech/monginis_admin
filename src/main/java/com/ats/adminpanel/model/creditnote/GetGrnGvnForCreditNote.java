@@ -8,7 +8,7 @@ public class GetGrnGvnForCreditNote {
 	
 	int grnGvnId;
 
-	String grnGvnDate;
+	Date grnGvnDate;
 	
 
 	private int billNo;
@@ -119,13 +119,19 @@ public class GetGrnGvnForCreditNote {
 
 
 
-	public String getGrnGvnDate() {
+	
+
+
+	
+
+
+	public Date getGrnGvnDate() {
 		return grnGvnDate;
 	}
 
 
 
-	public void setGrnGvnDate(String grnGvnDate) {
+	public void setGrnGvnDate(Date grnGvnDate) {
 		this.grnGvnDate = grnGvnDate;
 	}
 
@@ -607,6 +613,7 @@ public class GetGrnGvnForCreditNote {
 
 
 
+	
 	
 
 	

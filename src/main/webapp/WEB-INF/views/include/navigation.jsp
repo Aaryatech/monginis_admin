@@ -572,6 +572,18 @@
 					</li>
 
 					
+					
+					<c:choose>
+						<c:when test="${Constants.subAct==85}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showInsertCreditNote">Credit Note</a>
+					</li>
+					
 
 
 

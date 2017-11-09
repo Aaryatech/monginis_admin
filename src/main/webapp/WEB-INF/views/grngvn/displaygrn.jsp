@@ -127,7 +127,6 @@
 										<select class="form-control chosen" multiple="multiple"
 											tabindex="6" name="fr_id" id="fr_id">
 
-											<option value="-1">All</option>
 											<c:forEach items="${allFrIdNameList}" var="allFrIdNameList"
 												varStatus="count">
 												<option value="${allFrIdNameList.frId}">${allFrIdNameList.frName}</option>

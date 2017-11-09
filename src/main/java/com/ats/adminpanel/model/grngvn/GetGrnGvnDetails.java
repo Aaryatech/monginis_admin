@@ -8,7 +8,7 @@ public class GetGrnGvnDetails {
 int grnGvnId;
 
 	
-	String grnGvnDate;
+	Date grnGvnDate;
 	
 
 	
@@ -126,8 +126,16 @@ int grnGvnId;
 		
 		private float finalAmt;
 
-	
-	
+		private int isCreditNote;
+						
+
+	public int getIsCreditNote() {
+			return isCreditNote;
+		}
+
+		public void setIsCreditNote(int isCreditNote) {
+			this.isCreditNote = isCreditNote;
+		}
 
 	public int getGrnGvnId() {
 		return grnGvnId;
@@ -137,11 +145,13 @@ int grnGvnId;
 		this.grnGvnId = grnGvnId;
 	}
 
-	public String getGrnGvnDate() {
+	
+
+	public Date getGrnGvnDate() {
 		return grnGvnDate;
 	}
 
-	public void setGrnGvnDate(String grnGvnDate) {
+	public void setGrnGvnDate(Date grnGvnDate) {
 		this.grnGvnDate = grnGvnDate;
 	}
 
@@ -456,9 +466,11 @@ int grnGvnId;
 				+ ", delStatus=" + delStatus + ", grnGvnQtyAuto=" + grnGvnQtyAuto + ", itemName=" + itemName
 				+ ", frName=" + frName + ", isTallySync=" + isTallySync + ", baseRate=" + baseRate + ", sgstPer="
 				+ sgstPer + ", cgstPer=" + cgstPer + ", igstPer=" + igstPer + ", taxableAmt=" + taxableAmt
-				+ ", totalTax=" + totalTax + ", roundUpAmt=" + roundUpAmt + ", finalAmt=" + finalAmt + "]";
+				+ ", totalTax=" + totalTax + ", roundUpAmt=" + roundUpAmt + ", finalAmt=" + finalAmt + ", isCreditNote="
+				+ isCreditNote + "]";
 	}
 
+	
 	
 
 

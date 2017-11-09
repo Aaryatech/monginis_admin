@@ -37,15 +37,9 @@ public class GrnGvnController {
 	List<GetGrnGvnDetails> getGrnGvnDetails;
 
 	public static String gateGrnFromDate, gateGrnToDate, accGrnFromDate, accGrnToDate;
-	
-	public static String gateGvnFromDate,gateGvnToDate,storeGvnFromDate,storeGvnToDate,accGvnFromDate,accGvnToDate;
-	
-	
-	
-	
-	
-	
-	
+
+	public static String gateGvnFromDate, gateGvnToDate, storeGvnFromDate, storeGvnToDate, accGvnFromDate, accGvnToDate;
+
 	@RequestMapping(value = "/getDateForGvnAcc", method = RequestMethod.GET)
 	public String getDateForGvnAcc(HttpServletRequest request, HttpServletResponse response) {
 
@@ -60,7 +54,7 @@ public class GrnGvnController {
 		return "";
 
 	}
-	
+
 	@RequestMapping(value = "/getDateForGvnStore", method = RequestMethod.GET)
 	public String getDateForGvnStore(HttpServletRequest request, HttpServletResponse response) {
 
@@ -76,8 +70,6 @@ public class GrnGvnController {
 
 	}
 
-	
-	
 	@RequestMapping(value = "/getDateForGvnGate", method = RequestMethod.GET)
 	public String getDateForGvnGate(HttpServletRequest request, HttpServletResponse response) {
 
@@ -92,7 +84,6 @@ public class GrnGvnController {
 		return "";
 
 	}
-
 
 	@RequestMapping(value = "/getDateForGrnGate", method = RequestMethod.GET)
 	public String getDateForGrnGate(HttpServletRequest request, HttpServletResponse response) {
@@ -149,20 +140,16 @@ public class GrnGvnController {
 
 		ModelAndView model = new ModelAndView("grngvn/gateGrn");
 
-		
-
 		try {
 
-			
 			RestTemplate restTemplate = new RestTemplate();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			try {
 
-				
 				map.add("fromDate", gateGrnFromDate);
 				map.add("toDate", gateGrnToDate);
-				
+
 			} catch (Exception e) {
 				System.out.println("ex in getting dates ---line 80");
 			}
@@ -296,7 +283,7 @@ public class GrnGvnController {
 
 	}
 
-	//insert gate grn by check boxes
+	// insert gate grn by check boxes
 	@RequestMapping(value = "/insertGrnByCheckBoxes", method = RequestMethod.GET) // Using checkboxes to insert
 	public ModelAndView getGrnId(HttpServletRequest request, HttpServletResponse response) {
 
@@ -319,7 +306,6 @@ public class GrnGvnController {
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 			System.out.println("grn details line 191 " + getGrnGvnDetails.toString());
 
-			
 			System.out.println("before for");
 
 			for (int i = 0; i < grnIdList.length; i++) {
@@ -329,25 +315,37 @@ public class GrnGvnController {
 
 					if (Integer.parseInt(grnIdList[i]) == getGrnGvnDetails.get(j).getGrnGvnId()) {
 
-						int aproveGateLogin = Integer
-								.parseInt(request.getParameter("approve_gate_login" + getGrnGvnDetails.get(j).getGrnGvnId()));
+						int aproveGateLogin = Integer.parseInt(
+								request.getParameter("approve_gate_login" + getGrnGvnDetails.get(j).getGrnGvnId()));
 
 						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						Calendar cal = Calendar.getInstance();
 						System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
-						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-						java.util.Date date = null;
+						/*
+						 * SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); java.util.Date
+						 * date = null;
+						 * 
+						 * try { date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate()); } catch
+						 * (ParseException e) { // TODO Auto-generated catch block e.printStackTrace();
+						 * }
+						 * 
+						 * java.sql.Date grnGvnDate = new Date(date.getTime());
+						 */
+						
+						
+						
+						
 
-						try {
-							date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate());
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
-						java.sql.Date grnGvnDate = new Date(date.getTime());
+						java.util.Date grnGvnDate = getGrnGvnDetails.get(j).getGrnGvnDate();
+						System.out.println("grn Gvn Date == "+grnGvnDate);
 
+						grnGvnDate = Df.parse(grnGvnDate.toString());
+						System.out.println(" grnGvnDate= " + grnGvnDate);
+
+												
 						GrnGvn postGrnGvn = new GrnGvn();
 
 						postGrnGvn.setGrnGvnDate(grnGvnDate);// 1
@@ -370,7 +368,6 @@ public class GrnGvnController {
 						postGrnGvn.setApprovedRemarkGate("Def: Grn Approved By Gate");// 19
 						postGrnGvn.setApproveimedDateTimeGate(dateFormat.format(cal.getTime()));
 
-
 						postGrnGvn.setApprovedLoginStore(getGrnGvnDetails.get(j).getApprovedLoginStore());// 20
 						postGrnGvn.setApprovedDateTimeStore(getGrnGvnDetails.get(j).getApprovedDateTimeStore());// 21
 						postGrnGvn.setApprovedRemarkStore(getGrnGvnDetails.get(j).getApprovedRemarkStore());// 22
@@ -382,6 +379,19 @@ public class GrnGvnController {
 						postGrnGvn.setGrnGvnQtyAuto(0);// 27
 
 						postGrnGvn.setGrnGvnAmt(getGrnGvnDetails.get(j).getGrnGvnAmt());
+
+						// newly added
+
+						postGrnGvn.setIsTallySync(0);
+						postGrnGvn.setBaseRate(getGrnGvnDetails.get(j).getBaseRate());
+						postGrnGvn.setSgstPer(getGrnGvnDetails.get(j).getSgstPer());
+						postGrnGvn.setCgstPer(getGrnGvnDetails.get(j).getCgstPer());
+						postGrnGvn.setIgstPer(getGrnGvnDetails.get(j).getIgstPer());
+
+						postGrnGvn.setTaxableAmt(getGrnGvnDetails.get(j).getTaxableAmt());
+						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
+						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
+						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
 
 						postGrnGvnList.add(postGrnGvn);
 
@@ -462,7 +472,6 @@ public class GrnGvnController {
 
 	}
 
-
 	@RequestMapping(value = "/showAccountGrnDetails", method = RequestMethod.GET)
 	public ModelAndView showAccountGrnDetails(HttpServletRequest request, HttpServletResponse response) {
 
@@ -513,13 +522,11 @@ public class GrnGvnController {
 
 		Constants.mainAct = 9;
 		Constants.subAct = 92;
-		
-		ModelAndView model = new ModelAndView("grngvn/accGrn");
 
+		ModelAndView model = new ModelAndView("grngvn/accGrn");
 
 		try {
 			String[] grnIdList = request.getParameterValues("select_to_agree");
-
 
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -532,7 +539,6 @@ public class GrnGvnController {
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 			System.out.println("grn details line 465 " + getGrnGvnDetails.toString());
 
-			
 			System.out.println("before for");
 
 			for (int i = 0; i < grnIdList.length; i++) {
@@ -541,25 +547,31 @@ public class GrnGvnController {
 				for (int j = 0; j < getGrnGvnDetails.size(); j++) {
 
 					if (Integer.parseInt(grnIdList[i]) == getGrnGvnDetails.get(j).getGrnGvnId()) {
-						
-						int aproveAccLogin = Integer
-								.parseInt(request.getParameter("approve_acc_login" + getGrnGvnDetails.get(j).getGrnGvnId()));
+
+						int aproveAccLogin = Integer.parseInt(
+								request.getParameter("approve_acc_login" + getGrnGvnDetails.get(j).getGrnGvnId()));
 
 						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						Calendar cal = Calendar.getInstance();
 						System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
-						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-						java.util.Date date = null;
+						/*
+						 * SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); java.util.Date
+						 * date = null;
+						 * 
+						 * try { date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate()); } catch
+						 * (ParseException e) { // TODO Auto-generated catch block e.printStackTrace();
+						 * }
+						 * 
+						 * java.sql.Date grnGvnDate = new Date(date.getTime());
+						 */
 
-						try {
-							date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate());
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
-						java.sql.Date grnGvnDate = new Date(date.getTime());
+						java.util.Date grnGvnDate = getGrnGvnDetails.get(j).getGrnGvnDate();
+
+						grnGvnDate = Df.parse(grnGvnDate.toString());
+						System.out.println("grnGvnDate= " + grnGvnDate);
 
 						GrnGvn postGrnGvn = new GrnGvn();
 
@@ -594,6 +606,19 @@ public class GrnGvnController {
 						postGrnGvn.setApproveimedDateTimeGate(getGrnGvnDetails.get(j).getApproveimedDateTimeGate());
 
 						postGrnGvn.setGrnGvnAmt(getGrnGvnDetails.get(j).getGrnGvnAmt());
+
+						// newly added
+
+						postGrnGvn.setIsTallySync(0);
+						postGrnGvn.setBaseRate(getGrnGvnDetails.get(j).getBaseRate());
+						postGrnGvn.setSgstPer(getGrnGvnDetails.get(j).getSgstPer());
+						postGrnGvn.setCgstPer(getGrnGvnDetails.get(j).getCgstPer());
+						postGrnGvn.setIgstPer(getGrnGvnDetails.get(j).getIgstPer());
+
+						postGrnGvn.setTaxableAmt(getGrnGvnDetails.get(j).getTaxableAmt());
+						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
+						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
+						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
 
 						postGrnGvnList.add(postGrnGvn);
 
@@ -650,8 +675,6 @@ public class GrnGvnController {
 
 	}
 
-	
-	
 	@RequestMapping(value = "/insertAccGrnProcessAgree", method = RequestMethod.GET)
 	public String insertAccGrnProcessAgree(HttpServletRequest request, HttpServletResponse response) {
 
@@ -779,8 +802,6 @@ public class GrnGvnController {
 
 	}
 
-
-
 	@RequestMapping(value = "/showGateGvnDetails", method = RequestMethod.GET)
 	public ModelAndView showGateGvnDetails(HttpServletRequest request, HttpServletResponse response) {
 
@@ -791,16 +812,15 @@ public class GrnGvnController {
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		RestTemplate restTemplate = new RestTemplate();
-		
+
 		System.out.println("from Date using ajax  :" + gateGvnFromDate);
 		System.out.println("to Date using ajax  : " + gateGvnToDate);
 
 		try {
 
-			
 			map.add("fromDate", gateGvnFromDate);
 			map.add("toDate", gateGvnToDate);
-			
+
 			getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGvnDetails", map,
 					GetGrnGvnDetailsList.class);
 
@@ -838,8 +858,6 @@ public class GrnGvnController {
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-
-
 		try {
 			String[] grnIdList = request.getParameterValues("select_to_agree");
 
@@ -848,7 +866,6 @@ public class GrnGvnController {
 
 			}
 
-			
 			List<GrnGvn> postGrnGvnList = new ArrayList<GrnGvn>();
 
 			PostGrnGvnList postGrnList = new PostGrnGvnList();
@@ -856,7 +873,6 @@ public class GrnGvnController {
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 			System.out.println("grn details line 191 " + getGrnGvnDetails.toString());
 
-			
 			System.out.println("before for");
 
 			for (int i = 0; i < grnIdList.length; i++) {
@@ -874,17 +890,23 @@ public class GrnGvnController {
 						Calendar cal = Calendar.getInstance();
 						System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
-						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-						java.util.Date date = null;
+						/*
+						 * SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); java.util.Date
+						 * date = null;
+						 * 
+						 * try { date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate()); } catch
+						 * (ParseException e) { // TODO Auto-generated catch block e.printStackTrace();
+						 * }
+						 * 
+						 * java.sql.Date grnGvnDate = new Date(date.getTime());
+						 */
 
-						try {
-							date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate());
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
-						java.sql.Date grnGvnDate = new Date(date.getTime());
+						java.util.Date grnGvnDate = getGrnGvnDetails.get(j).getGrnGvnDate();
+
+						grnGvnDate = Df.parse(grnGvnDate.toString());
+						System.out.println("grnGvnDate= " + grnGvnDate);
 
 						GrnGvn postGrnGvn = new GrnGvn();
 
@@ -920,6 +942,18 @@ public class GrnGvnController {
 
 						postGrnGvn.setGrnGvnAmt(getGrnGvnDetails.get(j).getGrnGvnAmt());
 
+						// newly added
+						postGrnGvn.setIsTallySync(0);
+						postGrnGvn.setBaseRate(getGrnGvnDetails.get(j).getBaseRate());
+						postGrnGvn.setSgstPer(getGrnGvnDetails.get(j).getSgstPer());
+						postGrnGvn.setCgstPer(getGrnGvnDetails.get(j).getCgstPer());
+						postGrnGvn.setIgstPer(getGrnGvnDetails.get(j).getIgstPer());
+
+						postGrnGvn.setTaxableAmt(getGrnGvnDetails.get(j).getTaxableAmt());
+						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
+						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
+						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
+
 						postGrnGvnList.add(postGrnGvn);
 
 						System.out.println("Done it inside if ");
@@ -954,11 +988,10 @@ public class GrnGvnController {
 			e.printStackTrace();
 
 		}
-		
-		
+
 		map.add("fromDate", gateGvnFromDate);
 		map.add("toDate", gateGvnToDate);
-		
+
 		getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGvnDetails", map,
 				GetGrnGvnDetailsList.class);
 
@@ -971,13 +1004,10 @@ public class GrnGvnController {
 
 		model.addObject("fromDate", gateGvnFromDate);
 		model.addObject("toDate", gateGvnToDate);
-		
-		
+
 		return model;
 
 	}
-	
-	
 
 	@RequestMapping(value = "/insertGateGvnProcessAgree", method = RequestMethod.GET)
 	public String insertGateGvnProcessAgree(HttpServletRequest request, HttpServletResponse response) {
@@ -1104,8 +1134,6 @@ public class GrnGvnController {
 
 	}
 
-	
-
 	@RequestMapping(value = "/showStoreGvnDetails", method = RequestMethod.GET)
 	public ModelAndView showStoreGvnDetails(HttpServletRequest request, HttpServletResponse response) {
 
@@ -1120,10 +1148,10 @@ public class GrnGvnController {
 		try {
 			System.out.println("from Date using ajax  :" + storeGvnFromDate);
 			System.out.println("to Date using ajax  : " + storeGvnToDate);
-			
+
 			map.add("fromDate", storeGvnFromDate);
 			map.add("toDate", storeGvnToDate);
-			
+
 			getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGvnDetails", map,
 					GetGrnGvnDetailsList.class);
 
@@ -1161,7 +1189,6 @@ public class GrnGvnController {
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-
 		try {
 			String[] grnIdList = request.getParameterValues("select_to_agree");
 
@@ -1169,8 +1196,6 @@ public class GrnGvnController {
 				System.out.println("GVN id for gate approval " + grnIdList[k]);
 
 			}
-
-			
 
 			List<GrnGvn> postGrnGvnList = new ArrayList<GrnGvn>();
 
@@ -1196,17 +1221,23 @@ public class GrnGvnController {
 						Calendar cal = Calendar.getInstance();
 						System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
-						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-						java.util.Date date = null;
+						/*
+						 * SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); java.util.Date
+						 * date = null;
+						 * 
+						 * try { date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate()); } catch
+						 * (ParseException e) { // TODO Auto-generated catch block e.printStackTrace();
+						 * }
+						 * 
+						 * java.sql.Date grnGvnDate = new Date(date.getTime());
+						 */
 
-						try {
-							date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate());
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
-						java.sql.Date grnGvnDate = new Date(date.getTime());
+						java.util.Date grnGvnDate = getGrnGvnDetails.get(j).getGrnGvnDate();
+
+						grnGvnDate = Df.parse(grnGvnDate.toString());
+						System.out.println("grnGvnDate= " + grnGvnDate);
 
 						GrnGvn postGrnGvn = new GrnGvn();
 
@@ -1241,6 +1272,20 @@ public class GrnGvnController {
 						postGrnGvn.setApproveimedDateTimeGate(getGrnGvnDetails.get(j).getApproveimedDateTimeGate());
 
 						postGrnGvn.setGrnGvnAmt(getGrnGvnDetails.get(j).getGrnGvnAmt());
+
+						// newly added
+
+						postGrnGvn.setIsTallySync(0);
+						postGrnGvn.setBaseRate(getGrnGvnDetails.get(j).getBaseRate());
+						postGrnGvn.setSgstPer(getGrnGvnDetails.get(j).getSgstPer());
+						postGrnGvn.setCgstPer(getGrnGvnDetails.get(j).getCgstPer());
+						postGrnGvn.setIgstPer(getGrnGvnDetails.get(j).getIgstPer());
+
+						postGrnGvn.setTaxableAmt(getGrnGvnDetails.get(j).getTaxableAmt());
+						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
+						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
+						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
+
 						postGrnGvnList.add(postGrnGvn);
 
 						System.out.println("Done it inside if ");
@@ -1276,10 +1321,9 @@ public class GrnGvnController {
 
 		}
 
-		
 		map.add("fromDate", storeGvnFromDate);
 		map.add("toDate", storeGvnToDate);
-		
+
 		getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGvnDetails", map,
 				GetGrnGvnDetailsList.class);
 
@@ -1291,7 +1335,7 @@ public class GrnGvnController {
 		model.addObject("gvnList", getGrnGvnDetails);
 		model.addObject("fromDate", storeGvnFromDate);
 		model.addObject("toDate", storeGvnToDate);
-		
+
 		return model;
 
 	}
@@ -1420,8 +1464,6 @@ public class GrnGvnController {
 
 	}
 
-	
-
 	@RequestMapping(value = "/showAccountGvnDetails", method = RequestMethod.GET)
 	public ModelAndView showAccountGvnDetails(HttpServletRequest request, HttpServletResponse response) {
 
@@ -1437,10 +1479,9 @@ public class GrnGvnController {
 			System.out.println("from Date using ajax  :" + accGvnFromDate);
 			System.out.println("to Date using ajax  : " + accGvnToDate);
 
-			
 			map.add("fromDate", accGvnFromDate);
 			map.add("toDate", accGvnToDate);
-			
+
 			getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGvnDetails", map,
 					GetGrnGvnDetailsList.class);
 
@@ -1474,11 +1515,10 @@ public class GrnGvnController {
 		Constants.subAct = 123;
 
 		ModelAndView model = new ModelAndView("grngvn/accGvn");
-		
+
 		RestTemplate restTemplate = new RestTemplate();
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-
 
 		try {
 			String[] grnIdList = request.getParameterValues("select_to_agree");
@@ -1488,7 +1528,6 @@ public class GrnGvnController {
 
 			}
 
-			
 			List<GrnGvn> postGrnGvnList = new ArrayList<GrnGvn>();
 
 			PostGrnGvnList postGrnList = new PostGrnGvnList();
@@ -1513,17 +1552,23 @@ public class GrnGvnController {
 						Calendar cal = Calendar.getInstance();
 						System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
-						SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-						java.util.Date date = null;
+						/*
+						 * SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); java.util.Date
+						 * date = null;
+						 * 
+						 * try { date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate()); } catch
+						 * (ParseException e) { // TODO Auto-generated catch block e.printStackTrace();
+						 * }
+						 * 
+						 * java.sql.Date grnGvnDate = new Date(date.getTime());
+						 */
 
-						try {
-							date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate());
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
-						java.sql.Date grnGvnDate = new Date(date.getTime());
+						java.util.Date grnGvnDate = getGrnGvnDetails.get(j).getGrnGvnDate();
+
+						grnGvnDate = Df.parse(grnGvnDate.toString());
+						System.out.println("grnGvnDate= " + grnGvnDate);
 
 						GrnGvn postGrnGvn = new GrnGvn();
 
@@ -1559,6 +1604,19 @@ public class GrnGvnController {
 
 						postGrnGvn.setGrnGvnAmt(getGrnGvnDetails.get(j).getGrnGvnAmt());
 
+						// newly added
+
+						postGrnGvn.setIsTallySync(0);
+						postGrnGvn.setBaseRate(getGrnGvnDetails.get(j).getBaseRate());
+						postGrnGvn.setSgstPer(getGrnGvnDetails.get(j).getSgstPer());
+						postGrnGvn.setCgstPer(getGrnGvnDetails.get(j).getCgstPer());
+						postGrnGvn.setIgstPer(getGrnGvnDetails.get(j).getIgstPer());
+
+						postGrnGvn.setTaxableAmt(getGrnGvnDetails.get(j).getTaxableAmt());
+						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
+						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
+						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
+
 						postGrnGvnList.add(postGrnGvn);
 
 						System.out.println("Done it inside if ");
@@ -1593,11 +1651,10 @@ public class GrnGvnController {
 			e.printStackTrace();
 
 		}
-		
-		
+
 		map.add("fromDate", accGvnFromDate);
 		map.add("toDate", accGvnToDate);
-		
+
 		getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGvnDetails", map,
 				GetGrnGvnDetailsList.class);
 
@@ -1660,7 +1717,7 @@ public class GrnGvnController {
 
 			e.printStackTrace();
 		}
-		
+
 		model.addObject("fromDate", accGvnFromDate);
 		model.addObject("toDate", accGvnToDate);
 
@@ -1719,8 +1776,7 @@ public class GrnGvnController {
 
 			e.printStackTrace();
 		}
-		
-		
+
 		model.addObject("fromDate", accGvnFromDate);
 		model.addObject("toDate", accGvnToDate);
 
