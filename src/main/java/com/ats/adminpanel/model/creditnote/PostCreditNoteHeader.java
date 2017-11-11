@@ -8,6 +8,10 @@ public class PostCreditNoteHeader {
 	
 	
 	private int crnId;
+	
+	//newly added
+	private String crnNo;
+	
 
 	private Date crnDate;
 
@@ -128,15 +132,23 @@ public class PostCreditNoteHeader {
 		this.roundOff = roundOff;
 	}
 
-	@Override
-	public String toString() {
-		return "PostCreditNoteHeader [crnId=" + crnId + ", crnDate=" + crnDate + ", frId=" + frId + ", crnTaxableAmt="
-				+ crnTaxableAmt + ", crnTotalTax=" + crnTotalTax + ", crnGrandTotal=" + crnGrandTotal + ", crnFinalAmt="
-				+ crnFinalAmt + ", roundOff=" + roundOff + ", userId=" + userId + ", createdDateTime=" + createdDateTime
-				+ ", isTallySync=" + isTallySync + ", postCreditNoteDetails=" + postCreditNoteDetails + "]";
+	public String getCrnNo() {
+		return crnNo;
 	}
 
-	
+	public void setCrnNo(String crnNo) {
+		this.crnNo = crnNo;
+	}
+
+	@Override
+	public String toString() {
+		return "PostCreditNoteHeader [crnId=" + crnId + ", crnNo=" + crnNo + ", crnDate=" + crnDate + ", frId=" + frId
+				+ ", crnTaxableAmt=" + crnTaxableAmt + ", crnTotalTax=" + crnTotalTax + ", crnGrandTotal="
+				+ crnGrandTotal + ", crnFinalAmt=" + crnFinalAmt + ", roundOff=" + roundOff + ", userId=" + userId
+				+ ", createdDateTime=" + createdDateTime + ", isTallySync=" + isTallySync + ", postCreditNoteDetails="
+				+ postCreditNoteDetails + "]";
+	}
+
 	
 	
 	

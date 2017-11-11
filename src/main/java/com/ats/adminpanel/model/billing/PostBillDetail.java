@@ -83,7 +83,6 @@ public class PostBillDetail {
 	    
 	    
 	    
-	    
 		public int getIsGrngvnApplied() {
 			return isGrngvnApplied;
 		}

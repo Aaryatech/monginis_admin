@@ -226,8 +226,10 @@ public class GetBillDetail {
 				+ ", sgstPer=" + sgstPer + ", sgstRs=" + sgstRs + ", cgstPer=" + cgstPer + ", cgstRs=" + cgstRs
 				+ ", igstPer=" + igstPer + ", igstRs=" + igstRs + ", taxableAmt=" + taxableAmt + ", remark=" + remark
 				+ ", delStatus=" + delStatus + ", itemName=" + itemName + ", catName=" + catName + ", billDate="
-				+ billDate + ", baseRate=" + baseRate + ", totalTax=" + totalTax + "]";
+				+ billDate + ", baseRate=" + baseRate + ", totalTax=" + totalTax + ", grnType=" + grnType
+				+ ", expiryDate=" + expiryDate + ", isGrngvnApplied=" + isGrngvnApplied + "]";
 	}
+	
 	
 	
     

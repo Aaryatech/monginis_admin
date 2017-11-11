@@ -185,7 +185,14 @@ public class CreditNoteController {
 						creditNoteDetail.setTaxableAmt(creditNote.getTaxableAmt());
 						creditNoteDetail.setTotalTax(creditNote.getTotalTax());
 						
+						//newly added
+						creditNoteDetail.setCatId(creditNote.getCatId());
+						creditNoteDetail.setBaseRate(creditNote.getBaseRate());
+						creditNoteDetail.setCessPer(0);
+						creditNoteDetail.setRefInvoiceNo("ppppp");
+						
 						postCreditNoteDetailsListMatched.add(creditNoteDetail);
+						
 						creditHeader.setPostCreditNoteDetails(postCreditNoteDetailsListMatched);
 						
 						creditHeader.setCrnTaxableAmt(creditHeader.getCrnTaxableAmt()+creditNote.getTaxableAmt());
@@ -237,6 +244,7 @@ public class CreditNoteController {
 					postCreditHeader.setIsTallySync(creditNote.getIsTallySync());
 					postCreditHeader.setRoundOff(creditNote.getRoundUpAmt());
 					postCreditHeader.setUserId(0);
+					postCreditHeader.setCrnNo("gfpl :default");
 						
 					PostCreditNoteDetails creditNoteDetail=new PostCreditNoteDetails();
 															

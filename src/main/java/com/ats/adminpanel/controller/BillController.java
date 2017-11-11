@@ -680,16 +680,16 @@ public class BillController {
 			PostBillDetail postBillDetail=new PostBillDetail();
 			PostBillHeader postBillHeader=new PostBillHeader();
 			for (int i = 0; i < billDetailsList.size(); i++) {
-
-				 postBillDetail=new PostBillDetail();
 				
+				Integer newBillQty=Integer.parseInt(request.getParameter("billQty" + billDetailsList.get(i).getBillDetailNo()));
+
+				System.out.println("new bill qty = "+newBillQty);
 				
 				GetBillDetail getBillDetail=billDetailsList.get(i);
 				
-				Integer newBillQty=Integer.parseInt(request.getParameter("billQty" + billDetailsList.get(i).getBillDetailNo()));
-				
-				
-				
+				if (getBillDetail.getBillQty() != newBillQty) {
+
+				 postBillDetail=new PostBillDetail();
 				
 				postBillDetail.setBaseRate(getBillDetail.getBaseRate());
 				postBillDetail.setBillDetailNo(getBillDetail.getBillDetailNo());
@@ -713,7 +713,7 @@ public class BillController {
 				postBillDetail.setIsGrngvnApplied(getBillDetail.getIsGrngvnApplied());
 
 				
-				if (getBillDetail.getBillQty() != newBillQty) {
+				
 							
 					float baseRate=getBillDetail.getBaseRate();
 					
@@ -749,7 +749,7 @@ public class BillController {
 
 				}//end of if 
 				
-				else {
+				/*else {
 
 					System.out.println(" Nothing Changed ");
 					postBillDetail.setBillQty(getBillDetail.getBillQty());
@@ -764,48 +764,55 @@ public class BillController {
 					
 					
 				}//end of else
-				
+*/				
 				postBillDetailsList.add(postBillDetail);
 				
 
+				for(int j=0;j<billHeadersList.size();j++) {
+					
+					if(billHeadersList.get(j).getBillNo()==postBillDetailsList.get(0).getBillNo()) {
+						
+						
+						
+						DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+						Date billDate=null;
+						try {
+							billDate = formatter.parse(billHeadersList.get(j).getBillDate());
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+						postBillHeader.setBillDate(billDate);
+						
+						postBillHeader.setBillNo(billHeadersList.get(j).getBillNo());
+						postBillHeader.setDelStatus(0);
+						postBillHeader.setFrCode(billHeadersList.get(j).getFrCode());
+						postBillHeader.setFrId(billHeadersList.get(j).getFrId());
+						postBillHeader.setGrandTotal(sumGrandTotal);
+						postBillHeader.setInvoiceNo(billHeadersList.get(j).getInvoiceNo());
+						postBillHeader.setRemark(billHeadersList.get(j).getRemark());
+						postBillHeader.setStatus(billHeadersList.get(j).getStatus());
+						postBillHeader.setTaxableAmt(sumTaxableAmt);
+						postBillHeader.setTaxApplicable(billHeadersList.get(j).getTaxApplicable());
+						postBillHeader.setTotalTax(sumTotalTax);
+						
+					}//end of if
+				}//end of for
+				
+				
+				
+				
 			} // End of for
 			
 			
-			for(int j=0;j<billHeadersList.size();j++) {
-				
-				if(billHeadersList.get(j).getBillNo()==postBillDetailsList.get(0).getBillNo()) {
-					
-					DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-					Date billDate=null;
-					try {
-						billDate = formatter.parse(billHeadersList.get(j).getBillDate());
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					postBillHeader.setBillDate(billDate);
-					
-					postBillHeader.setBillNo(billHeadersList.get(j).getBillNo());
-					postBillHeader.setDelStatus(0);
-					postBillHeader.setFrCode(billHeadersList.get(j).getFrCode());
-					postBillHeader.setFrId(billHeadersList.get(j).getFrId());
-					postBillHeader.setGrandTotal(sumGrandTotal);
-					postBillHeader.setInvoiceNo(billHeadersList.get(j).getInvoiceNo());
-					postBillHeader.setRemark(billHeadersList.get(j).getRemark());
-					postBillHeader.setStatus(billHeadersList.get(j).getStatus());
-					postBillHeader.setTaxableAmt(sumTaxableAmt);
-					postBillHeader.setTaxApplicable(billHeadersList.get(j).getTaxApplicable());
-					postBillHeader.setTotalTax(sumTotalTax);
-					
-				}//end of if
-			}//end of for
+			
 			
 			postBillHeader.setPostBillDetailsList(postBillDetailsList);
 			postBillHeadersList.add(postBillHeader);
 			postBillDataCommon.setPostBillHeadersList(postBillHeadersList);
 			
 
-			Info info = restTemplate.postForObject(Constants.url + "insertBillData", postBillDataCommon,
+			Info info = restTemplate.postForObject(Constants.url + "updateBillData", postBillDataCommon,
 					Info.class);
 
 			return "redirect:/showBillList";

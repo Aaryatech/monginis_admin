@@ -3,6 +3,7 @@ package com.ats.adminpanel.model.creditnote;
 import java.util.Date;
 
 
+
 public class PostCreditNoteDetails {
 	
 	
@@ -55,7 +56,16 @@ public class PostCreditNoteDetails {
 	private Date billDate;
 	
 	
-
+	private int catId;
+	
+	
+	private float baseRate;
+	
+	private float cessPer;
+	
+	private String  refInvoiceNo;
+	
+	
 	public int getBillNo() {
 		return billNo;
 	}
@@ -226,6 +236,38 @@ public class PostCreditNoteDetails {
 		this.grnGvnDate = grnGvnDate;
 	}
 
+	public int getCatId() {
+		return catId;
+	}
+
+	public void setCatId(int catId) {
+		this.catId = catId;
+	}
+
+	public float getBaseRate() {
+		return baseRate;
+	}
+
+	public void setBaseRate(float baseRate) {
+		this.baseRate = baseRate;
+	}
+
+	public float getCessPer() {
+		return cessPer;
+	}
+
+	public void setCessPer(float cessPer) {
+		this.cessPer = cessPer;
+	}
+
+	public String getRefInvoiceNo() {
+		return refInvoiceNo;
+	}
+
+	public void setRefInvoiceNo(String refInvoiceNo) {
+		this.refInvoiceNo = refInvoiceNo;
+	}
+
 	@Override
 	public String toString() {
 		return "PostCreditNoteDetails [crndId=" + crndId + ", crnId=" + crnId + ", itemId=" + itemId + ", grnGvnId="
@@ -233,10 +275,10 @@ public class PostCreditNoteDetails {
 				+ grnGvnQty + ", taxableAmt=" + taxableAmt + ", totalTax=" + totalTax + ", grnGvnAmt=" + grnGvnAmt
 				+ ", cgstPer=" + cgstPer + ", sgstPer=" + sgstPer + ", igstPer=" + igstPer + ", cgstRs=" + cgstRs
 				+ ", sgstRs=" + sgstRs + ", igstRs=" + igstRs + ", cessRs=" + cessRs + ", delStatus=" + delStatus
-				+ ", billNo=" + billNo + ", billDate=" + billDate + "]";
+				+ ", billNo=" + billNo + ", billDate=" + billDate + ", catId=" + catId + ", baseRate=" + baseRate
+				+ ", cessPer=" + cessPer + ", refInvoiceNo=" + refInvoiceNo + "]";
 	}
 
-	
 	
 	
 

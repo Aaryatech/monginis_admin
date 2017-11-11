@@ -3,6 +3,7 @@ package com.ats.adminpanel.model.creditnote;
 import java.sql.Date;
 
 
+
 public class GetGrnGvnForCreditNote {
 	
 	
@@ -98,6 +99,17 @@ public class GetGrnGvnForCreditNote {
 	
 	
 	private int isCreditNote;
+	
+	
+	
+	
+	private int menuId;
+	
+	private int catId;
+	
+	private String invoiceNo;
+	
+	private Date refInvoiceDate;
 
 
 
@@ -113,16 +125,53 @@ public class GetGrnGvnForCreditNote {
 
 
 
-	
 
-	
-
-
-
-	
+	public int getMenuId() {
+		return menuId;
+	}
 
 
-	
+
+	public void setMenuId(int menuId) {
+		this.menuId = menuId;
+	}
+
+
+
+	public int getCatId() {
+		return catId;
+	}
+
+
+
+	public void setCatId(int catId) {
+		this.catId = catId;
+	}
+
+
+
+	public String getInvoiceNo() {
+		return invoiceNo;
+	}
+
+
+
+	public void setInvoiceNo(String invoiceNo) {
+		this.invoiceNo = invoiceNo;
+	}
+
+
+
+	public Date getRefInvoiceDate() {
+		return refInvoiceDate;
+	}
+
+
+
+	public void setRefInvoiceDate(Date refInvoiceDate) {
+		this.refInvoiceDate = refInvoiceDate;
+	}
+
 
 
 	public Date getGrnGvnDate() {
@@ -608,13 +657,11 @@ public class GetGrnGvnForCreditNote {
 				+ ", delStatus=" + delStatus + ", grnGvnQtyAuto=" + grnGvnQtyAuto + ", isTallySync=" + isTallySync
 				+ ", baseRate=" + baseRate + ", sgstPer=" + sgstPer + ", cgstPer=" + cgstPer + ", igstPer=" + igstPer
 				+ ", taxableAmt=" + taxableAmt + ", totalTax=" + totalTax + ", roundUpAmt=" + roundUpAmt + ", finalAmt="
-				+ finalAmt + ", itemName=" + itemName + ", frName=" + frName + ", isCreditNote=" + isCreditNote + "]";
+				+ finalAmt + ", itemName=" + itemName + ", frName=" + frName + ", isCreditNote=" + isCreditNote
+				+ ", menuId=" + menuId + ", catId=" + catId + ", invoiceNo=" + invoiceNo + ", refInvoiceDate="
+				+ refInvoiceDate + "]";
 	}
 
-
-
-	
-	
 
 	
 }
