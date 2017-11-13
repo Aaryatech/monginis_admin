@@ -795,8 +795,9 @@ public class BillController {
 						postBillHeader.setTaxableAmt(sumTaxableAmt);
 						postBillHeader.setTaxApplicable(billHeadersList.get(j).getTaxApplicable());
 						postBillHeader.setTotalTax(sumTotalTax);
-						
+						break;
 					}//end of if
+			
 				}//end of for
 				
 				
