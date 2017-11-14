@@ -117,7 +117,7 @@ public class ProductionController {
 		
 	}
 	
-	
+	/*
 	@RequestMapping(value = "/getProductionOrder", method = RequestMethod.GET)
 	public @ResponseBody List<GetOrderItemQty> generateOrderList(HttpServletRequest request,
 		HttpServletResponse response) {
@@ -155,7 +155,7 @@ public class ProductionController {
 		return getOrderItemQtyList;
 		
 	}
-	
+	*/
 	@RequestMapping(value = "/getProductionRegSpCakeOrder", method = RequestMethod.GET)
 	public @ResponseBody List<GetRegSpCakeOrderQty> generateRegSpCakeOrderList(HttpServletRequest request,
 		HttpServletResponse response) {
