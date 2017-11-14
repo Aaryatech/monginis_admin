@@ -596,6 +596,59 @@
 		
 <!-- GRN Menu -->
 
+
+</li>
+
+<c:choose>
+					<c:when test="${Constants.mainAct==12}">
+						<li class="active">
+					</c:when>
+
+					<c:otherwise>
+						<li>
+					</c:otherwise>
+				</c:choose>
+				<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
+					<span>Stock</span> <b class="arrow fa fa-angle-right"></b>
+				</a>
+				<!-- BEGIN Submenu -->
+				<ul class="submenu">
+
+					<c:choose>
+						<c:when test="${Constants.subAct==121}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showFrOpeningStock">Franchise
+						Opening Stock</a>
+					</li>
+
+					<c:choose>
+						<c:when test="${Constants.subAct==122}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showBillList">Bill
+						List</a>
+					</li>
+
+				</ul>
+				<!-- END Submenu -->
+				</li>
+
+
+
+
+
+
+
+
 	<c:choose>
 					<c:when test="${Constants.mainAct==9}">
 						<li class="active">
