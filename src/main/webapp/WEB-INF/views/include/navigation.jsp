@@ -796,6 +796,47 @@
 <!-- end of new added by sachin -->
 
 
+<c:choose>
+					<c:when test="${Constants.mainAct==16}">
+						<li class="active">
+					</c:when>
+
+					<c:otherwise>
+						<li>
+					</c:otherwise>
+				</c:choose>
+				<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
+					<span>Production</span> <b class="arrow fa fa-angle-right"></b>
+				</a>
+				<!-- BEGIN Submenu -->
+				<ul class="submenu">
+					
+					<c:choose>
+						<c:when test="${Constants.subAct==161}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showproduction">Add to Production</a>
+					</li>
+					
+					<c:choose>
+						<c:when test="${Constants.subAct==162}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/addForecasting">Add Forecasting</a>
+					</li>
+					
+</ul>
+				<!-- END Submenu -->
+				</li>
+
 
 
 

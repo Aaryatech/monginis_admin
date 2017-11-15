@@ -282,7 +282,89 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 		return "redirect:/showproduction";
 	}
 
+
+	@RequestMapping(value = "/addForecasting", method = RequestMethod.GET)
+	public ModelAndView showAddProdForcasting(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("production/addProdForecasting");
+//		Constants.mainAct = 8;
+//		Constants.subAct = 82;
+
+		
+
+		RestTemplate restTemplate = new RestTemplate();
+		
+		
+
+		CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
+				CategoryListResponse.class);
+
+		categoryList = categoryListResponse.getmCategoryList();
+		//allFrIdNameList = new AllFrIdNameList();
+		System.out.println("Category list  " +categoryList);
+		int productionTimeSlot=0;
+		try {
+
+			  productionTimeSlot = restTemplate.getForObject(Constants.url + "getProductionTimeSlot", Integer.class);
+			  System.out.println("time slot  "  +productionTimeSlot);
+		}catch (Exception e) {
+			//System.out.println(e.getMessage());
+			//e.printStackTrace();
+			
+		}
 	
+		
+		timeSlot = new int[productionTimeSlot] ;
+		for(int i=0;i<productionTimeSlot;i++)
+			timeSlot[i]=i+1;
+		
+		model.addObject("unSelectedCatList", categoryList);
+		model.addObject("productionTimeSlot", timeSlot);
+
+		return model;
+	}
+
+	
+	
+	@RequestMapping(value = "/getProdOrderForecating", method = RequestMethod.GET)
+	public @ResponseBody List<GetOrderItemQty> getProdOrderForecating(HttpServletRequest request,
+		HttpServletResponse response) {
+		
+		System.out.println("In method");
+		  getOrderItemQtyList=new ArrayList<GetOrderItemQty>();
+		
+		 productionDate=request.getParameter("productionDate");
+		String selectedMenuList=request.getParameter("selectedMenu_list");
+
+		selectedMenuList = selectedMenuList.substring(1, selectedMenuList.length() - 1);
+		selectedMenuList = selectedMenuList.replaceAll("\"", "");
+		String timeSlot=request.getParameter("timeSlot");
+		MultiValueMap<String, Object> map=new LinkedMultiValueMap<String, Object>();
+		
+		RestTemplate rest=new RestTemplate();
+		
+		map.add("productionDate", productionDate);
+		map.add("menuId", selectedMenuList);
+		try
+			{
+			ParameterizedTypeReference<List<GetOrderItemQty>> typeRef = new ParameterizedTypeReference<List<GetOrderItemQty>>() {
+			};
+			ResponseEntity<List<GetOrderItemQty>> responseEntity = rest.exchange(Constants.url + "getOrderAllItemQty",
+					HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			
+			getOrderItemQtyList = responseEntity.getBody();
+			
+			//getOrderItemQtyList=rest.postForObject(Constants.url + "getOrderAllItemQty", map, List.class);
+			
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		System.out.println("List of Orders : "+ getOrderItemQtyList.toString());
+		
+		return getOrderItemQtyList;
+		
+	}
 
 	
 }
