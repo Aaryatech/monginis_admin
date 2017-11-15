@@ -9,17 +9,25 @@ public class PostFrItemStockDetail {
 
 	private int 	itemId;
 	
-	private int openingStock;
+	private int regOpeningStock;
+	
+	private int spOpeningStock;
+
 	
 	private int physicalStock;
 	
 	private int stockDifference;
 	
-	private int totalPurchase;
+	private int regTotalPurchase;
 	
-	private int totalGrnGvn;
+	private int spTotalPurchase;
+
+	private int regTotalGrnGvn;
 	
-	private int totalSell;
+	private int regTotalSell;
+	
+	private int spTotalSell;
+
 	
 	private String remark;
 
@@ -50,13 +58,6 @@ public class PostFrItemStockDetail {
 		this.itemId = itemId;
 	}
 
-	public int getOpeningStock() {
-		return openingStock;
-	}
-
-	public void setOpeningStock(int openingStock) {
-		this.openingStock = openingStock;
-	}
 
 	public int getPhysicalStock() {
 		return physicalStock;
@@ -74,28 +75,60 @@ public class PostFrItemStockDetail {
 		this.stockDifference = stockDifference;
 	}
 
-	public int getTotalPurchase() {
-		return totalPurchase;
+	public int getRegOpeningStock() {
+		return regOpeningStock;
 	}
 
-	public void setTotalPurchase(int totalPurchase) {
-		this.totalPurchase = totalPurchase;
+	public void setRegOpeningStock(int regOpeningStock) {
+		this.regOpeningStock = regOpeningStock;
 	}
 
-	public int getTotalGrnGvn() {
-		return totalGrnGvn;
+	public int getSpOpeningStock() {
+		return spOpeningStock;
 	}
 
-	public void setTotalGrnGvn(int totalGrnGvn) {
-		this.totalGrnGvn = totalGrnGvn;
+	public void setSpOpeningStock(int spOpeningStock) {
+		this.spOpeningStock = spOpeningStock;
 	}
 
-	public int getTotalSell() {
-		return totalSell;
+	public int getRegTotalPurchase() {
+		return regTotalPurchase;
 	}
 
-	public void setTotalSell(int totalSell) {
-		this.totalSell = totalSell;
+	public void setRegTotalPurchase(int regTotalPurchase) {
+		this.regTotalPurchase = regTotalPurchase;
+	}
+
+	public int getSpTotalPurchase() {
+		return spTotalPurchase;
+	}
+
+	public void setSpTotalPurchase(int spTotalPurchase) {
+		this.spTotalPurchase = spTotalPurchase;
+	}
+
+	public int getRegTotalGrnGvn() {
+		return regTotalGrnGvn;
+	}
+
+	public void setRegTotalGrnGvn(int regTotalGrnGvn) {
+		this.regTotalGrnGvn = regTotalGrnGvn;
+	}
+
+	public int getRegTotalSell() {
+		return regTotalSell;
+	}
+
+	public void setRegTotalSell(int regTotalSell) {
+		this.regTotalSell = regTotalSell;
+	}
+
+	public int getSpTotalSell() {
+		return spTotalSell;
+	}
+
+	public void setSpTotalSell(int spTotalSell) {
+		this.spTotalSell = spTotalSell;
 	}
 
 	public String getRemark() {
@@ -106,16 +139,15 @@ public class PostFrItemStockDetail {
 		this.remark = remark;
 	}
 
-	
-	
 	@Override
 	public String toString() {
 		return "PostFrItemStockDetail [openingStockDetailId=" + openingStockDetailId + ", openingStockHeaderId="
-				+ openingStockHeaderId + ", itemId=" + itemId + ", openingStock=" + openingStock + ", physicalStock="
-				+ physicalStock + ", stockDifference=" + stockDifference + ", totalPurchase=" + totalPurchase
-				+ ", totalGrnGvn=" + totalGrnGvn + ", totalSell=" + totalSell + ", remark=" + remark + "]";
+				+ openingStockHeaderId + ", itemId=" + itemId + ", regOpeningStock=" + regOpeningStock
+				+ ", spOpeningStock=" + spOpeningStock + ", physicalStock=" + physicalStock + ", stockDifference="
+				+ stockDifference + ", regTotalPurchase=" + regTotalPurchase + ", spTotalPurchase=" + spTotalPurchase
+				+ ", regTotalGrnGvn=" + regTotalGrnGvn + ", regTotalSell=" + regTotalSell + ", spTotalSell="
+				+ spTotalSell + ", remark=" + remark + "]";
 	}
-	
 	
 	
 
