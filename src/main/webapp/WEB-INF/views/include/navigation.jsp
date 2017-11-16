@@ -31,9 +31,9 @@
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/resources/img/favicon.png">
 </head>
-<body>
+<body>    
 
-
+ 
 	<!-- BEGIN Navbar -->
 
 	<div id="navbar" class="navbar"
