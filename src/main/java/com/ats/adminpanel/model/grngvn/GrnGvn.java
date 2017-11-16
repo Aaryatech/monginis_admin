@@ -126,10 +126,85 @@ public class GrnGvn {
 		
 		
 		
+		private int isCreditNote;
+		
+		
+
+		//NEW ADDED
+		
+		private int menuId;
+		
+
+		private int catId;
+		
+
+		private String invoiceNo;
+		
+
+		private Date refInvoiceDate;
+		
+		
+		
+		//END NEW ADDED
+		
+		
+		
+		
+		
 
 
 	public int getGrnGvnId() {
 		return grnGvnId;
+	}
+
+
+	public int getIsCreditNote() {
+		return isCreditNote;
+	}
+
+
+	public void setIsCreditNote(int isCreditNote) {
+		this.isCreditNote = isCreditNote;
+	}
+
+
+	public int getMenuId() {
+		return menuId;
+	}
+
+
+	public void setMenuId(int menuId) {
+		this.menuId = menuId;
+	}
+
+
+	public int getCatId() {
+		return catId;
+	}
+
+
+	public void setCatId(int catId) {
+		this.catId = catId;
+	}
+
+
+	public String getInvoiceNo() {
+		return invoiceNo;
+	}
+
+
+	public void setInvoiceNo(String invoiceNo) {
+		this.invoiceNo = invoiceNo;
+	}
+
+
+	public Date getRefInvoiceDate() {
+		return refInvoiceDate;
+	}
+
+
+	public void setRefInvoiceDate(Date refInvoiceDate) {
+		this.refInvoiceDate = refInvoiceDate;
 	}
 
 
@@ -516,10 +591,13 @@ public class GrnGvn {
 				+ grnApprovedDateTimeAcc + ", approvedRemarkAcc=" + approvedRemarkAcc + ", delStatus=" + delStatus
 				+ ", grnGvnQtyAuto=" + grnGvnQtyAuto + ", isTallySync=" + isTallySync + ", baseRate=" + baseRate
 				+ ", sgstPer=" + sgstPer + ", cgstPer=" + cgstPer + ", igstPer=" + igstPer + ", taxableAmt="
-				+ taxableAmt + ", totalTax=" + totalTax + ", roundUpAmt=" + roundUpAmt + ", finalAmt=" + finalAmt + "]";
+				+ taxableAmt + ", totalTax=" + totalTax + ", roundUpAmt=" + roundUpAmt + ", finalAmt=" + finalAmt
+				+ ", isCreditNote=" + isCreditNote + ", menuId=" + menuId + ", catId=" + catId + ", invoiceNo="
+				+ invoiceNo + ", refInvoiceDate=" + refInvoiceDate + "]";
 	}
 
 
+	
 	
 	
 	

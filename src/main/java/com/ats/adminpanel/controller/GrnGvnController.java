@@ -48,9 +48,7 @@ public class GrnGvnController {
 		accGvnFromDate = request.getParameter("fromDate");
 		accGvnToDate = request.getParameter("toDate");
 
-		System.out.println("from Date using ajax  :" + accGvnFromDate);
-		System.out.println("to Date using ajax  : " + accGvnToDate);
-
+		
 		return "";
 
 	}
@@ -62,9 +60,6 @@ public class GrnGvnController {
 
 		storeGvnFromDate = request.getParameter("fromDate");
 		storeGvnToDate = request.getParameter("toDate");
-
-		System.out.println("from Date using ajax  :" + storeGvnFromDate);
-		System.out.println("to Date using ajax  : " + storeGvnToDate);
 
 		return "";
 
@@ -78,9 +73,7 @@ public class GrnGvnController {
 		gateGvnFromDate = request.getParameter("fromDate");
 		gateGvnToDate = request.getParameter("toDate");
 
-		System.out.println("from Date using ajax  :" + gateGvnFromDate);
-		System.out.println("to Date using ajax  : " + gateGvnToDate);
-
+	
 		return "";
 
 	}
@@ -93,9 +86,7 @@ public class GrnGvnController {
 		gateGrnFromDate = request.getParameter("fromDate");
 		gateGrnToDate = request.getParameter("toDate");
 
-		System.out.println("from Date using ajax  :" + gateGrnFromDate);
-		System.out.println("to Date using ajax  : " + gateGrnToDate);
-
+		
 		return "";
 
 	}
@@ -108,13 +99,14 @@ public class GrnGvnController {
 		accGrnFromDate = request.getParameter("fromDate");
 		accGrnToDate = request.getParameter("toDate");
 
-		System.out.println("from Date using ajax  :" + accGrnFromDate);
-		System.out.println("to Date using ajax  : " + accGrnToDate);
-
+	
 		return "";
 
 	}
 
+	
+	
+	
 	@RequestMapping(value = "/showGateGrn", method = RequestMethod.GET)
 	public ModelAndView showGateGrn(HttpServletRequest request, HttpServletResponse response) {
 
@@ -137,6 +129,10 @@ public class GrnGvnController {
 
 	@RequestMapping(value = "/showGateGrnDetails", method = RequestMethod.GET)
 	public ModelAndView showGateGrnDetails(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct = 9;
+		Constants.subAct = 91;
+
 
 		ModelAndView model = new ModelAndView("grngvn/gateGrn");
 
@@ -145,17 +141,17 @@ public class GrnGvnController {
 			RestTemplate restTemplate = new RestTemplate();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			try {
+		 
 
 				map.add("fromDate", gateGrnFromDate);
 				map.add("toDate", gateGrnToDate);
-
-			} catch (Exception e) {
-				System.out.println("ex in getting dates ---line 80");
-			}
+				System.out.println("OK ");
+				
+				getGrnGvnDetailsList=new GetGrnGvnDetailsList();
 
 			getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGrnDetail", map,
 					GetGrnGvnDetailsList.class);
+			
 
 			getGrnGvnDetails = new ArrayList<GetGrnGvnDetails>();
 
@@ -180,11 +176,10 @@ public class GrnGvnController {
 	}
 
 	@RequestMapping(value = "/insertGateGrnProcessAgree", method = RequestMethod.GET)
-	public String insertGateGrnProcess(HttpServletRequest request, HttpServletResponse response) {
+	public String insertGateGrnProcessAgree(HttpServletRequest request, HttpServletResponse response) {
 
 		Constants.mainAct = 9;
 		Constants.subAct = 91;
-		System.out.println("using a href to call insert Gate");
 
 		ModelAndView model = new ModelAndView("grngvn/gateGrn");
 
@@ -192,15 +187,12 @@ public class GrnGvnController {
 
 		int gateApproveLogin = Integer.parseInt(request.getParameter("approveGateLogin"));
 
-		System.out.println("gateApproveLogin =" + gateApproveLogin);
 
-		System.out.println("grnId =" + grnId);
 
 		try {
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
-			System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -217,7 +209,7 @@ public class GrnGvnController {
 			map.add("grnGvnId", grnId);
 
 			String info = restTemplate.postForObject(Constants.url + "updateGateGrn", map, String.class);
-			System.out.println("after calling web service ");
+			System.out.println("after calling web service of gate grn agree ");
 
 		} catch (Exception e) {
 
@@ -225,6 +217,7 @@ public class GrnGvnController {
 
 			e.printStackTrace();
 		}
+		System.out.println("INSERT GATE GRN APPROVE : STATUS =2");
 
 		return "redirect:/showGateGrnDetails";
 
@@ -245,15 +238,15 @@ public class GrnGvnController {
 			int gateApproveLogin = Integer.parseInt(request.getParameter("approveGateLogin"));
 
 			String gateRemark = request.getParameter("gateRemark");
-			System.out.println("Gate Remark  " + gateRemark);
+			//System.out.println("Gate Remark  " + gateRemark);
 
-			System.out.println("gateApproveLogin =" + gateApproveLogin);
+			//System.out.println("gateApproveLogin =" + gateApproveLogin);
 
-			System.out.println("grnId =" + grnId);
+			//System.out.println("grnId =" + grnId);
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
-			System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
+			//System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -270,6 +263,7 @@ public class GrnGvnController {
 			map.add("grnGvnId", grnId);
 
 			String info = restTemplate.postForObject(Constants.url + "updateGateGrn", map, String.class);
+			
 			System.out.println("after calling web service of disagree");
 
 		} catch (Exception e) {
@@ -278,14 +272,17 @@ public class GrnGvnController {
 
 			e.printStackTrace();
 		}
+		System.out.println("INSERT GATE GRN DISAPPROVE : STATUS =3");
 
 		return "redirect:/showGateGrnDetails";
-
+		//model=showGateGrnDetails(request, response);
 	}
 
+	
+	
 	// insert gate grn by check boxes
-	@RequestMapping(value = "/insertGrnByCheckBoxes", method = RequestMethod.GET) // Using checkboxes to insert
-	public ModelAndView getGrnId(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/insertGateGrnByCheckBoxes", method = RequestMethod.POST) // Using checkboxes to insert
+	public String insertGateGrnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
 
 		Constants.mainAct = 9;
 		Constants.subAct = 91;
@@ -304,13 +301,9 @@ public class GrnGvnController {
 			PostGrnGvnList postGrnList = new PostGrnGvnList();
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
-			System.out.println("grn details line 191 " + getGrnGvnDetails.toString());
 
-			System.out.println("before for");
 
 			for (int i = 0; i < grnIdList.length; i++) {
-				System.out.println("grn id List" + grnIdList[i]);
-				System.out.println("detail list = " + getGrnGvnDetails.get(i).getGrnGvnId());
 				for (int j = 0; j < getGrnGvnDetails.size(); j++) {
 
 					if (Integer.parseInt(grnIdList[i]) == getGrnGvnDetails.get(j).getGrnGvnId()) {
@@ -320,30 +313,13 @@ public class GrnGvnController {
 
 						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						Calendar cal = Calendar.getInstance();
-						System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
-						/*
-						 * SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); java.util.Date
-						 * date = null;
-						 * 
-						 * try { date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate()); } catch
-						 * (ParseException e) { // TODO Auto-generated catch block e.printStackTrace();
-						 * }
-						 * 
-						 * java.sql.Date grnGvnDate = new Date(date.getTime());
-						 */
 						
-						
-						
-						
-
 						DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
 						java.util.Date grnGvnDate = getGrnGvnDetails.get(j).getGrnGvnDate();
-						System.out.println("grn Gvn Date == "+grnGvnDate);
 
 						grnGvnDate = Df.parse(grnGvnDate.toString());
-						System.out.println(" grnGvnDate= " + grnGvnDate);
 
 												
 						GrnGvn postGrnGvn = new GrnGvn();
@@ -392,17 +368,26 @@ public class GrnGvnController {
 						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
 						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
 						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
+						
+						//AGAIN ADDED
+						postGrnGvn.setMenuId(getGrnGvnDetails.get(j).getMenuId());
+						postGrnGvn.setCatId(getGrnGvnDetails.get(j).getCatId());
+						postGrnGvn.setInvoiceNo(getGrnGvnDetails.get(j).getInvoiceNo());
+						postGrnGvn.setRefInvoiceDate(getGrnGvnDetails.get(j).getRefInvoiceDate());
+						
+						
+						
+						
 
 						postGrnGvnList.add(postGrnGvn);
 
 						System.out.println("Done it inside if ");
-						System.out.println("grn ID=  " + grnIdList[i]);
-
+						
 					} // end of if
 
 					else {
 
-						System.out.println("No match found " + getGrnGvnDetails.get(j).getGrnGvnId());
+						//System.out.println("No match found " + getGrnGvnDetails.get(j).getGrnGvnId());
 					} // end of else
 
 				} // inner for
@@ -421,13 +406,13 @@ public class GrnGvnController {
 
 			// System.out.println("Error in Getting grn details " + e.getMessage());
 
-			String fromDate = request.getParameter("from_date");
+			/*String fromDate = request.getParameter("from_date");
 			String toDate = request.getParameter("to_date");
+*/
+			//System.out.println("gateGrnFromDate Date *******" + gateGrnFromDate);
+			//System.out.println("gateGrnToDate Date ***********" + gateGrnToDate);
 
-			System.out.println("gateGrnFromDate Date *******" + gateGrnFromDate);
-			System.out.println("gateGrnToDate Date ***********" + gateGrnToDate);
-
-			map.add("fromDate", gateGrnFromDate);
+			/*map.add("fromDate", gateGrnFromDate);
 			map.add("toDate", gateGrnToDate);
 
 			getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGrnDetail", map,
@@ -440,7 +425,7 @@ public class GrnGvnController {
 			model.addObject("grnList", getGrnGvnDetails);
 			model.addObject("fromDate", gateGrnFromDate);
 			model.addObject("toDate", gateGrnToDate);
-
+*/
 		} catch (Exception e) {
 
 			System.out.println("Exce in Insert Grn " + e.getMessage());
@@ -448,7 +433,11 @@ public class GrnGvnController {
 
 		}
 
-		return model;
+		
+		
+		System.out.println("INSERT GATE GRN BY CHECKBOXEX : SUBMIT   STATUS =2");
+		
+		return "redirect:/showGateGrnDetails";
 
 	}
 
@@ -518,7 +507,7 @@ public class GrnGvnController {
 	}
 
 	@RequestMapping(value = "/insertAccGrnByCheckBoxes", method = RequestMethod.GET) // Using checkboxes to insert
-	public ModelAndView insertAccGrnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
+	public String insertAccGrnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
 
 		Constants.mainAct = 9;
 		Constants.subAct = 92;
@@ -535,6 +524,7 @@ public class GrnGvnController {
 			List<GrnGvn> postGrnGvnList = new ArrayList<GrnGvn>();
 
 			PostGrnGvnList postGrnList = new PostGrnGvnList();
+			
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 			System.out.println("grn details line 465 " + getGrnGvnDetails.toString());
@@ -555,16 +545,7 @@ public class GrnGvnController {
 						Calendar cal = Calendar.getInstance();
 						System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
-						/*
-						 * SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); java.util.Date
-						 * date = null;
-						 * 
-						 * try { date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate()); } catch
-						 * (ParseException e) { // TODO Auto-generated catch block e.printStackTrace();
-						 * }
-						 * 
-						 * java.sql.Date grnGvnDate = new Date(date.getTime());
-						 */
+					
 
 						DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -619,6 +600,14 @@ public class GrnGvnController {
 						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
 						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
 						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
+						
+						
+						//newly ad
+						postGrnGvn.setMenuId(getGrnGvnDetails.get(j).getMenuId());
+						postGrnGvn.setCatId(getGrnGvnDetails.get(j).getCatId());
+						postGrnGvn.setInvoiceNo(getGrnGvnDetails.get(j).getInvoiceNo());
+						postGrnGvn.setRefInvoiceDate(getGrnGvnDetails.get(j).getRefInvoiceDate());
+						
 
 						postGrnGvnList.add(postGrnGvn);
 
@@ -646,9 +635,11 @@ public class GrnGvnController {
 
 			Info info = restTemplate.postForObject(Constants.url + "insertGrnGvn", postGrnList, Info.class);
 
-			map.add("fromDate", accGrnFromDate);
+			/*map.add("fromDate", accGrnFromDate);
 
 			map.add("toDate", accGrnToDate);
+			
+			getGrnGvnDetailsList=new GetGrnGvnDetailsList();
 
 			getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGrnDetail", map,
 					GetGrnGvnDetailsList.class);
@@ -660,7 +651,7 @@ public class GrnGvnController {
 			model.addObject("grnList", getGrnGvnDetails);
 
 			model.addObject("fromDate", accGrnFromDate);
-			model.addObject("toDate", accGrnToDate);
+			model.addObject("toDate", accGrnToDate);*/
 
 			// System.out.println("Error in Getting grn details " + e.getMessage());
 
@@ -671,8 +662,7 @@ public class GrnGvnController {
 
 		}
 
-		return model;
-
+		return "redirect:/showAccountGrnDetails";
 	}
 
 	@RequestMapping(value = "/insertAccGrnProcessAgree", method = RequestMethod.GET)
@@ -731,7 +721,6 @@ public class GrnGvnController {
 
 		Constants.mainAct = 9;
 		Constants.subAct = 92;
-		System.out.println("using a href to call insert account agree ");
 
 		ModelAndView model = new ModelAndView("grngvn/accGrn");
 
@@ -767,6 +756,7 @@ public class GrnGvnController {
 			map.add("grnGvnId", grnId);
 
 			String info = restTemplate.postForObject(Constants.url + "updateAccGrn", map, String.class);
+			
 			System.out.println("after calling web service acc grn disagree ");
 
 		} catch (Exception e) {
@@ -848,7 +838,7 @@ public class GrnGvnController {
 	}
 
 	@RequestMapping(value = "/insertGateGvnByCheckBoxes", method = RequestMethod.GET) // Using checkboxes to insert
-	public ModelAndView insertGatevrnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
+	public String insertGateGvnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
 
 		Constants.mainAct = 12;
 		Constants.subAct = 121;
@@ -873,8 +863,7 @@ public class GrnGvnController {
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 			System.out.println("grn details line 191 " + getGrnGvnDetails.toString());
 
-			System.out.println("before for");
-
+			
 			for (int i = 0; i < grnIdList.length; i++) {
 				System.out.println("grn id List" + grnIdList[i]);
 				int apLoginGate = Integer.parseInt(request.getParameter("approve_gate_login" + grnIdList[i]));
@@ -953,6 +942,17 @@ public class GrnGvnController {
 						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
 						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
 						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
+						
+						
+						
+						
+						//newly ad
+						postGrnGvn.setMenuId(getGrnGvnDetails.get(j).getMenuId());
+						postGrnGvn.setCatId(getGrnGvnDetails.get(j).getCatId());
+						postGrnGvn.setInvoiceNo(getGrnGvnDetails.get(j).getInvoiceNo());
+						postGrnGvn.setRefInvoiceDate(getGrnGvnDetails.get(j).getRefInvoiceDate());
+						
+
 
 						postGrnGvnList.add(postGrnGvn);
 
@@ -971,7 +971,6 @@ public class GrnGvnController {
 				postGrnList.setGrnGvn(postGrnGvnList);
 
 			} // outer for
-			System.out.println("after for");
 
 			// postGrnList.setGrnGvn(postGrnGvnList);
 
@@ -989,7 +988,7 @@ public class GrnGvnController {
 
 		}
 
-		map.add("fromDate", gateGvnFromDate);
+		/*map.add("fromDate", gateGvnFromDate);
 		map.add("toDate", gateGvnToDate);
 
 		getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGvnDetails", map,
@@ -1003,9 +1002,9 @@ public class GrnGvnController {
 		model.addObject("gvnList", getGrnGvnDetails);
 
 		model.addObject("fromDate", gateGvnFromDate);
-		model.addObject("toDate", gateGvnToDate);
+		model.addObject("toDate", gateGvnToDate);*/
 
-		return model;
+		return "redirect:/showGateGvnDetails";
 
 	}
 
@@ -1179,7 +1178,7 @@ public class GrnGvnController {
 	}
 
 	@RequestMapping(value = "/insertStoreGvnByCheckBoxes", method = RequestMethod.GET) // Using checkboxes to insert
-	public ModelAndView insertStoreGvnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
+	public String insertStoreGvnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
 
 		Constants.mainAct = 12;
 		Constants.subAct = 122;
@@ -1285,6 +1284,16 @@ public class GrnGvnController {
 						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
 						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
 						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
+						
+						
+						
+						//newly ad
+						postGrnGvn.setMenuId(getGrnGvnDetails.get(j).getMenuId());
+						postGrnGvn.setCatId(getGrnGvnDetails.get(j).getCatId());
+						postGrnGvn.setInvoiceNo(getGrnGvnDetails.get(j).getInvoiceNo());
+						postGrnGvn.setRefInvoiceDate(getGrnGvnDetails.get(j).getRefInvoiceDate());
+						
+
 
 						postGrnGvnList.add(postGrnGvn);
 
@@ -1321,7 +1330,7 @@ public class GrnGvnController {
 
 		}
 
-		map.add("fromDate", storeGvnFromDate);
+		/*map.add("fromDate", storeGvnFromDate);
 		map.add("toDate", storeGvnToDate);
 
 		getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGvnDetails", map,
@@ -1334,9 +1343,9 @@ public class GrnGvnController {
 		model.addObject("url", Constants.SPCAKE_IMAGE_URL);
 		model.addObject("gvnList", getGrnGvnDetails);
 		model.addObject("fromDate", storeGvnFromDate);
-		model.addObject("toDate", storeGvnToDate);
+		model.addObject("toDate", storeGvnToDate);*/
 
-		return model;
+		return "redirect:/showStoreGvnDetails";
 
 	}
 
@@ -1509,7 +1518,7 @@ public class GrnGvnController {
 	}
 
 	@RequestMapping(value = "/insertAccGvnByCheckBoxes", method = RequestMethod.GET) // Using checkboxes to insert
-	public ModelAndView insertAccGvnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
+	public String insertAccGvnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
 
 		Constants.mainAct = 12;
 		Constants.subAct = 123;
@@ -1616,6 +1625,17 @@ public class GrnGvnController {
 						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
 						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
 						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
+						
+						
+						
+						
+						//newly ad
+						postGrnGvn.setMenuId(getGrnGvnDetails.get(j).getMenuId());
+						postGrnGvn.setCatId(getGrnGvnDetails.get(j).getCatId());
+						postGrnGvn.setInvoiceNo(getGrnGvnDetails.get(j).getInvoiceNo());
+						postGrnGvn.setRefInvoiceDate(getGrnGvnDetails.get(j).getRefInvoiceDate());
+						
+
 
 						postGrnGvnList.add(postGrnGvn);
 
@@ -1652,7 +1672,7 @@ public class GrnGvnController {
 
 		}
 
-		map.add("fromDate", accGvnFromDate);
+	/*	map.add("fromDate", accGvnFromDate);
 		map.add("toDate", accGvnToDate);
 
 		getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGvnDetails", map,
@@ -1667,9 +1687,8 @@ public class GrnGvnController {
 
 		model.addObject("fromDate", accGvnFromDate);
 		model.addObject("toDate", accGvnToDate);
-
-		return model;
-
+*/
+		return "redirect:/showAccountGvnDetails";
 	}
 
 	@RequestMapping(value = "/insertAccGvnProcessAgree", method = RequestMethod.GET)

@@ -10,7 +10,7 @@ public class GetGrnGvnForCreditNote {
 	int grnGvnId;
 
 	Date grnGvnDate;
-	
+
 
 	private int billNo;
 
@@ -662,6 +662,11 @@ public class GetGrnGvnForCreditNote {
 				+ refInvoiceDate + "]";
 	}
 
+
+
+	
+
+	
 
 	
 }

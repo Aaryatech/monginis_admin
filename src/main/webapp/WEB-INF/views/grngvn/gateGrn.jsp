@@ -203,8 +203,8 @@ div.panel {
 
 
 
-							<form action="${pageContext.request.contextPath}/insertGrnByCheckBoxes"
-								class="form-horizontal" method="get" id="validation-form">
+							<form action="${pageContext.request.contextPath}/insertGateGrnByCheckBoxes"
+								class="form-horizontal" method="post" id="validation-form">
 
 
 
@@ -238,8 +238,6 @@ div.panel {
 														<th width="100" align="left">Status</th>
 														<th width="100">Action</th>
 													</tr>
-
-
 
 												</thead>
 												<tbody>
@@ -372,7 +370,7 @@ div.panel {
 																				<div class="panel" align="left">
 																					Enter Remark
 																					<textarea  name="gate_remark${grnList.grnGvnId}" id="gate_remark${grnList.grnGvnId}" ></textarea>
-																					<input class="btn btn-primary" value="Submit" onclick="insertGrnDisAgree(${grnList.grnGvnId})"/>
+																					<input class="btn btn-info" value="Submit" onclick="insertGrnDisAgree(${grnList.grnGvnId})"/>
 
 																				</div>
 																			
@@ -412,7 +410,7 @@ div.panel {
 																				<div class="panel" align="left">
 																					Enter Remark
 																					<textarea  name="gate_remark${grnList.grnGvnId}" id="gate_remark${grnList.grnGvnId}" ></textarea>
-																					<input class="btn btn-primary" value="Submit" onclick="insertGrnDisAgree(${grnList.grnGvnId})"/>
+																					<input class="btn btn-info" value="Submit" onclick="insertGrnDisAgree(${grnList.grnGvnId})"/>
 
 																				</div>
 																			
@@ -451,7 +449,7 @@ div.panel {
 																				<div class="panel" align="left">
 																					Enter Remark
 																					<textarea  name="gate_remark${grnList.grnGvnId}" id="gate_remark${grnList.grnGvnId}" ></textarea>
-																					<input class="btn btn-primary" value="Submit" onclick="insertGrnDisAgree(${grnList.grnGvnId})"/>
+																					<input class="btn btn-info" value="Submit" onclick="insertGrnDisAgree(${grnList.grnGvnId})"/>
 
 																				</div>
 																			
@@ -530,7 +528,6 @@ div.panel {
 											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
 											<input type="submit" value="Submit">
 
-											<button type="button" onClick="firstCall();">FirstCall</button>
 
 										</div>
 										<!-- </form> -->
@@ -685,9 +682,7 @@ else{
 
 
 callRefreshDisAgree();
-/* callSecondRefresh();
-callThirdRefresh();
-callfourthRefresh(); */
+
 }
 }
 
@@ -699,7 +694,6 @@ function callRefreshDisAgree(){
 	
 		alert("DisApproved Successfully");
 		window.location.reload();
-	//document.getElementById("validation-form").reload();
 	}
 
 </script>
@@ -742,9 +736,7 @@ alert(approve_gate_login); */
 );
 
 callRefresh();
-/* callSecondRefresh();
-callThirdRefresh();
-callfourthRefresh(); */
+
 }
 
 
@@ -754,41 +746,13 @@ callfourthRefresh(); */
 function callRefresh(){
 	alert("Approved Successfully");
 		window.location.reload();
-	//document.getElementById("validation-form").reload();
+	
 	}
 
 </script>
 
-<script type="text/javascript">
-
-function callSecondRefresh(){
-
-	window.location.reload();
-
-	
-}
 
 
-</script>
-
-<script type="text/javascript">
-
-function callThirdRefresh(){
-	window.location.reload();
-
-}
-
-</script>
-
-<script type="text/javascript">
-
-function callfourthRefresh(){
-	window.reload();
-
-
-}
-
-</script>
 <!-- insertGrnAgree --> 
 
 
@@ -836,9 +800,6 @@ function getDate(){
 
 
 </script>
-
-
-
 
 
 </body>
