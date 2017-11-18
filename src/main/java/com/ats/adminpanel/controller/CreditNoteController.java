@@ -159,16 +159,16 @@ public class CreditNoteController {
 						creditNoteDetail.setCessRs(00);
 						
 						creditNoteDetail.setCgstPer(creditNote.getCgstPer());
-						float cgstRs=creditNote.getCgstPer()*creditNote.getTaxableAmt()/100;
+						float cgstRs=(creditNote.getCgstPer()*creditNote.getTaxableAmt())/100;
 						creditNoteDetail.setCgstRs(cgstRs);
 						
 						creditNoteDetail.setSgstPer(creditNote.getSgstPer());
-						float sgstRs=creditNote.getSgstPer()*creditNote.getTaxableAmt()/100;
+						float sgstRs=(creditNote.getSgstPer()*creditNote.getTaxableAmt())/100;
 						creditNoteDetail.setSgstRs(sgstRs);
 						
 
 						creditNoteDetail.setIgstPer(creditNote.getIgstPer());
-						float igstRs=creditNote.getIgstPer()*creditNote.getTaxableAmt()/100;
+						float igstRs=(creditNote.getIgstPer()*creditNote.getTaxableAmt())/100;
 						creditNoteDetail.setIgstRs(igstRs);
 						
 						creditNoteDetail.setDelStatus(0);
@@ -256,7 +256,7 @@ public class CreditNoteController {
 					creditNoteDetail.setCessRs(00);
 					
 					creditNoteDetail.setCgstPer(creditNote.getCgstPer());
-					float cgstRs=(creditNoteDetail.getCgstPer()*creditNoteDetail.getTaxableAmt())/100;
+					float cgstRs=(creditNote.getCgstPer()*creditNote.getTaxableAmt())/100;
 					System.out.println("getCgstPer  "+creditNoteDetail.getCgstPer());
 
 					System.out.println("cgst Rs "+cgstRs);
@@ -264,15 +264,16 @@ public class CreditNoteController {
 					
 					
 					creditNoteDetail.setSgstPer(creditNote.getSgstPer());
-					float sgstRs=(creditNoteDetail.getSgstPer()*creditNoteDetail.getTaxableAmt())/100;
+					float sgstRs=(creditNote.getSgstPer()*creditNote.getTaxableAmt())/100;
 					creditNoteDetail.setSgstRs(sgstRs);
 					System.out.println("getSgstPer  "+creditNoteDetail.getSgstPer());
+					System.out.println("getTaxableAmt  "+sgstRs);
 
 					System.out.println("sgstRs Rs "+sgstRs);
 
 
 					creditNoteDetail.setIgstPer(creditNote.getIgstPer());
-					float igstRs=(creditNoteDetail.getIgstPer()*creditNoteDetail.getTaxableAmt())/100;
+					float igstRs=(creditNote.getIgstPer()*creditNote.getTaxableAmt())/100;
 					creditNoteDetail.setIgstRs(igstRs);
 					
 					creditNoteDetail.setDelStatus(0);
@@ -323,7 +324,7 @@ public class CreditNoteController {
 			postCreditNoteHeaderList.setPostCreditNoteHeader(creditHeaderList);
 			
 			
-			Info info=restTemplate.postForObject(Constants.url+"postCreditNote", postCreditNoteHeaderList,Info.class);
+			//Info info=restTemplate.postForObject(Constants.url+"postCreditNote", postCreditNoteHeaderList,Info.class);
 			
 			
 			System.out.println("taxable amt =" + totalCrnTaxableAmt);
