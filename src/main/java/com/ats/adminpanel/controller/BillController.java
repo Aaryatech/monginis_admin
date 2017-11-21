@@ -256,7 +256,7 @@ public class BillController {
 			ZoneId zoneId = ZoneId.of("Asia/Calcutta");
 			ZonedDateTime zdt = ZonedDateTime.now(zoneId);
 			//System.out.println("time ==" + zdt.format(null));
-			
+			 
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss ");
 			TimeZone istTimeZone = TimeZone.getTimeZone("Asia/Kolkata");

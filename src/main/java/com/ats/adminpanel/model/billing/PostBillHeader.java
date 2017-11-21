@@ -49,7 +49,7 @@ public class PostBillHeader {
 	private String remark;
 	
 	private String time;
-	
+	 
 	
 	List<PostBillDetail> postBillDetailsList;
 	
