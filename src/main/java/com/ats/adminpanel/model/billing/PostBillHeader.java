@@ -3,6 +3,7 @@ package com.ats.adminpanel.model.billing;
 import java.util.Date;
 import java.util.List;
 
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 // Bean to insert bill :
@@ -46,6 +47,8 @@ public class PostBillHeader {
 	
 	
 	private String remark;
+	
+	private String time;
 	
 	
 	List<PostBillDetail> postBillDetailsList;
@@ -94,6 +97,14 @@ public class PostBillHeader {
 	
 
 	
+
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
 
 	public float getGrandTotal() {
 		return grandTotal;
@@ -166,9 +177,11 @@ public class PostBillHeader {
 		return "PostBillHeader [billNo=" + billNo + ", taxApplicable=" + taxApplicable + ", invoiceNo=" + invoiceNo
 				+ ", billDate=" + billDate + ", frId=" + frId + ", frCode=" + frCode + ", grandTotal=" + grandTotal
 				+ ", taxableAmt=" + taxableAmt + ", totalTax=" + totalTax + ", status=" + status + ", DelStatus="
-				+ DelStatus + ", remark=" + remark + ", postBillDetailsList=" + postBillDetailsList + "]";
+				+ DelStatus + ", remark=" + remark + ", time=" + time + ", postBillDetailsList=" + postBillDetailsList
+				+ "]";
 	}
 
+	
 	
 
 	

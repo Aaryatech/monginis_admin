@@ -7,6 +7,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -15,6 +16,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -74,8 +76,6 @@ public class BillController {
 
 	GenerateBillList generateBillList = new GenerateBillList();
 	List<String> frList = new ArrayList<>();
-	
-
 
 	public static List<GetBillDetail> billDetailsList;
 	public GetBillHeader getBillHeader;
@@ -83,12 +83,8 @@ public class BillController {
 	List<GetBillHeader> billHeadersList = new ArrayList<>();
 
 	List<GetSellBillHeader> getSellBillHeaderList;
-	List<GetSellBillDetail>getSellBillDetailList;
-	
-	
-	
+	List<GetSellBillDetail> getSellBillDetailList;
 
-	
 	@RequestMapping(value = "/submitNewBill", method = RequestMethod.POST)
 	public String submitNewBill(HttpServletRequest request, HttpServletResponse response) {
 
@@ -212,21 +208,21 @@ public class BillController {
 					billDetail.setRemark("");
 					billDetail.setDelStatus(0);
 					billDetail.setIsGrngvnApplied(0);
-					
-					billDetail.setGrnType(gBill.getGrnType());//newly added
-					
-					int itemShelfLife=gBill.getItemShelfLife();
-					
-					String deliveryDate=gBill.getDeliveryDate();
-					System.out.println("delivery date from order ************"+deliveryDate);
-					System.out.println("item shelf life******** "+itemShelfLife);
-					
-					String calculatedDate=incrementDate(deliveryDate,itemShelfLife);
-					
-					System.out.println("calculatedDate date************ ="+calculatedDate);
-					
+
+					billDetail.setGrnType(gBill.getGrnType());// newly added
+
+					int itemShelfLife = gBill.getItemShelfLife();
+
+					String deliveryDate = gBill.getDeliveryDate();
+					System.out.println("delivery date from order ************" + deliveryDate);
+					System.out.println("item shelf life******** " + itemShelfLife);
+
+					String calculatedDate = incrementDate(deliveryDate, itemShelfLife);
+
+					System.out.println("calculatedDate date************ =" + calculatedDate);
+
 					DateFormat Df = new SimpleDateFormat("dd-MM-yyyy");
-					//DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
+					// DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
 					Date expiryDate = null;
 					try {
@@ -235,9 +231,9 @@ public class BillController {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					System.out.println("Expiry date**************** ="+expiryDate);
+					System.out.println("Expiry date**************** =" + expiryDate);
 					billDetail.setExpiryDate(expiryDate);
-					
+
 					postBillDetailsList.add(billDetail);
 
 					System.out.println("New Detail Object " + billDetail.toString());
@@ -249,7 +245,7 @@ public class BillController {
 
 				}
 
-			   }
+			}
 
 			header.setTaxableAmt(sumTaxableAmt);
 			header.setGrandTotal(sumGrandTotal);
@@ -257,6 +253,19 @@ public class BillController {
 			header.setStatus(1);
 			header.setPostBillDetailsList(postBillDetailsList);
 
+			ZoneId zoneId = ZoneId.of("Asia/Calcutta");
+			ZonedDateTime zdt = ZonedDateTime.now(zoneId);
+			//System.out.println("time ==" + zdt.format(null));
+			
+			
+			SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss ");
+			TimeZone istTimeZone = TimeZone.getTimeZone("Asia/Kolkata");
+			Date d = new Date();
+			sdf.setTimeZone(istTimeZone);
+			String strtime = sdf.format(d);
+
+			System.out.println("time ==" + strtime);
+			header.setTime(strtime);
 			postBillHeaderList.add(header);
 
 		}
@@ -272,12 +281,9 @@ public class BillController {
 		System.out.println("Info Data " + info.toString());
 
 		return "redirect:/showGenerateBill";
-		
-		
+
 	}
 
-	
-	
 	public String incrementDate(String date, int day) {
 
 		SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
@@ -295,8 +301,7 @@ public class BillController {
 		return date;
 
 	}
-	
-	
+
 	public static float roundUp(float d) {
 		return BigDecimal.valueOf(d).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
 	}
@@ -429,8 +434,7 @@ public class BillController {
 
 		return generateBillList.getGenerateBills();
 	}
-	
-	
+
 	@RequestMapping(value = "/showBillList", method = RequestMethod.GET)
 	public ModelAndView showBillList(HttpServletRequest request, HttpServletResponse response) {
 
@@ -476,224 +480,220 @@ public class BillController {
 		return model;
 
 	}
-	
-	
-	//List<GetBillHeader> billHeadersList;
-		@RequestMapping(value = "/getBillListProcess", method = RequestMethod.GET)
-		public @ResponseBody List<GetBillHeader> getBillListProcess(HttpServletRequest request,
-				HttpServletResponse response) {
 
-			Constants.mainAct = 8;
-			Constants.subAct = 83;
+	// List<GetBillHeader> billHeadersList;
+	@RequestMapping(value = "/getBillListProcess", method = RequestMethod.GET)
+	public @ResponseBody List<GetBillHeader> getBillListProcess(HttpServletRequest request,
+			HttpServletResponse response) {
 
-			billHeadersList = new ArrayList<>();
+		Constants.mainAct = 8;
+		Constants.subAct = 83;
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		billHeadersList = new ArrayList<>();
 
-			RestTemplate restTemplate = new RestTemplate();
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-			String routeId = "0";
-			String frIdString = "";
+		RestTemplate restTemplate = new RestTemplate();
 
-			System.out.println("inside getBillListProcess ajax call");
+		String routeId = "0";
+		String frIdString = "";
 
-			frIdString = request.getParameter("fr_id_list");
-			String fromDate = request.getParameter("from_date");
-			String toDate = request.getParameter("to_date");
-			routeId = request.getParameter("route_id");
+		System.out.println("inside getBillListProcess ajax call");
 
-			System.out.println("routeId= " + routeId);
+		frIdString = request.getParameter("fr_id_list");
+		String fromDate = request.getParameter("from_date");
+		String toDate = request.getParameter("to_date");
+		routeId = request.getParameter("route_id");
 
-			boolean isAllFrSelected = false;
+		System.out.println("routeId= " + routeId);
 
-			frIdString = frIdString.substring(1, frIdString.length() - 1);
-			frIdString = frIdString.replaceAll("\"", "");
+		boolean isAllFrSelected = false;
 
-			List<String> franchIds = new ArrayList();
-			franchIds = Arrays.asList(frIdString);
+		frIdString = frIdString.substring(1, frIdString.length() - 1);
+		frIdString = frIdString.replaceAll("\"", "");
 
-			System.out.println("fr Id ArrayList " + franchIds.toString());
+		List<String> franchIds = new ArrayList();
+		franchIds = Arrays.asList(frIdString);
 
-			if (franchIds.contains("-1")) {
-				isAllFrSelected = true;
+		System.out.println("fr Id ArrayList " + franchIds.toString());
 
-			}
+		if (franchIds.contains("-1")) {
+			isAllFrSelected = true;
 
-			if (!routeId.equalsIgnoreCase("0")) {
+		}
 
-				map.add("routeId", routeId);
+		if (!routeId.equalsIgnoreCase("0")) {
 
-				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId", map,
-						FrNameIdByRouteIdResponse.class);
+			map.add("routeId", routeId);
 
-				List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+			FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId", map,
+					FrNameIdByRouteIdResponse.class);
 
-				System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+			List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
 
-				StringBuilder sbForRouteFrId = new StringBuilder();
-				for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
+			System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
 
-					sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
+			StringBuilder sbForRouteFrId = new StringBuilder();
+			for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
 
-				}
-
-				String strFrIdRouteWise = sbForRouteFrId.toString();
-				frIdString = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
-				System.out.println("fr Id Route WISE = " + frIdString);
-
-			} // end of if
-
-			if (isAllFrSelected) {
-
-				map.add("fromDate", fromDate);
-				map.add("toDate", toDate);
-				System.out.println("Inside is All fr Selected " + isAllFrSelected);
-
-				GetBillHeaderResponse billHeaderResponse = restTemplate
-						.postForObject(Constants.url + "getBillHeaderForAllFr", map, GetBillHeaderResponse.class);
-
-				billHeadersList = billHeaderResponse.getGetBillHeaders();
-
-				System.out.println("bill header  " + billHeadersList.toString());
-
-			} else { // few franchisee selected
-
-				map.add("frId", frIdString);
-				map.add("fromDate", fromDate);
-				map.add("toDate", toDate);
-
-				GetBillHeaderResponse billHeaderResponse = restTemplate.postForObject(Constants.url + "getBillHeader", map,
-						GetBillHeaderResponse.class);
-
-				billHeadersList = billHeaderResponse.getGetBillHeaders();
+				sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
 
 			}
+
+			String strFrIdRouteWise = sbForRouteFrId.toString();
+			frIdString = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+			System.out.println("fr Id Route WISE = " + frIdString);
+
+		} // end of if
+
+		if (isAllFrSelected) {
+
+			map.add("fromDate", fromDate);
+			map.add("toDate", toDate);
+			System.out.println("Inside is All fr Selected " + isAllFrSelected);
+
+			GetBillHeaderResponse billHeaderResponse = restTemplate
+					.postForObject(Constants.url + "getBillHeaderForAllFr", map, GetBillHeaderResponse.class);
+
+			billHeadersList = billHeaderResponse.getGetBillHeaders();
 
 			System.out.println("bill header  " + billHeadersList.toString());
 
-			return billHeadersList;
+		} else { // few franchisee selected
+
+			map.add("frId", frIdString);
+			map.add("fromDate", fromDate);
+			map.add("toDate", toDate);
+
+			GetBillHeaderResponse billHeaderResponse = restTemplate.postForObject(Constants.url + "getBillHeader", map,
+					GetBillHeaderResponse.class);
+
+			billHeadersList = billHeaderResponse.getGetBillHeaders();
 
 		}
 
-	
-		@RequestMapping(value = "/viewBillDetails/{billNo}/{frName}", method = RequestMethod.GET)
-		public ModelAndView viewBillDetails(@PathVariable int billNo, @PathVariable String frName) {
-			ModelAndView model = new ModelAndView("billing/viewBillDetails");
-			try {
+		System.out.println("bill header  " + billHeadersList.toString());
 
-				RestTemplate restTemplate = new RestTemplate();
+		return billHeadersList;
 
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				map.add("billNo", billNo);
+	}
 
-				GetBillDetailsResponse billDetailsResponse = restTemplate.postForObject(Constants.url + "getBillDetails",
-						map, GetBillDetailsResponse.class);
-
-				billDetailsList = new ArrayList<GetBillDetail>();
-				billDetailsList = billDetailsResponse.getGetBillDetails();
-
-				System.out.println(" *** get Bill response  " + billDetailsResponse.getGetBillDetails().toString());
-				System.out.println("fr Name==" + frName);
-				
-				for(int i=0;i<billDetailsList.size();i++) {
-					
-					model.addObject("billNo", billDetailsList.get(i).getBillNo());
-					model.addObject("billDate", billDetailsList.get(i).getBillDate());
-					
-				}
-
-				model.addObject("frName", frName);
-				/*model.addObject("billNo", billDetailsList.get(0).getBillNo());
-				model.addObject("billDate", billDetailsList.get(0).getBillDate());*/
-				model.addObject("billDetails", billDetailsList);
-
-			} catch (Exception e) {
-				System.out.println("bill controller error " + e.getMessage());
-				e.printStackTrace();
-			}
-
-			return model;
-
-		}
-		
-		
-		
-		@RequestMapping(value = "/updateBillDetails/{billNo}/{frName}", method = RequestMethod.GET)
-		public ModelAndView updateBillDetails(@PathVariable int billNo, @PathVariable String frName) {
-			ModelAndView model = new ModelAndView("billing/editBillDetails");
-			try {
-
-				RestTemplate restTemplate = new RestTemplate();
-
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				map.add("billNo", billNo);
-
-				GetBillDetailsResponse billDetailsResponse = restTemplate.postForObject(Constants.url + "getBillDetails",
-						map, GetBillDetailsResponse.class);
-
-				billDetailsList = new ArrayList<GetBillDetail>();
-				billDetailsList = billDetailsResponse.getGetBillDetails();
-
-				System.out.println(" *** get Bill response  " + billDetailsResponse.getGetBillDetails().toString());
-				System.out.println("fr Name==----------" + frName);
-
-				model.addObject("frName", frName);
-				model.addObject("billNo", billDetailsList.get(0).getBillNo());
-				model.addObject("billDate", billDetailsList.get(0).getBillDate());
-				model.addObject("billDetails", billDetailsList);
-
-			} catch (Exception e) {
-				System.out.println("bill controller error " + e.getMessage());
-			}
-
-			return model;
-
-		}
-		
-		
-		@RequestMapping(value = "/updateBillDetailsProcess", method = RequestMethod.POST)
-		public String updateBillDetailsProcess(HttpServletRequest request, HttpServletResponse response) {
-			// ModelAndView model = new ModelAndView("billing/editBillDetails");
-			System.out.println("It is Process");
-			System.out.println("bill Detail list " + billDetailsList.toString());
+	@RequestMapping(value = "/viewBillDetails/{billNo}/{frName}", method = RequestMethod.GET)
+	public ModelAndView viewBillDetails(@PathVariable int billNo, @PathVariable String frName) {
+		ModelAndView model = new ModelAndView("billing/viewBillDetails");
+		try {
 
 			RestTemplate restTemplate = new RestTemplate();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("billNo", billNo);
 
-			List<Integer> billDetailNoList = new ArrayList<Integer>();
-			List<Integer> BilQtyList = new ArrayList<Integer>();
-			List<Float> grandTotalList = new ArrayList<Float>();
-			List<Float> taxableAmtList = new ArrayList<Float>();
+			GetBillDetailsResponse billDetailsResponse = restTemplate.postForObject(Constants.url + "getBillDetails",
+					map, GetBillDetailsResponse.class);
 
-			
-			
-			int billNo = 0;
+			billDetailsList = new ArrayList<GetBillDetail>();
+			billDetailsList = billDetailsResponse.getGetBillDetails();
 
-			PostBillDataCommon postBillDataCommon = new PostBillDataCommon();
-			List<PostBillHeader>postBillHeadersList=new ArrayList<>();
-			
-			List<PostBillDetail>postBillDetailsList=new ArrayList<>();
-			
-			float sumTaxableAmt = 0,sumTotalTax=0,sumGrandTotal=0;
-			
-			PostBillDetail postBillDetail=new PostBillDetail();
-			PostBillHeader postBillHeader=new PostBillHeader();
+			System.out.println(" *** get Bill response  " + billDetailsResponse.getGetBillDetails().toString());
+			System.out.println("fr Name==" + frName);
+
 			for (int i = 0; i < billDetailsList.size(); i++) {
-				
-				Integer newBillQty=Integer.parseInt(request.getParameter("billQty" + billDetailsList.get(i).getBillDetailNo()));
 
-				System.out.println("new bill qty = "+newBillQty);
-				
-				GetBillDetail getBillDetail=billDetailsList.get(i);
-				
-				if (getBillDetail.getBillQty() != newBillQty) {
+				model.addObject("billNo", billDetailsList.get(i).getBillNo());
+				model.addObject("billDate", billDetailsList.get(i).getBillDate());
 
-				 postBillDetail=new PostBillDetail();
-				
+			}
+
+			model.addObject("frName", frName);
+			/*
+			 * model.addObject("billNo", billDetailsList.get(0).getBillNo());
+			 * model.addObject("billDate", billDetailsList.get(0).getBillDate());
+			 */
+			model.addObject("billDetails", billDetailsList);
+
+		} catch (Exception e) {
+			System.out.println("bill controller error " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+
+	}
+
+	@RequestMapping(value = "/updateBillDetails/{billNo}/{frName}", method = RequestMethod.GET)
+	public ModelAndView updateBillDetails(@PathVariable int billNo, @PathVariable String frName) {
+		ModelAndView model = new ModelAndView("billing/editBillDetails");
+		try {
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("billNo", billNo);
+
+			GetBillDetailsResponse billDetailsResponse = restTemplate.postForObject(Constants.url + "getBillDetails",
+					map, GetBillDetailsResponse.class);
+
+			billDetailsList = new ArrayList<GetBillDetail>();
+			billDetailsList = billDetailsResponse.getGetBillDetails();
+
+			System.out.println(" *** get Bill response  " + billDetailsResponse.getGetBillDetails().toString());
+			System.out.println("fr Name==----------" + frName);
+
+			model.addObject("frName", frName);
+			model.addObject("billNo", billDetailsList.get(0).getBillNo());
+			model.addObject("billDate", billDetailsList.get(0).getBillDate());
+			model.addObject("billDetails", billDetailsList);
+
+		} catch (Exception e) {
+			System.out.println("bill controller error " + e.getMessage());
+		}
+
+		return model;
+
+	}
+
+	@RequestMapping(value = "/updateBillDetailsProcess", method = RequestMethod.POST)
+	public String updateBillDetailsProcess(HttpServletRequest request, HttpServletResponse response) {
+		// ModelAndView model = new ModelAndView("billing/editBillDetails");
+		System.out.println("It is Process");
+		System.out.println("bill Detail list " + billDetailsList.toString());
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+		List<Integer> billDetailNoList = new ArrayList<Integer>();
+		List<Integer> BilQtyList = new ArrayList<Integer>();
+		List<Float> grandTotalList = new ArrayList<Float>();
+		List<Float> taxableAmtList = new ArrayList<Float>();
+
+		int billNo = 0;
+
+		PostBillDataCommon postBillDataCommon = new PostBillDataCommon();
+		List<PostBillHeader> postBillHeadersList = new ArrayList<>();
+
+		List<PostBillDetail> postBillDetailsList = new ArrayList<>();
+
+		float sumTaxableAmt = 0, sumTotalTax = 0, sumGrandTotal = 0;
+
+		PostBillDetail postBillDetail = new PostBillDetail();
+		PostBillHeader postBillHeader = new PostBillHeader();
+		for (int i = 0; i < billDetailsList.size(); i++) {
+
+			Integer newBillQty = Integer
+					.parseInt(request.getParameter("billQty" + billDetailsList.get(i).getBillDetailNo()));
+
+			System.out.println("new bill qty = " + newBillQty);
+
+			GetBillDetail getBillDetail = billDetailsList.get(i);
+
+			if (getBillDetail.getBillQty() != newBillQty) {
+
+				postBillDetail = new PostBillDetail();
+
 				postBillDetail.setBaseRate(getBillDetail.getBaseRate());
 				postBillDetail.setBillDetailNo(getBillDetail.getBillDetailNo());
-				
+
 				postBillDetail.setBillNo(getBillDetail.getBillNo());
 				postBillDetail.setCatId(getBillDetail.getCatId());
 				postBillDetail.setSgstPer(getBillDetail.getSgstPer());
@@ -712,254 +712,217 @@ public class BillController {
 				postBillDetail.setExpiryDate(getBillDetail.getExpiryDate());
 				postBillDetail.setIsGrngvnApplied(getBillDetail.getIsGrngvnApplied());
 
-				
-				
-							
-					float baseRate=getBillDetail.getBaseRate();
-					
-					float taxableAmt=baseRate*newBillQty;
-					taxableAmt=roundUp(taxableAmt);
-					
-					float sgstRs=(taxableAmt*getBillDetail.getSgstPer())/100;
-					float cgstRs=(taxableAmt*getBillDetail.getCgstPer())/100;
-					float igstRs=(taxableAmt*getBillDetail.getIgstPer())/100;
-					
-					sgstRs=roundUp(sgstRs);
-					cgstRs=roundUp(cgstRs);
-					igstRs=roundUp(igstRs);
-					
-					float totalTax=sgstRs+cgstRs;
-					totalTax=roundUp(totalTax);
-					
-					float grandTotal=totalTax+taxableAmt;
-					grandTotal=roundUp(grandTotal);
-					
-					sumTaxableAmt=sumTaxableAmt+taxableAmt;
-					sumTotalTax=sumTotalTax+totalTax;
-					sumGrandTotal=sumGrandTotal+grandTotal;
-					postBillDetail.setBillQty(newBillQty);
-					postBillDetail.setSgstRs(sgstRs);
-					postBillDetail.setCgstRs(cgstRs);
-					postBillDetail.setIgstRs(igstRs);
-					postBillDetail.setTaxableAmt(taxableAmt);
-					postBillDetail.setTotalTax(totalTax);
-					postBillDetail.setGrandTotal(grandTotal);
-					
-					
+				float baseRate = getBillDetail.getBaseRate();
 
-				}//end of if 
-				
-				/*else {
+				float taxableAmt = baseRate * newBillQty;
+				taxableAmt = roundUp(taxableAmt);
 
-					System.out.println(" Nothing Changed ");
-					postBillDetail.setBillQty(getBillDetail.getBillQty());
+				float sgstRs = (taxableAmt * getBillDetail.getSgstPer()) / 100;
+				float cgstRs = (taxableAmt * getBillDetail.getCgstPer()) / 100;
+				float igstRs = (taxableAmt * getBillDetail.getIgstPer()) / 100;
 
-					postBillDetail.setSgstRs(getBillDetail.getSgstRs());
-					postBillDetail.setCgstRs(getBillDetail.getSgstRs());
-					postBillDetail.setIgstRs(getBillDetail.getIgstRs());
-					postBillDetail.setTaxableAmt(getBillDetail.getTaxableAmt());
-					postBillDetail.setTotalTax(getBillDetail.getTotalTax());
-					postBillDetail.setGrandTotal(getBillDetail.getGrandTotal());
-					
-					
-					
-				}//end of else
-*/				
-				postBillDetailsList.add(postBillDetail);
-				
+				sgstRs = roundUp(sgstRs);
+				cgstRs = roundUp(cgstRs);
+				igstRs = roundUp(igstRs);
 
-				for(int j=0;j<billHeadersList.size();j++) {
-					
-					if(billHeadersList.get(j).getBillNo()==postBillDetailsList.get(0).getBillNo()) {
-						
-						
-						
-						DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-						Date billDate=null;
-						try {
-							billDate = formatter.parse(billHeadersList.get(j).getBillDate());
-						} catch (ParseException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
-						postBillHeader.setBillDate(billDate);
-						
-						postBillHeader.setBillNo(billHeadersList.get(j).getBillNo());
-						postBillHeader.setDelStatus(0);
-						postBillHeader.setFrCode(billHeadersList.get(j).getFrCode());
-						postBillHeader.setFrId(billHeadersList.get(j).getFrId());
-						postBillHeader.setGrandTotal(sumGrandTotal);
-						postBillHeader.setInvoiceNo(billHeadersList.get(j).getInvoiceNo());
-						postBillHeader.setRemark(billHeadersList.get(j).getRemark());
-						postBillHeader.setStatus(billHeadersList.get(j).getStatus());
-						postBillHeader.setTaxableAmt(sumTaxableAmt);
-						postBillHeader.setTaxApplicable(billHeadersList.get(j).getTaxApplicable());
-						postBillHeader.setTotalTax(sumTotalTax);
-						break;
-					}//end of if
-			
-				}//end of for
-				
-				
-				
-				
-			} // End of for
-			
-			
-			
-			
-			postBillHeader.setPostBillDetailsList(postBillDetailsList);
-			postBillHeadersList.add(postBillHeader);
-			postBillDataCommon.setPostBillHeadersList(postBillHeadersList);
-			
+				float totalTax = sgstRs + cgstRs;
+				totalTax = roundUp(totalTax);
 
-			Info info = restTemplate.postForObject(Constants.url + "updateBillData", postBillDataCommon,
-					Info.class);
+				float grandTotal = totalTax + taxableAmt;
+				grandTotal = roundUp(grandTotal);
 
-			return "redirect:/showBillList";
-		}
-		
-		
+				sumTaxableAmt = sumTaxableAmt + taxableAmt;
+				sumTotalTax = sumTotalTax + totalTax;
+				sumGrandTotal = sumGrandTotal + grandTotal;
+				postBillDetail.setBillQty(newBillQty);
+				postBillDetail.setSgstRs(sgstRs);
+				postBillDetail.setCgstRs(cgstRs);
+				postBillDetail.setIgstRs(igstRs);
+				postBillDetail.setTaxableAmt(taxableAmt);
+				postBillDetail.setTotalTax(totalTax);
+				postBillDetail.setGrandTotal(grandTotal);
 
-		//delete Bill
-		
-		@RequestMapping(value = "/deleteBill/{billNo}/{frName}", method = RequestMethod.GET)
-		public String deleteBill(@PathVariable int billNo, @PathVariable String frName) {
-			ModelAndView model = new ModelAndView("billing/viewbillheader");
-			
-				RestTemplate restTemplate = new RestTemplate();
+			} // end of if
 
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				map.add("billNo", billNo);
-				map.add("delStatus", 1);
+			/*
+			 * else {
+			 * 
+			 * System.out.println(" Nothing Changed ");
+			 * postBillDetail.setBillQty(getBillDetail.getBillQty());
+			 * 
+			 * postBillDetail.setSgstRs(getBillDetail.getSgstRs());
+			 * postBillDetail.setCgstRs(getBillDetail.getSgstRs());
+			 * postBillDetail.setIgstRs(getBillDetail.getIgstRs());
+			 * postBillDetail.setTaxableAmt(getBillDetail.getTaxableAmt());
+			 * postBillDetail.setTotalTax(getBillDetail.getTotalTax());
+			 * postBillDetail.setGrandTotal(getBillDetail.getGrandTotal());
+			 * 
+			 * 
+			 * 
+			 * }//end of else
+			 */
+			postBillDetailsList.add(postBillDetail);
 
-				Info info  = restTemplate.postForObject(Constants.url + "deleteBill",
-						map, Info.class);
-		
+			for (int j = 0; j < billHeadersList.size(); j++) {
+
+				if (billHeadersList.get(j).getBillNo() == postBillDetailsList.get(0).getBillNo()) {
+
+					DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+					Date billDate = null;
+					try {
+						billDate = formatter.parse(billHeadersList.get(j).getBillDate());
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					postBillHeader.setBillDate(billDate);
+
+					postBillHeader.setBillNo(billHeadersList.get(j).getBillNo());
+					postBillHeader.setDelStatus(0);
+					postBillHeader.setFrCode(billHeadersList.get(j).getFrCode());
+					postBillHeader.setFrId(billHeadersList.get(j).getFrId());
+					postBillHeader.setGrandTotal(sumGrandTotal);
+					postBillHeader.setInvoiceNo(billHeadersList.get(j).getInvoiceNo());
+					postBillHeader.setRemark(billHeadersList.get(j).getRemark());
+					postBillHeader.setStatus(billHeadersList.get(j).getStatus());
+					postBillHeader.setTaxableAmt(sumTaxableAmt);
+					postBillHeader.setTaxApplicable(billHeadersList.get(j).getTaxApplicable());
+					postBillHeader.setTotalTax(sumTotalTax);
+					break;
+				} // end of if
+
+			} // end of for
+
+		} // End of for
+
+		postBillHeader.setPostBillDetailsList(postBillDetailsList);
+		postBillHeadersList.add(postBillHeader);
+		postBillDataCommon.setPostBillHeadersList(postBillHeadersList);
+
+		Info info = restTemplate.postForObject(Constants.url + "updateBillData", postBillDataCommon, Info.class);
+
 		return "redirect:/showBillList";
-		
+	}
+
+	// delete Bill
+
+	@RequestMapping(value = "/deleteBill/{billNo}/{frName}", method = RequestMethod.GET)
+	public String deleteBill(@PathVariable int billNo, @PathVariable String frName) {
+		ModelAndView model = new ModelAndView("billing/viewbillheader");
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("billNo", billNo);
+		map.add("delStatus", 1);
+
+		Info info = restTemplate.postForObject(Constants.url + "deleteBill", map, Info.class);
+
+		return "redirect:/showBillList";
+
+	}
+
+	// ganesh
+
+	@RequestMapping(value = "/viewBill", method = RequestMethod.GET)
+	public ModelAndView viewBill(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("billing/sellBillHeader");
+
+		RestTemplate restTemplate = new RestTemplate();
+		allFrIdNameList = new AllFrIdNameList();
+		try {
+
+			allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+
+		} catch (Exception e) {
+			System.out.println("Exception in getAllFrIdName" + e.getMessage());
+			e.printStackTrace();
+
 		}
-		
-		
-		//ganesh
-		
-	      
-		@RequestMapping(value = "/viewBill", method = RequestMethod.GET)
-		public ModelAndView viewBill(HttpServletRequest request,
-					HttpServletResponse response) {
 
-				ModelAndView model = new ModelAndView("billing/sellBillHeader");
-				
-				RestTemplate restTemplate = new RestTemplate();
-				allFrIdNameList = new AllFrIdNameList();
-				try {
+		model.addObject("allFrIdNameList", allFrIdNameList.getFrIdNamesList());
 
-					allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+		return model;
+	}
 
-				} catch (Exception e) {
-					System.out.println("Exception in getAllFrIdName" + e.getMessage());
-					e.printStackTrace();
-
-				}
-				
-				model.addObject("allFrIdNameList", allFrIdNameList.getFrIdNamesList());
-				
-				return model;			
-		}
-		
-		
-		@RequestMapping(value = "/getSellBillHeader", method = RequestMethod.GET)
-		public @ResponseBody List<GetSellBillHeader> getSellBillHeader(HttpServletRequest request,
+	@RequestMapping(value = "/getSellBillHeader", method = RequestMethod.GET)
+	public @ResponseBody List<GetSellBillHeader> getSellBillHeader(HttpServletRequest request,
 			HttpServletResponse response) {
-					
-			
-			System.out.println("in method");
-			String fromDate=request.getParameter("fromDate");
-			String toDate=request.getParameter("toDate");
-			String selectedFr = request.getParameter("fr_id_list");
-			selectedFr=selectedFr.substring(1, selectedFr.length()-1);
-			selectedFr=selectedFr.replaceAll("\"", "");
-			
-				
-						RestTemplate restTemplate = new RestTemplate();
-						
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			
-			map.add("frId", selectedFr);
-			map.add("fromDate", fromDate);
-			map.add("toDate", toDate);
-			//getFrGrnDetail
-			try {
-			  
+
+		System.out.println("in method");
+		String fromDate = request.getParameter("fromDate");
+		String toDate = request.getParameter("toDate");
+		String selectedFr = request.getParameter("fr_id_list");
+		selectedFr = selectedFr.substring(1, selectedFr.length() - 1);
+		selectedFr = selectedFr.replaceAll("\"", "");
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+		map.add("frId", selectedFr);
+		map.add("fromDate", fromDate);
+		map.add("toDate", toDate);
+		// getFrGrnDetail
+		try {
+
 			ParameterizedTypeReference<List<GetSellBillHeader>> typeRef = new ParameterizedTypeReference<List<GetSellBillHeader>>() {
 			};
-			ResponseEntity<List<GetSellBillHeader>> responseEntity = restTemplate.exchange(Constants.url + "getSellBillHeader",
-					HttpMethod.POST, new HttpEntity<>(map), typeRef);
-			
-			getSellBillHeaderList = responseEntity.getBody();	
-			}
-			catch (Exception e) {
-				e.printStackTrace();
-				System.out.println(e.getMessage());
-			}
-			
-			
-			 System.out.println("Sell Bill Header "+getSellBillHeaderList.toString());
-			
-				
-						
-			
-		
-		return getSellBillHeaderList;
-		
+			ResponseEntity<List<GetSellBillHeader>> responseEntity = restTemplate
+					.exchange(Constants.url + "getSellBillHeader", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			getSellBillHeaderList = responseEntity.getBody();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
-		
-		@RequestMapping(value = "/viewBillDetails", method = RequestMethod.GET)
-		public ModelAndView viewBillDetails(HttpServletRequest request,
-					HttpServletResponse response) {
 
-				ModelAndView model = new ModelAndView("billing/sellBillDetail");
-				
+		System.out.println("Sell Bill Header " + getSellBillHeaderList.toString());
 
-				System.out.println("in method");
-				
-				String sellBill_no=request.getParameter("sellBillNo");
+		return getSellBillHeaderList;
 
-				String billDate=request.getParameter("billDate");
-				String frName=request.getParameter("frName");
-				
-				
-					
-							RestTemplate restTemplate = new RestTemplate();
-							
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				int sellBillNo=Integer.parseInt(sellBill_no);
-				map.add("sellBillNo", sellBillNo);
-				
-				try {
-				
-				ParameterizedTypeReference<List<GetSellBillDetail>> typeRef = new ParameterizedTypeReference<List<GetSellBillDetail>>() {
-				};
-				ResponseEntity<List<GetSellBillDetail>> responseEntity = restTemplate.exchange(Constants.url + "getSellBillDetail",
-						HttpMethod.POST, new HttpEntity<>(map), typeRef);
-				
-				getSellBillDetailList = responseEntity.getBody();	
-				}
-				catch (Exception e) {
-					e.printStackTrace();
-					System.out.println(e.getMessage());
-				}
-				
-				
-				 System.out.println("Sell Bill Detail "+getSellBillDetailList.toString());
-				
-				model.addObject("getSellBillDetailList",getSellBillDetailList);
-				model.addObject("sellBillNo", sellBillNo);	
-				model.addObject("billDate",billDate);
-				model.addObject("frName",frName);
-				
-				return model;			
-		}	
-	
+	}
+
+	@RequestMapping(value = "/viewBillDetails", method = RequestMethod.GET)
+	public ModelAndView viewBillDetails(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("billing/sellBillDetail");
+
+		System.out.println("in method");
+
+		String sellBill_no = request.getParameter("sellBillNo");
+
+		String billDate = request.getParameter("billDate");
+		String frName = request.getParameter("frName");
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		int sellBillNo = Integer.parseInt(sellBill_no);
+		map.add("sellBillNo", sellBillNo);
+
+		try {
+
+			ParameterizedTypeReference<List<GetSellBillDetail>> typeRef = new ParameterizedTypeReference<List<GetSellBillDetail>>() {
+			};
+			ResponseEntity<List<GetSellBillDetail>> responseEntity = restTemplate
+					.exchange(Constants.url + "getSellBillDetail", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			getSellBillDetailList = responseEntity.getBody();
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+
+		System.out.println("Sell Bill Detail " + getSellBillDetailList.toString());
+
+		model.addObject("getSellBillDetailList", getSellBillDetailList);
+		model.addObject("sellBillNo", sellBillNo);
+		model.addObject("billDate", billDate);
+		model.addObject("frName", frName);
+
+		return model;
+	}
 
 }
