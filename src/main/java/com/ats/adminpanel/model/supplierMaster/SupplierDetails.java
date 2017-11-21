@@ -45,6 +45,8 @@ private int suppId;
 	private String suppFdaLic;
 	 
 	private int suppPayId;
+	
+	private int delStatus;
 	 
 	private int suppCreditDays;
 
@@ -224,6 +226,14 @@ private int suppId;
 		this.suppCreditDays = suppCreditDays;
 	}
 
+	public int getDelStatus() {
+		return delStatus;
+	}
+
+	public void setDelStatus(int delStatus) {
+		this.delStatus = delStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "SupplierDetails [suppId=" + suppId + ", suppName=" + suppName + ", suppAddr=" + suppAddr + ", suppCity="
@@ -232,8 +242,9 @@ private int suppId;
 				+ suppPhone2 + ", suppEmail1=" + suppEmail1 + ", suppEmail2=" + suppEmail2 + ", suppEmail3="
 				+ suppEmail3 + ", suppEmail4=" + suppEmail4 + ", suppEmail5=" + suppEmail5 + ", suppGstin=" + suppGstin
 				+ ", suppCPerson=" + suppCPerson + ", suppPanNo=" + suppPanNo + ", suppFdaLic=" + suppFdaLic
-				+ ", suppPayId=" + suppPayId + ", suppCreditDays=" + suppCreditDays + "]";
+				+ ", suppPayId=" + suppPayId + ", delStatus=" + delStatus + ", suppCreditDays=" + suppCreditDays + "]";
 	}
 
+	 
 	 
 }

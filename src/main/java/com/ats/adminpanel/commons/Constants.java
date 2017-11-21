@@ -3,18 +3,18 @@ package com.ats.adminpanel.commons;
 import java.io.File;
 
 public class Constants {
-	public static final String url="http://localhost:8076/";
+	public static final String url="http://localhost:8027/";
 	//public static final String url = "http://mongiwebapi.ap-south-1.elasticbeanstalk.com/";
 
-	public static final String SPCAKE_IMAGE_URL = "https://s3.ap-south-1.amazonaws.com/elasticbeanstalk-ap-south-1-549563654916/uploads/specialCake/";
+	public static final String SPCAKE_IMAGE_URL = "https://s3.ap-south-1.amazonaws.com/monginis/uploads/specialCake/";
 
-	public static final String FR_IMAGE_URL = "https://s3.ap-south-1.amazonaws.com/elasticbeanstalk-ap-south-1-549563654916/uploads/fr/";
+	public static final String FR_IMAGE_URL = "https://s3.ap-south-1.amazonaws.com/monginis/uploads/fr/";
 
-	public static final String PHOTO_CAKE_URL = "https://s3.ap-south-1.amazonaws.com/elasticbeanstalk-ap-south-1-549563654916/uploads/photoCake/";
+	public static final String PHOTO_CAKE_URL = "https://s3.ap-south-1.amazonaws.com/monginis/uploads/photoCake/";
 
-	public static final String MESSAGE_IMAGE_URL = "https://s3.ap-south-1.amazonaws.com/elasticbeanstalk-ap-south-1-549563654916/uploads/message/";
+	public static final String MESSAGE_IMAGE_URL = "https://s3.ap-south-1.amazonaws.com/monginis/uploads/message/";
 
-	public static final String ITEM_IMAGE_URL = "https://s3.ap-south-1.amazonaws.com/elasticbeanstalk-ap-south-1-549563654916/uploads/items/";
+	public static final String ITEM_IMAGE_URL = "https://s3.ap-south-1.amazonaws.com/monginis/uploads/items/";
 
 	
 	// navigation view
