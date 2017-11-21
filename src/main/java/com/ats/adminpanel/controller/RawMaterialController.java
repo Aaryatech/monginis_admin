@@ -10,16 +10,15 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
-import com.ats.adminpanel.model.RawMaterial.Info;
-import com.ats.adminpanel.model.RawMaterial.SupplierDetails; 
+import com.ats.adminpanel.model.RawMaterial.Info; 
 
 
 @Controller
-public class RowMaterialController {
+public class RawMaterialController {
 	
 	
 	@RequestMapping(value = "/showRowMaterial", method = RequestMethod.GET)
-	public ModelAndView showProdForcasting(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView showRowMaterial(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/rowMaterialMaster");
 
@@ -36,5 +35,7 @@ public class RowMaterialController {
 
 		return model;
 	}
+	
+	
 
 }
