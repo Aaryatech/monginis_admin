@@ -116,14 +116,16 @@
 							<form action="showRawMaterialDetails" method="post" class="form-horizontal" id=
 									"validation-form"
 										enctype="multipart/form-data" method="post">
-										<br/>
-					<div class="col-md-12" style="text-align: center" align="center">
-					<label class="col-sm-3 col-lg-2 control-label">Group</label>
-									<div class="col-sm-6 col-lg-4 controls">
-										<select name="rm_group" id="rm_group" class="form-control"placeholder="Group"data-rule-required="true">
+									 
+					<div class="colOuter">	
+					<div class="col-md-2" > </div>
+					<div class="col-md-2" >Group</div>
+									<div class="col-md-4">
+										<select name="rm_group" id="rm_group" class="form-control" tabindex="6">
+										<option value="-1">Select Group</option>
 											 <c:forEach items="${groupList}" var="groupList"
 							varStatus="count">
-							<option value=-1>Select Group</option>
+							
 									<c:choose>
 													<c:when test="${rawMaterialDetails.grpId==groupList.grpId}">
 														<option selected value="${groupList.grpId}"><c:out value="${groupList.grpName}"/></option>
@@ -139,20 +141,20 @@
 									</div>
 
 					</div>
-					<div class="row">
-									<div class="col-md-12" style="text-align: center">
+					 
+									<div class="col-md-4">
 										<input type="submit" id="search" class="btn btn-info"
 											value="Search" />
 
 
 
 									</div>
-								</div>
+								 
 					
 					</form>
 				</div>
 				
-				<br/><hr>
+				
 
 									<div class="clearfix"></div>
 									<div class="table-responsive" style="border: 0">
