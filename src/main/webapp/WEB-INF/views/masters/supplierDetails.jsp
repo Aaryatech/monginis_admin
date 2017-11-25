@@ -80,7 +80,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Row material Master
+						<i class="fa fa-file-o"></i>Supplier Master
 					</h1>
 
 				</div>

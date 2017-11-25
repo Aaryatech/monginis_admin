@@ -393,35 +393,7 @@
 				
 
 
-<!-- <script type="text/javascript">
-	function getSupplier()
-	{ 
-		
-			
-			$('#loader').show();
-			
-			
-			$.getJSON('${getSupplierDetails}',{
-				
-								
-								ajax : 'true',
 
-							},
-							function(data) {
-								$('#loader').hide();
-								 if (data == "") {
-									alert("No records found !!");
-									document.getElementById("edit").disabled = true;
-								} 
-								 else
-									 {
-									 document.getElementById("edit").disabled = false;
-									 }
-								
-							});
-	}
-	</script>
-	 -->
 
 </body>
 </html>
