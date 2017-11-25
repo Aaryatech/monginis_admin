@@ -228,13 +228,106 @@
 					</c:choose>
 					<a href="${pageContext.request.contextPath}/addroute">Route</a>
 					</li>
-
+<c:choose>
+						<c:when test="${Constants.subAct==26}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAddRmTax">Add RM Tax</a>
+					</li>
+					<c:choose>
+						<c:when test="${Constants.subAct==27}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAddRmUmo">Add RM UOM</a>
+					</li>
 
 				</ul>
 				<!-- END Submenu -->
 				</li>
 
-				<c:choose>
+
+<!-- Purchase Master
+ -->			
+ <c:choose>
+					<c:when test="${Constants.mainAct==17}">
+						<li class="active">
+					</c:when>
+
+					<c:otherwise>
+						<li>
+					</c:otherwise>
+				</c:choose>
+				<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
+					<span>Purchase Masters</span> <b class="arrow fa fa-angle-right"></b>
+				</a>
+				<!-- BEGIN Submenu -->
+				<ul class="submenu">
+					<c:choose>
+						<c:when test="${Constants.subAct==171}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAddSupplier">Add Supplier</a>
+					</li>
+					<c:choose>
+						<c:when test="${Constants.subAct==172}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showSupplierDetails">View Supplier Details</a>
+					</li>
+					<c:choose>
+						<c:when test="${Constants.subAct==173}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAddRawMaterial">Add Raw Material</a>
+					</li>
+					<c:choose>
+						<c:when test="${Constants.subAct==174}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showRawMaterial">View Raw Material Details</a>
+					</li>
+					<c:choose>
+						<c:when test="${Constants.subAct==175}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showRmRateVerification">RM Rate Verification</a>
+					</li>
+
+
+				</ul>
+				<!-- END Submenu -->
+				</li>
+ 
+ <!-- end Puchase Master -->
+ 	<c:choose>
 					<c:when test="${Constants.mainAct==3}">
 						<li class="active">
 					</c:when>
