@@ -47,7 +47,8 @@ import com.ats.adminpanel.model.franchisee.FranchiseeList;
 import com.ats.adminpanel.model.franchisee.Menu;
 import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.Item;
-
+import com.ats.adminpanel.model.pushorderdata.GetOrderDataForPushOrder;
+import com.ats.adminpanel.model.pushorderdata.GetOrderDataForPushOrderList;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 
@@ -62,6 +63,8 @@ public class PushOrderController {
 	public static List<Item> items;
 	int menuId;
 	int selectedMainCatId;
+	List<GetOrderDataForPushOrder> pushOrderData;
+	
 	
 	@RequestMapping(value = "/showpushorders", method = RequestMethod.GET)
 	public ModelAndView showPushOrder(HttpServletRequest request, HttpServletResponse response) {
@@ -119,6 +122,9 @@ public class PushOrderController {
 	public @ResponseBody List<Item> generateItemList(HttpServletRequest request,
 		HttpServletResponse response) {
 		
+		RestTemplate restTemplate = new RestTemplate();
+
+		
 		//int selectedMainCatId=0;
 		String selectedMenu = request.getParameter("menu_id");
 		menuId=Integer.parseInt(selectedMenu);
@@ -135,28 +141,48 @@ public class PushOrderController {
 	System.out.println("Before Rest of Items   and mennu id is  :  "+selectedMenu);
 	
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		
 		map.add("itemGrp1", selectedMainCatId);
 		
 		try {
-		RestTemplate restTemplate = new RestTemplate();
-
+			
+	
 		ParameterizedTypeReference<List<Item>> typeRef = new ParameterizedTypeReference<List<Item>>() {
 		};
 		ResponseEntity<List<Item>> responseEntity = restTemplate.exchange(Constants.url + "getItemsByCatId",
 				HttpMethod.POST, new HttpEntity<>(map), typeRef);
 		
 		items = responseEntity.getBody();
+		
 		}catch (Exception e) {
+			
 			System.out.println(e.getMessage());
+			
 		}
 		System.out.println("After Rest of Items   and mennu id is  :");
 		
+		
+		
+		GetOrderDataForPushOrderList pushOrderDataList=restTemplate.getForObject(Constants.url+"getOrderDataForPushOrder", GetOrderDataForPushOrderList.class);		
+		
+		 pushOrderData=pushOrderDataList.getOrderDataForPushOrder();
+		
+		
+		System.out.println("push order data "+pushOrderData);
+		
 		//items=rest.postForObject(Constants.url + "getItemsByCatId",map,List.class);
 		System.out.println("Item List: "+items.toString());
-		for (int i=0;i<items.size();i++) {
+		for (int i=0;i<pushOrderData.size();i++) {
 			
-		//	menuId=items.get(i).getMe
-		System.out.println(items.get(i).getId());
+			
+			if(items.get(i).getId()==pushOrderData.get(i).getItemId()) {
+				items.get(i).setDelStatus(pushOrderData.get(i).getOrderQty());
+
+			}
+			
+			System.out.println("item entry new qty "+items.toString());
+		//	items.get(i).setMinQty(pushOrderData.get(i).getItemId());
+		
 		}
 		
 		String selectedFr = request.getParameter("fr_id_list");
@@ -227,9 +253,13 @@ public class PushOrderController {
 	List<FranchiseeList> franchaseeList = new ArrayList<FranchiseeList>();
 	franchaseeList = allFranchiseeList.getFranchiseeList();
 	
-	
+	for(int m=0;m<pushOrderData.size();m++) {
+		
+		
 		for(int j=0;j<items.size();j++)
 		{
+			if(pushOrderData.get(m).getItemId()!=items.get(j).getId()) {
+
 			
 			//System.out.println(items.get(j).getId());
 			for(int i=0;i<selectedFrIdList.size();i++)
@@ -239,9 +269,8 @@ public class PushOrderController {
 			
 			String quantity=request.getParameter("itemId"+items.get(j).getId()+"orderQty"+selectedFrIdList.get(i));
 			int qty=Integer.parseInt(quantity);
-			//System.out.println("For Fr and item id"+items.get(j).getId()+"orderQty"+selectedFrIdList.get(i)+"     : "+quantity);
-			
-			if(qty!=0)
+
+			if(qty!=0 )
 			{
 				 List<Orders> oList=new ArrayList<>();
 				
@@ -254,7 +283,7 @@ public class PushOrderController {
 				order.setOrderDate(date);
 				order.setDeliveryDate(deliveryDate);
 				order.setMenuId(0);
-				order.setGrnType(2);
+				order.setGrnType(4);
 				order.setIsEdit(1);
 				order.setMenuId(menuId);
 				order.setOrderType(selectedMainCatId);
@@ -281,7 +310,8 @@ public class PushOrderController {
 					   				order.setOrderRate(items.get(j).getItemRate3()*qty);
 					   				order.setOrderMrp(items.get(j).getItemMrp3());
 					   			}
-					   			
+					   					
+						   
 						   }
 				}
 				}
@@ -289,8 +319,9 @@ public class PushOrderController {
 				oList.add(order);
 				PlaceOrder(oList);
 				
+			}// end of else
 			}
-			
+			}// end of if pushOrderData
 		}
 	}
 		model.addObject("unSelectedMenuList", menuList);

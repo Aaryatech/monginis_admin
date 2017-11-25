@@ -29,6 +29,8 @@ import com.ats.adminpanel.model.grngvn.GetGrnGvnDetails;
 import com.ats.adminpanel.model.grngvn.GetGrnGvnDetailsList;
 import com.ats.adminpanel.model.grngvn.GrnGvn;
 import com.ats.adminpanel.model.grngvn.PostGrnGvnList;
+import com.ats.adminpanel.model.remarks.GetAllRemarks;
+import com.ats.adminpanel.model.remarks.GetAllRemarksList;
 
 @Controller
 public class GrnGvnController {
@@ -36,27 +38,27 @@ public class GrnGvnController {
 	GetGrnGvnDetailsList getGrnGvnDetailsList;
 	List<GetGrnGvnDetails> getGrnGvnDetails;
 
+	GetAllRemarksList allRemarksList;
+	List<GetAllRemarks> getAllRemarks;
+
 	public static String gateGrnFromDate, gateGrnToDate, accGrnFromDate, accGrnToDate;
 
 	public static String gateGvnFromDate, gateGvnToDate, storeGvnFromDate, storeGvnToDate, accGvnFromDate, accGvnToDate;
 
+	
+	//getting Dates using ajax
 	@RequestMapping(value = "/getDateForGvnAcc", method = RequestMethod.GET)
 	public String getDateForGvnAcc(HttpServletRequest request, HttpServletResponse response) {
-
-		ModelAndView model = new ModelAndView("grngvn/accGvn");
 
 		accGvnFromDate = request.getParameter("fromDate");
 		accGvnToDate = request.getParameter("toDate");
 
-		
 		return "";
 
 	}
 
 	@RequestMapping(value = "/getDateForGvnStore", method = RequestMethod.GET)
 	public String getDateForGvnStore(HttpServletRequest request, HttpServletResponse response) {
-
-		ModelAndView model = new ModelAndView("grngvn/storeGvn");
 
 		storeGvnFromDate = request.getParameter("fromDate");
 		storeGvnToDate = request.getParameter("toDate");
@@ -68,12 +70,9 @@ public class GrnGvnController {
 	@RequestMapping(value = "/getDateForGvnGate", method = RequestMethod.GET)
 	public String getDateForGvnGate(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("grngvn/gateGvn");
-
 		gateGvnFromDate = request.getParameter("fromDate");
 		gateGvnToDate = request.getParameter("toDate");
 
-	
 		return "";
 
 	}
@@ -81,12 +80,9 @@ public class GrnGvnController {
 	@RequestMapping(value = "/getDateForGrnGate", method = RequestMethod.GET)
 	public String getDateForGrnGate(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("grngvn/gateGrn");
-
 		gateGrnFromDate = request.getParameter("fromDate");
 		gateGrnToDate = request.getParameter("toDate");
 
-		
 		return "";
 
 	}
@@ -94,19 +90,14 @@ public class GrnGvnController {
 	@RequestMapping(value = "/getDateForGrnAcc", method = RequestMethod.GET)
 	public String getDateForGrnAcc(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("grngvn/gateGrn");
-
 		accGrnFromDate = request.getParameter("fromDate");
 		accGrnToDate = request.getParameter("toDate");
 
-	
 		return "";
 
 	}
+	//end of getting dates 
 
-	
-	
-	
 	@RequestMapping(value = "/showGateGrn", method = RequestMethod.GET)
 	public ModelAndView showGateGrn(HttpServletRequest request, HttpServletResponse response) {
 
@@ -129,10 +120,9 @@ public class GrnGvnController {
 
 	@RequestMapping(value = "/showGateGrnDetails", method = RequestMethod.GET)
 	public ModelAndView showGateGrnDetails(HttpServletRequest request, HttpServletResponse response) {
-		
+
 		Constants.mainAct = 9;
 		Constants.subAct = 91;
-
 
 		ModelAndView model = new ModelAndView("grngvn/gateGrn");
 
@@ -141,21 +131,29 @@ public class GrnGvnController {
 			RestTemplate restTemplate = new RestTemplate();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-		 
 
-				map.add("fromDate", gateGrnFromDate);
-				map.add("toDate", gateGrnToDate);
-				System.out.println("OK ");
-				
-				getGrnGvnDetailsList=new GetGrnGvnDetailsList();
+			map.add("fromDate", gateGrnFromDate);
+			map.add("toDate", gateGrnToDate);
+			
+			System.out.println("OK ");
+
+			getGrnGvnDetailsList = new GetGrnGvnDetailsList();
 
 			getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGrnDetail", map,
 					GetGrnGvnDetailsList.class);
-			
 
 			getGrnGvnDetails = new ArrayList<GetGrnGvnDetails>();
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
+
+			allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
+
+			getAllRemarks = new ArrayList<>();
+			getAllRemarks = allRemarksList.getGetAllRemarks();
+
+			System.out.println("remark list " + getAllRemarks.toString());
+
+			model.addObject("remarkList", getAllRemarks);
 
 			model.addObject("grnList", getGrnGvnDetails);
 
@@ -169,6 +167,7 @@ public class GrnGvnController {
 			System.out.println("Error in Getting grn details " + e.getMessage());
 
 			e.printStackTrace();
+
 		}
 
 		return model;
@@ -186,8 +185,6 @@ public class GrnGvnController {
 		int grnId = Integer.parseInt(request.getParameter("grnId"));
 
 		int gateApproveLogin = Integer.parseInt(request.getParameter("approveGateLogin"));
-
-
 
 		try {
 
@@ -213,7 +210,7 @@ public class GrnGvnController {
 
 		} catch (Exception e) {
 
-			// System.out.println("Error in Getting grn details " + e.getMessage());
+			 System.out.println("Error in Getting grn details " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -238,15 +235,11 @@ public class GrnGvnController {
 			int gateApproveLogin = Integer.parseInt(request.getParameter("approveGateLogin"));
 
 			String gateRemark = request.getParameter("gateRemark");
-			//System.out.println("Gate Remark  " + gateRemark);
-
-			//System.out.println("gateApproveLogin =" + gateApproveLogin);
-
-			//System.out.println("grnId =" + grnId);
+			
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
-			//System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
+			
 
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -263,23 +256,21 @@ public class GrnGvnController {
 			map.add("grnGvnId", grnId);
 
 			String info = restTemplate.postForObject(Constants.url + "updateGateGrn", map, String.class);
-			
+
 			System.out.println("after calling web service of disagree");
 
 		} catch (Exception e) {
 
-			// System.out.println("Error in Getting grn details " + e.getMessage());
+			 System.out.println("Error in updating grn details " + e.getMessage());
 
 			e.printStackTrace();
 		}
 		System.out.println("INSERT GATE GRN DISAPPROVE : STATUS =3");
 
 		return "redirect:/showGateGrnDetails";
-		//model=showGateGrnDetails(request, response);
-	}
+		
+		}
 
-	
-	
 	// insert gate grn by check boxes
 	@RequestMapping(value = "/insertGateGrnByCheckBoxes", method = RequestMethod.POST) // Using checkboxes to insert
 	public String insertGateGrnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
@@ -302,7 +293,6 @@ public class GrnGvnController {
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 
-
 			for (int i = 0; i < grnIdList.length; i++) {
 				for (int j = 0; j < getGrnGvnDetails.size(); j++) {
 
@@ -314,14 +304,12 @@ public class GrnGvnController {
 						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						Calendar cal = Calendar.getInstance();
 
-						
 						DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
 						java.util.Date grnGvnDate = getGrnGvnDetails.get(j).getGrnGvnDate();
 
 						grnGvnDate = Df.parse(grnGvnDate.toString());
 
-												
 						GrnGvn postGrnGvn = new GrnGvn();
 
 						postGrnGvn.setGrnGvnDate(grnGvnDate);// 1
@@ -368,26 +356,23 @@ public class GrnGvnController {
 						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
 						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
 						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
-						
-						//AGAIN ADDED
+
+						// AGAIN ADDED
 						postGrnGvn.setMenuId(getGrnGvnDetails.get(j).getMenuId());
 						postGrnGvn.setCatId(getGrnGvnDetails.get(j).getCatId());
 						postGrnGvn.setInvoiceNo(getGrnGvnDetails.get(j).getInvoiceNo());
 						postGrnGvn.setRefInvoiceDate(getGrnGvnDetails.get(j).getRefInvoiceDate());
-						
-						
-						
-						
 
 						postGrnGvnList.add(postGrnGvn);
 
 						System.out.println("Done it inside if ");
-						
+
 					} // end of if
 
 					else {
 
-						//System.out.println("No match found " + getGrnGvnDetails.get(j).getGrnGvnId());
+						// System.out.println("No match found " +
+						// getGrnGvnDetails.get(j).getGrnGvnId());
 					} // end of else
 
 				} // inner for
@@ -404,28 +389,7 @@ public class GrnGvnController {
 
 			Info info = restTemplate.postForObject(Constants.url + "insertGrnGvn", postGrnList, Info.class);
 
-			// System.out.println("Error in Getting grn details " + e.getMessage());
-
-			/*String fromDate = request.getParameter("from_date");
-			String toDate = request.getParameter("to_date");
-*/
-			//System.out.println("gateGrnFromDate Date *******" + gateGrnFromDate);
-			//System.out.println("gateGrnToDate Date ***********" + gateGrnToDate);
-
-			/*map.add("fromDate", gateGrnFromDate);
-			map.add("toDate", gateGrnToDate);
-
-			getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGrnDetail", map,
-					GetGrnGvnDetailsList.class);
-
-			getGrnGvnDetails = new ArrayList<GetGrnGvnDetails>();
-
-			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
-
-			model.addObject("grnList", getGrnGvnDetails);
-			model.addObject("fromDate", gateGrnFromDate);
-			model.addObject("toDate", gateGrnToDate);
-*/
+			
 		} catch (Exception e) {
 
 			System.out.println("Exce in Insert Grn " + e.getMessage());
@@ -433,10 +397,8 @@ public class GrnGvnController {
 
 		}
 
-		
-		
 		System.out.println("INSERT GATE GRN BY CHECKBOXEX : SUBMIT   STATUS =2");
-		
+
 		return "redirect:/showGateGrnDetails";
 
 	}
@@ -489,6 +451,15 @@ public class GrnGvnController {
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 
+			allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
+
+			getAllRemarks = new ArrayList<>();
+			getAllRemarks = allRemarksList.getGetAllRemarks();
+
+			System.out.println("remark list " + getAllRemarks.toString());
+
+			model.addObject("remarkList", getAllRemarks);
+
 			model.addObject("grnList", getGrnGvnDetails);
 			model.addObject("fromDate", accGrnFromDate);
 			model.addObject("toDate", accGrnToDate);
@@ -524,7 +495,6 @@ public class GrnGvnController {
 			List<GrnGvn> postGrnGvnList = new ArrayList<GrnGvn>();
 
 			PostGrnGvnList postGrnList = new PostGrnGvnList();
-			
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 			System.out.println("grn details line 465 " + getGrnGvnDetails.toString());
@@ -544,8 +514,6 @@ public class GrnGvnController {
 						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						Calendar cal = Calendar.getInstance();
 						System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
-
-					
 
 						DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
@@ -600,14 +568,12 @@ public class GrnGvnController {
 						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
 						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
 						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
-						
-						
-						//newly ad
+
+						// newly ad
 						postGrnGvn.setMenuId(getGrnGvnDetails.get(j).getMenuId());
 						postGrnGvn.setCatId(getGrnGvnDetails.get(j).getCatId());
 						postGrnGvn.setInvoiceNo(getGrnGvnDetails.get(j).getInvoiceNo());
 						postGrnGvn.setRefInvoiceDate(getGrnGvnDetails.get(j).getRefInvoiceDate());
-						
 
 						postGrnGvnList.add(postGrnGvn);
 
@@ -634,26 +600,6 @@ public class GrnGvnController {
 			System.out.println("post grn for rest size " + postGrnList.getGrnGvn().size());
 
 			Info info = restTemplate.postForObject(Constants.url + "insertGrnGvn", postGrnList, Info.class);
-
-			/*map.add("fromDate", accGrnFromDate);
-
-			map.add("toDate", accGrnToDate);
-			
-			getGrnGvnDetailsList=new GetGrnGvnDetailsList();
-
-			getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGrnDetail", map,
-					GetGrnGvnDetailsList.class);
-
-			getGrnGvnDetails = new ArrayList<GetGrnGvnDetails>();
-
-			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
-
-			model.addObject("grnList", getGrnGvnDetails);
-
-			model.addObject("fromDate", accGrnFromDate);
-			model.addObject("toDate", accGrnToDate);*/
-
-			// System.out.println("Error in Getting grn details " + e.getMessage());
 
 		} catch (Exception e) {
 
@@ -756,12 +702,12 @@ public class GrnGvnController {
 			map.add("grnGvnId", grnId);
 
 			String info = restTemplate.postForObject(Constants.url + "updateAccGrn", map, String.class);
-			
+
 			System.out.println("after calling web service acc grn disagree ");
 
 		} catch (Exception e) {
 
-			// System.out.println("Error in Getting grn details " + e.getMessage());
+			System.out.println("Error in Getting grn details " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -818,6 +764,15 @@ public class GrnGvnController {
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 
+			allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
+
+			getAllRemarks = new ArrayList<>();
+			getAllRemarks = allRemarksList.getGetAllRemarks();
+
+			System.out.println("remark list " + getAllRemarks.toString());
+
+			model.addObject("remarkList", getAllRemarks);
+
 			model.addObject("url", Constants.SPCAKE_IMAGE_URL);
 			model.addObject("gvnList", getGrnGvnDetails);
 
@@ -863,7 +818,6 @@ public class GrnGvnController {
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 			System.out.println("grn details line 191 " + getGrnGvnDetails.toString());
 
-			
 			for (int i = 0; i < grnIdList.length; i++) {
 				System.out.println("grn id List" + grnIdList[i]);
 				int apLoginGate = Integer.parseInt(request.getParameter("approve_gate_login" + grnIdList[i]));
@@ -942,17 +896,12 @@ public class GrnGvnController {
 						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
 						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
 						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
-						
-						
-						
-						
-						//newly ad
+
+						// newly ad
 						postGrnGvn.setMenuId(getGrnGvnDetails.get(j).getMenuId());
 						postGrnGvn.setCatId(getGrnGvnDetails.get(j).getCatId());
 						postGrnGvn.setInvoiceNo(getGrnGvnDetails.get(j).getInvoiceNo());
 						postGrnGvn.setRefInvoiceDate(getGrnGvnDetails.get(j).getRefInvoiceDate());
-						
-
 
 						postGrnGvnList.add(postGrnGvn);
 
@@ -987,22 +936,6 @@ public class GrnGvnController {
 			e.printStackTrace();
 
 		}
-
-		/*map.add("fromDate", gateGvnFromDate);
-		map.add("toDate", gateGvnToDate);
-
-		getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGvnDetails", map,
-				GetGrnGvnDetailsList.class);
-
-		getGrnGvnDetails = new ArrayList<GetGrnGvnDetails>();
-
-		getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
-
-		model.addObject("url", Constants.SPCAKE_IMAGE_URL);
-		model.addObject("gvnList", getGrnGvnDetails);
-
-		model.addObject("fromDate", gateGvnFromDate);
-		model.addObject("toDate", gateGvnToDate);*/
 
 		return "redirect:/showGateGvnDetails";
 
@@ -1046,11 +979,12 @@ public class GrnGvnController {
 			map.add("grnGvnId", grnId);
 
 			String info = restTemplate.postForObject(Constants.url + "updateGateGrn", map, String.class);
+
 			System.out.println("after calling web service ");
 
 		} catch (Exception e) {
 
-			// System.out.println("Error in Getting grn details " + e.getMessage());
+			System.out.println("Error in Getting grn details " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -1157,6 +1091,15 @@ public class GrnGvnController {
 			getGrnGvnDetails = new ArrayList<GetGrnGvnDetails>();
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
+
+			allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
+
+			getAllRemarks = new ArrayList<>();
+			getAllRemarks = allRemarksList.getGetAllRemarks();
+
+			System.out.println("remark list " + getAllRemarks.toString());
+
+			model.addObject("remarkList", getAllRemarks);
 
 			model.addObject("url", Constants.SPCAKE_IMAGE_URL);
 			model.addObject("gvnList", getGrnGvnDetails);
@@ -1284,16 +1227,12 @@ public class GrnGvnController {
 						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
 						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
 						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
-						
-						
-						
-						//newly ad
+
+						// newly ad
 						postGrnGvn.setMenuId(getGrnGvnDetails.get(j).getMenuId());
 						postGrnGvn.setCatId(getGrnGvnDetails.get(j).getCatId());
 						postGrnGvn.setInvoiceNo(getGrnGvnDetails.get(j).getInvoiceNo());
 						postGrnGvn.setRefInvoiceDate(getGrnGvnDetails.get(j).getRefInvoiceDate());
-						
-
 
 						postGrnGvnList.add(postGrnGvn);
 
@@ -1329,21 +1268,6 @@ public class GrnGvnController {
 			e.printStackTrace();
 
 		}
-
-		/*map.add("fromDate", storeGvnFromDate);
-		map.add("toDate", storeGvnToDate);
-
-		getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGvnDetails", map,
-				GetGrnGvnDetailsList.class);
-
-		getGrnGvnDetails = new ArrayList<GetGrnGvnDetails>();
-
-		getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
-
-		model.addObject("url", Constants.SPCAKE_IMAGE_URL);
-		model.addObject("gvnList", getGrnGvnDetails);
-		model.addObject("fromDate", storeGvnFromDate);
-		model.addObject("toDate", storeGvnToDate);*/
 
 		return "redirect:/showStoreGvnDetails";
 
@@ -1390,7 +1314,7 @@ public class GrnGvnController {
 
 		} catch (Exception e) {
 
-			// System.out.println("Error in Getting grn details " + e.getMessage());
+			System.out.println("Error in Getting grn details " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -1442,7 +1366,7 @@ public class GrnGvnController {
 
 		} catch (Exception e) {
 
-			// System.out.println("Error in Getting grn details " + e.getMessage());
+			System.out.println("Error in Getting grn details " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -1497,6 +1421,15 @@ public class GrnGvnController {
 			getGrnGvnDetails = new ArrayList<GetGrnGvnDetails>();
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
+
+			allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
+
+			getAllRemarks = new ArrayList<>();
+			getAllRemarks = allRemarksList.getGetAllRemarks();
+
+			System.out.println("remark list " + getAllRemarks.toString());
+
+			model.addObject("remarkList", getAllRemarks);
 
 			model.addObject("url", Constants.SPCAKE_IMAGE_URL);
 			model.addObject("gvnList", getGrnGvnDetails);
@@ -1625,17 +1558,12 @@ public class GrnGvnController {
 						postGrnGvn.setTotalTax(getGrnGvnDetails.get(j).getTotalTax());
 						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
 						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
-						
-						
-						
-						
-						//newly ad
+
+						// newly ad
 						postGrnGvn.setMenuId(getGrnGvnDetails.get(j).getMenuId());
 						postGrnGvn.setCatId(getGrnGvnDetails.get(j).getCatId());
 						postGrnGvn.setInvoiceNo(getGrnGvnDetails.get(j).getInvoiceNo());
 						postGrnGvn.setRefInvoiceDate(getGrnGvnDetails.get(j).getRefInvoiceDate());
-						
-
 
 						postGrnGvnList.add(postGrnGvn);
 
@@ -1672,22 +1600,7 @@ public class GrnGvnController {
 
 		}
 
-	/*	map.add("fromDate", accGvnFromDate);
-		map.add("toDate", accGvnToDate);
-
-		getGrnGvnDetailsList = restTemplate.postForObject(Constants.url + "getGvnDetails", map,
-				GetGrnGvnDetailsList.class);
-
-		getGrnGvnDetails = new ArrayList<GetGrnGvnDetails>();
-
-		getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
-
-		model.addObject("url", Constants.SPCAKE_IMAGE_URL);
-		model.addObject("gvnList", getGrnGvnDetails);
-
-		model.addObject("fromDate", accGvnFromDate);
-		model.addObject("toDate", accGvnToDate);
-*/
+		
 		return "redirect:/showAccountGvnDetails";
 	}
 
@@ -1732,7 +1645,7 @@ public class GrnGvnController {
 
 		} catch (Exception e) {
 
-			// System.out.println("Error in Getting grn details " + e.getMessage());
+			System.out.println("Error in Getting grn details " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -1791,7 +1704,7 @@ public class GrnGvnController {
 
 		} catch (Exception e) {
 
-			// System.out.println("Error in Getting grn details " + e.getMessage());
+			 System.out.println("Error in Getting grn details " + e.getMessage());
 
 			e.printStackTrace();
 		}

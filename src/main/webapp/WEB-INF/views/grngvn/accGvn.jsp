@@ -15,6 +15,14 @@ div.panel {
 	overflow: hidden;
 	transition: max-height 0.2s ease-out;
 }
+
+.disableClick {
+	pointer-events: none;
+}
+
+#disableMe {
+	pointer-events: none;
+}
 </style>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -47,7 +55,7 @@ div.panel {
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.css" />
 
-	<link rel="stylesheet" type="text/css"
+<link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/lightbox.css">
 
 
@@ -64,29 +72,33 @@ div.panel {
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
+
+
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/style.css" />
+<!-- Kalpesh  -->
+
 </head>
 <body>
-	<c:url var="insertAccGvnProcessAgree"
-		value="/insertAccGvnProcessAgree" />
+	<c:url var="insertAccGvnProcessAgree" value="/insertAccGvnProcessAgree" />
 
 
 	<c:url var="insertAccGvnProcessDisAgree"
 		value="/insertAccGvnProcessDisAgree" />
-		
-		
-		
-		<c:url var="getDateForGvnAcc"
-		value="/getDateForGvnAcc" />
-		
-		
-		
-		
-		
+
+
+
+	<c:url var="getDateForGvnAcc" value="/getDateForGvnAcc" />
+
+
+
+
+
 	<%-- 	<c:url var="showGateGvnDetails"
 		value="/showGateGvnDetails" /> --%>
-		
-		
-		
+
+
+
 
 
 	<%-- 	<c:url var="getGrnId" value="/getGrnId" />
@@ -161,27 +173,24 @@ div.panel {
 									<label class="col-sm-3 col-lg-2 control-label">From
 										Date</label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="from_date" size="16"
-											type="text" name="from_date" value="${fromDate}" required 
-											onblur="getDate()" />
+										<input class="form-control date-picker" id="from_date"
+											size="16" type="text" name="from_date" value="${fromDate}"
+											required onblur="getDate()" />
 									</div>
-								</div>
-
-
-								<div class="form-group">
+							
 									<label class="col-sm-3 col-lg-2 control-label">To Date</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<input class="form-control date-picker" id="to_date" size="16"
-											type="text" value="${toDate}" name="to_date" required 
-											onblur="getDate()"/>
+											type="text" value="${toDate}" name="to_date" required
+											onblur="getDate()" />
 									</div>
-								</div>
+								
 
 
 								<div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-									<input type="submit" value="Submit"/>
+									<input type="submit" value="Submit"  class="btn btn-primary"/>
 
-
+</div>
 
 								</div>
 
@@ -214,7 +223,8 @@ div.panel {
 										<div class="clearfix"></div>
 										<div class="table-responsive" style="border: 0">
 											<table width="100%"
-												class="table table-advance table-responsive" id="table1">
+												class="table table-advance table-responsive table-position"
+												id="table1">
 												<thead>
 													<tr>
 														<th width="30"></th>
@@ -239,8 +249,7 @@ div.panel {
 															<c:choose>
 																<c:when test="${gvnList.grnGvnStatus==4}">
 																	<td><input type="checkbox" name="select_to_agree"
-																		 id="${gvnList.grnGvnId}"
-																		value="${gvnList.grnGvnId}"></></td>
+																		id="${gvnList.grnGvnId}" value="${gvnList.grnGvnId}"></></td>
 
 																</c:when>
 																<c:when test="${gvnList.grnGvnStatus==7}">
@@ -249,7 +258,7 @@ div.panel {
 
 																</c:when>
 
-																
+
 																<c:otherwise>
 
 																	<td><input type="checkbox" name="select_to_agree"
@@ -275,222 +284,388 @@ div.panel {
 																id="approve_acc_login${gvnList.grnGvnId}"
 																value="${gvnList.approvedLoginAcc}" /></td>
 
-															<td><a href="${url}${gvnList.gvnPhotoUpload1}"data-lightbox="image-1" >Image 1</a>
-																							</td>
+															<td><a href="${url}${gvnList.gvnPhotoUpload1}"
+																data-lightbox="image-1">Image 1</a></td>
 
-															<td><a href="${url}${gvnList.gvnPhotoUpload2}"data-lightbox="image-1" >Image 2</a>
+															<td><a href="${url}${gvnList.gvnPhotoUpload2}"
+																data-lightbox="image-1">Image 2</a> <c:choose>
+																	<c:when test="${gvnList.grnGvnStatus==1}">
+																		<td align="left"><c:out value="Pending"></c:out></td>
 
-															<c:choose>
-																<c:when test="${gvnList.grnGvnStatus==1}">
-																	<td align="left"><c:out value="Pending"></c:out></td>
+																	</c:when>
 
-																</c:when>
+																	<c:when test="${gvnList.grnGvnStatus==2}">
+																		<td align="left"><c:out value="approvedByGate"></c:out></td>
 
-																<c:when test="${gvnList.grnGvnStatus==2}">
-																	<td align="left"><c:out value="approvedByGate"></c:out></td>
+																	</c:when>
 
-																</c:when>
+																	<c:when test="${gvnList.grnGvnStatus==3}">
+																		<td align="left"><c:out value="rejectByGate"></c:out></td>
 
-																<c:when test="${gvnList.grnGvnStatus==3}">
-																	<td align="left"><c:out value="rejectByGate"></c:out></td>
+																	</c:when>
 
-																</c:when>
+																	<c:when test="${gvnList.grnGvnStatus==4}">
+																		<td align="left"><c:out value="approvedBystore"></c:out></td>
 
-																<c:when test="${gvnList.grnGvnStatus==4}">
-																	<td align="left"><c:out value="approvedBystore"></c:out></td>
+																	</c:when>
 
-																</c:when>
+																	<c:when test="${gvnList.grnGvnStatus==5}">
+																		<td align="left"><c:out value="rejectByStore"></c:out></td>
 
-																<c:when test="${gvnList.grnGvnStatus==5}">
-																	<td align="left"><c:out value="rejectByStore"></c:out></td>
+																	</c:when>
 
-																</c:when>
+																	<c:when test="${gvnList.grnGvnStatus==6}">
+																		<td align="left"><c:out value="approvedByAcc"></c:out></td>
 
-																<c:when test="${gvnList.grnGvnStatus==6}">
-																	<td align="left"><c:out value="approvedByAcc"></c:out></td>
+																	</c:when>
 
-																</c:when>
+																	<c:when test="${gvnList.grnGvnStatus==7}">
+																		<td align="left"><c:out value="rejectByAcc"></c:out></td>
 
-																<c:when test="${gvnList.grnGvnStatus==7}">
-																	<td align="left"><c:out value="rejectByAcc"></c:out></td>
+																	</c:when>
 
-																</c:when>
-
-															</c:choose>
-
-															<c:choose>
-																<c:when test="${gvnList.grnGvnStatus==4}">
-
-																	<td><input class="btn btn-primary" value="Approve"
-																		id="callSubmit" 
-																		onclick="insertGrnCall(${gvnList.grnGvnId})">
-
-
-																	<input class="accordion btn btn-primary"
-																		value="DisApprove" />
-																		<div class="panel" align="left">
-																			Enter Remark
-																			<textarea name="acc_remark${gvnList.grnGvnId}"
-																				id="acc_remark${gvnList.grnGvnId}"></textarea>
-																			<input class="btn btn-primary" value="Submit"
-																				onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
-
-																		</div> <input class="accordion btn btn-primary" value="Show" />
-																		<div class="panel" align="left">
-																			Franchisee Remark
-																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${gvnList.frGrnGvnRemark}</textarea>
-																			
-																		</div></td>
-
-																</c:when>
-
-
-
-																<c:when test="${gvnList.grnGvnStatus==6}">
-
-																	<td><input class="btn btn-primary" value="Approve"
-																		id="callSubmit" disabled="disabled"
-																		onclick="insertGrnCall(${gvnList.grnGvnId})">
-
-																		<input class="accordion btn btn-primary"
-																		value="DisApprove"  />
-																		<div class="panel" align="left">
-																			Enter Remark
-																			<textarea name="acc_remark${gvnList.grnGvnId}"
-																				id="acc_remark${gvnList.grnGvnId}"></textarea>
-																			<input class="btn btn-primary" value="Submit"
-																				onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
-
-																		</div> <input class="accordion btn btn-primary" value="Show" />
-																		<div class="panel" align="left">
-																			Franchisee Remark
-																			<textarea name="t1" readonly="readonly"
-																				class="form-control" > ${gvnList.frGrnGvnRemark}</textarea>
-																			
-																		</div></td>
-
-																</c:when>
-
-
-																<c:when test="${gvnList.grnGvnStatus==7}">
-
-																	<td><input class="btn btn-primary" value="Approve"
-																		id="callSubmit"
-																		onclick="insertGrnCall(${gvnList.grnGvnId})">
-
-																		<input class="accordion btn btn-primary"
-																		value="DisApprove" disabled="disabled" />
-																		<div class="panel" align="left">
-																			Enter Remark
-																			<textarea name="acc_remark${gvnList.grnGvnId}"
-																				id="acc_remark${gvnList.grnGvnId}"></textarea>
-																			<input class="btn btn-primary" value="Submit"
-																				onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
-
-																		</div> <input class="accordion btn btn-primary" value="Show" />
-																		<div class="panel" align="left">
-																			Franchisee Remark
-																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${gvnList.frGrnGvnRemark}</textarea>
-																			Account remark
-																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${gvnList.approvedRemarkAcc}</textarea>
-																		</div></td>
-
-																</c:when>
-
-
-																<c:otherwise>
-																
-																
-																<c:choose>
-																
-																<c:when test="${gvnList.grnGvnStatus==3}">
-																
-																<td><input class="btn btn-primary" value="Approve"
-																		id="callSubmit" disabled="disabled"
-																		onclick="insertGrnCall(${gvnList.grnGvnId})" /> <input
-																		class="accordion btn btn-primary" value="DisApprove"
-																		disabled="disabled" />
-																		<div class="panel" align="left">
-																			Enter Remark
-																			<textarea name="acc_remark${gvnList.grnGvnId}"
-																				id="acc_remark${gvnList.grnGvnId}"></textarea>
-																			<input class="btn btn-primary" value="Submit"
-																				onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
-
-																		</div> <input class="accordion btn btn-primary" value="Show" />
-																		<div class="panel" align="left">
-																			Franchisee Remark
-																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${gvnList.frGrnGvnRemark}</textarea>
-																			Dispatch remark
-																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${gvnList.approvedRemarkGate}</textarea>
-																		</div></td>
-																
-																</c:when>
-																
-																
-																
-																<c:when test="${gvnList.grnGvnStatus==5}">
-																
-																<td><input class="btn btn-primary" value="Approve"
-																		id="callSubmit" disabled="disabled"
-																		onclick="insertGrnCall(${gvnList.grnGvnId})" /> <input
-																		class="accordion btn btn-primary" value="DisApprove"
-																		disabled="disabled" />
-																		<div class="panel" align="left">
-																			Enter Remark
-																			<textarea name="acc_remark${gvnList.grnGvnId}"
-																				id="acc_remark${gvnList.grnGvnId}"></textarea>
-																			<input class="btn btn-primary" value="Submit"
-																				onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
-
-																		</div> <input class="accordion btn btn-primary" value="Show" />
-																		<div class="panel" align="left">
-																			Franchisee Remark
-																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${gvnList.frGrnGvnRemark}</textarea>
-																			Store remark
-																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${gvnList.approvedRemarkStore}</textarea>
-																		</div></td>
-																
-																
-																</c:when>
-																
-																
-																<c:otherwise>
-																
-																<td><input class="btn btn-primary" value="Approve"
-																		id="callSubmit" disabled="disabled"
-																		onclick="insertGrnCall(${gvnList.grnGvnId})" /> <input
-																		class="accordion btn btn-primary" value="DisApprove"
-																		disabled="disabled" />
-																		<div class="panel" align="left">
-																			Enter Remark
-																			<textarea name="acc_remark${gvnList.grnGvnId}"
-																				id="acc_remark${gvnList.grnGvnId}"></textarea>
-																			<input class="btn btn-primary" value="Submit"
-																				onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
-
-																		</div> <input class="accordion btn btn-primary" value="Show" />
-																		<div class="panel" align="left">
-																			Franchisee Remark
-																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${gvnList.frGrnGvnRemark}</textarea>
-																			
-																		</div></td>
-																
-																
-																</c:otherwise>
-																
-																
 																</c:choose>
+																
+																 <c:choose>
+																	<c:when test="${gvnList.grnGvnStatus==4}">
 
-																	<%-- <td><input class="btn btn-primary" value="Approve"
+																		<td>
+																			
+																			<ul class="table-menu">
+
+																				<li><a href="" id="callSubmit"
+																					onclick="insertGrnCall(${gvnList.grnGvnId})"> <i
+																						class="fa fa-check"></i></a></li>
+
+																				<li>
+																					<div class="dropdown">
+																						<a class="dropdown-toggle" href="#"
+																							data-toggle="dropdown"><i class="fa fa-times"></i></a>
+																						<div class="dropdown-menu">
+																							<div class="form">
+																								<select name="acc_remark${gvnList.grnGvnId}"
+																									id="acc_remark${gvnList.grnGvnId}"
+																									class="form-control">
+																									<c:forEach items="${remarkList}"
+																										var="remarkList">
+																										<option value="${remarkList.remark}">${remarkList.remark}</option>
+																									</c:forEach>
+																								</select> </br> <input class="btn btn-primary" value="Submit"
+																									onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
+
+																							</div>
+																						</div>
+																					</div>
+																				</li>
+																				<li>
+																					<div class="dropdown">
+																						<a class="dropdown-toggle" href="#"
+																							data-toggle="dropdown"><i
+																							class="fa fa-info-circle"></i></a>
+																						<div class="dropdown-menu">
+																							<div class="form">
+																								Franchisee Remark
+																								<textarea name="t1" readonly="readonly"
+																									class="form-control"><c:out value="${gvnList.frGrnGvnRemark}"></c:out></textarea>
+
+																							</div>
+																						</div>
+																					</div>
+																				</li>
+
+																			</ul>
+
+																		</td>
+
+																	</c:when>
+
+
+
+																	<c:when test="${gvnList.grnGvnStatus==6}">
+
+																		<td>
+																			<ul class="table-menu">
+
+																				<li><a href="" id="callSubmit" class="disableClick"
+																					onclick="insertGrnCall(${gvnList.grnGvnId})"> <i
+																						class="fa fa-check"></i></a></li>
+
+																				<li>
+																					<div class="dropdown">
+																						<a class="dropdown-toggle" href="#"
+																							data-toggle="dropdown"><i class="fa fa-times"></i></a>
+																						<div class="dropdown-menu">
+																							<div class="form">
+																								<select name="acc_remark${gvnList.grnGvnId}"
+																									id="acc_remark${gvnList.grnGvnId}"
+																									class="form-control">
+																									<c:forEach items="${remarkList}"
+																										var="remarkList">
+																										<option value="${remarkList.remark}">${remarkList.remark}</option>
+																									</c:forEach>
+																								</select> </br> <input class="btn btn-primary" value="Submit"
+																									onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
+
+																							</div>
+																						</div>
+																					</div>
+																				</li>
+																				<li>
+																					<div class="dropdown">
+																						<a class="dropdown-toggle" href="#"
+																							data-toggle="dropdown"><i
+																							class="fa fa-info-circle"></i></a>
+																						<div class="dropdown-menu">
+																							<div class="form">
+																								Franchisee Remark
+																								<textarea name="t1" readonly="readonly"
+																									class="form-control"><c:out value="${gvnList.frGrnGvnRemark}"></c:out></textarea>
+
+																							</div>
+																						</div>
+																					</div>
+																				</li>
+
+																			</ul>
+
+																		</td>
+
+																	</c:when>
+
+
+																	<c:when test="${gvnList.grnGvnStatus==7}">
+
+																		<td>
+																			
+																			<ul class="table-menu">
+
+																				<li><a href="" id="callSubmit"
+																					onclick="insertGrnCall(${gvnList.grnGvnId})"> <i
+																						class="fa fa-check"></i></a></li>
+
+																				<li>
+																					<div class="dropdown">
+																						<a class="dropdown-toggle" href="#" id="disableMe"
+																							data-toggle="dropdown"><i class="fa fa-times"></i></a>
+																						<div class="dropdown-menu">
+																							<div class="form">
+																								<select name="acc_remark${gvnList.grnGvnId}"
+																									id="acc_remark${gvnList.grnGvnId}"
+																									class="form-control">
+																									<c:forEach items="${remarkList}"
+																										var="remarkList">
+																										<option value="${remarkList.remark}">${remarkList.remark}</option>
+																									</c:forEach>
+																								</select> </br> <input class="btn btn-primary" value="Submit"
+																									onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
+
+																							</div>
+																						</div>
+																					</div>
+																				</li>
+																				<li>
+																					<div class="dropdown">
+																						<a class="dropdown-toggle" href="#"
+																							data-toggle="dropdown"><i
+																							class="fa fa-info-circle"></i></a>
+																						<div class="dropdown-menu">
+																							<div class="form">
+																								Franchisee Remark
+																								<textarea name="t1" readonly="readonly"
+																									class="form-control"><c:out value="${gvnList.frGrnGvnRemark}"></c:out></textarea>
+
+																								Account remark
+																								<textarea name="t1" readonly="readonly"
+																									class="form-control">${gvnList.approvedRemarkAcc}</textarea>
+																							</div>
+																						</div>
+																					</div>
+																				</li>
+
+																			</ul>
+
+																		</td>
+
+																	</c:when>
+
+
+																	<c:otherwise>
+
+
+																		<c:choose>
+
+																			<c:when test="${gvnList.grnGvnStatus==3}">
+
+																				<td>
+																				
+																				
+																					<ul class="table-menu">
+
+																				<li><a href="" id="callSubmit" class="disableClick"
+																					onclick="insertGrnCall(${gvnList.grnGvnId})"> <i
+																						class="fa fa-check"></i></a></li>
+
+																				<li>
+																					<div class="dropdown">
+																						<a class="dropdown-toggle" href="#" id="disableMe"
+																							data-toggle="dropdown"><i class="fa fa-times"></i></a>
+																						<div class="dropdown-menu">
+																							<div class="form">
+																								<select name="acc_remark${gvnList.grnGvnId}"
+																									id="acc_remark${gvnList.grnGvnId}"
+																									class="form-control">
+																									<c:forEach items="${remarkList}"
+																										var="remarkList">
+																										<option value="${remarkList.remark}">${remarkList.remark}</option>
+																									</c:forEach>
+																								</select> </br> <input class="btn btn-primary" value="Submit"
+																									onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
+
+																							</div>
+																						</div>
+																					</div>
+																				</li>
+																				<li>
+																					<div class="dropdown">
+																						<a class="dropdown-toggle" href="#"
+																							data-toggle="dropdown"><i
+																							class="fa fa-info-circle"></i></a>
+																						<div class="dropdown-menu">
+																							<div class="form">
+																								Franchisee Remark
+																								<textarea name="t1" readonly="readonly"
+																									class="form-control"><c:out value="${gvnList.frGrnGvnRemark}"></c:out></textarea>
+
+																									Dispatch remark
+																						<textarea name="t1" readonly="readonly"
+																							class="form-control">${gvnList.approvedRemarkGate}</textarea>
+																							</div>
+																						</div>
+																					</div>
+																				</li>
+
+																			</ul>
+																					</td>
+
+																			</c:when>
+
+
+
+																			<c:when test="${gvnList.grnGvnStatus==5}">
+
+																				<td>
+																				
+																					
+																					<ul class="table-menu">
+
+																				<li><a href="" id="callSubmit" class="disableClick"
+																					onclick="insertGrnCall(${gvnList.grnGvnId})"> <i
+																						class="fa fa-check"></i></a></li>
+
+																				<li>
+																					<div class="dropdown">
+																						<a class="dropdown-toggle" href="#" id="disableMe"
+																							data-toggle="dropdown"><i class="fa fa-times"></i></a>
+																						<div class="dropdown-menu">
+																							<div class="form">
+																								<select name="acc_remark${gvnList.grnGvnId}"
+																									id="acc_remark${gvnList.grnGvnId}"
+																									class="form-control">
+																									<c:forEach items="${remarkList}"
+																										var="remarkList">
+																										<option value="${remarkList.remark}">${remarkList.remark}</option>
+																									</c:forEach>
+																								</select> </br> <input class="btn btn-primary" value="Submit"
+																									onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
+
+																							</div>
+																						</div>
+																					</div>
+																				</li>
+																				<li>
+																					<div class="dropdown">
+																						<a class="dropdown-toggle" href="#"
+																							data-toggle="dropdown"><i
+																							class="fa fa-info-circle"></i></a>
+																						<div class="dropdown-menu">
+																							<div class="form">
+																								Franchisee Remark
+																								<textarea name="t1" readonly="readonly"
+																									class="form-control"><c:out value="${gvnList.frGrnGvnRemark}"></c:out></textarea>
+
+																								Store remark
+																						<textarea name="t1" readonly="readonly"
+																							class="form-control">${gvnList.approvedRemarkStore}</textarea>
+																							</div>
+																						</div>
+																					</div>
+																				</li>
+
+																			</ul>
+																					
+																					</td>
+
+
+																			</c:when>
+
+
+																			<c:otherwise>
+
+																				<td>
+																				
+																				<ul class="table-menu">
+
+																				<li><a href="" id="callSubmit" class="disableClick"
+																					onclick="insertGrnCall(${gvnList.grnGvnId})"> <i
+																						class="fa fa-check"></i></a></li>
+
+																				<li>
+																					<div class="dropdown">
+																						<a class="dropdown-toggle" href="#" id="disableMe"
+																							data-toggle="dropdown"><i class="fa fa-times"></i></a>
+																						<div class="dropdown-menu">
+																							<div class="form">
+																								<select name="acc_remark${gvnList.grnGvnId}"
+																									id="acc_remark${gvnList.grnGvnId}"
+																									class="form-control">
+																									<c:forEach items="${remarkList}"
+																										var="remarkList">
+																										<option value="${remarkList.remark}">${remarkList.remark}</option>
+																									</c:forEach>
+																								</select> </br> <input class="btn btn-primary" value="Submit"
+																									onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
+
+																							</div>
+																						</div>
+																					</div>
+																				</li>
+																				<li>
+																					<div class="dropdown">
+																						<a class="dropdown-toggle" href="#"
+																							data-toggle="dropdown"><i
+																							class="fa fa-info-circle"></i></a>
+																						<div class="dropdown-menu">
+																							<div class="form">
+																								Franchisee Remark
+																								<textarea name="t1" readonly="readonly"
+																									class="form-control"><c:out value="${gvnList.frGrnGvnRemark}"></c:out></textarea>
+
+																							</div>
+																						</div>
+																					</div>
+																				</li>
+
+																			</ul>
+																					
+																					</td>
+
+
+																			</c:otherwise>
+
+
+																		</c:choose>
+
+																		<%-- <td><input class="btn btn-primary" value="Approve"
 																		id="callSubmit" disabled="disabled"
 																		onclick="insertGrnCall(${gvnList.grnGvnId})" /> <input
 																		class="accordion btn btn-primary" value="DisApprove"
@@ -511,9 +686,8 @@ div.panel {
 																			<textarea name="t1" readonly="readonly"
 																				class="form-control">${gvnList.approvedRemarkGate}</textarea>
 																		</div></td> --%>
-																</c:otherwise>
-															</c:choose>
-
+																	</c:otherwise>
+																</c:choose>
 														</tr>
 
 													</c:forEach>
@@ -529,9 +703,8 @@ div.panel {
 
 										<div
 											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-											<input type="submit" value="Submit">
+											<input type="submit" value="Submit" class="btn btn-primary">
 
-											<button type="button" onClick="firstCall();">FirstCall</button>
 
 										</div>
 										<!-- </form> -->
@@ -565,9 +738,9 @@ div.panel {
 				|| document
 						.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
 	</script>
-	
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/lightbox.js"></script>
+
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/lightbox.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
 	<script
@@ -763,7 +936,7 @@ function callRefresh(){
 
 </script>
 
-	
+
 
 
 	<!-- insertGrnAgree -->
@@ -787,7 +960,7 @@ for (i = 0; i < acc.length; i++) {
 </script>
 
 
-<script type="text/javascript">
+	<script type="text/javascript">
 
 function showGateGvnDetails(){
 	
@@ -816,7 +989,7 @@ function showGateGvnDetails(){
 
 
 
-<script type="text/javascript">
+	<script type="text/javascript">
 
 function getDate(){
 	
@@ -845,5 +1018,13 @@ function getDate(){
 
 </script>
 
+	<script>
+	$(document).ready(function(){
+	    //Handles menu drop down
+	    $('.dropdown-menu').find('.form').click(function (e) {
+	        e.stopPropagation();
+	    });
+	});
+</script>
 </body>
 </html>

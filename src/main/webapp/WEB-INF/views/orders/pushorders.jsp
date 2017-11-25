@@ -180,8 +180,8 @@
 
 				<div class="row">
 					<div class="col-md-12" style="text-align: center">
-						<input type="button" id="searchFr" class="btn btn-info" value="Search"
-							onclick="searchItem()" />
+						<input type="button" id="searchFr" class="btn btn-info"
+							value="Search" onclick="searchItem()" />
 						<!-- onclick="generateOrders()" -->
 						<!-- </button> -->
 
@@ -222,11 +222,11 @@
 								style="width: 100%" id="table_grid">
 								<thead>
 									<tr>
-										
-										
+
+
 									</tr>
 
-									
+
 
 								</thead>
 								<tbody>
@@ -323,18 +323,32 @@
 														$('#table_grid tbody')
 																.append(itemName);
 														
-													
 														
+														var pushQty=0;
+												    	  var  orderQty=0;
+												    	  
 														  
-													      $.each(frId, function(key, id){            
+													      $.each(frId, function(key, id){  
+													    	  
+													        	if(itemname.delStatus!=0){
+													        		pushQty=itemname.delStatus;
 													        	
-													           
-													    	  var orderQty = "<td align=center><input type=number min=0 max=500 class=form-control   id=itemId"+itemname.id+"orderQty"+ id+ " name=itemId"+itemname.id+"orderQty"+id+" value = "+ 0+ "></td>"; 
+orderQty = "<td align=center><input type=number min=0 max=500 class=form-control  id=itemId"+itemname.id+"orderQty"+ id+ " name=itemId"+itemname.id+"orderQty"+id+" value ="+itemname.delStatus+" readonly=true ></td>"; 
+														    	
+													        	}
+													        	
+													        	
+													      if(itemname.delStatus == 0){
+													        	   
+ orderQty = "<td align=center><input type=number min=0 max=500 class=form-control  id=itemId"+itemname.id+"orderQty"+ id+ " name=itemId"+itemname.id+"orderQty"+id+" value = "+0+ "></td>"; 
+													           }
+													        	 
+													    	//var orderQty = "<td align=center><input type=number min=0 max=500 class=form-control  id=itemId"+itemname.id+"orderQty"+ id+ " name=itemId"+itemname.id+"orderQty"+id+" value = "+pushQty+ "></td>"; 
 													    	
 													    	
-													    	$('#table_grid tbody')
+													    	 $('#table_grid tbody')
 																.append(orderQty);
-
+ 
 													        });
 														
 														$('#table_grid tbody')
@@ -373,10 +387,10 @@
 		}
 	</script>
 
-	
 
-<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-<script type="text/javascript">
+
+	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	<script type="text/javascript">
 
 		
     
