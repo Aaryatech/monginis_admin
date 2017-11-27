@@ -13,7 +13,19 @@ public class RmItemSubCategory  implements Serializable{
 	
 	private String subCatName;
 	
+	private String subCatDesc;
+	
 	private int delStatus;
+
+	
+	
+	public String getSubCatDesc() {
+		return subCatDesc;
+	}
+
+	public void setSubCatDesc(String subCatDesc) {
+		this.subCatDesc = subCatDesc;
+	}
 
 	public int getSubCatId() {
 		return subCatId;
@@ -49,9 +61,7 @@ public class RmItemSubCategory  implements Serializable{
 
 	@Override
 	public String toString() {
-		return "RmItemSubcategory [subCatId=" + subCatId + ", catId=" + catId + ", subCatName=" + subCatName
-				+ ", delStatus=" + delStatus + "]";
+		return "RmItemSubCategory [subCatId=" + subCatId + ", catId=" + catId + ", subCatName=" + subCatName
+				+ ", subCatDesc=" + subCatDesc + ", delStatus=" + delStatus + "]";
 	}
-
-	
 }
