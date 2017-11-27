@@ -1,7 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+
 <html>
 <head>
 <meta charset="utf-8">
@@ -9,6 +11,7 @@
 <title>Dashboard - MONGINIS Admin</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 
 <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
@@ -32,9 +35,34 @@
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.css" />
 
-
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>
+											window.jQuery
+													|| document
+															.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
+										</script>
 
 <!--page specific css styles-->
+<script
+	src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
+
+<!--page specific plugin scripts-->
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
 
 <!--flaty css styles-->
 <link rel="stylesheet"
@@ -74,7 +102,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Latest News
+						<i class="fa fa-file-o"></i>Payment Terms
 					</h1>
 
 				</div>
@@ -89,113 +117,64 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> Add Latest News
+								<i class="fa fa-bars"></i> Edit Payment Terms
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showAllLatestNews">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showPaymentTermsList">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
-							<!-- <div class="box-tool">
-								<a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a> <a data-action="close" href="#"><i
-									class="fa fa-times"></i></a>
-							</div> -->
+							
 						</div>
+
+
 
 
 						<div class="box-content">
-							<form action="addLatestNews" class="form-horizontal"
-								id="validation-form" method="post">
+							<form action="${pageContext.request.contextPath}/updatePaymentTermsProcess" class="form-horizontal"
+								method="post" id="validation-form">
 
-
-
-
-								<input type="hidden" name="mode_add" id="mode_add"
-									value="add_att">
 
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Message From Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="dp1" size="16"
-											type="text" name="sch_date" value="" placeholder="Message From Date" required />
-									</div>
-								</div>
-
-								<!-- <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">To Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="dp1" size="16"
-											type="text" name="sch_to_date"  required />
-
-									</div>
-								 -->	
-									<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Message To Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="dp1" size="16"
-											type="text" name="sch_to_date" required placeholder="Message To Date"/>
-
-									</div>
-									
-									
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Occasion
-										Name</label>
+									<label class="col-sm-3 col-lg-2 control-label" for="payment_desc">Payment Description
+										</label>
 									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="sch_occasion_name"
-											id="sch_occasion_name" placeholder="Occasion Name"
-											class="form-control" required />
+										<input type="text" name="payment_desc" id="payment_desc"
+											placeholder="Payment Term Description" class="form-control"
+											data-rule-required="true" value="${paymentTerms.payDesc}"/>
 									</div>
 								</div>
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Message</label>
+                               <div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label" for="credit_days">Credit Days
+										</label>
 									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="sch_message" id="sch_message"
-											placeholder="Message" class="form-control" required />
+										<input type="text" name="credit_days" id="credit_days"
+											placeholder="Credit Days" class="form-control"
+											data-rule-required="true" data-rule-number="true"value="${paymentTerms.creditDays}"/>
 									</div>
 								</div>
-
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Status</label>
-									<div class="col-sm-9 col-lg-10 controls">
-										<select class="form-control input-sm" name="is_active"
-											id="is_active">
-											<option selected  value="1">Active</option>
-											<option value="0">In-Active</option>
-
-										</select>
-									</div>
-								</div>
-
+                            
+                               <input type="hidden" name="pay_id" id="pay_id" value="${paymentTerms.payId}">
 
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-										<button type="submit" class="btn btn-primary">
-											<i class="fa fa-check"></i> Save
-										</button>
-										</div>
-										</div>
-								
-										
+										<input type="submit" class="btn btn-primary" value="Submit">
+<!-- 										<button type="button" class="btn">Cancel</button>
+ -->									</div>
+								</div>
 							</form>
 						</div>
 					</div>
-					
 				</div>
 			</div>
-		</div>
-		
-	</div>
-	<!-- END Main Content -->
-	<footer>
-	<p>2017 © MONGINIS.</p>
-	</footer>
+			<!-- END Main Content -->
+			<footer>
+			<p>2017 © MONGINIS.</p>
+			</footer>
 
-	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-		class="fa fa-chevron-up"></i></a>
-	</div>
-	<!-- END Content -->
+			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+				class="fa fa-chevron-up"></i></a>
+		</div>
+		<!-- END Content -->
 	</div>
 	<!-- END Container -->
 
@@ -262,5 +241,12 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+
+
+
+
+
+
 </body>
-</html>
+</html>>

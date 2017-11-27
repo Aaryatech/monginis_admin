@@ -6,9 +6,13 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -24,12 +28,15 @@ import com.ats.adminpanel.model.RawMaterial.Info;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialDetails;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetails;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialUom;
+import com.ats.adminpanel.model.RawMaterial.RmItemCatList;
 import com.ats.adminpanel.model.RawMaterial.RmItemCategory;
 import com.ats.adminpanel.model.RawMaterial.RmItemGroup;
+import com.ats.adminpanel.model.RawMaterial.RmItemSubCatList;
 import com.ats.adminpanel.model.RawMaterial.RmItemSubCategory;
 import com.ats.adminpanel.model.RawMaterial.RmRateVerification;
 import com.ats.adminpanel.model.franchisee.AllMenuResponse;
 import com.ats.adminpanel.model.franchisee.Menu;
+import com.ats.adminpanel.model.item.ErrorMessage;
 import com.ats.adminpanel.model.supplierMaster.SupplierDetails;
 import com.ats.adminpanel.util.ImageS3Util; 
 
@@ -587,4 +594,432 @@ public class RawMaterialController {
 					
 					return getUomAndTax;
 }
+				
+				//------------------------------Show Raw Material Item Category Jsp------------------------------------
+				@RequestMapping(value = "/showRmItemCategory", method = RequestMethod.GET)
+				public ModelAndView showRmItemCategory(HttpServletRequest request, HttpServletResponse response) {
+				
+					ModelAndView model = new ModelAndView("masters/rmItemCategoryStores");
+					Constants.mainAct = 17;
+					Constants.subAct=176;
+					
+					
+					List<RmItemGroup> rmItemGroupList =new ArrayList<RmItemGroup>();
+					
+					try {
+					
+						RestTemplate restTemplate = new RestTemplate();
+
+						ResponseEntity<List<RmItemGroup>> rateResponse =
+						        restTemplate.exchange(""+Constants.url +"/rawMaterial/getAllRmItemGroup",
+						                    HttpMethod.GET, null, new ParameterizedTypeReference<List<RmItemGroup>>() {
+						            });
+						
+						 rmItemGroupList = rateResponse.getBody();
+						
+						model.addObject("rmItemGroupList", rmItemGroupList);
+					
+					}catch(Exception e)
+					{
+					   model.addObject("rmItemGroupList", rmItemGroupList);
+			           System.out.println("Exception In /showRmItemCategory:"+e.getMessage());
+			             
+
+					}
+					return model;
+				}
+				//----------------------------------------END-------------------------------------------------------------
+				
+				//------------------------------Show Raw Material Item SubCategory Jsp------------------------------------
+
+				@RequestMapping(value = "/showRmItemSubCategory", method = RequestMethod.GET)
+				public ModelAndView showRmItemSubCategory(HttpServletRequest request, HttpServletResponse response) {
+				
+					ModelAndView model = new ModelAndView("masters/rmItemSubCatStores");
+					Constants.mainAct = 17;
+					Constants.subAct=178;
+					
+					try {
+					RestTemplate restTemplate = new RestTemplate();
+
+					RmItemCatList rmItemCatList=restTemplate.getForObject(Constants.url +"/rawMaterial/showRmItemCategories",RmItemCatList.class);
+					
+					System.out.println("Category Response:"+rmItemCatList.getRmItemCategoryList().toString());
+					
+					model.addObject("rmItemCatList", rmItemCatList.getRmItemCategoryList());
+					}
+					catch(Exception e)
+					{
+						System.out.println("Exception In Show Item Sub Category:"+e.getMessage());
+					}
+
+					return model;
+				}
+				//----------------------------------------END-------------------------------------------------------------
+				
+				//------------------------------ADD  Raw Material Item Category Process------------------------------------
+
+				@RequestMapping(value = "/addRmCategoryProcess", method = RequestMethod.POST)
+				public String addRmCategoryProcess(HttpServletRequest request, HttpServletResponse response) {
+
+					ModelAndView model = new ModelAndView("masters/rmItemCategoryStores");
+					try {
+						
+						String catName=request.getParameter("cat_name");
+						
+						String catDesc=request.getParameter("cat_desc");
+						
+						int grpId=Integer.parseInt(request.getParameter("grp_id"));
+						
+						RmItemCategory rmItemCategory=new RmItemCategory();
+						
+						rmItemCategory.setCatId(0);
+						rmItemCategory.setCatName(catName);
+						rmItemCategory.setCatDesc(catDesc);
+						rmItemCategory.setGrpId(grpId);
+						rmItemCategory.setDelStatus(0);
+						
+						RestTemplate restTemplate = new RestTemplate();
+
+						
+						ErrorMessage errorMessage=restTemplate.postForObject(Constants.url + "/rawMaterial/saveRmItemCategory", rmItemCategory,
+								ErrorMessage.class);
+						System.out.println("Response: "+errorMessage.toString());
+					
+					if(errorMessage.getError()==true) {
+						
+						System.out.println("Error:True"+errorMessage.toString());
+						return "redirect:/showItemCatList";
+						
+					}else
+					{
+						return "redirect:/showItemCatList";
+					}
+						
+					}catch(Exception e)
+					{
+						
+						System.out.println("Exception In Add Item Category Process:"+e.getMessage());
+
+					}
+
+					return "redirect:/showItemCatList";
+					}
+				//----------------------------------------END-------------------------------------------------------------
+				//------------------------------ADD  Raw Material Item SubCategory Process------------------------------------
+
+					@RequestMapping(value = "/addRmSubCategoryProcess", method = RequestMethod.POST)
+					public String addRmSubCategoryProcess(HttpServletRequest request, HttpServletResponse response) {
+
+						ModelAndView model = new ModelAndView("masters/rmItemSubCatStores");
+						try {
+							
+							String catName=request.getParameter("sub_cat_name");
+							
+							int catId=Integer.parseInt(request.getParameter("cat_id"));
+
+							
+							String catDesc=request.getParameter("sub_cat_desc");
+							
+							RmItemSubCategory rmItemSubCategory=new RmItemSubCategory();
+							
+							rmItemSubCategory.setSubCatId(0);
+							rmItemSubCategory.setCatId(catId);
+							rmItemSubCategory.setSubCatName(catName);
+							rmItemSubCategory.setSubCatDesc(catDesc);
+							
+							rmItemSubCategory.setDelStatus(0);
+							
+							RestTemplate restTemplate = new RestTemplate();
+
+							
+							ErrorMessage errorMessage=restTemplate.postForObject(Constants.url + "/rawMaterial/saveRmItemSubCategory", rmItemSubCategory,
+									ErrorMessage.class);
+							System.out.println("Response: "+errorMessage.toString());
+						}catch(Exception e)
+						{
+							System.out.println("Exception In Add Item SubCategory Process:"+e.getMessage());
+
+							return "redirect:/showItemSubCatList";
+
+						}
+
+						return "redirect:/showItemSubCatList";
+						}
+					//----------------------------------------END-------------------------------------------------------------
+					
+				//------------------------------Update Raw Material Item Category Process------------------------------------
+
+				@RequestMapping(value = "/updateRmCategoryProcess", method = RequestMethod.POST)
+				public String updateRmCategoryProcess(HttpServletRequest request, HttpServletResponse response) {
+
+					ModelAndView model = new ModelAndView("masters/editItemCatStore");
+					try {
+						int catId=Integer.parseInt(request.getParameter("cat_id"));
+						
+						String catName=request.getParameter("cat_name");
+						
+						String catDesc=request.getParameter("cat_desc");
+						
+						int grpId=Integer.parseInt(request.getParameter("grp_id"));
+						
+						RmItemCategory rmItemCategory=new RmItemCategory();
+						
+						rmItemCategory.setCatId(catId);
+						rmItemCategory.setCatName(catName);
+						rmItemCategory.setCatDesc(catDesc);
+						rmItemCategory.setGrpId(grpId);
+						rmItemCategory.setDelStatus(0);
+						
+						RestTemplate restTemplate = new RestTemplate();
+
+						
+						ErrorMessage errorMessage=restTemplate.postForObject(Constants.url + "/rawMaterial/saveRmItemCategory", rmItemCategory,
+								ErrorMessage.class);
+						System.out.println("ErrorMessage Response: "+errorMessage.toString());
+					}catch(Exception e)
+					{
+						System.out.println("Exception In Update RM Category Process:"+e.getMessage());
+
+						return "redirect:/showItemCatList";
+					}
+
+					return "redirect:/showItemCatList";
+					}
+				//----------------------------------------END-------------------------------------------------------------
+				//------------------------------Update Raw Material Item Category JSP------------------------------------
+
+				@RequestMapping(value = "/updateRmItemCategory/{catId}", method = RequestMethod.GET)
+				public ModelAndView updateRmCategory(@PathVariable("catId") int catId) {
+
+						ModelAndView model = new ModelAndView("masters/editItemCatStore");
+						try {
+							RestTemplate restTemplate = new RestTemplate();
+
+							MultiValueMap<String, Object> map=new LinkedMultiValueMap<String, Object>();
+							map.add("catId", catId);
+							
+							RmItemCategory rmItemCategory=restTemplate.postForObject(Constants.url + "/rawMaterial/getRmItemCategory", map,
+									RmItemCategory.class);
+					
+							System.out.println("RmItemCategory Response: "+rmItemCategory.toString());
+							
+							ResponseEntity<List<RmItemGroup>> rateResponse =
+							        restTemplate.exchange(""+Constants.url +"/rawMaterial/getAllRmItemGroup",
+							                    HttpMethod.GET, null, new ParameterizedTypeReference<List<RmItemGroup>>() {
+							            });
+							List<RmItemGroup> rmItemGroupList = rateResponse.getBody();
+							
+							model.addObject("rmItemGroupList", rmItemGroupList);
+							
+							
+							model.addObject("rmItemCategory", rmItemCategory);
+						}catch(Exception e)
+						{
+							System.out.println("Exception In Update RM Category JspPage Show:"+e.getMessage());
+
+						}
+
+						return model;
+					}
+					//----------------------------------------END-------------------------------------------------------------
+					//------------------------------Update Raw Material Item SubCategory JSP------------------------------------
+
+							@RequestMapping(value = "/updateRmSubCategory/{subCatId}", method = RequestMethod.GET)
+							public ModelAndView updateRmSubCategory(@PathVariable("subCatId") int subCatId) {
+
+								ModelAndView model = new ModelAndView("masters/editItemSubCatStore");
+								try {
+									RestTemplate restTemplate = new RestTemplate();
+
+									MultiValueMap<String, Object> map=new LinkedMultiValueMap<String, Object>();
+									map.add("subCatId", subCatId);
+									
+									RmItemSubCategory rmItemSubCategory=restTemplate.postForObject(Constants.url + "/rawMaterial/getRmItemSubCategory", map,
+											RmItemSubCategory.class);
+									System.out.println("RmItemSubCategory Response: "+rmItemSubCategory.toString());
+									
+									RmItemCatList rmItemCatList=restTemplate.getForObject(Constants.url +"/rawMaterial/showRmItemCategories",RmItemCatList.class);
+									
+									System.out.println("Category Response:"+rmItemCatList.toString());
+									
+									model.addObject("rmItemCatList", rmItemCatList.getRmItemCategoryList());
+									
+									model.addObject("rmItemSubCategory", rmItemSubCategory);
+
+									
+								}catch(Exception e)
+								{
+									System.out.println("Exception In Update RM SubCategory JspPage Show:"+e.getMessage());
+
+								}
+
+								return model;
+								}
+				//----------------------------------------END-------------------------------------------------------------
+				
+				//------------------------------Update Raw Material Item SubCategory Process------------------------------------
+
+					@RequestMapping(value = "/updateRmSubCategoryProcess", method = RequestMethod.POST)
+					public String updateRmSubCatProcess(HttpServletRequest request, HttpServletResponse response) {
+
+						ModelAndView model = new ModelAndView("masters/editItemSubCatStore");
+						try {
+							
+							String subCatName=request.getParameter("sub_cat_name");
+							System.out.println("Sub Category Name:"+subCatName);
+							
+							String subCatDesc=request.getParameter("sub_cat_desc");
+							System.out.println("Sub Category Description:"+subCatDesc);
+
+							int catId=Integer.parseInt(request.getParameter("cat_id"));
+							System.out.println("CatId:"+catId);
+
+							
+							int subCatId=Integer.parseInt(request.getParameter("sub_cat_id"));
+							System.out.println("subCatId:"+subCatId);
+
+							
+							RmItemSubCategory rmItemSubCategory=new RmItemSubCategory();
+							
+							
+							rmItemSubCategory.setCatId(catId);
+							rmItemSubCategory.setSubCatId(subCatId);
+							rmItemSubCategory.setSubCatName(subCatName);
+							rmItemSubCategory.setSubCatDesc(subCatDesc);
+							rmItemSubCategory.setDelStatus(0);
+							System.out.println("RmItemSubCategory:"+rmItemSubCategory.toString());
+							
+							RestTemplate restTemplate = new RestTemplate();
+
+							
+							ErrorMessage errorMessage=restTemplate.postForObject(Constants.url + "/rawMaterial/saveRmItemSubCategory", rmItemSubCategory,
+									ErrorMessage.class);
+							System.out.println("Response: "+errorMessage.toString());
+						}catch(Exception e)
+						{
+							System.out.println("Exception In Update RM SubCategory Process:"+e.getMessage());
+
+							return "redirect:/showItemSubCatList";
+						}
+
+						return "redirect:/showItemSubCatList";
+						}
+					//----------------------------------------END-------------------------------------------------------------
+				//------------------------------show Raw Material Item Category List Jsp------------------------------------
+				@RequestMapping(value = "/showItemCatList")
+				public ModelAndView showItemCatList(HttpServletRequest request, HttpServletResponse response) {
+					ModelAndView mav = new ModelAndView("masters/rmItemCatStoreList");
+					Constants.mainAct = 17;
+					Constants.subAct=177;
+					try {
+						RestTemplate restTemplate = new RestTemplate();
+
+						RmItemCatList rmItemCatList=restTemplate.getForObject(Constants.url +"/rawMaterial/showRmItemCategories",RmItemCatList.class);
+						
+						System.out.println("Category Response:"+rmItemCatList.toString());
+						
+						mav.addObject("rmItemCatList", rmItemCatList.getRmItemCategoryList());
+						
+					}catch(Exception e)
+					{
+						System.out.println("Exception In RM Category List Show:"+e.getMessage());
+
+					}
+
+					return mav;
+				}
+				//----------------------------------------END-------------------------------------------------------------
+				//------------------------------show Raw Material Item SubCategory List Jsp------------------------------------
+					@RequestMapping(value = "/showItemSubCatList")
+					public ModelAndView showItemSubCatList(HttpServletRequest request, HttpServletResponse response) {
+						ModelAndView mav = new ModelAndView("masters/rmItemSubCatStoreList");
+						Constants.mainAct = 17;
+						Constants.subAct=179;
+						try {
+							RestTemplate restTemplate = new RestTemplate();
+
+							RmItemSubCatList rmItemSubCatList=restTemplate.getForObject(Constants.url +"/rawMaterial/showRmItemSubCategories",RmItemSubCatList.class);
+							
+							System.out.println("SubCategory Response:"+rmItemSubCatList.toString());
+							
+							mav.addObject("rmItemSubCatList", rmItemSubCatList.getRmItemSubCategory());
+							
+						}catch(Exception e)
+						{
+							System.out.println("Exception In RM SubCategory List Show:"+e.getMessage());
+
+						}
+
+						return mav;
+					}
+					//----------------------------------------END-------------------------------------------------------------
+					
+				//------------------------------Delete Raw Material Item Category Process------------------------------------
+				@RequestMapping(value = "/deleteRmItemCategory/{id}", method = RequestMethod.GET)
+				public String deleteRmItemCategory(@PathVariable int id) {
+
+
+					ModelAndView mav = new ModelAndView("masters/rmItemCatStoreList");
+					try {
+						
+					
+					RestTemplate rest = new RestTemplate();
+					MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+					map.add("catId", id);
+
+					ErrorMessage errorResponse = rest.postForObject(Constants.url + "/rawMaterial/deleteRmItemCategory", map, ErrorMessage.class);
+					System.out.println(errorResponse.toString());
+
+					if (errorResponse.getError()) {
+						
+						return "redirect:/showItemCatList";
+
+					} else {
+						return "redirect:/showItemCatList";
+
+					}
+					}catch(Exception e){
+						System.out.println("Exception In delete Rm Item Category:"+e.getMessage());
+
+						return "redirect:/showItemCatList";
+
+					}
+
+				}
+				
+				//----------------------------------------END-------------------------------------------------------------
+				//------------------------------Delete Raw Material Item SubCategory Process------------------------------------
+					@RequestMapping(value = "/deleteRmItemSubCategory/{id}", method = RequestMethod.GET)
+					public String deleteRmItemSubCategory(@PathVariable int id) {
+
+
+						ModelAndView mav = new ModelAndView("masters/rmItemSubCatStoreList");
+						try {
+							
+						RestTemplate rest = new RestTemplate();
+						MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+						map.add("subCatId", id);
+
+						ErrorMessage errorResponse = rest.postForObject(Constants.url + "/rawMaterial/deleteRmItemSubCategory", map, ErrorMessage.class);
+						System.out.println(errorResponse.toString());
+
+						if (errorResponse.getError()) {
+							return "redirect:/showItemSubCatList";
+
+						} else {
+							return "redirect:/showItemSubCatList";
+
+						}
+						
+					  }catch(Exception e){
+						System.out.println("Exception In delete Rm Item SubCategory:"+e.getMessage());
+
+						return "redirect:/showItemCatList";
+
+					}
+					}
+					
+					//----------------------------------------END-------------------------------------------------------------			
+				
 }

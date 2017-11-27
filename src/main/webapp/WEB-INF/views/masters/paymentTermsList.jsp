@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-
+	pageEncoding="UTF-8"%><%@ taglib
+	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -74,128 +74,89 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Latest News
+						<i class="fa fa-file-o"></i>Payment Terms
 					</h1>
-
 				</div>
 			</div>
 			<!-- END Page Title -->
 
-
-
-			<!-- BEGIN Main Content -->
 			<div class="row">
 				<div class="col-md-12">
+
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> Add Latest News
+								<i class="fa fa-table"></i>Payment Terms List
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showAllLatestNews">Back to List</a> <a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a>
-							</div>
-							<!-- <div class="box-tool">
 								<a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a> <a data-action="close" href="#"><i
-									class="fa fa-times"></i></a>
-							</div> -->
+									class="fa fa-chevron-up"></i></a>
+								<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
+							</div>
 						</div>
-
 
 						<div class="box-content">
-							<form action="addLatestNews" class="form-horizontal"
-								id="validation-form" method="post">
+
+							<div class="clearfix"></div>
 
 
 
 
-								<input type="hidden" name="mode_add" id="mode_add"
-									value="add_att">
-
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Message From Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="dp1" size="16"
-											type="text" name="sch_date" value="" placeholder="Message From Date" required />
-									</div>
-								</div>
-
-								<!-- <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">To Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="dp1" size="16"
-											type="text" name="sch_to_date"  required />
-
-									</div>
-								 -->	
-									<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Message To Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="dp1" size="16"
-											type="text" name="sch_to_date" required placeholder="Message To Date"/>
-
-									</div>
-									
-									
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Occasion
-										Name</label>
-									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="sch_occasion_name"
-											id="sch_occasion_name" placeholder="Occasion Name"
-											class="form-control" required />
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Message</label>
-									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="sch_message" id="sch_message"
-											placeholder="Message" class="form-control" required />
-									</div>
-								</div>
-
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Status</label>
-									<div class="col-sm-9 col-lg-10 controls">
-										<select class="form-control input-sm" name="is_active"
-											id="is_active">
-											<option selected  value="1">Active</option>
-											<option value="0">In-Active</option>
-
-										</select>
-									</div>
-								</div>
-
-
-								<div class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-										<button type="submit" class="btn btn-primary">
-											<i class="fa fa-check"></i> Save
-										</button>
-										</div>
-										</div>
-								
+							<div class="table-responsive" style="border: 0">
+								<table width="100%" class="table table-advance" id="table1">
+									<thead>
+										<tr>
+											<th width="170" style="width: 18px">Sr.No.</th>
+											<th width="190" align="left">Payment Description</th>
+											<th width="358" align="left">Credit Days</th>
 										
-							</form>
+										
+											<th width="88" align="left">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+							  <%int c=1; %>
+										<c:forEach items="${paymentTermsList}" var="paymentTermsList">
+
+
+
+											<tr>
+												<td>	<%=c++%>
+											<c:out
+														value="${c}" /> 
+												</td>
+												<td align="left"><c:out
+														value="${paymentTermsList.payDesc}" /></td>
+												<td align="left"><c:out
+														value="${paymentTermsList.creditDays}" /></td>
+												
+												
+												<td align="left"><a
+													href="${pageContext.request.contextPath}/updatePaymentTerm/${paymentTermsList.payId}"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+
+													<a href="${pageContext.request.contextPath}/deletePaymentTerm/${paymentTermsList.payId}"
+													onClick="return confirm('Are you sure want to delete this record');"><span
+														class="glyphicon glyphicon-remove"></span></a></td>
+											</tr>
+										</c:forEach>
+
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
-					
 				</div>
 			</div>
-		</div>
-		
-	</div>
-	<!-- END Main Content -->
-	<footer>
-	<p>2017 © MONGINIS.</p>
-	</footer>
+			<!-- END Main Content -->
+			<footer>
+			<p>2017 © MONGINIS.</p>
+			</footer>
 
-	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-		class="fa fa-chevron-up"></i></a>
-	</div>
-	<!-- END Content -->
+			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+				class="fa fa-chevron-up"></i></a>
+		</div>
+		<!-- END Content -->
 	</div>
 	<!-- END Container -->
 

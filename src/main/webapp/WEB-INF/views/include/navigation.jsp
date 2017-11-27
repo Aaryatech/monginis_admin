@@ -320,7 +320,96 @@
 					</c:choose>
 					<a href="${pageContext.request.contextPath}/showRmRateVerification">RM Rate Verification</a>
 					</li>
-
+                    <c:choose>
+						<c:when test="${Constants.subAct==176}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showRmItemCategory">RM Category</a>
+					</li>
+                   <c:choose>
+						<c:when test="${Constants.subAct==177}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showItemCatList">RM Category List</a>
+					</li>
+                   <c:choose>
+						<c:when test="${Constants.subAct==178}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showRmItemSubCategory">RM SubCategory</a>
+					</li>
+					 <c:choose>
+						<c:when test="${Constants.subAct==179}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showItemSubCatList">RM SubCategory List</a>
+					</li>
+                    <c:choose>
+						<c:when test="${Constants.subAct==180}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAddTransporter">Transporter</a>
+					</li>
+					<c:choose>
+						<c:when test="${Constants.subAct==181}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showTransporterList">Transporter List</a>
+					</li>
+						<c:choose>
+						<c:when test="${Constants.subAct==182}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAddPaymentTerms">Payment Terms</a>
+					</li>
+					<c:choose>
+						<c:when test="${Constants.subAct==183}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showPaymentTermsList">Payment Terms List</a>
+					</li>
+					<c:choose>
+						<c:when test="${Constants.subAct==184}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/gateEntries">Gate Entry</a>
+					</li>
 
 				</ul>
 				<!-- END Submenu -->
