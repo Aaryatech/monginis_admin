@@ -7,7 +7,7 @@ public class GetBillHeader {
     private Integer billNo;
     private String frName;
     private Integer taxApplicable;
-    private Integer invoiceNo;
+    private String invoiceNo;
     private String billDate;
     private Integer frId;
     private String frCode;
@@ -42,15 +42,16 @@ public class GetBillHeader {
         this.taxApplicable = taxApplicable;
     }
 
-    public Integer getInvoiceNo() {
-        return invoiceNo;
-    }
+    
+    public String getInvoiceNo() {
+		return invoiceNo;
+	}
 
-    public void setInvoiceNo(Integer invoiceNo) {
-        this.invoiceNo = invoiceNo;
-    }
+	public void setInvoiceNo(String invoiceNo) {
+		this.invoiceNo = invoiceNo;
+	}
 
-    public String getBillDate() {
+	public String getBillDate() {
         return billDate;
     }
 
@@ -133,10 +134,5 @@ public class GetBillHeader {
 	}
 
 
-    
-    
-
-	
-    
-
+   
 }

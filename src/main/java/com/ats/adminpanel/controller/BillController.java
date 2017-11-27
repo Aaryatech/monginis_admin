@@ -6,22 +6,27 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Year;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TimeZone;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.omg.CORBA.ORBPackage.InvalidName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -60,8 +65,11 @@ import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
 import com.ats.adminpanel.model.franchisee.Menu;
 import com.ats.adminpanel.model.item.CategoryListResponse;
+import com.ats.adminpanel.model.item.FrItemStockConfiResponse;
+import com.ats.adminpanel.model.item.FrItemStockConfigure;
 import com.ats.adminpanel.model.item.MCategoryList;
 import com.ats.adminpanel.model.modules.ErrorMessage;
+import com.sun.org.apache.bcel.internal.generic.INVOKEINTERFACE;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 @Controller
@@ -84,12 +92,18 @@ public class BillController {
 
 	List<GetSellBillHeader> getSellBillHeaderList;
 	List<GetSellBillDetail> getSellBillDetailList;
+	 
 
 	@RequestMapping(value = "/submitNewBill", method = RequestMethod.POST)
 	public String submitNewBill(HttpServletRequest request, HttpServletResponse response) {
 
 		logger.info("/submitNewBill request mapping.");
-
+		
+		int settingValue=0;
+		String invoiceNo=null;
+		
+		RestTemplate restTemplate = new RestTemplate();
+		
 		DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
 		Date billDate = null;
 		try {
@@ -104,6 +118,54 @@ public class BillController {
 		ModelAndView model = new ModelAndView("billing/generatebill");
 		Constants.mainAct = 8;
 		Constants.subAct = 81;
+
+		//settingValue
+		
+		FrItemStockConfiResponse frItemStockConfiResponse = restTemplate.getForObject(Constants.url + "getfrItemConfSetting",
+				FrItemStockConfiResponse.class);
+		List<FrItemStockConfigure> frItemStockConfigures = new ArrayList<FrItemStockConfigure>();
+
+		
+		frItemStockConfigures = frItemStockConfiResponse.getFrItemStockConfigure();
+		
+		 for(int k=0;k<frItemStockConfigures.size();k++) {
+		
+		if(frItemStockConfigures.get(k).getSettingKey().equalsIgnoreCase("PB")) {
+			settingValue=frItemStockConfigures.get(k).getSettingValue();
+		}
+		
+		 }	
+		
+		 System.out.println("settingValue= "+settingValue);
+		 
+		//end of settingValue
+		 int year = Year.now().getValue();	
+		 String strYear=String.valueOf(year);
+		 strYear=strYear.substring(2);
+		 
+		 System.out.println("strYear= "+strYear);
+		 
+		 
+		 int length=String.valueOf(settingValue).length();
+		 
+		 if(length==1) 
+			 
+			  invoiceNo=strYear+"-"+"0000"+settingValue;
+		 if(length==2) 
+			 
+			  invoiceNo=strYear+"-"+"000"+settingValue;
+		 
+		 if(length==3) 
+			 
+			  invoiceNo=strYear+"-"+"00"+settingValue;
+		 
+		 if(length==4) 
+			 
+			  invoiceNo=strYear+"-"+"0"+settingValue;
+		 
+		 
+		 
+			System.out.println("Invoice No= "+invoiceNo);
 
 		PostBillDataCommon postBillDataCommon = new PostBillDataCommon();
 
@@ -238,6 +300,7 @@ public class BillController {
 
 					System.out.println("New Detail Object " + billDetail.toString());
 
+					header.setInvoiceNo(invoiceNo);
 					header.setFrCode(gBill.getFrCode());
 					header.setBillDate(billDate);
 					header.setRemark("");
@@ -274,14 +337,32 @@ public class BillController {
 
 		System.out.println("Test data : " + postBillDataCommon.toString());
 
-		RestTemplate restTemplate = new RestTemplate();
+	
 
 		Info info = restTemplate.postForObject(Constants.url + "insertBillData", postBillDataCommon, Info.class);
 
 		System.out.println("Info Data " + info.toString());
+		
+		if(info.getError()==false) {
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				
+			settingValue=settingValue+1;
+				
+				map.add("settingValue", settingValue);
+				
+				map.add("settingKey", Constants.settingKey);
+				
+				
+				
+			
+			Info infoUpdate = restTemplate.postForObject(Constants.url + "updateSeetingForPB", map, Info.class);
+
+			
+		}
 
 		return "redirect:/showGenerateBill";
-
+		 
 	}
 
 	public String incrementDate(String date, int day) {

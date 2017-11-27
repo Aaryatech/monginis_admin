@@ -172,19 +172,22 @@ public class PushOrderController {
 		
 		//items=rest.postForObject(Constants.url + "getItemsByCatId",map,List.class);
 		System.out.println("Item List: "+items.toString());
+		
+		if(pushOrderData !=null) {
+		
 		for (int i=0;i<pushOrderData.size();i++) {
 			
 			
 			if(items.get(i).getId()==pushOrderData.get(i).getItemId()) {
+				
 				items.get(i).setDelStatus(pushOrderData.get(i).getOrderQty());
 
 			}
 			
 			System.out.println("item entry new qty "+items.toString());
-		//	items.get(i).setMinQty(pushOrderData.get(i).getItemId());
 		
-		}
-		
+		}//end of for loop
+		}//end of if
 		String selectedFr = request.getParameter("fr_id_list");
 		
 		
@@ -252,7 +255,16 @@ public class PushOrderController {
 
 	List<FranchiseeList> franchaseeList = new ArrayList<FranchiseeList>();
 	franchaseeList = allFranchiseeList.getFranchiseeList();
+	boolean pushItem=false;
 	
+	if(pushOrderData!=null) {
+		
+		pushItem=true;
+	}
+	
+	
+	if(pushItem) {
+		
 	for(int m=0;m<pushOrderData.size();m++) {
 		
 		
@@ -324,6 +336,79 @@ public class PushOrderController {
 			}// end of if pushOrderData
 		}
 	}
+	}// end of if pushItem
+	
+	if(pushItem==false) {
+			for(int j=0;j<items.size();j++)
+			{
+				
+				//System.out.println(items.get(j).getId());
+				for(int i=0;i<selectedFrIdList.size();i++)
+				{
+					
+				System.out.println(items.get(j).getId());
+				
+				String quantity=request.getParameter("itemId"+items.get(j).getId()+"orderQty"+selectedFrIdList.get(i));
+				System.out.println("qtyb    "+quantity);
+				int qty=Integer.parseInt(quantity);
+
+				if(qty!=0 )
+				{
+					 List<Orders> oList=new ArrayList<>();
+					
+					order.setOrderDatetime(todaysDate);
+					order.setFrId(selectedFrIdList.get(i));
+					order.setRefId(items.get(j).getId());
+					order.setItemId(String.valueOf(items.get(j).getId()));
+					order.setOrderQty(qty);
+					order.setProductionDate(date);
+					order.setOrderDate(date);
+					order.setDeliveryDate(deliveryDate);
+					order.setMenuId(0);
+					order.setGrnType(items.get(j).getGrnTwo());
+					order.setIsEdit(1);
+					order.setMenuId(menuId);
+					order.setOrderType(selectedMainCatId);
+					
+					for(int l=0;l<selectedFrIdList.size();l++)
+					{
+					for(int k=0;k<franchaseeList.size();k++)
+					{
+					   if(selectedFrIdList.get(l)==franchaseeList.get(k).getFrId())
+							   {
+						   			if(franchaseeList.get(k).getFrRateCat()==1)
+						   			{
+						   				order.setOrderRate(items.get(j).getItemRate1()*qty);
+						   				order.setOrderMrp(items.get(j).getItemMrp1());
+						   			}
+						   			else if(franchaseeList.get(k).getFrRateCat()==2)
+						   			{
+						   				order.setOrderRate(items.get(j).getItemRate2()*qty);
+						   				order.setOrderMrp(items.get(j).getItemMrp2());
+						   			}
+						   			else if(franchaseeList.get(k).getFrRateCat()==3)
+						   			{
+						   				order.setOrderRate(items.get(j).getItemRate3()*qty);
+						   				order.setOrderMrp(items.get(j).getItemMrp3());
+						   			}
+						   					
+							   
+							   }
+					}
+					}
+				
+					
+					oList.add(order);
+					PlaceOrder(oList);
+					
+				}// end of if qty!=0
+				}
+				}// end items for loop
+	
+	}//end of not pushItem
+	
+	
+	
 		model.addObject("unSelectedMenuList", menuList);
 		model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
 		

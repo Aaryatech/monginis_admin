@@ -19,7 +19,7 @@ public class PostBillHeader {
 	private int taxApplicable;
 	
 	
-	private int invoiceNo;
+	private String invoiceNo;
 	
 	private Date billDate;
 	
@@ -62,13 +62,15 @@ public class PostBillHeader {
 		this.billNo = billNo;
 	}
 
-	public int getInvoiceNo() {
+	
+	public String getInvoiceNo() {
 		return invoiceNo;
 	}
 
-	public void setInvoiceNo(int invoiceNo) {
+	public void setInvoiceNo(String invoiceNo) {
 		this.invoiceNo = invoiceNo;
 	}
+
 	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getBillDate() {
 		return billDate;
