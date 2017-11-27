@@ -4,7 +4,7 @@ import java.io.Serializable;
 
 
 public class RmItemCategory {
-
+ 
 	
 	private int catId;
 	
