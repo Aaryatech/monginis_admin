@@ -161,7 +161,7 @@
 
 
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Franchisee
+									<label class="col-sm-3 col-lg-2 control-label">Franchise
 										Name</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="fr_name" id="fr_name"

@@ -121,7 +121,7 @@
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
-				<li class="active">Franchisee Bill</li>
+				<li class="active">Franchise Bill</li>
 			</ul>
 		</div>
 		<!-- END Breadcrumb -->
@@ -158,6 +158,9 @@
 
 							</select>
 						</div>
+						
+						
+						
 					</div>
 
 					<div class="form-group col-md-3">
@@ -172,10 +175,28 @@
 
 
 
-					<div class="form-group col-md-9">
+<!-- <div class="col-sm-9 col-lg-5 controls">
+ -->
+ 
+ <div class="form-group col-md-5"><label class=" col-md-2 control-label menu_label">
+							Route</label>
+
+										<select class="form-control chosen" tabindex="6"
+											name="selectRoute" id="selectRoute">
+
+											<option value="0">Select Route</option>
+											<c:forEach items="${routeList}" var="route" varStatus="count">
+												<option value="${route.routeId}"> ${route.routeName}</option>
+
+											</c:forEach>
+
+										</select>
+									</div>
+
+					<div class="form-group  ">
 						<label class=" col-md-2 control-label menu_label">Select
 							Menu</label>
-						<div class=" col-md-5 controls menu_select">
+						<div class=" col-md-3 controls menu_select">
 
 							<select data-placeholder="Choose Menu"
 								class="form-control chosen" multiple="multiple" tabindex="6"
@@ -242,7 +263,7 @@
 								<thead>
 									<tr>
 										<th>Sr.No.</th>
-										<th>Franchisee Name</th>
+										<th>Franchise Name</th>
 										<th>Menu Name</th>
 										<th>Item id</th>
 										<th>Item Name</th>
@@ -265,6 +286,8 @@
 					<div class="row">
 						<div class="col-md-offset-6 col-md-6">
 							<button class="btn btn-info pull-right">Submit & PDF</button>
+							
+						 <a href="${pageContext.request.contextPath}/pdf?url=showBillPdf">PDF</a> 
 							<button class="btn btn-info pull-right"
 								style="margin-right: 5px;" onclick="submitBill()">Submit</button>
 						</div>
@@ -297,6 +320,8 @@
 
 			if (isValid) {
 				var selectedFr = $("#selectFr").val();
+				var routeId=$("#selectRoute").val();
+				
 				var selectedMenu = $("#selectMenu").val();
 				var deliveryDate = $("#deliveryDate").val();
 
@@ -310,6 +335,7 @@
 									fr_id_list : JSON.stringify(selectedFr),
 									menu_id_list : JSON.stringify(selectedMenu),
 									deliveryDate : deliveryDate,
+									route_id:routeId,
 									ajax : 'true'
 
 								},
@@ -327,6 +353,8 @@
 											.each(
 													data,
 													function(key, bill) {
+														
+														if(bill.orderQty>0){
 
 														var index = key + 1;
 
@@ -412,6 +440,8 @@
 														$('#table_grid tbody')
 																.append(
 																		trclosed);
+														
+													}
 
 													})
 
@@ -426,14 +456,19 @@
 
 			var selectedFr = $("#selectFr").val();
 			var selectedMenu = $("#selectMenu").val();
+			var selectedRoute = $("#selectRoute").val();
+
 
 			var isValid = true;
 
-			if (selectedFr == "" || selectedFr == null) {
-
-				isValid = false;
-				alert("Please select Franchise");
-
+			if (selectedFr == "" || selectedFr == null  ) {
+ 
+				if(selectedRoute=="" || selectedRoute ==null ) {
+					alert("Please Select atleast one ");
+					isValid = false;
+				}
+				//alert("Please select Franchise/Route");
+ 
 			} else if (selectedMenu == "" || selectedMenu == null) {
 
 				isValid = false;

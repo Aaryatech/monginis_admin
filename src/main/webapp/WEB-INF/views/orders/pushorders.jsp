@@ -292,7 +292,7 @@
 								function(data) {
 
 									//$('#table_grid td').remove();
-									
+									//alert(data);
 									
 
 									if (data == "") {
@@ -326,37 +326,41 @@
 														
 														var pushQty=0;
 												    	  var  orderQty=0;
-												    	  
-														  
+												    	
 													      $.each(frId, function(key, id){  
+													    	  var qty=0;
+													    	  if(itemname.getOrderDataForPushOrder!=null)
+												    	 		 {
+													    		
+												    	  $.each(itemname.getOrderDataForPushOrder, function(key, frData){
+												    			if (frData.frId == id && itemname.itemId==frData.itemId){
+												    	 				qty=frData.orderQty;
+
+												    		}
+					    	
+												    	
+												    	  });	
+												    	  
+	
+												    	 		 }
 													    	  
-													        	if(itemname.delStatus!=0){
-													        		pushQty=itemname.delStatus;
-													        	
-orderQty = "<td align=center><input type=number min=0 max=500 class=form-control  id=itemId"+itemname.id+"orderQty"+ id+ " name=itemId"+itemname.id+"orderQty"+id+" value ="+itemname.delStatus+" readonly=true ></td>"; 
-														    	
-													        	}
-													        	
-													        	
-													      if(itemname.delStatus == 0){
-													        	   
- orderQty = "<td align=center><input type=number min=0 max=500 class=form-control  id=itemId"+itemname.id+"orderQty"+ id+ " name=itemId"+itemname.id+"orderQty"+id+" value = "+0+ "></td>"; 
-													           }
-													        	 
-													    	//var orderQty = "<td align=center><input type=number min=0 max=500 class=form-control  id=itemId"+itemname.id+"orderQty"+ id+ " name=itemId"+itemname.id+"orderQty"+id+" value = "+pushQty+ "></td>"; 
-													    	
-													    	
-													    	 $('#table_grid tbody')
-																.append(orderQty);
- 
-													        });
-														
-														$('#table_grid tbody')
-														.append(trclosed);
+													    	  if(qty > 0)
+												    		var orderQty = "<td align=center><input type=number min=0 max=500 class=form-control  readonly='true'   id=itemId"+itemname.itemId+"orderQty"+ id+ " name=itemId"+itemname.itemId+"orderQty"+id+" value = "+qty+"></td>"; 
+												    		else
+													    		var orderQty = "<td align=center><input type=number min=0 max=500 class=form-control   id=itemId"+itemname.itemId+"orderQty"+ id+ " name=itemId"+itemname.itemId+"orderQty"+id+" value = "+qty+"></td>"; 
 
-													})
+												    	 $('#table_grid tbody')
+															.append(orderQty);
+												      });
+												    
+													
+													$('#table_grid tbody')
+													.append(trclosed);
 
-								});
+												})
+													
+
+							});
 
 			}
 		}

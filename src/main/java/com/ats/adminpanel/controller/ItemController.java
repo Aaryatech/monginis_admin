@@ -51,7 +51,7 @@ import com.ats.adminpanel.util.ImageS3Util;
 
 @Controller
 public class ItemController {
- 
+
 	private static final Logger logger = LoggerFactory.getLogger(ItemController.class);
 
 	AllItemsListResponse allItemsListResponse;
@@ -70,17 +70,14 @@ public class ItemController {
 	public static List<GetPrevItemStockResponse> getPrevItemStockResponsesList;
 
 	ArrayList<String> tempItemList;
-	public int catId = 0;
+	public static int  catId = 0; 
 
-	
-	
-	
 	@RequestMapping(value = "/addItem", method = RequestMethod.GET)
 	public ModelAndView showAddCategory(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("items/addnewitem");
-		
+
 		Constants.mainAct = 4;
-		Constants.subAct=42;
+		Constants.subAct = 42;
 		try {
 
 			System.out.println("Add Item Request");
@@ -127,217 +124,215 @@ public class ItemController {
 
 	// Franchisee Item Configuration -- new work 26/09
 
-	
 	@RequestMapping(value = "/showFrItemConfiguration")
 	public ModelAndView showFrItemConfiguration(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("Item Request");
-		ModelAndView mav = new ModelAndView("items/itemConfig");
+		ModelAndView model = new ModelAndView("items/itemConfig");
 		Constants.mainAct = 4;
-		Constants.subAct=44;
+		Constants.subAct = 44;
 
-		RestTemplate restTemplate = new RestTemplate();
+		try {
 
-		FrItemStockConfiResponse frItemStockConfiResponse = restTemplate
-				.getForObject(Constants.url + "getfrItemConfSetting", FrItemStockConfiResponse.class);
+			RestTemplate restTemplate = new RestTemplate();
 
-		List<FrItemStockConfigure> frItemStockConfigures = new ArrayList<FrItemStockConfigure>();
+			FrItemStockConfiResponse frItemStockConfiResponse = restTemplate
+					.getForObject(Constants.url + "getfrItemConfSetting", FrItemStockConfiResponse.class);
 
-		frItemStockConfigures = frItemStockConfiResponse.getFrItemStockConfigure();
+			List<FrItemStockConfigure> frItemStockConfigures = new ArrayList<FrItemStockConfigure>();
 
-		for (int i = 0; i < frItemStockConfigures.size(); i++) {
+			frItemStockConfigures = frItemStockConfiResponse.getFrItemStockConfigure();
 
-			if (frItemStockConfigures.get(i).getSettingKey().equals("frItemStockType")) {
+			for (int i = 0; i < frItemStockConfigures.size(); i++) {
 
-				settingValue = frItemStockConfigures.get(i).getSettingValue();
+				if (frItemStockConfigures.get(i).getSettingKey().equals("frItemStockType")) {
+
+					settingValue = frItemStockConfigures.get(i).getSettingValue();
+
+				}
 
 			}
 
+			System.out.println("settingValue-------------------------------------------==" + settingValue);
+
+			CategoryListResponse itemsWithCategoryResponseList = restTemplate
+					.getForObject(Constants.url + "showAllCategory", CategoryListResponse.class);
+
+			itemsWithCategoriesList = itemsWithCategoryResponseList.getmCategoryList();
+
+			System.out.println("item Id Cat Name --" + itemsWithCategoriesList.toString());
+
+			for (int i = 0; i < itemsWithCategoriesList.size(); i++) {
+
+				System.out.println("cat id== " + itemsWithCategoriesList.get(i).getCatId());
+				if (itemsWithCategoriesList.get(i).getCatId() == 5) {
+
+					itemsWithCategoriesList.remove(i);
+
+				}
+
+			}
+
+			for (int i = 0; i < itemsWithCategoriesList.size(); i++) {
+
+				System.out.println("cat id== " + itemsWithCategoriesList.get(i).getCatId());
+				if (itemsWithCategoriesList.get(i).getCatId() == 6) {
+
+					itemsWithCategoriesList.remove(i);
+
+				}
+
+			}
+
+			model.addObject("settingValue", settingValue);
+			model.addObject("ItemIdCategory", itemsWithCategoriesList);
+			model.addObject("catId", catId);
+			model.addObject("itemList", getPrevItemStockResponsesList);
+
+		} catch (Exception e) {
+
+			System.out.println("Exception in showing fr Item Stock Confi " + e.getMessage());
+			e.printStackTrace();
 		}
-
-		System.out.println("settingValue-------------------------------------------==" + settingValue);
-
-		CategoryListResponse itemsWithCategoryResponseList = restTemplate
-				.getForObject(Constants.url + "showAllCategory", CategoryListResponse.class);
-
-		itemsWithCategoriesList = itemsWithCategoryResponseList.getmCategoryList();
-		
-		System.out.println("item Id Cat Name --"+itemsWithCategoriesList.toString());
-		
-		for (int i = 0; i < itemsWithCategoriesList.size(); i++) {
-
-			System.out.println("cat id== "+itemsWithCategoriesList.get(i).getCatId());
-			  if(itemsWithCategoriesList.get(i).getCatId()==5)
-			 {
-			 
-			  itemsWithCategoriesList.remove(i);
-			  
-			  
-			  }
-		
-		}
-	
-		for (int i = 0; i < itemsWithCategoriesList.size(); i++) {
-
-			System.out.println("cat id== "+itemsWithCategoriesList.get(i).getCatId());
-			  if(itemsWithCategoriesList.get(i).getCatId()==6) {
-			 
-			  itemsWithCategoriesList.remove(i);
-			  
-			  
-			  }
-		
-
-		}
-		mav.addObject("settingValue", settingValue);
-		mav.addObject("ItemIdCategory", itemsWithCategoriesList);
-		// mav.addObject("itemList",itemList);
-		mav.addObject("catId", catId);
-		mav.addObject("itemList", getPrevItemStockResponsesList);
-
-		return mav;
+		return model;
 	}
 
 	@RequestMapping(value = "/getItemsbyCatIdProcess", method = RequestMethod.GET)
 	public String getItemsbyCatIdProcess(HttpServletRequest request, HttpServletResponse response) {
-		ModelAndView mav = new ModelAndView("items/itemlist");
+
+		//ModelAndView model = new ModelAndView("items/itemlist");
+		ModelAndView model = new ModelAndView("items/itemConfig");
+		
+		Constants.mainAct = 4;
+		Constants.subAct = 44;
+
 		try {
-			
+
 			catId = Integer.parseInt(request.getParameter("cat_name"));
-			
-		} catch (Exception e) {
-			
-			System.out.println("exe in item get By CatId " + e.getMessage());
-		}
-		
-		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			System.out.println("cat Id "+catId);
 
-		map.add("itemGrp1", catId);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-		RestTemplate restTemplate = new RestTemplate();
+			//MultiValueMap<String, Object> mapItemList = new LinkedMultiValueMap<String, Object>();
 
-		Item[] item = restTemplate.postForObject(Constants.url + "getItemsByCatId", map, Item[].class);
+			map.add("itemGrp1", catId);
 
-		ArrayList<Item> tempItemList = new ArrayList<Item>(Arrays.asList(item));
+			RestTemplate restTemplate = new RestTemplate();
 
-		StringBuilder sb = new StringBuilder();
-		
+			Item[] item = restTemplate.postForObject(Constants.url + "getItemsByCatId", map, Item[].class);
 
-		String itemId;
+			ArrayList<Item> tempItemList = new ArrayList<Item>(Arrays.asList(item));
 
-		for (int i = 0; i < tempItemList.size(); i++) {
+			StringBuilder stringBuilder = new StringBuilder();
 
-			itemId = (tempItemList.get(i).getId()) + ",";
-			sb.append(itemId);
+			String itemId;
 
-		}
+			for (int i = 0; i < tempItemList.size(); i++) {
 
-		String itemIds = sb.toString();
-		itemIds = itemIds.substring(0, itemIds.length() - 1);
+				itemId = (tempItemList.get(i).getId()) + ",";
+				stringBuilder.append(itemId);
 
-		System.out.println("itemId :"+itemIds);
-		
-		
-		MultiValueMap<String, Object> mapItemList = new LinkedMultiValueMap<String, Object>();
-
-		mapItemList.add("itemId", itemIds);
-
-		getPrevItemStockResponsesList = new ArrayList<GetPrevItemStockResponse>();
-
-		ParameterizedTypeReference<List<GetPrevItemStockResponse>> typeRef = new ParameterizedTypeReference<List<GetPrevItemStockResponse>>() {
-		};
-
-		ResponseEntity<List<GetPrevItemStockResponse>> responseEntity = restTemplate.exchange(
-				Constants.url + "getAllFrItemConfPost", HttpMethod.POST, new HttpEntity<>(mapItemList), typeRef);
-
-		getPrevItemStockResponsesList = responseEntity.getBody();
-
-	if (getPrevItemStockResponsesList.size() < tempItemList.size()) {
-			
-			List<GetPrevItemStockResponse> tempPrevItemStockList=new ArrayList<GetPrevItemStockResponse>();
-			
-			
-			for(int i=0;i<tempItemList.size();i++) {
-				
-				Item  tempItem =tempItemList.get(i);
-				
-				
-				GetPrevItemStockResponse tempItemStockResponse=new GetPrevItemStockResponse();
-				
-				tempItemStockResponse.setItemId(tempItem.getId());
-				tempItemStockResponse.setItemName(tempItem.getItemName());
-				
-				
-				List<StockDetail> stockDetailsList = new ArrayList<StockDetail>();
-
-				for (int j = 1; j <= settingValue; j++) {
-					
-					
-						
-					StockDetail stockDetail = new StockDetail();
-
-					stockDetail.setFrStockId(0);
-					stockDetail.setMaxQty(0);
-					stockDetail.setMinQty(0);
-					stockDetail.setType(j);
-
-					stockDetailsList.add(stockDetail);
-					
-				}
-				
-				tempItemStockResponse.setStockDetails(stockDetailsList);
-				
-				for(int j=0;j<getPrevItemStockResponsesList.size();j++) {
-					
-					if(getPrevItemStockResponsesList.get(j).getItemId()==tempItemList.get(i).getId()) {
-						
-						tempItemStockResponse=getPrevItemStockResponsesList.get(j);
-					}
-					
-				}
-			
-				tempPrevItemStockList.add(tempItemStockResponse);
-				
 			}
+
+			String itemIds = stringBuilder.toString();
+			itemIds = itemIds.substring(0, itemIds.length() - 1);
+
+			System.out.println("itemId :" + itemIds);
+
+			map = new LinkedMultiValueMap<String, Object>();
 			
-			System.out.println("\n\n ####### Updated Stock List is: "+tempPrevItemStockList.toString());
-		
-		
+			map.add("itemId", itemIds);
 
 			getPrevItemStockResponsesList = new ArrayList<GetPrevItemStockResponse>();
 
-			getPrevItemStockResponsesList=tempPrevItemStockList;
+			ParameterizedTypeReference<List<GetPrevItemStockResponse>> typeRef = new ParameterizedTypeReference<List<GetPrevItemStockResponse>>() {
+			};
+
+			ResponseEntity<List<GetPrevItemStockResponse>> responseEntity = restTemplate.exchange(
+					Constants.url + "getAllFrItemConfPost", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			getPrevItemStockResponsesList = responseEntity.getBody();
+
+			if (getPrevItemStockResponsesList.size() < tempItemList.size()) {
+
+				List<GetPrevItemStockResponse> tempPrevItemStockList = new ArrayList<GetPrevItemStockResponse>();
+
+				for (int i = 0; i < tempItemList.size(); i++) {
+
+					Item tempItem = tempItemList.get(i);
+
+					GetPrevItemStockResponse tempItemStockResponse = new GetPrevItemStockResponse();
+
+					tempItemStockResponse.setItemId(tempItem.getId());
+					tempItemStockResponse.setItemName(tempItem.getItemName());
+
+					List<StockDetail> stockDetailsList = new ArrayList<StockDetail>();
+
+					for (int j = 1; j <= settingValue; j++) {
+
+						StockDetail stockDetail = new StockDetail();
+
+						stockDetail.setFrStockId(0);
+						stockDetail.setMaxQty(0);
+						stockDetail.setMinQty(0);
+						stockDetail.setType(j);
+
+						stockDetailsList.add(stockDetail);
+
+					}
+
+					tempItemStockResponse.setStockDetails(stockDetailsList);
+
+					for (int j = 0; j < getPrevItemStockResponsesList.size(); j++) {
+
+						if (getPrevItemStockResponsesList.get(j).getItemId() == tempItemList.get(i).getId()) {
+
+							tempItemStockResponse = getPrevItemStockResponsesList.get(j);
+						}
+
+					}
+
+					tempPrevItemStockList.add(tempItemStockResponse);
+
+				}
+
+				System.out.println("\n\n ####### Updated Stock List is: " + tempPrevItemStockList.toString());
+
+				getPrevItemStockResponsesList = new ArrayList<GetPrevItemStockResponse>();
+
+				getPrevItemStockResponsesList = tempPrevItemStockList;
+			}
+
+			itemList = new ArrayList<Item>(Arrays.asList(item));
+
+			System.out.println(" item Stock response  List " + getPrevItemStockResponsesList.toString());
+			System.out.println("item list size= " + getPrevItemStockResponsesList.size());
+
+			model.addObject("catId", catId);
+			model.addObject("itemList", getPrevItemStockResponsesList);
+
+		} catch (Exception e) {
+
+			System.out.println("exe in item get By CatId frItemConf " + e.getMessage());
+			e.printStackTrace();
 		}
-		
-
-		itemList = new ArrayList<Item>(Arrays.asList(item));
-
-		System.out.println(" item Stock response  List " + getPrevItemStockResponsesList.toString());
-		System.out.println("item list size= " + getPrevItemStockResponsesList.size());
-
-		mav.addObject("catId", catId);
-		mav.addObject("itemList", getPrevItemStockResponsesList);
 
 		return "redirect:/showFrItemConfiguration";
 
 	}
-
+	
+	
 	@RequestMapping(value = "/frItemStockConfigurationProcess", method = RequestMethod.POST)
-	public String frItemStockProcess(HttpServletRequest request, HttpServletResponse response) {
-		ModelAndView mav = new ModelAndView("items/itemlist");
+	public String frItemStockInsertProcess(HttpServletRequest request, HttpServletResponse response) {
+	//ModelAndView mav = new ModelAndView("items/itemlist");
 
 		List<FrItemStock> frItemStocksList = new ArrayList<FrItemStock>();
 
 		try {
 			
-			catId = Integer.parseInt(request.getParameter("cat_name"));
-			
-		} catch (Exception e) {
-			
-			System.out.println("exe in fr Item  stock process  " + e.getMessage());
-		}
+			RestTemplate rest = new RestTemplate();
 
-		ZoneId zId = ZoneId.of("Asia/Calcutta");
-		System.out.println("using json controller before Loop " + LocalTime.now(zId));
+
+			//catId = Integer.parseInt(request.getParameter("cat_name"));
 
 		for (int i = 0; i < getPrevItemStockResponsesList.size(); i++) {
 
@@ -376,16 +371,33 @@ public class ItemController {
 
 			}
 		}
-		System.out.println("using json controller after Loop " + LocalTime.now(zId));
+		
 
 		System.out.println("Fr item Stock " + frItemStocksList.toString());
 		System.out.println("fr item stock size " + frItemStocksList.size());
 
-		RestTemplate rest = new RestTemplate();
 		ErrorMessage errorResponse = rest.postForObject(Constants.url + "frItemStockPost", frItemStocksList,
 				ErrorMessage.class);
+		
+		
+		//sachin
+		
+		
+		
+		
+		//sachin
+		
+		
+		
+		
+		} catch (Exception e) {
 
-		return "redirect:/getItemsbyCatIdProcess";// changed
+			System.out.println("exe in fr Item  stock insert  process  " + e.getMessage());
+			
+			e.printStackTrace();
+		}
+		
+		return "redirect:/getItemsbyCatIdProcess";
 
 	}
 
@@ -431,9 +443,8 @@ public class ItemController {
 		double itemSortId = Double.parseDouble(request.getParameter("item_sort_id"));
 
 		int grnTwo = Integer.parseInt(request.getParameter("grn_two"));
-		
+
 		int itemShelfLife = Integer.parseInt(request.getParameter("item_shelf_life"));
-		
 
 		logger.info("Add new item request mapping.");
 
@@ -462,7 +473,7 @@ public class ItemController {
 		map.add("itemSortId", itemSortId);
 		map.add("grnTwo", grnTwo);
 		map.add("itemShelfLife", itemShelfLife);
-		
+
 		ErrorMessage errorResponse = rest.postForObject("" + Constants.url + "insertItem", map, ErrorMessage.class);
 		System.out.println(errorResponse.toString());
 		System.out.println("Response:" + errorResponse.getMessage());
@@ -476,9 +487,8 @@ public class ItemController {
 		System.out.println("List Item Request");
 		ModelAndView mav = new ModelAndView("items/itemlist");
 		Constants.mainAct = 4;
-		Constants.subAct=43;
- 		
-		
+		Constants.subAct = 43;
+
 		RestTemplate restTemplate = new RestTemplate();
 		// CategoryListResponse
 		categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory", CategoryListResponse.class);
@@ -693,7 +703,7 @@ public class ItemController {
 
 		int grnTwo = Integer.parseInt(request.getParameter("grn_two"));
 		int id = Integer.parseInt(request.getParameter("itemId"));
-		int shelfLife=Integer.parseInt(request.getParameter("item_shelf_life"));
+		int shelfLife = Integer.parseInt(request.getParameter("item_shelf_life"));
 
 		logger.info("Add new item request mapping.");
 
@@ -727,7 +737,7 @@ public class ItemController {
 		map.add("itemSortId", itemSortId);
 		map.add("grnTwo", grnTwo);
 		map.add("id", id);
-		
+
 		map.add("itemShelfLife", shelfLife);
 		ErrorMessage errorResponse = rest.postForObject("" + Constants.url + "updateItem", map, ErrorMessage.class);
 

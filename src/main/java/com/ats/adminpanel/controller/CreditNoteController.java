@@ -34,7 +34,6 @@ public class CreditNoteController {
 	}
 
 	
-	
 	GetGrnGvnForCreditNoteList getGrnGvnForCreditNoteList;
 
 	List<GetGrnGvnForCreditNote> getGrnGvnForCreditNote;
@@ -58,9 +57,10 @@ public class CreditNoteController {
 
 			getGrnGvnForCreditNote = getGrnGvnForCreditNoteList.getGetGrnGvnForCreditNotes();
 			
-			
-			
 			System.out.println("grn gvn for credit note  : " + getGrnGvnForCreditNote.toString());
+
+			model.addObject("creditNoteList", getGrnGvnForCreditNote);
+
 
 		} catch (Exception e) {
 
@@ -68,8 +68,6 @@ public class CreditNoteController {
 
 			e.printStackTrace();
 		}
-
-		model.addObject("creditNoteList", getGrnGvnForCreditNote);
 
 		return model;
 
@@ -90,12 +88,7 @@ public class CreditNoteController {
 
 			String[] grnGvnIdList = request.getParameterValues("select_to_credit");
 
-			for (int i = 0; i < grnGvnIdList.length; i++) {
-
-				System.out.println("selected grngvn Id " + grnGvnIdList[i]);
-
-			}
-
+			
 			List<GetGrnGvnForCreditNote> selectedCreditNote=new ArrayList<>();
 			
 			
@@ -120,7 +113,7 @@ public class CreditNoteController {
 			
 			List<PostCreditNoteHeader> creditHeaderList =new ArrayList<>();
 			
-			List<PostCreditNoteDetails> postCreditNoteDetails=new ArrayList<>();
+			//List<PostCreditNoteDetails> postCreditNoteDetails=new ArrayList<>();
 			
 			for(int i=0;i<selectedCreditNote.size();i++) {
 				
@@ -136,14 +129,9 @@ public class CreditNoteController {
 						
 						isRepeated=true;
 						
-						PostCreditNoteHeader postCreditHeaderMatched=new  PostCreditNoteHeader();
 												
 						List<PostCreditNoteDetails> postCreditNoteDetailsListMatched=creditHeader.getPostCreditNoteDetails();
 												
-						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-						Calendar cal = Calendar.getInstance();
-
-						java.sql.Date creditNoteDate = new java.sql.Date(Calendar.getInstance().getTime().getTime());
 						
 						DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 						
@@ -160,16 +148,16 @@ public class CreditNoteController {
 						
 						creditNoteDetail.setCgstPer(creditNote.getCgstPer());
 						float cgstRs=(creditNote.getCgstPer()*creditNote.getTaxableAmt())/100;
-						creditNoteDetail.setCgstRs(cgstRs);
+						creditNoteDetail.setCgstRs(roundUp(cgstRs));
 						
 						creditNoteDetail.setSgstPer(creditNote.getSgstPer());
 						float sgstRs=(creditNote.getSgstPer()*creditNote.getTaxableAmt())/100;
-						creditNoteDetail.setSgstRs(sgstRs);
+						creditNoteDetail.setSgstRs(roundUp(sgstRs));
 						
 
 						creditNoteDetail.setIgstPer(creditNote.getIgstPer());
 						float igstRs=(creditNote.getIgstPer()*creditNote.getTaxableAmt())/100;
-						creditNoteDetail.setIgstRs(igstRs);
+						creditNoteDetail.setIgstRs(roundUp(igstRs));
 						
 						creditNoteDetail.setDelStatus(0);
 						creditNoteDetail.setGrnGvnAmt(creditNote.getGrnGvnAmt());
@@ -257,20 +245,14 @@ public class CreditNoteController {
 					
 					creditNoteDetail.setCgstPer(creditNote.getCgstPer());
 					float cgstRs=(creditNote.getCgstPer()*creditNote.getTaxableAmt())/100;
-					System.out.println("getCgstPer  "+creditNoteDetail.getCgstPer());
-
-					System.out.println("cgst Rs "+cgstRs);
+					
 					creditNoteDetail.setCgstRs(cgstRs);
 					
 					
 					creditNoteDetail.setSgstPer(creditNote.getSgstPer());
 					float sgstRs=(creditNote.getSgstPer()*creditNote.getTaxableAmt())/100;
 					creditNoteDetail.setSgstRs(sgstRs);
-					System.out.println("getSgstPer  "+creditNoteDetail.getSgstPer());
-					System.out.println("getTaxableAmt  "+sgstRs);
-
-					System.out.println("sgstRs Rs "+sgstRs);
-
+					
 
 					creditNoteDetail.setIgstPer(creditNote.getIgstPer());
 					float igstRs=(creditNote.getIgstPer()*creditNote.getTaxableAmt())/100;
@@ -313,25 +295,16 @@ public class CreditNoteController {
 			
 			System.out.println("header List "+creditHeaderList.toString());
 			
-			
-			float totalCrnTaxableAmt = 0.0f;
-
-			
-			
 			PostCreditNoteHeaderList postCreditNoteHeaderList=new PostCreditNoteHeaderList();
-			
-			
+						
 			postCreditNoteHeaderList.setPostCreditNoteHeader(creditHeaderList);
 			
+			Info info=restTemplate.postForObject(Constants.url+"postCreditNote", postCreditNoteHeaderList,Info.class);
 			
-			//Info info=restTemplate.postForObject(Constants.url+"postCreditNote", postCreditNoteHeaderList,Info.class);
-			
-			
-			System.out.println("taxable amt =" + totalCrnTaxableAmt);
 			
 		} catch (Exception e) {
 		
-			System.out.println("Error in  : Insert Credit "+e.getMessage());
+			System.out.println("Error in  : Insert Credit Note "+e.getMessage());
 			
 			e.printStackTrace();
 			

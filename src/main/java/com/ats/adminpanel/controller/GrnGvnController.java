@@ -109,8 +109,6 @@ public class GrnGvnController {
 
 		} catch (Exception e) {
 
-			System.out.println("Error in Getting grn details " + e.getMessage());
-
 			e.printStackTrace();
 		}
 
@@ -135,7 +133,6 @@ public class GrnGvnController {
 			map.add("fromDate", gateGrnFromDate);
 			map.add("toDate", gateGrnToDate);
 			
-			System.out.println("OK ");
 
 			getGrnGvnDetailsList = new GetGrnGvnDetailsList();
 
@@ -182,11 +179,12 @@ public class GrnGvnController {
 
 		ModelAndView model = new ModelAndView("grngvn/gateGrn");
 
-		int grnId = Integer.parseInt(request.getParameter("grnId"));
-
-		int gateApproveLogin = Integer.parseInt(request.getParameter("approveGateLogin"));
-
+		
 		try {
+			
+			int grnId = Integer.parseInt(request.getParameter("grnId"));
+
+			int gateApproveLogin = Integer.parseInt(request.getParameter("approveGateLogin"));
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
@@ -199,23 +197,22 @@ public class GrnGvnController {
 
 			map.add("approveimedDateTimeGate", dateFormat.format(cal.getTime()));
 
-			map.add("approvedRemarkGate", "Def:Grn Accepted");
+			map.add("approvedRemarkGate", "");
 
-			map.add("grnGvnStatus", 2);
+			map.add("grnGvnStatus", Constants.AP_BY_GATE);
 
 			map.add("grnGvnId", grnId);
 
 			String info = restTemplate.postForObject(Constants.url + "updateGateGrn", map, String.class);
+			
 			System.out.println("after calling web service of gate grn agree ");
 
 		} catch (Exception e) {
 
-			 System.out.println("Error in Getting grn details " + e.getMessage());
-
-			e.printStackTrace();
+			 System.out.println("Error in insert Gat eGrn Process Agree " + e.getMessage());
+			 e.printStackTrace();
 		}
-		System.out.println("INSERT GATE GRN APPROVE : STATUS =2");
-
+		
 		return "redirect:/showGateGrnDetails";
 
 	}
@@ -226,10 +223,10 @@ public class GrnGvnController {
 
 		Constants.mainAct = 9;
 		Constants.subAct = 91;
-		System.out.println("using Ajax to call disagree");
 
 		ModelAndView model = new ModelAndView("grngvn/gateGrn");
 		try {
+			
 			int grnId = Integer.parseInt(request.getParameter("grnId"));
 
 			int gateApproveLogin = Integer.parseInt(request.getParameter("approveGateLogin"));
@@ -251,11 +248,11 @@ public class GrnGvnController {
 
 			map.add("approvedRemarkGate", gateRemark);
 
-			map.add("grnGvnStatus", 3);
+			map.add("grnGvnStatus", Constants.DIS_BY_GATE);
 
 			map.add("grnGvnId", grnId);
 
-			String info = restTemplate.postForObject(Constants.url + "updateGateGrn", map, String.class);
+			String updateGateGrn = restTemplate.postForObject(Constants.url + "updateGateGrn", map, String.class);
 
 			System.out.println("after calling web service of disagree");
 
@@ -281,6 +278,7 @@ public class GrnGvnController {
 		ModelAndView model = new ModelAndView("grngvn/gateGrn");
 
 		try {
+			
 			String[] grnIdList = request.getParameterValues("select_to_agree");
 
 			RestTemplate restTemplate = new RestTemplate();
@@ -294,6 +292,7 @@ public class GrnGvnController {
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 
 			for (int i = 0; i < grnIdList.length; i++) {
+				
 				for (int j = 0; j < getGrnGvnDetails.size(); j++) {
 
 					if (Integer.parseInt(grnIdList[i]) == getGrnGvnDetails.get(j).getGrnGvnId()) {
@@ -312,40 +311,39 @@ public class GrnGvnController {
 
 						GrnGvn postGrnGvn = new GrnGvn();
 
-						postGrnGvn.setGrnGvnDate(grnGvnDate);// 1
+						postGrnGvn.setGrnGvnDate(grnGvnDate);
 						postGrnGvn.setGrnGvnId(getGrnGvnDetails.get(j).getGrnGvnId());
-						postGrnGvn.setBillNo(getGrnGvnDetails.get(j).getBillNo());// 2
-						postGrnGvn.setFrId(getGrnGvnDetails.get(j).getFrId());// 3
-						postGrnGvn.setItemId(getGrnGvnDetails.get(j).getItemId());// 4
-						postGrnGvn.setItemRate(getGrnGvnDetails.get(j).getItemRate());// 5
-						postGrnGvn.setItemMrp(getGrnGvnDetails.get(j).getItemMrp());// 6
-						postGrnGvn.setGrnGvnQty(getGrnGvnDetails.get(j).getGrnGvnQty());// 7
-						postGrnGvn.setGrnType(getGrnGvnDetails.get(j).getGrnType());// 9
-						postGrnGvn.setIsGrn(getGrnGvnDetails.get(j).getIsGrn());// 10
-						postGrnGvn.setIsGrnEdit(getGrnGvnDetails.get(j).getIsGrnEdit());// 11
-						postGrnGvn.setGrnGvnEntryDateTime(getGrnGvnDetails.get(j).getGrnGvnEntryDateTime());// 12
-						postGrnGvn.setFrGrnGvnRemark(getGrnGvnDetails.get(j).getFrGrnGvnRemark());// 13
-						postGrnGvn.setGvnPhotoUpload1(getGrnGvnDetails.get(j).getGvnPhotoUpload1());// 14
-						postGrnGvn.setGvnPhotoUpload2(getGrnGvnDetails.get(j).getGvnPhotoUpload2());// 15
-						postGrnGvn.setGrnGvnStatus(2);// 16
-						postGrnGvn.setApprovedLoginGate(aproveGateLogin);// 17dateFormat.format(cal.getTime()));//18
-						postGrnGvn.setApprovedRemarkGate("Def: Grn Approved By Gate");// 19
+						postGrnGvn.setBillNo(getGrnGvnDetails.get(j).getBillNo());
+						postGrnGvn.setFrId(getGrnGvnDetails.get(j).getFrId());
+						postGrnGvn.setItemId(getGrnGvnDetails.get(j).getItemId());
+						postGrnGvn.setItemRate(getGrnGvnDetails.get(j).getItemRate());
+						postGrnGvn.setItemMrp(getGrnGvnDetails.get(j).getItemMrp());
+						postGrnGvn.setGrnGvnQty(getGrnGvnDetails.get(j).getGrnGvnQty());
+						postGrnGvn.setGrnType(getGrnGvnDetails.get(j).getGrnType());
+						postGrnGvn.setIsGrn(getGrnGvnDetails.get(j).getIsGrn());
+						postGrnGvn.setIsGrnEdit(getGrnGvnDetails.get(j).getIsGrnEdit());
+						postGrnGvn.setGrnGvnEntryDateTime(getGrnGvnDetails.get(j).getGrnGvnEntryDateTime());
+						postGrnGvn.setFrGrnGvnRemark(getGrnGvnDetails.get(j).getFrGrnGvnRemark());
+						postGrnGvn.setGvnPhotoUpload1(getGrnGvnDetails.get(j).getGvnPhotoUpload1());
+						postGrnGvn.setGvnPhotoUpload2(getGrnGvnDetails.get(j).getGvnPhotoUpload2());
+						postGrnGvn.setGrnGvnStatus(Constants.AP_BY_GATE);
+						postGrnGvn.setApprovedLoginGate(aproveGateLogin);
+						postGrnGvn.setApprovedRemarkGate("Def: Grn Approved By Gate");
 						postGrnGvn.setApproveimedDateTimeGate(dateFormat.format(cal.getTime()));
 
-						postGrnGvn.setApprovedLoginStore(getGrnGvnDetails.get(j).getApprovedLoginStore());// 20
-						postGrnGvn.setApprovedDateTimeStore(getGrnGvnDetails.get(j).getApprovedDateTimeStore());// 21
-						postGrnGvn.setApprovedRemarkStore(getGrnGvnDetails.get(j).getApprovedRemarkStore());// 22
-						postGrnGvn.setApprovedLoginAcc(getGrnGvnDetails.get(j).getApprovedLoginAcc());// 23
-						postGrnGvn.setGrnApprovedDateTimeAcc(getGrnGvnDetails.get(j).getGrnApprovedDateTimeAcc());// 24
-						postGrnGvn.setApprovedRemarkAcc(getGrnGvnDetails.get(j).getApprovedRemarkAcc());// 25
+						postGrnGvn.setApprovedLoginStore(getGrnGvnDetails.get(j).getApprovedLoginStore());
+						postGrnGvn.setApprovedDateTimeStore(getGrnGvnDetails.get(j).getApprovedDateTimeStore());
+						postGrnGvn.setApprovedRemarkStore(getGrnGvnDetails.get(j).getApprovedRemarkStore());
+						postGrnGvn.setApprovedLoginAcc(getGrnGvnDetails.get(j).getApprovedLoginAcc());
+						postGrnGvn.setGrnApprovedDateTimeAcc(getGrnGvnDetails.get(j).getGrnApprovedDateTimeAcc());
+						postGrnGvn.setApprovedRemarkAcc(getGrnGvnDetails.get(j).getApprovedRemarkAcc());
 
-						postGrnGvn.setDelStatus(0);// 26
-						postGrnGvn.setGrnGvnQtyAuto(0);// 27
+						postGrnGvn.setDelStatus(0);
+						postGrnGvn.setGrnGvnQtyAuto(0);
 
 						postGrnGvn.setGrnGvnAmt(getGrnGvnDetails.get(j).getGrnGvnAmt());
 
 						// newly added
-
 						postGrnGvn.setIsTallySync(0);
 						postGrnGvn.setBaseRate(getGrnGvnDetails.get(j).getBaseRate());
 						postGrnGvn.setSgstPer(getGrnGvnDetails.get(j).getSgstPer());
@@ -357,7 +355,7 @@ public class GrnGvnController {
 						postGrnGvn.setFinalAmt(getGrnGvnDetails.get(j).getFinalAmt());
 						postGrnGvn.setRoundUpAmt(getGrnGvnDetails.get(j).getRoundUpAmt());
 
-						// AGAIN ADDED
+						// ADDED
 						postGrnGvn.setMenuId(getGrnGvnDetails.get(j).getMenuId());
 						postGrnGvn.setCatId(getGrnGvnDetails.get(j).getCatId());
 						postGrnGvn.setInvoiceNo(getGrnGvnDetails.get(j).getInvoiceNo());
@@ -365,14 +363,12 @@ public class GrnGvnController {
 
 						postGrnGvnList.add(postGrnGvn);
 
-						System.out.println("Done it inside if ");
 
 					} // end of if
 
 					else {
 
-						// System.out.println("No match found " +
-						// getGrnGvnDetails.get(j).getGrnGvnId());
+						
 					} // end of else
 
 				} // inner for
@@ -380,24 +376,20 @@ public class GrnGvnController {
 				postGrnList.setGrnGvn(postGrnGvnList);
 
 			} // outer for
-			System.out.println("after for");
 
-			// postGrnList.setGrnGvn(postGrnGvnList);
-
+			
 			System.out.println("post grn for rest----- " + postGrnList.toString());
 			System.out.println("post grn for rest size " + postGrnList.getGrnGvn().size());
 
-			Info info = restTemplate.postForObject(Constants.url + "insertGrnGvn", postGrnList, Info.class);
+			Info insertGrn = restTemplate.postForObject(Constants.url + "insertGrnGvn", postGrnList, Info.class);
 
 			
 		} catch (Exception e) {
 
-			System.out.println("Exce in Insert Grn " + e.getMessage());
+			System.out.println("Exce in Insert Grn Gate  " + e.getMessage());
 			e.printStackTrace();
 
 		}
-
-		System.out.println("INSERT GATE GRN BY CHECKBOXEX : SUBMIT   STATUS =2");
 
 		return "redirect:/showGateGrnDetails";
 
@@ -414,7 +406,7 @@ public class GrnGvnController {
 
 		} catch (Exception e) {
 
-			System.out.println("Error in Getting grn details " + e.getMessage());
+			System.out.println("Error in showing Acc grn Page " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -437,9 +429,7 @@ public class GrnGvnController {
 
 		try {
 
-			System.out.println("from Date using ajax  :" + accGrnFromDate);
-			System.out.println("to Date using ajax  : " + accGrnToDate);
-
+			
 			map.add("fromDate", accGrnFromDate);
 
 			map.add("toDate", accGrnToDate);
@@ -456,7 +446,6 @@ public class GrnGvnController {
 			getAllRemarks = new ArrayList<>();
 			getAllRemarks = allRemarksList.getGetAllRemarks();
 
-			System.out.println("remark list " + getAllRemarks.toString());
 
 			model.addObject("remarkList", getAllRemarks);
 
@@ -468,7 +457,7 @@ public class GrnGvnController {
 
 		} catch (Exception e) {
 
-			System.out.println("Error in Getting gvn details " + e.getMessage());
+			System.out.println("Error in Getting grn details " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -499,11 +488,9 @@ public class GrnGvnController {
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 			System.out.println("grn details line 465 " + getGrnGvnDetails.toString());
 
-			System.out.println("before for");
 
 			for (int i = 0; i < grnIdList.length; i++) {
-				System.out.println("grn id List" + grnIdList[i]);
-				System.out.println("detail list = " + getGrnGvnDetails.get(i).getGrnGvnId());
+			
 				for (int j = 0; j < getGrnGvnDetails.size(); j++) {
 
 					if (Integer.parseInt(grnIdList[i]) == getGrnGvnDetails.get(j).getGrnGvnId()) {
@@ -513,14 +500,12 @@ public class GrnGvnController {
 
 						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						Calendar cal = Calendar.getInstance();
-						System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
 						DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
 						java.util.Date grnGvnDate = getGrnGvnDetails.get(j).getGrnGvnDate();
 
 						grnGvnDate = Df.parse(grnGvnDate.toString());
-						System.out.println("grnGvnDate= " + grnGvnDate);
 
 						GrnGvn postGrnGvn = new GrnGvn();
 
@@ -539,7 +524,7 @@ public class GrnGvnController {
 						postGrnGvn.setFrGrnGvnRemark(getGrnGvnDetails.get(j).getFrGrnGvnRemark());// 13
 						postGrnGvn.setGvnPhotoUpload1(getGrnGvnDetails.get(j).getGvnPhotoUpload1());// 14
 						postGrnGvn.setGvnPhotoUpload2(getGrnGvnDetails.get(j).getGvnPhotoUpload2());// 15
-						postGrnGvn.setGrnGvnStatus(6);// 16
+						postGrnGvn.setGrnGvnStatus(Constants.AP_BY_ACC);// 16
 						postGrnGvn.setApprovedLoginGate(getGrnGvnDetails.get(j).getApprovedLoginGate());// 17dateFormat.format(cal.getTime()));//18
 						postGrnGvn.setApprovedRemarkGate(getGrnGvnDetails.get(j).getApprovedRemarkGate());// 19
 						postGrnGvn.setApprovedLoginStore(getGrnGvnDetails.get(j).getApprovedLoginStore());// 20
@@ -592,18 +577,18 @@ public class GrnGvnController {
 				postGrnList.setGrnGvn(postGrnGvnList);
 
 			} // outer for
-			System.out.println("after for");
 
-			// postGrnList.setGrnGvn(postGrnGvnList);
+			
 
 			System.out.println("post grn for rest----- " + postGrnList.toString());
 			System.out.println("post grn for rest size " + postGrnList.getGrnGvn().size());
 
-			Info info = restTemplate.postForObject(Constants.url + "insertGrnGvn", postGrnList, Info.class);
+			Info insertAccGrn = restTemplate.postForObject(Constants.url + "insertGrnGvn", postGrnList, Info.class);
 
 		} catch (Exception e) {
 
-			System.out.println("Exce in Insert Grn " + e.getMessage());
+			System.out.println("Exce in Insert Acc Grn " + e.getMessage());
+			
 			e.printStackTrace();
 
 		}
@@ -619,16 +604,14 @@ public class GrnGvnController {
 		System.out.println("using a href to call insert account agree ");
 
 		ModelAndView model = new ModelAndView("grngvn/accGrn");
-
+		
+		try {
 		int grnId = Integer.parseInt(request.getParameter("grnId"));
 
 		int accApproveLogin = Integer.parseInt(request.getParameter("approveAccLogin"));
 
-		System.out.println("accApproveLogin =" + accApproveLogin);
+		
 
-		System.out.println("grnId =" + grnId);
-
-		try {
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
@@ -642,18 +625,17 @@ public class GrnGvnController {
 
 			map.add("approvedDateTimeAcc", dateFormat.format(cal.getTime()));
 
-			map.add("approvedRemarkAcc", "Def:Acc Grn Approved");
+			map.add("approvedRemarkAcc", "");
 
-			map.add("grnGvnStatus", 6);
+			map.add("grnGvnStatus", Constants.AP_BY_ACC);
 
 			map.add("grnGvnId", grnId);
 
-			String info = restTemplate.postForObject(Constants.url + "updateAccGrn", map, String.class);
-			System.out.println("after calling web service acc grn agree ");
+			String updateAccGrnAgree = restTemplate.postForObject(Constants.url + "updateAccGrn", map, String.class);
 
 		} catch (Exception e) {
 
-			// System.out.println("Error in Getting grn details " + e.getMessage());
+			System.out.println("Error in update Acc Grn Agree " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -697,17 +679,16 @@ public class GrnGvnController {
 
 			map.add("approvedRemarkAcc", accRemark);
 
-			map.add("grnGvnStatus", 7);
+			map.add("grnGvnStatus", Constants.DIS_BY_ACC);
 
 			map.add("grnGvnId", grnId);
 
-			String info = restTemplate.postForObject(Constants.url + "updateAccGrn", map, String.class);
+			String updateAccGrn = restTemplate.postForObject(Constants.url + "updateAccGrn", map, String.class);
 
-			System.out.println("after calling web service acc grn disagree ");
 
 		} catch (Exception e) {
 
-			System.out.println("Error in Getting grn details " + e.getMessage());
+			System.out.println("Error in update Acc Grn " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -748,10 +729,7 @@ public class GrnGvnController {
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		RestTemplate restTemplate = new RestTemplate();
-
-		System.out.println("from Date using ajax  :" + gateGvnFromDate);
-		System.out.println("to Date using ajax  : " + gateGvnToDate);
-
+		
 		try {
 
 			map.add("fromDate", gateGvnFromDate);
@@ -769,14 +747,12 @@ public class GrnGvnController {
 			getAllRemarks = new ArrayList<>();
 			getAllRemarks = allRemarksList.getGetAllRemarks();
 
-			System.out.println("remark list " + getAllRemarks.toString());
 
 			model.addObject("remarkList", getAllRemarks);
 
 			model.addObject("url", Constants.SPCAKE_IMAGE_URL);
 			model.addObject("gvnList", getGrnGvnDetails);
 
-			System.out.println("gvn  details " + getGrnGvnDetails.toString());
 
 		} catch (Exception e) {
 
@@ -806,10 +782,7 @@ public class GrnGvnController {
 		try {
 			String[] grnIdList = request.getParameterValues("select_to_agree");
 
-			for (int k = 0; k < grnIdList.length; k++) {
-				System.out.println("GVN id for gate approval " + grnIdList[k]);
-
-			}
+			
 
 			List<GrnGvn> postGrnGvnList = new ArrayList<GrnGvn>();
 
@@ -819,68 +792,55 @@ public class GrnGvnController {
 			System.out.println("grn details line 191 " + getGrnGvnDetails.toString());
 
 			for (int i = 0; i < grnIdList.length; i++) {
-				System.out.println("grn id List" + grnIdList[i]);
+
 				int apLoginGate = Integer.parseInt(request.getParameter("approve_gate_login" + grnIdList[i]));
 
-				System.out.println("approve login gate =" + apLoginGate);
 
-				System.out.println("detail list = " + getGrnGvnDetails.get(i).getGrnGvnId());
 				for (int j = 0; j < getGrnGvnDetails.size(); j++) {
 
 					if (Integer.parseInt(grnIdList[i]) == getGrnGvnDetails.get(j).getGrnGvnId()) {
 
 						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						Calendar cal = Calendar.getInstance();
-						System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
-						/*
-						 * SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); java.util.Date
-						 * date = null;
-						 * 
-						 * try { date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate()); } catch
-						 * (ParseException e) { // TODO Auto-generated catch block e.printStackTrace();
-						 * }
-						 * 
-						 * java.sql.Date grnGvnDate = new Date(date.getTime());
-						 */
+						
 
 						DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
 						java.util.Date grnGvnDate = getGrnGvnDetails.get(j).getGrnGvnDate();
 
 						grnGvnDate = Df.parse(grnGvnDate.toString());
-						System.out.println("grnGvnDate= " + grnGvnDate);
 
 						GrnGvn postGrnGvn = new GrnGvn();
 
-						postGrnGvn.setGrnGvnDate(grnGvnDate);// 1
+						postGrnGvn.setGrnGvnDate(grnGvnDate);
 						postGrnGvn.setGrnGvnId(getGrnGvnDetails.get(j).getGrnGvnId());
-						postGrnGvn.setBillNo(getGrnGvnDetails.get(j).getBillNo());// 2
-						postGrnGvn.setFrId(getGrnGvnDetails.get(j).getFrId());// 3
-						postGrnGvn.setItemId(getGrnGvnDetails.get(j).getItemId());// 4
-						postGrnGvn.setItemRate(getGrnGvnDetails.get(j).getItemRate());// 5
-						postGrnGvn.setItemMrp(getGrnGvnDetails.get(j).getItemMrp());// 6
-						postGrnGvn.setGrnGvnQty(getGrnGvnDetails.get(j).getGrnGvnQty());// 7
-						postGrnGvn.setGrnType(getGrnGvnDetails.get(j).getGrnType());// 9
-						postGrnGvn.setIsGrn(getGrnGvnDetails.get(j).getIsGrn());// 10
-						postGrnGvn.setIsGrnEdit(getGrnGvnDetails.get(j).getIsGrnEdit());// 11
-						postGrnGvn.setGrnGvnEntryDateTime(getGrnGvnDetails.get(j).getGrnGvnEntryDateTime());// 12
-						postGrnGvn.setFrGrnGvnRemark(getGrnGvnDetails.get(j).getFrGrnGvnRemark());// 13
-						postGrnGvn.setGvnPhotoUpload1(getGrnGvnDetails.get(j).getGvnPhotoUpload1());// 14
-						postGrnGvn.setGvnPhotoUpload2(getGrnGvnDetails.get(j).getGvnPhotoUpload2());// 15
-						postGrnGvn.setGrnGvnStatus(2);// 16
-						postGrnGvn.setApprovedLoginGate(apLoginGate);// 17dateFormat.format(cal.getTime()));//18
-						postGrnGvn.setApprovedRemarkGate("Def: GVN Approved by Gate");// 19
+						postGrnGvn.setBillNo(getGrnGvnDetails.get(j).getBillNo());
+						postGrnGvn.setFrId(getGrnGvnDetails.get(j).getFrId());
+						postGrnGvn.setItemId(getGrnGvnDetails.get(j).getItemId());
+						postGrnGvn.setItemRate(getGrnGvnDetails.get(j).getItemRate());
+						postGrnGvn.setItemMrp(getGrnGvnDetails.get(j).getItemMrp());
+						postGrnGvn.setGrnGvnQty(getGrnGvnDetails.get(j).getGrnGvnQty());
+						postGrnGvn.setGrnType(getGrnGvnDetails.get(j).getGrnType());
+						postGrnGvn.setIsGrn(getGrnGvnDetails.get(j).getIsGrn());
+						postGrnGvn.setIsGrnEdit(getGrnGvnDetails.get(j).getIsGrnEdit());
+						postGrnGvn.setGrnGvnEntryDateTime(getGrnGvnDetails.get(j).getGrnGvnEntryDateTime());
+						postGrnGvn.setFrGrnGvnRemark(getGrnGvnDetails.get(j).getFrGrnGvnRemark());
+						postGrnGvn.setGvnPhotoUpload1(getGrnGvnDetails.get(j).getGvnPhotoUpload1());
+						postGrnGvn.setGvnPhotoUpload2(getGrnGvnDetails.get(j).getGvnPhotoUpload2());
+						postGrnGvn.setGrnGvnStatus(Constants.AP_BY_GATE);
+						postGrnGvn.setApprovedLoginGate(apLoginGate);
+						postGrnGvn.setApprovedRemarkGate("");
 
-						postGrnGvn.setApprovedLoginStore(0);// 20
-						postGrnGvn.setApprovedDateTimeStore(getGrnGvnDetails.get(j).getApprovedDateTimeStore());// 21
-						postGrnGvn.setApprovedRemarkStore(getGrnGvnDetails.get(j).getApprovedRemarkStore());// 22
-						postGrnGvn.setApprovedLoginAcc(getGrnGvnDetails.get(j).getApprovedLoginAcc());// 23
-						postGrnGvn.setGrnApprovedDateTimeAcc(getGrnGvnDetails.get(j).getGrnApprovedDateTimeAcc());// 24
-						postGrnGvn.setApprovedRemarkAcc(getGrnGvnDetails.get(j).getApprovedRemarkAcc());// 25
+						postGrnGvn.setApprovedLoginStore(0);
+						postGrnGvn.setApprovedDateTimeStore(getGrnGvnDetails.get(j).getApprovedDateTimeStore());
+						postGrnGvn.setApprovedRemarkStore(getGrnGvnDetails.get(j).getApprovedRemarkStore());
+						postGrnGvn.setApprovedLoginAcc(getGrnGvnDetails.get(j).getApprovedLoginAcc());
+						postGrnGvn.setGrnApprovedDateTimeAcc(getGrnGvnDetails.get(j).getGrnApprovedDateTimeAcc());
+						postGrnGvn.setApprovedRemarkAcc(getGrnGvnDetails.get(j).getApprovedRemarkAcc());
 
-						postGrnGvn.setDelStatus(0);// 26
-						postGrnGvn.setGrnGvnQtyAuto(0);// 27
+						postGrnGvn.setDelStatus(0);
+						postGrnGvn.setGrnGvnQtyAuto(getGrnGvnDetails.get(j).getGrnGvnQtyAuto());
 						postGrnGvn.setApproveimedDateTimeGate(dateFormat.format(cal.getTime()));
 
 						postGrnGvn.setGrnGvnAmt(getGrnGvnDetails.get(j).getGrnGvnAmt());
@@ -905,14 +865,11 @@ public class GrnGvnController {
 
 						postGrnGvnList.add(postGrnGvn);
 
-						System.out.println("Done it inside if ");
-						System.out.println("grn ID=  " + grnIdList[i]);
 
 					} // end of if
 
 					else {
 
-						System.out.println("No match found " + getGrnGvnDetails.get(j).getGrnGvnId());
 					} // end of else
 
 				} // inner for
@@ -921,18 +878,16 @@ public class GrnGvnController {
 
 			} // outer for
 
-			// postGrnList.setGrnGvn(postGrnGvnList);
 
 			System.out.println("post grn for rest----- " + postGrnList.toString());
 			System.out.println("post grn for rest size " + postGrnList.getGrnGvn().size());
 
-			Info info = restTemplate.postForObject(Constants.url + "insertGrnGvn", postGrnList, Info.class);
+			Info insertGvn = restTemplate.postForObject(Constants.url + "insertGrnGvn", postGrnList, Info.class);
 
-			// System.out.println("Error in Getting grn details " + e.getMessage());
 
 		} catch (Exception e) {
 
-			System.out.println("Exce in Insert Grn " + e.getMessage());
+			System.out.println("Exce in Insert Gvn for Gate" + e.getMessage());
 			e.printStackTrace();
 
 		}
@@ -972,19 +927,18 @@ public class GrnGvnController {
 
 			map.add("approveimedDateTimeGate", dateFormat.format(cal.getTime()));
 
-			map.add("approvedRemarkGate", "Def:Gvn  Approved by gate");
+			map.add("approvedRemarkGate", "");
 
-			map.add("grnGvnStatus", 2);
+			map.add("grnGvnStatus", Constants.AP_BY_GATE);
 
 			map.add("grnGvnId", grnId);
 
-			String info = restTemplate.postForObject(Constants.url + "updateGateGrn", map, String.class);
+			String updateGvnForGate = restTemplate.postForObject(Constants.url + "updateGateGrn", map, String.class);
 
-			System.out.println("after calling web service ");
 
 		} catch (Exception e) {
 
-			System.out.println("Error in Getting grn details " + e.getMessage());
+			System.out.println("Error in Updating gvn for Gate " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -1001,21 +955,18 @@ public class GrnGvnController {
 		System.out.println("using Ajax to call disagree");
 
 		ModelAndView model = new ModelAndView("grngvn/gateGvn");
+	
 		try {
 			int grnId = Integer.parseInt(request.getParameter("grnId"));
 
 			int gateApproveLogin = Integer.parseInt(request.getParameter("approveGateLogin"));
 
 			String gateRemark = request.getParameter("gateRemark");
-			System.out.println("Gate Remark  " + gateRemark);
 
-			System.out.println("gateApproveLogin =" + gateApproveLogin);
 
-			System.out.println("grnId =" + grnId);
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
-			System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -1027,16 +978,15 @@ public class GrnGvnController {
 
 			map.add("approvedRemarkGate", gateRemark);
 
-			map.add("grnGvnStatus", 3);
+			map.add("grnGvnStatus", Constants.DIS_BY_GATE);
 
 			map.add("grnGvnId", grnId);
 
-			String info = restTemplate.postForObject(Constants.url + "updateGateGrn", map, String.class);
-			System.out.println("after calling web service of disagree gvn by gate");
+			String updateGvnByGateDisagree = restTemplate.postForObject(Constants.url + "updateGateGrn", map, String.class);
 
 		} catch (Exception e) {
 
-			// System.out.println("Error in Getting grn details " + e.getMessage());
+			 System.out.println("Error in update Gvn By Gate Disagree " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -1045,7 +995,7 @@ public class GrnGvnController {
 
 	}
 
-	// Store GVN started
+	// Store GVN 
 
 	@RequestMapping(value = "/showStoreGvn", method = RequestMethod.GET)
 	public ModelAndView showStoreGvn(HttpServletRequest request, HttpServletResponse response) {
@@ -1058,7 +1008,7 @@ public class GrnGvnController {
 
 		} catch (Exception e) {
 
-			System.out.println("Error in Getting grn details " + e.getMessage());
+			System.out.println("Error in showing store gvn page " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -1079,9 +1029,8 @@ public class GrnGvnController {
 		RestTemplate restTemplate = new RestTemplate();
 
 		try {
-			System.out.println("from Date using ajax  :" + storeGvnFromDate);
-			System.out.println("to Date using ajax  : " + storeGvnToDate);
-
+			
+		
 			map.add("fromDate", storeGvnFromDate);
 			map.add("toDate", storeGvnToDate);
 
@@ -1097,7 +1046,6 @@ public class GrnGvnController {
 			getAllRemarks = new ArrayList<>();
 			getAllRemarks = allRemarksList.getGetAllRemarks();
 
-			System.out.println("remark list " + getAllRemarks.toString());
 
 			model.addObject("remarkList", getAllRemarks);
 
@@ -1108,7 +1056,7 @@ public class GrnGvnController {
 
 		} catch (Exception e) {
 
-			System.out.println("Error in Getting gvn details " + e.getMessage());
+			System.out.println("Error in Getting store gvn details " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -1134,83 +1082,62 @@ public class GrnGvnController {
 		try {
 			String[] grnIdList = request.getParameterValues("select_to_agree");
 
-			for (int k = 0; k < grnIdList.length; k++) {
-				System.out.println("GVN id for gate approval " + grnIdList[k]);
-
-			}
-
+			
 			List<GrnGvn> postGrnGvnList = new ArrayList<GrnGvn>();
 
 			PostGrnGvnList postGrnList = new PostGrnGvnList();
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
-			System.out.println("grn details line 191 " + getGrnGvnDetails.toString());
 
-			System.out.println("before for");
 
 			for (int i = 0; i < grnIdList.length; i++) {
-				System.out.println("grn id List" + grnIdList[i]);
 				int apLoginStore = Integer.parseInt(request.getParameter("approve_store_login" + grnIdList[i]));
 
-				System.out.println("approve login Store =" + apLoginStore);
 
-				System.out.println("detail list = " + getGrnGvnDetails.get(i).getGrnGvnId());
 				for (int j = 0; j < getGrnGvnDetails.size(); j++) {
 
 					if (Integer.parseInt(grnIdList[i]) == getGrnGvnDetails.get(j).getGrnGvnId()) {
 
 						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						Calendar cal = Calendar.getInstance();
-						System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
-						/*
-						 * SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); java.util.Date
-						 * date = null;
-						 * 
-						 * try { date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate()); } catch
-						 * (ParseException e) { // TODO Auto-generated catch block e.printStackTrace();
-						 * }
-						 * 
-						 * java.sql.Date grnGvnDate = new Date(date.getTime());
-						 */
-
+						
 						DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
 						java.util.Date grnGvnDate = getGrnGvnDetails.get(j).getGrnGvnDate();
 
 						grnGvnDate = Df.parse(grnGvnDate.toString());
-						System.out.println("grnGvnDate= " + grnGvnDate);
 
 						GrnGvn postGrnGvn = new GrnGvn();
 
-						postGrnGvn.setGrnGvnDate(grnGvnDate);// 1
+						postGrnGvn.setGrnGvnDate(grnGvnDate);
 						postGrnGvn.setGrnGvnId(getGrnGvnDetails.get(j).getGrnGvnId());
-						postGrnGvn.setBillNo(getGrnGvnDetails.get(j).getBillNo());// 2
-						postGrnGvn.setFrId(getGrnGvnDetails.get(j).getFrId());// 3
-						postGrnGvn.setItemId(getGrnGvnDetails.get(j).getItemId());// 4
-						postGrnGvn.setItemRate(getGrnGvnDetails.get(j).getItemRate());// 5
-						postGrnGvn.setItemMrp(getGrnGvnDetails.get(j).getItemMrp());// 6
-						postGrnGvn.setGrnGvnQty(getGrnGvnDetails.get(j).getGrnGvnQty());// 7
-						postGrnGvn.setGrnType(getGrnGvnDetails.get(j).getGrnType());// 9
-						postGrnGvn.setIsGrn(getGrnGvnDetails.get(j).getIsGrn());// 10
-						postGrnGvn.setIsGrnEdit(getGrnGvnDetails.get(j).getIsGrnEdit());// 11
-						postGrnGvn.setGrnGvnEntryDateTime(getGrnGvnDetails.get(j).getGrnGvnEntryDateTime());// 12
-						postGrnGvn.setFrGrnGvnRemark(getGrnGvnDetails.get(j).getFrGrnGvnRemark());// 13
-						postGrnGvn.setGvnPhotoUpload1(getGrnGvnDetails.get(j).getGvnPhotoUpload1());// 14
-						postGrnGvn.setGvnPhotoUpload2(getGrnGvnDetails.get(j).getGvnPhotoUpload2());// 15
-						postGrnGvn.setGrnGvnStatus(4);// 16
-						postGrnGvn.setApprovedLoginGate(getGrnGvnDetails.get(j).getApprovedLoginGate());// 17dateFormat.format(cal.getTime()));//18
-						postGrnGvn.setApprovedRemarkGate(getGrnGvnDetails.get(j).getApprovedRemarkGate());// 19
+						postGrnGvn.setBillNo(getGrnGvnDetails.get(j).getBillNo());
+						postGrnGvn.setFrId(getGrnGvnDetails.get(j).getFrId());
+						postGrnGvn.setItemId(getGrnGvnDetails.get(j).getItemId());
+						postGrnGvn.setItemRate(getGrnGvnDetails.get(j).getItemRate());
+						postGrnGvn.setItemMrp(getGrnGvnDetails.get(j).getItemMrp());
+						postGrnGvn.setGrnGvnQty(getGrnGvnDetails.get(j).getGrnGvnQty());
+						postGrnGvn.setGrnType(getGrnGvnDetails.get(j).getGrnType());
+						postGrnGvn.setIsGrn(getGrnGvnDetails.get(j).getIsGrn());
+						postGrnGvn.setIsGrnEdit(getGrnGvnDetails.get(j).getIsGrnEdit());
+						postGrnGvn.setGrnGvnEntryDateTime(getGrnGvnDetails.get(j).getGrnGvnEntryDateTime());
+						postGrnGvn.setFrGrnGvnRemark(getGrnGvnDetails.get(j).getFrGrnGvnRemark());
+						postGrnGvn.setGvnPhotoUpload1(getGrnGvnDetails.get(j).getGvnPhotoUpload1());
+						postGrnGvn.setGvnPhotoUpload2(getGrnGvnDetails.get(j).getGvnPhotoUpload2());
+						postGrnGvn.setGrnGvnStatus(Constants.AP_BY_STORE);
+						postGrnGvn.setApprovedLoginGate(getGrnGvnDetails.get(j).getApprovedLoginGate());
+						postGrnGvn.setApprovedRemarkGate(getGrnGvnDetails.get(j).getApprovedRemarkGate());
 
-						postGrnGvn.setApprovedLoginStore(apLoginStore);// 20
-						postGrnGvn.setApprovedDateTimeStore(dateFormat.format(cal.getTime()));// 21
-						postGrnGvn.setApprovedRemarkStore("Def: Approved by Store");// 22
-						postGrnGvn.setApprovedLoginAcc(getGrnGvnDetails.get(j).getApprovedLoginAcc());// 23
-						postGrnGvn.setGrnApprovedDateTimeAcc(getGrnGvnDetails.get(j).getGrnApprovedDateTimeAcc());// 24
+						postGrnGvn.setApprovedLoginStore(apLoginStore);
+						postGrnGvn.setApprovedDateTimeStore(dateFormat.format(cal.getTime()));
+						postGrnGvn.setApprovedRemarkStore("Def: Approved by Store");
+						postGrnGvn.setApprovedLoginAcc(getGrnGvnDetails.get(j).getApprovedLoginAcc());
+						postGrnGvn.setGrnApprovedDateTimeAcc(getGrnGvnDetails.get(j).getGrnApprovedDateTimeAcc());
 						postGrnGvn.setApprovedRemarkAcc(getGrnGvnDetails.get(j).getApprovedRemarkAcc());// 25
 
-						postGrnGvn.setDelStatus(0);// 26
-						postGrnGvn.setGrnGvnQtyAuto(0);// 27
+						postGrnGvn.setDelStatus(0);
+						postGrnGvn.setGrnGvnQtyAuto(getGrnGvnDetails.get(j).getGrnGvnQtyAuto());
 						postGrnGvn.setApproveimedDateTimeGate(getGrnGvnDetails.get(j).getApproveimedDateTimeGate());
 
 						postGrnGvn.setGrnGvnAmt(getGrnGvnDetails.get(j).getGrnGvnAmt());
@@ -1236,14 +1163,11 @@ public class GrnGvnController {
 
 						postGrnGvnList.add(postGrnGvn);
 
-						System.out.println("Done it inside if ");
-						System.out.println("grn ID=  " + grnIdList[i]);
-
+					
 					} // end of if
 
 					else {
 
-						System.out.println("No match found " + getGrnGvnDetails.get(j).getGrnGvnId());
 					} // end of else
 
 				} // inner for
@@ -1253,18 +1177,16 @@ public class GrnGvnController {
 			} // outer for
 			System.out.println("after for");
 
-			// postGrnList.setGrnGvn(postGrnGvnList);
 
 			System.out.println("post grn for rest----- " + postGrnList.toString());
 			System.out.println("post grn for rest size " + postGrnList.getGrnGvn().size());
 
 			Info info = restTemplate.postForObject(Constants.url + "insertGrnGvn", postGrnList, Info.class);
 
-			// System.out.println("Error in Getting grn details " + e.getMessage());
 
 		} catch (Exception e) {
 
-			System.out.println("Exce in Insert Grn " + e.getMessage());
+			System.out.println("Exce in Insert store gvn " + e.getMessage());
 			e.printStackTrace();
 
 		}
@@ -1281,19 +1203,17 @@ public class GrnGvnController {
 
 		ModelAndView model = new ModelAndView("grngvn/storeGvn");
 
+		try {
+
 		int grnId = Integer.parseInt(request.getParameter("grnId"));
 
 		int storeApproveLogin = Integer.parseInt(request.getParameter("approveStoreLogin"));
 
-		System.out.println("gateApproveLogin =" + storeApproveLogin);
+		
 
-		System.out.println("grnId =" + grnId);
-
-		try {
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
-			System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -1303,18 +1223,17 @@ public class GrnGvnController {
 
 			map.add("approvedDateTimeStore", dateFormat.format(cal.getTime()));
 
-			map.add("approvedRemarkStore", "Def:Gvn  Approved by Store");
+			map.add("approvedRemarkStore", "");
 
-			map.add("grnGvnStatus", 4);
+			map.add("grnGvnStatus", Constants.AP_BY_STORE);
 
 			map.add("grnGvnId", grnId);
 
-			String info = restTemplate.postForObject(Constants.url + "updateStoreGvn", map, String.class);
-			System.out.println("after calling web service ");
+			String updateStoreGvn = restTemplate.postForObject(Constants.url + "updateStoreGvn", map, String.class);
 
 		} catch (Exception e) {
 
-			System.out.println("Error in Getting grn details " + e.getMessage());
+			System.out.println("Error in update Store Gvn " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -1328,24 +1247,20 @@ public class GrnGvnController {
 
 		Constants.mainAct = 12;
 		Constants.subAct = 122;
-		System.out.println("using Ajax to call disagree");
 
 		ModelAndView model = new ModelAndView("grngvn/storeGvn");
 		try {
+			
 			int grnId = Integer.parseInt(request.getParameter("grnId"));
 
 			int storeApproveLogin = Integer.parseInt(request.getParameter("approveStoreLogin"));
 
 			String storeRemark = request.getParameter("storeRemark");
-			System.out.println("storeRemark Remark  " + storeRemark);
-
-			System.out.println("storeApproveLogin =" + storeApproveLogin);
-
-			System.out.println("grnId =" + grnId);
+			
+			
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
-			System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -1357,16 +1272,15 @@ public class GrnGvnController {
 
 			map.add("approvedRemarkStore", storeRemark);
 
-			map.add("grnGvnStatus", 5);
+			map.add("grnGvnStatus", Constants.DIS_BY_STORE);
 
 			map.add("grnGvnId", grnId);
 
-			String info = restTemplate.postForObject(Constants.url + "updateStoreGvn", map, String.class);
-			System.out.println("after calling web service of disagree gvn by gate");
+			String updateStoreGvn = restTemplate.postForObject(Constants.url + "updateStoreGvn", map, String.class);
 
 		} catch (Exception e) {
 
-			System.out.println("Error in Getting grn details " + e.getMessage());
+			System.out.println("Error in update Store Gvn " + e.getMessage());
 
 			e.printStackTrace();
 		}
@@ -1388,8 +1302,7 @@ public class GrnGvnController {
 
 		} catch (Exception e) {
 
-			System.out.println("Error in Getting grn details " + e.getMessage());
-
+			System.out.println("Error in showing page acc gvn  " + e.getMessage());
 			e.printStackTrace();
 		}
 
@@ -1409,9 +1322,7 @@ public class GrnGvnController {
 		RestTemplate restTemplate = new RestTemplate();
 
 		try {
-			System.out.println("from Date using ajax  :" + accGvnFromDate);
-			System.out.println("to Date using ajax  : " + accGvnToDate);
-
+			
 			map.add("fromDate", accGvnFromDate);
 			map.add("toDate", accGvnToDate);
 
@@ -1427,25 +1338,24 @@ public class GrnGvnController {
 			getAllRemarks = new ArrayList<>();
 			getAllRemarks = allRemarksList.getGetAllRemarks();
 
-			System.out.println("remark list " + getAllRemarks.toString());
 
 			model.addObject("remarkList", getAllRemarks);
 
 			model.addObject("url", Constants.SPCAKE_IMAGE_URL);
 			model.addObject("gvnList", getGrnGvnDetails);
+			
+			model.addObject("fromDate", accGvnFromDate);
+			model.addObject("toDate", accGvnToDate);
 
-			System.out.println("gvn  details " + getGrnGvnDetails.toString());
 
 		} catch (Exception e) {
 
-			System.out.println("Error in Getting gvn details " + e.getMessage());
+			System.out.println("Error in Getting Acc  gvn details " + e.getMessage());
 
 			e.printStackTrace();
 		}
 
-		model.addObject("fromDate", accGvnFromDate);
-		model.addObject("toDate", accGvnToDate);
-
+		
 		return model;
 
 	}
@@ -1465,83 +1375,63 @@ public class GrnGvnController {
 		try {
 			String[] grnIdList = request.getParameterValues("select_to_agree");
 
-			for (int k = 0; k < grnIdList.length; k++) {
-				System.out.println("GVN id for gate approval " + grnIdList[k]);
-
-			}
-
+			
 			List<GrnGvn> postGrnGvnList = new ArrayList<GrnGvn>();
 
 			PostGrnGvnList postGrnList = new PostGrnGvnList();
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
-			System.out.println("grn details line 191 " + getGrnGvnDetails.toString());
 
-			System.out.println("before for");
 
 			for (int i = 0; i < grnIdList.length; i++) {
-				System.out.println("grn id List" + grnIdList[i]);
+				
 				int apLoginAcc = Integer.parseInt(request.getParameter("approve_acc_login" + grnIdList[i]));
 
-				System.out.println("approve login apLoginAcc =" + apLoginAcc);
-
-				System.out.println("detail list = " + getGrnGvnDetails.get(i).getGrnGvnId());
 				for (int j = 0; j < getGrnGvnDetails.size(); j++) {
 
 					if (Integer.parseInt(grnIdList[i]) == getGrnGvnDetails.get(j).getGrnGvnId()) {
 
 						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 						Calendar cal = Calendar.getInstance();
-						System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
-						/*
-						 * SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd"); java.util.Date
-						 * date = null;
-						 * 
-						 * try { date = sdf.parse(getGrnGvnDetails.get(j).getGrnGvnDate()); } catch
-						 * (ParseException e) { // TODO Auto-generated catch block e.printStackTrace();
-						 * }
-						 * 
-						 * java.sql.Date grnGvnDate = new Date(date.getTime());
-						 */
+						
 
 						DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
 						java.util.Date grnGvnDate = getGrnGvnDetails.get(j).getGrnGvnDate();
 
 						grnGvnDate = Df.parse(grnGvnDate.toString());
-						System.out.println("grnGvnDate= " + grnGvnDate);
 
 						GrnGvn postGrnGvn = new GrnGvn();
 
-						postGrnGvn.setGrnGvnDate(grnGvnDate);// 1
+						postGrnGvn.setGrnGvnDate(grnGvnDate);
 						postGrnGvn.setGrnGvnId(getGrnGvnDetails.get(j).getGrnGvnId());
-						postGrnGvn.setBillNo(getGrnGvnDetails.get(j).getBillNo());// 2
-						postGrnGvn.setFrId(getGrnGvnDetails.get(j).getFrId());// 3
-						postGrnGvn.setItemId(getGrnGvnDetails.get(j).getItemId());// 4
-						postGrnGvn.setItemRate(getGrnGvnDetails.get(j).getItemRate());// 5
-						postGrnGvn.setItemMrp(getGrnGvnDetails.get(j).getItemMrp());// 6
-						postGrnGvn.setGrnGvnQty(getGrnGvnDetails.get(j).getGrnGvnQty());// 7
-						postGrnGvn.setGrnType(getGrnGvnDetails.get(j).getGrnType());// 9
-						postGrnGvn.setIsGrn(getGrnGvnDetails.get(j).getIsGrn());// 10
-						postGrnGvn.setIsGrnEdit(getGrnGvnDetails.get(j).getIsGrnEdit());// 11
-						postGrnGvn.setGrnGvnEntryDateTime(getGrnGvnDetails.get(j).getGrnGvnEntryDateTime());// 12
-						postGrnGvn.setFrGrnGvnRemark(getGrnGvnDetails.get(j).getFrGrnGvnRemark());// 13
-						postGrnGvn.setGvnPhotoUpload1(getGrnGvnDetails.get(j).getGvnPhotoUpload1());// 14
-						postGrnGvn.setGvnPhotoUpload2(getGrnGvnDetails.get(j).getGvnPhotoUpload2());// 15
-						postGrnGvn.setGrnGvnStatus(6);// 16
-						postGrnGvn.setApprovedLoginGate(getGrnGvnDetails.get(j).getApprovedLoginGate());// 17dateFormat.format(cal.getTime()));//18
-						postGrnGvn.setApprovedRemarkGate(getGrnGvnDetails.get(j).getApprovedRemarkGate());// 19
+						postGrnGvn.setBillNo(getGrnGvnDetails.get(j).getBillNo());
+						postGrnGvn.setFrId(getGrnGvnDetails.get(j).getFrId());
+						postGrnGvn.setItemId(getGrnGvnDetails.get(j).getItemId());
+						postGrnGvn.setItemRate(getGrnGvnDetails.get(j).getItemRate());
+						postGrnGvn.setItemMrp(getGrnGvnDetails.get(j).getItemMrp());
+						postGrnGvn.setGrnGvnQty(getGrnGvnDetails.get(j).getGrnGvnQty());
+						postGrnGvn.setGrnType(getGrnGvnDetails.get(j).getGrnType());
+						postGrnGvn.setIsGrn(getGrnGvnDetails.get(j).getIsGrn());
+						postGrnGvn.setIsGrnEdit(getGrnGvnDetails.get(j).getIsGrnEdit());
+						postGrnGvn.setGrnGvnEntryDateTime(getGrnGvnDetails.get(j).getGrnGvnEntryDateTime());
+						postGrnGvn.setFrGrnGvnRemark(getGrnGvnDetails.get(j).getFrGrnGvnRemark());
+						postGrnGvn.setGvnPhotoUpload1(getGrnGvnDetails.get(j).getGvnPhotoUpload1());
+						postGrnGvn.setGvnPhotoUpload2(getGrnGvnDetails.get(j).getGvnPhotoUpload2());
+						postGrnGvn.setGrnGvnStatus(6);
+						postGrnGvn.setApprovedLoginGate(getGrnGvnDetails.get(j).getApprovedLoginGate());
+						postGrnGvn.setApprovedRemarkGate(getGrnGvnDetails.get(j).getApprovedRemarkGate());
 
-						postGrnGvn.setApprovedLoginStore(getGrnGvnDetails.get(j).getApprovedLoginStore());// 20
-						postGrnGvn.setApprovedDateTimeStore(dateFormat.format(cal.getTime()));// 21
-						postGrnGvn.setApprovedRemarkStore(getGrnGvnDetails.get(j).getApprovedRemarkStore());// 22
-						postGrnGvn.setApprovedLoginAcc(apLoginAcc);// 23
-						postGrnGvn.setGrnApprovedDateTimeAcc(dateFormat.format(cal.getTime()));// 24
-						postGrnGvn.setApprovedRemarkAcc("Def: GVN Approved by Account");// 25
+						postGrnGvn.setApprovedLoginStore(getGrnGvnDetails.get(j).getApprovedLoginStore());
+						postGrnGvn.setApprovedDateTimeStore(dateFormat.format(cal.getTime()));
+						postGrnGvn.setApprovedRemarkStore(getGrnGvnDetails.get(j).getApprovedRemarkStore());
+						postGrnGvn.setApprovedLoginAcc(apLoginAcc);
+						postGrnGvn.setGrnApprovedDateTimeAcc(dateFormat.format(cal.getTime()));
+						postGrnGvn.setApprovedRemarkAcc("Def: GVN Approved by Account");
 
-						postGrnGvn.setDelStatus(0);// 26
-						postGrnGvn.setGrnGvnQtyAuto(0);// 27
+						postGrnGvn.setDelStatus(getGrnGvnDetails.get(j).getDelStatus());
+						postGrnGvn.setGrnGvnQtyAuto(getGrnGvnDetails.get(j).getGrnGvnQtyAuto());
 						postGrnGvn.setApproveimedDateTimeGate(getGrnGvnDetails.get(j).getApproveimedDateTimeGate());
 
 						postGrnGvn.setGrnGvnAmt(getGrnGvnDetails.get(j).getGrnGvnAmt());
@@ -1567,14 +1457,11 @@ public class GrnGvnController {
 
 						postGrnGvnList.add(postGrnGvn);
 
-						System.out.println("Done it inside if ");
-						System.out.println("grn ID=  " + grnIdList[i]);
-
+						
 					} // end of if
 
 					else {
 
-						System.out.println("No match found " + getGrnGvnDetails.get(j).getGrnGvnId());
 					} // end of else
 
 				} // inner for
@@ -1582,25 +1469,20 @@ public class GrnGvnController {
 				postGrnList.setGrnGvn(postGrnGvnList);
 
 			} // outer for
-			System.out.println("after for");
 
-			// postGrnList.setGrnGvn(postGrnGvnList);
 
 			System.out.println("post grn for rest----- " + postGrnList.toString());
 			System.out.println("post grn for rest size " + postGrnList.getGrnGvn().size());
 
-			Info info = restTemplate.postForObject(Constants.url + "insertGrnGvn", postGrnList, Info.class);
+			Info insertGvnForAcc = restTemplate.postForObject(Constants.url + "insertGrnGvn", postGrnList, Info.class);
 
-			// System.out.println("Error in Getting grn details " + e.getMessage());
 
 		} catch (Exception e) {
 
-			System.out.println("Exce in Insert Grn " + e.getMessage());
+			System.out.println("Exce in Insert Gvn For Acc " + e.getMessage());
 			e.printStackTrace();
 
 		}
-
-		
 		return "redirect:/showAccountGvnDetails";
 	}
 
@@ -1611,20 +1493,19 @@ public class GrnGvnController {
 		Constants.subAct = 123;
 
 		ModelAndView model = new ModelAndView("grngvn/accGvn");
+		
+		try {
 
 		int grnId = Integer.parseInt(request.getParameter("grnId"));
 
 		int accApproveLogin = Integer.parseInt(request.getParameter("approveAccLogin"));
 
-		System.out.println("accApproveLogin =" + accApproveLogin);
-
-		System.out.println("grnId =" + grnId);
-
-		try {
+		
+		
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
-			System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
+			
 
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -1634,25 +1515,25 @@ public class GrnGvnController {
 
 			map.add("approvedDateTimeAcc", dateFormat.format(cal.getTime()));
 
-			map.add("approvedRemarkAcc", "Def:Gvn  Approved by Acc");
+			map.add("approvedRemarkAcc", "");
 
-			map.add("grnGvnStatus", 6);
+			map.add("grnGvnStatus", Constants.AP_BY_ACC);
 
 			map.add("grnGvnId", grnId);
 
-			String info = restTemplate.postForObject(Constants.url + "updateAccGrn", map, String.class);
-			System.out.println("after calling web service ");
+			String updateAccGvn = restTemplate.postForObject(Constants.url + "updateAccGrn", map, String.class);
+			
+			model.addObject("fromDate", accGvnFromDate);
+			model.addObject("toDate", accGvnToDate);
 
 		} catch (Exception e) {
 
-			System.out.println("Error in Getting grn details " + e.getMessage());
+			System.out.println("Error in update Acc Gvn  " + e.getMessage());
 
 			e.printStackTrace();
 		}
 
-		model.addObject("fromDate", accGvnFromDate);
-		model.addObject("toDate", accGvnToDate);
-
+		
 		return "redirect:/showAccountGvnDetails";
 
 	}
@@ -1664,25 +1545,19 @@ public class GrnGvnController {
 		Constants.subAct = 123;
 
 		ModelAndView model = new ModelAndView("grngvn/accGvn");
+		
+		try {
 
 		int grnId = Integer.parseInt(request.getParameter("grnId"));
-		System.out.println("1] Grn Id " + grnId);
 
 		int accApproveLogin = Integer.parseInt(request.getParameter("approveAccLogin"));
 
 		String accremark = request.getParameter("accRemark");
 
-		System.out.println("accApproveLogin =" + accApproveLogin);
-
-		System.out.println("2] accApproveLogin " + accApproveLogin);
-
-		System.out.println("3] accremark" + accremark);
-
-		try {
-
+		
+		
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
-			System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
 
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -1694,24 +1569,24 @@ public class GrnGvnController {
 
 			map.add("approvedRemarkAcc", accremark);
 
-			map.add("grnGvnStatus", 7);
+			map.add("grnGvnStatus", Constants.DIS_BY_ACC);
 
 			map.add("grnGvnId", grnId);
 
-			String info = restTemplate.postForObject(Constants.url + "updateAccGrn", map, String.class);
+			String updateAccGvn = restTemplate.postForObject(Constants.url + "updateAccGrn", map, String.class);
+			
+			model.addObject("fromDate", accGvnFromDate);
+			model.addObject("toDate", accGvnToDate);
 
 			System.out.println("after calling web service ");
 
 		} catch (Exception e) {
 
-			 System.out.println("Error in Getting grn details " + e.getMessage());
-
-			e.printStackTrace();
+			 System.out.println("Error in update Acc Gvn " + e.getMessage());
+		   	e.printStackTrace();
 		}
 
-		model.addObject("fromDate", accGvnFromDate);
-		model.addObject("toDate", accGvnToDate);
-
+		
 		return "redirect:/showAccountGvnDetails";
 
 	}

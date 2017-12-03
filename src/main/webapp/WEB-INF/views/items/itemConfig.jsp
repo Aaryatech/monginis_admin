@@ -106,7 +106,6 @@
 													<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 												</div>
 											</div>
-											`
 
 
 											<div class="box-content">
@@ -115,17 +114,13 @@
 
 
 													<div class="form-group">
-														<label class="col-sm-3 col-lg-2 control-label">Category</label>
-														<div class="col-sm-9 col-lg-10 controls">
+														<label class="col-sm-2 col-lg-2 control-label">Category</label>
+														<div class="col-sm-1 col-lg-3 controls">
 															<select data-placeholder="Select Category"
 																class="form-control chosen" tabindex="6" name="cat_name"
 																id="cat_name">
 
-																<%-- <%
-																int cId;
-																request.setAttribute("cId", "${catId}");
 																
-																%> --%>
 																<c:forEach items="${ItemIdCategory}" var="catIdName"
 																	varStatus="count">
 
@@ -157,14 +152,14 @@
 
 															</select>
 														</div>
-													</div>
+													<!-- </div>
 
 
 
 
-													<div class="form-group">
-														<div
-															class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
+													<div class="form-group"> -->
+														
+															<div class="col-md-2">
 															<input type="submit" class="btn btn-primary"
 																value="Submit">
 
@@ -184,12 +179,10 @@
 														<table width="100%" class="table table-advance"
 															id="table1">
 															<thead>
-
 																<tr>
 
 																	<th width="17" style="width: 18px">#</th>
 																	<th width="200" align="left">Item Name</th>
-																	<th width="200" align="left">Category</th>
 
 
 
@@ -218,9 +211,12 @@
 
 																		<td align="left">${count.index+1}</td>
 
-																		<td align="left"><c:out value="${item.itemName}" /></td>
+																		<td align="left"><c:out value="${item.itemName}" />
+																		<input type="hidden" name="cat_name" value="${cId}">
+																		
+																		
+																		</td>
 
-																		<td align="left"><c:out value="${item.itemName}" /></td>
 
 																		<c:forEach items="${item.stockDetails}" var="stDetails"
 																			varStatus="count">
@@ -266,10 +262,9 @@
 
 													<div class="form-group">
 														<div
-															class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
+															class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-5">
 															<input type="submit" class="btn btn-primary"
 																value="Submit" id="callSubmit">
-															<button type="button" class="btn">Cancel</button>
 														</div>
 													</div>
 
@@ -302,10 +297,13 @@
 	<script type="text/javascript">
 		$(document).ready(function() {
 			$('#callSubmit').submit(function() {
+				
+				var cat_id=$("#cat_name");
 				$.ajax({
+
 					type : "get",
-					url : "frItemStockConfigurationProcess", //this is my servlet
-				/*   data: "input=" +$('#ip').val()+"&output="+$('#op').val(), */
+					url : "frItemStockConfigurationProcess", 
+				
 
 				});
 			});
@@ -350,8 +348,6 @@
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-
-
 
 
 

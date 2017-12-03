@@ -136,7 +136,7 @@
 								<div class="form-group">
 
 									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Select
-										Franchisee </label>
+										Franchise </label>
 									<div class="col-sm-9 col-lg-10 controls">
 
 										<select class="form-control chosen" multiple="multiple"
@@ -234,7 +234,7 @@
 															No</th>
 														<th width="138" align="left">Bill No</th>
 														<th width="159" align="left">Date</th>
-														<th width="159" align="left">Franchisee Name</th>
+														<th width="159" align="left">Franchise Name</th>
 														<th width="159" align="left">Taxable
 															Amt</th>
 														<th width="91" align="left">Total tax</th>

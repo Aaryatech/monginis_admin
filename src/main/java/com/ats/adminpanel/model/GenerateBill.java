@@ -10,6 +10,7 @@ public class GenerateBill {
 	private int orderId;
 	
 	int  frId;
+	int isPositive;
 	
 	int  menuId;
 	
@@ -212,13 +213,22 @@ public class GenerateBill {
 		this.itemTax3 = itemTax3;
 	}
 
+	public int getIsPositive() {
+		return isPositive;
+	}
+
+	public void setIsPositive(int isPositive) {
+		this.isPositive = isPositive;
+	}
+
 	@Override
 	public String toString() {
-		return "GenerateBill [orderId=" + orderId + ", frId=" + frId + ", menuId=" + menuId + ", itemId=" + itemId
-				+ ", orderQty=" + orderQty + ", orderRate=" + orderRate + ", orderMrp=" + orderMrp + ", frName="
-				+ frName + ", menuTitle=" + menuTitle + ", itemName=" + itemName + ", catId=" + catId + ", frCode="
-				+ frCode + ", rateType=" + rateType + ", subCatId=" + subCatId + ", itemTax1=" + itemTax1
-				+ ", itemTax2=" + itemTax2 + ", itemTax3=" + itemTax3 + ", grnType=" + grnType + "]";
+		return "GenerateBill [orderId=" + orderId + ", frId=" + frId + ", isPositive=" + isPositive + ", menuId="
+				+ menuId + ", itemId=" + itemId + ", orderQty=" + orderQty + ", orderRate=" + orderRate + ", orderMrp="
+				+ orderMrp + ", frName=" + frName + ", menuTitle=" + menuTitle + ", itemName=" + itemName + ", catId="
+				+ catId + ", frCode=" + frCode + ", rateType=" + rateType + ", subCatId=" + subCatId + ", itemTax1="
+				+ itemTax1 + ", itemTax2=" + itemTax2 + ", itemTax3=" + itemTax3 + ", grnType=" + grnType
+				+ ", itemShelfLife=" + itemShelfLife + ", deliveryDate=" + deliveryDate + "]";
 	}
 
 	

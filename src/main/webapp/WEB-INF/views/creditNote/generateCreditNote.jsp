@@ -129,10 +129,8 @@
 											</tr>
 										</thead>
 										<tbody>
-											<%
-												int c = 1;
-											%>
-											<c:forEach items="${creditNoteList}" var="creditNoteList">
+											
+											<c:forEach items="${creditNoteList}" var="creditNoteList" varStatus="count">
 
 
 
@@ -140,14 +138,9 @@
 													<td><input type="checkbox" name="select_to_credit"
 														id="select_to_credit" value="${creditNoteList.grnGvnId}"></td>
 
-													<td><%=c++%> <c:out value="${c}" /></td>
+													<td><c:out value="${count.index+1}"/></td>
 
-													<%-- <fmt:parseDate value="${creditNoteList.grnGvnDate}"
-														pattern="yyyy-MM-dd HH:mm:ss" var="myDate" />
-													<fmt:formatDate value="${myDate}" var="startFormat"
-														pattern="dd-MM-yyyy" />
-
- --%>
+												
 
 													<td align="left"><c:out
 															value="${creditNoteList.grnGvnDate}" /></td>
@@ -183,14 +176,6 @@
 															value="${creditNoteList.grnGvnAmt}" /></td>
 
 
-
-													<%-- <td align="left"><a
-													href="updateNews/${schedulerList.schId}"><span
-														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
-
-													<a href="deleteNews/${schedulerList.schId}"
-													onClick="return confirm('Are you sure want to delete this record');"><span
-														class="glyphicon glyphicon-remove"></span></a></td> --%>
 												</tr>
 											</c:forEach>
 
@@ -255,9 +240,6 @@
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
 
-
-
-
 	<!--flaty scripts-->
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
@@ -281,39 +263,17 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
 	<script>
+	
 		function selectcreditnote(source) {
 			checkboxes = document.getElementsByName('select_to_credit');
+			
 			for (var i = 0, n = checkboxes.length; i < n; i++) {
 				checkboxes[i].checked = source.checked;
 			}
+			
 		}
+		
 	</script>
-
-
-
-	<!-- <script type="text/javascript">
-
-
-function insertCreditNote(grnGvnId){
-//alert("second function called ");
-var grnId=grnGvnId;
-
 	
-	$.getJSON('${insertCreditNote}',
-			{
-			
-			grnId : grnId,
-			
-				ajax : 'true',
-			
-
-			}
-);
-
-
-}
-
-
-</script> -->
 </body>
 </html>

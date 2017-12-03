@@ -8,6 +8,8 @@ public class GetOrderDataForPushOrder {
 
 	int orderQty;
 
+	int frId;
+	
 	public int getOrderId() {
 		return orderId;
 	}
@@ -32,11 +34,18 @@ public class GetOrderDataForPushOrder {
 		this.orderQty = orderQty;
 	}
 
+	public int getFrId() {
+		return frId;
+	}
+
+	public void setFrId(int frId) {
+		this.frId = frId;
+	}
+
 	@Override
 	public String toString() {
-		return "GetOrderDataForPushOrder [orderId=" + orderId + ", itemId=" + itemId + ", orderQty=" + orderQty + "]";
+		return "GetOrderDataForPushOrder [orderId=" + orderId + ", itemId=" + itemId + ", orderQty=" + orderQty
+				+ ", frId=" + frId + "]";
 	}
-	
-	
-	
+
 }
