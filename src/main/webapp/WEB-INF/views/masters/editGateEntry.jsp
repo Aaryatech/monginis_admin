@@ -155,7 +155,7 @@
 									
 
 								</div>
-                             &nbsp;&nbsp;
+                             
                    </div>
                     
                                  <div class="col1">

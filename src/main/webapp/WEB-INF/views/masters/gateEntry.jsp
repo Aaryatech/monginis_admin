@@ -9,7 +9,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Dashboard - MONGINIS Admin</title>
+<title>Material Receipt Gate Entry</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -21,12 +21,22 @@
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/assets/font-awesome/css/font-awesome.min.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.css" />
+
+<!--page specific css styles-->
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/assets/jquery-tags-input/jquery.tagsinput.css" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/assets/jquery-pwstrength/jquery.pwstrength.css" />
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.css" />
 <link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.min.css" />
+	href="${pageContext.request.contextPath}/resources/assets/bootstrap-duallistbox/duallistbox/bootstrap-duallistbox.css" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/assets/dropzone/downloads/css/dropzone.css" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/css/colorpicker.css" />
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/compiled/timepicker.css" />
 <link rel="stylesheet" type="text/css"
@@ -35,6 +45,10 @@
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/css/datepicker.css" />
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.css" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/assets/bootstrap-switch/static/stylesheets/bootstrap-switch.css" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css" />
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <script>
@@ -67,12 +81,12 @@
 
 <!--flaty css styles-->
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/flaty.css">
+	href="${pageContext.request.contextPath}/resources/css/flaty.css"/>
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/flaty-responsive.css">
+	href="${pageContext.request.contextPath}/resources/css/flaty-responsive.css"/>
 
 <link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/resources/img/favicon.png">
+	href="${pageContext.request.contextPath}/resources/img/favicon.png"/>
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
@@ -81,9 +95,9 @@
 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+	<c:url var="gateEntryList" value="/gateEntryList"></c:url>
 
-
-	<div class="container" id="main-container">
+	
 
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
@@ -103,7 +117,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Gate Entry
+						<i class="fa fa-file-o"></i>Material Receipt Gate Entry
 					</h1>
 
 				</div>
@@ -113,15 +127,16 @@
 
 
 			<!-- BEGIN Main Content -->
-			<div class="row">
-				<div class="col-md-12">
-					<div class="box">
+			<div class="box">
+				
+					
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Add Gate Entry
+								<i class="fa fa-bars"></i>Material Receipt Gate Entry
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/gateEntries">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/gateEntries">Back to List</a> <a data-action="collapse" 
+								href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -131,14 +146,21 @@
 
 
 						<div class="box-content">
-							<form action="${pageContext.request.contextPath}/addTransporterProcess" class="form-horizontal"
+						  <div class="box">
+							<form action="${pageContext.request.contextPath}/materialReceiptStore" class="form-horizontal"
 								method="post" id="validation-form">
 
-                  <div class="form-group">
+                 			 <div class="box-content">
 								<div class="col1">
 								
 								 <label class="col-sm-1 col-lg-2 control-label" for="Inward No">InwardNo:</label>
-								  <label class="col-sm-1 col-lg-1 control-label" for="Inward No">101</label>
+								 <div class="col-md-1">
+										<input type="text" name="mrn_no" id="mrn_no" value="${mrnno}"
+											 class="form-control"
+											readonly />
+									</div>
+								  
+								 
 								</div>
                                <div class="col1">
 									<label class="col-sm-1 col-lg-1 control-label" for="Date">Date:</label>
@@ -159,102 +181,122 @@
 
 								</div>
                              &nbsp;&nbsp;
-                   </div>
-                    
-                                 <div class="col1">
-									<label class="col-sm-1 col-lg-2 control-label" for="Supplier">Supplier</label>
-									<div class="col-sm-1 col-lg-3 controls">
-										<select data-placeholder="Select Supplier"
-											class="form-control chosen" name="supp_id" tabindex="-1"
-											id="supp_id" data-rule-required="true">
-											<option selected>Select Supplier</option>
+                   		</div>
+                   
+                   
+                   <div class="box-content">
+                   			
+									
+									
+									<div class="col-md-2" for="Supplier">Supplier</div>
+									<div class="col-md-3">
+										<select data-placeholder="Select Supplier" class="form-control chosen" name="supp_id" 
+										tabindex="-1" id="supp_id" required >
+											<option selected value="">Select Supplier</option>
 											
 											<c:forEach items="${supplierList}" var="supplierList">
                                               
                                               
-														<option value="${supplierList.suppId}"><c:out value="${supplierList.suppName}"></c:out> </option>
+										<option value="${supplierList.suppId}"><c:out value="${supplierList.suppName}"></c:out> </option>
 													
 
 											</c:forEach>
 											</select>
 									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-1 col-lg-2 control-label" for="Vehicle No">Vehicle No</label>
-									<div class="col-sm-1 col-lg-3 controls">
+									
+									<div class="col-md-2" for="Vehicle No">Vehicle No</div>
+									<div class="col-md-3">
 										<input type="text" name="vehicle_no" id="vehicle_no"
 											placeholder="Vehicle No" class="form-control"
-											data-rule-required="true" />
+											required />
 									</div>
-								</div>
-								<div class="col1">
-									<label class="col-sm-1 col-lg-2 control-label" for="LR No">LR No</label>
-									<div class="col-sm-1 col-lg-3 controls">
+									
+								
+                   </div><br><br><br>
+                   
+							<div class="box-content">
+                                 
+									<div class="col-md-2" for="LR No">LR No</div>
+									<div class="col-md-3">
 										<input type="text" name="lr_no" id="lr_no"
 											placeholder="LR No" class="form-control"
-											data-rule-required="true"/>
+											required />
 									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-1 col-lg-2 control-label" for="Transporter">Transporter</label>
-									<div class="col-sm-1 col-lg-3 controls">
+									
+									<div class="col-md-2" for="Transporter">Transporter</div>
+									<div class="col-md-3">
 										<select data-placeholder="Select Transporter"
 											class="form-control chosen" name="tran_id" tabindex="-1"
-											id="tran_id" data-rule-required="true">
-											<option selected>Select Transporter</option>
+											id="tran_id" required >
+											<option selected value="">Select Transporter</option>
 											
 											<c:forEach items="${transporterList}" var="transporterList">
                                               
                                               
-														<option value="${transporterList.tranId}"><c:out value="${transporterList.tranName}"></c:out> </option>
+								<option value="${transporterList.tranId}"><c:out value="${transporterList.tranName}"></c:out> </option>
 													
 
 											</c:forEach>
 											</select>
 									</div>
-								</div>	
-								 <div class="col1">
-									<label class="col-sm-1 col-lg-2 control-label" for="Description of Goods">Description</label>
-									<div class="col-sm-1 col-lg-3 controls">
+									
+								
+							</div><br><br><br>
+							
+							
+							<div class="box-content">	
+								 
+									<div class="col-md-2" for="Description of Goods">Description</div>
+									<div class="col-md-3">
 										<textarea type="text" name="description_of_goods" id="description_of_goods"
 											placeholder="Description of Goods" class="form-control"
-											data-rule-required="true"></textarea>
+											required ></textarea>
 									</div>
-								</div>
-								 <div class="form-group">
-									<label class="col-sm-1 col-lg-2 control-label" for="No of Items">No of Items</label>
-									<div class="col-sm-1 col-lg-3 controls">
+								
+								
+								<div class="col-md-2" for="No of Items">No of Items</div>
+									<div class="col-md-3">
 										<input type="text" name="no_of_items" id="no_of_items"
 											placeholder="No of Items" class="form-control"
-											data-rule-required="true" />
+											required/>
 									</div>
-								</div>
-								 <div class="col1">
-									<label class="col-sm-1 col-lg-2 control-label" for="Description of Goods">Remark</label>
-									<div class="col-sm-1 col-lg-3 controls">
+									
+									
+								
+							</div><br><br><br><br><br>
+							
+							
+							
+							<div class="box-content">	
+						
+								<div class="col-md-2" >Remark</div>
+									<div class="col-md-3">
 										<textarea type="text" name="remark" id="remark"
 											placeholder="Remark" class="form-control"
-											data-rule-required="true"></textarea>
+											required></textarea>
 									</div>
-								</div>
+									
+									<div class="col-md-2" for="Rev Qty">Rev_Qty</div>
+									<div class="col-md-3">
+										<input type="text" name="Rev_Qty" id="Rev_Qty"
+											placeholder="Rev Qty" class="form-control"
+											required />
+									</div>
+									
+							</div><br><br><br><br><br>
 								
-								<div class="form-group">
-									<label class="col-sm-1 col-lg-2 control-label" for="Tot.Qty">Tot.Qty</label>
-									<div class="col-sm-1 col-lg-3 controls">
-										<input type="text" name="tot_qty" id="tot_qty"
-											placeholder="Tot.Qty" class="form-control"
-											data-rule-required="true" />
-									</div>
-								</div>
-									<div class="col1">
-									<label class="col-sm-2 col-lg-2 control-label">Image</label>
-									<div class="col-sm-2 col-lg-4 controls">
+								
+							<div class="box-content">
+								 <div class="form-group">
+									
+									<div class="col-md-2">Image</div>
+									<div class="col-md-3">
 										<div class="fileupload fileupload-new"
 											data-provides="fileupload">
 											<div class="fileupload-new img-thumbnail"
-												style="width: 200px; height: 150px;">
+												style="width: 150px; height: 150px;">
 												<img
-													src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
+													src="http://www.placehold.it/150x150/EFEFEF/AAAAAA&amp;text=no+image"
 													alt="" />
 											</div>
 											<div
@@ -272,16 +314,15 @@
 										</div>
 
 									</div>
-								</div>
-									<div class="form-group">
-									<label class="col-sm-2 col-lg-1 control-label">Image</label>
-									<div class="col-sm-2 col-lg-4 controls">
+									
+									<div class="col-md-2">Image</div>
+									<div class="col-md-2">
 										<div class="fileupload fileupload-new"
 											data-provides="fileupload">
 											<div class="fileupload-new img-thumbnail"
 												style="width: 200px; height: 150px;">
 												<img
-													src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
+													src="http://www.placehold.it/150x150/EFEFEF/AAAAAA&amp;text=no+image"
 													alt="" />
 											</div>
 											<div
@@ -299,7 +340,81 @@
 										</div>
 
 									</div>
-								</div>	
+									
+								</div>
+							</div>
+								
+							
+								<div class="box-content">
+									<div class="col-md-2" >Select Raw Material Name</div>
+									<div class="col-md-2">
+										<select data-placeholder="Select RM Name" class="form-control chosen" name="rm_id" tabindex="-1"
+											id="rm_id" required>
+											<option selected value="">Select Raw Material Name</option>
+											
+											<c:forEach items="${rmlist}" var="rmlist">
+                                              
+                                              
+														<option value="${rmlist.rmId}"><c:out value="${rmlist.rmName}"></c:out> </option>
+													
+
+											</c:forEach>
+											</select>
+									</div>
+									
+									
+									<div class="col-md-2" for="rm_qty">Qty</div>
+									<div class="col-md-2">
+										<input type="text" name="rm_qty" id="rm_qty"
+											placeholder="Qty" class="form-control"
+											required />
+												 
+									</div>
+									
+									
+									
+									<div class="col-md-2">
+									
+								<div><input type="button" class="btn btn-info pull-right" onclick="addItem()" value="Add Item"></div>
+					 
+									</div>
+								</div><br><br><br><br>
+					 
+								
+								
+								
+									
+								
+								
+								
+								
+								<div class=" box-content">
+					<div class="row">
+						<div class="col-md-12 table-responsive">
+							<table class="table table-bordered table-striped fill-head "
+								style="width: 100%" id="table_grid">
+								<thead>
+									<tr>
+										<th>Sr.No.</th>
+										<th>Name</th>
+										
+										
+										<th>Qty</th>
+
+									</tr>
+								</thead>
+								<tbody>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+								</div>
+		
+		
+		
+								
+								
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										<input type="submit" class="btn btn-primary" value="Submit">
@@ -319,10 +434,7 @@
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 				class="fa fa-chevron-up"></i></a>
-		</div>
-		<!-- END Content -->
-	</div>
-	<!-- END Container -->
+		
 
 	<!--basic scripts-->
 	<script
@@ -383,6 +495,65 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+		
+		<script type="text/javascript">
+		function addItem() {
+
+		 
+
+			  
+				var rm_id = $("#rm_id").val();
+				var rm_qty = $("#rm_qty").val();
+				
+				
+				$('#loader').show();
+
+				$
+						.getJSON(
+								'${gateEntryList}',
+
+								{
+									 
+									rm_id : rm_id,
+									rm_qty : rm_qty,
+									ajax : 'true'
+
+								},
+								function(data) {
+
+									$('#table_grid td').remove();
+									$('#loader').hide();
+
+									if (data == "") {
+										alert("No records found !!");
+
+									}
+								 
+  
+								  $.each(
+												data,
+												function(key, itemList) {
+												
+
+													var tr = $('<tr></tr>');
+
+												  	tr.append($('<td></td>').html(key+1));
+
+												  	tr.append($('<td></td>').html(itemList.rmName));
+												  	
+
+												  	tr.append($('<td></td>').html(itemList.qty));
+													$('#table_grid tbody').append(tr);
+
+													 
+ 
+												})  
+								});
+
+			 
+		}
+	</script>
+		
 <script>
 function startTime() {
     var today = new Date();
@@ -400,5 +571,7 @@ function checkTime(i) {
     return i;
 }
 </script>
+
+
 </body>
 </html>

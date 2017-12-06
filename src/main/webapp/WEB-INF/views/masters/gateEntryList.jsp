@@ -92,6 +92,17 @@
 								<a href="${pageContext.request.contextPath}/addGateEntry" >ADD NEW ENTRY</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
+							
+							<div class="box-tool">
+								<a href="${pageContext.request.contextPath}/materialReceiptDirectore" >Material Receipt Directore</a> <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
+							
+							<div class="box-tool">
+								<a href="${pageContext.request.contextPath}/materialReceiptStore" >Material Receipt Directore</a> <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
+							
 						</div>
 						
 						
