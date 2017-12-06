@@ -21,7 +21,7 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.MRawMaterial;
 import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;
 import com.ats.adminpanel.model.RawMaterial.RmItemGroup;
-import com.ats.adminpanel.model.materialreceipt.AddPolist;
+
 import com.ats.adminpanel.model.materialreceipt.MaterialRecNote;
 import com.ats.adminpanel.model.materialreceipt.MaterialRecNoteDetails;
 import com.ats.adminpanel.model.materialreceipt.Supplist;
@@ -41,7 +41,7 @@ public class GateEntryController {
 	private static List<MaterialRecNoteDetails> materialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
 	private List<PurchaseOrderHeader> purchaseOrderHeaderlist = new ArrayList<PurchaseOrderHeader>();
 	public static List<PurchaseOrderDetail> purchaseOrderDetailList = new ArrayList<PurchaseOrderDetail>();
-	List<AddPolist> rawWithPoList = new ArrayList<AddPolist>();
+	
 	
 	
 	MaterialRecNote materialRecNotes;
@@ -63,7 +63,6 @@ public class GateEntryController {
 		Constants.subAct=184;*/
 		
 
-		rawWithPoList = new ArrayList<AddPolist>();
 		
 		/*java.util.Date utildate = new java.util.Date();
 		java.sql.Date date = new Date(utildate.getTime());*/

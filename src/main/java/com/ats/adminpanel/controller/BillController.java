@@ -294,20 +294,31 @@ public class BillController {
 						System.out.println("item shelf life******** " + itemShelfLife);
 
 						String calculatedDate = incrementDate(deliveryDate, itemShelfLife);
+						
+						//inc exp date if these menuId
+						if(gBill.getMenuId()==44 || gBill.getMenuId()==45 || gBill.getMenuId()==46) {
+							
+							calculatedDate=incrementDate(calculatedDate, 1);
+							
+						}
 
 						System.out.println("calculatedDate date************ =" + calculatedDate);
 
 						DateFormat Df = new SimpleDateFormat("dd-MM-yyyy");
-						// DateFormat Df = new SimpleDateFormat("yyyy-MM-dd");
 
 						Date expiryDate = null;
 						try {
 							expiryDate = Df.parse(calculatedDate);
 						} catch (ParseException e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						}
+						
 						System.out.println("Expiry date**************** =" + expiryDate);
+						
+						
+							
+							
 						billDetail.setExpiryDate(expiryDate);
 
 						postBillDetailsList.add(billDetail);
