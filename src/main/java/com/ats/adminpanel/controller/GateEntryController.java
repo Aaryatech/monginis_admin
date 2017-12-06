@@ -363,10 +363,10 @@ public class GateEntryController {
 	
 	
 	@RequestMapping(value = "/withPoRef", method = RequestMethod.GET)
-	public @ResponseBody List<AddPolist> withPo(HttpServletRequest request,
+	public @ResponseBody List<MRawMaterial> withPo(HttpServletRequest request,
 		HttpServletResponse response) {
 		
-		rawWithPoList = new ArrayList<AddPolist>();
+		
 		try
 		{
 			System.out.println("in controller");
@@ -395,14 +395,14 @@ public class GateEntryController {
 				
 			}
 		System.out.println("End for");
-		System.out.println(rawWithPoList);
+		System.out.println(rawlist);
 		}catch(Exception e)
 		{
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
 		
-		return rawWithPoList;
+		return rawlist;
 
 	}
 	
