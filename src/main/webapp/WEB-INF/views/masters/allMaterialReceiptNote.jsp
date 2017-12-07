@@ -107,7 +107,7 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Material Receipt Directore
+					<i class="fa fa-file-o"></i>Material Receipt Director
 				</h1>
 				<!-- <h4>Bill for franchises</h4> -->
 			</div>
@@ -119,135 +119,10 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>Material Receipt Directore
+					<i class="fa fa-bars"></i>Material Receipt Director
 				</h3>
 
-			</div>
-
-				<div class=" box-content">
-					 
-		<div class="box">
-			<form id=""
-				action="${pageContext.request.contextPath}/ "
-				method="post">
-				
-						<div class="box-content">
-							 
-								<div class="col-md-2">Inward No.</div>
-									<div class="col-md-3"><input type="text" id="inward_no." name="inward_no." value="00" class="form-control" readonly>
-								</div>
-								<div class="col-md-1"></div>
-								<div class="col-md-2">Inward Date & Time</div>
-									<div class="col-md-3">
-									<input class="form-control" id="dp1" size="16"
-											type="text" name="inward_date" value="" placeholder="Inward date" readonly />
-									</div>
-								 
-				 
-				 
-						</div><br>
-						<div class="box-content">
-						
-								<div class="col-md-2">Supplier </div>
-									<div class="col-md-3"><input type="text" id="supp_id" name="supp_id" value="Akshay Kasar" 
-									class="form-control" readonly>
-								</div>
-								<div class="col-md-1"></div>
-								<div class="col-md-2">Transporter</div>
-										<div class="col-md-3"><input type="text" id="transporter" name="transporter" value="xyz" class="form-control" readonly>
-									</div>
-							</div><br>
-							
-							
-			
-				
-						<div class="box-content">
-								
-									<div class="col-md-2">Po No.</div>
-								<div class="col-md-3">
-									<input type="text" name="po_no"id="po_no" class="form-control" readonly>
-								</div>
-								<div class="col-md-1"></div>
-								<div class="col-md-2" >PO Date</div>
-										<div class="col-md-3">
-											<input type="text" name="po_date"id="po_date" class="form-control" readonly>
-										</div>
-										
-				 
-						</div> <br/>
-						
-						
-								<div class="box-content">
-									
-									<div class="col-md-2" >MRN Type</div>
-									<div class="col-md-3">
-										
-									<input type="text" id="mrn_type" name="mrn_type" value="mrn_type" class="form-control" readonly>
-									</div>
-								
-								</div><br><br>
-								
-								
-								<div class="box-content">
-								 <div class="form-group">
-									
-									<div class="col-md-2">Image</div>
-									<div class="col-md-2">
-										<div class="fileupload fileupload-new"
-											data-provides="fileupload">
-											<div class="fileupload-new img-thumbnail"
-												style="width: 150px; height: 150px;">
-												<img
-													src="http://www.placehold.it/150x150/EFEFEF/AAAAAA&amp;text=no+image"
-													alt="" />
-											</div>
-											<div
-												class="fileupload-preview fileupload-exists img-thumbnail"
-												style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-											<div>
-												<span class="btn btn-default btn-file"><span
-													class="fileupload-new">Select image</span> <span
-													class="fileupload-exists">Change</span> <input type="file"
-													class="file-input" name="image1" id="image2"
-													 /></span> <a href="#"
-													class="btn btn-default fileupload-exists"
-													data-dismiss="fileupload">Remove</a>
-											</div>
-										</div>
-
-									</div>
-									<div class="col-md-1"></div>
-									<div class="col-md-2">Image</div>
-									<div class="col-md-2">
-										<div class="fileupload fileupload-new"
-											data-provides="fileupload">
-											<div class="fileupload-new img-thumbnail"
-												style="width: 200px; height: 150px;">
-												<img
-													src="http://www.placehold.it/150x150/EFEFEF/AAAAAA&amp;text=no+image"
-													alt="" />
-											</div>
-											<div
-												class="fileupload-preview fileupload-exists img-thumbnail"
-												style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-											<div>
-												<span class="btn btn-default btn-file"><span
-													class="fileupload-new">Select image</span> <span
-													class="fileupload-exists">Change</span> <input type="file"
-													class="file-input" name="image2" id="image2"
-													 /></span> <a href="#"
-													class="btn btn-default fileupload-exists"
-													data-dismiss="fileupload">Remove</a>
-											</div>
-										</div>
-
-									</div>
-									
-								</div>
-								</div>
-							
-							
-			
+			</div> 
 				<div class=" box-content">
 					<div class="row">
 						<div class="col-md-12 table-responsive">
@@ -256,15 +131,56 @@
 								<thead>
 									<tr>
 										<th>Sr.No.</th>
-										<th>Item</th>
-										<th>Stock Quantity</th>
-										<th>PO Quantity</th>
-										<th>PO Rate</th>
+										<th>Inward No.</th>
+										<th>PO No.</th>
+										<th>Supplier Name</th>
+										<th>Date & Time</th>
+										<th>PO Date</th>
+										<th>Action</th>
 
 									</tr>
 								</thead>
+								
 								<tbody>
 
+									<c:forEach items="${materialRecNoteList}" var="materialRecNoteList"
+													varStatus="count">
+
+													<tr>
+														<td><c:out value="${count.index+1}" /></td>
+
+														<td align="left"><c:out
+																value="${materialRecNoteList.mrnNo}" /></td>
+																
+																<td align="left"><c:out
+																value="${materialRecNoteList.poNo}" /></td>
+																
+																<td align="left"><c:out
+																value="${materialRecNoteList.poNo}" /></td>
+																
+															<c:forEach items="${supplierDetailsList}" var="supplierDetailsList"
+													varStatus="count">
+																<c:choose>
+													<c:when test="${materialRecNoteList.supplierId==supplierDetailsList.suppId}">
+													<td align="left"><c:out
+																value="${supplierDetailsList.suppName}" /></td>
+													</c:when>
+													 </c:choose>
+													 </c:forEach>
+													 
+													 <td align="left"><c:out
+																value="${materialRecNoteList.gateEntryDate}" />  
+																<c:out
+																value="${materialRecNoteList.gateEntryTime}" />
+																</td>
+																
+																<td align="left"><c:out
+																value="${materialRecNoteList.poDate}" /></td>
+																
+					<td><a href="${pageContext.request.contextPath}/materialReceiptDirectore?mrnId=${materialRecNoteList.mrnId}" class="action_btn" >
+						<abbr title="Details"><i class="fa fa-list"></i></abbr></a></td>
+																</tr>
+												</c:forEach>
 								</tbody>
 							</table>
 						</div>
@@ -272,32 +188,8 @@
 
 		</div>
 		
-				 	
-									<div class="box-content">
-									
-										<div class="col-md-2">Issue</div>
-											<div class="col-md-2" style="text-align: center">
-												<select name="issue" id="issue" class="form-control" tabindex="6" required="required"  >
-													<option value="">Select Issue</option>
-													<option value="1">Not Applicable</option>
-													<option value="2">On Your Side</option>
-													<option value="3">On Our Side</option>
-												</select>
-											</div>
-										
-									
-									</div><br/><br/>
-			
-			<div class="row">
-						<div class="col-md-12" style="text-align: center">
-							<input type="submit" class="btn btn-info" value="Accept">
-							<input type="button" class="btn btn-info" value="Reject">
-						</div>
-					</div>
-				
-			</form>
-			</div>
-		</div>
+				 
+	 
 	</div>
 	</div>
 	<!-- END Main Content -->

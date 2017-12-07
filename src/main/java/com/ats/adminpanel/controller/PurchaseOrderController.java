@@ -33,6 +33,8 @@ import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetails;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetailsList;
 import com.ats.adminpanel.model.RawMaterial.RmItemCategory;
 import com.ats.adminpanel.model.item.Item;
+import com.ats.adminpanel.model.materialreceipt.GetMaterialRecNoteList;
+import com.ats.adminpanel.model.materialreceipt.MaterialRecNote;
 import com.ats.adminpanel.model.purchaseorder.PurchaseOrderDetail;
 import com.ats.adminpanel.model.purchaseorder.PurchaseOrderHeader;
 import com.ats.adminpanel.model.supplierMaster.SupPaymentTermsList;
@@ -317,4 +319,55 @@ public class PurchaseOrderController {
 		return "redirect:/showDirectPurchaseOrder";
 	}
 
+	
+	@RequestMapping(value = "/allMaterialReceiptNote", method = RequestMethod.GET)
+	public String allMaterialReceiptNote(HttpServletRequest request, HttpServletResponse response) {
+		/*Constants.mainAct = 17;
+		Constants.subAct=184;*/
+		
+		List<SupplierDetails> supplierDetailsList=new ArrayList<SupplierDetails>();
+		GetMaterialRecNoteList materialRecNoteList=new GetMaterialRecNoteList();
+		ModelAndView model = new ModelAndView("masters/allMaterialReceiptNote");
+		try {
+			RestTemplate rest = new RestTemplate();
+			supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplier", List.class);
+
+			System.out.println("Supplier List :"+supplierDetailsList.toString());
+			
+			materialRecNoteList=rest.getForObject(Constants.url + "/getMaterialRecNotes", GetMaterialRecNoteList.class);
+			System.out.println("materialRecNoteList  :"+materialRecNoteList.toString());
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		System.out.println("List  "+materialRecNoteList.getMaterialRecNoteList().toString());
+		model.addObject("materialRecNoteList",materialRecNoteList.getMaterialRecNoteList());
+		model.addObject("supplierDetailsList",supplierDetailsList);
+		return "masters/allMaterialReceiptNote";
+	}
+	
+	@RequestMapping(value = "/materialReceiptDirectore", method = RequestMethod.GET)
+	public String materialReceiptDirectore(HttpServletRequest request, HttpServletResponse response) {
+		/*Constants.mainAct = 17;
+		Constants.subAct=184;*/
+		
+		//List<SupplierDetails> supplierDetailsList=new ArrayList<SupplierDetails>();
+		GetMaterialRecNoteList materialRecNoteList=new GetMaterialRecNoteList();
+		ModelAndView model = new ModelAndView("masters/materialReceiptDirectore");
+		try {
+			RestTemplate rest = new RestTemplate();
+		//	supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplier", List.class);
+
+		//	System.out.println("Supplier List :"+supplierDetailsList.toString());
+			
+			materialRecNoteList=rest.getForObject(Constants.url + "/getMaterialRecNotes", GetMaterialRecNoteList.class);
+			System.out.println("materialRecNoteList  :"+materialRecNoteList.toString());
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		
+		model.addObject("materialRecNoteList",materialRecNoteList.getMaterialRecNoteList());
+		//model.addObject("supplierDetailsList",supplierDetailsList);
+		return "masters/materialReceiptDirectore";
+	}
+	
 }
