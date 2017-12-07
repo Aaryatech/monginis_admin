@@ -1,10 +1,7 @@
 package com.ats.adminpanel.model.RawMaterial;
 
-import java.util.List;
-
-public class ItemSfHeader{
+public class GetItemSfHeader {
 	
-
 	private int sfId;
 
 	private String sfName;
@@ -120,5 +117,5 @@ public class ItemSfHeader{
 				+ "]";
 	}
 
-	
+
 }

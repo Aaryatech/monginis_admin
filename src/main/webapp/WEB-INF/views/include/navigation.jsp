@@ -480,7 +480,7 @@
 							<li>
 						</c:otherwise>
 					</c:choose>
-					<a href="resoucres/index.php/items/import_data">Import Items</a>
+					<a href="${pageContext.request.contextPath}/showItemSf">SF  Items</a>
 					</li>
 					<c:choose>
 						<c:when test="${Constants.subAct==42}">
