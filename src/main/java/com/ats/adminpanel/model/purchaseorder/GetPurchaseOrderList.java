@@ -2,24 +2,32 @@ package com.ats.adminpanel.model.purchaseorder;
 
 import java.util.List;
 
+import com.ats.adminpanel.model.ErrorMessage;
+
 
 
 public class GetPurchaseOrderList {
 	
-	 private PurchaseOrderHeader purchaseOrderHeader;
-	 List<PurchaseOrderDetail> purchaseOrderDetaillist;
-	public PurchaseOrderHeader getPurchaseOrderHeader() {
-		return purchaseOrderHeader;
+	 private List<PurchaseOrderHeader> purchaseOrderHeaderList;
+	 ErrorMessage errorMessage;
+	public List<PurchaseOrderHeader> getPurchaseOrderHeaderList() {
+		return purchaseOrderHeaderList;
 	}
-	public void setPurchaseOrderHeader(PurchaseOrderHeader purchaseOrderHeader) {
-		this.purchaseOrderHeader = purchaseOrderHeader;
+	public void setPurchaseOrderHeaderList(List<PurchaseOrderHeader> purchaseOrderHeaderList) {
+		this.purchaseOrderHeaderList = purchaseOrderHeaderList;
 	}
-	public List<PurchaseOrderDetail> getPurchaseOrderDetaillist() {
-		return purchaseOrderDetaillist;
+	public ErrorMessage getErrorMessage() {
+		return errorMessage;
 	}
-	public void setPurchaseOrderDetaillist(List<PurchaseOrderDetail> purchaseOrderDetaillist) {
-		this.purchaseOrderDetaillist = purchaseOrderDetaillist;
+	public void setErrorMessage(ErrorMessage errorMessage) {
+		this.errorMessage = errorMessage;
 	}
+	@Override
+	public String toString() {
+		return "GetPurchaseOrderList [purchaseOrderHeaderList=" + purchaseOrderHeaderList + ", errorMessage="
+				+ errorMessage + "]";
+	}
+	
 	 
 	 
 

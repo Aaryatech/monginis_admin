@@ -265,8 +265,8 @@ public class GateEntryController {
 	
 
 
-	@RequestMapping(value = "/materialReceiptDirectore", method = RequestMethod.POST)
-	public ModelAndView materialReceiptDirectore(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/submitMaterialStore", method = RequestMethod.POST)
+	public ModelAndView submitMaterialStore(HttpServletRequest request, HttpServletResponse response) {
 		/*Constants.mainAct = 17;
 		Constants.subAct=184;*/
 		System.out.println(rawlist);
@@ -424,7 +424,6 @@ public class GateEntryController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("poId", poId);
 			
-			withaddPolist = new ArrayList<AddPolist>();
 			
 			RestTemplate rest = new RestTemplate();
 			purchaseOrderDetailedList = rest.postForObject(Constants.url + "purchaseOrder/purchaseorderdetailedList",map,PurchaseOrderDetailedList.class);
