@@ -19,6 +19,16 @@ private int sfDid;
 	private float rmWeight;
 	
 	private int delStatus;
+	
+	private int rmType;
+	
+	public int getRmType() {
+		return rmType;
+	}
+
+	public void setRmType(int rmType) {
+		this.rmType = rmType;
+	}
 
 	public int getSfDid() {
 		return sfDid;
@@ -90,5 +100,4 @@ private int sfDid;
 				+ rmQty + ", rmUnit=" + rmUnit + ", rmWeight=" + rmWeight + ", delStatus=" + delStatus + "]";
 	}
 	
-
 }

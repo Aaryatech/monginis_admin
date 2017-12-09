@@ -53,8 +53,17 @@
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 </head>
 <body>
-<c:url var="getRmSubCategory" value="/getRmSubCategory" />
-<c:url var="getRmCategory" value="/getRmCategory" />
+	<c:url var="getRmSubCategory" value="/getRmSubCategory" />
+	
+	<c:url var="insertSfItemDetail" value="/insertSfItemDetail" />
+	<c:url var="getRmCategory" value="/getRmCategory" />
+
+	<c:url var="getItemDetail" value="/getItemDetail" />
+		<c:url var="getSingleItem" value="/getSingleItem" />
+	
+		<c:url var="getRawMaterial" value="/getRawMaterial" />
+	
+		<c:url var="itemForEdit" value="/itemForEdit" />
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -79,7 +88,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Semi Furnish Item
+						<i class="fa fa-file-o"></i>Semi Finished Item
 					</h1>
 
 				</div>
@@ -94,158 +103,174 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Add Item Details
+								<i class="fa fa-bars"></i>Add Item Details:- <b> SF
+									Name-${sfName}</b>
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
-							
+
 						</div>
-
-
 						<div class="box-content">
-							<form action="insertSfItemHeader" method="post" class="form-horizontal" id=
-									"validation-form"  method="post">
-										
+							<form action="" method="post"
+								class="form-horizontal" id="validation-form" method="post">
+
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label"> SF Name</label>
-									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="sf_item_name" id="sf_item_name" class="form-control"placeholder="SF Name"data-rule-required="true" />
-									</div>
 
 									<label class="col-sm-3 col-lg-2 control-label">SF Type
 									</label>
 									<div class="col-sm-6 col-lg-4 controls">
-									<input type="text" name="sf_item_name" id="sf_item_name" class="form-control"placeholder="SF Name"data-rule-required="true" />
+										<input type="text" name="sf_item_type_name"
+											readonly="readonly" value="${sfTypeName}" id="sf_item_name"
+											class="form-control" placeholder="SF Name"
+											data-rule-required="true" />
 									</div>
 
 								</div>
-									<div class="form-group">
-								
-												<label class=" col-sm-3 col-lg-2 control-label"> RM Name</label>
-										<div class="col-sm-6 col-lg-4 controls">
-									<select name="sf_item_type" id="sf_item_type" class="form-control"placeholder="SF Type"data-rule-required="true">
-											<option value="1">Select RM Name</option>
-											<c:forEach items="${rmDetailList}" var="rmDetailList"
-													varStatus="count">
-												<option value="${rmDetailList.rmId}"><c:out value="${rmDetailList.rmName}"/></option>
-												</c:forEach>
+								<div class="form-group">
+
+									<label class="col-sm-3 col-lg-2 control-label">
+										Material Type</label>
+									<div class="col-sm-6 col-lg-4 controls">
+										<select name="material_type" id="material_type"
+											class="form-control"
+											placeholder="SF Type" data-rule-required="true">
+											<option value="0">Select Material Type</option>
+											<option value="1">RM</option>
+											<option value="2">SF</option>
 										</select>
 									</div>
-								
-								
-										<label class="col-sm-3 col-lg-2 control-label"> Material Type</label>
-									<div class="col-sm-6 col-lg-4 controls">
-									<select name="sf_item_type" id="sf_item_type" class="form-control"placeholder="SF Type"data-rule-required="true">
-											<option value="1">Select RM Type</option>
+
+									<label class=" col-sm-3 col-lg-2 control-label">
+										Material Name</label>
+									<div class="col-sm-6 col-lg-4 controls"
+										id="chooseRM">
+										<select name="rm_material_name" id="rm_material_name"
+											class="form-control" placeholder="RM"
+											data-rule-required="true">
+											<option value="-1">Select Material</option>
 											
-												<option value="1"><c:out value="RM"/></option>
-												<option value="2"><c:out value="SF"/></option>
-												
 										</select>
 									</div>
-									</div>
-							
+									
+								</div>
+
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">SF UOM</label>
+
+									<label class="col-sm-3 col-lg-2 control-label">SF
+										Weight </label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<select name="sf_item_uom" id="sf_item_uom" class="form-control"placeholder="SF UOM"data-rule-required="true">
-											<option value="1">Select UOM</option>
-											<c:forEach items="${rmUomList}" var="rmUomList"
-													varStatus="count">
-												<option value="${rmUomList.uomId}"><c:out value="${rmUomList.uom}"/></option>
-												</c:forEach>
-										</select>
+										<input type="text" name="sf_item_weight" id="sf_item_weight"
+											class="form-control" placeholder="Specification "
+											data-rule-required="true" />
 									</div>
 
-									<label class="col-sm-3 col-lg-2 control-label">SF Weight </label>
+									<label class="col-sm-3 col-lg-2 control-label"> Qty</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="sf_item_weight"  id="sf_item_weight" class="form-control"placeholder="Specification "data-rule-required="true"/>
+										<input type="text" name="qty" id="qty" class="form-control"
+											placeholder="Weight" data-rule-required="true"
+											onKeyPress="return isNumberCommaDot(event)" />
+									</div>
+
+								</div>
+
+								<div class="row">
+									<div class="col-md-12" style="text-align: center">
+										<input type="button" class="btn btn-info" value="Submit"
+											onclick="submitItem()">
+
 									</div>
 								</div>
-							
-								<div class="form-group">
-									
-									
-									<label class="col-sm-3 col-lg-2 control-label"> Qty</label>
-						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="sf_stock_qty" id="sf_stock_qty" class="form-control"placeholder="Weight"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)"  />
-						</div>
-						
-						<label class="col-sm-3 col-lg-2 control-label">Rate </label>
 
-							<div class="col-sm-6 col-lg-4 controls">
-								<input type="text" name="sf_reorder_level_qty" id="sf_reorder_level_qty" class="form-control"placeholder="Max Qty "data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
-							</div>
-						 
+								<div class="clearfix"></div>
+								<div class="table-responsive" style="border: 0">
+									<table width="100%" class="table table-advance" id="table1">
+										<thead>
+											<tr>
+
+												<th width="140" style="width: 30px" align="left">Sr No</th>
+												<th width="138" align="left">Material Name</th>
+												<th width="120" align="left">Material Type</th>
+												<th width="120" align="left">Qty</th>
+												<th width="120" align="left">Weight</th>
+												<th width="120" align="left">Action</th>
+												<!-- 	<th width="140" align="left">GST %</th> -->
+
+											</tr>
+
+										</thead>
+
+										<tbody>
+
+											<c:forEach items="${sfDetailList}" var="sfDetailList"
+												varStatus="count">
+
+												<c:choose>
+												
+												<c:when test="${sfDetailList.delStatus == '0'}">
+												<tr>
+												
+												<td><c:out value="${count.index+1}" /></td>
+
+													<td align="left"><c:out
+															value="${sfDetailList.rmName}" /></td>
+															
+															<c:choose>
+															<c:when test="${sfDetailList.rmType == 1}">
+															<td align="left"><c:out
+															value="RM" /></td>
+															</c:when>
+															
+															<c:when test="${sfDetailList.rmType == 2}">
+															<td align="left"><c:out
+															value="SF" /></td>
+															</c:when>
+															</c:choose>
+															<td align="left"><c:out
+															value="${sfDetailList.rmQty}" /></td>
+															
+															<td align="left"><c:out
+															value="${sfDetailList.rmWeight}" /></td>
+
+													<td>
+													
+													<input type="button" id="delete" onClick="deleteSfDetail(${count.index})" value="Delete"> <input type="button" id="edit" onClick="editSfDetail(${count.index})" value="Edit">
+													
+													</td>
+													</tr>
+												</c:when>
+												</c:choose>
+													
+													<%-- <a
+														href="${pageContext.request.contextPath}/delete/${sfDetailList.rmId}"
+														class="action_btn"> <abbr title="Delete"><i
+																class="fa fa-list"></i></abbr></a> --%>
+												
+											</c:forEach>
+
+										</tbody>
+									</table>
 								</div>
 								
+								<input type="button" class="btn btn-info" value="Submit Items"
+											onclick="insertItemDetail()">
 
-					<div class="row">
-						<div class="col-md-12" style="text-align: center">
-							<input type="submit" class="btn btn-info" value="Submit">
-
+							</form>
 						</div>
 					</div>
-					
-										<div class="clearfix"></div>
-									<div class="table-responsive" style="border: 0">
-										<table width="100%" class="table table-advance" id="table1">
-											<thead>
-												<tr>
 
-													<th width="140" style="width: 30px" align="left">Sr No</th>
-													<th width="138" align="left">Item Name</th>
-													<th width="120" align="left">Sf Type</th>
-																	<th width="120" align="left">Action </th>
-												<!-- 	<th width="140" align="left">GST %</th> -->
-												 
-												</tr>
-
-											</thead>
-
-											<tbody>
-
-												<c:forEach items="${itemHeaderList}" var="itemHeaderList"
-													varStatus="count">
-
-													<tr>
-														<td><c:out value="${count.index+1}" /></td>
-
-														<td align="left"><c:out
-																value="${itemHeaderList.sfName}" /></td>
-
-
-														<td align="left"><c:out
-																value="${itemHeaderList.sfType}" /></td>
-
-					<td><a href="${pageContext.request.contextPath}/addSfItemDetail/${itemHeaderList.sfId}" class="action_btn" >
-						<abbr title="Details"><i class="fa fa-list"></i></abbr></a></td>
-
-												</tr>
-												</c:forEach>
-
-											</tbody>
-										</table>
-									</div>
-					
-						</form>
-					</div>
 				</div>
 
 			</div>
-
 		</div>
-	</div>
-	<!-- END Main Content -->
-	<footer>
-	<p>2017 © MONGINIS.</p>
-	</footer>
+		<!-- END Main Content -->
+		<footer>
+		<p>2017 © MONGINIS.</p>
+		</footer>
 
-
-	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-		class="fa fa-chevron-up"></i></a>
+		<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+			class="fa fa-chevron-up"></i></a>
 	</div>
 	<!-- END Content -->
 	</div>
@@ -282,16 +307,11 @@
 	<script
 		src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
 
-
 	<!--page specific plugin scripts-->
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-
-
-
-
 
 	<!--flaty scripts-->
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
@@ -314,60 +334,293 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/common.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-				
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
+
 
 	<script type="text/javascript">
-$(document).ready(function() { 
-	$('#rm_group').change(
-			function() {
-				$.getJSON('${getRmCategory}', {
-					grpId : $(this).val(),
-					ajax : 'true'
-				}, function(data) {
-					var html = '<option value="" selected >Select Category</option>';
+	
+	var editFlag=false;
+	var key1=0;
+	
+		function submitItem() {
+			
+			
+			if(editFlag==true){
+				
+				var materialType = $('#material_type').val();
+				var materialName=$("#rm_material_name option:selected").html();
+				var materialNameId= $('#rm_material_name').val();
+				var sfWeight = document.getElementById("sf_item_weight").value;
+				var qty = document.getElementById("qty").value;
+				if(materialNameId == null){
+					alert("Please Select Material Name");
+				}
+				else{
+				$.getJSON('${itemForEdit}', {
+					mat_type : materialType,
+					mat_name_id : materialNameId,
+					mat_name : materialName,
+					sf_weight : sfWeight,
+					qty : qty,
+					key : key1,
+					 
+					ajax : 'true',
+
+				},function(data) {
+					alert(data.length);
 					
 					var len = data.length;
-					for ( var i = 0; i < len; i++) {
-						html += '<option value="' + data[i].catId + '">'
-								+ data[i].catName + '</option>';
-					}
-					html += '</option>';
-					$('#rm_cat').html(html);
-					$('#rm_cat').formcontrol('refresh');
-
-				});
-			});
-});
-$(document).ready(function() { 
-	$('#rm_cat').change(
-			function() {
-				$.getJSON('${getRmSubCategory}', {
-					catId : $(this).val(),
-					ajax : 'true'
-				}, function(data) {
-					var html = '<option value="" selected >Select Category</option>';
+					$('#table1 td').remove();
 					
-					var len = data.length;
-					for ( var i = 0; i < len; i++) {
-						html += '<option value="' + data[i].subCatId + '">'
-								+ data[i].subCatName + '</option>';
+					$.each(data,function(key, sfDetail) {
+					
+					var tr = $('<tr></tr>');
+					var rmTypeName;
+					if(sfDetail.rmType == 1){
+						rmTypeName="RM";
+					}else if(sfDetail.rmType == 2){
+						rmTypeName="SF";
 					}
-					html += '</option>';
-					$('#rm_sub_cat').html(html);
-					$('#rm_sub_cat').formcontrol('refresh');
+
+					if(sfDetail.delStatus == 0){
+						
+				  	tr.append($('<td></td>').html(key+1));
+
+				  	tr.append($('<td></td>').html(sfDetail.rmName));
+
+				  	tr.append($('<td></td>').html(""+rmTypeName));
+
+				  	tr.append($('<td></td>').html(sfDetail.rmQty));
+
+				  	tr.append($('<td></td>').html(sfDetail.rmWeight));
+				  
+				  	tr.append($('<td></td>').html("<input type=button id=delete onClick=deleteSfDetail("+key+"); Value=Delete> <input type=button id=edit onClick=editSfDetail("+key+"); Value=Edit> "));
+					}
+					$('#table1 tbody').append(tr);
+
+					})
+
+					});
+
+				document.getElementById("sf_item_weight").value="";
+				document.getElementById("qty").value="";
+				document.getElementById("material_type").options.selectedIndex = 0;
+				document.getElementById("rm_material_name").options.selectedIndex = 0;
+			}	
+			}// end of if
+			else{
+			alert("Inside Submit ");
+			var materialType = $('#material_type').val();
+			var materialName=$("#rm_material_name option:selected").html();
+			var materialNameId= $('#rm_material_name').val();
+			
+			var key=-1;
+			var editKey=-1;
+			
+			var sfWeight = document.getElementById("sf_item_weight").value;
+			var qty = document.getElementById("qty").value;
+		
+			$.getJSON('${getItemDetail}', {
+				mat_type : materialType,
+				mat_name_id : materialNameId,
+				mat_name : materialName,
+				sf_weight : sfWeight,
+				qty : qty,
+				
+				key:key,
+				editKey:editKey,
+				ajax : 'true',
+
+			}, function(data) {
+			alert(data.length);
+				
+				var len = data.length;
+				$('#table1 td').remove();
+				$.each(data,function(key, sfDetail) {
+				var tr = $('<tr></tr>');
+				var rmTypeName;
+				if(sfDetail.rmType == 1){
+					rmTypeName="RM";
+				}else if(sfDetail.rmType == 2){
+					rmTypeName="SF";
+				}
+
+				if(sfDetail.delStatus == 0){
+					
+			  	tr.append($('<td></td>').html(key+1));
+
+			  	tr.append($('<td></td>').html(sfDetail.rmName));
+
+			  	tr.append($('<td></td>').html(""+rmTypeName));
+
+			  	tr.append($('<td></td>').html(sfDetail.rmQty));
+
+			  	tr.append($('<td></td>').html(sfDetail.rmWeight));
+			  
+			  	tr.append($('<td></td>').html("<input type=button id=delete onClick=deleteSfDetail("+key+"); Value=Delete> <input type=button id=edit onClick=editSfDetail("+key+"); Value=Edit> "));
+				}
+				$('#table1 tbody').append(tr);
+
+				})
 
 				});
-			});
-});
+
+			document.getElementById("sf_item_weight").value="";
+			document.getElementById("qty").value="";
+			$("#material_type").val=0;
+			document.getElementById("material_type").options.selectedIndex = 0;
+			document.getElementById("rm_material_name").options.selectedIndex = 0;
+			
+			}//end of else
+				editFlag=false;
+				}
+		
+		
+function deleteSfDetail(key){
+	alert("first key ss "+key);
+	alert("inside delete ");
+	var editKey=-2;
+	if(key == null ){
+		key=-2;
+		alert(key);
+	}
+	$.getJSON('${getItemDetail}', {
+		
+		key:key,
+		editKey : editKey,
+		ajax : 'true',
+
+	}, function(data) {
+		
+		var len = data.length;
+
+		$('#table1 td').remove();
+
+		$.each(data,function(key, sfDetail) {
+
+		var tr = $('<tr></tr>');
+		var rmTypeName;
+		if(sfDetail.rmType == 1){
+			rmTypeName="RM";
+		}else if(sfDetail.rmType == 2){
+			rmTypeName="SF";
+		}
+		if(sfDetail.delStatus == 0){
+	  	tr.append($('<td></td>').html(key+1));
+
+	  	tr.append($('<td></td>').html(sfDetail.rmName));
+
+	  	tr.append($('<td></td>').html(""+rmTypeName));
+
+	  	tr.append($('<td></td>').html(sfDetail.rmQty));
+
+	  	tr.append($('<td></td>').html(sfDetail.rmWeight));
+	  
+	  	tr.append($('<td></td>').html("<input type=button id=delete onClick=deleteSfDetail("+key+"); Value=Delete> <input type=button id=edit onClick=editSfDetail("+key+"); Value=Edit> "));
+		}
+	  	
+		$('#table1 tbody').append(tr);
+
+		})
+
+		});
+}
+
+function editSfDetail(token){
+ 
+	editFlag=true;
+	
+	$.getJSON('${getSingleItem}', {
+		
+		 
+		ajax : 'true',
+
+	}, function(data) {
+		alert(data);
+		var len = data.length;
+
+		//$('#table1 td').remove();
+ 
+		 $.each(data,function(key, sfDetail) {
+			editKey=key; 
+
+	//	var tr = $('<tr></tr>');
+		//var rmTypeName;
+		//alert(token);
+		if(key==token)
+			{
+		if(sfDetail.rmType == 1){
+			rmTypeName="RM";
+		}else if(sfDetail.rmType == 2){
+			rmTypeName="SF";
+		}
+		var m_type= sfDetail.rmType;
+				document.getElementById("sf_item_weight").value=sfDetail.rmWeight;
+				 document.getElementById("qty").value=sfDetail.rmQty;
+				 document.getElementById("material_type").options.selectedIndex =sfDetail.rmType;
+					//document.getElementById("rm_material_name").options.selectedIndex =sfDetail.rmId;
+					$('#rm_material_name').val('sfDetail.rmId').prop('selected', true);
+				
+				 key1=key;
+			}
+	  	 
+		 })  
+
+		});
+	/* document.getElementById("sf_item_weight").value="";
+	document.getElementById("qty").value="";
+	
+	$("#material_type").val("0"); */
+	
+}
+</script>
+<script type="text/javascript">
+
+function insertItemDetail(){
+	
+	
+	$.getJSON('${insertSfItemDetail}',
+			{
+				ajax : 'true',
+}
+);
+}
+
 
 </script>
 
+	<script type="text/javascript">
+$(document).ready(function() { 
+	$('#material_type').change(
+			function() {
+
+	$.getJSON('${getRawMaterial}', {
+		material_type : $(this).val(),
+					
+					ajax : 'true',
+				},  function(data) {
+					var html = '<option value="" selected >Select Raw Material</option>';
+					
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].id + '">'
+								+ data[i].name + '</option>';
+					}
+					html += '</option>';
+					$('#rm_material_name').html(html);
+				});
+			});
+			
+
+});
+</script>
+	
+	
 </body>
 </html>
-

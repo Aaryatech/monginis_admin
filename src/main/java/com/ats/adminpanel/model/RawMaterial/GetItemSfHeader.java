@@ -9,6 +9,8 @@ public class GetItemSfHeader {
 	private int sfUomId;
 	
 	private String sfType;
+	
+	private String sfTypeName;
 
 	private int sfWeight;
 	
@@ -22,11 +24,14 @@ public class GetItemSfHeader {
 	
 	private int delStatus;
 
-	
-	
-	
-	
-	
+	public String getSfTypeName() {
+		return sfTypeName;
+	}
+
+	public void setSfTypeName(String sfTypeName) {
+		this.sfTypeName = sfTypeName;
+	}
+
 	public int getSfId() {
 		return sfId;
 	}
@@ -111,11 +116,12 @@ public class GetItemSfHeader {
 
 	@Override
 	public String toString() {
-		return "ItemSfHeader [sfId=" + sfId + ", sfName=" + sfName + ", sfUomId=" + sfUomId + ", sfType=" + sfType
-				+ ", sfWeight=" + sfWeight + ", stockQty=" + stockQty + ", minLevelQty=" + minLevelQty
-				+ ", maxLevelQty=" + maxLevelQty + ", reorderLevelQty=" + reorderLevelQty + ", delStatus=" + delStatus
-				+ "]";
+		return "GetItemSfHeader [sfId=" + sfId + ", sfName=" + sfName + ", sfUomId=" + sfUomId + ", sfType=" + sfType
+				+ ", sfTypeName=" + sfTypeName + ", sfWeight=" + sfWeight + ", stockQty=" + stockQty + ", minLevelQty="
+				+ minLevelQty + ", maxLevelQty=" + maxLevelQty + ", reorderLevelQty=" + reorderLevelQty + ", delStatus="
+				+ delStatus + "]";
 	}
 
-
+	
+	
 }
