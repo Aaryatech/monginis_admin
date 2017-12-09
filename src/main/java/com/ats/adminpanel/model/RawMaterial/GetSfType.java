@@ -4,16 +4,12 @@ public class GetSfType {
 	
 	private int id;
 	
-	private String sfName;
+	private String sfTypeName;
 	
 	private int delStatus;
 
 	public int getId() {
 		return id;
-	}
-
-	public String getSfName() {
-		return sfName;
 	}
 
 	public int getDelStatus() {
@@ -24,17 +20,20 @@ public class GetSfType {
 		this.id = id;
 	}
 
-	public void setSfName(String sfName) {
-		this.sfName = sfName;
-	}
-
 	public void setDelStatus(int delStatus) {
 		this.delStatus = delStatus;
 	}
 
+	public String getSfTypeName() {
+		return sfTypeName;
+	}
+
+	public void setSfTypeName(String sfTypeName) {
+		this.sfTypeName = sfTypeName;
+	}
+
 	@Override
 	public String toString() {
-		return "GetSfType [id=" + id + ", sfName=" + sfName + ", delStatus=" + delStatus + "]";
+		return "GetSfType [id=" + id + ", sfTypeName=" + sfTypeName + ", delStatus=" + delStatus + "]";
 	}
-	
 }

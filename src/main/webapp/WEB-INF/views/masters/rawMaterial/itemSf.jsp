@@ -79,7 +79,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Semi Furnish Item
+						<i class="fa fa-file-o"></i>Semi Finished Item
 					</h1>
 
 				</div>
@@ -126,7 +126,7 @@
 											<option value="1">Select SF Type</option>
 											<c:forEach items="${sfTypeList}" var="sfTypeList"
 												varStatus="count">
-												<option value="${sfTypeList.id}"><c:out value="${sfTypeList.sfName}"/></option>
+												<option value="${sfTypeList.id}"><c:out value="${sfTypeList.sfTypeName}"/></option>
 											</c:forEach>
 										</select>
 									</div>
@@ -241,7 +241,7 @@
 
 
 													<td align="left"><c:out
-															value="${itemHeaderList.sfType}" /></td>
+															value="${itemHeaderList.sfTypeName}" /></td>
 
 													<td align="left"><c:out
 															value="${itemHeaderList.sfWeight}" /></td>
@@ -253,7 +253,7 @@
 															value="${itemHeaderList.reorderLevelQty}" /></td>
 
 													<td><a
-														href="${pageContext.request.contextPath}/showAddSfItemDetail/${itemHeaderList.sfId}"
+href="${pageContext.request.contextPath}/showAddSfItemDetail/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
 														class="action_btn"> <abbr title="Details"><i
 																class="fa fa-list"></i></abbr></a></td>
 
