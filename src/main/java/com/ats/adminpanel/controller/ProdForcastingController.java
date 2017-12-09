@@ -48,7 +48,7 @@ public class ProdForcastingController {
 	public static int[] timeSlot;
 	public static String productionDate;
 	public static int selectedCat;
-	public static List<Item> globalItemList;
+	public static List<Item> globalItemList; 
 
 	@RequestMapping(value = "/showProdForcast", method = RequestMethod.GET)
 	public ModelAndView showProdForcasting(HttpServletRequest request, HttpServletResponse response) {

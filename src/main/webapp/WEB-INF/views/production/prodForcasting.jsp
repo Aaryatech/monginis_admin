@@ -336,7 +336,7 @@
 
 			$("#datepicker1").val(yesterdayString); 
             $("#datepicker5").val(todaysString); 
-
+ 
 			//alert(catId);
 			
 			$('#loader').show();
