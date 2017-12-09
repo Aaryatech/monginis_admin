@@ -51,6 +51,8 @@
 </head>
 <body>
 
+<c:url var="findItemsByCategory" value="/getItemsByCategory"></c:url>
+<c:url var="getItemsProdQty" value="/getItemsProdQty"></c:url>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -75,7 +77,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Production Forcasting
+						<i class="fa fa-file-o"></i> Production Plan
 					</h1>
 
 				</div>
@@ -90,7 +92,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> Production List
+								<i class="fa fa-bars"></i> Production 
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -104,8 +106,8 @@
 						</div>
 
 						<div class="box-content">
-							<form action="showItems" class="form-horizontal"
-								id="validation-form" method="post">
+							<form  class="form-horizontal"
+								id="validation-form">
 
 
 
@@ -113,11 +115,11 @@
 									<label class="col-sm-3 col-lg-2 control-label">Category</label>
 
 									<div class="col-sm-9 col-lg-10 controls">
-										<select class="form-control chosen" name="menu_id" id="menu_id" multiple="multiple">
+										<select class="form-control chosen" name="catId" id="catId" >
 										
-										<c:forEach items="${menuList}" var="menuList">
+										<c:forEach items="${catList}" var="catList">
 										
-										<option value="${menuList.menuId}">${menuList.menuTitle} </option>
+										<option value="${catList.catId}">${catList.catName} </option>
 										
 										</c:forEach>
 
@@ -128,19 +130,17 @@
 								</div>
 
 
+
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-										<input type="submit" class="btn btn-primary" value="Search">
+									
+                         <input type="button" class="btn btn-info" name="submit" value="submit" onclick="searchItemsByCategory()"/>
 									</div>
 								</div>
+					<input type="hidden" id="selectedCatId" name="selectedCatId"/>			
 
-
-
-
-
-
-
-
+</form>
+					<form action="submitProductionPlan" method ="post">
 
 								<div class="box">
 									<div class="box-title">
@@ -154,14 +154,6 @@
 										</div>
 									</div>
 
-
-
-
-
-
-
-
-
 									<div class="box-content">
 
 										<div class="clearfix"></div>
@@ -169,78 +161,85 @@
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
-														<th width="18" style="width: 18px">Sr No</th>
-														<th width="917" align="left">Item Name</th>
-														<th width="130" align="left"><div
-																class="col-sm-5 col-lg-3 controls">
-																<input class="form-control date-picker" id="date1"
-																	size="16" type="text" name="prod_date1"
-																	data-rule-required="true" />
-															</div></th>
-
-														<th width="130" align="left"><div
-																class="col-sm-5 col-lg-3 controls">
-																<input class="form-control date-picker" id="date2"
-																	size="16" type="text" name="prod_date2"
-																	data-rule-required="true" />
-															</div></th>
-
-														<th width="130" align="left"><div
-																class="col-sm-5 col-lg-3 controls">
-																<input class="form-control date-picker" id="date3"
-																	size="16" type="text" name="prod_date3"
-																	data-rule-required="true" />
-															</div></th>
-
-														<th width="130" align="left"><div
-																class="col-sm-5 col-lg-3 controls">
-																<input class="form-control date-picker" id="date4"
-																	size="16" type="text" name="prod_date4"
-																	data-rule-required="true" />
-															</div></th>
-
-
-														<th width="130" align="left"><div
-																class="col-sm-5 col-lg-3 controls">
-																<input class="form-control date-picker" id="date4"
-																	size="16" type="text" name="prod_date5"
-																	data-rule-required="true" />
-															</div></th>
-
-														<th width="100">Item Name</th>
-														<th width="100">Quantity</th>
-														<th width="100">Production Quantity</th>
-
+														<th width="30" align="left">Sr No</th>
+														<th width="70" align="left">Item Name</th>
+														<th width="100" align="left">
+															<div>
+ 									                     	<input class="form-control date-picker" id="datepicker1" size="16" type="text" name="datepicker1" value="" placeholder="Date1"  disabled/>
+ <%-- 								                     	  <a href="${pageContext.request.contextPath}/"> <span class="	glyphicon glyphicon-circle-arrow-right"></span></a>
+ --%>								                     	  
+                                                              </div>
+														</th>
+                                                       <th width="5" align="left"><i class="glyphicon glyphicon-circle-arrow-right  fa-2x" onclick=" return getProdQty(1,5)"></i>
+														 </th>
+                                                      	<th width="100" align="left">
+															<div>
+									                     	<input class="form-control date-picker" id="datepicker2" size="16" type="text" name="datepicker2" value="" placeholder="Date2"  onblur=" return getProdQty(2,2)" />
+								                     	     </div>
+														 </th>
+														<th width="5" align="left">  <i class="	glyphicon glyphicon-circle-arrow-right  fa-2x"onclick=" return getProdQty(2,5)"></i>
+														 </th>
+														 
+														<th width="100" align="left">
+															<div>
+									                     	<input class="form-control date-picker" id="datepicker3" size="16" type="text" name="datepicker3" value="" placeholder="Date3"  onblur=" return getProdQty(3,3)"/>
+								                        	</div>
+														</th>
+													 <th width="5" align="left"> <i class="	glyphicon glyphicon-circle-arrow-right  fa-2x" onclick=" return getProdQty(3,5)"></i>
+														 </th>
+														<th width="100" align="left">
+															<div>
+									                     	<input class="form-control date-picker" id="datepicker4" size="16" type="text" name="datepicker4" value="" placeholder="Date4"  onblur=" return getProdQty(4,4)"/>
+								                     	    </div>
+														</th>
+													 <th width="5" align="left">  <i class="	glyphicon glyphicon-circle-arrow-right  fa-2x" onclick=" return getProdQty(4,5)"></i>
+														 </th>
+													<!-- 	<th width="120" align="left">
+															<div>
+									                     	<input class="form-control date-picker" id="datepicker5" size="16" type="text" name="datepicker5" value="" placeholder="Date5"  onblur=" return getProdQty(5)"/>
+								                     	    </div>
+														</th> -->
+														
+														<th width="100" align="left" >
+															<div>
+									                     	<input class="form-control date-picker" id="datepicker5" size="16" type="text" name="datepicker5" value="" placeholder="Date5"  onblur=" return getProdQty(5,5)"/>
+								                     	    </div>
+														</th>
 													</tr>
 												</thead>
 												<tbody>
-													<%-- <c:forEach items="${itemList}" var="itemList"
-														varStatus="count">
-														<tr>
-															<td><c:out value="${count.index+1}" /></td>
-															
-															<td><c:out value="Item Name" /></td>
-															
-															<td><input type="text" name="qty_date1${itemList.id}"></td>
-															
-															<td><input type="text" name="qty_date2${itemList.id}"></td>
-
-															<td><input type="text" name="qty_date3${itemList.id}"></td>
-
-															<td><input type="text" name="qty_date4${itemList.id}"></td>
-
-															<td><input type="text" name="qty_date5${itemList.id}"></td>
-
-														</tr>
-													</c:forEach> --%>
+												
 												</tbody>
 											</table>
 										</div>
 									</div>
 								</div>
-							</form>
 						</div>
 					</div>
+						
+								<div align="center" class="form-group">
+								<div class="col-sm-5 col-lg-10 controls">
+
+										Select Time Slot <select  data-placeholder="Choose Time Slot"
+											tabindex="-1" name="selectTime" id="selectTime" data-rule-required="true">
+
+										
+									 	<c:forEach items="${productionTimeSlot}" var="productionTime"
+													varStatus="count">
+												<option value="${productionTime}"><c:out value="Time Slot ${productionTime}"/></option>
+												</c:forEach>
+										
+										
+										</select>
+										</div>
+									<div
+										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
+										<input type="submit" class="btn btn-primary" value="Submit" id="callSubmit">
+
+
+									</div>
+								</div>
+						</form>		
 				</div>
 			</div>
 
@@ -273,10 +272,30 @@
 		src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
 
 	<!--page specific plugin scripts-->
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
+
+
+	<!--page specific plugin scripts-->
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
+
+
+
 
 
 	<!--flaty scripts-->
@@ -284,28 +303,172 @@
 	<script
 		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
 	<!--page specific plugin scripts-->
-
-
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
-
-
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/clockface/js/clockface.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
-	<spring:url
-		value="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"
-		var="jqueryJs" />
-	<script src="${jqueryJs}"></script>
+<script type="text/javascript">
+		function searchItemsByCategory() {
+			
+			var catId = $("#catId").val();
+			document.getElementById("selectedCatId").value =catId;
+			var todayTimeStamp = +new Date; // Unix timestamp in milliseconds
+			var oneDayTimeStamp = 1000 * 60 * 60 * 24; // Milliseconds in a day
+			var diff = todayTimeStamp - oneDayTimeStamp;
+			var yesterdayDate = new Date(diff);
+			var todaysDate = new Date(todayTimeStamp);
 
-	<spring:url
-		value="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"
-		var="jqueryAdd" />
-	<script src="${jqueryAdd}"></script>
+			var yesterdayString =  yesterdayDate.getDate()+ '-' + (yesterdayDate.getMonth() + 1) + '-' +yesterdayDate.getFullYear();
+			var todaysString =  todaysDate.getDate()+ '-' + (todaysDate.getMonth() + 1) + '-' +todaysDate.getFullYear();
 
+			$("#datepicker1").val(yesterdayString); 
+            $("#datepicker5").val(todaysString); 
+
+			//alert(catId);
+			
+			$('#loader').show();
+
+			$
+					.getJSON(
+							'${findItemsByCategory}',
+							{
+								
+								catId : catId,
+								ajax : 'true'
+
+							},
+							function(data) {
+
+								$('#table1 td').remove();
+								
+								$('#loader').hide();
+								if (data == "") {
+									alert("No records found !!");
+
+								}
+
+								
+								$
+										.each(
+												data,
+												function(key, item) {
+
+													
+												 	var index = key + 1;
+
+													var tr = "<tr>";
+
+													var index = "<td>&nbsp;&nbsp;&nbsp;"
+															+ index
+															+ "</td>";
+
+													var itemName = "<td>&nbsp;&nbsp;&nbsp;"
+															+ item.name
+															+ "</td>";
+
+													var qty1 = "<td align=center colspan='2'><input type=text min=0 max=20 class=form-control  id= qty1"+ item.id+ " name=qty1"+item.id+" value = "+item.qty+ " disabled></td>"; 
+													
+											
+													var qty2 = "<td align=center colspan='2'><input type=text min=0 max=20 class=form-control  id= qty2"+ item.id+ " name=qty2"+item.id+" value = "+0+ " disabled></td>";
+
+													var qty3 = "<td align=center colspan='2'><input type=text min=0 max=20 class=form-control  id= qty3"+ item.id+ " name=qty3"+item.id+" value = "+0+ " disabled></td>";
+
+													var qty4 = "<td align=center colspan='2'><input type=text min=0 max=20 class=form-control  id= qty4"+ item.id+ " name=qty4"+item.id+" value = "+0+ " disabled></td>";
+
+/* 													var qty5 = "<td align=center><input type=text min=0 max=500 class=form-control  id= qty5"+ item.id+ " name=qty5"+item.id+" value = "+0+ " disabled></td>";
+ */
+													var qty5 = "<td align=center colspan='2'><input type=number min=0 max=20 class=form-control  id= qty5"+ item.id+ " name=qty5"+item.id+" value = "+0+ "></td>";
+
+													var trclosed = "</tr>";
+
+													$('#table1 tbody')
+															.append(tr);
+													$('#table1 tbody')
+															.append(index);
+													$('#table1 tbody')
+															.append(itemName);
+													$('#table1 tbody')
+															.append(
+																	qty1);
+											
+													$('#table1 tbody')
+															.append(qty2);
+												
+													$('#table1 tbody')
+															.append(
+																	qty3);
+													 $('#table1 tbody')
+															.append(qty4); 
+													$('#table1 tbody')
+															.append(
+																	qty5);
+													
+													$('#table1 tbody')
+															.append(
+																	trclosed); 
+
+												})
+
+							});
+			
+			
+			
+			
+		}
+
+</script>
+
+<script type="text/javascript">
+		function getProdQty(token,id) {
+			
+			var prodDate = document.getElementById("datepicker"+token).value;
+			
+			var selectedCatId = document.getElementById("selectedCatId").value;
+
+		   //  alert("Your typed in " + prodDate);
+		    
+		    
+		     $.getJSON('${getItemsProdQty}',
+							{
+								
+								prodDate : prodDate,
+								catId: selectedCatId,
+								
+								ajax : 'true'
+
+							},
+							function(data) {
+
+
+								var len = data.length;
+                                //alert(data.length);
+								//$('#table1 td').remove();
+
+
+								$.each(data,function(key, item) {
+									//alert(item.itemId);alert('qty'+id+''+item.itemId);
+									document.getElementById('qty'+id+''+item.itemId).value = item.qty;
+
+								})
+								
+							});
+		     
+			
+		}
+</script>
 </body>
+
 </html>
