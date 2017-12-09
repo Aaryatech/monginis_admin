@@ -9,7 +9,7 @@ public class MaterialRecNote {
 
 		private int mrnId;
 		private String mrnNo;		
-		private Date gateEntryDate;
+		private String gateEntryDate;
 		private String gateEntryTime;
 		private int transportId;
 		private String vehicleNo;
@@ -29,7 +29,7 @@ public class MaterialRecNote {
 		private int apainstPo;
 		private int poId;
 		private String poNo;
-		private Date poDate;
+		private String poDate;
 		private int useridStores;
 		private String storesRemark;
 		private int approvedUserId;
@@ -61,25 +61,6 @@ public class MaterialRecNote {
 		private int status;
 		
 		List<MaterialRecNoteDetails> materialRecNoteDetails;
-		
-		 
-		
-		
-		public int getDelStatus() {
-			return delStatus;
-		}
-
-		public void setDelStatus(int delStatus) {
-			this.delStatus = delStatus;
-		}
-
-		public List<MaterialRecNoteDetails> getMaterialRecNoteDetails() {
-			return materialRecNoteDetails;
-		}
-
-		public void setMaterialRecNoteDetails(List<MaterialRecNoteDetails> materialRecNoteDetails) {
-			this.materialRecNoteDetails = materialRecNoteDetails;
-		}
 
 		public int getMrnId() {
 			return mrnId;
@@ -96,17 +77,25 @@ public class MaterialRecNote {
 		public void setMrnNo(String mrnNo) {
 			this.mrnNo = mrnNo;
 		}
-		
-		public Date getGateEntryDate() {
+
+		/*public Date getGateEntryDate() {
 			return gateEntryDate;
 		}
-		
+
 		public void setGateEntryDate(Date gateEntryDate) {
 			this.gateEntryDate = gateEntryDate;
-		}
+		}*/
 
 		public String getGateEntryTime() {
 			return gateEntryTime;
+		}
+
+		public String getGateEntryDate() {
+			return gateEntryDate;
+		}
+
+		public void setGateEntryDate(String gateEntryDate) {
+			this.gateEntryDate = gateEntryDate;
 		}
 
 		public void setGateEntryTime(String gateEntryTime) {
@@ -136,13 +125,11 @@ public class MaterialRecNote {
 		public void setLrNo(String lrNo) {
 			this.lrNo = lrNo;
 		}
-		
-		
+
 		public Date getLrDate() {
 			return lrDate;
 		}
-		
-		
+
 		public void setLrDate(Date lrDate) {
 			this.lrDate = lrDate;
 		}
@@ -155,30 +142,12 @@ public class MaterialRecNote {
 			this.supplierId = supplierId;
 		}
 
-
 		public int getNoOfItem() {
 			return noOfItem;
 		}
 
 		public void setNoOfItem(int noOfItem) {
 			this.noOfItem = noOfItem;
-		}
-
-		
-		public int getApprovedUserId() {
-			return approvedUserId;
-		}
-
-		public void setApprovedUserId(int approvedUserId) {
-			this.approvedUserId = approvedUserId;
-		}
-
-		public String getApprovalRemark() {
-			return approvalRemark;
-		}
-
-		public void setApprovalRemark(String approvalRemark) {
-			this.approvalRemark = approvalRemark;
 		}
 
 		public String getPhoto1() {
@@ -252,19 +221,25 @@ public class MaterialRecNote {
 		public void setPoNo(String poNo) {
 			this.poNo = poNo;
 		}
-		
-		
-		public Date getPoDate() {
+
+		/*public Date getPoDate() {
 			return poDate;
 		}
-		
-		
+
 		public void setPoDate(Date poDate) {
 			this.poDate = poDate;
-		}
+		}*/
 
 		public int getUseridStores() {
 			return useridStores;
+		}
+
+		public String getPoDate() {
+			return poDate;
+		}
+
+		public void setPoDate(String poDate) {
+			this.poDate = poDate;
 		}
 
 		public void setUseridStores(int useridStores) {
@@ -278,15 +253,21 @@ public class MaterialRecNote {
 		public void setStoresRemark(String storesRemark) {
 			this.storesRemark = storesRemark;
 		}
-		
-		
-		public Date getInvBookDate() {
-			return invBookDate;
+
+		public int getApprovedUserId() {
+			return approvedUserId;
 		}
-		
-		
-		public void setInvBookDate(Date invBookDate) {
-			this.invBookDate = invBookDate;
+
+		public void setApprovedUserId(int approvedUserId) {
+			this.approvedUserId = approvedUserId;
+		}
+
+		public String getApprovalRemark() {
+			return approvalRemark;
+		}
+
+		public void setApprovalRemark(String approvalRemark) {
+			this.approvalRemark = approvalRemark;
 		}
 
 		public String getInvoiceNumber() {
@@ -297,14 +278,20 @@ public class MaterialRecNote {
 			this.invoiceNumber = invoiceNumber;
 		}
 
-		
 		public Date getInvDate() {
 			return invDate;
 		}
-		
-		
+
 		public void setInvDate(Date invDate) {
 			this.invDate = invDate;
+		}
+
+		public Date getInvBookDate() {
+			return invBookDate;
+		}
+
+		public void setInvBookDate(Date invBookDate) {
+			this.invBookDate = invBookDate;
 		}
 
 		public float getBasicValue() {
@@ -419,14 +406,6 @@ public class MaterialRecNote {
 			this.accRemark = accRemark;
 		}
 
-		public int getStatus() {
-			return getDelStatus();
-		}
-
-		public void setStatus(int status) {
-			this.status = status;
-		}
-
 		public int getIsTallySync() {
 			return isTallySync;
 		}
@@ -435,24 +414,49 @@ public class MaterialRecNote {
 			this.isTallySync = isTallySync;
 		}
 
+		public int getDelStatus() {
+			return delStatus;
+		}
+
+		public void setDelStatus(int delStatus) {
+			this.delStatus = delStatus;
+		}
+
+		public int getStatus() {
+			return status;
+		}
+
+		public void setStatus(int status) {
+			this.status = status;
+		}
+
+		public List<MaterialRecNoteDetails> getMaterialRecNoteDetails() {
+			return materialRecNoteDetails;
+		}
+
+		public void setMaterialRecNoteDetails(List<MaterialRecNoteDetails> materialRecNoteDetails) {
+			this.materialRecNoteDetails = materialRecNoteDetails;
+		}
+
 		@Override
 		public String toString() {
 			return "MaterialRecNote [mrnId=" + mrnId + ", mrnNo=" + mrnNo + ", gateEntryDate=" + gateEntryDate
 					+ ", gateEntryTime=" + gateEntryTime + ", transportId=" + transportId + ", vehicleNo=" + vehicleNo
 					+ ", lrNo=" + lrNo + ", lrDate=" + lrDate + ", supplierId=" + supplierId + ", noOfItem=" + noOfItem
 					+ ", photo1=" + photo1 + ", photo2=" + photo2 + ", gateUserId=" + gateUserId + ", gateRemark="
-					+ gateRemark + ", mrnStoreDate=" + mrnStoreDate + ", mrnType=" + mrnType + ", apainstPo=" + apainstPo
-					+ ", poId=" + poId + ", poNo=" + poNo + ", poDate=" + poDate + ", useridStores=" + useridStores
-					+ ", storesRemark=" + storesRemark + ", approvedUserId=" + approvedUserId + ", approvalRemark="
-					+ approvalRemark + ", invBookDate=" + invBookDate + ", invoiceNumber=" + invoiceNumber + ", invDate="
-					+ invDate + ", basicValue=" + basicValue + ", discPer=" + discPer + ", discAmt=" + discAmt
-					+ ", discAmt2=" + discAmt2 + ", freightAmt=" + freightAmt + ", insuranceAmt=" + insuranceAmt + ", cgst="
-					+ cgst + ", sgst=" + sgst + ", igst=" + igst + ", cess=" + cess + ", roundOff=" + roundOff
-					+ ", billAmount=" + billAmount + ", useridAcc=" + useridAcc + ", accRemark=" + accRemark + ", status="
-					+ status + ", isTallySync=" + isTallySync + ", materialRecNoteDetails=" + materialRecNoteDetails + "]";
+					+ gateRemark + ", mrnStoreDate=" + mrnStoreDate + ", mrnType=" + mrnType + ", apainstPo="
+					+ apainstPo + ", poId=" + poId + ", poNo=" + poNo + ", poDate=" + poDate + ", useridStores="
+					+ useridStores + ", storesRemark=" + storesRemark + ", approvedUserId=" + approvedUserId
+					+ ", approvalRemark=" + approvalRemark + ", invoiceNumber=" + invoiceNumber + ", invDate=" + invDate
+					+ ", invBookDate=" + invBookDate + ", basicValue=" + basicValue + ", discPer=" + discPer
+					+ ", discAmt=" + discAmt + ", discAmt2=" + discAmt2 + ", freightAmt=" + freightAmt
+					+ ", insuranceAmt=" + insuranceAmt + ", cgst=" + cgst + ", sgst=" + sgst + ", igst=" + igst
+					+ ", cess=" + cess + ", roundOff=" + roundOff + ", billAmount=" + billAmount + ", useridAcc="
+					+ useridAcc + ", accRemark=" + accRemark + ", isTallySync=" + isTallySync + ", delStatus="
+					+ delStatus + ", status=" + status + ", materialRecNoteDetails=" + materialRecNoteDetails + "]";
 		}
 
-
+		 
 		
 		
 		
