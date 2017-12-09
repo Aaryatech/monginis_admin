@@ -9,6 +9,7 @@ public class PurchaseOrderDetailedList {
 	
 	private List<PurchaseOrderDetail> purchaseOrderDetaillist;
 	ErrorMessage errorMessage;
+	
 	public List<PurchaseOrderDetail> getPurchaseOrderDetaillist() {
 		return purchaseOrderDetaillist;
 	}

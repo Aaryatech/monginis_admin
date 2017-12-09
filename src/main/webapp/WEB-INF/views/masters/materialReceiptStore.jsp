@@ -49,7 +49,9 @@
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 </head>
 <body>
+<c:url var="gateEntryList" value="/gateEntryList"></c:url>
 <c:url var="withPoRef" value="/withPoRef"></c:url>
+<c:url var="withPoRefDate" value="/withPoRefDate"></c:url>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -99,15 +101,15 @@
 						
 						<div class="box-content">
 
-							<form id="submitMrnEntry" action="${pageContext.request.contextPath}/" method="post">
+							<form id="submitMaterialStore" action="${pageContext.request.contextPath}/submitMaterialStore" method="post">
 							<div class="box-content">
 								<div class="col-md-2">MRN No.</div>
-								<div class="col-md-3"><input type="text" id="mrn_no" name="mrn_no" value="${mrnid}" class="form-control" readonly>
+								<div class="col-md-3"><input type="text" id="mrn_no" name="mrn_no" value="${materialRecNote.mrnId}" class="form-control" readonly>
 								</div>
 								
 							<div class="col-md-2"> Date</div> 
 							<div class="col-md-3">
-							<input type="text" id="mrn_date" name="mrn_date" value="${date}" class="form-control" readonly>
+							<input type="text" id="mrn_date" name="mrn_date" value="${materialRecNote.gateEntryDate}" class="form-control" readonly>
 							
 							</div>
 					
@@ -116,12 +118,12 @@
 							<div class="box-content">
 							
 								<div class="col-md-2">Inward no.</div>
-									<div class="col-md-3"><input type="text" id="inward_no" name="inward_no" value="${mrnno}" class="form-control" readonly>
+									<div class="col-md-3"><input type="text" id="inward_no" name="inward_no" value="${materialRecNote.mrnNo}" class="form-control" readonly>
 								</div>
 								<div class="col-md-2">Inward date</div>
 									<div class="col-md-3">
 									<input class="form-control" id="inward_date" size="16"
-											type="text" name="inward_date" value="${date}"  readonly />
+											type="text" name="inward_date" value="${materialRecNote.gateEntryDate}"  readonly />
 									</div>
 								
 				 
@@ -147,7 +149,7 @@
 									</div>
 									
 									<div class="col-md-2">Supplier </div>
-									<div class="col-md-3"><input type="text" id="supp_id" name="supp_id" value="${suplrname}" 
+									<div class="col-md-3"><input type="text" id="supp_id" name="supp_id" value="${suppName}" 
 									class="form-control" readonly>
 								</div>
 								
@@ -157,7 +159,7 @@
 							<div class="box-content">
 							
 							<div class="col-md-2" >Invoice No.</div>
-									<div class="col-md-3"><input type="text" id="invoice_no" name="invoice_no" placeholder="Invoice No" class="form-control" required />
+									<div class="col-md-3"><input type="text" id="invoice_no" name="invoice_no" value="${materialRecNote.invoiceNumber}" placeholder="Invoice No" class="form-control" required />
 								</div>
 									
 									<div class="col-md-2">Date</div>
@@ -171,7 +173,7 @@
 							<div class="box-content">
 							
 									<div class="col-md-2" >Vehical No.</div>
-									<div class="col-md-3"><input type="text" id="vehical_no" name="vehical_no" value="${vehicalno}" class="form-control" readonly>
+									<div class="col-md-3"><input type="text" id="vehical_no" name="vehical_no" value="${materialRecNote.vehicleNo}" class="form-control" readonly>
 									</div>
 									
 									<div class="col-md-2">Transporter</div>
@@ -182,9 +184,19 @@
 							
 							<div class="box-content">
 							
+												<c:choose>
+													<c:when test="${materialRecNote.apainstPo==1}">
+													<c:set var = "textdisable" value="disabled"/>
+													</c:when>
+													
+													<c:otherwise>
+													  <c:set var = "textdisable" value=""/>
+													</c:otherwise>
+													</c:choose>
+							
 							<div class="col-md-2" >Against PO</div>
 									<div class="col-md-3">
-										<select name="po_id" id="po_id" class="form-control" tabindex="6" required>
+										<select name="po_id" id="po_id" class="form-control" tabindex="6" <c:out value = "${textdisable}"/> required>
 											<option value=""> select</option>
 											<option value="1">Yes</option>
 											<option value="2">No</option>
@@ -193,7 +205,7 @@
 									</div>
 									
 									<div class="col-md-2">LR No.</div>
-									<div class="col-md-3"><input type="text" id="lr_no" name="lr_no" value="${lrno}" 
+									<div class="col-md-3"><input type="text" id="lr_no" name="lr_no" value="${materialRecNote.lrNo}" 
 									class="form-control" readonly>
 								</div>
 								
@@ -206,14 +218,24 @@
 									
 									<div class="col-md-2" >PO Reference</div>
 									<div class="col-md-3">
+									
+											<c:choose>
+													<c:when test="${materialRecNote.apainstPo==0}">
+													<c:set var = "textdisable" value='sadf'/>
+													</c:when>
+													
+													<c:otherwise>
+													  <c:set var = "textdisable" value=""/>
+													</c:otherwise>
+												</c:choose>
 										<select name="poref_id" id="poref_id" class="form-control" tabindex="-1"  disabled required>
 									
-										<option selected value="">Select Po Ref</option>
+										<option selected value=<c:out value = "${textdisable}"/>>Select Po Ref</option>
 											
-											<c:forEach items="${polist}" var="polist">
+											<c:forEach items="${purchaseOrderList}" var="purchaseOrderList">
                                               
                                               
-										<option value="${polist.poId}"><c:out value="${polist.poNo}"></c:out> </option>
+										<option value="${purchaseOrderList.poId}"><c:out value="${purchaseOrderList.poNo}"></c:out> </option>
 													
 
 											</c:forEach>
@@ -223,10 +245,19 @@
 									<div class="col-md-2">PO Date</div>
 										<div class="col-md-3">
 										<input class="form-control date-picker" id="po_date" size="16"
-											type="text" name="po_date" value="" placeholder="PO Date" disabled required />
+											type="text" name="po_date" value="${materialRecNote.poDate}" placeholder="PO Date" disabled required />
 									</div>
 							
 							</div><br><br>
+							
+											<c:choose>
+													<c:when test="${materialRecNote.status==2}">
+													<c:set var = "lable" value="${materialRecNote.approvalRemark}"/>
+													</c:when>
+													</c:choose>
+							 <div class="col1">
+									<h4><c:out value = "${lable}"/></h4>
+								</div><br><br>
 							
 							
 							<div class=" box-content">
@@ -241,36 +272,61 @@
 										<th>IN QTY</th>
 										<th>PO QTY</th>
 										<th>STOCK QTY</th>
+										<th>REJECTED QTY</th>
 										<th>PO Rate</th>
 
 									</tr>
 								</thead>
 									<tbody>
-									<c:forEach items="${rawlist}" var="RawmaterialList"
+									 <c:set var = "srNo" value="0"/>
+									<c:forEach items="${materialRecNoteDetail}" var="materialRecNoteDetail"
 													varStatus="count">
+													
+													<c:choose>
+													<c:when test="${materialRecNoteDetail.status==1}">
+													<c:set var = "color" value="blue"/>
+													<c:set var = "textdisable" value="disabled"/>
+													</c:when>
+													
+													<c:otherwise>
+													  <c:set var = "color" value="black"/>
+													  <c:set var = "textdisable" value=""/>
+													</c:otherwise>
+													</c:choose>
+													
+		
+													
+													
 
 													<tr>
-														<td><c:out value="${count.index+1}" /></td>
+														<td style="color: <c:out value = "${color}"/>"><c:out value="${count.index+1}" /></td>
+ 														<c:set var = "srNo" value="${srNo+1}"/>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out
+																value="${materialRecNoteDetail.rmName}" /></td>
 
-														<td align="left"><c:out
-																value="${RawmaterialList.rmName}" /></td>
 
-
-														<td align="left"><c:out
-																value="${RawmaterialList.qty}" /></td>
- 														<td><input class="form-control" id="po_qty" size="16"
-											type="text" name="po_qty" value="" placeholder="po_qty" disabled required /></td>
-											
-											<td><input class="form-control" id="stockqty" size="16"
-											type="text" name="stockqty" value="" placeholder="stockqty" disabled required /></td>
-											
-											<td><input class="form-control" id="porate" size="16"
-											type="text" name="porate" value="" placeholder="porate" disabled required /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out
+																value="${materialRecNoteDetail.recdQty}" /></td>
+																
+														 <td align="left" style="color: <c:out value = "${color}"/>"><c:out
+																value="${materialRecNoteDetail.poQty}" /></td>
+																
+														 <td align="left" style="color: <c:out value = "${color}"/>"><input type="text" name='stockQty<c:out
+																value="${materialRecNoteDetail.mrnDetailId}" />'<c:out value = "${textdisable}"/> class="form-control" value=
+																<c:out
+																value="${materialRecNoteDetail.stockQty}" />></td>
+														 <td align="left" style="color: <c:out value = "${color}"/>"><input type="text" name='rejectedQty<c:out
+																value="${materialRecNoteDetail.mrnDetailId}" />'<c:out value = "${textdisable}"/> class="form-control" value=
+																<c:out
+																value="${materialRecNoteDetail.rejectedQty}" />></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out
+																value="${materialRecNoteDetail.poRate}" /></td>
+ 												 
 											
 												</tr>
 												</c:forEach>
 								
-
+													<input type="hidden" value='<c:out value="${srNo}" />' id="srNo">
 									</tbody>
 									</table>
 								</div>
@@ -398,28 +454,27 @@
 				{
 					document.getElementById("poref_id").disabled = false;
 					document.getElementById("po_date").disabled = false;
-					document.getElementById("po_qty").disabled = false;
-					document.getElementById("stockqty").disabled = false;
-					document.getElementById("porate").disabled = false;
+				 
+				 
 				}
 				
 				else
 				{
 					document.getElementById("poref_id").disabled = true;
 					document.getElementById("po_date").disabled = true;
-					document.getElementById("po_qty").disabled = true;
-					document.getElementById("stockqty").disabled = true;
-					document.getElementById("porate").disabled = true;
+				 
 				}
 		})
 					 
 });
+	 
 	
 	$(document).ready(function() { 
 		$('#poref_id').change(
 				function() {
 				 alert("in function");
 					$.getJSON('${withPoRef}', {
+						
 						poref_id : $(this).val(),
 						ajax : 'true'
 					},
@@ -434,18 +489,27 @@
 							$('#table_grid td').remove();
 						
 							
-						alert(data);
 						
-						 $.each(
-												data,
-												function(key, itemList) {
+						
+						var srNo=document.getElementById("srNo").value;
+						 $.each(data,function(key, itemList) {
+													
 						var tr = $('<tr></tr>');
 
-					  	tr.append($('<td></td>').html(key+1));			  	
+					  	tr.append($('<td></td>').html(srNo+1));			  	
 					  	tr.append($('<td></td>').html(itemList.rmName));
-						tr.append($('<td></td>').html(itemList.qty));
+						tr.append($('<td></td>').html(itemList.recdQty));
 						tr.append($('<td></td>').html(itemList.poQty));
-						tr.append($('<td></td>').html(itemList.stockQty));
+						if(itemList.mrnDetailId!=0)
+							{
+						tr.append($('<td></td>').html("<input type='text' class='form-control' name='stockQty"+itemList.mrnDetailId+"' >"));
+						tr.append($('<td></td>').html("<input type='text' class='form-control' name='rejectedQty"+itemList.mrnDetailId+"' >"));
+							}
+						else
+							{
+							tr.append($('<td></td>').html("0"));
+							tr.append($('<td></td>').html("0"));
+							}
 						tr.append($('<td></td>').html(itemList.poRate));
 					$('#table_grid tbody').append(tr);
 					
@@ -458,7 +522,31 @@
 			})
 						 
 	});
-	</script>poref_id
+	
+	
+	
+	$(document).ready(function() { 
+		$('#poref_id').change(
+				function() {
+				 alert("in function");
+					$.getJSON('${withPoRefDate}', {
+						
+						 
+						ajax : 'true',
+					},
+							function(data) {
+						alert("hiieieie");
+						alert(data);
+						
+						document.getElementById("po_date").value=data[0].poDate;
+						
+												
+							});
+					
+			})
+						 
+	});
+	</script> 
 	
 	
 								

@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Dashboard - MONGINIS Admin</title>
+<title>Gate Entry List</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -93,75 +93,81 @@
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
-							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/materialReceiptDirectore" >Material Receipt Directore</a> <a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a>
-							</div>
-							
-							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/materialReceiptStore" >Material Receipt Directore</a> <a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a>
-							</div>
-							
 						</div>
 						
 						
-						<div class="box-content">
+						<div class=" box-content">
+					<div class="row">
+						<div class="col-md-12 table-responsive">
+							<table class="table table-bordered table-striped fill-head "
+								style="width: 100%" id="table_grid">
+								<thead>
+									<tr>
+										<th>Sr.No.</th>
+										
+										<th>MRN No.</th>
+										<th>Supplier Name</th>
+										<th>lrNo</th>
+										<th>Vehical</th>
+										<th>Transport</th>
+										<th>Edit Gate Entry</th>
 
-							<div class="clearfix"></div>
+									</tr>
+								</thead>
+								
+								<tbody>
 
+									<c:forEach items="${materialRecNoteList}" var="materialRecNoteList"
+													varStatus="count">
 
+													<tr>
+														<td><c:out value="${count.index+1}" /></td>
 
-
-							<div class="table-responsive" style="border: 0">
-								<table width="100%" class="table table-advance" id="table1">
-									<thead>
-										<tr>
-											<th width="170" style="width: 18px">Inw.No</th>
-											<th width="190" align="left">Inw.Date</th>
-											<th width="358" align="left">Vehicle No</th>
-											<th width="358" align="left">IN Time</th>
-										    <th width="170" style="width: 18px">SUPPLIER</th>
-											<th width="190" align="left">DC/INV</th>
-											<th width="358" align="left">Description of Goods</th>
-											<th width="358" align="left">No.of Items</th>
-											<th width="88" align="left">Status</th>
-											<th width="88" align="left">ACTION</th>
-										</tr>
-									</thead>
-									<tbody>
-								<%--  <%int c=1; %>
-										<c:forEach items="${rmItemCatList}" var="rmItemCatList">
-
-
-
-											<tr>
-												<td>	<%=c++%>
-											<c:out
-														value="${c}" /> 
-												</td>
-												<td align="left"><c:out
-														value="${rmItemCatList.catName}" /></td>
-												<td align="left"><c:out
-														value="${rmItemCatList.grpName}" /></td>
-												
-												<td align="left"><c:out
-														value="${rmItemCatList.catDesc}" /></td>
-												
-												<td align="left"><a
-													href="${pageContext.request.contextPath}/updateRmItemCategory/${rmItemCatList.catId}"><span
-														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
-
-													<a href="${pageContext.request.contextPath}/deleteRmItemCategory/${rmItemCatList.catId}"
-													onClick="return confirm('Are you sure want to delete this record');"><span
-														class="glyphicon glyphicon-remove"></span></a></td>
-											</tr>
-										</c:forEach> --%>
-
-									</tbody>
-								</table>
-							</div>
+														
+																
+																<td align="left"><c:out
+																value="${materialRecNoteList.mrnNo}" /></td>
+																
+																<c:forEach items="${supplierDetailsList}" var="supplierDetailsList"
+													varStatus="count">
+																<c:choose>
+													<c:when test="${materialRecNoteList.supplierId==supplierDetailsList.suppId}">
+													<td align="left"><c:out
+																value="${supplierDetailsList.suppName}" /></td>
+													</c:when>
+													 </c:choose>
+													 </c:forEach>
+													  
+													<td align="left"><c:out
+																value="${materialRecNoteList.lrNo}" />  </td>
+															
+															<td align="left"><c:out	
+																value="${materialRecNoteList.vehicleNo}" />
+																</td>
+																
+																
+																<c:forEach items="${transportlist}" var="transportlist"
+													varStatus="count">
+																<c:choose>
+													<c:when test="${materialRecNoteList.transportId==transportlist.tranId}">
+													<td align="left"><c:out
+																value="${transportlist.tranName}" /></td>
+													</c:when>
+													 </c:choose>
+													 </c:forEach>
+																
+																
+						<td><a href="${pageContext.request.contextPath}/editGateEntry?mrnId=${materialRecNoteList.mrnId}" class="action_btn" >
+						<abbr title="Edit"><i class="fa fa-list"></i></abbr></a></td>
+						
+																</tr>
+												</c:forEach>
+								</tbody>
+							</table>
 						</div>
+					</div>
+
+		</div>
 					</div>
 				</div>
 			</div>

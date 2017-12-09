@@ -410,10 +410,34 @@
 					</c:choose>
 					<a href="${pageContext.request.contextPath}/gateEntries">Gate Entry</a>
 					</li>
+					
+					<c:choose>
+						<c:when test="${Constants.subAct==185}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAllStoreMaterialReciept">Material Receipt Store</a>
+					</li>
 
+					<c:choose>
+						<c:when test="${Constants.subAct==186}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/allDirectorMaterialRecieptNote">Material Receipt Director</a>
+					</li>
 				</ul>
 				<!-- END Submenu -->
 				</li>
+				
+				
+				
  
  <!-- end Puchase Master -->
  	<c:choose>

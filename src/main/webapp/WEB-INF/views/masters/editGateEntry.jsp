@@ -80,7 +80,7 @@
 </head>
 <body onload="startTime()">
 
-
+<c:url var="gateEntryList" value="/gateEntryList"></c:url>
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
 
@@ -132,24 +132,28 @@
 
 
 						<div class="box-content">
-							<form action="${pageContext.request.contextPath}/addTransporterProcess" class="form-horizontal"
+							<form action="${pageContext.request.contextPath}/submitEditGateEntry" class="form-horizontal"
 								method="post" id="validation-form">
 
                   <div class="form-group">
 								<div class="col1">
-								 <label class="col-sm-1 col-lg-2 control-label" for="Inward No">InwardNo:</label>
-								  <label class="col-sm-1 col-lg-1 control-label" for="Inward No">101</label>
+								 <label class="col-sm-1 col-lg-2 control-label" for="Inward No" >InwardNo:</label>
+								 <div class="col-md-1">
+										<input type="text" name="mrn_no" id="mrn_no" value="${materialRecNote.mrnNo}"
+											 class="form-control"
+											readonly />
+									</div>
+								 
 								</div>
                                <div class="col1">
 									<label class="col-sm-1 col-lg-1 control-label" for="Date">Date:</label>
-									<label class="col-sm-1 col-lg-2 control-label" for="Date">
-                                     <jsp:useBean id="now" class="java.util.Date"/>    
-                                     <fmt:formatDate value="${now}" pattern="dd-MMM-yyyy"/>
+									<label class="col-sm-1 col-lg-2 control-label" for="Date">${materialRecNote.gateEntryDate}
+                                    
                                    </label>
 								</div>
 								 <div class="col1">
 									<label class="col-sm-1 col-lg-1 control-label" for="Time">Time:</label>
-                                    <label class="col-sm-1 col-lg-2 control-label" for="Date"> <div id="txt"></div></label>			
+                                    <label class="col-sm-1 col-lg-2 control-label" for="Date">${materialRecNote.gateEntryTime}</label>			
  					            </div>
 								<div class="col1">
 									
@@ -161,22 +165,29 @@
                                  <div class="col1">
 									<label class="col-sm-1 col-lg-2 control-label" for="Supplier">Supplier</label>
 									<div class="col-sm-1 col-lg-3 controls">
-										<select data-placeholder="Select Supplier"
+										<select data-placeholder=""
 											class="form-control chosen" name="supp_id" tabindex="-1"
 											id="supp_id" data-rule-required="true">
-											<option selected>Select Supplier</option>
+											<c:forEach items="${supplierList}" var="supplierList"
+													varStatus="count">
+																<c:choose>
+													<c:when test="${materialRecNote.supplierId==supplierList.suppId}">
+													<option selected value="${supplierList.suppId}">${supplierList.suppName}</option>
+													</c:when>
+													 </c:choose>
+													 </c:forEach>
 											
+											
+											
+											
+											
+											
+											<%-- <option selected>${materialRecNote.supplierId}</option> --%>
 											<c:forEach items="${supplierList}" var="supplierList">
                                               
                                               
-													   <c:choose>
-													<c:when test="${supplierList.suppId==gateEntry.suppId}">
-														<option selected value="${supplierList.suppId}"><c:out value="${supplierList.suppName}"></c:out> </option>
-													</c:when>
-													<c:otherwise>
-														<option value="${supplierList.suppId}"><c:out value="${supplierList.suppName}"></c:out> </option>
-													</c:otherwise>
-												</c:choose>
+										<option value="${supplierList.suppId}"><c:out value="${supplierList.suppName}"></c:out> </option>
+													
 
 											</c:forEach>
 											</select>
@@ -185,7 +196,7 @@
 								<div class="form-group">
 									<label class="col-sm-1 col-lg-2 control-label" for="Vehicle No">Vehicle No</label>
 									<div class="col-sm-1 col-lg-3 controls">
-										<input type="text" name="vehicle_no" id="vehicle_no"
+										<input type="text" name="vehicle_no" value="${materialRecNote.vehicleNo}" id="vehicle_no"
 											placeholder="Vehicle No" class="form-control"
 											data-rule-required="true" />
 									</div>
@@ -193,7 +204,7 @@
 								<div class="col1">
 									<label class="col-sm-1 col-lg-2 control-label" for="LR No">LR No</label>
 									<div class="col-sm-1 col-lg-3 controls">
-										<input type="text" name="lr_no" id="lr_no"
+										<input type="text" name="lr_no" id="lr_no" value="${materialRecNote.lrNo}"
 											placeholder="LR No" class="form-control"
 											data-rule-required="true"/>
 									</div>
@@ -204,17 +215,18 @@
 										<select data-placeholder="Select Transporter"
 											class="form-control chosen" name="tran_id" tabindex="-1"
 											id="tran_id" data-rule-required="true">
-											<option selected>Select Transporter</option>
-											
-											<c:forEach items="${transporterList}" var="transporterList">
-                                               <c:choose>
-													<c:when test="${transporterList.tranId==gateEntry.tranId}">
-														<option selected value="${transporterList.tranId}"><c:out value="${transporterList.tranName}"></c:out> </option>
+											<c:forEach items="${transport}" var="transport"
+													varStatus="count">
+																<c:choose>
+													<c:when test="${materialRecNote.transportId==transport.tranId}">
+													<option selected value="${transport.tranId}">${transport.tranName}</option>
 													</c:when>
-													<c:otherwise>
-														<option value="${transporterList.tranId}"><c:out value="${transporterList.tranName}"></c:out> </option>
-													</c:otherwise>
-												</c:choose>
+													 </c:choose>
+													 </c:forEach>
+													 
+											<c:forEach items="${transport}" var="transport">
+														<option value="${transport.tranId}"><c:out value="${transport.tranName}"></c:out> </option>
+													
 											</c:forEach>
 											</select>
 									</div>
@@ -222,15 +234,16 @@
 								 <div class="col1">
 									<label class="col-sm-1 col-lg-2 control-label" for="Description of Goods">Description</label>
 									<div class="col-sm-1 col-lg-3 controls">
-										<textarea type="text" name="description_of_goods" id="description_of_goods"
+										<input type="text" name="description_of_goods" id="description_of_goods" value="${materialRecNote.gateRemark}"
 											placeholder="Description of Goods" class="form-control"
-											data-rule-required="true"></textarea>
+											data-rule-required="true">
 									</div>
 								</div>
 								 <div class="form-group">
 									<label class="col-sm-1 col-lg-2 control-label" for="No of Items">No of Items</label>
 									<div class="col-sm-1 col-lg-3 controls">
 										<input type="text" name="no_of_items" id="no_of_items"
+										 value="${materialRecNote.noOfItem}"
 											placeholder="No of Items" class="form-control"
 											data-rule-required="true" />
 									</div>
@@ -238,19 +251,14 @@
 								 <div class="col1">
 									<label class="col-sm-1 col-lg-2 control-label" for="Description of Goods">Remark</label>
 									<div class="col-sm-1 col-lg-3 controls">
-										<textarea type="text" name="remark" id="remark"
+										<input type="text" name="remark" id="remark" value="${materialRecNote.gateRemark}"
 											placeholder="Remark" class="form-control"
-											data-rule-required="true"></textarea>
+											data-rule-required="true">
 									</div>
 								</div>
 								
 								<div class="form-group">
-									<label class="col-sm-1 col-lg-2 control-label" for="Tot.Qty">Tot.Qty</label>
-									<div class="col-sm-1 col-lg-3 controls">
-										<input type="text" name="tot_qty" id="tot_qty"
-											placeholder="Tot.Qty" class="form-control"
-											data-rule-required="true" />
-									</div>
+									
 								</div>
 									<div class="col1">
 									<label class="col-sm-2 col-lg-2 control-label">Image</label>
@@ -306,13 +314,115 @@
 
 									</div>
 								</div>	
+								
+								
+								<div class="box-content">
+									<div class="col-md-2" >Select Raw Material Name</div>
+									<div class="col-md-2">
+										<select data-placeholder="Select RM Name" class="form-control chosen" name="rm_id" tabindex="-1"
+											id="rm_id">
+											<option selected value="">Select Raw Material Name</option>
+											
+											<c:forEach items="${rmlist}" var="rmlist">
+                                              
+                                              
+														<option value="${rmlist.rmId}"><c:out value="${rmlist.rmName}"></c:out> </option>
+													
+
+											</c:forEach>
+											</select>
+									</div>
+									
+									
+									<div class="col-md-2" for="rm_qty">Qty</div>
+									<div class="col-md-2">
+										<input type="text" name="rm_qty" id="rm_qty"
+											placeholder="Qty" class="form-control"
+											 />
+												 
+									</div>
+									
+									
+									
+									<div class="col-md-2">
+									
+								<div><input type="button" class="btn btn-info pull-right" onclick="addItem()" value="Add Item"></div>
+					 
+									</div>
+								</div><br><br><br><br>
+								
+							<div class=" box-content">
+							<div class="row">
+								<div class="col-md-12 table-responsive">
+									<table class="table table-bordered table-striped fill-head "
+								style="width: 100%" id="table_grid">
+								<thead>
+									<tr>
+										<th>Sr.No.</th>
+										<th>Name</th>
+										<th>Qty</th>
+
+									</tr>
+								</thead>
+								<tbody>
+								
+								 <c:set var = "srNo" value="0"/>
+									<c:forEach items="${materialRecNoteDetail}" var="materialRecNoteDetail"
+													varStatus="count">
+
+													<tr>
+														<td><c:out value="${count.index+1}" /></td>
+ 														<c:set var = "srNo" value="${srNo+1}"/>
+														<td align="left"><c:out
+																value="${materialRecNoteDetail.rmName}" /></td>
+
+
+														<td align="left"><c:out
+																value="${materialRecNoteDetail.recdQty}" /></td>
+															
+												</tr>
+												</c:forEach>
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+								</div>
+								
 								<div class="form-group">
+									<label class="col-sm-1 col-lg-2 control-label" for="Transporter"> Add New Item</label>
+									
+								</div>	
+								
+								
+								<div class=" box-content">
+							<div class="row">
+								<div class="col-md-12 table-responsive">
+									<table class="table table-bordered table-striped fill-head "
+								style="width: 100%" id="table_grid1">
+								<thead>
+									<tr>
+										<th>Sr.No.</th>
+										<th>Name</th>
+										<th>Qty</th>
+
+									</tr>
+								</thead>
+								<tbody>
+								
+
+								</tbody>
+							</table>
+							
+							<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										<input type="submit" class="btn btn-primary" value="Submit">
 <!-- 										<button type="button" class="btn">Cancel</button>
  -->									</div>
 								</div>
-							
+						</div>
+					</div>
+								</div>
 							</form>
 						</div>
 					</div>
@@ -389,22 +499,62 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script>
-function startTime() {
-    var today = new Date();
-    var h = today.getHours();
-    var m = today.getMinutes();
-    var s = today.getSeconds();
-    m = checkTime(m);
-    s = checkTime(s);
-    document.getElementById('txt').innerHTML =
-    h + ":" + m + ":" + s;
-    var t = setTimeout(startTime, 500);
-}
-function checkTime(i) {
-    if (i < 10) {i = "0" + i};  // add zero in front of numbers < 10
-    return i;
-}
-</script>
+<script type="text/javascript">
+		function addItem() {
+
+		 
+
+			  
+				var rm_id = $("#rm_id").val();
+				var rm_qty = $("#rm_qty").val();
+				
+				
+				$('#loader').show();
+
+				$
+						.getJSON(
+								'${gateEntryList}',
+
+								{
+									 
+									rm_id : rm_id,
+									rm_qty : rm_qty,
+									ajax : 'true'
+
+								},
+								function(data) {
+
+									$('#table_grid1 td').remove();
+									$('#loader').hide();
+
+									if (data == "") {
+										alert("No records found !!");
+
+									}
+								 
+  
+								  $.each(
+												data,
+												function(key, itemList) {
+												
+
+													var tr = $('<tr></tr>');
+
+												  	tr.append($('<td></td>').html(key+1));
+
+												  	tr.append($('<td></td>').html(itemList.rmName));
+												  	
+
+												  	tr.append($('<td></td>').html(itemList.recdQty));
+													$('#table_grid1 tbody').append(tr);
+
+													 
+ 
+												})  
+								});
+
+			 
+		}
+	</script>
 </body>
 </html>

@@ -168,7 +168,7 @@
 									
 									<jsp:useBean id="now" class="java.util.Date"/>    
                                     <fmt:formatDate value="${now}" pattern="dd-MMM-yyyy"/>
-									
+									<input type="hidden" name="nowDate" value=" <fmt:formatDate value="${now}" pattern="dd-mm-yyyy"/>">
 									
 									</label>
 								</div>
@@ -542,7 +542,7 @@
 												  	tr.append($('<td></td>').html(itemList.rmName));
 												  	
 
-												  	tr.append($('<td></td>').html(itemList.qty));
+												  	tr.append($('<td></td>').html(itemList.recdQty));
 													$('#table_grid tbody').append(tr);
 
 													 
