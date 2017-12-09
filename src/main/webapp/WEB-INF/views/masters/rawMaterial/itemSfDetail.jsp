@@ -126,7 +126,14 @@
 											class="form-control" placeholder="SF Name"
 											data-rule-required="true" />
 									</div>
-
+										<label class="col-sm-3 col-lg-2 control-label" id="itemNameLabel" style="display: none">Material Name
+									</label >
+									<div class="col-sm-6 col-lg-4 controls" id="item_name_div" style="display: none" >
+									<input type="text" name="item_name" style="display: none"
+											readonly="readonly" value="" id="item_name"
+											class="form-control" 
+											 />
+									</div>
 								</div>
 								<div class="form-group">
 
@@ -353,19 +360,18 @@
 			
 			if(editFlag==true){
 				
-				var materialType = $('#material_type').val();
+				/* var materialType = $('#material_type').val();
 				var materialName=$("#rm_material_name option:selected").html();
-				var materialNameId= $('#rm_material_name').val();
+				var materialNameId= $('#rm_material_name').val(); */
+				
+				
 				var sfWeight = document.getElementById("sf_item_weight").value;
 				var qty = document.getElementById("qty").value;
-				if(materialNameId == null){
-					alert("Please Select Material Name");
-				}
-				else{
+				
 				$.getJSON('${itemForEdit}', {
-					mat_type : materialType,
+					/* mat_type : materialType,
 					mat_name_id : materialNameId,
-					mat_name : materialName,
+					mat_name : materialName, */
 					sf_weight : sfWeight,
 					qty : qty,
 					key : key1,
@@ -412,7 +418,11 @@
 				document.getElementById("qty").value="";
 				document.getElementById("material_type").options.selectedIndex = 0;
 				document.getElementById("rm_material_name").options.selectedIndex = 0;
-			}	
+				
+				$("#item_name_div").hide();
+				$("#item_name").hide();
+				$("#itemNameLabel").hide();
+				
 			}// end of if
 			else{
 			alert("Inside Submit ");
@@ -563,9 +573,18 @@ function editSfDetail(token){
 		var m_type= sfDetail.rmType;
 				document.getElementById("sf_item_weight").value=sfDetail.rmWeight;
 				 document.getElementById("qty").value=sfDetail.rmQty;
-				 document.getElementById("material_type").options.selectedIndex =sfDetail.rmType;
+					 //document.getElementById("material_type").options.selectedIndex =sfDetail.rmType;
+					 
+					 document.getElementById("material_type").options[1].disabled = true;
+					 document.getElementById("material_type").options[2].disabled = true;
 					//document.getElementById("rm_material_name").options.selectedIndex =sfDetail.rmId;
 					$('#rm_material_name').val('sfDetail.rmId').prop('selected', true);
+					
+					document.getElementById("item_name").value=sfDetail.rmName;
+					
+					$("#item_name_div").show();
+					$("#item_name").show();
+					$("#itemNameLabel").show();
 				
 				 key1=key;
 			}
@@ -579,6 +598,8 @@ function editSfDetail(token){
 	$("#material_type").val("0"); */
 	
 }
+
+
 </script>
 <script type="text/javascript">
 
@@ -590,6 +611,8 @@ function insertItemDetail(){
 				ajax : 'true',
 }
 );
+	
+	window.location.reload();
 }
 
 

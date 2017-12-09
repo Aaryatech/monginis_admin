@@ -41,6 +41,7 @@ import com.ats.adminpanel.model.item.Item;
 
 @Controller
 public class ItemSfController {
+	
 	List<GetSfType> sfTypeList;
 	List<RawMaterialUom> rawMaterialUomList;
 	List<ItemSfDetail> sfDetailList=new ArrayList<>();
@@ -201,10 +202,6 @@ public class ItemSfController {
 		
 		sfDetaiListItems=restTemplate.postForObject(Constants.url+"getSfItemDetailList",map,SfItemDetailList.class);
 		
-			//sfItemDetail=sfDetaiListItems.getSfItemDetail();
-		
-			//System.out.println("sfItemDetail :"+sfItemDetail.toString());
-
 		
 		 rawMaterialDetailsList=restTemplate.getForObject(Constants.url +"rawMaterial/getAllRawMaterial", RawMaterialDetailsList.class);
 		
@@ -235,7 +232,7 @@ public class ItemSfController {
 		Constants.mainAct=4;
 		Constants.subAct=41;
 		ModelAndView model=new ModelAndView("masters/rawMaterial/itemSfDetail");
-		
+		//add new Item
 		ItemSfDetail sfDetail=new ItemSfDetail();
 		
 		try {
@@ -273,7 +270,7 @@ public class ItemSfController {
 			sfDetail.setSfId(globalSfId);
 			sfDetail.setRmUnit(unitOM);
 			
-			sfDetailList.add(sfDetail);
+			sfDetailList.add(sfDetail);// end of add new Item
 			}
 			else if(Integer.parseInt(request.getParameter("key"))!=-1 && Integer.parseInt(request.getParameter("editKey"))==-2 ) {
 
@@ -314,11 +311,6 @@ public class ItemSfController {
 		
 	}
 	
-	
-	
-	
-	
-	
 	@RequestMapping(value = "/itemForEdit", method = RequestMethod.GET)
 	@ResponseBody public List<ItemSfDetail> itemForEdit(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println(" Inside  Item For Edit " );
@@ -331,21 +323,20 @@ public class ItemSfController {
 		
 		int key=Integer.parseInt(request.getParameter("key"));
 		
-		
-		
 		try {
-			
+			/*String strMaterialNameId=request.getParameter("mat_name_id");
+
 			int materialType=Integer.parseInt(request.getParameter("mat_type"));
 		
 			int materialNameId=Integer.parseInt(request.getParameter("mat_name_id"));
-
+*/
 			float sfWeight=Float.parseFloat(request.getParameter("sf_weight"));
 			
 			float qty=Float.parseFloat(request.getParameter("qty"));
 			
-			String matName=request.getParameter("mat_name");
+			/*String matName=request.getParameter("mat_name");*/
 			
-			System.out.println("mat name "+matName);
+		/*	System.out.println("mat name "+matName);
 
 			
 			for(int i=0;i<commonConfs.size();i++) {
@@ -354,22 +345,23 @@ public class ItemSfController {
 					
 					unitOM=commonConfs.get(i).getRmUomId();
 				}
-				
-			}
+			}*/
 			
 			System.out.println("inside If material Id matched");
 			
 			 sfDetailList.get(key).setDelStatus(0);;
-			 sfDetailList.get(key).setRmType(materialType);;
-			 sfDetailList.get(key).setRmId(materialNameId);;
-			 sfDetailList.get(key).setRmName(matName);;
+			 sfDetailList.get(key).setRmType(sfDetailList.get(key).getRmType());;
+			 sfDetailList.get(key).setRmId(sfDetailList.get(key).getRmId());;
+			 sfDetailList.get(key).setRmName(sfDetailList.get(key).getRmName());;
 			 sfDetailList.get(key).setRmQty(qty);
 			 sfDetailList.get(key).setRmWeight(sfWeight);
 			 sfDetailList.get(key).setSfId(globalSfId);
-			 sfDetailList.get(key).setRmUnit(unitOM);;
+			 sfDetailList.get(key).setRmUnit(sfDetailList.get(key).getRmUnit());;
 			
 		}catch (Exception e) {
+			
 			System.out.println("Failed To receive Item Detail "+e.getMessage());
+			
 			e.printStackTrace();
 		}
 		
@@ -393,8 +385,11 @@ public class ItemSfController {
 		
 		Info info=restTemplate.postForObject(Constants.url+"postSfItemDetail",sfDetailList,Info.class);
 		
-		if(!info.getError())
+		if(!info.getError()) {
 		sfDetailList=new ArrayList<ItemSfDetail>() ;
+		}
+		
+		System.out.println("Redirecting to show Sf Item  after Inserting item details ");
 		
 		return "redirect:/showItemSf";
 	}
