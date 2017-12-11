@@ -57,6 +57,10 @@
 <c:url var="getRawMaterialList" value="/getRawMaterialList" />
 <c:url var="getBaseQty" value="/getBaseQty" />
 <c:url var="insertItemDetail" value="/insertItemDetail"/>
+<c:url var="deleteItemDetail" value="/deleteItemDetail"/>
+<c:url var="editItemDetail" value="/editItemDetail"/>
+<c:url var="editItem" value="/editItem"/>
+<c:url var="addItemDetail" value="/addItemDetail"/>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -99,7 +103,7 @@
 								<i class="fa fa-bars"></i>Add Item Detail
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/itemList">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							<!-- <div class="box-tool">
@@ -119,19 +123,19 @@
 								<div class="form-group">
 									<label class="col-sm-2 col-lg-2 control-label">Item Name</label>
 									<div class="col-sm-9 col-lg-4 controls">
-										<select name="item_id" id="item_id" class="form-control"placeholder="Item Name"data-rule-required="true">
+									
+								  <input type="text" name="item_name" id="item_name" class="form-control" placeholder="Item Name" value="${item.itemName}" disabled data-rule-required="true"/>
+								  <input type="hidden" name="item_id" id="item_id" class="form-control"  value="${item.id}" />
+								  	
+										<%-- <select name="item_id" id="item_id" class="form-control"placeholder="Item Name"data-rule-required="true">
 											<option value="-1">Select Item</option>
 									 	<c:forEach items="${itemsList}" var="itemsList"
 													varStatus="count">
 												<option value="${itemsList.id}"><c:out value="${itemsList.itemName}"/></option>
 												</c:forEach> 
-										</select>
+										</select> --%>
 									</div>
-                                    <label class="col-sm-3 col-lg-1 control-label">Base Qty</label>
-								 	<div class="col-sm-6 col-lg-4 controls">
-						     	    <input type="text" name="base_qty" id="base_qty" class="form-control"placeholder="Base Qty"data-rule-required="true"/>
-									
-									</div> 
+                                    
 									
 								</div>
 								<div class="box"><div class="box-title">
@@ -172,7 +176,7 @@
 									<!--</div> -->
 								<label class="col-sm-3 col-lg-2 control-label">RM Qty</label>
 					      	    <div class="col-sm-6 col-lg-4 controls">
-							    <input type="text" name="rm_qty" id="rm_qty" class="form-control"placeholder="RM Qty"data-rule-required="true"/>
+							    <input type="text" name="rm_qty" id="rm_qty" class="form-control"placeholder="RM Qty" required/>
 					     	    </div>
 					     	    
 					     	    <label class="col-sm-3 col-lg-1 control-label">RM Weight</label>
@@ -180,8 +184,14 @@
 							    <input type="text" name="rm_weight"   id="rm_weight" class="form-control"placeholder="RM Weight(KG)"data-rule-required="true"/>
 					     	    </div>
 								</div>
+								<div class="form-group">
 				
-								
+				                <label class="col-sm-3 col-lg-2 control-label">No. Of Pieces Per Item</label>
+								 	<div class="col-sm-6 col-lg-4 controls">
+						     	    <input type="text" name="base_qty" id="base_qty" class="form-control"placeholder="No. Of Pieces Per Item" value="${item.minQty}"   data-rule-required="true"/>
+									
+									</div> 
+								</div>
 					<div class="row">
 						<div class="col-md-12" style="text-align: center">
 							<input type="button" class="btn btn-info" value="ADD" name="add" id="add">
@@ -191,7 +201,7 @@
 					</div>
 					</form>
 					</br>
-					<form action="addItemDetail" method="post" class="form-horizontal" id=
+					<form action="${pageContext.request.contextPath}/addItemDetails" method="post" class="form-horizontal" id=
 									"validation-form"
 										 method="post">
 						<div class="box">
@@ -224,21 +234,53 @@
 													</tr>
 												</thead>
 												<tbody>
-													<%-- <c:forEach items="${routeList}" var="routeList" varStatus="count">
+													 <c:forEach items="${itemDetailList}" var="itemDetailList" varStatus="count">
 														<tr>
+														<c:choose>
+         
+                                                                <c:when test = "${itemDetailList.delStatus==0}">
+                                                                
 															<td><c:out value="${count.index+1}"/></td>
 															<td align="left"><c:out
-																	value="${routeList.routeName}"></c:out></td>
-															<td align="left"><a
-																href="updateRoute/${routeList.routeId }"><span
-																	class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+																	value="${itemDetailList.itemName}"></c:out></td>
+															<c:choose>
+         
+                                                                <c:when test = "${itemDetailList.rmType==1}">
+                                                                 
+																	<td align="left"><c:out
+																	value="Raw Material"></c:out></td>
+                                                                </c:when>
+         
+      															   <c:when test = "${itemDetailList.rmType==2}">
+       															   
+																	<td align="left"><c:out
+																	value="Semi Finished"></c:out></td>
+       																  </c:when>
+         
+       															  <c:otherwise>
+       															  </c:otherwise>
+      														</c:choose>
+															
+																	<td align="left"><c:out
+																	value="${itemDetailList.rmName}"></c:out></td>
+															<td align="left"><c:out
+																	value="${itemDetailList.rmUomId}"></c:out></td>	
+															<td align="left"><c:out
+																	value="${itemDetailList.rmWeight}"></c:out></td>
+															<td align="left"><c:out
+																	value="${itemDetailList.rmQty}"></c:out></td>						
+																	
+															<td align="left"><a href='#' class='action_btn' onclick="editItemDetail(${count.index})"> <abbr title='edit'> <i class='fa fa-edit  fa-lg' ></i></abbr> </a>&nbsp;&nbsp;&nbsp;&nbsp;
 
-																<a href="deleteRoute/${routeList.routeId}"
-																onClick="return confirm('Are you sure want to delete this record');"><span
-																	class="glyphicon glyphicon-remove"></span></a></td>
+		                                                    <a href='#' class='action_btn'onclick="deleteItemDetail(${count.index})"><abbr title='Delete'><i class='fa fa-trash-o  fa-lg'></i></abbr></a>														</td>
+														     
+														     </c:when>
+       															  <c:otherwise>
+       															  </c:otherwise>
+      														</c:choose>
 														</tr>
 
-													</c:forEach> --%>
+													</c:forEach> 
 												</tbody>
 											</table>
 										</div>
@@ -246,7 +288,7 @@
 								</div>
 								  <div class="row">
 						<div class="col-md-12" style="text-align: center">
-							<input type="submit" class="btn btn-info" value="Submit">
+							<input type="button" class="btn btn-info" value="Submit" name="Submit" id="Submit">
 
 						</div>
 					</div>
@@ -348,7 +390,7 @@ $(document).ready(function() {
 					rm_type : $(this).val(),
 					ajax : 'true',
 				},  function(data) {
-					var html = '<option value="" selected >Select Raw Material</option>';
+					var html = '<option value="-1" selected >Select Raw Material</option>';
 					
 					var len = data.length;
 					for ( var i = 0; i < len; i++) {
@@ -363,7 +405,7 @@ $(document).ready(function() {
 
 });
 </script>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 $(document).ready(function() { 
 	$('#item_id').change(
 			function() {
@@ -379,14 +421,21 @@ $(document).ready(function() {
 			
 
 });
-</script>
+</script> -->
 <script type="text/javascript">
+
+var editFlag=false;
+var key1=0;
+
 $(document).ready(function() {
 	$("#add").click(function() {
 		
+	var isValid = validation();
+	if (isValid) {
+		
  	var itemId = $("#item_id").val();
 	//alert(itemId);
-	var itemName=$('#item_id option:selected').text();
+	var itemName=$('#item_name').val();
 	//alert(selectedValue);
 
 	var baseQty = $("#base_qty").val();
@@ -402,6 +451,76 @@ $(document).ready(function() {
 	
 	var rmName=$('#rm_id option:selected').text();
 
+	if(editFlag==true)
+	{
+		editFlag=false;
+		
+		$.getJSON('${editItem}', {
+			
+			itemId : itemId,
+			itemName:itemName,
+			baseQty:baseQty,
+			rmType:rmType,
+			rmId:rmId,
+			rmName:rmName,
+			rmQty:rmQty,
+			rmWeight:rmWeight,
+			key:key1,
+			
+			ajax : 'true',
+		},  function(data) { 
+	 
+			 //$('#loader').hide();
+			var len = data.length;
+
+			//alert(len);
+
+			$('#table1 td').remove();
+
+			$.each(data,function(key, item) {
+
+	      if(item.delStatus==0)
+		  {
+			var tr = $('<tr></tr>');
+
+		  	tr.append($('<td></td>').html(key+1));
+
+		  	tr.append($('<td></td>').html(item.itemName));
+
+		  	if(item.rmType==1)
+		  		{
+			  	
+		  		 tr.append($('<td></td>').html("Raw Material"));
+
+		  		}
+		  	else
+		  		{
+			  	tr.append($('<td></td>').html("Semi Finished"));
+
+		  		}
+
+		  	tr.append($('<td></td>').html(item.rmName));
+
+		  	tr.append($('<td></td>').html(item.rmUomId));
+		  	
+		  	tr.append($('<td></td>').html(item.rmWeight));
+		  	
+		  	tr.append($('<td></td>').html(item.rmQty));
+		  	
+		 	tr.append($('<td></td>').html("<a href='#' class='action_btn' onclick=editItemDetail("+key+")> <abbr title='edit'> <i class='fa fa-edit  fa-lg' ></i></abbr> </a> <a href='#' class='action_btn'onclick=deleteItemDetail("+key+ ")><abbr title='Delete'><i class='fa fa-trash-o  fa-lg'></i></abbr></a>"));
+		  
+		  //	tr.append($('<td></td>').html());
+		  	
+			$('#table1 tbody').append(tr);
+	
+		  }
+		 }); 
+		
+		});
+	}//if edit false then else....
+	else
+		{
+//	alert(rmId);
 	$.getJSON('${insertItemDetail}', {
 		
 		itemId : itemId,
@@ -419,12 +538,14 @@ $(document).ready(function() {
 		 //$('#loader').hide();
 		var len = data.length;
 
-		alert(len);
+		//alert(len);
 
 		$('#table1 td').remove();
 
 		$.each(data,function(key, item) {
 
+	   if(item.delStatus==0)
+	   {
 		var tr = $('<tr></tr>');
 
 	  	tr.append($('<td></td>').html(key+1));
@@ -451,15 +572,216 @@ $(document).ready(function() {
 	  	
 	  	tr.append($('<td></td>').html(item.rmQty));
 	  	
-	 	tr.append($('<td></td>').html());
+	 	tr.append($('<td></td>').html("<a href='#' class='action_btn' onclick=editItemDetail("+key+")> <abbr title='edit'> <i class='fa fa-edit  fa-lg' ></i></abbr> </a> <a href='#' class='action_btn'onclick=deleteItemDetail("+key+ ")><abbr title='Delete'><i class='fa fa-trash-o  fa-lg'></i></abbr></a>"));
 	  
-	  	tr.append($('<td></td>').html());
+	  //	tr.append($('<td></td>').html());
 	  	
 		$('#table1 tbody').append(tr);
-
+	 }
 	 }); 
 	
 	});
+ }
+	}
+});
+
+});
+
+
+function editItemDetail(token){
+ 
+	editFlag=true;
+	
+	$.getJSON('${editItemDetail}', {
+		
+		key:token,
+		ajax : 'true',
+
+	}, function(data) {
+		//alert(data);
+		var len = data.length;
+ 
+		         document.getElementById("rm_weight").value=data.rmWeight;
+		       
+				 document.getElementById("rm_qty").value=data.rmQty;
+				 document.getElementById("rm_type").options.selectedIndex =data.rmType;
+				 
+					$.getJSON('${getRawMaterialList}', {
+						rm_type : data.rmType,
+						ajax : 'true',
+					},  function(data) {
+						//var html = '<option value="">Select Raw Material</option>';
+						
+						var len = data.length;
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].id + '">'
+									+ data[i].name + '</option>';
+						}
+						
+						html += '</option>';
+						$('#rm_id').html(html);
+					});
+					//alert(data.rmId)
+					 document.getElementById("rm_id").value =data.rmId;
+
+				
+				 key1=token;
+	 
+
+		});
+	
+	
+}
+function validation() {
+	
+	var baseQty = $("#base_qty").val();
+	var rmType = $("#rm_type").val();
+	//alert(rmType);
+	var rmId = $("#rm_id").val();
+	var rmWeight = $("#rm_weight").val();
+	var rmQty = $("#rm_qty").val();
+
+	var isValid = true;
+	if (rmType==-1) { 
+		isValid = false;
+		alert("Please Select  RM Type");
+	} else if (rmId ==-1) {
+		isValid = false;
+		alert("Please Select RM ");
+	}else if (rmQty == ""||rmQty=='0') {
+		isValid = false;
+		alert("Please Enter Valid RM Qty");
+	}else if (rmWeight == ""||rmWeight=='0') {
+		isValid = false;
+		alert("Please Enter Valid RM Weight");
+	}else if (baseQty == "") {
+		isValid = false;
+		alert("Please Enter No. of Pieces Per Item.");
+	}
+	return isValid;
+}
+
+</script>
+<script type="text/javascript">
+function deleteItemDetail(key){
+
+	$.getJSON('${deleteItemDetail}', {
+		
+		key:key,
+	
+		ajax : 'true',
+
+	}, function(data) {
+		
+		 //$('#loader').hide();
+		var len = data.length;
+
+		//alert(len);
+
+		$('#table1 td').remove();
+
+		$.each(data,function(key, item) {
+			
+	if(item.delStatus==0)
+	{
+			
+		var tr = $('<tr></tr>');
+
+	  	tr.append($('<td></td>').html(key+1));
+
+	  	tr.append($('<td></td>').html(item.itemName));
+
+	  	if(item.rmType==1)
+	  		{
+		  	
+	  		 tr.append($('<td></td>').html("Raw Material"));
+
+	  		}
+	  	else
+	  		{
+		  	tr.append($('<td></td>').html("Semi Finished"));
+
+	  		}
+
+	  	tr.append($('<td></td>').html(item.rmName));
+
+	  	tr.append($('<td></td>').html(item.rmUomId));
+	  	
+	  	tr.append($('<td></td>').html(item.rmWeight));
+	  	
+	  	tr.append($('<td></td>').html(item.rmQty));
+	  	
+	 	tr.append($('<td></td>').html("<a href='#' class='action_btn' onclick=editItemDetail("+key+")> <abbr title='edit'> <i class='fa fa-edit  fa-lg' ></i></abbr> </a> <a href='#' class='action_btn'onclick=deleteItemDetail("+key+ ")><abbr title='Delete'><i class='fa fa-trash-o  fa-lg'></i></abbr></a>"));
+	  
+	  //	tr.append($('<td></td>').html());
+	  	
+		$('#table1 tbody').append(tr);
+
+	}
+		})
+		
+		});
+}
+</script>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#Submit").click(function() {
+
+	$.getJSON('${addItemDetail}', {
+	
+	
+		ajax : 'true',
+
+	}, function(data) {
+		
+		 //$('#loader').hide();
+		var len = data.length;
+
+		alert("Item Detail Saved Successfully");
+
+		$('#table1 td').remove();
+
+		$.each(data,function(key, item) {
+
+	if(item.delStatus==0)
+    {	
+		var tr = $('<tr></tr>');
+
+	  	tr.append($('<td></td>').html(key+1));
+
+	  	tr.append($('<td></td>').html(item.itemName));
+
+	  	if(item.rmType==1)
+	  		{
+		  	
+	  		 tr.append($('<td></td>').html("Raw Material"));
+
+	  		}
+	  	else
+	  		{
+		  	tr.append($('<td></td>').html("Semi Finished"));
+
+	  		}
+
+	  	tr.append($('<td></td>').html(item.rmName));
+
+	  	tr.append($('<td></td>').html(item.rmUomId));
+	  	
+	  	tr.append($('<td></td>').html(item.rmWeight));
+	  	
+	  	tr.append($('<td></td>').html(item.rmQty));
+	  	
+	 	tr.append($('<td></td>').html("<a href='#' class='action_btn' onclick=editItemDetail("+key+")> <abbr title='edit'> <i class='fa fa-edit  fa-lg' ></i></abbr> </a> <a href='#' class='action_btn'onclick=deleteItemDetail("+key+ ")><abbr title='Delete'><i class='fa fa-trash-o  fa-lg'></i></abbr></a>"));
+	  
+	  //	tr.append($('<td></td>').html());
+	  	
+		$('#table1 tbody').append(tr);
+       }
+
+		})
+
+		});
 });
 });
 </script>

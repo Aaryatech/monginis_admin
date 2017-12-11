@@ -22,10 +22,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.model.RawMaterial.ItemDetail;
+import com.ats.adminpanel.model.RawMaterial.ItemDetailList;
 import com.ats.adminpanel.model.RawMaterial.GetRawmaterialByGroup;
 import com.ats.adminpanel.model.RawMaterial.GetUomAndTax;
 import com.ats.adminpanel.model.RawMaterial.Info;
+import com.ats.adminpanel.model.RawMaterial.ItemSfDetail;
+import com.ats.adminpanel.model.RawMaterial.ItemSfHeader;
+import com.ats.adminpanel.model.RawMaterial.ItemSfHeaderList;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialDetails;
+import com.ats.adminpanel.model.RawMaterial.RawMaterialDetailsList;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetails;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialUom;
 import com.ats.adminpanel.model.RawMaterial.RmItemCatList;
@@ -35,8 +41,11 @@ import com.ats.adminpanel.model.RawMaterial.RmItemSubCatList;
 import com.ats.adminpanel.model.RawMaterial.RmItemSubCategory;
 import com.ats.adminpanel.model.RawMaterial.RmRateVerification;
 import com.ats.adminpanel.model.franchisee.AllMenuResponse;
+import com.ats.adminpanel.model.franchisee.CommonConf;
 import com.ats.adminpanel.model.franchisee.Menu;
+import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.ErrorMessage;
+import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.supplierMaster.SupplierDetails;
 import com.ats.adminpanel.util.ImageS3Util; 
 
@@ -44,6 +53,10 @@ import com.ats.adminpanel.util.ImageS3Util;
 @Controller
 public class RawMaterialController {
 	
+	public static List<Item> itemList;
+	public static List<ItemDetail> itemDetailList;
+	public static  List<CommonConf> commonConfs=new ArrayList<CommonConf>();
+	public static int globalId=0;
 	
 	@RequestMapping(value = "/showAddRawMaterial", method = RequestMethod.GET)
 	public ModelAndView showRowMaterial(HttpServletRequest request, HttpServletResponse response) {
@@ -1020,6 +1033,351 @@ public class RawMaterialController {
 					}
 					}
 					
-					//----------------------------------------END-------------------------------------------------------------			
+	//----------------------------------------END-------------------------------------------------------------
+    //----------------------------Show Add Item Detail Jsp----------------------------------------------------
+	@RequestMapping(value = "/showItemDetail/{id}", method = RequestMethod.GET)
+	public ModelAndView showItemDetail(@PathVariable int id,HttpServletRequest request, HttpServletResponse response) {
+
+	ModelAndView model = new ModelAndView("masters/rawMaterial/addItemDetail");
+	
+	try {
+	
+	RestTemplate rest=new RestTemplate();
+	itemDetailList=new ArrayList<ItemDetail>();
+	globalId=id;
+	
+	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+	map.add("id", id);
+
+	Item item = rest.postForObject("" + Constants.url + "getItem", map,Item.class);
+
+	ItemDetailList itemDetailsList= rest.postForObject(Constants.url + "rawMaterial/getItemDetails",map, ItemDetailList.class);
+
+	
+	for(int i=0;i< itemDetailsList.getItemDetailList().size();i++)
+	{  
+		ItemDetail itemDetail=new ItemDetail();
+		
+		itemDetail.setItemDetailId(itemDetailsList.getItemDetailList().get(i).getItemDetailId());
+		itemDetail.setItemId(itemDetailsList.getItemDetailList().get(i).getItemId());
+		itemDetail.setItemName(itemDetailsList.getItemDetailList().get(i).getItemName());
+		itemDetail.setNoOfPiecesPerItem(itemDetailsList.getItemDetailList().get(i).getNoOfPiecesPerItem());
+		itemDetail.setRmId(itemDetailsList.getItemDetailList().get(i).getRmId());
+		itemDetail.setRmName(itemDetailsList.getItemDetailList().get(i).getRmName());
+		itemDetail.setRmQty(itemDetailsList.getItemDetailList().get(i).getRmQty());
+		itemDetail.setRmType(itemDetailsList.getItemDetailList().get(i).getRmType());
+		itemDetail.setRmUomId(itemDetailsList.getItemDetailList().get(i).getRmUomId());
+		itemDetail.setRmWeight(itemDetailsList.getItemDetailList().get(i).getRmWeight());
+		itemDetail.setDelStatus(itemDetailsList.getItemDetailList().get(i).getDelStatus());
+		itemDetailList.add(itemDetail);
+	}
+	model.addObject("itemDetailList", itemDetailsList.getItemDetailList());
+	model.addObject("item", item);
+	
+	}
+	catch(Exception e)
+	{
+		System.err.println();
+	}
+	return model;
+	}
+	//----------------------------------------END-------------------------------------------------------------
+	
+	@RequestMapping(value = "/getBaseQty", method = RequestMethod.GET)
+	public @ResponseBody int getBaseQty(HttpServletRequest request, HttpServletResponse response) {
+		
+		int baseQty = 0;
+		
+		int id=Integer.parseInt(request.getParameter("id"));
+		
+		for(Item item:itemList)
+		{
+			if(item.getId()==id)
+			{
+				baseQty=item.getMinQty();
 				
+				break;
+			}
+			
+		}
+		return baseQty;
+	}
+
+	  //---------------------------------------AJAX For RM List -----------------------------------------
+		@RequestMapping(value = "/getRawMaterialList", method = RequestMethod.GET)
+		public @ResponseBody List<CommonConf> getRawMaterialList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/rawMaterial/addItemDetail");
+		
+		int rmType=Integer.parseInt(request.getParameter("rm_type"));
+		   System.out.println("rmType:"+rmType);
+
+		RestTemplate rest=new RestTemplate();
+		
+		List<CommonConf> commonConfList=new ArrayList<CommonConf>();
+
+		if(rmType==1)
+		{
+			System.out.println("inside if");
+		try
+		{
+		RawMaterialDetailsList rawMaterialDetailsList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterial", RawMaterialDetailsList.class);
+		
+		System.out.println("RM Details : "+rawMaterialDetailsList.toString());
+		
+		   for(RawMaterialDetails rawMaterialDetails:rawMaterialDetailsList.getRawMaterialDetailsList())
+		   {
+			   CommonConf commonConf=new CommonConf();
+			   
+			   commonConf.setId(rawMaterialDetails.getRmId());
+			   commonConf.setName(rawMaterialDetails.getRmName());
+			   commonConf.setRmUomId(rawMaterialDetails.getRmUomId());
+			   
+			   
+			   commonConfList.add(commonConf);
+			   commonConfs.add(commonConf);
+		   }
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		   System.out.println("Common Rm List1:"+commonConfList.toString());
+		   
+		}
+		else
+		{
+			
+			//if rmType=2,call Semi finished service
+			ItemSfHeaderList itemHeaderDetailList = rest.getForObject(Constants.url + "rawMaterial/getItemSfHeaders", ItemSfHeaderList.class);
+			
+			System.out.println("ItemSfHeaderList Details : "+itemHeaderDetailList.toString());
+			
+			   for(ItemSfHeader itemSfHeader:itemHeaderDetailList.getItemSfHeaderList())
+			   {
+				   CommonConf commonConf=new CommonConf();
+				   
+				   commonConf.setId(itemSfHeader.getSfId());
+				   commonConf.setName(itemSfHeader.getSfName());
+				   commonConf.setRmUomId(itemSfHeader.getSfUomId());
+
+				   commonConfList.add(commonConf);
+				   commonConfs.add(commonConf);
+
+			   }
+			   System.out.println("Common Rm List2:"+commonConfList.toString());
+
+		}
+		
+		return commonConfList;
+		}
+		//----------------------------------------END-------------------------------------------------------------
+		
+		@RequestMapping(value = "/insertItemDetail", method = RequestMethod.GET)
+		public @ResponseBody List<ItemDetail> insertItemDetail(HttpServletRequest request, HttpServletResponse response) {
+			
+			
+			
+			int itemId=Integer.parseInt(request.getParameter("itemId"));
+			System.out.println("itemId"+itemId);
+			
+			String itemName=request.getParameter("itemName");
+			System.out.println("itemName"+itemName);
+
+			
+			int noOfPiecesPerItem=Integer.parseInt(request.getParameter("baseQty"));
+			
+			int rmType=Integer.parseInt(request.getParameter("rmType"));
+			
+			int rmId=Integer.parseInt(request.getParameter("rmId"));
+			
+			String rmName=request.getParameter("rmName");
+
+			
+			int rmWeight=Integer.parseInt(request.getParameter("rmWeight"));
+			
+			int rmQty=Integer.parseInt(request.getParameter("rmQty"));
+			
+			
+			ItemDetail itemDetail=new ItemDetail();
+			
+			itemDetail.setItemId(itemId);
+			itemDetail.setItemName(itemName);
+			itemDetail.setRmId(rmId);
+			itemDetail.setRmName(rmName);
+			itemDetail.setRmQty(rmQty);
+			itemDetail.setRmWeight(rmWeight);
+			itemDetail.setRmQty(rmQty);
+			itemDetail.setRmType(rmType);
+			itemDetail.setNoOfPiecesPerItem(noOfPiecesPerItem);
+			
+			for(CommonConf commonConf:commonConfs)
+			{
+				if(commonConf.getId()==itemDetail.getRmId())
+				{
+					itemDetail.setRmUomId(commonConf.getRmUomId());
+
+				}
+			}
+			
+			
+			itemDetail.setDelStatus(0);
+			System.out.println("ItemDetail"+itemDetail);
+			
+			itemDetailList.add(itemDetail);
+			
+			System.out.println("ItemDetail List:"+itemDetailList.toString());
+			return itemDetailList;
+		
+		}
+		@RequestMapping(value = "/addItemDetail", method = RequestMethod.GET)
+		public @ResponseBody List<ItemDetail> addItemDetail(HttpServletRequest request, HttpServletResponse response) {
+			
+			RestTemplate restTemplate=new RestTemplate();
+			
+			System.out.println("Item  Detail Before Submit "+itemDetailList.toString());
+			Info  info = null;
+			try
+			{
+			info=restTemplate.postForObject(Constants.url+"/rawMaterial/saveItemDetails",itemDetailList,Info.class);
+			
+			itemDetailList=new ArrayList<ItemDetail>();//new Object for Item Detail List
+			
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("id", globalId);
+
+			ItemDetailList itemDetailsList= restTemplate.postForObject(Constants.url + "rawMaterial/getItemDetails",map, ItemDetailList.class);
+
+			
+			for(int i=0;i< itemDetailsList.getItemDetailList().size();i++)
+			{  
+				ItemDetail itemDetail=new ItemDetail();
+				
+				itemDetail.setItemDetailId(itemDetailsList.getItemDetailList().get(i).getItemDetailId());
+				itemDetail.setItemId(itemDetailsList.getItemDetailList().get(i).getItemId());
+				itemDetail.setItemName(itemDetailsList.getItemDetailList().get(i).getItemName());
+				itemDetail.setNoOfPiecesPerItem(itemDetailsList.getItemDetailList().get(i).getNoOfPiecesPerItem());
+				itemDetail.setRmId(itemDetailsList.getItemDetailList().get(i).getRmId());
+				itemDetail.setRmName(itemDetailsList.getItemDetailList().get(i).getRmName());
+				itemDetail.setRmQty(itemDetailsList.getItemDetailList().get(i).getRmQty());
+				itemDetail.setRmType(itemDetailsList.getItemDetailList().get(i).getRmType());
+				itemDetail.setRmUomId(itemDetailsList.getItemDetailList().get(i).getRmUomId());
+				itemDetail.setRmWeight(itemDetailsList.getItemDetailList().get(i).getRmWeight());
+				itemDetail.setDelStatus(itemDetailsList.getItemDetailList().get(i).getDelStatus());
+				itemDetailList.add(itemDetail);
+			}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+				System.out.println("EXC:"+e.getStackTrace());
+
+			}
+			System.out.println("itemDetailList:"+itemDetailList.toString());
+
+
+			return itemDetailList;
+			
+		}
+		@RequestMapping(value = "/editItem", method = RequestMethod.GET)
+		public @ResponseBody List<ItemDetail> editItem(HttpServletRequest request, HttpServletResponse response) {
+			
+			int itemId=Integer.parseInt(request.getParameter("itemId"));
+			System.out.println("itemId"+itemId);
+			
+			String itemName=request.getParameter("itemName");
+			System.out.println("itemName"+itemName);
+
+			int noOfPiecesPerItem=Integer.parseInt(request.getParameter("baseQty"));
+			
+			int rmType=Integer.parseInt(request.getParameter("rmType"));
+			
+			int rmId=Integer.parseInt(request.getParameter("rmId"));
+			
+			String rmName=request.getParameter("rmName");
+			
+			int rmWeight=Integer.parseInt(request.getParameter("rmWeight"));
+			
+			int rmQty=Integer.parseInt(request.getParameter("rmQty"));
+			
+			int index=Integer.parseInt(request.getParameter("key"));
+			System.out.println("Key:"+index);
+			
+			System.out.println("itemDetailList::"+itemDetailList.toString());
+			for(int i=0;i<itemDetailList.size();i++)
+			{
+				if(i==index)
+				{
+			    	 itemDetailList.get(index).setItemId(itemId);
+					 itemDetailList.get(index).setItemName(itemName);
+					 itemDetailList.get(index).setRmId(rmId);
+					 itemDetailList.get(index).setRmName(rmName);
+					 itemDetailList.get(index).setRmQty(rmQty);
+					 itemDetailList.get(index).setRmWeight(rmWeight);
+					 itemDetailList.get(index).setRmQty(rmQty);
+					 itemDetailList.get(index).setRmType(rmType);
+					 itemDetailList.get(index).setNoOfPiecesPerItem(noOfPiecesPerItem);
+
+			    for(CommonConf commonConf:commonConfs)
+			    {
+				   if(commonConf.getId()== itemDetailList.get(index).getRmId())
+				   {
+					  itemDetailList.get(index).setRmUomId(commonConf.getRmUomId());
+
+				   }
+			    }
+			
+			  itemDetailList.get(index).setDelStatus(0);
+			  System.out.println("ItemDetail"+ itemDetailList.get(index));
+			
+			 }
+				
+			}
+			System.out.println("Edit ItemDetail Ajax: "+ itemDetailList.get(index).toString());
+ 			System.out.println("ItemDetail List:"+itemDetailList.toString());
+			return itemDetailList;
+			
+		}
+		
+		@RequestMapping(value = "/deleteItemDetail", method = RequestMethod.GET)
+		public @ResponseBody List<ItemDetail> deleteItemDetail(HttpServletRequest request, HttpServletResponse response) {
+			
+			int index=Integer.parseInt(request.getParameter("key"));
+
+			if(itemDetailList.get(index).getItemDetailId()==0)
+			{
+			   itemDetailList.remove(index);
+			}
+			else
+			{
+				itemDetailList.get(index).setDelStatus(1);
+			}
+ 			System.out.println("ItemDetail List D:"+itemDetailList.toString());
+
+			return itemDetailList;
+		}
+		
+
+		@RequestMapping(value = "/editItemDetail", method = RequestMethod.GET)
+		public @ResponseBody ItemDetail editItemDetail(HttpServletRequest request, HttpServletResponse response) {
+			
+			int index=Integer.parseInt(request.getParameter("key"));
+			System.out.println("Key:"+index);
+			ItemDetail  getItemDetail=new ItemDetail(); 
+			
+			System.out.println("itemDetailList::"+itemDetailList.toString());
+			for(int i=0;i<itemDetailList.size();i++)
+			{
+				if(i==index)
+				{
+			     getItemDetail=itemDetailList.get(index);
+				}
+			
+			}
+			System.out.println("Edit ItemDetail Ajax: "+getItemDetail.toString());
+			return getItemDetail;
+		}
+			
+			
 }
