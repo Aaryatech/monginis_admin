@@ -1049,6 +1049,18 @@
 					<a href="${pageContext.request.contextPath}/showProdForcast">Production Plan</a>
 					</li>
 					
+					
+					<c:choose>
+						<c:when test="${Constants.subAct==164}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showProdHeader">Get Prod Plan Header</a>
+					</li>
+					
 </ul>
 				<!-- END Submenu -->
 				</li>
