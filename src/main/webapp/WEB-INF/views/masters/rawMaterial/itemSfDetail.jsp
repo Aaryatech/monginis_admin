@@ -142,7 +142,7 @@
 									<div class="col-sm-6 col-lg-4 controls">
 										<select name="material_type" id="material_type"
 											class="form-control"
-											placeholder="SF Type" data-rule-required="true">
+											placeholder="Material Type" data-rule-required="true">
 											<option value="0">Select Material Type</option>
 											<option value="1">RM</option>
 											<option value="2">SF</option>
@@ -154,7 +154,7 @@
 									<div class="col-sm-6 col-lg-4 controls"
 										id="chooseRM">
 										<select name="rm_material_name" id="rm_material_name"
-											class="form-control" placeholder="RM"
+											class="form-control" placeholder="Material Name"
 											data-rule-required="true">
 											<option value="-1">Select Material</option>
 											
@@ -169,14 +169,14 @@
 										Weight </label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_item_weight" id="sf_item_weight"
-											class="form-control" placeholder="Specification "
+											class="form-control" placeholder="SF Weight "
 											data-rule-required="true" />
 									</div>
 
 									<label class="col-sm-3 col-lg-2 control-label"> Qty</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="qty" id="qty" class="form-control"
-											placeholder="Weight" data-rule-required="true"
+											placeholder="Qty" data-rule-required="true"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 
@@ -612,7 +612,7 @@ function insertItemDetail(){
 }
 );
 	
-	window.location.reload();
+
 }
 
 

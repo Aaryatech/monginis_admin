@@ -79,7 +79,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Semi Finished Item
+						<i class="fa fa-file-o"></i>Semi Finished Item Edit
 					</h1>
 
 				</div>
@@ -94,7 +94,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Add Item
+								<i class="fa fa-bars"></i>Edit Item
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -105,14 +105,14 @@
 
 
 						<div class="box-content">
-							<form action="insertSfItemHeader" method="post"
-								class="form-horizontal" id="validation-form" method="post">
+							<form action="${pageContext.request.contextPath}/editSfHeader" method="post"
+								class="form-horizontal" id="validation-form">
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label"> SF Name</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_item_name" id="sf_item_name"
-											class="form-control" placeholder="SF Name"
+											class="form-control" placeholder="SF Name" value="${sfName}"
 											data-rule-required="true" />
 									</div>
 
@@ -126,7 +126,16 @@
 											<option value="1">Select SF Type</option>
 											<c:forEach items="${sfTypeList}" var="sfTypeList"
 												varStatus="count">
-												<option value="${sfTypeList.id}"><c:out value="${sfTypeList.sfTypeName}"/></option>
+												
+												<c:choose>
+												<c:when test="${editHeader.sfType eq sfTypeList.id}">
+													<option selected value="${sfTypeList.id}"><c:out value="${sfTypeList.sfTypeName}"/></option>
+
+												</c:when>
+												<c:otherwise>
+													<option value="${sfTypeList.id}"><c:out value="${sfTypeList.sfTypeName}"/></option>
+												</c:otherwise>
+												</c:choose>
 											</c:forEach>
 										</select>
 									</div>
@@ -142,7 +151,15 @@
 											<option value="1">Select UOM</option>
 											<c:forEach items="${rmUomList}" var="rmUomList"
 												varStatus="count">
-												<option value="${rmUomList.uomId}"><c:out value="${rmUomList.uom}"/></option>
+												<c:choose>
+												<c:when test="${editHeader.sfUomId eq rmUomList.uomId}">
+													<option selected value="${rmUomList.uomId}"><c:out value="${rmUomList.uom}"/></option>
+												</c:when>
+												<c:otherwise>
+													<option value="${rmUomList.uomId}"><c:out value="${rmUomList.uom}"/></option>
+
+												</c:otherwise>
+												</c:choose>
 											</c:forEach>
 										</select>
 									</div>
@@ -150,8 +167,8 @@
 									<label class="col-sm-3 col-lg-2 control-label">SF
 										Weight </label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="sf_item_weight" id="sf_item_weight"
-											class="form-control" placeholder="SF Weight "
+										<input type="text" name="sf_item_weight" id="sf_item_weight" value="${editHeader.sfWeight}"
+											class="form-control" placeholder="Specification "
 											data-rule-required="true" />
 									</div>
 								</div>
@@ -163,8 +180,8 @@
 										Qty</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_stock_qty" id="sf_stock_qty"
-											class="form-control" placeholder="Stock Qty"
-											data-rule-required="true"
+											class="form-control" placeholder="Weight"
+											data-rule-required="true" value="${editHeader.stockQty}"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 
@@ -174,7 +191,8 @@
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_reorder_level_qty"
 											id="sf_reorder_level_qty" class="form-control"
-											placeholder="Reorder Level Qty " data-rule-required="true"
+											placeholder="Max Qty " data-rule-required="true"
+											value="${editHeader.reorderLevelQty}"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 
@@ -185,8 +203,9 @@
 
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_min_qty" id="sf_min_qty"
-											class="form-control" placeholder="Min Level Qty"
+											class="form-control" placeholder="Pack Qty"
 											data-rule-required="true"
+											value="${editHeader.minLevelQty}"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 
@@ -194,20 +213,21 @@
 										Level Qty </label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_max_qty" id="sf_max_qty"
-											class="form-control" placeholder="Max Level Qty"
+											class="form-control" placeholder="Min Qty"
 											data-rule-required="true"
+											value="${editHeader.maxLevelQty}"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 								</div>
 
 								<div class="row">
 									<div class="col-md-12" style="text-align: center">
-										<input type="submit" class="btn btn-info" value="Submit">
+										<input type="submit" class="btn btn-info" value="Submit Edit">
 
 									</div>
 								</div>
 
-								<div class="clearfix"></div>
+						<%-- 		<div class="clearfix"></div>
 								<div class="table-responsive" style="border: 0">
 									<table width="100%" class="table table-advance" id="table1">
 										<thead>
@@ -216,10 +236,10 @@
 												<th width="140" style="width: 30px" align="left">Sr No</th>
 												<th width="138" align="left">SF Name</th>
 												<th width="120" align="left">SF Type</th>
-												<th width="50" align="left">SF Weight</th>
+												<th width="120" align="left">SF Weight</th>
 
-												<th width="90" align="left">Min Level Qty</th>
-												<th width="100" align="left">Reorder Level Qty</th>
+												<th width="120" align="left">Min Level Qty</th>
+												<th width="120" align="left">Reorder Level Qty</th>
 
 												<th width="120" align="left">Action</th>
 												<!-- 	<th width="140" align="left">GST %</th> -->
@@ -243,34 +263,29 @@
 													<td align="left"><c:out
 															value="${itemHeaderList.sfTypeName}" /></td>
 
-													<td align="center"><c:out
+													<td align="left"><c:out
 															value="${itemHeaderList.sfWeight}" /></td>
 
-													<td align="center"><c:out
+													<td align="left"><c:out
 															value="${itemHeaderList.minLevelQty}" /></td>
 
-													<td align="center"><c:out
+													<td align="left"><c:out
 															value="${itemHeaderList.reorderLevelQty}" /></td>
 
 													<td><a
-href="${pageContext.request.contextPath}/showAddSfItemDetail/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
-														class="btn bnt-primary"> <i
-																class="fa fa-list"></i></a>
-																
-																<a
-href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
-														class="btn btn-primary"><i
-																class="fa fa-edit"></i></a>
-																
-																
-																</td>
+														href="${pageContext.request.contextPath}/showAddSfItemDetail/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
+														class="action_btn"> <abbr title="Details"><i
+																class="fa fa-list"></i></abbr></a> <a
+														href="${pageContext.request.contextPath}/editSfItemDetail/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
+														class="action_btn"> <abbr title="Details"><i
+																class="fa fa-edit"></i></abbr></a></td>
 
 												</tr>
 											</c:forEach>
 
 										</tbody>
 									</table>
-								</div>
+								</div> --%>
 
 							</form>
 						</div>
@@ -365,80 +380,6 @@ href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
 
-	<script type="text/javascript">
-		$(document)
-				.ready(
-						function() {
-							$('#rm_group')
-									.change(
-											function() {
-												$
-														.getJSON(
-																'${getRmCategory}',
-																{
-																	grpId : $(
-																			this)
-																			.val(),
-																	ajax : 'true'
-																},
-																function(data) {
-																	var html = '<option value="" selected >Select Category</option>';
-
-																	var len = data.length;
-																	for (var i = 0; i < len; i++) {
-																		html += '<option value="' + data[i].catId + '">'
-																				+ data[i].catName
-																				+ '</option>';
-																	}
-																	html += '</option>';
-																	$('#rm_cat')
-																			.html(
-																					html);
-																	$('#rm_cat')
-																			.formcontrol(
-																					'refresh');
-
-																});
-											});
-						});
-		$(document)
-				.ready(
-						function() {
-							$('#rm_cat')
-									.change(
-											function() {
-												$
-														.getJSON(
-																'${getRmSubCategory}',
-																{
-																	catId : $(
-																			this)
-																			.val(),
-																	ajax : 'true'
-																},
-																function(data) {
-																	var html = '<option value="" selected >Select Category</option>';
-
-																	var len = data.length;
-																	for (var i = 0; i < len; i++) {
-																		html += '<option value="' + data[i].subCatId + '">'
-																				+ data[i].subCatName
-																				+ '</option>';
-																	}
-																	html += '</option>';
-																	$(
-																			'#rm_sub_cat')
-																			.html(
-																					html);
-																	$(
-																			'#rm_sub_cat')
-																			.formcontrol(
-																					'refresh');
-
-																});
-											});
-						});
-	</script>
 
 </body>
 </html>

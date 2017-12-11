@@ -50,7 +50,7 @@ public class ItemSfController {
 	
 	public static  List<CommonConf> commonConfs=new ArrayList<CommonConf>();
 
-	
+	int editSfId=0;
 	SfItemDetailList sfDetaiListItems;
 	
 	List<ItemSfDetail> sfItemDetail=new ArrayList<>();
@@ -68,12 +68,13 @@ public class ItemSfController {
 
 			RestTemplate restTemplate = new RestTemplate();
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-
+			rawMaterialUomList= new ArrayList<>();
 
 			rawMaterialUomList = restTemplate.getForObject(Constants.url + "rawMaterial/getRmUom",
 					List.class);
 			
 				map.add("delStatus", 0);
+				sfTypeList=new ArrayList<>();
 				
 			 sfTypeList=restTemplate.postForObject(Constants.url+"getSfType",map,List.class);
 			
@@ -108,7 +109,7 @@ public class ItemSfController {
 	}
 
 	@RequestMapping(value = "/insertSfItemHeader", method = RequestMethod.POST)
-	public ModelAndView insertSfItemHeader(HttpServletRequest request, HttpServletResponse response) {
+	public String insertSfItemHeader(HttpServletRequest request, HttpServletResponse response) {
 		
 		Constants.mainAct=4;
 		Constants.subAct=41;
@@ -164,12 +165,13 @@ public class ItemSfController {
 		
 		}
 		catch (Exception e) {
+			
 			e.printStackTrace();
-			System.out.println("ex in header insert = "+e.getMessage());
+			System.out.println("ex in header edit = "+e.getMessage());
 			
 		}
 		
-	return model;
+	return "redirect:/showItemSf";
 	
 	}
 	
@@ -224,6 +226,144 @@ public class ItemSfController {
 		}
 		return model;
 	}	
+	
+	//edit sf Header
+
+	@RequestMapping(value = "/editSfItemHeader/{sfId}/{sfName}/{sfTypeName}", method = RequestMethod.GET)
+	public ModelAndView editSfItemDetail(@PathVariable int sfId,@PathVariable String sfName,@PathVariable  String sfTypeName,HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct=4;
+		Constants.subAct=41;
+			System.out.println("Inside show edit Item Header ");
+			
+		ModelAndView model=new ModelAndView("masters/rawMaterial/editItemSfHeader");
+	
+		try {
+			
+		RestTemplate restTemplate=new RestTemplate();
+		
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		//GetItemSfHeader editHeader=new GetItemSfHeader();
+		GetItemSfHeader editHeader=new GetItemSfHeader();
+		for(int i=0;i<itemHeaderList.size();i++) {
+		
+			if(itemHeaderList.get(i).getSfId()==sfId)
+			editHeader=itemHeaderList.get(i);
+
+		}
+		editSfId=editHeader.getSfId();
+		
+		 rawMaterialDetailsList=restTemplate.getForObject(Constants.url +"rawMaterial/getAllRawMaterial", RawMaterialDetailsList.class);
+		
+		 System.out.println("LIst :"+rawMaterialDetailsList.toString());
+		
+		model.addObject("rmDetailList",rawMaterialDetailsList.getRawMaterialDetailsList());
+		
+		System.out.println("sf header List "+itemHeaderList.toString());
+		
+		
+		 map = new LinkedMultiValueMap<String, Object>();
+
+		 rawMaterialUomList=new ArrayList<>();
+		rawMaterialUomList = restTemplate.getForObject(Constants.url + "rawMaterial/getRmUom",
+				List.class);
+		
+			map.add("delStatus", 0);
+			sfTypeList=new ArrayList<>();
+		 sfTypeList=restTemplate.postForObject(Constants.url+"getSfType",map,List.class);
+		
+		 
+		model.addObject("editHeader",editHeader);
+		model.addObject("sfName",sfName);	
+		model.addObject("sfType",sfTypeName);
+		model.addObject("sfTypeList", sfTypeList);
+		
+		model.addObject("rmUomList", rawMaterialUomList);
+		
+		//model.addObject("sfTypeList", sfTypeList);
+
+		}catch (Exception e) {
+			
+			System.out.println("Error in editItem SfItemDetail Details ");
+			
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+
+		}
+		
+		return model;
+	}	
+	
+	
+	
+	@RequestMapping(value = "/editSfHeader", method = RequestMethod.POST)
+	public String editSfHeader(HttpServletRequest request, HttpServletResponse response) {
+		
+		Constants.mainAct=4;
+		Constants.subAct=41;
+
+		ModelAndView model=new ModelAndView("masters/rawMaterial/itemSf");
+		
+		try {
+			
+		RestTemplate restTemplate=new RestTemplate();
+		
+		String sfItemName=request.getParameter("sf_item_name");
+		
+		String sfType=request.getParameter("sf_item_type");
+		
+		
+		int sfItemUoM=Integer.parseInt(request.getParameter("sf_item_uom"));
+				
+		int sfItewWeight=Integer.parseInt(request.getParameter("sf_item_weight"));
+		
+		int sfStockQty=Integer.parseInt(request.getParameter("sf_stock_qty"));
+						
+		float sfReorderQty=Float.parseFloat(request.getParameter("sf_reorder_level_qty"));
+		
+		float sfMinQty=Float.parseFloat(request.getParameter("sf_min_qty"));
+		
+		float sfMaxQty=Float.parseFloat(request.getParameter("sf_min_qty"));
+		
+		ItemSfHeader header=new ItemSfHeader();
+		
+		header.setSfId(editSfId);
+		header.setDelStatus(0);
+		header.setMaxLevelQty(sfMaxQty);
+		header.setMinLevelQty(sfMinQty);
+		header.setReorderLevelQty(sfReorderQty);
+		header.setSfName(sfItemName);
+		header.setSfType(sfType);
+		header.setSfUomId(sfItemUoM);
+		header.setSfWeight(sfItewWeight);
+		header.setStockQty(sfStockQty);
+		
+		System.out.println("header= "+header.toString());
+
+		Info info=restTemplate.postForObject(Constants.url+"postSfItemHeader",header,Info.class);
+		
+		System.out.println("Insert Header response "+info.toString());
+		
+		//List<GetItemSfHeader> itemHeaderList=restTemplate.getForObject(Constants.url+"getItemSfHeader",List.class);
+
+		//System.out.println(" Header response "+itemHeaderList);
+		
+		model.addObject("itemHeaderList",itemHeaderList);
+		model.addObject("rmUomList", rawMaterialUomList);
+		model.addObject("sfTypeList", sfTypeList);
+		
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("ex in header insert = "+e.getMessage());
+			
+		}
+		
+		return "redirect:/showItemSf";
+	
+	}
+	
+	//edit df header
 	
 	@RequestMapping(value = "/getItemDetail", method = RequestMethod.GET)
 	@ResponseBody public List<ItemSfDetail> getItemDetail(HttpServletRequest request, HttpServletResponse response) {
@@ -377,6 +517,8 @@ public class ItemSfController {
 		
 		Constants.mainAct=4;
 		Constants.subAct=41;
+		ModelAndView model = new ModelAndView("masters/rawMaterial/itemSf");
+
 		
 		System.out.println("Inside show details");
 		RestTemplate restTemplate=new RestTemplate();
@@ -390,7 +532,7 @@ public class ItemSfController {
 		}
 		
 		System.out.println("Redirecting to show Sf Item  after Inserting item details ");
-		
+
 		return "redirect:/showItemSf";
 	}
 	
