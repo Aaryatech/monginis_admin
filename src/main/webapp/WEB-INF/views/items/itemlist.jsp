@@ -185,11 +185,11 @@
 										<tr>
 											<th width="17" style="width: 18px">#</th>
 											<th width="180" align="left">Iteam Id</th>
-											<th width="423" align="left">Item Name</th>
+											<th width="223" align="left">Item Name</th>
 											<th width="423" align="left">Image</th>
 											<th width="243" align="left">Rate</th>
 											<th width="137" align="left">MRP</th>
-											<th width="70" align="left">Action</th>
+											<th width="150" align="left">Action</th>
 										</tr>
 									</thead>
 									<tbody>
@@ -208,9 +208,10 @@
 												<td align="left"><c:out value="${itemsList.itemRate1}" /></td>
 												<td align="left"><c:out value="${itemsList.itemMrp1}" /></td>
 												<td align="left"><a href="updateItem/${itemsList.id}"><span
-														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
-
-													<a href="deleteItem/${itemsList.id}"
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
+                                             <a href="showItemDetail/${itemsList.id}"><span
+														class="glyphicon glyphicon-list"></span></a>
+													&nbsp;&nbsp;<a href="deleteItem/${itemsList.id}"
 													onClick="return confirm('Are you sure want to delete this record');"><span
 														class="glyphicon glyphicon-remove"></span></a></td>
 											</tr>
