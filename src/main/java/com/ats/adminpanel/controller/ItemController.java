@@ -588,7 +588,6 @@ public class ItemController {
 	public ModelAndView updateMessage(@PathVariable int id) {
 		ModelAndView mav = new ModelAndView("items/editItem");
 
-		RestTemplate rest = new RestTemplate();
 
 		RestTemplate restTemplate = new RestTemplate();
 		// CategoryListResponse
@@ -597,7 +596,10 @@ public class ItemController {
 		mCategoryList = categoryListResponse.getmCategoryList();
 		System.out.println("Main Cat is  " + categoryListResponse.toString());
 
-		Item item = rest.getForObject("" + Constants.url + "getItem?id={id}", Item.class, id);
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("id", id);
+		
+		Item item = restTemplate.postForObject("" + Constants.url + "getItem", map,Item.class);
 		System.out.println("ItemResponse" + item);
 		String grp1 = item.getItemGrp1();
 		mav.addObject("grp1", grp1);
