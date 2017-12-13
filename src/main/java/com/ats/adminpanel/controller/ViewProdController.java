@@ -20,19 +20,45 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllFrIdNameList;
+import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.RawMaterial.ItemDetailList;
 import com.ats.adminpanel.model.production.GetProdPlanDetail;
 import com.ats.adminpanel.model.production.GetProdPlanDetailList;
 import com.ats.adminpanel.model.production.GetProdPlanHeader;
 import com.ats.adminpanel.model.production.GetProdPlanHeaderList;
+import com.ats.adminpanel.model.production.PostProductionPlanDetail;
+import com.ats.adminpanel.model.production.mixing.temp.GetSFPlanDetailForMixing;
+import com.ats.adminpanel.model.production.mixing.temp.GetSFPlanDetailForMixingList;
+import com.ats.adminpanel.model.production.mixing.temp.GetTempMixItemDetail;
+import com.ats.adminpanel.model.production.mixing.temp.GetTempMixItemDetailList;
+import com.ats.adminpanel.model.production.mixing.temp.TempMixing;
+import com.ats.adminpanel.model.production.mixing.temp.TempMixingList;
 
 @Controller
-
 public class ViewProdController {
+	
+	String globalProductionBatch;
+	int globalTimeSlot;
+	// new Lists
+
+	GetSFPlanDetailForMixingList getSFPlanDetailForMixingList;
+
+	List<GetSFPlanDetailForMixing> sfPlanDetailForMixing = new ArrayList<>();
+
+	GetTempMixItemDetailList getTempMixItemDetailList;
+
+	List<GetTempMixItemDetail> tempMixItemDetail = new ArrayList<>();
+
+	// temp Mix table beans
+	TempMixingList tempMixingList;
+	List<TempMixing> tempMixing = new ArrayList<>();
+	
 	
 	List<GetProdPlanHeader> prodPlanHeaderList;
 	
-	List<GetProdPlanDetail> prodPlanDetailList;
-	
+    public  List<GetProdPlanDetail> prodPlanDetailList;
+    public static  List<PostProductionPlanDetail> postProdPlanDetailList;
+
 	int globalHeaderId=0;
 	
 	@RequestMapping(value = "/showProdHeader", method = RequestMethod.GET)
@@ -40,6 +66,8 @@ public class ViewProdController {
 		
 		Constants.mainAct=16;
 		Constants.subAct=164;
+		postProdPlanDetailList=new ArrayList<PostProductionPlanDetail>();
+		
 		ModelAndView model = new ModelAndView("production/viewProdHeader");
 		try {
 		RestTemplate restTemplate = new RestTemplate();
@@ -51,6 +79,8 @@ public class ViewProdController {
 		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 		String fromDate=df.format(date);
 		String toDate=df.format(date);
+		System.out.println("From Date And :"+fromDate+"ToDATE"+toDate);
+		
 		map.add("fromDate", fromDate);
 		map.add("toDate", toDate);
 		
@@ -113,6 +143,8 @@ public class ViewProdController {
 		prodPlanDetailList=new ArrayList<>();
 		
 		prodPlanDetailList=prodDetail.getProdPlanDetail();
+		
+		
 		GetProdPlanHeader planHeader=new GetProdPlanHeader();
 		
 		for(int i=0;i<prodPlanHeaderList.size();i++) {
@@ -123,7 +155,24 @@ public class ViewProdController {
 			}
 				
 		}
+		globalProductionBatch=planHeader.getProductionBatch();
+		globalTimeSlot=planHeader.getTimeSlot();
 		
+		for(int j=0;j<prodPlanDetailList.size();j++)
+		{
+			PostProductionPlanDetail postProductionPlanDetail=new PostProductionPlanDetail();
+			postProductionPlanDetail.setProductionDetailId(prodPlanDetailList.get(j).getProductionDetailId());
+			postProductionPlanDetail.setItemId(prodPlanDetailList.get(j).getItemId());
+			postProductionPlanDetail.setOpeningQty(prodPlanDetailList.get(j).getOpeningQty());
+			postProductionPlanDetail.setPlanQty(prodPlanDetailList.get(j).getPlanQty());
+			postProductionPlanDetail.setProductionBatch(prodPlanDetailList.get(j).getProductionBatch());
+			postProductionPlanDetail.setProductionDate(prodPlanDetailList.get(j).getProductionDate());
+			postProductionPlanDetail.setProductionHeaderId(prodPlanDetailList.get(j).getProductionHeaderId());
+			postProductionPlanDetail.setProductionQty(prodPlanDetailList.get(j).getProductionQty());
+			postProductionPlanDetail.setOrderQty(prodPlanDetailList.get(j).getOrderQty());
+			postProductionPlanDetail.setRejectedQty(prodPlanDetailList.get(j).getRejectedQty());
+			postProdPlanDetailList.add(postProductionPlanDetail);
+		}
 		
 		model.addObject("planDetail", prodPlanDetailList);
 		
@@ -131,7 +180,7 @@ public class ViewProdController {
 		
 		}catch (Exception e) {
 			
-			System.out.println("in catech model ");
+			System.out.println("in catch model ");
 			
 			e.printStackTrace();
 			
@@ -142,4 +191,173 @@ public class ViewProdController {
 		
 	}
 	
+	@RequestMapping(value = "/updateQty", method = RequestMethod.POST)
+	public ModelAndView updatePlanQty(HttpServletRequest request, HttpServletResponse response) {
+		
+		ModelAndView model = new ModelAndView("production/prodDetail");
+
+		try {
+			int prodStatus=Integer.parseInt(request.getParameter("productionStatus"));
+
+	//	List<PostProductionPlanDetail> getProdPlanDetailList=new ArrayList<PostProductionPlanDetail>();
+		
+		   for(int i=0;i<postProdPlanDetailList.size();i++)
+		   {
+		 
+			 if(prodStatus==1)
+			 {
+			   int planQty=Integer.parseInt(request.getParameter("plan_qty"+postProdPlanDetailList.get(i).getProductionDetailId()+"status1"));
+			   System.out.println("planQty"+planQty);
+			   
+			   int prodQty=Integer.parseInt(request.getParameter("act_prod_qty"+postProdPlanDetailList.get(i).getProductionDetailId()+"status1"));
+			   System.out.println("prodQty:"+prodQty);
+			   
+				postProdPlanDetailList.get(i).setPlanQty(planQty);
+				postProdPlanDetailList.get(i).setProductionQty(prodQty);
+
+			 }
+			 else if(prodStatus==2)
+			 {
+				 int orderQty=Integer.parseInt(request.getParameter("order_qty"+postProdPlanDetailList.get(i).getProductionDetailId()+"status1"));
+				 System.out.println("orderQty:"+orderQty);
+				 
+				 int prodQty=Integer.parseInt(request.getParameter("act_prod_qty"+postProdPlanDetailList.get(i).getProductionDetailId()+"status1"));
+				   System.out.println("prodQty:"+prodQty);
+			  
+					postProdPlanDetailList.get(i).setOrderQty(orderQty);
+					postProdPlanDetailList.get(i).setProductionQty(prodQty);
+
+			 }
+			 else if(prodStatus==3)
+			 {
+				 int prodQty=Integer.parseInt(request.getParameter("act_prod_qty"+postProdPlanDetailList.get(i).getProductionDetailId()+"status1"));
+				   System.out.println("prodQty:"+prodQty);
+				   
+					postProdPlanDetailList.get(i).setProductionQty(prodQty);
+			 }
+			 
+			
+		   }
+		System.out.println("ItemDetail List:"+postProdPlanDetailList.toString());
+		
+		RestTemplate restTemplate=new RestTemplate();
+
+		
+		Info info= restTemplate.postForObject(Constants.url + "updateProdQty",postProdPlanDetailList, Info.class);
+
+		System.out.println("Info"+info.toString());
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception In Update Plan Qty");
+		}
+		return model;
+	}
+	@RequestMapping(value = "/addMixing", method = RequestMethod.GET)
+	public ModelAndView showMixing(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView mav = new ModelAndView("production/addMixing");
+
+		try {
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			System.out.println("globalHeaderId:"+globalHeaderId);
+			map.add("headerId", globalHeaderId);
+
+			getSFPlanDetailForMixingList = restTemplate.postForObject(Constants.url + "getSfPlanDetailForMixing", map,
+					GetSFPlanDetailForMixingList.class);
+
+			sfPlanDetailForMixing = getSFPlanDetailForMixingList.getSfPlanDetailForMixing();
+
+			System.out.println("sf Plan Detail For Mixing  " + sfPlanDetailForMixing.toString());
+
+			TempMixing tempMx = null;
+			for (int i = 0; i < sfPlanDetailForMixing.size(); i++) {
+
+				GetSFPlanDetailForMixing planMixing = sfPlanDetailForMixing.get(i);
+
+				tempMx = new TempMixing();
+
+				tempMx.setQty(planMixing.getTotal());
+
+				tempMx.setRmId(planMixing.getRmId());
+				tempMx.setSfId(1);
+
+				tempMx.setProdHeaderId(globalHeaderId);
+
+				tempMixing.add(tempMx);
+			}
+
+			System.out.println("temp Mix List " + tempMixing.toString());
+
+			Info info = restTemplate.postForObject(Constants.url + "insertTempMixing", tempMixing, Info.class);
+
+			map = new LinkedMultiValueMap<String, Object>();
+
+			map.add("prodHeaderId", globalHeaderId);
+
+			getTempMixItemDetailList = restTemplate.postForObject(Constants.url + "getTempMixItemDetail", map,
+					GetTempMixItemDetailList.class);
+
+			tempMixItemDetail = getTempMixItemDetailList.getTempMixItemDetail();
+
+			System.out.println("temp Mix Item Detail  " + tempMixItemDetail.toString());
+
+			// Calculations
+
+			boolean isSameItem = false;
+			GetSFPlanDetailForMixing newItem = null;
+			
+			for (int j = 0; j < tempMixItemDetail.size(); j++) {
+				
+				GetTempMixItemDetail tempMixItem = tempMixItemDetail.get(j);
+
+			for (int i = 0; i < sfPlanDetailForMixing.size(); i++) {
+
+				GetSFPlanDetailForMixing planMixing = sfPlanDetailForMixing.get(i);
+
+					if (tempMixItem.getRmId() == planMixing.getRmId()) {
+						
+						planMixing.setTotal(planMixing.getTotal() + tempMixItem.getTotal());
+
+						isSameItem = true;
+
+					}
+				}
+				if(isSameItem==false) {
+					
+					 newItem= new  GetSFPlanDetailForMixing();
+					
+					newItem.setRmName(tempMixItem.getRmName());
+					newItem.setRmType(tempMixItem.getRmType());
+					newItem.setRmId(tempMixItem.getSfId());
+					newItem.setTotal(tempMixItem.getTotal());
+					newItem.setUom(tempMixItem.getUom());
+					
+					sfPlanDetailForMixing.add(newItem);
+					
+				}
+			}
+
+					
+			System.out.println("Final List "+sfPlanDetailForMixing.toString());
+			
+       mav.addObject("mixingList",sfPlanDetailForMixing);
+       mav.addObject("productionBatch",globalProductionBatch);
+       mav.addObject("globalTimeSlot",globalTimeSlot);
+       
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			System.out.println("Ex oc");
+		}
+
+		return mav;
+
+	}
+
+			
 }

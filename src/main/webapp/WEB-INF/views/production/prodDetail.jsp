@@ -54,6 +54,7 @@
 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<c:url var="updatePlanQty" value="/updatePlanQty"/>
 
 
 	<div class="container" id="main-container">
@@ -97,17 +98,13 @@
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
-							<!-- <div class="box-tool">
-								<a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a> <a data-action="close" href="#"><i
-									class="fa fa-times"></i></a>
-							</div> -->
+							
 						</div>
 
 
 						<div class="box-content">
-							<form action="viewProd" class="form-horizontal"
-								id="validation-form" method="post">
+							<form action="${pageContext.request.contextPath}/updateQty" class="form-horizontal"
+								id="form" method="post" name="form">
 
 
 
@@ -135,7 +132,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Category
 									</label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input " type="text" name="from_date"
+										<input  type="text" name="from_date" id="from_date"
 											value="${planHeader.catName}" required />
 									</div>
 
@@ -154,7 +151,7 @@
 										<thead>
 											<tr>
 
-												<th width="17" style="width: 18px">Iten Name</th>
+												<th width="17" style="width: 18px">Item Name</th>
 												<th width="150" align="left">Stock</th>
 												<th width="150" align="left">Plan Qty</th>
 												<th width="150" align="left">Order Qty</th>
@@ -168,34 +165,65 @@
 										</thead>
 										<tbody>
 
-											<c:forEach items="${planDetail}" var="planDetail">
-
+											<c:forEach items="${planDetail}" var="planDetail" varStatus="count">
+												<input type="hidden" name="item${count.index}" id="item${planDetail.productionDetailId}" value="${planDetail.itemId}"/>
 												<tr>
 													<td align="left"><c:out value="${planDetail.itemName}" /></td>
 													
 													<td align="left"><input align="left" type="text"  value="${planDetail.openingQty}"
-														placeholder="Stock Qty" class="form-control" name="stk_qty"
-														data-rule-required="true" style="width: 65px" /></td>
+														placeholder="Stock Qty" class="form-control" name="stk_qty${planDetail.productionDetailId}" id="stk_qty${planDetail.productionDetailId}"
+														data-rule-required="true" style="width: 65px" disabled/></td>
 
-													<td align="left"><input align="left" type="text" name="plan_qty"
+                                                      <c:choose>
+         
+                                                      <c:when test = "${planHeader.productionStatus==1}">
+													<td align="left"><input align="left" type="text" name="plan_qty${planDetail.productionDetailId}status1" id="plan_qty${planDetail.productionDetailId}status1"
 														placeholder="Plan Qty" class="form-control" value="${planDetail.planQty}"
-														data-rule-required="true" style="width: 65px" /></td>
-														
-													<td align="left"><input align="left" type="text" name="order_qty"
+														data-rule-required="true" style="width: 65px"/></td>
+														</button>
+                                                    </c:when>
+                                                       <c:otherwise>
+                                                           <td align="left"><input align="left" type="text" name="plan_qty${planDetail.productionDetailId}status2" id="plan_qty${planDetail.productionDetailId}status2"
+														placeholder="Plan Qty" class="form-control" value="${planDetail.planQty}"
+														data-rule-required="true" style="width: 65px" disabled/></td>
+                                                       </c:otherwise>
+                                                     </c:choose>
+                                                     <c:choose>
+                                                     <c:when test = "${planHeader.productionStatus==2}">
+													  <td align="left"><input align="left" type="text" name="order_qty${planDetail.productionDetailId}status1" id="order_qty${planDetail.productionDetailId}status1"
 														placeholder="Order Qty" class="form-control" value="${planDetail.orderQty}"
-														data-rule-required="true" style="width: 65px" /></td>
-														
-													<td align="left"><input align="left" type="text" name="act_prod_qty"
+														data-rule-required="true" style="width: 65px"/></td>
+														 </c:when>
+														  <c:otherwise>
+														   <td align="left"><input align="left" type="text" name="order_qty${planDetail.productionDetailId}status2" id="order_qty${planDetail.productionDetailId}status2"
+														   placeholder="Order Qty" class="form-control" value="${planDetail.orderQty}"
+														   data-rule-required="true" style="width: 65px" disabled/></td>
+														  </c:otherwise>
+														  </c:choose>
+														    <c:choose>
+                                                      <c:when test = "${planHeader.productionStatus==4}">
+													<td align="left"><input align="left" type="text" name="act_prod_qty${planDetail.productionDetailId}status4" id="act_prod_qty${planDetail.productionDetailId}status4"
 														placeholder="Actual Prod" class="form-control" value="${planDetail.productionQty}"
-														data-rule-required="true" style="width: 65px" /></td>
-														
-													<td align="left"><input align="left" type="text" name="total_qty"
+														data-rule-required="true" style="width: 65px"disabled/></td>
+														 </c:when>
+														 <c:when test = "${planHeader.productionStatus==5}">
+														 	<td align="left"><input align="left" type="text" name="act_prod_qty${planDetail.productionDetailId}status5" id="act_prod_qty${planDetail.productionDetailId}status5"
+														    placeholder="Actual Prod" class="form-control" value="${planDetail.productionQty}"
+														    data-rule-required="true" style="width: 65px"disabled/></td>
+														 </c:when>
+														   <c:otherwise>
+														   <td align="left"><input align="left" type="text" name="act_prod_qty${planDetail.productionDetailId}status1" id="act_prod_qty${planDetail.productionDetailId}status1"
+														    placeholder="Actual Prod" class="form-control" value="${planDetail.productionQty}"
+														    data-rule-required="true" style="width: 65px" /></td>
+														   </c:otherwise>
+														 </c:choose>
+													<td align="left"><input align="left" type="text" name="total_qty${planDetail.productionDetailId}" id="total_qty${planDetail.productionDetailId}" 
 														placeholder="Total Qty" class="form-control" value="total"
-														data-rule-required="true" style="width: 65px" /></td>
+														data-rule-required="true" style="width: 65px" disabled/></td>
 														
-													<td align="left"><input align="left" type="text" name="rej_qty"
+													<td align="left"><input align="left" type="text" name="rej_qty${planDetail.productionDetailId}"  id="rej_qty${planDetail.productionDetailId}" 
 														placeholder="Rejected Qty" class="form-control" value="0"
-														data-rule-required="true" style="width: 65px" /></td>
+														data-rule-required="true" style="width: 65px" disabled/></td>
 
 
 													<%-- <td align="left"><a
@@ -203,6 +231,8 @@
 															class="glyphicon glyphicon-info-sign"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
 
 													</td> --%>
+													
+													  <c:if test="${count.last}"><input type="hidden" name="cnt" id="cnt" value="${count.index}"/></c:if>
 												</tr>
 											</c:forEach>
 
@@ -212,16 +242,86 @@
 
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-										<button type="submit" class="btn btn-primary">
-											<i class="fa fa-check"></i> Generate BOM
+									<c:choose>
+									  <c:when test = "${planHeader.isBom==0}">
+                                       <button type="button" class="btn btn-primary" >
+											<i class="fa fa-check"></i> Req. BOM
 										</button>
-									<!-- </div>
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2"> -->
-																		&nbsp;&nbsp;&nbsp;&nbsp;
-									
-										<button type="submit" class="btn btn-primary">
-											<i class="fa fa-check"></i> Mixing
+                                    </c:when>
+         
+                                    <c:when test = "${planHeader.isBom==1}">
+									<button type="button" class="btn btn-primary" disabled="disabled">
+											<i class="fa fa-check"></i> Req. BOM
 										</button>
+                                    </c:when>
+                                   <c:otherwise>
+                                   </c:otherwise>
+                                   </c:choose>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									<c:choose>
+									  <c:when test = "${planHeader.isMixing==0}">
+                                     <a href="${pageContext.request.contextPath}/addMixing"> <button type="button" class="btn btn-primary">
+											<i class="fa fa-check"></i> Req. Mixing
+										</button></a>
+										
+                                    </c:when>
+         
+                                    <c:when test = "${planHeader.isMixing==1}">
+								 <a href="${pageContext.request.contextPath}/addMixing">	<button type="button" class="btn btn-primary"disabled="disabled">
+											<i class="fa fa-check"></i> Req. Mixing
+									</button></a>
+										
+                                    </c:when>
+                                   <c:otherwise>
+                                   </c:otherwise>
+                                   </c:choose>
+										<input type="hidden" name="productionStatus" id="productionStatus" value="${planHeader.productionStatus}"/>
+									&nbsp;&nbsp;&nbsp;&nbsp;
+									  <c:choose>
+         
+                                    <c:when test = "${planHeader.productionStatus==1}">
+                                    <button type="submit" class="btn btn-primary" id="editPlanQty">
+											<i class="fa fa-check"></i> Edit Plan Qty
+									</button>
+                                    </c:when>
+         
+                                    <c:when test = "${planHeader.productionStatus==2}">
+									<button type="submit" class="btn btn-primary" id="editOrderQty">
+											<i class="fa fa-check"></i> Order Plan Qty
+									</button>
+                                    </c:when>
+         
+                                   <c:otherwise>
+                                   </c:otherwise>
+                                   </c:choose>
+                                   &nbsp;&nbsp;&nbsp;&nbsp;
+									 <c:choose>
+         
+                                    <c:when test = "${planHeader.productionStatus==4}">
+										<button type="submit" class="btn btn-primary" disabled="disabled">
+											<i class="fa fa-check"></i>Complete Production
+										</button>
+                                    </c:when>
+         
+                                    <c:when test = "${planHeader.productionStatus==5}">
+									    <button type="submit" class="btn btn-primary" disabled="disabled">
+											<i class="fa fa-check"></i>Complete Production
+										</button>
+                                    </c:when>
+                                    <c:otherwise>
+									    <button type="submit" class="btn btn-primary">
+											<i class="fa fa-check"></i>Complete Production
+										</button>
+                                   </c:otherwise>
+                                   </c:choose>
+										
+									   <div id="WaitDialog"   class="hidden" style="text-align: center">
+                                        <img  src="css/images/loading_black.gif" />
+                                        <div style="margin-top: 10px; color: white">
+                                         <b>Please wait</b>
+                                        </div>
+                                          </div>	
+										
 									</div>
 								</div>
 							</form>
@@ -306,5 +406,44 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+<script type="text/javascript">
+
+/* $("#editPlanQty").click(function() {
+	 var i; 
+
+	var count=document.getElementById("cnt").value;	
+	
+	$.getJSON('${updatePlanQty}', {
+		index : count,
+		ajax : 'true',
+	});
+	
+	for(i=0;i<=count;i++)
+		{
+	       $("#plan_qty"+i).attr('disabled', !$("#plan_qty"+i).attr('disabled'));
+	  
+		} 
+	}); */
+</script>
+<script type="text/javascript">
+$("#editOrderQty").click(function() {
+	/* var i; 
+
+	var count=document.getElementById("cnt").value;	
+	for(i=0;i<=count;i++)
+		{
+	       $("#order_qty"+i).attr('disabled', !$("#order_qty"+i).attr('disabled'));
+	  
+		}  */
+	});
+</script>
+<script src="scripts/jquery.min.js"></script>
+<script src="scripts/ww.jquery.min.js"></script>
+<script>
+    $("#form").submit(function() {
+        $("#WaitDialog").modalDialog();
+    });
+</script>
 </body>
 </html>
