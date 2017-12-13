@@ -33,6 +33,8 @@ import com.ats.adminpanel.model.production.mixing.temp.GetTempMixItemDetail;
 import com.ats.adminpanel.model.production.mixing.temp.GetTempMixItemDetailList;
 import com.ats.adminpanel.model.production.mixing.temp.TempMixing;
 import com.ats.adminpanel.model.production.mixing.temp.TempMixingList;
+import com.ats.adminpanel.model.productionplan.MixingDetailed;
+import com.ats.adminpanel.model.productionplan.MixingHeader;
 
 @Controller
 public class ViewProdController {
@@ -60,6 +62,8 @@ public class ViewProdController {
     public static  List<PostProductionPlanDetail> postProdPlanDetailList;
 
 	int globalHeaderId=0;
+	private int productionId;
+	private int isMixing;
 	
 	@RequestMapping(value = "/showProdHeader", method = RequestMethod.GET)
 	public ModelAndView showProdHeader(HttpServletRequest request, HttpServletResponse response) {
@@ -155,9 +159,12 @@ public class ViewProdController {
 			}
 				
 		}
+		
+		
 		globalProductionBatch=planHeader.getProductionBatch();
 		globalTimeSlot=planHeader.getTimeSlot();
-		
+		productionId=planHeader.getProductionHeaderId();
+		isMixing=planHeader.getIsMixing();
 		for(int j=0;j<prodPlanDetailList.size();j++)
 		{
 			PostProductionPlanDetail postProductionPlanDetail=new PostProductionPlanDetail();
@@ -177,6 +184,8 @@ public class ViewProdController {
 		model.addObject("planDetail", prodPlanDetailList);
 		
 		model.addObject("planHeader",planHeader);
+		
+		
 		
 		}catch (Exception e) {
 			
@@ -348,6 +357,8 @@ public class ViewProdController {
        mav.addObject("mixingList",sfPlanDetailForMixing);
        mav.addObject("productionBatch",globalProductionBatch);
        mav.addObject("globalTimeSlot",globalTimeSlot);
+       mav.addObject("productionId",productionId);
+       mav.addObject("isMixing",isMixing);
        
 		} catch (Exception e) {
 
@@ -356,6 +367,88 @@ public class ViewProdController {
 		}
 
 		return mav;
+
+	}
+	
+	
+	@RequestMapping(value = "/addMixingreqst", method = RequestMethod.POST)
+	public String addMixingreqst(HttpServletRequest request, HttpServletResponse response) {
+		Constants.mainAct = 17;
+		Constants.subAct=184;
+		
+		
+
+		int timeSlot=Integer.parseInt(request.getParameter("globalTimeSlot")); 
+		String globalProductionBatch=request.getParameter("globalProductionBatch");
+		int prodId=Integer.parseInt(request.getParameter("productionId"));
+		
+		MixingHeader mixingHeader =new  MixingHeader();
+		System.out.println("globalTimeSlot "+globalTimeSlot+"globalProductionBatch  "+globalProductionBatch +"editQty");
+		
+		Date date = new Date();
+		
+		mixingHeader.setMixId(0);
+		mixingHeader.setMixDate(date);
+		mixingHeader.setProductionId(prodId);
+		mixingHeader.setProductionBatch(globalProductionBatch);
+		mixingHeader.setStatus(0);
+		mixingHeader.setDelStatus(0);
+		mixingHeader.setTimeSlot(timeSlot);
+		mixingHeader.setIsBom(0);
+		mixingHeader.setExBool1(0);
+		mixingHeader.setExInt2(0);
+		mixingHeader.setExInt3(0);
+		mixingHeader.setExVarchar1("");
+		mixingHeader.setExVarchar2("");
+		mixingHeader.setExVarchar3("");
+		
+		List<MixingDetailed> addmixingDetailedlist = new ArrayList<MixingDetailed>();
+			
+		for(int i=0;i<sfPlanDetailForMixing.size();i++)
+		{
+			System.out.println("in for ");
+			MixingDetailed mixingDetailed= new MixingDetailed();
+			mixingDetailed.setMixing_detailId(0);
+			mixingDetailed.setMixingId(0);
+			mixingDetailed.setSfId(sfPlanDetailForMixing.get(i).getRmId());
+			mixingDetailed.setSfName(sfPlanDetailForMixing.get(i).getRmName());
+			mixingDetailed.setReceivedQty(sfPlanDetailForMixing.get(i).getTotal());
+			mixingDetailed.setMixingDate(date);
+			mixingDetailed.setExBool1(0);
+			mixingDetailed.setExInt2(0);
+			mixingDetailed.setExInt1(0);
+			mixingDetailed.setExInt3(0);
+			mixingDetailed.setExVarchar1("");
+			mixingDetailed.setExVarchar2("");
+			mixingDetailed.setExVarchar3("");
+			addmixingDetailedlist.add(mixingDetailed);
+			
+		}
+		int count=0;
+		for(int i=0;i<addmixingDetailedlist.size();i++)
+		{
+			System.out.println("in second for ");
+			int prod_qty = Integer.parseInt(request.getParameter("editQty"+count));
+			System.out.println("prodqty  "+prod_qty);
+			addmixingDetailedlist.get(i).setProductionQty(prod_qty);
+			count++;
+		}
+		
+		mixingHeader.setMixingDetailed(addmixingDetailedlist);
+		System.out.println("while inserting "+mixingHeader.toString());
+		RestTemplate rest = new RestTemplate();
+		MixingHeader mixingHeaderin = rest.postForObject(Constants.url + "insertMixingHeaderndDetailed", mixingHeader,
+				MixingHeader.class);
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("productionId", prodId);
+		int updateisMixing = rest.postForObject(Constants.url + "updateisMixing", map,
+				Integer.class);
+		
+		System.out.println(mixingHeaderin.toString());
+		
+		return "redirect:/getMixingList";
+		
+		
 
 	}
 

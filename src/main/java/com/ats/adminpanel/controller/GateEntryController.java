@@ -3,6 +3,7 @@ package com.ats.adminpanel.controller;
 
 
 import java.text.DateFormat;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,10 +48,8 @@ public class GateEntryController {
 	
 	
 	MaterialRecNote materialRecNotes;
-	private List<AddPolist> withaddPolist = new ArrayList<AddPolist>();
 	public static  List<MaterialRecNoteDetails> getmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
 	public static  List<MaterialRecNoteDetails> addmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
-	private List<MaterialRecNoteDetails> getmaterialRecNoteDetailslist2;
 	private PurchaseOrderHeader purchaseOrderHeaderfordate;
 	private String podate;
 	public static List<PurchaseOrderDetail> purchaseOrderDetailedListcomp;
@@ -410,7 +409,7 @@ public class GateEntryController {
 		int againstpo_id=0;
 		int poref_id=0;
 		String poDate=request.getParameter("");
-		if(request.getParameter("po_id")==null)
+		if(request.getParameter("po_id")=="")
 		{
 			againstpo_id = 2;
 		}
@@ -428,10 +427,24 @@ public class GateEntryController {
 			poref_id = Integer.parseInt(request.getParameter("poref_id"));
 		}
 		
-		
+		String po_date;
 		String Remark = request.getParameter("Remark");
+		if(request.getParameter("po_date")==null)
+		{
+
+			Date todaysDate = new Date();
+			DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+
+			String testDateString = df.format(todaysDate);
+			po_date=testDateString;
+			System.out.println("po_date in null"+po_date);
+		}
+		else
+		{
+			po_date=request.getParameter("po_date");
+			System.out.println("po_date"+po_date);
+		}
 		
-		String po_date=request.getParameter("po_date");
 		int status = 1;
 		MaterialRecNote materialRecNote = materialRecNoteHeader;
 		

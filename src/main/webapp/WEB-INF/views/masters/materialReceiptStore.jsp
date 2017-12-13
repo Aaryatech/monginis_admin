@@ -185,18 +185,20 @@
 							<div class="box-content">
 							
 												<c:choose>
-													<c:when test="${materialRecNote.apainstPo==1}">
-													<c:set var = "textdisable" value="disabled"/>
+													<c:when test="${materialRecNote.status==2}">
+													<c:set var = "textdisable" value="readonly"/>
+													<c:set var = "tex" value="0"/>
 													</c:when>
 													
 													<c:otherwise>
 													  <c:set var = "textdisable" value=""/>
+													  <c:set var = "tex" value="0"/>
 													</c:otherwise>
 													</c:choose>
 							
 							<div class="col-md-2" >Against PO</div>
 									<div class="col-md-3">
-										<select name="po_id" id="po_id" class="form-control" tabindex="6" <c:out value = "${textdisable}"/> required>
+										<select name="po_id" id="po_id" class="form-control" tabindex="6" <c:out value = "${textdisable}"/> <c:out value = "${tex}"/>>
 											<option value=""> select</option>
 											<option value="1">Yes</option>
 											<option value="2">No</option>
@@ -220,17 +222,19 @@
 									<div class="col-md-3">
 									
 											<c:choose>
-													<c:when test="${materialRecNote.apainstPo==0}">
-													<c:set var = "textdisable" value='sadf'/>
+													<c:when test="${materialRecNote.status==2}">
+													<c:set var = "textdisable" value='readonly'/>
+													<c:set var = "tex" value="0"/>
 													</c:when>
 													
 													<c:otherwise>
 													  <c:set var = "textdisable" value=""/>
+													  <c:set var = "tex" value=""/>
 													</c:otherwise>
 												</c:choose>
-										<select name="poref_id" id="poref_id" class="form-control" tabindex="-1"  disabled required>
+										<select name="poref_id" id="poref_id" class="form-control" tabindex="-1" <c:out value = "${tex}"/> disabled >
 									
-										<option selected value=<c:out value = "${textdisable}"/>>Select Po Ref</option>
+										<option selected >Select Po Ref</option>
 											
 											<c:forEach items="${purchaseOrderList}" var="purchaseOrderList">
                                               
@@ -245,7 +249,8 @@
 									<div class="col-md-2">PO Date</div>
 										<div class="col-md-3">
 										<input class="form-control date-picker" id="po_date" size="16"
-											type="text" name="po_date" value="${materialRecNote.poDate}" placeholder="PO Date" disabled required />
+											type="text" name="po_date" value="${materialRecNote.poDate}" placeholder="PO Date"  readonly />
+											
 									</div>
 							
 							</div><br><br>
@@ -346,7 +351,7 @@
 							<div class="col-md-2" >Remark</div>
 									
 									<div class="col-md-3"><input type="text" id="Remark" name="Remark" value="" 
-									class="form-control" >
+									class="form-control" required>
 									</div>
 									
 							</div><br>

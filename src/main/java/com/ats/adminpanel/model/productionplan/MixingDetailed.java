@@ -23,6 +23,18 @@ public class MixingDetailed {
 	private String exVarchar2;
 	private String exVarchar3;
 	private int exBool1;
+	private String uom;
+	
+	
+	
+	
+	
+	public String getUom() {
+		return uom;
+	}
+	public void setUom(String uom) {
+		this.uom = uom;
+	}
 	public int getMixing_detailId() {
 		return mixing_detailId;
 	}

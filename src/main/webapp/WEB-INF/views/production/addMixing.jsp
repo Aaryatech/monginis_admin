@@ -98,7 +98,12 @@
 						<div class="box-content">
 
 							<div class="clearfix"></div>
-
+						<form action="${pageContext.request.contextPath}/addMixingreqst" class="form-horizontal" method="post"
+							id="validation-form">
+							<input type="text" name="globalTimeSlot" value="${globalTimeSlot}" readonly>
+							<input type="text" name="globalProductionBatch" value="${globalProductionBatch}" readonly>
+							<input type="text" name="productionId" value="${productionId}" readonly>
+							<input type="text" name="ismixing" value="${isMixing}" readonly>
 							<div class="table-responsive" style="border: 0">
 								<table width="100%" class="table table-advance" id="table1">
 									<thead>
@@ -124,7 +129,8 @@
 												<td align="left"><c:out value="${mixingList.total}" /></td>
 
 												<td align="left"><input type="text" id="editQty" size="2" class="form-control"
-													name="editQty" value="${mixingList.total}"></td>
+													name="editQty<c:out
+																value="${count.index}"/>" value="${mixingList.total}"></td>
 
 												<td align="left"><c:out value="${mixingList.uom}"></c:out></td>
 
@@ -134,6 +140,20 @@
 									</tbody>
 								</table>
 							</div>
+							
+							<c:choose>
+													<c:when test="${isMixing==0}">
+													<div align="center" class="form-group">
+												<div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
+												<input type= "submit" class="btn btn-primary" value="Request For Mixing" id="search">
+				
+												</div><br>
+												</div>
+													</c:when>
+													</c:choose>
+								
+							
+							</form>
 						</div>
 					</div>
 				</div>
