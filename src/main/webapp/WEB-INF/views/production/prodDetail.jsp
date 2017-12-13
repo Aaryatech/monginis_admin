@@ -315,12 +315,12 @@
                                    </c:otherwise>
                                    </c:choose>
 										
-									   <div id="WaitDialog"   class="hidden" style="text-align: center">
+									  <!--  <div id="WaitDialog"   class="hidden" style="text-align: center">
                                         <img  src="css/images/loading_black.gif" />
                                         <div style="margin-top: 10px; color: white">
                                          <b>Please wait</b>
                                         </div>
-                                          </div>	
+                                          </div> -->	
 										
 									</div>
 								</div>
@@ -438,12 +438,12 @@ $("#editOrderQty").click(function() {
 		}  */
 	});
 </script>
-<script src="scripts/jquery.min.js"></script>
+<!-- <script src="scripts/jquery.min.js"></script>
 <script src="scripts/ww.jquery.min.js"></script>
 <script>
     $("#form").submit(function() {
         $("#WaitDialog").modalDialog();
     });
-</script>
+</script> -->
 </body>
 </html>
