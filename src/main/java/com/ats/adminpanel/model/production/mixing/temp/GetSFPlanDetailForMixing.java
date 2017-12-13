@@ -1,11 +1,11 @@
 package com.ats.adminpanel.model.production.mixing.temp;
 
+//same bean used for Bom and mixing
 
 public class GetSFPlanDetailForMixing {
 
 	
-	
-private int itemDetailId;
+	private int itemDetailId;
 	
 	private int itemId;
 	

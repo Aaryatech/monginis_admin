@@ -3,7 +3,7 @@ package com.ats.adminpanel.model.production.mixing.temp;
 import java.util.List;
 
 import com.ats.adminpanel.model.Info;
-
+//same bean used for Bom and mixing
 public class GetSFPlanDetailForMixingList {
 	
 List<GetSFPlanDetailForMixing> sfPlanDetailForMixing;

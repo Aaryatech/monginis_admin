@@ -38,9 +38,6 @@ public class MixingAndBomController {
 	public MixingHeader mixingHeader=new MixingHeader();
 	private List<BillOfMaterialHeader> getBOMListall;
 	
-
-
-	
 	
 	@RequestMapping(value = "/getMixingList", method = RequestMethod.GET)
 	public ModelAndView getMixingList(HttpServletRequest request, HttpServletResponse response) {

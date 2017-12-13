@@ -11,6 +11,7 @@ import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
@@ -18,7 +19,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.Info;
-
+import com.ats.adminpanel.model.production.mixing.temp.GetSFMixingForBom;
+import com.ats.adminpanel.model.production.mixing.temp.GetSFMixingForBomList;
 import com.ats.adminpanel.model.production.mixing.temp.GetSFPlanDetailForMixing;
 import com.ats.adminpanel.model.production.mixing.temp.GetSFPlanDetailForMixingList;
 import com.ats.adminpanel.model.production.mixing.temp.GetTempMixItemDetail;
@@ -34,7 +36,7 @@ public class MixingController {
 	GetSFPlanDetailForMixingList getSFPlanDetailForMixingList;
 
 	List<GetSFPlanDetailForMixing> sfPlanDetailForMixing = new ArrayList<>();
-
+	
 	GetTempMixItemDetailList getTempMixItemDetailList;
 
 	List<GetTempMixItemDetail> tempMixItemDetail = new ArrayList<>();
@@ -42,6 +44,16 @@ public class MixingController {
 	// temp Mix table beans
 	TempMixingList tempMixingList;
 	List<TempMixing> tempMixing = new ArrayList<>();
+	
+	
+	GetSFPlanDetailForMixingList getSFPlanDetailForBomList;
+
+	List<GetSFPlanDetailForMixing> sfPlanDetailForBom = new ArrayList<>();
+	
+	GetSFMixingForBomList sFMixingForBomList;
+	
+	List<GetSFMixingForBom> sFMixingForBom=new ArrayList<>();
+			
 
 	@RequestMapping(value = "/bbb", method = RequestMethod.GET)
 	public ModelAndView showMixing(HttpServletRequest request, HttpServletResponse response) {
@@ -145,10 +157,11 @@ mav.addObject("mixingList",sfPlanDetailForMixing);
 
 	}
 
-	/*@RequestMapping(value = "/aaa", method = RequestMethod.GET)
-	public ModelAndView viewMixing(HttpServletRequest request, HttpServletResponse response) {
+	
+	@RequestMapping(value = "/bom", method = RequestMethod.GET)
+	public ModelAndView showBom(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView mav = new ModelAndView("message/addNewMessage");
+		ModelAndView mav = new ModelAndView("production/addBom");
 
 		try {
 
@@ -156,122 +169,89 @@ mav.addObject("mixingList",sfPlanDetailForMixing);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-			itemwisePlanDetailList = restTemplate.getForObject(Constants.url + "getItemwisePlanDetail",
-					GetItemwisePlanDetailList.class);
+			map.add("headerId", 53);
 
-			itemwisePlanDetail = itemwisePlanDetailList.getItemwisePlanDetail();
+			getSFPlanDetailForBomList = restTemplate.postForObject(Constants.url + "getSfPlanDetailForBom", map,
+					GetSFPlanDetailForMixingList.class);
 
-			System.out.println("itwm Wise Detail " + itemwisePlanDetail.toString());
+			sfPlanDetailForBom = getSFPlanDetailForBomList.getSfPlanDetailForMixing();
 
-			String itemIdList = new String();
-			StringBuilder sb = new StringBuilder();
-			for (int i = 0; i < itemwisePlanDetail.size(); i++) {
-
-				sb.append(String.valueOf(itemwisePlanDetail.get(i).getItemId()) + ",");
-
-				itemIdList = new String(itemIdList + "," + itemwisePlanDetail.get(i).getItemId());
-			}
-			itemIdList = itemIdList.substring(1, itemIdList.length() - 1);
-
-			System.out.println("item Id List " + itemIdList.toString());
-
-			map.add("itemIdList", itemIdList);
-
-			itemDetailForMixingList = restTemplate.postForObject(Constants.url + "getItemDetailForMixing", map,
-					GetItemDetailForMixingList.class);
-
-			itemDetailForMixing = itemDetailForMixingList.getItemDetailForMixing();
-
-			System.out.println("item Mixing List " + itemDetailForMixing.toString());
-
-			MixingItem mxItem = null;
-
-			for (int j = 0; j < itemwisePlanDetail.size(); j++) {
-
-				GetItemwisePlanDetail planDetail = itemwisePlanDetail.get(j);
-
-				for (int i = 0; i < itemDetailForMixing.size(); i++) {
-
-					GetItemDetailForMixing mixingDetail = itemDetailForMixing.get(i);
-
-					if (mixingDetail.getItemId() == planDetail.getItemId()) {
-
-						mxItem = new MixingItem();
-
-						mxItem.setCalcQty(
-								(planDetail.getTotal() * mixingDetail.getRmQty()) / mixingDetail.getNoPiecesPerItem());
-						mxItem.setRmId(mixingDetail.getRmId());
-						mxItem.setRmName(mixingDetail.getRmName());
-						mxItem.setUom(mixingDetail.getRmUomId());
-
-					}
-
-				}
-
-			}
-
-			mixingItemList.add(mxItem);
-
-			System.out.println("first Mixing Itel List " + mixingItemList.toString());
-
+			System.out.println("sf Plan Detail For Bom  " + sfPlanDetailForBom.toString());
+			
+			GetSFMixingForBomList sFMixingForBomList;
+			
+			List<GetSFMixingForBom> sFMixingForBom=new ArrayList<>();
+			
 			map = new LinkedMultiValueMap<String, Object>();
 
-			String sfIdList = new String();
-			for (int i = 0; i < mixingItemList.size(); i++) {
+			map.add("mixingId", 1);
+			
+			sFMixingForBomList = restTemplate.postForObject(Constants.url + "getSFMixingForBom", map,
+					GetSFMixingForBomList.class);
 
-				sfIdList = new String(sfIdList + "," + mixingItemList.get(i).getRmId());
-			}
+			sFMixingForBom = sFMixingForBomList.getsFMixingForBom();
 
-			sfIdList = sfIdList.substring(1, sfIdList.length() - 1);
-
-			System.out.println("sfIdList Id List " + sfIdList.toString());
-
-			map.add("sfIdList", sfIdList);
-
-			sffDetailForMixingList = restTemplate.postForObject(Constants.url + "getSfDetailForMixing", map,
-					GetSfDetailForMixingList.class);
-
-			sfDetailForMixing = sffDetailForMixingList.getSfDetailForMixing();
-
-			System.out.println("sf Detail For Mixing = " + sfDetailForMixing.toString());
-
-			MixingItem mixingItem = new MixingItem();
-
-			for (int i = 0; i < mixingItemList.size(); i++) {
-
-				MixingItem mixItem = mixingItemList.get(i);
-
-				for (int j = 0; j < sfDetailForMixing.size(); j++) {
-
-					GetSfDetailForMixing sfDetail = sfDetailForMixing.get(j);
-
-					if (mixItem.getRmId() == sfDetail.getSfId()) {
-
-						mixingItem.setCalcQty(mixItem.getCalcQty() * sfDetail.getRmQty() * sfDetail.getRmWeight());
-
-						mixingItem.setRmId(sfDetail.getRmId());
-
-						mixingItem.setRmName(sfDetail.getRmName());
-
-						mixingItem.setUom(sfDetail.getRmUnit());
-
-					}
-
-				}
-
-			}
-
-			mixingItemList.add(mixingItem);
-
-			System.out.println("second Mixing Itel List " + mixingItemList.toString());
-
-		} catch (Exception e) {
-
-			System.out.println("	Ex occured	");
+			System.out.println("sf Mixing Detail For Bom  " + sFMixingForBom.toString());
+			mav.addObject("planDetailForBom",sfPlanDetailForBom);
+		}catch (Exception e) {
+			
 			e.printStackTrace();
-
+			System.out.println("Ex in bom");
 		}
-
 		return mav;
-	}*/
+	}
+	
+	
+	
+	@RequestMapping(value = "/showBom/{prodHeaderId}/{isMix}", method = RequestMethod.GET)
+	public ModelAndView showBom2(@PathVariable int prodHeaderId,@PathVariable int isMix,HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView mav = new ModelAndView("production/addBom");
+		
+		try {
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			RestTemplate restTemplate = new RestTemplate();
+			if(isMix==1) {
+				
+				map.add("headerId", prodHeaderId);
+
+				getSFPlanDetailForBomList = restTemplate.postForObject(Constants.url + "getSfPlanDetailForBom", map,
+						GetSFPlanDetailForMixingList.class);
+
+				sfPlanDetailForBom = getSFPlanDetailForBomList.getSfPlanDetailForMixing();
+
+				System.out.println("sf Plan Detail For Bom  " + sfPlanDetailForBom.toString());
+				mav.addObject("planDetailForBom",sfPlanDetailForBom);
+			}
+			else if(isMix==0) {
+				System.out.println("inside Else");
+				
+				List<GetSFMixingForBom> sFMixingForBom=new ArrayList<>();
+				
+				map = new LinkedMultiValueMap<String, Object>();
+
+				map.add("mixingId",prodHeaderId);
+				
+				sFMixingForBomList = restTemplate.postForObject(Constants.url + "getSFMixingForBom", map,
+						GetSFMixingForBomList.class);
+
+				sFMixingForBom = sFMixingForBomList.getsFMixingForBom();
+
+				System.out.println("sf Mixing Detail For Bom  " + sFMixingForBom.toString());
+				
+				mav.addObject("planDetailForBom",sFMixingForBom);
+			}
+			
+			mav.addObject("isMix",isMix);
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+			
+			System.out.println("Error In showBom "+e.getMessage());
+		}
+		return mav;
+		
+	}
 }

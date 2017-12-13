@@ -244,9 +244,9 @@
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
 									<c:choose>
 									  <c:when test = "${planHeader.isBom==0}">
-                                       <button type="button" class="btn btn-primary" >
+                                   <a href="${pageContext.request.contextPath}/showBom/${planHeader.productionHeaderId}/1">   <button type="button" class="btn btn-primary">
 											<i class="fa fa-check"></i> Req. BOM
-										</button>
+										</button></a>
                                     </c:when>
          
                                     <c:when test = "${planHeader.isBom==1}">
@@ -267,9 +267,9 @@
                                     </c:when>
          
                                     <c:when test = "${planHeader.isMixing==1}">
-								 <a href="${pageContext.request.contextPath}/addMixing">	<button type="button" class="btn btn-primary"disabled="disabled">
+								<button type="button" class="btn btn-primary"disabled="disabled">
 											<i class="fa fa-check"></i> Req. Mixing
-									</button></a>
+									</button>
 										
                                     </c:when>
                                    <c:otherwise>
@@ -315,12 +315,7 @@
                                    </c:otherwise>
                                    </c:choose>
 										
-									  <!--  <div id="WaitDialog"   class="hidden" style="text-align: center">
-                                        <img  src="css/images/loading_black.gif" />
-                                        <div style="margin-top: 10px; color: white">
-                                         <b>Please wait</b>
-                                        </div>
-                                          </div> -->	
+									  
 										
 									</div>
 								</div>
@@ -407,6 +402,7 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
+
 <script type="text/javascript">
 
 /* $("#editPlanQty").click(function() {
@@ -438,12 +434,6 @@ $("#editOrderQty").click(function() {
 		}  */
 	});
 </script>
-<!-- <script src="scripts/jquery.min.js"></script>
-<script src="scripts/ww.jquery.min.js"></script>
-<script>
-    $("#form").submit(function() {
-        $("#WaitDialog").modalDialog();
-    });
-</script> -->
+
 </body>
 </html>
