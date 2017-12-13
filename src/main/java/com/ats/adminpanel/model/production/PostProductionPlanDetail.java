@@ -24,7 +24,7 @@ public class PostProductionPlanDetail {
 
 	private String productionBatch;
 	
-	private Date productionDate;
+	private String productionDate;
 
 		public String getProductionBatch() {
 		return productionBatch;
@@ -34,11 +34,11 @@ public class PostProductionPlanDetail {
 		this.productionBatch = productionBatch;
 	}
 
-	public Date getProductionDate() {
+	public String getProductionDate() {
 		return productionDate;
 	}
 
-	public void setProductionDate(Date productionDate) {
+	public void setProductionDate(String productionDate) {
 		this.productionDate = productionDate;
 	}
 
