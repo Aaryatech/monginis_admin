@@ -35,7 +35,9 @@ public class GetProdPlanHeader {
 	
 	private String  catName;
 
-
+	private int isPlanned;
+	
+	
 	public int getProductionHeaderId() {
 		return productionHeaderId;
 	}
@@ -136,15 +138,23 @@ public class GetProdPlanHeader {
 	}
 
 
+	public int getIsPlanned() {
+		return isPlanned;
+	}
+
+
+	public void setIsPlanned(int isPlanned) {
+		this.isPlanned = isPlanned;
+	}
+
+
 	@Override
 	public String toString() {
 		return "GetProdPlanHeader [productionHeaderId=" + productionHeaderId + ", catId=" + catId + ", timeSlot="
 				+ timeSlot + ", productionBatch=" + productionBatch + ", productionStatus=" + productionStatus
 				+ ", productionDate=" + productionDate + ", isMixing=" + isMixing + ", isBom=" + isBom + ", delStatus="
-				+ delStatus + ", catName=" + catName + "]";
+				+ delStatus + ", catName=" + catName + ", isPlanned=" + isPlanned + "]";
 	}
 
 
-	
-	
 }
