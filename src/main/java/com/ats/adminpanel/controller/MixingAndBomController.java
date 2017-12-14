@@ -2,7 +2,9 @@ package com.ats.adminpanel.controller;
 
 
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -149,7 +151,16 @@ public class MixingAndBomController {
 		 mixingHeader=rest.postForObject(Constants.url + "/getDetailedwithMixId",map, MixingHeader.class);
 		 mixwithdetaild =mixingHeader.getMixingDetailed();
 		
-		model.addObject("mixheader",mixingHeader);
+		 Date mixdate = mixingHeader.getMixDate();
+		 
+		 SimpleDateFormat dtFormat=new SimpleDateFormat("dd-MM-yyyy");
+			
+		 String date=dtFormat.format(mixdate);
+				
+		 System.out.println("date" +date);
+			model.addObject("date",date);
+
+			model.addObject("mixheader",mixingHeader);
 		model.addObject("mixwithdetaild", mixwithdetaild);
 		
 		return model;
