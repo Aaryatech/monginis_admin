@@ -206,7 +206,7 @@
 													<c:when test="${mixheader.status==0}">
 													<div align="center" class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-										 <a href="${pageContext.request.contextPath}/showBom/${mixheader.mixId}/0"><i class="fa fa-check"></i> Req. BOM</a>
+										 <a href="${pageContext.request.contextPath}/showBom/${mixheader.mixId}/0/${date}/0"><i class="fa fa-check"></i> Req. BOM</a>
 										<input type="submit" class="btn btn-primary" value="complet Production">
 									</div>
 								</div>

@@ -21,7 +21,12 @@ public class BillOfMaterialDetailed {
 	private int exBool1;
 	private int exBool2;
 	private int delStatus;
-
+	
+	//Newly added
+	private float autoRmReqQty;
+	
+	private float rejectedQty;
+	
 	public int getReqDetailId() {
 		return reqDetailId;
 	}
@@ -150,17 +155,31 @@ public class BillOfMaterialDetailed {
 		this.delStatus = delStatus;
 	}
 
+	public float getAutoRmReqQty() {
+		return autoRmReqQty;
+	}
+
+	public void setAutoRmReqQty(float autoRmReqQty) {
+		this.autoRmReqQty = autoRmReqQty;
+	}
+
+	public float getRejectedQty() {
+		return rejectedQty;
+	}
+
+	public void setRejectedQty(float rejectedQty) {
+		this.rejectedQty = rejectedQty;
+	}
+
 	@Override
 	public String toString() {
 		return "BillOfMaterialDetailed [reqDetailId=" + reqDetailId + ", reqId=" + reqId + ", rmType=" + rmType
 				+ ", rmId=" + rmId + ", rmName=" + rmName + ", uom=" + uom + ", rmReqQty=" + rmReqQty + ", rmIssueQty="
 				+ rmIssueQty + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVarchar1=" + exVarchar1
 				+ ", exVarchar2=" + exVarchar2 + ", exVarchar3=" + exVarchar3 + ", exBool1=" + exBool1 + ", exBool2="
-				+ exBool2 + ", delStatus=" + delStatus + "]";
+				+ exBool2 + ", delStatus=" + delStatus + ", autoRmReqQty=" + autoRmReqQty + ", rejectedQty="
+				+ rejectedQty + "]";
 	}
-	
-	
-	
-	
 
+	
 }

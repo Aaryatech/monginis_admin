@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.springframework.stereotype.Controller;
@@ -24,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.login.UserResponse;
 import com.ats.adminpanel.model.production.mixing.temp.GetSFMixingForBom;
 import com.ats.adminpanel.model.production.mixing.temp.GetSFMixingForBomList;
 import com.ats.adminpanel.model.production.mixing.temp.GetSFPlanDetailForMixing;
@@ -50,15 +52,17 @@ public class BomController {
 
 	String prodOrMixDate;
 	int globalHeaderId;
-
-	@RequestMapping(value = "/showBom/{prodHeaderId}/{isMix}/{date}", method = RequestMethod.GET)
+int globalIsPlan;
+	@RequestMapping(value = "/showBom/{prodHeaderId}/{isMix}/{date}/{isPlan}", method = RequestMethod.GET)
 	public ModelAndView showBom2(@PathVariable int prodHeaderId, @PathVariable int isMix, @PathVariable String date,
+			@PathVariable int isPlan,
 			HttpServletRequest request, HttpServletResponse response) throws ParseException {
 
 		prodOrMixDate = date;
 
 		globalHeaderId = prodHeaderId;
 
+		globalIsPlan=isPlan;
 		ModelAndView mav = new ModelAndView("production/addBom");
 
 		try {
@@ -114,6 +118,15 @@ public class BomController {
 
 		ModelAndView mav = new ModelAndView("production/addBom");
 
+		HttpSession session=request.getSession();
+		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
+		
+		int deptId=userResponse.getUser().getDeptId();
+		
+		int userId=userResponse.getUser().getId();
+		
+		System.out.println("new Field Dept Id = "+userResponse.getUser().getDeptId());
+		
 		String isMix = request.getParameter("isMix");
 		System.out.println("isMix " + isMix);
 		int isMixing = Integer.parseInt(isMix);
@@ -143,14 +156,16 @@ public class BomController {
 			billOfMaterialHeader.setApprovedDate(date);
 			billOfMaterialHeader.setApprovedUserId(0);
 			billOfMaterialHeader.setDelStatus(0);
-			billOfMaterialHeader.setFromDeptId(0);
+			billOfMaterialHeader.setFromDeptId(deptId);
 			billOfMaterialHeader.setProductionDate(prodOrMixDate1);
 			billOfMaterialHeader.setProductionId(globalHeaderId);
 			billOfMaterialHeader.setReqDate(date);
-			billOfMaterialHeader.setSenderUserid(0);
+			billOfMaterialHeader.setSenderUserid(userId);
 			billOfMaterialHeader.setStatus(0);
 			billOfMaterialHeader.setToDeptId(0);
 			billOfMaterialHeader.setToDeptName("BMS");
+			
+			billOfMaterialHeader.setIsManual(0);
 
 			List<BillOfMaterialDetailed> bomDetailList = new ArrayList<BillOfMaterialDetailed>();
 			BillOfMaterialDetailed bomDetail = null;
@@ -159,6 +174,10 @@ public class BomController {
 				billOfMaterialHeader.setIsProduction(1);
 
 				billOfMaterialHeader.setFromDeptName("Prod");
+				billOfMaterialHeader.setIsPlan(globalIsPlan);
+
+				
+				billOfMaterialHeader.setIsPlan(0);
 
 				for (int i = 0; i < sfPlanDetailForBom.size(); i++) {
 
@@ -172,9 +191,11 @@ public class BomController {
 					bomDetail.setRmIssueQty(0.0F);
 					bomDetail.setUom(sfPlanDetailForBom.get(i).getUom());
 					bomDetail.setRmType(sfPlanDetailForBom.get(i).getRmType());
-					bomDetail.setRmReqQty(sfPlanDetailForBom.get(i).getTotal());
+					bomDetail.setRmReqQty(Integer.parseInt(editQty));
 					bomDetail.setRmName(sfPlanDetailForBom.get(i).getRmName());
-
+					
+					bomDetail.setRejectedQty(0);
+					bomDetail.setAutoRmReqQty(sfPlanDetailForBom.get(i).getTotal());
 					bomDetailList.add(bomDetail);
 
 				}
@@ -184,6 +205,8 @@ public class BomController {
 
 				billOfMaterialHeader.setFromDeptName("Mixing");
 				billOfMaterialHeader.setIsProduction(0);
+				
+				billOfMaterialHeader.setIsPlan(0);
 
 				for (int i = 0; i < sFMixingForBom.size(); i++) {
 
@@ -199,6 +222,9 @@ public class BomController {
 					bomDetail.setRmType(sFMixingForBom.get(i).getRmType());
 					bomDetail.setRmReqQty(sFMixingForBom.get(i).getTotal());
 					bomDetail.setRmName(sFMixingForBom.get(i).getRmName());
+					
+					bomDetail.setRmReqQty(Integer.parseInt(editQty));
+
 
 					bomDetailList.add(bomDetail);
 

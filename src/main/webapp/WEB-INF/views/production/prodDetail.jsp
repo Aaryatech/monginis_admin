@@ -244,7 +244,7 @@
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
 									<c:choose>
 									  <c:when test = "${planHeader.isBom==0}">
-                                   <a href="${pageContext.request.contextPath}/showBom/${planHeader.productionHeaderId}/1/${planHeader.productionDate}">   <button type="button" class="btn btn-primary">
+                                   <a href="${pageContext.request.contextPath}/showBom/${planHeader.productionHeaderId}/1/${planHeader.productionDate}/${planHeader.isPlanned}">   <button type="button" class="btn btn-primary">
 											<i class="fa fa-check"></i> Req.To BOM
 										</button></a>
                                     </c:when>
