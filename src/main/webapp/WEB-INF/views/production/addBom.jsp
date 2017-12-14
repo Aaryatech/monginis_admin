@@ -80,7 +80,6 @@
 			</div>
 			<!-- END Page Title -->
 <c:choose>
-
 <c:when test="${isMix==1}">
 <c:set var="title" value="Production Request">
 </c:set>
@@ -88,11 +87,9 @@
 <c:otherwise>
 <c:set var="title" value="Mixing Request">
 </c:set>
-
-
 </c:otherwise>
-
 </c:choose>
+
 			<div class="row">
 				<div class="col-md-12">
 
@@ -109,8 +106,9 @@
 						</div>
 
 						<div class="box-content">
-
+<form action="${pageContext.request.contextPath}/insertBom" name="validation-form" id="validation-form">
 							<div class="clearfix"></div>
+<input type="hidden" name="isMix" value="${isMix}">
 
 							<div class="table-responsive" style="border: 0">
 								<table width="100%" class="table table-advance" id="table1">
@@ -137,7 +135,7 @@
 												<td align="left"><c:out value="${planDetailForBom.total}" /></td>
 
 												<td align="left"><input type="text" id="editQty" size="2" class="form-control"
-													name="editQty" value="${planDetailForBom.total}"></td>
+													name="editQty${count.index}" value="${planDetailForBom.total}"></td>
 
 												<td align="left"><c:out value="${planDetailForBom.uom}"></c:out></td>
 
@@ -148,7 +146,9 @@
 								</table>
 							</div>
 							<input type="submit" value="Submit"/>
+						</form>
 						</div>
+						
 					</div>
 				</div>
 			</div>
