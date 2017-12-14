@@ -35,6 +35,7 @@ import com.ats.adminpanel.model.production.mixing.temp.TempMixingList;
 import com.ats.adminpanel.model.productionplan.BillOfMaterialDetailed;
 import com.ats.adminpanel.model.productionplan.BillOfMaterialHeader;
 import com.ats.adminpanel.model.productionplan.GetBillOfMaterialList;
+import com.ats.adminpanel.model.productionplan.MixingHeader;
 
 @Controller
 public class BomController {
@@ -223,9 +224,12 @@ public class BomController {
 	
 	}
 	
-	//from akshay
+	//from akshay View BOM-------------
+	
 	private List<BillOfMaterialHeader> getBOMListall;
 	public List<BillOfMaterialHeader> getbomList = new ArrayList<BillOfMaterialHeader>();
+	BillOfMaterialHeader billOfMaterialHeader = new BillOfMaterialHeader();
+	List<BillOfMaterialDetailed> bomwithdetaild = new ArrayList<BillOfMaterialDetailed>();
 	
 	@RequestMapping(value = "/getBomList", method = RequestMethod.GET)
 	public ModelAndView getBomList(HttpServletRequest request, HttpServletResponse response) {
@@ -303,13 +307,53 @@ public class BomController {
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("reqId",reqId);
 		RestTemplate rest = new RestTemplate();
-		BillOfMaterialHeader billOfMaterialHeader=rest.postForObject(Constants.url + "/getDetailedwithreqId",map, BillOfMaterialHeader.class);
-		 List<BillOfMaterialDetailed> bomwithdetaild =billOfMaterialHeader.getBillOfMaterialDetailed();
+		billOfMaterialHeader=rest.postForObject(Constants.url + "/getDetailedwithreqId",map, BillOfMaterialHeader.class);
+		bomwithdetaild =billOfMaterialHeader.getBillOfMaterialDetailed();
 		
 		model.addObject("billOfMaterialHeader",billOfMaterialHeader);
 		model.addObject("bomwithdetaild", bomwithdetaild);
 		
 		return model;
+	}
+	
+	
+	@RequestMapping(value = "/approvedBom", method = RequestMethod.POST)
+	public String approvedBom(HttpServletRequest request, HttpServletResponse response) {
+		/*Constants.mainAct = 17;
+		Constants.subAct=184;*/
+		
+		for(int i=0;i<billOfMaterialHeader.getBillOfMaterialDetailed().size();i++)
+		{
+			System.out.println(12);
+			 
+			 
+				System.out.println(13);
+				String issue_qty=request.getParameter("issue_qty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId());
+				
+				if(issue_qty!=null) {
+					System.out.println("issue_qty Qty   :"+issue_qty);
+					float issueqty= Float.parseFloat(issue_qty);
+					billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRmIssueQty(issueqty);
+					System.out.println("productionQty  :"+issueqty);
+				}
+				else
+				{
+					billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRmIssueQty(0);
+				}
+				System.out.println(2);
+			 
+		}
+		billOfMaterialHeader.setStatus(1);
+		
+		
+		System.out.println(billOfMaterialHeader.toString());
+		
+		RestTemplate rest = new RestTemplate();
+		
+		Info info = rest.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);	
+		System.out.println(info);
+		
+		return "redirect:/getBomList";
 	}
 
 	// commented code Sachin
