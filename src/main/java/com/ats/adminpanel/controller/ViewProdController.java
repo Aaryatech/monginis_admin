@@ -445,7 +445,8 @@ public class ViewProdController {
 				MixingHeader.class);
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("productionId", prodId);
-		int updateisMixing = rest.postForObject(Constants.url + "updateisMixing", map,
+		map.add("flag", 0);
+		int updateisMixing = rest.postForObject(Constants.url + "updateisMixingandBom", map,
 				Integer.class);
 		
 		System.out.println(mixingHeaderin.toString());

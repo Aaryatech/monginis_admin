@@ -76,7 +76,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Bill of Material Request Detailed
+						<i class="fa fa-file-o"></i>Rejection
 					</h1>
 				</div>
 			</div>
@@ -88,7 +88,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i>Bill of Material Request Detailed
+								<i class="fa fa-table"></i>Rejection
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -100,7 +100,7 @@
 						
 						<div class="box-content">
 
-							<form id="completproduction" action="${pageContext.request.contextPath}/approvedBom" method="post">
+							<form id="completproduction" action="${pageContext.request.contextPath}/updateRejectedQty" method="post">
 							<div class="box-content">
 								<div class="col-md-2">Bill Of Material Request Date</div>
 						
@@ -155,7 +155,7 @@
 									<tr>
 										<th>Sr.No.</th>
 										<th>Rm Name</th>
-										<th>Rm request Qty</th>
+										
 										<th>Rm issue Qty</th>
 										<th>Rejected Qty</th>
 										
@@ -172,25 +172,15 @@
  														<c:set var = "srNo" value="${srNo+1}"/>
 														<td ><c:out
 																value="${bomwithdetaild.rmName}" /></td>
-
-														<td><c:out
-																value="${bomwithdetaild.rmReqQty}" /></td>
 														
-														<c:choose>
-													<c:when test="${billOfMaterialHeader.status==0}">
-													<td><input type="text" name='issue_qty<c:out
-																value="${bomwithdetaild.reqDetailId}" />' class="form-control" value=
-																<c:out
-																value="${bomwithdetaild.rmIssueQty}" />></td>
-													</c:when>
-													<c:otherwise>
-													<td>
+														<td>
 														<c:out value="${bomwithdetaild.rmIssueQty}" /></td>
-													</c:otherwise>
-													</c:choose>	
 														
-														<td><c:out
-																value="${bomwithdetaild.rejectedQty}" /></td>	
+													<td><input type="text" name='rejectedQty<c:out
+													value="${bomwithdetaild.reqDetailId}" />' class="form-control" value=
+													<c:out value="${bomwithdetaild.rejectedQty}" />></td>
+													
+															
 															
 		
 												</c:forEach>
@@ -205,25 +195,14 @@
 							
 							
 												<c:choose>
-													<c:when test="${billOfMaterialHeader.status==0}">
-													<div align="center" class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-										
-										<input type="submit" class="btn btn-primary" value="Approved">
-									</div>
-								</div>
-													</c:when>
 													<c:when test="${billOfMaterialHeader.status==1}">
 													<div align="center" class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										
-										<a href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"><i class="fa fa-check"></i>For The rejection</a>
+										<input type="submit" class="btn btn-primary" value="For Rejection">
 									</div>
 								</div>
-													
-													
 													</c:when>
-													
 													</c:choose>
 							
 									

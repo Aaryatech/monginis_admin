@@ -147,7 +147,6 @@ int globalIsPlan;
 
 			RestTemplate restTemplate = new RestTemplate();
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 			Date date = new Date();
 
@@ -199,6 +198,21 @@ int globalIsPlan;
 					bomDetailList.add(bomDetail);
 
 				}
+				
+				System.out.println("bom detail List " + bomDetailList.toString());
+				billOfMaterialHeader.setBillOfMaterialDetailed(bomDetailList);
+
+				System.out.println(" insert List " + billOfMaterialHeader.toString());
+				int prodId=billOfMaterialHeader.getProductionId();
+				Info info = restTemplate.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("productionId", prodId);
+				map.add("flag", 1);
+				int updateisBom = restTemplate.postForObject(Constants.url + "updateisMixingandBom", map,
+						Integer.class);
+
+				
+				
 			}
 
 			else {
@@ -229,17 +243,22 @@ int globalIsPlan;
 					bomDetailList.add(bomDetail);
 
 				}
+				
+				System.out.println("bom detail List " + bomDetailList.toString());
+				billOfMaterialHeader.setBillOfMaterialDetailed(bomDetailList);
 
+				System.out.println(" insert List " + billOfMaterialHeader.toString());
+				int mixId=billOfMaterialHeader.getProductionId();
+				Info info = restTemplate.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("mixId", mixId);
+				int updateisBom = restTemplate.postForObject(Constants.url + "updateisBomInMixing", map,
+						Integer.class);
 			}
 
-			System.out.println("bom detail List " + bomDetailList.toString());
-			billOfMaterialHeader.setBillOfMaterialDetailed(bomDetailList);
+			
 
-			System.out.println(" insert List " + billOfMaterialHeader.toString());
-
-			Info info = restTemplate.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);
-
-			System.out.println("Info = " + info.toString());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -370,6 +389,61 @@ int globalIsPlan;
 			 
 		}
 		billOfMaterialHeader.setStatus(1);
+		
+		
+		System.out.println(billOfMaterialHeader.toString());
+		
+		RestTemplate rest = new RestTemplate();
+		
+		Info info = rest.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);	
+		System.out.println(info);
+		
+		return "redirect:/getBomList";
+	}
+	
+	
+	@RequestMapping(value = "/rejectiontoBms", method = RequestMethod.GET)
+	public ModelAndView rejectiontoBms(HttpServletRequest request, HttpServletResponse response) {
+		/*Constants.mainAct = 17;
+		Constants.subAct=184;*/
+		ModelAndView model = new ModelAndView("productionPlan/rejectforbom");
+		
+		System.out.println("in rejection form ");
+		
+		model.addObject("billOfMaterialHeader",billOfMaterialHeader);
+		model.addObject("bomwithdetaild", bomwithdetaild);
+		
+		return model;
+	}
+	
+	
+	@RequestMapping(value = "/updateRejectedQty", method = RequestMethod.POST)
+	public String updateRejectedQty(HttpServletRequest request, HttpServletResponse response) {
+		/*Constants.mainAct = 17;
+		Constants.subAct=184;*/
+		
+		for(int i=0;i<billOfMaterialHeader.getBillOfMaterialDetailed().size();i++)
+		{
+			System.out.println(12);
+			 
+			 
+				System.out.println(13);
+				String reject_qty=request.getParameter("rejectedQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId());
+				
+				if(reject_qty!=null) {
+					System.out.println("reject_qty Qty   :"+reject_qty);
+					float rejectqty= Float.parseFloat(reject_qty);
+					billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRejectedQty(rejectqty);
+					System.out.println("productionQty  :"+rejectqty);
+				}
+				else
+				{
+					billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRejectedQty(0);
+				}
+				System.out.println(2);
+			 
+		}
+		billOfMaterialHeader.setStatus(2);
 		
 		
 		System.out.println(billOfMaterialHeader.toString());

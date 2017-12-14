@@ -121,6 +121,23 @@
 								<tbody>
 									<c:forEach items="${getbomList}" var="getbomList"
 													varStatus="count">
+													
+													
+													<c:choose>
+													<c:when test="${getbomList.status==0}">
+													<c:set var = "status" value='Pending'/>
+													</c:when>
+													
+													<c:when test="${getbomList.status==1}">
+													  <c:set var = "status" value="Approved"/>
+													
+													</c:when>
+													
+													<c:when test="${getbomList.status==2}">
+													  <c:set var = "status" value="Rejected"/>
+													
+													</c:when>
+												</c:choose>
 
 													<tr>
 														<td><c:out value="${count.index+1}" /></td>
@@ -138,7 +155,7 @@
 																
 																
 																<td align="left"><c:out	
-																value="${getbomList.status}" />
+																value="${status}" />
 																</td>
 																
 																
@@ -166,7 +183,7 @@
 								<i class="fa fa-table"></i> Search Bill of Material List Date Wise
 							</h3>
 							<div class="box-tool">
-								<input type="button" class="btn btn-primary" value="Todays List" onclick="showdatewisetable()"> <a data-action="collapse" href="#"><i
+								<input type="button" class="btn btn-primary" value="Pending List" onclick="showdatewisetable()"> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -367,8 +384,13 @@
 							  $.each(
 											data,
 											function(key, itemList) {
-											
+												var stats;
+												var bgcolor;
 												alert("all request");
+												
+											if(itemList.status==0)
+												{
+												stats="Pending";
 												var tr = $('<tr></tr>');
 											  	tr.append($('<td></td>').html(key+1));
 
@@ -377,10 +399,47 @@
 
 											  	tr.append($('<td></td>').html(itemList.reqDate));
 											  
-											  	tr.append($('<td></td>').html(itemList.status));
+											  	tr.append($('<td></td>').html(stats));
+											  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
+												
+												$('#table_grid tbody').append(tr);
+												
+												}
+											else if(itemList.status==1)
+												{
+												stats="Approved";
+												var tr = $('<tr></tr>');
+											  	tr.append($('<td style="color:blue"></td>').html(key+1));
+
+											  	tr.append($('<td style="color:blue"></td>').html(itemList.fromDeptName));
+											  	
+
+											  	tr.append($('<td style="color:blue"></td>').html(itemList.reqDate));
+											  
+											  	tr.append($('<td style="color:blue"></td>').html(stats));
+											  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
+												
+												$('#table_grid tbody').append(tr);
+												}
+											else
+												{
+												stats="Rejected";
+												var tr = $('<tr></tr>');
+											  	tr.append($('<td style="color:red"></td>').html(key+1));
+
+											  	tr.append($('<td style="color:red"></td>').html(itemList.fromDeptName));
+											  	
+
+											  	tr.append($('<td style="color:red"></td>').html(itemList.reqDate));
+											  
+											  	tr.append($('<td style="color:red"></td>').html(stats));
 											  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
 												
 												$('#table_grid tbody').append(tr);
+												}
+											
+												
+												
 
 												 
 
