@@ -168,7 +168,7 @@ public class BomController {
 
 					bomDetail.setDelStatus(0);
 					bomDetail.setRmId(sfPlanDetailForBom.get(i).getRmId());
-					bomDetail.setRmIssueQty(1.0F);
+					bomDetail.setRmIssueQty(0.0F);
 					bomDetail.setUom(sfPlanDetailForBom.get(i).getUom());
 					bomDetail.setRmType(sfPlanDetailForBom.get(i).getRmType());
 					bomDetail.setRmReqQty(sfPlanDetailForBom.get(i).getTotal());
