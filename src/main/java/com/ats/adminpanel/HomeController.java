@@ -159,6 +159,12 @@ public class HomeController {
 				UserResponse userObj = restTemplate.getForObject(
 						Constants.url+"/login?username=" + name + "&password=" + password,
 						UserResponse.class);
+				
+				session.setAttribute("UserDetail", userObj);
+				UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
+				
+				System.out.println("new Field Dept Id = "+userResponse.getUser().getDeptId());
+				
 
 				System.out.println("JSON Response Objet " + userObj.toString());
 				String loginResponseMessage="";
@@ -170,7 +176,6 @@ public class HomeController {
 					
 					loginResponseMessage="Login Successful";
 					mav.addObject("loginResponseMessage",loginResponseMessage);
-					
 					
 					
 					mav = new ModelAndView("home");
