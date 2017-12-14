@@ -3,7 +3,7 @@ package com.ats.adminpanel.model.production;
 import java.util.Date;
 
 public class GetProdPlanHeader {
-	
+	 
 	
 	
 	private int productionHeaderId;
