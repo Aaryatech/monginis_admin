@@ -64,6 +64,7 @@ public class ViewProdController {
 	int globalHeaderId=0;
 	private int productionId;
 	private int isMixing;
+	private String globalProdDate;
 	
 	@RequestMapping(value = "/showProdHeader", method = RequestMethod.GET)
 	public ModelAndView showProdHeader(HttpServletRequest request, HttpServletResponse response) {
@@ -159,6 +160,7 @@ public class ViewProdController {
 			}
 				
 		}
+		globalProdDate =planHeader.getProductionDate();
 		
 		
 		globalProductionBatch=planHeader.getProductionBatch();
@@ -359,7 +361,8 @@ public class ViewProdController {
        mav.addObject("globalTimeSlot",globalTimeSlot);
        mav.addObject("productionId",productionId);
        mav.addObject("isMixing",isMixing);
-       
+       ModelAndView model = new ModelAndView("production/addBom");
+       model.addObject("prodDate",globalProdDate);
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -413,6 +416,7 @@ public class ViewProdController {
 			mixingDetailed.setSfId(sfPlanDetailForMixing.get(i).getRmId());
 			mixingDetailed.setSfName(sfPlanDetailForMixing.get(i).getRmName());
 			mixingDetailed.setReceivedQty(sfPlanDetailForMixing.get(i).getTotal());
+			mixingDetailed.setUom(sfPlanDetailForMixing.get(i).getUom());
 			mixingDetailed.setMixingDate(date);
 			mixingDetailed.setExBool1(0);
 			mixingDetailed.setExInt2(0);
