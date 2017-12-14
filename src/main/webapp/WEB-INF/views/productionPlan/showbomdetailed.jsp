@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Mix Request Detailed</title>
+<title>BOM Request Detailed</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -100,7 +100,7 @@
 						
 						<div class="box-content">
 
-							<form id="completproduction" action="${pageContext.request.contextPath}/updateProdctionQty" method="post">
+							<form id="completproduction" action="${pageContext.request.contextPath}/updateIssueQty" method="post">
 							<div class="box-content">
 								<div class="col-md-2">Bill Of Material Request Date</div>
 						
@@ -175,10 +175,22 @@
 
 														<td><c:out
 																value="${bomwithdetaild.rmReqQty}" /></td>
-															
+														
+														<c:choose>
+													<c:when test="${billOfMaterialHeader.status==0}">
+													<td><input type="text" name='issue_qty<c:out
+																value="${bomwithdetaild.reqDetailId}" />' class="form-control" value=
+																<c:out
+																value="${bomwithdetaild.rmIssueQty}" />></td>
+													</c:when>
+													<c:otherwise>
 													<td>
 														<c:out value="${bomwithdetaild.rmIssueQty}" /></td>
-												</tr>
+													</c:otherwise>
+													</c:choose>	
+															
+															
+		
 												</c:forEach>
 								
 													
@@ -191,11 +203,11 @@
 							
 							
 												<c:choose>
-													<c:when test="${mixheader.status==0}">
+													<c:when test="${billOfMaterialHeader.status==0}">
 													<div align="center" class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-										<input type="button" class="btn btn-primary" value="Request for bill">
-										<input type="submit" class="btn btn-primary" value="complet Production">
+										
+										<input type="submit" class="btn btn-primary" value="Approved">
 									</div>
 								</div>
 													</c:when>

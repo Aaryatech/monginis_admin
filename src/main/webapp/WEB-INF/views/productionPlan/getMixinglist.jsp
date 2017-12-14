@@ -85,13 +85,13 @@
 			<div class="row">
 				<div class="col-md-12">
 
-					<div class="box">
+					<div class="box" id="todayslist">
 						<div class="box-title">
 							<h3>
 								<i class="fa fa-table"></i> Search Mixing List
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<input type="button" class="btn btn-primary" value="Datewise record" onclick="showdatewisetable()"> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -108,7 +108,7 @@
 									<tr>
 										<th>Sr.No.</th>
 										
-										<th>Production Date</th>
+										<th>Mixing Date</th>
 										<th>Production Batch</th>
 										<th>Time Slot</th>
 										<th>Status</th>
@@ -158,14 +158,14 @@
 		</div>
 			</div>			
 						
-					<div class="box">
+					<div class="box" id="datewise_table" style="display: none">
 					
 					<div class="box-title">
 							<h3>
 								<i class="fa fa-table"></i> Search Mixing List Date Wise
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<input type="button" class="btn btn-primary" value="Todays List" onclick="showdatewisetable()"> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -236,7 +236,7 @@
 									<tr>
 										<th>Sr.No.</th>
 										
-										<th>Production Date</th>
+										<th>Mixing Date</th>
 										<th>Production Batch</th>
 										<th>Time Slot</th>
 										<th>Status</th>
@@ -448,5 +448,30 @@
 		 
 	}
 	</script>
+	
+	<script type="text/javascript">
+	var flag=0;
+	function showdatewisetable() {
+		if(flag==0)
+			{
+				flag=1;
+				$('#todayslist').hide();
+				$("#datewise_table").show();
+			}
+		else if(flag==1)
+			{
+				flag=0;
+				$('#todayslist').show();
+				$("#datewise_table").hide();
+			}
+		
+
+	 
+}
+	
+	
+	</script>
+	
+	
 </body>
 </html>

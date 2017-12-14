@@ -87,13 +87,13 @@
 			<div class="row">
 				<div class="col-md-12">
 
-					<div class="box">
+					<div class="box" id="todayslist">
 						<div class="box-title">
 							<h3>
 								<i class="fa fa-table"></i> Search Bill Of Material List
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<input type="button" class="btn btn-primary" value="Datewise record" onclick="showdatewisetable()"> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 						</div>
@@ -143,7 +143,7 @@
 																
 																
 						<td><a href="${pageContext.request.contextPath}/viewDetailBOMRequest?reqId=${getbomList.reqId}" class="action_btn" >
-						<abbr title="Edit"><i class="fa fa-list"></i></abbr></a></td>
+						<abbr title="detailed"><i class="fa fa-list"></i></abbr></a></td>
 						
 																</tr>
 												</c:forEach>
@@ -159,14 +159,14 @@
 						
 						
 						
-					<div class="box">
+					<div class="box" id="datewise_table" style="display: none">
 					
 						<div class="box-title">
 							<h3>
 								<i class="fa fa-table"></i> Search Bill of Material List Date Wise
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<input type="button" class="btn btn-primary" value="Todays List" onclick="showdatewisetable()"> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -378,7 +378,7 @@
 											  	tr.append($('<td></td>').html(itemList.reqDate));
 											  
 											  	tr.append($('<td></td>').html(itemList.status));
-											  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailes'> <i class='fa fa-list' ></i></abbr> "));
+											  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
 												
 												$('#table_grid tbody').append(tr);
 
@@ -389,6 +389,27 @@
 
 		 
 	}
+	</script>
+	
+	<script type="text/javascript">
+	var flag=0
+	function showdatewisetable() {
+		
+		if(flag==0)
+		{
+			$('#todayslist').hide();
+			$("#datewise_table").show();
+			flag=1;
+		}
+		else if(flag==1)
+		{
+			$('#todayslist').show();
+			$("#datewise_table").hide();
+			flag=0;
+		}
+	 
+}
+		
 	</script>
 </body>
 </html>

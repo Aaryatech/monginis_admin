@@ -17,10 +17,12 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.production.mixing.temp.GetSFMixingForBom;
 import com.ats.adminpanel.model.production.mixing.temp.GetSFMixingForBomList;
@@ -32,16 +34,17 @@ import com.ats.adminpanel.model.production.mixing.temp.TempMixing;
 import com.ats.adminpanel.model.production.mixing.temp.TempMixingList;
 import com.ats.adminpanel.model.productionplan.BillOfMaterialDetailed;
 import com.ats.adminpanel.model.productionplan.BillOfMaterialHeader;
+import com.ats.adminpanel.model.productionplan.GetBillOfMaterialList;
 
 @Controller
-public class MixingController {
+public class BomController {
 
 	GetSFPlanDetailForMixingList getSFPlanDetailForBomList;
 
 	List<GetSFPlanDetailForMixing> sfPlanDetailForBom = new ArrayList<>();
 
 	GetSFMixingForBomList sFMixingForBomList;
-
+	
 	List<GetSFMixingForBom> sFMixingForBom = new ArrayList<>();
 
 	String prodOrMixDate;
@@ -218,6 +221,95 @@ public class MixingController {
 		
 	return mav;
 	
+	}
+	
+	//from akshay
+	private List<BillOfMaterialHeader> getBOMListall;
+	public List<BillOfMaterialHeader> getbomList = new ArrayList<BillOfMaterialHeader>();
+	
+	@RequestMapping(value = "/getBomList", method = RequestMethod.GET)
+	public ModelAndView getBomList(HttpServletRequest request, HttpServletResponse response) {
+		/*Constants.mainAct = 17;
+		Constants.subAct=184;*/
+		
+		ModelAndView model = new ModelAndView("productionPlan/getbomlist");//
+		getbomList = new ArrayList<BillOfMaterialHeader>();
+		
+		RestTemplate rest = new RestTemplate();
+		try
+		{
+			GetBillOfMaterialList getBillOfMaterialList= rest.getForObject(Constants.url + "/getallBOMHeaderList", GetBillOfMaterialList.class);
+			 
+			
+			System.out.println("getbomList"+getBillOfMaterialList.getBillOfMaterialHeader().toString());
+			for(int i=0;i<getBillOfMaterialList.getBillOfMaterialHeader().size();i++)
+			{
+				BillOfMaterialHeader billOfMaterialHeader=getBillOfMaterialList.getBillOfMaterialHeader().get(i);
+				int Status=billOfMaterialHeader.getStatus();
+				if(Status==0)
+				{
+					getbomList.add(getBillOfMaterialList.getBillOfMaterialHeader().get(i));
+				}
+			}
+			System.out.println("bomHeaderList"+getBillOfMaterialList.getBillOfMaterialHeader().toString());
+			
+		}catch(Exception e)
+		{
+			System.out.println("error in controller "+e.getMessage());
+		}
+		model.addObject("getbomList",getbomList) ;
+		return model;
+
+	}
+	
+	
+	
+	
+	@RequestMapping(value = "/getBomAllListWithDate", method = RequestMethod.GET)
+	@ResponseBody
+	public List<BillOfMaterialHeader> getBomAllListWithDate(HttpServletRequest request, HttpServletResponse response) {
+		/*Constants.mainAct = 17;
+		Constants.subAct=184;*/
+		String frmdate=request.getParameter("from_date");
+		String todate=request.getParameter("to_date");
+		
+		System.out.println("in getMixingListWithDate   "+frmdate+todate);
+		String frdate=DateConvertor.convertToYMD(frmdate);
+		String tdate=DateConvertor.convertToYMD(todate);
+		
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("frmdate",frdate);
+		map.add("todate",tdate);
+		System.out.println("in getBOMListWithDate   "+frdate+tdate);
+		RestTemplate rest = new RestTemplate();
+		GetBillOfMaterialList getBillOfMaterialList= rest.postForObject(Constants.url + "/getBOMHeaderList",map, GetBillOfMaterialList.class);
+		getBOMListall  = getBillOfMaterialList.getBillOfMaterialHeader();
+		return getBOMListall;
+	
+
+	}
+	
+	@RequestMapping(value = "/viewDetailBOMRequest", method = RequestMethod.GET)
+	public ModelAndView viewDetailBOMRequest(HttpServletRequest request, HttpServletResponse response) {
+		/*Constants.mainAct = 17;
+		Constants.subAct=184;*/
+		ModelAndView model = new ModelAndView("productionPlan/showbomdetailed");
+		
+		
+		//String mixId=request.getParameter("mixId");
+		int reqId=Integer.parseInt(request.getParameter("reqId"));
+		System.out.println(reqId);
+		
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("reqId",reqId);
+		RestTemplate rest = new RestTemplate();
+		BillOfMaterialHeader billOfMaterialHeader=rest.postForObject(Constants.url + "/getDetailedwithreqId",map, BillOfMaterialHeader.class);
+		 List<BillOfMaterialDetailed> bomwithdetaild =billOfMaterialHeader.getBillOfMaterialDetailed();
+		
+		model.addObject("billOfMaterialHeader",billOfMaterialHeader);
+		model.addObject("bomwithdetaild", bomwithdetaild);
+		
+		return model;
 	}
 
 	// commented code Sachin
