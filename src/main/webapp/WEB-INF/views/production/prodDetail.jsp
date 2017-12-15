@@ -56,6 +56,7 @@
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <c:url var="updatePlanQty" value="/updatePlanQty"/>
 
+<c:url var="goToManualBom" value="/goToManualBom"/>
 
 	<div class="container" id="main-container">
 
@@ -104,7 +105,7 @@
 
 						<div class="box-content">
 							<form action="${pageContext.request.contextPath}/updateQty" class="form-horizontal"
-								id="form" method="post" name="form">
+								id="validation_form" method="post" name="form">
 
 
 
@@ -115,7 +116,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Prod
 										Date </label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input " type="text" name="from_date"
+										<input " type="text" name="prod_date" id="prod_date"
 											value="${planHeader.productionDate}" />
 									</div>
 
@@ -123,7 +124,7 @@
 										Slot</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<input type="text" value="${planHeader.timeSlot}"
-											name="to_date" />
+											name="time_slot" />
 									</div>
 
 								</div>
@@ -132,14 +133,14 @@
 									<label class="col-sm-3 col-lg-2 control-label">Category
 									</label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input  type="text" name="from_date" id="from_date"
+										<input  type="text" name="cat_name" id="cat_name"
 											value="${planHeader.catName}" required />
 									</div>
 
 									<label class="col-sm-3 col-lg-2 control-label">Prod ID</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<input type="text" value="${planHeader.productionHeaderId}"
-											name="to_date" />
+											id="prod_id" name="prod_id" />
 									</div>
 
 								</div>
@@ -314,6 +315,15 @@
 										</button>
                                    </c:otherwise>
                                    </c:choose>
+                                   <c:choose>
+                                   
+                                   <c:when test = "${planHeader.isBom==1}">
+									    <button type="button" class="btn btn-primary" id="man_bom_button" onclick="goToManBom()">
+											<i class="fa fa-check"></i>Manual Bom
+										</button>
+                                    </c:when>
+                                   
+                                   </c:choose>
 										
 									  
 										
@@ -403,24 +413,39 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
 
+
+
+
 <script type="text/javascript">
 
-/* $("#editPlanQty").click(function() {
-	 var i; 
 
-	var count=document.getElementById("cnt").value;	
-	
-	$.getJSON('${updatePlanQty}', {
-		index : count,
-		ajax : 'true',
+
+$('#man_bom_button').click(function(){
+    var form = document.getElementById("validation_form")
+    form.action ="${pageContext.request.contextPath}/goToManualBom";
+    form.submit();
+});
+
+ /* function goToManBom(){
+		
+	 alert("inside got to man bom");
+		var prodDate=$("#prod_date").val();
+		
+		var prodId=$("#prod_id").val();
+		
+		alert(prodDate);
+		alert(prodId);
+
+		$.getJSON('${goToManualBom}',
+				{
+			
+			prodId : prodId,
+			prodDate :prodDate,
+			ajax : 'true',
 	});
-	
-	for(i=0;i<=count;i++)
-		{
-	       $("#plan_qty"+i).attr('disabled', !$("#plan_qty"+i).attr('disabled'));
-	  
-		} 
-	}); */
+		
+		
+	} */
 </script>
 <script type="text/javascript">
 $("#editOrderQty").click(function() {

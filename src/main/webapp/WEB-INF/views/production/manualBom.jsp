@@ -53,21 +53,23 @@
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 </head>
 <body>
-	<c:url var="getRmSubCategory" value="/getRmSubCategory" />
+	<%-- 	<c:url var="getRmSubCategory" value="/getRmSubCategory" />
 	
 	<c:url var="insertSfItemDetail" value="/insertSfItemDetail" />
 	<c:url var="getRmCategory" value="/getRmCategory" />
 
 	<c:url var="getItemDetail" value="/getItemDetail" />
-		<c:url var="getSingleItem" value="/getSingleItem" />
-	
-		<c:url var="getMaterial" value="/getMaterial" />
-	
-		<c:url var="itemForEdit" value="/itemForEdit" />
+		<c:url var="getSingleItem" value="/getSingleItem" /> --%>
 
-		<c:url var="getMatUom" value="/getMatUom" />
+	<c:url var="getMaterial" value="/getMaterial" />
 
+	<c:url var="manBomAddItem" value="/manBomAddItem" />
 
+	<c:url var="getMatUom" value="/getMatUom" />
+
+	<c:url var="deleteBomDetail" value="/deleteBomDetail" />
+
+	<c:url var="insertBomHeader" value="/insertBomHeader" />
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -107,7 +109,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Add Manual Bom - <b>-${sfName}</b>
+								<i class="fa fa-bars"></i>Add Manual Bom - <b>-</b>
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -116,49 +118,63 @@
 
 						</div>
 						<div class="box-content">
-							<form action="" method="post"
-								class="form-horizontal" id="validation-form" method="post">
+							<form action="" method="post" class="form-horizontal"
+								id="validation-form" method="post">
 
 								<div class="form-group">
-								
-								<h4 align="center">Prod Header Id : 114  Prod Date :22-11-2017</h4>
 
-									<label class="col-sm-3 col-lg-2 control-label">
-										From Dept</label>
+
+									<c:choose>
+										<c:when test="${isProd==1}">
+											<h4 align="center">Prod Header Id ${prodHeaderId} Prod
+												Date ${prodDate}</h4>
+										</c:when>
+										<c:otherwise>
+
+											<h4 align="center">Mix Header Id ${prodHeaderId} Mix
+												Date ${prodDate}</h4>
+
+										</c:otherwise>
+									</c:choose>
+
+
+									<label class="col-sm-3 col-lg-2 control-label"> From
+										Dept</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<select name="from_dept" id="from_dept"
-											class="form-control"
+										<select name="from_dept" id="from_dept" class="form-control"
 											placeholder="Material Type" data-rule-required="true">
 											<option value="0">Select From Dept</option>
-											<option value="1">Prod</option>
-											<option value="2">Mixing</option>
+
+											<c:forEach items="${deptList}" var="dept">
+												<option value="${dept.deptId}">${dept.deptName}</option>
+											</c:forEach>
+
 										</select>
 									</div>
-								
-									
-									<label class="col-sm-3 col-lg-2 control-label">
-										To Dept</label>
+
+
+									<label class="col-sm-3 col-lg-2 control-label"> To Dept</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<select name="to_dept" id="to_dept"
-											class="form-control"
+										<select name="to_dept" id="to_dept" class="form-control"
 											placeholder="Material Type" data-rule-required="true">
 											<option value="0">Select To Dept</option>
-											<option value="1">Kitchen</option>
-											<option value="2">Prod</option>
+											<c:forEach items="${deptList}" var="dept">
+												<option value="${dept.deptId}">${dept.deptName}</option>
+											</c:forEach>
 										</select>
 									</div>
-										
+
 								</div>
-								
-								
+
+
 								<div class="form-group">
 
 									<label class="col-sm-3 col-lg-2 control-label">
 										Material Type</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<select name="material_type" id="material_type"
-											class="form-control"
-											placeholder="Material Type" data-rule-required="true">
+											class="form-control" placeholder="Material Type"
+											data-rule-required="true">
 											<option value="0">Select Material Type</option>
 											<option value="1">RM</option>
 											<option value="2">SF</option>
@@ -167,41 +183,42 @@
 
 									<label class=" col-sm-3 col-lg-2 control-label">
 										Material Name</label>
-									<div class="col-sm-6 col-lg-4 controls"
-										id="chooseRM">
+									<div class="col-sm-6 col-lg-4 controls" id="chooseRM">
 										<select name="rm_material_name" id="rm_material_name"
 											class="form-control" placeholder="Material Name"
 											data-rule-required="true">
 											<option value="-1">Select Material</option>
-											
+
 										</select>
 									</div>
-									
+
 								</div>
 
 								<div class="form-group">
 
 									<label class="col-sm-3 col-lg-2 control-label">UOM</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="uom" id="uom"  class="form-control"
+										<input type="text" name="uom" id="uom" class="form-control"
 											placeholder="UOM" data-rule-required="true" />
-											
+
 									</div>
-									
-									<label class="col-sm-3 col-lg-2 control-label">RM Req Qty</label>
+
+									<label class="col-sm-3 col-lg-2 control-label">RM Req
+										Qty</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="qty" id="qty" class="form-control"
-											placeholder="Qty" data-rule-required="true"
+										<input type="text" name="rm_req_qty" id="rm_req_qty"
+											class="form-control" placeholder="Qty"
+											data-rule-required="true"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 
 								</div>
-								
-								
+
+
 
 								<div class="row">
 									<div class="col-md-12" style="text-align: center">
-										<input type="button" class="btn btn-info" value="Submit"
+										<input type="button" class="btn btn-info" value="Submit Items"
 											onclick="submitItem()">
 
 									</div>
@@ -217,7 +234,7 @@
 												<th width="138" align="left">Material Name</th>
 												<th width="120" align="left">Material Type</th>
 												<th width="120" align="left">Qty</th>
-												<th width="120" align="left">Weight</th>
+												<th width="120" align="left">UOM</th>
 												<th width="120" align="left">Action</th>
 
 											</tr>
@@ -226,12 +243,12 @@
 
 										<tbody>
 
-											<c:forEach items="${sfDetailList}" var="sfDetailList"
+											<%-- <c:forEach items="${sfDetailList}" var="sfDetailList"
 												varStatus="count">
 
 												<c:choose>
 												
-												<c:when test="${sfDetailList.delStatus == '0'}">
+												
 												<tr>
 												
 												<td><c:out value="${count.index+1}" /></td>
@@ -262,26 +279,27 @@
 													
 													</td>
 													</tr>
-												</c:when>
-												</c:choose>
-													
-													<%-- <a
+												
+												
+													<a
 														href="${pageContext.request.contextPath}/delete/${sfDetailList.rmId}"
 														class="action_btn"> <abbr title="Delete"><i
-																class="fa fa-list"></i></abbr></a> --%>
+																class="fa fa-list"></i></abbr></a>
 												
 											</c:forEach>
-
+ --%>
 										</tbody>
 									</table>
 								</div>
-								
-								<input type="button" class="btn btn-info" value="Submit Items"
-											onclick="insertItemDetail()">
+
+								<input type="button" class="btn btn-info" value="Submit List"
+									onclick="insertItemDetail()"> <input type="hidden"
+									id="prodHeaderId" value="${prodHeaderId}"> <input
+									type="hidden" id="prodDate" value="${prodDate}">
 
 							</form>
 						</div>
-						
+
 					</div>
 
 				</div>
@@ -367,21 +385,145 @@
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
 
-	
-<script type="text/javascript">
+	<script type="text/javascript">
+function submitItem() {
+				
+				var materialType = $('#material_type').val();
+				var materialName=$("#rm_material_name option:selected").html();
+				var materialNameId= $('#rm_material_name').val(); 
+				
+				var uom = document.getElementById("uom").value;
+				var rmReqQty = document.getElementById("rm_req_qty").value;
+				
+				$.getJSON('${manBomAddItem}', {
+					 mat_type : materialType,
+					mat_name_id : materialNameId,
+					mat_name : materialName,
+					uom : uom,
+					qty : rmReqQty,
+					 
+					ajax : 'true',
+
+				},function(data) {
+					
+					var len = data.length;
+					$('#table1 td').remove();
+					
+					$.each(data,function(key, bomDetail) {
+					
+					var tr = $('<tr></tr>');
+					var rmTypeName;
+					if(bomDetail.rmType == 1){
+						rmTypeName="RM";
+					}else if(bomDetail.rmType == 2){
+						rmTypeName="SF";
+					}
+
+					if(bomDetail.delStatus == 0){
+						
+				  	tr.append($('<td></td>').html(key+1));
+
+				  	tr.append($('<td></td>').html(bomDetail.rmName));
+
+				  	tr.append($('<td></td>').html(""+rmTypeName));
+
+				  	tr.append($('<td></td>').html(bomDetail.rmReqQty));
+
+				  	tr.append($('<td></td>').html(bomDetail.uom));
+				  
+				  	tr.append($('<td></td>').html("<input type=button id=delete onClick=deleteBomDetail("+key+"); Value=Delete> "));
+					}
+					$('#table1 tbody').append(tr);
+
+					})
+
+					});
+
+				
+				}
+				
+				function deleteBomDetail(key){
+					
+					$.getJSON('${deleteBomDetail}',
+							{
+								key:key,
+								ajax : 'true',
+							},function(data) {
+								
+								var len = data.length;
+								$('#table1 td').remove();
+								
+								$.each(data,function(key, bomDetail) {
+								
+								var tr = $('<tr></tr>');
+								var rmTypeName;
+								if(bomDetail.rmType == 1){
+									rmTypeName="RM";
+								}else if(bomDetail.rmType == 2){
+									rmTypeName="SF";
+								}
+
+								if(bomDetail.delStatus == 0){
+									
+							  	tr.append($('<td></td>').html(key+1));
+
+							  	tr.append($('<td></td>').html(bomDetail.rmName));
+
+							  	tr.append($('<td></td>').html(""+rmTypeName));
+
+							  	tr.append($('<td></td>').html(bomDetail.rmReqQty));
+
+							  	tr.append($('<td></td>').html(bomDetail.uom));
+							  
+							  	tr.append($('<td></td>').html("<input type=button id=delete onClick=deleteBomDetail("+key+"); Value=Delete> "));
+								}
+								$('#table1 tbody').append(tr);
+
+								})
+
+								});
+
+							
+				}
+
+</script>
+
+	<script type="text/javascript">
 
 function insertItemDetail(){
 	
+	alert("inside Bom Header Insert ");
 	
-	$.getJSON('${insertSfItemDetail}',
+	var fromDeptName=$("#from_dept option:selected").html();
+	
+	var toDeptName=$("#to_dept option:selected").html();
+
+	var prodHeaderId= $('#prodHeaderId').val();
+	//var prodHeaderId = document.getElementById("prodHeaderId").value;
+
+	var prodDate=$('#prodDate').val();
+	
+//salert(prodDate);
+alert(prodHeaderId);
+alert(prodDate);
+
+	var fromDept = $('#from_dept').val();
+	var toDept = $('#to_dept').val();
+	
+	$.getJSON('${insertBomHeader}',
 			{
-				ajax : 'true',
-}
-);
+		fromDeptName:fromDeptName,
+		toDeptName:toDeptName,
+		fromDept:fromDept,
+		toDept:toDept,
+		headerId:prodHeaderId,
+		prodDate :prodDate,
+		ajax : 'true',
+});
 	
-
+	alert("Inserted Suucessfully");
+	$('#table1 td').remove();
 }
-
 
 </script>
 
@@ -408,17 +550,14 @@ $(document).ready(function() {
 					
 				});
 			});
-			
 
 });
 </script>
 
-<script type="text/javascript">
+	<script type="text/javascript">
 $(document).ready(function() { 
 	$('#rm_material_name').change(
 			function() {
-				alert("mat name changed");
-			alert($(this).val());	
 
 	$.getJSON('${getMatUom}', {
 		rm_material_name : $(this).val(),
@@ -426,8 +565,7 @@ $(document).ready(function() {
 					ajax : 'true',
 				},  function(data) {
 					
-	alert(data);
-	alert(data.uom);
+	
 	var uom=data.uom;
 
 	document.getElementById("uom").setAttribute('value',data.uom);
@@ -436,13 +574,11 @@ $(document).ready(function() {
 					
 					})
 					
-				
 			});
 			
 
-
 </script>
-	
-	
+
+
 </body>
 </html>

@@ -149,6 +149,8 @@ public class ViewMixingController {
 		
 		 Date mixdate = mixingHeader.getMixDate();
 		 
+		 
+		 
 		 SimpleDateFormat dtFormat=new SimpleDateFormat("dd-MM-yyyy");
 			
 		 String date=dtFormat.format(mixdate);

@@ -12,6 +12,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +30,7 @@ import com.ats.adminpanel.model.grngvn.GetGrnGvnDetails;
 import com.ats.adminpanel.model.grngvn.GetGrnGvnDetailsList;
 import com.ats.adminpanel.model.grngvn.GrnGvn;
 import com.ats.adminpanel.model.grngvn.PostGrnGvnList;
+import com.ats.adminpanel.model.login.UserResponse;
 import com.ats.adminpanel.model.remarks.GetAllRemarks;
 import com.ats.adminpanel.model.remarks.GetAllRemarksList;
 
@@ -52,6 +54,8 @@ public class GrnGvnController {
 
 		accGvnFromDate = request.getParameter("fromDate");
 		accGvnToDate = request.getParameter("toDate");
+		
+		
 
 		return "";
 

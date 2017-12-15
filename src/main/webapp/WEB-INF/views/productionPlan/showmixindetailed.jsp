@@ -31,7 +31,7 @@
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/css/datepicker.css" />
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.css" />
-<%@ taglib prefix = "fmt" uri = "http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 
 <!--page specific css styles-->
@@ -49,9 +49,9 @@
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 </head>
 <body>
-<c:url var="gateEntryList" value="/gateEntryList"></c:url>
-<c:url var="withPoRef" value="/withPoRef"></c:url>
-<c:url var="withPoRefDate" value="/withPoRefDate"></c:url>
+	<c:url var="gateEntryList" value="/gateEntryList"></c:url>
+	<c:url var="withPoRef" value="/withPoRef"></c:url>
+	<c:url var="withPoRefDate" value="/withPoRefDate"></c:url>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -90,163 +90,190 @@
 							<h3>
 								<i class="fa fa-table"></i>Mix Request Detailed
 							</h3>
-							
-							
+
+
 						</div>
-						
-						
+
+
 						<div class="box-content">
 
-							<form id="completproduction" action="${pageContext.request.contextPath}/updateProdctionQty" method="post">
-							<div class="box-content">
-								<div class="col-md-2">Mix Request Date</div>
-						
-								<div class="col-md-3"><input type="text" id="mix_date" name="mix_date" value="<fmt:formatDate pattern = "dd-MM-yyyy" value = "${mixheader.mixDate}" />" class="form-control" readonly>
-								</div>
-								
-							
-					
-							</div><br>
-							
-							<div class="box-content">
-							
-								<div class="col-md-2">Status</div>
-									<div class="col-md-3"><input type="text" id="status" name="status" value="${mixheader.status}" class="form-control" readonly>
-								</div>
-							</div><br>
-							
-							<div class="box-content">
-							
-								
-								<div class="col-md-2">Time Slot</div>
-									<div class="col-md-3">
-									<input class="form-control" id="time_slot" size="16"
-											type="text" name="time_slot" value="${mixheader.timeSlot}"  readonly />
-									</div>
-								
-				 
-							</div><br>
-							
-							<div class="box-content">
-							
-									<div class="col-md-2">Production Batch</div> 
-									<div class="col-md-3">
-										<input type="text" id="production_batch" name="production_batch" value="${mixheader.productionBatch}" class="form-control" readonly>
-							
-									</div>
-							</div><br>
-						
-							
-							
-							
-							<div class=" box-content">
-								<div class="row">
-								<div class="col-md-12 table-responsive">
-									<table class="table table-bordered table-striped fill-head "
-								style="width: 100%" id="table_grid">
-								<thead>
-									<tr>
-										<th>Sr.No.</th>
-										<th>Sf Name</th>
-										<th>Received Qty</th>
-										<th>Production Qty</th>
-										<th>Mixing Date</th>
-										
+							<form id="completproduction"
+								action="${pageContext.request.contextPath}/updateProdctionQty"
+								method="post">
+								<div class="box-content">
+									<div class="col-md-2">Mix Request Date</div>
 
-									</tr>
-								</thead>
-									<tbody>
-									 <c:set var = "srNo" value="0"/>
-									<c:forEach items="${mixwithdetaild}" var="mixwithdetaild"
-													varStatus="count">
-													
+									<div class="col-md-3">
+										<input type="text" id="mix_date" name="mix_date"
+											value="<fmt:formatDate pattern = "dd-MM-yyyy" value = "${mixheader.mixDate}" />"
+											class="form-control" readonly>
+									</div>
 
+
+
+								</div>
+								<br>
+
+								<div class="box-content">
+
+									<div class="col-md-2">Status</div>
+									<div class="col-md-3">
+										<input type="text" id="status" name="status"
+											value="${mixheader.status}" class="form-control" readonly>
+									</div>
+								</div>
+								<br>
+
+								<div class="box-content">
+
+
+									<div class="col-md-2">Time Slot</div>
+									<div class="col-md-3">
+										<input class="form-control" id="time_slot" size="16"
+											type="text" name="time_slot" value="${mixheader.timeSlot}"
+											readonly />
+									</div>
+
+								</div>
+								<br>
+
+								<div class="box-content">
+
+									<div class="col-md-2">Production Batch</div>
+									<div class="col-md-3">
+										<input type="text" id="production_batch"
+											name="production_batch" value="${mixheader.productionBatch}"
+											class="form-control" readonly>
+
+									</div>
+								</div>
+								<br>
+
+
+
+
+								<div class=" box-content">
+									<div class="row">
+										<div class="col-md-12 table-responsive">
+											<table class="table table-bordered table-striped fill-head "
+												style="width: 100%" id="table_grid">
+												<thead>
 													<tr>
-														<td ><c:out value="${count.index+1}" /></td>
- 														<c:set var = "srNo" value="${srNo+1}"/>
-														<td ><c:out
-																value="${mixwithdetaild.sfName}" /></td>
+														<th>Sr.No.</th>
+														<th>Sf Name</th>
+														<th>Received Qty</th>
+														<th>Production Qty</th>
+														<th>Mixing Date</th>
 
 
-														<td><c:out
-																value="${mixwithdetaild.receivedQty}" /></td>
-																
-																<c:choose>
-													<c:when test="${mixheader.status==0}">
-													<td><input type="text" name='production_Qty<c:out
-																value="${mixwithdetaild.mixing_detailId}" />' class="form-control" value=
-																<c:out
+													</tr>
+												</thead>
+												<tbody>
+													<c:set var="srNo" value="0" />
+													<c:forEach items="${mixwithdetaild}" var="mixwithdetaild"
+														varStatus="count">
+
+
+														<tr>
+															<td><c:out value="${count.index+1}" /></td>
+															<c:set var="srNo" value="${srNo+1}" />
+															<td><c:out value="${mixwithdetaild.sfName}" /></td>
+
+
+															<td><c:out value="${mixwithdetaild.receivedQty}" /></td>
+
+															<c:choose>
+																<c:when test="${mixheader.status==0}">
+																	<td><input type="text"
+																		name='production_Qty<c:out
+																value="${mixwithdetaild.mixing_detailId}" />'
+																		class="form-control"
+																		value=<c:out
 																value="${mixwithdetaild.productionQty}" />></td>
-													</c:when>
-													<c:otherwise>
-													<td>
-														<c:out value="${mixwithdetaild.productionQty}" /></td>
-													</c:otherwise>
-													</c:choose>
-														 
-														 
-													
-														<td><c:out
-																value="${mixwithdetaild.mixingDate}" /></td>
- 												 
-											
-												</tr>
-												</c:forEach>
-								
-													
-									</tbody>
-									</table>
-								</div>
-								</div>
-							</div>
-							
-							
-							
-												<c:choose>
-													<c:when test="${mixheader.status==0}">
-														<div align="center" class="form-group">
-														<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-										 
-															<input type="submit" class="btn btn-primary" value="complet Production">
-														</div>
-														</div>
-													</c:when>
-												</c:choose>
-												
-												<c:choose>
-													<c:when test="${mixheader.isBom==0}">
-													<div align="center" class="form-group">
-														<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-										 				<a href="${pageContext.request.contextPath}/showBom/${mixheader.mixId}/0/${date}/0"><i class="fa fa-check"></i> Req. BOM</a>
-		
-														</div>
-													</div>
-													</c:when>
-												</c:choose>
-									
+																</c:when>
+																<c:otherwise>
+																	<td><c:out value="${mixwithdetaild.productionQty}" /></td>
+																</c:otherwise>
+															</c:choose>
 
-							
-							<div class="box-content">
-							
-							
-							</div><br><br><br>
-							
-							
 
-						</form>
-						</div>	
+
+															<td><c:out value="${mixwithdetaild.mixingDate}" /></td>
+
+
+														</tr>
+													</c:forEach>
+
+
+												</tbody>
+											</table>
+										</div>
+									</div>
+								</div>
+
+
+
+								<c:choose>
+									<c:when test="${mixheader.status==0}">
+										<div align="center" class="form-group">
+											<div
+												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+
+												<input type="submit" class="btn btn-primary"
+													value="complet Production">
+											</div>
+										</div>
+									</c:when>
+								</c:choose>
+
+								<c:choose>
+									<c:when test="${mixheader.isBom==0}">
+										<div align="center" class="form-group">
+											<div
+												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+												<a
+													href="${pageContext.request.contextPath}/showBom/${mixheader.mixId}/0/${date}/0"><i
+													class="fa fa-check"></i> Req. BOM</a>
+
+											</div>
+										</div>
+									</c:when>
+								</c:choose>
+
+								<c:choose>
+
+									<c:when test="${mixheader.isBom == 1}">
+										<button type="button" class="btn btn-primary"
+											id="man_bom_button" onclick="goToManBom()">
+											<i class="fa fa-check"></i>Manual Bom for Mixing
+										</button>
+									</c:when>
+
+								</c:choose>
+
+
+								<div class="box-content"></div>
+								<br>
+								<br>
+								<br>
+
+<input type="hidden" name="mixId" value="${mixheader.mixId}">
+<input type="hidden" name="isMixing" value="1">
+
+							</form>
 						</div>
 					</div>
 				</div>
 			</div>
-			<!-- END Main Content -->
-			<footer>
-			<p>2017 © MONGINIS.</p>
-			</footer>
+		</div>
+		<!-- END Main Content -->
+		<footer>
+		<p>2017 © MONGINIS.</p>
+		</footer>
 
-			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-				class="fa fa-chevron-up"></i></a>
-		
+		<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+			class="fa fa-chevron-up"></i></a>
+
 		<!-- END Content -->
 	</div>
 	<!-- END Container -->
@@ -314,7 +341,15 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-						
-	
+
+<script type="text/javascript">
+
+$('#man_bom_button').click(function(){
+    var form = document.getElementById("completproduction")
+    form.action ="${pageContext.request.contextPath}/goToManualBom";
+    form.submit();
+});
+</script>
+
 </body>
 </html>
