@@ -863,8 +863,7 @@
 							<li>
 						</c:otherwise>
 					</c:choose>
-					<a href="${pageContext.request.contextPath}/showBillList">Bill
-						List</a>
+					<a href="${pageContext.request.contextPath}/showBmsStock">BMS Stock</a>
 					</li>
 
 				</ul>
