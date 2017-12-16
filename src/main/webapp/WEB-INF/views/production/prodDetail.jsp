@@ -116,7 +116,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Prod
 										Date </label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input " type="text" name="prod_date" id="prod_date"
+										<input " type="text" name="prod_date" id="prod_date" class="form-control"
 											value="${planHeader.productionDate}" />
 									</div>
 
@@ -124,7 +124,7 @@
 										Slot</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<input type="text" value="${planHeader.timeSlot}"
-											name="time_slot" />
+											name="time_slot" class="form-control" />
 									</div>
 
 								</div>
@@ -134,13 +134,13 @@
 									</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<input  type="text" name="cat_name" id="cat_name"
-											value="${planHeader.catName}" required />
+											value="${planHeader.catName}" class="form-control" required />
 									</div>
 
 									<label class="col-sm-3 col-lg-2 control-label">Prod ID</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<input type="text" value="${planHeader.productionHeaderId}"
-											id="prod_id" name="prod_id" />
+											id="prod_id" name="prod_id" class="form-control" />
 									</div>
 
 								</div>

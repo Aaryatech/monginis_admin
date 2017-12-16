@@ -206,6 +206,8 @@ int isProd=0;
 		bomDetail.setRmReqQty(qty);
 		bomDetail.setRmType(materialType);
 		bomDetail.setUom(uom);
+		bomDetail.setReturnQty(0);
+
 
 		bomDetailList.add(bomDetail);
 

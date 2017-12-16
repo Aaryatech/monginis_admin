@@ -195,6 +195,8 @@ int globalIsPlan;
 					
 					bomDetail.setRejectedQty(0);
 					bomDetail.setAutoRmReqQty(sfPlanDetailForBom.get(i).getTotal());
+					
+					bomDetail.setReturnQty(0);
 					bomDetailList.add(bomDetail);
 
 				}
@@ -238,6 +240,8 @@ int globalIsPlan;
 					bomDetail.setRmName(sFMixingForBom.get(i).getRmName());
 					
 					bomDetail.setRmReqQty(Integer.parseInt(editQty));
+
+					bomDetail.setReturnQty(0);
 
 
 					bomDetailList.add(bomDetail);
