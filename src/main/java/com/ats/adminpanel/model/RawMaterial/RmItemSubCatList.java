@@ -3,20 +3,19 @@ package com.ats.adminpanel.model.RawMaterial;
 import java.io.Serializable;
 import java.util.List;
 
-import com.ats.adminpanel.model.ErrorMessage;
+import com.ats.adminpanel.model.modules.ErrorMessage;
 
 
 public class RmItemSubCatList implements Serializable{
-	List<RmItemSubCategory> rmItemSubCategory;
+	List<GetRmItemSubCat> rmItemSubCategory;
 
 	ErrorMessage errorMessage;
 
-   
-	public List<RmItemSubCategory> getRmItemSubCategory() {
+	public List<GetRmItemSubCat> getRmItemSubCategory() {
 		return rmItemSubCategory;
 	}
 
-	public void setRmItemSubCategory(List<RmItemSubCategory> rmItemSubCategory) {
+	public void setRmItemSubCategory(List<GetRmItemSubCat> rmItemSubCategory) {
 		this.rmItemSubCategory = rmItemSubCategory;
 	}
 

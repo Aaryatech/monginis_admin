@@ -6,7 +6,6 @@ private String name;
 private int qty;
 private int rmUomId;
 
-
 public int getRmUomId() {
 	return rmUomId;
 }
