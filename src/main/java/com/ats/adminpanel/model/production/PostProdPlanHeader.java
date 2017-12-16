@@ -23,11 +23,22 @@ public class PostProdPlanHeader {
 
 	private int isBom;
 	
+	private int isPlanned;
+
+	
 	private int delStatus;
 	
 	private List<PostProductionPlanDetail> postProductionPlanDetail;
 	
 	
+
+	public int getIsPlanned() {
+		return isPlanned;
+	}
+
+	public void setIsPlanned(int isPlanned) {
+		this.isPlanned = isPlanned;
+	}
 
 	public String getProductionBatch() {
 		return productionBatch;

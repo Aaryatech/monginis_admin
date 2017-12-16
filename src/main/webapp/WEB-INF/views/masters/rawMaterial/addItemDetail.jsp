@@ -605,7 +605,7 @@ function editItemDetail(token){
 		       
 				 document.getElementById("rm_qty").value=data.rmQty;
 				 document.getElementById("rm_type").options.selectedIndex =data.rmType;
-				 
+				 document.getElementById("base_qty").value =data.noOfPiecesPerItem;
 					$.getJSON('${getRawMaterialList}', {
 						rm_type : data.rmType,
 						ajax : 'true',

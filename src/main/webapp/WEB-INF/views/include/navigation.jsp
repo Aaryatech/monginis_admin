@@ -178,6 +178,20 @@
 				</a>
 				<!-- BEGIN Submenu -->
 				<ul class="submenu">
+				
+						<c:choose>
+						<c:when test="${Constants.subAct==20}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAddEmployee">Add Employee</a>
+					</li>
+				    
+				
+				
 					<c:choose>
 						<c:when test="${Constants.subAct==21}">
 							<li class="active">
@@ -248,7 +262,16 @@
 					</c:choose>
 					<a href="${pageContext.request.contextPath}/showAddRmUmo">Add RM UOM</a>
 					</li>
-
+                    <c:choose>
+						<c:when test="${Constants.subAct==28}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAddDepartment">Add Department</a>
+					</li>
 				</ul>
 				<!-- END Submenu -->
 				</li>
@@ -1076,7 +1099,76 @@
 				<!-- END Submenu -->
 				</li>
 
+                   <c:choose>
+					<c:when test="${Constants.mainAct==19}">
+						<li class="active">
+					</c:when>
 
+					<c:otherwise>
+						<li>
+					</c:otherwise>
+				</c:choose>
+				<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
+					<span>Sp Production</span> <b class="arrow fa fa-angle-right"></b>
+				</a>
+				<!-- BEGIN Submenu -->
+				<ul class="submenu">
+					
+						<c:choose>
+						<c:when test="${Constants.subAct==191}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAddStation">Add SpStation</a>
+					</li>
+						<c:choose>
+						<c:when test="${Constants.subAct==192}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAddInstrument">Add Instrument</a>
+					</li>
+					
+					<c:choose>
+						<c:when test="${Constants.subAct==193}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAllInstrument">Instrument List</a>
+					</li>
+					
+					<c:choose>
+						<c:when test="${Constants.subAct==194}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAddShift">Add Shift</a>
+					</li>
+					<c:choose>
+						<c:when test="${Constants.subAct==195}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/configureStation">Configure Station</a>
+					</li>
+					</ul>
+             <!-- END Submenu -->
+				</li>
 
 
 

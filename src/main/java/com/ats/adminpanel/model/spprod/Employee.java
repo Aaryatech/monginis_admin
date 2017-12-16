@@ -21,6 +21,14 @@ public class Employee implements Serializable{
 
 	private int empType;
 	
+	public int getEmpType() {
+		return empType;
+	}
+
+	public void setEmpType(int empType) {
+		this.empType = empType;
+	}
+
 	public boolean isError() {
 		return isError;
 	}

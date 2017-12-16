@@ -238,6 +238,8 @@ public class ProdForcastingController {
 	public @ResponseBody List<GetProductionItemQty> getItemsProdQty(HttpServletRequest request,
 			HttpServletResponse response) {
 
+		int maxTimeSlot=0;
+		
 		System.out.println("In method");
 		getProdItemQtyList = new ArrayList<GetProductionItemQty>();
 
@@ -258,6 +260,11 @@ public class ProdForcastingController {
 			ResponseEntity<List<GetProductionItemQty>> responseEntity = rest.exchange(Constants.url + "getProduItemQty",
 					HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
+			
+			//PostProdPlanHeader postProductionHeader= rest.postForObject(Constants.url + "getProductionTimeSlot", map,PostProdPlanHeader.class);
+
+			//maxTimeSlot=postProductionHeader.getTimeSlot();
+			
 			getProdItemQtyList = responseEntity.getBody();
 
 			// getOrderItemQtyList=rest.postForObject(Constants.url + "getOrderAllItemQty",
@@ -343,8 +350,9 @@ public class ProdForcastingController {
 			postProductionHeader.setItemGrp1(selectedCat);
 			postProductionHeader.setProductionDate(convertedDate);
 			postProductionHeader.setDelStatus(0);
-			postProductionHeader.setIsBom(1);
-			postProductionHeader.setIsMixing(1);
+			postProductionHeader.setIsBom(0);
+			postProductionHeader.setIsMixing(0);
+			postProductionHeader.setIsPlanned(1);
 			postProductionHeader.setProductionBatch("0");
 			postProductionHeader.setProductionStatus(1);
 			postProductionHeader.setProductionHeaderId(0);
