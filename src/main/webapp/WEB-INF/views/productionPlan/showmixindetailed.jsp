@@ -163,6 +163,7 @@
 														<th>Sf Name</th>
 														<th>Received Qty</th>
 														<th>Production Qty</th>
+														<th>Rejected Qty</th>
 														<th>Mixing Date</th>
 
 
@@ -186,13 +187,19 @@
 																<c:when test="${mixheader.status==0}">
 																	<td><input type="text"
 																		name='production_Qty<c:out
-																value="${mixwithdetaild.mixing_detailId}" />'
+																		value="${mixwithdetaild.mixing_detailId}" />'
 																		class="form-control"
-																		value=<c:out
-																value="${mixwithdetaild.productionQty}" />></td>
+																		value=<c:out value="${mixwithdetaild.productionQty}" />></td>
+																<td><input type="text"
+																		name='rejected_Qty<c:out  
+																		value="${mixwithdetaild.mixing_detailId}" />'
+																		class="form-control"
+																		value=<c:out value="${mixwithdetaild.productionQty}" />></td>
+																
 																</c:when>
 																<c:otherwise>
 																	<td><c:out value="${mixwithdetaild.productionQty}" /></td>
+																	<td><c:out value="${mixwithdetaild.rejectedQty}" /></td>
 																</c:otherwise>
 															</c:choose>
 

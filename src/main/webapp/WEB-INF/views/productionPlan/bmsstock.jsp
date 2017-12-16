@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>BOM Request Detailed</title>
+<title>BMS Stock</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -49,9 +49,8 @@
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 </head>
 <body>
-<c:url var="gateEntryList" value="/gateEntryList"></c:url>
-<c:url var="withPoRef" value="/withPoRef"></c:url>
-<c:url var="withPoRefDate" value="/withPoRefDate"></c:url>
+<c:url var="getSfndRawItem" value="/getSfndRawItem"></c:url>
+
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -76,7 +75,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Bill of Material Request Detailed
+						<i class="fa fa-file-o"></i>BMS Stock
 					</h1>
 				</div>
 			</div>
@@ -88,7 +87,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i>Bill of Material Request Detailed
+								<i class="fa fa-table"></i>BMS Stock
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -100,46 +99,28 @@
 						
 						<div class="box-content">
 
-							<form id="completproduction" action="${pageContext.request.contextPath}/approvedBom" method="post">
-							<div class="box-content">
-								<div class="col-md-2">Bill Of Material Request Date</div>
-						
-								<div class="col-md-3"><input type="text" id="mix_date" name="mix_date" value="<fmt:formatDate pattern = "dd-MM-yyyy" value = "${billOfMaterialHeader.reqDate}" />" class="form-control" readonly>
-								</div>
-								
-							
-					
-							</div><br>
-							
+							<form id="completproduction" action="${pageContext.request.contextPath}/insertBmsStock" method="post">
 							<div class="box-content">
 							
-								<div class="col-md-2">Status</div>
-									<div class="col-md-3"><input type="text" id="status" name="status" value="${billOfMaterialHeader.status}" class="form-control" readonly>
-								</div>
-							</div><br>
+							<div class="col-md-2">Item Type</div>
+							<div class="col-md-3">
+								<select data-placeholder="Select Item type" class="form-control" name="item_type" 
+										tabindex="-1" id="item_type"  >
+											<option selected value="-1">Select Item type</option>
+											<option  value="1">Raw Material</option>
+											<option  value="2">Semi Finished</option>
+											
+											
+											</select>
+								
 							
-							<div class="box-content">
+							</div>
 							
-								
-								<div class="col-md-2">From Department Name </div>
-									<div class="col-md-3">
-									<input class="form-control" id="time_slot" size="16"
-											type="text" name="time_slot" value="${billOfMaterialHeader.fromDeptName}"  readonly />
-									</div>
-								
-				 
-							</div><br>
-							<div class="box-content">
+							</div><br><br><br>
 							
-								
-								<div class="col-md-2">To Department Name </div>
-									<div class="col-md-3">
-									<input class="form-control" id="time_slot" size="16"
-											type="text" name="time_slot" value="${billOfMaterialHeader.toDeptName}"  readonly />
-									</div>
-								
-				 
-							</div><br>
+							
+							
+							
 							
 							
 						
@@ -155,64 +136,15 @@
 									<tr>
 										<th>Sr.No.</th>
 										<th>Name</th>
-										<th>request Qty</th>
-										<th>issue Qty</th>
-										<c:choose>
-												<c:when test="${billOfMaterialHeader.status!=0}">
-													<th>Return Qty</th>
-													<th>Reject Qty</th>
-												</c:when>
-										</c:choose>
 										
+										<th> Uom</th>
+										<th> Qty</th>
 										
 
 									</tr>
 								</thead>
 									<tbody>
-									 <c:set var = "srNo" value="0"/>
-									<c:forEach items="${bomwithdetaild}" var="bomwithdetaild"
-													varStatus="count">
-													
-													<tr>
-														<td ><c:out value="${count.index+1}" /></td>
- 														<c:set var = "srNo" value="${srNo+1}"/>
-														<td ><c:out
-																value="${bomwithdetaild.rmName}" /></td>
-
-														<td><c:out
-																value="${bomwithdetaild.rmReqQty}" /></td>
-														
-														<c:choose>
-													<c:when test="${billOfMaterialHeader.status==0}">
-													<td><input type="text" name='issue_qty<c:out
-																value="${bomwithdetaild.reqDetailId}" />' class="form-control" value=
-																<c:out
-																value="${bomwithdetaild.rmIssueQty}" />></td>
-													</c:when>
-													<c:otherwise>
-													<td>
-														<c:out value="${bomwithdetaild.rmIssueQty}" /></td>
-													</c:otherwise>
-													</c:choose>	
-														
-													<c:choose>
-													<c:when test="${billOfMaterialHeader.status!=0}">
-														
-														<td><c:out
-																value="${bomwithdetaild.returnQty}" /></td>
-																
-														<td><c:out
-																value="${bomwithdetaild.rejectedQty}" /></td>
-													
-													
-													</c:when>
-													</c:choose>	
-													
-															
-		
-												</c:forEach>
-								
-													
+											
 									</tbody>
 									</table>
 								</div>
@@ -221,27 +153,13 @@
 							
 							
 							
-												<c:choose>
-													<c:when test="${billOfMaterialHeader.status==0}">
-													<div align="center" class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+												<div align="center" class="form-group">
+												<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										
-										<input type="submit" class="btn btn-primary" value="Approved">
-									</div>
-								</div>
-													</c:when>
-													<c:when test="${billOfMaterialHeader.status!=0}">
-													<div align="center" class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-										
-										<a href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"><i class="fa fa-check"></i>For The Rejection And Return</a>
-									</div>
-								</div>
+													<input type="submit" class="btn btn-primary" value="Request">
+												</div>
+											</div>
 													
-													
-													</c:when>
-													
-													</c:choose>
 							
 									
 
@@ -333,6 +251,46 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>				
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<script>	
+	$(document).ready(function() { 
+		$('#item_type').change(
+				function() {
+					
+				 alert("in function");
+				 var itemType = $("#item_type").val();
+			
+				 alert("value "+itemType);
+				 
+				 
+					$.getJSON('${getSfndRawItem}', {
+						itemType : itemType,
+						ajax : 'true',
+					},
+							function(data) {
+						alert("hiieieie");
+						alert(data);
+						
+						$('#table_grid td').remove();
+						var srNo=0;
+						
+						 $.each(data,function(key, itemList) {
+													
+						var tr = $('<tr></tr>');
+
+					  	tr.append($('<td></td>').html(key+1));			  	
+					  	tr.append($('<td></td>').html(itemList.name));
+						tr.append($('<td></td>').html(itemList.uomName));
+						tr.append($('<td></td>').html("<input type='text' class='form-control' name='stockQty"+itemList.itemId+"' >"));
+					$('#table_grid tbody').append(tr);
+						 });
+												
+							}); 
+					
+			})
+						 
+	});
+		
+	</script> 				
 </body>
 </html>

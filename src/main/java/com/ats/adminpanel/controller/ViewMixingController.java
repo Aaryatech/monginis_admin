@@ -176,16 +176,27 @@ public class ViewMixingController {
 			 
 				System.out.println(13);
 				String production_Qty=request.getParameter("production_Qty"+mixingHeader.getMixingDetailed().get(i).getMixing_detailId());
-				
+				String rejected_Qty=request.getParameter("rejected_Qty"+mixingHeader.getMixingDetailed().get(i).getMixing_detailId());
 				if(production_Qty!=null) {
 					System.out.println("production_Qty Qty   :"+production_Qty);
-					int productionQty=Integer.parseInt(production_Qty);
+					float productionQty=Float.parseFloat(production_Qty);
 					mixingHeader.getMixingDetailed().get(i).setProductionQty(productionQty);
 					System.out.println("productionQty  :"+productionQty);
 				}
 				else
 				{
 					mixingHeader.getMixingDetailed().get(i).setProductionQty(0);
+				}
+				
+				if(rejected_Qty!=null) {
+					System.out.println("rejected_Qty Qty   :"+rejected_Qty);
+					float rejectedQty=Float.parseFloat(rejected_Qty);
+					mixingHeader.getMixingDetailed().get(i).setRejectedQty(rejectedQty);
+					System.out.println("productionQty  :"+rejectedQty);
+				}
+				else
+				{
+					mixingHeader.getMixingDetailed().get(i).setRejectedQty(0);
 				}
 				System.out.println(2);
 			 

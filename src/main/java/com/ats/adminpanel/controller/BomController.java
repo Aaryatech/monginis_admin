@@ -366,7 +366,7 @@ int globalIsPlan;
 	public String approvedBom(HttpServletRequest request, HttpServletResponse response) {
 		/*Constants.mainAct = 17;
 		Constants.subAct=184;*/
-		
+		Date date= new Date();
 		for(int i=0;i<billOfMaterialHeader.getBillOfMaterialDetailed().size();i++)
 		{
 			System.out.println(12);
@@ -389,7 +389,7 @@ int globalIsPlan;
 			 
 		}
 		billOfMaterialHeader.setStatus(1);
-		
+		billOfMaterialHeader.setApprovedDate(date);
 		
 		System.out.println(billOfMaterialHeader.toString());
 		
@@ -408,6 +408,8 @@ int globalIsPlan;
 		Constants.subAct=184;*/
 		ModelAndView model = new ModelAndView("productionPlan/rejectforbom");
 		
+		
+		
 		System.out.println("in rejection form ");
 		
 		model.addObject("billOfMaterialHeader",billOfMaterialHeader);
@@ -422,6 +424,7 @@ int globalIsPlan;
 		/*Constants.mainAct = 17;
 		Constants.subAct=184;*/
 		
+		
 		for(int i=0;i<billOfMaterialHeader.getBillOfMaterialDetailed().size();i++)
 		{
 			System.out.println(12);
@@ -429,22 +432,33 @@ int globalIsPlan;
 			 
 				System.out.println(13);
 				String reject_qty=request.getParameter("rejectedQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId());
+				String return_qty=request.getParameter("returnQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId());
 				
 				if(reject_qty!=null) {
 					System.out.println("reject_qty Qty   :"+reject_qty);
 					float rejectqty= Float.parseFloat(reject_qty);
 					billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRejectedQty(rejectqty);
-					System.out.println("productionQty  :"+rejectqty);
+					System.out.println("reject_qty  :"+rejectqty);
 				}
 				else
 				{
 					billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRejectedQty(0);
 				}
+				
+				if(return_qty!=null) {
+					System.out.println("return_qty Qty   :"+return_qty);
+					float returnqty= Float.parseFloat(return_qty);
+					billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setReturnQty(returnqty);
+					System.out.println("return_qty  :"+returnqty);
+				}
+				else
+				{
+					billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setReturnQty(0);
+				}
 				System.out.println(2);
 			 
 		}
 		billOfMaterialHeader.setStatus(2);
-		
 		
 		System.out.println(billOfMaterialHeader.toString());
 		

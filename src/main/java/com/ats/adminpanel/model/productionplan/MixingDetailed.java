@@ -14,7 +14,7 @@ public class MixingDetailed {
 	private int sfId;
 	private String sfName;
 	private float receivedQty;
-	private int productionQty;
+	private float productionQty;
 	private Date mixingDate;
 	private int exInt1;
 	private int exInt2;
@@ -24,11 +24,18 @@ public class MixingDetailed {
 	private String exVarchar3;
 	private int exBool1;
 	private String uom;
+	private float rejectedQty;
 	
 	
 	
 	
 	
+	public float getRejectedQty() {
+		return rejectedQty;
+	}
+	public void setRejectedQty(float rejectedQty) {
+		this.rejectedQty = rejectedQty;
+	}
 	public String getUom() {
 		return uom;
 	}
@@ -65,10 +72,10 @@ public class MixingDetailed {
 	public void setReceivedQty(float receivedQty) {
 		this.receivedQty = receivedQty;
 	}
-	public int getProductionQty() {
+	public float getProductionQty() {
 		return productionQty;
 	}
-	public void setProductionQty(int productionQty) {
+	public void setProductionQty(float productionQty) {
 		this.productionQty = productionQty;
 	}
 	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")

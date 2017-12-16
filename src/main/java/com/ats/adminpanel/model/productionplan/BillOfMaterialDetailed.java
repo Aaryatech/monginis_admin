@@ -26,7 +26,18 @@ public class BillOfMaterialDetailed {
 	private float autoRmReqQty;
 	
 	private float rejectedQty;
+	private float returnQty;
 	
+	
+	
+	public float getReturnQty() {
+		return returnQty;
+	}
+
+	public void setReturnQty(float returnQty) {
+		this.returnQty = returnQty;
+	}
+
 	public int getReqDetailId() {
 		return reqDetailId;
 	}

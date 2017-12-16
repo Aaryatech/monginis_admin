@@ -157,7 +157,8 @@
 										<th>Rm Name</th>
 										
 										<th>Rm issue Qty</th>
-										<th>Rejected Qty</th>
+										<th>Return Qty</th>
+										<th>Reject Qty</th>
 										
 
 									</tr>
@@ -175,6 +176,11 @@
 														
 														<td>
 														<c:out value="${bomwithdetaild.rmIssueQty}" /></td>
+														
+														<td><input type="text" name='returnQty<c:out
+													value="${bomwithdetaild.reqDetailId}" />' class="form-control" value=
+													<c:out value="${bomwithdetaild.returnQty}" />></td>
+														
 														
 													<td><input type="text" name='rejectedQty<c:out
 													value="${bomwithdetaild.reqDetailId}" />' class="form-control" value=
@@ -194,22 +200,20 @@
 							
 							
 							
-												<c:choose>
-													<c:when test="${billOfMaterialHeader.status==1}">
-													<div align="center" class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-										
-										<input type="submit" class="btn btn-primary" value="For Rejection">
-									</div>
-								</div>
-													</c:when>
-													</c:choose>
+											
+													
+													
 							
 									
 
 							
 							<div class="box-content">
-							
+							<div align="center" class="form-group">
+									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+										
+										<input type="submit" class="btn btn-primary" value="For Rejection">
+									</div>
+								</div>
 							
 							</div><br><br><br>
 							
