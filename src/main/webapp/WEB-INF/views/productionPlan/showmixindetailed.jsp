@@ -194,7 +194,7 @@
 																		name='rejected_Qty<c:out  
 																		value="${mixwithdetaild.mixing_detailId}" />'
 																		class="form-control"
-																		value=<c:out value="${mixwithdetaild.productionQty}" />></td>
+																		value=<c:out value="${mixwithdetaild.rejectedQty}" />></td>
 																
 																</c:when>
 																<c:otherwise>

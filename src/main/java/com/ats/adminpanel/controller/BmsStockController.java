@@ -17,11 +17,8 @@ public class BmsStockController {
 
 		ModelAndView mav = new ModelAndView("stock/bmsStock");
 		
-		
 		return mav;
 		
 	}
-	
-
 
 }

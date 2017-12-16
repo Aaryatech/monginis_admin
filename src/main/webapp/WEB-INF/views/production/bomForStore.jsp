@@ -1,8 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
+	pageEncoding="UTF-8"%><%@ taglib
+	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -76,158 +74,87 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Prod Header
+						<i class="fa fa-file-o"></i> Add BOM to Store
 					</h1>
-
 				</div>
 			</div>
 			<!-- END Page Title -->
 
 
-
-			<!-- BEGIN Main Content -->
 			<div class="row">
 				<div class="col-md-12">
+
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> View Production
+								<i class="fa fa-table"></i>BOM Store List
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a>
-							</div>
-							<!-- <div class="box-tool">
 								<a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a> <a data-action="close" href="#"><i
-									class="fa fa-times"></i></a>
-							</div> -->
+									class="fa fa-chevron-up"></i></a>
+								<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
+							</div>
 						</div>
 
-
 						<div class="box-content">
-							<form action="${pageContext.request.contextPath}/showProdHeader" class="form-horizontal"
-								id="validation-form" method="get">
-
-
-
-								<input type="hidden" name="mode_add" id="mode_add"
-									value="add_att">
-
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">From
-										Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="from_date"
-											size="16" type="text" name="from_date" value="${fromDate}"
-											required  />
-									</div>
-									<!-- </div>
-
-
-								<div class="form-group"> -->
-									<label class="col-sm-3 col-lg-2 control-label">To Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="to_date" size="16"
-											type="text"  name="to_date" required value="${toDate}"
-											/>
-									</div>
-
-									<div
-										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										<input type="submit" value="Submit" class="btn btn-primary">
-									</div>
-
-								</div>
-
-
+							<form action="${pageContext.request.contextPath}/storeBom"
+								name="validation-form" id="validation-form">
 								<div class="clearfix"></div>
 
 								<div class="table-responsive" style="border: 0">
 									<table width="100%" class="table table-advance" id="table1">
 										<thead>
 											<tr>
-												<th width="17" style="width: 18px">Prod ID</th>
-												<th width="163" align="left">Date</th>
-												<th width="358" align="left">Category</th>
-												<th width="194" align="left">Status</th>
-												<th width="102" align="left">IsPlanned</th>
-												<th width="88" align="left">Action</th>
+												<th width="17" style="width: 18px">Sr No</th>
+												<th width="100" align="left">Current Stock</th>
+												<th width="120" align="left">Min Level</th>
+												<th width="120" align="left">Max Level</th>
+												<th width="120" align="left">Reorder Qty</th>
+												<th width="100" align="left">Order Qty ie BOM Qty</th>
 											</tr>
 										</thead>
 										<tbody>
-
-											<c:forEach items="${planHeader}" var="planHeader">
+											<c:forEach items="${aa}" var="" varStatus="count">
 
 												<tr>
+													<td><c:out value="${count.index+1}" /></td>
+													<td align="left"><input type="text" name="" id=""
+														value="00" size="2" min="0"  class="form-control" ></td>
+													<td align="left"><input type="text" name="" id=""
+														value="00" size="2" min="0"  class="form-control" ></td>
+													<td align="left"><input type="text" name="" id=""
+														value="00" size="2" min="0"  class="form-control" ></td>
 
-													<td align="left"><c:out
-															value="${planHeader.productionHeaderId}" /></td>
-													<td align="left"><c:out
-															value="${planHeader.productionDate}" /></td>
-													<td align="left"><c:out value="${planHeader.catName}" /></td>
+													<td align="left"><input type="text" id="editQty"
+														size="2" class="form-control" name="editQty${count.index}"
+														value="00"  class="form-control" ></td>
 
-													<c:choose>
-														<c:when test="${planHeader.productionStatus==1}">
-															<td align="left"><c:out value="Planning"></c:out></td>
+													<td align="left"><input type="text" id="editQty"
+														size="2" class="form-control" name="editQty${count.index}"
+														value="00"></td>
 
-														</c:when>
-														<c:otherwise>
-															<td align="left"><c:out value="In Active"></c:out></td>
-
-														</c:otherwise>
-
-													</c:choose>
-
-
-													<c:choose>
-														<c:when test="${planHeader.productionStatus==1}">
-															<td align="left"><c:out value="Planning"></c:out></td>
-
-														</c:when>
-														<c:otherwise>
-															<td align="left"><c:out value="In Active"></c:out></td>
-
-														</c:otherwise>
-
-													</c:choose>
-
-
-													<td align="left"><a
-														href="${pageContext.request.contextPath}/getProdDetail/${planHeader.productionHeaderId}"><span
-															class="glyphicon glyphicon-info-sign"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
-
-													</td>
 												</tr>
 											</c:forEach>
 
 										</tbody>
 									</table>
 								</div>
-
-								<div class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-										<button type="submit" class="btn btn-primary">
-											<i class="fa fa-check"></i> Save
-										</button>
-									</div>
-								</div>
+								<input type="submit" value="Insert Bom For Store bomt table insert" />
 							</form>
 						</div>
+
 					</div>
-
 				</div>
+			</div>
+			<!-- END Main Content -->
+			<footer>
+			<p>2017 © MONGINIS.</p>
+			</footer>
 
-	</div>
-	<!-- END Main Content -->
-	<footer>
-	<p>2017 © MONGINIS.</p>
-	</footer>
-
-	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-		class="fa fa-chevron-up"></i></a>
-	</div>
-	<!-- END Content -->
+			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+				class="fa fa-chevron-up"></i></a>
+		</div>
+		<!-- END Content -->
 	</div>
 	<!-- END Container -->
 
@@ -268,8 +195,6 @@
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-
-
 
 
 

@@ -279,8 +279,13 @@ div.panel {
 
 
 										<div
-											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
+											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-2">
 											<input type="submit" value="Submit" class="btn btn-primary">
+											
+												<input type="submit" value="Day End Process" class="btn btn-warning">
+											
+												<input type="submit" value=" Store BOM" class="btn btn-success">
+											
 
 										</div>
 										<!-- </form> -->

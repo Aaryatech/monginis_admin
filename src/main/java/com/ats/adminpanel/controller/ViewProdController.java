@@ -78,12 +78,12 @@ public class ViewProdController {
 		RestTemplate restTemplate = new RestTemplate();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		
-		
+		String fromDate,toDate;
 		if(request.getParameter("from_date")==null || request.getParameter("to_date")==null) {
 		Date date=new Date();
 		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
-		String fromDate=df.format(date);
-		String toDate=df.format(date);
+		 fromDate=df.format(date);
+		 toDate=df.format(date);
 		System.out.println("From Date And :"+fromDate+"ToDATE"+toDate);
 		
 		map.add("fromDate", fromDate);
@@ -92,8 +92,8 @@ public class ViewProdController {
 		System.out.println("inside if ");
 		}
 		else {
-			String fromDate=request.getParameter("from_date");
-			String toDate=request.getParameter("to_date");
+			 fromDate=request.getParameter("from_date");
+			 toDate=request.getParameter("to_date");
 			
 			System.out.println("inside Else ");
 
@@ -113,6 +113,8 @@ public class ViewProdController {
 		prodPlanHeaderList=prodHeader.getProdPlanHeader();
 		
 		System.out.println("prod header "+prodPlanHeaderList.toString());
+		model.addObject("fromDate",fromDate);
+		model.addObject("toDate",toDate);
 		
 		model.addObject("planHeader",prodPlanHeaderList);
 		}catch (Exception e) {

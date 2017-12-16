@@ -283,6 +283,12 @@ int isProd=0;
 				bomHeader.setIsProduction(1);
 
 			}
+			
+			bomHeader.setRejApproveDate(date);
+			bomHeader.setRejApproveUserId(0);
+			bomHeader.setRejDate(date);
+			bomHeader.setRejUserId(0);
+			
 			bomHeader.setApprovedDate(date);
 			bomHeader.setApprovedUserId(0);
 			bomHeader.setDelStatus(0);

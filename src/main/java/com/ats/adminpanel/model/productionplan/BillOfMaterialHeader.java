@@ -32,6 +32,10 @@ public class BillOfMaterialHeader {
 	private int isPlan;
 	private int isManual;
 	
+	private int rejUserId;
+	private Date rejDate;
+	private int rejApproveUserId;
+	private Date rejApproveDate;
 	
 
 	public int getReqId() {
@@ -211,6 +215,38 @@ public class BillOfMaterialHeader {
 
 	public void setIsManual(int isManual) {
 		this.isManual = isManual;
+	}
+
+	public int getRejUserId() {
+		return rejUserId;
+	}
+
+	public void setRejUserId(int rejUserId) {
+		this.rejUserId = rejUserId;
+	}
+
+	public Date getRejDate() {
+		return rejDate;
+	}
+
+	public void setRejDate(Date rejDate) {
+		this.rejDate = rejDate;
+	}
+
+	public int getRejApproveUserId() {
+		return rejApproveUserId;
+	}
+
+	public void setRejApproveUserId(int rejApproveUserId) {
+		this.rejApproveUserId = rejApproveUserId;
+	}
+
+	public Date getRejApproveDate() {
+		return rejApproveDate;
+	}
+
+	public void setRejApproveDate(Date rejApproveDate) {
+		this.rejApproveDate = rejApproveDate;
 	}
 
 }

@@ -164,6 +164,11 @@ int globalIsPlan;
 			billOfMaterialHeader.setToDeptId(0);
 			billOfMaterialHeader.setToDeptName("BMS");
 			
+			billOfMaterialHeader.setRejApproveDate(date);
+			billOfMaterialHeader.setRejApproveUserId(0);
+			billOfMaterialHeader.setRejDate(date);
+			billOfMaterialHeader.setRejUserId(0);
+			
 			billOfMaterialHeader.setIsManual(0);
 
 			List<BillOfMaterialDetailed> bomDetailList = new ArrayList<BillOfMaterialDetailed>();
@@ -371,6 +376,14 @@ int globalIsPlan;
 		/*Constants.mainAct = 17;
 		Constants.subAct=184;*/
 		Date date= new Date();
+		
+		HttpSession session=request.getSession();
+		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
+		
+		
+		int userId=userResponse.getUser().getId();
+		
+		
 		for(int i=0;i<billOfMaterialHeader.getBillOfMaterialDetailed().size();i++)
 		{
 			System.out.println(12);
@@ -393,6 +406,7 @@ int globalIsPlan;
 			 
 		}
 		billOfMaterialHeader.setStatus(1);
+		billOfMaterialHeader.setApprovedUserId(userId);
 		billOfMaterialHeader.setApprovedDate(date);
 		
 		System.out.println(billOfMaterialHeader.toString());
@@ -427,7 +441,12 @@ int globalIsPlan;
 	public String updateRejectedQty(HttpServletRequest request, HttpServletResponse response) {
 		/*Constants.mainAct = 17;
 		Constants.subAct=184;*/
+		Date date= new Date();
+		HttpSession session=request.getSession();
+		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
 		
+		
+		int userId=userResponse.getUser().getId();
 		
 		for(int i=0;i<billOfMaterialHeader.getBillOfMaterialDetailed().size();i++)
 		{
@@ -463,6 +482,8 @@ int globalIsPlan;
 			 
 		}
 		billOfMaterialHeader.setStatus(2);
+		billOfMaterialHeader.setRejDate(date);
+		billOfMaterialHeader.setRejUserId(userId);
 		
 		System.out.println(billOfMaterialHeader.toString());
 		
@@ -473,6 +494,37 @@ int globalIsPlan;
 		
 		return "redirect:/getBomList";
 	}
+	
+	
+	
+	
+	@RequestMapping(value = "/approveRejected", method = RequestMethod.GET)
+	public String approveRejected(HttpServletRequest request, HttpServletResponse response) {
+		
+		
+		System.out.println("inside Approve Rejected ");
+		Date date= new Date();
+		HttpSession session=request.getSession();
+		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
+		
+		int reqId=Integer.parseInt(request.getParameter("reqId"));
+		System.out.println(reqId);
+		
+		int userId=userResponse.getUser().getId();
+		billOfMaterialHeader.setRejApproveDate(date);
+		billOfMaterialHeader.setRejApproveUserId(userId);
+		
+		billOfMaterialHeader.setStatus(3);//3 for Approve Rejected 
+		
+		RestTemplate rest = new RestTemplate();
+		
+		Info info = rest.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);	
+		System.out.println(info.toString());
+		
+		return "redirect:/getBomList";
+	}
+	
+	
 
 	// commented code Sachin
 
