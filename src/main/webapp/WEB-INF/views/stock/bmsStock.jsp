@@ -300,7 +300,7 @@ div.panel {
 															<td><c:out value="${stockList.store_rejected_qty}"></c:out>
 															</td>
 															<td><c:out value="${stockList.openingQty}"></c:out>
-															<td><c:out value="${stockList.closingQty}"></c:out>
+															<td><c:out value="00"></c:out>
 															<td><c:out value="Status"></c:out></td>
 
 														</tr>

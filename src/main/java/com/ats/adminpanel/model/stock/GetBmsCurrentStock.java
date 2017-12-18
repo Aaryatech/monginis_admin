@@ -15,7 +15,7 @@ public class GetBmsCurrentStock {
 	float store_rejected_qty;
 	
 	float openingQty;
-	float closingQty;
+	
 	
 	public int getRmId() {
 		return rmId;
@@ -83,20 +83,13 @@ public class GetBmsCurrentStock {
 	public void setOpeningQty(float openingQty) {
 		this.openingQty = openingQty;
 	}
-	public float getClosingQty() {
-		return closingQty;
-	}
-	public void setClosingQty(float closingQty) {
-		this.closingQty = closingQty;
-	}
 	@Override
 	public String toString() {
 		return "GetBmsCurrentStock [rmId=" + rmId + ", rmName=" + rmName + ", prod_issue_qty=" + prod_issue_qty
 				+ ", prod_rejected_qty=" + prod_rejected_qty + ", prod_return_qty=" + prod_return_qty
 				+ ", mixing_issue_qty=" + mixing_issue_qty + ", mixing_rejected_qty=" + mixing_rejected_qty
 				+ ", mixing_return_qty=" + mixing_return_qty + ", store_issue_qty=" + store_issue_qty
-				+ ", store_rejected_qty=" + store_rejected_qty + ", openingQty=" + openingQty + ", closingQty="
-				+ closingQty + "]";
+				+ ", store_rejected_qty=" + store_rejected_qty + ", openingQty=" + openingQty + "]";
 	}
 	
 }
