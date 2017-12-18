@@ -155,7 +155,13 @@
 																	<td align="left"><a
 																		href="updateSpCake/${specialCake.spId}"><span
 																			class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+																			
+																			
+																			<a href="viewSpCakeDetailed/${specialCake.spId}" class="action_btn" >
+						<abbr title="Detailed"><i class="fa fa-list"></i></abbr></a>
 
+
+																		
 																		<a href="deleteSpecialCake/${specialCake.spId}"
 																		onClick="return confirm('Are you sure want to delete this record');"><span
 																			class="glyphicon glyphicon-remove"></span></a></td>
