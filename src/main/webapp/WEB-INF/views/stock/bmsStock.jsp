@@ -149,10 +149,17 @@ div.panel {
 
 
 						<div class="box-content">
-							<form
-								action="${pageContext.request.contextPath}/showAccountGrnDetails"
-								class="form-horizontal" method="get" id="validation-form">
-
+							<form action="${pageContext.request.contextPath}/getBmsStock"
+								class="form-horizontal" method="post" id="validation-form">
+								<div class="form_group">
+									<label class="col-sm-3 col-lg-2 control-label">Select
+										Material Type</label> <select name="matType"
+										class="form-control chosen" tabindex="6" id="mat_Type"
+										required>
+										<option value="1">RM</option>
+										<option value="2">SF</option>
+									</select>
+								</div>
 
 
 
@@ -171,72 +178,67 @@ div.panel {
 
 										</select>
 									</div>
-									<input type="button" class="btn btn-primary" value="Search">
 
 								</div>
+								<input type="submit" value="Search">
+							</form>
 
+							<div class="form-group">
+								<div>
+									<div class="colOuter" style="display: none"
+										id=select_month_year>
+										<div class="col-md-2">
+											<div class="col1title">Select Month From :</div>
+										</div>
+										<div class="col-md-2" align="left">
 
-								<div class="form-group">
-									<div>
-										<div class="colOuter" style="display: none"
-											id=select_month_year>
-											<div class="col-md-2">
-												<div class="col1title">Select Month From :</div>
-											</div>
-											<div class="col-md-2" align="left">
-
-												<input type='text' placeholder="Select From Month"
-													name="from_stockdate" required class="datepicker" />
-											</div>
-
-											<div class="col3"></div>
-
-											<div class="col-md-2">
-												<div class="col1title">To :</div>
-											</div>
-											<div class="col-md-2" align="left">
-												<input type='text' placeholder="Select To Month"
-													name="to_stockdate" required class="datepicker" />
-											</div>
-
+											<input type='text' placeholder="Select From Month"
+												name="from_stockdate" required class="datepicker" />
 										</div>
 
-										<div class="colOuter" style="display: none" id=select_date>
-											<div class="col-md-2">
-												<div class="col1title">From Date:</div>
-											</div>
-											<div class="col-md-2" align="left">
+										<div class="col3"></div>
 
-												<input id="fromdatepicker" class="form-control date-picker"
-													placeholder="From Date" name="from_datepicker" type="text">
-
-											</div>
-
-											<div class="col3"></div>
-
-											<div class="col-md-2">
-												<div class="col1title">To Date:</div>
-											</div>
-											<div class="col-md-2" align="left">
-												<input id="todatepicker" class="form-control date-picker"
-													placeholder="To Date" name="to_datepicker" type="text">
-
-											</div>
-
+										<div class="col-md-2">
+											<div class="col1title">To :</div>
 										</div>
-
+										<div class="col-md-2" align="left">
+											<input type='text' placeholder="Select To Month"
+												name="to_stockdate" required class="datepicker" />
+										</div>
 
 									</div>
 
+									<div class="colOuter" style="display: none" id=select_date>
+										<div class="col-md-2">
+											<div class="col1title">From Date:</div>
+										</div>
+										<div class="col-md-2" align="left">
+
+											<input id="fromdatepicker" class="form-control date-picker"
+												placeholder="From Date" name="from_datepicker" type="text">
+
+										</div>
+
+										<div class="col3"></div>
+
+										<div class="col-md-2">
+											<div class="col1title">To Date:</div>
+										</div>
+										<div class="col-md-2" align="left">
+											<input id="todatepicker" class="form-control date-picker"
+												placeholder="To Date" name="to_datepicker" type="text">
+
+										</div>
+
+									</div>
 
 								</div>
-							</form>
 
-							<form action="${pageContext.request.contextPath}/getBmsStock"
-								class="form-horizontal" method="get" id="validation-form">
+							</div>
 
 
-
+							<form action="" class="form-horizontal" method="get"
+								id="validation-form">
 
 								<div class="box">
 									<div class="box-title">
@@ -261,20 +263,16 @@ div.panel {
 													<tr>
 
 														<th>Sr No</th>
-														<th>Material Type</th>
-														<th>Material Name</th>
-														<th>UOM</th>
-														<th>Opening Stock</th>
-														<th>Store Issue Qty</th>
-														<th>Store Rej Qty</th>
-														<th>Mix Rec Qty</th>
-														<th>Mix Rec Rej Qty</th>
-														<th>Mix Issue Qty</th>
-														<th>Mix Return Qty</th>
-														<th>Mix Rej Qty</th>
+														<th>Mat Name</th>
 														<th>Prod Issue Qty</th>
 														<th>Prod Rej Qty</th>
 														<th>Prod Return Qty</th>
+														<th>Mix Issue Qty</th>
+														<th>Mix Return Qty</th>
+														<th>Mix Rej Qty</th>
+														<th>Store Issue Qty</th>
+														<th>Store Rej Qty</th>
+														<th>Opening Stock</th>
 														<th>Closing Qty</th>
 														<th>Status</th>
 
@@ -282,56 +280,31 @@ div.panel {
 
 												</thead>
 												<tbody>
-												
-												<tr>
-												<td>
-												<c:out value="${a }"></c:out>
-												</td>
-												<td>
-												<c:out value="${a }"></c:out>
-												</td>
-												<td>
-												<c:out value="${a }"></c:out>
-												</td>
-												<td>
-												<c:out value="${a }"></c:out>
-												</td>
-												<td>
-												<c:out value="${a }"></c:out>
-												</td>
-												<td>
-												<c:out value="${a }"></c:out>
-												</td>
-												<td>
-												<c:out value="${a}"></c:out>
-												</td>
-												<td>
-												<c:out value="${a }"></c:out>
-												</td>
-												<td>
-												<c:out value="${ a}"></c:out>
-												</td>
-												<td>
-												<c:out value="${ a}"></c:out>
-												</td>
-												<td>
-												<c:out value="${a }"></c:out>
-												</td>
-												<td>
-												<c:out value="${a }"></c:out>
-												</td>
-												<td>
-												<c:out value="${a }"></c:out>
-												</td>
-												<td>
-												<c:out value="${a }"></c:out>
-												</td>
-												<td>
-												<c:out value="${a }"></c:out>
-												</td>
-												
-												</tr>
+													<c:forEach items="${stockList}" var="stockList"
+														varStatus="count">
 
+														<tr>
+															<td><c:out value="${count.index+1}"></c:out></td>
+															<td><c:out value="${stockList.rmName}"></c:out></td>
+															<td><c:out value="${stockList.prod_issue_qty}"></c:out>
+															</td>
+															<td><c:out value="${stockList.prod_rejected_qty}"></c:out>
+															</td>
+															<td><c:out value="${stockList.prod_return_qty}"></c:out>
+															</td>
+															<td><c:out value="${stockList.mixing_issue_qty}"></c:out>
+															<td><c:out value="${stockList.mixing_rejected_qty}"></c:out>
+															<td><c:out value="${stockList.mixing_return_qty}"></c:out>
+															<td><c:out value="${stockLis.store_issue_qty}"></c:out>
+															</td>
+															<td><c:out value="${stockList.store_rejected_qty}"></c:out>
+															</td>
+															<td><c:out value="${stockList.openingQty}"></c:out>
+															<td><c:out value="${stockList.closingQty}"></c:out>
+															<td><c:out value="Status"></c:out></td>
+
+														</tr>
+													</c:forEach>
 												</tbody>
 
 											</table>

@@ -25,6 +25,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.login.UserResponse;
 import com.ats.adminpanel.model.production.mixing.temp.GetSFMixingForBom;
 import com.ats.adminpanel.model.production.mixing.temp.GetSFMixingForBomList;
@@ -121,9 +122,23 @@ int globalIsPlan;
 		HttpSession session=request.getSession();
 		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
 		
+		RestTemplate restTemplate = new RestTemplate();
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		
 		int deptId=userResponse.getUser().getDeptId();
 		
 		int userId=userResponse.getUser().getId();
+		
+		String settingKey = new String();
+
+		settingKey = "BMS";
+
+		map.add("settingKeyList", settingKey);
+		
+		// web Service to get Dept Name And Dept Id for bom toDept and toDeptId
+		
+		FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+				FrItemStockConfigureList.class);
 		
 		System.out.println("new Field Dept Id = "+userResponse.getUser().getDeptId());
 		
@@ -144,10 +159,10 @@ int globalIsPlan;
 		}
 
 		try {
-
-			RestTemplate restTemplate = new RestTemplate();
-
-
+			
+			int toDeptId=settingList.getFrItemStockConfigure().get(0).getSettingValue();
+			String toDeptName=settingList.getFrItemStockConfigure().get(0).getSettingKey();
+			
 			Date date = new Date();
 
 			BillOfMaterialHeader billOfMaterialHeader = new BillOfMaterialHeader();
@@ -161,8 +176,8 @@ int globalIsPlan;
 			billOfMaterialHeader.setReqDate(date);
 			billOfMaterialHeader.setSenderUserid(userId);
 			billOfMaterialHeader.setStatus(0);
-			billOfMaterialHeader.setToDeptId(0);
-			billOfMaterialHeader.setToDeptName("BMS");
+			billOfMaterialHeader.setToDeptId(toDeptId);
+			billOfMaterialHeader.setToDeptName(toDeptName);
 			
 			billOfMaterialHeader.setRejApproveDate(date);
 			billOfMaterialHeader.setRejApproveUserId(0);
@@ -212,7 +227,8 @@ int globalIsPlan;
 				System.out.println(" insert List " + billOfMaterialHeader.toString());
 				int prodId=billOfMaterialHeader.getProductionId();
 				Info info = restTemplate.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				
+				map = new LinkedMultiValueMap<String, Object>();
 				map.add("productionId", prodId);
 				map.add("flag", 1);
 				int updateisBom = restTemplate.postForObject(Constants.url + "updateisMixingandBom", map,
@@ -260,8 +276,10 @@ int globalIsPlan;
 				int mixId=billOfMaterialHeader.getProductionId();
 				Info info = restTemplate.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);
 
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map = new LinkedMultiValueMap<String, Object>();
+				
 				map.add("mixId", mixId);
+				
 				int updateisBom = restTemplate.postForObject(Constants.url + "updateisBomInMixing", map,
 						Integer.class);
 			}
