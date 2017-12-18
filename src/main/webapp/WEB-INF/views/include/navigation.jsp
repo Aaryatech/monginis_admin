@@ -1094,6 +1094,17 @@
 					<a href="${pageContext.request.contextPath}/getMixingList">Mixing List</a>
 					</li>
 					
+					<c:choose>
+						<c:when test="${Constants.subAct==166}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/getBomList">BOM List</a>
+					</li>
+					
 </ul>
 				<!-- END Submenu -->
 				</li>
