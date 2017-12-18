@@ -32,4 +32,10 @@ public class FrItemStockConfigure {
         this.settingValue = settingValue;
     }
 
+	@Override
+	public String toString() {
+		return "FrItemStockConfigure [settingId=" + settingId + ", settingKey=" + settingKey + ", settingValue="
+				+ settingValue + "]";
+	}
+
 }

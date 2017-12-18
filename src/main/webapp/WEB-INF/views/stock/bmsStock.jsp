@@ -86,16 +86,16 @@ div.panel {
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
-	
-	<script type="text/javascript"
-		src="/adminpanel/resources/assets/bootstrap-datepicker/js/bootstrap-monthpicker.js"></script>
-	
-	<link rel="stylesheet" type="text/css"
+
+<script type="text/javascript"
+	src="/adminpanel/resources/assets/bootstrap-datepicker/js/bootstrap-monthpicker.js"></script>
+
+<link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/style.css" />
-	
+
 </head>
 <body>
-	
+
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
 
@@ -157,81 +157,82 @@ div.panel {
 
 
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Select View Option
-										Date</label>
+									<label class="col-sm-3 col-lg-2 control-label">Select
+										View Option Date</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<select name="selectStock" class="form-control chosen"
-							tabindex="6" id="selectStock" onchange="showDiv(this)" required>
+											tabindex="6" id="selectStock" onchange="showDiv(this)"
+											required>
 
-							<option value="-1">Select Option</option>
-							<option value="1" id="currentStock">Get Current Stock</option>
-							<option value="2" id="monthStock">Get Stock Between Month</option>
-							<option value="3" id="dateStock">Get Stock Between Dates</option>
+											<option value="-1">Select Option</option>
+											<option value="1" id="currentStock">Get Current Stock</option>
+											<option value="2" id="monthStock">Get Stock Between Month</option>
+											<option value="3" id="dateStock">Get Stock Between Dates</option>
 
-						</select>
+										</select>
 									</div>
 									<input type="button" class="btn btn-primary" value="Search">
-									
-									</div>
+
+								</div>
 
 
 								<div class="form-group">
-								<div>
-									<div class="colOuter" style="display: none" id=select_month_year>
-					<div class="col-md-2">
-						<div class="col1title">Select Month From :</div>
-					</div>
-					<div class="col-md-2" align="left">
+									<div>
+										<div class="colOuter" style="display: none"
+											id=select_month_year>
+											<div class="col-md-2">
+												<div class="col1title">Select Month From :</div>
+											</div>
+											<div class="col-md-2" align="left">
 
-						<input type='text' placeholder="Select From Month"
-							name="from_stockdate" required class="datepicker"  />
-					</div>
+												<input type='text' placeholder="Select From Month"
+													name="from_stockdate" required class="datepicker" />
+											</div>
 
-					<div class="col3"></div>
+											<div class="col3"></div>
 
-					<div class="col-md-2">
-						<div class="col1title">To :</div>
-					</div>
-					<div class="col-md-2" align="left">
-						<input type='text' placeholder="Select To Month"
-							name="to_stockdate" required  class="datepicker" />
-					</div>
+											<div class="col-md-2">
+												<div class="col1title">To :</div>
+											</div>
+											<div class="col-md-2" align="left">
+												<input type='text' placeholder="Select To Month"
+													name="to_stockdate" required class="datepicker" />
+											</div>
 
-				</div>
+										</div>
 
-				<div class="colOuter" style="display: none" id=select_date>
-					<div class="col-md-2">
-						<div class="col1title">From Date:</div>
-					</div>
-					<div class="col-md-2" align="left">
+										<div class="colOuter" style="display: none" id=select_date>
+											<div class="col-md-2">
+												<div class="col1title">From Date:</div>
+											</div>
+											<div class="col-md-2" align="left">
 
-						<input id="fromdatepicker" class="form-control date-picker" 
-							placeholder="From Date" name="from_datepicker" type="text">
+												<input id="fromdatepicker" class="form-control date-picker"
+													placeholder="From Date" name="from_datepicker" type="text">
 
-					</div>
+											</div>
 
-					<div class="col3"></div>
+											<div class="col3"></div>
 
-					<div class="col-md-2">
-						<div class="col1title">To Date:</div>
-					</div>
-					<div class="col-md-2" align="left">
-						<input id="todatepicker" class="form-control date-picker" 
-							placeholder="To Date" name="to_datepicker" type="text">
-							
-					</div>
-					
-				</div>
+											<div class="col-md-2">
+												<div class="col1title">To Date:</div>
+											</div>
+											<div class="col-md-2" align="left">
+												<input id="todatepicker" class="form-control date-picker"
+													placeholder="To Date" name="to_datepicker" type="text">
+
+											</div>
+
+										</div>
+
+
+									</div>
 
 
 								</div>
-								
-								
-							</div>
 							</form>
 
-							<form
-								action="${pageContext.request.contextPath}/getBmsStock"
+							<form action="${pageContext.request.contextPath}/getBmsStock"
 								class="form-horizontal" method="get" id="validation-form">
 
 
@@ -254,21 +255,83 @@ div.panel {
 										<div class="clearfix"></div>
 										<div class="table-responsive" style="border: 0">
 											<table width="100%"
-												class="table table-advance table-responsive table-position" id="table1">
+												class="table table-advance table-responsive table-position"
+												id="table1">
 												<thead>
 													<tr>
-														
+
 														<th>Sr No</th>
+														<th>Material Type</th>
 														<th>Material Name</th>
-														
-														<th>Quantity</th>
+														<th>UOM</th>
+														<th>Opening Stock</th>
+														<th>Store Issue Qty</th>
+														<th>Store Rej Qty</th>
+														<th>Mix Rec Qty</th>
+														<th>Mix Rec Rej Qty</th>
+														<th>Mix Issue Qty</th>
+														<th>Mix Return Qty</th>
+														<th>Mix Rej Qty</th>
+														<th>Prod Issue Qty</th>
+														<th>Prod Rej Qty</th>
+														<th>Prod Return Qty</th>
+														<th>Closing Qty</th>
 														<th>Status</th>
-														
+
 													</tr>
 
 												</thead>
 												<tbody>
-													
+												
+												<tr>
+												<td>
+												<c:out value="${a }"></c:out>
+												</td>
+												<td>
+												<c:out value="${a }"></c:out>
+												</td>
+												<td>
+												<c:out value="${a }"></c:out>
+												</td>
+												<td>
+												<c:out value="${a }"></c:out>
+												</td>
+												<td>
+												<c:out value="${a }"></c:out>
+												</td>
+												<td>
+												<c:out value="${a }"></c:out>
+												</td>
+												<td>
+												<c:out value="${a}"></c:out>
+												</td>
+												<td>
+												<c:out value="${a }"></c:out>
+												</td>
+												<td>
+												<c:out value="${ a}"></c:out>
+												</td>
+												<td>
+												<c:out value="${ a}"></c:out>
+												</td>
+												<td>
+												<c:out value="${a }"></c:out>
+												</td>
+												<td>
+												<c:out value="${a }"></c:out>
+												</td>
+												<td>
+												<c:out value="${a }"></c:out>
+												</td>
+												<td>
+												<c:out value="${a }"></c:out>
+												</td>
+												<td>
+												<c:out value="${a }"></c:out>
+												</td>
+												
+												</tr>
+
 												</tbody>
 
 											</table>
@@ -281,11 +344,11 @@ div.panel {
 										<div
 											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-2">
 											<input type="submit" value="Submit" class="btn btn-primary">
-											
-												<input type="submit" value="Day End Process" class="btn btn-warning">
-											
-												<input type="submit" value=" Store BOM" class="btn btn-success">
-											
+
+											<input type="submit" value="Day End Process"
+												class="btn btn-warning"> <input type="submit"
+												value=" Store BOM" class="btn btn-success">
+
 
 										</div>
 										<!-- </form> -->
@@ -370,57 +433,88 @@ div.panel {
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script>
-$("#datepicker").datepicker( {
-    format: "mm-yyyy",
-    startView: "months", 
-    minViewMode: "months"
-});
-</script>
-<script>
-			function showDiv(elem) {
-				if (elem.value == 1) {
-					document.getElementById('select_month_year').style = "display:none";
-					document.getElementById('select_date').style = "display:none";
-				} else if (elem.value == 2) {
-					document.getElementById('select_month_year').style.display = "block";
-					document.getElementById('select_date').style = "display:none";
-				} else if (elem.value == 3) {
-					document.getElementById('select_date').style.display = "block";
-					document.getElementById('select_month_year').style = "display:none";
-				}
+	<script>
+		$("#datepicker").datepicker({
+			format : "mm-yyyy",
+			startView : "months",
+			minViewMode : "months"
+		});
+	</script>
+	<script>
+		function showDiv(elem) {
+			if (elem.value == 1) {
+				document.getElementById('select_month_year').style = "display:none";
+				document.getElementById('select_date').style = "display:none";
+			} else if (elem.value == 2) {
+				document.getElementById('select_month_year').style.display = "block";
+				document.getElementById('select_date').style = "display:none";
+			} else if (elem.value == 3) {
+				document.getElementById('select_date').style.display = "block";
+				document.getElementById('select_month_year').style = "display:none";
 			}
-		</script>
-<script>
+		}
+	</script>
+	<script>
+		$(document)
+				.ready(
+						function() {
+							$('#txtDate')
+									.datepicker(
+											{
+												changeMonth : true,
+												changeYear : true,
+												dateFormat : 'mm/yy',
 
-$(document).ready(function() {
-   $('#txtDate').datepicker({
-     changeMonth: true,
-     changeYear: true,
-     dateFormat: 'mm/yy',
-       
-     
-     onClose: function() {
-        var iMonth = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-        var iYear = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-        $(this).datepicker('setDate', new Date(iYear, iMonth, 1));
-     },
-       
-     beforeShow: function() {
-         $('#ui-datepicker-div').addClass('hide-calendar');
+												onClose : function() {
+													var iMonth = $(
+															"#ui-datepicker-div .ui-datepicker-month :selected")
+															.val();
+													var iYear = $(
+															"#ui-datepicker-div .ui-datepicker-year :selected")
+															.val();
+													$(this).datepicker(
+															'setDate',
+															new Date(iYear,
+																	iMonth, 1));
+												},
 
-    	 
-       if ((selDate = $(this).val()).length > 0) 
-       {
-          iYear = selDate.substring(selDate.length - 4, selDate.length);
-          iMonth = jQuery.inArray(selDate.substring(0, selDate.length - 5), $(this).datepicker('option', 'monthNames'));
-          $(this).datepicker('option', 'defaultDate', new Date(iYear, iMonth, 1));
-           $(this).datepicker('setDate', new Date(iYear, iMonth, 1));
-       }
-    }
-  });
-});
-</script>
+												beforeShow : function() {
+													$('#ui-datepicker-div')
+															.addClass(
+																	'hide-calendar');
+
+													if ((selDate = $(this)
+															.val()).length > 0) {
+														iYear = selDate
+																.substring(
+																		selDate.length - 4,
+																		selDate.length);
+														iMonth = jQuery
+																.inArray(
+																		selDate
+																				.substring(
+																						0,
+																						selDate.length - 5),
+																		$(this)
+																				.datepicker(
+																						'option',
+																						'monthNames'));
+														$(this).datepicker(
+																'option',
+																'defaultDate',
+																new Date(iYear,
+																		iMonth,
+																		1));
+														$(this).datepicker(
+																'setDate',
+																new Date(iYear,
+																		iMonth,
+																		1));
+													}
+												}
+											});
+						});
+	</script>
 
 </body>
 </html>
