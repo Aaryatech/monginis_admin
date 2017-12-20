@@ -142,7 +142,7 @@ div.panel {
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
-							
+
 						</div>
 
 
@@ -178,53 +178,57 @@ div.panel {
 									</div>
 
 								</div>
-								
-							
 
-							<div class="form-group">
-								<div>
-									<div class="colOuter" style="display: none"
-										id=select_month_year>
-										<div class="col-md-2">
-											<div class="col1title">Select Month From :</div>
-										</div>
-										<div class="col-md-2" align="left">
 
-											<input type='text' placeholder="Select From Month" value="2017-12-12"
-												name="from_stockdate" required class="form-control date-picker" />
-										</div>
 
-										<div class="col3"></div>
+								<div class="form-group">
+									<div>
+										<div class="colOuter" style="display: none"
+											id=select_month_year>
+											<div class="col-md-2">
+												<div class="col1title">Select Month From :</div>
+											</div>
+											<div class="col-md-2" align="left">
 
-										<div class="col-md-2">
-											<div class="col1title">To :</div>
-										</div>
-										<div class="col-md-2" align="left">
-											<input type='text' placeholder="Select To Month" value="2017-12-12"
-												name="to_stockdate" required class="form-control date-picker"/>
-										</div>
+												<input type='text' placeholder="Select From Month"
+													value="2017-12-12" name="from_stockdate" required
+													class="form-control date-picker" />
+											</div>
 
-									</div>
+											<div class="col3"></div>
 
-									<div class="colOuter" style="display: none" id=select_date>
-										<div class="col-md-2">
-											<div class="col1title">From Date:</div>
-										</div>
-										<div class="col-md-2" align="left">
-
-											<input id="fromdatepicker" class="form-control date-picker"
-												placeholder="From Date" name="from_datepicker" type="text">
+											<div class="col-md-2">
+												<div class="col1title">To :</div>
+											</div>
+											<div class="col-md-2" align="left">
+												<input type='text' placeholder="Select To Month"
+													value="2017-12-12" name="to_stockdate" required
+													class="form-control date-picker" />
+											</div>
 
 										</div>
 
-										<div class="col3"></div>
+										<div class="colOuter" style="display: none" id=select_date>
+											<div class="col-md-2">
+												<div class="col1title">From Date:</div>
+											</div>
+											<div class="col-md-2" align="left">
 
-										<div class="col-md-2">
-											<div class="col1title">To Date:</div>
-										</div>
-										<div class="col-md-2" align="left">
-											<input id="todatepicker" class="form-control date-picker"
-												placeholder="To Date" name="to_datepicker" type="text">
+												<input id="fromdatepicker" class="form-control date-picker"
+													placeholder="From Date" name="from_datepicker" type="text">
+
+											</div>
+
+											<div class="col3"></div>
+
+											<div class="col-md-2">
+												<div class="col1title">To Date:</div>
+											</div>
+											<div class="col-md-2" align="left">
+												<input id="todatepicker" class="form-control date-picker"
+													placeholder="To Date" name="to_datepicker" type="text">
+
+											</div>
 
 										</div>
 
@@ -232,9 +236,7 @@ div.panel {
 
 								</div>
 
-							</div>
-							
-							<input type="submit" value="Search">
+								<input type="submit" value="Search">
 							</form>
 
 
@@ -311,18 +313,28 @@ div.panel {
 											</table>
 										</div>
 
-										<!-- this is for ajax call<input type="submit" class="btn btn-primary" value="Submit"
-										id="callSubmit" onclick="callSubmitGrn(); getGrnId();"> -->
-
 
 										<div
 											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-2">
 											<input type="submit" value="Submit" class="btn btn-primary">
+											<input type="submit" value=" Store BOM"
+												class="btn btn-success">
 
-											<input type="submit" value="Day End Process"
-												class="btn btn-warning"> <input type="submit"
-												value=" Store BOM" class="btn btn-success">
+											<c:choose>
+												<c:when test="${showDayEnd == 1}">
+													<input type="submit" value="Day End Process"
+														class="btn btn-warning">
 
+												</c:when>
+
+											
+												<c:when test="${showDayEnd == 0}">
+													<input type="submit" value="Day End Process" disabled="disabled"
+														class="btn btn-warning">
+
+												</c:when>
+
+											</c:choose>
 
 										</div>
 										<!-- </form> -->
