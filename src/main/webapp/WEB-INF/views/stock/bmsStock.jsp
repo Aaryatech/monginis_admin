@@ -149,10 +149,10 @@ div.panel {
 
 
 						<div class="box-content">
-							<form action="${pageContext.request.contextPath}/getBmsStock"
-								class="form-horizontal" method="post" id="validation-form">
+							<%-- <form action="${pageContext.request.contextPath}/getBmsStock"
+								class="form-horizontal" method="post" id="validation-form"> --%>
 								<div class="form_group">
-									<label class="col-sm-3 col-lg-2 control-label">Select
+									<label class="col-sm-3 col-lg-2 control-label">
 										Material Type</label> <select name="matType"
 										class="form-control chosen" tabindex="6" id="mat_Type"
 										required>
@@ -165,7 +165,7 @@ div.panel {
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Select
-										View Option Date</label>
+										View Option</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<select name="selectStock" class="form-control chosen"
 											tabindex="6" id="selectStock" onchange="showDiv(this)"
@@ -180,10 +180,8 @@ div.panel {
 									</div>
 
 								</div>
-								<input type="submit" value="Search">
-							</form>
-
-							<div class="form-group">
+								
+							<!-- <div class="form-group"> -->
 								<div>
 									<div class="colOuter" style="display: none"
 										id=select_month_year>
@@ -215,7 +213,7 @@ div.panel {
 										<div class="col-md-2" align="left">
 
 											<input id="fromdatepicker" class="form-control date-picker"
-												placeholder="From Date" name="from_datepicker" type="text">
+												placeholder="From Date" name="from_date" type="text">
 
 										</div>
 
@@ -226,19 +224,23 @@ div.panel {
 										</div>
 										<div class="col-md-2" align="left">
 											<input id="todatepicker" class="form-control date-picker"
-												placeholder="To Date" name="to_datepicker" type="text">
+												placeholder="To Date" name="to_date" type="text" onblur="getDate()">
 
 										</div>
 
 									</div>
 
 								</div>
+							<!-- </form> -->
 
 							</div>
+							
+							<input type="button" value="Search" id ="getStockButton">
+							
 
 
-							<form action="" class="form-horizontal" method="get"
-								id="validation-form">
+							<form action="${pageContext.request.contextPath}/dayEndProcess"
+								class="form-horizontal" method="post" id="validation-form">
 
 								<div class="box">
 									<div class="box-title">
@@ -300,7 +302,7 @@ div.panel {
 															<td><c:out value="${stockList.store_rejected_qty}"></c:out>
 															</td>
 															<td><c:out value="${stockList.openingQty}"></c:out>
-															<td><c:out value="00"></c:out>
+															<td><c:out value="${stockList.closingQty}"></c:out>
 															<td><c:out value="Status"></c:out></td>
 
 														</tr>
@@ -407,11 +409,21 @@ div.panel {
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 	<script>
-		$("#datepicker").datepicker({
-			format : "mm-yyyy",
-			startView : "months",
-			minViewMode : "months"
-		});
+		
+	function getDate() {
+		
+		var fromDate=document.getElementById('fromdatepicker').value;
+		var toDate=document.getElementById('todatepicker').value
+		
+		alert(toDate);
+		alert(fromDate);
+	}
+	
+	$('#"getStockButton"').click(function(){
+	    var form = document.getElementById("validation-form")
+	    form.action ="getBmsStock";
+	    form.submit();
+	});
 	</script>
 	<script>
 		function showDiv(elem) {
