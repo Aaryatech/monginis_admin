@@ -12,7 +12,7 @@
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Material Receipt Directore</title>
+<title>Dashboard - MONGINIS Admin</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -107,7 +107,7 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Material Receipt Director
+					<i class="fa fa-file-o"></i>Bill of Material to Store
 				</h1>
 				<!-- <h4>Bill for franchises</h4> -->
 			</div>
@@ -119,32 +119,31 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>Material Receipt Director
+					<i class="fa fa-bars"></i>Raw Material Stock Calculation
 				</h3>
 
 			</div> 
 				<div class=" box-content">
-				<form id="validation-form"
-				action="allMaterialReceiptNote"
-				method="get">
-				<input type="hidden" value="1" name="viewAll">
-				
-				<input type="submit" class="btn btn-info" value="View All" >
-				</form>
+				 <form action="submitBmstoStore" method="post" class="form-horizontal" id=
+									"validation-form"
+										enctype="multipart/form-data" method="post">
 					<div class="row">
 						<div class="col-md-12 table-responsive">
 							<table class="table table-bordered table-striped fill-head "
 								style="width: 100%" id="table_grid">
 								<thead>
 									<tr>
+										
+										<th align="left"><input type="checkbox"
+													onClick="selectAll(this)"
+													  /> Select All</th>
 										<th>Sr.No.</th>
-										<th>Inward No.</th>
-										<th>PO No.</th>
-										<th>Supplier Name</th>
-										<th>Entry Date & Time</th>
-										<th>PO Date</th>
-										 <th>Status</th>
-										<th>Action</th>
+										<th>RM Name</th>
+										<th>Re Order</th>
+										<th>Max Order</th>
+										<th>Crrent Stock Qty</th>
+										 <th>Order Qty</th>
+									 
 
 
 									</tr>
@@ -152,98 +151,99 @@
 								
 								<tbody>
 
-									<c:forEach items="${materialRecNoteList}" var="materialRecNoteList"
+									<c:forEach items="${rmList}" var="rmList"
 													varStatus="count">
 
-												<c:choose>
-													<c:when test="${materialRecNoteList.status==2}">
-													 <c:set var = "color" value="red"/>
-													</c:when>
-													<c:when test="${materialRecNoteList.status==3}">
-													 <c:set var = "color" value="red"/>
-													</c:when>
-													<c:when test="${materialRecNoteList.status==4}">
-													 <c:set var = "color" value="green"/>
-													</c:when>
+											 	
+													 
 													
-													<c:otherwise>
-													  <c:set var = "color" value="black"/>
-													</c:otherwise>
-													</c:choose>
+												 
+												 
+												 <c:forEach items="${rmStockList}" var="rmStockList"
+													varStatus="count">
+													
+													
+													<c:choose>
+													<c:when test="${rmList.rmId==rmStockList.rmId}">
 													 
 													<tr>
-												 
+													<c:choose>
+													<c:when test="${rmStockList.closingQty < rmList.rmRolQty}">
+													 <td><input type="checkbox" name="select_to_approve"
+																id="select_to_approve" checked readonly
+																value="${rmList.rmId}"  
+																 ></td>
+																 <c:set var="orderQty" value="${rmList.rmMaxQty-rmStockList.closingQty  }" />
+																  
+													</c:when>
+													 
 													 
 													
-														<td style="color: <c:out value = "${color}"/>"><c:out value="${count.index+1}" /></td>
+													<c:otherwise>
+													  <td><input type="checkbox" name="select_to_approve"
+																id="select_to_approve"
+																value="${rmList.rmId}"  
+																onchange="selectCheck(${rmList.rmId})" ></td>
+																  <c:set var="orderQty" value="0" />
+																   
+													
+													</c:otherwise>
+													</c:choose>  
+													
+													
+													
+													
+														<td  ><c:out value="${count.index+1}" /></td>
 
-														<td align="left" style="color: <c:out value = "${color}"/>"><c:out
-																value="${materialRecNoteList.mrnNo}" /></td>
+														<td align="left"  ><c:out
+																value="${rmList.rmName}" /></td>
 																
-																<td align="left" style="color: <c:out value = "${color}"/>"><c:out
-																value="${materialRecNoteList.poNo}" /></td>
+																<td align="left"  ><c:out
+																value="${rmList.rmRolQty}" /></td>
 																
-																<c:forEach items="${supplierDetailsList}" var="supplierDetailsList"
-													varStatus="count">
-																<c:choose>
-													<c:when test="${materialRecNoteList.supplierId==supplierDetailsList.suppId}">
-													<td align="left" style="color: <c:out value = "${color}"/>"><c:out
-																value="${supplierDetailsList.suppName}" /></td>
-													</c:when>
-													 </c:choose>
-													 </c:forEach>
+																 
 													  
-												 	 <td align="left" style="color: <c:out value = "${color}"/>"><c:out
-																value="${materialRecNoteList.gateEntryDate}" />  
-															  <c:out
-																value="${materialRecNoteList.gateEntryTime}" /> 
+												 	 <td align="left"  ><c:out
+																value="${rmList.rmMaxQty}" />  
+															   
 																</td>
 												 
 															
-															<td align="left" style="color: <c:out value = "${color}"/>"><c:out	
-																value="${materialRecNoteList.poDate}" />
+													 <td align="left"  ><c:out	
+																value="${ rmStockList.closingQty}" />
 																</td>
-														<%-- <td align="left"><c:out	
-																value="${materialRecNoteList.status}" />
-																</td> --%>		
+													  <td align="left"><input type=text name='orderQty${rmList.rmId }' class='form-control' readonly id='orderQty${rmList.rmId }'   value=<c:out value = "${orderQty}"/>>
+																</td>  	
 														
-												<c:choose>
-												<c:when test="${materialRecNoteList.status =='0'}">
-													<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="Approved from Gate"></c:out></td>
-													</c:when>
-													<c:when test="${materialRecNoteList.status =='1'}">
-													<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="Approved From Store"></c:out></td>
-													</c:when>
-													<c:when test="${materialRecNoteList.status =='2'}">
-													<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="Reject to Store"></c:out></td>
-													</c:when>
-													<c:when test="${materialRecNoteList.status =='3'}">
-													<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="Reject to Account"></c:out></td>
-													</c:when>
-													<c:when test="${materialRecNoteList.status =='4'}">
-													<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="Approved"></c:out></td>
-													</c:when>
-													
-												</c:choose>
+												 
 												
-													 
-															 
-																
-							<td><a href="${pageContext.request.contextPath}/materialReceiptDirectore?mrnId=${materialRecNoteList.mrnId}" class="action_btn" >
-						<abbr title="Details"><i class="fa fa-list"></i></abbr></a></td>
-																</tr>
+													 	</tr>
+															 </c:when>
+															 </c:choose>
+															</c:forEach>	
+							 
+															
 																 
 												</c:forEach>
 								</tbody>
 							</table>
 						</div>
 					</div>
+			<div class="row">
+						<div class="col-md-12" style="text-align: center">
+							<input type="submit" class="btn btn-info" value="Submit" name="Submit" id="Submit">
 
+						</div>
+					</div>
+					</form>
 		</div>
+		
+		
 		
 				 
 	 
 	</div>
+
 	</div>
 	<!-- END Main Content -->
 
@@ -315,6 +315,30 @@
 		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
 		
 		
+		
+		<script>
+	
+		function selectAll(source) {
+			checkboxes = document.getElementsByName('select_to_approve');
+			
+			for (var i = 0, n = checkboxes.length; i < n; i++) {
+				checkboxes[i].checked = source.checked;
+			}
+			
+		}
+		
+		function selectCheck(id)
+		{
+		 
+			var x=document.getElementById("orderQty"+id).readOnly;
+			if(x)
+			document.getElementById("orderQty"+id).readOnly=false;
+			else{
+				document.getElementById("orderQty"+id).readOnly=true;
+				document.getElementById("orderQty"+id).value=0;
+			}
+		}
+		</script>
 		
 		
 </body>

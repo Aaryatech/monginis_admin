@@ -114,7 +114,7 @@
 		</div>
 		<!-- END Page Title -->
 
-		
+
 		<!-- BEGIN Main Content -->
 		<div class="box">
 			<div class="box-title">
@@ -124,181 +124,280 @@
 
 			</div>
 
-				<div class=" box-content">
+			<div class=" box-content">
+
+				<div class="box">
+					<form id="validation-form" class="form-horizontal"
+						enctype="multipart/form-data" method="post">
+
+						<div class="box-content">
+
+							<div class="col-md-2">Inward No.</div>
+							<div class="col-md-3">
+								<input type="text" id="inward_no." name="inward_no."
+									value="${materialRecNoteHeader.mrnNo}" class="form-control"
+									readonly>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-2">Inward Date & Time</div>
+							<div class="col-md-3">
+								<input class="form-control" id="dp1" size="16" type="text"
+									name="inward_date" value=""
+									placeholder="${materialRecNoteHeader.gateEntryDate}   ${materialRecNoteHeader.gateEntryTime}"
+									readonly />
+							</div>
+
+
+
+						</div>
+						<br>
+						<div class="box-content">
+
+							<div class="col-md-2">Supplier</div>
+							<div class="col-md-3">
+								<input type="text" id="supp_id" name="supp_id"
+									value="${suppName1}" class="form-control" readonly>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-2">Transporter</div>
+							<div class="col-md-3">
+								<input type="text" id="transporter" name="transporter"
+									value="${transportName }" class="form-control" readonly>
+							</div>
+						</div>
+						<br>
+
+
+
+
+						<div class="box-content">
+
+							<div class="col-md-2">Po No.</div>
+							<div class="col-md-3">
+								<input type="text" name="po_no" id="po_no" class="form-control"
+									value="${materialRecNoteHeader.poNo}" readonly>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-2">PO Date</div>
+							<div class="col-md-3">
 					 
-		<div class="box">
-			<form id=""
-				action="${pageContext.request.contextPath}/ "
-				method="post">
-				
-						<div class="box-content">
-							 
-								<div class="col-md-2">Inward No.</div>
-									<div class="col-md-3"><input type="text" id="inward_no." name="inward_no." value="00" class="form-control" readonly>
-								</div>
-								<div class="col-md-1"></div>
-								<div class="col-md-2">Inward Date & Time</div>
-									<div class="col-md-3">
-									<input class="form-control" id="dp1" size="16"
-											type="text" name="inward_date" value="" placeholder="Inward date" readonly />
-									</div>
-								 
-				 
-				 
-						</div><br>
-						<div class="box-content">
-						
-								<div class="col-md-2">Supplier </div>
-									<div class="col-md-3"><input type="text" id="supp_id" name="supp_id" value="Akshay Kasar" 
-									class="form-control" readonly>
-								</div>
-								<div class="col-md-1"></div>
-								<div class="col-md-2">Transporter</div>
-										<div class="col-md-3"><input type="text" id="transporter" name="transporter" value="xyz" class="form-control" readonly>
-									</div>
-							</div><br>
-							
-							
-			
-				
-						<div class="box-content">
-								
-									<div class="col-md-2">Po No.</div>
-								<div class="col-md-3">
-									<input type="text" name="po_no"id="po_no" class="form-control" readonly>
-								</div>
-								<div class="col-md-1"></div>
-								<div class="col-md-2" >PO Date</div>
-										<div class="col-md-3">
-											<input type="text" name="po_date"id="po_date" class="form-control" readonly>
-										</div>
-										
-				 
-						</div> <br/>
-						
-						
-								<div class="box-content">
-									
-									<div class="col-md-2" >MRN Type</div>
-									<div class="col-md-3">
-										
-									<input type="text" id="mrn_type" name="mrn_type" value="mrn_type" class="form-control" readonly>
-									</div>
-								
-								</div><br><br>
-								
-								
-								<div class="box-content">
-								 <div class="form-group">
-									
-									<div class="col-md-2">Image</div>
-									<div class="col-md-2">
-										<div class="fileupload fileupload-new"
-											data-provides="fileupload">
-											<div class="fileupload-new img-thumbnail"
-												style="width: 150px; height: 150px;">
-												<img
-													src="http://www.placehold.it/150x150/EFEFEF/AAAAAA&amp;text=no+image"
-													alt="" />
-											</div>
-											<div
-												class="fileupload-preview fileupload-exists img-thumbnail"
-												style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-											<div>
-												<span class="btn btn-default btn-file"><span
-													class="fileupload-new">Select image</span> <span
-													class="fileupload-exists">Change</span> <input type="file"
-													class="file-input" name="image1" id="image2"
-													 /></span> <a href="#"
-													class="btn btn-default fileupload-exists"
-													data-dismiss="fileupload">Remove</a>
-											</div>
-										</div>
+								<input type="text" name="po_date" id="po_date"
+									value="${materialRecNoteHeader.poDate}" class="form-control"
+									readonly>
+									 
+							</div>
 
-									</div>
-									<div class="col-md-1"></div>
-									<div class="col-md-2">Image</div>
-									<div class="col-md-2">
-										<div class="fileupload fileupload-new"
-											data-provides="fileupload">
-											<div class="fileupload-new img-thumbnail"
-												style="width: 200px; height: 150px;">
-												<img
-													src="http://www.placehold.it/150x150/EFEFEF/AAAAAA&amp;text=no+image"
-													alt="" />
-											</div>
-											<div
-												class="fileupload-preview fileupload-exists img-thumbnail"
-												style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-											<div>
-												<span class="btn btn-default btn-file"><span
-													class="fileupload-new">Select image</span> <span
-													class="fileupload-exists">Change</span> <input type="file"
-													class="file-input" name="image2" id="image2"
-													 /></span> <a href="#"
-													class="btn btn-default fileupload-exists"
-													data-dismiss="fileupload">Remove</a>
-											</div>
-										</div>
 
-									</div>
-									
-								</div>
-								</div>
-							
-							
-			
-				<div class=" box-content">
-					<div class="row">
-						<div class="col-md-12 table-responsive">
-							<table class="table table-bordered table-striped fill-head "
-								style="width: 100%" id="table_grid">
-								<thead>
-									<tr>
-										<th>Sr.No.</th>
-										<th>Item</th>
-										<th>Stock Quantity</th>
-										<th>PO Quantity</th>
-										<th>PO Rate</th>
-
-									</tr>
-								</thead>
-								<tbody>
-
-								</tbody>
-							</table>
 						</div>
-					</div>
+						<br />
+						<c:forEach items="${rmItemGroupList}" var="rmItemGroupList"
+							varStatus="count">
+							<c:choose>
+								<c:when
+									test="${materialRecNoteHeader.mrnType==rmItemGroupList.grpId}">
+									<c:set var="mrnName" value="${rmItemGroupList.grpName}" />
+								</c:when>
+							</c:choose>
+						</c:forEach>
 
-		</div>
-		
-				 	
-									<div class="box-content">
-									
-										<div class="col-md-2">Issue</div>
-											<div class="col-md-2" style="text-align: center">
-												<select name="issue" id="issue" class="form-control" tabindex="6" required="required"  >
-													<option value="">Select Issue</option>
-													<option value="1">Not Applicable</option>
-													<option value="2">On Your Side</option>
-													<option value="3">On Our Side</option>
-												</select>
-											</div>
-										
-									
-									</div><br/><br/>
-			
-			<div class="row">
-						<div class="col-md-12" style="text-align: center">
-							<input type="submit" class="btn btn-info" value="Accept">
-							<input type="button" class="btn btn-info" value="Reject">
+						<div class="box-content">
+
+							<div class="col-md-2">MRN Type</div>
+							<div class="col-md-3">
+
+								<input type="text" id="mrn_type" name="mrn_type"
+									value='<c:out value = "${mrnName}"/>' class="form-control"
+									readonly>
+							</div>
+
 						</div>
-					</div>
-				
-			</form>
+						<br>
+						<br>
+
+
+						<div class="box-content">
+
+
+							<div class="col-md-2">Images</div>
+							<div class="col-md-2"></div>
+							<div class="col-md-2">
+								<div class="fileupload fileupload-new"
+									data-provides="fileupload">
+									<div class="fileupload-new img-thumbnail"
+										style="width: 150px; height: 150px;">
+										<img src='"${imageUrl}"${materialRecNoteHeader.photo1}'
+											onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';"
+											alt="" />
+									</div>
+									<div class="fileupload-preview fileupload-exists img-thumbnail"
+										style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+
+								</div>
+
+							</div>
+
+
+							<div class="col-md-2">
+								<div class="fileupload fileupload-new"
+									data-provides="fileupload">
+									<div class="fileupload-new img-thumbnail"
+										style="width: 200px; height: 150px;">
+										<img src='"${imageUrl}"${materialRecNoteHeader.photo2}'
+											onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';"
+											alt="" />
+									</div>
+									<div class="fileupload-preview fileupload-exists img-thumbnail"
+										style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+
+								</div>
+
+							</div>
+
+
+						</div>
+
+						<c:choose>
+							<c:when test="${materialRecNoteHeader.status==1}">
+								<c:set var="disabledFlag" value="" />
+							</c:when>
+							<c:otherwise>
+								<c:set var="disabledFlag" value="disabled" />
+							</c:otherwise>
+						</c:choose>
+
+						<div class=" box-content">
+							<div class="row">
+								<div class="col-md-12 table-responsive">
+									<table class="table table-bordered table-striped fill-head "
+										style="width: 100%" id="table_grid">
+										<thead>
+											<tr>
+
+												<th align="left"><input type="checkbox"
+													onClick="selectAll(this)"
+													<c:out value = "${disabledFlag}"/> /> Select All</th>
+												<th>Sr.No.</th>
+												<th>Item</th>
+												<th>Stock Quantity</th>
+												<th>PO Quantity</th>
+												<th>PO Rate</th>
+												<th>Value</th>
+
+											</tr>
+										</thead>
+										<tbody>
+
+
+											<c:forEach items="${materialRecNoteDetail}"
+												var="materialRecNoteDetail" varStatus="count">
+
+
+
+												<tr>
+
+													<c:choose>
+														<c:when test="${materialRecNoteDetail.status==1}">
+															<td><input type="checkbox" name="select_to_approve"
+																id="select_to_approve"
+																value="${materialRecNoteDetail.mrnDetailId}" checked
+																readonly="readonly"></td>
+															<c:set var="color" value="black" />
+														</c:when>
+														 
+														<c:otherwise>
+															<td><input type="checkbox" name="select_to_approve"
+																id="select_to_approve"
+																value="${materialRecNoteDetail.mrnDetailId}"
+																<c:out value = "${disabledFlag}"/>></td>
+															<c:set var="color" value="black" />
+														</c:otherwise>
+													</c:choose>
+
+
+
+
+
+													<td style="color: <c:out value = "${color}"/>"><c:out
+															value="${count.index+1}" /></td>
+
+													<td align="left" style="color: <c:out value = "${color}"/>"><c:out
+															value="${materialRecNoteDetail.rmName}" /></td>
+
+													<td align="left" style="color: <c:out value = "${color}"/>"><c:out
+															value="${materialRecNoteDetail.stockQty}" /></td>
+
+
+
+													<td align="left" style="color: <c:out value = "${color}"/>"><c:out
+															value="${materialRecNoteDetail.poQty}" /></td>
+
+													<td align="left" style="color: <c:out value = "${color}"/>">
+														<c:out value="${materialRecNoteDetail.poRate}" />
+													</td>
+
+
+													<td align="left" style="color: <c:out value = "${color}"/>"><c:out
+															value="${materialRecNoteDetail.poRate*materialRecNoteDetail.poQty}" />
+													</td>
+
+
+
+
+
+
+
+
+												</tr>
+											</c:forEach>
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+						</div>
+
+
+						<div class="box-content">
+
+							<div class="col-md-2">* Issue</div>
+							<div class="col-md-4" style="text-align: center">
+								<select name="issue" id="issue" class="form-control"
+									tabindex="6" required data-rule-required="true">
+									<option value="">None</option>
+									<c:forEach items="${allRemarksList}" var="allRemarksList"
+										varStatus="count">
+										<option value="${allRemarksList.remark}"><c:out value="${allRemarksList.remark}"/></option>
+									</c:forEach>
+
+								</select>
+							</div>
+
+
+						</div>
+						<br />
+						<br />
+
+						<div class="row">
+							<div class="col-md-12" style="text-align: center">
+								<input type="button" class="btn btn-info" id="btnRejetToStore"
+									value="Reject To Store" <c:out value = "${disabledFlag}"/>
+									onclick="rejectToStore()"> <input type="button"
+									class="btn btn-info" id="btnRejectToAcc"
+									value="Reject To Account" <c:out value = "${disabledFlag}"/>
+									onclick="rejectToAcc()"> <input type="button"
+									class="btn btn-info" id="btnApprov" value="Approve"
+									onclick="approve()" <c:out value = "${disabledFlag}"/>><br />
+								<br /> <input type="button" class="btn btn-info"
+									value="Back to List"
+									onclick="window.location.href='${pageContext.request.contextPath}/allMaterialReceiptNote'">
+							</div>
+						</div>
+
+					</form>
+				</div>
 			</div>
 		</div>
-	</div>
 	</div>
 	<!-- END Main Content -->
 
@@ -309,9 +408,9 @@
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
 
- 
 
-	
+
+
 
 	<!--basic scripts-->
 	<script
@@ -368,9 +467,43 @@
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
+
+
+	<script>
+	
+		function selectAll(source) {
+			checkboxes = document.getElementsByName('select_to_approve');
+			
+			for (var i = 0, n = checkboxes.length; i < n; i++) {
+				checkboxes[i].checked = source.checked;
+			}
+			
+		}
 		
+		function rejectToStore(){
+			 var form = document.getElementById("validation-form");
+			 form.action ="submitMaterialReceiptDirector/2";
+			    form.submit();
+		}
 		
+		function rejectToAcc(){
+			 var form = document.getElementById("validation-form");
+			 form.action ="submitMaterialReceiptDirector/3";
+			    form.submit();
+			    
+		}
 		
+		function approve(){
+			 var form = document.getElementById("validation-form");
+			 form.action ="submitMaterialReceiptDirector/4";
+			    form.submit();
+		}
+		 
+ 
+   
+	 
 		
+	</script>
+
 </body>
 </html>

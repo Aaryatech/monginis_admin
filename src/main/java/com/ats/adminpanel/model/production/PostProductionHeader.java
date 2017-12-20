@@ -14,11 +14,31 @@ public class PostProductionHeader {
 	
 	private String productionDate;
 	
+private int isMixing;
+
+	
+	private int isBom;
+	
+	
+	private int delStatus;
+	
+	
+ 
+
+	private int isPlanned;
+	
+	
 /*	private int int2;
 	private int int3;
 	
 	private String varchar1;
 	private String*/
+	
+private String productionBatch;
+	
+	
+	private int productionStatus;
+	
 	
 	private List<PostProductionDetail> postProductionDetail;
 
@@ -63,13 +83,66 @@ public class PostProductionHeader {
 		this.itemGrp1 = itemGrp1;
 	}
 
+	public int getIsMixing() {
+		return isMixing;
+	}
+
+	public void setIsMixing(int isMixing) {
+		this.isMixing = isMixing;
+	}
+
+	public int getIsBom() {
+		return isBom;
+	}
+
+	public void setIsBom(int isBom) {
+		this.isBom = isBom;
+	}
+
+	public int getDelStatus() {
+		return delStatus;
+	}
+
+	public void setDelStatus(int delStatus) {
+		this.delStatus = delStatus;
+	}
+
+	public int getIsPlanned() {
+		return isPlanned;
+	}
+
+	public void setIsPlanned(int isPlanned) {
+		this.isPlanned = isPlanned;
+	}
+
+	public String getProductionBatch() {
+		return productionBatch;
+	}
+
+	public void setProductionBatch(String productionBatch) {
+		this.productionBatch = productionBatch;
+	}
+
+	 
+
+	public int getProductionStatus() {
+		return productionStatus;
+	}
+
+	public void setProductionStatus(int productionStatus) {
+		this.productionStatus = productionStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "PostProductionHeader [productionHeaderId=" + productionHeaderId + ", itemGrp1=" + itemGrp1
-				+ ", timeSlot=" + timeSlot + ", productionDate=" + productionDate + ", postProductionDetail="
+				+ ", timeSlot=" + timeSlot + ", productionDate=" + productionDate + ", isMixing=" + isMixing
+				+ ", isBom=" + isBom + ", delStatus=" + delStatus + ", isPlanned=" + isPlanned + ", productionBatch="
+				+ productionBatch + ", productionStatus=" + productionStatus + ", postProductionDetail="
 				+ postProductionDetail + "]";
 	}
 
+	 
 	
 	
 	

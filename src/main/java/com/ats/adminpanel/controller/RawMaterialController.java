@@ -84,13 +84,13 @@ public class RawMaterialController {
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/rmRateVerification");
 			RestTemplate rest=new RestTemplate();
-		List<RawMaterialDetails> rawMaterialDetailsList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterial", List.class);
+			RawMaterialDetailsList rawMaterialDetailsList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterial", RawMaterialDetailsList.class);
 		
 		System.out.println("RM Details : "+rawMaterialDetailsList.toString());
 		  List<SupplierDetails> supplierDetailsList=rest.getForObject(Constants.url + "getAllSupplier",   List.class);
 
 			model.addObject("supplierList", supplierDetailsList);
-			model.addObject("RawmaterialList", rawMaterialDetailsList);
+			model.addObject("RawmaterialList", rawMaterialDetailsList.getRawMaterialDetailsList());
 		
 
 		return model;

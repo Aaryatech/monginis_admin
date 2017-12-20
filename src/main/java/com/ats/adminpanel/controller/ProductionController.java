@@ -117,7 +117,7 @@ public class ProductionController {
 		
 	}
 	
-	/*
+	 
 	@RequestMapping(value = "/getProductionOrder", method = RequestMethod.GET)
 	public @ResponseBody List<GetOrderItemQty> generateOrderList(HttpServletRequest request,
 		HttpServletResponse response) {
@@ -155,7 +155,7 @@ public class ProductionController {
 		return getOrderItemQtyList;
 		
 	}
-	*/
+	 
 	@RequestMapping(value = "/getProductionRegSpCakeOrder", method = RequestMethod.GET)
 	public @ResponseBody List<GetRegSpCakeOrderQty> generateRegSpCakeOrderList(HttpServletRequest request,
 		HttpServletResponse response) {
@@ -238,6 +238,14 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 		postProductionHeader.setTimeSlot(timeSlot);
 		postProductionHeader.setItemGrp1(Integer.parseInt(selectedCat));
 		postProductionHeader.setProductionDate(convertedDate);
+		postProductionHeader.setDelStatus(0);
+		postProductionHeader.setIsBom(0);
+		
+		postProductionHeader.setIsMixing(0);
+		postProductionHeader.setIsPlanned(0);
+		postProductionHeader.setProductionBatch("");
+		postProductionHeader.setProductionStatus(0);
+		
 		
 	List<PostProductionDetail> postProductionDetailList=new ArrayList<>();
 	PostProductionDetail postProductionDetail;
@@ -253,7 +261,14 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 		
 		postProductionDetail.setItemId(Integer.parseInt(a));
 		
-		postProductionDetail.setProductionQty(getOrderItemQtyList.get(i).getQty());
+		postProductionDetail.setOrderQty(getOrderItemQtyList.get(i).getQty());
+		postProductionDetail.setProductionDate(convertedDate);
+		postProductionDetail.setOpeningQty(0);
+		postProductionDetail.setProductionQty(0);
+		postProductionDetail.setProductionBatch("");
+		postProductionDetail.setRejectedQty(0);
+		postProductionDetail.setPlanQty(0);
+		 
 		postProductionDetailList.add(postProductionDetail);
 	}
 	for(int i=0;i<getRegSpCakeOrderQtyList.size();i++)
