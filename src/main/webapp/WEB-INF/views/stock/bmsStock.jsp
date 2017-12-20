@@ -1,3 +1,5 @@
+
+
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
@@ -140,19 +142,15 @@ div.panel {
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
-							<!-- <div class="box-tool">
-								<a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a> <a data-action="close" href="#"><i
-									class="fa fa-times"></i></a>
-							</div> -->
+							
 						</div>
 
 
 						<div class="box-content">
-							<%-- <form action="${pageContext.request.contextPath}/getBmsStock"
-								class="form-horizontal" method="post" id="validation-form"> --%>
+							<form action="${pageContext.request.contextPath}/getBmsStock"
+								class="form-horizontal" method="post" id="validation-form">
 								<div class="form_group">
-									<label class="col-sm-3 col-lg-2 control-label">
+									<label class="col-sm-3 col-lg-2 control-label">Select
 										Material Type</label> <select name="matType"
 										class="form-control chosen" tabindex="6" id="mat_Type"
 										required>
@@ -165,7 +163,7 @@ div.panel {
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Select
-										View Option</label>
+										View Option Date</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<select name="selectStock" class="form-control chosen"
 											tabindex="6" id="selectStock" onchange="showDiv(this)"
@@ -181,7 +179,9 @@ div.panel {
 
 								</div>
 								
-							<!-- <div class="form-group"> -->
+							
+
+							<div class="form-group">
 								<div>
 									<div class="colOuter" style="display: none"
 										id=select_month_year>
@@ -190,8 +190,8 @@ div.panel {
 										</div>
 										<div class="col-md-2" align="left">
 
-											<input type='text' placeholder="Select From Month"
-												name="from_stockdate" required class="datepicker" />
+											<input type='text' placeholder="Select From Month" value="2017-12-12"
+												name="from_stockdate" required class="form-control date-picker" />
 										</div>
 
 										<div class="col3"></div>
@@ -200,8 +200,8 @@ div.panel {
 											<div class="col1title">To :</div>
 										</div>
 										<div class="col-md-2" align="left">
-											<input type='text' placeholder="Select To Month"
-												name="to_stockdate" required class="datepicker" />
+											<input type='text' placeholder="Select To Month" value="2017-12-12"
+												name="to_stockdate" required class="form-control date-picker"/>
 										</div>
 
 									</div>
@@ -213,7 +213,7 @@ div.panel {
 										<div class="col-md-2" align="left">
 
 											<input id="fromdatepicker" class="form-control date-picker"
-												placeholder="From Date" name="from_date" type="text">
+												placeholder="From Date" name="from_datepicker" type="text">
 
 										</div>
 
@@ -224,19 +224,18 @@ div.panel {
 										</div>
 										<div class="col-md-2" align="left">
 											<input id="todatepicker" class="form-control date-picker"
-												placeholder="To Date" name="to_date" type="text" onblur="getDate()">
+												placeholder="To Date" name="to_datepicker" type="text">
 
 										</div>
 
 									</div>
 
 								</div>
-							<!-- </form> -->
 
 							</div>
 							
-							<input type="button" value="Search" id ="getStockButton">
-							
+							<input type="submit" value="Search">
+							</form>
 
 
 							<form action="${pageContext.request.contextPath}/dayEndProcess"
@@ -409,21 +408,11 @@ div.panel {
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 	<script>
-		
-	function getDate() {
-		
-		var fromDate=document.getElementById('fromdatepicker').value;
-		var toDate=document.getElementById('todatepicker').value
-		
-		alert(toDate);
-		alert(fromDate);
-	}
-	
-	$('#"getStockButton"').click(function(){
-	    var form = document.getElementById("validation-form")
-	    form.action ="getBmsStock";
-	    form.submit();
-	});
+		$("#datepicker").datepicker({
+			format : "mm-yyyy",
+			startView : "months",
+			minViewMode : "months"
+		});
 	</script>
 	<script>
 		function showDiv(elem) {
@@ -503,3 +492,5 @@ div.panel {
 
 </body>
 </html>
+
+

@@ -26,6 +26,15 @@ public class BmsStockDetailed {
 	private float prodRejectedQty;
 	private float closingQty;
 	private int isDelStatus;
+	private String uom;
+	
+	
+	public String getUom() {
+		return uom;
+	}
+	public void setUom(String uom) {
+		this.uom = uom;
+	}
 	public int getBmsStockDeatilId() {
 		return bmsStockDeatilId;
 	}

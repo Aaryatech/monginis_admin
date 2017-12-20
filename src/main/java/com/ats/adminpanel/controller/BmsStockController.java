@@ -23,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.BmsStockDetailed;
 import com.ats.adminpanel.model.BmsStockHeader;
 import com.ats.adminpanel.model.RawMaterial.GetItemSfHeader;
@@ -239,17 +240,17 @@ public class BmsStockController {
 			bmsCurrentStock = new ArrayList<>();
 
 			
-			  String fromStockdate=request.getParameter("from_date");
+			  String fromStockdate=request.getParameter("from_datepicker");
 			  
-			  String toStockdate = request.getParameter("to_date");
+			  String toStockdate = request.getParameter("to_datepicker");
 			 
 			 int rmType=Integer.parseInt(request.getParameter("matType"));
 			 
-			 System.out.println("from Date "+fromStockdate+"\n Todate "+toStockdate+"\n RM type  "+rmType);
+			 System.out.println("from Date "+DateConvertor.convertToYMD(fromStockdate)+"\n Todate "+DateConvertor.convertToYMD(toStockdate)+"\n RM type  "+rmType);
 			 
 
-			map.add("fromDate", fromStockdate);
-			map.add("toDate", toStockdate);
+			map.add("fromDate", DateConvertor.convertToYMD(fromStockdate));
+			map.add("toDate", DateConvertor.convertToYMD(toStockdate));
 			map.add("rmType", rmType);
 
 			List<BmsStockDetailed> stockBetDate = new ArrayList<>();
