@@ -152,7 +152,7 @@ public class FinishedGoodStockController {
 	public ModelAndView finishedGoodDayEnd(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("stock/finishedGoodStock");
-		
+		 
 		System.out.println("Inside Finished Good Day End ");
 
 		Constants.mainAct = 12;
