@@ -53,6 +53,12 @@
 
 	<c:url var="findItemsByCategory" value="/getItemsByCatId"></c:url>
 	
+	
+	
+		<c:url var="finishedGoodDayEnd" value="/finishedGoodDayEnd"></c:url>
+	
+	
+	
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
 
@@ -137,7 +143,7 @@
 								<input type="hidden" id="selectedCatId" name="selectedCatId" />
 
 							</form>
-							<form action="submitProductionPlan" method="post">
+							<form action="insertOpeningStock" method="post" id="validation-form">
 
 								<div class="box">
 									<div class="box-title">
@@ -172,21 +178,30 @@
 											</table>
 										</div>
 									</div>
-								</div>
+								
 						</div>
-					</div>
-
-					<div align="center" class="form-group">
+						
+						<div align="center" class="form-group">
 
 						<div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-							<input type="submit" class="btn btn-primary" value="Submit"
-								id="callSubmit">
-
+							<input type="submit" class="btn btn-primary" value="Submit">
+								
+								<input type="button" class="btn btn-danger" value="Day End Process" id ="dayEndButton">
+								
+								
 
 						</div>
+						
 					</div>
-					</form>
+						
+						</form>
+					</div>
+
+					
+					</div>
+					<!-- </form> -->
 				</div>
+				
 			</div>
 
 
@@ -389,6 +404,25 @@
 		     
 			
 		}
+</script>
+
+<script type="text/javascript">
+
+$('#dayEndButton').click(function(){
+	
+	alert("India");
+	
+	$.getJSON('${finishedGoodDayEnd}',
+			{
+				
+				ajax : 'true',
+			
+
+}
+);
+
+});
+
 </script>
 </body>
 
