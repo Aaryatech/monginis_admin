@@ -75,13 +75,13 @@
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
-
 </head>
-<body>
+<body onload="hideStationAndShift(${isEdit})">
 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
+<c:url var="getInstrumentStatus" value="/getInstrumentStatus"/>
 
 	<div class="container" id="main-container">
 
@@ -103,7 +103,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Instrument Allocation To Station
+						<i class="fa fa-file-o"></i>Instrument Verification
 					</h1>
 
 				</div>
@@ -118,10 +118,10 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Instrument Allocation To Station
+								<i class="fa fa-bars"></i>Instrument Verification
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showInstAllocated">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAddEmployee">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -131,20 +131,18 @@
 
 
 						<div class="box-content">
-							<form action="${pageContext.request.contextPath}/addInstrumentAlloc" class="form-horizontal"
+							<form action="${pageContext.request.contextPath}/addInstVerification" class="form-horizontal"
 								method="post" id="validation-form">
-
-                      <input type="hidden" name="inst_alloc_id" id="inst_alloc_id" value="${instAllocToStationRes.instAllocId}"/>
-                      
-								
-								 <div class="form-group">
+         
+         
+          <div class="col2">
 									<label class="col-sm-3 col-lg-2 control-label">Station</label>
-									<div class="col-sm-1 col-lg-4 controls">
-									<select name="st_id" id="st_id" class="form-control" placeholder="Select Station" data-rule-required="true" >
+									<div class="col-sm-1 col-lg-3 controls">
+									<select name="st_id" id="st_id" class="form-control" placeholder="Select Station" data-rule-required="true">
 											<option value="-1">Select Station</option>
 											<c:forEach items="${spStationList}" var="spStationList">
 										    	<c:choose>
-													<c:when test="${spStationList.stId==instAllocToStationRes.stId}">
+													<c:when test="${spStationList.stId==instVerificationHeader.stationId}">
 												          <option value="${spStationList.stId}" selected><c:out value="${spStationList.stName}"></c:out></option>
 													</c:when>
 													<c:otherwise>
@@ -155,52 +153,47 @@
 								</select>	
 									</div>
 								</div>
-								
-                             
-								  <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Instruments</label>
-									<div class="col-sm-9 col-lg-10 controls">
-									<select name="inst_id" id="inst_id[]" class="form-control chosen" placeholder="Select Instruments" data-rule-required="true" multiple="multiple">
-											<option value="-1">Select Instruments</option>
-										  	<c:choose>
-											 <c:when test="${isEdit==1}">
-											           <c:forEach items="${selectedInstrumentList}" var="instrumentsList">
-
-												          <option value="${instrumentsList.instrumentId}" selected><c:out value="${instrumentsList.instrumentName}"></c:out></option>
-
-														</c:forEach>
-
-														<c:forEach items="${remInstrumentList}" var="instrumentsList">
-
-												          <option value="${instrumentsList.instrumentId}"><c:out value="${instrumentsList.instrumentName}"></c:out></option>
-
-														</c:forEach>
-											</c:when>
-											<c:otherwise>
-											<c:forEach items="${instrumentsList}" var="instrumentsList">
-
-												          <option value="${instrumentsList.instrumentId}" ><c:out value="${instrumentsList.instrumentName}"></c:out></option>
-
-														</c:forEach>
-											</c:otherwise>			
-											</c:choose>
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Shift</label>
+									<div class="col-sm-2 col-lg-3 controls">
+									<select name="shift_id" id="shift_id" class="form-control" placeholder="Select Shift" data-rule-required="true">
+											<option value="-1">Select Shift</option>
+										  	<c:forEach items="${shiftList}" var="shiftList">
+										    	<c:choose>
+													<c:when test="${shiftList.shiftId==instVerificationHeader.shiftId}">
+												          <option value="${shiftList.shiftId}" selected><c:out value="${shiftList.shiftName}"></c:out></option>
+													</c:when>
+													<c:otherwise>
+										            	  <option value="${shiftList.shiftId}"><c:out value="${shiftList.shiftName}"></c:out></option>
+													</c:otherwise>
+												</c:choose>
+											</c:forEach> 
 								</select>	
 									</div>
-								</div>  
-    
-
-								<div class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-										<input type="submit" class="btn btn-primary" value="Submit" onclick="return validation()">
-<!-- 										<button type="button" class="btn">Cancel</button>
- -->									</div>
 								</div>
-							</form>
+                             <div class="form-group">
+                             <label class="col-sm-2 col-lg-4 control-label"id="status"></label>
+									<div class="col-sm-2 col-sm-offset-4 col-lg3 col-lg-offset-4">
+									<%-- <c:choose>
+													<c:when test="${instVerificationHeader.stStatus==1}"> --%>
+													
+													<input type="button" class="btn btn-primary" id="start" value="Start" onclick="return updateCheckBoxBefore()">
+									             	&nbsp;
+													<%-- </c:when>
+													<c:otherwise> --%>
+							                    	<input type="button" class="btn btn-primary" id="close" value="Close" onclick="return updateCheckBoxAfter()">
+													<%-- </c:otherwise>
+									</c:choose> --%>
+						           </div>
+							</div> 
+							
+								<input type="hidden" name="isStationAvail" id="isStationAvail" value="0"/>
+         
 							<br>
 								<div class="box">
 									<div class="box-title">
 										<h3>
-											<i class="fa fa-table"></i>Configured Stations
+											<i class="fa fa-table"></i>Instruments Status
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i
@@ -216,31 +209,37 @@
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
-														<th width="45" style="width: 18px">Sr.No.</th>
-														<th width="100" align="left">Station</th>
-														<th width="100" align="left">Instruments</th>
+														<th width="15" style="width: 18px">Sr.No.</th>
+														<th width="150" align="left">Instruments</th>
+														<th width="80" align="left">Before</th>
+												    	<th width="80" align="left">after</th>
 													
-														<th width="81" align="left">Action</th>
+														<!-- <th width="81" align="left">Action</th> -->
 													</tr>
 												</thead>
 												<tbody>
-												<c:forEach items="${instAllocToStationList}" var="instAllocToStationList" varStatus="count">
+													   <c:forEach items="${instrumentsList}" var="instrumentsList" varStatus="count">
 														<tr>
 														
 															<td><c:out value="${count.index+1}"/></td>
-															<td align="left"><c:out
-																	value="${instAllocToStationList.stName}"></c:out></td>
-															<td align="left"><c:out
-																	value="${instAllocToStationList.instId}"></c:out></td>		
+															<td align="left"><c:out value="${instrumentsList.instrumentName}"></c:out></td>
+													       <td align="left"><input type="checkbox" name="before" id="beforeSelection${instrumentsList.instrumentId}" value="${instrumentsList.instrumentId}"disabled="disabled"> <%-- <label for="beforeSelection${count.index+1}">${instrumentsList.instrumentName}</label> --%><BR></td>		
 														
-															<td align="left"><a href="${pageContext.request.contextPath}/updateInstAllocToStation/${instAllocToStationList.instAllocId}"><span
+															<td align="left"><input type="checkbox" name="after" id="afterSelection${instrumentsList.instrumentId}" value="${instrumentsList.instrumentId}" disabled="disabled"><%-- <label for="afterSelection${count.index+1}">${instrumentsList.instrumentName}</label> --%><BR></td>
+													
+													
+														<%-- b	<td align="left"><c:out
+																	value="${stationList.empHelperName}"></c:out></td>
+																			
+															<td align="left"><a href="${pageContext.request.contextPath}/updateStationAllocation/${stationList.allocationId}"><span
 														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
                                                         
-                                                        <a href="${pageContext.request.contextPath}/deleteInstAllocToStation/${instAllocToStationList.instAllocId}"
+                                                        <a href="${pageContext.request.contextPath}/deleteStationAllocation/${stationList.}"
 													    onClick="return confirm('Are you sure want to delete this record');"><span
-														class="glyphicon glyphicon-remove"></span></a></td>	
+														class="glyphicon glyphicon-remove"></span></a></td>	 --%>
 														 
 														</tr>
+													  <c:if test="${count.last}"><input type="hidden" name="cnt" id="cnt" value="${count.index}"/></c:if>
 
 													</c:forEach>
 												</tbody>
@@ -248,7 +247,13 @@
 										</div>
 									</div>
 								</div>
-							
+								<div class="form-group">
+									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+										<input type="submit" class="btn btn-primary" value="Submit" onclick="return validation()">
+<!-- 										<button type="button" class="btn">Cancel</button>
+ -->									</div>
+								</div>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -332,6 +337,73 @@
 
 </body>
 <script type="text/javascript">
+$(document).ready(function() { 
+	$('#st_id').change(
+			function() {
+
+
+	$.getJSON('${getInstrumentStatus}', {
+					stationId : $(this).val(),
+					ajax : 'true',
+				},  function(data) {
+					
+					if(data.error==false)
+					{
+						//alert("shift"+data.shiftId)
+						
+					//	document.getElementById('start').style.visibility = 'hidden';
+						//getElementById('close').style.visibility = 'show';
+						 document.getElementById("shift_id").options.selectedIndex =data.shiftId;
+						 document.getElementById("isStationAvail").value =0;
+ 
+						  document.getElementById('status').innerHTML = 'Station is Running';
+						  document.getElementById('status').style.color = "Red";
+						  
+						 var chks = document.getElementsByName("before");
+					       // document.getElementById('start').style.visibility = 'hidden';
+					            for (var i = 0; i <= chks.length - 1; i++) {
+					                chks[i].disabled = false;
+					            }
+					            $.each(data.instVerificationDetailList,function(key, detail) {
+					            
+					            	document.getElementById('start').style.visibility = 'hidden';
+					            	if(detail.bef==1)
+					            		{
+					       
+					            	 document.getElementById("beforeSelection"+detail.instId).checked =true;
+					            	 document.getElementById("beforeSelection"+detail.instId).disabled=true;
+						            //	document.getElementById("beforeSelection"+detail.instId).style.visibility = 'hidden';
+
+					            		}
+					            })
+					            
+				    }
+					else
+						{
+						 document.getElementById("isStationAvail").value =1;
+						  document.getElementById('status').innerHTML = 'Station is Available';
+						  document.getElementById('status').style.color = "green";
+						//document.getElementById('close').style.visibility = 'hidden';
+						//document.getElementById('start').style.visibility = 'show';
+					//document.getElementById("beforeSelection"+detail.instId).disabled=false;
+
+						 // document.getElementById("before").checked =false;
+						    var chks = document.getElementsByName("before");
+
+            // document.getElementById('start').style.visibility = 'hidden';
+            for (var i = 0; i <= chks.length - 1; i++) {
+                chks[i].checked = false;
+            }
+       
+			            	 document.getElementById("beforeSelection"+detail.instId).disabled=true;
+						}
+					});
+			});
+			
+});
+
+</script>
+<script type="text/javascript">
 function validation() {
 	
 	var stId = $("#st_id").val();
@@ -355,5 +427,32 @@ function validation() {
 	}
 	return isValid;
 }
+
+</script>
+<script>
+    function updateCheckBoxBefore() {
+    	
+        var chks = document.getElementsByName("before");
+
+       // document.getElementById('start').style.visibility = 'hidden';
+            for (var i = 0; i <= chks.length - 1; i++) {
+                chks[i].disabled = false;
+            }
+       
+        }
+  
+</script>
+<script>
+    function updateCheckBoxAfter() {
+        var chks = document.getElementsByName("after");
+
+      //  document.getElementById('close').style.visibility = 'hidden';
+
+            for (var i = 0; i <= chks.length - 1; i++) {
+                chks[i].disabled = false;
+            }
+       
+        }
+  
 </script>
 </html>

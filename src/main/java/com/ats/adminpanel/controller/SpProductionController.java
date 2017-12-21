@@ -1,36 +1,62 @@
 package com.ats.adminpanel.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.RawMaterial.GetItemSfHeader;
 import com.ats.adminpanel.model.RawMaterial.RmItemCategory;
 import com.ats.adminpanel.model.item.ErrorMessage;
+import com.ats.adminpanel.model.login.UserResponse;
 import com.ats.adminpanel.model.spprod.Employee;
 import com.ats.adminpanel.model.spprod.EmployeeList;
+import com.ats.adminpanel.model.spprod.GetAllocStationCk;
 import com.ats.adminpanel.model.spprod.GetEmployeeList;
+import com.ats.adminpanel.model.spprod.GetInstVerifHeader;
+import com.ats.adminpanel.model.spprod.GetInstrVerifHeader;
+import com.ats.adminpanel.model.spprod.InstAllocToStation;
+import com.ats.adminpanel.model.spprod.InstAllocToStationList;
+import com.ats.adminpanel.model.spprod.InstVerificationDetail;
+import com.ats.adminpanel.model.spprod.InstVerificationHeader;
 import com.ats.adminpanel.model.spprod.Instrument;
 import com.ats.adminpanel.model.spprod.InstrumentList;
 import com.ats.adminpanel.model.spprod.MDept;
 import com.ats.adminpanel.model.spprod.MDeptList;
 import com.ats.adminpanel.model.spprod.Shift;
 import com.ats.adminpanel.model.spprod.ShiftList;
+import com.ats.adminpanel.model.spprod.SpCkAllocDetail;
+import com.ats.adminpanel.model.spprod.SpCkAllocHeader;
 import com.ats.adminpanel.model.spprod.SpStation;
 import com.ats.adminpanel.model.spprod.SpStationList;
 import com.ats.adminpanel.model.spprod.StationAllocList;
 import com.ats.adminpanel.model.spprod.StationAllocation;
+import com.ats.adminpanel.model.spprod.StationSpCake;
+import com.ats.adminpanel.model.spprod.StationSpCakeList;
+import com.ats.adminpanel.model.spprod.StationWiseCkCount;
 import com.ats.adminpanel.model.spprod.TypeList;
 
 @Controller
@@ -38,9 +64,12 @@ public class SpProductionController {
 
 	private int empType = 1;// employee Type
 	private int instType = 2;// instrument Type
-    private int mistryId=101;
-    private int helperId=102;
-	
+	private int mistryId = 101;
+	private int helperId = 102;
+	private static InstVerificationHeader instVerificationHeaderRes = null;
+	private static int userId = 0;
+	private static StationSpCakeList stationSpCakeList=new StationSpCakeList();
+
 	@RequestMapping(value = "/showAddEmployee", method = RequestMethod.GET)
 	public ModelAndView showAddEmployee(HttpServletRequest request, HttpServletResponse response) {
 
@@ -834,8 +863,8 @@ public class SpProductionController {
 	@RequestMapping(value = "/configureStation", method = RequestMethod.GET)
 	public ModelAndView configureStation(HttpServletRequest request, HttpServletResponse response) {
 
-		// Constants.mainAct = 19;
-		// Constants.subAct = 191;
+		 Constants.mainAct = 19;
+		 Constants.subAct = 195;
 
 		ModelAndView model = new ModelAndView("spProduction/configureStation");
 		try {
@@ -847,28 +876,29 @@ public class SpProductionController {
 			MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
 			mvm.add("empType", mistryId);
 
-			GetEmployeeList employeeList = restTemplate.postForObject(Constants.url + "/spProduction/getEmployeesByType", mvm,
-					GetEmployeeList.class);
+			GetEmployeeList employeeList = restTemplate
+					.postForObject(Constants.url + "/spProduction/getEmployeesByType", mvm, GetEmployeeList.class);
 			System.out.println("Response: " + employeeList.toString());
-			
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("empType",helperId);
 
-			GetEmployeeList helperList = restTemplate.postForObject(Constants.url + "/spProduction/getEmployeesByType", map,
-					GetEmployeeList.class);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("empType", helperId);
+
+			GetEmployeeList helperList = restTemplate.postForObject(Constants.url + "/spProduction/getEmployeesByType",
+					map, GetEmployeeList.class);
 			System.out.println("Response: " + helperList.toString());
 
 			ShiftList shiftListRes = restTemplate.getForObject(Constants.url + "/spProduction/getShiftList",
 					ShiftList.class);
 			System.out.println("Response: " + shiftListRes.toString());
 
-			StationAllocList stationAllocList=restTemplate.getForObject(Constants.url + "/spProduction/getStationAllocList",StationAllocList.class);
-		
+			StationAllocList stationAllocList = restTemplate
+					.getForObject(Constants.url + "/spProduction/getStationAllocList", StationAllocList.class);
+
 			model.addObject("stationAllocList", stationAllocList.getStationAllocationList());
 
 			model.addObject("shiftList", shiftListRes.getShiftList());
 			model.addObject("spStationList", spStationList.getSpStationList());
-			model.addObject("isEdit",0);
+			model.addObject("isEdit", 0);
 			model.addObject("helperList", helperList.getGetEmpList());
 			model.addObject("employeeList", employeeList.getGetEmpList());
 		} catch (Exception e) {
@@ -878,7 +908,8 @@ public class SpProductionController {
 	}
 
 	// ----------------------------------------------------------------------------------------------------------
-	// ------------------------------ADD StAllocation Process------------------------------------
+	// ------------------------------ADD StAllocation
+	// Process------------------------------------
 	@RequestMapping(value = "/addStationAllocation", method = RequestMethod.POST)
 	public String addStationAllocation(HttpServletRequest request, HttpServletResponse response) {
 
@@ -889,6 +920,7 @@ public class SpProductionController {
 			try {
 				allocationId = Integer.parseInt(request.getParameter("allocation_id"));
 
+				System.out.println("try : allocationId" + allocationId);
 			} catch (Exception e) {
 				allocationId = 0;
 
@@ -897,12 +929,16 @@ public class SpProductionController {
 			}
 
 			int stId = Integer.parseInt(request.getParameter("st_id"));
+			System.out.println("stId" + stId);
 
 			int shiftId = Integer.parseInt(request.getParameter("shift_id"));
+			System.out.println("shiftId" + shiftId);
 
 			int mId = Integer.parseInt(request.getParameter("m_id"));
+			System.out.println("mId" + mId);
 
 			int hId = Integer.parseInt(request.getParameter("h_id"));
+			System.out.println("hId" + hId);
 
 			StationAllocation stationAllocation = new StationAllocation();
 			stationAllocation.setAllocationId(allocationId);
@@ -934,7 +970,8 @@ public class SpProductionController {
 	}
 
 	// ----------------------------------------END-------------------------------------------------------------
-	// ------------------------------Edit StAllocation-------------------------------------------------------------
+	// ------------------------------Edit
+	// StAllocation-------------------------------------------------------------
 
 	@RequestMapping(value = "/updateStationAllocation/{allocationId}", method = RequestMethod.GET)
 	public ModelAndView updateStationAllocation(@PathVariable int allocationId) {
@@ -946,8 +983,8 @@ public class SpProductionController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("allocationId", allocationId);
 
-			StationAllocation stationAllocation = rest
-					.postForObject(Constants.url + "/spProduction/getStationAlloc", map, StationAllocation.class);
+			StationAllocation stationAllocation = rest.postForObject(Constants.url + "/spProduction/getStationAlloc",
+					map, StationAllocation.class);
 			System.out.println(stationAllocation.toString());
 
 			SpStationList spStationList = rest.getForObject(Constants.url + "/spProduction/getSpStationList",
@@ -956,24 +993,22 @@ public class SpProductionController {
 			MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
 			mvm.add("empType", mistryId);
 
-			
 			GetEmployeeList employeeList = rest.postForObject(Constants.url + "/spProduction/getEmployeesByType", mvm,
 					GetEmployeeList.class);
 			System.out.println("Response: " + employeeList.toString());
-			
-			MultiValueMap<String, Object> mvc= new LinkedMultiValueMap<String, Object>();
+
+			MultiValueMap<String, Object> mvc = new LinkedMultiValueMap<String, Object>();
 			mvc.add("empType", helperId);
 
 			GetEmployeeList helperList = rest.postForObject(Constants.url + "/spProduction/getEmployeesByType", mvc,
 					GetEmployeeList.class);
 			System.out.println("Response: " + helperList.toString());
 
-			ShiftList shiftListRes = rest.getForObject(Constants.url + "/spProduction/getShiftList",
-					ShiftList.class);
+			ShiftList shiftListRes = rest.getForObject(Constants.url + "/spProduction/getShiftList", ShiftList.class);
 			System.out.println("Response: " + shiftListRes.toString());
 
-			StationAllocList stationAllocList=rest.getForObject(Constants.url + "/spProduction/getStationAllocList",StationAllocList.class);
-		
+			StationAllocList stationAllocList = rest.getForObject(Constants.url + "/spProduction/getStationAllocList",
+					StationAllocList.class);
 
 			if (stationAllocation != null) {
 
@@ -985,7 +1020,7 @@ public class SpProductionController {
 				mav.addObject("spStationList", spStationList.getSpStationList());
 				mav.addObject("helperList", helperList.getGetEmpList());
 				mav.addObject("employeeList", employeeList.getGetEmpList());
-				mav.addObject("isEdit",1);
+				mav.addObject("isEdit", 1);
 			}
 
 		} catch (Exception e) {
@@ -997,67 +1032,804 @@ public class SpProductionController {
 	}
 
 	// -------------------------------------------------------------------------------------------------------
-	// -------------------------------Delete Shift---------------------------------
-		@RequestMapping(value = "/deleteStationAllocation/{allocationId}", method = RequestMethod.GET)
-		public String deleteStationAllocation(@PathVariable int allocationId) {
+	// -------------------------------Delete StationAllocation---------------------------------
+	@RequestMapping(value = "/deleteStationAllocation/{allocationId}", method = RequestMethod.GET)
+	public String deleteStationAllocation(@PathVariable int allocationId) {
 
-			ModelAndView mav = new ModelAndView("spProduction/configureStation");
-			try {
+		ModelAndView mav = new ModelAndView("spProduction/configureStation");
+		try {
 
-				RestTemplate rest = new RestTemplate();
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				map.add("allocationId", allocationId);
+			RestTemplate rest = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("allocationId", allocationId);
 
-				Info errorResponse = rest.postForObject(Constants.url + "/spProduction/deleteStationAllocation", map, Info.class);
-				System.out.println(errorResponse.toString());
+			Info errorResponse = rest.postForObject(Constants.url + "/spProduction/deleteStationAllocation", map,
+					Info.class);
+			System.out.println(errorResponse.toString());
 
-				if (errorResponse.getError()) {
-
-					return "redirect:/configureStation";
-
-				} else {
-					return "redirect:/configureStation";
-
-				}
-			} catch (Exception e) {
-				System.out.println("Exception In delete configuredStation :" + e.getMessage());
+			if (errorResponse.getError()) {
 
 				return "redirect:/configureStation";
 
+			} else {
+				return "redirect:/configureStation";
+
 			}
+		} catch (Exception e) {
+			System.out.println("Exception In delete configuredStation :" + e.getMessage());
+
+			return "redirect:/configureStation";
 
 		}
 
-		// ----------------------------------------END------------------------------------------------------------
-		
+	}
 
-		@RequestMapping(value = "/instrumentAllocation", method = RequestMethod.GET)
-		public ModelAndView instrumentAllocation(HttpServletRequest request, HttpServletResponse response) {
+	// ----------------------------------------END------------------------------------------------------------
 
-			// Constants.mainAct = 19;
-			// Constants.subAct = 191;
+	@RequestMapping(value = "/instrumentAllocation", method = RequestMethod.GET)
+	public ModelAndView instrumentAllocation(HttpServletRequest request, HttpServletResponse response) {
 
-			ModelAndView model = new ModelAndView("spProduction/instrumentAlloc");
+		 Constants.mainAct = 19;
+		 Constants.subAct = 196;
+		int isEdit = 0;
+		ModelAndView model = new ModelAndView("spProduction/instrumentAlloc");
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+
+			SpStationList spStationList = restTemplate.getForObject(Constants.url + "/spProduction/getSpStationList",
+					SpStationList.class);
+			System.out.println("Response: " + spStationList.toString());
+			MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
+			mvm.add("instType", instType);
+
+			InstrumentList instrumentsList = restTemplate
+					.postForObject(Constants.url + "/spProduction/getInstrumentList", mvm, InstrumentList.class);
+			System.out.println("Response: " + instrumentsList.toString());
+
+			InstAllocToStationList instAllocToStationList = restTemplate
+					.getForObject(Constants.url + "/spProduction/getInstAllocToStList", InstAllocToStationList.class);
+
+			model.addObject("spStationList", spStationList.getSpStationList());
+			model.addObject("instrumentsList", instrumentsList.getInstrumentList());
+			model.addObject("instAllocToStationList", instAllocToStationList.getInstAllocList());
+			model.addObject("isEdit", isEdit);
+		} catch (Exception e) {
+			System.out.println("Exc In instrumentAllocation:" + e.getMessage());
+		}
+		return model;
+	}
+
+	// ------------------------------ADD StAllocation Process------------------------------------
+	@RequestMapping(value = "/addInstrumentAlloc", method = RequestMethod.POST)
+	public String addInstrumentAlloc(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("spProduction/instrumentAlloc");
+		try {
+			int instAllocId = 0;
+
 			try {
-				RestTemplate restTemplate = new RestTemplate();
+				instAllocId = Integer.parseInt(request.getParameter("inst_alloc_id"));
 
-				SpStationList spStationList = restTemplate.getForObject(Constants.url + "/spProduction/getSpStationList",
-						SpStationList.class);
-				System.out.println("Response: " + spStationList.toString());
-				MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
-				mvm.add("instType", instType);
-
-				InstrumentList instrumentsList = restTemplate
-						.postForObject(Constants.url + "/spProduction/getInstrumentList", mvm, InstrumentList.class);
-				System.out.println("Response: " + instrumentsList.toString());
-				
-				
-				model.addObject("spStationList", spStationList.getSpStationList());
-				model.addObject("instrumentsList", instrumentsList.getInstrumentList());
-				
+				System.out.println("try : instAllocId" + instAllocId);
 			} catch (Exception e) {
-				System.out.println("Exc In instrumentAllocation:" + e.getMessage());
+				instAllocId = 0;
+
+				System.out.println("In Catch of Add StAllocation Process Exc:" + e.getMessage());
+
+			}
+
+			int stId = Integer.parseInt(request.getParameter("st_id"));
+			System.out.println("stId" + stId);
+
+			String[] instId = request.getParameterValues("inst_id");
+			System.out.println("mId" + instId);
+
+			StringBuilder sb = new StringBuilder();
+
+			for (int i = 0; i < instId.length; i++) {
+				sb = sb.append(instId[i] + ",");
+
+			}
+			String instruments = sb.toString();
+			instruments = instruments.substring(0, instruments.length() - 1);
+
+			System.out.println("instruments" + instruments);
+
+			InstAllocToStation instAllocToStation = new InstAllocToStation();
+
+			instAllocToStation.setInstAllocId(instAllocId);
+			instAllocToStation.setInstId(instruments);
+			instAllocToStation.setStId(stId);
+			instAllocToStation.setDelStatus(0);
+			System.out.println("InstAllocToStation:" + instAllocToStation.toString());
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			ErrorMessage errorMessage = restTemplate.postForObject(
+					Constants.url + "/spProduction/saveInstAllocToStation", instAllocToStation, ErrorMessage.class);
+			System.out.println("Response: " + errorMessage.toString());
+
+			if (errorMessage.getError() == true) {
+
+				System.out.println("Error:True" + errorMessage.toString());
+				return "redirect:/instrumentAllocation";
+			} else {
+				return "redirect:/instrumentAllocation";
+			}
+		} catch (Exception e) {
+			System.out.println("Exception In instrumentAllocation Process:" + e.getMessage());
+		}
+
+		return "redirect:/instrumentAllocation";
+	}
+
+	// ----------------------------------------END-------------------------------------------------------------
+	// -------------------------------Delete InstAllocToStation---------------------------------
+	@RequestMapping(value = "/deleteInstAllocToStation/{instAllocId}", method = RequestMethod.GET)
+	public String deleteInstrumentAlloc(@PathVariable int instAllocId) {
+
+		ModelAndView mav = new ModelAndView("spProduction/instrumentAlloc");
+		try {
+
+			RestTemplate rest = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("instAllocId", instAllocId);
+
+			Info errorResponse = rest.postForObject(Constants.url + "/spProduction/deleteInstAllocToStation", map,
+					Info.class);
+			System.out.println(errorResponse.toString());
+
+			if (errorResponse.getError()) {
+
+				return "redirect:/instrumentAllocation";
+
+			} else {
+				return "redirect:/instrumentAllocation";
+
+			}
+		} catch (Exception e) {
+			System.out.println("Exception In delete instrumentAllocation :" + e.getMessage());
+
+			return "redirect:/instrumentAllocation";
+
+		}
+
+	}
+
+	// ----------------------------------------END------------------------------------------------------------
+	// ------------------------------updateInstAllocToStation-------------------------------------------------------------
+
+	@RequestMapping(value = "/updateInstAllocToStation/{instAllocId}", method = RequestMethod.GET)
+	public ModelAndView updateInstAllocToStation(@PathVariable int instAllocId) {
+
+		ModelAndView mav = new ModelAndView("spProduction/instrumentAlloc");
+		try {
+
+			int isEdit = 1;
+
+			RestTemplate rest = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("instAllocId", instAllocId);
+
+			InstAllocToStation instAllocToStationRes = rest.postForObject(
+					Constants.url + "/spProduction/getInstAllocToStation", map, InstAllocToStation.class);
+			System.out.println(instAllocToStationRes.toString());
+
+			MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
+			mvm.add("instType", instType);
+
+			InstrumentList instrumentsList = rest.postForObject(Constants.url + "/spProduction/getInstrumentList", mvm,
+					InstrumentList.class);
+			System.out.println("Response: " + instrumentsList.toString());
+
+			String instIds = instAllocToStationRes.getInstId();
+
+			List<String> frPrevInstList = Arrays.asList(instIds.split("\\s*,\\s*"));
+
+			List<Instrument> selectedInstrumentList = new ArrayList<Instrument>();
+			List<Instrument> tempInstrumentList = instrumentsList.getInstrumentList();
+
+			for (int i = 0; i < frPrevInstList.size(); i++) {
+				for (int j = 0; j < instrumentsList.getInstrumentList().size(); j++) {
+					if (Integer.parseInt(frPrevInstList.get(i)) == instrumentsList.getInstrumentList().get(j)
+							.getInstrumentId()) {
+						selectedInstrumentList.add(instrumentsList.getInstrumentList().get(j));
+						tempInstrumentList.remove(j);
+
+					}
+				}
+
+			}
+
+			InstAllocToStationList instAllocToStationList = rest
+					.getForObject(Constants.url + "/spProduction/getInstAllocToStList", InstAllocToStationList.class);
+
+			SpStationList spStationList = rest.getForObject(Constants.url + "/spProduction/getSpStationList",
+					SpStationList.class);
+			System.out.println("Response: " + spStationList.toString());
+
+			if (instAllocToStationRes != null) {
+
+				mav.addObject("instAllocToStationList", instAllocToStationList.getInstAllocList());
+				mav.addObject("spStationList", spStationList.getSpStationList());
+				mav.addObject("instrumentsList", instrumentsList.getInstrumentList());
+				mav.addObject("instAllocToStationRes", instAllocToStationRes);
+				mav.addObject("selectedInstrumentList", selectedInstrumentList);
+				mav.addObject("remInstrumentList", tempInstrumentList);
+				mav.addObject("isEdit", isEdit);
+			}
+
+		} catch (Exception e) {
+			System.out.println("Exception In updateInstAllocToStation:" + e.getMessage());
+
+			return mav;
+		}
+		return mav;
+	}
+
+	// -------------------------------------------------------------------------------------------------------
+	@RequestMapping(value = "/instrVerification", method = RequestMethod.GET)
+	public ModelAndView instVerification(HttpServletRequest request, HttpServletResponse response) {
+
+	    Constants.mainAct = 19;
+		Constants.subAct = 197;
+		int isEdit = 0;
+		ModelAndView model = new ModelAndView("spProduction/InstVerification");
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			instVerificationHeaderRes = new InstVerificationHeader();
+
+			SpStationList spStationList = restTemplate.getForObject(Constants.url + "/spProduction/getSpStationList",
+					SpStationList.class);
+			System.out.println("Response: " + spStationList.toString());
+			MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
+			mvm.add("instType", instType);
+
+			InstrumentList instrumentsList = restTemplate
+					.postForObject(Constants.url + "/spProduction/getInstrumentList", mvm, InstrumentList.class);
+			System.out.println("Response: " + instrumentsList.toString());
+
+			ShiftList shiftListRes = restTemplate.getForObject(Constants.url + "/spProduction/getShiftList",
+					ShiftList.class);
+			System.out.println("Response: " + shiftListRes.toString());
+
+			model.addObject("shiftList", shiftListRes.getShiftList());
+			model.addObject("spStationList", spStationList.getSpStationList());
+			model.addObject("instrumentsList", instrumentsList.getInstrumentList());
+			
+		} catch (Exception e) {
+			System.out.println("Exc In InstrumentVerification:" + e.getMessage());
+		}
+		return model;
+	}
+
+	// -------------------------------------------------------------------------------------------------------
+	@RequestMapping(value = "/getInstrumentStatus", method = RequestMethod.GET)
+	public @ResponseBody InstVerificationHeader getInstrumentStatus(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		int stationId = Integer.parseInt(request.getParameter("stationId"));
+		MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
+		mvm.add("stationId", stationId);
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		instVerificationHeaderRes = restTemplate.postForObject(Constants.url + "/spProduction/getStationStatus", mvm,
+				InstVerificationHeader.class);
+
+		return instVerificationHeaderRes;
+	}
+
+	// ------------------------------ADD InstVerification Process------------------------------------
+	@RequestMapping(value = "/addInstVerification", method = RequestMethod.POST)
+	public String addInstVerification(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("spProduction/InstVerification");
+
+		HttpSession session = request.getSession();
+		UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
+
+		
+		try {
+			userId = userResponse.getUser().getId();
+		} catch (Exception e) {
+			userId = 0;
+			System.out.println("User Id not Found Exc:");
+		}
+		System.out.println("userId:" + userId);
+
+		int stationId = Integer.parseInt(request.getParameter("st_id"));
+		System.out.println("Station Id:" + stationId);
+
+		int shiftId = Integer.parseInt(request.getParameter("shift_id"));
+		System.out.println("Shift Id:" + shiftId);
+
+		int isStationAvail = Integer.parseInt(request.getParameter("isStationAvail"));
+		System.out.println("isStationAvail" + isStationAvail);
+
+		// int lastIndex=Integer.parseInt(request.getParameter("cnt"));
+		try {
+			InstVerificationHeader instVerificationHeader = new InstVerificationHeader();
+			System.out.println("instVerificationHeaderRes" + instVerificationHeaderRes.toString());
+
+			if (instVerificationHeaderRes.isError() == false) {
+				System.out.println("instVerificationHeaderRes is Not null!! ");
+
+				instVerificationHeader = instVerificationHeaderRes;
+				System.out.println("instVerificationHeader:" + instVerificationHeader.toString());
+				System.out.println(
+						"instVerificationDetail:" + instVerificationHeader.getInstVerificationDetailList().toString());
+
+				String[] selectedBeforeInstr = null;
+				String[] selectedAfterInstr = null;
+				
+				if (isStationAvail == 1) {
+					selectedBeforeInstr = request.getParameterValues("before");
+					System.out.println("selectedBeforeInstr" + selectedBeforeInstr);
+
+					instVerificationHeader.setStartTime(java.time.LocalTime.now().toString());
+					instVerificationHeader.setStStatus(1);
+				} else if (isStationAvail == 0) {
+					selectedAfterInstr = request.getParameterValues("after");
+					System.out.println("selectedAfterInstr" + selectedAfterInstr.toString());
+
+					instVerificationHeader.setEndTime(java.time.LocalTime.now().toString());
+					instVerificationHeader.setStStatus(2);
+				}
+				
+
+				instVerificationHeader.setInstVerifDate(new Date());
+				instVerificationHeader.setUserId(userId);
+				instVerificationHeader.setStationId(stationId);
+				instVerificationHeader.setShiftId(shiftId);
+				instVerificationHeader.setDelStatus(0);
+
+				if (isStationAvail == 1) {
+					List<String> list = Arrays.asList(selectedBeforeInstr);
+					System.out.println("selectedBeforeInstr List:--" + list.toString());
+
+					for (int i = 0; i < instVerificationHeader.getInstVerificationDetailList().size(); i++) {
+						for (int j = 0; j < list.size(); j++) {
+
+							if (instVerificationHeader.getInstVerificationDetailList().get(i).getInstId() == Integer
+									.parseInt(list.get(j))) {
+								instVerificationHeader.getInstVerificationDetailList().get(i).setBef(1);
+
+							}
+
+						}
+					}
+				}
+				if (isStationAvail == 0) {
+					List<String> list = Arrays.asList(selectedAfterInstr);
+
+					System.out.println("selectedAfterInstr List:--" + list.toString());
+					for (int i = 0; i < instVerificationHeader.getInstVerificationDetailList().size(); i++) {
+						for (int j = 0; j < list.size(); j++) {
+
+							if (instVerificationHeader.getInstVerificationDetailList().get(i).getInstId() == Integer
+									.parseInt(list.get(j))) {
+								instVerificationHeader.getInstVerificationDetailList().get(i).setAft(1);
+
+							}
+
+						}
+					}
+				}
+				System.out.println("instVerificationHeader1:--"
+						+ instVerificationHeader.getInstVerificationDetailList().toString());
+
+			} // if Header is not null
+			else {
+				System.out.println("instVerificationHeaderRes is null!! ");
+
+				// if Header is null
+				instVerificationHeader = new InstVerificationHeader();
+
+				instVerificationHeader.setInstVerifHId(0);
+				instVerificationHeader.setUserId(userId);
+				instVerificationHeader.setDelStatus(0);
+				instVerificationHeader.setInstVerifDate(new Date());
+				instVerificationHeader.setShiftId(shiftId);
+				instVerificationHeader.setStationId(stationId);
+				instVerificationHeader.setStStatus(1);
+				instVerificationHeader.setStartTime(java.time.LocalTime.now().toString());
+				instVerificationHeader.setEndTime("00:00:00");
+				System.out.println("instVerificationHeader" + instVerificationHeader.toString());
+
+				List<InstVerificationDetail> instVerificationDetailList = new ArrayList<InstVerificationDetail>();
+
+				String[] selectedBeforeInstr = null;
+				String[] selectedAfterInstr = null;
+				List<String> beforeInstrList = null;
+				List<String> afterInstrList = null;
+				
+				if (isStationAvail == 1) {
+					selectedBeforeInstr = request.getParameterValues("before");
+					System.out.println("selectedBeforeInstr" + selectedBeforeInstr);
+					beforeInstrList = Arrays.asList(selectedBeforeInstr);
+					System.out.println("selectedBeforeInstr" + beforeInstrList.toString());
+
+					instVerificationHeader.setStartTime(java.time.LocalTime.now().toString());
+					instVerificationHeader.setStStatus(1);
+				} else if (isStationAvail == 0) {
+					selectedAfterInstr = request.getParameterValues("after");
+					System.out.println("selectedAfterInstr" + selectedAfterInstr.toString());
+					afterInstrList = Arrays.asList(selectedAfterInstr);
+					System.out.println("selectedAfterInstr" + afterInstrList.toString());
+
+					instVerificationHeader.setEndTime(java.time.LocalTime.now().toString());
+					instVerificationHeader.setStStatus(2);
+				}
+				if (isStationAvail == 1) {
+
+					for (int j = 0; j < beforeInstrList.size(); j++) {
+						InstVerificationDetail iVerificationDetail = new InstVerificationDetail();
+
+						iVerificationDetail.setInstVerifDId(0);
+						iVerificationDetail.setInstVerifHId(0);
+						iVerificationDetail.setInstId(Integer.parseInt(beforeInstrList.get(j)));
+						iVerificationDetail.setBef(1);
+						iVerificationDetail.setAft(0);
+
+						instVerificationDetailList.add(iVerificationDetail);
+					}
+				}
+				if (isStationAvail == 0) {
+
+					for (int j = 0; j < afterInstrList.size(); j++) {
+						InstVerificationDetail iVerificationDetail = new InstVerificationDetail();
+
+						iVerificationDetail.setInstVerifDId(0);
+						iVerificationDetail.setInstVerifHId(0);
+						iVerificationDetail.setInstId(Integer.parseInt(afterInstrList.get(j)));
+						iVerificationDetail.setBef(0);
+						iVerificationDetail.setAft(1);
+
+						instVerificationDetailList.add(iVerificationDetail);
+					}
+				}
+
+				instVerificationHeader.setInstVerificationDetailList(instVerificationDetailList);
+			}
+			RestTemplate restTemplate = new RestTemplate();
+
+			Info info = restTemplate.postForObject(Constants.url + "/spProduction/saveInstVerification",
+					instVerificationHeader, Info.class);
+
+			System.out.println("Response:" + info.toString());
+		} catch (Exception e) {
+			System.out.println("Exception In Saving Inst Verification!!" + e.getMessage());
+
+		}
+		return "redirect:/instrVerification";
+	}
+
+	// -------------------------------------------------------------------------------------------------------
+	@RequestMapping(value = "/instrVerifDetails", method = RequestMethod.GET)
+	public ModelAndView instrVerifDetails(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("spProduction/instVerifHeader");
+		
+		 Constants.mainAct = 19;
+			Constants.subAct = 198;
+    try {
+		RestTemplate restTemplate = new RestTemplate();
+
+		List<GetInstVerifHeader> getInstVerifHeaderRes = restTemplate
+				.getForObject(Constants.url + "/spProduction/getInstVerHeaders", List.class);
+
+		model.addObject("getInstVerifHeaderRes", getInstVerifHeaderRes);
+    }
+    catch(Exception e)
+    {
+    	System.out.println("Exception in /instrVerifDetails");
+    }
+		return model;
+	}
+	// --------------------------------------------------------------------------------------------------------------
+	// -------------------------------------------------------------------------------------------------------
+		@RequestMapping(value = "/showInstrVeriDetails/{instVerifHId}", method = RequestMethod.GET)
+		public ModelAndView showInstVeriDetails(@PathVariable int instVerifHId,HttpServletRequest request, HttpServletResponse response) {
+
+			ModelAndView model = new ModelAndView("spProduction/instVerifDetail");
+			  
+				
+			System.out.println("instVerifHId"+instVerifHId);
+			try
+			{
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
+			mvm.add("instVerifId",instVerifHId);
+			
+			GetInstrVerifHeader getInstrVerifHeaderRes = restTemplate
+					.postForObject(Constants.url + "/spProduction/getInstVerifHDetails",mvm, GetInstrVerifHeader.class);
+
+			System.out.println("getInstrVerifHeaderRes"+getInstrVerifHeaderRes.getInstVerificationDetailList().toString());
+			
+			model.addObject("getInstrVerifDetailRes", getInstrVerifHeaderRes.getInstVerificationDetailList());
+			model.addObject("getInstrVerifHeaderRes", getInstrVerifHeaderRes);
+
+			}
+			catch(Exception e)
+			{
+				System.out.println("Exc"+e.getMessage());
+				e.printStackTrace();
 			}
 			return model;
 		}
+		// --------------------------------------------------------------------------------------------------------------
+		// -------------------------------------------------------------------------------------------------------
+		@RequestMapping(value = "/showCkAllocToStation", method = RequestMethod.GET)
+		public ModelAndView showCkAllocToStation(HttpServletRequest request, HttpServletResponse response) {
+
+			 Constants.mainAct = 19;
+			 Constants.subAct = 199;
+			ModelAndView model = new ModelAndView("spProduction/ckAllocToStation");
+	    try {
+			RestTemplate restTemplate = new RestTemplate();
+			SpStationList spStationList = restTemplate.getForObject(Constants.url + "/spProduction/getSpStationList",
+					SpStationList.class);
+			System.out.println("Response: " + spStationList.toString());
+			
+			List<StationWiseCkCount> stWiseCkList=restTemplate.getForObject(Constants.url + "/spProduction/getStationwiseCkCount",List.class);
+			System.out.println("Response: " + stWiseCkList.toString());
+
+			
+			ShiftList shiftListRes = restTemplate.getForObject(Constants.url + "/spProduction/getShiftList",
+					ShiftList.class);
+			System.out.println("Response: " + shiftListRes.toString());
+
+			model.addObject("shiftList", shiftListRes.getShiftList());
+			
+			 stationSpCakeList=restTemplate.getForObject(Constants.url + "/spProduction/getStationSpCakeList",StationSpCakeList.class);
+			
+			model.addObject("stationSpCakeList", stationSpCakeList.getStationSpCakeList());
+			model.addObject("spStationList", spStationList.getSpStationList());
+			model.addObject("stWiseCkList", stWiseCkList);
+	    }
+	    catch(Exception e)
+	    {
+	    	System.out.println("Exception in /showCkAllocToStation");
+	    }
+			return model;
+		}
+		// --------------------------------------------------------------------------------------------------------------
+		
+
+		// -------------------------------------------------------------------------------------------------------
+				@RequestMapping(value = "/addCkAllocToStation", method = RequestMethod.POST)
+				public String addCkAllocToStation(HttpServletRequest request, HttpServletResponse response) {
+
+					ModelAndView model = new ModelAndView("spProduction/ckAllocToStation");
+			    try {
+			    	HttpSession session = request.getSession();
+					UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
+
+						userId = userResponse.getUser().getId();
+			    	
+			    	int stationId=Integer.parseInt(request.getParameter("st_id"));
+			    	System.out.println("Station Id:"+stationId);
+			    	
+			    	String[] spId=request.getParameterValues("spck_id");
+			    	System.out.println("spId"+spId.toString());
+			        List<String> spIdList = Arrays.asList(spId);  
+			        
+			    	int shiftId=Integer.parseInt(request.getParameter("shift_id"));
+			    	System.out.println("shiftId"+shiftId);
+
+			    	
+			    	RestTemplate restTemplate = new RestTemplate();
+
+                    SpCkAllocHeader  spCkAllocHeader=new SpCkAllocHeader();
+                    
+                    spCkAllocHeader.setReqDate(new Date());//Current Date 
+                    
+                    spCkAllocHeader.setReqTime(java.time.LocalTime.now().toString());//Current Time 
+                    
+                    spCkAllocHeader.setReqUserId(userId);
+                    
+                    spCkAllocHeader.setShiftId(shiftId);
+                    
+                    spCkAllocHeader.setSpCkAllocId(0);
+                    
+                    spCkAllocHeader.setStationId(stationId);
+                    
+                    List<SpCkAllocDetail> spCkAllocDetailList=new ArrayList<SpCkAllocDetail>();
+                    for(int i=0;i<spIdList.size();i++)
+                    {
+                    	SpCkAllocDetail spCkAllocDetail=new SpCkAllocDetail();
+                    	
+                    	spCkAllocDetail.setSpCkAllocDId(0);
+                    	spCkAllocDetail.setSpCkAllocId(0);
+                    	
+                    	StationSpCake stationSpCake=new StationSpCake();
+                    	System.out.println("Station Special Cake List :"+stationSpCakeList.getStationSpCakeList());
+                    	System.out.println("Special Cake Ids:"+spIdList.toString());
+                    	
+                    	for(int j=0;j<stationSpCakeList.getStationSpCakeList().size();j++)
+                    	{
+                    		
+                    		if(stationSpCakeList.getStationSpCakeList().get(j).getSpOrderNo()==Integer.parseInt(spIdList.get(i)))
+                    		{
+                    			stationSpCake=stationSpCakeList.getStationSpCakeList().get(i);
+                    		    System.out.println("Special Cake:"+stationSpCake.toString());
+                    		}
+                    	}
+                    	spCkAllocDetail.setSpCode(stationSpCake.getSpCode());
+                    	spCkAllocDetail.setSpId(stationSpCake.getSpId());
+                    	spCkAllocDetail.setSpName(stationSpCake.getSpName());
+                    	spCkAllocDetail.settSpCakeId(Integer.parseInt(spIdList.get(i)));
+                    	spCkAllocDetail.setPickupDate(new Date());//Current Date 
+                    	spCkAllocDetail.setFrId(stationSpCake.getFrId());
+                    	spCkAllocDetail.setStatus(0);
+                    	spCkAllocDetail.setStartTime("00:00:00");
+                    	spCkAllocDetail.setEndTime("00:00:00");
+                    	spCkAllocDetail.setDelStatus(0);
+                    	
+                    	spCkAllocDetailList.add(spCkAllocDetail);
+                    }
+                    spCkAllocHeader.setSpCkAllocDetailList(spCkAllocDetailList);
+					
+                    Info info=restTemplate.postForObject(Constants.url + "/spProduction/saveSpCkAllocHeader",spCkAllocHeader,Info.class);
+                    
+                    System.out.println("addCkAllocToStation Response:"+info.toString());
+			    }
+			    catch(Exception e)
+			    {
+			    	System.out.println("Exception In Saving Cake Alloc Data"+e.getMessage());
+			    	
+			    	e.printStackTrace();
+			    }
+				return "redirect:/showCkAllocToStation";
+				}
+	
+				@RequestMapping(value = "/showSpCksAllocToStation", method = RequestMethod.GET)
+				public ModelAndView showSpCksAllocToStation(HttpServletRequest request, HttpServletResponse response) {
+
+					ModelAndView model = new ModelAndView("spProduction/stationwiseSpAllocList");
+					 Constants.mainAct = 19;
+					 Constants.subAct = 200;
+					 try {
+							RestTemplate restTemplate = new RestTemplate();
+							SpStationList spStationList = restTemplate.getForObject(Constants.url + "/spProduction/getSpStationList",
+									SpStationList.class);
+							System.out.println("Response: " + spStationList.toString());
+							
+							List<String> stationId = new ArrayList<String>();
+							String stIds=new String();
+							
+							for(int i=0;i<spStationList.getSpStationList().size();i++)
+							{
+								int stId=spStationList.getSpStationList().get(i).getStId();
+								stationId.add(String.valueOf(stId));
+								stIds=stIds+","+stId;
+								
+							}
+							stIds=stIds.substring(1);
+							
+							System.out.println("Station Id:"+stIds);
+							
+							DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+							DateFormat dmyFr = new SimpleDateFormat("dd-MM-yyyy");
+
+							String currentDate = df.format(new Date());
+							String dmyCDate=dmyFr.format(new Date());
+							System.out.println("currentDate :"+currentDate);
+
+							
+							MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+							map.add("stationId",stIds);
+							map.add("fromDate",currentDate);
+							map.add("toDate",currentDate);
+
+							ParameterizedTypeReference<List<GetAllocStationCk>> typeRef = new ParameterizedTypeReference<List<GetAllocStationCk>>() {
+							};
+							ResponseEntity<List<GetAllocStationCk>> responseEntity = restTemplate.exchange(Constants.url + "/spProduction/getAllocStationCk",
+									HttpMethod.POST, new HttpEntity<>(map), typeRef);
+							
+							List<GetAllocStationCk> getAllocStationCkList =new ArrayList<GetAllocStationCk>();
+							getAllocStationCkList= responseEntity.getBody();
+							
+							System.out.println("getAllocStationCkList"+getAllocStationCkList.toString());
+							
+							model.addObject("getAllocStationCkList", getAllocStationCkList);
+							model.addObject("spStationList",spStationList.getSpStationList());
+							model.addObject("fromDate", dmyCDate);
+							model.addObject("toDate", dmyCDate);
+						    model.addObject("selStId",-1);
+
+					 }
+					 catch(Exception e)
+					 {
+						 System.out.println("Exce while showing /showSpCksAllocToStation"+e.getMessage());
+						 
+					 }
+					return model;
+				}
+				
+				
+				
+				@RequestMapping(value = "/searchStSpCkAlloc", method = RequestMethod.POST)
+				public ModelAndView searchStSpCkAlloc(HttpServletRequest request, HttpServletResponse response) {
+
+					ModelAndView model = new ModelAndView("spProduction/stationwiseSpAllocList");
+					
+					 try {
+						 
+						 int selStId=Integer.parseInt(request.getParameter("st_id"));
+							System.out.println("selStId :"+selStId);
+
+						 String fromDate=request.getParameter("from_date");
+						 System.out.println("fromDate"+fromDate);
+						 
+						 String toDate=request.getParameter("to_date");
+						 System.out.println("toDate"+toDate);
+
+						 
+						    RestTemplate restTemplate = new RestTemplate();
+							SpStationList spStationList = restTemplate.getForObject(Constants.url + "/spProduction/getSpStationList",
+									SpStationList.class);
+							System.out.println("Response: " + spStationList.toString());
+							
+							List<String> stationId = new ArrayList<String>();
+							String stIds=new String();
+							
+							for(int i=0;i<spStationList.getSpStationList().size();i++)
+							{
+								int stId=spStationList.getSpStationList().get(i).getStId();
+								stationId.add(String.valueOf(stId));
+								stIds=stIds+","+stId;
+								
+							}
+							stIds=stIds.substring(1);
+							
+							System.out.println("Station Id:"+stIds);
+							DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+							DateFormat dmyFr = new SimpleDateFormat("dd-MM-yyyy");
+
+							
+							MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+							if(selStId==-1)
+							{
+							 map.add("stationId",stIds);
+							}
+							else
+							{
+							 map.add("stationId",selStId);
+
+							}
+							Date fmtFrDate=dmyFr.parse(fromDate);
+							Date fmtToDate=dmyFr.parse(toDate);
+
+							map.add("fromDate",df.format(fmtFrDate));
+							map.add("toDate",df.format(fmtToDate));
+
+							System.out.println("fmtFrDate"+df.format(fmtFrDate));
+							ParameterizedTypeReference<List<GetAllocStationCk>> typeRef = new ParameterizedTypeReference<List<GetAllocStationCk>>() {
+							};
+							ResponseEntity<List<GetAllocStationCk>> responseEntity = restTemplate.exchange(Constants.url + "/spProduction/getAllocStationCk",
+									HttpMethod.POST, new HttpEntity<>(map), typeRef);
+							
+							List<GetAllocStationCk> getAllocStationCkList =new ArrayList<GetAllocStationCk>();
+							getAllocStationCkList= responseEntity.getBody();
+							
+							System.out.println("getAllocStationCkList"+getAllocStationCkList.toString());
+							
+							model.addObject("getAllocStationCkList", getAllocStationCkList);
+							model.addObject("spStationList",spStationList.getSpStationList());
+						    model.addObject("fromDate", dmyFr.format(fmtFrDate));
+						    model.addObject("toDate",dmyFr.format(fmtToDate));
+						    model.addObject("selStId", selStId);
+					 }
+					 catch(Exception e)
+					 {
+						 System.out.println("Exce in /searchStSpCkAlloc"+e.getMessage());
+
+					 }
+				return model;
+
+				}
 }
+			
+				
