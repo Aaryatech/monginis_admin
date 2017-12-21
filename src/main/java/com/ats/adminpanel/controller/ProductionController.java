@@ -23,16 +23,22 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.Variance;
+import com.ats.adminpanel.model.VarianceList;
 import com.ats.adminpanel.model.franchisee.AllMenuResponse;
 import com.ats.adminpanel.model.franchisee.Menu;
+import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.CategoryListResponse;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.item.MCategoryList;
 import com.ats.adminpanel.model.production.GetOrderItemQty;
 import com.ats.adminpanel.model.production.GetRegSpCakeOrderQty;
+import com.ats.adminpanel.model.production.PostProdPlanHeader;
 import com.ats.adminpanel.model.production.PostProductionDetail;
 import com.ats.adminpanel.model.production.PostProductionHeader;
+import com.ats.adminpanel.model.production.PostProductionPlanDetail;
 
 @Controller
 public class ProductionController {
@@ -380,6 +386,191 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 		return getOrderItemQtyList;
 		
 	}
+	
+	
+	
+	//-----------------------------------------------------Variation--------------------------------------
+		List<PostProductionPlanDetail> postProductionPlanDetaillist=new ArrayList<PostProductionPlanDetail>();
+		PostProdPlanHeader postProdPlanHeader = new PostProdPlanHeader();
+		
+		
+		@RequestMapping(value = "/listForVariation", method = RequestMethod.GET)
+		public ModelAndView listForVariation(HttpServletRequest request, HttpServletResponse response) {
+			postProductionPlanDetaillist=new ArrayList<PostProductionPlanDetail>();
+			ModelAndView model = new ModelAndView("production/variation");
+//			Constants.mainAct = 8;
+//			Constants.subAct = 82;
+
+			
+
+			RestTemplate restTemplate = new RestTemplate();
+			
+			
+
+			List<PostProdPlanHeader> postProdPlanHeader = restTemplate.getForObject(Constants.url + "PostProdPlanHeaderVariationlist",
+					List.class);
+
+			System.out.println("postProdPlanHeader"+postProdPlanHeader.toString());
+			model.addObject("postProdPlanHeaderList",postProdPlanHeader);
+
+			return model;
+		}
+		
+		@RequestMapping(value = "/varianceDetailed", method = RequestMethod.GET)
+		public ModelAndView varianceDetailed(HttpServletRequest request, HttpServletResponse response) {
+
+			ModelAndView model = new ModelAndView("production/variancelistdetailed");
+			PostProductionPlanDetail postProductionPlanDetail = new PostProductionPlanDetail();
+//			Constants.mainAct = 8;
+//			Constants.subAct = 82;
+
+			int productionHeaderId = Integer.parseInt(request.getParameter("productionHeaderId"));
+			System.out.println("productionHeaderId"+productionHeaderId);
+			try
+			{
+				RestTemplate restTemplate = new RestTemplate();
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("planHeaderId", productionHeaderId);
+
+				postProdPlanHeader = restTemplate.postForObject(Constants.url + "PostProdPlanHeaderwithDetailed",map,
+						PostProdPlanHeader.class);
+				int groupType=postProdPlanHeader.getItemGrp1();
+				String prodDate=postProdPlanHeader.getProductionDate();
+				System.out.println(prodDate);
+				    String date = DateConvertor.convertToYMD(prodDate);
+				    
+				map = new LinkedMultiValueMap<String, Object>();
+				map.add("Date", date);
+				map.add("groupType", groupType);
+				
+				
+				VarianceList getQtyforVariance =restTemplate.postForObject(Constants.url + "getQtyforVariance",map,
+						VarianceList.class);
+				
+				System.out.println(getQtyforVariance.getVarianceorderlist().size()+"getQtyforVariance"+getQtyforVariance.getVarianceorderlist().toString());
+				System.out.println("postProdPlanHeader"+postProdPlanHeader.toString());
+				
+				 postProductionPlanDetaillist=postProdPlanHeader.getPostProductionPlanDetail();
+				 
+				
+				 
+				 model.addObject("getQtyforVariance",getQtyforVariance.getVarianceorderlist());
+				 System.out.println("unsort size "+getQtyforVariance.getVarianceorderlist().size());
+				
+				
+				List<Variance> getVarianceorderlistforsort = new ArrayList<Variance>();
+				getVarianceorderlistforsort=getQtyforVariance.getVarianceorderlist();
+				
+				
+				
+				for(int i=0;i<postProductionPlanDetaillist.size();i++)
+				{
+					int planItemid=postProductionPlanDetaillist.get(i).getItemId();
+					
+					for(int j=0;j<getVarianceorderlistforsort.size();j++)
+					{
+						int varianceItemId=getVarianceorderlistforsort.get(j).getId();
+						
+						
+						if(planItemid==varianceItemId)
+						{
+		
+							int orderQty=getVarianceorderlistforsort.get(j).getOrderQty()+getVarianceorderlistforsort.get(j).getProdRejectedQty();
+							System.out.println("updated orderQty" + orderQty);
+							postProductionPlanDetaillist.get(i).setOrderQty(orderQty);
+							
+							int remainingProQty=postProductionPlanDetaillist.get(i).getOrderQty()-(postProductionPlanDetaillist.get(i).getOpeningQty()+postProductionPlanDetaillist.get(i).getProductionQty());
+							postProductionPlanDetaillist.get(i).setInt4(remainingProQty);
+							getVarianceorderlistforsort.remove(j);
+						}
+						
+					}
+					
+				}
+				AllItemsListResponse allItemsListResponse = restTemplate.getForObject(Constants.url + "getAllItems", AllItemsListResponse.class);
+				List<Item> itemsList = allItemsListResponse.getItems();
+				
+				System.out.println("getVarianceorderlistforsort size "+getVarianceorderlistforsort.size());
+				System.out.println("unsort size "+getQtyforVariance.getVarianceorderlist().size());
+				System.out.println(postProductionPlanDetaillist.toString());
+				
+				model.addObject("postProdPlanHeader",postProdPlanHeader);
+				model.addObject("getVarianceorderlistforsort",getVarianceorderlistforsort);
+				model.addObject("itemsList",itemsList);
+				model.addObject("postProdPlanHeaderDetailed",postProductionPlanDetaillist);
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			
+
+			return model;
+		}
+
+		
+		@RequestMapping(value = "/updateOrderQtyinPlan", method = RequestMethod.POST)
+		public ModelAndView updateOrderQtyinPlan(HttpServletRequest request, HttpServletResponse response) {
+			
+			List<PostProductionPlanDetail> postProductionPlanDetailnewplan =new ArrayList<PostProductionPlanDetail>();
+			PostProductionPlanDetail postProductionPlanDetailnew = new PostProductionPlanDetail();
+			PostProdPlanHeader postProdPlanHeadernewplan = new PostProdPlanHeader();
+			Date date = new Date();
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+			String Pdate = formatter.format(date);
+			System.out.println(Pdate);
+
+
+			
+			ModelAndView model = new ModelAndView("production/variation");
+			RestTemplate restTemplate = new RestTemplate();
+			try
+			{
+				postProdPlanHeadernewplan.setProductionStatus(2);
+				postProdPlanHeadernewplan.setItemGrp1(postProdPlanHeader.getItemGrp1());
+				postProdPlanHeadernewplan.setProductionDate(Pdate);
+				postProdPlanHeadernewplan.setTimeSlot(postProdPlanHeader.getTimeSlot());
+				postProdPlanHeadernewplan.setProductionBatch("");
+				for(int i=0;i<postProductionPlanDetaillist.size();i++)
+				{
+					if(postProductionPlanDetaillist.get(i).getInt4()>0)
+					{
+						postProductionPlanDetailnew = new PostProductionPlanDetail();
+						postProductionPlanDetailnew.setItemId(postProductionPlanDetaillist.get(i).getItemId());
+						postProductionPlanDetailnew.setOpeningQty(0);
+						postProductionPlanDetailnew.setOrderQty(postProductionPlanDetaillist.get(i).getInt4());
+						postProductionPlanDetailnew.setProductionQty(0);
+						postProductionPlanDetailnew.setRejectedQty(0);
+						postProductionPlanDetailnew.setPlanQty(0);
+						postProductionPlanDetailnew.setInt4(0);
+						postProductionPlanDetailnew.setProductionDate(Pdate);
+						postProductionPlanDetailnew.setProductionBatch("");
+						postProductionPlanDetailnewplan.add(postProductionPlanDetailnew);
+						
+					}
+				}
+				postProdPlanHeadernewplan.setPostProductionPlanDetail(postProductionPlanDetailnewplan);
+				Info insertNewinPlan = restTemplate.postForObject(Constants.url + "postProductionPlan",postProdPlanHeadernewplan,
+						Info.class);
+				
+				
+				postProdPlanHeader.setProductionStatus(5);
+				postProdPlanHeader.setPostProductionPlanDetail(postProductionPlanDetaillist);
+				Info updateOrderQtyinPlan = restTemplate.postForObject(Constants.url + "postProductionPlan",postProdPlanHeader,
+						Info.class);
+				
+				
+				postProductionPlanDetaillist=new ArrayList<PostProductionPlanDetail>();
+				List<PostProdPlanHeader> postProdPlanHeader = restTemplate.getForObject(Constants.url + "PostProdPlanHeaderVariationlist",
+						List.class);
+
+				System.out.println("postProdPlanHeader"+postProdPlanHeader.toString());
+				model.addObject("postProdPlanHeaderList",postProdPlanHeader);
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+			return model;
+		}
 
 	
 }
