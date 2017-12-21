@@ -2,6 +2,8 @@ package com.ats.adminpanel.model.production;
 
 import java.util.Date;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 public class PostProductionPlanDetail {
 
@@ -25,6 +27,18 @@ public class PostProductionPlanDetail {
 	private String productionBatch;
 	
 	private String productionDate;
+	
+	private int int4;
+	
+	
+
+		public int getInt4() {
+		return int4;
+	}
+
+	public void setInt4(int int4) {
+		this.int4 = int4;
+	}
 
 		public String getProductionBatch() {
 		return productionBatch;
@@ -34,6 +48,7 @@ public class PostProductionPlanDetail {
 		this.productionBatch = productionBatch;
 	}
 
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public String getProductionDate() {
 		return productionDate;
 	}
@@ -111,7 +126,8 @@ public class PostProductionPlanDetail {
 			return "PostProductionPlanDetail [productionDetailId=" + productionDetailId + ", productionHeaderId="
 					+ productionHeaderId + ", planQty=" + planQty + ", orderQty=" + orderQty + ", openingQty="
 					+ openingQty + ", rejectedQty=" + rejectedQty + ", productionQty=" + productionQty + ", itemId="
-					+ itemId + ", productionBatch=" + productionBatch + ", productionDate=" + productionDate + "]";
+					+ itemId + ", productionBatch=" + productionBatch + ", productionDate=" + productionDate + ", int4="
+					+ int4 + "]";
 		}
 
 
