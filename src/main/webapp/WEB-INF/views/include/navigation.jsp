@@ -865,6 +865,18 @@
 					</c:choose>
 					<a href="${pageContext.request.contextPath}/showBmsStock">BMS Stock</a>
 					</li>
+					
+					
+					<c:choose>
+						<c:when test="${Constants.subAct==123}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showFinishedGoodStock">Finished Good Stock</a>
+					</li>
 
 				</ul>
 				<!-- END Submenu -->
