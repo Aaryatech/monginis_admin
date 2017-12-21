@@ -61,7 +61,7 @@ import com.ats.adminpanel.model.spprod.TypeList;
 
 @Controller
 public class SpProductionController {
-
+ 
 	private int empType = 1;// employee Type
 	private int instType = 2;// instrument Type
 	private int mistryId = 101;
