@@ -10,6 +10,8 @@ public class GetCurProdAndBillQty {
 	int prodQty;
 	int rejectedQty;
 	int billQty;
+	int damagedQty;
+	
 	public int getId() {
 		return id;
 	}
@@ -40,10 +42,16 @@ public class GetCurProdAndBillQty {
 	public void setBillQty(int billQty) {
 		this.billQty = billQty;
 	}
+	public int getDamagedQty() {
+		return damagedQty;
+	}
+	public void setDamagedQty(int damagedQty) {
+		this.damagedQty = damagedQty;
+	}
 	@Override
 	public String toString() {
 		return "GetCurProdAndBillQty [id=" + id + ", itemName=" + itemName + ", prodQty=" + prodQty + ", rejectedQty="
-				+ rejectedQty + ", billQty=" + billQty + "]";
+				+ rejectedQty + ", billQty=" + billQty + ", damagedQty=" + damagedQty + "]";
 	}
 	
 	

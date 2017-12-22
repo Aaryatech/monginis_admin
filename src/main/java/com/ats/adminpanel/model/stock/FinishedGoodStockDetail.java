@@ -5,6 +5,7 @@ import java.util.Date;
 public class FinishedGoodStockDetail {
 
 	int finStockDetailId;
+	int finStockId;
 
 	int itemId;
 
@@ -172,6 +173,23 @@ public class FinishedGoodStockDetail {
 
 	public void setTotalCloStk(float totalCloStk) {
 		this.totalCloStk = totalCloStk;
+	}
+
+	public int getFinStockId() {
+		return finStockId;
+	}
+
+	public void setFinStockId(int finStockId) {
+		this.finStockId = finStockId;
+	}
+
+	@Override
+	public String toString() {
+		return "FinishedGoodStockDetail [finStockDetailId=" + finStockDetailId + ", finStockId=" + finStockId
+				+ ", itemId=" + itemId + ", stockDate=" + stockDate + ", itemName=" + itemName + ", opT1=" + opT1
+				+ ", opT2=" + opT2 + ", opT3=" + opT3 + ", opTotal=" + opTotal + ", prodQty=" + prodQty + ", rejQty="
+				+ rejQty + ", frSaleQty=" + frSaleQty + ", gateSaleQty=" + gateSaleQty + ", cloT1=" + cloT1 + ", cloT2="
+				+ cloT2 + ", cloT3=" + cloT3 + ", cloCurrent=" + cloCurrent + ", totalCloStk=" + totalCloStk + "]";
 	}
 
 }
