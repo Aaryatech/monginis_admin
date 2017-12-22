@@ -53,11 +53,11 @@ public class BmsToStoreBomController {
 	BillOfMaterialHeader billOfMaterialHeader = new BillOfMaterialHeader();
 	List<BillOfMaterialDetailed> bomwithdetaild = new ArrayList<BillOfMaterialDetailed>();
 	
-	@RequestMapping(value = "/showRmStockCalc", method = RequestMethod.GET)
+	@RequestMapping(value = "/showBmsToStoreBom", method = RequestMethod.GET)
 	public ModelAndView showInsertCreditNote(HttpServletRequest request, HttpServletResponse response) {
 
-	//	Constants.mainAct = 8;
-	//	Constants.subAct = 85;
+	 	Constants.mainAct = 20;
+	 	Constants.subAct = 201;
 
 		ModelAndView model = new ModelAndView("bmsToStore/bmsToStoreBom");
 
@@ -303,15 +303,15 @@ public class BmsToStoreBomController {
 	 
 		 
 		 
-		return "redirect:/showRmStockCalc"; 
+		return "redirect:/showBmsToStoreBom"; 
 	}
 	
 	
 	
 	@RequestMapping(value = "/getBomListBmsToStore", method = RequestMethod.GET)
 	public ModelAndView getBomList(HttpServletRequest request, HttpServletResponse response) {
-		/*Constants.mainAct = 17;
-		Constants.subAct=184;*/
+		 Constants.mainAct = 20;
+		Constants.subAct=202; 
 		
 		ModelAndView model = new ModelAndView("bmsToStore/bmsToStoreBomHeader");//
 		getbomList = new ArrayList<BillOfMaterialHeader>();
@@ -555,6 +555,6 @@ public class BmsToStoreBomController {
 		Info info = rest.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);	
 		System.out.println(info.toString());
 		
-		return "redirect:/getBomList";
+		return "redirect:/getBomListBmsToStore";
 	} 
 }

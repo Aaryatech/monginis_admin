@@ -1,5 +1,7 @@
 package com.ats.adminpanel.controller;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -19,12 +21,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.amazonaws.services.simpleworkflow.flow.worker.SynchronousActivityTaskPoller;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;
 import com.ats.adminpanel.model.RawMaterial.Info;
@@ -32,11 +36,14 @@ import com.ats.adminpanel.model.RawMaterial.RawMaterialDetails;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetails;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetailsList;
 import com.ats.adminpanel.model.RawMaterial.RmItemCategory;
+import com.ats.adminpanel.model.RawMaterial.RmItemGroup;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.materialreceipt.GetMaterialRecNoteList;
 import com.ats.adminpanel.model.materialreceipt.MaterialRecNote;
+import com.ats.adminpanel.model.materialreceipt.Supplist;
 import com.ats.adminpanel.model.purchaseorder.PurchaseOrderDetail;
 import com.ats.adminpanel.model.purchaseorder.PurchaseOrderHeader;
+import com.ats.adminpanel.model.remarks.GetAllRemarksList;
 import com.ats.adminpanel.model.supplierMaster.SupPaymentTermsList;
 import com.ats.adminpanel.model.supplierMaster.SupplierDetails;
 import com.ats.adminpanel.model.supplierMaster.TransporterList;
@@ -53,7 +60,7 @@ public class PurchaseOrderController {
 	public static float gstPer;
 	public static GetRawMaterialDetailList getRawMaterialDetailList;
 	public static RawMaterialTaxDetailsList rawMaterialTaxDetailsList;
-	 
+	
 	
 	@RequestMapping(value = "/showDirectPurchaseOrder", method = RequestMethod.GET)
 	public ModelAndView showPurchaseOrder(HttpServletRequest request, HttpServletResponse response) {
@@ -106,6 +113,8 @@ public class PurchaseOrderController {
 		ModelAndView model = new ModelAndView("masters/purchaseOrder/purchaseOrder");
 		
 		
+		 Constants.mainAct = 21;
+		Constants.subAct=211; 
 
 		return model;
 	}
@@ -320,54 +329,6 @@ public class PurchaseOrderController {
 	}
 
 	
-	@RequestMapping(value = "/allMaterialReceiptNote", method = RequestMethod.GET)
-	public String allMaterialReceiptNote(HttpServletRequest request, HttpServletResponse response) {
-		/*Constants.mainAct = 17;
-		Constants.subAct=184;*/
-		
-		List<SupplierDetails> supplierDetailsList=new ArrayList<SupplierDetails>();
-		GetMaterialRecNoteList materialRecNoteList=new GetMaterialRecNoteList();
-		ModelAndView model = new ModelAndView("masters/allMaterialReceiptNote");
-		try {
-			RestTemplate rest = new RestTemplate();
-			supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplier", List.class);
-
-			System.out.println("Supplier List :"+supplierDetailsList.toString());
-			
-			materialRecNoteList=rest.getForObject(Constants.url + "/getMaterialRecNotes", GetMaterialRecNoteList.class);
-			System.out.println("materialRecNoteList  :"+materialRecNoteList.toString());
-		}catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		System.out.println("List  "+materialRecNoteList.getMaterialRecNoteList().toString());
-		model.addObject("materialRecNoteList",materialRecNoteList.getMaterialRecNoteList());
-		model.addObject("supplierDetailsList",supplierDetailsList);
-		return "masters/allMaterialReceiptNote";
-	}
 	
-	@RequestMapping(value = "/materialReceiptDirectore", method = RequestMethod.GET)
-	public String materialReceiptDirectore(HttpServletRequest request, HttpServletResponse response) {
-		/*Constants.mainAct = 17;
-		Constants.subAct=184;*/
-		
-		//List<SupplierDetails> supplierDetailsList=new ArrayList<SupplierDetails>();
-		GetMaterialRecNoteList materialRecNoteList=new GetMaterialRecNoteList();
-		ModelAndView model = new ModelAndView("masters/materialReceiptDirectore");
-		try {
-			RestTemplate rest = new RestTemplate();
-		//	supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplier", List.class);
-
-		//	System.out.println("Supplier List :"+supplierDetailsList.toString());
-			
-			materialRecNoteList=rest.getForObject(Constants.url + "/getMaterialRecNotes", GetMaterialRecNoteList.class);
-			System.out.println("materialRecNoteList  :"+materialRecNoteList.toString());
-		}catch (Exception e) {
-			System.out.println(e.getMessage());
-		}
-		
-		model.addObject("materialRecNoteList",materialRecNoteList.getMaterialRecNoteList());
-		//model.addObject("supplierDetailsList",supplierDetailsList);
-		return "masters/materialReceiptDirectore";
-	}
-	
+	 
 }

@@ -386,7 +386,7 @@
 											function(key, itemList) {
 												var stats;
 												var bgcolor;
-												alert("all request");
+												//alert("all request");
 												
 											if(itemList.status==0)
 												{
