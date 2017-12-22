@@ -125,7 +125,7 @@
 			</div> 
 				<div class=" box-content">
 				<form id="validation-form"
-				action="allMaterialReceiptNote"
+				action="allDirectorMaterialReceiptNote"
 				method="get">
 				<input type="hidden" value="1" name="viewAll">
 				

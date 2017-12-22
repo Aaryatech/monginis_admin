@@ -137,8 +137,11 @@
 			<div class=" box-content">
 			<div class="box">
 			<div class="col-md-2">
-				<button class="btn btn-info pull-left" style="margin-right: 5px;">Add
-					New</button>
+			<a href="showDirectPurchaseOrder" class="btn btn-info btn">
+          <span class="glyphicon glyphicon-pencil"></span> Add New 
+        </a>
+				<!-- <button class="btn btn-info pull-left" style="margin-right: 5px;" >Add
+					New</button> -->
 			</div>
 			<div class="col-md-2">Search</div>
 			<div class="col-md-4">

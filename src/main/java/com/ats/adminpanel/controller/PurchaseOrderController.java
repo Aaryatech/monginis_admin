@@ -61,7 +61,7 @@ public class PurchaseOrderController {
 	public static GetRawMaterialDetailList getRawMaterialDetailList;
 	public static RawMaterialTaxDetailsList rawMaterialTaxDetailsList;
 	
-	
+	  
 	@RequestMapping(value = "/showDirectPurchaseOrder", method = RequestMethod.GET)
 	public ModelAndView showPurchaseOrder(HttpServletRequest request, HttpServletResponse response) {
 
