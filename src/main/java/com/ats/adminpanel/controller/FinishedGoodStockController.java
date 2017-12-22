@@ -298,7 +298,7 @@ public class FinishedGoodStockController {
 						 cloT1 = t1 - a;
 						 cloT2 = t2 - b;
 						 cloT3 = t3 - c;
-
+ 
 						 curClosing = prodQty - rejQty - curIssue;
 
 						 totalClosing = ((t1 + t2 + t3) + (prodQty - rejQty)) - billQty;
