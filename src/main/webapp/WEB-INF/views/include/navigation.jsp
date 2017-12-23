@@ -550,7 +550,27 @@
 					<a href="${pageContext.request.contextPath}/itemList">Items
 						List</a>
 					</li>
-
+	<c:choose>
+						<c:when test="${Constants.subAct==45}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAddItemSup">Add Item Supp</a>
+					</li>
+					<c:choose>
+						<c:when test="${Constants.subAct==46}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showItemSupList">Items
+						Supp List</a>
+					</li>
 						<c:choose>
 						<c:when test="${Constants.subAct==44}">
 							<li class="active">
@@ -676,6 +696,17 @@
 						New</a>
 					</li>
 					<c:choose>
+						<c:when test="${Constants.subAct==77}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAddFranchiseSup">Add
+						Franchise Supp</a>
+					</li>
+					<c:choose>
 						<c:when test="${Constants.subAct==72}">
 							<li class="active">
 						</c:when>
@@ -686,7 +717,17 @@
 					<a href="${pageContext.request.contextPath}/listAllFranchisee">Franchisee
 						List</a>
 					</li>
-
+                    <c:choose>
+						<c:when test="${Constants.subAct==78}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showAddFrTarget">Add Franchisee
+						Target</a>
+					</li>
 					<c:choose>
 						<c:when test="${Constants.subAct==73}">
 							<li class="active">
