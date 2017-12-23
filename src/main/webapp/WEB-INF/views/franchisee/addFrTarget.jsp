@@ -75,12 +75,19 @@
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
+   
+   <!-- <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/css/bootstrap-datepicker.css" rel="stylesheet"> -->
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>  
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
 </head>
-<body onload="hideStationAndShift(${isEdit})">
+<body onload="chkRequest(${isSave})">
 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
+<c:url var="searchFrMonthTarget" value="/searchFrMonthTarget"/>
 
 	<div class="container" id="main-container">
 
@@ -102,7 +109,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Configure Station
+						<i class="fa fa-file-o"></i>Franchise
 					</h1>
 
 				</div>
@@ -117,109 +124,69 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Configure Station
+								<i class="fa fa-bars"></i> Add Franchise Target
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showAddEmployee">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAddFrTarget">Back</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
 						</div>
 
+
+
+        <form action="${pageContext.request.contextPath}/addFrTargetProcess" class="form-horizontal" method="post" id="validation-form">
 						<div class="box-content">
-							<form action="${pageContext.request.contextPath}/addStationAllocation" class="form-horizontal"
-								method="post" id="validation-form">
-
-                      <input type="hidden" name="allocation_id" id="allocation_id" value="${cnfStation.allocationId}"/>
-                      
-								
-                               <div class="col2">
-									<label class="col-sm-3 col-lg-2 control-label">Station</label>
-									<div class="col-sm-1 col-lg-4 controls">
-									<select name="st_id" id="st_id" class="form-control" placeholder="Select Station" data-rule-required="true">
-											<option value="-1">Select Station</option>
-											<c:forEach items="${spStationList}" var="spStationList">
-										    	<c:choose>
-													<c:when test="${spStationList.stId==cnfStation.stationId}">
-												          <option value="${spStationList.stId}" selected><c:out value="${spStationList.stName}"></c:out></option>
+							  <div class="col2">
+									<label class="col-sm-1 col-lg-2 control-label">Franchise</label>
+									<div class="col-sm-9 col-lg-3 controls">
+									<select name="fr_id" id="fr_id" class="form-control" placeholder="Select Franchise" data-rule-required="true">
+											<option value="-1">Select Franchise</option>
+										 <c:forEach items="${franchiseeList}" var="franchiseeList">
+											<c:choose>
+													<c:when test="${franchiseeList.frId==frId}">
+												          <option value="${franchiseeList.frId}" selected><c:out value="${franchiseeList.frName}"></c:out></option>
 													</c:when>
 													<c:otherwise>
-										            	  <option value="${spStationList.stId}"><c:out value="${spStationList.stName}"></c:out></option>
+										            	  <option value="${franchiseeList.frId}"><c:out value="${franchiseeList.frName}"></c:out></option>
 													</c:otherwise>
 												</c:choose>
-											</c:forEach> 
+										</c:forEach>
+												
 								</select>	
 									</div>
 								</div>
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Shift</label>
-									<div class="col-sm-2 col-lg-4 controls">
-									<select name="shift_id" id="shift_id" class="form-control" placeholder="Select Shift" data-rule-required="true">
-											<option value="-1">Select Shift</option>
-										  	<c:forEach items="${shiftList}" var="shiftList">
-										    	<c:choose>
-													<c:when test="${shiftList.shiftId==cnfStation.shiftId}">
-												          <option value="${shiftList.shiftId}" selected><c:out value="${shiftList.shiftName}"></c:out></option>
-													</c:when>
-													<c:otherwise>
-										            	  <option value="${shiftList.shiftId}"><c:out value="${shiftList.shiftName}"></c:out></option>
-													</c:otherwise>
-												</c:choose>
-											</c:forEach> 
-								</select>	
-									</div>
-								</div>
-							<%-- 	</c:otherwise>
-								</c:choose> --%>
-								  <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Mistry</label>
-									<div class="col-sm-9 col-lg-10 controls">
-									<select name="m_id" id="m_id" class="form-control" placeholder="Select Mistry" data-rule-required="true">
-											<option value="-1">Select Mistry</option>
-										  	<c:forEach items="${employeeList}" var="employeeList">
-										    	<c:choose>
-													<c:when test="${employeeList.empId==cnfStation.empMistryId}">
-												          <option value="${employeeList.empId}" selected><c:out value="${employeeList.empName}"></c:out></option>
-													</c:when>
-													<c:otherwise>
-										            	  <option value="${employeeList.empId}"><c:out value="${employeeList.empName}"></c:out></option>
-													</c:otherwise>
-												</c:choose>
-											</c:forEach> 
-								</select>	
-									</div>
-								</div>  
-                                  <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Helper</label>
-									<div class="col-sm-9 col-lg-10 controls">
-									<select name="h_id" id="h_id" class="form-control" placeholder="Select Helper" required>
-											<option value="-1">Select Helper</option>
-										    <c:forEach items="${helperList}" var="employeeList">
-										    	<c:choose>
-													<c:when test="${employeeList.empId==cnfStation.empHelperId}">
-												          <option value="${employeeList.empId}" selected><c:out value="${employeeList.empName}"></c:out></option>
-													</c:when>
-													<c:otherwise>
-										            	  <option value="${employeeList.empId}"><c:out value="${employeeList.empName}"></c:out></option>
-													</c:otherwise>
-												</c:choose>
-											</c:forEach> 
-								</select>	
-									</div>
-								</div>  
+                          <div class="col2">
+                          <label class="col-sm-1 col-lg-2 control-label">Select Year</label>
+                          
+                        <div class="container text-center">
 
-								<div class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-										<input type="submit" class="btn btn-primary" value="Submit" onclick="return validation()">
+                          <input class="date-own form-control" style="width: 200px;" type="text" name="year" id="year"placeholder="select Year" value="${thisYear}">
+
+                          <script type="text/javascript">
+                           $('.date-own').datepicker({
+                               minViewMode: 2,
+                               format: 'yyyy'
+                              });
+                          </script>
+
+                        </div>							
+                        </div>
+                        <div class="col2">
+									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+										<input type="button" class="btn btn-primary" value="Search" onclick="searchFrMonthTarget();validation()">
 <!-- 										<button type="button" class="btn">Cancel</button>
  -->									</div>
-								</div>
-							</form>
-							<br>
+						</div>
+						
+							<br/>
+							
+						    <br/>
+							
 								<div class="box">
 									<div class="box-title">
 										<h3>
-											<i class="fa fa-table"></i>Configured Stations
+											<i class="fa fa-table"></i>Franchise Target
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i
@@ -235,45 +202,47 @@
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
-														<th width="45" style="width: 18px">Sr.No.</th>
-														<th width="100" align="left">Shift</th>
-														<th width="100" align="left">Station</th>
-														<th width="100" align="left">Mistry Name</th>
-														<th width="100" align="left">Helper Name</th>
-														<th width="81" align="left">Action</th>
+														<th width="10" style="width: 8px">Sr.No</th>
+             											<th width="10" >#</th>
+														
+														<th width="80" align="left">Month</th>
+														<th width="95" align="left">Target</th>
+														<th width="95" align="left">Achieved Target</th>
+														<th width="95" align="left">Award</th>
+														<th width="95" align="left">Remark</th>
+													    <th width="80" align="left">Status</th>
 													</tr>
 												</thead>
 												<tbody>
-													  <c:forEach items="${stationAllocList}" var="stationAllocList" varStatus="count">
+												 <c:forEach items="${months}" var="months" varStatus="count">
 														<tr>
 														
 															<td><c:out value="${count.index+1}"/></td>
-															<td align="left"><c:out
-																	value="${stationAllocList.shiftName}"></c:out></td>
-															<td align="left"><c:out
-																	value="${stationAllocList.stName}"></c:out></td>		
-															<td align="left"><c:out
-																	value="${stationAllocList.empMistryName}"></c:out></td>
-															<td align="left"><c:out
-																	value="${stationAllocList.empHelperName}"></c:out></td>
-																			
-															<td align="left"><a href="${pageContext.request.contextPath}/updateStationAllocation/${stationAllocList.allocationId}"><span
-														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
-                                                        
-                                                        <a href="${pageContext.request.contextPath}/deleteStationAllocation/${stationAllocList.allocationId}"
-													    onClick="return confirm('Are you sure want to delete this record');"><span
-														class="glyphicon glyphicon-remove"></span></a></td>	
-														 
+															<td align="left"><input type="checkbox" name="chk" id="chk${count.index+1}" value="${count.index+1}"/></td>
+															<td align="left"><input type="text" class="form-control" name="month${count.index+1}" id="month${count.index+1}" maxlength="12" size="12" value="${months}" readonly/></td>
+															<td align="left"><input type="text" class="form-control" name="target${count.index+1}" id="target${count.index+1}" maxlength="14" size="14"   value="0"/></td>
+												        	<td align="left"><input type="text" class="form-control" name="ach_target${count.index+1}" id="ach_target${count.index+1}" maxlength="14" size="14" value="0"readonly/></td>					
+												        	<td align="left"><input type="text" class="form-control" name="award${count.index+1}" id="award${count.index+1}"  value="NA"/></td>					
+                                                            <td align="left"><input type="text"class="form-control"  name="remark${count.index+1}" id="remark${count.index+1}"  value="NA"/></td>					
+									                        <td align="left"><input type="text" class="form-control" name="status${count.index+1}" id="status${count.index+1}" maxlength="15" size="15" value="UnFreezed"readonly/>					
+															 <input type="hidden" class="form-control" name="id${count.index+1}" id="id${count.index+1}" maxlength="15" size="15" value="0" /></td>					
+															
 														</tr>
 
-													</c:forEach>
-												</tbody>
+													</c:forEach>  
+              										</tbody>
 											</table>
 										</div>
 									</div>
 								</div>
+								<div class="form-group">
+									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+										<input type="submit" class="btn btn-primary" value="Submit" onclick="return validation()">
+<!-- 										<button type="button" class="btn">Cancel</button>
+ -->									</div>
+								</div>
 							
-						</div>
+						</div></form>
 					</div>
 				</div>
 			</div>
@@ -327,10 +296,6 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
-
-
-
-
 	<!--flaty scripts-->
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
@@ -356,42 +321,111 @@
 
 </body>
 <script type="text/javascript">
+
+	function searchFrMonthTarget() {
+		
+		var frId = document.getElementById("fr_id").value;
+		var year = document.getElementById("year").value;
+
+
+		
+				$.getJSON('${searchFrMonthTarget}', {
+					
+					frId : frId,
+					year:year,
+					ajax : 'true'
+				}, function(data) {
+					var len = data.length;
+                    
+					$.each(data,function(key, frTarget) {
+						
+					if(frTarget.status==1)
+					{
+						 document.getElementById("chk"+frTarget.frTargetMonth).disabled = true;
+					 	document.getElementById('target'+frTarget.frTargetMonth).value = frTarget.frTargetAmt;
+					 	document.getElementById('target'+frTarget.frTargetMonth).disabled = true;
+					 	
+					 	if(frTarget.frAchievedSale>frTarget.frTargetAmt)
+					 		{
+							  document.getElementById('ach_target'+frTarget.frTargetMonth).style.color = "green";
+					 		}
+						document.getElementById('ach_target'+frTarget.frTargetMonth).value = frTarget.frAchievedSale;
+						document.getElementById('ach_target'+frTarget.frTargetMonth).disabled = true;
+						document.getElementById('award'+frTarget.frTargetMonth).value = frTarget.frAward;
+						document.getElementById('award'+frTarget.frTargetMonth).disabled = true;
+						document.getElementById('remark'+frTarget.frTargetMonth).value = frTarget.remark;
+						document.getElementById('remark'+frTarget.frTargetMonth).disabled = true;
+						document.getElementById('id'+frTarget.frTargetMonth).value = frTarget.frTargetId;
+
+						if(frTarget.status==1)
+							{
+						document.getElementById('status'+frTarget.frTargetMonth).value ="Freezed";
+							}
+						else if(frTarget.status==0)
+							{
+							document.getElementById('status'+frTarget.frTargetMonth).value="Unfreezed";
+	
+							}
+					}
+					else if(frTarget.status==0)
+					{
+						document.getElementById('target'+frTarget.frTargetMonth).value = frTarget.frTargetAmt;
+					 	if(frTarget.frAchievedSale>frTarget.frTargetAmt)
+					 		{
+							  document.getElementById('ach_target'+frTarget.frTargetMonth).style.color = "green";
+					 		}
+						document.getElementById('ach_target'+frTarget.frTargetMonth).value = frTarget.frAchievedSale;
+						document.getElementById('award'+frTarget.frTargetMonth).value = frTarget.frAward;
+						document.getElementById('remark'+frTarget.frTargetMonth).value = frTarget.remark;
+						document.getElementById('id'+frTarget.frTargetMonth).value = frTarget.frTargetId;
+
+						if(frTarget.status==1)
+							{
+						document.getElementById('status'+frTarget.frTargetMonth).value ="Freezed";
+							}
+						else if(frTarget.status==0)
+							{
+							document.getElementById('status'+frTarget.frTargetMonth).value="Unfreezed";
+	
+							}	
+							
+							
+							
+							
+					}
+					
+					})
+					
+
+				});
+			}
+</script>
+<script type="text/javascript">
 function validation() {
 	
-	var stId = $("#st_id").val();
-	var shiftId = $("#shift_id").val();
-	var mId = $("#m_id").val();
-	var hId = $("#h_id").val();
+	var frId = $("#fr_id").val();
+	var year = $("#year").val();
 	
 	var isValid = true;
-	if (stId==-1) { 
+	if (frId==-1) { 
 		isValid = false;
-		alert("Please Select Station");
-	} else if (shiftId ==-1) {
+		alert("Please Select Franchisee");
+	} else if (year.length>4) {
 		isValid = false;
-		alert("Please Select Shift");
-	}else if (mId ==-1) {
-		isValid = false;
-		alert("Please Select Mistry");
-	}else if (hId==-1) {
-		isValid = false;
-		alert("Please Select Helper");
+		alert("Please Select Valid Year");
 	}
 	return isValid;
 }
 
 </script>
 <script type="text/javascript">
-function hideStationAndShift(isEdit)
+function chkRequest(isSave)
 {
-	if(isEdit==1)
+	if(isSave==1)
 		{
-		$('#st_id').css('pointer-events','none'); 
-		$('#shift_id').css('pointer-events','none'); 
-
-
+		searchFrMonthTarget();
 		}
-
+	
 }
 </script>
 </html>

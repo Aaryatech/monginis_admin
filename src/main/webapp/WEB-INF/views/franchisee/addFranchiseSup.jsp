@@ -1,8 +1,9 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+
+
 <html>
 <head>
 <meta charset="utf-8">
@@ -11,12 +12,10 @@
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+
 <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
 <!--base css styles-->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/loader.css">
-
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet"
@@ -36,9 +35,34 @@
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.css" />
 
-
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>
+											window.jQuery
+													|| document
+															.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
+										</script>
 
 <!--page specific css styles-->
+<script
+	src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
+
+<!--page specific plugin scripts-->
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
 
 <!--flaty css styles-->
 <link rel="stylesheet"
@@ -51,11 +75,13 @@
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
-
 </head>
-<body>
+<body onload="disableFranchise(${isEdit})">
+
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+
+
 	<div class="container" id="main-container">
 
 		<!-- BEGIN Sidebar -->
@@ -76,7 +102,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Cake Allocation
+						<i class="fa fa-file-o"></i>Franchise Supplement
 					</h1>
 
 				</div>
@@ -91,99 +117,146 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Cake Completion Status
+								<i class="fa fa-bars"></i> Add Franchise Sup
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showSpCksAllocToStation">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAddFrSup">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
 						</div>
 
 
-						<div class="box-content">
-							<form action="addCkAllocToStation" method="post" class="form-horizontal" id=
-									"validation-form"
-										 method="post">
-							
 
-								<div class="col2">
-								 <c:forEach items="${stWiseCkList}" var="stWiseCkList">
-									<label class="col-sm-2 col-lg-2 control-label">${stWiseCkList.stName}[${stWiseCkList.compQty}/${stWiseCkList.totQty}]</label>
-									</c:forEach>
+
+						<div class="box-content">
+							<form action="${pageContext.request.contextPath}/addFrSupProcess" class="form-horizontal"
+								method="post" id="validation-form">
+
+	                    <input type="hidden" name="id" id="id" value="${frSup.id}"/>
+							 
+							  <div class="col2">
+									<label class="col-sm-3 col-lg-2 control-label">Franchise</label>
+									<div class="col-sm-9 col-lg-3 controls">
+									<select name="fr_id" id="fr_id" class="form-control" placeholder="Select Franchise" data-rule-required="true">
+											<option value="-1">Select Franchise</option>
+										 <c:forEach items="${franchiseeList}" var="franchiseeList">
+											<c:choose>
+													<c:when test="${franchiseeList.frId==frSup.frId}">
+												          <option value="${franchiseeList.frId}" selected><c:out value="${franchiseeList.frName}"></c:out></option>
+													</c:when>
+													<c:otherwise>
+										            	  <option value="${franchiseeList.frId}"><c:out value="${franchiseeList.frName}"></c:out></option>
+													</c:otherwise>
+												</c:choose>
+										</c:forEach>
+												
+								</select>	
+									</div>
 								</div>
-								<br/><br/>
-								<div class="box"><div class="box-title">
+                         
+							  <div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">PAN No.</label>
+									<div class="col-sm-9 col-lg-3 controls">
+										<input type="text" name="pan_no" id="pan_no"
+											placeholder="PAN No" class="form-control"
+											data-rule-required="true" value="${frSup.frPanNo}"/>
+									</div>
+							  </div>
+							  <div class="col2">
+									<label class="col-sm-3 col-lg-2 control-label">State</label>
+									<div class="col-sm-9 col-lg-3 controls">
+										<input type="text" name="fr_state" id="fr_state"
+											placeholder="State" class="form-control"
+											data-rule-required="true" value="${frSup.frState}"/>
+									</div>
+							  </div>
+							   <div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Country</label>
+									<div class="col-sm-9 col-lg-3 controls">
+										<input type="text" name="fr_country" id="fr_country"
+											placeholder="Country" class="form-control"
+											data-rule-required="true" value="${frSup.frCountry}"/>
+									</div>
+							  </div>
+							
+								<div class="form-group">
+									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+										<input type="submit" class="btn btn-primary" value="Submit">
+<!-- 										<button type="button" class="btn">Cancel</button>
+ -->									</div>
+								</div>
+							</form>
+							<br>
+								<div class="box">
+									<div class="box-title">
 										<h3>
-											<i class="fa fa-record"></i>Cake Allocation To Station
+											<i class="fa fa-table"></i>Franchise List
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i
 												class="fa fa-chevron-up"></i></a>
-											
+											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 										</div>
-									</div></div>
-								<div class="form-group">
-									<label class="col-sm-2 col-lg-2 control-label">Station</label>
-									<div class="col-sm-6 col-lg-10 controls">
-                                    <select name="st_id" id="st_id" class="form-control" placeholder="Station"data-rule-required="true" >
-											<option value="-1">Select Station</option>
-									 <c:forEach items="${spStationList}" var="spStationList">
-								         <option value="${spStationList.stId}"><c:out value="${spStationList.stName}"></c:out></option>
-									 
-									</c:forEach>
-								   </select>									
-								   </div>
+									</div>
 
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Shift</label>
-									<div class="col-sm-2 col-lg-4 controls">
-									<select name="shift_id" id="shift_id" class="form-control" placeholder="Select Shift" data-rule-required="true">
-											<option value="-1">Select Shift</option>
-										  	<c:forEach items="${shiftList}" var="shiftList">
-										    	 <option value="${shiftList.shiftId}"><c:out value="${shiftList.shiftName}"></c:out></option>
-											</c:forEach> 
-								</select>	
+									<div class="box-content">
+
+										<div class="clearfix"></div>
+										<div class="table-responsive" style="border: 0">
+											<table width="100%" class="table table-advance" id="table1">
+												<thead>
+													<tr>
+														<th width="45" style="width: 18px">Sr.No.</th>
+														<th width="100" align="left">Franchise Name</th>
+														<th width="100" align="left">PAN No.</th>
+														<th width="100" align="left">State</th>
+														<th width="100" align="left">Country</th>
+													
+														<th width="81" align="left">Action</th>
+													</tr>
+												</thead>
+												<tbody>
+												 <c:forEach items="${frSupList}" var="frSupList" varStatus="count">
+														<tr>
+														
+															<td><c:out value="${count.index+1}"/></td>
+															<td align="left"><c:out
+																	value="${frSupList.frName}"></c:out></td>
+															<td align="left"><c:out
+																	value="${frSupList.frPanNo}"></c:out></td>	
+												        	<td align="left"><c:out
+																	value="${frSupList.frState}"></c:out></td>					
+															<td align="left"><c:out
+																	value="${frSupList.frCountry}"></c:out></td>
+															
+															<td align="left"><a href="${pageContext.request.contextPath}/updateFranchiseSup/${frSupList.id}"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
+                                                        </td>		
+																												
+       													
+														</tr>
+
+													</c:forEach>  
+              										</tbody>
+											</table>
+										</div>
 									</div>
 								</div>
-							  <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Special Cake</label>
-									<div class="col-sm-9 col-lg-10 controls">
-									<select name="spck_id" id="spck_id[]" class="form-control chosen" placeholder="Select Special Cake" data-rule-required="true" multiple="multiple">
-										 <option value="-1">Select Special Cake</option>
-									     <c:forEach items="${stationSpCakeList}" var="stationSpCakeList">
-										 <option value="${stationSpCakeList.spOrderNo}"><c:out value="${stationSpCakeList.spName}"></c:out></option>
-										 </c:forEach>
-								</select>	
-									</div>
-								</div>
-								
-					<div class="row">
-						<div class="col-md-12" style="text-align: center">
-							<input type="submit" class="btn btn-info" value="Submit" name="add" id="add">
-
-
+							
 						</div>
 					</div>
-					</form>
-					
-				           </div>
-				           
-				         
-			          </div>
-		        </div>
-	     </div>
-	<!-- END Main Content -->
-	<footer>
-	<p>2017 © MONGINIS.</p>
-	</footer>
+				</div>
+			</div>
+			<!-- END Main Content -->
+			<footer>
+			<p>2017 © MONGINIS.</p>
+			</footer>
 
-
-	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-		class="fa fa-chevron-up"></i></a>
-	</div>
-	<!-- END Content -->
+			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+				class="fa fa-chevron-up"></i></a>
+		</div>
+		<!-- END Content -->
 	</div>
 	<!-- END Container -->
 
@@ -246,15 +319,16 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-				
+
 </body>
+<script>
+function disableFranchise(isEdit) {
+	if(isEdit==1)
+		{
+		$("#fr_id option:not(:selected)").prop("disabled", true);
+		}
 
-
+}
+</script>
 </html>
-

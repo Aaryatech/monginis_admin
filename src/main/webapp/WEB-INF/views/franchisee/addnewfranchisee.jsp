@@ -390,11 +390,18 @@
 												</select>
 											</div>
 										</div>
-										
-										
-										
-										
-										
+											<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Is Same State?</label>
+											<div class="col-sm-9 col-lg-10 controls">
+												 <label class="radio-inline"> <input type="radio"
+													name="is_same_state" id="optionsRadios1" value="1" checked/> YES
+												</label>
+												<label class="radio-inline"> <input type="radio"
+													name="is_same_state" id="optionsRadios1" value="0">
+													NO
+												</label>
+											</div>
+										</div>
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">GRN 2
 												Applicable ?</label>

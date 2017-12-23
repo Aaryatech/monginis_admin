@@ -301,23 +301,7 @@
 
 									</div>
 								</div>
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">SGST %</label>
-									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="item_tax1" id="item_tax1"
-											placeholder="SGST" class="form-control"
-											data-rule-required="true" data-rule-number="true" value="0.0" onchange="calTotalGst()"/>
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">CGST %</label>
-									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="item_tax2" id="item_tax2"
-											placeholder="CGST" class="form-control"
-											data-rule-required="true" data-rule-number="true" value="0.0" onchange="calTotalGst()"/>
-									</div>
-								</div>
-								<div class="form-group">
+									<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">IGST %</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="item_tax3" id="item_tax3"
@@ -325,7 +309,24 @@
 											data-rule-required="true" data-rule-number="true" value="0.0"/>
 									</div>
 								</div>
-
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">CGST %</label>
+									<div class="col-sm-9 col-lg-10 controls">
+										<input type="text" name="item_tax2" id="item_tax2"
+											placeholder="CGST" class="form-control"
+											data-rule-required="true" data-rule-number="true" value="0.0"  onchange="calTotalGst()"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">SGST %</label>
+									<div class="col-sm-9 col-lg-10 controls">
+										<input type="text" name="item_tax1" id="item_tax1"
+											placeholder="SGST" class="form-control"
+											data-rule-required="true" data-rule-number="true" value="0.0"/>
+									</div>
+								</div>
+								
+							
                                 <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Total GST Applicable %</label>
 									<div class="col-sm-9 col-lg-10 controls">
@@ -500,13 +501,15 @@ $(document).ready(function() {
 
 <script>
 function calTotalGst() {
-   
-	  var sgst=parseFloat($("#item_tax1").val());
+	 var igst=parseFloat($("#item_tax3").val());
 	  var cgst=parseFloat($("#item_tax2").val());
-	  var totalGst=parseFloat(cgst+sgst);
-	
+	  var sgst=parseFloat(igst-cgst);
+	 
+	  document.getElementById("item_tax1")
+		.setAttribute('value', sgst);
+	  
 	  document.getElementById("total_gst_appli")
-		.setAttribute('value', totalGst);
+		.setAttribute('value', igst);
 }
 </script>
 

@@ -84,6 +84,16 @@ private String frAddress;
 
 private String frTarget;
 
+private int isSameState;
+
+
+public int getIsSameState() {
+	return isSameState;
+}
+
+public void setIsSameState(int isSameState) {
+	this.isSameState = isSameState;
+}
 
 public String getOwnerBirthDate() {
 	return ownerBirthDate;

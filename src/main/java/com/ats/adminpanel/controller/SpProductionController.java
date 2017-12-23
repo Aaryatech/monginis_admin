@@ -1652,7 +1652,7 @@ public class SpProductionController {
                     		
                     		if(stationSpCakeList.getStationSpCakeList().get(j).getSpOrderNo()==Integer.parseInt(spIdList.get(i)))
                     		{
-                    			stationSpCake=stationSpCakeList.getStationSpCakeList().get(i);
+                    			stationSpCake=stationSpCakeList.getStationSpCakeList().get(j);
                     		    System.out.println("Special Cake:"+stationSpCake.toString());
                     		}
                     	}
@@ -1758,7 +1758,7 @@ public class SpProductionController {
 					 try {
 						 
 						 int selStId=Integer.parseInt(request.getParameter("st_id"));
-							System.out.println("selStId :"+selStId);
+						 System.out.println("selStId :"+selStId);
 
 						 String fromDate=request.getParameter("from_date");
 						 System.out.println("fromDate"+fromDate);

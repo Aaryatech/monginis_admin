@@ -1,6 +1,6 @@
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -14,9 +14,6 @@
 <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
 <!--base css styles-->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/loader.css">
-
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet"
@@ -51,11 +48,13 @@
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
-
 </head>
 <body>
 
+
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+
+
 	<div class="container" id="main-container">
 
 		<!-- BEGIN Sidebar -->
@@ -70,120 +69,116 @@
 		</div>
 		<!-- END Sidebar -->
 
+
 		<!-- BEGIN Content -->
 		<div id="main-content">
 			<!-- BEGIN Page Title -->
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Cake Allocation
+						<i class="fa fa-file-o"></i> Item Supp
 					</h1>
-
 				</div>
 			</div>
 			<!-- END Page Title -->
 
-
-
 			<!-- BEGIN Main Content -->
 			<div class="row">
 				<div class="col-md-12">
+
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Cake Completion Status
+								<i class="fa fa-table"></i> Items Supp List
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showSpCksAllocToStation">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAddItemSup">Add New Item Supp</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
-							
 						</div>
-
 
 						<div class="box-content">
-							<form action="addCkAllocToStation" method="post" class="form-horizontal" id=
-									"validation-form"
-										 method="post">
-							
 
-								<div class="col2">
-								 <c:forEach items="${stWiseCkList}" var="stWiseCkList">
-									<label class="col-sm-2 col-lg-2 control-label">${stWiseCkList.stName}[${stWiseCkList.compQty}/${stWiseCkList.totQty}]</label>
-									</c:forEach>
-								</div>
-								<br/><br/>
-								<div class="box"><div class="box-title">
-										<h3>
-											<i class="fa fa-record"></i>Cake Allocation To Station
-										</h3>
-										<div class="box-tool">
-											<a data-action="collapse" href="#"><i
-												class="fa fa-chevron-up"></i></a>
+							<div class="clearfix"></div>
+							<div class="table-responsive" style="border: 0">
+								<table width="100%" class="table table-advance" id="table1">
+									<thead>
+										<tr>
+											<th width="17" style="width: 18px">#</th>
+											<th width="100" align="left">Item Id</th>
+											<th width="150" align="left">Item Name</th>
 											
-										</div>
-									</div></div>
-								<div class="form-group">
-									<label class="col-sm-2 col-lg-2 control-label">Station</label>
-									<div class="col-sm-6 col-lg-10 controls">
-                                    <select name="st_id" id="st_id" class="form-control" placeholder="Station"data-rule-required="true" >
-											<option value="-1">Select Station</option>
-									 <c:forEach items="${spStationList}" var="spStationList">
-								         <option value="${spStationList.stId}"><c:out value="${spStationList.stName}"></c:out></option>
-									 
-									</c:forEach>
-								   </select>									
-								   </div>
+											<th width="100" align="left">HSN Code</th>
+											<th width="100" align="left">UOM</th>
+											<th width="103" align="left">Actual Weight</th>
+											<th width="137" align="left">Base Weight</th>
+											<th width="200" align="left">Input Per Qty</th>
+									       <th width="200" align="left">Is Gate Sale?</th>
+							               <th width="200" align="left">Is Gate Sale Disc?</th>
+							               <th width="200" align="left">Is Allow Birthday?</th>
 
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Shift</label>
-									<div class="col-sm-2 col-lg-4 controls">
-									<select name="shift_id" id="shift_id" class="form-control" placeholder="Select Shift" data-rule-required="true">
-											<option value="-1">Select Shift</option>
-										  	<c:forEach items="${shiftList}" var="shiftList">
-										    	 <option value="${shiftList.shiftId}"><c:out value="${shiftList.shiftName}"></c:out></option>
-											</c:forEach> 
-								</select>	
-									</div>
-								</div>
-							  <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Special Cake</label>
-									<div class="col-sm-9 col-lg-10 controls">
-									<select name="spck_id" id="spck_id[]" class="form-control chosen" placeholder="Select Special Cake" data-rule-required="true" multiple="multiple">
-										 <option value="-1">Select Special Cake</option>
-									     <c:forEach items="${stationSpCakeList}" var="stationSpCakeList">
-										 <option value="${stationSpCakeList.spOrderNo}"><c:out value="${stationSpCakeList.spName}"></c:out></option>
-										 </c:forEach>
-								</select>	
-									</div>
-								</div>
-								
-					<div class="row">
-						<div class="col-md-12" style="text-align: center">
-							<input type="submit" class="btn btn-info" value="Submit" name="add" id="add">
+											<th width="150" align="left">Action</th>
+										</tr>
+									</thead>
+									<tbody>
+									 <c:forEach items="${itemsList}" var="itemsList" varStatus="count">
+											<tr>
+												<td><c:out value="${count.index+1}" /></td>
+												<td align="left"><c:out value="${itemsList.itemId}" /></td>
+												<td align="left"><c:out value="${itemsList.itemName}" /></td>
+												
+												<td align="left"><c:out value="${itemsList.itemHsncd}" /></td>
+												<td align="left"><c:out value="${itemsList.itemUom}" /></td>
+										        <td align="left"><c:out value="${itemsList.actualWeight}" /></td>
+												<td align="left"><c:out value="${itemsList.baseWeight}" /></td>
+											    <td align="left"><c:out value="${itemsList.inputPerQty}" /></td>
+												<c:choose><c:when test="${itemsList.isGateSale==0}">
+												<td align="left"><c:out value="NO" /></td>
+												</c:when>
+												<c:when test="${itemsList.isGateSale==1}">
+												<td align="left"><c:out value="YES" /></td>
+												</c:when>
+												</c:choose>
+												
+												<c:choose><c:when test="${itemsList.isGateSaleDisc==0}">
+												<td align="left"><c:out value="NO" /></td>
+												</c:when>
+												<c:when test="${itemsList.isGateSaleDisc==1}">
+												<td align="left"><c:out value="YES" /></td>
+												</c:when>
+												</c:choose>
+												<c:choose>
+												<c:when test="${itemsList.isAllowBday==0}">
+												<td align="left"><c:out value="NO" /></td>
+												</c:when>
+												<c:when test="${itemsList.isAllowBday==1}">
+												<td align="left"><c:out value="YES" /></td>
+												</c:when>
+												</c:choose>
+												<td align="left"><a href="updateItemSup/${itemsList.id}"><span
+														class="glyphicon glyphicon-edit"></span></a>
+                                             </td>
+											</tr>
 
+										</c:forEach>
 
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</div>
-					</form>
-					
-				           </div>
-				           
-				         
-			          </div>
-		        </div>
-	     </div>
-	<!-- END Main Content -->
-	<footer>
-	<p>2017 © MONGINIS.</p>
-	</footer>
+				</div>
+			</div>
 
+			<!-- END Main Content -->
+			<footer>
+			<p>2017 © MONGINIS.</p>
+			</footer>
 
-	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-		class="fa fa-chevron-up"></i></a>
-	</div>
-	<!-- END Content -->
+			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+				class="fa fa-chevron-up"></i></a>
+		</div>
+		<!-- END Content -->
 	</div>
 	<!-- END Container -->
 
@@ -246,15 +241,5 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/common.js"></script>
-
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-				
 </body>
-
-
 </html>
-

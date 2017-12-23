@@ -44,6 +44,7 @@ import com.ats.adminpanel.model.ConfigureFrBean;
 import com.ats.adminpanel.model.ConfigureFrListResponse;
 import com.ats.adminpanel.model.ConfiguredSpDayCkResponse;
 import com.ats.adminpanel.model.GetConfiguredSpDayCk;
+import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.ItemNameId;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.SpCakeResponse;
@@ -52,6 +53,11 @@ import com.ats.adminpanel.model.SpecialCake;
 import com.ats.adminpanel.model.franchisee.AllFranchiseeAndMenu;
 import com.ats.adminpanel.model.franchisee.AllFranchiseeList;
 import com.ats.adminpanel.model.franchisee.CommonConf;
+import com.ats.adminpanel.model.franchisee.FrTarget;
+import com.ats.adminpanel.model.franchisee.FrTargetList;
+import com.ats.adminpanel.model.franchisee.FrTotalSale;
+import com.ats.adminpanel.model.franchisee.FranchiseSup;
+import com.ats.adminpanel.model.franchisee.FranchiseSupList;
 import com.ats.adminpanel.model.franchisee.FranchiseeAndMenuList;
 import com.ats.adminpanel.model.franchisee.FranchiseeList;
 import com.ats.adminpanel.model.franchisee.Menu;
@@ -59,6 +65,7 @@ import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.FrItemStockConfiResponse;
 import com.ats.adminpanel.model.item.FrItemStockConfigure;
 import com.ats.adminpanel.model.item.Item;
+import com.ats.adminpanel.model.item.ItemSup;
 import com.ats.adminpanel.model.modules.ErrorMessage;
 import com.ats.adminpanel.util.ImageS3Util;
 
@@ -311,6 +318,8 @@ public class FranchiseeController {
 
 		int grnTwo = Integer.parseInt(request.getParameter("grn_two"));
 		System.out.println("16] fr grn two "+grnTwo);
+		
+		int isSameState = Integer.parseInt(request.getParameter("is_same_state"));
 
 		int delStatus = Integer.parseInt(request.getParameter("fr_status"));
 		System.out.println("17fr del status "+delStatus);
@@ -387,7 +396,7 @@ public class FranchiseeController {
 		map.add("stockType", stockType);
 		map.add("frAddress", frAddr);
 		map.add("frTarget", frTarget);
-		
+		map.add("isSameState", isSameState);
 		
 		
 		
@@ -969,6 +978,7 @@ public class FranchiseeController {
 
 		ModelAndView mav = new ModelAndView("franchisee/listAllFranchisee");
 
+		try {
 		RestTemplate rest = new RestTemplate();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("frId", frId);
@@ -976,6 +986,10 @@ public class FranchiseeController {
 		ErrorMessage errorResponse = rest.postForObject(Constants.url + "deleteFranchisee", map, ErrorMessage.class);
 		System.out.println(errorResponse.toString());
 
+		Info info = rest.postForObject(Constants.url + "deleteFranchiseSup", map, Info.class);
+		System.out.println(info.toString());
+
+		
 		if (errorResponse.getError()) {
 			return "redirect:/listAllFranchisee";
 
@@ -983,6 +997,12 @@ public class FranchiseeController {
 			return "redirect:/listAllFranchisee";
 
 		}
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exc In Del Fr");
+		}
+		return "redirect:/listAllFranchisee";
 	}
 
 	//----------------------------------------END---------------------------------------------------------
@@ -1205,6 +1225,7 @@ public class FranchiseeController {
 
 		String frOwner = request.getParameter("fr_owner");
 		System.out.println("18] frOwner "+frOwner);
+		int isSameState = Integer.parseInt(request.getParameter("is_same_state"));
 
 		int grnTwo = Integer.parseInt(request.getParameter("grn_two"));
 		System.out.println("18] grnTwo "+grnTwo);
@@ -1292,6 +1313,7 @@ public class FranchiseeController {
 		map.add("stockType", stockType);
 		map.add("frAddress", frAddr);
 		map.add("frTarget", frTarget);
+		map.add("isSameState", isSameState);
 		ErrorMessage errorMessage = rest.postForObject(Constants.url + "updateFranchisee", map, ErrorMessage.class);
 		}
 		catch(Exception e)
@@ -1734,5 +1756,287 @@ public class FranchiseeController {
 						
 				}
 			//----------------------------------------END---------------------------------------------------------
+			//---------------------------------------LIST ALL FRANCHISEE--------------------------------------------
 
+			@RequestMapping(value = "/showAddFranchiseSup")
+			public ModelAndView addFranchiseSup(HttpServletRequest request, HttpServletResponse response) {
+				//Constants.mainAct=7;
+				//Constants.subAct=72;
+				ModelAndView mav = new ModelAndView("franchisee/addFranchiseSup");
+
+				RestTemplate restTemplate = new RestTemplate();
+				AllFranchiseeList allFranchiseeList = restTemplate.getForObject(Constants.url + "getAllFranchisee",
+						AllFranchiseeList.class);
+				
+				FranchiseSupList frSupList=restTemplate.getForObject(Constants.url + "/getFranchiseSupList",FranchiseSupList.class);
+						
+				List<FranchiseeList> franchiseeList = new ArrayList<FranchiseeList>();
+				franchiseeList = allFranchiseeList.getFranchiseeList();
+				System.out.println("Franchisee List:"+franchiseeList.toString());
+				
+				mav.addObject("franchiseeList", franchiseeList);
+			    mav.addObject("frSupList", frSupList.getFrList());
+			    mav.addObject("isEdit",0);
+
+				return mav;
+			}
+			//----------------------------------------END---------------------------------------------------------
+			
+			// ------------------------------ADD Franchisee Process------------------------------------
+			@RequestMapping(value = "/addFrSupProcess", method = RequestMethod.POST)
+			public String addFrSupProcess(HttpServletRequest request, HttpServletResponse response) {
+
+				ModelAndView model = new ModelAndView("franchisee/addFranchiseSup");
+				try {
+
+					int id = 0;
+
+					try {
+						id = Integer.parseInt(request.getParameter("id"));
+
+					} catch (Exception e) {
+						id = 0;
+						System.out.println("In Catch of Add ItemSup Process Exc:" + e.getMessage());
+
+					}
+					int frId = Integer.parseInt(request.getParameter("fr_id"));
+
+					String frPanNo = request.getParameter("pan_no");
+
+					String frState = request.getParameter("fr_state");
+
+					String frCountry = request.getParameter("fr_country");
+					
+					FranchiseSup frSup=new FranchiseSup();
+					frSup.setId(id);
+					frSup.setFrId(frId);
+					frSup.setFrPanNo(frPanNo);
+					frSup.setFrCountry(frCountry);
+					frSup.setFrState(frState);
+					frSup.setDelStatus(0);
+					
+					RestTemplate restTemplate = new RestTemplate();
+
+					Info info = restTemplate.postForObject(Constants.url + "/saveFranchiseSup",
+							frSup, Info.class);
+					System.out.println("Response: " + info.toString());
+
+					if (info.getError() == true) {
+
+						System.out.println("Error:True" + info.toString());
+						return "redirect:/showAddFranchiseSup";
+
+					} else {
+						return "redirect:/showAddFranchiseSup";
+					}
+
+				} catch (Exception e) {
+
+					System.out.println("Exception In Add Fr Sup Process:" + e.getMessage());
+
+				}
+
+				return "redirect:/showAddFranchiseSup";
+			}
+			
+			// ------------------------------ADD Franchisee Process------------------------------------
+			@RequestMapping(value = "/updateFranchiseSup/{id}", method = RequestMethod.GET)
+			public ModelAndView updateFranchiseSup(@PathVariable("id")int id,HttpServletRequest request, HttpServletResponse response) {
+
+			ModelAndView model = new ModelAndView("franchisee/addFranchiseSup");
+			try {
+				RestTemplate restTemplate = new RestTemplate();
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("id",id);
+			     
+				FranchiseSup frSup= restTemplate.postForObject(Constants.url + "/getFranchiseSup",
+						map, FranchiseSup.class);
+				AllFranchiseeList allFranchiseeList = restTemplate.getForObject(Constants.url + "getAllFranchisee",
+						AllFranchiseeList.class);
+				List<FranchiseeList> franchiseeList = new ArrayList<FranchiseeList>();
+				franchiseeList = allFranchiseeList.getFranchiseeList();
+				System.out.println("Franchisee List:"+franchiseeList.toString());
+				
+				FranchiseSupList frSupList=restTemplate.getForObject(Constants.url + "/getFranchiseSupList",FranchiseSupList.class);
+
+				model.addObject("franchiseeList", franchiseeList);
+				model.addObject("frSup", frSup);
+				model.addObject("frSupList", frSupList.getFrList());
+				model.addObject("isEdit",1);
+
+			}
+			catch(Exception e)
+			{
+				System.out.println("Exc In Update Fr Sup");
+			}
+			return model;
+			}
+
+           //------------------------------------showAddFrTarget--------------------------------------------
+			@RequestMapping(value = "/showAddFrTarget", method = RequestMethod.GET)
+			public ModelAndView showAddFrTarget(HttpServletRequest request, HttpServletResponse response) {
+				//Constants.mainAct=7;
+				//Constants.subAct=72;
+				ModelAndView model = new ModelAndView("franchisee/addFrTarget");
+				
+				List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+                   String thisYear = new SimpleDateFormat("yyyy").format(new Date());
+   				RestTemplate restTemplate = new RestTemplate();
+
+                AllFranchiseeList allFranchiseeList = restTemplate.getForObject(Constants.url + "getAllFranchisee",
+   						AllFranchiseeList.class);
+   				List<FranchiseeList> franchiseeList = new ArrayList<FranchiseeList>();
+   				franchiseeList = allFranchiseeList.getFranchiseeList();
+   				System.out.println("Franchisee List:"+franchiseeList.toString());
+				
+   				model.addObject("franchiseeList", franchiseeList);
+                model.addObject("thisYear", thisYear);
+				model.addObject("months", months);
+                model.addObject("isSave",0);
+
+				return model;
+			}
+		   //---------------------------------------------------------------------------------------------
+			
+		//------------------------------------showAddFrTarget--------------------------------------------
+			@RequestMapping(value = "/addFrTargetProcess", method = RequestMethod.POST)
+			public ModelAndView addFrTargetProcess(HttpServletRequest request, HttpServletResponse response) {
+				
+				ModelAndView model = new ModelAndView("franchisee/addFrTarget");
+   				RestTemplate restTemplate = new RestTemplate();
+
+   				try
+   				{
+				String[] selChk= request.getParameterValues("chk");
+				System.out.println("selChk:" + selChk);
+
+				int frId = Integer.parseInt(request.getParameter("fr_id"));
+				System.out.println("frId:" + frId);
+				
+				int frTargetYear = Integer.parseInt(request.getParameter("year"));
+				System.out.println("frTargetYear:" + frTargetYear);
+				
+				List<String> list = Arrays.asList(selChk);
+
+				List<FrTarget> frTargetList=new ArrayList<FrTarget>();
+				
+				
+				for (int j = 0; j < list.size(); j++) {
+					
+					int chk=Integer.parseInt(list.get(j));
+					
+					//String frMonth = request.getParameter("month"+chk);
+					//System.out.println("month:" + frMonth);
+					int frTargetId = Integer.parseInt(request.getParameter("id"+chk));
+					System.out.println("frTargetId:" + frTargetId);
+					
+					float frTargetAmt = Float.parseFloat(request.getParameter("target"+chk));
+					System.out.println("frTarget:" + frTargetAmt);
+					
+					float frAchievedSale = Float.parseFloat(request.getParameter("ach_target"+chk));
+					System.out.println("frAchTarget:" + frAchievedSale);
+
+					String frAward = request.getParameter("award"+chk);
+					System.out.println("frAward" + frAward);
+
+					String remark = request.getParameter("remark"+chk);
+					System.out.println("remark" + remark);
+					int status=0;
+					if(frAchievedSale>0)
+					{
+					 status =1;//Integer.parseInt(request.getParameter("status"+chk));
+					System.out.println("status:" + status);
+					}
+					else
+					{
+						status=0;
+					}
+					FrTarget franchiseTarget=new FrTarget();
+					
+					franchiseTarget.setFrTargetId(frTargetId);
+					franchiseTarget.setFrId(frId);
+					franchiseTarget.setFrTargetAmt(frTargetAmt);
+					franchiseTarget.setFrAchievedSale(frAchievedSale);
+					franchiseTarget.setFrAward(frAward);
+					franchiseTarget.setFrTargetMonth(chk);
+					franchiseTarget.setFrTargetYear(frTargetYear);
+					franchiseTarget.setRemark(remark);
+					franchiseTarget.setStatus(status);
+					
+					franchiseTarget.setDelStatus(0);
+					frTargetList.add(franchiseTarget);
+				}
+				Info info=restTemplate.postForObject(Constants.url + "/saveFrTarget",frTargetList, Info.class);
+				System.out.println("saveFrTarget Response:"+info.toString());
+				
+				List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
+
+			    AllFranchiseeList allFranchiseeList = restTemplate.getForObject(Constants.url + "getAllFranchisee",
+	   						AllFranchiseeList.class);
+	   			List<FranchiseeList> franchiseeList = new ArrayList<FranchiseeList>();
+	   			franchiseeList = allFranchiseeList.getFranchiseeList();
+	   				
+	   				System.out.println("Franchisee List:"+franchiseeList.toString());
+					
+	   			model.addObject("franchiseeList", franchiseeList);
+				model.addObject("months", months);
+				model.addObject("frId", frId);
+				model.addObject("thisYear", frTargetYear);
+                model.addObject("isSave", 1);
+   				}
+   				catch(Exception e)
+   				{
+   					System.out.println("Exception In /saveFrTarget"+e.getMessage());
+   					e.printStackTrace();
+   				}
+				return model;
+			}
+			//--------------------------------------------------------------------------------------------------
+			
+			@RequestMapping(value = "/searchFrMonthTarget", method = RequestMethod.GET)
+			public @ResponseBody List<FrTarget> searchFrMonthTarget(HttpServletRequest request, HttpServletResponse response) {
+				FrTargetList frTargetList=new FrTargetList();
+               try {
+				int frId = Integer.parseInt(request.getParameter("frId"));
+				System.out.println("frId:" + frId);
+				
+				int year = Integer.parseInt(request.getParameter("year"));
+				System.out.println("year:" + year);
+				
+   				RestTemplate restTemplate = new RestTemplate();
+   				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("frId",frId);
+				map.add("year",year);
+
+				frTargetList=restTemplate.postForObject(Constants.url + "/getFrTargetList",map,FrTargetList.class);
+			    System.out.println("Fr Target List:"+frTargetList.toString());
+			    
+			    for(int i=0;i<frTargetList.getFrTargetList().size();i++)
+			    {
+			    	if(frTargetList.getFrTargetList().get(i).getStatus()==0)
+			    	{
+                       System.out.println(frTargetList.getFrTargetList().get(i).getFrId());	
+                        map = new LinkedMultiValueMap<String, Object>();
+			    		 map.add("frId",frTargetList.getFrTargetList().get(i).getFrId());
+			    		 map.add("month", frTargetList.getFrTargetList().get(i).getFrTargetMonth());
+			    		 map.add("year",frTargetList.getFrTargetList().get(i).getFrTargetYear());
+			    		
+			    		FrTotalSale frTotalSale=restTemplate.postForObject(Constants.url + "/getFrTotalSale",map,FrTotalSale.class);
+			    	    System.out.println("FrTotalSale:"+frTotalSale.toString());
+			    	    
+			    		if(frTotalSale!=null||frTotalSale.getTotalSale()!=0)
+			    		{
+			    			float achievedSale=frTotalSale.getTotalSale();
+			    			frTargetList.getFrTargetList().get(i).setFrAchievedSale(achievedSale);
+			    		}
+			    	
+			    	}
+			    }
+               }
+               catch(Exception e)
+               {
+            	   System.out.println("Exception In Search FrTarget Data By FrId"+e.getMessage());
+               }
+				return frTargetList.getFrTargetList();
+			}
 }
