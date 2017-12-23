@@ -1760,8 +1760,8 @@ public class FranchiseeController {
 
 			@RequestMapping(value = "/showAddFranchiseSup")
 			public ModelAndView addFranchiseSup(HttpServletRequest request, HttpServletResponse response) {
-				//Constants.mainAct=7;
-				//Constants.subAct=72;
+				Constants.mainAct=7;
+				Constants.subAct=77;
 				ModelAndView mav = new ModelAndView("franchisee/addFranchiseSup");
 
 				RestTemplate restTemplate = new RestTemplate();
@@ -1875,8 +1875,8 @@ public class FranchiseeController {
            //------------------------------------showAddFrTarget--------------------------------------------
 			@RequestMapping(value = "/showAddFrTarget", method = RequestMethod.GET)
 			public ModelAndView showAddFrTarget(HttpServletRequest request, HttpServletResponse response) {
-				//Constants.mainAct=7;
-				//Constants.subAct=72;
+				Constants.mainAct=7;
+				Constants.subAct=78;
 				ModelAndView model = new ModelAndView("franchisee/addFrTarget");
 				
 				List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");

@@ -754,7 +754,8 @@ public class ItemController {
 	
 	@RequestMapping(value = "/showAddItemSup", method = RequestMethod.GET)
 	public ModelAndView showAddItemSup(HttpServletRequest request, HttpServletResponse response) {
-		
+		Constants.mainAct = 4;
+		Constants.subAct = 45;
 		ModelAndView model = new ModelAndView("items/itemSup");
 		try
 		{		
@@ -811,8 +812,8 @@ public class ItemController {
 	@RequestMapping(value = "/showItemSupList", method = RequestMethod.GET)
 	public ModelAndView itemSupList(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView("items/itemSupList");
-		//Constants.mainAct = 4;
-		//Constants.subAct = 43;
+		Constants.mainAct = 4;
+		Constants.subAct = 46;
 
 		RestTemplate restTemplate = new RestTemplate();
 		
@@ -905,8 +906,7 @@ public class ItemController {
 		@RequestMapping(value = "/updateItemSup/{id}", method = RequestMethod.GET)
 		public ModelAndView updateItemSup(@PathVariable("id")int id,HttpServletRequest request, HttpServletResponse response) {
 			ModelAndView mav = new ModelAndView("items/itemSup");
-			//Constants.mainAct = 4;
-			//Constants.subAct = 43;
+			
 
 			RestTemplate restTemplate = new RestTemplate();
 			
