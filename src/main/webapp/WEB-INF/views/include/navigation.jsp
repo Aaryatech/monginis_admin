@@ -453,7 +453,7 @@
 							<li>
 						</c:otherwise>
 					</c:choose>
-					<a href="${pageContext.request.contextPath}/allDirectorMaterialReceiptNote">Material Receipt Director</a>
+					<a href="${pageContext.request.contextPath}/allDirectorMaterialRecieptNote">Material Receipt Director</a>
 					</li>
 				</ul>
 				<!-- END Submenu -->
@@ -865,18 +865,6 @@
 					</c:choose>
 					<a href="${pageContext.request.contextPath}/showBmsStock">BMS Stock</a>
 					</li>
-					
-					
-					<c:choose>
-						<c:when test="${Constants.subAct==123}">
-							<li class="active">
-						</c:when>
-						<c:otherwise>
-							<li>
-						</c:otherwise>
-					</c:choose>
-					<a href="${pageContext.request.contextPath}/showFinishedGoodStock">Finished Good Stock</a>
-					</li>
 
 				</ul>
 				<!-- END Submenu -->
@@ -1188,126 +1176,65 @@
 					</c:choose>
 					<a href="${pageContext.request.contextPath}/configureStation">Configure Station</a>
 					</li>
+					<c:choose>
+						<c:when test="${Constants.subAct==196}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/instrumentAllocation">Instrument Alloc To Station</a>
+					</li>
+					
+					<c:choose>
+						<c:when test="${Constants.subAct==197}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/instrVerification">Instrument Verification</a>
+					</li>
+					
+					<c:choose>
+						<c:when test="${Constants.subAct==198}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/instrVerifDetails">Instrument Verif Details</a>
+					</li>
+					
+					<c:choose>
+						<c:when test="${Constants.subAct==199}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showCkAllocToStation">SpCake Alloc To Station</a>
+					</li>
+					
+					<c:choose>
+						<c:when test="${Constants.subAct==200}">
+							<li class="active">
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					<a href="${pageContext.request.contextPath}/showSpCksAllocToStation">SpCakes Allocated To Station</a>
+					</li>
 					</ul>
              <!-- END Submenu -->
 				</li>
 
 
-
-	<c:choose>
-					<c:when test="${Constants.mainAct==20}">
-						<li class="active">
-					</c:when>
-
-					<c:otherwise>
-						<li>
-					</c:otherwise>
-				</c:choose>
-				<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
-					<span>Store</span> <b class="arrow fa fa-angle-right"></b>
-				</a>
-				<!-- BEGIN Submenu -->
-				<ul class="submenu">
-					<c:choose>
-						<c:when test="${Constants.subAct==201}">
-							<li class="active">
-						</c:when>
-						<c:otherwise>
-							<li>
-						</c:otherwise>
-					</c:choose>
-					<a href="${pageContext.request.contextPath}/showBmsToStoreBom">BMS to Store BOM
-						</a>
-					</li>
-					<c:choose>
-						<c:when test="${Constants.subAct==202}">
-							<li class="active">
-						</c:when>
-						<c:otherwise>
-							<li>
-						</c:otherwise>
-					</c:choose>
-					<a href="${pageContext.request.contextPath}/getBomListBmsToStore">BMS to Store
-						BOM List</a>
-					</li>
-					
-					<c:choose>
-						<c:when test="${Constants.subAct==203}">
-							<li class="active">
-						</c:when>
-						<c:otherwise>
-							<li>
-						</c:otherwise>
-					</c:choose>
-					<a href="${pageContext.request.contextPath}/showStoreOpeningStock"> Store Opening
-						Stock</a>
-					</li>
-					
-						<c:choose>
-						<c:when test="${Constants.subAct==204}">
-							<li class="active">
-						</c:when>
-						<c:otherwise>
-							<li>
-						</c:otherwise>
-					</c:choose>
-					<a href="${pageContext.request.contextPath}/showStoreStock"> Store
-						Stock</a>
-					</li>
-
-
-
-				</ul>
-				<!-- END Submenu -->
-				</li>
-
-
-<c:choose>
-					<c:when test="${Constants.mainAct==21}">
-						<li class="active">
-					</c:when>
-
-					<c:otherwise>
-						<li>
-					</c:otherwise>
-				</c:choose>
-				<a href="#" class="dropdown-toggle"> <i class="fa fa-list"></i>
-					<span>Purchase Order</span> <b class="arrow fa fa-angle-right"></b>
-				</a>
-				<!-- BEGIN Submenu -->
-				<ul class="submenu">
-				<%-- 	<c:choose>
-						<c:when test="${Constants.subAct==211}">
-							<li class="active">
-						</c:when>
-						<c:otherwise>
-							<li>
-						</c:otherwise>
-					</c:choose>
-					<a href="${pageContext.request.contextPath}/showDirectPurchaseOrder">Direct Purchase
-						Order</a>
-					</li> --%>
-					<c:choose>
-						<c:when test="${Constants.subAct==211}">
-							<li class="active">
-						</c:when>
-						<c:otherwise>
-							<li>
-						</c:otherwise>
-					</c:choose>
-					<a href="${pageContext.request.contextPath}/showPurchaseOrder">Purchase
-						Order</a>
-					</li>
-					
-					 
-					
-				 
-
-
-
-				</ul>
-				<!-- END Submenu -->
-				</li>
 
 
 
