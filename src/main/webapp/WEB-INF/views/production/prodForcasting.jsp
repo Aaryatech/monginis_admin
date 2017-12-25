@@ -140,7 +140,7 @@
 					<input type="hidden" id="selectedCatId" name="selectedCatId"/>			
 
 </form>
-					<form action="submitProductionPlan" method ="post">
+					<form action="${pageContext.request.contextPath}/submitProductionPlan" method ="post">
 
 								<div class="box">
 									<div class="box-title">
