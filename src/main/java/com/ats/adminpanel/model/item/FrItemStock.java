@@ -8,10 +8,24 @@ public class FrItemStock {
 	int type;
 	int minQty;
 	int maxQty;
+	int reorderQty;
 	
 	
 	
-	
+	public int getReorderQty() {
+		return reorderQty;
+	}
+
+
+
+
+	public void setReorderQty(int reorderQty) {
+		this.reorderQty = reorderQty;
+	}
+
+
+
+
 	public int getFrStockId() {
 		return frStockId;
 	}
@@ -85,7 +99,7 @@ public class FrItemStock {
 	@Override
 	public String toString() {
 		return "FrItemStock [frStockId=" + frStockId + ", itemId=" + itemId + ", type=" + type + ", minQty=" + minQty
-				+ ", maxQty=" + maxQty + "]";
+				+ ", maxQty=" + maxQty + ", reorderQty=" + reorderQty + "]";
 	}
 
 

@@ -398,8 +398,8 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 		public ModelAndView listForVariation(HttpServletRequest request, HttpServletResponse response) {
 			postProductionPlanDetaillist=new ArrayList<PostProductionPlanDetail>();
 			ModelAndView model = new ModelAndView("production/variation");
-//			Constants.mainAct = 8;
-//			Constants.subAct = 82;
+			Constants.mainAct = 16;
+			Constants.subAct = 167;
 
 			
 
