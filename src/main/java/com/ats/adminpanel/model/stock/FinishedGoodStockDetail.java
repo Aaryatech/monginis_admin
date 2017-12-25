@@ -38,6 +38,9 @@ public class FinishedGoodStockDetail {
 	float cloCurrent;
 
 	float totalCloStk;
+	
+	int delStatus;
+	
 
 	public int getFinStockDetailId() {
 		return finStockDetailId;
@@ -183,13 +186,23 @@ public class FinishedGoodStockDetail {
 		this.finStockId = finStockId;
 	}
 
+	public int getDelStatus() {
+		return delStatus;
+	}
+
+	public void setDelStatus(int delStatus) {
+		this.delStatus = delStatus;
+	}
+
 	@Override
 	public String toString() {
 		return "FinishedGoodStockDetail [finStockDetailId=" + finStockDetailId + ", finStockId=" + finStockId
 				+ ", itemId=" + itemId + ", stockDate=" + stockDate + ", itemName=" + itemName + ", opT1=" + opT1
 				+ ", opT2=" + opT2 + ", opT3=" + opT3 + ", opTotal=" + opTotal + ", prodQty=" + prodQty + ", rejQty="
 				+ rejQty + ", frSaleQty=" + frSaleQty + ", gateSaleQty=" + gateSaleQty + ", cloT1=" + cloT1 + ", cloT2="
-				+ cloT2 + ", cloT3=" + cloT3 + ", cloCurrent=" + cloCurrent + ", totalCloStk=" + totalCloStk + "]";
+				+ cloT2 + ", cloT3=" + cloT3 + ", cloCurrent=" + cloCurrent + ", totalCloStk=" + totalCloStk
+				+ ", delStatus=" + delStatus + "]";
 	}
 
+	
 }

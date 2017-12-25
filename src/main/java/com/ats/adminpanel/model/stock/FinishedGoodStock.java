@@ -10,6 +10,7 @@ int catId;
 Date finGoodStockDate;
 
 int finGoodStockStatus;
+int delStatus;
 
 	
 	List<FinishedGoodStockDetail> finishedGoodStockDetail;
@@ -65,12 +66,21 @@ int finGoodStockStatus;
 	}
 
 
+	public int getDelStatus() {
+		return delStatus;
+	}
+
+
+	public void setDelStatus(int delStatus) {
+		this.delStatus = delStatus;
+	}
+
+
 	@Override
 	public String toString() {
 		return "FinishedGoodStock [finStockId=" + finStockId + ", catId=" + catId + ", finGoodStockDate="
-				+ finGoodStockDate + ", finGoodStockStatus=" + finGoodStockStatus + ", finishedGoodStockDetail="
-				+ finishedGoodStockDetail + "]";
+				+ finGoodStockDate + ", finGoodStockStatus=" + finGoodStockStatus + ", delStatus=" + delStatus
+				+ ", finishedGoodStockDetail=" + finishedGoodStockDetail + "]";
 	}
-
 
 }

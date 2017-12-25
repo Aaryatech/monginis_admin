@@ -394,7 +394,7 @@ public class BmsStockController {
 			
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			Calendar c = Calendar.getInstance();
-			c.setTime(new Date()); // Now use today date.
+			c.setTime(globalHeaderDate); // Now use today date.
 			c.add(Calendar.DATE, 1); // Adding 1 day
 			String output = sdf.format(c.getTime());
 			System.out.println(output);
