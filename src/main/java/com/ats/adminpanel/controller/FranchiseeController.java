@@ -1807,6 +1807,13 @@ public class FranchiseeController {
 
 					String frCountry = request.getParameter("fr_country");
 					
+					String pass1 = request.getParameter("pass1");
+					
+					String pass2 = request.getParameter("pass2");
+
+					String pass3 = request.getParameter("pass3");
+
+					
 					FranchiseSup frSup=new FranchiseSup();
 					frSup.setId(id);
 					frSup.setFrId(frId);
@@ -1814,6 +1821,11 @@ public class FranchiseeController {
 					frSup.setFrCountry(frCountry);
 					frSup.setFrState(frState);
 					frSup.setDelStatus(0);
+					frSup.setPass1(pass1);
+					frSup.setPass2(pass2);
+					frSup.setPass3(pass3);
+					frSup.setPass4("pass4");
+					frSup.setPass5("pass5");
 					
 					RestTemplate restTemplate = new RestTemplate();
 

@@ -179,7 +179,30 @@
 											data-rule-required="true" value="${frSup.frCountry}"/>
 									</div>
 							  </div>
-							
+							  <div class="col2">
+									<label class="col-sm-3 col-lg-2 control-label">Password1</label>
+									<div class="col-sm-9 col-lg-3 controls">
+										<input type="text" name="pass1" id="pass1"
+											placeholder="User1 Password" class="form-control"
+											data-rule-required="true" value="${frSup.pass1}"/>
+									</div>
+							  </div>
+							    <div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Password2</label>
+									<div class="col-sm-9 col-lg-3 controls">
+										<input type="text" name="pass2" id="pass2"
+											placeholder="User2 Password" class="form-control"
+											data-rule-required="true" value="${frSup.pass2}"/>
+									</div>
+							  </div>
+							    <div class="col2">
+									<label class="col-sm-3 col-lg-2 control-label">Password3</label>
+									<div class="col-sm-9 col-lg-3 controls">
+										<input type="text" name="pass3" id="pass3"
+											placeholder="User3 Password" class="form-control"
+											data-rule-required="true" value="${frSup.pass3}"/>
+									</div>
+							  </div>
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										<input type="submit" class="btn btn-primary" value="Submit">
@@ -212,7 +235,10 @@
 														<th width="100" align="left">PAN No.</th>
 														<th width="100" align="left">State</th>
 														<th width="100" align="left">Country</th>
-													
+													<th width="100" align="left">Pass1</th>
+													<th width="100" align="left">Pass2</th>
+													<th width="100" align="left">Pass3</th>
+												
 														<th width="81" align="left">Action</th>
 													</tr>
 												</thead>
@@ -226,10 +252,17 @@
 															<td align="left"><c:out
 																	value="${frSupList.frPanNo}"></c:out></td>	
 												        	<td align="left"><c:out
-																	value="${frSupList.frState}"></c:out></td>					
+																	value="${frSupList.frState}"></c:out></td>		
 															<td align="left"><c:out
-																	value="${frSupList.frCountry}"></c:out></td>
+																	value="${frSupList.frCountry}"></c:out></td>							
+															<td align="left"><c:out
+																	value="${frSupList.pass1}"></c:out></td>
+															<td align="left"><c:out
+																	value="${frSupList.pass2}"></c:out></td>
+															<td align="left"><c:out
+																	value="${frSupList.pass3}"></c:out></td>
 															
+																	
 															<td align="left"><a href="${pageContext.request.contextPath}/updateFranchiseSup/${frSupList.id}"><span
 														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
                                                         </td>		

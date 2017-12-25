@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.CategoryListResponse;
 import com.ats.adminpanel.model.item.FrItemStock;
@@ -41,8 +42,11 @@ import com.ats.adminpanel.model.item.FrItemStockConfiResponse;
 import com.ats.adminpanel.model.item.FrItemStockConfigure;
 import com.ats.adminpanel.model.item.FrItemStockConfigurePost;
 import com.ats.adminpanel.model.item.FrItemStockList;
+import com.ats.adminpanel.model.item.GetItemSup;
 import com.ats.adminpanel.model.item.GetPrevItemStockResponse;
 import com.ats.adminpanel.model.item.Item;
+import com.ats.adminpanel.model.item.ItemSup;
+import com.ats.adminpanel.model.item.ItemSupList;
 import com.ats.adminpanel.model.item.MCategoryList;
 import com.ats.adminpanel.model.item.StockDetail;
 import com.ats.adminpanel.model.item.SubCategory;
@@ -386,16 +390,6 @@ public class ItemController {
 				ErrorMessage.class);
 		
 		
-		//sachin
-		
-		
-		
-		
-		//sachin
-		
-		
-		
-		
 		} catch (Exception e) {
 
 			System.out.println("exe in fr Item  stock insert  process  " + e.getMessage());
@@ -581,6 +575,10 @@ public class ItemController {
 		ErrorMessage errorResponse = rest.postForObject("" + Constants.url + "deleteItem", map, ErrorMessage.class);
 		System.out.println(errorResponse.toString());
 
+		Info info = rest.postForObject("" + Constants.url + "deleteItemSup", map, Info.class);
+		System.out.println(info.toString());
+
+		
 		if (errorResponse.getError()) {
 			return "redirect:/itemList";
 
@@ -752,359 +750,180 @@ public class ItemController {
 		return "redirect:/itemList";
 
 	}
+	@RequestMapping(value = "/showAddItemSup", method = RequestMethod.GET)
+	public ModelAndView showAddItemSup(HttpServletRequest request, HttpServletResponse response) {
+		Constants.mainAct = 4;
+		Constants.subAct = 45;
+		ModelAndView model = new ModelAndView("items/itemSup");
+		try
+		{		
+			RestTemplate restTemplate = new RestTemplate();
+
+			categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
+					CategoryListResponse.class);
+			mCategoryList = categoryListResponse.getmCategoryList();
+			List<MCategoryList> resCatList=new ArrayList<MCategoryList>();
+			for(MCategoryList mCat:mCategoryList)
+			{
+				if(mCat.getCatId()!=5 && mCat.getCatId()!=6)
+				{
+					resCatList.add(mCat);
+				}
+			}
+
+			model.addObject("mCategoryList", resCatList);
+			model.addObject("isEdit", 0);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Excption In /showAddItemSup");
+		}
+		return model;
+
+	}
+	@RequestMapping(value = "/getItemsByCatId", method = RequestMethod.GET)
+	public @ResponseBody List<Item> getItemsByCatId(HttpServletRequest request, HttpServletResponse response) {
+	
+		ArrayList<Item> itemsList=new ArrayList<Item>();
+		try
+		{
+	int catId = Integer.parseInt(request.getParameter("cat_id"));
+	System.out.println("cat Id "+catId);
+
+	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+	map.add("itemGrp1", catId);
+
+	RestTemplate restTemplate = new RestTemplate();
+
+	Item[] item = restTemplate.postForObject(Constants.url + "getItemsByCatId", map, Item[].class);
+
+	itemsList = new ArrayList<Item>(Arrays.asList(item));
+	
+	
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception in /AJAX getItemsByCatId");
+		}
+	return itemsList;
+	}
+	@RequestMapping(value = "/showItemSupList", method = RequestMethod.GET)
+	public ModelAndView itemSupList(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView("items/itemSupList");
+		Constants.mainAct = 4;
+		Constants.subAct = 46;
+
+		RestTemplate restTemplate = new RestTemplate();
+		
+		try {
+              ItemSupList itemSupList=restTemplate.getForObject(Constants.url+"/getItemSupList", ItemSupList.class);
+			
+			mav.addObject("itemsList", itemSupList.getItemSupList());
+			
+		} catch (Exception e) {
+			System.out.println("Exc In /itemSupList" + e.getMessage());
+		}
+
+		return mav;
+
+	}
+	// ------------------------------ADD ItemSup Process------------------------------------
+		@RequestMapping(value = "/addItemSupProcess", method = RequestMethod.POST)
+		public String addItemSupProcess(HttpServletRequest request, HttpServletResponse response) {
+
+			ModelAndView model = new ModelAndView("items/itemSup");
+			try {
+
+				int id = 0;
+
+				try {
+					id = Integer.parseInt(request.getParameter("id"));
+
+				} catch (Exception e) {
+					id = 0;
+					System.out.println("In Catch of Add ItemSup Process Exc:" + e.getMessage());
+
+				}
+				int itemId = Integer.parseInt(request.getParameter("sel_item_id"));
+
+				String itemHsncd = request.getParameter("item_hsncd");
+
+				String itemUom = request.getParameter("item_uom");
+
+				float actualWeight = Float.parseFloat(request.getParameter("actual_weight"));
+
+				float baseWeight = Float.parseFloat(request.getParameter("base_weight"));
+
+				float inputPerQty = Float.parseFloat(request.getParameter("input_per_qty"));
+				
+				int isGateSale = Integer.parseInt(request.getParameter("is_gate_sale"));
+				
+				int isGateSaleDisc = Integer.parseInt(request.getParameter("is_gate_sale_disc"));
+
+				int isAllowBday= Integer.parseInt(request.getParameter("is_allow_bday"));
+				
+				ItemSup itemSup=new ItemSup();
+				itemSup.setId(id);
+				itemSup.setItemId(itemId);
+				itemSup.setItemUom(itemUom);
+				itemSup.setItemHsncd(itemHsncd);
+				itemSup.setIsGateSale(isGateSale);
+				itemSup.setActualWeight(actualWeight);
+				itemSup.setBaseWeight(baseWeight);
+				itemSup.setInputPerQty(inputPerQty);
+				itemSup.setIsGateSaleDisc(isGateSaleDisc);
+				itemSup.setIsAllowBday(isAllowBday);
+				itemSup.setDelStatus(0);
+				
+				RestTemplate restTemplate = new RestTemplate();
+
+				Info info = restTemplate.postForObject(Constants.url + "/saveItemSup",
+						itemSup, Info.class);
+				System.out.println("Response: " + info.toString());
+
+				if (info.getError() == true) {
+
+					System.out.println("Error:True" + info.toString());
+					return "redirect:/showItemSupList";
+
+				} else {
+					return "redirect:/showItemSupList";
+				}
+
+			} catch (Exception e) {
+
+				System.out.println("Exception In Add Item Sup Process:" + e.getMessage());
+
+			}
+
+			return "redirect:/showItemSupList";
+		}
+
+		// ----------------------------------------END---------------------------------------------------
+	
+		@RequestMapping(value = "/updateItemSup/{id}", method = RequestMethod.GET)
+		public ModelAndView updateItemSup(@PathVariable("id")int id,HttpServletRequest request, HttpServletResponse response) {
+			ModelAndView mav = new ModelAndView("items/itemSup");
+			
+
+			RestTemplate restTemplate = new RestTemplate();
+			
+			try {
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("id", id);
+				
+	              GetItemSup itemSupRes=restTemplate.postForObject(Constants.url+"/getItemSup",map, GetItemSup.class);
+				System.out.println("itemSupRes"+itemSupRes.toString() );
+				mav.addObject("itemSupp", itemSupRes);
+				mav.addObject("isEdit", 1);
+
+			} catch (Exception e) {
+				System.out.println("Exc In /updateItemSup" + e.getMessage());
+			}
+
+			return mav;
+
+		}
+	
 }
 
-/*
- * package com.ats.adminpanel.controller;
- * 
- * import java.io.BufferedOutputStream; import java.io.File; import
- * java.io.FileOutputStream; import java.util.ArrayList; import java.util.List;
- * import java.util.UUID;
- * 
- * import javax.servlet.http.HttpServletRequest; import
- * javax.servlet.http.HttpServletResponse; import
- * javax.servlet.http.HttpSession;
- * 
- * import org.slf4j.Logger; import org.slf4j.LoggerFactory; import
- * org.springframework.stereotype.Controller; import
- * org.springframework.util.LinkedMultiValueMap; import
- * org.springframework.util.MultiValueMap; import
- * org.springframework.web.bind.annotation.PathVariable; import
- * org.springframework.web.bind.annotation.RequestMapping; import
- * org.springframework.web.bind.annotation.RequestMethod; import
- * org.springframework.web.bind.annotation.RequestParam; import
- * org.springframework.web.bind.annotation.ResponseBody; import
- * org.springframework.web.client.RestTemplate; import
- * org.springframework.web.multipart.MultipartFile; import
- * org.springframework.web.servlet.ModelAndView;
- * 
- * import com.ats.adminpanel.commons.Constants; import
- * com.ats.adminpanel.model.item.AllItemsListResponse; import
- * com.ats.adminpanel.model.item.CategoryListResponse; import
- * com.ats.adminpanel.model.item.Item; import
- * com.ats.adminpanel.model.item.MCategoryList; import
- * com.ats.adminpanel.model.item.SubCategory; import
- * com.ats.adminpanel.model.modules.ErrorMessage;
- * 
- * @Controller public class ItemController {
- * 
- * private static final Logger logger =
- * LoggerFactory.getLogger(ItemController.class);
- * 
- * AllItemsListResponse allItemsListResponse;
- * 
- * public static List<MCategoryList> mCategoryList = null;
- * 
- * public static CategoryListResponse categoryListResponse;
- * 
- * @RequestMapping(value = "/addItem", method = RequestMethod.GET) public
- * ModelAndView showAddCategory(HttpServletRequest request, HttpServletResponse
- * response) { ModelAndView model = new ModelAndView("items/addnewitem"); try {
- * 
- * System.out.println("Add Item Request");
- * 
- * RestTemplate restTemplate = new RestTemplate(); // CategoryListResponse
- * categoryListResponse = restTemplate.getForObject(Constants.url +
- * "/showAllCategory", CategoryListResponse.class); List<MCategoryList>
- * mCategoryList = new ArrayList<MCategoryList>(); mCategoryList =
- * categoryListResponse.getmCategoryList(); System.out.println("Main Cat is  " +
- * categoryListResponse.toString());
- * 
- * model.addObject("mCategoryList", mCategoryList);
- * 
- * } catch (Exception e) { System.out.println("error in item show sachin" +
- * e.getMessage()); } return model; }
- * 
- * // try for ajax // ajax today
- * 
- * @RequestMapping(value = "/getGroup2ByCatId", method = RequestMethod.GET)
- * public @ResponseBody List<SubCategory> subCatById(@RequestParam(value =
- * "catId", required = true) int catId) { logger.debug("finding Items for menu "
- * + catId);
- * 
- * List<SubCategory> subCatList = new ArrayList<SubCategory>();
- * 
- * for (int x = 0; x < mCategoryList.size(); x++) { if
- * (mCategoryList.get(x).getCatId() == catId) { subCatList =
- * mCategoryList.get(x).getSubCategory(); }
- * 
- * }
- * 
- * System.out.println("Finding sub cat List " + subCatList.toString());
- * 
- * return subCatList; }
- * 
- * // end
- * 
- * private void imagesDirIfNeeded() { if (!Constants.ITEM_DIR.exists()) {
- * Constants.ITEM_DIR.mkdirs(); } }
- * 
- * private String createImage(String name, MultipartFile file) { try {
- * 
- * System.out.println("Directory : " + Constants.ITEM_DIR_ABSOLUTE_PATH); File
- * image = new File(Constants.ITEM_DIR_ABSOLUTE_PATH + name);
- * BufferedOutputStream stream = new BufferedOutputStream(new
- * FileOutputStream(image)); stream.write(file.getBytes()); stream.close();
- * 
- * return "success"; } catch (Exception e) { return "failed"; } }
- * 
- * 
- * 
- * @RequestMapping(value = "/addItemProcess", method = RequestMethod.POST)
- * public String addItemProcess(HttpServletRequest request, HttpServletResponse
- * response,
- * 
- * @RequestParam("item_image") MultipartFile file) { ModelAndView mav = new
- * ModelAndView("items/itemlist");
- * 
- * String itemId = request.getParameter("item_id");
- * 
- * String itemName = request.getParameter("item_name");
- * 
- * String itemGrp1 = request.getParameter("item_grp1");
- * 
- * String itemGrp2 = request.getParameter("item_grp2");
- * 
- * String itemGrp3 = request.getParameter("item_grp3");
- * 
- * double itemRate1 = Double.parseDouble(request.getParameter("item_rate1"));
- * 
- * double itemRate2 = Double.parseDouble(request.getParameter("item_rate2"));
- * 
- * double itemMrp1 = Double.parseDouble(request.getParameter("item_mrp1"));
- * 
- * double itemMrp2 = Double.parseDouble(request.getParameter("item_mrp2"));
- * 
- * String itemImage = request.getParameter("item_image");
- * 
- * double itemTax1 = Double.parseDouble(request.getParameter("item_tax1"));
- * 
- * double itemTax2 = Double.parseDouble(request.getParameter("item_tax2"));
- * 
- * double itemTax3 = Double.parseDouble(request.getParameter("item_tax3"));
- * 
- * int itemIsUsed = Integer.parseInt(request.getParameter("is_used"));
- * 
- * double itemSortId = Double.parseDouble(request.getParameter("item_sort_id"));
- * 
- * int grnTwo = Integer.parseInt(request.getParameter("grn_two"));
- * 
- * logger.info("Add new item request mapping.");
- * 
- * UUID uuid = UUID.randomUUID(); String randomUUIDString = uuid.toString();
- * 
- * 
- * itemImage=randomUUIDString+""+file.getOriginalFilename();
- * System.out.println("image name= "+itemImage); if (file.isEmpty()) { } else {
- * imagesDirIfNeeded(); createImage(itemImage, file); }
- * 
- * 
- * RestTemplate rest = new RestTemplate(); MultiValueMap<String, Object> map =
- * new LinkedMultiValueMap<String, Object>(); map.add("itemId", itemId);
- * map.add("itemName", itemName); map.add("itemGrp1", itemGrp1);
- * map.add("itemGrp2", itemGrp2); map.add("itemGrp3", itemGrp3);
- * map.add("itemRate1", itemRate1); map.add("itemRate2", itemRate2);
- * map.add("itemMrp1", itemMrp1); map.add("itemMrp2", itemMrp2);
- * map.add("itemImage", itemImage); map.add("itemTax1", itemTax1);
- * map.add("itemTax2", itemTax2); map.add("itemTax3", itemTax3);
- * map.add("itemIsUsed", itemIsUsed); map.add("itemSortId", itemSortId);
- * map.add("grnTwo", grnTwo); ErrorMessage errorResponse = rest.postForObject(""
- * + Constants.url + "/insertItem", map, ErrorMessage.class);
- * System.out.println(errorResponse.toString()); System.out.println("Response:"
- * + errorResponse.getMessage());
- * 
- * return "redirect:/itemList";
- * 
- * }
- * 
- * @RequestMapping(value = "/itemList") public ModelAndView
- * showAddItem(HttpServletRequest request, HttpServletResponse response) {
- * System.out.println("List Item Request"); ModelAndView mav = new
- * ModelAndView("items/itemlist");
- * 
- * RestTemplate restTemplate = new RestTemplate(); // CategoryListResponse
- * categoryListResponse = restTemplate.getForObject(Constants.url +
- * "/showAllCategory", CategoryListResponse.class); List<MCategoryList>
- * mCategoryList = new ArrayList<MCategoryList>(); mCategoryList =
- * categoryListResponse.getmCategoryList();
- * 
- * mav.addObject("mCategoryList", mCategoryList); try {
- * 
- * // RestTemplate restTemplate = new RestTemplate(); allItemsListResponse =
- * restTemplate.getForObject(Constants.url + "/getAllItems",
- * AllItemsListResponse.class);
- * 
- * List<Item> itemsList = new ArrayList<Item>(); itemsList =
- * allItemsListResponse.getItems(); System.out.println("LIst of items" +
- * itemsList.toString());
- * 
- * mav.addObject("mCategoryList", mCategoryList); mav.addObject("itemsList",
- * itemsList); } catch (Exception e) {
- * System.out.println("exce in listing filtered group itme" + e.getMessage()); }
- * 
- * return mav;
- * 
- * }
- * 
- * @RequestMapping(value = "/searchItem") public ModelAndView
- * showSearchItem(HttpServletRequest request, HttpServletResponse response) {
- * System.out.println("List Item Request");
- * 
- * int catId = Integer.parseInt(request.getParameter("catId")); ModelAndView mav
- * = new ModelAndView("items/itemlist");
- * 
- * RestTemplate restTemplate = new RestTemplate(); categoryListResponse =
- * restTemplate.getForObject(Constants.url + "/showAllCategory",
- * CategoryListResponse.class); // mCategoryList = new
- * ArrayList<MCategoryList>(); List<MCategoryList>mCategoryList =
- * categoryListResponse.getmCategoryList();
- * 
- * 
- * try {
- * 
- * List<Item> tempItemsList = new ArrayList<Item>(); List<Item> itemsList = new
- * ArrayList<Item>(); itemsList = allItemsListResponse.getItems();
- * 
- * System.out.println("item count before" + itemsList.size());
- * 
- * System.out.println("item to show m cat is " + catId); for (int i = 0; i <
- * itemsList.size(); i++) {
- * 
- * if (Integer.parseInt(itemsList.get(i).getItemGrp1()) == catId) {
- * tempItemsList.add(itemsList.get(i));
- * 
- * }
- * 
- * }
- * 
- * 
- * System.out.println("after filter itemList " + tempItemsList.toString());
- * 
- * mav.addObject("catId", catId); mav.addObject("mCategoryList", mCategoryList);
- * mav.addObject("itemsList", tempItemsList); } catch (Exception e) {
- * System.out.println("exce in listing filtered group itme" + e.getMessage()); }
- * 
- * return mav;
- * 
- * }
- * 
- * @RequestMapping(value = "/deleteItem/{id}", method = RequestMethod.GET)
- * public String deleteItem(@PathVariable int id) {
- * 
- * // String id=request.getParameter("id");
- * 
- * ModelAndView mav = new ModelAndView("items/itemList");
- * 
- * RestTemplate rest = new RestTemplate(); MultiValueMap<String, Object> map =
- * new LinkedMultiValueMap<String, Object>(); map.add("id", id);
- * 
- * ErrorMessage errorResponse = rest.postForObject("" + Constants.url +
- * "/deleteItem", map, ErrorMessage.class);
- * System.out.println(errorResponse.toString());
- * 
- * if (errorResponse.getError()) { return "redirect:/itemList";
- * 
- * } else { return "redirect:/itemList";
- * 
- * } }
- * 
- * @RequestMapping(value = "/updateItem/{id}", method = RequestMethod.GET)
- * public ModelAndView updateMessage(@PathVariable int id) { ModelAndView mav =
- * new ModelAndView("items/editItem");
- * 
- * RestTemplate rest = new RestTemplate();
- * 
- * RestTemplate restTemplate = new RestTemplate(); // CategoryListResponse
- * categoryListResponse = restTemplate.getForObject(Constants.url +
- * "/showAllCategory", CategoryListResponse.class); mCategoryList = new
- * ArrayList<MCategoryList>(); mCategoryList =
- * categoryListResponse.getmCategoryList(); System.out.println("Main Cat is  " +
- * categoryListResponse.toString());
- * 
- * Item item = rest.getForObject("" + Constants.url + "/getItem?id={id}",
- * Item.class, id); System.out.println("ItemResponse" + item); String grp1 =
- * item.getItemGrp1(); mav.addObject("grp1", grp1);
- * mav.addObject("mCategoryList", mCategoryList);
- * 
- * List<SubCategory> subCategoryList = new ArrayList<SubCategory>();
- * 
- * for (int i = 0; i < mCategoryList.size(); i++) { if
- * (Integer.parseInt(item.getItemGrp1()) == (mCategoryList.get(i).getCatId()))
- * subCategoryList = mCategoryList.get(i).getSubCategory();
- * 
- * } mav.addObject("subCategoryList", subCategoryList);
- * System.out.println("sub cat list is =" + subCategoryList.toString());
- * 
- * int grn2app = item.getGrnTwo(); String strGrnAppl = String.valueOf(grn2app);
- * mav.addObject("strGrnAppl", strGrnAppl);
- * 
- * int isUsed = item.getItemIsUsed(); String strIsUsed = String.valueOf(isUsed);
- * mav.addObject("strIsUsed", strIsUsed);
- * 
- * mav.addObject("item", item);
- * 
- * return mav;
- * 
- * }
- * 
- * @RequestMapping(value = "/updateItem/updateItemProcess", method =
- * RequestMethod.POST)
- * 
- * public String updateMessage(HttpServletRequest request, HttpServletResponse
- * response) { System.out.println("HI");
- * 
- * ModelAndView model = new ModelAndView("items/itemList");
- * 
- * RestTemplate restTemplate = new RestTemplate(); String itemId =
- * request.getParameter("item_id");
- * 
- * String itemName = request.getParameter("item_name");
- * 
- * String itemGrp1 = request.getParameter("item_grp1");
- * 
- * String itemGrp2 = request.getParameter("item_grp2");
- * 
- * String itemGrp3 = request.getParameter("item_grp3");
- * 
- * double itemRate1 = Double.parseDouble(request.getParameter("item_rate1"));
- * 
- * double itemRate2 = Double.parseDouble(request.getParameter("item_rate2"));
- * 
- * double itemMrp1 = Double.parseDouble(request.getParameter("item_mrp1"));
- * 
- * double itemMrp2 = Double.parseDouble(request.getParameter("item_mrp2"));
- * 
- * String itemImage = request.getParameter("item_image");
- * 
- * double itemTax1 = Double.parseDouble(request.getParameter("item_tax1"));
- * 
- * double itemTax2 = Double.parseDouble(request.getParameter("item_tax2"));
- * 
- * double itemTax3 = Double.parseDouble(request.getParameter("item_tax3"));
- * 
- * int itemIsUsed = Integer.parseInt(request.getParameter("is_used"));
- * 
- * double itemSortId = Double.parseDouble(request.getParameter("item_sort_id"));
- * 
- * int grnTwo = Integer.parseInt(request.getParameter("grn_two")); int id =
- * Integer.parseInt(request.getParameter("itemId"));
- * 
- * logger.info("Add new item request mapping.");
- * 
- * RestTemplate rest = new RestTemplate(); MultiValueMap<String, Object> map =
- * new LinkedMultiValueMap<String, Object>(); map.add("itemId", itemId);
- * map.add("itemName", itemName); map.add("itemGrp1", itemGrp1);
- * map.add("itemGrp2", itemGrp2); map.add("itemGrp3", itemGrp3);
- * map.add("itemRate1", itemRate1); map.add("itemRate2", itemRate2);
- * map.add("itemMrp1", itemMrp1); map.add("itemMrp2", itemMrp2);
- * map.add("itemImage", itemImage); map.add("itemTax1", itemTax1);
- * map.add("itemTax2", itemTax2); map.add("itemTax3", itemTax3);
- * map.add("itemIsUsed", itemIsUsed); map.add("itemSortId", itemSortId);
- * map.add("grnTwo", grnTwo); map.add("id", id); ErrorMessage errorResponse =
- * rest.postForObject("" + Constants.url + "/updateItem", map,
- * ErrorMessage.class);
- * 
- * return "redirect:/itemList";
- * 
- * } }
- */
