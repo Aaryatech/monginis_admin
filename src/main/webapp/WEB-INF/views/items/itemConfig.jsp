@@ -244,6 +244,16 @@
 																						value="${stDetails.maxQty}"
 																						/>
 																				</div>
+																				
+																				<div align="center"
+																					class="col-sm-9 col-lg-10 controls">
+																					Reorder <input type="text"
+																						name="${item.itemId}reorder${count.index}"
+																						placeholder="reorder" class="form-control"
+																						data-rule-required="true" style="width: 65px" 
+																						value="${stDetails.reorderQty}"
+																						/>
+																				</div>
 
 																			</td>
 

@@ -156,19 +156,6 @@
 							</div><br>
 							
 							
-							<div class="box-content">
-							
-							<div class="col-md-2" >Invoice No.</div>
-									<div class="col-md-3"><input type="text" id="invoice_no" name="invoice_no" value="${materialRecNote.invoiceNumber}" placeholder="Invoice No" class="form-control" required />
-								</div>
-									
-									<div class="col-md-2">Date</div>
-										<div class="col-md-3">
-										<input class="form-control date-picker" id="dp1" size="16"
-											type="text" name="invoice_date" value="" placeholder="Invoice Date" required />
-									</div>
-							
-							</div><br>
 							
 							<div class="box-content">
 							
@@ -186,25 +173,29 @@
 							
 												<c:choose>
 													<c:when test="${materialRecNote.status==2}">
-													<c:set var = "textdisable" value="readonly"/>
-													<c:set var = "tex" value="0"/>
+													<div class="col-md-2" >Against PO</div>
+									<div class="col-md-3">
+									<input type="text" id="po_id" name="po_id" value="${materialRecNote.apainstPo}" 
+									class="form-control" readonly>
+										
+										</div>
+										
 													</c:when>
 													
 													<c:otherwise>
-													  <c:set var = "textdisable" value=""/>
-													  <c:set var = "tex" value="0"/>
-													</c:otherwise>
-													</c:choose>
-							
-							<div class="col-md-2" >Against PO</div>
+													  <div class="col-md-2" >Against PO</div>
 									<div class="col-md-3">
-										<select name="po_id" id="po_id" class="form-control" tabindex="6" <c:out value = "${textdisable}"/> <c:out value = "${tex}"/>>
+										<select name="po_id" id="po_id" class="form-control" tabindex="6">
 											<option value=""> select</option>
 											<option value="1">Yes</option>
 											<option value="2">No</option>
 
 										</select>
 									</div>
+													</c:otherwise>
+													</c:choose>
+							
+							
 									
 									<div class="col-md-2">LR No.</div>
 									<div class="col-md-3"><input type="text" id="lr_no" name="lr_no" value="${materialRecNote.lrNo}" 
@@ -222,28 +213,25 @@
 									<div class="col-md-3">
 									
 											<c:choose>
-													<c:when test="${materialRecNote.status==2}">
-													<c:set var = "textdisable" value='readonly'/>
-													<c:set var = "tex" value="0"/>
-													</c:when>
+												<c:when test="${materialRecNote.status==2}">
+													<div class="col-md-4">
+													<input type="text" id="poref_id" name="poref_id" value="${materialRecNote.poId}" 
+													class="form-control" readonly>
+										
+													</div>
+												</c:when>
 													
 													<c:otherwise>
-													  <c:set var = "textdisable" value=""/>
-													  <c:set var = "tex" value=""/>
+													 <select name="poref_id" id="poref_id" class="form-control" tabindex="-1"  disabled >
+														<option selected >Select Po Ref</option>
+											
+														<c:forEach items="${purchaseOrderList}" var="purchaseOrderList">
+                                              			<option value="${purchaseOrderList.poId}"><c:out value="${purchaseOrderList.poNo}"></c:out> </option>
+														</c:forEach>
+													</select>
 													</c:otherwise>
 												</c:choose>
-										<select name="poref_id" id="poref_id" class="form-control" tabindex="-1" <c:out value = "${tex}"/> disabled >
-									
-										<option selected >Select Po Ref</option>
-											
-											<c:forEach items="${purchaseOrderList}" var="purchaseOrderList">
-                                              
-                                              
-										<option value="${purchaseOrderList.poId}"><c:out value="${purchaseOrderList.poNo}"></c:out> </option>
-													
-
-											</c:forEach>
-										</select>
+										
 									</div>
 									
 									<div class="col-md-2">PO Date</div>

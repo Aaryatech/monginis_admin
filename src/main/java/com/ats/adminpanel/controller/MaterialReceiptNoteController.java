@@ -408,10 +408,9 @@ public class MaterialReceiptNoteController {
 		
 		
 		int mrnType = Integer.parseInt(request.getParameter("mrn_id"));
-		String invoice_no = request.getParameter("invoice_no");
 		int againstpo_id=0;
 		int poref_id=0;
-		String poDate=request.getParameter("");
+		
 		if(request.getParameter("po_id")=="")
 		{
 			againstpo_id = 2;
@@ -436,7 +435,7 @@ public class MaterialReceiptNoteController {
 		{
 
 			Date todaysDate = new Date();
-			DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
 			String testDateString = df.format(todaysDate);
 			po_date=testDateString;
@@ -454,7 +453,7 @@ public class MaterialReceiptNoteController {
 		
 	
 		 
-		System.out.println(mrnType+ invoice_no+ againstpo_id +poref_id+ Remark);
+		System.out.println(mrnType+ againstpo_id +poref_id+ Remark);
 		try
 		{
 		
@@ -471,7 +470,7 @@ public class MaterialReceiptNoteController {
 			materialRecNote.setMrnType(mrnType);
 			materialRecNote.setApainstPo(againstpo_id);
 			materialRecNote.setPoId(poref_id);
-			materialRecNote.setInvoiceNumber(invoice_no);
+			materialRecNote.setInvoiceNumber("");
 			materialRecNote.setInvDate(dt);
 			materialRecNote.setPoNo("");
 			
@@ -933,6 +932,37 @@ public class MaterialReceiptNoteController {
 			System.out.println(e.getMessage());
 		}
 		return "redirect:/allDirectorMaterialReceiptNote";
+	}
+	
+	
+	
+	@RequestMapping(value = "/allMaterialRecieptAccList", method = RequestMethod.GET)
+	public ModelAndView allMaterialRecieptAccList(HttpServletRequest request, HttpServletResponse response) {
+		/*Constants.mainAct = 17;
+		Constants.subAct=184;*/
+		
+		ModelAndView model = new ModelAndView("masters/allMaterialRecieptAccList");
+		
+		
+		
+		List<SupplierDetails> supplierDetailsList=new ArrayList<SupplierDetails>();
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		 
+
+		map.add("status","3,4");
+ 
+		RestTemplate rest = new RestTemplate();
+		GetMaterialRecNoteList materialRecNoteList=rest.postForObject(Constants.url + "/getMaterialRecNotes",map, GetMaterialRecNoteList.class);
+		System.out.println("materialRecNoteList  :"+materialRecNoteList.toString());
+		
+		supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplier", List.class);
+
+		System.out.println("Supplier List :"+supplierDetailsList.toString());
+		System.out.println("materialRecNoteList  "+materialRecNoteList.getMaterialRecNoteList());
+		model.addObject("materialRecNoteList", materialRecNoteList.getMaterialRecNoteList());
+		model.addObject("supplierDetailsList",supplierDetailsList);
+		return model;
+		 
 	}
 	
 }
