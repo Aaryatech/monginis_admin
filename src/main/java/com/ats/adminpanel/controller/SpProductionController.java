@@ -31,13 +31,19 @@ import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.RawMaterial.GetItemSfHeader;
 import com.ats.adminpanel.model.RawMaterial.RmItemCategory;
 import com.ats.adminpanel.model.item.ErrorMessage;
+import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.login.UserResponse;
+import com.ats.adminpanel.model.productionplan.BillOfMaterialDetailed;
+import com.ats.adminpanel.model.productionplan.BillOfMaterialHeader;
 import com.ats.adminpanel.model.spprod.Employee;
 import com.ats.adminpanel.model.spprod.EmployeeList;
 import com.ats.adminpanel.model.spprod.GetAllocStationCk;
+import com.ats.adminpanel.model.spprod.GetAllocStationCkList;
 import com.ats.adminpanel.model.spprod.GetEmployeeList;
 import com.ats.adminpanel.model.spprod.GetInstVerifHeader;
 import com.ats.adminpanel.model.spprod.GetInstrVerifHeader;
+import com.ats.adminpanel.model.spprod.GetSpDetailForBom;
+import com.ats.adminpanel.model.spprod.GetSpDetailForBomList;
 import com.ats.adminpanel.model.spprod.InstAllocToStation;
 import com.ats.adminpanel.model.spprod.InstAllocToStationList;
 import com.ats.adminpanel.model.spprod.InstVerificationDetail;
@@ -69,7 +75,9 @@ public class SpProductionController {
 	private static InstVerificationHeader instVerificationHeaderRes = null;
 	private static int userId = 0;
 	private static StationSpCakeList stationSpCakeList=new StationSpCakeList();
-
+	private static List<GetAllocStationCk> getAllocStationCkRes=null;
+	private static List<GetSpDetailForBom> getSpDetailForBomList=null;
+	
 	@RequestMapping(value = "/showAddEmployee", method = RequestMethod.GET)
 	public ModelAndView showAddEmployee(HttpServletRequest request, HttpServletResponse response) {
 
@@ -1606,7 +1614,13 @@ public class SpProductionController {
 			    	HttpSession session = request.getSession();
 					UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
 
+					try {
 						userId = userResponse.getUser().getId();
+					}
+					catch(Exception e)
+					{
+						userId=0;
+					}
 			    	
 			    	int stationId=Integer.parseInt(request.getParameter("st_id"));
 			    	System.out.println("Station Id:"+stationId);
@@ -1670,18 +1684,18 @@ public class SpProductionController {
                     	spCkAllocDetailList.add(spCkAllocDetail);
                     }
                     spCkAllocHeader.setSpCkAllocDetailList(spCkAllocDetailList);
-					
+           
                     Info info=restTemplate.postForObject(Constants.url + "/spProduction/saveSpCkAllocHeader",spCkAllocHeader,Info.class);
                     
                     System.out.println("addCkAllocToStation Response:"+info.toString());
-			    }
+			    } 
 			    catch(Exception e)
 			    {
 			    	System.out.println("Exception In Saving Cake Alloc Data"+e.getMessage());
 			    	
 			    	e.printStackTrace();
 			    }
-				return "redirect:/showCkAllocToStation";
+				return "redirect:/showSpCksAllocToStation";
 				}
 	
 				@RequestMapping(value = "/showSpCksAllocToStation", method = RequestMethod.GET)
@@ -1723,17 +1737,20 @@ public class SpProductionController {
 							map.add("fromDate",currentDate);
 							map.add("toDate",currentDate);
 
-							ParameterizedTypeReference<List<GetAllocStationCk>> typeRef = new ParameterizedTypeReference<List<GetAllocStationCk>>() {
+					/*		ParameterizedTypeReference<List<GetAllocStationCk>> typeRef = new ParameterizedTypeReference<List<GetAllocStationCk>>() {
 							};
 							ResponseEntity<List<GetAllocStationCk>> responseEntity = restTemplate.exchange(Constants.url + "/spProduction/getAllocStationCk",
 									HttpMethod.POST, new HttpEntity<>(map), typeRef);
 							
 							List<GetAllocStationCk> getAllocStationCkList =new ArrayList<GetAllocStationCk>();
-							getAllocStationCkList= responseEntity.getBody();
-							
+							getAllocStationCkList= responseEntity.getBody();*/
+							GetAllocStationCkList getAllocStationCkList=restTemplate.postForObject(Constants.url + "/spProduction/getAllocStationCk",map,GetAllocStationCkList.class);
+
 							System.out.println("getAllocStationCkList"+getAllocStationCkList.toString());
+							getAllocStationCkRes=new ArrayList<>();
+							getAllocStationCkRes=getAllocStationCkList.getGetAllocStationCkList();
 							
-							model.addObject("getAllocStationCkList", getAllocStationCkList);
+							model.addObject("getAllocStationCkList", getAllocStationCkList.getGetAllocStationCkList());
 							model.addObject("spStationList",spStationList.getSpStationList());
 							model.addObject("fromDate", dmyCDate);
 							model.addObject("toDate", dmyCDate);
@@ -1806,17 +1823,24 @@ public class SpProductionController {
 							map.add("toDate",df.format(fmtToDate));
 
 							System.out.println("fmtFrDate"+df.format(fmtFrDate));
-							ParameterizedTypeReference<List<GetAllocStationCk>> typeRef = new ParameterizedTypeReference<List<GetAllocStationCk>>() {
+							/*ParameterizedTypeReference<List<GetAllocStationCk>> typeRef = new ParameterizedTypeReference<List<GetAllocStationCk>>() {
 							};
 							ResponseEntity<List<GetAllocStationCk>> responseEntity = restTemplate.exchange(Constants.url + "/spProduction/getAllocStationCk",
 									HttpMethod.POST, new HttpEntity<>(map), typeRef);
 							
-							List<GetAllocStationCk> getAllocStationCkList =new ArrayList<GetAllocStationCk>();
+							getAllocStationCkList =new ArrayList<GetAllocStationCk>();
 							getAllocStationCkList= responseEntity.getBody();
+							*/
+							GetAllocStationCkList getAllocStationCkList=restTemplate.postForObject(Constants.url + "/spProduction/getAllocStationCk",map,GetAllocStationCkList.class);
+
+							System.out.println("getAllocStationCkList"+getAllocStationCkList.toString());
+							getAllocStationCkRes=new ArrayList<>();
+							getAllocStationCkRes=getAllocStationCkList.getGetAllocStationCkList();
+							
+							model.addObject("getAllocStationCkList", getAllocStationCkList.getGetAllocStationCkList());
 							
 							System.out.println("getAllocStationCkList"+getAllocStationCkList.toString());
 							
-							model.addObject("getAllocStationCkList", getAllocStationCkList);
 							model.addObject("spStationList",spStationList.getSpStationList());
 						    model.addObject("fromDate", dmyFr.format(fmtFrDate));
 						    model.addObject("toDate",dmyFr.format(fmtToDate));
@@ -1830,6 +1854,194 @@ public class SpProductionController {
 				return model;
 
 				}
-}
+				
+				// -------------------------------------------------------------------------------------------------------
+				@RequestMapping(value = "/getSpDetailForBom/{spId}/{spCkAllocDId}", method = RequestMethod.GET)
+				public ModelAndView getSpDetailForBom(@PathVariable("spId")int spId,@PathVariable("spCkAllocDId")int spCkAllocDId,HttpServletRequest request, HttpServletResponse response) {
+
+					ModelAndView model = new ModelAndView("spProduction/addSpBom");
+					
+					RestTemplate restTemplate = new RestTemplate();
+
+					try {
+					MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+					map.add("spId",spId);
+					
+					GetSpDetailForBomList getSpDtailForBom=restTemplate.postForObject(Constants.url + "/getSpDetailForBom", map, GetSpDetailForBomList.class);
+					
+					System.out.println("GetSpDetailForBomList"+getSpDtailForBom.toString());
+					
+					
+					getSpDetailForBomList=getSpDtailForBom.getGetSpDetailForBomList();
+					
+					model.addObject("getSpDtailForBom",getSpDtailForBom.getGetSpDetailForBomList());
+					model.addObject("spId",spId);
+					model.addObject("spCkAllocDId",spCkAllocDId);
+
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+					}
+					return model;
+				}
+				//-------------------------------------------------------------------------------------------------------
+				//insertSpBom getAllocStationCkList
+
+				@RequestMapping(value = "/insertSpBom", method = RequestMethod.POST)
+				public String insertBom(HttpServletRequest request, HttpServletResponse response) {
+
+					ModelAndView mav = new ModelAndView("spProduction/addSpBom");
+					try {
+						int localSpId = 0;
+					HttpSession session=request.getSession();
+					UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
+					
+					int spId = Integer.parseInt(request.getParameter("spId"));
+					System.out.println("spId"+spId);
+					int spCkAllocDId= Integer.parseInt(request.getParameter("spCkAllocDId"));
+					System.out.println("spCkAllocDId"+spCkAllocDId);
+
+					RestTemplate restTemplate = new RestTemplate();
+					MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+					
+					//int deptId=userResponse.getUser().getDeptId();
+					
+					int userId=userResponse.getUser().getId();
+					
+					String fromSettingKey = new String();
+
+					fromSettingKey = "sp_cake_dept";
+
+					map.add("settingKeyList", fromSettingKey);
+					
+					// web Service to get Dept Name And Dept Id for bom toDept and toDeptId
+					
+					FrItemStockConfigureList fromSettingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+							FrItemStockConfigureList.class);
+					System.out.println("fromSettingList"+fromSettingList.toString());
+
+					
+					String toSettingKey = new String();
+
+					toSettingKey = "BMS";
+
+					map.add("settingKeyList", toSettingKey);
+					
+					// web Service to get Dept Name And Dept Id for bom toDept and toDeptId
+					
+					FrItemStockConfigureList toSettingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+							FrItemStockConfigureList.class);
+					
+					System.out.println("toSettingList"+toSettingList.toString());
+					System.out.println("new Field Dept Id = "+userResponse.getUser().getDeptId());
+					
+					BillOfMaterialHeader billOfMaterialHeader = new BillOfMaterialHeader();
+
+					
 			
+					for(int i=0;i<getAllocStationCkRes.size();i++)
+					{
+						if(spId==getAllocStationCkRes.get(i).getSpId())
+						{
+							localSpId=getAllocStationCkRes.get(i).getSpId();
+						int fromDeptId=fromSettingList.getFrItemStockConfigure().get(0).getSettingValue();
+						String fromDeptName=fromSettingList.getFrItemStockConfigure().get(0).getSettingKey();
+						
+						int toDeptId=toSettingList.getFrItemStockConfigure().get(0).getSettingValue();
+						String toDeptName=toSettingList.getFrItemStockConfigure().get(0).getSettingKey();
+						
+						Date date = new Date();
+
+
+						billOfMaterialHeader.setApprovedDate(date);
+						billOfMaterialHeader.setApprovedUserId(0);
+						billOfMaterialHeader.setDelStatus(0);
+						billOfMaterialHeader.setFromDeptId(fromDeptId);
+						
+
+                        DateFormat parser = new SimpleDateFormat("dd-MM-yyyy"); 
+                        Date frDate = (Date) parser.parse(getAllocStationCkRes.get(i).getReqDate());
+
+                        DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); 
+                        frDate=formatter.parse(formatter.format(frDate));
+                        System.out.println(frDate);
+
+						billOfMaterialHeader.setProductionDate(frDate);//
+						billOfMaterialHeader.setProductionId(getAllocStationCkRes.get(i).gettSpCakeId());//
+						billOfMaterialHeader.setReqDate(date);
+						billOfMaterialHeader.setSenderUserid(userId);
+						billOfMaterialHeader.setStatus(0);
+						billOfMaterialHeader.setToDeptId(toDeptId);
+						billOfMaterialHeader.setToDeptName(toDeptName);
+						billOfMaterialHeader.setFromDeptName(fromDeptName);
+
+						billOfMaterialHeader.setRejApproveDate(date);
+						billOfMaterialHeader.setRejApproveUserId(0);
+						billOfMaterialHeader.setRejDate(date);
+						billOfMaterialHeader.setRejUserId(0);
+						
+						billOfMaterialHeader.setIsManual(0);
+						billOfMaterialHeader.setIsProduction(4);
+						billOfMaterialHeader.setIsPlan(0);
+						
+						billOfMaterialHeader.setIsPlan(0);
+						}
+					}
+						List<BillOfMaterialDetailed> bomDetailList = new ArrayList<BillOfMaterialDetailed>();
+						BillOfMaterialDetailed bomDetail = null;
+						for (int i = 0; i < getSpDetailForBomList.size(); i++) {
+
+							String editQty = request.getParameter("editQty" + i);
+							bomDetail = new BillOfMaterialDetailed();
+
+							System.out.println("editQty " + editQty);
+
+							bomDetail.setDelStatus(0);
+							bomDetail.setRmId(getSpDetailForBomList.get(i).getRmId());
+							bomDetail.setRmIssueQty(0.0F);
+							bomDetail.setUom(getSpDetailForBomList.get(i).getUom());
+							bomDetail.setRmType(getSpDetailForBomList.get(i).getRmType());
+							bomDetail.setRmReqQty(Integer.parseInt(editQty));
+							bomDetail.setRmName(getSpDetailForBomList.get(i).getRmName());
+							
+							bomDetail.setRejectedQty(0);
+							bomDetail.setAutoRmReqQty(getSpDetailForBomList.get(i).getTotal());
+							
+							bomDetail.setReturnQty(0);
+							bomDetailList.add(bomDetail);
+
+						}
+						
+						System.out.println("bom detail List " + bomDetailList.toString());
+						billOfMaterialHeader.setBillOfMaterialDetailed(bomDetailList);
+
+						System.out.println(" insert List " + billOfMaterialHeader.toString());
+						int prodId=billOfMaterialHeader.getProductionId();
+						
+						Info info = restTemplate.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);
+						System.out.println(" Info " + info.toString());
+
+						mav.addObject("getSpDtailForBom",getSpDetailForBomList);
+                        mav.addObject("spId", localSpId);
+                        
+                        map = new LinkedMultiValueMap<String, Object>();
+    					map.add("spCkAllocDId",spCkAllocDId);
+    					
+                        
+                        Info updateRes = restTemplate.postForObject(Constants.url + "updateIsBomOfSpAllocn", map, Info.class);
+                        System.out.println("Is Bom Updated Res"+updateRes.toString());
+                        
+					}
+					catch(Exception e)
+					{
+						e.printStackTrace();
+					}
+					
+					return "redirect:/showSpCksAllocToStation";    
+					
+					
+				}
+}
+
 				

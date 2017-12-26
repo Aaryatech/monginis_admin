@@ -96,7 +96,7 @@
 								<i class="fa fa-bars"></i>Search Stationwise Allocated Cake
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/itemList">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showCkAllocToStation">Stationwise Cake Allocation</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 						</div>
@@ -178,6 +178,8 @@
 										<th>Req.Date</th>
 										<th>Station</th>
 										<th>Special Cake</th>
+										<th>BOM</th>
+										
 									</tr>
 								</thead>
 								
@@ -199,9 +201,15 @@
 																<td align="left"><c:out	
 																value="${getAllocStationCkList.spName}" />
 																</td>
-																
-															
-						
+																<c:if test="${getAllocStationCkList.isBom==0}">
+																<td align="left"><a
+													href="${pageContext.request.contextPath}/getSpDetailForBom/${getAllocStationCkList.spId}/${getAllocStationCkList.spCkAllocDId}"><input type="button" value="Bom" name="BOM" id="${getAllocStationCkList.spId}"/></a>
+																</td>
+						                                    </c:if>
+						                                    <c:if test="${getAllocStationCkList.isBom==1}">
+						                                    	<td align="left"><input type="button" value="Bom" name="BOM" id="bomCompleted" onclick="return bomStatus()"/>
+																</td>															
+						                                    </c:if>
 																</tr>
 												</c:forEach> 
 										
@@ -300,7 +308,13 @@
 				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 				
 </body>
+<script type="text/javascript">
+function bomStatus()
+{
 
+	alert("Bill Of Material Already Completed")
+}
+</script>
 
 </html>
 
