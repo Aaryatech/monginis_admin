@@ -152,7 +152,7 @@
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_item_weight" id="sf_item_weight"
 											class="form-control" placeholder="SF Weight "
-											data-rule-required="true" />
+											data-rule-required="true"  data-rule-number="true"/>
 									</div>
 								</div>
 
@@ -164,7 +164,7 @@
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_stock_qty" id="sf_stock_qty"
 											class="form-control" placeholder="Stock Qty"
-											data-rule-required="true"
+											data-rule-required="true" data-rule-number="true"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 
@@ -175,6 +175,7 @@
 										<input type="text" name="sf_reorder_level_qty"
 											id="sf_reorder_level_qty" class="form-control"
 											placeholder="Reorder Level Qty " data-rule-required="true"
+											data-rule-number="true"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 
@@ -186,7 +187,7 @@
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_min_qty" id="sf_min_qty"
 											class="form-control" placeholder="Min Level Qty"
-											data-rule-required="true"
+											data-rule-required="true" data-rule-number="true"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 
@@ -195,7 +196,7 @@
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_max_qty" id="sf_max_qty"
 											class="form-control" placeholder="Max Level Qty"
-											data-rule-required="true"
+											data-rule-required="true" data-rule-number="true"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 								</div>

@@ -222,12 +222,12 @@
 						<div class="row">
 							<div class="col-md-12 table-responsive">
 								<table class="table table-bordered table-striped fill-head "
-									style="width:30%" id="table_grid" align="left">
+									style="width:50%" id="table_grid" align="left">
 									<thead>
 										<tr>
 											<th width="10">Sr.No.</th>
 											<th width="40">Item Id</th>
-											<th width="100">Item Name</th>
+											<th width="200">Item Name</th>
 											<th width="50">Opening Quantity</th>
 
 										</tr>

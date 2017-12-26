@@ -170,13 +170,13 @@
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_item_weight" id="sf_item_weight"
 											class="form-control" placeholder="SF Weight "
-											data-rule-required="true" />
+											data-rule-required="true" data-rule-number="true" />
 									</div>
 
 									<label class="col-sm-3 col-lg-2 control-label"> Qty</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="qty" id="qty" class="form-control"
-											placeholder="Qty" data-rule-required="true"
+											placeholder="Qty" data-rule-required="true" data-rule-number="true"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 

@@ -220,7 +220,7 @@
 									<div class="col-sm-9 col-lg-3 controls">
 										<input type="text" name="actual_weight" id="actual_weight"
 											placeholder="Actual Weight" class="form-control"
-											data-rule-required="true" value="${itemSupp.actualWeight}"/>
+											data-rule-required="true" data-rule-number="true"value="${itemSupp.actualWeight}"/>
 									</div>
 							  </div>
 							   <div class="form-group">
@@ -228,7 +228,7 @@
 									<div class="col-sm-9 col-lg-3 controls">
 										<input type="text" name="base_weight" id="base_weight"
 											placeholder="Base Weight" class="form-control"
-											data-rule-required="true" value="${itemSupp.baseWeight}"/>
+											data-rule-required="true" data-rule-number="true" value="${itemSupp.baseWeight}"/>
 									</div>
 							  </div>
 							  <div class="col2">
@@ -236,7 +236,7 @@
 									<div class="col-sm-9 col-lg-3 controls">
 										<input type="text" name="input_per_qty" id="input_per_qty"
 											placeholder="Input Per Qty" class="form-control"
-											data-rule-required="true" value="${itemSupp.inputPerQty}"/>
+											data-rule-required="true"  data-rule-number="true" value="${itemSupp.inputPerQty}"/>
 									</div>
 							  </div>
 							      <div class="form-group">

@@ -137,61 +137,17 @@
 
 			<div class="box-content">
 				<div class="row">
-					<div class="form-group col-md-9">
-						<label class=" col-md-2 control-label franchisee_label">Select
-							Franchise </label>
-						<div class=" col-md-7 controls franchisee_select">
-							<select data-placeholder="Choose Franchisee"
-								class="form-control chosen " multiple="multiple" tabindex="6"
-								id="selectFr" name="selectFr">
 
-								<option value="-1"><c:out value="All"/></option>
-
-
-
-								<c:forEach items="${unSelectedFrList}" var="fr"
-									varStatus="count">
-									<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
-								</c:forEach>
-
-
-
-							</select>
-						</div>
-						
-						
-						
-					</div>
 
 					<div class="form-group col-md-3">
-						<label class="col-md-5	 control-label date_label">Select
+						<label class="col-md-5	 control-label date_label">Delivery
 							Date</label>
-						<div class="col-md-6 controls date_select">
+						<div class="col-md-7 controls date_select">
 							<input class="form-control date-picker" id="deliveryDate"
 								name="deliveryDate" size="30" type="text" value="${todaysDate}" />
 						</div>
 
 					</div>
-
-
-
-<!-- <div class="col-sm-9 col-lg-5 controls">
- -->
- 
- <div class="form-group col-md-5"><label class=" col-md-2 control-label menu_label">
-							Route</label>
-
-										<select class="form-control chosen" tabindex="6"
-											name="selectRoute" id="selectRoute">
-
-											<option value="0">Select Route</option>
-											<c:forEach items="${routeList}" var="route" varStatus="count">
-												<option value="${route.routeId}"> ${route.routeName}</option>
-
-											</c:forEach>
-
-										</select>
-									</div>
 
 					<div class="form-group  ">
 						<label class=" col-md-2 control-label menu_label">Select
@@ -203,10 +159,6 @@
 								id="selectMenu" name="selectMenu">
 
 								<option value="-1"><c:out value="All"/></option>
-
-
-
-
 
 								<c:forEach items="${unSelectedMenuList}" var="unSelectedMenu"
 									varStatus="count">
@@ -220,8 +172,51 @@
 
 				</div>
 
+
+
+
+				<!-- <div class="col-sm-9 col-lg-5 controls">
+ -->
+
+				<div class="form-group col-md-9">
+					<label class=" col-md-2"> Route</label> 
+					<div class=" col-md-7">
+					<select data-placeholder="Select Route"
+						class="form-control chosen "  tabindex="6" name="selectRoute"
+						id="selectRoute">
+
+						<option value="0">Select Route</option>
+						<c:forEach items="${routeList}" var="route" varStatus="count">
+							<option value="${route.routeId}"> ${route.routeName}</option>
+
+						</c:forEach>
+
+					</select>
+					</div>
+				</div>
+
+				<div class="form-group col-md-9">
+					<label class=" col-md-2">Select
+						Franchise </label>
+					<div class=" col-md-7">
+						<select data-placeholder="Choose Franchisee"
+							class="form-control chosen " multiple="multiple" tabindex="6"
+							id="selectFr" name="selectFr">
+
+							<option value="-1"><c:out value="All"/></option>
+
+							<c:forEach items="${unSelectedFrList}" var="fr" varStatus="count">
+								<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
+							</c:forEach>
+						</select>
+					</div>
+
+				</div>
+
+
+
 				<div class="row">
-					<div class="col-md-12" style="text-align: center">
+					<div class="col-md-12" style="text-align: left">
 						<button class="btn btn-info" onclick="generateNewBill()">Generate
 							Bill</button>
 
@@ -254,7 +249,8 @@
 			</div>
 
 			<form id="submitBillForm"
-				action="${pageContext.request.contextPath}/submitNewBill" method="post">
+				action="${pageContext.request.contextPath}/submitNewBill"
+				method="post">
 				<div class=" box-content">
 					<div class="row">
 						<div class="col-md-12 table-responsive">
@@ -265,17 +261,15 @@
 										<th>Sr.No.</th>
 										<th>Franchise Name</th>
 										<th>Menu Name</th>
-										<th>Item id</th>
 										<th>Item Name</th>
 										<th>Order Quantity</th>
 										<th>Bill Quantity</th>
-										<th>Expiry Date</th>
 										<th>Rate</th>
 										<th>Total</th>
 									</tr>
 								</thead>
 								<tbody>
-									
+
 								</tbody>
 							</table>
 						</div>
@@ -286,8 +280,8 @@
 					<div class="row">
 						<div class="col-md-offset-6 col-md-6">
 							<button class="btn btn-info pull-right">Submit & PDF</button>
-							
-						 <a href="${pageContext.request.contextPath}/pdf?url=showBillPdf">PDF</a> 
+
+							<%-- <a href="${pageContext.request.contextPath}/pdf?url=showBillPdf">PDF</a> --%>
 							<button class="btn btn-info pull-right"
 								style="margin-right: 5px;" onclick="submitBill()">Submit</button>
 						</div>
@@ -372,9 +366,9 @@
 																+ bill.menuTitle
 																+ "</td>";
 
-														var itemId = "<td>&nbsp;&nbsp;&nbsp;"
+														/* var itemId = "<td>&nbsp;&nbsp;&nbsp;"
 																+ bill.itemId
-																+ "</td>";
+																+ "</td>"; */
 
 														var itemName = "<td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
 																+ bill.itemName
@@ -417,8 +411,8 @@
 														$('#table_grid tbody')
 																.append(
 																		menuTitle);
-														$('#table_grid tbody')
-																.append(itemId);
+														/* $('#table_grid tbody')
+																.append(itemId); */
 														$('#table_grid tbody')
 																.append(
 																		itemName);
@@ -427,9 +421,9 @@
 																		orderQty);
 														$('#table_grid tbody')
 																.append(billQty);
-														$('#table_grid tbody')
+														/* $('#table_grid tbody')
 																.append(
-																		expiryDate);
+																		expiryDate); */
 														$('#table_grid tbody')
 																.append(
 																		orderRate);
@@ -492,7 +486,21 @@
 		}
 	</script>
 
+<script>
+$('.datepicker').datepicker({
+    format: {
+        /*
+         * Say our UI should display a week ahead,
+         * but textbox should store the actual date.
+         * This is useful if we need UI to select local dates,
+         * but store in UTC
+         */
+    	 format: 'mm/dd/yyyy',
+    	    startDate: '-3d'
+    }
+});
 
+</script>
 
 	<!--basic scripts-->
 	<script
