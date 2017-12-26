@@ -43,6 +43,8 @@ public class GrnGvnController {
 	GetAllRemarksList allRemarksList;
 	List<GetAllRemarks> getAllRemarks;
 
+	GetAllRemarksList getAllRemarksList=new GetAllRemarksList();
+
 	public static String gateGrnFromDate, gateGrnToDate, accGrnFromDate, accGrnToDate;
 
 	public static String gateGvnFromDate, gateGvnToDate, storeGvnFromDate, storeGvnToDate, accGvnFromDate, accGvnToDate;
@@ -146,11 +148,22 @@ public class GrnGvnController {
 			getGrnGvnDetails = new ArrayList<GetGrnGvnDetails>();
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
+			
+			
+			//Ganesh Remrk
+			map=new LinkedMultiValueMap<String, Object>();
+			map.add("isFrUsed", 0);
+			map.add("moduleId", 1);
+			map.add("subModuleId", 1); 
+			  getAllRemarksList=restTemplate.postForObject(Constants.url + "/getAllRemarks",map, GetAllRemarksList.class);
+			  
+			
+			
 
-			allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
+			//allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
 
 			getAllRemarks = new ArrayList<>();
-			getAllRemarks = allRemarksList.getGetAllRemarks();
+			getAllRemarks = getAllRemarksList.getGetAllRemarks();
 
 			System.out.println("remark list " + getAllRemarks.toString());
 
@@ -445,11 +458,18 @@ public class GrnGvnController {
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 
-			allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
+			map=new LinkedMultiValueMap<String, Object>();
+			map.add("isFrUsed", 0);
+			map.add("moduleId", 1);
+			map.add("subModuleId", 1); 
+			  getAllRemarksList=restTemplate.postForObject(Constants.url + "/getAllRemarks",map, GetAllRemarksList.class);
+			  
+			
+
+			//allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
 
 			getAllRemarks = new ArrayList<>();
-			getAllRemarks = allRemarksList.getGetAllRemarks();
-
+			getAllRemarks = getAllRemarksList.getGetAllRemarks();
 
 			model.addObject("remarkList", getAllRemarks);
 
@@ -746,11 +766,19 @@ public class GrnGvnController {
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 
-			allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
+			map=new LinkedMultiValueMap<String, Object>();
+			map.add("isFrUsed", 0);
+			map.add("moduleId", 1);
+			map.add("subModuleId", 1); 
+			  getAllRemarksList=restTemplate.postForObject(Constants.url + "/getAllRemarks",map, GetAllRemarksList.class);
+			  
+			
+			
+
+			//allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
 
 			getAllRemarks = new ArrayList<>();
-			getAllRemarks = allRemarksList.getGetAllRemarks();
-
+			getAllRemarks = getAllRemarksList.getGetAllRemarks();
 
 			model.addObject("remarkList", getAllRemarks);
 
@@ -1045,11 +1073,19 @@ public class GrnGvnController {
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 
-			allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
+			map=new LinkedMultiValueMap<String, Object>();
+			map.add("isFrUsed", 0);
+			map.add("moduleId", 1);
+			map.add("subModuleId", 1); 
+			  getAllRemarksList=restTemplate.postForObject(Constants.url + "/getAllRemarks",map, GetAllRemarksList.class);
+			  
+			
+			
+
+			//allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
 
 			getAllRemarks = new ArrayList<>();
-			getAllRemarks = allRemarksList.getGetAllRemarks();
-
+			getAllRemarks = getAllRemarksList.getGetAllRemarks();
 
 			model.addObject("remarkList", getAllRemarks);
 
@@ -1337,11 +1373,19 @@ public class GrnGvnController {
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 
-			allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
+			map=new LinkedMultiValueMap<String, Object>();
+			map.add("isFrUsed", 0);
+			map.add("moduleId", 1);
+			map.add("subModuleId", 1); 
+			  getAllRemarksList=restTemplate.postForObject(Constants.url + "/getAllRemarks",map, GetAllRemarksList.class);
+			  
+			
+			
+
+			//allRemarksList = restTemplate.getForObject(Constants.url + "getAllRemarks", GetAllRemarksList.class);
 
 			getAllRemarks = new ArrayList<>();
-			getAllRemarks = allRemarksList.getGetAllRemarks();
-
+			getAllRemarks = getAllRemarksList.getGetAllRemarks();
 
 			model.addObject("remarkList", getAllRemarks);
 

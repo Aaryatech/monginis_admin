@@ -120,7 +120,7 @@
 																class="form-control chosen" tabindex="6" name="cat_name"
 																id="cat_name">
 
-																
+
 																<c:forEach items="${ItemIdCategory}" var="catIdName"
 																	varStatus="count">
 
@@ -128,7 +128,7 @@
 
 																	<c:set var="cId" value="${catId}"></c:set>
 																	<c:set var="listCatId" value="${catIdName.catId}"></c:set>
-																	
+
 																	<%
 																		int cateId = (int) pageContext.getAttribute("cId");
 																		int lCatId = (int) pageContext.getAttribute("listCatId");
@@ -136,7 +136,7 @@
 																	if (cateId == lCatId) {
 																	%>
 																	<option selected value="${catIdName.catId}"><c:out value="${catIdName.catName}"/></option>
-																	
+
 																	<%
 																	} else {
 																	%>
@@ -152,14 +152,14 @@
 
 															</select>
 														</div>
-													<!-- </div>
+														<!-- </div>
 
 
 
 
 													<div class="form-group"> -->
-														
-															<div class="col-md-2">
+
+														<div class="col-md-2">
 															<input type="submit" class="btn btn-primary"
 																value="Submit">
 
@@ -212,50 +212,48 @@
 																		<td align="left">${count.index+1}</td>
 
 																		<td align="left"><c:out value="${item.itemName}" />
-																		<input type="hidden" name="cat_name" value="${cId}">
-																		
-																		
+																			<input type="hidden" name="cat_name" value="${cId}">
+
+
 																		</td>
 
 
-																		<c:forEach items="${item.stockDetails}" var="stDetails"
-																			varStatus="count">
-																			<td align="left">
-																						<input type="hidden" name="${item.itemId}stockId${count.index}"
-																						value="${stDetails.frStockId}"
-																						>
+																		<c:forEach items="${item.stockDetails}"
+																			var="stDetails" varStatus="count">
+																			<td align="left"><input type="hidden"
+																				name="${item.itemId}stockId${count.index}"
+																				value="${stDetails.frStockId}">
 																				<div align="center"
 																					class="col-sm-9 col-lg-10 controls">
 																					Min <input align="left" type="text"
 																						name="${item.itemId}min${count.index}"
+																						id="${item.itemId}min${count.index}"
 																						placeholder="Min" class="form-control"
-																						data-rule-required="true" style="width: 65px" 
-																						value="${stDetails.minQty}"
-																						
-																						 />
+																						data-rule-required="true" style="width: 65px"
+																						value="${stDetails.minQty}" onchange="validateMinQty(this.id)" />
 																				</div>
 
 																				<div align="center"
 																					class="col-sm-9 col-lg-10 controls">
 																					Max <input type="text"
 																						name="${item.itemId}max${count.index}"
+																						id="${item.itemId}max${count.index}"
 																						placeholder="Max" class="form-control"
-																						data-rule-required="true" style="width: 65px" 
+																						data-rule-required="true" style="width: 65px"
 																						value="${stDetails.maxQty}"
-																						/>
+																						onchange="validateMaxQty(this.id)" />
 																				</div>
-																				
+
 																				<div align="center"
 																					class="col-sm-9 col-lg-10 controls">
 																					Reorder <input type="text"
 																						name="${item.itemId}reorder${count.index}"
+																						id="${item.itemId}reorder${count.index}"
 																						placeholder="reorder" class="form-control"
-																						data-rule-required="true" style="width: 65px" 
+																						data-rule-required="true" style="width: 65px"
 																						value="${stDetails.reorderQty}"
-																						/>
-																				</div>
-
-																			</td>
+																						onchange="validateReOrder(this.id)" />
+																				</div></td>
 
 
 																		</c:forEach>
@@ -319,6 +317,42 @@
 			});
 
 		});
+	</script>
+
+	<script>
+	
+	var minQty,maxQty,reOrderQty;
+	
+	function validateMaxQty(maxId){
+		
+		alert(maxId);
+		maxQty=document.getElementById(''+maxId).value;
+		alert(maxQty);
+	}
+	
+	function validateMinQty(minId){
+		
+		alert(minId);
+		minQty=document.getElementById(''+minId).value;
+		alert(minQty);
+	}
+		function validateReOrder(reOrderId){
+			
+		alert(reOrderId);
+		reOrderQty=document.getElementById(''+reOrderId).value;
+		alert(reOrderQty);
+		
+		if(maxQty < minQty)
+			alert("Enter max qty > minQty");
+		
+		if(reOrderQty > maxQty)
+			alert("Enter reOrderQty < maxQty");
+		
+		
+	}
+	
+	
+	
 	</script>
 
 

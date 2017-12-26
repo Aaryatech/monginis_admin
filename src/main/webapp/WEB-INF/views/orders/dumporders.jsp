@@ -130,29 +130,7 @@
 				<div class="row">
 					
 					<div class="form-group col-md-9">
-						<label class=" col-md-2 control-label franchisee_label">Select
-							Franchise </label>
-						<div class=" col-md-7 controls franchisee_select">
-							<select data-placeholder="Choose Franchisee"
-								class="form-control chosen " multiple="multiple" tabindex="6"
-								id="selectFr" name="selectFr">
-
-								<option value="-1"><c:out value=""/></option>
-
-
-
-								<c:forEach items="${unSelectedFrList}" var="fr"
-									varStatus="count">
-									<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
-								</c:forEach>
-
-
-
-							</select>
-						</div>
-					</div>
-					<div class="form-group col-md-9">
-						<label class=" col-md-2 control-label menu_label">Select
+				<label class=" col-md-2 control-label menu_label">Select
 							Menu</label>
 						<div class=" col-md-5 controls menu_select">
 
@@ -179,6 +157,28 @@
 
 							<input class="form-control date-picker" id="dp2" size="16"
 											type="text" name="oreder_date" />
+						</div>
+					</div>
+					<div class="form-group col-md-9">
+								<label class=" col-md-2 control-label franchisee_label">Select
+							Franchise </label>
+						<div class=" col-md-7 controls franchisee_select">
+							<select data-placeholder="Choose Franchisee"
+								class="form-control chosen " multiple="multiple" tabindex="6"
+								id="selectFr" name="selectFr">
+
+								<option value="-1"><c:out value=""/></option>
+
+
+
+								<c:forEach items="${unSelectedFrList}" var="fr"
+									varStatus="count">
+									<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
+								</c:forEach>
+
+
+
+							</select>
 						</div>
 					</div>
 					

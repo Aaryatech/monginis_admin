@@ -143,7 +143,7 @@
 								</div>
 
 								<div class="form-group">
-									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Items</label>
+									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Menu</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<select class="form-control chosen" multiple="multiple"
 											tabindex="6" name="item_id" id="item_id">
@@ -431,6 +431,9 @@ $.getJSON('${callSearchOrdersProcess}', {
  	tr.append($('<td></td>').html("<input type=number min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
   
   	tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> "));
+  	
+  	  	//tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+");<i class='fa fa-pencil'></i>>"));
+
   	
   	//<input type=button id=delete"+orders.orderId+" onClick=deleteOrder("+orders.orderId+"); Value=Delete>
 

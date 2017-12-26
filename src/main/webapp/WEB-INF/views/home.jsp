@@ -79,7 +79,7 @@
 					<div class="row">
 					
 		<c:forEach items="${orderCounts}"  var ="orderCounts">
-						<a href="resoucres/index.php/orders/list_all">
+						<!-- <a href="resoucres/index.php/orders/list_all"> -->
 							<div class="col-md-3">
 								<div class="tile tile-orange">
 									<div class="img">
@@ -93,7 +93,7 @@
 
 							</div>
 
-						</a> 
+							
 						</c:forEach>
 					
 						<!-- 

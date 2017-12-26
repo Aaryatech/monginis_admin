@@ -151,19 +151,22 @@ div.panel {
 								class="form-horizontal" method="post" id="validation-form">
 								<div class="form_group">
 									<label class="col-sm-3 col-lg-2 control-label">Select
-										Material Type</label> <select name="matType"
+										Material Type</label> 
+										<div class="col-sm-5 col-lg-3 controls">
+										<select name="matType"
 										class="form-control chosen" tabindex="6" id="mat_Type"
 										required>
 										<option value="1">RM</option>
 										<option value="2">SF</option>
 									</select>
+									</div>
 								</div>
 
 
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Select
-										View Option Date</label>
+										View Option</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<select name="selectStock" class="form-control chosen"
 											tabindex="6" id="selectStock" onchange="showDiv(this)"
@@ -235,8 +238,7 @@ div.panel {
 									</div>
 
 								</div>
-
-								<input type="submit" value="Search">
+								<input type="submit" class="btn btn-primary" value="Search" align="right">
 							</form>
 
 
@@ -277,7 +279,7 @@ div.panel {
 														<th>Store Rej Qty</th>
 														<th>Opening Stock</th>
 														<th>Closing Qty</th>
-														<th>Status</th>
+														
 
 													</tr>
 
@@ -298,13 +300,13 @@ div.panel {
 															<td><c:out value="${stockList.mixing_issue_qty}"></c:out>
 															<td><c:out value="${stockList.mixing_rejected_qty}"></c:out>
 															<td><c:out value="${stockList.mixing_return_qty}"></c:out>
-															<td><c:out value="${stockLis.store_issue_qty}"></c:out>
+															<td><c:out value="${stockList.store_issue_qty}"></c:out>
 															</td>
 															<td><c:out value="${stockList.store_rejected_qty}"></c:out>
 															</td>
 															<td><c:out value="${stockList.openingQty}"></c:out>
 															<td><c:out value="${stockList.closingQty}"></c:out>
-															<td><c:out value="Status"></c:out></td>
+														
 
 														</tr>
 													</c:forEach>
@@ -316,10 +318,10 @@ div.panel {
 
 										<div
 											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-2">
-											<input type="submit" value="Submit" class="btn btn-primary">
-											<input type="submit" value=" Store BOM"
+											<!-- <input type="submit" value="Submit" class="btn btn-primary"> -->
+											<!-- <input type="submit" value=" Store BOM"
 												class="btn btn-success">
-
+ -->
 											<c:choose>
 												<c:when test="${showDayEnd == 1}">
 													<input type="submit" value="Day End Process"

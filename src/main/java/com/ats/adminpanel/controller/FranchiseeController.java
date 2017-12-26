@@ -39,6 +39,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.ConfigureFrBean;
 import com.ats.adminpanel.model.ConfigureFrListResponse;
@@ -262,7 +263,7 @@ public class FranchiseeController {
 
 	@RequestMapping(value = "/addNewFrProcess", method = RequestMethod.POST)
 	public String displayLogin(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("fr_image") MultipartFile file) {
+			@RequestParam("fr_image") List<MultipartFile> file) {
 		ModelAndView model = new ModelAndView("franchisee/addnewfranchisee");
 		// ModelAndView model = new ModelAndView("orders/orders");
 
@@ -363,8 +364,16 @@ public class FranchiseeController {
 		System.out.println("26] frTarget "+frTarget);
 		
 		
-		 String frImage=ImageS3Util.uploadFrImage(file);
-
+		// String frImage=ImageS3Util.uploadFrImage(file);
+		 VpsImageUpload upload=new VpsImageUpload();
+		 
+		try {
+			upload.saveUploadedFiles(file,0,VpsImageUpload.getCurTimeStamp()+file.get(0).getOriginalFilename());
+			System.out.println("upload method called "+file.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		  
 
 		RestTemplate rest = new RestTemplate();
@@ -372,7 +381,7 @@ public class FranchiseeController {
 		map.add("frCode", frCode);
 		map.add("frOpeningDate", frOpeningDate);
 		map.add("frName", frName);
-		map.add("frImage", frImage);
+		map.add("frImage", file.get(0).getOriginalFilename());
 		map.add("frRouteId", frRouteId);
 		map.add("frRateCat", frRateCat);
 		map.add("frRate", frRate);
@@ -1777,6 +1786,7 @@ public class FranchiseeController {
 				mav.addObject("franchiseeList", franchiseeList);
 			    mav.addObject("frSupList", frSupList.getFrList());
 			    mav.addObject("isEdit",0);
+			    mav.addObject("state","Maharashtra");
 
 				return mav;
 			}
@@ -1875,6 +1885,8 @@ public class FranchiseeController {
 				model.addObject("frSup", frSup);
 				model.addObject("frSupList", frSupList.getFrList());
 				model.addObject("isEdit",1);
+				
+				model.addObject("state",frSup.getFrState());
 
 			}
 			catch(Exception e)

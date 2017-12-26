@@ -164,20 +164,22 @@
 									</div>
 							  </div>
 							  <div class="col2">
-									<label class="col-sm-3 col-lg-2 control-label">State</label>
-									<div class="col-sm-9 col-lg-3 controls">
-										<input type="text" name="fr_state" id="fr_state"
-											placeholder="State" class="form-control"
-											data-rule-required="true" value="${frSup.frState}"/>
-									</div>
-							  </div>
-							   <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Country</label>
+							  <label class="col-sm-3 col-lg-2 control-label">Country</label>
 									<div class="col-sm-9 col-lg-3 controls">
 										<input type="text" name="fr_country" id="fr_country"
 											placeholder="Country" class="form-control"
-											data-rule-required="true" value="${frSup.frCountry}"/>
+											data-rule-required="true" value="India"/>
 									</div>
+									
+							  </div>
+							   <div class="form-group">
+							   <label class="col-sm-3 col-lg-2 control-label">State</label>
+									<div class="col-sm-9 col-lg-3 controls">
+										<input type="text" name="fr_state" id="fr_state"
+											placeholder="State" class="form-control"
+											data-rule-required="true" value="${state}"/>
+									</div>
+									
 							  </div>
 							  <div class="col2">
 									<label class="col-sm-3 col-lg-2 control-label">Password1</label>

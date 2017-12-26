@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/flaty.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/flaty-responsive.css">
 
-<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/favicon.png">
+<link rel="icon" href="${pageContext.request.contextPath}/resources/img/monginislogo.png" type="image/x-icon" >
 </head>
 <body>
 

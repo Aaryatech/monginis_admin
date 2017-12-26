@@ -133,9 +133,9 @@
 	                                 </div>
 	                                 
 		                             <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Franchisee Target</label>
+											<label class="col-sm-3 col-lg-2 control-label">Target Per Year</label>
 											<div class="col-sm-9 col-lg-4 controls">
-												<input type="text" name="fr_target" id="fr_target" placeholder="Franchisee Target"
+												<input type="text" name="fr_target" id="fr_target" placeholder="Target Per Year"
 													class="form-control" data-rule-required="true"
 													data-rule-number="true"
 													onKeyPress="return isNumberCommaDot(event)"/>
@@ -373,7 +373,7 @@
 											<div class="col-sm-9 col-lg-4 controls">
 												<input type="text" name="fr_gst_no" id="fr_gst_no" placeholder="GST Number"
 													class="form-control" data-rule-required="true"
-													data-rule-number="true"
+													
 													onKeyPress="return isNumberCommaDot(event)"/>
 											</div>
 										</div>
