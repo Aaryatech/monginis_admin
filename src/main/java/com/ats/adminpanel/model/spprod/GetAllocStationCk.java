@@ -17,7 +17,28 @@ public class GetAllocStationCk{
 	
 	private String spCode;
 	
+	private int spId;
+	
 	private String reqDate;
+
+	private int isBom;
+	
+	
+	public int getIsBom() {
+		return isBom;
+	}
+
+	public void setIsBom(int isBom) {
+		this.isBom = isBom;
+	}
+
+	public int getSpId() {
+		return spId;
+	}
+
+	public void setSpId(int spId) {
+		this.spId = spId;
+	}
 
 	public int getSpCkAllocDId() {
 		return spCkAllocDId;
@@ -78,8 +99,8 @@ public class GetAllocStationCk{
 	@Override
 	public String toString() {
 		return "GetAllocStationCk [spCkAllocDId=" + spCkAllocDId + ", stationId=" + stationId + ", stName=" + stName
-				+ ", tSpCakeId=" + tSpCakeId + ", spName=" + spName + ", spCode=" + spCode + ", reqDate=" + reqDate
-				+ "]";
+				+ ", tSpCakeId=" + tSpCakeId + ", spName=" + spName + ", spCode=" + spCode + ", spId=" + spId
+				+ ", reqDate=" + reqDate + "]";
 	}
-	
+
 }
