@@ -364,7 +364,7 @@ public class FranchiseeController {
 		System.out.println(sdf.format(cal.getTime()));
 
 		String curTimeStamp = sdf.format(cal.getTime());
-
+ 
 		try {
 			
 			upload.saveUploadedFiles(file, 0, curTimeStamp + "-" + file.get(0).getOriginalFilename());
