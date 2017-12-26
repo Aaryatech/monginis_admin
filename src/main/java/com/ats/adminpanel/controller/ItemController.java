@@ -2,10 +2,13 @@
 package com.ats.adminpanel.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -33,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.CategoryListResponse;
@@ -403,7 +407,7 @@ public class ItemController {
 
 	@RequestMapping(value = "/addItemProcess", method = RequestMethod.POST)
 	public String addItemProcess(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("item_image") MultipartFile file) {
+			@RequestParam("item_image") List<MultipartFile> file) {
 		ModelAndView mav = new ModelAndView("items/itemlist");
 
 		String itemId = request.getParameter("item_id");
@@ -448,7 +452,28 @@ public class ItemController {
 
 		logger.info("Add new item request mapping.");
 
-		String itemImage = ImageS3Util.uploadItemImage(file);
+	//	String itemImage = ImageS3Util.uploadItemImage(file);
+		
+		
+		
+		VpsImageUpload upload = new VpsImageUpload();
+
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		System.out.println(sdf.format(cal.getTime()));
+
+		String curTimeStamp = sdf.format(cal.getTime());
+
+		try {
+			
+			upload.saveUploadedFiles(file, Constants.ITEM_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+			System.out.println("upload method called " + file.toString());
+			
+		} catch (IOException e) {
+			
+			System.out.println("Exce in File Upload In Item Insert " + e.getMessage());
+			e.printStackTrace();
+		}
 
 		RestTemplate rest = new RestTemplate();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -465,7 +490,7 @@ public class ItemController {
 		map.add("itemMrp1", itemMrp1);
 		map.add("itemMrp2", itemMrp2);
 		map.add("itemMrp3", itemMrp3);
-		map.add("itemImage", itemImage);
+		map.add("itemImage", curTimeStamp+"-"+file.get(0).getOriginalFilename());
 		map.add("itemTax1", itemTax1);
 		map.add("itemTax2", itemTax2);
 		map.add("itemTax3", itemTax3);

@@ -3,7 +3,10 @@ package com.ats.adminpanel.controller;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -11,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.tomcat.util.bcel.Const;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -25,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.message.AllMessageResponse;
 import com.ats.adminpanel.model.message.Info;
 import com.ats.adminpanel.model.message.Message;
@@ -83,7 +88,7 @@ public class MessageController {
 		
 	@RequestMapping(value="/addMessageProcess",method=RequestMethod.POST)
 	  public String addNewMessage(HttpServletRequest request, HttpServletResponse response,
-			  @RequestParam("msg_image") MultipartFile file) {
+			  @RequestParam("msg_image") List<MultipartFile> file) {
 		  ModelAndView mav = new ModelAndView("message/addNewMessage");
 		  
 		
@@ -95,15 +100,32 @@ public class MessageController {
 		String msgDetails=request.getParameter("msg_details");
 	int isActive=Integer.parseInt(request.getParameter("is_active"));
 	
-	 String msgImage=	ImageS3Util.uploadMessageImage(file);
+	// String msgImage=	ImageS3Util.uploadMessageImage(file);
 		
+	 VpsImageUpload upload = new VpsImageUpload();
 
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		System.out.println(sdf.format(cal.getTime()));
+
+		String curTimeStamp = sdf.format(cal.getTime());
+
+		try {
+			
+			upload.saveUploadedFiles(file, Constants.MESSAGE_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+			System.out.println("upload method called " + file.toString());
+			
+		} catch (IOException e) {
+			
+			System.out.println("Exce in File Upload In Item Insert " + e.getMessage());
+			e.printStackTrace();
+		}
 		
 			RestTemplate rest = new RestTemplate();
 	        MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 	        map.add("msgFrdt",msgFrdt);         
 	        map.add("msgTodt",msgTodt);
-	        map.add("msgImage",msgImage);
+	        map.add("msgImage",curTimeStamp+"-"+file.get(0).getOriginalFilename());
 	        map.add("msgHeader",msgHeader);
 	        map.add("msgDetails",msgDetails);
 	        map.add("isActive",isActive);
@@ -187,7 +209,7 @@ public class MessageController {
 	@RequestMapping(value = "/updateMessage/updateMessageProcess",method=RequestMethod.POST)
 
 	public String updateMessage(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("msg_image") MultipartFile file) {
+			@RequestParam("msg_image")List<MultipartFile> file) {
 		System.out.println("HI");
 		try
 		 {		
@@ -206,10 +228,29 @@ public class MessageController {
 		String msgImage=request.getParameter("prevImage");
 		
 		
-		if(!file.getOriginalFilename().equalsIgnoreCase("")) {
+		if(!file.get(0).getOriginalFilename().equalsIgnoreCase("")) {
 			
 			System.out.println("Empty image");
-			msgImage=	ImageS3Util.uploadMessageImage(file);
+			//msgImage=	ImageS3Util.uploadMessageImage(file);
+			
+			VpsImageUpload upload = new VpsImageUpload();
+
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			System.out.println(sdf.format(cal.getTime()));
+
+			String curTimeStamp = sdf.format(cal.getTime());
+
+			try {
+				
+				upload.saveUploadedFiles(file, Constants.MESSAGE_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+				System.out.println("upload method called " + file.toString());
+				
+			} catch (IOException e) {
+				
+				System.out.println("Exce in File Upload In Item Insert " + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 
 		
@@ -223,6 +264,7 @@ public class MessageController {
 	        map.add("msgDetails",msgDetails);
 	        map.add("isActive",isActive);
 	        map.add("id", id);
+	        System.out.println("Image Url "+Constants.MESSAGE_IMAGE_URL);
 	        
 	        model.addObject("url",Constants.MESSAGE_IMAGE_URL);
 

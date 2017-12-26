@@ -113,7 +113,6 @@
 									<tbody>
 					
                              <c:forEach items="${message}" var="message" varStatus="count">
-   
 										<tr>
 											<td><c:out value="${count.index+1}"/></td>
 											<td align="left"><c:out value="${message.msgFrdt} ${message.msgTodt}" /></td>

@@ -367,7 +367,7 @@ public class FranchiseeController {
  
 		try {
 			
-			upload.saveUploadedFiles(file, 0, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+			upload.saveUploadedFiles(file, Constants.FR_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
 			System.out.println("upload method called " + file.toString());
 			
 		} catch (IOException e) {
