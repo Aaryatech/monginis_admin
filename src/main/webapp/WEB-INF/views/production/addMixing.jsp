@@ -100,10 +100,10 @@
 							<div class="clearfix"></div>
 						<form action="${pageContext.request.contextPath}/addMixingreqst" class="form-horizontal" method="post"
 							id="validation-form">
-							<input type="text" name="globalTimeSlot" value="${globalTimeSlot}" readonly>
-							<input type="text" name="globalProductionBatch" value="${globalProductionBatch}" readonly>
-							<input type="text" name="productionId" value="${productionId}" readonly>
-							<input type="text" name="ismixing" value="${isMixing}" readonly>
+							<input type="hidden" name="globalTimeSlot" value="${globalTimeSlot}"  readonly>
+							<input type="hidden" name="globalProductionBatch" value="${globalProductionBatch}" readonly>
+							<input type="hidden" name="productionId" value="${productionId}" readonly>
+							<input type="hidden" name="ismixing" value="${isMixing}" readonly>
 							<div class="table-responsive" style="border: 0">
 								<table width="100%" class="table table-advance" id="table1">
 									<thead>

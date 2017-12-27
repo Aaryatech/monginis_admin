@@ -383,14 +383,22 @@ $('#dayEndButton').click(function(){
 	var option= $("#selectStock").val();
 if(option==1){
 	alert("Day End ");
-	
+	$('#loader').show();
+
 	$.getJSON('${finishedGoodDayEnd}',
 			{
 				
 				ajax : 'true',
-			
-
+				
+				 complete: function() {
+						
+					alert("completed ")
+				
+				 }
+	
 }
+	$('#loader').hide();
+
 );
 
 }else{alert("Please Select Current Stock")}});
