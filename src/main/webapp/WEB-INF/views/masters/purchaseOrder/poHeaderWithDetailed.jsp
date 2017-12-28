@@ -12,7 +12,7 @@
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Purchase Order</title>
+<title>Purchase Order Detailed</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -52,6 +52,7 @@
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css" />
 <style>
+
 @media only screen and (min-width: 1200px) {
 	.franchisee_label, .menu_label {
 		width: 22%;
@@ -79,11 +80,13 @@
 
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/resources/img/favicon.png">
+	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 </head>
 <body>
 
 
-	<%-- <c:url var="getBillList" value="/generateNewBill"></c:url> --%>
+	<c:url var="addItemToListInOldItemList" value="/addItemToListInOldItemList"></c:url>
+		<c:url var="updateRmQty0" value="/updateRmQty0"></c:url>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -108,7 +111,7 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Purchase Order
+					<i class="fa fa-file-o"></i>Purchase Order Detailed
 				</h1>
 				<!-- <h4>Bill for franchises</h4> -->
 			</div>
@@ -130,32 +133,112 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>PO List
+					<i class="fa fa-bars"></i>Purchase Order Detailed
 				</h3>
 
 			</div>
-			<div class=" box-content">
-			<div class="box">
-			<div class="col-md-2">
-			<a href="showDirectPurchaseOrder" class="btn btn-info btn">
-          <span class="glyphicon glyphicon-pencil"></span> Add New 
-        </a>
-				<!-- <button class="btn btn-info pull-left" style="margin-right: 5px;" >Add
-					New</button> -->
-			</div>
-			<div class="col-md-2">Search</div>
-			<div class="col-md-4">
-				<input type="text" class="form-control">
-			</div>
-			<div class="col-md-2">Party</div>
 
-<br/>
-
-		</div>
-
-			<form id="submitBillForm"
-				action="${pageContext.request.contextPath}/submitNewBill"
+				<div class=" box-content">
+					 
+		<div class="box">
+			<form id="submitPurchaseOrder"
+				action="${pageContext.request.contextPath}/"
 				method="post">
+			<div class="box-content">
+				<div class="col-md-2">PO No.  </div>
+				<div class="col-md-4"><input type="text" id="po_no" name="po_no" value="${purchaseOrderHeader.poNo}" class="form-control" readonly>
+				</div>
+				<div class="col-md-2">PO Date</div> 
+				<div class="col-md-3">
+				<input type="text" id="po_date" name="po_date" value="${purchaseOrderHeader.poDate}" class="form-control" readonly>
+				<input type="hidden" id="flag" name="flag" value="0" class="form-control">
+				
+				</div>
+				</div><br/>
+				<div class="box-content">
+				<div class="col-md-2" >Supplier</div>
+									<div class="col-md-4">
+									
+										<c:forEach items="${supplierList}" var="supplierList" varStatus="count">
+												<c:choose>
+													<c:when test="${purchaseOrderHeader.suppId==supplierList.suppId}">
+													<input type="text" id="Suppid" name="Suppid" value="${supplierList.suppName}" 
+								class="form-control" readonly>
+													
+													</c:when>
+												 </c:choose>
+											</c:forEach>
+									
+									</div>
+									<div class="col-md-2">Quotation Ref. No.  </div>
+				<div class="col-md-3">
+					<input type="text" name="quotation_ref_no" id="quotation_ref_no" value="${purchaseOrderHeader.quotationRefNo}" class="form-control" readonly>
+				</div>
+				 
+			</div><br/>
+			<div class="box-content">
+				<div class="col-md-2">Kind Attention</div>
+				<div class="col-md-4">
+					<input type="text" name="kind_attn" id="kind_attn" value="${purchaseOrderHeader.kindAttn}" class="form-control" readonly>
+				</div>
+				<div class="col-md-2">Delivery At</div>
+				<div class="col-md-3">
+					<input type="text" name="delv_at" id="delv_at" value="${purchaseOrderHeader.delvAtRem}" class="form-control" readonly>
+				</div>
+				</div><br/>
+			<div class="box-content">
+				<div class="col-md-2" >Taxation</div>
+									<div class="col-md-4">
+									<c:choose>
+										<c:when test="${purchaseOrderHeader.taxationRem==1}">
+											<c:set var="taxation" value="Inclusive"> </c:set>
+										</c:when>
+										<c:when test="${purchaseOrderHeader.taxationRem==2}">
+											<c:set var="taxation" value="Extra"> </c:set>
+										</c:when>
+									</c:choose>
+									
+									<input type="text" name="taxation" id="taxation" value="${taxation}" class="form-control" readonly>
+				
+									</div>
+									<div class="col-md-2">Delivery Date  </div>
+				<div class="col-md-3">
+					<input type="text" name="delv_date"id="delv_date" class="form-control" 
+					value="${purchaseOrderHeader.delvDateRem}" readonly>
+				</div>
+				 
+			</div> <br/>
+			<div class="box-content">
+								<div class="col-md-2" >PO Type</div>
+									<div class="col-md-4">
+										 <c:choose>
+											<c:when test="${purchaseOrderHeader.poType==1}">
+												<c:set var="poType" value="Regular"></c:set>
+											</c:when>
+											
+											<c:when test="${purchaseOrderHeader.poType==2}">
+												<c:set var="poType" value="Open"></c:set>
+											</c:when>
+										
+										</c:choose>
+										
+										<input type="text" name="po_type" id="po_type" class="form-control" 
+											value="${poType}" readonly>
+										
+									</div>
+								<div class="col-md-2" >Quotation Ref. Date</div>
+									<div class="col-md-3">
+										 <input type="text" name="quotation_date" id="quotation_date" value="${purchaseOrderHeader.quotationRefDate}" class="form-control" readonly>
+									</div>
+									
+						</div>	<br/>		
+							
+			<div class="box-content">
+			
+					</div><br/>
+			
+			
+			
 				<div class=" box-content">
 					<div class="row">
 						<div class="col-md-12 table-responsive">
@@ -164,142 +247,109 @@
 								<thead>
 									<tr>
 										<th>Sr.No.</th>
-										<th>PO.No.</th>
-										<th>PO Date</th>
-										<th>Po Type</th>
-										<th>Suppiler</th>
+										<th>Product</th>
+										<th>Quantity</th>
+										<th>Rate</th>
+										<th>Discount %</th>
 										<th>Value</th>
-										<th>Status</th>
-										<th colspan="2">Action</th>
+										<th>Schedule Days</th>
+										<th>RM Remark</th>
+										
 
 									</tr>
 								</thead>
 								<tbody>
 								
-								
-								<c:forEach items="${purchaseorderlist}" var="purchaseorderlist"
-													varStatus="count">
-											<c:choose>
-													<c:when test="${purchaseorderlist.poStatus==3}">
-													<c:set var = "color" value="red"/>
-													</c:when>
-													<c:otherwise>
-													  <c:set var = "color" value="black"/>
-													</c:otherwise>
-											</c:choose>
-											
-											<c:choose>
-													<c:when test="${purchaseorderlist.poStatus==0}">
-													<c:set var = "status" value="Pending"/>
-													</c:when>
-													<c:when test="${purchaseorderlist.poStatus==1}">
-													 <c:set var = "status" value="Requested"/>
-													</c:when>
-													<c:when test="${purchaseorderlist.poStatus==3}">
-													 <c:set var = "status" value="Rejected"/>
-													</c:when>
-											</c:choose>
+								<c:forEach items="${purchaseOrderHeader.purchaseOrderDetail}" var="purchaseOrderDetailedList"
+														varStatus="count">
 
-									
 
-													<tr>
-														<td style="color: <c:out value = "${color}"/>"><c:out value="${count.index+1}" /></td>
+														<tr>
+															<td><c:out value="${count.index+1}" /></td>
+															<c:set var="srNo" value="${srNo+1}" />
+															<td><c:out value="${purchaseOrderDetailedList.rmName}" /></td>
+															<td><c:out value="${purchaseOrderDetailedList.poQty}" /></td>
 
-														
-																
-																<td align="left" style="color: <c:out value = "${color}"/>"><c:out
-																value="${purchaseorderlist.poNo}" /></td>
-																
-																<td align="left" style="color: <c:out value = "${color}"/>"><c:out
-																value="${purchaseorderlist.poDate}" />  </td>
-																
-																
-																<td align="left" style="color: <c:out value = "${color}"/>"><c:out	
-																value="${purchaseorderlist.poType}" />
-																</td>
-																
-																<c:forEach items="${supplierList}" var="supplierList"
-													varStatus="count">
-																<c:choose>
-													<c:when test="${purchaseorderlist.suppId==supplierList.suppId}">
-													<td align="left" style="color: <c:out value = "${color}"/>"><c:out
-																value="${supplierList.suppName}" /></td>
-													</c:when>
-													 </c:choose>
-													 </c:forEach>
-													 
-													 <td align="left" style="color: <c:out value = "${color}"/>"><c:out	
-																value="${purchaseorderlist.poTotalValue}" />
-																</td>
-																
-													<td align="left" style="color: <c:out value = "${color}"/>"><c:out	
-																value="${status}" />
-																</td>
+
+															<td><c:out value="${purchaseOrderDetailedList.poRate}" /></td>
+															<td><c:out value="${purchaseOrderDetailedList.discPer}" /></td>
+															<td><c:out value="${purchaseOrderDetailedList.poQty*purchaseOrderDetailedList.poRate}" /></td>
 															
+															<td><c:out value="${purchaseOrderDetailedList.schDays}" /></td>
+															<td><c:out value="${purchaseOrderDetailedList.rmRemark}" /></td>
 															
-																
-																
-				
-																
-																
-						<td>
-						
-						<a href="poHeaderWithDetailed/${purchaseorderlist.poId}" class="action_btn" >
-						<abbr title="Edit"><i class="fa fa-list"></i></abbr></a>
-						
-						<c:choose>
-						<c:when test="${purchaseorderlist.poStatus==0}"> 
-							<a href="editPurchaseOrder/${purchaseorderlist.poId}">
-									<span class="glyphicon glyphicon-edit"><abbr title='Edit'></abbr></span></a>
-						
-							<a href="requestPOStoreToPurchase/${purchaseorderlist.poId}">
-          							<span class="glyphicon glyphicon-ok-circle"><abbr title='Approve'></abbr></span> </a>
-          					<a href="deletePoRecord/${purchaseorderlist.poId}"
-						onClick="return confirm('Are you sure want to delete this record');"><abbr title='Delete'></abbr><span
-																			class="glyphicon glyphicon-remove"></span></a>
-						
-						</c:when>
-						<c:when test="${purchaseorderlist.poStatus==3}">
-							<a href="editPurchaseOrder/${purchaseorderlist.poId}">
-								<span class="glyphicon glyphicon-edit"><abbr title='Edit'></abbr></span></a>
+		                                                    
+
+														</tr>
+													</c:forEach>
 								
-							<a href="requestPOStoreToPurchase/${purchaseorderlist.poId}">
-          						<span class="glyphicon glyphicon-ok-circle"><abbr title='Approve'></abbr></span> </a>
-          						
-          					<a href="deletePoRecord/${purchaseorderlist.poId}"
-						onClick="return confirm('Are you sure want to delete this record');"><abbr title='Delete'></abbr><span
-																			class="glyphicon glyphicon-remove"></span></a>
-						</c:when>
-						</c:choose>
-						
-						
-						
-						
-						
-						
-						
-						
-						</td>
-						
-																</tr>
-												</c:forEach>
+								
 
 								</tbody>
 							</table>
 						</div>
 					</div>
 
-
-
-
-		 
-
-			</form>
-	 
-</div>
  
+		</div>
+		<div class="box-content">
+				<div class="col-md-2" >Payment Terms</div>
+									<div class="col-md-3">
+									
+									<input type="text" name="pay_terms" id="pay_terms" value="${purchaseOrderHeader.payId}" class="form-control" readonly>
+				
+								
+									</div>
+									<div class="col-md-2">PO Validity </div>
+				<div class="col-md-3">
+					<input type="text" name="po_validity" id="po_validity" class="form-control" value="${purchaseOrderHeader.validity}" readonly>
+				</div>
+				</div><br/>
+				 	<div class="box-content">
+							<div class="col-md-2" >Transportation</div>
+									<div class="col-md-3">
+									
+					
+											 <c:forEach items="${transporterList}" var="transporterList" varStatus="count">
+											 	<c:choose>
+											 		<c:when test="${transporterList.tranId==purchaseOrderHeader.tranId}">
+											 			<input type="text" name="transportation" id="transportation" class="form-control" value="${transporterList.tranName}" readonly>
+													 </c:when>
+												 </c:choose>
+											</c:forEach>
+							 		</div>
+							 		
+									<div class="col-md-2" >Freight</div>
+									<div class="col-md-3">
+										<input type="text" name="transportation" id="transportation" class="form-control" value="${purchaseOrderHeader.freidhtRem}" readonly>
+									</div>
+									</div><br/>
+									
+									<div class="box-content">
+										<div class="col-md-2" >Insurance</div>
+											<div class="col-md-3">
+											<input type="text" name="insurance" id="insurance" class="form-control" value="${purchaseOrderHeader.insuRem}" readonly>
+									
+					
+									</div>
+									<div class="col-md-2" >Sp.Instrucion</div>
+									<div class="col-md-3">
+					<input type="text" name="sp_instruction" id="sp_instruction" class="form-control" value="${purchaseOrderHeader.spRem}" readonly>
+				</div>
+									</div><br/><br/>
+			
+			<div class="row">
+						<div class="col-md-12" style="text-align: center">
+							<!-- <input type="submit" class="btn btn-info" value="Submit"> -->
 
-	 
+
+						</div>
+					</div>
+				
+			</form>
+			</div>
+		</div>
+	</div>
 	</div>
 	<!-- END Main Content -->
 
@@ -310,7 +360,12 @@
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
 
-	
+ 
+
+
+
+
+
 
 	<!--basic scripts-->
 	<script
@@ -367,5 +422,9 @@
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
+		
+		
+		
+		
 </body>
 </html>

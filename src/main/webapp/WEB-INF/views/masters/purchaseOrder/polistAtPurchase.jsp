@@ -12,7 +12,7 @@
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Purchase Order</title>
+<title>Purchase Order At Purchase</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -135,28 +135,10 @@
 
 			</div>
 			<div class=" box-content">
-			<div class="box">
-			<div class="col-md-2">
-			<a href="showDirectPurchaseOrder" class="btn btn-info btn">
-          <span class="glyphicon glyphicon-pencil"></span> Add New 
-        </a>
-				<!-- <button class="btn btn-info pull-left" style="margin-right: 5px;" >Add
-					New</button> -->
-			</div>
-			<div class="col-md-2">Search</div>
-			<div class="col-md-4">
-				<input type="text" class="form-control">
-			</div>
-			<div class="col-md-2">Party</div>
-
-<br/>
-
-		</div>
 
 			<form id="submitBillForm"
 				action="${pageContext.request.contextPath}/submitNewBill"
 				method="post">
-				<div class=" box-content">
 					<div class="row">
 						<div class="col-md-12 table-responsive">
 							<table class="table table-bordered table-striped fill-head "
@@ -179,26 +161,30 @@
 								
 								<c:forEach items="${purchaseorderlist}" var="purchaseorderlist"
 													varStatus="count">
-											<c:choose>
-													<c:when test="${purchaseorderlist.poStatus==3}">
+												<c:choose>
+													<c:when test="${purchaseorderlist.poStatus==4}">
 													<c:set var = "color" value="red"/>
 													</c:when>
+													
+													
 													<c:otherwise>
 													  <c:set var = "color" value="black"/>
 													</c:otherwise>
-											</c:choose>
-											
-											<c:choose>
-													<c:when test="${purchaseorderlist.poStatus==0}">
+												</c:choose>
+												
+												<c:choose>
+													<c:when test="${purchaseorderlist.poStatus==1}">
 													<c:set var = "status" value="Pending"/>
 													</c:when>
-													<c:when test="${purchaseorderlist.poStatus==1}">
-													 <c:set var = "status" value="Requested"/>
+													
+													<c:when test="${purchaseorderlist.poStatus==2}">
+													  <c:set var = "status" value="Requested"/>
 													</c:when>
-													<c:when test="${purchaseorderlist.poStatus==3}">
-													 <c:set var = "status" value="Rejected"/>
+													
+													<c:when test="${purchaseorderlist.poStatus==4}">
+													  <c:set var = "status" value="Rejected"/>
 													</c:when>
-											</c:choose>
+												</c:choose>
 
 									
 
@@ -227,15 +213,13 @@
 													</c:when>
 													 </c:choose>
 													 </c:forEach>
-													 
-													 <td align="left" style="color: <c:out value = "${color}"/>"><c:out	
+													  
+													<td align="left" style="color: <c:out value = "${color}"/>"><c:out	
 																value="${purchaseorderlist.poTotalValue}" />
 																</td>
-																
 													<td align="left" style="color: <c:out value = "${color}"/>"><c:out	
 																value="${status}" />
-																</td>
-															
+																</td>	
 															
 																
 																
@@ -243,36 +227,29 @@
 																
 																
 						<td>
-						
 						<a href="poHeaderWithDetailed/${purchaseorderlist.poId}" class="action_btn" >
 						<abbr title="Edit"><i class="fa fa-list"></i></abbr></a>
 						
 						<c:choose>
-						<c:when test="${purchaseorderlist.poStatus==0}"> 
-							<a href="editPurchaseOrder/${purchaseorderlist.poId}">
-									<span class="glyphicon glyphicon-edit"><abbr title='Edit'></abbr></span></a>
-						
-							<a href="requestPOStoreToPurchase/${purchaseorderlist.poId}">
-          							<span class="glyphicon glyphicon-ok-circle"><abbr title='Approve'></abbr></span> </a>
-          					<a href="deletePoRecord/${purchaseorderlist.poId}"
-						onClick="return confirm('Are you sure want to delete this record');"><abbr title='Delete'></abbr><span
+							<c:when test="${purchaseorderlist.poStatus==1}"> 
+								<a href="requestPOPurachaseToDirectore/${purchaseorderlist.poId}">
+          								<span class="glyphicon glyphicon-ok-circle"></span> </a>
+          							
+          						<a href="rejectPOPurachaseToStore/${purchaseorderlist.poId}"
+						onClick="return confirm('You Want To Reject This Record To Store');"><span
 																			class="glyphicon glyphicon-remove"></span></a>
 						
-						</c:when>
-						<c:when test="${purchaseorderlist.poStatus==3}">
-							<a href="editPurchaseOrder/${purchaseorderlist.poId}">
-								<span class="glyphicon glyphicon-edit"><abbr title='Edit'></abbr></span></a>
-								
-							<a href="requestPOStoreToPurchase/${purchaseorderlist.poId}">
-          						<span class="glyphicon glyphicon-ok-circle"><abbr title='Approve'></abbr></span> </a>
+							</c:when>
+							<c:when test="${purchaseorderlist.poStatus==4}"> 
+								<a href="requestPOPurachaseToDirectore/${purchaseorderlist.poId}">
+          							<span class="glyphicon glyphicon-ok-circle"></span> </a>
           						
-          					<a href="deletePoRecord/${purchaseorderlist.poId}"
-						onClick="return confirm('Are you sure want to delete this record');"><abbr title='Delete'></abbr><span
+          						<a href="rejectPOPurachaseToStore/${purchaseorderlist.poId}"
+						onClick="return confirm('You Want To Reject This Record To Store');"><span
 																			class="glyphicon glyphicon-remove"></span></a>
-						</c:when>
+						
+							</c:when>
 						</c:choose>
-						
-						
 						
 						
 						
@@ -310,7 +287,17 @@
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
 
+	<script type="text/javascript">
+			function submitBill() {
+
+				//submitBillForm.submit();
+			}
+		</script>
+
+
 	
+
+
 
 	<!--basic scripts-->
 	<script
