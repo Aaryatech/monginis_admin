@@ -97,8 +97,8 @@
 								<i class="fa fa-bars"></i>Add Item
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a>
+								<!-- <a href="">Back to List</a> <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a> -->
 							</div>
 
 						</div>
@@ -123,7 +123,7 @@
 										<select name="sf_item_type" id="sf_item_type"
 											class="form-control" placeholder="SF Type"
 											data-rule-required="true">
-											<option value="1">Select SF Type</option>
+											<option value="0">Select SF Type</option>
 											<c:forEach items="${sfTypeList}" var="sfTypeList"
 												varStatus="count">
 												<option value="${sfTypeList.id}"><c:out value="${sfTypeList.sfTypeName}"/></option>
@@ -139,7 +139,7 @@
 										<select name="sf_item_uom" id="sf_item_uom"
 											class="form-control" placeholder="SF UOM"
 											data-rule-required="true">
-											<option value="1">Select UOM</option>
+											<option value="0">Select UOM</option>
 											<c:forEach items="${rmUomList}" var="rmUomList"
 												varStatus="count">
 												<option value="${rmUomList.uomId}"><c:out value="${rmUomList.uom}"/></option>
@@ -200,10 +200,21 @@
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 								</div>
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Multiplication
+										 Factor </label>
+
+									<div class="col-sm-6 col-lg-4 controls">
+										<input type="text" name="mul_factor" id="mul_factor"
+											class="form-control" placeholder="Multi Factot"
+											data-rule-required="true" data-rule-number="true"
+											onKeyPress="return isNumberCommaDot(event)" />
+									</div>
+									</div>
 
 								<div class="row">
 									<div class="col-md-12" style="text-align: center">
-										<input type="submit" class="btn btn-info" value="Submit">
+										<input type="button" onclick="validateQty()" class="btn btn-info" value="Submit">
 
 									</div>
 								</div>
@@ -367,78 +378,87 @@ href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}
 
 
 	<script type="text/javascript">
-		$(document)
-				.ready(
-						function() {
-							$('#rm_group')
-									.change(
-											function() {
-												$
-														.getJSON(
-																'${getRmCategory}',
-																{
-																	grpId : $(
-																			this)
-																			.val(),
-																	ajax : 'true'
-																},
-																function(data) {
-																	var html = '<option value="" selected >Select Category</option>';
+	function validateQty() {
+		
+		alert("inside validate fun");
+		var min = document.getElementById("sf_min_qty").value;
+		var max = document.getElementById("sf_max_qty").value;
+		var reOrder = document.getElementById("sf_reorder_level_qty").value;
+		var sfName = document.getElementById("sf_item_name").value;
+		//alert( "name= "+sfName);
+		var sfType = document.getElementById("sf_item_type").value;
+		//alert("type ="+sfType);
+		var uom = document.getElementById("sf_item_uom").value;
+		//alert("uom = "+uom);
+		var weight = document.getElementById("sf_item_weight").value;
+		//alert("weight="+weight);
+		var stockQty = document.getElementById("sf_stock_qty").value;
+		//alert("stock qty "+stockQty);
+		
+				var mulFactor = document.getElementById("mul_factor").value;
 
-																	var len = data.length;
-																	for (var i = 0; i < len; i++) {
-																		html += '<option value="' + data[i].catId + '">'
-																				+ data[i].catName
-																				+ '</option>';
-																	}
-																	html += '</option>';
-																	$('#rm_cat')
-																			.html(
-																					html);
-																	$('#rm_cat')
-																			.formcontrol(
-																					'refresh');
+		
+		
+		
+		var valid=true;
+		
+		if(max == min || max < min ){
+			alert("Enter Max Qty  greater than Min Qty");
+			valid=false;
+		}
+		else if(reOrder<=min || reOrder>=max ){
+			alert("Enter Reorder Qty between Min and Max Qty");
+			valid=false;
+		}
+		
+		else if(sfName==null || sfName==""){
+			alert("Please Enter SF Name");
+			valid=false;
+		}
+		else if(sfType==0){
+			alert("Please Select Sf Type");
+			valid=false;
+		}
+		else if(uom==0){
+			alert("Please Select Unit of Measure");
+			valid=false;
+		}
+		else if(weight<0 || isNaN(weight)){
+			alert("Please Enter valid Weight")
+			valid=false;
+		}
+		else if(isNaN(min)){
+			alert("Please Enter valid Min Qty");
+			valid=false;
+		}
+		else if(max<=0 || isNaN(max)){
+			alert("Please Enter valid Max Qty");
+			valid=false;
+		}
+		else if(stockQty<=0 || isNaN(stockQty)){
+			alert("Please Enter valid Stock Qty");
+			valid=false;
+		}
+		else if(reOrder<=0 || isNaN(reOrder)){
+			alert("Please Enter valid Reorder Qty");
+			valid=false;
+		}
+		
+		else if(mulFactor<=0 || isNaN(mulFactor)){
+			alert("Please Enter valid Multiplication Qty");
+			valid=false;
+		}
+		
+		
+		if(valid){
+			alert("Submited ");
+			 var form = document.getElementById("validation-form")
+			    form.action ="${pageContext.request.contextPath}/insertSfItemHeader";
+			    form.submit();
+		}
 
-																});
-											});
-						});
-		$(document)
-				.ready(
-						function() {
-							$('#rm_cat')
-									.change(
-											function() {
-												$
-														.getJSON(
-																'${getRmSubCategory}',
-																{
-																	catId : $(
-																			this)
-																			.val(),
-																	ajax : 'true'
-																},
-																function(data) {
-																	var html = '<option value="" selected >Select Category</option>';
-
-																	var len = data.length;
-																	for (var i = 0; i < len; i++) {
-																		html += '<option value="' + data[i].subCatId + '">'
-																				+ data[i].subCatName
-																				+ '</option>';
-																	}
-																	html += '</option>';
-																	$(
-																			'#rm_sub_cat')
-																			.html(
-																					html);
-																	$(
-																			'#rm_sub_cat')
-																			.formcontrol(
-																					'refresh');
-
-																});
-											});
-						});
+		
+	}
 	</script>
 
 </body>
