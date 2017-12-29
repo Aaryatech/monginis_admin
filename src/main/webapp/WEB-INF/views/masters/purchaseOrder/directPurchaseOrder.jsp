@@ -85,6 +85,7 @@
 
 	<c:url var="addItemToList" value="/addItemToList"></c:url>
 		<c:url var="updateRmQty0" value="/updateRmQty0"></c:url>
+		<c:url var="delItem" value="/delItem"></c:url>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -149,14 +150,15 @@
 				<div class="col-md-2">PO Date</div> 
 				<div class="col-md-3">
 				<input type="text" id="po_date" name="po_date" value="${todayDate}" class="form-control" readonly>
-					
+				<input type="hidden" id="flag" name="flag" value="1" class="form-control" readonly>
+				
 				</div>
 				</div><br/>
 				<div class="box-content">
 				<div class="col-md-2" >Supplier</div>
 									<div class="col-md-4">
-										<select name="supp_id" id="supp_id" class="form-control" tabindex="6">
-										<option value="-1">Select Supplier</option>
+										<select name="supp_id" id="supp_id" class="form-control" tabindex="6" required>
+										<option value="">Select Supplier</option>
 											 <c:forEach items="${supplierList}" var="supplierList"
 							varStatus="count">
 							  <option value="${supplierList.suppId}"><c:out value="${supplierList.suppName}"/></option>
@@ -168,25 +170,25 @@
 									</div>
 									<div class="col-md-2">Quotation Ref. No.  </div>
 				<div class="col-md-3">
-					<input type="text" name="quotation_ref_no" id="quotation_ref_no" class="form-control">
+					<input type="text" name="quotation_ref_no" id="quotation_ref_no" class="form-control" required>
 				</div>
 				 
 			</div><br/>
 			<div class="box-content">
 				<div class="col-md-2">Kind Attention</div>
 				<div class="col-md-4">
-					<input type="text" name="kind_attn" id="kind_attn" class="form-control">
+					<input type="text" name="kind_attn" id="kind_attn" class="form-control" required>
 				</div>
 				<div class="col-md-2">Delivery At</div>
 				<div class="col-md-3">
-					<input type="text" name="delv_at" id="delv_at" class="form-control">
+					<input type="text" name="delv_at" id="delv_at" class="form-control" required>
 				</div>
 				</div><br/>
 			<div class="box-content">
 				<div class="col-md-2" >Taxation</div>
 									<div class="col-md-4">
-										<select name="taxation" id="taxation" class="form-control" tabindex="6">
-										<option value="-1">Select Taxation Type</option>
+										<select name="taxation" id="taxation" class="form-control" tabindex="6" required>
+										<option value="">Select Taxation Type</option>
 										<option value="1">Inclusive</option>
 										<option value="2">Extra</option>
 											
@@ -196,15 +198,15 @@
 									</div>
 									<div class="col-md-2">Delivery Date  </div>
 				<div class="col-md-3">
-					<input type="text" name="delv_date"id="delv_date" class="form-control date-picker">
+					<input type="text" name="delv_date"id="delv_date" class="form-control date-picker" required>
 				</div>
 				 
 			</div> <br/>
 			<div class="box-content">
 			<div class="col-md-2" >PO Type</div>
 									<div class="col-md-4">
-										<select name="po_type" id="po_type" class="form-control" tabindex="6">
-										<option value="-1">Select PO Type</option>
+										<select name="po_type" id="po_type" class="form-control" tabindex="6" required>
+										<option value="">Select PO Type</option>
 										<option value="1">Regular</option>
 										<option value="2">Open</option>
 											
@@ -214,14 +216,14 @@
 									</div>
 									<div class="col-md-2">Discount % </div>
 				<div class="col-md-3">
-					<input type="text" name="disc_per" id="disc_per" class="form-control">
+					<input type="text" name="disc_per" id="disc_per" class="form-control" required>
 				</div>
 									</div><br/>
 			<div class="box-content">
 				<div class="col-md-2" >Item</div>
 									<div class="col-md-4">
-										<select name="rm_id" id="rm_id" class="form-control" tabindex="6">
-										<option value="-1">Select Raw Material</option>
+										<select name="rm_id" id="rm_id" class="form-control" tabindex="6" required>
+										<option value="">Select Raw Material</option>
 											 <c:forEach items="${RawmaterialList}" var="RawmaterialList"
 							varStatus="count">
 							   <option value="${RawmaterialList.rmId}"><c:out value="${RawmaterialList.rmName}"/></option>
@@ -233,7 +235,7 @@
 									</div>
 									<div class="col-md-2">Quantity </div>
 				<div class="col-md-2">
-					<input type="text" name="rm_qty" id="rm_qty" class="form-control">
+					<input type="text" name="rm_qty" id="rm_qty" class="form-control" required>
 				</div>
 				 <div class="col-md-2">
 				<input type="button" class="btn btn-info pull-right" onclick="addItem()" value="Add Item"> 
@@ -243,7 +245,7 @@
 			<div class="box-content">
 			<div class="col-md-2" >Quotation Ref. Date</div>
 									<div class="col-md-4">
-										 <input type="text" name="quotation_date" id="quotation_date" class="form-control date-picker">
+										 <input type="text" name="quotation_date" id="quotation_date" class="form-control date-picker" required>
 									</div>
 					</div><br/>
 			
@@ -299,8 +301,8 @@
 				 	<div class="box-content">
 				<div class="col-md-2" >Transportation</div>
 									<div class="col-md-3">
-										<select name="transportation" id="transportation" class="form-control" tabindex="6">
-										<option value="-1">Select Pay Terms</option>
+										<select name="transportation" id="transportation" class="form-control" tabindex="6" required>
+										<option value="">Select Pay Terms</option>
 											 <c:forEach items="${transporterList}" var="transporterList"
 							varStatus="count">
 							   <option value="${transporterList.tranId}"><c:out value="${transporterList.tranName}"/></option>
@@ -453,7 +455,7 @@
 												  	tr.append($('<td></td>').html(itemList.schDays));
 												  	
 												  	tr.append($('<td></td>').html(itemList.rmRemark));
-												  	tr.append($('<td></td>').html('  <span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span>  <span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span>    <span class="glyphicon glyphicon-remove" id="delete'+key+'"></span>  '));
+												  	tr.append($('<td></td>').html('  <span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span>  <span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span>    <span class="glyphicon glyphicon-remove" onclick="del('+key+')" id="delete'+key+'"></span>  '));
 												  	 
 
 
@@ -529,6 +531,8 @@
 		{
 			var qty=document.getElementById("poQty"+key).value;
 			document.getElementById("poQty"+key).disabled = true;
+			document.getElementById("edit"+key).style.visibility="visible";
+			document.getElementById("ok"+key).style.visibility="hidden";
 			alert(qty);
 			$
 			.getJSON(
@@ -549,7 +553,80 @@
 			
 		}
 		
-	
+		function del(key)
+		{
+			alert("key1"+key);
+			var key=key;
+			$
+			.getJSON(
+					'${delItem}',
+
+					{
+						 
+						index : key,
+						
+					
+						ajax : 'true'
+
+					},
+					function(data) {
+						
+						$('#table_grid td').remove();
+						$('#loader').hide();
+
+						if (data == "") {
+							alert("No records found !!");
+
+						}
+					 
+
+					  $.each(
+									data,
+									function(key, itemList) {
+									
+
+										var tr = $('<tr></tr>');
+
+									
+										
+										if(itemList.delStatus==0)
+											{
+											
+											tr.append($('<td></td>').html(key+1));
+
+										  	tr.append($('<td></td>').html(itemList.rmName));
+
+										  	tr.append($('<td></td>').html('<input type="text" id="poQty'+key+'" onkeyup="changeQty('+key+');"value="'+itemList.poQty+'" class="form-control" disabled="true">'));
+
+										  	tr.append($('<td></td>').html(itemList.poRate+'<input type="hidden" id="poRate'+key+'" value='+itemList.poRate+' readonly>'));
+
+										  	tr.append($('<td></td>').html(itemList.discPer));
+										  	
+										  	//tr.append($('<td></td>').html(itemList.poTaxable));
+										  	tr.append($('<td></td>').html('<input type="text" value="'+itemList.poTaxable+'" id="poValue'+key+'" class="form-control" disabled="true">'));
+
+										  	tr.append($('<td></td>').html(itemList.schDays));
+										  	
+										  	tr.append($('<td></td>').html(itemList.rmRemark));
+										  	tr.append($('<td></td>').html('  <span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span> <span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
+										  	 
+
+
+
+
+
+											$('#table_grid tbody').append(tr);
+											}
+									  	
+
+										 
+
+									})
+						
+					});
+			
+			
+		}
 		
 	</script>
 
