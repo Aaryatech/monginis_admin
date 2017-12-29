@@ -15,8 +15,6 @@
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-
-
 <!--base css styles-->
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/bootstrap.min.css">
@@ -50,9 +48,6 @@
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
-
-
-
 
 <!--basic scripts-->
 
@@ -109,10 +104,6 @@
 <!-- http://forum.springsource.org/showthread.php?110258-dual-select-dropdown-lists -->
 <!-- http://api.jquery.com/jQuery.getJSON/ -->
 
-
-
-
-
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 <script type="text/javascript"
@@ -128,12 +119,6 @@ select {
 
 </head>
 <body>
-
-
-
-
-
-
 
 	<c:url var="setAllItemSelected" value="/setAllItemSelected" />
 
@@ -225,12 +210,7 @@ select {
 												<select data-placeholder="Select Menu" name="menu"
 													class="form-control chosen" tabindex="-1" id="menu"
 													data-rule-required="true">
-	<optgroup label="All Menus">                                                     <%--  <c:forEach
-															items="${allFranchiseeAndMenuList.getAllMenu()}"
-															var="menuList">
-															<option value="${menuList.menuId}">${menuList.menuTitle}</option>
-
-														</c:forEach> --%>
+	                                             <optgroup label="All Menus">                                                     
 
 													</optgroup>
 
@@ -238,62 +218,6 @@ select {
 											</div>
 										</div>
 
-
-
-
-
-										<!--  <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">SubCategory</label>
-											<div class="col-sm-9 col-lg-10 controls">
-
-												 <select id="sub_cat"  class="form-control chosen-select"
-													onchange="preferedSubCat()">
-													<optgroup label=" All Subcategories ">
-                                                   
-													</optgroup>
-
-												</select>
-
-                                         </div></div>
- -->
-
-										<%--<select data-placeholder="Select SubCategory"
-													name="subcat" class="form-control chosen"
-													tabindex="-1" id="subcat" data-rule-required="true">
-													<option value=""> </option>
-													<optgroup label="All Subcategories">
-														<option value="1"></option>
-														<c:forEach
-															items="${allFranchiseeAndMenuList.getSubCategories()}"
-															var="subCategoryList">
-															<option value="${subCategoryList.subCatId}">${subCategoryList.subCatName}</option>
-															
-														</c:forEach>  
-													</optgroup>
-
-												</select> 
-											</div>
-										</div> --%>
-										
-										
-										
-										<!-- 
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Items</label>
-											<div class="col-sm-9 col-lg-10 controls">
-												<select data-placeholder=""
-													class="form-control chosen" multiple="multiple"
-													tabindex="-1" name="items[]" id="items">
-													<optgroup label="ITEMS">
-														<option value=""></option>
-
-
-													</optgroup>
-
-												</select>
-											</div>
-										</div> -->
-										
 											<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Items</label>
 											<div class="col-sm-9 col-lg-10 controls">
@@ -327,8 +251,12 @@ select {
 										<div id="2" class="formgroup" style="display: none">
 											<label class="col-sm-3 col-lg-2 control-label">Date</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<input class="form-control date-picker" id="date" size="16"
-													type="text" name="date" value="24-08-2017" />
+											<select class="form-control chosen" name="date" id="date">
+													<option value="0">Select Date</option>
+													 <c:forEach var = "i" begin = "1" end = "31">
+       													<option value="${i}">${i}</option>
+                                                     </c:forEach>
+												</select>
 											</div>
 										</div>
 
@@ -350,8 +278,6 @@ select {
 										</div>
 
 										&nbsp;
-
-
 
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">From
@@ -390,11 +316,7 @@ select {
                            
 
                               %>
-
-
-
-
-																<option value="<%=time%>"><%=time%></option>
+             			<option value="<%=time%>"><%=time%></option>
 
 															</c:forEach>
 
@@ -454,7 +376,6 @@ select {
 											</div>
 										</div>
 
-
 										<div class="form-group">
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
@@ -463,13 +384,7 @@ select {
 												<button type="button" class="btn">Cancel</button>
 											</div>
 										</div>
-
-
-
 									</form>
-
-
-
 
 								</div>
 							</div>
@@ -490,8 +405,6 @@ select {
 	</div>
 	<!-- END Container -->
 
-
-
 <script>
 $(function() {
     $('#typeselector').change(function(){
@@ -505,32 +418,8 @@ $('#select_all').click(function() {
 	alert("alert");
     $('#items option').prop('selected', true);
     $('#items').chosen('destroy').val(["hola","mundo","cruel"]).chosen();
-
 });
 </script>
-	<!-- <script type="text/javascript">
-$(document).ready(function() { 
-	$('#menu').change(
-			function() {
-				$.getJSON('${findItemsByCatId}', {
-					menuId : $(this).val(),
-					ajax : 'true'
-				}, function(data) {
-					var html = '<option value="">Items</option>';
-				
-					var len = data.length;
-					for ( var i = 0; i < len; i++) {
-						html += '<option value="' + data[i].id + '">'
-								+ data[i].name + '</option>';
-					}
-					html += '</option>';
-					$('#items').html(html);
-					$('#items').formcontrol('refresh');
-
-				});
-			});
-});
-</script> -->
 
 <script type="text/javascript">
 $(document).ready(function() {
@@ -561,8 +450,6 @@ $(document).ready(function() {
                     }
 
                     $("#items").trigger("chosen:updated");
-
-
                 });
             });
 });
@@ -592,20 +479,12 @@ $(document).ready(function() {
                             );
 					
 					for ( var i = 0; i < len; i++) {
-						
-						/* html += '<option value="' + data[i].menuId + '">'
-								+ data[i].menuTitle + '</option>'; */
-				          
                         $("#menu").append(
                                 $("<option></option>").attr(
                                     "value", data[i].menuId).text(data[i].menuTitle)
                             );
 					}
-				/* 	html += '</option>';
-					$('#menu').html(html);
-					$('#menu').formcontrol('refresh'); */
 					   $("#menu").trigger("chosen:updated");
-					 
 				});
 			});
 });
@@ -632,27 +511,17 @@ $('#items').change(
 			    .find('option')
 			    .remove()
 			    .end()
-			    
-		
-				
+			
 				for ( var i = 0; i < len; i++) {
-					
-					/* html += '<option value="' + data[i].menuId + '">'
-							+ data[i].menuTitle + '</option>'; */
-/* 							<option selected value="${selectedItem.id}">${selectedItem.itemName}</option>
- */     
+    
                    $("#items").append(
                            $("<option selected></option>").attr(
                                "value", data[i].id).text(data[i].name)
                        );
 				}
-			/* 	html += '</option>';
-				$('#menu').html(html);
-				$('#menu').formcontrol('refresh'); */
+		
 				   $("#items").trigger("chosen:updated");
-				 
 			});
-           
   }
 });
 });
@@ -660,35 +529,12 @@ $('#items').change(
 
 
 </script>
+<script>
+$( "#date" ).datepicker({ 
+    // Add this line
 
-
-
- -->
-<!-- 
-
-	<script type="text/javascript">
-	$(document).ready(
-			function() {
-				$.getJSON('${findAllMenus}', {
-					ajax : 'true'
-				}, function(data) {
-					var html = '<option value="">Menu</option>';
-					var len = data.length;
-					for ( var i = 0; i < len; i++) {
-						html += '<option value="' + data[i].menuId + '">'
-								+ data[i].menuTitle + '</option>';
-					}
-					html += '</option>';
-					$('#menu').html(html);
-					$('#menu').form-control('refresh');
-					
-					
-
-				});
-				
-			});
-</script> -->
-
-
+    stepMonths: 0,
+});
+</script>
 </body>
 </html>

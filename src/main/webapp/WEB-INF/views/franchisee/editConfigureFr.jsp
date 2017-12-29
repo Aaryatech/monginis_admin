@@ -175,17 +175,11 @@
 									</div>
 								</div>
 
-
 								<c:set var="allFranchiseeAndMenuList"
 									value="${allFranchiseeAndMenuList}" />
 								<div class="box-content">
 									<form action="updateFranchiseeProcess" class="form-horizontal"
 										id="validation-form" method="post">
-
-
-
-
-
 
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Franchisee
@@ -228,15 +222,8 @@
 											 <c:when test="${catId==5}">
 													
                                                        <c:forEach items="${selectedItems}" var="selectedItem">
-
-
 															<option selected value="${selectedItem.spId}">${selectedItem.spCode}-${selectedItem.spName}</option>
-
-
 														</c:forEach>
-
-
-
 
 														<c:forEach items="${remItems}" var="remItem">
 
@@ -244,51 +231,22 @@
 
 														</c:forEach>
 
-
-
-
-
-
 												</c:when>
 												<c:otherwise>
 												
 												      <c:forEach items="${selectedItems}" var="selectedItem">
-
-
 															<option selected value="${selectedItem.id}">${selectedItem.itemName}</option>
-
-
 														</c:forEach>
-
-
-
-
 														<c:forEach items="${remItems}" var="remItem">
-
 															<option value="${remItem.id}"><c:out value="${remItem.itemName}"></c:out></option>
-
 														</c:forEach>
-												
-												
-												
-												
-												
-												
 												</c:otherwise> 
-												
-                                                          
+												      
 											</c:choose>
-
-														
-
 
 												</select>
 											</div>
 										</div>
-
-
-
-
 
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Setting
@@ -334,20 +292,24 @@
 											<div id="2" class="formgroup" style="display: none">
 											<label class="col-sm-3 col-lg-2 control-label">Date</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<input class="form-control date-picker" id="date" size="16"
-													type="text" name="date" value="${franchiseeList.date}" />
+												
+												<select class="form-control chosen" name="date" id="date">
+													<option value="0">Select Date</option>
+													 <c:forEach var = "i" begin = "1" end = "31">
+													<c:choose>
+													<c:when test="${i==franchiseeList.date}">
+													 <option value="${i}" selected>${i}</option>
+													</c:when>
+													<c:otherwise>
+       													<option value="${i}">${i}</option>
+       												</c:otherwise>	
+       												</c:choose>
+                                                     </c:forEach>
+                                                    
+												</select>	
 											</div>
 										</div>
 										
-<%-- 
-										<div id="2" class="formgroup" style="display: none">
-											<label class="col-sm-3 col-lg-2 control-label">Date</label>
-											<div class="col-sm-9 col-lg-10 controls">
-												<input class="form-control date-picker" id="date" size="16"
-													type="text" name="date" value="${franchiseeList.date}" />
-											</div>
-										</div>
- --%>
 										<div id="3" class="formgroup" style="display: none">
 											<label class="col-sm-3 col-lg-2 control-label">Day</label>
 											<div class="col-sm-9 col-lg-10 controls">
@@ -457,8 +419,6 @@
 
 										&nbsp;
 
-
-
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">From
 												Time</label>
@@ -468,8 +428,6 @@
 													data-rule-required="true">
 
 													<optgroup label="Select From Time">
-
-
 
 														<%
 															DateFormat tipe = new SimpleDateFormat("hh:mm a");

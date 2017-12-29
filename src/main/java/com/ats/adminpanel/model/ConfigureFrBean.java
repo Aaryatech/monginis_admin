@@ -11,7 +11,7 @@ public class ConfigureFrBean {
     private String fromTime;
     private String toTime;
     private Integer day;
-    private String date;
+    private int date;
     private String itemShow;
     private Integer delStatus;
     private String frName;
@@ -97,11 +97,11 @@ public class ConfigureFrBean {
    
 
    
-	public String getDate() {
+	public int getDate() {
 		return date;
 	}
 
-	public void setDate(String date) {
+	public void setDate(int date) {
 		this.date = date;
 	}
 

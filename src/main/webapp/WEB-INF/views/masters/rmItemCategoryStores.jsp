@@ -102,7 +102,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Raw Material
+						<i class="fa fa-file-o"></i>Raw Material Item
 					</h1>
 
 				</div>
@@ -117,10 +117,10 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> Item Category
+								<i class="fa fa-bars"></i> Item Category 
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/itemRmCategoryList">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showItemCatList">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -134,7 +134,24 @@
 								method="post" id="validation-form">
 
 
+                         <div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Group</label>
+									<div class="col-sm-9 col-lg-10 controls">
+										<select data-placeholder="Select Group"
+											class="form-control chosen" name="grp_id" tabindex="-1"
+											id="grp_id" data-rule-required="true">
+											<option selected>Select Group</option>
 
+											<c:forEach items="${rmItemGroupList}" var="rmItemGroupList">
+												<option value="${rmItemGroupList.grpId}"><c:out value="${rmItemGroupList.grpName}"></c:out></option>
+											</c:forEach>
+
+
+
+
+										</select>
+									</div>
+								</div>
 						
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label" for="item_name">Category
@@ -145,6 +162,7 @@
 											data-rule-required="true" />
 									</div>
 								</div>
+                               
 
                                <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label" for="item_name">Category
@@ -156,14 +174,14 @@
 									</div>
 								</div>
 
-
-
+                
+								
 
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
 										<input type="submit" class="btn btn-primary" value="Submit">
-										<button type="button" class="btn">Cancel</button>
-									</div>
+<!-- 										<button type="button" class="btn">Cancel</button>
+ -->									</div>
 								</div>
 							</form>
 						</div>

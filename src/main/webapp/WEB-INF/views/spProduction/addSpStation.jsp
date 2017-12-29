@@ -145,10 +145,10 @@
 								</div>
                          
                               <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Department Name</label>
+									<label class="col-sm-3 col-lg-2 control-label">Department</label>
 									<div class="col-sm-9 col-lg-10 controls">
 									<select name="dept_id" id="dept_id" class="form-control" placeholder="Department Name" data-rule-required="true">
-											<option value="-1">Select Department Name</option>
+											<option value="-1">Select Department</option>
 											<c:forEach items="${mDeptList}" var="mDeptList">
 											<c:choose>
 													<c:when test="${mDeptList.deptId==spStation.deptId}">

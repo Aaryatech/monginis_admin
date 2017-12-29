@@ -129,12 +129,6 @@ select {
 </head>
 <body>
 
-
-
-
-
-
-
 	<c:url var="setAllItemSelected" value="/setAllItemSelected" />
 
 	<c:url var="findItemsByCatId" value="/getCommonByMenuId" />

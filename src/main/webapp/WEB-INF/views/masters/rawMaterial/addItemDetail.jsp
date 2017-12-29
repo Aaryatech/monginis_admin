@@ -61,6 +61,7 @@
 <c:url var="editItemDetail" value="/editItemDetail"/>
 <c:url var="editItem" value="/editItem"/>
 <c:url var="addItemDetail" value="/addItemDetail"/>
+<c:url var="redirectToItemList" value="/redirectToItemList"/>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -152,7 +153,7 @@
 									<label class="col-sm-2 col-lg-2 control-label">RM Type</label>
 									<div class="col-sm-6 col-lg-4 controls">
                                     <select name="rm_type" id="rm_type" class="form-control" placeholder="Raw Material Type"data-rule-required="true" >
-											<option value="-1">Select RM Type</option>
+											<option value="0">Select RM Type</option>
 											<option value="1">Raw Material</option>
 											<option value="2">Semi Finished</option>
 									
@@ -162,7 +163,7 @@
 									<label class="col-sm-3 col-lg-1 control-label">Raw Material</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<select name="rm_id" id="rm_id" class="form-control" placeholder="Raw Material"data-rule-required="true">
-											<option value="-1">Select Raw Material</option>
+											<option value="0">Select Raw Material</option>
 										    
 								</select>
 									</div>
@@ -201,7 +202,7 @@
 					</div>
 					</form>
 					</br>
-					<form action="${pageContext.request.contextPath}/addItemDetails" method="post" class="form-horizontal" id=
+					<form action="${pageContext.request.contextPath}/addItemDetail" method="post" class="form-horizontal" id=
 									"validation-form"
 										 method="post">
 						<div class="box">
@@ -288,7 +289,7 @@
 								</div>
 								  <div class="row">
 						<div class="col-md-12" style="text-align: center">
-							<input type="button" class="btn btn-info" value="Submit" name="Submit" id="Submit">
+							<input type="submit" class="btn btn-info" value="Submit" name="Submit" id="Submit">
 
 						</div>
 					</div>
@@ -390,7 +391,7 @@ $(document).ready(function() {
 					rm_type : $(this).val(),
 					ajax : 'true',
 				},  function(data) {
-					var html = '<option value="-1" selected >Select Raw Material</option>';
+					var html = '<option value="0" selected >Select Raw Material</option>';
 					
 					var len = data.length;
 					for ( var i = 0; i < len; i++) {
@@ -405,23 +406,7 @@ $(document).ready(function() {
 
 });
 </script>
-<!-- <script type="text/javascript">
-$(document).ready(function() { 
-	$('#item_id').change(
-			function() {
 
-
-	$.getJSON('${getBaseQty}', {
-					id : $(this).val(),
-					ajax : 'true',
-				},  function(data) {
-					document.getElementById("base_qty").value = data;
-				});
-			});
-			
-
-});
-</script> -->
 <script type="text/javascript">
 
 var editFlag=false;
@@ -582,6 +567,11 @@ $(document).ready(function() {
 	
 	});
  }
+	 document.getElementById("rm_weight").value="";
+	 document.getElementById("rm_type").selectedIndex = "0"; 
+	 document.getElementById("rm_id").selectedIndex = "0"; 
+	 document.getElementById("rm_qty").value="";
+	 document.getElementById("base_qty").value ="";
 	}
 });
 
@@ -636,25 +626,25 @@ function validation() {
 	
 	var baseQty = $("#base_qty").val();
 	var rmType = $("#rm_type").val();
-	//alert(rmType);
+	var numbers = /^[0-9]+$/; 
 	var rmId = $("#rm_id").val();
 	var rmWeight = $("#rm_weight").val();
 	var rmQty = $("#rm_qty").val();
 
 	var isValid = true;
-	if (rmType==-1) { 
+	if (rmType==0) { 
 		isValid = false;
 		alert("Please Select  RM Type");
-	} else if (rmId ==-1) {
+	} else if (rmId ==0) {
 		isValid = false;
 		alert("Please Select RM ");
-	}else if (rmQty == ""||rmQty=='0') {
+	}else if (rmQty == ""||rmQty=='0'||isNaN(rmQty) || rmQty < 1 ) {
 		isValid = false;
 		alert("Please Enter Valid RM Qty");
-	}else if (rmWeight == ""||rmWeight=='0') {
+	}else if (rmWeight == ""||rmWeight=='0'||isNaN(rmWeight) || rmWeight < 1) {
 		isValid = false;
 		alert("Please Enter Valid RM Weight");
-	}else if (baseQty == "") {
+	}else if (baseQty == ""||isNaN(baseQty) || baseQty < 1) {
 		isValid = false;
 		alert("Please Enter No. of Pieces Per Item.");
 	}
@@ -725,7 +715,7 @@ function deleteItemDetail(key){
 </script>
 
 <script type="text/javascript">
-$(document).ready(function() {
+/* $(document).ready(function() {
 	$("#Submit").click(function() {
 
 	$.getJSON('${addItemDetail}', {
@@ -740,7 +730,9 @@ $(document).ready(function() {
 
 		alert("Item Detail Saved Successfully");
 
-		$('#table1 td').remove();
+		
+		
+/* 		$('#table1 td').remove();
 
 		$.each(data,function(key, item) {
 
@@ -779,11 +771,12 @@ $(document).ready(function() {
 		$('#table1 tbody').append(tr);
        }
 
-		})
+		}) */
 
-		});
+	/* 	});
 });
-});
+}); */ */
+
 </script>
 </html>
 

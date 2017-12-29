@@ -327,7 +327,8 @@
 		var frId = document.getElementById("fr_id").value;
 		var year = document.getElementById("year").value;
 
-
+         var status=0;
+         
 		
 				$.getJSON('${searchFrMonthTarget}', {
 					
@@ -337,8 +338,11 @@
 				}, function(data) {
 					var len = data.length;
                     
+				
 					$.each(data,function(key, frTarget) {
 						
+					status=1;
+					
 					if(frTarget.status==1)
 					{
 						 document.getElementById("chk"+frTarget.frTargetMonth).disabled = true;
@@ -388,16 +392,34 @@
 							document.getElementById('status'+frTarget.frTargetMonth).value="Unfreezed";
 	
 							}	
-							
-							
-							
+						
 							
 					}
-					
+				
 					})
 					
 
 				});
+				if(status==0)
+					{
+					  for(var i=1;i<=12;i++)
+					 {
+						 	  document.getElementById('target'+i).disabled = false;
+							  document.getElementById('ach_target'+i).style.color = "gray";
+
+						    document.getElementById("chk"+i).disabled = false;
+						    document.getElementById('target'+i).value = 0;
+						    document.getElementById('ach_target'+i).value = 0;
+							document.getElementById('ach_target'+i).disabled = false;
+							document.getElementById('award'+i).value = 0;
+							document.getElementById('award'+i).disabled = false;
+							document.getElementById('remark'+i).value ='NA';
+							document.getElementById('remark'+i).disabled = false;
+							document.getElementById('id'+i).value = 0;
+							document.getElementById('status'+i).value="Unfreezed";
+
+					 }
+					}
 			}
 </script>
 <script type="text/javascript">

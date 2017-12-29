@@ -6,6 +6,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -49,14 +50,14 @@ import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.supplierMaster.SupplierDetails;
 import com.ats.adminpanel.util.ImageS3Util; 
 
-
 @Controller
+@Scope("session")
 public class RawMaterialController {
 	
-	public static List<Item> itemList;
-	public static List<ItemDetail> itemDetailList;
-	public static  List<CommonConf> commonConfs=new ArrayList<CommonConf>();
-	public static int globalId=0;
+	public  List<Item> itemList;
+	public  List<ItemDetail> itemDetailList;
+	public  List<CommonConf> commonConfs=new ArrayList<CommonConf>();
+	public  int globalId=0;
 	
 	@RequestMapping(value = "/showAddRawMaterial", method = RequestMethod.GET)
 	public ModelAndView showRowMaterial(HttpServletRequest request, HttpServletResponse response) {
@@ -1230,8 +1231,8 @@ public class RawMaterialController {
 			return itemDetailList;
 		
 		}
-		@RequestMapping(value = "/addItemDetail", method = RequestMethod.GET)
-		public @ResponseBody List<ItemDetail> addItemDetail(HttpServletRequest request, HttpServletResponse response) {
+		@RequestMapping(value = "/addItemDetail", method = RequestMethod.POST)
+		public  String addItemDetail(HttpServletRequest request, HttpServletResponse response) {
 			
 			RestTemplate restTemplate=new RestTemplate();
 			
@@ -1277,7 +1278,7 @@ public class RawMaterialController {
 			System.out.println("itemDetailList:"+itemDetailList.toString());
 
 
-			return itemDetailList;
+			return "redirect:/itemList";
 			
 		}
 		@RequestMapping(value = "/editItem", method = RequestMethod.GET)

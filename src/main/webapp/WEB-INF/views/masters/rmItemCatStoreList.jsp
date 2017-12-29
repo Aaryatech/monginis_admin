@@ -107,6 +107,8 @@
 									<thead>
 										<tr>
 											<th width="170" style="width: 18px">Sr.No.</th>
+											
+											<th width="200" align="left">Group Name</th>
 											<th width="190" align="left">Category Name</th>
 											<th width="358" align="left">Description</th>
 										
@@ -124,6 +126,9 @@
 											<c:out
 														value="${c}" /> 
 												</td>
+												
+												<td align="left"><c:out
+														value="${rmItemCatList.grpName}" /></td>
 												<td align="left"><c:out
 														value="${rmItemCatList.catName}" /></td>
 												<td align="left"><c:out

@@ -102,7 +102,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Raw Material
+						<i class="fa fa-file-o"></i>Raw Material Item
 					</h1>
 
 				</div>
@@ -120,7 +120,7 @@
 								<i class="fa fa-bars"></i> Item SubCategory
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/itemRmSubCategoryList">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showItemSubCatList">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -133,6 +133,21 @@
 							<form action="${pageContext.request.contextPath}/addRmSubCategoryProcess" class="form-horizontal"
 								method="post" id="validation-form">
 
+                               <div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Category</label>
+									<div class="col-sm-9 col-lg-10 controls">
+										<select data-placeholder="Select Category"
+											class="form-control chosen" name="cat_id" tabindex="-1"
+											id="cat_id" data-rule-required="true">
+											<option selected>Select Category</option>
+
+											<c:forEach items="${rmItemCatList}" var="rmItemCatList">
+												<option value="${rmItemCatList.catId}"><c:out value="${rmItemCatList.catName}"></c:out></option>
+											</c:forEach>
+
+										</select>
+									</div>
+								</div>
 
 
 						
@@ -146,15 +161,7 @@
 									</div>
 								</div>
 
-                               <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label" for="cat_id">Category
-										Id</label>
-									<div class="col-sm-9 col-lg-10 controls">
-										<textarea name="cat_id" id="cat_id"
-											placeholder="Category Id" class="form-control"
-											data-rule-required="true"></textarea>
-									</div>
-								</div>
+                              
                                  <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label" for="sub_cat_desc">SubCategory
 										Description</label>
@@ -171,8 +178,8 @@
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
 										<input type="submit" class="btn btn-primary" value="Submit">
-										<button type="button" class="btn">Cancel</button>
-									</div>
+<!-- 										<button type="button" class="btn">Cancel</button>
+ -->									</div>
 								</div>
 							</form>
 						</div>

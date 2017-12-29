@@ -107,16 +107,16 @@
 									<thead>
 										<tr>
 											<th width="170" style="width: 18px">Sr.No.</th>
-											<th width="190" align="left">SubCategory Name</th>
 											<th width="190" align="left">Category Name</th>
+											<th width="190" align="left">SubCategory Name</th>
 											<th width="358" align="left">Description</th>
 										
 											<th width="88" align="left">Action</th>
 										</tr>
 									</thead>
 									<tbody>
-								<%--  <%int c=1; %>
-										<c:forEach items="${rmItemCatList}" var="rmItemCatList">
+							  <%int c=1; %>
+										<c:forEach items="${rmItemSubCatList}" var="rmItemSubCatList">
 
 
 
@@ -125,21 +125,24 @@
 											<c:out
 														value="${c}" /> 
 												</td>
+													<td align="left"><c:out
+														value="${rmItemSubCatList.catName}" /></td>
 												<td align="left"><c:out
-														value="${rmItemCatList.catName}" /></td>
+														value="${rmItemSubCatList.subCatName}" /></td>
+											
 												<td align="left"><c:out
-														value="${rmItemCatList.catDesc}" /></td>
+														value="${rmItemSubCatList.subCatDesc}" /></td>
 												
 												<td align="left"><a
-													href="${pageContext.request.contextPath}/updateRmItemCategory/${rmItemCatList.catId}"><span
+													href="${pageContext.request.contextPath}/updateRmSubCategory/${rmItemSubCatList.subCatId}"><span
 														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
 
-													<a href="${pageContext.request.contextPath}/deleteRmItemCategory/${rmItemCatList.catId}"
+													<a href="${pageContext.request.contextPath}/deleteRmItemSubCategory/${rmItemSubCatList.subCatId}"
 													onClick="return confirm('Are you sure want to delete this record');"><span
 														class="glyphicon glyphicon-remove"></span></a></td>
 											</tr>
 										</c:forEach>
- --%>
+
 									</tbody>
 								</table>
 							</div>

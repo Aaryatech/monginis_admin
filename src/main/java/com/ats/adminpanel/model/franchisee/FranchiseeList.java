@@ -13,10 +13,6 @@ private String frCode;
 
 private String frOpeningDate;
 
-
-
-
-
 public String getFrOpeningDate() {
 	return frOpeningDate;
 }

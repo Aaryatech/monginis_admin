@@ -427,7 +427,7 @@ public class FranchiseeController {
 		ModelAndView model = new ModelAndView("franchisee/configureFr");
 		try {
 
-			String date;
+			int date;
 			int day;
 
 			String fromTime = request.getParameter("frm_time");
@@ -473,17 +473,17 @@ public class FranchiseeController {
 			System.out.println("settingType" + settingType);
 
 			if (settingType == 1) {
-				date = "23-09-2017";
+				date = 0;
 				day = 0;
 			} else if (settingType == 2) {
-				date = request.getParameter("date");
+				date = Integer.parseInt(request.getParameter("date"));
 				System.out.println("date" + date);
 				day = 0;
 			} else {
 				day = Integer.parseInt(request.getParameter("day"));
 				System.out.println("day:" + day);
 
-				date = "23-09-2017";
+				date = 0;
 			}
 
 			RestTemplate rest = new RestTemplate();
@@ -495,7 +495,6 @@ public class FranchiseeController {
 			map.add("catId", selectedCatId);
 			map.add("itemShow", items);
 			map.add("settingType", settingType);
-			System.out.println("Date" + date);
 			map.add("date", date);
 			System.out.println("day" + day);
 			map.add("day", day);
@@ -522,7 +521,7 @@ public class FranchiseeController {
 
 	@RequestMapping(value = "/updateFranchiseeConf/updateFranchiseeProcess", method = RequestMethod.POST)
 	public String updateConfFr(HttpServletRequest request, HttpServletResponse response) {
-		String date = "2017-01-01";
+		int date = 0;
 		int day = 0;
 
 		ModelAndView model = new ModelAndView("franchisee/configureFr");
@@ -566,24 +565,17 @@ public class FranchiseeController {
 			System.out.println("item id list is" + strItems.toString());
 
 			if (settingType == 1) {
-				date = "23-09-2017";
-				day = 0;
+				date =0;
+				day =0;
 			} else if (settingType == 2) {
-				date = request.getParameter("date");
-				System.out.println("date " + date);
-				day = 0;
+				date = Integer.parseInt(request.getParameter("date"));
+				day =0;
 			} else {
 				day = Integer.parseInt(request.getParameter("day"));
-				System.out.println("day: " + day);
 
-				date = "23-09-2017";
+				date =0;
 			}
 
-			System.out.println(" date :get parameter " + date);
-			System.out.println(" Day :get parameter " + day);
-			System.out.println(" strItems :get parameter " + strItems);
-			System.out.println(" settingId :get parameter " + settingId);
-			System.out.println(" settingType :get parameter " + settingType);
 
 			RestTemplate rest = new RestTemplate();
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -592,6 +584,7 @@ public class FranchiseeController {
 
 			map.add("settingType", settingType);
 			map.add("day", day);
+			System.out.println("date:"+date);
 			map.add("date", date);
 			map.add("itemShow", strItems);
 			map.add("settingId", settingId);
@@ -684,7 +677,7 @@ public class FranchiseeController {
 
 		franchiseeList.getSettingId();
 
-		String date = franchiseeList.getDate().toString();
+		int date = franchiseeList.getDate();
 
 		System.out.println("selected franchisee is" + franchiseeList.toString());
 		int frId = franchiseeList.getFrId();
