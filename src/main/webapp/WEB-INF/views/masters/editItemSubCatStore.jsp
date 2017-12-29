@@ -102,7 +102,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Raw Material
+						<i class="fa fa-file-o"></i>Raw Material Item
 					</h1>
 
 				</div>
@@ -120,7 +120,7 @@
 								<i class="fa fa-bars"></i>Edit Item SubCategory
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/itemRmSubCategoryList">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showItemSubCatList">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -133,7 +133,28 @@
 							<form action="${pageContext.request.contextPath}/updateRmSubCategoryProcess" class="form-horizontal"
 								method="post" id="validation-form">
 
+                                  <div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Category</label>
+									<div class="col-sm-9 col-lg-10 controls">
+										<select data-placeholder="Select Category"
+											class="form-control chosen" name="cat_id" tabindex="-1"
+											id="cat_id" data-rule-required="true">
+											<option selected>Select Category</option>
 
+											<c:forEach items="${rmItemCatList}" var="rmItemCatList">
+												  <c:choose>
+													<c:when test="${rmItemCatList.catId==rmItemSubCategory.catId}">
+												       <option value="${rmItemCatList.catId}" selected><c:out value="${rmItemCatList.catName}"></c:out></option>
+													</c:when>
+													<c:otherwise>
+												      <option value="${rmItemCatList.catId}"><c:out value="${rmItemCatList.catName}"></c:out></option>
+													</c:otherwise>
+												</c:choose>
+											</c:forEach>
+
+										</select>
+									</div>
+								</div>
 
 						
 								<div class="form-group">
@@ -142,17 +163,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="sub_cat_name" id="sub_cat_name"
 											placeholder="SubCategory Name" class="form-control"
-											data-rule-required="true" />
-									</div>
-								</div>
-
-                               <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label" for="cat_id">Category
-										Id</label>
-									<div class="col-sm-9 col-lg-10 controls">
-										<textarea  name="cat_id" id="cat_id"
-											placeholder="Category Id" class="form-control"
-											data-rule-required="true"></textarea>
+											data-rule-required="true" value="${rmItemSubCategory.subCatName}"/>
 									</div>
 								</div>
                                  <div class="form-group">
@@ -161,18 +172,18 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<textarea name="sub_cat_desc" id="sub_cat_desc"
 											placeholder="SubCategory Description" class="form-control"
-											data-rule-required="true"></textarea>
+											data-rule-required="true">${rmItemSubCategory.subCatDesc}</textarea>
 									</div>
 								</div>
 
-
+                           <input type="hidden" name="sub_cat_id" id="sub_cat_id" value="${rmItemSubCategory.subCatId}"/> 
 
 
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
 										<input type="submit" class="btn btn-primary" value="Submit">
-										<button type="button" class="btn">Cancel</button>
-									</div>
+<!-- 										<button type="button" class="btn">Cancel</button>
+ -->									</div>
 								</div>
 							</form>
 						</div>
