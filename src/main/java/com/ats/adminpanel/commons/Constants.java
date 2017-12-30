@@ -6,20 +6,20 @@ public class Constants {
 	public static final String url="http://localhost:8098/";
 	//public static final String url = "http://132.148.143.124:8080/webapi/";
 
-	public static final String SPCAKE_IMAGE_URL = "";
-	public static final String FR_IMAGE_URL = "";
+	public static final String SPCAKE_IMAGE_URL = "/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/MSPCAKE";
+	public static final String FR_IMAGE_URL = "/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/FR";
 
-	public static final String PHOTO_CAKE_URL = "";
 
-	public static final String MESSAGE_IMAGE_URL = "";
+	public static final String MESSAGE_IMAGE_URL = "/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/MSG";
 
-	public static final String ITEM_IMAGE_URL = "";
+	public static final String ITEM_IMAGE_URL = "/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/ITEM";
 
-	public static final String RAW_MAT_IMG_URL ="";
 
-	public static final String GATE_ENTRY_IMG_URL = "";
+	public static final String RAW_MAT_IMG_URL ="/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/RAWMAT";
+
+	public static final String GATE_ENTRY_IMG_URL = "/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/GATEENTRY";
 	
-	public static final String GVN_IMAGE_URL = "";
+	public static final String GVN_IMAGE_URL =  "/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/GVN";
 
 	// navigation view
 	
@@ -39,7 +39,7 @@ public class Constants {
 
 	public static int GATE_ENTRY_IMAGE_TYPE=7;
 
-	
+	public static final String ReportURL ="http://132.148.143.124:8080/admin/";
 	
 	
 	public static final String FR_PROPERTY = "/home/ats-11/mongiImage/FR";
@@ -75,7 +75,7 @@ public class Constants {
 
 	public static final String SETTING_KEY = "PB";
 
-	public static final String ReportURL = url+"/adminpanel/";
+	//public static final String ReportURL = url+"/adminpanel/";
 
 	public static final int DIS_BY_ACC = 7;
 

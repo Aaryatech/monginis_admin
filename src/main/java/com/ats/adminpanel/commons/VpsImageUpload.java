@@ -12,16 +12,16 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class VpsImageUpload {
 
-	public static final String FR_FOLDER = "/home/ats-11/mongiImage/FR/";
-	public static final String ITEM_FOLDER = "/home/ats-11/mongiImage/Items/";
+	public static final String FR_FOLDER = "/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/FR";
+	public static final String ITEM_FOLDER = "/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/ITEM";
 
-	public static final String MSG_FOLDER = "/home/ats-11/mongiImage/Message/";
+	public static final String MSG_FOLDER = "/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/MSG";
 	
-	public static final String SP_CAKE_FOLDER = "/home/ats-11/mongiImage/SpecialCake/";
+	public static final String M_SP_CAKE_FOLDER = "/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/MSPCAKE";
 	
-	public static final String RAW_MAT_IMAGE_FOLDER = "/home/ats-11/mongiImage/RawMaterial/";
+	public static final String RAW_MAT_IMAGE_FOLDER = "/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/RAWMAT";
 
-	public static final String GATE_ENTRY_IMAGE_FOLDER = "/home/ats-11/mongiImage/GateEntry/";
+	public static final String GATE_ENTRY_IMAGE_FOLDER = "/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/GATEENTRY";
 	
 
 
@@ -61,7 +61,7 @@ public class VpsImageUpload {
 
 			}else if (imageType == 4) {
 
-				path = Paths.get(SP_CAKE_FOLDER + imageName);
+				path = Paths.get(M_SP_CAKE_FOLDER + imageName);
 
 			}
 			else if (imageType == 6) {
