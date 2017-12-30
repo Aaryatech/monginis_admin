@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -41,6 +42,7 @@ import com.ats.adminpanel.model.production.PostProductionHeader;
 import com.ats.adminpanel.model.production.PostProductionPlanDetail;
 
 @Controller
+@Scope("session")
 public class ProductionController {
 
 	//AllFrIdNameList allFrIdNameList;
@@ -258,7 +260,8 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 	
 	
 	System.out.println("List    :"+getOrderItemQtyList);
-	
+	List<String> orderId=new ArrayList<String>();
+	 
 	for(int i=0;i<getOrderItemQtyList.size();i++)
 		{
 		postProductionDetail=new PostProductionDetail();
@@ -276,6 +279,8 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 		postProductionDetail.setPlanQty(0);
 		 
 		postProductionDetailList.add(postProductionDetail);
+		
+		orderId.add(String.valueOf(getOrderItemQtyList.get(i).getOrderId()));
 	}
 	for(int i=0;i<getRegSpCakeOrderQtyList.size();i++)
 	{
@@ -289,11 +294,24 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 	postProductionHeader.setPostProductionDetail(postProductionDetailList);
 	try {
 	
+		
 		Info info = restTemplate.postForObject(Constants.url + "postProduction", postProductionHeader,
 				Info.class);
+		
+		System.out.println("Info After post to production :   "+info.toString());
+		
+	 
+			
+		 
+		MultiValueMap<String, Object> map=new LinkedMultiValueMap<>();
+		map.add("orderId", orderId);
+		
+		   info = restTemplate.postForObject(Constants.url + "updateIsBillGenerate", getOrderItemQtyList,
+					Info.class);
 
-		System.out.println("Message :   "+info.getMessage());
-		System.out.println("Error  :    "+info.getError());
+
+		
+		System.out.println("Info After update status  :    "+info.toString());
 	}catch (Exception e) {
 		System.out.println(e.getMessage());
 	}

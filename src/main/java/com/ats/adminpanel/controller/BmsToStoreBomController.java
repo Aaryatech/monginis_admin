@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -43,6 +44,7 @@ import com.ats.adminpanel.model.stock.GetBmsCurrentStock;
 import com.ats.adminpanel.model.stock.GetBmsCurrentStockList;
 
 @Controller
+@Scope("session")
 public class BmsToStoreBomController {
 
 	

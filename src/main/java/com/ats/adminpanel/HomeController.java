@@ -13,18 +13,28 @@ import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ats.adminpanel.commons.Commons;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.Login;
 import com.ats.adminpanel.model.OrderCount;
 import com.ats.adminpanel.model.OrderCountsResponse;
+import com.ats.adminpanel.model.accessright.AccessRightModule;
+import com.ats.adminpanel.model.accessright.ModuleJson;
+import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.login.User;
 import com.ats.adminpanel.model.login.UserResponse;
 import com.ats.adminpanel.session.UserSession;
@@ -40,6 +50,8 @@ public class HomeController {
 
 	private static final Logger logger = LoggerFactory.getLogger(HomeController.class);
 
+	 
+	
 	/**
 	 * Simply selects the home view to render by returning its name.
 	 */
@@ -178,6 +190,29 @@ public class HomeController {
 					mav.addObject("loginResponseMessage",loginResponseMessage);
 					
 					
+					MultiValueMap<String, Object> map =new LinkedMultiValueMap<String, Object>();
+					int userId=userObj.getUser().getId();
+					map.add("usrId", userId);
+					System.out.println("Before web service");
+					try {
+					 ParameterizedTypeReference<List<ModuleJson>> typeRef = new ParameterizedTypeReference<List<ModuleJson>>() {
+					};
+					ResponseEntity<List<ModuleJson>> responseEntity = restTemplate.exchange(Constants.url + "getRoleJson",
+							HttpMethod.POST, new HttpEntity<>(map), typeRef);
+					
+					 List<ModuleJson> newModuleList = responseEntity.getBody();
+					
+					 
+					 
+						session.setAttribute("newModuleList", newModuleList);
+						 
+						
+					
+				//	System.out.println("Role Json "+Commons.newModuleList.toString());
+					}catch (Exception e) {
+						System.out.println(e.getMessage());
+					}
+					
 					mav = new ModelAndView("home");
 					
 					OrderCountsResponse orderCountList=restTemplate.getForObject(
@@ -220,4 +255,26 @@ public class HomeController {
 		return "login";
 	}
 
+	
+	@RequestMapping(value = "/showCommingSoon", method = RequestMethod.GET)
+	public ModelAndView showCommingSoon(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView model = new ModelAndView("commingSoon");
+		logger.info("/ request mapping.");
+
+		return model;
+
+	}
+	@RequestMapping(value = "/sessionTimeOut" , method = RequestMethod.GET)
+	public ModelAndView displayLoginAgain(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("login");
+
+		logger.info("/login request mapping.");
+
+		model.addObject("loginResponseMessage", "Session timeout ! Please login again . . .");
+
+		return model;
+
+	}
+	
 }

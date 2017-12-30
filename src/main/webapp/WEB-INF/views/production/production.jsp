@@ -99,10 +99,19 @@
 
 
 			<!-- BEGIN Main Content -->
-			<div class="row">
-				<div class="col-md-12">
-					<div class="box">
-						<div class="box-title">
+		 
+				
+						<div class="box">
+			<div class="box-title">
+				<h3>
+					<i class="fa fa-bars"></i> Search Production Order
+				</h3>
+
+			</div>
+
+			<div class="box-content">
+				<div class="row">	 
+				<!-- 		<div class="box-title">
 							<h3>
 								<i class="fa fa-bars"></i> Search Production Order
 							</h3>
@@ -110,27 +119,26 @@
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
-							<!-- <div class="box-tool">
+							<div class="box-tool">
 								<a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a> <a data-action="close" href="#"><i
 									class="fa fa-times"></i></a>
-							</div> -->
+							</div>
 						</div>
 
-
-						<div class="box-content">
-						 <form class="form-horizontal" method="get" id="validation-form">
-							<br/>
-								<div class="form-group">
-
-									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Select
+			<div class="box-content">
+						<div class="row" > -->
+					
+					<div class="form-group col-md-8" align="left">
+					<label class=" col-md-3 control-label franchisee_label"></label>
+				<label class=" col-md-3 control-label menu_label">Select
 										Category </label>
-									<div class="col-sm-9 col-lg-10 controls">
+									<div class="col-md-6 controls">
 
 										<select class="form-control chosen" data-placeholder="Choose Category"
 											 name="selectCategory" id="selectCategory" tabindex="-1" data-rule-required="true">
 
-										<option selected>Selece Category</option>
+										<option value="-1"><c:out value=""/></option>
 											
 											<c:forEach items="${unSelectedCatList}" var="unSelectedCat"
 													varStatus="count">
@@ -143,24 +151,25 @@
 
 								</div>
 							
-							<div class="form-group">
-
-									<label class="col-sm-3 col-lg-2 control-label">Menu</label>
-									<div class="col-sm-9 col-lg-10 controls">
-										<select data-placeholder="Select Category"
+							<div class="form-group col-md-8" align="left">
+					<label class=" col-md-3 control-label franchisee_label"></label>
+				<label class=" col-md-3 control-label menu_label">Menu</label>
+									<div class="col-md-6 controls">
+										<select data-placeholder="Select Menu"
 											class="form-control chosen-select" name="selectMenu"
 											tabindex="-1" id="selectMenu" data-rule-required="true">
-
+												
 										</select>
 									</div>
 
 
 								</div>
 <br/>
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Production
+								<div class="form-group col-md-8" align="left">
+					<label class=" col-md-3 control-label franchisee_label"></label>
+				<label class=" col-md-3 control-label menu_label">Production
 										Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
+									<div class="col-md-6 controls">
 										<input class="form-control date-picker" id="datepicker" size="16"
 											 type="text" name="production_date" required />
 									</div>
@@ -170,18 +179,18 @@
 
 
 								</div>
-	
-								<div align="center" class="form-group">
+	</div>
+								<div class="row" align="center">
 									<div
-										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										<input class="btn btn-primary" value="Search..." id="callSubmit"
+										class="col-md-12">
+										<input class="btn btn-info" value="Search" id="callSubmit"
 											onclick="searchOrder()">
 
 
 									</div>
 								</div>
 
-
+</div>
 								<div align="center" id="loader" style="display: none">
 
 									<span>
@@ -192,11 +201,8 @@
 										class="l-3"></span> <span class="l-4"></span> <span
 										class="l-5"></span> <span class="l-6"></span>
 								</div>
-
-								<!-- </form>
- -->
-								<!-- <tion="getBillListProcess" class="form-horizontal"
-								method="post" id="validation-form"> -->
+</div>
+								 
 								<div class="box">
 									<div class="box-title">
 										<h3>
@@ -208,12 +214,17 @@
 											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 										</div>
 									</div>
+									
+									
+								 <form action="submitProduction" method ="post">
+						
 
 									<div class="box-content">
 
-										<div class="clearfix"></div>
-										<div class="table-responsive" style="border: 0">
-											<table width="100%" class="table table-advance" id="table1" name="table1">
+								<div class="row">
+										<div class="col-md-12 table-responsive" >
+										 
+											<table width="60%" class="table table-bordered table-striped fill-head " id="table1" name="table1" align="left">
 												<thead>
 													<tr>
 														<th width="18" style="width: 18px">Sr No</th>
@@ -230,24 +241,51 @@
 												
 											</table>
 										</div>
-									</div>
+									<br/>
 
 
-								</div>
-								
-								
-							 </form> 
-						</div>
-						
-					
-										
-					</div>
-					<form action="submitProduction" method ="post">
-						
-								<div align="center" class="form-group">
-								<div class="col-sm-5 col-lg-10 controls">
 
-										Select Time Slot <select  data-placeholder="Choose Time Slot"
+
+
+									<div class="form-group col-md-8" align="left">
+										<label class=" col-md-3 control-label franchisee_label"></label>
+										<label class=" col-md-3 control-label menu_label">Select
+											Time Slot </label>
+										<div class="col-md-6 controls">
+
+											<select class="form-control chosen"
+												data-placeholder= "Choose Time Slot" name="selectTime"
+												id="selectTime" tabindex="-1" data-rule-required="true">
+
+												 
+
+												<c:forEach items="${productionTimeSlot}" var="productionTime"
+													varStatus="count">
+												<option value="${productionTime}"><c:out value="Time Slot ${productionTime}"/></option>
+												</c:forEach>
+											</select>
+										</div>
+
+
+									<br/>
+
+</div>
+
+				 
+							<div class="row" align="center">
+									<div
+										class="col-md-12">
+								<input type="submit" class="btn btn-primary"
+								  value="Submit" id="callSubmit">
+						 </div>
+</div>
+
+
+<%-- 
+									<div align="center" class="form-group">
+								<div class="col-sm-5 " align="center">
+
+										Select Time Slot <select class="form-control" data-placeholder=" Choose Time Slot"
 											tabindex="-1" name="selectTime" id="selectTime" data-rule-required="true">
 
 										
@@ -264,10 +302,13 @@
 										<input type="submit" class="btn btn-primary" value="Submit" id="callSubmit">
 
 
-									</div>
-								</div>
+									</div>--%>
+								</div> 
 						</form>		
-				</div>
+						</div>
+						 
+						
+				 
 			</div>
 			<!-- END Main Content -->
 			<footer>
@@ -363,7 +404,7 @@ $(document).ready(function() {
 					selectedCat : $(this).val(),
 					ajax : 'true'
 				}, function(data) {
-					var html = '<option value="" selected >Select Menu</option>';
+					var html = '<option value="-1"><c:out value=""/></option>';
 					
 					var len = data.length;
 					for ( var i = 0; i < len; i++) {
@@ -415,7 +456,7 @@ $(document).ready(function() {
 
 								
 								$.each(data,function(key, order) {
-
+/* 
 									autoindex = autoindex +1 ;
 
 													var tr = "<tr>";
@@ -440,8 +481,8 @@ $(document).ready(function() {
 												
 													$('#table1 tbody').append(tr);
 													$('#table1 tbody').append(index);
-													$('#table1 tbody').append(itemId);
-													$('#table1 tbody').append(itemName);
+													$('#table1 tbody').append(order.itemId);
+													$('#table1 tbody').append(order.itemName);
 													$('#table1 tbody').append(Qty);
 													
 													$('#table1 tbody').append(trclosed);
@@ -449,7 +490,20 @@ $(document).ready(function() {
 													
 
 												})
-													
+													 */
+												
+												var tr = $('<tr></tr>');
+
+							  	tr.append($('<td></td>').html(key+1));			  	
+							  	tr.append($('<td></td>').html(order.itemId));
+								tr.append($('<td></td>').html(order.itemName));
+								tr.append($('<td></td>').html(order.qty));
+								 
+								 
+							$('#table1 tbody').append(tr);
+							
+														})
+														
 
 							});
 			

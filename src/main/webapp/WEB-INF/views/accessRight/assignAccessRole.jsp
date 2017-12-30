@@ -12,7 +12,7 @@
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Push Orders</title>
+<title>Dashboard - MONGINIS Admin</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -83,7 +83,6 @@
 <body>
 
 
-	<c:url var="getItemList" value="/getItemList"></c:url>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -108,148 +107,140 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Push Orders
+					<i class="fa fa-file-o"></i>Access Right
 				</h1>
+				<!-- <h4>Bill for franchises</h4> -->
 			</div>
 		</div>
 		<!-- END Page Title -->
 
-
+		
 		<!-- BEGIN Main Content -->
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>Orders For Franchise
+					<i class="fa fa-bars"></i>Assign Access Role
 				</h3>
 
-			</div>
-			<div class="box-content">
-				<div class="row">
-					<div class="form-group col-md-8" align="left">
-					<label class=" col-md-3 control-label franchisee_label"></label>
-						<label class=" col-md-3 control-label menu_label">Select
-							Menu</label>
-						<div class=" col-md-6 controls menu_select">
-
-							<select data-placeholder="Choose Menu"
-								class="form-control chosen" tabindex="6" id="selectMenu"
-								name="selectMenu">
-
-								<option value="-1"><c:out value=""/></option>
-
-
-
-
-
-								<c:forEach items="${unSelectedMenuList}" var="unSelectedMenu"
-									varStatus="count">
-									<option value="${unSelectedMenu.menuId}"><c:out value="${unSelectedMenu.menuTitle}"/></option>
-								</c:forEach>
-
-
-							</select>
-						</div>
-					</div>
-
-					<div class="form-group col-md-8">
-					<label class=" col-md-3 control-label franchisee_label"></label>
-						<label class=" col-md-3 control-label franchisee_label">Select
-							Franchise </label>
-						<div class=" col-md-6 controls franchisee_select">
-							<select data-placeholder="Choose Franchisee"
-								class="form-control chosen " multiple="multiple" tabindex="6"
-								id="selectFr" name="selectFr">
-
-								<option value="-1"><c:out value=""/></option>
-
-
-
-								<c:forEach items="${unSelectedFrList}" var="fr"
-									varStatus="count">
-									<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
-								</c:forEach>
-
-
-
-							</select>
-						</div>
-					</div>
-
-
-
-
-				</div>
-
-				<div class="row">
-					<div class="col-md-12" style="text-align: center">
-						<input type="button" id="searchFr" class="btn btn-info"
-							value="Search" onclick="searchItem()" />
-						<!-- onclick="generateOrders()" -->
-						<!-- </button> -->
-
-
-					</div>
-				</div>
-
-				<div align="center" id="loader" style="display: none">
-
-					<span>
-						<h4>
-							<font color="#343690">Loading</font>
-						</h4>
-					</span> <span class="l-1"></span> <span class="l-2"></span> <span
-						class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
-					<span class="l-6"></span>
-				</div>
-
-			</div>
-		</div>
-
-
-		<div class="box">
-			<div class="box-title">
-				<h3>
-					<i class="fa fa-list-alt"></i>Order
-				</h3>
-
-			</div>
-
-			<form id="submitPushOrderForm"
-				action="${pageContext.request.contextPath}/submitPushOrder"
-				method="post">
+			</div> 
 				<div class=" box-content">
+				<form id="validation-form"
+				action="submitAssignedRole"
+				method="post">
+				 
+				
 					<div class="row">
 						<div class="col-md-12 table-responsive">
 							<table class="table table-bordered table-striped fill-head "
-								style="width: 100%" id="table_grid">
+								style="width: 70%" id="table_grid">
 								<thead>
 									<tr>
+										<th>Sr.No.</th>
+										<th>Users Name</th>
+										<th>Assigned Role</th>
+										<th>Add/Edit</th>
+										 
 
 
 									</tr>
-
-
-
 								</thead>
+								
 								<tbody>
 
+									<c:forEach items="${userList}" var="userList"
+													varStatus="count">
+ 
+													<tr>
+												 
+													 
+													  <c:set var = "empRoll" value=""/>
+													    <c:set var = "btnClass" value="glyphicon glyphicon-plus"/>
+														<td ><c:out value="${count.index+1}" /></td>
+
+														<td align="left"><c:out
+																value="${userList.username}" /></td>
+																
+																 
+																
+																  <c:forEach items="${createdRoleList}" var="createdRoleList"
+													varStatus="count">
+																<c:choose>
+													<c:when test="${createdRoleList.roleId==userList.roleId}">
+													  <c:set var = "empRoll" value="${createdRoleList.roleName}"/>
+													 
+													  <c:set var = "btnClass" value="glyphicon glyphicon-edit"/>
+													</c:when>
+													 </c:choose>
+													 </c:forEach>  
+													 
+													  <td align="left"><c:out
+																value="${empRoll}" /></td>
+																
+																
+												 	   
+															 
+																
+							<td><span class='<c:out value="${btnClass}" />'  onclick="editRole('${userList.username}', ${userList.id})"></span></td>
+										 				</tr>
+																 
+												</c:forEach>
 								</tbody>
 							</table>
 						</div>
 					</div>
+					
+					<input type="hidden" id="empId" name="empId">
+					
+					<div class="box-content">
 
+							<div class="col-md-2">Employee Name</div>
+							<div class="col-md-4" style="text-align: center">
+								<input type="text" name="empName" id="empName" class="form-control"
+									 required data-rule-required="true" readonly>
+								  
+									
+									  
+							</div>
 
+ 
+						</div><br/><br/><br/>
+						
+					<div class="box-content">
 
-					<div class="row">
-						<div class="col-md-offset-6 col-md-6">
+							<div class="col-md-2">Role</div>
+							<div class="col-md-4" style="text-align: center">
+								<select name="role" id="role" class="form-control"
+									tabindex="6" placeholder="Selete Role" required data-rule-required="true">
+								 
+									
+									<option value="" disabled selected>Select Role</option>
+									 
+									
+									  <c:forEach items="${createdRoleList}" var="createdRoleList"
+										varStatus="count">
+										<option value="${createdRoleList.roleId}"><c:out value="${createdRoleList.roleName}"/></option>
+									</c:forEach>  
 
-							<button class="btn btn-info pull-right"
-								style="margin-right: 5px;" onclick="submitOrder()">Submit</button>
+								</select>
+							</div>
+
+ 
+						</div><br/><br/><br/>
+						<div class="box-content">
+
+							<div class="col-md-2"> </div>
+							<div class="col-md-4" style="text-align: center">
+						<input type="submit" value="Submit" class="btn btn-info">
+						
 						</div>
-					</div>
-				</div>
-			</form>
+						</div><br/>
+						
+</form>
 		</div>
+		
+				 
+	 
+	</div>
 	</div>
 	<!-- END Main Content -->
 
@@ -260,170 +251,9 @@
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
 
+ 
 
-	<script type="text/javascript">
 	
-		function searchItem() {
-			$('#table_grid td').remove();
-			$('#table_grid th').remove();
-			var isValid = validate();
-
-			if (isValid) {
-				var selectedMenu = $("#selectMenu").val();
-				var selectedFr = $("#selectFr").val();
-				franchasee();
-				var frId = [];
-			       
-			     
-		        $.each($("#selectFr option:selected"), function(){            
-		        	frId.push($(this).val());
-		           
-		            
-		        });
-				
-		       
-		        
-				$.getJSON('${getItemList}',{
-					
-									menu_id : selectedMenu,
-									fr_id_list : JSON.stringify(frId),
-									
-									ajax : 'true'
-
-								},
-								function(data) {
-
-									//$('#table_grid td').remove();
-									//alert(data);
-									
-
-									if (data == "") {
-										alert("No records found !!");
-
-									}
-
-									
-									$.each(data,function(key, itemname) {
-
-														var index = key + 1;
-
-														var tr = "<tr>";
-
-														
-
-														var itemName = "<td>&nbsp;&nbsp;&nbsp;"
-																+ itemname.itemName
-																+ "</td>";
-
-														
-
-														var trclosed = "</tr>";
-
-														$('#table_grid tbody')
-																.append(tr);
-													
-														$('#table_grid tbody')
-																.append(itemName);
-														
-														
-														var pushQty=0;
-												    	  var  orderQty=0;
-												    	
-													      $.each(frId, function(key, id){  
-													    	  var qty=0;
-													    	  if(itemname.getOrderDataForPushOrder!=null)
-												    	 		 {
-													    		
-												    	  $.each(itemname.getOrderDataForPushOrder, function(key, frData){
-												    			if (frData.frId == id && itemname.itemId==frData.itemId){
-												    	 				qty=frData.orderQty;
-
-												    		}
-					    	
-												    	
-												    	  });	
-												    	  
-	
-												    	 		 }
-													    	  
-													    	  if(qty > 0)
-												    		var orderQty = "<td align=center><input type=number min=0 max=500 class=form-control  readonly='true'   id=itemId"+itemname.itemId+"orderQty"+ id+ " name=itemId"+itemname.itemId+"orderQty"+id+" value = "+qty+"></td>"; 
-												    		else
-													    		var orderQty = "<td align=center><input type=number min=0 max=500 class=form-control   id=itemId"+itemname.itemId+"orderQty"+ id+ " name=itemId"+itemname.itemId+"orderQty"+id+" value = "+qty+"></td>"; 
-
-												    	 $('#table_grid tbody')
-															.append(orderQty);
-												      });
-												    
-													
-													$('#table_grid tbody')
-													.append(trclosed);
-
-												})
-													
-
-							});
-
-			}
-		}
-	</script>
-
-	<script type="text/javascript">
-		function validate() {
-
-			var selectedMenu = $("#selectMenu").val();
-			var selectedFr = $("#selectFr").val();
-			
-
-			var isValid = true;
-
-			if($('#selectMenu :selected').text() == ''){
-				    			
-				isValid = false;
-				alert("Please select Menu");
-
-			} else if (selectedFr == "" || selectedFr == null) {
-
-				isValid = false;
-				alert("Please select Franchise");
-
-			}
-			return isValid;
-
-		}
-	</script>
-
-
-
-	<script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-	<script type="text/javascript">
-
-		
-    
-	function franchasee() {
-        var frName = [];
-       
-        var i=0;
-   
-        var tr;
-        tr = document.getElementById('table_grid').tHead.children[0];
-
-        tr.insertCell(0).outerHTML = "<th> ItemName</th>"
-        $.each($("#selectFr option:selected"), function(){            
-        	frName.push($(this).text());
-        	i++;
-        });
-        i=i-1;
-        $.each(frName, function(){  
-       
-            tr.insertCell(1).outerHTML = "<th>"+frName[i] +"</th>"
-            i--;
-       });
-        	
-        
-	}
-</script>
-
 
 	<!--basic scripts-->
 	<script
@@ -480,5 +310,32 @@
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
+		
+			<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
+
+<script type="text/javascript"
+				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
+			<script type="text/javascript"
+				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
+		
+		
+		
+		<script>
+		function editRole(empName, empId)
+		{
+			
+			//alert(empId);
+			document.getElementById("empId").value=empId;
+			document.getElementById("empName").value=empName;
+			
+			 
+		}
+		</script>
+		
+		
+		
 </body>
 </html>

@@ -86,6 +86,7 @@
 <body>
 
 
+	<c:url var="getNonOrderFrList" value="/getNonOrderFrList"></c:url>
 	<c:url var="getOrderItemList" value="/getOrderItemList"></c:url>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
@@ -127,16 +128,17 @@
 
 			</div>
 			<div class="box-content">
-				<div class="row">
+				<div class="row" >
 					
-					<div class="form-group col-md-9">
-				<label class=" col-md-2 control-label menu_label">Select
+					<div class="form-group col-md-8" align="left">
+					<label class=" col-md-3 control-label franchisee_label"></label>
+				<label class=" col-md-3 control-label menu_label">Select
 							Menu</label>
-						<div class=" col-md-5 controls menu_select">
+						<div class=" col-md-6 controls menu_select">
 
 							<select data-placeholder="Choose Menu"
 								class="form-control chosen" tabindex="6" id="selectMenu"
-								name="selectMenu">
+								name="selectMenu" onchange="getFr()">
 
 								<option value="-1"><c:out value=""/></option>
 
@@ -149,32 +151,34 @@
 							</select>
 						</div>
 					</div>
-					<div class="form-group col-md-9">
-						<label class=" col-md-2 control-label menu_label">Previous Order
+					<div class="form-group col-md-8">
+					<label class=" col-md-3 control-label franchisee_label"></label>
+						<label class=" col-md-3 control-label menu_label">Previous Order
 										Date
 							</label>
-						<div class=" col-md-5 controls menu_select">
+						<div class=" col-md-6 controls menu_select">
 
 							<input class="form-control date-picker" id="dp2" size="16"
-											type="text" name="oreder_date" />
+											type="text" name="oreder_date"/>
 						</div>
 					</div>
-					<div class="form-group col-md-9">
-								<label class=" col-md-2 control-label franchisee_label">Select
+					<div class="form-group col-md-8">
+					<label class=" col-md-3 control-label franchisee_label"></label>
+								<label class=" col-md-3 control-label franchisee_label">Select
 							Franchise </label>
-						<div class=" col-md-7 controls franchisee_select">
+						<div class=" col-md-6 controls franchisee_select">
 							<select data-placeholder="Choose Franchisee"
 								class="form-control chosen " multiple="multiple" tabindex="6"
 								id="selectFr" name="selectFr">
 
-								<option value="-1"><c:out value=""/></option>
+								<%-- <option value="-1"><c:out value=""/></option>
 
 
 
 								<c:forEach items="${unSelectedFrList}" var="fr"
 									varStatus="count">
 									<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
-								</c:forEach>
+								</c:forEach> --%>
 
 
 
@@ -243,8 +247,8 @@
 
 
 
-					<div class="row">
-						<div class="col-md-offset-6 col-md-6">
+					<div class="row" align="center">
+						<div class="col-md-offset-6 col-md-6" align="center">
 
 							<button class="btn btn-info pull-right"
 								style="margin-right: 5px;" onclick="submitOrder()">Submit</button>
@@ -265,6 +269,54 @@
 
 
 	<script type="text/javascript">
+	 
+ 
+				function getFr() {
+					 
+					$.getJSON('${getNonOrderFrList}', {
+						menu_id : $("#selectMenu").val(),
+						ajax : 'true'
+					}, function(data) {
+						//alert(data);
+						var html = '<option value="-1"><c:out value=""/></option>';
+
+						
+
+						var len = data.length;
+
+						$('#selectFr')
+
+					    .find('option')
+
+					    .remove()
+
+					    .end()
+
+							
+
+					    	//alert(len);
+
+						for ( var i = 0; i < len; i++) {
+
+							
+
+							 $("#selectFr").append(
+
+			                           $("<option ></option>").attr(
+
+			                               "value", data[i].frId).text(data[i].frName)
+
+			                       );
+
+						} 
+						$("#selectFr").trigger("chosen:updated");
+	 
+					});
+
+				}
+	
+	</script>
+<script type="text/javascript">
 	
 		function searchOrders() {
 			
@@ -288,7 +340,7 @@
 		        });
 				
 		       
-		        
+		        $('#loader').show();
 				$.getJSON('${getOrderItemList}',{
 					
 									menu_id : selectedMenu,
@@ -301,7 +353,7 @@
 
 									//$('#table_grid td').remove();
 									
-									
+									$('#loader').hide();
 
 									if (data == "") {
 										alert("No records found !!");

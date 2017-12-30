@@ -14,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -46,6 +47,7 @@ import com.ats.adminpanel.model.franchisee.Menu;
 import com.ats.adminpanel.model.item.Item;
 
 @Controller
+@Scope("session")
 public class DumpOrderController {
 	 
 	public static AllFrIdNameList allFrIdNameList;
@@ -67,9 +69,6 @@ public class DumpOrderController {
 		ModelAndView model = new ModelAndView("orders/dumporders");
 		Constants.mainAct = 8;
 		Constants.subAct = 82;
-		java.util.Date utilDate = new java.util.Date();
-		java.sql.Date date=new java.sql.Date(utilDate.getTime());
-		String orderDate=date.toString();
 		
 		RestTemplate restTemplate = new RestTemplate();
 		try {
@@ -81,11 +80,10 @@ public class DumpOrderController {
 	
 		allFrIdNameList = new AllFrIdNameList();
 		
-		MultiValueMap<String, Object> map=new LinkedMultiValueMap<String, Object>();
-		map.add("orderDate", orderDate);
-		System.out.println(orderDate);
 		
-			allFrIdNameList = restTemplate.postForObject(Constants.url + "getNonOrderFr",map, AllFrIdNameList.class);
+		//System.out.println(orderDate);
+		
+			
 
 		} catch (Exception e) {
 			System.out.println("Exception in getAllFrIdName" + e.getMessage());
@@ -117,6 +115,30 @@ public class DumpOrderController {
 	
 	
 
+	@RequestMapping(value = "/getNonOrderFrList", method = RequestMethod.GET)
+	public @ResponseBody List<AllFrIdName> getNonOrderFrList(HttpServletRequest request,
+		HttpServletResponse response) {
+		
+		
+		int menu_id=Integer.parseInt(request.getParameter("menu_id"));
+		 
+		java.util.Date utilDate = new java.util.Date();
+		java.sql.Date date=new java.sql.Date(utilDate.getTime());
+		String orderDate=date.toString();
+		
+		
+		MultiValueMap<String, Object> map=new LinkedMultiValueMap<String, Object>();
+		map.add("orderDate", orderDate);
+		map.add("menuId", menu_id);
+		RestTemplate restTemplate = new RestTemplate();
+		try {
+		allFrIdNameList = restTemplate.postForObject(Constants.url + "getNonOrderFr",map, AllFrIdNameList.class);
+		
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return allFrIdNameList.getFrIdNamesList();
+	}
 	//Ajax Call
 	
 		@RequestMapping(value = "/getOrderItemList", method = RequestMethod.GET)
@@ -262,7 +284,7 @@ public class DumpOrderController {
 		//After submit order
 		
 		@RequestMapping(value = "/submitDumpOrder", method = RequestMethod.POST)
-		public ModelAndView submitDumpOrders(HttpServletRequest request, HttpServletResponse response) {
+		public String submitDumpOrders(HttpServletRequest request, HttpServletResponse response) {
 			ModelAndView model = new ModelAndView("orders/dumporders");
 			Orders order=new Orders();
 			System.out.println("In Submit order call");
@@ -361,7 +383,7 @@ public class DumpOrderController {
 			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
 			model.addObject("unSelectedMenuList", selectedMenuList);
 			
-			return model;
+			return "redirect:/showdumporders";
 		}
 		void PlaceOrder( List<Orders> oList)
 		{
