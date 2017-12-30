@@ -117,7 +117,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> Add Franchise Sup
+								<i class="fa fa-bars"></i> Add Franchise Supplement
 							</h3>
 							<div class="box-tool">
 								<a href="${pageContext.request.contextPath}/"></a> <a data-action="collapse" href="#"><i
@@ -138,8 +138,8 @@
 							  <div class="col2">
 									<label class="col-sm-3 col-lg-2 control-label">Franchise</label>
 									<div class="col-sm-9 col-lg-3 controls">
-									<select name="fr_id" id="fr_id" class="form-control" placeholder="Select Franchise" data-rule-required="true">
-											<option value="-1">Select Franchise</option>
+									<select name="fr_id" id="fr_id" class="form-control" placeholder="Select Franchise"  data-rule-required="true">
+											<option value="">Select Franchise</option>
 										 <c:forEach items="${franchiseeList}" var="franchiseeList">
 											<c:choose>
 													<c:when test="${franchiseeList.frId==frSup.frId}">

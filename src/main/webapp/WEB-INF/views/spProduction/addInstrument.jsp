@@ -148,7 +148,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Instrument Type</label>
 									<div class="col-sm-9 col-lg-10 controls">
 									<select name="inst_type" id="inst_type" class="form-control" placeholder="Instrument Type" data-rule-required="true">
-											<option value="-1">Select Instrument Type</option>
+											<option value="">Select Instrument Type</option>
 											<c:forEach items="${typeList}" var="typeList">
 										        <option value="${typeList.typeId}"><c:out value="${typeList.typeName}"></c:out></option>
 										</c:forEach>
@@ -161,7 +161,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="instrument_opqty" id="instrument_opqty"
 											placeholder="Instrument Optimum Qty" class="form-control"
-											data-rule-required="true" />
+											data-rule-required="true" data-rule-number="true"/>
 									</div>
 								</div>
                                  <div class="form-group">
@@ -169,7 +169,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="instrument_clqty" id="instrument_clqty"
 											placeholder="Instrument Clear Qty" class="form-control"
-											data-rule-required="true" />
+											data-rule-required="true" data-rule-number="true"/>
 									</div>
 								</div>
 								
@@ -178,7 +178,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<textarea name="instrument_status" id="instrument_status"
 											placeholder="Instrument Status" class="form-control"
-											data-rule-required="true" ></textarea>
+											data-rule-required="true"></textarea>
 									</div>
 							  </div>
 							  
@@ -187,17 +187,17 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="stock_qty" id="stock_qty"
 											placeholder="Stock Qty" class="form-control"
-											data-rule-required="true" />
+											data-rule-required="true"  data-rule-number="true"/>
 									</div>
 							  </div>
 							   <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Instrument Is Used?</label>
 									<div class="col-sm-9 col-lg-10 controls">
 												<label class="radio-inline"> <input type="radio"
-													name="instrument_is_used" id="optionsRadios1" value="0" checked>
+													name="instrument_is_used" id="optionsRadios1" value="0" >
 													No
 												</label> <label class="radio-inline"> <input type="radio"
-													name="instrument_is_used" id="optionsRadios1" value="1" />
+													name="instrument_is_used" id="optionsRadios1" value="1" checked/>
 													Yes
 												</label>
 									</div>

@@ -135,9 +135,16 @@
 										</c:forEach> 
 
 									</tbody>
+									
 								</table>
+								
 							</div>
-							<input type="submit" value="Submit"/>
+							<div class="col2">
+									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+							<input type="submit" value="Submit" class="btn btn-primary" />
+							</div>
+							</div>
+							<br>	<br>
 						</form>
 						</div>
 						

@@ -103,7 +103,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Instrument Allocation To Station
+						<i class="fa fa-file-o"></i>Instrument Allocation
 					</h1>
 
 				</div>
@@ -121,7 +121,7 @@
 								<i class="fa fa-bars"></i>Instrument Allocation To Station
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showInstAllocated">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showInstAllocated"></a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -141,7 +141,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Station</label>
 									<div class="col-sm-1 col-lg-4 controls">
 									<select name="st_id" id="st_id" class="form-control" placeholder="Select Station" data-rule-required="true" >
-											<option value="-1">Select Station</option>
+											<option value="">Select Station</option>
 											<c:forEach items="${spStationList}" var="spStationList">
 										    	<c:choose>
 													<c:when test="${spStationList.stId==instAllocToStationRes.stId}">
@@ -161,7 +161,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Instruments</label>
 									<div class="col-sm-9 col-lg-10 controls">
 									<select name="inst_id" id="inst_id[]" class="form-control chosen" placeholder="Select Instruments" data-rule-required="true" multiple="multiple">
-											<option value="-1">Select Instruments</option>
+											<option value="">Select Instruments</option>
 										  	<c:choose>
 											 <c:when test="${isEdit==1}">
 											           <c:forEach items="${selectedInstrumentList}" var="instrumentsList">
@@ -200,7 +200,7 @@
 								<div class="box">
 									<div class="box-title">
 										<h3>
-											<i class="fa fa-table"></i>Configured Stations
+											<i class="fa fa-table"></i>Instrument Allocated To Station
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i

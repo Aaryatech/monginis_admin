@@ -1126,7 +1126,7 @@ public class FranchiseeController {
 
 	@RequestMapping(value = "/updateFranchisee/updateFrProcess", method = RequestMethod.POST)
 	public String updateFrProcess(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("fr_image") List<MultipartFile> file) {
+			@RequestParam("fr_image") MultipartFile file) {
 		ModelAndView model = new ModelAndView("franchisee/addnewfranchisee");
 
 		try {
@@ -1217,31 +1217,10 @@ public class FranchiseeController {
 
 			String frImage = request.getParameter("prevImage");
 
-			if (!file.get(0).getOriginalFilename().equalsIgnoreCase("")) {
+			if (!file.getOriginalFilename().equalsIgnoreCase("")) {
 
 				System.out.println("Empty image");
-				
-				VpsImageUpload upload = new VpsImageUpload();
-
-				Calendar cal = Calendar.getInstance();
-				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
-				System.out.println(sdf.format(cal.getTime()));
-
-
-				String curTimeStamp = sdf.format(cal.getTime());
-				 frImage=null;
-				try {
-					frImage=curTimeStamp + "-" + file.get(0).getOriginalFilename();
-					upload.saveUploadedFiles(file, Constants.SPCAKE_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
-					System.out.println("upload method called for image Upload " + file.toString());
-					
-				} catch (IOException e) {
-					
-					System.out.println("Exce in File Upload In Fr Image Upload " + e.getMessage());
-					e.printStackTrace();
-				}
-				
-				//frImage = ImageS3Util.uploadFrImage(file);
+				frImage = ImageS3Util.uploadFrImage(file);
 			}
 
 			RestTemplate rest = new RestTemplate();
@@ -1965,7 +1944,9 @@ public class FranchiseeController {
 
 			frTargetList = restTemplate.postForObject(Constants.url + "/getFrTargetList", map, FrTargetList.class);
 			System.out.println("Fr Target List:" + frTargetList.toString());
-
+           
+			if(frTargetList.getInfo().getError()==false)
+			{
 			for (int i = 0; i < frTargetList.getFrTargetList().size(); i++) {
 				if (frTargetList.getFrTargetList().get(i).getStatus() == 0) {
 					System.out.println(frTargetList.getFrTargetList().get(i).getFrId());
@@ -1985,6 +1966,17 @@ public class FranchiseeController {
 
 				}
 			}
+			}
+			else
+			{
+				frTargetList=new FrTargetList();
+				FrTarget frTarget=new FrTarget();
+				frTarget.setFrId(0);
+				List<FrTarget> frTargetListTest=new ArrayList<FrTarget>();
+				frTargetListTest.add(frTarget);
+				frTargetList.setFrTargetList(frTargetListTest);
+			}
+			
 		} catch (Exception e) {
 			System.out.println("Exception In Search FrTarget Data By FrId" + e.getMessage());
 		}

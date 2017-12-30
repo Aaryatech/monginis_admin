@@ -116,7 +116,7 @@
 
 
 						<div class="box-content">
-							<form action="addItemDetails" method="post" class="form-horizontal" id=
+							<form action="${pageContext.request.contextPath}/addItemDetails" method="post" class="form-horizontal" id=
 									"validation-form"
 										 method="post">
 							

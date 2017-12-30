@@ -343,7 +343,7 @@
 											<div class="col-sm-9 col-lg-10 controls">
 												<select data-placeholder="Select Events"
 													class="form-control chosen" multiple="multiple"
-													tabindex="6" name="spe_id_list[]" id="spe_id_list[]">
+													tabindex="6" name="spe_id_list[]" id="spe_id_list"data-rule-required="true">
 													<option value=""> </option>
 													<optgroup label="EVENTS">
 
@@ -450,12 +450,10 @@
 										<div class="form-group">
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-												<button type="submit" class="btn btn-primary">
-															<i class="fa fa-check"></i> Save
+												<button type="submit" class="btn btn-primary" style="width: 70px" onclick="return validation()">
+														 Save
 														</button>
-												<!-- <button type="submit" class="btn btn-primary">
-											<i class="fa fa-check"></i> Save
-										</button> -->
+										
 												<button type="button" class="btn">Cancel</button>
 
 												<!--<button type="button" class="btn">Cancel</button>-->
@@ -556,5 +554,7 @@
 	  document.getElementById("tax_2").setAttribute('value',sgst);
 	  document.getElementById("total_gst_appli").setAttribute('value', totGst);
 }
+   
 </script>	
+
 </html>

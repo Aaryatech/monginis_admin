@@ -120,7 +120,7 @@
 								<i class="fa fa-bars"></i> Add SpStation
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showAddStationt">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAddStation"></a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -148,7 +148,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Department</label>
 									<div class="col-sm-9 col-lg-10 controls">
 									<select name="dept_id" id="dept_id" class="form-control" placeholder="Department Name" data-rule-required="true">
-											<option value="-1">Select Department</option>
+											<option value="">Select Department</option>
 											<c:forEach items="${mDeptList}" var="mDeptList">
 											<c:choose>
 													<c:when test="${mDeptList.deptId==spStation.deptId}">
@@ -196,10 +196,10 @@
 												</c:when>
 												<c:otherwise>
 												<label class="radio-inline"> <input type="radio"
-													name="st_is_used" id="optionsRadios1" value="0" checked>
+													name="st_is_used" id="optionsRadios1" value="0" >
 													No
 												</label> <label class="radio-inline"> <input type="radio"
-													name="st_is_used" id="optionsRadios1" value="1" />
+													name="st_is_used" id="optionsRadios1" value="1" checked/>
 													Yes
 												</label>
 												</c:otherwise>

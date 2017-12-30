@@ -14,8 +14,10 @@
 
 
 <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
 <!--base css styles-->
+<!--base css styles-->
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/loader.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/bootstrap.min.css">
 <link rel="stylesheet"
@@ -41,7 +43,6 @@
 													|| document
 															.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
 										</script>
-
 <!--page specific css styles-->
 <script
 	src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
@@ -109,7 +110,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Franchise
+						<i class="fa fa-file-o"></i>Franchise Target
 					</h1>
 
 				</div>
@@ -127,7 +128,7 @@
 								<i class="fa fa-bars"></i> Add Franchise Target
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showAddFrTarget">Back</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAddFrTarget">REFRESH</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -177,6 +178,16 @@
 										<input type="button" class="btn btn-primary" value="Search" onclick="searchFrMonthTarget();validation()">
 <!-- 										<button type="button" class="btn">Cancel</button>
  -->									</div>
+                       <div align="center" id="loader" style="display: none">
+
+					<span>
+						<h4>
+							<font color="#343690">Loading</font>
+						</h4>
+					</span> <span class="l-1"></span> <span class="l-2"></span> <span
+						class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
+					<span class="l-6"></span>
+				</div>
 						</div>
 						
 							<br/>
@@ -218,9 +229,9 @@
 														<tr>
 														
 															<td><c:out value="${count.index+1}"/></td>
-															<td align="left"><input type="checkbox" name="chk" id="chk${count.index+1}" value="${count.index+1}"/></td>
+                                                            <td align="left"><abbr title="First Click this Checkbox to insert this Record"><input type="checkbox" name="chk" id="chk${count.index+1}" value="${count.index+1}"/></abbr>	</td>
 															<td align="left"><input type="text" class="form-control" name="month${count.index+1}" id="month${count.index+1}" maxlength="12" size="12" value="${months}" readonly/></td>
-															<td align="left"><input type="text" class="form-control" name="target${count.index+1}" id="target${count.index+1}" maxlength="14" size="14"   value="0"/></td>
+															<td align="left"><input type="text" class="form-control" name="target${count.index+1}" id="target${count.index+1}" maxlength="14" size="14"   value="0" data-rule-number="true"data-rule-required="true"/></td>
 												        	<td align="left"><input type="text" class="form-control" name="ach_target${count.index+1}" id="ach_target${count.index+1}" maxlength="14" size="14" value="0"readonly/></td>					
 												        	<td align="left"><input type="text" class="form-control" name="award${count.index+1}" id="award${count.index+1}"  value="NA"/></td>					
                                                             <td align="left"><input type="text"class="form-control"  name="remark${count.index+1}" id="remark${count.index+1}"  value="NA"/></td>					
@@ -326,7 +337,7 @@
 		
 		var frId = document.getElementById("fr_id").value;
 		var year = document.getElementById("year").value;
-
+		$('#loader').show();
          var status=0;
          
 		
@@ -337,7 +348,7 @@
 					ajax : 'true'
 				}, function(data) {
 					var len = data.length;
-                    
+					$('#loader').hide();
 				
 					$.each(data,function(key, frTarget) {
 						
@@ -424,7 +435,8 @@
 </script>
 <script type="text/javascript">
 function validation() {
-	
+	$('#loader').hide();
+
 	var frId = $("#fr_id").val();
 	var year = $("#year").val();
 	

@@ -120,7 +120,7 @@
 								<i class="fa fa-bars"></i> Add Shift
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showAllShift">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAllShift"></a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -176,10 +176,10 @@
 												</c:when>
 												<c:otherwise>
 												<label class="radio-inline"> <input type="radio"
-													name="is_used" id="optionsRadios1" value="0" checked>
+													name="is_used" id="optionsRadios1" value="0" >
 													No
 												</label> <label class="radio-inline"> <input type="radio"
-													name="is_used" id="optionsRadios1" value="1" />
+													name="is_used" id="optionsRadios1" value="1" checked/>
 													Yes
 												</label>
 												

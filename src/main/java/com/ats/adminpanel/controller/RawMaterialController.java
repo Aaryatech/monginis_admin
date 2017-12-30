@@ -394,7 +394,7 @@ public class RawMaterialController {
 		int rmUomId=rawMaterialDetails.getRmUomId();
 		System.out.println("UOM ID : "+rmUomId);
 		
-		model.addObject("url",Constants.RAW_MAT_IMG_URL);
+		model.addObject("url",Constants.FR_IMAGE_URL);
 		//model.addObject("rmIconStr", rmIconStr);
 		model.addObject("rmUomList", rawMaterialUomList);
 		model.addObject("rmTaxList", rawMaterialTaxDetailsList);
@@ -535,7 +535,7 @@ public class RawMaterialController {
 						MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 						map.add("taxId", taxId);
 
-						Info info = rest.postForObject(Constants.url + "/rawMaterial/deleteRMTax", map, Info.class);
+						Info info = rest.postForObject(Constants.url + "/rawMaterial/deleteRmTax", map, Info.class);
 						System.out.println(info.toString());
 
 						if (info.isError()) {

@@ -121,7 +121,7 @@
 								<i class="fa fa-bars"></i>Instrument Verification
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showAddEmployee">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/"></a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							

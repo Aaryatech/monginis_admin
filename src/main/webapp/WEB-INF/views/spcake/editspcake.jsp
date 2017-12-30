@@ -111,7 +111,7 @@
 												<input type="text" name="spc_code" id="spc_code"
 													placeholder="Code" class="form-control"
 													value="${specialCake.spCode}" data-rule-required="true"
-													data-rule-minlength="3" />
+													 />
 											</div>
 										</div>
 

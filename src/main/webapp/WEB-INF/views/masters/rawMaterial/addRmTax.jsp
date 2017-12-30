@@ -119,7 +119,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">IGST Percentage(%)
 									</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="igst_per" id="igst_per" class="form-control"placeholder="Enter IGST %"data-rule-required="true" value="${rmTax.igstPer}"/>
+										<input type="text" name="igst_per" id="igst_per" class="form-control"placeholder="Enter IGST %"data-rule-required="true"  data-rule-number="true" value="${rmTax.igstPer}"/>
 									</div>
 
 								</div>
@@ -128,7 +128,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">CGST Percentage(%)
 									</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="cgst_per" id="cgst_per" class="form-control"placeholder="Enter CGST %"data-rule-required="true" value="${rmTax.cgstPer}"/>
+										<input type="text" name="cgst_per" id="cgst_per" class="form-control"placeholder="Enter CGST %"data-rule-required="true"  data-rule-number="true" value="${rmTax.cgstPer}"/>
 									</div>
 								 
 
@@ -136,7 +136,7 @@
 								<label class="col-sm-3 col-lg-2 control-label">SGST Percentage(%)
 									</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="sgst_per" id="sgst_per" class="form-control"placeholder="Enter SGST %"data-rule-required="true" value="${rmTax.sgstPer}"/>
+										<input type="text" name="sgst_per" id="sgst_per" class="form-control"placeholder="Enter SGST %"data-rule-required="true"   data-rule-number="true" value="${rmTax.sgstPer}"/>
 									</div>
 						</div>
 
@@ -172,9 +172,9 @@
 													<tr>
 														<th width="55" style="width: 18px">Sr.No.</th>
 														<th width="140" align="center">Tax Description</th>
-														<th width="140" align="center">Igst Percentage</th>
-														<th width="140" align="center">Cgst Percentage</th>
-														<th width="140" align="center">Sgst Percentage</th>
+														<th width="140" align="center">IGST Percentage</th>
+														<th width="140" align="center">CGST Percentage</th>
+														<th width="140" align="center">SGST Percentage</th>
 														<th width="50" align="left">Action</th>
 													</tr>
 												</thead>

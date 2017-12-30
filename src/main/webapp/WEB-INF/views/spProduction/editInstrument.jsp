@@ -144,7 +144,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Instrument Type</label>
 									<div class="col-sm-9 col-lg-10 controls">
 									<select name="inst_type" id="inst_type" class="form-control" placeholder="Instrument Type" data-rule-required="true">
-											<option value="-1">Select Instrument Type</option>
+											<option value="">Select Instrument Type</option>
 											<c:forEach items="${typeList}" var="typeList">
 											<c:choose>
 													<c:when test="${typeList.typeId==instrument.instType}">
@@ -164,7 +164,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="instrument_opqty" id="instrument_opqty"
 											placeholder="Instrument Optimum Qty" class="form-control"
-											data-rule-required="true" value="${instrument.instrumentOpqty}"/>
+											data-rule-required="true" value="${instrument.instrumentOpqty}" data-rule-number="true"/>
 									</div>
 								</div>
                                  <div class="form-group">
@@ -172,7 +172,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="instrument_clqty" id="instrument_clqty"
 											placeholder="Instrument Clear Qty" class="form-control"
-											data-rule-required="true" value="${instrument.instrumentClqty}"/>
+											data-rule-required="true" value="${instrument.instrumentClqty}" data-rule-number="true"/>
 									</div>
 								</div>
 								
@@ -190,7 +190,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="stock_qty" id="stock_qty"
 											placeholder="Stock Qty" class="form-control"
-											data-rule-required="true" value="${instrument.stockQty}"/>
+											data-rule-required="true" value="${instrument.stockQty}" data-rule-number="true"/>
 									</div>
 							  </div>
 							   <div class="form-group">
@@ -217,10 +217,10 @@
 												</c:when>
 												<c:otherwise>
 												<label class="radio-inline"> <input type="radio"
-													name="instrument_is_used" id="optionsRadios1" value="0" checked>
+													name="instrument_is_used" id="optionsRadios1" value="0" >
 													No
 												</label> <label class="radio-inline"> <input type="radio"
-													name="instrument_is_used" id="optionsRadios1" value="1" />
+													name="instrument_is_used" id="optionsRadios1" value="1" checked/>
 													Yes
 												</label>
 												

@@ -155,7 +155,7 @@ public class SpProductionController {
 
 			model.addObject("mDeptList", mDeptList.getList());
 			model.addObject("spStationList", spStationList.getSpStationList());
-			model.addObject("spStation", new SpStation());
+		//	model.addObject("spStation", new SpStation());
 		} catch (Exception e) {
 			System.out.println("Exc In showAddStation:" + e.getMessage());
 		}
@@ -1910,7 +1910,7 @@ public class SpProductionController {
 					MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 					
 					//int deptId=userResponse.getUser().getDeptId();
-					
+
 					int userId=userResponse.getUser().getId();
 					
 					String fromSettingKey = new String();
