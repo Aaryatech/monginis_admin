@@ -88,6 +88,9 @@
 	<c:url var="addItemToListInOldItemList" value="/addItemToListInOldItemList"></c:url>
 		<c:url var="updateRmQtyInEdit" value="/updateRmQtyInEdit"></c:url>
 		<c:url var="deleteItem" value="/deleteItem"></c:url>
+		<c:url var="getRmCategory" value="/getRmCategory" />
+		<c:url var="getRmListByCatId" value="/getRmListByCatId" />
+						<c:url var="getRmRateAndTax" value="/getRmRateAndTax" />
 		
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
@@ -248,21 +251,21 @@
 
 										</select>
 									</div>
-									<div class="col-md-2">Discount % </div>
-										<div class="col-md-3">
-											<input type="text" name="disc_per" id="disc_per" class="form-control">
-										</div>
-									</div><br/>
+									<div class="col-md-2" >Quotation Ref. Date</div>
+									<div class="col-md-3">
+										 <input type="text" name="quotation_date" id="quotation_date" value="${purchaseOrderHeader.quotationRefDate}" class="form-control date-picker">
+									</div>
+									</div><br><br>
+									<hr/>
 									
-							<div class="box-content">
-									<div class="col-md-2" >Item</div>
-									<div class="col-md-4">
-										<select name="rm_id" id="rm_id" class="form-control" tabindex="6">
-										
-										<option value="-1">Select Raw Material</option>
-										
-											 <c:forEach items="${RawmaterialList}" var="RawmaterialList" varStatus="count">
-							   <option value="${RawmaterialList.rmId}"><c:out value="${RawmaterialList.rmName}"/></option>
+									<div class="box-content">
+										<div class="col-md-2" >Rm Group</div>
+											<div class="col-md-4">
+											<select name="rm_group" id="rm_group" class="form-control" tabindex="6" onchange="getCat()">
+											<option value="-1" disabled="disabled" selected="selected">Select RM Group</option>
+											 <c:forEach items="${RawmaterialList}" var="RawmaterialList"
+											varStatus="count">
+							  					 <option value="${RawmaterialList.grpId}"><c:out value="${RawmaterialList.grpName}"/></option>
  													 
 												</c:forEach>
 						
@@ -270,20 +273,66 @@
 										</select>
 									</div>
 									<div class="col-md-2">Quantity </div>
-				<div class="col-md-2">
-					<input type="text" name="rm_qty" id="rm_qty" class="form-control">
+										<div class="col-md-3">
+										<input type="text" placeholder="Enetr RM Quantity" name="rm_qty" id="rm_qty" class="form-control">
+									</div>
+				 
+								</div><br/>
+								
+								<div class="box-content">
+			
+			<div class="col-md-2">RM Category </div>
+								<div class="col-md-4">
+										<select name="rm_cat" id="rm_cat" class="form-control" tabindex="6" onchange="getRm()">
+										<option value="-1"disabled="disabled" selected="selected">Select RM Category</option>
+											 
+										</select>
 				</div>
-				 <div class="col-md-2">
+				
+				
+				<div class="col-md-2">Discount % </div>
+				<div class="col-md-3">
+					<input type="text" placeholder="Enter Discount %" name="disc_per" id="disc_per" value="0" class="form-control">
+				</div>
+				
+									
+				 
+			</div><br>
+									
+							<div class="box-content">
+			
+								<div class="col-md-2" >Item</div>
+									<div class="col-md-4">
+										<select name="rm_id" id="rm_id" class="form-control"placeholder="Select RM " tabindex="6">
+										<option value="-1" disabled="disabled" selected="selected">Select Raw Material</option>
+											 
+						
+
+										</select>
+									</div>	
+									
+				<div class="col-md-1"></div>
+				<div class="col-md-3">
 				<input type="button" class="btn btn-info pull-right" onclick="addItem()" value="Add Item"> 
 					 
 			</div>
-			</div> <br/>
-			<div class="box-content">
-			<div class="col-md-2" >Quotation Ref. Date</div>
-									<div class="col-md-4">
-										 <input type="text" name="quotation_date" id="quotation_date" value="${purchaseOrderHeader.quotationRefDate}" class="form-control date-picker">
-									</div>
 					</div><br/>
+			
+			
+			<div class="box-content">
+			
+					</div><br/>
+					
+					<div align="center" id="loader" style="display: none">
+
+							<span>
+								<h4>
+									<font color="#343690">Loading</font>
+								</h4>
+							</span> <span class="l-1"></span> <span class="l-2"></span> <span
+						class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
+					<span class="l-6"></span>
+				</div>
 			
 			
 			
@@ -447,153 +496,179 @@
 
 		 
 
-			  alert("ala");
+			  
 				var taxation = $("#taxation").val();
-				
 				var kind_attn = $("#kind_attn").val();
-				
 				var rm_qty = $("#rm_qty").val();
-				
 				var supp_id = $("#supp_id").val();
-				
-
 				var po_type = $("#po_type").val();
-				
 				var delv_date = $("#delv_date").val();
-				
 				var delv_at = $("#delv_at").val();
-				
 				var quotation_ref_no = $("#quotation_ref_no").val();
-				
 				var po_no = $("#po_no").val();
-				
 				var po_date = $("#po_date").val();
-				
 				var rm_id = $("#rm_id").val();
-				
 				var disc_per = $("#disc_per").val();
+				$('#loader').show();
 				
-				
-			 
+				$
+				.getJSON(
+						'${getRmRateAndTax}',
+
+						{
+							 
+							rm_id : rm_id,
+							po_date : po_date,
+							po_no : po_no,
+							quotation_ref_no : quotation_ref_no,
+							delv_at : delv_at,
+							delv_date : delv_date,
+							po_type : po_type,
+							supp_id : supp_id,
+							rm_qty : rm_qty,
+							kind_attn : kind_attn,
+							taxation : taxation,
+							disc_per : disc_per,
+							ajax : 'true'
+
+						},
 				 
 				   
 			 
-				$('#loader').show();
+				function(data) {
+				if(data==0){
+					alert("Item rate  is not verified !!");
+					$('#loader').hide();
+				}
+				else{
+					
+					$
+					.getJSON(
+							'${addItemToListInOldItemList}',
 
-				$
-						.getJSON(
-								'${addItemToListInOldItemList}',
-
-								{
-									 
-									rm_id : rm_id,
-									po_date : po_date,
-									po_no : po_no,
-									quotation_ref_no : quotation_ref_no,
-									delv_at : delv_at,
-									delv_date : delv_date,
-									po_type : po_type,
-									supp_id : supp_id,
-									rm_qty : rm_qty,
-									kind_attn : kind_attn,
-									taxation : taxation,
-									disc_per : disc_per,
-									ajax : 'true'
-
-								},
-								function(data) {
-
-									$('#table_grid td').remove();
-									$('#loader').hide();
-
-									if (data == "") {
-										alert("No records found !!");
-
-									}
+							{
 								 
-  
-								  $.each(
-												data,
-												function(key, itemList) {
+								rm_id : rm_id,
+								po_date : po_date,
+								po_no : po_no,
+								quotation_ref_no : quotation_ref_no,
+								delv_at : delv_at,
+								delv_date : delv_date,
+								po_type : po_type,
+								supp_id : supp_id,
+								rm_qty : rm_qty,
+								kind_attn : kind_attn,
+								taxation : taxation,
+								disc_per : disc_per,
+								ajax : 'true'
+
+							},
+							function(data) {
+
+								$('#table_grid td').remove();
+								$('#loader').hide();
+
+								if (data == "") {
+									alert("No records found !!");
+
+								}
+							 
+
+							  $.each(
+											data,
+											function(key, itemList) {
+											
+
+												var tr = $('<tr></tr>');
+
+											
 												
+												if(itemList.delStatus==0)
+												{
+													tr.append($('<td></td>').html(key+1));
 
-													var tr = $('<tr></tr>');
+												  	tr.append($('<td></td>').html(itemList.rmName));
 
-												
-													
-													if(itemList.delStatus==0)
-													{
-														tr.append($('<td></td>').html(key+1));
+												  	tr.append($('<td></td>').html('<input type="text" id="poQty'+key+'" onkeyup="changeQty('+key+');"value="'+itemList.poQty+'" class="form-control" disabled="true">'));
 
-													  	tr.append($('<td></td>').html(itemList.rmName));
+												  	tr.append($('<td></td>').html(itemList.poRate+'<input type="hidden" id="poRate'+key+'" value='+itemList.poRate+' readonly>'));
 
-													  	tr.append($('<td></td>').html('<input type="text" id="poQty'+key+'" onkeyup="changeQty('+key+');"value="'+itemList.poQty+'" class="form-control" disabled="true">'));
-
-													  	tr.append($('<td></td>').html(itemList.poRate+'<input type="hidden" id="poRate'+key+'" value='+itemList.poRate+' readonly>'));
-
-													  	tr.append($('<td></td>').html(itemList.discPer));
-													  	
-													  	//tr.append($('<td></td>').html(itemList.poTaxable));
-													  	tr.append($('<td></td>').html('<input type="text" value="'+itemList.poTaxable+'" id="poValue'+key+'" class="form-control" disabled="true">'));
-
-													  	tr.append($('<td></td>').html(itemList.schDays));
-													  	
-													  	tr.append($('<td></td>').html(itemList.rmRemark));
-													  	tr.append($('<td></td>').html('  <span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"></span> <span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span> '));
-													  	 
-
-
-
-	 
-
-														$('#table_grid tbody').append(tr);
-													}
+												  	tr.append($('<td></td>').html(itemList.discPer));
 												  	
+												  	//tr.append($('<td></td>').html(itemList.poTaxable));
+												  	tr.append($('<td></td>').html('<input type="text" value="'+itemList.poTaxable+'" id="poValue'+key+'" class="form-control" disabled="true">'));
 
-													 
+												  	tr.append($('<td></td>').html(itemList.schDays));
+												  	
+												  	tr.append($('<td></td>').html(itemList.rmRemark));
+												  	tr.append($('<td></td>').html('  <span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"></span> <span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span> '));
+												  	 
+
+
+
  
-												})  
-								});
 
+													$('#table_grid tbody').append(tr);
+												}
+											  	
+
+												 
+
+											})  
+							});
+				
+				}
+				
+		});
 			 
 		}
 	</script>
 
 	<script type="text/javascript">
-		function validate() {
+	 
+				function getCat() {
+					
+					$.getJSON('${getRmCategory}', {
+						grpId : $('#rm_group').val(),
+						ajax : 'true'
+					}, function(data) {
+						var html = '<option value="" disabled="disabled" selected >Select Category</option>';
+						
+						var len = data.length;
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].catId + '">'
+									+ data[i].catName + '</option>';
+						}
+						html += '</option>';
+						$('#rm_cat').html(html);
+						$('#rm_cat').formcontrol('refresh');
 
-			var selectedFr = $("#selectFr").val();
-			var selectedMenu = $("#selectMenu").val();
+					});
+				} 
+	 
+				function getRm() {
+					
+					$.getJSON('${getRmListByCatId}', {
+						catId : $('#rm_cat').val(),
+						ajax : 'true'
+					}, function(data) {
+						var html = '<option value="" disabled="disabled" selected >Select Category</option>';
+						
+						var len = data.length;
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].rmId + '">'
+									+ data[i].rmName + '</option>';
+						}
+						html += '</option>';
+						$('#rm_id').html(html);
+						$('#rm_id').formcontrol('refresh');
 
-			var isValid = true;
-
-			if (selectedFr == "" || selectedFr == null) {
-
-				isValid = false;
-				alert("Please select Franchise");
-
-			} else if (selectedMenu == "" || selectedMenu == null) {
-
-				isValid = false;
-				alert("Please select Menu");
-
-			}
-			return isValid;
-
-		}
+					});
+				} 
 		
 	</script>
 
 	<script type="text/javascript">
-		function updateTotal(orderId, rate) {
-			
-			var newQty = $("#billQty" + orderId).val();
-
-			var total = parseFloat(newQty) * parseFloat(rate);
-
-
-			 $('#billTotal'+orderId).html(total);
-		}
 		function edit(key)
 		{
 			alert(key);
@@ -644,6 +719,7 @@
 		{
 			alert("key1"+key);
 			var key=key;
+			$('#loader').show();
 			$
 			.getJSON(
 					'${deleteItem}',

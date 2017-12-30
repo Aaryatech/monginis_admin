@@ -337,14 +337,59 @@
 					<input type="text" name="sp_instruction" id="sp_instruction" class="form-control" value="${purchaseOrderHeader.spRem}" readonly>
 				</div>
 									</div><br/><br/>
-			
-			<div class="row">
+									
+									<div class="row">
 						<div class="col-md-12" style="text-align: center">
-							<!-- <input type="submit" class="btn btn-info" value="Submit"> -->
-
-
+							<c:choose>
+								<c:when test="${purchaseOrderHeader.poStatus==0}"> 
+									<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}" ><input type="button" value="Edit" class="btn btn-info">
+									</a>
+								
+								<a href="${pageContext.request.contextPath}/requestPOStoreToPurchase/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Purchase" class="btn btn-info">
+								</a>
+							</c:when>
+							 <c:when test="${purchaseOrderHeader.poStatus==3}">
+							 	<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}" ><input type="button" value="Edit" class="btn btn-info">
+								</a>
+								
+								<a href="${pageContext.request.contextPath}/requestPOStoreToPurchase/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Purchase" class="btn btn-info">
+								</a>
+          						 
+						</c:when>
+						<c:when test="${purchaseOrderHeader.poStatus==1}"> 
+									<a href="${pageContext.request.contextPath}/requestPOPurachaseToDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Directore" class="btn btn-info">
+									</a>
+								
+								<a href="${pageContext.request.contextPath}/rejectPOPurachaseToStore/${purchaseOrderHeader.poId}"
+						onClick="return confirm('You Want To Reject This Record To Store');" ><input type="button" value="Reject To Store" class="btn btn-info">
+								</a>
+							</c:when>
+							 <c:when test="${purchaseOrderHeader.poStatus==4}">
+							 	<a href="${pageContext.request.contextPath}/requestPOPurachaseToDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Purchase" class="btn btn-info">
+									</a>
+								
+								<a href="${pageContext.request.contextPath}/rejectPOPurachaseToStore/${purchaseOrderHeader.poId}"
+						onClick="return confirm('You Want To Reject This Record To Store');" ><input type="button" value="Reject To Store" class="btn btn-info">
+								</a>
+          						 
+						</c:when>
+						
+						<c:when test="${purchaseOrderHeader.poStatus==2}"> 
+									<a href="${pageContext.request.contextPath}/requestPOFinalByDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Approve" class="btn btn-info">
+									</a>
+								
+								<a href="${pageContext.request.contextPath}/rejectPODirectoreToPurchase/${purchaseOrderHeader.poId}"
+						onClick="return confirm('You Want To Reject This Record To Purchase');" ><input type="button" value="Reject To Purchase" class="btn btn-info">
+								</a>
+							</c:when>
+						
+						
+						</c:choose>
+							</div>
 						</div>
-					</div>
+			
+			
+					
 				
 			</form>
 			</div>

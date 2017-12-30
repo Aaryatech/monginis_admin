@@ -134,7 +134,7 @@
 							
 							<div class="col-md-2" >MRN Type</div>
 									<div class="col-md-3">
-										<select name="mrn_id" id="mrn_id" class="form-control" tabindex="-1" required>
+										<select name="mrntype" id="mrntype" class="form-control" tabindex="-1" required>
 									
 										<option selected value="">Select MRN Type</option>
 											
@@ -185,7 +185,7 @@
 													<c:otherwise>
 													  <div class="col-md-2" >Against PO</div>
 									<div class="col-md-3">
-										<select name="po_id" id="po_id" class="form-control" tabindex="6">
+										<select name="po_id" id="po_id" class="form-control" tabindex="6" required>
 											<option value=""> select</option>
 											<option value="1">Yes</option>
 											<option value="2">No</option>
@@ -222,8 +222,8 @@
 												</c:when>
 													
 													<c:otherwise>
-													 <select name="poref_id" id="poref_id" class="form-control" tabindex="-1"  disabled >
-														<option selected >Select Po Ref</option>
+													 <select name="poref_id" id="poref_id" class="form-control" tabindex="-1"  disabled>
+														<option value="">Select Po Ref</option>
 											
 														<c:forEach items="${purchaseOrderList}" var="purchaseOrderList">
                                               			<option value="${purchaseOrderList.poId}"><c:out value="${purchaseOrderList.poNo}"></c:out> </option>
@@ -236,7 +236,7 @@
 									
 									<div class="col-md-2">PO Date</div>
 										<div class="col-md-3">
-										<input class="form-control date-picker" id="po_date" size="16"
+										<input class="form-control" id="po_date" size="16"
 											type="text" name="po_date" value="${materialRecNote.poDate}" placeholder="PO Date"  readonly />
 											
 									</div>
@@ -304,14 +304,30 @@
 														 <td align="left" style="color: <c:out value = "${color}"/>"><c:out
 																value="${materialRecNoteDetail.poQty}" /></td>
 																
-														 <td align="left" style="color: <c:out value = "${color}"/>"><input type="text" name='stockQty<c:out
-																value="${materialRecNoteDetail.mrnDetailId}" />'<c:out value = "${textdisable}"/> class="form-control" value=
+																<c:choose>
+													<c:when test="${materialRecNoteDetail.status==1}">
+														
+														<td align="left" style="color: <c:out value = "${color}"/>"><input type="text" name='stockQty<c:out
+																value="${materialRecNoteDetail.mrnDetailId}" />' class="form-control" value=
 																<c:out
-																value="${materialRecNoteDetail.stockQty}" />></td>
+																value="${materialRecNoteDetail.stockQty}" /> readonly></td>
 														 <td align="left" style="color: <c:out value = "${color}"/>"><input type="text" name='rejectedQty<c:out
-																value="${materialRecNoteDetail.mrnDetailId}" />'<c:out value = "${textdisable}"/> class="form-control" value=
+																value="${materialRecNoteDetail.mrnDetailId}" />' class="form-control" value=
 																<c:out
-																value="${materialRecNoteDetail.rejectedQty}" />></td>
+																value="${materialRecNoteDetail.rejectedQty}" /> readonly></td>
+													
+													</c:when>
+												
+													<c:otherwise>
+													<td align="left" style="color: <c:out value = "${color}"/>"><input type="text" name='stockQty<c:out
+																value="${materialRecNoteDetail.mrnDetailId}" />' class="form-control"  required="true" data-rule-number="true"></td>
+														 <td align="left" style="color: <c:out value = "${color}"/>"><input type="text" name='rejectedQty<c:out
+																value="${materialRecNoteDetail.mrnDetailId}" />' class="form-control"  required="true" data-rule-number="true"></td>
+													  
+													</c:otherwise>
+													</c:choose>
+													
+														 
 														<td align="left" style="color: <c:out value = "${color}"/>"><c:out
 																value="${materialRecNoteDetail.poRate}" /></td>
  												 
@@ -339,7 +355,7 @@
 							<div class="col-md-2" >Remark</div>
 									
 									<div class="col-md-3"><input type="text" id="Remark" name="Remark" value="" 
-									class="form-control">
+									class="form-control" >
 									</div>
 									
 							</div><br>
@@ -447,6 +463,8 @@
 				{
 					document.getElementById("poref_id").disabled = false;
 					document.getElementById("po_date").disabled = false;
+					document.getElementById("poref_id").required=true;
+					
 				 
 				 
 				}
@@ -465,7 +483,7 @@
 	$(document).ready(function() { 
 		$('#poref_id').change(
 				function() {
-				 alert("in function");
+				 
 					$.getJSON('${withPoRef}', {
 						
 						poref_id : $(this).val(),
@@ -489,14 +507,14 @@
 													
 						var tr = $('<tr></tr>');
 
-					  	tr.append($('<td></td>').html(srNo+1));			  	
+					  	tr.append($('<td></td>').html(key+1));			  	
 					  	tr.append($('<td></td>').html(itemList.rmName));
 						tr.append($('<td></td>').html(itemList.recdQty));
 						tr.append($('<td></td>').html(itemList.poQty));
 						if(itemList.mrnDetailId!=0)
 							{
-						tr.append($('<td></td>').html("<input type='text' class='form-control' name='stockQty"+itemList.mrnDetailId+"' >"));
-						tr.append($('<td></td>').html("<input type='text' class='form-control' name='rejectedQty"+itemList.mrnDetailId+"' >"));
+						tr.append($('<td></td>').html("<input type='text' class='form-control' name='stockQty"+itemList.mrnDetailId+"' required>"));
+						tr.append($('<td></td>').html("<input type='text' class='form-control' name='rejectedQty"+itemList.mrnDetailId+"' required>"));
 							}
 						else
 							{
@@ -521,15 +539,15 @@
 	$(document).ready(function() { 
 		$('#poref_id').change(
 				function() {
-				 alert("in function");
+				 
 					$.getJSON('${withPoRefDate}', {
 						
 						 
 						ajax : 'true',
 					},
 							function(data) {
-						alert("hiieieie");
-						alert(data);
+						
+						
 						
 						document.getElementById("po_date").value=data[0].poDate;
 						

@@ -143,11 +143,7 @@
 				<!-- <button class="btn btn-info pull-left" style="margin-right: 5px;" >Add
 					New</button> -->
 			</div>
-			<div class="col-md-2">Search</div>
-			<div class="col-md-4">
-				<input type="text" class="form-control">
-			</div>
-			<div class="col-md-2">Party</div>
+			
 
 <br/>
 
@@ -245,27 +241,17 @@
 						<td>
 						
 						<a href="poHeaderWithDetailed/${purchaseorderlist.poId}" class="action_btn" >
-						<abbr title="Edit"><i class="fa fa-list"></i></abbr></a>
+						<abbr title="Detail"><i class="fa fa-list"></i></abbr></a>
 						
 						<c:choose>
 						<c:when test="${purchaseorderlist.poStatus==0}"> 
-							<a href="editPurchaseOrder/${purchaseorderlist.poId}">
-									<span class="glyphicon glyphicon-edit"><abbr title='Edit'></abbr></span></a>
-						
-							<a href="requestPOStoreToPurchase/${purchaseorderlist.poId}">
-          							<span class="glyphicon glyphicon-ok-circle"><abbr title='Approve'></abbr></span> </a>
+							
           					<a href="deletePoRecord/${purchaseorderlist.poId}"
 						onClick="return confirm('Are you sure want to delete this record');"><abbr title='Delete'></abbr><span
 																			class="glyphicon glyphicon-remove"></span></a>
 						
 						</c:when>
-						<c:when test="${purchaseorderlist.poStatus==3}">
-							<a href="editPurchaseOrder/${purchaseorderlist.poId}">
-								<span class="glyphicon glyphicon-edit"><abbr title='Edit'></abbr></span></a>
-								
-							<a href="requestPOStoreToPurchase/${purchaseorderlist.poId}">
-          						<span class="glyphicon glyphicon-ok-circle"><abbr title='Approve'></abbr></span> </a>
-          						
+						<c:when test="${purchaseorderlist.poStatus==3}">		
           					<a href="deletePoRecord/${purchaseorderlist.poId}"
 						onClick="return confirm('Are you sure want to delete this record');"><abbr title='Delete'></abbr><span
 																			class="glyphicon glyphicon-remove"></span></a>

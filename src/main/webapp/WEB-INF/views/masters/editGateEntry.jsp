@@ -322,6 +322,8 @@
 								</div>	
 								
 								
+								
+								<hr/>
 								<div class="box-content">
 									<div class="col-md-2" >Select Raw Material Name</div>
 									<div class="col-md-2">
@@ -356,6 +358,16 @@
 					 
 									</div>
 								</div><br><br><br><br>
+								<div align="center" id="loader" style="display: none">
+
+									<span>
+										<h4>
+									<font color="#343690">Loading</font>
+									</h4>
+									</span> <span class="l-1"></span> <span class="l-2"></span> <span
+						class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
+							<span class="l-6"></span>
+							</div>
 								
 							<div class=" box-content">
 							<div class="row">
@@ -587,6 +599,7 @@
 		{
 			alert("key1"+key);
 			var key=key;
+			$('#loader').show();
 			$
 			.getJSON(
 					'${deleteRmIteminEditGate}',

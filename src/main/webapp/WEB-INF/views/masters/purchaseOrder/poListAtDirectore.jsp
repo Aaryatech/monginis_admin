@@ -217,14 +217,10 @@
 													  				
 																
 						<td>
+						<a href="poHeaderWithDetailed/${purchaseorderlist.poId}" class="action_btn" >
+						<abbr title="Detail"><i class="fa fa-list"></i></abbr></a>
 						
-						<a href="requestPOFinalByDirectore/${purchaseorderlist.poId}">
-          <span class="glyphicon glyphicon-ok-circle"></span>
-        </a>
 						
-						<a href="rejectPODirectoreToPurchase/${purchaseorderlist.poId}"
-						onClick="return confirm('You Want To Reject This Record To Purchase');"><span
-																			class="glyphicon glyphicon-remove"></span></a>
 						
 						</td>
 						

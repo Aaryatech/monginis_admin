@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -21,6 +23,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.MRawMaterial;
 import com.ats.adminpanel.model.MaterialRecieptAcc;
@@ -40,6 +43,7 @@ import com.ats.adminpanel.model.supplierMaster.SupplierDetails;
 import com.ats.adminpanel.model.supplierMaster.TransporterList;
 
 @Controller
+@Scope("session")
 public class MaterialReceiptNoteController {
 
 	public GetRawMaterialDetailList getRawMaterialDetailList = new GetRawMaterialDetailList();
@@ -642,7 +646,7 @@ public class MaterialReceiptNoteController {
 		 * Constants.mainAct = 17; Constants.subAct=184;
 		 */
 
-		int mrnType = Integer.parseInt(request.getParameter("mrn_id"));
+		int mrnType = Integer.parseInt(request.getParameter("mrntype"));
 		int againstpo_id = 0;
 		int poref_id = 0;
 
@@ -809,7 +813,7 @@ public class MaterialReceiptNoteController {
 		model.addObject("polist", purchaseOrderHeaderlist);
 		model.addObject("rawlist", rawlist);
 		model.addObject("materialRecNote", materialRecNoteHeader);
-		model.addObject("materialRecNoteDetail", materialRecNoteHeader.getMaterialRecNoteDetails());
+		model.addObject("materialRecNoteDetail", getmaterialRecNoteDetailslist);
 		model.addObject("purchaseOrderList", getPurchaseOrderList.getPurchaseOrderHeaderList());
 		return model;
 	}
@@ -818,7 +822,11 @@ public class MaterialReceiptNoteController {
 	public @ResponseBody List<MaterialRecNoteDetails> withPo(HttpServletRequest request, HttpServletResponse response) {
 
 		try {
-			System.out.println("in controller");
+			
+			 getmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
+			 System.out.println("null size "+getmaterialRecNoteDetailslist.size());
+			 getmaterialRecNoteDetailslist=materialRecNoteHeader.getMaterialRecNoteDetails();
+			 System.out.println("initial size "+getmaterialRecNoteDetailslist.size());
 			int poId = Integer.parseInt(request.getParameter("poref_id"));
 			System.out.println("poref_id" + poId);
 
@@ -950,6 +958,7 @@ public class MaterialReceiptNoteController {
 			HttpServletResponse response) {
 
 		System.out.println(podate);
+		purchaseOrderDetailedListcomp.get(0).setPoDate(DateConvertor.convertToDMY(purchaseOrderDetailedListcomp.get(0).getPoDate()));
 		return purchaseOrderDetailedListcomp;
 
 	}
@@ -1280,14 +1289,13 @@ public class MaterialReceiptNoteController {
 			for (int i = 0; i < materialRecieptAccList.size(); i++) // cal freight amt, insurance amnt;
 			{
 				materialRecieptAccList.get(i).setDivFactor(materialRecieptAccList.get(i).getValue() / valueTotal * 100);
+				System.out.println("division factor"+materialRecieptAccList.get(i).getDivFactor());
 
 			}
 
 			materialRecNoteHeaderAcc.setBasicValue(valueTotal);
 			materialRecNoteHeaderAcc.setDiscAmt2(discAmtTotal);
-			materialRecNoteHeaderAcc
-					.setDiscAmt((materialRecNoteHeaderAcc.getBasicValue() - materialRecNoteHeaderAcc.getDiscAmt2())
-							* materialRecNoteHeaderAcc.getDiscPer() / 100);
+			materialRecNoteHeaderAcc.setDiscAmt((materialRecNoteHeaderAcc.getBasicValue() - materialRecNoteHeaderAcc.getDiscAmt2())*materialRecNoteHeaderAcc.getDiscPer() / 100);
 			materialRecNoteHeaderAcc.setCgst(cgst);
 			materialRecNoteHeaderAcc.setSgst(sgst);
 			float finalAmt = (materialRecNoteHeaderAcc.getBasicValue() - materialRecNoteHeaderAcc.getDiscAmt2()
@@ -1492,6 +1500,7 @@ public class MaterialReceiptNoteController {
 	@ResponseBody
 	public String submitMaterialAcc(HttpServletRequest request, HttpServletResponse response) {
 
+
 		String booking_date = request.getParameter("booking_date");
 		String invoice_date = request.getParameter("invoice_date");
 		String invoice_no = request.getParameter("invoice_no");
@@ -1500,9 +1509,12 @@ public class MaterialReceiptNoteController {
 		System.out.println("invoice_no" + invoice_no);
 
 		try {
-			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-			Date bookingdate = (Date) formatter.parse(booking_date);
-			Date invoicedate = (Date) formatter.parse(invoice_date);
+			DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+			Date bookingdate = null;
+			Date invoicedate = null;
+			bookingdate=formatter.parse(booking_date);
+			invoicedate=formatter.parse(invoice_date);
+			
 			System.out.println("bookingdate" + bookingdate);
 			System.out.println("invoicedate" + invoicedate);
 

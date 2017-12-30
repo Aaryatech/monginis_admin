@@ -230,32 +230,6 @@
 						<a href="poHeaderWithDetailed/${purchaseorderlist.poId}" class="action_btn" >
 						<abbr title="Edit"><i class="fa fa-list"></i></abbr></a>
 						
-						<c:choose>
-							<c:when test="${purchaseorderlist.poStatus==1}"> 
-								<a href="requestPOPurachaseToDirectore/${purchaseorderlist.poId}">
-          								<span class="glyphicon glyphicon-ok-circle"></span> </a>
-          							
-          						<a href="rejectPOPurachaseToStore/${purchaseorderlist.poId}"
-						onClick="return confirm('You Want To Reject This Record To Store');"><span
-																			class="glyphicon glyphicon-remove"></span></a>
-						
-							</c:when>
-							<c:when test="${purchaseorderlist.poStatus==4}"> 
-								<a href="requestPOPurachaseToDirectore/${purchaseorderlist.poId}">
-          							<span class="glyphicon glyphicon-ok-circle"></span> </a>
-          						
-          						<a href="rejectPOPurachaseToStore/${purchaseorderlist.poId}"
-						onClick="return confirm('You Want To Reject This Record To Store');"><span
-																			class="glyphicon glyphicon-remove"></span></a>
-						
-							</c:when>
-						</c:choose>
-						
-						
-						
-						
-						
-						
 						</td>
 						
 																</tr>

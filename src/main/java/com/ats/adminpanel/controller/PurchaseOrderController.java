@@ -1,5 +1,7 @@
 package com.ats.adminpanel.controller;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -8,25 +10,33 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.InputStreamSource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.amazonaws.services.simpleworkflow.flow.worker.SynchronousActivityTaskPoller;
@@ -58,6 +68,9 @@ import com.sun.javafx.UnmodifiableArrayList;
 @Controller
 @Scope("session")
 public class PurchaseOrderController {
+	
+	@Autowired
+	private JavaMailSender mailSender;
 	
 	public List<PurchaseOrderDetail> purchaseOrderDetailList;
 	public List<SupplierDetails> supplierDetailsList;
@@ -194,6 +207,8 @@ public class PurchaseOrderController {
 			  rawMaterialTaxDetailsList=rest.getForObject(Constants.url + "rawMaterial/getAllRmTaxList", RawMaterialTaxDetailsList.class);
 			System.out.println("RM Tax data : "+rawMaterialTaxDetailsList);
 			
+			List<RmItemGroup> rmItemGroupList=rest.getForObject(Constants.url + "rawMaterial/getAllRmItemGroup", List.class);
+			
 			purchaseOrderHeaderedit.setDelvDateRem(DateConvertor.convertToDMY(purchaseOrderHeaderedit.getDelvDateRem()));
 			purchaseOrderHeaderedit.setQuotationRefDate(DateConvertor.convertToDMY(purchaseOrderHeaderedit.getQuotationRefDate()));
 			
@@ -202,7 +217,8 @@ public class PurchaseOrderController {
 			model.addObject("purchaseOrderDetailedList",editPurchaseOrderDetailList);
 			model.addObject("supplierList", supplierDetailsList);
 			model.addObject("transporterList", transporterList.getTransporterList());
-			model.addObject("RawmaterialList", getRawMaterialDetailList.getRawMaterialDetailsList());
+			model.addObject("RawmaterialList",rmItemGroupList);
+			
 		return model;
 	}
 	
@@ -415,18 +431,41 @@ public class PurchaseOrderController {
 			Info info=rest.postForObject(Constants.url + "purchaseOrder/insertPurchaseOrder",purchaseOrderHeader, Info.class);
 			 System.out.println("Response :"+info.toString());
 			
-			
-			
+			 String phonno = null;
+			 String email = null;
+			 Supplist supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
+			 for(int i=0;i<supplierDetailsList.getSupplierDetailslist().size();i++)
+			 {
+				 if(supplierDetailsList.getSupplierDetailslist().get(i).getSuppId()==purchaseOrderHeader.getSuppId())
+				 {
+					 phonno=supplierDetailsList.getSupplierDetailslist().get(i).getSuppMob1();
+					 email=supplierDetailsList.getSupplierDetailslist().get(i).getSuppEmail1();
+					 break;
+				 }
+			 }
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			 
 			 map.add("authkey", "140742AbB1cy8zZt589c06d5");
-			 map.add("mobiles", "7588519473");
+			 map.add("mobiles", phonno);
 			 map.add("message", "PO Approved");
 			 map.add("sender", "RCONNT");
 			 map.add("route", "4");
 			 map.add("country", "91");
 			 map.add("response", "json");
 			String String=rest.postForObject("http://control.bestsms.co.in/api/sendhttp.php",map, String.class);
+			final String e_mail=email;
+			mailSender.send(new MimeMessagePreparator() {
+
+				@Override
+				public void prepare(MimeMessage mimeMessage) throws Exception {
+					MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+					messageHelper.setTo(e_mail);
+					messageHelper.setSubject("Email Testing");
+					messageHelper.setText("Nana Po Approved");
+
+				}
+
+			});
 			 
 		}catch(Exception e)
 		{
@@ -741,88 +780,93 @@ public class PurchaseOrderController {
 	public @ResponseBody List<PurchaseOrderDetail> addItemToListInOldItemList(HttpServletRequest request,
 		HttpServletResponse response) {
 		
-		 
 		String suppId = request.getParameter("supp_id");
-
 		String poType = request.getParameter("po_type");
 		String poNo = request.getParameter("po_no");
 		String poDate = request.getParameter("po_date");
 		String rm_id = request.getParameter("rm_id");
 		String disc_per = request.getParameter("disc_per");
 		String rmQty = request.getParameter("rm_qty");
+		int taxation = Integer.parseInt(request.getParameter("taxation"));
 		
 		float discPer=Float.parseFloat(disc_per);
 		int rmId=Integer.parseInt(rm_id);
 		System.out.println("Rm Id : "+rmId);
 		
 		int poQty=Integer.parseInt(rmQty);
-		System.out.println("in edit ");
-		PurchaseOrderDetail purchaseOrderDetail=new PurchaseOrderDetail();
-		RestTemplate rest=new RestTemplate();
-		for(int i=0;i<getRawMaterialDetailList.getRawMaterialDetailsList().size();i++)
+		
+		try
 		{
+			PurchaseOrderDetail purchaseOrderDetail=new PurchaseOrderDetail();
 			
-			System.out.println("Raw Material List :"+getRawMaterialDetailList.getRawMaterialDetailsList());
+			  
+			 
 			
-		
-			
-			System.out.println("In 1for"+getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmId());
-			
-			if(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmId()==rmId)
-			{	System.out.println("In 1for");
-				for(int j=0;j<rawMaterialTaxDetailsList.getRawMaterialTaxDetailsList().size();j++)
-				{System.out.println("In 1for");
-					if(rawMaterialTaxDetailsList.getRawMaterialTaxDetailsList().get(j).getTaxId()==getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmTaxId())
-					{System.out.println("In 1if");
-						purchaseOrderDetail.setCgstPer(rawMaterialTaxDetailsList.getRawMaterialTaxDetailsList().get(j).getCgstPer());
-						purchaseOrderDetail.setSgstPer(rawMaterialTaxDetailsList.getRawMaterialTaxDetailsList().get(j).getSgstPer());
-						purchaseOrderDetail.setIgstPer(rawMaterialTaxDetailsList.getRawMaterialTaxDetailsList().get(j).getIgstPer());
-						gstPer=rawMaterialTaxDetailsList.getRawMaterialTaxDetailsList().get(j).getSgstPer()+rawMaterialTaxDetailsList.getRawMaterialTaxDetailsList().get(j).getCgstPer();
-						purchaseOrderDetail.setGstPer(gstPer);
+			purchaseOrderDetail.setCgstPer(getRmRateAndTax.getCgstPer());
+			purchaseOrderDetail.setSgstPer(getRmRateAndTax.getSgstPer());
+			purchaseOrderDetail.setIgstPer(getRmRateAndTax.getIgstPer());
+			 purchaseOrderDetail.setGstPer(getRmRateAndTax.getGstPer());
+		 
+ 
+	 
+ 
+					purchaseOrderDetail.setRmId(rmId);
+				 
+					purchaseOrderDetail.setDelStatus(0);
+					purchaseOrderDetail.setDiscPer(discPer);  //Discount Hard Coded
+					purchaseOrderDetail.setPoDate(poDate);
+				 
+					purchaseOrderDetail.setPoNo(Integer.parseInt(poNo));
+					purchaseOrderDetail.setPoQty(poQty);
+				 
+					
+					if(taxation==1) {
+						 
+					purchaseOrderDetail.setPoRate(getRmRateAndTax.getRateTaxIncl());
+					float poTaxable=poQty*(getRmRateAndTax.getRateTaxIncl());
+					purchaseOrderDetail.setPoTaxable(poTaxable);//-Discount per %
+					float poTotal=(poTaxable*getRmRateAndTax.getGstPer())/100;
+					purchaseOrderDetail.setPoTotal(poTotal);
 					}
-				}
-				System.out.println("11");
-				System.out.println("Raw Material List :"+getRawMaterialDetailList.getRawMaterialDetailsList());
-				int k=0;
-				//purchaseOrderDetail.setCgstPer(10.09f);
-				System.out.println(k++);
-				purchaseOrderDetail.setRmId(rmId);
-				System.out.println(k++);
-				purchaseOrderDetail.setDelStatus(0);
-				purchaseOrderDetail.setDiscPer(discPer);  //Discount Hard Coded
-				purchaseOrderDetail.setPoDate(poDate);
-				System.out.println(k++);
-				purchaseOrderDetail.setPoNo(Integer.parseInt(poNo));
-				purchaseOrderDetail.setPoQty(poQty);
-				System.out.println(k++);
-				purchaseOrderDetail.setPoRate(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmRate());
-				float poTaxable=poQty*(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmRate());
-				System.out.println(k++);
-				purchaseOrderDetail.setPoTaxable(poQty*(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmRate()));//-Discount per %
-				float poTotal=(poTaxable*gstPer)/100;
-				purchaseOrderDetail.setPoTotal(poTotal);
-				System.out.println(k++);
-				purchaseOrderDetail.setPoType(Integer.parseInt(poType));
-				purchaseOrderDetail.setRmId(rmId);
-				purchaseOrderDetail.setRmName(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmName());
-				purchaseOrderDetail.setRmRemark("Remark ");//Remark Hard Coded
-				System.out.println(k++);
-				purchaseOrderDetail.setRmUomId(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmUomId());
-				purchaseOrderDetail.setSpecification(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmSpecification());
-				purchaseOrderDetail.setSuppId(Integer.parseInt(suppId));
-				System.out.println(k++);
+					else if(taxation==2){
+						purchaseOrderDetail.setPoRate(getRmRateAndTax.getRateTaxExtra());
+						float poTaxable=poQty*(getRmRateAndTax.getRateTaxExtra());
+						purchaseOrderDetail.setPoTaxable(poTaxable);//-Discount per %
+						float poTotal=(poTaxable*getRmRateAndTax.getGstPer())/100;
+						purchaseOrderDetail.setPoTotal(poTotal);
+						}
+					 
+					
+					 
+					purchaseOrderDetail.setPoType(Integer.parseInt(poType));
+					purchaseOrderDetail.setRmId(rmId);
+					purchaseOrderDetail.setRmName(getRmRateAndTax.getRmName());
+					purchaseOrderDetail.setRmRemark("Remark ");//Remark Hard Coded
+				 
+					purchaseOrderDetail.setRmUomId(getRmRateAndTax.getRmUomId());
+					purchaseOrderDetail.setSpecification(getRmRateAndTax.getSpecification());
+					purchaseOrderDetail.setSuppId(Integer.parseInt(suppId));
+					purchaseOrderDetail.setSchDays(0);
+					
+					System.out.println("Data "+purchaseOrderDetail.toString());
+					editPurchaseOrderDetailList.add(purchaseOrderDetail);
 				
-				purchaseOrderDetail.setSchDays(0);
+					System.out.println("DataList "+editPurchaseOrderDetailList.toString());
+					  
+				System.out.println("Item Lisst :"+editPurchaseOrderDetailList);
 				
-				editPurchaseOrderDetailList.add(purchaseOrderDetail);
-				System.out.println("Data "+purchaseOrderDetail.toString());
-				System.out.println("DataList "+editPurchaseOrderDetailList.toString());
-			}
+				
+				
+				
+				System.out.println("Item Lisst :"+editPurchaseOrderDetailList);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
 		}
+		 
 		
 		
 		
-		System.out.println("Item Lisst :"+editPurchaseOrderDetailList);
 		return editPurchaseOrderDetailList;
 		
 	}
