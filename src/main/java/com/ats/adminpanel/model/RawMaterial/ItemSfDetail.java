@@ -19,7 +19,7 @@ private int sfDid;
 	private float rmWeight;
 	
 	private int delStatus;
-	
+	 
 	private int rmType;
 	
 	public int getRmType() {
