@@ -44,6 +44,7 @@ import com.ats.adminpanel.model.item.FrItemStock;
 import com.ats.adminpanel.model.item.FrItemStockConfiPostResponse;
 import com.ats.adminpanel.model.item.FrItemStockConfiResponse;
 import com.ats.adminpanel.model.item.FrItemStockConfigure;
+import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.item.FrItemStockConfigurePost;
 import com.ats.adminpanel.model.item.FrItemStockList;
 import com.ats.adminpanel.model.item.GetItemSup;
@@ -69,7 +70,7 @@ public class ItemController {
 	public static CategoryListResponse categoryListResponse;
 
 	public static List<MCategoryList> itemsWithCategoriesList;
-	public static int settingValue;
+	public  int settingValue;
 
 	public static List<FrItemStockConfigurePost> frItemStockConfigureList;
 
@@ -78,7 +79,7 @@ public class ItemController {
 	public static List<GetPrevItemStockResponse> getPrevItemStockResponsesList;
 
 	ArrayList<String> tempItemList;
-	public static int  catId = 0; 
+	public  int  catId = 0; 
 
 	@RequestMapping(value = "/addItem", method = RequestMethod.GET)
 	public ModelAndView showAddCategory(HttpServletRequest request, HttpServletResponse response) {
@@ -145,8 +146,11 @@ public class ItemController {
 
 			FrItemStockConfiResponse frItemStockConfiResponse = restTemplate
 					.getForObject(Constants.url + "getfrItemConfSetting", FrItemStockConfiResponse.class);
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-			List<FrItemStockConfigure> frItemStockConfigures = new ArrayList<FrItemStockConfigure>();
+
+			/*List<FrItemStockConfigure> frItemStockConfigures = new ArrayList<FrItemStockConfigure>();
 
 			frItemStockConfigures = frItemStockConfiResponse.getFrItemStockConfigure();
 
@@ -159,9 +163,18 @@ public class ItemController {
 				}
 
 			}
+*/
+			String settingKey = "frItemStockType";
 
-			System.out.println("settingValue-------------------------------------------==" + settingValue);
+			map.add("settingKeyList", settingKey);
 
+			FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue",
+					map, FrItemStockConfigureList.class);
+
+			System.out.println("SettingKeyList" + settingList.toString());
+
+			System.out.println("settingValue-------------------------------------------==" + settingList.getFrItemStockConfigure().get(0).getSettingValue());
+			settingValue=settingList.getFrItemStockConfigure().get(0).getSettingValue();
 			CategoryListResponse itemsWithCategoryResponseList = restTemplate
 					.getForObject(Constants.url + "showAllCategory", CategoryListResponse.class);
 
@@ -215,7 +228,14 @@ public class ItemController {
 
 		try {
 
-			catId = Integer.parseInt(request.getParameter("cat_name"));
+			
+			
+		String	catIds = request.getParameter("cat_name");
+		if(catIds==null || catIds=="") {
+			catId=catId;
+		}else {
+			catId=Integer.parseInt(catIds);
+		}
 			System.out.println("cat Id "+catId);
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();

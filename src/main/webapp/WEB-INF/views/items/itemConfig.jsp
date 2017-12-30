@@ -230,7 +230,7 @@
 																						id="${item.itemId}min${count.index}"
 																						placeholder="Min" class="form-control"
 																						data-rule-required="true" style="width: 65px"
-																						value="${stDetails.minQty}" onchange="validateMinQty(this.id)" />
+																						value="${stDetails.minQty}" />
 																				</div>
 
 																				<div align="center"
@@ -241,7 +241,7 @@
 																						placeholder="Max" class="form-control"
 																						data-rule-required="true" style="width: 65px"
 																						value="${stDetails.maxQty}"
-																						onchange="validateMaxQty(this.id)" />
+																						/>
 																				</div>
 
 																				<div align="center"
@@ -252,7 +252,7 @@
 																						placeholder="reorder" class="form-control"
 																						data-rule-required="true" style="width: 65px"
 																						value="${stDetails.reorderQty}"
-																						onchange="validateReOrder(this.id)" />
+																						onblur="enableSubmit(${item.itemId},${count.index});" />
 																				</div></td>
 
 
@@ -272,7 +272,7 @@
 														<div
 															class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-5">
 															<input type="submit" class="btn btn-primary"
-																value="Submit" id="callSubmit">
+																value="Submit" id="callSubmit" style="display: none;" />
 														</div>
 													</div>
 
@@ -306,6 +306,7 @@
 		$(document).ready(function() {
 			$('#callSubmit').submit(function() {
 				
+				
 				var cat_id=$("#cat_name");
 				$.ajax({
 
@@ -321,37 +322,55 @@
 
 	<script>
 	
-	var minQty,maxQty,reOrderQty;
-	
-	function validateMaxQty(maxId){
-		
-		alert(maxId);
-		maxQty=document.getElementById(''+maxId).value;
-		alert(maxQty);
-	}
-	
-	function validateMinQty(minId){
-		
-		alert(minId);
-		minQty=document.getElementById(''+minId).value;
-		alert(minQty);
-	}
-		function validateReOrder(reOrderId){
+		function validateReOrder(itemId,index){
+			//$('#callSubmit').style.display="block";
+			// document.getElementById("callSubmit").style.display="none";
+			var isSubmit=true;
 			
-		alert(reOrderId);
-		reOrderQty=document.getElementById(''+reOrderId).value;
-		alert(reOrderQty);
+		var reOrderQty=document.getElementById(itemId+'reorder'+index).value;
+		var min=document.getElementById(itemId+'min'+index).value;
 		
-		if(maxQty < minQty)
-			alert("Enter max qty > minQty");
+		var max=document.getElementById(itemId+'max'+index).value;
 		
-		if(reOrderQty > maxQty)
-			alert("Enter reOrderQty < maxQty");
+		alert("min= "+min);
+		alert("max= "+max);
+		alert("reorder "+reOrderQty);
+
+		if(max<=min){
+			alert("Enter max qty greater than minQty");
+		isSubmit=false;
+		 //document.getElementById("callSubmit").style.display="none";
+
+		}
+		else if(reOrderQty>max||reOrderQty<=min){
+			alert("Enter reOrderQty Between Min And Max Qty");
+			isSubmit=false;
+		 //document.getElementById("callSubmit").style.display="none";
+
+			}
 		
+		return isSubmit;
 		
 	}
-	
-	
+		function enableSubmit(itemId,index){
+			 document.getElementById("callSubmit").style.display="none";
+
+			var flag=validateReOrder(itemId,index);
+			if(flag==true){
+			 document.getElementById("callSubmit").style.display="block";
+
+			}else{
+				// document.getElementById("callSubmit").style.display="none";
+
+				
+				document.getElementById(itemId+'reorder'+index).value=0;
+				document.getElementById(itemId+'min'+index).value=0;
+				document.getElementById(itemId+'max'+index).value=0;
+				 document.getElementById("callSubmit").style.display="block";
+
+				
+			}
+		}
 	
 	</script>
 
