@@ -96,7 +96,8 @@
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 	<c:url var="gateEntryList" value="/gateEntryList"></c:url>
-
+	<c:url var="editRmQtyOnGate" value="/editRmQtyOnGate"></c:url>
+	<c:url var="deleteRmItem" value="/deleteRmItem"></c:url>
 	
 
 		<!-- BEGIN Sidebar -->
@@ -146,7 +147,7 @@
 
 
 						<div class="box-content">
-						  <div class="box">
+						  
 							<form action="${pageContext.request.contextPath}/materialReceiptStore" class="form-horizontal"
 								method="post" id="validation-form">
 
@@ -219,8 +220,7 @@
 									<div class="col-md-2" for="LR No">LR No</div>
 									<div class="col-md-3">
 										<input type="text" name="lr_no" id="lr_no"
-											placeholder="LR No" class="form-control"
-											required />
+											placeholder="LR No" class="form-control" data-rule-required="true" data-rule-number="true" />
 									</div>
 									
 									<div class="col-md-2" for="Transporter">Transporter</div>
@@ -243,30 +243,6 @@
 								
 							</div><br><br><br>
 							
-							
-							<div class="box-content">	
-								 
-									<div class="col-md-2" for="Description of Goods">Description</div>
-									<div class="col-md-3">
-										<textarea type="text" name="description_of_goods" id="description_of_goods"
-											placeholder="Description of Goods" class="form-control"
-											required ></textarea>
-									</div>
-								
-								
-								<div class="col-md-2" for="No of Items">No of Items</div>
-									<div class="col-md-3">
-										<input type="text" name="no_of_items" id="no_of_items"
-											placeholder="No of Items" class="form-control"
-											required/>
-									</div>
-									
-									
-								
-							</div><br><br><br><br><br>
-							
-							
-							
 							<div class="box-content">	
 						
 								<div class="col-md-2" >Remark</div>
@@ -276,11 +252,10 @@
 											required></textarea>
 									</div>
 									
-									<div class="col-md-2" for="Rev Qty">Rev_Qty</div>
+									<div class="col-md-2" for="No of Items">No of Items</div>
 									<div class="col-md-3">
-										<input type="text" name="Rev_Qty" id="Rev_Qty"
-											placeholder="Rev Qty" class="form-control"
-											required />
+										<input type="text" name="no_of_items" id="no_of_items"
+											placeholder="No of Items" class="form-control" data-rule-required="true" data-rule-number="true"/>
 									</div>
 									
 							</div><br><br><br><br><br>
@@ -367,7 +342,7 @@
 									<div class="col-md-2">
 										<input type="text" name="rm_qty" id="rm_qty"
 											placeholder="Qty" class="form-control"
-											required />
+											 data-rule-required="true" data-rule-number="true"/>
 												 
 									</div>
 									
@@ -396,10 +371,9 @@
 								<thead>
 									<tr>
 										<th>Sr.No.</th>
-										<th>Name</th>
-										
-										
+										<th>Name</th> 
 										<th>Qty</th>
+										<th>Action</th>
 
 									</tr>
 								</thead>
@@ -426,7 +400,7 @@
 						</div>
 					</div>
 				</div>
-			</div>
+			
 			<!-- END Main Content -->
 			<footer>
 			<p>2017 © MONGINIS.</p>
@@ -542,8 +516,9 @@
 												  	tr.append($('<td></td>').html(itemList.rmName));
 												  	
 
-												  	tr.append($('<td></td>').html(itemList.recdQty));
-													$('#table_grid tbody').append(tr);
+												  	tr.append($('<td></td>').html('<input type="text" id="recdQty'+key+'" onkeyup="changeQty('+key+');" value="'+itemList.recdQty+'" class="form-control" disabled="true">'));
+												  	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
+												    $('#table_grid tbody').append(tr);
 
 													 
  
@@ -551,6 +526,86 @@
 								});
 
 			 
+		}
+		
+		function edit(key)
+		{
+			alert(key);
+			document.getElementById("recdQty"+key).disabled = false;
+			document.getElementById("edit"+key).style.visibility="hidden";
+			document.getElementById("ok"+key).style.visibility="visible";
+			
+			//style="visibility: hidden;"
+		}
+		function submit(key)
+		{
+			alert("key"+key);
+			var qty=document.getElementById("recdQty"+key).value;
+			document.getElementById("recdQty"+key).disabled = true;
+			document.getElementById("edit"+key).style.visibility="visible";
+			document.getElementById("ok"+key).style.visibility="hidden";
+			alert(qty);
+			$
+			.getJSON(
+					'${editRmQtyOnGate}',
+
+					{
+						 
+						index : key,
+						updateQty : qty,
+					
+						ajax : 'true'
+
+					},
+					function(data) {
+						
+					});
+			
+			
+		}
+		function del(key)
+		{
+			alert("key1"+key);
+			var key=key;
+			$
+			.getJSON(
+					'${deleteRmItem}',
+
+					{
+						 
+						index : key,
+						ajax : 'true'
+
+					},
+					function(data) {
+						
+						$('#table_grid td').remove();
+						$('#loader').hide();
+
+						if (data == "") {
+							alert("No records found !!");
+
+						}
+					 
+
+					  $.each(
+									data,
+									function(key, itemList) {
+									
+
+										var tr = $('<tr></tr>');
+										var tr = $('<tr></tr>');
+										tr.append($('<td></td>').html(key+1));
+										tr.append($('<td></td>').html(itemList.rmName));
+									  	tr.append($('<td></td>').html('<input type="text" id="recdQty'+key+'" onkeyup="changeQty('+key+');" value="'+itemList.recdQty+'" class="form-control" disabled="true">'));
+									  	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
+									    $('#table_grid tbody').append(tr);
+									  	
+									})
+						
+					});
+			
+			
 		}
 	</script>
 		

@@ -3,7 +3,6 @@ package com.ats.adminpanel.controller;
 
 
 import java.text.DateFormat;
-import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -20,16 +19,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Constants;
-import com.ats.adminpanel.model.ErrorMessage;
 import com.ats.adminpanel.model.MRawMaterial;
+import com.ats.adminpanel.model.MaterialRecieptAcc;
 import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;
 import com.ats.adminpanel.model.RawMaterial.RmItemGroup;
-import com.ats.adminpanel.model.materialreceipt.AddPolist;
 import com.ats.adminpanel.model.materialreceipt.GetMaterialRecNoteList;
+import com.ats.adminpanel.model.materialreceipt.GetTaxListByRmId;
 import com.ats.adminpanel.model.materialreceipt.MaterialRecNote;
 import com.ats.adminpanel.model.materialreceipt.MaterialRecNoteDetails;
 import com.ats.adminpanel.model.materialreceipt.Supplist;
-import com.ats.adminpanel.model.purchaseorder.GetPurchaseOrder;
 import com.ats.adminpanel.model.purchaseorder.GetPurchaseOrderList;
 import com.ats.adminpanel.model.purchaseorder.PurchaseOrderDetail;
 import com.ats.adminpanel.model.purchaseorder.PurchaseOrderDetailedList;
@@ -41,21 +39,21 @@ import com.ats.adminpanel.model.supplierMaster.TransporterList;
 @Controller
 public class MaterialReceiptNoteController {
 
-	public static GetRawMaterialDetailList getRawMaterialDetailList = new GetRawMaterialDetailList();
-	public static List<MRawMaterial> rawlist = new ArrayList<MRawMaterial>();
-	public static List<MaterialRecNoteDetails> materialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
+	public GetRawMaterialDetailList getRawMaterialDetailList = new GetRawMaterialDetailList();
+	public List<MRawMaterial> rawlist = new ArrayList<MRawMaterial>();
+	public List<MaterialRecNoteDetails> materialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
 	public List<PurchaseOrderHeader> purchaseOrderHeaderlist = new ArrayList<PurchaseOrderHeader>();
-	public static List<PurchaseOrderDetail> purchaseOrderDetailList = new ArrayList<PurchaseOrderDetail>();
+	public List<PurchaseOrderDetail> purchaseOrderDetailList = new ArrayList<PurchaseOrderDetail>();
 	MaterialRecNote materialRecNoteHeader;
-	public static MaterialRecNote materialRecNote;
+	public MaterialRecNote materialRecNote;
 	
 	
 	MaterialRecNote materialRecNotes;
-	public static  List<MaterialRecNoteDetails> getmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
-	public static  List<MaterialRecNoteDetails> addmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
-	private PurchaseOrderHeader purchaseOrderHeaderfordate;
+	public List<MaterialRecNoteDetails> getmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
+	public List<MaterialRecNoteDetails> addmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
 	private String podate;
-	public static List<PurchaseOrderDetail> purchaseOrderDetailedListcomp;
+	public List<PurchaseOrderDetail> purchaseOrderDetailedListcomp;
+	List<MaterialRecieptAcc> materialRecieptAccList = new ArrayList<MaterialRecieptAcc>();
 	
 	@RequestMapping(value = "/gateEntries", method = RequestMethod.GET)
 	public ModelAndView gateEntries(HttpServletRequest request, HttpServletResponse response) {
@@ -279,6 +277,109 @@ public class MaterialReceiptNoteController {
 		return "redirect:/gateEntries";
 	}
 	
+	
+	
+	@RequestMapping(value = "/gateEntryList", method = RequestMethod.GET)
+	public @ResponseBody List<MaterialRecNoteDetails> gateEntryList(HttpServletRequest request,
+		HttpServletResponse response) {
+		
+		int rmId = Integer.parseInt(request.getParameter("rm_id"));
+		int qty = Integer.parseInt(request.getParameter("rm_qty"));
+		
+		
+		
+		System.out.println(qty);
+		RestTemplate rest=new RestTemplate();
+		getRawMaterialDetailList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterialList", GetRawMaterialDetailList.class);
+		
+		try
+		{
+			
+			
+			for(int i=0;i<getRawMaterialDetailList.getRawMaterialDetailsList().size();i++) {
+				if(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmId()==rmId)
+				{
+					
+					System.out.println("rawMaterialDetails  :"+getRawMaterialDetailList.getRawMaterialDetailsList().get(i).toString());
+					MaterialRecNoteDetails materialRecNoteDetails = new MaterialRecNoteDetails();
+					materialRecNoteDetails.setRmId(rmId);
+					materialRecNoteDetails.setRmName(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmName());
+					materialRecNoteDetails.setRecdQty(qty);
+					materialRecNoteDetails.setMrnNo(""); 
+					materialRecNoteDetails.setRmUom("");
+					System.out.println(materialRecNoteDetails.toString());
+					addmaterialRecNoteDetailslist.add(materialRecNoteDetails);
+					
+				}
+			}
+			System.out.println(addmaterialRecNoteDetailslist.size());
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		
+		return addmaterialRecNoteDetailslist;
+		
+	}
+	@RequestMapping(value = "/editRmQtyOnGate", method = RequestMethod.GET)
+	public @ResponseBody List<MaterialRecNoteDetails> editRmQtyOnGate(HttpServletRequest request,
+		HttpServletResponse response) {
+		
+		int index = Integer.parseInt(request.getParameter("index"));
+		int updateQty = Integer.parseInt(request.getParameter("updateQty"));
+		System.out.println("index"+index);
+		 System.out.println("updateQty"+updateQty);
+		
+		   
+		try
+		{
+			
+			
+			for(int i=0;i<addmaterialRecNoteDetailslist.size();i++) {
+				if(i==index)
+				{
+					
+					addmaterialRecNoteDetailslist.get(index).setRecdQty(updateQty);	
+				}
+			}
+			System.out.println(addmaterialRecNoteDetailslist.toString());
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		
+		return null;
+		
+	}
+	@RequestMapping(value = "/deleteRmItem", method = RequestMethod.GET)
+	public @ResponseBody List<MaterialRecNoteDetails> deleteRmItem(HttpServletRequest request,
+		HttpServletResponse response) {
+		
+		int index = Integer.parseInt(request.getParameter("index"));
+		
+		try
+		{
+			
+			
+			for(int i=0;i<addmaterialRecNoteDetailslist.size();i++) {
+				if(i==index)
+				{
+					addmaterialRecNoteDetailslist.remove(i);
+				}
+			}
+			System.out.println(addmaterialRecNoteDetailslist.size());
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		
+		return addmaterialRecNoteDetailslist;
+		
+	}
+	
 	@RequestMapping(value = "/editGateEntry", method = RequestMethod.GET)
 	public ModelAndView editStoreMaterialReciept(HttpServletRequest request, HttpServletResponse response) {
 	
@@ -287,44 +388,151 @@ public class MaterialReceiptNoteController {
 		addmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
 
 		int mrnId=Integer.parseInt(request.getParameter("mrnId"));
-	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-	map.add("mrnId",mrnId);
-
-
-	RestTemplate rest = new RestTemplate();
-	materialRecNoteHeader = rest.postForObject(Constants.url + "/getMaterialRecNotesHeaderDetails",map, MaterialRecNote.class);
-	getmaterialRecNoteDetailslist = materialRecNoteHeader.getMaterialRecNoteDetails();
-	 
-	System.out.println("material detailed   :"+ materialRecNoteHeader.getMaterialRecNoteDetails());
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("mrnId",mrnId);
 	
 	
-	TransporterList transporterList = rest.getForObject(Constants.url + "/showTransporters",TransporterList.class);
+		RestTemplate rest = new RestTemplate();
+		materialRecNoteHeader = rest.postForObject(Constants.url + "/getMaterialRecNotesHeaderDetails",map, MaterialRecNote.class);
+		getmaterialRecNoteDetailslist = materialRecNoteHeader.getMaterialRecNoteDetails();
+		 
+		System.out.println("material detailed   :"+ materialRecNoteHeader.getMaterialRecNoteDetails());
+		
+		
+		TransporterList transporterList = rest.getForObject(Constants.url + "/showTransporters",TransporterList.class);
+		
+		
+		Supplist supplierDetailsList =  rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
+		 
+		System.out.println(supplierDetailsList.getSupplierDetailslist().toString());
+		
+		
+		
+		GetRawMaterialDetailList getRawMaterialDetail=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterialList", GetRawMaterialDetailList.class);
+		
+		
 	
-	
-	Supplist supplierDetailsList =  rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
-	 
-	System.out.println(supplierDetailsList.getSupplierDetailslist().toString());
-	
-	
-	
-	GetRawMaterialDetailList getRawMaterialDetail=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterialList", GetRawMaterialDetailList.class);
-	
-	
-
-	model.addObject("materialRecNote", materialRecNoteHeader);
-	model.addObject("materialRecNoteDetail", getmaterialRecNoteDetailslist);
-	model.addObject("supplierList",supplierDetailsList.getSupplierDetailslist());
-	model.addObject("transport",transporterList.getTransporterList());
-	model.addObject("rmlist", getRawMaterialDetail.getRawMaterialDetailsList());
-	return model;
+		model.addObject("materialRecNote", materialRecNoteHeader);
+		model.addObject("materialRecNoteDetail", getmaterialRecNoteDetailslist);
+		model.addObject("supplierList",supplierDetailsList.getSupplierDetailslist());
+		model.addObject("transport",transporterList.getTransporterList());
+		model.addObject("rmlist", getRawMaterialDetail.getRawMaterialDetailsList());
+		return model;
 	}
 	
+	@RequestMapping(value = "/addRmitemInEditGateEntry", method = RequestMethod.GET)
+	public @ResponseBody List<MaterialRecNoteDetails> addRmitemInEditGateEntry(HttpServletRequest request,
+		HttpServletResponse response) {
+		
+		int rmId = Integer.parseInt(request.getParameter("rm_id"));
+		int qty = Integer.parseInt(request.getParameter("rm_qty"));
+		
+		
+		
+		System.out.println(qty);
+		RestTemplate rest=new RestTemplate();
+		getRawMaterialDetailList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterialList", GetRawMaterialDetailList.class);
+		
+		try
+		{
+			
+			
+			for(int i=0;i<getRawMaterialDetailList.getRawMaterialDetailsList().size();i++) {
+				if(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmId()==rmId)
+				{
+					
+					System.out.println("rawMaterialDetails  :"+getRawMaterialDetailList.getRawMaterialDetailsList().get(i).toString());
+					MaterialRecNoteDetails materialRecNoteDetails = new MaterialRecNoteDetails();
+					materialRecNoteDetails.setRmId(rmId);
+					materialRecNoteDetails.setRmName(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmName());
+					materialRecNoteDetails.setRecdQty(qty);
+					materialRecNoteDetails.setMrnNo(""); 
+					materialRecNoteDetails.setRmUom("");
+					System.out.println(materialRecNoteDetails.toString());
+					getmaterialRecNoteDetailslist.add(materialRecNoteDetails);
+					
+				}
+			}
+			System.out.println(getmaterialRecNoteDetailslist.size());
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		
+		return getmaterialRecNoteDetailslist;
+		
+	}
+	@RequestMapping(value = "/editRmQtyinEditGate", method = RequestMethod.GET)
+	public @ResponseBody List<MaterialRecNoteDetails> editRmQtyinEditGate(HttpServletRequest request,
+		HttpServletResponse response) {
+		
+		int index = Integer.parseInt(request.getParameter("index"));
+		int updateQty = Integer.parseInt(request.getParameter("updateQty"));
+		System.out.println("index"+index);
+		 System.out.println("updateQty"+updateQty);
+		
+		   
+		try
+		{
+			
+			
+			for(int i=0;i<getmaterialRecNoteDetailslist.size();i++) {
+				if(i==index)
+				{
+					
+					getmaterialRecNoteDetailslist.get(index).setRecdQty(updateQty);	
+				}
+			}
+			System.out.println(getmaterialRecNoteDetailslist.toString());
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		
+		return null;
+		
+	}
+	
+	@RequestMapping(value = "/deleteRmIteminEditGate", method = RequestMethod.GET)
+	public @ResponseBody List<MaterialRecNoteDetails> deleteRmIteminEditGate(HttpServletRequest request,
+		HttpServletResponse response) {
+		
+		int index = Integer.parseInt(request.getParameter("index"));
+		
+		try
+		{
+			
+			
+			for(int i=0;i<getmaterialRecNoteDetailslist.size();i++) {
+				if(i==index)
+				{
+					if(getmaterialRecNoteDetailslist.get(i).getMrnDetailId()!=0)
+					{
+						getmaterialRecNoteDetailslist.get(i).setDelStatus(1);
+						
+					}
+					else
+					{
+						getmaterialRecNoteDetailslist.remove(i);
+					}
+					
+				}
+			}
+			System.out.println(getmaterialRecNoteDetailslist.toString());
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			System.out.println(e.getMessage());
+		}
+		
+		return getmaterialRecNoteDetailslist;
+		
+	}
 	
 	@RequestMapping(value = "/submitEditGateEntry", method = RequestMethod.POST)
 	public String submitEditGateEntry(HttpServletRequest request, HttpServletResponse response) {
-		/*Constants.mainAct = 17;
-		Constants.subAct=184;*/
-		
 		
 		int sup_id = Integer.parseInt(request.getParameter("supp_id"));
 		String mrn_no=request.getParameter("mrn_no");
@@ -354,7 +562,6 @@ public class MaterialReceiptNoteController {
 			//--------------------------------------------
 			materialRecNote.setMrnId(materialRecNote.getMrnId());
 			materialRecNote.setMrnNo(mrn_no);
-			materialRecNote.setGateEntryTime("00:00:00");
 			materialRecNote.setTransportId(tran_id);
 			materialRecNote.setVehicleNo(vehino);
 			materialRecNote.setLrNo(lrno);
@@ -366,15 +573,12 @@ public class MaterialReceiptNoteController {
 			materialRecNote.setGateRemark(remark);
 			
 			System.out.println("SEt header data"+materialRecNote.toString());
-			
-			for(int i=0;i<addmaterialRecNoteDetailslist.size();i++)
+			for(int i=0;i<getmaterialRecNoteDetailslist.size();i++)
 			{
-				
-				MaterialRecNoteDetails materialRecNoteDetails= addmaterialRecNoteDetailslist.get(i);
-				 addmaterialRecNoteDetailslist.get(i).setMrnNo(mrn_no);
-				 addmaterialRecNoteDetailslist.get(i).setRmUom("");
-				getmaterialRecNoteDetailslist.add(materialRecNoteDetails);		
+				getmaterialRecNoteDetailslist.get(i).setMrnNo(mrn_no);
+				getmaterialRecNoteDetailslist.get(i).setSupplierId(sup_id);
 			}
+			
 			materialRecNote.setMaterialRecNoteDetails(getmaterialRecNoteDetailslist);
 			
 			
@@ -501,18 +705,20 @@ public class MaterialReceiptNoteController {
 					{
 						getmaterialRecNoteDetailslist.get(i).setStockQty(0);
 					}
-					if(stock_qty!=null) {
-						System.out.println("Stock Qty   :"+stock_qty);
+					if(rejected_Qty!=null) {
+						System.out.println("rejectedQty   :"+stock_qty);
 						int rejectedQty=Integer.parseInt(rejected_Qty);
-						getmaterialRecNoteDetailslist.get(i).setStockQty(rejectedQty);
-						System.out.println("Stock Qty   :"+rejectedQty);
+						getmaterialRecNoteDetailslist.get(i).setRejectedQty(rejectedQty);
+						System.out.println("rejectedQty   :"+rejectedQty);
 					}
 					else
 					{
-						getmaterialRecNoteDetailslist.get(i).setStockQty(0);
+						getmaterialRecNoteDetailslist.get(i).setRejectedQty(0);
 					}
 					
-					//System.out.println("Stock QTY :"+stockQty+"   REje  :"+rejectedQty);
+					getmaterialRecNoteDetailslist.get(i).setValue(
+							(getmaterialRecNoteDetailslist.get(i).getStockQty()+getmaterialRecNoteDetailslist.get(i).getRejectedQty())
+							*getmaterialRecNoteDetailslist.get(i).getPoRate());
 					
 					
 					 
@@ -544,48 +750,7 @@ public class MaterialReceiptNoteController {
 		
 	
 	
-	@RequestMapping(value = "/gateEntryList", method = RequestMethod.GET)
-	public @ResponseBody List<MaterialRecNoteDetails> gateEntryList(HttpServletRequest request,
-		HttpServletResponse response) {
-		
-		int rmId = Integer.parseInt(request.getParameter("rm_id"));
-		int qty = Integer.parseInt(request.getParameter("rm_qty"));
-		
-		
-		
-		System.out.println(qty);
-		RestTemplate rest=new RestTemplate();
-		getRawMaterialDetailList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterialList", GetRawMaterialDetailList.class);
-		
-	try
-	{
-		
-		
-		for(int i=0;i<getRawMaterialDetailList.getRawMaterialDetailsList().size();i++) {
-			if(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmId()==rmId)
-			{
-				
-				System.out.println("rawMaterialDetails  :"+getRawMaterialDetailList.getRawMaterialDetailsList().get(i).toString());
-				MaterialRecNoteDetails materialRecNoteDetails = new MaterialRecNoteDetails();
-				materialRecNoteDetails.setRmId(rmId);
-				materialRecNoteDetails.setRmName(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmName());
-				materialRecNoteDetails.setRecdQty(qty);
-				materialRecNoteDetails.setMrnNo("");
-				System.out.println(materialRecNoteDetails.toString());
-				addmaterialRecNoteDetailslist.add(materialRecNoteDetails);
-				
-			}
-		}
-		System.out.println(addmaterialRecNoteDetailslist.size());
-	}catch(Exception e)
-	{
-		e.printStackTrace();
-		System.out.println(e.getMessage());
-	}
-		
-		return addmaterialRecNoteDetailslist;
-		
-	}
+	
 	
 	
 	@RequestMapping(value = "/showStoreMaterialReciept", method = RequestMethod.GET)
@@ -699,6 +864,7 @@ public class MaterialReceiptNoteController {
 						getmaterialRecNoteDetailslist.get(j).setPoQty(purchaseDetail.getPoQty());
 						System.out.println("old po rate:   "+ getmaterialRecNoteDetailslist.get(j).toString());
 						getmaterialRecNoteDetailslist.get(j).setPoRate(purchaseDetail.getPoRate());
+						getmaterialRecNoteDetailslist.get(j).setPoId(purchaseDetail.getPoId());
 						
 						System.out.println("new PoRate:   "+getmaterialRecNoteDetailslist.get(j).getPoQty());
 						Issame=1;
@@ -962,6 +1128,442 @@ public class MaterialReceiptNoteController {
 		model.addObject("materialRecNoteList", materialRecNoteList.getMaterialRecNoteList());
 		model.addObject("supplierDetailsList",supplierDetailsList);
 		return model;
+		 
+	}
+	
+	public float valueTotal=0;
+	public float discAmtTotal=0;
+	public float cdAmtTotal=0;
+	public float freightAmtTotal=0;
+	public float insuAmtTotal=0;
+	public float other1=0;
+	public float other2=0;
+	public float taxableAmt=0;
+	public float cgst=0;
+	public float sgst=0;
+	public float igst=0;
+	
+	MaterialRecNote materialRecNoteHeaderAcc = new MaterialRecNote();
+	
+	
+	
+	@RequestMapping(value = "/materialRecieptAccDetail", method = RequestMethod.GET)
+	public ModelAndView materialRecieptAccDetail(HttpServletRequest request, HttpServletResponse response) {
+		valueTotal=0;
+		discAmtTotal=0;
+		cdAmtTotal=0;
+		freightAmtTotal=0;
+		insuAmtTotal=0;
+		other1=0;
+		other2=0;
+		taxableAmt=0;
+		cgst=0;
+		sgst=0;
+		igst=0;
+		
+		int mrnId=Integer.parseInt(request.getParameter("mrnId"));
+		System.out.println("mrnId"+mrnId);
+		ModelAndView model = new ModelAndView("masters/materialRecieptAccDetail");
+		
+		
+		try
+		{
+			List<SupplierDetails> supplierDetailsList=new ArrayList<SupplierDetails>();
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("mrnId",mrnId);
+
+
+			RestTemplate rest = new RestTemplate();
+			materialRecNoteHeaderAcc = rest.postForObject(Constants.url + "/getMaterialRecNotesHeaderDetails",map, MaterialRecNote.class);
+			System.out.println("materialRecNoteHeaderAcc"+materialRecNoteHeaderAcc.getMaterialRecNoteDetails().toString());
+			supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplier", List.class);
+			
+			int poId=materialRecNoteHeaderAcc.getPoId();
+			System.out.println("poId"+poId);
+			PurchaseOrderHeader purchaseOrderHeader = new PurchaseOrderHeader();
+			if(poId!=0)
+			{
+				map = new LinkedMultiValueMap<String,Object>();
+				map.add("poId", poId);
+				
+				
+				purchaseOrderHeader=rest.postForObject(Constants.url + "purchaseOrder/getpurchaseorderHeader",map, PurchaseOrderHeader.class);
+				System.out.println("purchaseOrderHeader "+purchaseOrderHeader.toString());
+			}
+				
+			
+			String rmId = new String();
+			for(int i=0;i<materialRecNoteHeaderAcc.getMaterialRecNoteDetails().size();i++)
+			{
+				rmId=rmId+","+materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getRmId();
+			}
+			
+			System.out.println("rmId "+rmId);
+			
+			map = new LinkedMultiValueMap<String,Object>();
+			map.add("rmId", rmId);
+			GetTaxListByRmId getTaxListByRmId = rest.postForObject(Constants.url + "getTaxByRmId",map, GetTaxListByRmId.class);
+			
+			System.out.println("getTaxListByRmId "+getTaxListByRmId.getGetTaxByRmIdList());
+			
+			materialRecieptAccList = new ArrayList<MaterialRecieptAcc>();
+			MaterialRecieptAcc materialRecieptAcc = new MaterialRecieptAcc();
+			
+			
+			for(int i=0;i<materialRecNoteHeaderAcc.getMaterialRecNoteDetails().size();i++)
+			{
+				materialRecieptAcc = new MaterialRecieptAcc();
+				if(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getRecdQty()!=0)
+				{
+					materialRecieptAcc.setMrnDetailedId(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getMrnDetailId());
+					materialRecieptAcc.setItem(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getRmName());
+					if(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getPoId()!=0)
+						{
+							materialRecieptAcc.setIncldTax(purchaseOrderHeader.getTaxationRem());
+						}
+					else
+						{
+							materialRecieptAcc.setIncldTax(0);
+						}
+					
+					materialRecieptAcc.setPoRate(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getPoRate());
+					materialRecieptAcc.setReciedvedQty(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getRecdQty());
+					
+					materialRecieptAcc.setRmId(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getRmId());
+					
+					for(int j=0;j<getTaxListByRmId.getGetTaxByRmIdList().size();j++)
+					{
+						if(getTaxListByRmId.getGetTaxByRmIdList().get(j).getRmId()==materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getRmId())
+						{
+							materialRecieptAcc.setGst(getTaxListByRmId.getGetTaxByRmIdList().get(j).getCgstPer()+getTaxListByRmId.getGetTaxByRmIdList().get(j).getSgstPer());
+							materialRecieptAcc.setCgst(getTaxListByRmId.getGetTaxByRmIdList().get(j).getCgstPer());
+							materialRecieptAcc.setSgst(getTaxListByRmId.getGetTaxByRmIdList().get(j).getSgstPer());
+							materialRecieptAcc.setIgst(getTaxListByRmId.getGetTaxByRmIdList().get(j).getIgstPer());
+							break;
+							
+						}
+					}
+					if(materialRecieptAcc.getIncldTax()==1)
+					{
+						materialRecieptAcc.setRateCal(materialRecieptAcc.getPoRate()/(1+materialRecieptAcc.getGst()/100));
+					}
+					else
+					{
+						materialRecieptAcc.setRateCal(materialRecieptAcc.getPoRate());
+					}
+					
+					materialRecieptAcc.setValue(materialRecieptAcc.getReciedvedQty()*materialRecieptAcc.getRateCal());
+					valueTotal=valueTotal+materialRecieptAcc.getValue();// for calculate total Value
+					System.out.println("valueTotal"+valueTotal);
+					
+					materialRecieptAcc.setDiscPer(0);
+					materialRecieptAcc.setDiscAmt(0);
+					discAmtTotal=discAmtTotal+materialRecieptAcc.getDiscAmt();
+					System.out.println("discAmtTotal"+discAmtTotal);
+					
+					materialRecieptAcc.setCdPer(0);
+					materialRecieptAcc.setCdAmt(0);
+					materialRecieptAcc.setDivFactor(0);
+					materialRecieptAcc.setInsuAmt(0);
+					materialRecieptAcc.setFreightAmt(0);
+					materialRecieptAcc.setOther1(0);
+					materialRecieptAcc.setOther2(0);
+					
+					materialRecieptAcc.setCess(0);
+					materialRecieptAcc.setTaxableAmt(materialRecieptAcc.getValue()-materialRecieptAcc.getDiscAmt()-materialRecieptAcc.getCdAmt()
+							+(materialRecieptAcc.getFreightAmt()+materialRecieptAcc.getInsuAmt()+materialRecieptAcc.getOther1()+materialRecieptAcc.getOther2()));
+					taxableAmt=taxableAmt+materialRecieptAcc.getTaxableAmt();
+					System.out.println("taxableAmt"+taxableAmt);
+					
+					materialRecieptAcc.setCgstAmt(materialRecieptAcc.getTaxableAmt()*materialRecieptAcc.getCgst()/100);
+					cgst=cgst+materialRecieptAcc.getCgstAmt();
+					System.out.println("cgst"+cgst);
+					
+					materialRecieptAcc.setSgstAmt(materialRecieptAcc.getTaxableAmt()*materialRecieptAcc.getSgst()/100);
+					sgst=sgst+materialRecieptAcc.getSgstAmt();
+					System.out.println("sgst"+sgst);
+					
+					
+					materialRecieptAcc.setIgstAmt(0);
+					materialRecieptAcc.setCessAmt(0);
+					materialRecieptAccList.add(materialRecieptAcc);
+					
+				}
+				
+				
+				
+			}
+			
+			
+			for(int i=0;i<materialRecieptAccList.size();i++) //cal freight amt, insurance amnt;
+			{
+				materialRecieptAccList.get(i).setDivFactor(materialRecieptAccList.get(i).getValue()/valueTotal*100);
+				
+				
+			}
+			
+			
+			
+			materialRecNoteHeaderAcc.setBasicValue(valueTotal);
+			materialRecNoteHeaderAcc.setDiscAmt2(discAmtTotal);
+			materialRecNoteHeaderAcc.setDiscAmt((materialRecNoteHeaderAcc.getBasicValue()-materialRecNoteHeaderAcc.getDiscAmt2())*materialRecNoteHeaderAcc.getDiscPer()/100);
+			materialRecNoteHeaderAcc.setCgst(cgst);
+			materialRecNoteHeaderAcc.setSgst(sgst);
+			float finalAmt=(materialRecNoteHeaderAcc.getBasicValue()-materialRecNoteHeaderAcc.getDiscAmt2()-materialRecNoteHeaderAcc.getDiscAmt())
+					+(materialRecNoteHeaderAcc.getFreightAmt()+materialRecNoteHeaderAcc.getInsuranceAmt()+other1+other2+materialRecNoteHeaderAcc.getCgst()+
+							materialRecNoteHeaderAcc.getSgst()+materialRecNoteHeaderAcc.getIgst()+materialRecNoteHeaderAcc.getCess()+materialRecNoteHeaderAcc.getRoundOff());
+			materialRecNoteHeaderAcc.setBillAmount(finalAmt);
+			
+			System.out.println("materialRecieptAccList "+materialRecieptAccList.toString());
+			
+			System.out.println("Supplier List :"+supplierDetailsList.toString());
+			model.addObject("materialRecNoteHeader",materialRecNoteHeaderAcc);
+			model.addObject("supplierDetailsList",supplierDetailsList);
+			model.addObject("materialRecieptAccList",materialRecieptAccList);
+			
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return model;
+		 
+	}
+	
+	@RequestMapping(value = "/updatedetailed", method = RequestMethod.GET)
+	@ResponseBody
+	public List<MaterialRecieptAcc> updatedetailed(HttpServletRequest request, HttpServletResponse response) {
+		
+		int index=Integer.parseInt(request.getParameter("index"));
+		float poRate=Float.parseFloat(request.getParameter("poRate"));
+		float discPer=Float.parseFloat(request.getParameter("discPer"));
+		System.out.println("index"+index);
+		System.out.println("discPer"+discPer);System.out.println("poRate"+poRate);
+		
+		
+		try
+		{
+			
+			for(int i=0;i<materialRecieptAccList.size();i++)
+			{
+				if(i==index)
+				{
+					materialRecieptAccList.get(i).setPoRate(poRate);
+					materialRecieptAccList.get(i).setRateCal(materialRecieptAccList.get(i).getPoRate()/(1+materialRecieptAccList.get(i).getGst()/100));
+					materialRecieptAccList.get(i).setValue(materialRecieptAccList.get(i).getReciedvedQty()*materialRecieptAccList.get(i).getRateCal());
+					materialRecieptAccList.get(i).setDiscPer(discPer);
+					materialRecieptAccList.get(i).setDiscAmt(materialRecieptAccList.get(i).getValue()*materialRecieptAccList.get(i).getDiscPer()/100);
+					materialRecieptAccList.get(i).setTaxableAmt(materialRecieptAccList.get(i).getValue()-materialRecieptAccList.get(i).getDiscAmt()-materialRecieptAccList.get(i).getCdAmt()
+							+(materialRecieptAccList.get(i).getFreightAmt()+materialRecieptAccList.get(i).getInsuAmt()+materialRecieptAccList.get(i).getOther1()+materialRecieptAccList.get(i).getOther2()));
+					materialRecieptAccList.get(i).setCdAmt((materialRecieptAccList.get(i).getValue()-materialRecieptAccList.get(i).getDiscAmt())*materialRecieptAccList.get(i).getCdPer()/100);
+					
+					materialRecieptAccList.get(i).setCgstAmt(materialRecieptAccList.get(i).getTaxableAmt()*materialRecieptAccList.get(i).getCgst()/100);
+					materialRecieptAccList.get(i).setSgstAmt(materialRecieptAccList.get(i).getTaxableAmt()*materialRecieptAccList.get(i).getSgst()/100);
+					
+				}
+				
+				
+			}
+			valueTotal=0;
+			discAmtTotal=0;
+			cdAmtTotal=0;
+			freightAmtTotal=0;
+			insuAmtTotal=0;
+			other1=0;
+			other2=0;
+			taxableAmt=0;
+			cgst=0;
+			sgst=0;
+			igst=0;
+			for(int i=0;i<materialRecieptAccList.size();i++)
+			{
+				valueTotal=valueTotal+materialRecieptAccList.get(i).getValue();
+				discAmtTotal=discAmtTotal+materialRecieptAccList.get(i).getDiscAmt();
+				taxableAmt=taxableAmt+materialRecieptAccList.get(i).getTaxableAmt();
+				cgst=cgst+materialRecieptAccList.get(i).getCgstAmt();
+				sgst=sgst+materialRecieptAccList.get(i).getSgstAmt();
+				
+			}
+			for(int i=0;i<materialRecieptAccList.size();i++) //cal freight amt
+			{
+				materialRecieptAccList.get(i).setDivFactor(materialRecieptAccList.get(i).getValue()/valueTotal*100);
+				
+				
+			}
+			
+			
+			
+			System.out.println("materialRecieptAccList "+materialRecieptAccList.toString());
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return materialRecieptAccList;
+		 
+	}
+	
+	
+	@RequestMapping(value = "/updateHeader", method = RequestMethod.GET)
+	@ResponseBody
+	public MaterialRecNote updateHeader(HttpServletRequest request, HttpServletResponse response) {
+		try
+		{
+			System.out.println("ala");
+			valueTotal=0;
+			discAmtTotal=0;
+			cdAmtTotal=0;
+			freightAmtTotal=0;
+			insuAmtTotal=0;
+			other1=0;
+			other2=0;
+			taxableAmt=0;
+			cgst=0;
+			sgst=0;
+			igst=0;
+			for(int i=0;i<materialRecieptAccList.size();i++)
+			{
+				valueTotal=valueTotal+materialRecieptAccList.get(i).getValue();
+				discAmtTotal=discAmtTotal+materialRecieptAccList.get(i).getDiscAmt();
+				taxableAmt=taxableAmt+materialRecieptAccList.get(i).getTaxableAmt();
+				cgst=cgst+materialRecieptAccList.get(i).getCgstAmt();
+				sgst=sgst+materialRecieptAccList.get(i).getSgstAmt();
+				
+			}
+			for(int i=0;i<materialRecieptAccList.size();i++) //cal freight amt, insurance amnt;
+			{
+				materialRecieptAccList.get(i).setDivFactor(materialRecieptAccList.get(i).getValue()/valueTotal*100);
+				
+				
+			}
+			materialRecNoteHeaderAcc.setBasicValue(valueTotal);
+			materialRecNoteHeaderAcc.setDiscAmt2(discAmtTotal);
+			materialRecNoteHeaderAcc.setDiscAmt((materialRecNoteHeaderAcc.getBasicValue()-materialRecNoteHeaderAcc.getDiscAmt2())*materialRecNoteHeaderAcc.getDiscPer()/100);
+			materialRecNoteHeaderAcc.setCgst(cgst);
+			materialRecNoteHeaderAcc.setSgst(sgst);
+			float finalAmt=(materialRecNoteHeaderAcc.getBasicValue()-materialRecNoteHeaderAcc.getDiscAmt2()-materialRecNoteHeaderAcc.getDiscAmt())
+					+(materialRecNoteHeaderAcc.getFreightAmt()+materialRecNoteHeaderAcc.getInsuranceAmt()+other1+other2+materialRecNoteHeaderAcc.getCgst()+
+							materialRecNoteHeaderAcc.getSgst()+materialRecNoteHeaderAcc.getIgst()+materialRecNoteHeaderAcc.getCess()+materialRecNoteHeaderAcc.getRoundOff());
+			materialRecNoteHeaderAcc.setBillAmount(finalAmt);
+			
+			System.out.println("discAmtTotal"+materialRecNoteHeaderAcc.getDiscAmt());
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return materialRecNoteHeaderAcc;
+		 
+	}
+	
+	@RequestMapping(value = "/updateFreightAmt", method = RequestMethod.GET)
+	@ResponseBody
+	public List<MaterialRecieptAcc> updateFreightAmt(HttpServletRequest request, HttpServletResponse response) {
+		
+		float discPer=Float.parseFloat(request.getParameter("discPer"));
+		float freightAmt=Float.parseFloat(request.getParameter("freightAmt"));
+		float insuranceAmt=Float.parseFloat(request.getParameter("insuranceAmt"));
+		System.out.println("discPer"+discPer);
+		System.out.println("freightAmt"+freightAmt);
+		System.out.println("insuranceAmt"+insuranceAmt);
+		
+		try
+		{
+			materialRecNoteHeaderAcc.setDiscPer(discPer);
+			materialRecNoteHeaderAcc.setFreightAmt(freightAmt);
+			materialRecNoteHeaderAcc.setInsuranceAmt(insuranceAmt);
+			
+			for(int i=0;i<materialRecieptAccList.size();i++)
+			{
+				materialRecieptAccList.get(i).setCdPer(discPer);
+				materialRecieptAccList.get(i).setCdAmt((materialRecieptAccList.get(i).getValue()-materialRecieptAccList.get(i).getDiscAmt())*materialRecieptAccList.get(i).getCdPer()/100);
+				materialRecieptAccList.get(i).setFreightAmt(materialRecieptAccList.get(i).getDivFactor()*freightAmt/100);
+				materialRecieptAccList.get(i).setInsuAmt(materialRecieptAccList.get(i).getDivFactor()*insuranceAmt/100);
+				materialRecieptAccList.get(i).setTaxableAmt(materialRecieptAccList.get(i).getValue()-materialRecieptAccList.get(i).getDiscAmt()-materialRecieptAccList.get(i).getCdAmt()
+						+(materialRecieptAccList.get(i).getFreightAmt()+materialRecieptAccList.get(i).getInsuAmt()+materialRecieptAccList.get(i).getOther1()+materialRecieptAccList.get(i).getOther2()));
+				materialRecieptAccList.get(i).setCgstAmt(materialRecieptAccList.get(i).getTaxableAmt()*materialRecieptAccList.get(i).getCgst()/100);
+				materialRecieptAccList.get(i).setSgstAmt(materialRecieptAccList.get(i).getTaxableAmt()*materialRecieptAccList.get(i).getSgst()/100);
+				
+				
+			}
+			System.out.println("materialRecieptAccList"+materialRecieptAccList.toString());
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return materialRecieptAccList;
+		 
+	}
+	@RequestMapping(value = "/submitMaterialAcc", method = RequestMethod.POST)
+	@ResponseBody
+	public String submitMaterialAcc(HttpServletRequest request, HttpServletResponse response) {
+		
+		String booking_date=request.getParameter("booking_date");
+		String invoice_date=request.getParameter("invoice_date");
+		String invoice_no=request.getParameter("invoice_no");
+		System.out.println("booking_date"+booking_date);
+		System.out.println("invoice_date"+invoice_date);
+		System.out.println("invoice_no"+invoice_no);
+		
+		
+		
+		try
+		{
+			DateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); 
+			Date bookingdate = (Date)formatter.parse(booking_date);
+			Date invoicedate = (Date)formatter.parse(invoice_date);
+			System.out.println("bookingdate"+bookingdate);
+			System.out.println("invoicedate"+invoicedate);
+			
+			materialRecNoteHeaderAcc.setInvBookDate(bookingdate);
+			materialRecNoteHeaderAcc.setInvDate(invoicedate);
+			materialRecNoteHeaderAcc.setInvoiceNumber(invoice_no);
+			materialRecNoteHeaderAcc.setStatus(5);
+			materialRecNoteHeaderAcc.setAccRemark("");
+			materialRecNoteHeaderAcc.setUseridAcc(0);
+			
+			for(int i=0;i<materialRecNoteHeaderAcc.getMaterialRecNoteDetails().size();i++)
+			{
+				for(int j=0;j<materialRecieptAccList.size();j++)
+				{
+					if(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getMrnDetailId()==materialRecieptAccList.get(j).getMrnDetailedId())
+					{
+						
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setPoRate(materialRecieptAccList.get(i).getPoRate());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setValue(materialRecieptAccList.get(i).getValue());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setDiscPer(materialRecieptAccList.get(i).getDiscPer());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setDiscAmt(materialRecieptAccList.get(i).getDiscAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setGstPer(materialRecieptAccList.get(i).getGst());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setFreightAmt(materialRecieptAccList.get(i).getFreightAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setInsurance_amt(materialRecieptAccList.get(i).getInsuAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setCgstPer(materialRecieptAccList.get(i).getCgst());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setCgstRs(materialRecieptAccList.get(i).getCgstAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setSgstPer(materialRecieptAccList.get(i).getSgst());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setSgstRs(materialRecieptAccList.get(i).getSgstAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setIgstPer(materialRecieptAccList.get(i).getIgst());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setIgstRs(materialRecieptAccList.get(i).getIgstAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setCessPer(materialRecieptAccList.get(i).getCess());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setCessRs(materialRecieptAccList.get(i).getCessAmt());
+						
+			
+					}
+				}
+			}
+			RestTemplate rest = new RestTemplate();
+			System.out.println("Update   "+materialRecNoteHeaderAcc.toString());
+			materialRecNoteHeaderAcc=rest.postForObject(Constants.url + "/postMaterialRecNote",materialRecNoteHeaderAcc, MaterialRecNote.class);
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return "redirect:/allMaterialRecieptAccList";
 		 
 	}
 	
