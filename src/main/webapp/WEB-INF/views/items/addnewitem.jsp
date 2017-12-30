@@ -154,7 +154,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="item_name" id="item_name"
 											placeholder="Item Name" class="form-control"
-											data-rule-required="true" data-rule-minlength="3" />
+											data-rule-required="true"  />
 									</div>
 								</div>
 
@@ -306,7 +306,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="item_tax3" id="item_tax3"
 											placeholder="IGST" class="form-control"
-											data-rule-required="true" data-rule-number="true" value="0.0"/>
+											data-rule-required="true" data-rule-number="true" value="0.0" onchange="calTotalGst()"/>
 									</div>
 								</div>
 								<div class="form-group">
@@ -504,12 +504,13 @@ function calTotalGst() {
 	 var igst=parseFloat($("#item_tax3").val());
 	  var cgst=parseFloat($("#item_tax2").val());
 	  var sgst=parseFloat(igst-cgst);
-	 
+	  var totGst=parseFloat(cgst+sgst);
+
 	  document.getElementById("item_tax1")
 		.setAttribute('value', sgst);
 	  
 	  document.getElementById("total_gst_appli")
-		.setAttribute('value', igst);
+		.setAttribute('value', totGst);
 }
 </script>
 

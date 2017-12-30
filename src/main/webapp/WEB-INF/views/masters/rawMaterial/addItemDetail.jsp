@@ -36,7 +36,7 @@
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.css" />
 
-
+  
 
 <!--page specific css styles-->
 
@@ -101,7 +101,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Add Item Detail
+								<i class="fa fa-bars"></i><span>Add Item Detail</span>
 							</h3>
 							<div class="box-tool">
 								<a href="${pageContext.request.contextPath}/itemList">Back to List</a> <a data-action="collapse" href="#"><i
@@ -162,7 +162,7 @@
 
 									<label class="col-sm-3 col-lg-1 control-label">Raw Material</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<select name="rm_id" id="rm_id" class="form-control" placeholder="Raw Material"data-rule-required="true">
+										<select name="rm_id" id="rm_id"class="form-control" placeholder="Raw Material"data-rule-required="true">
 											<option value="0">Select Raw Material</option>
 										    
 								</select>
@@ -193,12 +193,24 @@
 									
 									</div> 
 								</div>
+								
+								
 					<div class="row">
 						<div class="col-md-12" style="text-align: center">
 							<input type="button" class="btn btn-info" value="ADD" name="add" id="add">
-
+                            <input type="button" class="btn btn-info" value="CANCEL" name="cancel" id="cancel">
 
 						</div>
+						<div align="center" id="loader" style="display: none">
+
+					<span>
+						<h4>
+							<font color="#343690">Loading</font>
+						</h4>
+					</span> <span class="l-1"></span> <span class="l-2"></span> <span
+						class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
+					<span class="l-6"></span>
+				</div>
 					</div>
 					</form>
 					</br>
@@ -228,9 +240,10 @@
 														<th width="100" align="left">Item Name</th>
 														<th width="100" align="left">RM Type</th>
 														<th width="100" align="left">Raw Material</th>
-														<th width="100" align="left">RM Unit</th>
-														<th width="100" align="left">RM Weight</th>
+<!-- 														<th width="100" align="left">RM Unit</th>
+ -->														<th width="100" align="left">RM Weight</th>
 														<th width="100" align="left">RM Qty</th>
+														<th width="100" align="left">No. Of Pieces/Item</th>
 														<th width="81" align="left">Action</th>
 													</tr>
 												</thead>
@@ -264,16 +277,17 @@
 															
 																	<td align="left"><c:out
 																	value="${itemDetailList.rmName}"></c:out></td>
-															<td align="left"><c:out
-																	value="${itemDetailList.rmUomId}"></c:out></td>	
+														<%-- 	<td align="left"><c:out
+																	value="${itemDetailList.rmUomId}"></c:out></td>	 --%>
 															<td align="left"><c:out
 																	value="${itemDetailList.rmWeight}"></c:out></td>
 															<td align="left"><c:out
 																	value="${itemDetailList.rmQty}"></c:out></td>						
-																	
-															<td align="left"><a href='#' class='action_btn' onclick="editItemDetail(${count.index})"> <abbr title='edit'> <i class='fa fa-edit  fa-lg' ></i></abbr> </a>&nbsp;&nbsp;&nbsp;&nbsp;
+																<td align="left"><c:out
+																	value="${itemDetailList.noOfPiecesPerItem}"></c:out></td>	
+															<td align="left"><a href='#' class='action_btn' onclick="editItemDetail(${count.index})"> <abbr title='edit'> <i class='fa fa-edit  fa-lg' ></i></abbr> </a>
 
-		                                                    <a href='#' class='action_btn'onclick="deleteItemDetail(${count.index})"><abbr title='Delete'><i class='fa fa-trash-o  fa-lg'></i></abbr></a>														</td>
+		                                                    <a href='#' class='action_btn'onclick="deleteItemDetail(${count.index});"><abbr title='Delete'><i class='fa fa-trash-o fa-lg'></i></abbr></a>	</td>
 														     
 														     </c:when>
        															  <c:otherwise>
@@ -378,6 +392,7 @@
 				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 			<script type="text/javascript"
 				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
+
 				
 </body>
 
@@ -386,11 +401,14 @@ $(document).ready(function() {
 	$('#rm_type').change(
 			function() {
 
+				$('#loader').show();
 
 	$.getJSON('${getRawMaterialList}', {
 					rm_type : $(this).val(),
 					ajax : 'true',
 				},  function(data) {
+					$('#loader').hide();
+
 					var html = '<option value="0" selected >Select Raw Material</option>';
 					
 					var len = data.length;
@@ -406,11 +424,43 @@ $(document).ready(function() {
 
 });
 </script>
+<script type="text/javascript">
+function appendRmItem(rmId) {
+	var rmType = $("#rm_type").val();
 
+	$('#loader').show();
+
+	$.getJSON('${getRawMaterialList}', {
+					rm_type : rmType,
+					ajax : 'true',
+				},  function(data) {
+					$('#loader').hide();
+
+					var html = '<option value="0" selected >Select Raw Material</option>';
+					
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						if(data[i].id==rmId)
+							{
+							html += '<option value="' + data[i].id + '" selected>'
+							+ data[i].name + '</option>';
+							}
+						else
+							{
+						html += '<option value="' + data[i].id + '">'
+								+ data[i].name + '</option>';
+							}
+					}
+					html += '</option>';
+					$('#rm_id').html(html);
+				});
+}
+</script>
 <script type="text/javascript">
 
 var editFlag=false;
 var key1=0;
+//$('span').text("Add Item Detail");
 
 $(document).ready(function() {
 	$("#add").click(function() {
@@ -439,7 +489,7 @@ $(document).ready(function() {
 	if(editFlag==true)
 	{
 		editFlag=false;
-		
+
 		$.getJSON('${editItem}', {
 			
 			itemId : itemId,
@@ -454,7 +504,6 @@ $(document).ready(function() {
 			
 			ajax : 'true',
 		},  function(data) { 
-	 
 			 //$('#loader').hide();
 			var len = data.length;
 
@@ -486,11 +535,13 @@ $(document).ready(function() {
 
 		  	tr.append($('<td></td>').html(item.rmName));
 
-		  	tr.append($('<td></td>').html(item.rmUomId));
-		  	
+/* 		  	tr.append($('<td></td>').html(item.rmUomId));
+ */		  	
 		  	tr.append($('<td></td>').html(item.rmWeight));
 		  	
 		  	tr.append($('<td></td>').html(item.rmQty));
+		  	
+		  	tr.append($('<td></td>').html(item.noOfPiecesPerItem));
 		  	
 		 	tr.append($('<td></td>').html("<a href='#' class='action_btn' onclick=editItemDetail("+key+")> <abbr title='edit'> <i class='fa fa-edit  fa-lg' ></i></abbr> </a> <a href='#' class='action_btn'onclick=deleteItemDetail("+key+ ")><abbr title='Delete'><i class='fa fa-trash-o  fa-lg'></i></abbr></a>"));
 		  
@@ -505,6 +556,7 @@ $(document).ready(function() {
 	}//if edit false then else....
 	else
 		{
+
 //	alert(rmId);
 	$.getJSON('${insertItemDetail}', {
 		
@@ -551,11 +603,14 @@ $(document).ready(function() {
 
 	  	tr.append($('<td></td>').html(item.rmName));
 
-	  	tr.append($('<td></td>').html(item.rmUomId));
-	  	
+/* 	  	tr.append($('<td></td>').html(item.rmUomId));
+ */	  	
 	  	tr.append($('<td></td>').html(item.rmWeight));
 	  	
 	  	tr.append($('<td></td>').html(item.rmQty));
+	  	
+	  	tr.append($('<td></td>').html(item.noOfPiecesPerItem));
+
 	  	
 	 	tr.append($('<td></td>').html("<a href='#' class='action_btn' onclick=editItemDetail("+key+")> <abbr title='edit'> <i class='fa fa-edit  fa-lg' ></i></abbr> </a> <a href='#' class='action_btn'onclick=deleteItemDetail("+key+ ")><abbr title='Delete'><i class='fa fa-trash-o  fa-lg'></i></abbr></a>"));
 	  
@@ -576,47 +631,38 @@ $(document).ready(function() {
 });
 
 });
-
+$(document).ready(function() {
+	$("#cancel").click(function() {
+		 document.getElementById("rm_weight").value="";
+		 document.getElementById("rm_type").selectedIndex = "0"; 
+		 document.getElementById("rm_id").selectedIndex = "0"; 
+		 document.getElementById("rm_qty").value="";
+		 document.getElementById("base_qty").value ="";
+		
+	});
+});
 
 function editItemDetail(token){
  
 	editFlag=true;
-	
 	$.getJSON('${editItemDetail}', {
 		
 		key:token,
 		ajax : 'true',
 
 	}, function(data) {
-		//alert(data);
+	   
+
 		var len = data.length;
- 
+
 		         document.getElementById("rm_weight").value=data.rmWeight;
-		       
 				 document.getElementById("rm_qty").value=data.rmQty;
 				 document.getElementById("rm_type").options.selectedIndex =data.rmType;
 				 document.getElementById("base_qty").value =data.noOfPiecesPerItem;
-					$.getJSON('${getRawMaterialList}', {
-						rm_type : data.rmType,
-						ajax : 'true',
-					},  function(data) {
-						//var html = '<option value="">Select Raw Material</option>';
-						
-						var len = data.length;
-						for ( var i = 0; i < len; i++) {
-							html += '<option value="' + data[i].id + '">'
-									+ data[i].name + '</option>';
-						}
-						
-						html += '</option>';
-						$('#rm_id').html(html);
-					});
-					//alert(data.rmId)
-					 document.getElementById("rm_id").value =data.rmId;
-
-				
+				 document.getElementById("rm_id").options.selectedIndex =data.rmId;
 				 key1=token;
-	 
+				 
+					appendRmItem(data.rmId);
 
 		});
 	
@@ -654,7 +700,9 @@ function validation() {
 </script>
 <script type="text/javascript">
 function deleteItemDetail(key){
-
+	var isDel=confirm('Are you sure want to delete this record');
+	if(isDel==true)
+	{
 	$.getJSON('${deleteItemDetail}', {
 		
 		key:key,
@@ -695,12 +743,14 @@ function deleteItemDetail(key){
 
 	  	tr.append($('<td></td>').html(item.rmName));
 
-	  	tr.append($('<td></td>').html(item.rmUomId));
-	  	
+/* 	  	tr.append($('<td></td>').html(item.rmUomId));
+ */	  	
 	  	tr.append($('<td></td>').html(item.rmWeight));
 	  	
 	  	tr.append($('<td></td>').html(item.rmQty));
 	  	
+	  	tr.append($('<td></td>').html(item.noOfPiecesPerItem));
+
 	 	tr.append($('<td></td>').html("<a href='#' class='action_btn' onclick=editItemDetail("+key+")> <abbr title='edit'> <i class='fa fa-edit  fa-lg' ></i></abbr> </a> <a href='#' class='action_btn'onclick=deleteItemDetail("+key+ ")><abbr title='Delete'><i class='fa fa-trash-o  fa-lg'></i></abbr></a>"));
 	  
 	  //	tr.append($('<td></td>').html());
@@ -711,6 +761,11 @@ function deleteItemDetail(key){
 		})
 		
 		});
+	}
+	else
+		{
+		isDel=false;
+		}
 }
 </script>
 
@@ -775,7 +830,7 @@ function deleteItemDetail(key){
 
 	/* 	});
 });
-}); */ */
+}); */
 
 </script>
 </html>

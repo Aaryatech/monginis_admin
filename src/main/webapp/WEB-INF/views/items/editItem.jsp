@@ -133,7 +133,7 @@
 										<input type="text" name="item_name" id="item_name"
 											value="${item.itemName}" placeholder="Item Name"
 											class="form-control" data-rule-required="true"
-											data-rule-minlength="3" />
+											/>
 									</div>
 								</div>
 
@@ -308,11 +308,11 @@
 									</div>
 								</div>
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">SGST %</label>
+									<label class="col-sm-3 col-lg-2 control-label">IGST %</label>
 									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="item_tax1" id="item_tax1"
-											value="${item.itemTax1}" placeholder="SGST"
-											class="form-control" data-rule-required="true" data-rule-number="true" value="0.0" onchange="calTotalGst()"/>
+										<input type="text" name="item_tax3" id="item_tax3"
+											value="${item.itemTax3}" placeholder="IGST"
+											class="form-control" data-rule-required="true" data-rule-number="true"value="0.0"onchange="calTotalGst()"/>
 									</div>
 								</div>
 								<div class="form-group">
@@ -323,14 +323,16 @@
 											class="form-control" data-rule-required="true" data-rule-number="true" value="0.0" onchange="calTotalGst()"/>
 									</div>
 								</div>
+								
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">IGST %</label>
+									<label class="col-sm-3 col-lg-2 control-label">SGST %</label>
 									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="item_tax3" id="item_tax3"
-											value="${item.itemTax3}" placeholder="IGST"
-											class="form-control" data-rule-required="true" data-rule-number="true"value="0.0"/>
+										<input type="text" name="item_tax1" id="item_tax1"
+											value="${item.itemTax1}" placeholder="SGST"
+											class="form-control" data-rule-required="true" data-rule-number="true" value="0.0" />
 									</div>
 								</div>
+								
 								 <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Total GST Applicable %</label>
 									<div class="col-sm-9 col-lg-10 controls">
@@ -455,7 +457,7 @@
 
 														<label class="radio-inline"> <input type="radio"
 															name="grn_two" id="optionsRadios2" checked
-															value="${strGrnAppl}" /> GRN1
+															value="0" /> GRN1
 														</label>
 															<label class="radio-inline"> <input type="radio"
 															name="grn_two" id="optionsRadios2" value="1" />
@@ -475,7 +477,7 @@
 
 														<label class="radio-inline"> <input type="radio"
 															name="grn_two" id="optionsRadios2" 
-															value="${strGrnAppl}" /> GRN1
+															value="0" /> GRN1
 														</label>
 															<label class="radio-inline"> <input type="radio"
 															name="grn_two" id="optionsRadios2" value="1"checked />
@@ -496,7 +498,7 @@
 
 														<label class="radio-inline"> <input type="radio"
 															name="grn_two" id="optionsRadios2" 
-															value="${strGrnAppl}" /> GRN1
+															value="0" /> GRN1
 														</label>
 															<label class="radio-inline"> <input type="radio"
 															name="grn_two" id="optionsRadios2" value="1" />
@@ -529,7 +531,7 @@
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
 										<input type="submit" class="btn btn-primary" value="Submit">
-										<button type="button" class="btn">Cancel</button>
+										<!-- <button type="button" class="btn">Cancel</button> -->
 									</div>
 								</div>
 							</form>
@@ -637,13 +639,16 @@ $(document).ready(function() {
 
 <script>
 function calTotalGst() {
-   
-	  var sgst=parseFloat($("#item_tax1").val());
+	 var igst=parseFloat($("#item_tax3").val());
 	  var cgst=parseFloat($("#item_tax2").val());
-	  var totalGst=parseFloat(cgst+sgst);
-	
+	  var sgst=parseFloat(igst-cgst);
+	  var totGst=parseFloat(cgst+sgst);
+
+	  document.getElementById("item_tax1")
+		.setAttribute('value', sgst);
+	  
 	  document.getElementById("total_gst_appli")
-		.setAttribute('value', totalGst);
+		.setAttribute('value', totGst);
 }
 </script>
 

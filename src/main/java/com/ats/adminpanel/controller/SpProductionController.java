@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -66,17 +67,18 @@ import com.ats.adminpanel.model.spprod.StationWiseCkCount;
 import com.ats.adminpanel.model.spprod.TypeList;
 
 @Controller
+@Scope("session")
 public class SpProductionController {
  
 	private int empType = 1;// employee Type
 	private int instType = 2;// instrument Type
 	private int mistryId = 101;
 	private int helperId = 102;
-	private static InstVerificationHeader instVerificationHeaderRes = null;
-	private static int userId = 0;
-	private static StationSpCakeList stationSpCakeList=new StationSpCakeList();
-	private static List<GetAllocStationCk> getAllocStationCkRes=null;
-	private static List<GetSpDetailForBom> getSpDetailForBomList=null;
+	private  InstVerificationHeader instVerificationHeaderRes = null;
+	private  int userId = 0;
+	private  StationSpCakeList stationSpCakeList=new StationSpCakeList();
+	private  List<GetAllocStationCk> getAllocStationCkRes=null;
+	private  List<GetSpDetailForBom> getSpDetailForBomList=null;
 	
 	@RequestMapping(value = "/showAddEmployee", method = RequestMethod.GET)
 	public ModelAndView showAddEmployee(HttpServletRequest request, HttpServletResponse response) {
@@ -543,7 +545,9 @@ public class SpProductionController {
 					EmployeeList.class);
 			System.out.println("Response: " + employeeList.toString());
 
-			TypeList typeList = rest.getForObject(Constants.url + "/spProduction/getTypeList", TypeList.class);
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("typeId", empType);
+			TypeList typeList = rest.postForObject(Constants.url + "/spProduction/getTypeList",map, TypeList.class);
 			System.out.println("Response: " + typeList.toString());
 
 			if (emp.isError()) {

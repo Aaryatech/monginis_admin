@@ -97,7 +97,7 @@
 								<i class="fa fa-bars"></i>Add Tax
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href=""></a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 						
@@ -105,21 +105,21 @@
 
 
 						<div class="box-content">
-							<form action="addRmTax" method="post" class="form-horizontal" id=
-									"validation-form"
+							<form action="${pageContext.request.contextPath}/addRmTax" method="post" class="form-horizontal" id="validation-form"
 										enctype="multipart/form-data" method="post">
 							
+									<input type="hidden" name="tax_id" id="tax_id" value="${rmTax.taxId}"/>
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Tax Description</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="tax_desc" id="tax_desc" class="form-control"placeholder="Tax Description"data-rule-required="true" />
+										<input type="text" name="tax_desc" id="tax_desc" class="form-control"placeholder="Tax Description"data-rule-required="true" value="${rmTax.taxDesc}"/>
 									</div>
 
 									<label class="col-sm-3 col-lg-2 control-label">IGST Percentage(%)
 									</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="igst_per" id="igst_per" class="form-control"placeholder="Enter IGST %"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)"/>
+										<input type="text" name="igst_per" id="igst_per" class="form-control"placeholder="Enter IGST %"data-rule-required="true" value="${rmTax.igstPer}"/>
 									</div>
 
 								</div>
@@ -128,7 +128,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">CGST Percentage(%)
 									</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="cgst_per" id="cgst_per" class="form-control"placeholder="Enter CGST %"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)"/>
+										<input type="text" name="cgst_per" id="cgst_per" class="form-control"placeholder="Enter CGST %"data-rule-required="true" value="${rmTax.cgstPer}"/>
 									</div>
 								 
 
@@ -136,7 +136,7 @@
 								<label class="col-sm-3 col-lg-2 control-label">SGST Percentage(%)
 									</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="sgst_per" id="sgst_per" class="form-control"placeholder="Enter SGST %"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)"/>
+										<input type="text" name="sgst_per" id="sgst_per" class="form-control"placeholder="Enter SGST %"data-rule-required="true" value="${rmTax.sgstPer}"/>
 									</div>
 						</div>
 
@@ -150,6 +150,61 @@
 						</div>
 					</div>
 					</form>
+					<br>
+								<div class="box">
+									<div class="box-title">
+										<h3>
+											<i class="fa fa-table"></i>RM Tax List
+										</h3>
+										<div class="box-tool">
+											<a data-action="collapse" href="#"><i
+												class="fa fa-chevron-up"></i></a>
+											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
+										</div>
+									</div>
+
+									<div class="box-content">
+
+										<div class="clearfix"></div>
+										<div class="table-responsive" style="border: 0">
+											<table width="100%" class="table table-advance" id="table1">
+												<thead>
+													<tr>
+														<th width="55" style="width: 18px">Sr.No.</th>
+														<th width="140" align="center">Tax Description</th>
+														<th width="140" align="center">Igst Percentage</th>
+														<th width="140" align="center">Cgst Percentage</th>
+														<th width="140" align="center">Sgst Percentage</th>
+														<th width="50" align="left">Action</th>
+													</tr>
+												</thead>
+												<tbody>
+													  <c:forEach items="${rmTaxList}" var="rmTaxList" varStatus="count">
+														<tr>
+														
+															<td><c:out value="${count.index+1}"/></td>
+															<td align="left"><c:out
+																	value="${rmTaxList.taxDesc}"></c:out></td>
+															<td align="left"><c:out
+																	value="${rmTaxList.igstPer}"></c:out></td>
+															<td align="left"><c:out
+																	value="${rmTaxList.cgstPer}"></c:out></td>
+															<td align="left"><c:out
+																	value="${rmTaxList.sgstPer}"></c:out></td>		
+															<td align="left"><a href="updateRmTax/${rmTaxList.taxId}"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;
+                                                        
+                                                        <a href="deleteRmTax/${rmTaxList.taxId}"
+													    onClick="return confirm('Are you sure want to delete this record');"><span
+														class="glyphicon glyphicon-remove"></span></a></td>	
+														</tr>
+												</c:forEach> 
+										</tbody>
+									</table>
+								</div>
+							</div>
+					</div>
+					
 				</div>
 
 

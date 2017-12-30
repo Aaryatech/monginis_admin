@@ -71,7 +71,6 @@
 		</div>
 		<!-- END Sidebar -->
 
-
 		<!-- BEGIN Content -->
 		<div id="main-content">
 			<!-- BEGIN Page Title -->
@@ -84,7 +83,6 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
-
 
 			<!-- BEGIN Main Content -->
 			<div class="row">
@@ -117,20 +115,6 @@
 											</div>
 										</div>
 
-
-										<%-- <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Name </label>
-											<div class="col-sm-9 col-lg-10 controls">
-												
-													 <input type="text" name="spc_name" id="spc_name" placeholder="name"
-													value="${specialCake.spName}" 
-													class="form-control" required="true" />
-													 
-													
-											</div>
-										</div> --%>
-										
-										
 											<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Name </label>
 											<div class="col-sm-9 col-lg-10 controls">
@@ -339,18 +323,16 @@
 													data-rule-required="true" data-rule-number="true"/>
 											</div>
 										</div>
-
                                        <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">SGST %
+											<label class="col-sm-3 col-lg-2 control-label">IGST %
 											</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<input type="text" name="tax_2" id="tax_2"
-													value="${specialCake.spTax2}" placeholder="SGST"
-													class="form-control" data-rule-required="true" data-rule-number="true" value="0.0"onchange="calTotalGst()"/>
+												<input type="text" name="tax_3" id="tax_3"
+													value="${specialCake.spTax3}" placeholder="IGST"
+													class="form-control"  data-rule-required="true"  data-rule-number="true" value="0.0"onchange="calTotalGst()"/>
 											</div>
 										</div>
-
-
+										
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">CGST %
 											</label>
@@ -361,16 +343,14 @@
 													data-rule-required="true" data-rule-number="true" value="0.0" onchange="calTotalGst()"/>
 											</div>
 										</div>
-
 										
-
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">IGST %
+                                       <div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">SGST %
 											</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<input type="text" name="tax_3" id="tax_3"
-													value="${specialCake.spTax3}" placeholder="IGST"
-													class="form-control"  data-rule-required="true"  data-rule-number="true" value="0.0"/>
+												<input type="text" name="tax_2" id="tax_2"
+													value="${specialCake.spTax2}" placeholder="SGST"
+													class="form-control" data-rule-required="true" data-rule-number="true" value="0.0"onchange="calTotalGst()"/>
 											</div>
 										</div>
 
@@ -405,26 +385,7 @@
 												</select>
 											</div>
 										</div>
-										<%-- 										<c:set var="speIdList" value="${specialCake.speIdlist}" scope="request"/>
- --%>
-										<%-- <% List<String> speIdListArray=Arrays.asList(speIdList.split("\\s*,\\s*")); %> --%>
-
-
-										<%-- 	<c:forEach items="${specialCake.speIdlist var="sItmes"}">
-											<c:forEach items="${eventList.speId var="eItem"}">
-										
-										
-										
-										</c:forEach>
-										
-										
-										</c:forEach> --%>
-
-
-
-
-
-
+			
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">ERP
 												Link Code </label>
@@ -660,7 +621,7 @@
 															<i class="fa fa-check"></i> Save
 														</button> -->
 												<input type="submit" class="btn btn-primary" value="Submit">
-												<button type="button" class="btn">Cancel</button>
+												<!-- <button type="button" class="btn">Cancel</button> -->
 
 												<!--<button type="button" class="btn">Cancel</button>-->
 											</div>
@@ -744,18 +705,17 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 		
-	<script>
+<script>
     function calTotalGst() {
    
-	  var sgst=parseFloat($("#tax_1").val());
-	  var cgst=parseFloat($("#tax_2").val());
-	  var totalGst=parseFloat(cgst+sgst);
-	
-	  document.getElementById("total_gst_appli")
-		.setAttribute('value', totalGst);
+	  var igst=parseFloat($("#tax_3").val());
+	  var cgst=parseFloat($("#tax_1").val());
+	  var sgst=parseFloat(igst-cgst);
+	  var totGst=parseFloat(cgst+sgst);
+	  document.getElementById("tax_2").setAttribute('value',sgst);
+	  document.getElementById("total_gst_appli").setAttribute('value', totGst);
 }
 </script>	
-		
 <script>
 function calTotalGstOnLoad() {
    

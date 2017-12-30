@@ -86,7 +86,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i> Item SubCategory List
+								<i class="fa fa-table"></i>Raw Material SubCategory List
 							</h3>
 							<div class="box-tool">
 								<a data-action="collapse" href="#"><i
@@ -117,8 +117,6 @@
 									<tbody>
 							  <%int c=1; %>
 										<c:forEach items="${rmItemSubCatList}" var="rmItemSubCatList">
-
-
 
 											<tr>
 												<td>	<%=c++%>

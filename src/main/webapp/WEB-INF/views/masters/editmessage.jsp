@@ -91,7 +91,7 @@
 								<i class="fa fa-bars"></i> Edit Message
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showSpMessages">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							<!-- <div class="box-tool">
@@ -120,8 +120,8 @@
 
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-										<button type="submit" class="btn btn-primary">
-											<i class="fa fa-check"></i> Save
+										<button type="submit" class="btn btn-primary"  style="width: 70px">
+											Save
 										</button>
 										<!--<button type="button" class="btn">Cancel</button>-->
 									</div>

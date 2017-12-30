@@ -125,10 +125,6 @@
 							</div>
 							
 						</div>
-
-
-
-
 						<div class="box-content">
 							<form action="${pageContext.request.contextPath}/updateTransporterProcess" class="form-horizontal"
 								method="post" id="validation-form">
@@ -149,7 +145,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="transporter_mob" id="transporter_mob"
 											placeholder="Transporter Mobile" class="form-control"
-											data-rule-required="true" data-rule-number="true" value="${transporter.tranMobile}"/>
+											data-rule-required="true" data-rule-number="true" value="${transporter.tranMobile}"  pattern="^\d{10}$" required/>
 									</div>
 								</div>
                               <div class="form-group">
@@ -158,7 +154,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="tran_email_id" id="tran_email_id"
 											placeholder="Transporter Email Id" class="form-control"
-											data-rule-required="true" value="${transporter.tranEmail}"/>
+											data-rule-required="true" value="${transporter.tranEmail}"onblur="return validateEmail()"/>
 									</div>
 								</div>
                                <input type="hidden" name="tran_id" id="tran_id" value="${transporter.tranId}">
@@ -225,10 +221,6 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
-
-
-
-
 	<!--flaty scripts-->
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
@@ -251,11 +243,23 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
-
-
-
-
-
-
 </body>
+<script type="text/javascript">
+function validateEmail()  
+    {  
+	
+	  var email=document.getElementById("tran_email_id").value;
+      var regExEmail = /\S+@\S+\.\S+/;
+      if(regExEmail.test(email))
+    	  {
+    	  
+    	    return true;
+    	  }
+      else
+    	  {
+    	  
+    	    alert("Enter valid Email Id!")
+    	  }
+    }  
+</script>
 </html>

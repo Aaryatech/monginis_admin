@@ -121,7 +121,7 @@ flaty css styles -->
 								<i class="fa fa-bars"></i> Edit Route
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/addroute">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							<!-- <div class="box-tool">
@@ -156,8 +156,8 @@ flaty css styles -->
 								</div>
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-										<button type="submit" class="btn btn-primary">
-											<i class="fa fa-check"></i>Save
+										<button type="submit" class="btn btn-primary" style="width: 70px">
+											Save
 										</button>
 										<!--<button type="button" class="btn">Cancel</button>-->
 									</div>
@@ -197,10 +197,10 @@ flaty css styles -->
 															<td align="left"><c:out
 																	value="${routeList.routeName}"></c:out></td>
 															<td align="left"><a
-																href="updateRoute/${routeList.routeId}"><span
+																href="${pageContext.request.contextPath}/updateRoute/${routeList.routeId}"><span
 																	class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
 
-																<a href="deleteRoute/${routeList.routeId}"
+																<a href="${pageContext.request.contextPath}/deleteRoute/${routeList.routeId}"
 																onClick="return confirm('Are you sure want to delete this record');"><span
 																	class="glyphicon glyphicon-remove"></span></a></td>
 														</tr>

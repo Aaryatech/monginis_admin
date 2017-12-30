@@ -154,15 +154,10 @@
 																		</c:choose>
 																	<td align="left"><a
 																		href="updateSpCake/${specialCake.spId}"><span
-																			class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
-																			
-																			
+																			class="glyphicon glyphicon-edit"></span></a>
 																			<a href="viewSpCakeDetailed/${specialCake.spId}" class="action_btn" >
-						<abbr title="Detailed"><i class="fa fa-list"></i></abbr></a>
-
-
-																		
-																		<a href="deleteSpecialCake/${specialCake.spId}"
+					                                                  	<abbr title="Detailed"><i class="fa fa-list"></i></abbr></a>
+                                                                         <a href="deleteSpecialCake/${specialCake.spId}"
 																		onClick="return confirm('Are you sure want to delete this record');"><span
 																			class="glyphicon glyphicon-remove"></span></a></td>
 																</tr>
@@ -237,10 +232,6 @@
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-
-
-
-
 
 	<!--flaty scripts-->
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>

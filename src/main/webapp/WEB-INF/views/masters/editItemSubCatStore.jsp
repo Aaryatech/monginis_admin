@@ -102,14 +102,12 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Raw Material Item
+						<i class="fa fa-file-o"></i>Raw Material
 					</h1>
 
 				</div>
 			</div>
 			<!-- END Page Title -->
-
-
 
 			<!-- BEGIN Main Content -->
 			<div class="row">
@@ -117,17 +115,13 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Edit Item SubCategory
+								<i class="fa fa-bars"></i>Edit Raw Material SubCategory
 							</h3>
 							<div class="box-tool">
 								<a href="${pageContext.request.contextPath}/showItemSubCatList">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
-							
 						</div>
-
-
-
 
 						<div class="box-content">
 							<form action="${pageContext.request.contextPath}/updateRmSubCategoryProcess" class="form-horizontal"
@@ -139,7 +133,7 @@
 										<select data-placeholder="Select Category"
 											class="form-control chosen" name="cat_id" tabindex="-1"
 											id="cat_id" data-rule-required="true">
-											<option selected>Select Category</option>
+											<option value="0" selected>Select Category</option>
 
 											<c:forEach items="${rmItemCatList}" var="rmItemCatList">
 												  <c:choose>
@@ -155,8 +149,6 @@
 										</select>
 									</div>
 								</div>
-
-						
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label" for="sub_cat_name">SubCategory
 										Name</label>
@@ -177,11 +169,9 @@
 								</div>
 
                            <input type="hidden" name="sub_cat_id" id="sub_cat_id" value="${rmItemSubCategory.subCatId}"/> 
-
-
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-										<input type="submit" class="btn btn-primary" value="Submit">
+										<input type="submit" class="btn btn-primary" value="Submit" onclick="return validate()">
 <!-- 										<button type="button" class="btn">Cancel</button>
  -->									</div>
 								</div>
@@ -265,4 +255,15 @@
 
 
 </body>
+<script type="text/javascript">
+function validate()
+{
+   if(document.getElementById("cat_id").value =="0")
+   {
+      alert("Please select Category "); // prompt user
+      document.getElementById("cat_id").focus(); //set focus back to control
+      return false;
+   }
+}
+</script>
 </html>

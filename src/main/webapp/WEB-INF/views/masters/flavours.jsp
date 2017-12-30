@@ -93,7 +93,7 @@
 								<i class="fa fa-bars"></i> Add Flavour
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href=""></a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							<!-- <div class="box-tool">
@@ -121,8 +121,8 @@
 								</div>
 
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Add on
-										rate</label>
+									<label class="col-sm-3 col-lg-2 control-label">Add On
+										Rate</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="spf_adon_rate" id="spf_adon_rate"
 											placeholder="Add on rate" class="form-control" 
@@ -135,19 +135,19 @@
 									<label class="col-sm-3 col-lg-2 control-label">Type</label>
 									<div class="col-sm-9 col-lg-10 controls">
 									</label> <label class="radio-inline"> <input type="radio"
-											name="sp_type" id="optionsRadios1" value="2" /> FC
+											name="sp_type" id="optionsRadios1" value="2" checked/> FC
 										</label>
 										<label class="radio-inline"> <input type="radio"
-											name="sp_type" id="optionsRadios1" value="1" checked />
+											name="sp_type" id="optionsRadios1" value="1"  />
 											Chocolate
 										
 									</div>
 								</div>
 
 								<div class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-										<button type="submit" class="btn btn-primary">
-											<i class="fa fa-check"></i> Save
+									<div class="col-sm-9 col-sm-offset-4 col-lg-10 col-lg-offset-2">
+										<button type="submit" class="btn btn-primary" style="width: 70px">
+											 Save
 										</button>
 										<!--<button type="button" class="btn">Cancel</button>-->
 									</div>
@@ -196,13 +196,13 @@
 										<c:choose>
 											<c:when test="${flavoursList.spType=='1'}">
 												<td align="left"><c:out value="Chocolate" /></td>
-
-      <!--   <br /> -->
 											</c:when>
 											<c:when test="${flavoursList.spType=='2'}">
 												<td align="left"><c:out value="FC" /></td>
-											<!-- 	<br /> -->
                                            </c:when>
+                                           <c:otherwise>
+                                           <td align="left"><c:out value="" /></td>
+                                           </c:otherwise>
 										</c:choose>
 
 										<td align="left"><a
@@ -211,7 +211,8 @@
 
 											<a href="deleteFlavour/${flavoursList.spfId}"
 											onClick="return confirm('Are you sure want to delete this record');"><span
-												class="glyphicon glyphicon-remove"></span></a></td>
+												class="glyphicon glyphicon-remove"></span></a>
+										</td>
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -272,8 +273,6 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
-
-
 	<!--flaty scripts-->
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
@@ -289,11 +288,6 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-	<%-- <script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
-	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script> --%>
+
 </body>
 </html>

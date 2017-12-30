@@ -307,10 +307,9 @@ return "redirect:/addAndShowEvents";
 
 }
 
-//from mahesh
-
-/*@RequestMapping(value="/deleteFlavour/{spfId}",method=RequestMethod.GET)
-public String deleteFlavour(@PathVariable int spfId) {
+/*//from mahesh
+@RequestMapping(value="/deleteFlavour/{spfId}",method=RequestMethod.GET)
+public String deleteFlavours(@PathVariable int spfId) {
 
 	//String id=request.getParameter("id");
 	
@@ -322,7 +321,7 @@ public String deleteFlavour(@PathVariable int spfId) {
    
 	   ErrorMessage errorResponse = rest.postForObject("http://localhost:8089/deleteFlavour", map,ErrorMessage.class);
      System.out.println(errorResponse.toString());
-/
+
   if(errorResponse.getError()) {
 	  return "redirect:/flavoursList";
 
@@ -331,8 +330,8 @@ public String deleteFlavour(@PathVariable int spfId) {
 
      }
 
-}*/
-
+}
+*/
 
 // event update
 @RequestMapping(value = "/updateEvent/{speId}")

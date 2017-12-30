@@ -77,13 +77,9 @@
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 </head>
 <body>
-
-
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
-
 	<div class="container" id="main-container">
-
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
 
@@ -102,14 +98,12 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Raw Material Item
+						<i class="fa fa-file-o"></i>Raw Material
 					</h1>
 
 				</div>
 			</div>
 			<!-- END Page Title -->
-
-
 
 			<!-- BEGIN Main Content -->
 			<div class="row">
@@ -117,7 +111,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> Item Category 
+								<i class="fa fa-bars"></i>Add Raw Material Category 
 							</h3>
 							<div class="box-tool">
 								<a href="${pageContext.request.contextPath}/showItemCatList">Back to List</a> <a data-action="collapse" href="#"><i
@@ -125,10 +119,6 @@
 							</div>
 							
 						</div>
-
-
-
-
 						<div class="box-content">
 							<form action="${pageContext.request.contextPath}/addRmCategoryProcess" class="form-horizontal"
 								method="post" id="validation-form">
@@ -140,14 +130,11 @@
 										<select data-placeholder="Select Group"
 											class="form-control chosen" name="grp_id" tabindex="-1"
 											id="grp_id" data-rule-required="true">
-											<option selected>Select Group</option>
+											<option value="0" selected>Select Group</option>
 
 											<c:forEach items="${rmItemGroupList}" var="rmItemGroupList">
 												<option value="${rmItemGroupList.grpId}"><c:out value="${rmItemGroupList.grpName}"></c:out></option>
 											</c:forEach>
-
-
-
 
 										</select>
 									</div>
@@ -174,12 +161,9 @@
 									</div>
 								</div>
 
-                
-								
-
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-										<input type="submit" class="btn btn-primary" value="Submit">
+										<input type="submit" class="btn btn-primary" value="Submit" onclick="return validate()">
 <!-- 										<button type="button" class="btn">Cancel</button>
  -->									</div>
 								</div>
@@ -231,15 +215,11 @@
 	<script
 		src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
 
-
 	<!--page specific plugin scripts-->
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-
-
-
 
 
 	<!--flaty scripts-->
@@ -264,11 +244,17 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
-
-
-
-
-
-
 </body>
+<script type="text/javascript">
+function validate()
+{
+   if(document.getElementById("grp_id").value =="0")
+   {
+      alert("Please select Group "); // prompt user
+      document.getElementById("grp_id").focus(); //set focus back to control
+      return false;
+   }
+}
+
+</script>
 </html>

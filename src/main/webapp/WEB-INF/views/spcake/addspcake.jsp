@@ -296,20 +296,16 @@
 													data-rule-number="true" data-rule-required="true" />
 											</div>
 										</div>
-
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">SGST %
+                                       <div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">IGST %
 											</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<input type="text" name="tax_2" id="tax_2"
-													 placeholder="SGST" class="form-control"	
-													data-rule-required="true" data-rule-number="true"
-													value="0.0" onchange="calTotalGst()"/>
-													
+												<input type="text" name="tax_3" id="tax_3"
+													tax_3"" placeholder="IGST" class="form-control"
+													data-rule-required="true" data-rule-number="true" value="0.0" onchange="calTotalGst()"/>
 											</div>
 										</div>
-
-                                       <div class="form-group">
+										 <div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">CGST %
 											</label>
 											<div class="col-sm-9 col-lg-10 controls">
@@ -320,16 +316,19 @@
 											</div>
 										</div>
 
-
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">IGST %
+											<label class="col-sm-3 col-lg-2 control-label">SGST %
 											</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<input type="text" name="tax_3" id=""
-													tax_3"" placeholder="IGST" class="form-control"
-													data-rule-required="true" data-rule-number="true" value="0.0"/>
+												<input type="text" name="tax_2" id="tax_2"
+													 placeholder="SGST" class="form-control"	
+													data-rule-required="true" data-rule-number="true"
+													value="0.0" />
+													
 											</div>
 										</div>
+
+                                      
                                  <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Total GST Applicable %</label>
 									<div class="col-sm-9 col-lg-10 controls">
@@ -338,49 +337,7 @@
 											data-rule-required="true" data-rule-number="true" disabled/>
 									</div>
 								</div>
-										<%-- 
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Events</label>
-											<div class="col-sm-9 col-lg-10 controls">
-												<!-- <select multiple="multiple" class="form-control input-sm"  name="spc_events"
-													id="spc_events"> -->
-													<optgroup label="EVENTS"> -->
-													<select data-placeholder="Select Events" class="form-control chosen" multiple="multiple" tabindex="6" name="spc_events" id="spc_events">
-                                            
-                                            <optgroup label="EVENTS">
-                                                 
-                                                  
-													<c:forEach items="${eventList}" var="eventList">
-													
-													
-													 <option value="${eventList.speId}"> <c:out value="${eventList.speName}"></c:out></>
-												</c:forEach>
-												
-														
-													</optgroup>
-
-												</select>
-											</div>
-										</div>
- --%>
-										<%-- <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Events</label>
-											<div class="col-sm-9 col-lg-10 controls">
-												<select  class="form-control input-sm" name="spc_events"
-													id="spc_events" multiple="multiple" tabindex="6">
-													<optgroup>
-													<option value="1">rate</option>
-													 <c:forEach items="${eventList}" var="eventList">
-													
-													
-													<option value="${eventList.speId}"><c:out value="${eventList.speName}"></c:out></option>
-												</c:forEach>
-													</optgroup>
-												</select>
-											
-											</div>
-										</div> --%>
-
+							
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Events</label>
 											<div class="col-sm-9 col-lg-10 controls">
@@ -586,20 +543,18 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script> --%>
+	
+</body>
 		
-		
-	<script>
+<script>
     function calTotalGst() {
    
-	  var sgst=parseFloat($("#tax_1").val());
-	  var cgst=parseFloat($("#tax_2").val());
-	  var totalGst=parseFloat(cgst+sgst);
-	
-	  document.getElementById("total_gst_appli")
-		.setAttribute('value', totalGst);
+	  var igst=parseFloat($("#tax_3").val());
+	  var cgst=parseFloat($("#tax_1").val());
+	  var sgst=parseFloat(igst-cgst);
+	  var totGst=parseFloat(cgst+sgst);
+	  document.getElementById("tax_2").setAttribute('value',sgst);
+	  document.getElementById("total_gst_appli").setAttribute('value', totGst);
 }
 </script>	
-		
-		
-</body>
 </html>

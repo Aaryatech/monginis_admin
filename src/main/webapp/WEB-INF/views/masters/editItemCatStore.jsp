@@ -102,7 +102,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Raw Material Item
+						<i class="fa fa-file-o"></i>Raw Material
 					</h1>
 
 				</div>
@@ -117,7 +117,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Edit Item Category
+								<i class="fa fa-bars"></i>Edit Raw Material Category
 							</h3>
 							<div class="box-tool">
 								<a href="${pageContext.request.contextPath}/showItemCatList">Back to List</a> <a data-action="collapse" href="#"><i
@@ -140,7 +140,7 @@
 										<select data-placeholder="Select Group"
 											class="form-control chosen" name="grp_id" tabindex="-1"
 											id="grp_id" data-rule-required="true">
-											<option selected>Select Group</option>
+											<option value="0" selected>Select Group</option>
 
 											<c:forEach items="${rmItemGroupList}" var="rmItemGroupList">
                                               
@@ -185,7 +185,7 @@
 
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-										<input type="submit" class="btn btn-primary" value="Submit">
+										<input type="submit" class="btn btn-primary" value="Submit" onclick="return validate()">
 <!-- 										<button type="button" class="btn">Cancel</button>
  -->									</div>
 								</div>
@@ -270,11 +270,17 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
-
-
-
-
-
-
 </body>
+<script type="text/javascript">
+function validate()
+{
+   if(document.getElementById("grp_id").value =="0")
+   {
+      alert("Please select Group "); // prompt user
+      document.getElementById("grp_id").focus(); //set focus back to control
+      return false;
+   }
+}
+
+</script>
 </html>

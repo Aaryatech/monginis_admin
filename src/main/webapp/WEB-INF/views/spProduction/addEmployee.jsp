@@ -109,8 +109,6 @@
 			</div>
 			<!-- END Page Title -->
 
-
-
 			<!-- BEGIN Main Content -->
 			<div class="row">
 				<div class="col-md-12">
@@ -120,14 +118,11 @@
 								<i class="fa fa-bars"></i> Add Employee
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showAddEmployee">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAddEmployee"></a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
 						</div>
-
-
-
 
 						<div class="box-content">
 							<form action="${pageContext.request.contextPath}/addEmpProcess" class="form-horizontal"
@@ -187,38 +182,40 @@
 											<c:choose>
 												
 												<c:when test="${emp.isUsed==0}">
+												
+												<label class="radio-inline"> <input type="radio"
+													name="is_used" id="optionsRadios1" value="1" />
+													Yes
+												</label>
 												<label class="radio-inline"> 
 												<input type="radio"
 													name="is_used" id="optionsRadios1" value="0" checked>
 													No
 												</label> 
-												<label class="radio-inline"> <input type="radio"
-													name="is_used" id="optionsRadios1" value="1" />
-													Yes
-												</label>
 												</c:when>
 												
 												<c:when test="${emp.isUsed==1}">
-												<label class="radio-inline"> <input type="radio"
-													name="is_used" id="optionsRadios1" value="0" />
-													No
-												</label>
+											
 												<label class="radio-inline"> <input type="radio"
 													name="is_used" id="optionsRadios1" value="1" checked />
 													Yes
 												</label>
+													<label class="radio-inline"> <input type="radio"
+													name="is_used" id="optionsRadios1" value="0" />
+													No
+												</label>
 												</c:when>
 												<c:otherwise>
-												<label class="radio-inline"> 
-												<input type="radio"
-													name="is_used" id="optionsRadios1" value="0" checked>
-													No
-												</label> 
+												 
 												<label class="radio-inline"> <input type="radio"
-													name="is_used" id="optionsRadios1" value="1" />
+													name="is_used" id="optionsRadios1" value="1" checked/>
 													Yes
 												</label>
-												
+												<label class="radio-inline"> 
+												<input type="radio"
+													name="is_used" id="optionsRadios1" value="0" >
+													No
+												</label>
 												</c:otherwise>
 												</c:choose>
 									</div>

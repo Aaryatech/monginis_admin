@@ -25,10 +25,11 @@ import com.ats.adminpanel.model.SpCakeResponse;
 public class RouteController {
 	@RequestMapping(value = "/addRouteProcess", method=RequestMethod.POST)
 
-	public String redirectToRouteAdd(HttpServletRequest request, HttpServletResponse response) {
+	public String addRouteProcess(HttpServletRequest request, HttpServletResponse response) {
 		
 		ModelAndView model = new ModelAndView("masters/route");
 		RestTemplate rest = new RestTemplate();
+		
 		String routeName = request.getParameter("route_name");
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("routeName", routeName);
@@ -38,8 +39,7 @@ public class RouteController {
 	}
 
 	@RequestMapping(value = "/addroute", method=RequestMethod.GET)
-
-	public ModelAndView redirectToAddRoute(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView addroute(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("masters/route");
 		System.out.println("route disp");
 		
@@ -65,7 +65,7 @@ public class RouteController {
 	
 	@RequestMapping(value = "/deleteRoute/{routeId}", method=RequestMethod.GET)
 
-	public String redirectToAddRoute(@PathVariable int routeId) {
+	public String deleteRoute(@PathVariable int routeId) {
 		ModelAndView model = new ModelAndView("masters/route");
 		RestTemplate rest = new RestTemplate();
 
@@ -87,20 +87,28 @@ public class RouteController {
 	
 	@RequestMapping(value = "/updateRoute/{routeId}")
 
-	public ModelAndView redirectToUpdateRoute(@PathVariable int routeId, HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView updateRoute(@PathVariable int routeId, HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("masters/editRoute");
 		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("routeId", routeId);
 		RestTemplate restTemplate = new RestTemplate();
-		/*Route route=restTemplate
-				.postForObject(""+Constants.url+"/getRoute", map,Route.class);
-		*/
+		try {
 		Route route=restTemplate
 				.getForObject(""+Constants.url+"getRoute?routeId={routeId}",Route.class,routeId);
+	
+		AllRoutesListResponse allRouteListResponse=restTemplate
+				.getForObject(Constants.url+"showRouteList", AllRoutesListResponse.class);
 		
+		List<Route> routeList=new  ArrayList<Route>();
+		routeList=allRouteListResponse.getRoute();
+		model.addObject("routeList",routeList);
 		model.addObject("route",route);
-		
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception In updateRoute:"+e.getMessage());
+		}
 		
  return model;
 		
@@ -108,7 +116,7 @@ public class RouteController {
 	
 	@RequestMapping(value = "/updateRoute/editRouteProcess",method=RequestMethod.POST)
 
-	public String redirectToUpdateRouteProcess(HttpServletRequest request, HttpServletResponse response) {
+	public String editRouteProcess(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("masters/route");
 		
 		

@@ -29,6 +29,7 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.RawMaterial.ItemDetail;
 import com.ats.adminpanel.model.RawMaterial.ItemDetailList;
+import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;
 import com.ats.adminpanel.model.RawMaterial.GetRawmaterialByGroup;
 import com.ats.adminpanel.model.RawMaterial.GetUomAndTax;
 import com.ats.adminpanel.model.RawMaterial.Info;
@@ -38,7 +39,9 @@ import com.ats.adminpanel.model.RawMaterial.ItemSfHeaderList;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialDetails;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialDetailsList;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetails;
+import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetailsList;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialUom;
+import com.ats.adminpanel.model.RawMaterial.RawMaterialUomList;
 import com.ats.adminpanel.model.RawMaterial.RmItemCatList;
 import com.ats.adminpanel.model.RawMaterial.RmItemCategory;
 import com.ats.adminpanel.model.RawMaterial.RmItemGroup;
@@ -426,43 +429,57 @@ public class RawMaterialController {
 	public ModelAndView showAddRmTax(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/addRmTax");
-		
-		
+		RestTemplate rest=new RestTemplate();
+        try {
+		RawMaterialTaxDetailsList rawMaterialTaxDetailsList=rest.getForObject(Constants.url + "rawMaterial/getAllRmTaxList",RawMaterialTaxDetailsList.class);
 
-		return model;
+		System.out.println("rawMaterialTaxDetailsList"+rawMaterialTaxDetailsList.toString());
+		model.addObject("rmTaxList", rawMaterialTaxDetailsList.getRawMaterialTaxDetailsList());
+        }
+        catch(Exception e)
+        {
+        	System.out.println("Exception in showAddRmTax"+e.getMessage());
+        }
+        return model;
 	}
 	
 	
 	@RequestMapping(value = "/addRmTax", method = RequestMethod.POST)
 	public String addRmTax(HttpServletRequest request, HttpServletResponse response) {
 
-		 
+		try {
+		int taxId = 0;
 
-		String taxDesc=request.getParameter("tax_desc");
-		String igstPer=request.getParameter("igst_per");
-		String sgstPer=request.getParameter("sgst_per");
-		String cgstPer=request.getParameter("cgst_per");
-		String tax_id=request.getParameter("tax_id");
-		
-		RawMaterialTaxDetails rawMaterialTaxDetails=new RawMaterialTaxDetails();
-		
-		if(tax_id!=null)
-		{
-		int taxId=Integer.parseInt(tax_id);
-		rawMaterialTaxDetails.setTaxId(taxId);
+		try {
+			taxId = Integer.parseInt(request.getParameter("tax_id"));		
+
+
+		} catch (Exception e) {
+			taxId = 0;
+			System.out.println("In Catch of Add RmTax Process Exc:" + e.getMessage());
+
 		}
-		
-		rawMaterialTaxDetails.setCgstPer(Float.parseFloat(cgstPer));
-		rawMaterialTaxDetails.setIgstPer(Float.parseFloat(igstPer));
-		rawMaterialTaxDetails.setSgstPer(Float.parseFloat(sgstPer));
+		String taxDesc=request.getParameter("tax_desc");
+		float igstPer=Float.parseFloat(request.getParameter("igst_per"));
+		float sgstPer=Float.parseFloat(request.getParameter("sgst_per"));
+		float cgstPer=Float.parseFloat(request.getParameter("cgst_per"));
+
+		RawMaterialTaxDetails rawMaterialTaxDetails=new RawMaterialTaxDetails();
+		rawMaterialTaxDetails.setCgstPer(cgstPer);
+		rawMaterialTaxDetails.setIgstPer(igstPer);
+		rawMaterialTaxDetails.setSgstPer(sgstPer);
 		rawMaterialTaxDetails.setTaxDesc(taxDesc);
-		
+		rawMaterialTaxDetails.setTaxId(taxId);
 		
 		RestTemplate rest=new RestTemplate();
 		  Info info=rest.postForObject(Constants.url + "rawMaterial/insertRmTax",rawMaterialTaxDetails, Info.class);
 
 		  System.out.println("response : "+ info.toString());
-		 
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception In AddRmTax:"+e.getMessage());
+		}
 		return "redirect:/showAddRmTax";
 	}
 	
@@ -471,30 +488,154 @@ public class RawMaterialController {
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/addRmUom");
 		
+		RestTemplate rest = new RestTemplate();
+		RawMaterialUomList rawMaterialUomList=rest.getForObject(Constants.url + "/rawMaterial/getRmUomList",RawMaterialUomList.class);
 		
-
+		model.addObject("rmUomList", rawMaterialUomList.getRawMaterialUom());
 		return model;
 	}
+	// ------------------------------Delete Uom Process------------------------------------
+		@RequestMapping(value = "/deleteRmUom/{uomId}", method = RequestMethod.GET)
+		public String deleteUom(@PathVariable int uomId) {
+
+			ModelAndView mav = new ModelAndView("masters/rawMaterial/addRmUom");
+			try {
+
+				RestTemplate rest = new RestTemplate();
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("uomId", uomId);
+
+				Info info = rest.postForObject(Constants.url + "/rawMaterial/deleteRmUom", map, Info.class);
+				System.out.println(info.toString());
+
+				if (info.isError()) {
+
+					return "redirect:/showAddRmUmo";
+
+				} else {
+					return "redirect:/showAddRmUmo";
+
+				}
+			} catch (Exception e) {
+				System.out.println("Exception In delete RmUom:" + e.getMessage());
+
+				return "redirect:/showAddRmUmo";
+
+			}
+
+		}
+		// ------------------------------Delete RM Tax Process------------------------------------
+				@RequestMapping(value = "/deleteRmTax/{taxId}", method = RequestMethod.GET)
+				public String deleteRmTax(@PathVariable int taxId) {
+
+					ModelAndView mav = new ModelAndView("masters/rawMaterial/addRmTax");
+					try {
+
+						RestTemplate rest = new RestTemplate();
+						MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+						map.add("taxId", taxId);
+
+						Info info = rest.postForObject(Constants.url + "/rawMaterial/deleteRMTax", map, Info.class);
+						System.out.println(info.toString());
+
+						if (info.isError()) {
+
+							return "redirect:/showAddRmTax";
+
+						} else {
+							return "redirect:/showAddRmTax";
+
+						}
+					} catch (Exception e) {
+						System.out.println("Exception In delete RmTax:" + e.getMessage());
+
+						return "redirect:/showAddRmTax";
+
+					}
+
+				}
+		@RequestMapping(value = "/updateRmTax/{taxId}", method = RequestMethod.GET)
+		public ModelAndView updateRmTax(@PathVariable int taxId) {
+
+			ModelAndView mav = new ModelAndView("masters/rawMaterial/addRmTax");
+			try {
+
+				RestTemplate rest = new RestTemplate();
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("taxId", taxId);
+
+				RawMaterialTaxDetails rawMaterialTaxDetails = rest.postForObject(Constants.url + "/rawMaterial/getRMTax", map,RawMaterialTaxDetails.class);
+				System.out.println(rawMaterialTaxDetails.toString());
+
+				RawMaterialTaxDetailsList rawMaterialTaxDetailsList=rest.getForObject(Constants.url + "rawMaterial/getAllRmTaxList",RawMaterialTaxDetailsList.class);
+
+				mav.addObject("rmTaxList", rawMaterialTaxDetailsList.getRawMaterialTaxDetailsList());				
+
+				if (rawMaterialTaxDetails!=null) {
+
+					mav.addObject("rmTaxList", rawMaterialTaxDetailsList.getRawMaterialTaxDetailsList());
+
+					mav.addObject("rmTax", rawMaterialTaxDetails);
+				}
+			} catch (Exception e) {
+				System.out.println("Exception In Edit updateRmTax:" + e.getMessage());
+
+				return mav;
+			}
+			return mav;
+		}
+		// ----------------------------------------------------------------------------------------------
+		// ------------------------------Edit RMUom-------------------------------------------------------------
+		@RequestMapping(value = "/updateRmUom/{uomId}", method = RequestMethod.GET)
+		public ModelAndView updateInstrument(@PathVariable int uomId) {
+
+			ModelAndView mav = new ModelAndView("masters/rawMaterial/addRmUom");
+			try {
+
+				RestTemplate rest = new RestTemplate();
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("uomId", uomId);
+
+				RawMaterialUom rawMaterialUom = rest.postForObject(Constants.url + "/rawMaterial/getRmUomByUomId", map,RawMaterialUom.class);
+				System.out.println(rawMaterialUom.toString());
+
+				RawMaterialUomList rawMaterialUomList=rest.getForObject(Constants.url + "/rawMaterial/getRmUomList",RawMaterialUomList.class);
+				
+
+				if (rawMaterialUom!=null) {
+
+					mav.addObject("rmUomList", rawMaterialUomList.getRawMaterialUom());
+
+					mav.addObject("rmUom", rawMaterialUom);
+				}
+			} catch (Exception e) {
+				System.out.println("Exception In Edit rawMaterialUom:" + e.getMessage());
+
+				return mav;
+			}
+			return mav;
+		}
+		// ----------------------------------------------------------------------------------------------
+		// ----------------------------------------END-------------------------------------------------------------
 	@RequestMapping(value = "/addRmUom", method = RequestMethod.POST)
 	public String addRmUom(HttpServletRequest request, HttpServletResponse response) {
 
-		 
-
 		String uom=request.getParameter("uom");
 		
-		String umo_id=request.getParameter("umo_id");
-		
-		RawMaterialUom rawMaterialUom=new RawMaterialUom();
-		
-		if(umo_id!=null)
-		{
-		int umoId=Integer.parseInt(umo_id);
-		rawMaterialUom.setUomId(umoId);
+		int uomId = 0;
+
+		try {
+			uomId = Integer.parseInt(request.getParameter("umo_id"));
+
+		} catch (Exception e) {
+			uomId = 0;
+			System.out.println("In Catch of Add Uom Process Exc:" + e.getMessage());
+
 		}
 		
+		RawMaterialUom rawMaterialUom=new RawMaterialUom();
+		rawMaterialUom.setUomId(uomId);
 		rawMaterialUom.setUom(uom);
-		
-		
 		
 		RestTemplate rest=new RestTemplate();
 		  Info info=rest.postForObject(Constants.url + "rawMaterial/insertRmUom",rawMaterialUom, Info.class);
@@ -503,6 +644,7 @@ public class RawMaterialController {
 		 
 		return "redirect:/showAddRmUmo";
 	}
+	
 	
 	//---------------------------------------getRMCategory------------------------
 		@RequestMapping(value = "/getRmRateVerification", method = RequestMethod.GET)

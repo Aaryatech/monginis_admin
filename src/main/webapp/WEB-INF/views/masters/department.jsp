@@ -109,8 +109,6 @@
 			</div>
 			<!-- END Page Title -->
 
-
-
 			<!-- BEGIN Main Content -->
 			<div class="row">
 				<div class="col-md-12">
@@ -120,14 +118,11 @@
 								<i class="fa fa-bars"></i> Add Department
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showAddDepartment">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAddDepartment"></a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
 						</div>
-
-
-
 
 						<div class="box-content">
 							<form action="${pageContext.request.contextPath}/addDeptProcess" class="form-horizontal"
@@ -153,7 +148,6 @@
 											data-rule-required="true" value="${dept.deptName}"/>
 									</div>
 								</div>
-							
                               <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Is Active?</label>
 									<div class="col-sm-9 col-lg-10 controls">
@@ -184,11 +178,11 @@
 												<c:otherwise>
 												<label class="radio-inline"> 
 												<input type="radio"
-													name="is_active" id="optionsRadios1" value="0" checked>
+													name="is_active" id="optionsRadios1" value="0" >
 													No
 												</label> 
 												<label class="radio-inline"> <input type="radio"
-													name="is_active" id="optionsRadios1" value="1" />
+													name="is_active" id="optionsRadios1" value="1" checked/>
 													Yes
 												</label>
 												
@@ -196,8 +190,6 @@
 												</c:choose>
 									</div>
 								</div>
-
-
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
 										<input type="submit" class="btn btn-primary" value="Submit">
@@ -258,16 +250,13 @@
                                                         <a href="deleteDept/${deptList.deptId}"
 													    onClick="return confirm('Are you sure want to delete this record');"><span
 														class="glyphicon glyphicon-remove"></span></a></td>	
-														 
 														</tr>
-
 													</c:forEach> 
 												</tbody>
 											</table>
 										</div>
 									</div>
 								</div>
-							
 						</div>
 					</div>
 				</div>
@@ -322,10 +311,6 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
-
-
-
-
 	<!--flaty scripts-->
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
@@ -347,7 +332,6 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-
 
 </body>
 </html>
