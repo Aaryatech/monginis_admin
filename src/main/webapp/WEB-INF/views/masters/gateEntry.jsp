@@ -149,7 +149,7 @@
 						<div class="box-content">
 						  
 							<form action="${pageContext.request.contextPath}/materialReceiptStore" class="form-horizontal"
-								method="post" id="validation-form">
+								method="post" id="validation-form" enctype="multipart/form-data">
 
                  			 <div class="box-content">
 								<div class="col1">

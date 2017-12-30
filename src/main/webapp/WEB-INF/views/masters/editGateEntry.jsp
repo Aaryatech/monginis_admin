@@ -135,7 +135,7 @@
 
 						<div class="box-content">
 							<form action="${pageContext.request.contextPath}/submitEditGateEntry" class="form-horizontal"
-								method="post" id="validation-form">
+								method="post" id="validation-form" enctype="multipart/form-data">
 
                   <div class="form-group">
 								<div class="col1">
@@ -144,6 +144,10 @@
 										<input type="text" name="mrn_no" id="mrn_no" value="${materialRecNote.mrnNo}"
 											 class="form-control"
 											readonly />
+													<div> <input type="hidden" name="prevImage1" value="${materialRecNote.photo1}"></div>
+													<div> <input type="hidden" name="prevImage2" value="${materialRecNote.photo2}"></div>
+													
+											
 									</div>
 								 
 								</div>
