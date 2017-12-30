@@ -16,6 +16,13 @@ public class VpsImageUpload {
 	private static final String ITEM_FOLDER = "/home/ats-11/mongiImage/Items/";
 
 	private static final String MSG_FOLDER = "/home/ats-11/mongiImage/Message/";
+	
+	private static final String SP_CAKE_FOLDER = "/home/ats-11/mongiImage/SpecialCake/";
+	
+	private static final String RAW_MAT_IMAGE_FOLDER = "/home/ats-11/mongiImage/RawMaterial/";
+
+	private static final String GATE_ENTRY_IMAGE_TYPE = "/home/ats-11/mongiImage/GateEntry/";
+
 
 	private static final String FIELDMAP_FOLDER = null;
 	private static final String KYC_FOLDER = null;
@@ -51,7 +58,23 @@ public class VpsImageUpload {
 
 				path = Paths.get(MSG_FOLDER + imageName);
 
+			}else if (imageType == 4) {
+
+				path = Paths.get(SP_CAKE_FOLDER + imageName);
+
 			}
+			else if (imageType == 6) {
+
+				path = Paths.get(RAW_MAT_IMAGE_FOLDER + imageName);
+
+			}
+
+			else if (imageType == 7) {
+
+				path = Paths.get(GATE_ENTRY_IMAGE_TYPE + imageName);
+
+			}
+
 
 			Files.write(path, bytes);
 
