@@ -139,21 +139,21 @@
 				<div class="row">
 
 
-					<div class="form-group col-md-3">
-						<label class="col-md-5	 control-label date_label">Delivery
+					<div class="form-group">
+						<label class="col-sm-3 col-lg-2	 control-label">Delivery
 							Date</label>
-						<div class="col-md-7 controls date_select">
+						<div class="col-sm-6 col-lg-4 controls date_select">
 							<input class="form-control date-picker" id="deliveryDate"
 								name="deliveryDate" size="30" type="text" value="${todaysDate}" />
 						</div>
 
-					</div>
+					<!-- </div>
 
-					<div class="form-group  ">
-						<label class=" col-md-2 control-label menu_label">Select
+					<div class="form-group  "> -->
+					
+						<label class="col-sm-3 col-lg-2	 control-label">Select
 							Menu</label>
-						<div class=" col-md-3 controls menu_select">
-
+						<div class="col-sm-6 col-lg-4 controls">
 							<select data-placeholder="Choose Menu"
 								class="form-control chosen" multiple="multiple" tabindex="6"
 								id="selectMenu" name="selectMenu">
@@ -173,29 +173,46 @@
 				</div>
 
 
-
+<br>
 
 				<!-- <div class="col-sm-9 col-lg-5 controls">
  -->
-
-				<div class="form-group col-md-9">
-					<label class=" col-md-2"> Route</label> 
-					<div class=" col-md-7">
-					<select data-placeholder="Select Route"
-						class="form-control chosen "  tabindex="6" name="selectRoute"
-						id="selectRoute">
-
+<div class="row">
+				<div class="form-group">
+					<label class="col-sm-3 col-lg-2 control-label">Select Route</label>
+									<div class="col-sm-6 col-lg-4 controls">
+				<select data-placeholder="Select Route"
+						class="form-control chosen"  name="selectRoute"
+						id="selectRoute" onchange="disableFr()">
 						<option value="0">Select Route</option>
 						<c:forEach items="${routeList}" var="route" varStatus="count">
-							<option value="${route.routeId}"> ${route.routeName}</option>
+							<option value="${route.routeId}"><c:out value="${route.routeName}"/> </option>
 
 						</c:forEach>
-
-					</select>
+						</select>
 					</div>
-				</div>
+					
+					<label class="col-sm-3 col-lg-2 control-label">Select Franchisee
+										 </label>
+									<div class="col-sm-6 col-lg-4">
+									
+									<select data-placeholder="Choose Franchisee" 
+							class="form-control chosen" multiple="multiple" tabindex="6"
+							id="selectFr" name="selectFr" onchange="disableRoute()">
 
-				<div class="form-group col-md-9">
+							<option value="-1"><c:out value="All"/></option>
+
+							<c:forEach items="${unSelectedFrList}" var="fr" varStatus="count">
+								<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
+							</c:forEach>
+						</select>
+					
+				</div>
+				</div>
+				</div>
+			
+
+				<%-- <div class="form-group col-md-9">
 					<label class=" col-md-2">Select
 						Franchise </label>
 					<div class=" col-md-7">
@@ -211,13 +228,13 @@
 						</select>
 					</div>
 
-				</div>
+				</div> --%>
 
 
-
+<br>
 				<div class="row">
-					<div class="col-md-12" style="text-align: left">
-						<button class="btn btn-info" onclick="generateNewBill()">Generate
+					<div class="col-md-12" style="text-align: center;">
+						<button class="btn btn-info" onclick="generateNewBill()">Search
 							Bill</button>
 
 
@@ -499,6 +516,24 @@ $('.datepicker').datepicker({
     	    startDate: '-3d'
     }
 });
+
+</script>
+
+<script type="text/javascript">
+
+function disableFr(){
+
+	alert("Inside Disable Fr ");
+document.getElementById("selectFr").readonly = true;
+
+}
+
+function disableRoute(){
+
+	alert("Inside Disable route ");
+document.getElementById("selectRoute").readonly = true;
+
+}
 
 </script>
 

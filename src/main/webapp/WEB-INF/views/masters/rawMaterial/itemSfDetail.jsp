@@ -401,7 +401,6 @@
 					ajax : 'true',
 
 				},function(data) {
-					alert(data.length);
 					
 					var len = data.length;
 					$('#table1 td').remove();
@@ -462,7 +461,6 @@
 			 
 			var key=-1;
 			var editKey=-1;
-			alert("Hi ");
 			
 			$.getJSON('${getItemDetail}', {
 				mat_type : materialType,
@@ -476,7 +474,6 @@
 				ajax : 'true',
 
 			}, function(data) {
-			alert(data.length);
 				
 				var len = data.length;
 				$('#table1 td').remove();
@@ -529,7 +526,6 @@ function deleteSfDetail(key){
 	var editKey=-2;
 	if(key == null ){
 		key=-2;
-		alert(key);
 	}
 	$.getJSON('${getItemDetail}', {
 		

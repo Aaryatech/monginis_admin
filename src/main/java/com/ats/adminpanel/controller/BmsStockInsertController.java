@@ -7,6 +7,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -33,6 +34,7 @@ import com.ats.adminpanel.model.RawMaterial.RawMaterialUomList;
 
 
 @Controller
+@Scope("session")
 public class BmsStockInsertController {
 	
 	public List<SfndRawItem> sfndRawItemlist = new ArrayList<SfndRawItem>();

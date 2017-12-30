@@ -9,6 +9,7 @@ import java.util.ListIterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -40,15 +41,17 @@ import com.ats.adminpanel.model.franchisee.CommonConf;
 import com.ats.adminpanel.model.item.Item;
 
 @Controller
+@Scope("session")
+
 public class ItemSfController {
 	
 	List<GetSfType> sfTypeList;
 	List<RawMaterialUom> rawMaterialUomList;
 	List<ItemSfDetail> sfDetailList=new ArrayList<>();
 	RawMaterialDetailsList rawMaterialDetailsList;
-	public static int globalSfId=0;
+	public  int globalSfId=0;
 	
-	public static  List<CommonConf> commonConfs=new ArrayList<CommonConf>();
+	public   List<CommonConf> commonConfs=new ArrayList<CommonConf>();
 
 	int editSfId=0;
 	SfItemDetailList sfDetaiListItems;

@@ -336,25 +336,18 @@
 <script type="text/javascript">
 	function validateQty() {
 		
-		alert("inside validate fun");
 		var min = document.getElementById("sf_min_qty").value;
 		var max = document.getElementById("sf_max_qty").value;
 		var reOrder = document.getElementById("sf_reorder_level_qty").value;
 		var sfName = document.getElementById("sf_item_name").value;
-		alert( "name= "+sfName);
 		var sfType = document.getElementById("sf_item_type").value;
-	alert("type ="+sfType);
 		var uom = document.getElementById("sf_item_uom").value;
-		alert("uom = "+uom);
 		var weight = document.getElementById("sf_item_weight").value;
-		alert("weight="+weight);
 		var stockQty = document.getElementById("sf_stock_qty").value;
-		alert("stock qty "+stockQty);
 		
 				var mulFactor = document.getElementById("mul_factor").value;
 
 		
-		alert("Mul fact "+mulFactor);
 		
 		var valid=true;
 		
@@ -407,7 +400,6 @@
 		
 		
 		if(valid){
-			alert("Submited ");
 			 var form = document.getElementById("validation-form")
 			    form.action ="${pageContext.request.contextPath}/editSfHeader";
 			    form.submit();

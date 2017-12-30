@@ -37,6 +37,7 @@ import javax.servlet.http.HttpSession;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -77,12 +78,14 @@ import com.ats.adminpanel.model.franchisee.Menu;
 import com.ats.adminpanel.model.item.CategoryListResponse;
 import com.ats.adminpanel.model.item.FrItemStockConfiResponse;
 import com.ats.adminpanel.model.item.FrItemStockConfigure;
+import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.item.MCategoryList;
 import com.ats.adminpanel.model.modules.ErrorMessage;
 import com.sun.org.apache.bcel.internal.generic.INVOKEINTERFACE;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 @Controller
+@Scope("session")
 public class BillController {
 
 	private static final Logger logger = LoggerFactory.getLogger(BillController.class);
@@ -95,7 +98,7 @@ public class BillController {
 	GenerateBillList generateBillList = new GenerateBillList();
 	List<String> frList = new ArrayList<>();
 
-	public static List<GetBillDetail> billDetailsList;
+	public  List<GetBillDetail> billDetailsList;
 	public GetBillHeader getBillHeader;
 
 	List<GetBillHeader> billHeadersList = new ArrayList<>();
@@ -103,6 +106,59 @@ public class BillController {
 	List<GetSellBillHeader> getSellBillHeaderList;
 	List<GetSellBillDetail> getSellBillDetailList;
 	int bQty;
+	
+	
+		String getInvoiceNo(){
+
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		RestTemplate restTemplate = new RestTemplate();
+
+					
+					String settingKey = new String();
+
+					settingKey = "PB";
+
+					map.add("settingKeyList", settingKey);
+
+					FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue",
+							map, FrItemStockConfigureList.class);
+
+					System.out.println("SettingKeyList" + settingList.toString());
+
+					int settingValue=settingList.getFrItemStockConfigure().get(0).getSettingValue();
+					
+					System.out.println("Setting Value Received "+settingValue);
+					int year = Year.now().getValue();
+					String strYear = String.valueOf(year);
+					strYear = strYear.substring(2);
+
+					System.out.println("strYear= " + strYear);
+
+					int length = String.valueOf(settingValue).length();
+					
+					String invoiceNo=null;
+
+					if (length == 1)
+
+						 invoiceNo = strYear + "-" + "0000" + settingValue;
+					if (length == 2)
+
+						invoiceNo = strYear + "-" + "000" + settingValue;
+
+					if (length == 3)
+
+						invoiceNo = strYear + "-" + "00" + settingValue;
+
+					if (length == 4)
+
+						invoiceNo = strYear + "-" + "0" + settingValue;
+
+					System.out.println("settingValue= " + settingValue);
+		return invoiceNo;
+
+		}
+	
+	
 	@RequestMapping(value = "/submitNewBill", method = RequestMethod.POST)
 	public String submitNewBill(HttpServletRequest request, HttpServletResponse response) {
 
@@ -112,6 +168,7 @@ public class BillController {
 		String invoiceNo = null;
 
 		RestTemplate restTemplate = new RestTemplate();
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 		DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
 		Date billDate = null;
@@ -130,7 +187,7 @@ public class BillController {
 
 		// settingValue
 		try {
-			FrItemStockConfiResponse frItemStockConfiResponse = restTemplate
+		/*	FrItemStockConfiResponse frItemStockConfiResponse = restTemplate
 					.getForObject(Constants.url + "getfrItemConfSetting", FrItemStockConfiResponse.class);
 			List<FrItemStockConfigure> frItemStockConfigures = new ArrayList<FrItemStockConfigure>();
 
@@ -142,11 +199,25 @@ public class BillController {
 					settingValue = frItemStockConfigures.get(k).getSettingValue();
 				}
 
-			}
+			}*/
+			
+			
+			/*MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			
+			String settingKey = new String();
 
-			System.out.println("settingValue= " + settingValue);
+			settingKey = "PB";
 
-			// end of settingValue
+			map.add("settingKeyList", settingKey);
+
+			FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue",
+					map, FrItemStockConfigureList.class);
+
+			System.out.println("SettingKeyList" + settingList.toString());
+
+			settingValue=settingList.getFrItemStockConfigure().get(0).getSettingValue();
+			
+			System.out.println("Setting Value Received "+settingValue);
 			int year = Year.now().getValue();
 			String strYear = String.valueOf(year);
 			strYear = strYear.substring(2);
@@ -170,8 +241,10 @@ public class BillController {
 
 				invoiceNo = strYear + "-" + "0" + settingValue;
 
-			System.out.println("Invoice No= " + invoiceNo);
-
+			System.out.println("settingValue= " + settingValue);
+*/
+			// end of settingValue
+			
 			PostBillDataCommon postBillDataCommon = new PostBillDataCommon();
 
 			GenerateBillList generateBillListNew = generateBillList;
@@ -190,26 +263,68 @@ public class BillController {
 
 		
 			for (int i = 0; i < frIdList.size(); i++) {
-
+				
 				PostBillHeader header = new PostBillHeader();
-
+				System.out.println("Invoice No= " + invoiceNo);
 				int frId = frIdList.get(i);
-
+				
 				System.out.println("Outer For frId " + frId);
-
 				header.setFrId(frId);
 				postBillDetailsList = new ArrayList();
 
 				float sumTaxableAmt = 0, sumTotalTax = 0, sumGrandTotal = 0;
 
 				for (int j = 0; j < tempGenerateBillList.size(); j++) {
-
+					
 					GenerateBill gBill = tempGenerateBillList.get(j);
 
 					System.out.println("Inner For frId " + gBill.getFrId());
+					
+					
+					map = new LinkedMultiValueMap<String, Object>();
+					
+					String settingKey = new String();
+
+					settingKey = "PB";
+
+					map.add("settingKeyList", settingKey);
+
+					FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue",
+							map, FrItemStockConfigureList.class);
+
+					System.out.println("SettingKeyList" + settingList.toString());
+
+					settingValue=settingList.getFrItemStockConfigure().get(0).getSettingValue();
+					
+					System.out.println("Setting Value Received "+settingValue);
+					int year = Year.now().getValue();
+					String strYear = String.valueOf(year);
+					strYear = strYear.substring(2);
+
+					System.out.println("strYear= " + strYear);
+
+					int length = String.valueOf(settingValue).length();
+
+					if (length == 1)
+
+						invoiceNo = strYear + "-" + "0000" + settingValue;
+					if (length == 2)
+
+						invoiceNo = strYear + "-" + "000" + settingValue;
+
+					if (length == 3)
+
+						invoiceNo = strYear + "-" + "00" + settingValue;
+
+					if (length == 4)
+
+						invoiceNo = strYear + "-" + "0" + settingValue;
+
+					System.out.println("settingValue= " + settingValue);
+
 
 					if (gBill.getFrId() == frId) {
-
+						
 						System.out.println("If condn true " + gBill.getFrId());
 
 						PostBillDetail billDetail = new PostBillDetail();
@@ -219,11 +334,7 @@ public class BillController {
 
 						System.out.println(
 								"Bill qty for id:" + tempGenerateBillList.get(j).getOrderId() + " is = " + billQty);
-
 						// billQty = String.valueOf(gBill.getOrderQty());
-
-						
-
 						Float orderRate = (float) gBill.getOrderRate();
 						Float tax1 = (float) gBill.getItemTax1();
 						Float tax2 = (float) gBill.getItemTax2();
@@ -316,13 +427,8 @@ public class BillController {
 						
 						System.out.println("Expiry date**************** =" + expiryDate);
 						
-						
-							
-							
 						billDetail.setExpiryDate(expiryDate);
-
 						postBillDetailsList.add(billDetail);
-
 						System.out.println("New Detail Object " + billDetail.toString());
 
 						header.setInvoiceNo(invoiceNo);
@@ -330,8 +436,32 @@ public class BillController {
 						header.setBillDate(billDate);
 						header.setRemark("");
 						header.setTaxApplicable((int) (gBill.getItemTax1() + gBill.getItemTax2()));
+						
+						
+						for(int k=0;k<postBillHeaderList.size();k++) {
+							if(postBillHeaderList.get(k).getFrId()==header.getFrId()) {
+								System.out.println("Fr Id Matched "+k);
+								
+							}
+							else {
+								
+								 map = new LinkedMultiValueMap<String, Object>();
 
+									settingValue = settingValue + 1;
+
+									map.add("settingValue", settingValue);
+
+									map.add("settingKey", Constants.SETTING_KEY);
+
+									Info updateSetting = restTemplate.postForObject(Constants.url + "updateSeetingForPB", map, Info.class);
+							}
+							
+							
+						}
+						
 					}
+					
+					
 
 				}
 
@@ -367,7 +497,7 @@ public class BillController {
 
 			if (info.getError() == false) {
 
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				/* map = new LinkedMultiValueMap<String, Object>();
 
 				settingValue = settingValue + 1;
 
@@ -375,7 +505,7 @@ public class BillController {
 
 				map.add("settingKey", Constants.SETTING_KEY);
 
-				Info updateSetting = restTemplate.postForObject(Constants.url + "updateSeetingForPB", map, Info.class);
+				Info updateSetting = restTemplate.postForObject(Constants.url + "updateSeetingForPB", map, Info.class);*/
 
 			}
 		} catch (Exception e) {
@@ -599,7 +729,7 @@ public class BillController {
 
 				}
 				
-				// new code 
+/*				// new code 
 				
 				//GenerateBillList generateBillList = new GenerateBillList();
 
@@ -652,7 +782,7 @@ for(int i=0;i<genBills.size();i++) {
 				System.out.println(" new size tempGenBills = "+tempGenBills.size());
 				
 				//end of new  Code 
-				
+*/				
 				
 			} catch (Exception e) {
 				System.out.println("Exception " + e.getMessage());

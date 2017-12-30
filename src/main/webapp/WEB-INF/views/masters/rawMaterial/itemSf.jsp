@@ -380,7 +380,6 @@ href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}
 	<script type="text/javascript">
 	function validateQty() {
 		
-		alert("inside validate fun");
 		var min = document.getElementById("sf_min_qty").value;
 		var max = document.getElementById("sf_max_qty").value;
 		var reOrder = document.getElementById("sf_reorder_level_qty").value;
@@ -451,7 +450,6 @@ href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}
 		
 		
 		if(valid){
-			alert("Submited ");
 			 var form = document.getElementById("validation-form")
 			    form.action ="${pageContext.request.contextPath}/insertSfItemHeader";
 			    form.submit();

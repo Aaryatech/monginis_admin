@@ -551,7 +551,7 @@ public class MaterialReceiptNoteController {
 			String curTimeStamp = sdf.format(cal.getTime());
 			 String img1 = null;
 			try {
-				img1=curTimeStamp + "-" + image1.get(0).getOriginalFilename();
+				prevImage1=curTimeStamp + "-" + image1.get(0).getOriginalFilename();
 
 				upload.saveUploadedFiles(image1, Constants.GATE_ENTRY_IMAGE_TYPE, curTimeStamp + "-" + image1.get(0).getOriginalFilename());
 
@@ -577,7 +577,7 @@ public class MaterialReceiptNoteController {
 			String curTimeStamp = sdf.format(cal.getTime());
 			 String img2=null;
 			try {
-				img2=curTimeStamp + "-" + image2.get(0).getOriginalFilename();
+				prevImage2=curTimeStamp + "-" + image2.get(0).getOriginalFilename();
 
 				upload.saveUploadedFiles(image2, Constants.GATE_ENTRY_IMAGE_TYPE, curTimeStamp + "-" + image2.get(0).getOriginalFilename());
 
@@ -611,8 +611,8 @@ public class MaterialReceiptNoteController {
 			materialRecNote.setLrNo(lrno);
 			materialRecNote.setSupplierId(sup_id);
 			materialRecNote.setNoOfItem(no_of_items);
-			materialRecNote.setPhoto1(photo1);
-			materialRecNote.setPhoto2(photo2);
+			materialRecNote.setPhoto1(prevImage1);
+			materialRecNote.setPhoto2(prevImage2);
 			materialRecNote.setGateUserId(1);
 			materialRecNote.setGateRemark(remark);
 
