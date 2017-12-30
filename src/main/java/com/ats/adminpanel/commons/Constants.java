@@ -3,31 +3,42 @@ package com.ats.adminpanel.commons;
 import java.io.File;
 
 public class Constants {
-	public static final String url="http://localhost:8027/";
-	//public static final String url = "http://mongiwebapi.ap-south-1.elasticbeanstalk.com/";
+	public static final String url="http://localhost:8098/";
+	//public static final String url = "http://132.148.143.124:8080/webapi/";
 
-	public static final String SPCAKE_IMAGE_URL = "https://s3.ap-south-1.amazonaws.com/monginis/uploads/specialCake/";
+	public static final String SPCAKE_IMAGE_URL = "";
+	public static final String FR_IMAGE_URL = "";
 
-	public static final String FR_IMAGE_URL = "https://s3.ap-south-1.amazonaws.com/monginis/uploads/fr/";
+	public static final String PHOTO_CAKE_URL = "";
 
-	public static final String PHOTO_CAKE_URL = "https://s3.ap-south-1.amazonaws.com/monginis/uploads/photoCake/";
+	public static final String MESSAGE_IMAGE_URL = "";
 
-	public static final String MESSAGE_IMAGE_URL = "https://s3.ap-south-1.amazonaws.com/monginis/uploads/message/";
+	public static final String ITEM_IMAGE_URL = "";
 
-	public static final String ITEM_IMAGE_URL = "https://s3.ap-south-1.amazonaws.com/monginis/uploads/items/";
+	public static final String RAW_MAT_IMG_URL ="";
 
+	public static final String GATE_ENTRY_IMG_URL = "";
 	
+	public static final String GVN_IMAGE_URL = "";
+
 	// navigation view
 	
 	public static int mainAct=0;
 	public static int subAct=0;
+
+	public static int FR_IMAGE_TYPE=1;
+	public static int ITEM_IMAGE_TYPE=2;
+	public static int MESSAGE_IMAGE_TYPE=3;
+	
+	public static int SPCAKE_IMAGE_TYPE=4;
+	
+	public static int CUST_CHIOICE_IMAGE_TYPE=5;
 	
 	
-	
-	
-	
-	
-	
+	public static int RAW_MAT_IMAGE_TYPE=6;
+
+	public static int GATE_ENTRY_IMAGE_TYPE=7;
+
 	
 	
 	
@@ -61,5 +72,21 @@ public class Constants {
 	// public static final String
 	// FR_IMAGE_URL="http://monginisaurangabad.com/uploads/mongiImage/FR/";
 	public static final String SPCAKE_IMAGE_URL2 = "http://monginisaurangabad.com/uploads/mongiImage/SpecialCake/";
+
+	public static final String SETTING_KEY = "PB";
+
+	public static final String ReportURL = url+"/adminpanel/";
+
+	public static final int DIS_BY_ACC = 7;
+
+	public static final int AP_BY_ACC = 6;
+
+	public static final int DIS_BY_STORE = 5;
+
+	public static final int AP_BY_STORE = 4;
+
+	public static final int AP_BY_GATE = 2;
+
+	public static final int DIS_BY_GATE = 3;
 
 }

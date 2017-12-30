@@ -12,16 +12,17 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class VpsImageUpload {
 
-	private static final String FR_FOLDER = "/home/ats-11/mongiImage/FR/";
-	private static final String ITEM_FOLDER = "/home/ats-11/mongiImage/Items/";
+	public static final String FR_FOLDER = "/home/ats-11/mongiImage/FR/";
+	public static final String ITEM_FOLDER = "/home/ats-11/mongiImage/Items/";
 
-	private static final String MSG_FOLDER = "/home/ats-11/mongiImage/Message/";
+	public static final String MSG_FOLDER = "/home/ats-11/mongiImage/Message/";
 	
-	private static final String SP_CAKE_FOLDER = "/home/ats-11/mongiImage/SpecialCake/";
+	public static final String SP_CAKE_FOLDER = "/home/ats-11/mongiImage/SpecialCake/";
 	
-	private static final String RAW_MAT_IMAGE_FOLDER = "/home/ats-11/mongiImage/RawMaterial/";
+	public static final String RAW_MAT_IMAGE_FOLDER = "/home/ats-11/mongiImage/RawMaterial/";
 
-	private static final String GATE_ENTRY_IMAGE_TYPE = "/home/ats-11/mongiImage/GateEntry/";
+	public static final String GATE_ENTRY_IMAGE_FOLDER = "/home/ats-11/mongiImage/GateEntry/";
+	
 
 
 	private static final String FIELDMAP_FOLDER = null;
@@ -71,7 +72,7 @@ public class VpsImageUpload {
 
 			else if (imageType == 7) {
 
-				path = Paths.get(GATE_ENTRY_IMAGE_TYPE + imageName);
+				path = Paths.get(GATE_ENTRY_IMAGE_FOLDER + imageName);
 
 			}
 

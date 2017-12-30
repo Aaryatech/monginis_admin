@@ -394,7 +394,7 @@ public class RawMaterialController {
 		int rmUomId=rawMaterialDetails.getRmUomId();
 		System.out.println("UOM ID : "+rmUomId);
 		
-		model.addObject("url",Constants.FR_IMAGE_URL);
+		model.addObject("url",Constants.RAW_MAT_IMG_URL);
 		//model.addObject("rmIconStr", rmIconStr);
 		model.addObject("rmUomList", rawMaterialUomList);
 		model.addObject("rmTaxList", rawMaterialTaxDetailsList);

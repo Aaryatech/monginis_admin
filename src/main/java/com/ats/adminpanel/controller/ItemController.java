@@ -709,7 +709,7 @@ public class ItemController {
 	@RequestMapping(value = "/updateItem/updateItemProcess", method = RequestMethod.POST)
 
 	public String updateMessage(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("item_image") MultipartFile file) {
+			@RequestParam("item_image") List<MultipartFile> file) {
 		System.out.println("HI");
 
 		ModelAndView model = new ModelAndView("items/itemList");
@@ -760,10 +760,28 @@ public class ItemController {
 
 		String itemImage = request.getParameter("prevImage");
 
-		if (!file.getOriginalFilename().equalsIgnoreCase("")) {
+		if (!file.get(0).getOriginalFilename().equalsIgnoreCase("")) {
+			itemImage=null;
+			
+			VpsImageUpload upload = new VpsImageUpload();
 
-			System.out.println("Empty image");
-			itemImage = ImageS3Util.uploadItemImage(file);
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			System.out.println(sdf.format(cal.getTime()));
+
+			String curTimeStamp = sdf.format(cal.getTime());
+
+			try {
+				itemImage=curTimeStamp + "-" + file.get(0).getOriginalFilename();
+				upload.saveUploadedFiles(file, Constants.ITEM_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+				System.out.println("upload method called " + file.toString());
+				
+			} catch (IOException e) {
+				
+				System.out.println("Exce in File Upload In Item Update " + e.getMessage());
+				e.printStackTrace();
+			}
+			//itemImage = ImageS3Util.uploadItemImage(file);
 		}
 
 		RestTemplate rest = new RestTemplate();

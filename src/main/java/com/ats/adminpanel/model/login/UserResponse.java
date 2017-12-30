@@ -1,6 +1,7 @@
 package com.ats.adminpanel.model.login;
 
 import com.ats.adminpanel.model.ErrorMessage;
+import com.ats.adminpanel.model.login.User;
 
 public class UserResponse {
 	User user;

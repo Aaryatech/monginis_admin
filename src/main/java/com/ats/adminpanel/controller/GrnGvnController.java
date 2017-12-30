@@ -782,7 +782,7 @@ public class GrnGvnController {
 
 			model.addObject("remarkList", getAllRemarks);
 
-			model.addObject("url", Constants.SPCAKE_IMAGE_URL);
+			model.addObject("url", Constants.GVN_IMAGE_URL);
 			model.addObject("gvnList", getGrnGvnDetails);
 
 
@@ -1089,7 +1089,7 @@ public class GrnGvnController {
 
 			model.addObject("remarkList", getAllRemarks);
 
-			model.addObject("url", Constants.SPCAKE_IMAGE_URL);
+			model.addObject("url", Constants.GVN_IMAGE_URL);
 			model.addObject("gvnList", getGrnGvnDetails);
 
 			System.out.println("gvn  details " + getGrnGvnDetails.toString());
@@ -1389,7 +1389,7 @@ public class GrnGvnController {
 
 			model.addObject("remarkList", getAllRemarks);
 
-			model.addObject("url", Constants.SPCAKE_IMAGE_URL);
+			model.addObject("url", Constants.GVN_IMAGE_URL);
 			model.addObject("gvnList", getGrnGvnDetails);
 			
 			model.addObject("fromDate", accGvnFromDate);
