@@ -580,11 +580,11 @@
 	function changeRate(key)
 	{
 	
-		alert("key"+key);
+		
 		var poRate = $("#poRate"+key+"").val();
-		alert("porate"+poRate);
+		
 		var discPer = $("#discPer"+key+"").val();
-		alert("discpert"+discPer);
+		
 		
 		$
 		.getJSON(
@@ -601,7 +601,7 @@
 				},
 				function(data) {
 					
-					alert("alare nana"+data);
+					
 					$('#table_grid td').remove();
 					if (data == "") {
 						alert("No records found !!");
@@ -679,7 +679,7 @@
 									},
 								function(data)
 								{
-										alert(data)
+										
 										document.getElementById("basicValue").value=data.basicValue;
 										document.getElementById("billAmount").value=data.billAmount;
 										document.getElementById("discAmt2").value=data.discAmt2;
@@ -700,11 +700,11 @@
 	{
 		 
 		var discPer = $("#discPer").val();
-		alert("discPer"+discPer);
+		
 		var freightAmt = $("#freightAmt").val();
-		alert("freightAmt"+freightAmt);
+		
 		var insuranceAmt = $("#insuranceAmt").val();
-		alert("insuranceAmt"+insuranceAmt);
+		
 		
 		$
 		.getJSON(
@@ -719,10 +719,10 @@
 
 				},
 				function(data) {
-					alert("alare nana"+data);
+					
 					$('#table_grid td').remove();
 					if (data == "") {
-						alert("No records found !!");
+						
 
 					}
 					$.each(
@@ -791,7 +791,7 @@
 									},
 								function(data)
 								{
-										alert(data)
+										
 										document.getElementById("discAmt2").value=data.discAmt2;
 										document.getElementById("billAmount").value=data.billAmount;
 										document.getElementById("basicValue").value=data.basicValue;
