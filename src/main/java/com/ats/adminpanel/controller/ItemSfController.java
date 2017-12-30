@@ -114,7 +114,7 @@ public class ItemSfController {
 		Constants.mainAct=4;
 		Constants.subAct=41;
 
-		ModelAndView model=new ModelAndView("masters/rawMaterial/itemSf");
+		//ModelAndView model=new ModelAndView("masters/rawMaterial/itemSf");
 		
 		try {
 			
@@ -137,6 +137,8 @@ public class ItemSfController {
 		
 		float sfMaxQty=Float.parseFloat(request.getParameter("sf_min_qty"));
 		
+		float mulFactor=Float.parseFloat(request.getParameter("mul_factor"));
+		
 		ItemSfHeader header=new ItemSfHeader();
 		header.setDelStatus(0);
 		
@@ -148,7 +150,7 @@ public class ItemSfController {
 		header.setSfUomId(sfItemUoM);
 		header.setSfWeight(sfItewWeight);
 		header.setStockQty(sfStockQty);
-		
+		header.setMulFactor(mulFactor);
 		System.out.println("header= "+header.toString());
 
 		Info info=restTemplate.postForObject(Constants.url+"postSfItemHeader",header,Info.class);
@@ -159,15 +161,15 @@ public class ItemSfController {
 
 		//System.out.println(" Header response "+itemHeaderList);
 		
-		model.addObject("itemHeaderList",itemHeaderList);
-		model.addObject("rmUomList", rawMaterialUomList);
-		model.addObject("sfTypeList", sfTypeList);
+		//model.addObject("itemHeaderList",itemHeaderList);
+		//model.addObject("rmUomList", rawMaterialUomList);
+		//model.addObject("sfTypeList", sfTypeList);
 		
 		}
 		catch (Exception e) {
 			
 			e.printStackTrace();
-			System.out.println("ex in header edit = "+e.getMessage());
+			System.out.println("ex in header Insert = "+e.getMessage());
 			
 		}
 		
@@ -295,7 +297,6 @@ public class ItemSfController {
 	}	
 	
 	
-	
 	@RequestMapping(value = "/editSfHeader", method = RequestMethod.POST)
 	public String editSfHeader(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -325,6 +326,8 @@ public class ItemSfController {
 		
 		float sfMaxQty=Float.parseFloat(request.getParameter("sf_min_qty"));
 		
+		float mulFactor=Float.parseFloat(request.getParameter("mul_factor"));
+		
 		ItemSfHeader header=new ItemSfHeader();
 		
 		header.setSfId(editSfId);
@@ -337,7 +340,7 @@ public class ItemSfController {
 		header.setSfUomId(sfItemUoM);
 		header.setSfWeight(sfItewWeight);
 		header.setStockQty(sfStockQty);
-		
+		header.setMulFactor(mulFactor);
 		System.out.println("header= "+header.toString());
 
 		Info info=restTemplate.postForObject(Constants.url+"postSfItemHeader",header,Info.class);
@@ -355,7 +358,7 @@ public class ItemSfController {
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("ex in header insert = "+e.getMessage());
+			System.out.println("ex in header Edit Process = "+e.getMessage());
 			
 		}
 		
@@ -464,19 +467,19 @@ public class ItemSfController {
 		int key=Integer.parseInt(request.getParameter("key"));
 		
 		try {
-			/*String strMaterialNameId=request.getParameter("mat_name_id");
+			//String strMaterialNameId=request.getParameter("mat_name_id");
 
 			int materialType=Integer.parseInt(request.getParameter("mat_type"));
 		
 			int materialNameId=Integer.parseInt(request.getParameter("mat_name_id"));
-*/
+
 			float sfWeight=Float.parseFloat(request.getParameter("sf_weight"));
 			
 			float qty=Float.parseFloat(request.getParameter("qty"));
 			
-			/*String matName=request.getParameter("mat_name");*/
+			String matName=request.getParameter("mat_name");
 			
-		/*	System.out.println("mat name "+matName);
+			System.out.println("mat name "+matName);
 
 			
 			for(int i=0;i<commonConfs.size();i++) {
@@ -485,18 +488,19 @@ public class ItemSfController {
 					
 					unitOM=commonConfs.get(i).getRmUomId();
 				}
-			}*/
+			}
 			
 			System.out.println("inside If material Id matched");
 			
 			 sfDetailList.get(key).setDelStatus(0);;
-			 sfDetailList.get(key).setRmType(sfDetailList.get(key).getRmType());;
-			 sfDetailList.get(key).setRmId(sfDetailList.get(key).getRmId());;
-			 sfDetailList.get(key).setRmName(sfDetailList.get(key).getRmName());;
+			// sfDetailList.get(key).setRmType(sfDetailList.get(key).getRmType());;
+			 sfDetailList.get(key).setRmType(materialType);;
+			 sfDetailList.get(key).setRmId(materialNameId);;
+			 sfDetailList.get(key).setRmName(matName);;
 			 sfDetailList.get(key).setRmQty(qty);
 			 sfDetailList.get(key).setRmWeight(sfWeight);
 			 sfDetailList.get(key).setSfId(globalSfId);
-			 sfDetailList.get(key).setRmUnit(sfDetailList.get(key).getRmUnit());;
+			 sfDetailList.get(key).setRmUnit(unitOM);;
 			
 		}catch (Exception e) {
 			
@@ -511,8 +515,8 @@ public class ItemSfController {
 	
 	}
 	
-	@RequestMapping(value = "/insertSfItemDetail", method = RequestMethod.GET)
-	@ResponseBody public String insertItemDetail(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/insertSfItemDetail", method = RequestMethod.POST)
+	 public String insertItemDetail(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("i De " );
 		
 		Constants.mainAct=4;

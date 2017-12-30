@@ -1,6 +1,9 @@
 package com.ats.adminpanel.controller;
 
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -23,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.RawMaterial.ItemDetail;
 import com.ats.adminpanel.model.RawMaterial.ItemDetailList;
 import com.ats.adminpanel.model.RawMaterial.GetRawmaterialByGroup;
@@ -98,7 +102,7 @@ public class RawMaterialController {
 	}
 	
 	@RequestMapping(value = "/addRawMaterial", method = RequestMethod.POST)
-	public String addRawMaterial(HttpServletRequest request, HttpServletResponse response, @RequestParam("rm_icon") MultipartFile file)
+	public String addRawMaterial(HttpServletRequest request, HttpServletResponse response, @RequestParam("rm_icon") List<MultipartFile> file)
 	{
 		ModelAndView model = new ModelAndView();
 		
@@ -137,11 +141,54 @@ public class RawMaterialController {
 		String extRmIcon=request.getParameter("prevImage");
 	 
 	
-			if(!file.getOriginalFilename().equalsIgnoreCase("")) {
+			if(!file.get(0).getOriginalFilename().equalsIgnoreCase("")) {
 			
 			System.out.println("Empty image");
-			extRmIcon=ImageS3Util.uploadFrImage(file);
+			//extRmIcon=ImageS3Util.uploadFrImage(file);
+			
+			VpsImageUpload upload = new VpsImageUpload();
+
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			System.out.println(sdf.format(cal.getTime()));
+
+
+			String curTimeStamp = sdf.format(cal.getTime());
+			extRmIcon=null;
+			try {
+				extRmIcon=curTimeStamp + "-" + file.get(0).getOriginalFilename();
+				upload.saveUploadedFiles(file, Constants.RAW_MAT_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+				System.out.println("upload method called for image Upload " + file.toString());
+				
+			} catch (IOException e) {
+				
+				System.out.println("Exce in File Upload In Sp Cake  Insert " + e.getMessage());
+				e.printStackTrace();
+			}
 		}
+		
+			
+			
+			VpsImageUpload upload = new VpsImageUpload();
+
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			System.out.println(sdf.format(cal.getTime()));
+
+
+			String curTimeStamp = sdf.format(cal.getTime());
+			extRmIcon=null;
+			try {
+				extRmIcon=curTimeStamp + "-" + file.get(0).getOriginalFilename();
+				upload.saveUploadedFiles(file, Constants.RAW_MAT_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+				System.out.println("upload method called for image Upload " + file.toString());
+				
+			} catch (IOException e) {
+				
+				System.out.println("Exce in File Upload In Sp Cake  Insert " + e.getMessage());
+				e.printStackTrace();
+			}	
+		 
 			
 		
 		RawMaterialDetails rawMaterialDetails=new RawMaterialDetails();

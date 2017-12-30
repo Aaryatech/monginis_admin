@@ -80,7 +80,9 @@
 </head>
 <body onload="startTime()">
 
-<c:url var="gateEntryList" value="/gateEntryList"></c:url>
+<c:url var="addRmitemInEditGateEntry" value="/addRmitemInEditGateEntry"></c:url>
+<c:url var="editRmQtyinEditGate" value="/editRmQtyinEditGate"></c:url>
+	<c:url var="deleteRmIteminEditGate" value="/deleteRmIteminEditGate"></c:url>
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
 
@@ -133,7 +135,7 @@
 
 						<div class="box-content">
 							<form action="${pageContext.request.contextPath}/submitEditGateEntry" class="form-horizontal"
-								method="post" id="validation-form">
+								method="post" id="validation-form" enctype="multipart/form-data">
 
                   <div class="form-group">
 								<div class="col1">
@@ -142,6 +144,10 @@
 										<input type="text" name="mrn_no" id="mrn_no" value="${materialRecNote.mrnNo}"
 											 class="form-control"
 											readonly />
+													<div> <input type="hidden" name="prevImage1" value="${materialRecNote.photo1}"></div>
+													<div> <input type="hidden" name="prevImage2" value="${materialRecNote.photo2}"></div>
+													
+											
 									</div>
 								 
 								</div>
@@ -198,7 +204,7 @@
 									<div class="col-sm-1 col-lg-3 controls">
 										<input type="text" name="vehicle_no" value="${materialRecNote.vehicleNo}" id="vehicle_no"
 											placeholder="Vehicle No" class="form-control"
-											data-rule-required="true" />
+											/>
 									</div>
 								</div>
 								<div class="col1">
@@ -206,7 +212,7 @@
 									<div class="col-sm-1 col-lg-3 controls">
 										<input type="text" name="lr_no" id="lr_no" value="${materialRecNote.lrNo}"
 											placeholder="LR No" class="form-control"
-											data-rule-required="true"/>
+											data-rule-number="true"/>
 									</div>
 								</div>
 								<div class="form-group">
@@ -236,7 +242,7 @@
 									<div class="col-sm-1 col-lg-3 controls">
 										<input type="text" name="description_of_goods" id="description_of_goods" value="${materialRecNote.gateRemark}"
 											placeholder="Description of Goods" class="form-control"
-											data-rule-required="true">
+											>
 									</div>
 								</div>
 								 <div class="form-group">
@@ -245,7 +251,7 @@
 										<input type="text" name="no_of_items" id="no_of_items"
 										 value="${materialRecNote.noOfItem}"
 											placeholder="No of Items" class="form-control"
-											data-rule-required="true" />
+											data-rule-number="true"/>
 									</div>
 								</div>
 								 <div class="col1">
@@ -361,6 +367,7 @@
 										<th>Sr.No.</th>
 										<th>Name</th>
 										<th>Qty</th>
+										<th>Action</th>
 
 									</tr>
 								</thead>
@@ -377,8 +384,13 @@
 																value="${materialRecNoteDetail.rmName}" /></td>
 
 
-														<td align="left"><c:out
-																value="${materialRecNoteDetail.recdQty}" /></td>
+														<td><input type="text" id="recdQty${count.index}" onkeyup="changeQty(${count.index});" value="${materialRecNoteDetail.recdQty}" class="form-control" disabled="true"></td>
+														
+														<td align="left"><span class='glyphicon glyphicon-edit' onclick="edit(${count.index})" id="edit${count.index}"></span>
+																
+		                                                    <span  style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit(${count.index})" id="ok${count.index}"></span>
+		                                                    <span class="glyphicon glyphicon-remove" onclick="del(${count.index})" id="del${count.index}"></span>
+     														 </td>
 															
 												</tr>
 												</c:forEach>
@@ -389,35 +401,17 @@
 					</div>
 								</div>
 								
-								<div class="form-group">
-									<label class="col-sm-1 col-lg-2 control-label" for="Transporter"> Add New Item</label>
-									
-								</div>	
 								
 								
 								<div class=" box-content">
 							<div class="row">
 								<div class="col-md-12 table-responsive">
-									<table class="table table-bordered table-striped fill-head "
-								style="width: 100%" id="table_grid1">
-								<thead>
-									<tr>
-										<th>Sr.No.</th>
-										<th>Name</th>
-										<th>Qty</th>
-
-									</tr>
-								</thead>
-								<tbody>
-								
-
-								</tbody>
-							</table>
+									
 							
 							<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										<input type="submit" class="btn btn-primary" value="Submit">
-<!-- 										<button type="button" class="btn">Cancel</button>
+<!-- 										
  -->									</div>
 								</div>
 						</div>
@@ -513,7 +507,7 @@
 
 				$
 						.getJSON(
-								'${gateEntryList}',
+								'${addRmitemInEditGateEntry}',
 
 								{
 									 
@@ -524,7 +518,7 @@
 								},
 								function(data) {
 
-									$('#table_grid1 td').remove();
+									$('#table_grid td').remove();
 									$('#loader').hide();
 
 									if (data == "") {
@@ -541,12 +535,10 @@
 													var tr = $('<tr></tr>');
 
 												  	tr.append($('<td></td>').html(key+1));
-
 												  	tr.append($('<td></td>').html(itemList.rmName));
-												  	
-
-												  	tr.append($('<td></td>').html(itemList.recdQty));
-													$('#table_grid1 tbody').append(tr);
+												  	tr.append($('<td></td>').html('<input type="text" id="recdQty'+key+'" onkeyup="changeQty('+key+');" value="'+itemList.recdQty+'" class="form-control" disabled="true">'));
+												  	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
+												    $('#table_grid tbody').append(tr);
 
 													 
  
@@ -554,6 +546,89 @@
 								});
 
 			 
+		}
+		
+		function edit(key)
+		{
+			alert(key);
+			document.getElementById("recdQty"+key).disabled = false;
+			document.getElementById("edit"+key).style.visibility="hidden";
+			document.getElementById("ok"+key).style.visibility="visible";
+			
+			//style="visibility: hidden;"
+		}
+		function submit(key)
+		{
+			alert("key"+key);
+			var qty=document.getElementById("recdQty"+key).value;
+			document.getElementById("recdQty"+key).disabled = true;
+			document.getElementById("edit"+key).style.visibility="visible";
+			document.getElementById("ok"+key).style.visibility="hidden";
+			alert(qty);
+			$
+			.getJSON(
+					'${editRmQtyinEditGate}',
+
+					{
+						 
+						index : key,
+						updateQty : qty,
+					
+						ajax : 'true'
+
+					},
+					function(data) {
+						
+					});
+			
+			
+		}
+		function del(key)
+		{
+			alert("key1"+key);
+			var key=key;
+			$
+			.getJSON(
+					'${deleteRmIteminEditGate}',
+
+					{
+						 
+						index : key,
+						ajax : 'true'
+
+					},
+					function(data) {
+						
+						$('#table_grid td').remove();
+						$('#loader').hide();
+
+						if (data == "") {
+							alert("No records found !!");
+
+						}
+					 
+
+					  $.each(
+									data,
+									function(key, itemList) {
+									
+								if(itemList.delStatus==0)
+									{
+										var tr = $('<tr></tr>');
+										var tr = $('<tr></tr>');
+										tr.append($('<td></td>').html(key+1));
+										tr.append($('<td></td>').html(itemList.rmName));
+									  	tr.append($('<td></td>').html('<input type="text" id="recdQty'+key+'" onkeyup="changeQty('+key+');" value="'+itemList.recdQty+'" class="form-control" disabled="true">'));
+									  	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
+									    $('#table_grid tbody').append(tr);
+									}
+										
+									  	
+									})
+						
+					});
+			
+			
 		}
 	</script>
 </body>

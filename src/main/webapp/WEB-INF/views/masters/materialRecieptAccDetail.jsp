@@ -130,7 +130,7 @@
 
 				<div class="box">
 					<form id="validation-form" class="form-horizontal"
-						enctype="multipart/form-data" method="post">
+						action="${pageContext.request.contextPath}/submitMaterialAcc" method="post">
 
 						<div class="box-content">
 
@@ -292,8 +292,9 @@
 															value="${materialRecieptAccList.item}" /></td>
 															
 												<c:choose>
-													<c:when test="${materialRecieptAccList.poRate==0.0}">
+													<c:when test="${materialRecieptAccList.incldTax==0}">
 													<td style="width:200%;"><input style="width:200%;" type="text"
+													onchange="changeRate(${count.index})"
 													name="poRate${count.index}"  id="poRate${count.index}"
 									value="${materialRecieptAccList.poRate}" class="form-control" ></td>
 													
@@ -319,7 +320,7 @@
 													</td>
 													<td style="width:200%;">
 													
-													<input style="width:200%;" type="text" name="discPer${count.index}" id="discPer${count.index}"
+													<input style="width:200%;" onchange="changeRate(${count.index})" type="text" name="discPer${count.index}" id="discPer${count.index}"
 									value="${materialRecieptAccList.discPer}" class="form-control" >
 													
 													</td>
@@ -494,9 +495,8 @@
 
 						<div class="row">
 							<div class="col-md-12" style="text-align: center">
-								 <input type="button" class="btn btn-info"
-									value="Submit"
-									onclick="window.location.href='${pageContext.request.contextPath}/allMaterialReceiptNote'">
+								 <input type="submit" class="btn btn-info"
+									value="Submit" >
 							</div>
 						</div>
 
@@ -619,21 +619,21 @@
 
 								  	tr.append($('<td></td>').html(itemList.incldTax));
 								  	tr.append($('<td></td>').html(itemList.item));
-								  	if(itemList.poRate==0.0)
+								  	if(itemList.incldTax==0)
 								  		{
-								  		tr.append($('<td></td>').html('<input type="text" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control">'));
+								  		tr.append($('<td style="width:200%;"></td>').html('<input type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control">'));
 
 								  		}
 								  	else
 								  		{
-								  		tr.append($('<td></td>').html('<input type="text" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" readonly>'));
+								  		tr.append($('<td style="width:200%;"></td>').html('<input type="text" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" readonly>'));
 								  		
 										}
 								  	tr.append($('<td></td>').html(itemList.reciedvedQty));
 								  	tr.append($('<td></td>').html(itemList.rateCal));
 								  	tr.append($('<td></td>').html(itemList.value));
 								  	
-								  	tr.append($('<td></td>').html('<input type="text" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control">'));
+								  	tr.append($('<td style="width:200%;"></td>').html('<input type="text" onchange="changeRate('+key+')" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control">'));
 
 
 								  	tr.append($('<td></td>').html(itemList.discAmt));
@@ -681,6 +681,9 @@
 								{
 										alert(data)
 										document.getElementById("basicValue").value=data.basicValue;
+										document.getElementById("billAmount").value=data.billAmount;
+										document.getElementById("discAmt2").value=data.discAmt2;
+										document.getElementById("discAmt").value=data.discAmt;
 										document.getElementById("cgst").value=data.cgst;
 										document.getElementById("sgst").value=data.sgst;
 								});
@@ -734,21 +737,21 @@
 
 								  	tr.append($('<td></td>').html(itemList.incldTax));
 								  	tr.append($('<td></td>').html(itemList.item));
-								  	if(itemList.poRate==0.0)
+								  	if(itemList.incldTax==0)
 								  		{
-								  		tr.append($('<td></td>').html('<input type="text" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control">'));
+								  		tr.append($('<td style="width:200%;"></td>').html('<input type="text" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control">'));
 
 								  		}
 								  	else
 								  		{
-								  		tr.append($('<td></td>').html('<input type="text" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" readonly>'));
+								  		tr.append($('<td style="width:200%;"></td>').html('<input type="text" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" readonly>'));
 								  		
 										}
 								  	tr.append($('<td></td>').html(itemList.reciedvedQty));
 								  	tr.append($('<td></td>').html(itemList.rateCal));
 								  	tr.append($('<td></td>').html(itemList.value));
 								  	
-								  	tr.append($('<td></td>').html('<input type="text" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control">'));
+								  	tr.append($('<td style="width:200%;"></td>').html('<input type="text" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control">'));
 
 
 								  	tr.append($('<td></td>').html(itemList.discAmt));
@@ -789,7 +792,10 @@
 								function(data)
 								{
 										alert(data)
+										document.getElementById("discAmt2").value=data.discAmt2;
+										document.getElementById("billAmount").value=data.billAmount;
 										document.getElementById("basicValue").value=data.basicValue;
+										document.getElementById("discAmt").value=data.discAmt;
 										document.getElementById("cgst").value=data.cgst;
 										document.getElementById("sgst").value=data.sgst;
 								});

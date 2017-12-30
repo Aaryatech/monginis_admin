@@ -3,8 +3,11 @@ package com.ats.adminpanel.controller;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -26,6 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.AllEventListResponse;
 import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.SpecialCake;
@@ -133,7 +137,7 @@ public class SpecialCakeController {
 	@RequestMapping(value = "/addSpCakeProcess", method = RequestMethod.POST)
 
 	public String redirectToLogin56(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("sp_image") MultipartFile file) {
+			@RequestParam("sp_image") List<MultipartFile> file) {
 		ModelAndView model = new ModelAndView("spcake/addspcake");
 
 		RestTemplate rest = new RestTemplate();
@@ -218,9 +222,26 @@ public class SpecialCakeController {
 		System.out.println("Event id list is" + strEvents.toString());
 		
 		
-		 String spImage=	ImageS3Util.uploadSpCakeImage(file);
-		
-		
+		// String spImage=	ImageS3Util.uploadSpCakeImage(file);
+		 VpsImageUpload upload = new VpsImageUpload();
+
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			System.out.println(sdf.format(cal.getTime()));
+
+
+			String curTimeStamp = sdf.format(cal.getTime());
+			String spImage=null;
+			try {
+				spImage=curTimeStamp + "-" + file.get(0).getOriginalFilename();
+				upload.saveUploadedFiles(file, Constants.SPCAKE_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+				System.out.println("upload method called for image Upload " + file.toString());
+				
+			} catch (IOException e) {
+				
+				System.out.println("Exce in File Upload In Sp Cake  Insert " + e.getMessage());
+				e.printStackTrace();
+			}
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("spCode", code);
@@ -460,7 +481,7 @@ int rate=0;
 	@RequestMapping(value = "/updateSpCake/updateSpCakeProcess", method = RequestMethod.POST)
 
 	public String redirectToUpdateSpCakeProcess(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("sp_image") MultipartFile file) {
+			@RequestParam("sp_image") List<MultipartFile> file) {
 		try {
 		ModelAndView model = new ModelAndView("spcake/editspcake");
 
@@ -566,10 +587,30 @@ int rate=0;
 		String spImage=request.getParameter("prevImage");
 		
 		
-		if(!file.getOriginalFilename().equalsIgnoreCase("")) {
+		if(!file.get(0).getOriginalFilename().equalsIgnoreCase("")) {
 			
 			System.out.println("Empty image");
-			spImage=	ImageS3Util.uploadSpCakeImage(file);
+			//spImage=	ImageS3Util.uploadSpCakeImage(file);
+			
+			VpsImageUpload upload = new VpsImageUpload();
+
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			System.out.println(sdf.format(cal.getTime()));
+
+
+			String curTimeStamp = sdf.format(cal.getTime());
+			 spImage=null;
+			try {
+				spImage=curTimeStamp + "-" + file.get(0).getOriginalFilename();
+				upload.saveUploadedFiles(file, Constants.SPCAKE_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+				System.out.println("upload method called for image Upload " + file.toString());
+				
+			} catch (IOException e) {
+				
+				System.out.println("Exce in File Upload In Sp Cake  Insert " + e.getMessage());
+				e.printStackTrace();
+			}
 		}
 		
 		

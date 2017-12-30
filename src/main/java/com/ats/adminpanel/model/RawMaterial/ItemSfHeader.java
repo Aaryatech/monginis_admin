@@ -25,11 +25,18 @@ public class ItemSfHeader{
 	
 	private int delStatus;
 
+	private float mulFactor;
 	
 	
 	
-	
-	
+	@Override
+	public String toString() {
+		return "ItemSfHeader [sfId=" + sfId + ", sfName=" + sfName + ", sfUomId=" + sfUomId + ", sfType=" + sfType
+				+ ", sfWeight=" + sfWeight + ", stockQty=" + stockQty + ", minLevelQty=" + minLevelQty
+				+ ", maxLevelQty=" + maxLevelQty + ", reorderLevelQty=" + reorderLevelQty + ", delStatus=" + delStatus
+				+ ", mulFactor=" + mulFactor + "]";
+	}
+
 	public int getSfId() {
 		return sfId;
 	}
@@ -112,12 +119,12 @@ public class ItemSfHeader{
 		this.sfWeight = sfWeight;
 	}
 
-	@Override
-	public String toString() {
-		return "ItemSfHeader [sfId=" + sfId + ", sfName=" + sfName + ", sfUomId=" + sfUomId + ", sfType=" + sfType
-				+ ", sfWeight=" + sfWeight + ", stockQty=" + stockQty + ", minLevelQty=" + minLevelQty
-				+ ", maxLevelQty=" + maxLevelQty + ", reorderLevelQty=" + reorderLevelQty + ", delStatus=" + delStatus
-				+ "]";
+	public float getMulFactor() {
+		return mulFactor;
+	}
+
+	public void setMulFactor(float mulFactor) {
+		this.mulFactor = mulFactor;
 	}
 
 	

@@ -12,7 +12,7 @@
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>show All Store Material Reciept</title>
+<title>Material Receipt Account</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -107,7 +107,7 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>show All Store Material Reciept
+					<i class="fa fa-file-o"></i>Material Receipt Account
 				</h1>
 				<!-- <h4>Bill for franchises</h4> -->
 			</div>
@@ -119,11 +119,18 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>show All Store Material Reciept
+					<i class="fa fa-bars"></i>Material Receipt Account
 				</h3>
 
 			</div> 
 				<div class=" box-content">
+				<form id="validation-form"
+				action="allMaterialReceiptNote"
+				method="get">
+				<input type="hidden" value="1" name="viewAll">
+				
+				<input type="submit" class="btn btn-info" value="View All" >
+				</form>
 					<div class="row">
 						<div class="col-md-12 table-responsive">
 							<table class="table table-bordered table-striped fill-head "
@@ -131,77 +138,91 @@
 								<thead>
 									<tr>
 										<th>Sr.No.</th>
-										
-										<th>MRN No.</th>
+										<th>Inward No.</th>
+										<th>PO No.</th>
 										<th>Supplier Name</th>
-										<th>lrNo</th>
-										<th>Vehical</th>
-										<th>Transport</th>
+										<th>Entry Date & Time</th>
+										<th>PO Date</th>
+										 <th>Status</th>
 										<th>Action</th>
+
 
 									</tr>
 								</thead>
 								
 								<tbody>
-								<c:forEach items="${materialRecNoteList}" var="materialRecNoteList"
+
+									<c:forEach items="${materialRecNoteList}" var="materialRecNoteList"
 													varStatus="count">
-											<c:choose>
-													<c:when test="${materialRecNoteList.status==2}">
+
+												<c:choose>
+													<c:when test="${materialRecNoteList.status==3}">
 													<c:set var = "color" value="red"/>
 													</c:when>
 													
-													
-													<c:otherwise>
+													 
+													<c:when test="${materialRecNoteList.status==4}">
 													  <c:set var = "color" value="black"/>
-													</c:otherwise>
+													</c:when>
 													</c:choose>
-
-									
-
+													 
 													<tr>
+												 
+													 
+													
 														<td style="color: <c:out value = "${color}"/>"><c:out value="${count.index+1}" /></td>
 
-														
-																
-																<td align="left" style="color: <c:out value = "${color}"/>"><c:out
+														<td align="left" style="color:${color}"><c:out
 																value="${materialRecNoteList.mrnNo}" /></td>
+																
+																<td align="left" style="color:${color}"><c:out
+																value="${materialRecNoteList.poNo}" /></td>
 																
 																<c:forEach items="${supplierDetailsList}" var="supplierDetailsList"
 													varStatus="count">
 																<c:choose>
 													<c:when test="${materialRecNoteList.supplierId==supplierDetailsList.suppId}">
-													<td align="left" style="color: <c:out value = "${color}"/>"><c:out
+													<td align="left" style="color:${color}"><c:out
 																value="${supplierDetailsList.suppName}" /></td>
 													</c:when>
 													 </c:choose>
 													 </c:forEach>
 													  
-													<td align="left" style="color: <c:out value = "${color}"/>"><c:out
-																value="${materialRecNoteList.lrNo}" />  </td>
+												 	 <td align="left" style="color:${color}"><c:out
+																value="${materialRecNoteList.gateEntryDate}" />  
+															  <c:out
+																value="${materialRecNoteList.gateEntryTime}" /> 
+																</td>
+												 
 															
-															<td align="left" style="color: <c:out value = "${color}"/>"><c:out	
-																value="${materialRecNoteList.vehicleNo}" />
+															<td align="left" style="color:${color}"><c:out	
+																value="${materialRecNoteList.poDate}" />
 																</td>
 																
-																
-																<c:forEach items="${transportlist}" var="transportlist"
-													varStatus="count">
-																<c:choose>
-													<c:when test="${materialRecNoteList.transportId==transportlist.tranId}">
-													<td align="left" style="color: <c:out value = "${color}"/>"><c:out
-																value="${transportlist.tranName}" /></td>
+														
+														<%-- <td align="left"><c:out	
+																value="${materialRecNoteList.status}" />
+																</td>	 --%>	
+														
+												<c:choose>
+												
+													
+													<c:when test="${materialRecNoteList.status =='3'}">
+													<td align="left" style="color:${color}"><c:out value="Reject to Account"></c:out></td>
 													</c:when>
-													 </c:choose>
-													 </c:forEach>
+													<c:when test="${materialRecNoteList.status =='4'}">
+													<td align="left" style="color:${color}"><c:out value="Approved"></c:out></td>
+													</c:when>
+													
+												</c:choose>
+												
+													 
+															 
 																
-																
-						<td><a href="${pageContext.request.contextPath}/showStoreMaterialReciept?mrnId=${materialRecNoteList.mrnId}" class="action_btn" >
-						<abbr title="Details"><i class="fa fa-list"></i></abbr></a>
-						<a href="${pageContext.request.contextPath}/editGateEntry?mrnId=${materialRecNoteList.mrnId}"
-									><span class="glyphicon glyphicon-edit"><abbr title='Edit'></abbr></span> </a>
-						</td>
-						
+							<td><a href="${pageContext.request.contextPath}/materialRecieptAccDetail?mrnId=${materialRecNoteList.mrnId}" class="action_btn" >
+						<abbr title="Details"><i class="fa fa-list"></i></abbr></a></td>
 																</tr>
+																 
 												</c:forEach>
 								</tbody>
 							</table>

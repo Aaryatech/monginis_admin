@@ -97,7 +97,7 @@
 								<i class="fa fa-bars"></i>Edit Item
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showItemSf">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 
@@ -169,7 +169,7 @@
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_item_weight" id="sf_item_weight" value="${editHeader.sfWeight}"
 											class="form-control" placeholder="Specification "
-											data-rule-required="true" />
+											data-rule-required="true"  data-rule-number="true"/>
 									</div>
 								</div>
 
@@ -181,7 +181,7 @@
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_stock_qty" id="sf_stock_qty"
 											class="form-control" placeholder="Weight"
-											data-rule-required="true" value="${editHeader.stockQty}"
+											data-rule-required="true" data-rule-number="true"  value="${editHeader.stockQty}"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 
@@ -192,6 +192,7 @@
 										<input type="text" name="sf_reorder_level_qty"
 											id="sf_reorder_level_qty" class="form-control"
 											placeholder="Max Qty " data-rule-required="true"
+											data-rule-number="true"
 											value="${editHeader.reorderLevelQty}"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
@@ -204,7 +205,7 @@
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_min_qty" id="sf_min_qty"
 											class="form-control" placeholder="Pack Qty"
-											data-rule-required="true"
+											data-rule-required="true" data-rule-number="true"
 											value="${editHeader.minLevelQty}"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
@@ -214,80 +215,33 @@
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_max_qty" id="sf_max_qty"
 											class="form-control" placeholder="Min Qty"
-											data-rule-required="true"
+											data-rule-required="true" data-rule-number="true"
 											value="${editHeader.maxLevelQty}"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 								</div>
-
+								<div class="form-group">
+								<label class="col-sm-3 col-lg-2 control-label">Multiplication
+										Factor</label>
+								<div class="col-sm-6 col-lg-4 controls">
+										<input type="text" name="mul_factor" id="mul_factor"
+											class="form-control" placeholder="Multiplication Factot"
+											data-rule-required="true" data-rule-number="true"
+											onKeyPress="return isNumberCommaDot(event)" />
+									</div>
+									</div>
+									
 								<div class="row">
 									<div class="col-md-12" style="text-align: center">
-										<input type="submit" class="btn btn-info" value="Submit Edit">
+										<input type="button" onclick="validateQty()" class="btn btn-info" value="Update">
 
 									</div>
 								</div>
 
-						<%-- 		<div class="clearfix"></div>
-								<div class="table-responsive" style="border: 0">
-									<table width="100%" class="table table-advance" id="table1">
-										<thead>
-											<tr>
-
-												<th width="140" style="width: 30px" align="left">Sr No</th>
-												<th width="138" align="left">SF Name</th>
-												<th width="120" align="left">SF Type</th>
-												<th width="120" align="left">SF Weight</th>
-
-												<th width="120" align="left">Min Level Qty</th>
-												<th width="120" align="left">Reorder Level Qty</th>
-
-												<th width="120" align="left">Action</th>
-												<!-- 	<th width="140" align="left">GST %</th> -->
-
-											</tr>
-
-										</thead>
-
-										<tbody>
-
-											<c:forEach items="${itemHeaderList}" var="itemHeaderList"
-												varStatus="count">
-
-												<tr>
-													<td><c:out value="${count.index+1}" /></td>
-
-													<td align="left"><c:out
-															value="${itemHeaderList.sfName}" /></td>
-
-
-													<td align="left"><c:out
-															value="${itemHeaderList.sfTypeName}" /></td>
-
-													<td align="left"><c:out
-															value="${itemHeaderList.sfWeight}" /></td>
-
-													<td align="left"><c:out
-															value="${itemHeaderList.minLevelQty}" /></td>
-
-													<td align="left"><c:out
-															value="${itemHeaderList.reorderLevelQty}" /></td>
-
-													<td><a
-														href="${pageContext.request.contextPath}/showAddSfItemDetail/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
-														class="action_btn"> <abbr title="Details"><i
-																class="fa fa-list"></i></abbr></a> <a
-														href="${pageContext.request.contextPath}/editSfItemDetail/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
-														class="action_btn"> <abbr title="Details"><i
-																class="fa fa-edit"></i></abbr></a></td>
-
-												</tr>
-											</c:forEach>
-
-										</tbody>
-									</table>
-								</div> --%>
 
 							</form>
+							</div>
+							
 						</div>
 					</div>
 
@@ -379,7 +333,89 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
+<script type="text/javascript">
+	function validateQty() {
+		
+		alert("inside validate fun");
+		var min = document.getElementById("sf_min_qty").value;
+		var max = document.getElementById("sf_max_qty").value;
+		var reOrder = document.getElementById("sf_reorder_level_qty").value;
+		var sfName = document.getElementById("sf_item_name").value;
+		alert( "name= "+sfName);
+		var sfType = document.getElementById("sf_item_type").value;
+	alert("type ="+sfType);
+		var uom = document.getElementById("sf_item_uom").value;
+		alert("uom = "+uom);
+		var weight = document.getElementById("sf_item_weight").value;
+		alert("weight="+weight);
+		var stockQty = document.getElementById("sf_stock_qty").value;
+		alert("stock qty "+stockQty);
+		
+				var mulFactor = document.getElementById("mul_factor").value;
 
+		
+		alert("Mul fact "+mulFactor);
+		
+		var valid=true;
+		
+		if(max == min || max < min ){
+			alert("Enter Max Qty  greater than Min Qty");
+			valid=false;
+		}
+		else if(reOrder<=min || reOrder>=max ){
+			alert("Enter Reorder Qty between Min and Max Qty");
+			valid=false;
+		}
+		
+		else if(sfName==null || sfName==""){
+			alert("Please Enter SF Name");
+			valid=false;
+		}
+		else if(sfType==0){
+			alert("Please Select Sf Type");
+			valid=false;
+		}
+		else if(uom==0){
+			alert("Please Select Unit of Measure");
+			valid=false;
+		}
+		else if(weight<0 || isNaN(weight)){
+			alert("Please Enter valid Weight")
+			valid=false;
+		}
+		else if(isNaN(min)){
+			alert("Please Enter valid Min Qty");
+			valid=false;
+		}
+		else if(max<=0 || isNaN(max)){
+			alert("Please Enter valid Max Qty");
+			valid=false;
+		}
+		else if(stockQty<=0 || isNaN(stockQty)){
+			alert("Please Enter valid Stock Qty");
+			valid=false;
+		}
+		else if(reOrder<=0 || isNaN(reOrder)){
+			alert("Please Enter valid Reorder Qty");
+			valid=false;
+		}
+		
+		else if(mulFactor<=0 || isNaN(mulFactor)){
+			alert("Please Enter valid Multiplication Qty");
+			valid=false;
+		}
+		
+		
+		if(valid){
+			alert("Submited ");
+			 var form = document.getElementById("validation-form")
+			    form.action ="${pageContext.request.contextPath}/editSfHeader";
+			    form.submit();
+		}
+
+		
+	}
+	</script>
 
 </body>
 </html>
