@@ -124,13 +124,7 @@
 
 			</div> 
 				<div class=" box-content">
-				<form id="validation-form"
-				action="allMaterialReceiptNote"
-				method="get">
-				<input type="hidden" value="1" name="viewAll">
 				
-				<input type="submit" class="btn btn-info" value="View All" >
-				</form>
 					<div class="row">
 						<div class="col-md-12 table-responsive">
 							<table class="table table-bordered table-striped fill-head "
