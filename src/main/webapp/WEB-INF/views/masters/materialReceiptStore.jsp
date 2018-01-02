@@ -209,21 +209,38 @@
 							<div class="box-content">
 							
 									
-									<div class="col-md-2" >PO Reference</div>
-									<div class="col-md-3">
+									
+									
 									
 								
 									
 											<c:choose>
 												<c:when test="${materialRecNote.status==2}">
-													<div class="col-md-4">
-													<input type="text" id="poref_id" name="poref_id" value="${materialRecNote.poId}" 
-													class="form-control" readonly>
+													<c:choose>
+														<c:when test="${materialRecNote.poId!=0}">
+														<div class="col-md-2" >PO Reference</div>
+														<div class="col-md-3">
+													
+															<input type="hidden" id="poref_id" name="poref_id" value="${materialRecNote.poId}" 
+															class="form-control" >
+															<input  id="po_no" type="text" name="po_no"  value="${materialRecNote.poNo}" class="form-control" readonly/>
+														</div>
+													<div class="col-md-2">PO Date</div>
+										<div class="col-md-3">
+										<input class="form-control" id="po_date" size="16"
+											type="text" name="po_date" value="${materialRecNote.poDate}" placeholder="PO Date"  readonly />
 										
-													</div>
+											
+									</div>
+													
+													</c:when>
+													</c:choose>
 												</c:when>
 													
 													<c:otherwise>
+													<div class="col-md-2" >PO Reference</div>
+														<div class="col-md-3">
+													<input  id="po_no" type="hidden" name="po_no" />
 													 <select name="poref_id" id="poref_id" class="form-control" tabindex="-1"  disabled>
 														<option value="">Select Po Ref</option>
 											
@@ -240,18 +257,20 @@
                                               					</c:choose>
 														</c:forEach>
 													</select>
-													</c:otherwise>
-												</c:choose>
-										
-									</div>
-									
-									<div class="col-md-2">PO Date</div>
+													</div>
+													<div class="col-md-2">PO Date</div>
 										<div class="col-md-3">
 										<input class="form-control" id="po_date" size="16"
 											type="text" name="po_date" value="${materialRecNote.poDate}" placeholder="PO Date"  readonly />
-										<input  id="po_no" type="hidden" name="po_no"   />
+										
 											
 									</div>
+													</c:otherwise>
+												</c:choose>
+										
+									
+									
+									
 							
 							</div><br><br>
 							

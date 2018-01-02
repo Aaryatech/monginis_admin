@@ -124,7 +124,7 @@
 								<div class="col-md-2">Supplier</div>
 									<div class="col-md-3">
 									
-									<select name="supp_id" id="supp_id" class="form-control" tabindex="6" required>
+									<select name="supp_id" id="supp_id" class="form-control chosen" tabindex="6" required>
 											<option value="">Select Supplier</option>
 											<c:forEach items="${supplierList}" var="supplierList"> 
 												<option value="${supplierList.suppId}"><c:out value="${supplierList.suppName}"></c:out> </option>
@@ -153,7 +153,7 @@
 									<div class="col-md-2">Transporter</div>
 									<div class="col-md-3">
 									
-									<select name="tran_id" id="tran_id" class="form-control" tabindex="6" required>
+									<select name="tran_id" id="tran_id" class="form-control chosen" tabindex="6" required>
 									<option  value="">Select Transporter</option>
 									<c:forEach items="${transporterList}" var="transporterList">
                                               
@@ -267,7 +267,7 @@
 									<div class="col-md-3">
 										<input type="text" name="rm_qty" id="rm_qty"
 											placeholder="Qty" class="form-control"
-											 data-rule-required="true" data-rule-number="true"/>
+											 pattern="\d+" required/>
 												 
 									</div>
 									
@@ -408,14 +408,16 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 		<script type="text/javascript">
+		
+		
 		function addItem() {
 
-		 
-
-			  
+			
 				var rm_id = $("#rm_id").val();
 				var rm_qty = $("#rm_qty").val();
 				
+				if(validation()==true){	
+					
 				
 				$('#loader').show();
 
@@ -464,10 +466,14 @@
 
 			 
 		}
+				
+				
+			
+	}
 		
 		function edit(key)
 		{
-			alert(key);
+			
 			document.getElementById("recdQty"+key).disabled = false;
 			document.getElementById("edit"+key).style.visibility="hidden";
 			document.getElementById("ok"+key).style.visibility="visible";
@@ -476,12 +482,12 @@
 		}
 		function submit(key)
 		{
-			alert("key"+key);
+			
 			var qty=document.getElementById("recdQty"+key).value;
 			document.getElementById("recdQty"+key).disabled = true;
 			document.getElementById("edit"+key).style.visibility="visible";
 			document.getElementById("ok"+key).style.visibility="hidden";
-			alert(qty);
+			
 			$
 			.getJSON(
 					'${editRmQtyOnGate}',
@@ -502,7 +508,7 @@
 		}
 		function del(key)
 		{
-			alert("key1"+key);
+			
 			var key=key;
 			$('#loader').show();
 			$
@@ -549,85 +555,23 @@
 <script type="text/javascript">
 function validation()
 {
-	var mrn_no = $("#mrn_no").val();
-	var nowDate = $("#nowDate").val();
-	var supp_id = $("#supp_id").val();
-	var vehicle_no = $("#vehicle_no").val();
-	var lr_no = $("#lr_no").val();
-	var tran_id = $("#tran_id").val();
-	var no_of_items = $("#no_of_items").val();
-	var remark = $("#remark").val();
+	
+	var rm_id = $("#rm_id").val();
 	var rm_qty = $("#rm_qty").val();
-	
-	
-	if(mrn_no!="" &&  supp_id!="" && vehicle_no!="" && Math.floor(lr_no)!= lr_no && tran_id!="" && Math.floor(no_of_items)!= no_of_items && remark!="" && rm_qty!="")
-		{
-				
-		$('#loader').show();
-
-		$
-				.getJSON(
-						'${materialReceiptStore}',
-
-						{
-							 
-							mrn_no : mrn_no,
-							nowDate : nowDate,
-							supp_id : supp_id,
-							vehicle_no : vehicle_no,
-							lr_no : lr_no,
-							no_of_items : no_of_items,
-							remark : remark,
-							rm_qty : rm_qty,
-							tran_id : tran_id,
-							
-							ajax : 'true',
-
-						},
-						function(data) {
-		
-		});
-	
-	
-	
-	/* if (Math.floor(value) == value) {
-	  
-	} else {
-	  // value is not an integer, show some validation error
-	} */
-	
+	var isValid = true;
+	if(isNaN(rm_id) || rm_id < 0 || rm_id=="")
+	{
+	isValid = false;
+	alert("Please enter Raw Material");
 	}
-	else
-		{
-			if(supp_id=="")
-				{
-				 alert("Enter Supplier");
-				}
-			if(vehicle_no=="")
-			{
-			 alert("Enter Vehical No.");
-			}
-			if(lr_no=="")
-			{
-			 alert("Enter lr No.");
-			}
-			if(tran_id=="")
-			{
-			 alert("Enter Transport");
-			}
-			if(no_of_items=="")
-			{
-			 alert("Enter no_of_items");
-			}
-			if(remark=="")
-			{
-			 alert("Enter remark");
-			}
-			if(rm_qty=="")
-			{
-			 alert("Enter rm_qty");
-			}
-		}
+	
+	else if(isNaN(rm_qty) || rm_qty < 0 || rm_qty=="")
+	{
+	isValid = false;
+	alert("Please enter Quantity");
+	}
+	
+return isValid;
 	
 }
 

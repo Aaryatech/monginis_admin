@@ -201,7 +201,8 @@
 
 
 
-
+			<c:choose>
+						<c:when test="${materialRecNoteHeader.poId!=0}">
 						<div class="box-content">
 
 							<div class="col-md-2">Po No.</div>
@@ -221,11 +222,9 @@
 
 
 						</div>
-						<br />
-						
-
-						<br>
-
+						<br>  <br>
+				</c:when>
+				</c:choose>
 
 						
 
@@ -268,7 +267,7 @@
 												<th>SGST Amt</th>
 												<th>IGST Amt</th>
 												<th>CESS Amt</th>
-												<th>Action </th>
+												
 
 											</tr>
 										</thead>
@@ -362,9 +361,9 @@
 													<td><c:out value="${materialRecieptAccList.cessAmt}" />
 													</td>
 													
-													<td>
+													<%-- <td>
 													<span  class="glyphicon glyphicon-ok" onclick="changeRate(${count.index})" id="ok${count.index}"></span>
-													</td>
+													</td> --%>
  
 												</tr>
 											</c:forEach>

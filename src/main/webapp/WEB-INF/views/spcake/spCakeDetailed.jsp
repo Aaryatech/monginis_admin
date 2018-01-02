@@ -377,9 +377,9 @@
 $(document).ready(function() { 
 	$('#rm_type').change(
 			function() {
-alert("type");
+//alert("type");
 var rm_type = $("#rm_type").val();
-alert(rm_type);
+//alert(rm_type);
 
 	$.getJSON('${getRawMaterialListinSpcake}', {
 					rm_type : rm_type,
@@ -411,28 +411,28 @@ $(document).ready(function() {
 		
 	var isValid = validation();
 	if (isValid) {
-		alert("asdf");
+		//alert("asdf");
 		var cakeName = $("#cakeName").val();
  	var cakeId = $("#cake_Id").val();
-	alert("cake_Id"+cakeId)
+	//alert("cake_Id"+cakeId)
 	var baseQty = $("#base_qty").val();
-	alert("baseQty"+baseQty)
+	//alert("baseQty"+baseQty)
 	
 	var rmType = $("#rm_type").val();
-	alert("rmType"+rmType);
+	//alert("rmType"+rmType);
 	var rmId = $("#rm_id").val();
-	alert("rmId"+rmId);
+	//alert("rmId"+rmId);
 	var rmWeight = $("#rm_weight").val();
-	alert(rmWeight);
+	//alert(rmWeight);
 	var rmQty = $("#rm_qty").val();
-	alert("rm_qty"+rmQty);
+	//alert("rm_qty"+rmQty);
 	var rmName=$('#rm_id option:selected').text();
-	alert(rmName);
+	//alert(rmName);
 	if(editFlag==true)
 		{
 		editFlag=false;
-		alert("in if");
-		alert("key for edit "+key1);
+		//alert("in if");
+		//alert("key for edit "+key1);
 		$.getJSON('${editSpCakeDetail}', {
 			
 			cakeId : cakeId,
@@ -450,7 +450,7 @@ $(document).ready(function() {
 			 //$('#loader').hide();
 			var len = data.length;
 
-			alert(len);
+			//alert(len);
 
 			$('#table1 td').remove();
 
@@ -511,7 +511,7 @@ $(document).ready(function() {
 			ajax : 'true',
 		},  function(data) { 
 	 
-			alert("ala re bho");
+			//alert("ala re bho");
 			var len = data.length;
 
 			$('#table1 td').remove();
@@ -570,8 +570,8 @@ $(document).ready(function() {
 function editItemDetail(token){
  
 	editFlag=true;
-	alert("in function"+editFlag);
-	alert("key"+token);
+	//alert("in function"+editFlag);
+	//alert("key"+token);
 	$.getJSON('${editSpItemDetail}', {
 		
 		key:token,
@@ -580,7 +580,7 @@ function editItemDetail(token){
 	}, function(data) {
 		//alert(data);
 		var len = data.length;
- 		alert("alare");
+ 		//alert("alare");
 		         document.getElementById("rm_weight").value=data.rmWeight;
 		       
 				 document.getElementById("rm_qty").value=data.rmQty;
@@ -666,7 +666,7 @@ function deleteItemDetail(key){
 	{
 			
 		var tr = $('<tr></tr>');
-		alert("key "+key);
+		//alert("key "+key);
 	  	tr.append($('<td></td>').html(key+1));
 
 
