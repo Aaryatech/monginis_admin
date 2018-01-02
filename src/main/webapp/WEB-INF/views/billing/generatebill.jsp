@@ -147,10 +147,10 @@
 								name="deliveryDate" size="30" type="text" value="${todaysDate}" />
 						</div>
 
-					<!-- </div>
+						<!-- </div>
 
 					<div class="form-group  "> -->
-					
+
 						<label class="col-sm-3 col-lg-2	 control-label">Select
 							Menu</label>
 						<div class="col-sm-6 col-lg-4 controls">
@@ -173,44 +173,46 @@
 				</div>
 
 
-<br>
+				<br>
 
 				<!-- <div class="col-sm-9 col-lg-5 controls">
  -->
-<div class="row">
-				<div class="form-group">
-					<label class="col-sm-3 col-lg-2 control-label">Select Route</label>
-									<div class="col-sm-6 col-lg-4 controls">
-				<select data-placeholder="Select Route"
-						class="form-control chosen"  name="selectRoute"
-						id="selectRoute" onchange="disableFr()">
-						<option value="0">Select Route</option>
-						<c:forEach items="${routeList}" var="route" varStatus="count">
-							<option value="${route.routeId}"><c:out value="${route.routeName}"/> </option>
+				<div class="row">
+					<div class="form-group">
+						<label class="col-sm-3 col-lg-2 control-label">Select
+							Route</label>
+						<div class="col-sm-6 col-lg-4 controls">
+							<select data-placeholder="Select Route"
+								class="form-control chosen" name="selectRoute" id="selectRoute"
+								onchange="disableFr()">
+								<option value="0">Select Route</option>
+								<c:forEach items="${routeList}" var="route" varStatus="count">
+									<option value="${route.routeId}"><c:out value="${route.routeName}"/> </option>
 
-						</c:forEach>
-						</select>
+								</c:forEach>
+							</select>
+						</div>
+
+						<label class="col-sm-3 col-lg-2 control-label">Select
+							Franchisee </label>
+						<div class="col-sm-6 col-lg-4">
+
+							<select data-placeholder="Choose Franchisee"
+								class="form-control chosen" multiple="multiple" tabindex="6"
+								id="selectFr" name="selectFr" onchange="disableRoute()">
+
+								<option value="-1"><c:out value="All"/></option>
+
+								<c:forEach items="${unSelectedFrList}" var="fr"
+									varStatus="count">
+									<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
+								</c:forEach>
+							</select>
+
+						</div>
 					</div>
-					
-					<label class="col-sm-3 col-lg-2 control-label">Select Franchisee
-										 </label>
-									<div class="col-sm-6 col-lg-4">
-									
-									<select data-placeholder="Choose Franchisee" 
-							class="form-control chosen" multiple="multiple" tabindex="6"
-							id="selectFr" name="selectFr" onchange="disableRoute()">
+				</div>
 
-							<option value="-1"><c:out value="All"/></option>
-
-							<c:forEach items="${unSelectedFrList}" var="fr" varStatus="count">
-								<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
-							</c:forEach>
-						</select>
-					
-				</div>
-				</div>
-				</div>
-			
 
 				<%-- <div class="form-group col-md-9">
 					<label class=" col-md-2">Select
@@ -231,7 +233,7 @@
 				</div> --%>
 
 
-<br>
+				<br>
 				<div class="row">
 					<div class="col-md-12" style="text-align: center;">
 						<button class="btn btn-info" onclick="generateNewBill()">Search
@@ -279,9 +281,19 @@
 										<th>Franchise Name</th>
 										<th>Menu Name</th>
 										<th>Item Name</th>
-										<th>Order Quantity</th>
-										<th>Bill Quantity</th>
-										<th>Rate</th>
+										<th>Order Qty</th>
+										<th>Bill Qty</th>
+										<th>Base Rate</th>
+										<th>Amount</th>
+										
+										<th>SGST Rs</th>
+
+										<th>CGST Rs</th>
+
+										<th>IGST Rs</th>
+
+										<th>Total Tax %</th>
+
 										<th>Total</th>
 									</tr>
 								</thead>
@@ -298,7 +310,7 @@
 						<div class="col-md-offset-6 col-md-6">
 							<button class="btn btn-info pull-right">Submit & PDF</button>
 
-							<%-- <a href="${pageContext.request.contextPath}/pdf?url=showBillPdf">PDF</a> --%>
+							<a href="${pageContext.request.contextPath}/pdf?url=showBillPdf">PDF</a>
 							<button class="btn btn-info pull-right"
 								style="margin-right: 5px;" onclick="submitBill()">Submit</button>
 						</div>
@@ -395,23 +407,55 @@
 																+ bill.orderQty
 																+ "</td>";
 
-														 var billQty = "<td align=center><input type=number min=0 max=500 class=form-control   onkeyup= updateTotal("
+														 var billQty = "<td align=center><input type=number min=0 max=500 style='width: 5em' class=form-control   onkeyup= updateTotal("
 																+ bill.orderId + ","
 																+ bill.orderRate + ") onchange= updateTotal("+ bill.orderId+ ","+ bill.orderRate+ ")  id= billQty"+ bill.orderId+ " name=billQty"+bill.orderId+" value = "+ bill.orderQty+ "></td>"; 
 																
 																//var billQty = "<td align=center><input name=newId id=newId value=21 type=number ></td>";
 
-														
-														var expiryDate = "<td></td>";
-
-														var orderRate = "<td align=center id=billRate"+bill.orderId+"  value="
+														baseRateAmt=(bill.orderRate*100)/(100+bill.itemTax1+bill.itemTax2+bill.itemTax3);
+														alert("base Rate Amt ="+baseRateAmt);
+														var baseRate = "<td align=center>&nbsp;&nbsp;&nbsp;"
+															+ baseRateAmt+ "</td>";
+															
+														/* var orderRate = "<td align=center id=billRate"+bill.orderId+"  value="
 																+ bill.orderRate
 																+ ">"
 																+ bill.orderRate
-																+ "</td>";
+																+ "</td>" */;
+																var t1=parseFloat(bill.itemTax1);
+																var t2=parseFloat(bill.itemTax2);
+																var t3=parseFloat(bill.itemTax3);
+																alert("taxes ="+t1+"-"+t2+"-"+t3);
 
-														var total = parseFloat(bill.orderRate)
-																* parseFloat(bill.orderQty);
+																var taxableAmt= baseRateAmt * bill.orderQty;
+																//var taxableAmount = "<td align=center"+taxableAmt+">"+"</td>";
+																var taxableAmount ="<td align=center>&nbsp;&nbsp;&nbsp;"
+																+ taxableAmt+ "</td>";
+																alert("taxable amt "+taxableAmt);
+																
+																var sgstRS=(t1*taxableAmt)/100;
+																var cgstRS=(t2*taxableAmt)/100;
+																var igstRS=(t3*taxableAmt)/100;
+																alert("rs 1"+sgstRS);
+																alert("rs 2 "+cgstRS);
+																alert("rs 3 "+igstRS);
+																var totalTax=sgstRS+cgstRS+igstRS;
+
+																var sgst = "<td align=center>&nbsp;&nbsp;&nbsp;"
+																	+ sgstRS+ "</td>";
+
+																var cgst = "<td align=center>&nbsp;&nbsp;&nbsp;"
+																	+ cgstRS+ "</td>";
+																var igst ="<td align=center>&nbsp;&nbsp;&nbsp;"
+																	+ igstRS+ "</td>";
+																var totTaxP=t1+t2+t3;
+																var totTaxPer = "<td align=center>&nbsp;&nbsp;&nbsp;"
+																	+ totTaxP+ "</td>";
+																
+																	
+														var total = parseFloat(taxableAmt)+parseFloat(totalTax);
+																
 
 														var totaLBill = "<td align=center id=billTotal"+bill.orderId+">"
 																+ total
@@ -438,12 +482,30 @@
 																		orderQty);
 														$('#table_grid tbody')
 																.append(billQty);
-														/* $('#table_grid tbody')
-																.append(
-																		expiryDate); */
 														$('#table_grid tbody')
 																.append(
-																		orderRate);
+																		baseRateAmt);
+														$('#table_grid tbody')
+														.append(
+																taxableAmount);
+														 
+														 $('#table_grid tbody')
+															.append(
+																	sgst); 
+														 
+														 $('#table_grid tbody')
+															.append(
+																	cgst); 
+														 
+														 $('#table_grid tbody')
+															.append(
+																	igst); 
+														 
+														 $('#table_grid tbody')
+															.append(
+																	totTaxPer); 
+														 
+														
 														$('#table_grid tbody')
 																.append(
 																		totaLBill);
@@ -503,7 +565,7 @@
 		}
 	</script>
 
-<script>
+	<script>
 $('.datepicker').datepicker({
     format: {
         /*
@@ -519,19 +581,26 @@ $('.datepicker').datepicker({
 
 </script>
 
-<script type="text/javascript">
+	<script type="text/javascript">
 
 function disableFr(){
 
 	alert("Inside Disable Fr ");
-document.getElementById("selectFr").readonly = true;
+document.getElementById("selectFr").disabled = true;
 
 }
 
 function disableRoute(){
 
 	alert("Inside Disable route ");
-document.getElementById("selectRoute").readonly = true;
+	var x=document.getElementById("selectRoute")
+	alert(x.options.length);
+	var i;
+	for(i=0;i<x;i++){
+		document.getElementById("selectRoute").options[i].disabled;
+		 //document.getElementById("pets").options[2].disabled = true;
+	}
+//document.getElementById("selectRoute").disabled = true;
 
 }
 

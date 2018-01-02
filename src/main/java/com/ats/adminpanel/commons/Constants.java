@@ -39,7 +39,7 @@ public class Constants {
 
 	public static int GATE_ENTRY_IMAGE_TYPE=7;
 
-	public static final String ReportURL ="http://132.148.143.124:8080/admin/";
+	public static final String ReportURL ="localhost:8895/adminpanel/";
 	
 	
 	public static final String FR_PROPERTY = "/home/ats-11/mongiImage/FR";

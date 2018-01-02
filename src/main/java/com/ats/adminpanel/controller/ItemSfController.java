@@ -23,7 +23,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
-import org.zefer.html.doc.t;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.Info;

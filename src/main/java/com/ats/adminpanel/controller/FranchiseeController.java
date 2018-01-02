@@ -1125,7 +1125,7 @@ public class FranchiseeController {
 
 	@RequestMapping(value = "/updateFranchisee/updateFrProcess", method = RequestMethod.POST)
 	public String updateFrProcess(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("fr_image") MultipartFile file) {
+			@RequestParam("fr_image") List<MultipartFile> file) {
 		ModelAndView model = new ModelAndView("franchisee/addnewfranchisee");
 
 		try {
@@ -1216,10 +1216,26 @@ public class FranchiseeController {
 
 			String frImage = request.getParameter("prevImage");
 
-			if (!file.getOriginalFilename().equalsIgnoreCase("")) {
+			if (!file.get(0).getOriginalFilename().equalsIgnoreCase("")) {
 
-				System.out.println("Empty image");
-				//frImage = ImageS3Util.uploadFrImage(file);
+				VpsImageUpload upload = new VpsImageUpload();
+
+				Calendar cal = Calendar.getInstance();
+				SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+				System.out.println(sdf.format(cal.getTime()));
+
+				String curTimeStamp = sdf.format(cal.getTime());
+		 
+				try {
+					frImage=curTimeStamp + "-" + file.get(0).getOriginalFilename();
+					upload.saveUploadedFiles(file, Constants.FR_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+					System.out.println("upload method called " + file.toString());
+					
+				} catch (IOException e) {
+					
+					System.out.println("Exce in File Upload In Fr Update Process " + e.getMessage());
+					e.printStackTrace();
+				}
 			}
 
 			RestTemplate rest = new RestTemplate();
