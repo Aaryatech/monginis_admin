@@ -1539,7 +1539,6 @@ public class MaterialReceiptNoteController {
 	}
 
 	@RequestMapping(value = "/submitMaterialAcc", method = RequestMethod.POST)
-	@ResponseBody
 	public String submitMaterialAcc(HttpServletRequest request, HttpServletResponse response) {
 
 
@@ -1614,7 +1613,6 @@ public class MaterialReceiptNoteController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return "redirect:/allMaterialRecieptAccList";
 
 	}
