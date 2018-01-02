@@ -69,7 +69,6 @@ import com.ats.adminpanel.model.item.FrItemStockConfigure;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.item.ItemSup;
 import com.ats.adminpanel.model.modules.ErrorMessage;
-import com.ats.adminpanel.util.ImageS3Util;
 
 @Controller
 public class FranchiseeController {
@@ -1220,7 +1219,7 @@ public class FranchiseeController {
 			if (!file.getOriginalFilename().equalsIgnoreCase("")) {
 
 				System.out.println("Empty image");
-				frImage = ImageS3Util.uploadFrImage(file);
+				//frImage = ImageS3Util.uploadFrImage(file);
 			}
 
 			RestTemplate rest = new RestTemplate();

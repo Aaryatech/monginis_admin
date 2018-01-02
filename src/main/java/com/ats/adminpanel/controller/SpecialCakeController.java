@@ -44,7 +44,6 @@ import com.ats.adminpanel.model.SpecialCake;
 import com.ats.adminpanel.model.ViewSpCakeResponse;
 import com.ats.adminpanel.model.masters.AllRatesResponse;
 import com.ats.adminpanel.model.masters.Rate;
-import com.ats.adminpanel.util.ImageS3Util;
 import com.ats.adminpanel.model.ViewSpCakeListResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

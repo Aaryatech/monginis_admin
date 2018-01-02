@@ -34,7 +34,6 @@ import com.ats.adminpanel.model.message.AllMessageResponse;
 import com.ats.adminpanel.model.message.Info;
 import com.ats.adminpanel.model.message.Message;
 import com.ats.adminpanel.model.modules.ErrorMessage;
-import com.ats.adminpanel.util.ImageS3Util;
 
 @Controller
 public class MessageController {

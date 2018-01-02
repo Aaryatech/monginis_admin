@@ -39,7 +39,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.amazonaws.services.simpleworkflow.flow.worker.SynchronousActivityTaskPoller;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;

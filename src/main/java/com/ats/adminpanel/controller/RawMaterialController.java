@@ -55,7 +55,6 @@ import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.ErrorMessage;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.supplierMaster.SupplierDetails;
-import com.ats.adminpanel.util.ImageS3Util; 
 
 @Controller
 @Scope("session")

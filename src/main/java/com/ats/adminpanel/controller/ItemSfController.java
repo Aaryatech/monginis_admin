@@ -25,7 +25,6 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.zefer.html.doc.t;
 
-import com.amazonaws.retry.PredefinedRetryPolicies.SDKDefaultRetryCondition;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.RawMaterial.GetItemSfHeader;
