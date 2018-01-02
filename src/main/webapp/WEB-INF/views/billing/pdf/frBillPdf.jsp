@@ -32,21 +32,34 @@ th {
 </style>
 </head>
 <body>
-<h3 > Franchisee Bill</h3>
+	<h3>Franchisee Bill</h3>
 	<table width="100%" border="0" cellspacing="0" cellpadding="0"
 		id="table_grid" class="table table-bordered">
 		<thead>
 			<tr>
-				<th>#</th>
+				<!-- <th>#</th>
 				<th>Franchisee Name</th>
 				<th>Menu Name</th>
 				<th>Item id</th>
 				<th>Item Name</th>
 				<th>Order Quantity</th>
 				<th>Bill Quantity</th>
-				<!-- 										<th>Expiry Date</th>
- -->
+														<th>Expiry Date</th>
+
 				<th>Rate</th>
+				<th>Total</th>  before table -->
+				<th>Sr.No.</th>
+				<th>Franchise Name</th>
+				<th>Menu Name</th>
+				<th>Item Name</th>
+				<th>Order Qty</th>
+				<th>Bill Qty</th>
+				<th>Base Rate</th>
+				<th>Amount</th>
+				<th>Tax%</th>
+				<th>SGST Rs</th>
+				<th>CGST Rs</th>
+				<th>IGST Rs</th>
 				<th>Total</th>
 			</tr>
 		</thead>
@@ -61,22 +74,18 @@ th {
 
 				<td align="center"><c:out value="${getBillList.frName}" /></td>
 
-
 				<td align="center"><c:out value="${getBillList.menuTitle}" /></td>
 
-
-				<td align="center"><c:out value="${getBillList.itemId}" /></td>
 				<td align="center"><c:out value="${getBillList.itemName}" /></td>
 				<td align="center"><c:out value="${getBillList.orderQty}" /></td>
 
 				<td align="center"><c:out value="${getBillList.orderQty}" /></td>
 
 				<td align="center"><c:out value="${getBillList.orderRate}" /></td>
-				<c:set var="oRate"  value="${getBillList.orderRate}"/>
-				<c:set var="bQty"  value="${getBillList.orderQty}"/>
+				<c:set var="oRate" value="${getBillList.orderRate}" />
+				<c:set var="bQty" value="${getBillList.orderQty}" />
 
-				<td align="center"><c:out
-						value="${oRate*bQty}" /></td>
+				<td align="center"><c:out value="${oRate*bQty}" /></td>
 
 			</tr>
 

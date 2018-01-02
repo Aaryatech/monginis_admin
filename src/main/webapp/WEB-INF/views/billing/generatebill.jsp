@@ -285,15 +285,10 @@
 										<th>Bill Qty</th>
 										<th>Base Rate</th>
 										<th>Amount</th>
-										
+										<th>Tax %</th>
 										<th>SGST Rs</th>
-
 										<th>CGST Rs</th>
-
 										<th>IGST Rs</th>
-
-										<th>Total Tax %</th>
-
 										<th>Total</th>
 									</tr>
 								</thead>
@@ -310,9 +305,11 @@
 						<div class="col-md-offset-6 col-md-6">
 							<button class="btn btn-info pull-right">Submit & PDF</button>
 
-							<a href="${pageContext.request.contextPath}/pdf?url=showBillPdf">PDF</a>
+							<a href="${pageContext.request.contextPath}/pdf?url=showBillPdf"
+								target="_blank">PDF</a>
 							<button class="btn btn-info pull-right"
-								style="margin-right: 5px;" onclick="submitBill()">Submit</button>
+								style="margin-right: 5px;" onclick="submitBill()">Submit
+								Bill</button>
 						</div>
 					</div>
 				</div>
@@ -332,6 +329,7 @@
 			function submitBill() {
 
 				//submitBillForm.submit();
+				 window.open("${pageContext.request.contextPath}/pdf?url=showBillPdf");
 			}
 		</script>
 
@@ -488,6 +486,9 @@
 														$('#table_grid tbody')
 														.append(
 																taxableAmount);
+														 $('#table_grid tbody')
+															.append(
+																	totTaxPer); 
 														 
 														 $('#table_grid tbody')
 															.append(
@@ -501,9 +502,7 @@
 															.append(
 																	igst); 
 														 
-														 $('#table_grid tbody')
-															.append(
-																	totTaxPer); 
+													
 														 
 														
 														$('#table_grid tbody')

@@ -96,9 +96,11 @@ public class BillController {
 	List<Menu> menuList = new ArrayList<Menu>();
 	String selectedFrArray;
 	String selectedDate;
-
-	GenerateBillList generateBillList = new GenerateBillList();
+	static public GenerateBillList generateBillList = new GenerateBillList();
+	 static List<GenerateBill> staticGetGenerateBills= new ArrayList<>();
 	List<String> frList = new ArrayList<>();
+	
+	
 
 	public List<GetBillDetail> billDetailsList;
 	public GetBillHeader getBillHeader;
@@ -432,6 +434,8 @@ public class BillController {
 			Info info = restTemplate.postForObject(Constants.url + "insertBillData", postBillDataCommon, Info.class);
 
 			System.out.println("Info Data " + info.toString());
+			
+			//model.addObject("postBillDataCommon","");
 
 			//if (info.getError() == false) {
 
@@ -733,6 +737,8 @@ public class BillController {
 		// return generateBillList.getGenerateBills();
 
 		// return tempGenBills;
+		
+		
 		return generateBillList.getGenerateBills();
 	}
 
@@ -1232,11 +1238,23 @@ public class BillController {
 	public ModelAndView showBillPdf(HttpServletRequest request, HttpServletResponse response) {
 System.out.println("IN Show bill Method");
 		ModelAndView model = new ModelAndView("billing/pdf/frBillPdf");
-		
-		System.out.println(" Data for PDF generateBillList "+ generateBillList.getGenerateBills().toString());
-		model.addObject("getBillList", generateBillList.getGenerateBills());
+		try {
+           //System.out.println(" Data for PDF generateBillList "+ generateBillList.toString());
 
-		return model;
+           staticGetGenerateBills=generateBillList.getGenerateBills();
+           
+			//List<GenerateBill> generateNewBill=generateBillList.getGenerateBills();
+		//	System.out.println(" Data for PDF generateBillList "+ generateNewBill.toString());
+			model.addObject("getBillList", generateBillList.getGenerateBills());
+			System.out.println("after Data ");
+		
+		}catch (Exception e) {
+			
+			System.out.println("Ex in getting bill Data for PDF "+e.getMessage());		
+			e.printStackTrace();
+		}
+	return model;
+	
 	}
 	
 	
