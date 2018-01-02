@@ -542,7 +542,9 @@
 								  $.each(
 												data,
 												function(key, itemList) {
-												
+													
+													if(itemList.delStatus==0)
+													{
 
 													var tr = $('<tr></tr>');
 
@@ -552,7 +554,7 @@
 												  	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
 												    $('#table_grid tbody').append(tr);
 
-													 
+													}
  
 												})  
 								});

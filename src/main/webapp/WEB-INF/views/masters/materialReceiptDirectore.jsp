@@ -169,27 +169,8 @@
 
 
 
-
-						<div class="box-content">
-
-							<div class="col-md-2">Po No.</div>
-							<div class="col-md-3">
-								<input type="text" name="po_no" id="po_no" class="form-control"
-									value="${materialRecNoteHeader.poNo}" readonly>
-							</div>
-							<div class="col-md-1"></div>
-							<div class="col-md-2">PO Date</div>
-							<div class="col-md-3">
-					 
-								<input type="text" name="po_date" id="po_date"
-									value="${materialRecNoteHeader.poDate}" class="form-control"
-									readonly>
-									 
-							</div>
-
-
-						</div>
-						<br />
+					
+						
 						<c:forEach items="${rmItemGroupList}" var="rmItemGroupList"
 							varStatus="count">
 							<c:choose>
@@ -209,8 +190,57 @@
 									value='<c:out value = "${mrnName}"/>' class="form-control"
 									readonly>
 							</div>
+							</div><br>
+							
+							<c:choose>
+						<c:when test="${materialRecNoteHeader.poId!=0}">
+						 
+						<div class="box-content">
+
+							<div class="col-md-2">Po No.</div>
+							<div class="col-md-3">
+								<input type="text" name="po_no" id="po_no" class="form-control"
+									value="${materialRecNoteHeader.poNo}" readonly>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-2">PO Date</div>
+							<div class="col-md-3">
+					 
+								<input type="text" name="po_date" id="po_date"
+									value="${materialRecNoteHeader.poDate}" class="form-control"
+									readonly>
+									 
+							</div>
+
 
 						</div>
+						<br>
+						
+						<div class="box-content">
+							<c:choose>
+							
+							
+							 	<c:when test="${(purchaseOrderHeader.poType==1) and (materialRecNoteHeader.poId!=0)}">
+							 	
+							 		<div class="col-md-2">Po Status</div>
+									<div class="col-md-3">
+									<select name="po_sts" id="po_sts" class="form-control" tabindex="6" required>
+									<option  value="">Select Transporter</option>
+									<option  value="1">Partially Closed</option>
+									<option  value="2">Closed</option>
+									</select>
+
+										
+							</div>
+							 	</c:when>
+							
+							
+							</c:choose>
+							</div><br>
+						
+						</c:when>
+					
+					</c:choose>
 						<br>
 						<br>
 

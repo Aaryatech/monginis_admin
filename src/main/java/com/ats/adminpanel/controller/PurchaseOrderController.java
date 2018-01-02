@@ -430,41 +430,46 @@ public class PurchaseOrderController {
 			Info info=rest.postForObject(Constants.url + "purchaseOrder/insertPurchaseOrder",purchaseOrderHeader, Info.class);
 			 System.out.println("Response :"+info.toString());
 			
-			 String phonno = null;
-			 String email = null;
-			 Supplist supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
-			 for(int i=0;i<supplierDetailsList.getSupplierDetailslist().size();i++)
+			 if(info.isError()==false)
 			 {
-				 if(supplierDetailsList.getSupplierDetailslist().get(i).getSuppId()==purchaseOrderHeader.getSuppId())
+				 String phonno = null;
+				 String email = null;
+				 Supplist supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
+				 for(int i=0;i<supplierDetailsList.getSupplierDetailslist().size();i++)
 				 {
-					 phonno=supplierDetailsList.getSupplierDetailslist().get(i).getSuppMob1();
-					 email=supplierDetailsList.getSupplierDetailslist().get(i).getSuppEmail1();
-					 break;
+					 if(supplierDetailsList.getSupplierDetailslist().get(i).getSuppId()==purchaseOrderHeader.getSuppId())
+					 {
+						 phonno=supplierDetailsList.getSupplierDetailslist().get(i).getSuppMob1();
+						 email=supplierDetailsList.getSupplierDetailslist().get(i).getSuppEmail1();
+						 break;
+					 }
 				 }
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				 
+				 map.add("authkey", "140742AbB1cy8zZt589c06d5");
+				 map.add("mobiles", phonno);
+				 map.add("message", "PO Approved");
+				 map.add("sender", "RCONNT");
+				 map.add("route", "4");
+				 map.add("country", "91");
+				 map.add("response", "json");
+				String String=rest.postForObject("http://control.bestsms.co.in/api/sendhttp.php",map, String.class);
+				final String e_mail=email;
+				mailSender.send(new MimeMessagePreparator() {
+
+					@Override
+					public void prepare(MimeMessage mimeMessage) throws Exception {
+						MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
+						messageHelper.setTo(e_mail);
+						messageHelper.setSubject("Email Testing");
+						messageHelper.setText("Nana Po Approved");
+
+					}
+
+				});
+				 
 			 }
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			 
-			 map.add("authkey", "140742AbB1cy8zZt589c06d5");
-			 map.add("mobiles", phonno);
-			 map.add("message", "PO Approved");
-			 map.add("sender", "RCONNT");
-			 map.add("route", "4");
-			 map.add("country", "91");
-			 map.add("response", "json");
-			String String=rest.postForObject("http://control.bestsms.co.in/api/sendhttp.php",map, String.class);
-			final String e_mail=email;
-			mailSender.send(new MimeMessagePreparator() {
 
-				@Override
-				public void prepare(MimeMessage mimeMessage) throws Exception {
-					MimeMessageHelper messageHelper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
-					messageHelper.setTo(e_mail);
-					messageHelper.setSubject("Email Testing");
-					messageHelper.setText("Nana Po Approved");
-
-				}
-
-			});
 			 
 		}catch(Exception e)
 		{

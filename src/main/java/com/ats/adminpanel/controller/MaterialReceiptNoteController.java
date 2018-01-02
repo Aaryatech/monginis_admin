@@ -28,6 +28,7 @@ import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.MRawMaterial;
 import com.ats.adminpanel.model.MaterialRecieptAcc;
 import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;
+import com.ats.adminpanel.model.RawMaterial.Info;
 import com.ats.adminpanel.model.RawMaterial.RmItemGroup;
 import com.ats.adminpanel.model.materialreceipt.GetMaterialRecNoteList;
 import com.ats.adminpanel.model.materialreceipt.GetTaxListByRmId;
@@ -91,7 +92,7 @@ public class MaterialReceiptNoteController {
 	@RequestMapping(value = "/addGateEntry", method = RequestMethod.GET)
 	public ModelAndView addGateEntry(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("masters/gateEntry");
+		ModelAndView model = new ModelAndView("masters/insertGateEntry");
 
 		addmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
 		System.out.println(rawlist);
@@ -212,7 +213,7 @@ public class MaterialReceiptNoteController {
 			materialRecNote.setApainstPo(0);
 			materialRecNote.setPoId(0);
 			materialRecNote.setPoNo("");
-			materialRecNote.setPoDate(nowDate);
+			materialRecNote.setPoDate("");
 			materialRecNote.setUseridStores(0);
 			materialRecNote.setStoresRemark("");
 			materialRecNote.setApprovedUserId(0);
@@ -285,10 +286,13 @@ public class MaterialReceiptNoteController {
 			RestTemplate rest = new RestTemplate();
 			materialRecNotes = rest.postForObject(Constants.url + "/postMaterialRecNote", materialRecNote,
 					MaterialRecNote.class);// enter first form
-			int value = rest.getForObject(Constants.url + "/updateValuekey", Integer.class);
-			System.out.println("return value " + value);
-			// ----------------------------------------------------------------------------------------------------------
-			DateFormat dateFormat1 = new SimpleDateFormat("dd-MM-yyyy");
+			if(materialRecNotes!=null)
+			{
+				int value = rest.getForObject(Constants.url + "/updateValuekey", Integer.class);
+				System.out.println("return value " + value);
+			}
+			
+			
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
@@ -649,7 +653,7 @@ public class MaterialReceiptNoteController {
 		int mrnType = Integer.parseInt(request.getParameter("mrntype"));
 		int againstpo_id = 0;
 		int poref_id = 0;
-
+		String po_no=request.getParameter("po_no");
 		if (request.getParameter("po_id") == "") {
 			againstpo_id = 2;
 		} else {
@@ -670,7 +674,7 @@ public class MaterialReceiptNoteController {
 			DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 
 			String testDateString = df.format(todaysDate);
-			po_date = testDateString;
+			po_date = "";
 			System.out.println("po_date in null" + po_date);
 		} else {
 			po_date = request.getParameter("po_date");
@@ -697,7 +701,7 @@ public class MaterialReceiptNoteController {
 			materialRecNote.setPoId(poref_id);
 			materialRecNote.setInvoiceNumber("");
 			materialRecNote.setInvDate(dt);
-			materialRecNote.setPoNo("");
+			materialRecNote.setPoNo(po_no);
 
 			materialRecNote.setPoDate(po_date);
 			materialRecNote.setUseridStores(0);
@@ -995,13 +999,17 @@ public class MaterialReceiptNoteController {
 
 	}
 
+	
+	public PurchaseOrderHeader purchaseOrderHeaderChangePoStsByDirector = new PurchaseOrderHeader();
+	
 	@RequestMapping(value = "/materialReceiptDirectore", method = RequestMethod.GET)
 	public ModelAndView materialReceiptDirectore(HttpServletRequest request, HttpServletResponse response) {
 		/*
 		 * Constants.mainAct = 17; Constants.subAct=184;
 		 */
 		int mrnId = Integer.parseInt(request.getParameter("mrnId"));
-
+		
+		purchaseOrderHeaderChangePoStsByDirector = new PurchaseOrderHeader();
 		GetAllRemarksList getAllRemarksList = new GetAllRemarksList();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("mrnId", mrnId);
@@ -1046,8 +1054,15 @@ public class MaterialReceiptNoteController {
 					model.addObject("transportName", transporterList.getTransporterList().get(i).getTranName());
 				}
 			}
-			DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-			// materialRecNote.setPoDate(dateFormat.format(materialRecNote.getPoDate());
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			int poid=materialRecNote.getPoId();
+			map.add("poId", poid);
+			purchaseOrderHeaderChangePoStsByDirector = rest.postForObject(Constants.url + "purchaseOrder/getpurchaseorderHeader", map,
+					PurchaseOrderHeader.class);
+			System.out.println("purchaseOrderHeader " + purchaseOrderHeaderChangePoStsByDirector.toString());
+			
+			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -1055,7 +1070,7 @@ public class MaterialReceiptNoteController {
 		model.addObject("materialRecNoteHeader", materialRecNote);
 		model.addObject("materialRecNoteDetail", materialRecNote.getMaterialRecNoteDetails());
 		model.addObject("allRemarksList", getAllRemarksList.getGetAllRemarks());
-		// model.addObject("supplierDetailsList",supplierDetailsList);
+		 model.addObject("purchaseOrderHeader",purchaseOrderHeaderChangePoStsByDirector);
 		return model;
 	}
 
@@ -1066,6 +1081,8 @@ public class MaterialReceiptNoteController {
 		System.out.println("Status : " + status);
 		String[] statusList = request.getParameterValues("select_to_approve");
 		String approvalRemark = request.getParameter("issue");
+		String poSts = request.getParameter("po_sts");
+		
 		MaterialRecNote materialRecNote1 = materialRecNote;
 		materialRecNote1.setStatus(status);
 		materialRecNote1.setApprovalRemark(approvalRemark);
@@ -1096,6 +1113,31 @@ public class MaterialReceiptNoteController {
 			materialRecNote = rest.postForObject(Constants.url + "postMaterialRecNote", materialRecNote1,
 					MaterialRecNote.class);
 			System.out.println("After Update  :" + materialRecNote.toString());
+			
+			if(!poSts.equals(""))
+			{
+				int po_sts=Integer.parseInt(poSts);
+				if(po_sts==1)
+				{
+					purchaseOrderHeaderChangePoStsByDirector.setPoStatus(6);
+				}
+				else if(po_sts==2)
+				{
+					purchaseOrderHeaderChangePoStsByDirector.setPoStatus(7);
+				}
+				
+				
+				purchaseOrderHeaderChangePoStsByDirector.setDelvDateRem(DateConvertor.convertToDMY(purchaseOrderHeaderChangePoStsByDirector.getDelvDateRem()));
+				purchaseOrderHeaderChangePoStsByDirector.setQuotationRefDate(DateConvertor.convertToDMY(purchaseOrderHeaderChangePoStsByDirector.getQuotationRefDate()));
+				List<PurchaseOrderDetail> purchaseOrderDetail = new ArrayList<PurchaseOrderDetail>();
+				purchaseOrderHeaderChangePoStsByDirector.setPurchaseOrderDetail(purchaseOrderDetail);
+				System.out.println("purchaseOrderHeader "+purchaseOrderHeaderChangePoStsByDirector);
+				
+				 Info info=rest.postForObject(Constants.url + "purchaseOrder/insertPurchaseOrder",purchaseOrderHeaderChangePoStsByDirector, Info.class);
+				 System.out.println("Response :"+info.toString());
+			}
+			
+			
 		} catch (Exception e) {
 
 			System.out.println(e.getMessage());

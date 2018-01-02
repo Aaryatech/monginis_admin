@@ -212,6 +212,8 @@
 									<div class="col-md-2" >PO Reference</div>
 									<div class="col-md-3">
 									
+								
+									
 											<c:choose>
 												<c:when test="${materialRecNote.status==2}">
 													<div class="col-md-4">
@@ -226,7 +228,16 @@
 														<option value="">Select Po Ref</option>
 											
 														<c:forEach items="${purchaseOrderList}" var="purchaseOrderList">
-                                              			<option value="${purchaseOrderList.poId}"><c:out value="${purchaseOrderList.poNo}"></c:out> </option>
+															<c:choose>
+															<c:when test="${purchaseOrderList.poStatus==6}">
+																<option value="${purchaseOrderList.poId}" style="color:blue"><c:out value="${purchaseOrderList.poNo}"></c:out>
+																</option>
+															</c:when>
+                                              				<c:otherwise>
+                                              					<option value="${purchaseOrderList.poId}"><c:out value="${purchaseOrderList.poNo}"></c:out>
+																</option>
+                                              				</c:otherwise>
+                                              					</c:choose>
 														</c:forEach>
 													</select>
 													</c:otherwise>
@@ -238,6 +249,7 @@
 										<div class="col-md-3">
 										<input class="form-control" id="po_date" size="16"
 											type="text" name="po_date" value="${materialRecNote.poDate}" placeholder="PO Date"  readonly />
+										<input  id="po_no" type="hidden" name="po_no"   />
 											
 									</div>
 							
@@ -550,7 +562,7 @@
 						
 						
 						document.getElementById("po_date").value=data[0].poDate;
-						
+						document.getElementById("po_no").value=data[0].poNo;
 												
 							});
 					
