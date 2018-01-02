@@ -425,7 +425,7 @@ public class BillController {
 				header.setTime(strtime);
 				postBillHeaderList.add(header);
 
-			}
+	 		}
 
 			postBillDataCommon.setPostBillHeadersList(postBillHeaderList);
 
