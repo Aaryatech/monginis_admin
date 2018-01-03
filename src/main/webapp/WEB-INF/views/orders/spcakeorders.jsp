@@ -161,7 +161,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Production
 										Date</label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="dp2" size="16"
+										<input class="form-control date-picker" value="${todayDate }" id="dp2" size="16"
 											type="text" name="prod_date" data-rule-required="true" />
 									</div>
 								</div>
@@ -217,7 +217,7 @@
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
-														<th width="138" align="left">Sr No</th>
+														<th width="20" align="left">Sr No</th>
 														<th width="138" align="left">Franchise Name</th>
 														<th width="159" align="left"><span
 															style="width: 130px;">Item Code</span></th>
@@ -229,7 +229,7 @@
 														<th width="105" align="left">Rate</th>
 														<th width="75" align="left">Add Rate</th>
 														<th width="91" align="left">Total</th>
-														<th width="87" align="left">View</th>
+														<!-- <th width="87" align="left">View</th> -->
 														<th width="87" align="left">PDF</th>
 													</tr>
 												</thead>
@@ -421,7 +421,7 @@
 
 								  	tr.append($('<td></td>').html(totalValue));
 
-								  	tr.append($('<td></td>').html("View"));
+								  	/* tr.append($('<td></td>').html("View")); */
 
 								  	tr.append($('<td></td>').html("PDF"));
 

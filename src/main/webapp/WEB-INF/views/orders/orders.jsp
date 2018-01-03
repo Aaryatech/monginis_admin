@@ -183,20 +183,20 @@ th:hover::after {
 									</div>
 								</div>
 
-								<div class="form-group">
+								<!-- <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Production
 										Date</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<input class="form-control date-picker" id="dp2" size="16"
 											type="text" name="prod_date" required />
 									</div>
-								</div>
+								</div> -->
 
 
 								<div align="center" class="form-group">
 									<div
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										<input class="btn btn-primary" value="Submit" id="callSubmit"
+										<input type="button" class="btn btn-primary" value="Submit" id="callSubmit"
 											onclick="callSearch()">
 
 
@@ -244,9 +244,9 @@ th:hover::after {
 														<th width="138" align="left">Franchise Name</th>
 														<th width="159" align="left">Item Name</th>
 														<th width="159" align="left">Category</th>
-														<th width="159" align="left">Item Code</th>
+														<!-- <th width="159" align="left">Item Code</th> -->
 														<th width="159" align="left">Quantity</th>
-														<th width="159" align="left">Action</th>
+														<th width="100" align="left">Action</th>
 
 														<!-- <th width="91" align="left">Quantity</th> -->
 														<!-- 	<th width="105" align="left">MRP</th> -->
@@ -421,14 +421,14 @@ function callSearch() {
 	var frIds=$("#fr_id").val();
 		
 
-	var prodDate = document.getElementById("dp2").value;
+	/* var prodDate = document.getElementById("dp2").value; */
 	$('#loader').show();
 
 $.getJSON('${callSearchOrdersProcess}', {
 
 	fr_id_list : JSON.stringify(frIds),
 	item_id_list : JSON.stringify(itemIds),
-	prod_date : prodDate,
+	
 	
 	ajax : 'true'
 
@@ -452,12 +452,14 @@ $.getJSON('${callSearchOrdersProcess}', {
 
   	tr.append($('<td></td>').html(orders.catName));
 
-  	tr.append($('<td></td>').html(orders.id));
+  /* 	tr.append($('<td></td>').html(orders.id)); */
 
- 	tr.append($('<td></td>').html("<input type=number min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
+ 	tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
   
-  	tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> "));
-  	
+ 	tr.append($('<td></td>').html('    <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> '));
+  		
+ /*  tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> "));
+   */	
   	  	//tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+");<i class='fa fa-pencil'></i>>"));
 
   	
@@ -486,11 +488,14 @@ $.getJSON('${callSearchOrdersProcess}', {
 			//document.getElementById(orderId).disabled=false;
 			if(state)
 				{
-			
+				$("#edit"+orderId).removeClass("glyphicon glyphicon-edit");
+				 $("#edit"+orderId).addClass("glyphicon glyphicon-save");
 				document.getElementById(orderId).disabled=false;
 				
 				}
 			else{
+				$("#edit"+orderId).removeClass("glyphicon glyphicon-save");
+				 $("#edit"+orderId).addClass("glyphicon glyphicon-edit");
 				document.getElementById(orderId).disabled=true;
 				$.getJSON('${callChangeQty}',
 						{
@@ -503,6 +508,17 @@ $.getJSON('${callSearchOrdersProcess}', {
 						});
 			}
 		}
+		
+		var specialKeys = new Array();
+        specialKeys.push(8); //Backspace
+        function IsNumeric(e) {
+            var keyCode = e.which ? e.which : e.keyCode
+            var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1);
+           /*  document.getElementById("error").style.display = ret ? "none" : "inline"; */
+            return ret;
+        }
+        
+        
 		</script>
 	<!-- <script type="text/javascript">
 		function deleteOrder(orderId)

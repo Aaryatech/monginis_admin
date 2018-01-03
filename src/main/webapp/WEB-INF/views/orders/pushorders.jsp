@@ -67,6 +67,11 @@
 		padding-right: 0px;
 	}
 }
+
+.table-responsive tbody > tr:hover{
+  background-color: #ffa;
+}
+	
 </style>
 <!--flaty css styles-->
 <link rel="stylesheet"
@@ -79,6 +84,9 @@
 
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/resources/img/favicon.png">
+	
+	
+	
 </head>
 <body>
 
@@ -244,7 +252,7 @@
 						<div class="col-md-offset-6 col-md-6">
 
 							<button class="btn btn-info pull-right"
-								style="margin-right: 5px;" onclick="submitOrder()">Submit</button>
+								style="margin-right: 5px;" onclick="submitOrder()" id="submitOrder" disabled>Submit</button>
 						</div>
 					</div>
 				</div>
@@ -301,8 +309,8 @@
 										alert("No records found !!");
 
 									}
-
-									
+									else{ 
+										document.getElementById("submitOrder").disabled=false;
 									$.each(data,function(key, itemname) {
 
 														var index = key + 1;
@@ -349,7 +357,7 @@
 													    	  if(qty > 0)
 												    		var orderQty = "<td align=center><input type=number min=0 max=500 class=form-control  readonly='true'   id=itemId"+itemname.itemId+"orderQty"+ id+ " name=itemId"+itemname.itemId+"orderQty"+id+" value = "+qty+"></td>"; 
 												    		else
-													    		var orderQty = "<td align=center><input type=number min=0 max=500 class=form-control   id=itemId"+itemname.itemId+"orderQty"+ id+ " name=itemId"+itemname.itemId+"orderQty"+id+" value = "+qty+"></td>"; 
+													    		var orderQty = "<td align=center><input onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' type=number min=0 max=500 class=form-control   id=itemId"+itemname.itemId+"orderQty"+ id+ " name=itemId"+itemname.itemId+"orderQty"+id+" value = "+qty+"></td>"; 
 
 												    	 $('#table_grid tbody')
 															.append(orderQty);
@@ -360,6 +368,7 @@
 													.append(trclosed);
 
 												})
+									}
 													
 
 							});
@@ -422,6 +431,16 @@
         	
         
 	}
+	
+	var specialKeys = new Array();
+    specialKeys.push(8); //Backspace
+    function IsNumeric(e) {
+        var keyCode = e.which ? e.which : e.keyCode
+        var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1);
+       // document.getElementById("error").style.display = ret ? "none" : "inline";
+        return ret;
+    }
+
 </script>
 
 

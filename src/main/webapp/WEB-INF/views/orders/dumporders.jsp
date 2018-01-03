@@ -158,7 +158,7 @@
 							</label>
 						<div class=" col-md-6 controls menu_select">
 
-							<input class="form-control date-picker" id="dp2" size="16"
+							<input value="${todayDate }" class="form-control date-picker" id="dp2" size="16"
 											type="text" name="oreder_date"/>
 						</div>
 					</div>
@@ -251,7 +251,7 @@
 						<div class="col-md-offset-6 col-md-6" align="center">
 
 							<button class="btn btn-info pull-right"
-								style="margin-right: 5px;" onclick="submitOrder()">Submit</button>
+								style="margin-right: 5px;" onclick="submitOrder()" id="submitOrder" disabled>Submit</button>
 						</div>
 					</div>
 				</div>
@@ -360,7 +360,8 @@
 
 									}
 
-									
+									else{ 
+										document.getElementById("submitOrder").disabled=false;
 									$.each(data,function(key, orderdata) {
 
 														var index = key + 1;
@@ -398,7 +399,7 @@
 													    	
 													    	  });	
 													    	 		 }
-													    		 var orderQty = "<td align=center><input type=number min=0 max=500 class=form-control   id=itemId"+orderdata.itemId+"orderQty"+ id+ " name=itemId"+orderdata.itemId+"orderQty"+id+" value = "+qty +"></td>"; 
+													    		 var orderQty = "<td align=center><input onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' type=number min=0 max=500 class=form-control   id=itemId"+orderdata.itemId+"orderQty"+ id+ " name=itemId"+orderdata.itemId+"orderQty"+id+" value = "+qty +"></td>"; 
 																
 													    	 $('#table_grid tbody')
 																.append(orderQty);
@@ -409,6 +410,7 @@
 														.append(trclosed);
 
 													})
+									}
 														
 
 								});
@@ -479,6 +481,15 @@
         	
         
 	}
+	
+	var specialKeys = new Array();
+    specialKeys.push(8); //Backspace
+    function IsNumeric(e) {
+        var keyCode = e.which ? e.which : e.keyCode
+        var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1);
+       // document.getElementById("error").style.display = ret ? "none" : "inline";
+        return ret;
+    }
 </script>
 
 

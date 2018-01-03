@@ -154,7 +154,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Production
 										Date</label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="dp2" size="16"
+										<input value="${todayDate }" class="form-control date-picker" id="dp2" size="16"
 											type="text" name="prod_date" required />
 									</div>
 								</div>
@@ -187,7 +187,7 @@
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
-														<th width="138" align="left">Sr No</th>
+														<th width="20" align="left">Sr No</th>
 														<th width="138" align="left">Franchise Name</th>
 													
 														<th width="159" align="left"><span
@@ -198,7 +198,7 @@
 														<th width="105" align="left">Rate</th>
 														<th width="75" align="left">Quantity</th>
 														<th width="91" align="left">Total</th>
-														<th width="87" align="left">View</th>
+														<!-- <th width="87" align="left">View</th> -->
 														<th width="87" align="left">PDF</th>
 													</tr>
 												</thead>
@@ -231,7 +231,7 @@
 
 															<td align="left"><c:out value="${rate * qty}"></c:out></td>
 
-															<td align="left"><c:out value="PDF"></c:out></td>
+															<%-- <td align="left"><c:out value="PDF"></c:out></td> --%>
 
 															<td align="left"><c:out value=" ADMIN PDF"></c:out></td>
 
