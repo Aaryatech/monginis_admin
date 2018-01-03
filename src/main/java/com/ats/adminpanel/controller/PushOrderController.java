@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.context.annotation.Scope;
 //import org.joda.time.DateTime;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -53,6 +54,7 @@ import com.ats.adminpanel.model.pushorderdata.PushOrderList;
 import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 @Controller
+@Scope("session")
 public class PushOrderController {
 	AllFrIdNameList allFrIdNameList;
 	List<Menu> menuList;// = new ArrayList<Menu>();

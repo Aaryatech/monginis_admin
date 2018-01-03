@@ -94,7 +94,7 @@ public class OrderController {
 		
 		String menuId = request.getParameter("item_id_list");
 		String frIdString = request.getParameter("fr_id_list");
-		String prodDate = request.getParameter("prod_date");
+		//String prodDate = request.getParameter("prod_date");
 
 		
 		menuId=menuId.substring(1, menuId.length()-1);
@@ -119,7 +119,7 @@ public class OrderController {
 			
 			System.out.println("all fr selected");
 					
-			map.add("date", prodDate);
+			map.add("date",  new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 			map.add("menuId", menuId);
 			
 			RestTemplate restTemplate1 = new RestTemplate();
@@ -155,7 +155,7 @@ public class OrderController {
 
 			map.add("frId", frIdString);
 			map.add("menuId", menuId);
-			map.add("date", prodDate);
+			map.add("date", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 
 			
 			RestTemplate restTemplate1 = new RestTemplate();
@@ -193,7 +193,7 @@ public class OrderController {
 		 //franchiseeList= new ArrayList<FranchiseeList>();
 		franchiseeList=allFranchiseeList.getFranchiseeList();
 				
-		
+		model.addObject("todayDate",new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 		model.addObject("franchiseeList",franchiseeList);
 		
 	
@@ -211,7 +211,7 @@ public class OrderController {
 		 //franchiseeList= new ArrayList<FranchiseeList>();
 		franchiseeList=allFranchiseeList.getFranchiseeList();
 				
-		
+		model.addObject("todayDate",new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 		model.addObject("franchiseeList",franchiseeList);
 		
 	

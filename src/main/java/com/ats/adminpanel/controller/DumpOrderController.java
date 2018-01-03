@@ -8,6 +8,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -105,6 +106,7 @@ public class DumpOrderController {
 
 		System.out.println(" Fr " + allFrIdNameList.getFrIdNamesList());
 		
+		model.addObject("todayDate",new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 		
 		model.addObject("unSelectedMenuList", selectedMenuList);
 		model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
