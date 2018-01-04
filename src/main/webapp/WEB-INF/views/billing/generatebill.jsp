@@ -329,7 +329,9 @@
 			function submitBill() {
 
 				//submitBillForm.submit();
-				 window.open("${pageContext.request.contextPath}/pdf?url=showBillPdf");
+				 //window.open("${pageContext.request.contextPath}/pdf?url=showBillPdf");
+				 
+				// window.open("${pageContext.request.contextPath}/showBillListForPrint");
 			}
 		</script>
 
@@ -411,8 +413,9 @@
 																
 																//var billQty = "<td align=center><input name=newId id=newId value=21 type=number ></td>";
 
-														baseRateAmt=(bill.orderRate*100)/(100+bill.itemTax1+bill.itemTax2+bill.itemTax3);
-														alert("base Rate Amt ="+baseRateAmt);
+														var baseRateAmt=(bill.orderRate*100)/(100+bill.itemTax1+bill.itemTax2+bill.itemTax3);
+														//alert("base Rate Amt ="+baseRateAmt);
+														baseRateAmt=baseRateAmt.toFixed(2);
 														var baseRate = "<td align=center>&nbsp;&nbsp;&nbsp;"
 															+ baseRateAmt+ "</td>";
 															
@@ -424,20 +427,24 @@
 																var t1=parseFloat(bill.itemTax1);
 																var t2=parseFloat(bill.itemTax2);
 																var t3=parseFloat(bill.itemTax3);
-																alert("taxes ="+t1+"-"+t2+"-"+t3);
+																//alert("taxes ="+t1+"-"+t2+"-"+t3);
 
 																var taxableAmt= baseRateAmt * bill.orderQty;
 																//var taxableAmount = "<td align=center"+taxableAmt+">"+"</td>";
 																var taxableAmount ="<td align=center>&nbsp;&nbsp;&nbsp;"
 																+ taxableAmt+ "</td>";
-																alert("taxable amt "+taxableAmt);
+																//alert("taxable amt "+taxableAmt);
 																
 																var sgstRS=(t1*taxableAmt)/100;
 																var cgstRS=(t2*taxableAmt)/100;
 																var igstRS=(t3*taxableAmt)/100;
-																alert("rs 1"+sgstRS);
-																alert("rs 2 "+cgstRS);
-																alert("rs 3 "+igstRS);
+																sgstRS=sgstRS.toFixed(2);
+																cgstRS=cgstRS.toFixed(2);
+																igstRS=igstRS.toFixed(2);
+																
+																//alert("rs 1"+sgstRS);
+																//alert("rs 2 "+cgstRS);
+																//alert("rs 3 "+igstRS);
 																var totalTax=sgstRS+cgstRS+igstRS;
 
 																var sgst = "<td align=center>&nbsp;&nbsp;&nbsp;"
@@ -454,7 +461,7 @@
 																	
 														var total = parseFloat(taxableAmt)+parseFloat(totalTax);
 																
-
+total=total.toFixed(2);
 														var totaLBill = "<td align=center id=billTotal"+bill.orderId+">"
 																+ total
 																+ "</td>";
@@ -584,16 +591,16 @@ $('.datepicker').datepicker({
 
 function disableFr(){
 
-	alert("Inside Disable Fr ");
+	//alert("Inside Disable Fr ");
 document.getElementById("selectFr").disabled = true;
 
 }
 
 function disableRoute(){
 
-	alert("Inside Disable route ");
+	//alert("Inside Disable route ");
 	var x=document.getElementById("selectRoute")
-	alert(x.options.length);
+	//alert(x.options.length);
 	var i;
 	for(i=0;i<x;i++){
 		document.getElementById("selectRoute").options[i].disabled;
