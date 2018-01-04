@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -27,6 +28,7 @@ import com.ats.adminpanel.model.grngvn.GetGrnGvnDetailsList;
 
 
 @Controller
+@Scope("session")
 public class TempGvnGrnController {
 	
 	

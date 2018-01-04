@@ -100,7 +100,7 @@
 						
 						<div class="box-content">
 
-							<form id="completproduction" action="${pageContext.request.contextPath}/updateRejectedQty" method="post">
+							<form id="completproduction" action="${pageContext.request.contextPath}/updateRejectedQtyByDept" method="post">
 							<div class="box-content">
 								<div class="col-md-2">Bill Of Material Request Date</div>
 						
@@ -211,7 +211,9 @@
 							<div align="center" class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										<input type="hidden" name="fromDept" id="fromDept" value="${fromDept}">
+										
 										<input type="submit" class="btn btn-primary" value="For Rejection">
+										
 										
 									</div>
 								</div>

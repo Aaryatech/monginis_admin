@@ -261,3 +261,4 @@ function validateEmail()
     	  }
     }  
 </script>
+</html>

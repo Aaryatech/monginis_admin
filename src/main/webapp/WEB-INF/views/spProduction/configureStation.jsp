@@ -211,8 +211,8 @@
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
 										<input type="submit" class="btn btn-primary" value="Submit" onclick="return validation()">
-<!-- 										<button type="button" class="btn">Cancel</button>
- -->									</div>
+									 <a href="${pageContext.request.contextPath}/configureStation">	<button type="button" class="btn">Cancel</button></a>
+									</div>
 								</div>
 							</form>
 							<br>

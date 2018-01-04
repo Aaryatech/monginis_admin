@@ -81,7 +81,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Raw material Master
+						<i class="fa fa-file-o"></i>Raw Material Master
 					</h1>
 
 				</div>
@@ -99,7 +99,7 @@
 								<i class="fa fa-bars"></i>Details of <b> ${rawMaterialDetails.rmName}</b>
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showRawMaterial">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							<!-- <div class="box-tool">
@@ -111,24 +111,8 @@
 
 
 						<div class="box-content">
-									<%-- <div class="row">
-					<div class="col-md-12" style="text-align: center" align="center">
-					<label class="col-sm-3 col-lg-2 control-label">Raw Material Name</label>
-					<div class="col-sm-6 col-lg-4 controls">
-						 <select  name="rawMaterial" id="rawMaterial"  class="form-control chosen ">
-										<option value="-1">Select Raw Material </option>
-										<c:forEach items="${RawmaterialList}" var="RawmaterialList"
-													varStatus="count">
-												<option value="${RawmaterialList.rmId}"><c:out value="${RawmaterialList.rmName}"/></option>
-												</c:forEach>
-								</select>
-</div>
-
-					</div>
-				</div>
-				 
-				<hr>  --%>
-							<form action="addRawMaterial" method="post" class="form-horizontal" id=
+					
+							<form action="${pageContext.request.contextPath}/addRawMaterial" method="post" class="form-horizontal" id=
 									"validation-form"
 										enctype="multipart/form-data" method="post">
 							
@@ -235,7 +219,7 @@
 									</div>
 									<label class="col-sm-3 col-lg-2 control-label">Weight</label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" value="${rawMaterialDetails.rmWeight }" name="rm_weight" id="rm_weight" class="form-control"placeholder="Weight"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)"  />
+							<input type="text" value="${rawMaterialDetails.rmWeight }" name="rm_weight" id="rm_weight" class="form-control"placeholder="Weight"data-rule-required="true" data-rule-number="true"/>
 						</div>
 								</div>
 								<div class="form-group">
@@ -243,7 +227,7 @@
 										Quantity</label>
 
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" value="${rawMaterialDetails.rmPackQty }" name="rm_pack_qty" id="rm_pack_qty" class="form-control" placeholder="Pack Qty" data-rule-required="true" onKeyPress="return isNumberCommaDot(event)"  />
+										<input type="text" value="${rawMaterialDetails.rmPackQty }" name="rm_pack_qty" id="rm_pack_qty" class="form-control" placeholder="Pack Qty" data-rule-required="true" data-rule-number="true"/>
 									</div>
 								 
 
@@ -251,7 +235,7 @@
 								<label class="col-sm-3 col-lg-2 control-label">RM min
 									Quantity</label>
 								<div class="col-sm-6 col-lg-4 controls">
-									<input type="text" value="${rawMaterialDetails.rmMinQty }" name="rm_min_qty" id="rm_min_qty" class="form-control"placeholder="Min Qty" data-rule-required="true" onKeyPress="return isNumberCommaDot(event)"  />
+									<input type="text" value="${rawMaterialDetails.rmMinQty }" name="rm_min_qty" id="rm_min_qty" class="form-control"placeholder="Min Qty" data-rule-required="true" data-rule-number="true"/>
 								</div>
 						</div>
 
@@ -261,12 +245,12 @@
 								Quantity </label>
 
 							<div class="col-sm-6 col-lg-4 controls">
-								<input type="text" value="${rawMaterialDetails.rmMaxQty }" name="rm_max_qty"  id="rm_max_qty" class="form-control"placeholder="Max Qty "data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
+								<input type="text" value="${rawMaterialDetails.rmMaxQty }" name="rm_max_qty"  id="rm_max_qty" class="form-control"placeholder="Max Qty "data-rule-required="true" data-rule-number="true"/>
 							</div>
 						 <label class="col-sm-3 col-lg-2 control-label">RM OP Rate
 						</label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" value="${rawMaterialDetails.rmOpRate }" name="rm_op_rate" id="rm_op_rate" class="form-control"placeholder="RM Op Rate "data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
+							<input type="text" value="${rawMaterialDetails.rmOpRate }" name="rm_op_rate" id="rm_op_rate" class="form-control"placeholder="RM Op Rate "data-rule-required="true"data-rule-number="true"/>
 						</div>
 
 						
@@ -274,7 +258,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">Rate </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" value="${rawMaterialDetails.rmRate }" name="rm_rate" id="rm_rate" class="form-control" placeholder="Rate"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
+							<input type="text" value="${rawMaterialDetails.rmRate }" name="rm_rate" id="rm_rate" class="form-control" placeholder="Rate"data-rule-required="true"data-rule-number="true"/>
 						</div>
 
 						<label class="col-sm-3 col-lg-2 control-label">RM GST % </label>
@@ -301,12 +285,12 @@
 					<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">RM ROL Qty</label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" value="${rawMaterialDetails.rmRolQty }" name="rm_rol_qty" id="rm_rol_qty" class="form-control"placeholder="Re Order level "data-rule-required="true"/>
+							<input type="text" value="${rawMaterialDetails.rmRolQty }" name="rm_rol_qty" id="rm_rol_qty" class="form-control"placeholder="Re Order level" data-rule-required="true" data-rule-number="true"/>
 						</div>
 						<label class="col-sm-3 col-lg-2 control-label">RM Issue
 							Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" value="${rawMaterialDetails.rmIssQty }" name="rm_iss_qty" id="rm_iss_qty" class="form-control" placeholder="Issue Qty"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
+							<input type="text" value="${rawMaterialDetails.rmIssQty }" name="rm_iss_qty" id="rm_iss_qty" class="form-control" placeholder="Issue Qty"data-rule-required="true" data-rule-number="true"/>
 						</div>
 						
 
@@ -315,13 +299,13 @@
 					<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">RM OP Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" value="${rawMaterialDetails.rmOpQty }" name="rm_op_qty" id="rm_op_qty" class="form-control"placeholder="RM OP Qty"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
+							<input type="text" value="${rawMaterialDetails.rmOpQty }" name="rm_op_qty" id="rm_op_qty" class="form-control"placeholder="RM OP Qty"data-rule-required="true" data-rule-number="true" />
 						</div>
 
 						<label class="col-sm-3 col-lg-2 control-label">RM Received
 							Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" value="${rawMaterialDetails.rmReceivedQty }" name="rm_recd_qty" id="rm_recd_qty" class="form-control" placeholder="Re Order Qty"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
+							<input type="text" value="${rawMaterialDetails.rmReceivedQty }" name="rm_recd_qty" id="rm_recd_qty" class="form-control" placeholder="Re Order Qty"data-rule-required="true" data-rule-number="true"/>
 						</div>
 					<input type="hidden" name="rm_id" id="rm_id"value="${rawMaterialDetails.rmId}"  />
 						
@@ -332,13 +316,13 @@
 							Qty </label>
 
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" value="${rawMaterialDetails.rmCloQty }" name="rm_clo_qty" id="rm_clo_qty" class="form-control" placeholder="Close Qty" data-rule-required="true"  onKeyPress="return isNumberCommaDot(event)" />
+							<input type="text" value="${rawMaterialDetails.rmCloQty }" name="rm_clo_qty" id="rm_clo_qty" class="form-control" placeholder="Close Qty" data-rule-required="true" data-rule-number="true"/>
 						</div>
 
 						<label class="col-sm-3 col-lg-2 control-label">RM Rejected
 							Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" value="${rawMaterialDetails.rmRejQty }"name="rm_rej_qty" id="rm_rej_qty" class="form-control"placeholder="Raw Rejected Qty "data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
+							<input type="text" value="${rawMaterialDetails.rmRejQty }"name="rm_rej_qty" id="rm_rej_qty" class="form-control"placeholder="Raw Rejected Qty "data-rule-required="true" data-rule-number="true"/>
 						</div>
 					</div>
 					
@@ -381,10 +365,9 @@
 						
 				</div>
 				
-				<div class="row">
-							<div class="col-md-12" style="text-align: center">
-						<label">Raw Material Image
-					 </label>
+							<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Raw Material Image</label>
+														<div class="col-sm-9 col-lg-10 controls">
 					
 							<div class="fileupload fileupload-new"
 											data-provides="fileupload">
@@ -410,23 +393,19 @@
 										
 
 					</div>
-
-					</div><br/>
+</div>
+				<br/>
 					<br/>
 					<div class="row">
 							<div class="col-md-12" style="text-align: center">
-						<input type="button" class="btn btn-success" value="Submit" id="btn_submit">
+						<input type="submit" class="btn btn-success" value="Submit" id="btn_submit">
 						<!-- <input type="button" class="btn btn-info" value="Edit" id="edit" onclick="editClick()"> -->
-						<input type="button" class="btn btn-danger" value="Delete" id="delete" onclick="deleteClick()">
-					 
-
-
+<!-- 						<input type="button" class="btn btn-danger" value="Delete" id="delete" onclick="deleteClick()">
+ -->					
 					</div>
 					</div>
 					</form>
 				</div>
-
-
 
 			</div>
 
@@ -446,15 +425,6 @@
 	<!-- END Container -->
 
 	<!--basic scripts-->
-
-
-
-
-
-
-
-
-
 
 	<script
 		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -493,10 +463,6 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
-
-
-
-
 	<!--flaty scripts-->
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
@@ -528,45 +494,12 @@
 
 <script type="text/javascript">
 /* 
-function editClick()
-{
-
-	document.getElementById("edit").disabled = true;
-	document.getElementById("btn_submit").disabled = false;
-	document.getElementById("rm_name").disabled = false;
-	document.getElementById("rm_code").disabled = false;
-	document.getElementById("rm_uom").disabled = false;
-	document.getElementById("rm_specification").disabled = false;
-	document.getElementById("rm_group").disabled = false;
-	document.getElementById("rm_cat").disabled = false;
-	document.getElementById("rm_sub_cat").disabled = false;
-	document.getElementById("rm_icon").disabled = false;
-	document.getElementById("rm_op_qty").disabled = false;
-	document.getElementById("rm_recd_qty").disabled = false;
-	document.getElementById("rm_iss_qty").disabled = false;
-	document.getElementById("rm_rej_qty").disabled = false;
-	document.getElementById("rm_clo_qty").disabled = false;
-	document.getElementById("rm_rate").disabled = false;
-	document.getElementById("rm_gst_per").disabled = false;
-	document.getElementById("rm_min_qty").disabled = false;
-	document.getElementById("rm_max_qty").disabled = false;
-	document.getElementById("rm_rol_qty").disabled = false;
-	document.getElementById("rm_op_rate").disabled = false;
-	document.getElementById("rm_pack_qty").disabled = false;
-	  document.getElementById("rm_weight").disabled = false;
-	  
-
-//	document.getElementById("rm_is_critical").disabled = false;
-	
-	
-	}
-	 */
 $('#btn_submit').click(function(){
     var form = document.getElementById("validation-form")
     form.action ="addRawMaterial";
     form.submit();
 });
-
+ */
 $('#delete').click(function(){
     var form = document.getElementById("validation-form")
     form.action = "deleteRawMaterial";

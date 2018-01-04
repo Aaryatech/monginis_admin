@@ -69,7 +69,9 @@ public class RawMaterialController {
 	public ModelAndView showRowMaterial(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/addRawMaterial");
+		
 		RestTemplate rest=new RestTemplate();
+		try {
 		List<RmItemGroup> rmItemGroupList=rest.getForObject(Constants.url + "rawMaterial/getAllRmItemGroup", List.class);
 		System.out.println("Group list :: "+rmItemGroupList.toString());
 		List<RawMaterialUom> rawMaterialUomList=rest.getForObject(Constants.url + "rawMaterial/getRmUom", List.class);
@@ -81,7 +83,11 @@ public class RawMaterialController {
 		model.addObject("rmUomList", rawMaterialUomList);
 		model.addObject("rmTaxList", rawMaterialTaxDetailsList);
 		model.addObject("groupList", rmItemGroupList);
- 
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception in /showAddRawMaterial"+e.getMessage());
+		}
 		return model;
 	}
 	
@@ -91,6 +97,7 @@ public class RawMaterialController {
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/rmRateVerification");
 			RestTemplate rest=new RestTemplate();
+			try {
 			RawMaterialDetailsList rawMaterialDetailsList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterial", RawMaterialDetailsList.class);
 		
 		System.out.println("RM Details : "+rawMaterialDetailsList.toString());
@@ -98,18 +105,21 @@ public class RawMaterialController {
 
 			model.addObject("supplierList", supplierDetailsList);
 			model.addObject("RawmaterialList", rawMaterialDetailsList.getRawMaterialDetailsList());
-		
+			}
+			catch(Exception e)
+			{
+				System.out.println("Exception In /showRmRateVerification"+e.getMessage());
+			}
 
 		return model;
 	}
 	
 	@RequestMapping(value = "/addRawMaterial", method = RequestMethod.POST)
-	public String addRawMaterial(HttpServletRequest request, HttpServletResponse response, @RequestParam("rm_icon") List<MultipartFile> file)
+	public ModelAndView addRawMaterial(HttpServletRequest request, HttpServletResponse response, @RequestParam("rm_icon") List<MultipartFile> file)
 	{
-		ModelAndView model = new ModelAndView();
+		ModelAndView model = new ModelAndView("masters/rawMaterial/showAllRawMaterial");
 		
-		String strReturn="redirect:/showAddRawMaterial";
-		
+		try {
 		System.out.println("In method");
 		
 		String rmId=request.getParameter("rm_id");
@@ -199,7 +209,7 @@ public class RawMaterialController {
 		{
 			int rm_Id=Integer.parseInt(rmId);
 			rawMaterialDetails.setRmId(rm_Id);
-			strReturn=new String("redirect:/showRawMaterialDetails");
+			//strReturn=new String("redirect:/showRawMaterial");
 			//model = new ModelAndView("masters/supplierDetails");
 			//model.addObject("supplierList", supplierDetailsList);
 		}
@@ -231,11 +241,6 @@ public class RawMaterialController {
 		rawMaterialDetails.setCatId(Integer.parseInt(rmCat));
 		rawMaterialDetails.setSubCatId(Integer.parseInt(rmSubCat));
 		 
-	
-		
-		
-		
-		
 		rawMaterialDetails.setDelStatus(0);
 		
 		System.out.println("Data  : "+rawMaterialDetails.toString());
@@ -244,14 +249,31 @@ public class RawMaterialController {
 		
 		
 		System.out.println("Response : " +info.toString());
+		MultiValueMap<String , Object> map =new LinkedMultiValueMap<String, Object>();
+		map.add("grpId",Integer.parseInt(rmGroup));
 		
-		return strReturn;
+		List<GetRawmaterialByGroup> getRawmaterialByGroupList=rest.postForObject(Constants.url +"rawMaterial/getRawMaterialDetailByGroup", map,  List.class);
+		
+		List<RmItemGroup> rmItemGroupList=rest.getForObject(Constants.url + "rawMaterial/getAllRmItemGroup", List.class);
+		System.out.println("Group list :: "+rmItemGroupList.toString());
+		
+		System.out.println("RM Details : "+getRawmaterialByGroupList.toString());
+		model.addObject("grpId",Integer.parseInt(rmGroup));
+
+		model.addObject("groupList", rmItemGroupList);
+		model.addObject("RawmaterialList", getRawmaterialByGroupList);
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception In /addRawMaterial"+e.getMessage());
+		}
+		return model;
 	}
 	@RequestMapping(value = "/showRawMaterialDetails", method = RequestMethod.POST)
 	public ModelAndView showRawMaterialDetails(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/showAllRawMaterial");
-
+      try {
 		String grp_id=request.getParameter("rm_group");
 		int grpId=Integer.parseInt(grp_id);
 		
@@ -266,24 +288,31 @@ public class RawMaterialController {
 		System.out.println("Group list :: "+rmItemGroupList.toString());
 		
 		System.out.println("RM Details : "+getRawmaterialByGroupList.toString());
-		
+		model.addObject("grpId",grpId);
 		model.addObject("groupList", rmItemGroupList);
 		model.addObject("RawmaterialList", getRawmaterialByGroupList);
+      }
+      catch(Exception e)
+      {
+    	  System.out.println("Exception In /showRawMaterialDetails"+e.getMessage());
+      }
 		return model;
 	}
 	@RequestMapping(value = "/showRawMaterial", method = RequestMethod.GET)
 	public ModelAndView showRawMaterial(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/showAllRawMaterial");
-
+        try {
 		RestTemplate rest=new RestTemplate();
 		List<RmItemGroup> rmItemGroupList=rest.getForObject(Constants.url + "rawMaterial/getAllRmItemGroup", List.class);
 		System.out.println("Group list :: "+rmItemGroupList.toString());
 		
-	 
-		
 		model.addObject("groupList", rmItemGroupList);
-	 
+        }
+        catch(Exception e)
+        {
+        	System.out.println("Exception In /showRawMaterial"+e.getMessage());
+        }
 		return model;
 	}
 	
@@ -291,7 +320,9 @@ public class RawMaterialController {
 	@RequestMapping(value = "/getRmCategory", method = RequestMethod.GET)
 	public @ResponseBody List<RmItemCategory> getRmCategory(HttpServletRequest request,
 		HttpServletResponse response) {
-		
+		List<RmItemCategory> rmItemCategoryList=new ArrayList<RmItemCategory>();
+
+		try {
 		 
 		String selectedGroup=request.getParameter("grpId");
 		int grpId=Integer.parseInt(selectedGroup);
@@ -299,21 +330,20 @@ public class RawMaterialController {
 		RestTemplate rest=new RestTemplate();
 		
 		map.add("grpId", grpId);
-		List<RmItemCategory> rmItemCategoryList=new ArrayList<RmItemCategory>();
 		try {
 	
 			 rmItemCategoryList = rest.postForObject(Constants.url + "rawMaterial/getRmItemCategories",map,
 				List.class);
 		
-		 
-	
-			
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 		
 		System.out.println("List of Menu : "+ rmItemCategoryList.toString());
-		
+		}catch(Exception e)
+		{
+			System.out.println("Exception In /getRmCategory"+e.getMessage());
+		}
 		return rmItemCategoryList;
 		
 	}
@@ -336,9 +366,6 @@ public class RawMaterialController {
 			rmItemSubCategoryList = rest.postForObject(Constants.url + "rawMaterial/getRmItemSubCategories",map,
 				List.class);
 		
-		 
-	
-			
 		}catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -366,9 +393,6 @@ public class RawMaterialController {
 		map.add("rmId", rmId);
 		RestTemplate rest=new RestTemplate();
 		RawMaterialDetails rawMaterialDetails=rest.postForObject(Constants.url + "rawMaterial/getRawMaterialDetail", map, RawMaterialDetails.class);
-		//String rmIconStr=rawMaterialDetails.getRmIcon();
-		//rawMaterialDetails.setRmIcon(Constants.ITEM_IMAGE_URL+rawMaterialDetails.getRmIcon());
-		
 		
 		System.out.println("Raw Material data  : "+ rawMaterialDetails);
 		List<RmItemGroup> rmItemGroupList=rest.getForObject(Constants.url + "rawMaterial/getAllRmItemGroup", List.class);
@@ -408,21 +432,30 @@ public class RawMaterialController {
 	}
 	
 	
-	@RequestMapping(value = "/deleteRawMaterial", method = RequestMethod.POST)
-	public String deleteRawMaterial(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/deleteRawMaterial/{rmId}/{grpId}", method = RequestMethod.GET)
+	public ModelAndView deleteRawMaterial(@PathVariable("rmId")int rmId,@PathVariable("grpId")int grpId,HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView model = new ModelAndView("masters/rawMaterial/showAllRawMaterial");
 
-		 
+		  MultiValueMap<String, Object> map=new LinkedMultiValueMap<String,Object>();
+		  map.add("rmId", rmId);
+		  RestTemplate rest=new RestTemplate();
+		    Info info=rest.postForObject(Constants.url + "rawMaterial/deleteRawMaterial",map, Info.class);
 
-		String rm_id=request.getParameter("rm_id");
-		int rmId=Integer.parseInt(rm_id);
-		MultiValueMap<String, Object> map=new LinkedMultiValueMap<String,Object>();
-		map.add("rmId", rmId);
-		RestTemplate rest=new RestTemplate();
-		  Info info=rest.postForObject(Constants.url + "rawMaterial/deleteRawMaterial",map, Info.class);
-
-		  System.out.println("response : "+ info.toString());
-		 
-		return "redirect:/showRawMaterialDetails";
+		    System.out.println("response : "+ info.toString());
+		    map =new LinkedMultiValueMap<String, Object>();
+			map.add("grpId", grpId);
+			
+			List<GetRawmaterialByGroup> getRawmaterialByGroupList=rest.postForObject(Constants.url +"rawMaterial/getRawMaterialDetailByGroup", map,  List.class);
+			
+			List<RmItemGroup> rmItemGroupList=rest.getForObject(Constants.url + "rawMaterial/getAllRmItemGroup", List.class);
+			System.out.println("Group list :: "+rmItemGroupList.toString());
+			
+			System.out.println("RM Details : "+getRawmaterialByGroupList.toString());
+			
+			model.addObject("groupList", rmItemGroupList);
+			model.addObject("RawmaterialList", getRawmaterialByGroupList);
+			
+		    return model;
 	}
 	@RequestMapping(value = "/showAddRmTax", method = RequestMethod.GET)
 	public ModelAndView showAddRmTax(HttpServletRequest request, HttpServletResponse response) {

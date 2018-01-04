@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -32,9 +33,10 @@ import com.ats.adminpanel.model.productionplan.BillOfMaterialHeader;
 import com.ats.adminpanel.model.spprod.MDeptList;
 
 @Controller
+@Scope("session")
 public class TempManualBom {
 
-	public static List<CommonConf> commonConfs = new ArrayList<CommonConf>();
+	public  List<CommonConf> commonConfs = new ArrayList<CommonConf>();
 	
 	boolean isMix=false;
 	
