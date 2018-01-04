@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -43,6 +44,7 @@ import com.ats.adminpanel.model.stock.PostFrItemStockDetail;
 import com.ats.adminpanel.model.stock.PostFrItemStockHeader;
 
 @Controller
+@Scope("session")
 public class StockController {
 
 	private static final Logger logger = LoggerFactory.getLogger(StockController.class);

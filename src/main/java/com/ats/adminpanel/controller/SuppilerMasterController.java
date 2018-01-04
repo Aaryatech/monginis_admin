@@ -5,6 +5,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -26,9 +27,10 @@ import com.ats.adminpanel.model.supplierMaster.Transporter;
 import com.ats.adminpanel.model.supplierMaster.TransporterList;
 
 @Controller
+@Scope("session")
 public class SuppilerMasterController {
 
-	public static List<SupplierDetails> supplierDetailsList;
+	public  List<SupplierDetails> supplierDetailsList;
 
 	@RequestMapping(value = "/showAddSupplier", method = RequestMethod.GET)
 	public ModelAndView showAddSupplier(HttpServletRequest request, HttpServletResponse response) {
@@ -41,7 +43,7 @@ public class SuppilerMasterController {
 	@RequestMapping(value = "/addSupplier", method = RequestMethod.POST)
 	public String addSupplier(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
-		String strReturn = "redirect:/showAddSupplier";
+		String strReturn = "redirect:/showSupplierList";
 		System.out.println("In method");
 		String suppId = request.getParameter("supp_id");
 		System.out.println(suppId);
@@ -75,7 +77,7 @@ public class SuppilerMasterController {
 		if (suppId != null) {
 			int supp_Id = Integer.parseInt(suppId);
 			supplierDetails.setSuppId(supp_Id);
-			strReturn = new String("redirect:/showSupplierDetails");
+			strReturn = new String("redirect:/showSupplierList");
 			// model = new ModelAndView("masters/supplierDetails");
 			model.addObject("supplierList", supplierDetailsList);
 		}
@@ -113,10 +115,22 @@ public class SuppilerMasterController {
 		return strReturn;
 	}
 
-	@RequestMapping(value = "/showSupplierDetails", method = RequestMethod.GET)
-	public ModelAndView showSupplierDetails(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/showSupplierDetails/{suppId}", method = RequestMethod.GET)
+	public ModelAndView showSupplierDetails(@PathVariable("suppId")int suppId,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/supplierDetails");
+
+		RestTemplate rest = new RestTemplate();
+		supplierDetailsList = rest.getForObject(Constants.url + "getAllSupplier", List.class);
+		model.addObject("suppId", suppId);
+
+		model.addObject("supplierList", supplierDetailsList);
+		return model;
+	}
+	@RequestMapping(value = "/showSupplierList", method = RequestMethod.GET)
+	public ModelAndView showSupplierList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/supplierList");
 
 		RestTemplate rest = new RestTemplate();
 		supplierDetailsList = rest.getForObject(Constants.url + "getAllSupplier", List.class);
@@ -124,7 +138,6 @@ public class SuppilerMasterController {
 		model.addObject("supplierList", supplierDetailsList);
 		return model;
 	}
-
 	@RequestMapping(value = "/getSupplierDetails", method = RequestMethod.GET)
 	public @ResponseBody SupplierDetails getSupplierDetails(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("In method");
@@ -141,21 +154,25 @@ public class SuppilerMasterController {
 		return supplierDetails;
 	}
 
-	@RequestMapping(value = "/deleteSupplier", method = RequestMethod.POST)
-	public String deleteSupplier(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/deleteSupplier/{suppId}", method = RequestMethod.GET)
+	public String deleteSupplier(@PathVariable("suppId")int suppId,HttpServletRequest request, HttpServletResponse response) {
 
-		// ModelAndView model = new ModelAndView("masters/supplierDetails");
-
-		String supp_id = request.getParameter("supp_id");
-		int suppId = Integer.parseInt(supp_id);
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("suppId", suppId);
 		RestTemplate rest = new RestTemplate();
+		try {
+		
 		Info info = rest.postForObject(Constants.url + "deleteSupplier", map, Info.class);
 
 		System.out.println("response : " + info.toString());
-		// model.addObject("supplierList", supplierDetailsList);
-		return "redirect:/showSupplierDetails";
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+			return "redirect:/showSupplierList";
+
+		}
+		return "redirect:/showSupplierList";
 	}
 
 	// ------------------------------Show Add Transporter

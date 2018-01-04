@@ -79,7 +79,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Raw material Master
+						<i class="fa fa-file-o"></i>Raw Material Master
 					</h1>
 
 				</div>
@@ -97,7 +97,7 @@
 								<i class="fa fa-bars"></i>Add Raw Material
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showRawMaterial">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							<!-- <div class="box-tool">
@@ -132,7 +132,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">RM UOM</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<select name="rm_uom" class="form-control"placeholder="RM UOM"data-rule-required="true">
-											<option value="1">Select RM UOM</option>
+											<option value="">Select RM UOM</option>
 											<c:forEach items="${rmUomList}" var="rmUomList"
 													varStatus="count">
 												<option value="${rmUomList.uomId}"><c:out value="${rmUomList.uom}"/></option>
@@ -153,7 +153,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Group</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<select name="rm_group" id="rm_group" class="form-control"placeholder="Group"data-rule-required="true">
-											<option value="-1">Select Group </option>
+											<option value="">Select Group </option>
 										<c:forEach items="${groupList}" var="groupList"
 													varStatus="count">
 												<option value="${groupList.grpId}"><c:out value="${groupList.grpName}"/></option>
@@ -182,7 +182,7 @@
 									</div>
 									<label class="col-sm-3 col-lg-2 control-label">Weight</label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_weight" class="form-control"placeholder="Weight"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)"  />
+							<input type="text" name="rm_weight" class="form-control"placeholder="Weight"data-rule-required="true"data-rule-number="true" />
 						</div>
 								</div>
 								<div class="form-group">
@@ -190,7 +190,7 @@
 										Quantity</label>
 
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="rm_pack_qty" class="form-control"placeholder="Pack Qty"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
+										<input type="text" name="rm_pack_qty" class="form-control"placeholder="Pack Qty"data-rule-required="true"data-rule-number="true" />
 									</div>
 								 
 
@@ -198,7 +198,7 @@
 								<label class="col-sm-3 col-lg-2 control-label">RM min
 									Quantity</label>
 								<div class="col-sm-6 col-lg-4 controls">
-									<input type="text" name="rm_min_qty" class="form-control"placeholder="Min Qty"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)"  />
+									<input type="text" name="rm_min_qty" class="form-control"placeholder="Min Qty"data-rule-required="true"data-rule-number="true" />
 								</div>
 						</div>
 
@@ -208,13 +208,13 @@
 								Quantity </label>
 
 							<div class="col-sm-6 col-lg-4 controls">
-								<input type="text" name="rm_max_qty" class="form-control"placeholder="Max Qty "data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
+								<input type="text" name="rm_max_qty" class="form-control"placeholder="Max Qty "data-rule-required="true" data-rule-number="true" />
 							</div>
 						 
 					<label class="col-sm-3 col-lg-2 control-label">RM Opening Rate
 						</label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_op_rate" class="form-control"placeholder="RM Op Rate "data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
+							<input type="text" name="rm_op_rate" class="form-control"placeholder="RM Op Rate "data-rule-number="true" data-rule-required="true"/>
 						</div>
 
 						
@@ -222,13 +222,13 @@
 					<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">Rate </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_rate" class="form-control" placeholder="Rate"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
+							<input type="text" name="rm_rate" class="form-control" placeholder="Rate"data-rule-required="true"data-rule-number="true" />
 						</div>
 
 						<label class="col-sm-3 col-lg-2 control-label">RM GST % </label>
 						<div class="col-sm-6 col-lg-4 controls">
 							<select name="rm_tax_id" class="form-control">
-								<option value="1">Select RM GST</option>
+								<option value="">Select RM GST</option>
 								<c:forEach items="${rmTaxList}" var="rmTaxList"
 													varStatus="count">
 												<option value="${rmTaxList.taxId}"><c:out value="${rmTaxList.taxDesc}"/></option>
@@ -240,12 +240,12 @@
 					<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">RM ROL Qty</label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_rol_qty" class="form-control"placeholder="Re Order level "data-rule-required="true"/>
+							<input type="text" name="rm_rol_qty" class="form-control"placeholder="Re Order level "data-rule-required="true"data-rule-number="true" />
 						</div>
 						<label class="col-sm-3 col-lg-2 control-label">RM Issue
 							Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_iss_qty" class="form-control" placeholder="Issue Qty"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
+							<input type="text" name="rm_iss_qty" class="form-control" placeholder="Issue Qty"data-rule-required="true"data-rule-number="true" />
 						</div>
 						
 					</div>
@@ -253,13 +253,13 @@
 					<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">RM Opening Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_op_qty" class="form-control"placeholder="RM OP Qty"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)"  />
+							<input type="text" name="rm_op_qty" class="form-control"placeholder="RM OP Qty"data-rule-required="true" data-rule-number="true" />
 						</div>
 
 						<label class="col-sm-3 col-lg-2 control-label">RM Received
 							Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_recd_qty" class="form-control" placeholder="Re Order Qty"data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
+							<input type="text" name="rm_recd_qty" class="form-control" placeholder="Re Order Qty"data-rule-required="true" data-rule-number="true" />
 						</div>
 						</div>
 						<div class="form-group">
@@ -267,12 +267,12 @@
 							Qty </label>
 
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_clo_qty" class="form-control" placeholder="Close Qty" data-rule-required="true"  onKeyPress="return isNumberCommaDot(event)" />
+							<input type="text" name="rm_clo_qty" class="form-control" placeholder="Close Qty" data-rule-required="true"data-rule-number="true"  />
 						</div>
 						<label class="col-sm-3 col-lg-2 control-label">RM Rejected
 							Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_rej_qty" class="form-control"placeholder="Raw Rejected Qty "data-rule-required="true" onKeyPress="return isNumberCommaDot(event)" />
+							<input type="text" name="rm_rej_qty" class="form-control"placeholder="Raw Rejected Qty "data-rule-required="true"data-rule-number="true" />
 						</div>
 					</div>
 					
@@ -288,7 +288,7 @@
   								</div>
   								</div>
 									<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Image</label>
+									<label class="col-sm-3 col-lg-2 control-label">Raw Material Image</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<div class="fileupload fileupload-new"
 											data-provides="fileupload">
@@ -314,11 +314,7 @@
 
 									</div>
 								</div>
-								
-
-				 
-				
-				
+							
 					<div class="row">
 						<div class="col-md-12" style="text-align: center">
 							<input type="submit" class="btn btn-info" value="Submit">
@@ -328,9 +324,6 @@
 					</div>
 					</form>
 				</div>
-
-
-
 			</div>
 
 		</div>
@@ -349,15 +342,6 @@
 	<!-- END Container -->
 
 	<!--basic scripts-->
-
-
-
-
-
-
-
-
-
 
 	<script
 		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -395,10 +379,6 @@
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-
-
-
-
 
 	<!--flaty scripts-->
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>

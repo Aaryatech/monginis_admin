@@ -585,8 +585,10 @@ public class SpProductionController {
 			Instrument instrument = rest.postForObject(Constants.url + "/spProduction/getInstrument", map,
 					Instrument.class);
 			System.out.println(instrument.toString());
+			MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
+			mvm.add("typeId",instType);
 
-			TypeList typeList = rest.getForObject(Constants.url + "/spProduction/getTypeList", TypeList.class);
+			TypeList typeList = rest.postForObject(Constants.url + "/spProduction/getTypeList",mvm,TypeList.class);
 			System.out.println("Response: " + typeList.toString());
 
 			if (instrument.isError()) {

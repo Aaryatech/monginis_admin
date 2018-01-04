@@ -9,6 +9,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -37,6 +38,7 @@ import com.ats.adminpanel.model.productionplan.MixingDetailed;
 import com.ats.adminpanel.model.productionplan.MixingHeader;
 
 @Controller
+@Scope("session")
 public class ViewProdController {
 	
 	String globalProductionBatch;
@@ -59,7 +61,7 @@ public class ViewProdController {
 	List<GetProdPlanHeader> prodPlanHeaderList;
 	
     public  List<GetProdPlanDetail> prodPlanDetailList;
-    public static  List<PostProductionPlanDetail> postProdPlanDetailList;
+    public  List<PostProductionPlanDetail> postProdPlanDetailList;
 
 	int globalHeaderId=0;
 	private int productionId;

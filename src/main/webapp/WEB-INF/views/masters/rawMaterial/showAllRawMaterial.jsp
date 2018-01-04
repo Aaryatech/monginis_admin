@@ -99,7 +99,7 @@
 								<i class="fa fa-bars"></i>View Raw Material
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAddRawMaterial">Add Raw Material</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							<!-- <div class="box-tool">
@@ -127,7 +127,7 @@
 							varStatus="count">
 							
 									<c:choose>
-													<c:when test="${rawMaterialDetails.grpId==groupList.grpId}">
+													<c:when test="${groupList.grpId==grpId}">
 														<option selected value="${groupList.grpId}"><c:out value="${groupList.grpName}"/></option>
 												</c:when>
 													<c:otherwise>
@@ -162,8 +162,8 @@
 											<thead>
 												<tr>
 
-													<th width="140" style="width: 30px" align="left">Sr No</th>
-													<th width="138" align="left">RM Name</th>
+													<th width="100"  align="left">Sr No</th>
+													<th width="188" align="left">RM Name</th>
 													<th width="120" align="left">Category</th>
 													<th width="130" align="left">Sub Category</th>
 													<th width="130" align="right">Pack Qty</th>
@@ -206,7 +206,13 @@
 														<td align="left"><c:out
 																value="${RawmaterialList.rmIsCritical}" /></td>
 					<td><a href="${pageContext.request.contextPath}/getRawMaterialDetails?selectedRmId=${RawmaterialList.rmId}" class="action_btn" >
-						<abbr title="Details"><i class="fa fa-list"></i></abbr></a></td>
+						<abbr title="Details"><i class="fa fa-list"></i></abbr></a>
+						
+					<a href="${pageContext.request.contextPath}/deleteRawMaterial/${RawmaterialList.rmId}/${grpId}"
+													onClick="return confirm('Are you sure want to delete this record');"><span
+														class="glyphicon glyphicon-remove"></span></a>	
+						
+						</td>
 
 												</tr>
 												</c:forEach>
