@@ -6,7 +6,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>BOM Request Detailed</title>
+<title>Dashboard - MONGINIS Admin</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -106,7 +106,7 @@
 						<div class="box-content">
 
 							<form id="completproduction"
-								action="${pageContext.request.contextPath}/approvedBom"
+								action="${pageContext.request.contextPath}/approvedBomFromStore"
 								method="post">
 								<div class="box-content">
 									<div class="col-md-2">Bill Of Material Request Date</div>
@@ -155,6 +155,8 @@
 											type="text" name="time_slot"
 											value="${billOfMaterialHeader.toDeptName}" readonly />
 									</div>
+									<input class="form-control " id="settingvalue" size="16"
+											 type="hidden" name="settingvalue" value="${settingvalue}" readonly/>
 
 
 								</div>
@@ -235,73 +237,37 @@
 
 
 								<c:choose>
-									<c:when test="${billOfMaterialHeader.status==0}">
-										<div align="center" class="form-group">
-											<div
-												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-
-												<input type="submit" class="btn btn-primary"
-													value="Approved">
-											</div>
-										</div>
-									</c:when>
+									 
 									
-									<c:when test="${billOfMaterialHeader.status==1}">
+									<c:when test="${billOfMaterialHeader.status==1  || billOfMaterialHeader.status==3}">
+										<c:choose>
+											<c:when test="${userId==billOfMaterialHeader.senderUserid}">
+											
+											
 										<div align="center" class="form-group">
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 
-												<%-- <a href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"><input type="button" class="btn btn-primary"
-													value="For The Rejection And Return"></a>  --%>
-												<a href="${pageContext.request.contextPath}/approveRejected?reqId=${billOfMaterialHeader.reqId}"
-													id="disableMe"><input type="button" class="btn btn-primary"
-													value="Approve Rejected" disabled></a>
+												<a href="${pageContext.request.contextPath}/rejectiontoBmsByDeptWise?reqId=${billOfMaterialHeader.reqId}&fromDept=${fromDept}"> 
+													<input type="button" class="btn btn-primary" value="For Rejection And return"></a> 
 
 											</div>
 										</div>
-
-
-									</c:when>
-
-
-
-
-									<c:when test="${billOfMaterialHeader.status ==2}">
-										<div align="center" class="form-group">
-											<div
-												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-
-												<%-- <a href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"><input type="button" class="btn btn-primary"
-													value="For The Rejection And Return"></a> --%> 
-												<a href="${pageContext.request.contextPath}/approveRejected?reqId=${billOfMaterialHeader.reqId}"><input type="button" class="btn btn-primary"
-													value="Approve Rejected"></a>
-
-											</div>
-										</div>
-
+										
+										</c:when>
+									</c:choose>
 
 									</c:when>
-
-
-
-									<c:when test="${billOfMaterialHeader.status eq '3'}">
-										<div align="center" class="form-group">
-											<div
-												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-
-												<%-- <a href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"
-													id="disableMe"><input type="button" class="btn btn-primary"
-													value="For The Rejection And Return" disabled></a>  --%>
-												<a href="${pageContext.request.contextPath}/approveRejected?reqId=${billOfMaterialHeader.reqId}"
-													id="disableMe"><input type="button" class="btn btn-primary"
-													value="Approve Rejected" disabled></a>
-
-											</div>
-										</div>
-
-
+									<c:when test="${billOfMaterialHeader.status==2}">
+									<div align="center" class="form-group">
+									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+									<a href="${pageContext.request.contextPath}/rejectiontoBmsByDeptWise?reqId=${billOfMaterialHeader.reqId}&fromDept=${fromDept}" id="disableMe"> 
+													<input type="button" class="btn btn-primary" value="For Rejection And return" disabled></a> 
+													</div>
+													</div>
 									</c:when>
 
+ 
 								</c:choose>
 
 

@@ -7,7 +7,7 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Search Bill Of Material List</title>
+<title>Dashboard - MONGINIS Admin</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -52,8 +52,8 @@
 <body>
 
 
-	<c:url var="getBomListWithDate" value="/getBomListWithDate"></c:url>
-	<c:url var="getBomAllListWithDate" value="/getBomAllListWithDate"></c:url>
+	<c:url var="getBomListDepiseWithDate" value="/getBomListDepiseWithDate"></c:url>
+	 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
 
@@ -77,7 +77,11 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Search Bill Of Material List
+					 
+						<i class="fa fa-file-o"></i> Search Bill Of Material Department Wise
+						
+						 
+						
 					</h1>
 					
 				</div>
@@ -91,7 +95,7 @@
 					<div class="box" id="todayslist">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i> Search Bill Of Material List
+								<i class="fa fa-table"></i> Search Bill Of Material Department Wise
 							</h3>
 							<div class="box-tool">
 								<input type="button" class="btn btn-primary" value="Datewise record" onclick="showdatewisetable()"> <a data-action="collapse" href="#"><i
@@ -138,10 +142,6 @@
 													  <c:set var = "status" value="Rejected"/>
 													
 													</c:when>
-													<c:when test="${getbomList.status==3}">
-													  <c:set var = "status" value="Approved Rejected"/>
-													
-													</c:when>
 												</c:choose>
 
 													<tr>
@@ -152,18 +152,14 @@
 																<td align="left"><c:out
 																value="${getbomList.fromDeptName}" /></td>
 																
-													  
-													<td align="left"><fmt:formatDate pattern = "dd-MM-yyyy" value = "${getbomList.reqDate}" />   </td>
-															
-															
-																
-																
+													  <td align="left"><fmt:formatDate pattern = "dd-MM-yyyy" value="${getbomList.reqDate}" />   </td>
+													 	
 																<td align="left"><c:out	
 																value="${status}" />
 																</td>
 																
 																
-						<td><a href="${pageContext.request.contextPath}/viewDetailBOMRequest?reqId=${getbomList.reqId}" class="action_btn" >
+						<td><a href="${pageContext.request.contextPath}/bomDetailDepWise?reqId=${getbomList.reqId}&fromDept=${fromDept}" class="action_btn" >
 						<abbr title="detailed"><i class="fa fa-list"></i></abbr></a></td>
 						
 																</tr>
@@ -198,6 +194,10 @@
 									<div class="col-sm-5 col-lg-3 controls">
 										<input class="form-control date-picker" id="from_date" size="16"
 											 type="text" name="from_date" required />
+										<input class="form-control " id="toDept" size="16"
+											 type="hidden" name="toDept" value="${toDept}" readonly/>
+											 <input class="form-control " id="fromDept" size="16"
+											 type="hidden" name="fromDept" value="${fromDept}" readonly/>
 									
 										</div>
 										
@@ -359,18 +359,22 @@
 		function searchbomall() {
 			var from_date = $("#from_date").val();
 			var to_date = $("#to_date").val();
+			var toDept = $("#toDept").val();
+			var fromDept = $("#fromDept").val();
 			
 			
 			$('#loader').show();
 
 			$
 					.getJSON(
-							'${getBomAllListWithDate}',
+							'${getBomListDepiseWithDate}',
 
 							{
 								 
 								from_date : from_date,
 								to_date : to_date,
+								fromDept : fromDept,
+								toDept : toDept,
 								ajax : 'true'
 
 							},
@@ -390,7 +394,7 @@
 											function(key, itemList) {
 												var stats;
 												var bgcolor;
-												
+												//alert("all request");
 												
 											if(itemList.status==0)
 												{
@@ -404,7 +408,7 @@
 											  	tr.append($('<td></td>').html(itemList.reqDate));
 											  
 											  	tr.append($('<td></td>').html(stats));
-											  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
+											  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/bomDetailDepWise?reqId="+itemList.reqId+"&fromDept="+fromDept+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
 												
 												$('#table_grid tbody').append(tr);
 												
@@ -421,11 +425,11 @@
 											  	tr.append($('<td style="color:blue"></td>').html(itemList.reqDate));
 											  
 											  	tr.append($('<td style="color:blue"></td>').html(stats));
-											  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
+											  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/bomDetailDepWise?reqId="+itemList.reqId+"&fromDept="+fromDept+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
 												
 												$('#table_grid tbody').append(tr);
 												}
-											else
+											else if(itemList.status==2)
 												{
 												stats="Rejected";
 												var tr = $('<tr></tr>');
@@ -437,10 +441,27 @@
 											  	tr.append($('<td style="color:red"></td>').html(itemList.reqDate));
 											  
 											  	tr.append($('<td style="color:red"></td>').html(stats));
-											  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
+											  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/bomDetailDepWise?reqId="+itemList.reqId+"&fromDept="+fromDept+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
 												
 												$('#table_grid tbody').append(tr);
 												}
+											else if(itemList.status==3)
+											{
+											stats="Approved-Rejected";
+											var tr = $('<tr></tr>');
+										  	tr.append($('<td style="color:green"></td>').html(key+1));
+
+										  	tr.append($('<td style="color:green"></td>').html(itemList.fromDeptName));
+										  	
+
+										  	tr.append($('<td style="color:green"></td>').html(itemList.reqDate));
+										  
+										  	tr.append($('<td style="color:green"></td>').html(stats));
+										  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/bomDetailDepWise?reqId="+itemList.reqId+"&fromDept="+fromDept+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
+											
+											$('#table_grid tbody').append(tr);
+											}
+										
 											
 												
 												
