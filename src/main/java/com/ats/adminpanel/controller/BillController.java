@@ -66,6 +66,9 @@ import com.ats.adminpanel.model.GetSellBillDetail;
 import com.ats.adminpanel.model.GetSellBillHeader;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.Route;
+import com.ats.adminpanel.model.RawMaterial.GetItemSfHeader;
+import com.ats.adminpanel.model.billing.FrBillHeaderForPrint;
+import com.ats.adminpanel.model.billing.FrBillPrint;
 import com.ats.adminpanel.model.billing.GetBillDetail;
 import com.ats.adminpanel.model.billing.GetBillDetailsResponse;
 import com.ats.adminpanel.model.billing.GetBillHeader;
@@ -106,10 +109,19 @@ public class BillController {
 	public GetBillHeader getBillHeader;
 
 	List<GetBillHeader> billHeadersList = new ArrayList<>();
+	
+	List<FrBillHeaderForPrint> billHeadersListForPrint = new ArrayList<>();
+	
+	public static  List<FrBillPrint> billPrintList=new ArrayList<>();
+	
 
 	List<GetSellBillHeader> getSellBillHeaderList;
 	List<GetSellBillDetail> getSellBillDetailList;
 	int bQty;
+
+	public static String transportMode;
+
+	public static String vehicleNo;
 
 	String getInvoiceNo() {
 
@@ -379,28 +391,7 @@ public class BillController {
 						header.setRemark("");
 						header.setTaxApplicable((int) (gBill.getItemTax1() + gBill.getItemTax2()));
 
-			/*			for (int k = 0; k < postBillHeaderList.size(); k++) {
-							if (postBillHeaderList.get(k).getFrId() == header.getFrId()) {
-								System.out.println("Fr Id Matched " + k);
-
-							} else {
-
-								
-								 * map = new LinkedMultiValueMap<String, Object>();
-								 * 
-								 * settingValue = settingValue + 1;
-								 * 
-								 * map.add("settingValue", settingValue);
-								 * 
-								 * map.add("settingKey", Constants.SETTING_KEY);
-								 * 
-								 * Info updateSetting = restTemplate.postForObject(Constants.url +
-								 * "updateSeetingForPB", map, Info.class);
-								 
-							}
-
-						}
-*/
+			
 					}
 
 				}
@@ -452,12 +443,14 @@ public class BillController {
 				 * "updateSeetingForPB", map, Info.class);
 				 */
 
-			//}
+			//}.
+			
+			
 		} catch (Exception e) {
 			System.out.println("Exc in Inserting bill " + e.getMessage());
 			e.printStackTrace();
 		}
-		return "redirect:/showGenerateBill";
+		return "redirect:/showBillListForPrint";
 
 	}
 
@@ -781,6 +774,8 @@ public class BillController {
 			model.addObject("todaysDate", todaysDate);
 			model.addObject("menuList", menuList);
 			model.addObject("allFrIdNameList", allFrIdNameList.getFrIdNamesList());
+			
+			
 
 		} catch (Exception e) {
 			System.out.println("Exce in view Bills " + e.getMessage());
@@ -789,6 +784,215 @@ public class BillController {
 
 		return model;
 
+	}
+	
+	@RequestMapping(value = "/showBillListForPrint", method = RequestMethod.GET)
+	public ModelAndView showBillListForPrint(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("billing/billHeaderForPrint");
+
+		Constants.mainAct = 8;
+		Constants.subAct = 83;
+		try {
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			List<Menu> menuList = new ArrayList<Menu>();
+
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			String todaysDate = date.format(formatters);
+
+			AllMenuResponse allMenuResponse = restTemplate.getForObject(Constants.url + "getAllMenu",
+					AllMenuResponse.class);
+
+			menuList = allMenuResponse.getMenuConfigurationPage();
+
+			allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+
+			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
+					AllRoutesListResponse.class);
+
+			List<Route> routeList = new ArrayList<Route>();
+
+			routeList = allRouteListResponse.getRoute();
+			
+			
+			
+			String fromDate = request.getParameter("from_date");
+			String toDate = request.getParameter("to_date");
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			
+			
+			map.add("fromDate", "05-01-2018");
+			map.add("toDate", "05-01-2018");
+			//System.out.println("Inside is All fr Selected " + isAllFrSelected);
+			
+			
+			 ParameterizedTypeReference<List<FrBillHeaderForPrint>> typeRef = new ParameterizedTypeReference<List<FrBillHeaderForPrint>>() {
+				};
+				ResponseEntity<List<FrBillHeaderForPrint>> responseEntity = restTemplate.exchange(Constants.url + "getBillHeaderForPrint",
+						HttpMethod.POST, new HttpEntity<>(map), typeRef);
+				
+				//List<GetBillDetail>	billDetailsResponse = responseEntity.getBody();
+				billHeadersListForPrint=responseEntity.getBody();
+
+
+			/*billHeadersListForPrint  = restTemplate
+					.postForObject(Constants.url + "getBillHeaderForPrint", map, List.class);*/
+			//billHeadersList=new ArrayList<>();
+			
+			//billHeadersListForPrint = billHeaderResponse.getGetBillHeaders();
+			
+			model.addObject("billHeadersList",billHeadersListForPrint);
+
+			System.out.println("bill header for print with address :  " + billHeadersListForPrint.toString());
+
+			model.addObject("routeList", routeList);
+			model.addObject("todaysDate", todaysDate);
+			model.addObject("menuList", menuList);
+			model.addObject("allFrIdNameList", allFrIdNameList.getFrIdNamesList());
+
+		} catch (Exception e) {
+			System.out.println("Exce in view Bills " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+
+	}
+	
+	
+	
+	@RequestMapping(value = "/getBillDetailForPrint", method = RequestMethod.GET)
+	public ModelAndView getBillDetailForPrint(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("billing/billDetailPdf");
+
+		Constants.mainAct = 8;
+		Constants.subAct = 83;
+		try {
+			
+			vehicleNo=request.getParameter("vehicle_no");
+			transportMode=request.getParameter("transport_mode");
+			
+			System.out.println("Vehicle No "+vehicleNo+"Transport Mode = " + transportMode);
+			
+
+				System.out.println("Inside new form action ");
+			
+			RestTemplate restTemplate = new RestTemplate();
+			
+			
+			String[] selectedBills=request.getParameterValues("select_to_print");
+			String billList=new String();
+					
+			for(int i=0;i<selectedBills.length;i++) {
+				billList=selectedBills[i]+","+billList;
+			}
+			
+			billList=billList.substring(0, billList.length()-1);
+			
+			System.out.println("selected bills for Printing "+billList);
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			
+
+			map.add("billNoList", billList);
+			
+			
+			
+			 ParameterizedTypeReference<List<GetBillDetail>> typeRef = new ParameterizedTypeReference<List<GetBillDetail>>() {
+			};
+			ResponseEntity<List<GetBillDetail>> responseEntity = restTemplate.exchange(Constants.url + "getBillDetailsForPrint",
+					HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			
+			List<GetBillDetail>	billDetailsResponse = responseEntity.getBody();
+			 
+
+			  /*List<GetBillDetail> billDetailsResponse = restTemplate.postForObject(Constants.url + "getBillDetailsForPrint",
+					map, List.class);
+			  
+			 
+*/
+			billDetailsList = new ArrayList<GetBillDetail>();
+			billDetailsList = billDetailsResponse;
+			System.out.println(" *** get Bill response  " + billDetailsResponse.toString());
+			FrBillPrint billPrint=null;
+			for(int i=0;i<billHeadersListForPrint.size();i++) {
+				System.out.println("outside for Index I  = "+i);
+				  billPrint=new FrBillPrint();
+				 List<GetBillDetail> billDetails=new ArrayList<>();
+
+				  for(int j=0;j<billDetailsList.size();j++) {
+						System.out.println("inner for Index J = "+j);
+
+					  if(billHeadersListForPrint.get(i).getBillNo()==billDetailsList.get(j).getBillNo()) {
+						  
+							System.out.println("Inside If  Bill no  = "+billHeadersListForPrint.get(i).getBillNo());
+
+						 billPrint.setBillNo(billHeadersListForPrint.get(i).getBillNo());
+						 billPrint.setFrAddress(billHeadersListForPrint.get(i).getFrAddress());
+						 billPrint.setFrId(billHeadersListForPrint.get(i).getFrId());
+						 billPrint.setFrName(billHeadersListForPrint.get(i).getFrName());
+						 billPrint.setInvoiceNo(billHeadersListForPrint.get(i).getInvoiceNo());
+
+						 billDetails.add(billDetailsList.get(j));
+						
+					  }//end of if 
+					  
+				  }
+				  billPrint.setBillDetailsList(billDetails);
+				  billPrintList.add(billPrint);
+
+			  }
+
+			System.out.println("bill Print List "+billPrintList.toString());
+			model.addObject("billDetails",billPrintList);
+			HttpSession ses= request.getSession();
+			ses.setAttribute("billDetails", billPrintList);
+			
+		}catch (Exception e) {
+			System.out.println("Exce in getting bill Detail for Print "+e.getMessage());
+			e.printStackTrace();
+			
+		}
+		return model;
+		
+	}
+	
+	@RequestMapping(value = "/showBillPdf", method = RequestMethod.GET)
+	public ModelAndView showBillPdf(HttpServletRequest request, HttpServletResponse response) {
+System.out.println("IN Show bill Method");
+		ModelAndView model = new ModelAndView("billing/pdf/frBillPdf");
+//ModelAndView model = new ModelAndView("billing/billDetailPdf");
+
+		try {
+           System.out.println(" Data for PDF billPrintList "+ billPrintList.toString());
+
+          // staticGetGenerateBills=generateBillList.getGenerateBills();
+           
+			//List<GenerateBill> generateNewBill=generateBillList.getGenerateBills();
+		//	System.out.println(" Data for PDF generateBillList "+ generateNewBill.toString());
+			//model.addObject("getBillList", generateBillList.getGenerateBills());
+           
+			model.addObject("billDetails",billPrintList);
+			model.addObject("vehicleNo", vehicleNo);
+			model.addObject("transportMode", transportMode);
+
+
+			System.out.println("after Data ");
+		
+		}catch (Exception e) {
+			
+			System.out.println("Ex in getting bill Data for PDF "+e.getMessage());		
+			e.printStackTrace();
+		}
+	return model;
+	
 	}
 
 	// List<GetBillHeader> billHeadersList;
@@ -1234,7 +1438,7 @@ public class BillController {
 	}
 
 	
-	@RequestMapping(value = "/showBillPdf", method = RequestMethod.GET)
+	/*@RequestMapping(value = "/showBillPdf", method = RequestMethod.GET)
 	public ModelAndView showBillPdf(HttpServletRequest request, HttpServletResponse response) {
 System.out.println("IN Show bill Method");
 		ModelAndView model = new ModelAndView("billing/pdf/frBillPdf");
@@ -1256,6 +1460,8 @@ System.out.println("IN Show bill Method");
 	return model;
 	
 	}
+	*/
+	
 	
 	
 	private Dimension format = PD4Constants.A4;
