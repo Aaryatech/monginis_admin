@@ -251,12 +251,11 @@
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 
-												<a
-													href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"><i
-													class="fa fa-check"></i>For The Rejection And Return</a> <a
-													href="${pageContext.request.contextPath}/approveRejected?reqId=${billOfMaterialHeader.reqId}"
-													id="disableMe"><i class="fa fa-check"></i>Approve
-													Rejected</a>
+												<a href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"><input type="button" class="btn btn-primary"
+													value="For The Rejection And Return"></a> 
+												<a href="${pageContext.request.contextPath}/approveRejected?reqId=${billOfMaterialHeader.reqId}"
+													id="disableMe"><input type="button" class="btn btn-primary"
+													value="Approve Rejected" disabled></a>
 
 											</div>
 										</div>
@@ -272,11 +271,10 @@
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 
-												<a
-													href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"><i
-													class="fa fa-check"></i>For The Rejection And Return</a> <a
-													href="${pageContext.request.contextPath}/approveRejected?reqId=${billOfMaterialHeader.reqId}"><i
-													class="fa fa-check"></i>Approve Rejected</a>
+												<a href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"><input type="button" class="btn btn-primary"
+													value="For The Rejection And Return"></a> 
+												<a href="${pageContext.request.contextPath}/approveRejected?reqId=${billOfMaterialHeader.reqId}"><input type="button" class="btn btn-primary"
+													value="Approve Rejected"></a>
 
 											</div>
 										</div>
@@ -291,13 +289,12 @@
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 
-												<a
-													href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"
-													id="disableMe"><i class="fa fa-check"></i>For The
-													Rejection And Return</a> <a
-													href="${pageContext.request.contextPath}/approveRejected?reqId=${billOfMaterialHeader.reqId}"
-													id="disableMe"><i class="fa fa-check"></i>Approve
-													Rejected</a>
+												<a href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"
+													id="disableMe"><input type="button" class="btn btn-primary"
+													value="For The Rejection And Return" disabled></a> 
+												<a href="${pageContext.request.contextPath}/approveRejected?reqId=${billOfMaterialHeader.reqId}"
+													id="disableMe"><input type="button" class="btn btn-primary"
+													value="Approve Rejected" disabled></a>
 
 											</div>
 										</div>

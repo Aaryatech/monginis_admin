@@ -155,6 +155,8 @@
 											type="text" name="time_slot"
 											value="${billOfMaterialHeader.toDeptName}" readonly />
 									</div>
+									<input class="form-control " id="settingvalue" size="16"
+											 type="hidden" name="settingvalue" value="${settingvalue}" readonly/>
 
 
 								</div>
@@ -251,12 +253,8 @@
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 
-												<a
-													href="${pageContext.request.contextPath}/rejectiontoStore?reqId=${billOfMaterialHeader.reqId}"><i
-													class="fa fa-check"></i>For The Rejection And Return</a> <%-- <a
-													href="${pageContext.request.contextPath}/approveRejected?reqId=${billOfMaterialHeader.reqId}"
-													id="disableMe"><i class="fa fa-check"></i>Approve
-													Rejected</a> --%>
+												<a href="${pageContext.request.contextPath}/rejectiontoStore?reqId=${billOfMaterialHeader.reqId}&settingvalue=${settingvalue}"> 
+													<input type="button" class="btn btn-primary" value="For Rejection And return"></a> 
 
 											</div>
 										</div>
@@ -274,8 +272,8 @@
 
 												<%-- <a
 													href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"><i
-													class="fa fa-check"></i>For The Rejection And Return</a> --%> <a
-													href="${pageContext.request.contextPath}/approveRejectedByStore?reqId=${billOfMaterialHeader.reqId}"><i
+													class="fa fa-check"></i>For The Rejection And Return</a> --%> 
+													<a href="${pageContext.request.contextPath}/approveRejectedByStore?reqId=${billOfMaterialHeader.reqId}"><i
 													class="fa fa-check"></i>Approve Rejected</a>
 
 											</div>

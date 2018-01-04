@@ -152,7 +152,7 @@
 								method="post" id="validation-form" enctype="multipart/form-data">
 
                  			 <div class="box-content">
-								<div class="col1">
+								
 								
 								 <label class="col-sm-1 col-lg-2 control-label" for="Inward No">InwardNo:</label>
 								 <div class="col-md-1">
@@ -162,8 +162,8 @@
 									</div>
 								  
 								 
-								</div>
-                               <div class="col1">
+								
+                               
 									<label class="col-sm-1 col-lg-1 control-label" for="Date">Date:</label>
 									<label class="col-sm-1 col-lg-2 control-label" for="Date">
 									
@@ -172,17 +172,14 @@
 									<input type="hidden" name="nowDate" value=" <fmt:formatDate value="${now}" pattern="dd-mm-yyyy"/>">
 									
 									</label>
-								</div>
-								 <div class="col1">
+								
+								
 									<label class="col-sm-1 col-lg-1 control-label" for="Time">Time:</label>
                                    <label class="col-sm-1 col-lg-2 control-label" for="Date"> <div id="txt"></div></label>
-								</div>
-								<div class="col1">
-									
-
-								</div>
-                             &nbsp;&nbsp;
-                   		</div>
+								
+								
+                            
+                   		</div><br>
                    
                    
                    <div class="box-content">
@@ -213,7 +210,7 @@
 									</div>
 									
 								
-                   </div><br><br><br>
+                   </div><br>
                    
 							<div class="box-content">
                                  
@@ -228,6 +225,7 @@
 										<select data-placeholder="Select Transporter"
 											class="form-control chosen" name="tran_id" tabindex="-1"
 											id="tran_id" required >
+											
 											<option selected value="">Select Transporter</option>
 											
 											<c:forEach items="${transporterList}" var="transporterList">
@@ -281,7 +279,7 @@
 												<span class="btn btn-default btn-file"><span
 													class="fileupload-new">Select image</span> <span
 													class="fileupload-exists">Change</span> <input type="file"
-													class="file-input" name="image1" id="image2"
+													class="file-input" name="image1" id="image1"
 													 /></span> <a href="#"
 													class="btn btn-default fileupload-exists"
 													data-dismiss="fileupload">Remove</a>

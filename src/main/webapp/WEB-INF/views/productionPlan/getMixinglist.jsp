@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -120,14 +121,29 @@
 								<tbody>
 									<c:forEach items="${todaysmixrequest}" var="todaysmixrequest"
 													varStatus="count">
+													
+													<c:choose>
+														<c:when test="${todaysmixrequest.status==0}">
+															<c:set var="sts" value="Pending"></c:set>
+															
+														</c:when>
+														<c:when test="${todaysmixrequest.status==1}">
+															<c:set var="sts" value="1"></c:set>
+															
+														</c:when>
+														<c:when test="${todaysmixrequest.status==2}">
+															<c:set var="sts" value="Production Complet"></c:set>
+															
+														</c:when>
+													</c:choose>
 
 													<tr>
 														<td><c:out value="${count.index+1}" /></td>
 
 														
 																
-																<td align="left"><c:out
-																value="${todaysmixrequest.mixDate}" /></td>
+																<td align="left"><fmt:formatDate pattern = "dd-MM-yyyy"
+																value="${todaysmixrequest.mixDate}"/></td>
 																
 													  
 													<td align="left"><c:out
@@ -139,7 +155,7 @@
 																
 																
 																<td align="left"><c:out	
-																value="${todaysmixrequest.status}" />
+																value="${sts}" />
 																</td>
 																
 																
@@ -171,7 +187,7 @@
 							
 						</div>
 						<div class=" box-content">
-						<div class="form-group">
+						<div class="form-group"><br>
 									<label class="col-sm-3 col-lg-2 control-label">From Date:</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<input class="form-control date-picker" id="from_date" size="16"
@@ -199,15 +215,15 @@
 								<div class="form-group">
 								
 								<div align="center" class="form-group">
-									<div
-										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										<input class="btn btn-primary" value="Search" id="search"
+									 <div
+										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0"> 
+										<input type="button" class="btn btn-primary" value="Search" id="search"
 											onclick="searchMix()">
 				
-										<input class="btn btn-primary" value="View All" id="searchmixall"
+										<input type="button" class="btn btn-primary" value="View All" id="searchmixall"
 											onclick="searchmixall()">
 
-									</div><br>
+									 </div><br> 
 									
 									<div align="center" id="loader" style="display: none">
 
@@ -371,8 +387,12 @@
 								  $.each(
 												data,
 												function(key, itemList) {
-												
-													alert("with satus 0");
+													if(itemList.status==0)
+														{
+														var sts="Pending";
+														}
+													  
+													//alert("with satus 0");
 													var tr = $('<tr></tr>');
 
 												  	tr.append($('<td></td>').html(key+1));
@@ -382,7 +402,7 @@
 
 												  	tr.append($('<td></td>').html(itemList.productionBatch));
 												  	tr.append($('<td></td>').html(itemList.timeSlot));
-												  	tr.append($('<td></td>').html(itemList.status));
+												  	tr.append($('<td></td>').html(sts));
 												  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailMixRequest?mixId="+itemList.mixId+"' class='action_btn'> <abbr title='detailes'> <i class='fa fa-list' ></i></abbr> "));
 													$('#table_grid tbody').append(tr);
 
@@ -428,14 +448,26 @@
 							  $.each(
 											data,
 											function(key, itemList) {
-											
-												alert("all request");
+												
+											if(itemList.status==0)
+												{
+												var sts="Pending";
+												}
+											else if(itemList.status==1)
+												{
+												var sts=itemList.status;
+												}
+											else if(itemList.status==2)
+												{
+												var sts="Production Complete";
+												}
+												
 												var tr = $('<tr></tr>');
 											  	tr.append($('<td></td>').html(key+1));
 											  	tr.append($('<td></td>').html(itemList.mixDate));
 											  	tr.append($('<td></td>').html(itemList.productionBatch));
 											  	tr.append($('<td></td>').html(itemList.timeSlot));
-											  	tr.append($('<td></td>').html(itemList.status));
+											  	tr.append($('<td></td>').html(sts));
 											  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailMixRequest?mixId="+itemList.mixId+"' class='action_btn'> <abbr title='detailes'> <i class='fa fa-list' ></i></abbr> "));
 												
 												$('#table_grid tbody').append(tr);

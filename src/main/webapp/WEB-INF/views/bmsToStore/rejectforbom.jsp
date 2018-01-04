@@ -210,7 +210,8 @@
 							<div class="box-content">
 							<div align="center" class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-										
+										<input class="form-control " id="settingvalue" size="16"
+											 type="hidden" name="settingvalue" value="${settingvalue}" readonly/>
 										<input type="submit" class="btn btn-primary" value="For Rejection">
 									</div>
 								</div>

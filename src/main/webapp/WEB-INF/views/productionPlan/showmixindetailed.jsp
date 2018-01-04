@@ -102,6 +102,9 @@
 								method="post">
 								<div class="box-content">
 									<div class="col-md-2">Mix Request Date</div>
+									<c:set var="mdate" value="${mixheader.mixDate}">
+									
+									</c:set>
 
 									<div class="col-md-3">
 										<input type="text" id="mix_date" name="mix_date"
@@ -173,7 +176,7 @@
 													<c:set var="srNo" value="0" />
 													<c:forEach items="${mixwithdetaild}" var="mixwithdetaild"
 														varStatus="count">
-
+													
 
 														<tr>
 															<td><c:out value="${count.index+1}" /></td>
@@ -202,10 +205,8 @@
 																	<td><c:out value="${mixwithdetaild.rejectedQty}" /></td>
 																</c:otherwise>
 															</c:choose>
-
-
-
-															<td><c:out value="${mixwithdetaild.mixingDate}" /></td>
+															 
+															<td><fmt:formatDate pattern = "dd-MM-yyyy" value = "${mixwithdetaild.mixingDate}" /></td>
 
 
 														</tr>
@@ -218,46 +219,43 @@
 									</div>
 								</div>
 
-
-
-								<c:choose>
-									<c:when test="${mixheader.status==0}">
-										<div align="center" class="form-group">
-											<div
-												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-
-												<input type="submit" class="btn btn-primary"
+							<div class=" box-content">
+								<div class="form-group">
+									<div align="center" class="form-group">
+										<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+											<c:choose>
+												<c:when test="${mixheader.status!=2}">
+										 			<input type="submit" class="btn btn-primary"
 													value="complet Production">
-											</div>
+											    </c:when>
+											</c:choose>
+								
+						
+											<c:choose>
+												<c:when test="${mixheader.status!=2}">
+													<c:choose>
+														<c:when test="${mixheader.isBom==0}"> 
+															<a href="${pageContext.request.contextPath}/showBom/${mixheader.mixId}/0/${date}/0"><input type="button" class="btn btn-primary"
+													value="Request to Bom"> </a>
+ 
+														</c:when>
+													</c:choose>
+												</c:when>
+											</c:choose>
+
+											<c:choose> 
+												<c:when test="${mixheader.isBom == 1}">
+									  				<button type="button" class="btn btn-primary" 
+									  				id="man_bom_button" onclick="goToManBom()">
+											 Manual Bom for Mixing
+													</button>
+										 
+												</c:when> 
+											</c:choose>
 										</div>
-									</c:when>
-								</c:choose>
-
-								<c:choose>
-									<c:when test="${mixheader.isBom==0}">
-										<div align="center" class="form-group">
-											<div
-												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-												<a
-													href="${pageContext.request.contextPath}/showBom/${mixheader.mixId}/0/${date}/0"><i
-													class="fa fa-check"></i> Req. BOM</a>
-
-											</div>
-										</div>
-									</c:when>
-								</c:choose>
-
-								<c:choose>
-
-									<c:when test="${mixheader.isBom == 1}">
-										<button type="button" class="btn btn-primary"
-											id="man_bom_button" onclick="goToManBom()">
-											<i class="fa fa-check"></i>Manual Bom for Mixing
-										</button>
-									</c:when>
-
-								</c:choose>
-
+								</div>
+							</div>
+						</div>
 
 								<div class="box-content"></div>
 								<br>
