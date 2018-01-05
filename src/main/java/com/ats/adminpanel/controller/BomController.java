@@ -118,7 +118,7 @@ int globalIsPlan;
 	}
 
 	@RequestMapping(value = "/insertBom", method = RequestMethod.GET)
-	public ModelAndView insertBom(HttpServletRequest request, HttpServletResponse response) {
+	public String insertBom(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView mav = new ModelAndView("production/addBom");
 
@@ -154,6 +154,7 @@ int globalIsPlan;
 			System.out.println("Exce In Date conversion");
 			e1.printStackTrace();
 		}
+		String ret="";
 
 		try {
 			
@@ -187,7 +188,6 @@ int globalIsPlan;
 
 			List<BillOfMaterialDetailed> bomDetailList = new ArrayList<BillOfMaterialDetailed>();
 			BillOfMaterialDetailed bomDetail = null;
-
 			if (isMixing == 1) {
 				
 				map = new LinkedMultiValueMap<String, Object>();
@@ -243,7 +243,7 @@ int globalIsPlan;
 				int updateisBom = restTemplate.postForObject(Constants.url + "updateisMixingandBom", map,
 						Integer.class);
 
-				
+				 ret="redirect:/getBomListforProduction";
 				
 			}
 
@@ -300,6 +300,7 @@ int globalIsPlan;
 				
 				int updateisBom = restTemplate.postForObject(Constants.url + "updateisBomInMixing", map,
 						Integer.class);
+				 ret="redirect:/getBomListforMixing";
 			}
 
 			
@@ -310,7 +311,7 @@ int globalIsPlan;
 
 		}
 		
-	return mav;
+	return ret;
 	
 	}
 	

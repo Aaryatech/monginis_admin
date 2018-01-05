@@ -79,16 +79,16 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
-<c:choose>
-<c:when test="${isMix==1}">
-<c:set var="title" value="Production Request">
-</c:set>
-</c:when>
-<c:otherwise>
-<c:set var="title" value="Mixing Request">
-</c:set>
-</c:otherwise>
-</c:choose>
+			<c:choose>
+				<c:when test="${isMix==1}">
+					<c:set var="title" value="Production Request">
+					</c:set>
+				</c:when>
+				<c:otherwise>
+					<c:set var="title" value="Mixing Request">
+					</c:set>
+				</c:otherwise>
+			</c:choose>
 
 			<div class="row">
 				<div class="col-md-12">
@@ -106,49 +106,76 @@
 						</div>
 
 						<div class="box-content">
-<form action="${pageContext.request.contextPath}/insertBom" name="validation-form" id="validation-form">
-							<div class="clearfix"></div>
-<input type="hidden" name="isMix" value="${isMix}">
+							<form action="${pageContext.request.contextPath}/insertBom"
+								name="validation-form" id="validation-form">
+								<div class="clearfix"></div>
+								<input type="hidden" name="isMix" value="${isMix}">
 
-							<div class="table-responsive" style="border: 0">
-								<table width="100%" class="table table-advance" id="table1">
-									<thead>
-										<tr>
-											<th width="17" style="width: 18px">Sr No</th>
-											<th width="100" align="left">Rm Id</th>
-											<th width="120" align="left">Rm Name</th>
-											<th width="120" align="left">Qty</th>
-
-											<th width="120" align="left">Edit Qty</th>
-
-											<th width="100" align="left">Unit</th>
-										</tr>
-									</thead>
-									<tbody>
-										<c:forEach items="${planDetailForBom}" var="planDetailForBom"
-											varStatus="count">
-
+								<div class="table-responsive" style="border: 0">
+									<table width="100%" class="table table-advance" id="table1">
+										<thead>
 											<tr>
-												<td><c:out value="${count.index+1}" /></td>
-												<td align="left"><c:out value="${planDetailForBom.rmId}" /></td>
-												<td align="left"><c:out value="${planDetailForBom.rmName}" /></td>
-												<td align="left"><c:out value="${planDetailForBom.total}" /></td>
+												<th width="17" style="width: 18px">Sr No</th>
+												<th width="100" align="left">Rm Id</th>
+												<th width="120" align="left">Rm Name</th>
+												<th width="100" align="left">Rm Type</th>
+												<th width="120" align="left">Qty</th>
 
-												<td align="left"><input type="text" id="editQty" size="2" class="form-control"
-													name="editQty${count.index}" value="${planDetailForBom.total}"></td>
+												<th width="120" align="left">Edit Qty</th>
 
-												<td align="left"><c:out value="${planDetailForBom.uom}"></c:out></td>
-
+												<th width="100" align="left">Unit</th>
 											</tr>
-										</c:forEach>
+										</thead>
+										<tbody>
+											<c:forEach items="${planDetailForBom}" var="planDetailForBom"
+												varStatus="count">
 
-									</tbody>
-								</table>
-							</div>
-							<input type="submit" value="Submit"/>
-						</form>
+												<tr>
+													<td><c:out value="${count.index+1}" /></td>
+													<td align="left"><c:out
+															value="${planDetailForBom.rmId}" /></td>
+													<td align="left"><c:out
+															value="${planDetailForBom.rmName}" /></td>
+													<c:choose>
+														<c:when test="${planDetailForBom.rmType==1}">
+															<td align="left"><c:out
+																	value="RM" /></td>
+
+														</c:when>
+														<c:when test="${planDetailForBom.rmType==2}">
+															<td align="left"><c:out
+																	value="SF" /></td>
+
+														</c:when>
+
+													</c:choose>
+													<td align="left"><c:out
+															value="${planDetailForBom.total}" /></td>
+
+													<td align="left"><input type="text" id="editQty"
+														size="2" class="form-control" name="editQty${count.index}"
+														value="${planDetailForBom.total}"></td>
+
+													<td align="left"><c:out
+															value="${planDetailForBom.uom}"></c:out></td>
+
+												</tr>
+											</c:forEach>
+
+										</tbody>
+									</table>
+									
+								</div>
+									
+						<div class="col-md-12" style="text-align: center;">
+						
+						<input type="submit" value="Submit" class="btn btn-primary" />
+							
 						</div>
 						
+							</form>
+						</div>
+
 					</div>
 				</div>
 			</div>
