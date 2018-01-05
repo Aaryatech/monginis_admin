@@ -275,7 +275,7 @@ int globalIsPlan;
 					bomDetail.setRmIssueQty(1.0F);
 					bomDetail.setUom(sFMixingForBom.get(i).getUom());
 					bomDetail.setRmType(sFMixingForBom.get(i).getRmType());
-					bomDetail.setRmReqQty(sFMixingForBom.get(i).getTotal());
+					bomDetail.setAutoRmReqQty(sFMixingForBom.get(i).getTotal());
 					bomDetail.setRmName(sFMixingForBom.get(i).getRmName());
 					
 					bomDetail.setRmReqQty(Integer.parseInt(editQty));

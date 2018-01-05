@@ -74,7 +74,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Add to Mixing
+						<i class="fa fa-file-o"></i> Add to Mixing From Production 
 					</h1>
 				</div>
 			</div>
@@ -109,7 +109,6 @@
 									<thead>
 										<tr>
 											<th width="17" style="width: 18px">Sr No</th>
-											<th width="100" align="left">Rm Id</th>
 											<th width="120" align="left">Rm Name</th>
 											<th width="120" align="left">Qty</th>
 
@@ -124,7 +123,6 @@
 
 											<tr>
 												<td><c:out value="${count.index+1}" /></td>
-												<td align="left"><c:out value="${mixingList.rmId}" /></td>
 												<td align="left"><c:out value="${mixingList.rmName}" /></td>
 												<td align="left"><c:out value="${mixingList.total}" /></td>
 
@@ -145,7 +143,7 @@
 													<c:when test="${isMixing==0}">
 													<div align="center" class="form-group">
 												<div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-												<input type= "submit" class="btn btn-primary" value="Request For Mixing" id="search">
+												<input type= "submit" class="btn btn-primary" value="Request For Mixing From Production" id="search">
 				
 												</div><br>
 												</div>

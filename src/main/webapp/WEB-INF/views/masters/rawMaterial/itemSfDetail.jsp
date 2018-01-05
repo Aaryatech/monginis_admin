@@ -148,7 +148,7 @@
 										Material Type</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<select name="material_type" id="material_type"
-											class="form-control" placeholder="Material Type"
+											class="form-control chosen" placeholder="Material Type"
 											data-rule-required="true">
 											<option value="0">Select Material Type</option>
 											<option value="1">RM</option>
@@ -159,7 +159,7 @@
 									<label class=" col-sm-3 col-lg-2 control-label">
 										Material Name</label>
 									<div class="col-sm-6 col-lg-4 controls" id="chooseRM">
-										<select class="chosen" name="rm_material_name" id="rm_material_name"
+										<select class="form-control"  name="rm_material_name" id="rm_material_name"
 											 placeholder="Material Name"
 											data-rule-required="true">
 											<option value="0">Select Material</option>
@@ -744,8 +744,6 @@ function clearData(){
 	document.getElementById("rm_material_name").options.selectedIndex = "0";
 }
 </script>
-<script type="text/javascript">
-$(".chosen").chosen();
-</script>
+
 </body>
 </html>

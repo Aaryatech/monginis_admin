@@ -29,68 +29,110 @@ th {
 	background-color: blue;
 	color: white;
 }
+
+
 </style>
 </head>
 <body>
-	<h3>Franchisee Bill</h3>
+	<c:forEach items="${billDetails}" var="frDetails" varStatus="count">
+		<h2>Franchisee Bill</h2>
+		
+	<h2>Mode Of Transport: ${transportMode}</h2>
+	<h2>Vehicle No : ${vehicleNo}</h2>
+	
+	<h4>FR Name:${frDetails.frName}</h4>
+													<h4>Invoice No:${frDetails.invoiceNo}</h4> 
+													<h4>Address:s${frDetails.frAddress}</h4>
+													 
+													
 	<table width="100%" border="0" cellspacing="0" cellpadding="0"
 		id="table_grid" class="table table-bordered">
+			
 		<thead>
-			<tr>
-				<!-- <th>#</th>
-				<th>Franchisee Name</th>
-				<th>Menu Name</th>
-				<th>Item id</th>
-				<th>Item Name</th>
-				<th>Order Quantity</th>
-				<th>Bill Quantity</th>
-														<th>Expiry Date</th>
+			 									
+													<tr>
+													<th width="140" style="width: 30px" align="left">Sr No</th>
+													<th width="138" align="left">Item Name</th>
+													<th width="120" align="left">Group</th>
+													<th width="130" align="right">Billed Qty</th>
+													<th width="100" align="left">MRP</th>
+													<th width="100" align="left">Rate</th>
+													<th width="140" align="left">Taxable Amt</th>
+													<th width="105" align="left">GST %</th>
+													<th width="105" align="left">Total Tax</th>
+													<th width="130" align="left">Grand Total</th>
+												</tr>
+											</thead>
+											<tbody>
 
-				<th>Rate</th>
-				<th>Total</th>  before table -->
-				<th>Sr.No.</th>
-				<th>Franchise Name</th>
-				<th>Menu Name</th>
-				<th>Item Name</th>
-				<th>Order Qty</th>
-				<th>Bill Qty</th>
-				<th>Base Rate</th>
-				<th>Amount</th>
-				<th>Tax%</th>
-				<th>SGST Rs</th>
-				<th>CGST Rs</th>
-				<th>IGST Rs</th>
-				<th>Total</th>
-			</tr>
-		</thead>
-		<tbody>
+												
 
-		</tbody>
+													<%-- <tr>
+													
+													<td align="left"><c:out
+																value="${frDetails.frName}" /></td>
 
-		<c:forEach var="getBillList" items="${getBillList}" varStatus="count">
 
-			<tr>
-				<td><c:out value="${count.index+1}" /></td>
+														<td align="left"><c:out
+																value="${frDetails.invoiceNo}" /></td>
+																
+																<td align="left"><c:out
+																value="${frDetails.frAddress}" /></td>
+																
+																</tr> --%>
+									<c:forEach items="${frDetails.billDetailsList}" var="billDetails">
+									<tr>
+														<td><c:out value="${count.index+1}" /></td>
 
-				<td align="center"><c:out value="${getBillList.frName}" /></td>
+														<td align="left"><c:out
+																value="${billDetails.itemName}" /></td>
 
-				<td align="center"><c:out value="${getBillList.menuTitle}" /></td>
 
-				<td align="center"><c:out value="${getBillList.itemName}" /></td>
-				<td align="center"><c:out value="${getBillList.orderQty}" /></td>
+														<td align="left"><c:out
+																value="${billDetails.catName}" /></td>
 
-				<td align="center"><c:out value="${getBillList.orderQty}" /></td>
+														
+														<td align="center"><c:out value="${billDetails.billQty}" /></td>
 
-				<td align="center"><c:out value="${getBillList.orderRate}" /></td>
-				<c:set var="oRate" value="${getBillList.orderRate}" />
-				<c:set var="bQty" value="${getBillList.orderQty}" />
+														<td align="left"><c:out value="${billDetails.mrp}" /></td>
 
-				<td align="center"><c:out value="${oRate*bQty}" /></td>
+														<td align="left"><c:out value="${billDetails.rate}" /></td>
+														<td align="left"><c:out
+																value="${billDetails.taxableAmt}" /></td>
+																
+														<c:set var="sgstPer" value="${billDetails.sgstPer}" />
+														<c:set var="cgstPer" value="${billDetails.cgstPer}" />
 
-			</tr>
+														<td align="left"><c:out value="${sgstPer + cgstPer}" /></td>
 
-		</c:forEach>
-	</table>
+														<td align="left"><c:out
+																value="${billDetails.totalTax}" /></td>
+														<td align="center"><c:out
+																value="${billDetails.grandTotal}" /></td>
+														<!-- Total -->
+
+
+														<!-- <td rowspan="1" align="left"> <input
+																type="button" value="View"> <input type="button"
+																value="Edit"> <input type="button"
+																value="Cancel"></td> -->
+
+
+														<!-- <td align="left"><label><input type="submit"
+																	name="submit_button" id="submit_button"></label></td>  -->
+
+
+													</tr>
+													<div class="page-break">this content may page-break if content above this </div>
+												</c:forEach>
+<!-- </tr>
+ -->												
+<%--  </c:forEach>
+ --%>
+											</tbody>
+										</table>
+									
+								</c:forEach>
 
 </body>
 </html>

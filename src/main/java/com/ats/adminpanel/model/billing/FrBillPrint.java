@@ -11,6 +11,7 @@ public class FrBillPrint {
 	String frName;
 	String frAddress;
 	String invoiceNo;
+	int isSameState;
 	
 	public String getInvoiceNo() {
 		return invoiceNo;
@@ -48,15 +49,19 @@ public class FrBillPrint {
 	public void setFrAddress(String frAddress) {
 		this.frAddress = frAddress;
 	}
-	
+	public int getIsSameState() {
+		return isSameState;
+	}
+	public void setIsSameState(int isSameState) {
+		this.isSameState = isSameState;
+	}
 	@Override
 	public String toString() {
-		return "FrBillPrint [billDetailsList=" + billDetailsList + ", "
-					+ "frId=" + frId + ", "
-					+ "billNo=" + billNo + ", "
-					+ "frName="+ frName + ","
-					+ " frAddress=" + frAddress + ","
-					+ " invoiceNo=" + invoiceNo + "]";
+		return "FrBillPrint [billDetailsList=" + billDetailsList + ", frId=" + frId + ", billNo=" + billNo + ", frName="
+				+ frName + ", frAddress=" + frAddress + ", invoiceNo=" + invoiceNo + ", isSameState=" + isSameState
+				+ "]";
 	}
+	
+	
 
 }

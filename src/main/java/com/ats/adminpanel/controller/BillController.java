@@ -69,6 +69,7 @@ import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.RawMaterial.GetItemSfHeader;
 import com.ats.adminpanel.model.billing.FrBillHeaderForPrint;
 import com.ats.adminpanel.model.billing.FrBillPrint;
+import com.ats.adminpanel.model.billing.FrBillTax;
 import com.ats.adminpanel.model.billing.GetBillDetail;
 import com.ats.adminpanel.model.billing.GetBillDetailsResponse;
 import com.ats.adminpanel.model.billing.GetBillHeader;
@@ -939,8 +940,13 @@ public class BillController {
 						 billPrint.setFrId(billHeadersListForPrint.get(i).getFrId());
 						 billPrint.setFrName(billHeadersListForPrint.get(i).getFrName());
 						 billPrint.setInvoiceNo(billHeadersListForPrint.get(i).getInvoiceNo());
+						 billPrint.setIsSameState(billHeadersListForPrint.get(i).getIsSameState());
 
 						 billDetails.add(billDetailsList.get(j));
+						 
+						 FrBillTax billTax=new FrBillTax();
+						 
+						 
 						
 					  }//end of if 
 					  
