@@ -77,9 +77,17 @@
 			<div class="page-title">
 				<div>
 					<h1>
-					 
-						<i class="fa fa-file-o"></i> Search Bill Of Material Department Wise
-						
+					 <c:choose> 
+					 	<c:when test="${fromDept==14}">
+						<i class="fa fa-file-o"></i> Search Bill Of Material For PRODUCTION
+						</c:when>
+						<c:when test="${fromDept==15}">
+						<i class="fa fa-file-o"></i> Search Bill Of Material For MIXING
+						</c:when>
+						<c:otherwise>
+						<i class="fa fa-file-o"></i> Search Bill Of Department Wise
+						</c:otherwise>
+					</c:choose>
 						 
 						
 					</h1>
@@ -140,6 +148,15 @@
 													
 													<c:when test="${getbomList.status==2}">
 													  <c:set var = "status" value="Rejected"/>
+													
+													</c:when>
+													<c:when test="${getbomList.status==3}">
+													  <c:set var = "status" value="Approved Rejected"/>
+													
+													</c:when>
+													 
+													<c:when test="${getbomList.status==4}">
+													  <c:set var = "status" value="Request closed"/>
 													
 													</c:when>
 												</c:choose>
@@ -445,9 +462,17 @@
 												
 												$('#table_grid tbody').append(tr);
 												}
-											else if(itemList.status==3)
+											else 
 											{
-											stats="Approved-Rejected";
+												if(itemList.status==3)
+												{
+												stats="Approved Rejected";
+												}
+												else
+												{
+												stats="Request Closed";
+												}
+											 
 											var tr = $('<tr></tr>');
 										  	tr.append($('<td style="color:green"></td>').html(key+1));
 
@@ -460,7 +485,7 @@
 										  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/bomDetailDepWise?reqId="+itemList.reqId+"&fromDept="+fromDept+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
 											
 											$('#table_grid tbody').append(tr);
-											}
+											} 
 										
 											
 												

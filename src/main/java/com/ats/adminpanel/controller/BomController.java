@@ -558,7 +558,7 @@ int globalIsPlan;
 	@RequestMapping(value = "/getBomListforMixing", method = RequestMethod.GET)
 	public ModelAndView getBomListforMixing(HttpServletRequest request, HttpServletResponse response) {
 	
-		
+		List<BillOfMaterialHeader> getbomListsorted = new ArrayList<BillOfMaterialHeader>();
 		ModelAndView model = new ModelAndView("productionPlan/bomDepWise");//
 		getbomList = new ArrayList<BillOfMaterialHeader>();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -585,7 +585,7 @@ int globalIsPlan;
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("fromDept",fromsettingvalue.getFrItemStockConfigure().get(0).getSettingValue());         
 			map.add("toDept",tosettingvalue.getFrItemStockConfigure().get(0).getSettingValue());           
-			map.add("status","0");   
+			map.add("status","0,1,2,3,4");   
 			
 			System.out.println("map"+map);
 			
@@ -595,12 +595,25 @@ int globalIsPlan;
 			System.out.println("getbomList"+getBillOfMaterialList.getBillOfMaterialHeader().toString());
 			getbomList=getBillOfMaterialList.getBillOfMaterialHeader();
 			System.out.println("bomHeaderList"+getBillOfMaterialList.getBillOfMaterialHeader().toString());
+			SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+			Date date = new Date();
+			
+			for(int i=0;i<getbomList.size();i++)
+			{
+				System.out.println(df.format(date)+df.format(getbomList.get(i).getReqDate()));
+				if(df.format(date).equals(df.format(getbomList.get(i).getReqDate())) || getbomList.get(i).getStatus()==0)
+				{
+					getbomListsorted.add(getbomList.get(i));
+				}
+			}
+			
+			System.out.println(getbomListsorted);
 			
 		}catch(Exception e)
 		{
 			System.out.println("error in controller "+e.getMessage());
 		}
-		model.addObject("getbomList",getbomList) ;
+		model.addObject("getbomList",getbomListsorted) ;
 		model.addObject("toDept",tosettingvalue.getFrItemStockConfigure().get(0).getSettingValue()) ;
 		model.addObject("fromDept",fromsettingvalue.getFrItemStockConfigure().get(0).getSettingValue()) ;
 		
@@ -612,7 +625,7 @@ int globalIsPlan;
 	@RequestMapping(value = "/getBomListforProduction", method = RequestMethod.GET)
 	public ModelAndView getBomListforProduction(HttpServletRequest request, HttpServletResponse response) {
 	
-		
+		List<BillOfMaterialHeader> getbomListsorted = new ArrayList<BillOfMaterialHeader>(); 
 		ModelAndView model = new ModelAndView("productionPlan/bomDepWise");//
 		getbomList = new ArrayList<BillOfMaterialHeader>();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -639,7 +652,7 @@ int globalIsPlan;
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("fromDept",fromsettingvalue.getFrItemStockConfigure().get(0).getSettingValue());         
 			map.add("toDept",tosettingvalue.getFrItemStockConfigure().get(0).getSettingValue());           
-			map.add("status","0");   
+			map.add("status","0,1,2,3,4");   
 			
 			System.out.println("map"+map);
 			
@@ -650,11 +663,23 @@ int globalIsPlan;
 			getbomList=getBillOfMaterialList.getBillOfMaterialHeader();
 			System.out.println("bomHeaderList"+getBillOfMaterialList.getBillOfMaterialHeader().toString());
 			
+			SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+			Date date = new Date();
+			
+			for(int i=0;i<getbomList.size();i++)
+			{
+				System.out.println(df.format(date)+df.format(getbomList.get(i).getReqDate()));
+				if(df.format(date).equals(df.format(getbomList.get(i).getReqDate())) || getbomList.get(i).getStatus()==0)
+				{
+					getbomListsorted.add(getbomList.get(i));
+				}
+			}
+			
 		}catch(Exception e)
 		{
 			System.out.println("error in controller "+e.getMessage());
 		}
-		model.addObject("getbomList",getbomList) ;
+		model.addObject("getbomList",getbomListsorted) ;
 		model.addObject("toDept",tosettingvalue.getFrItemStockConfigure().get(0).getSettingValue()) ;
 		model.addObject("fromDept",fromsettingvalue.getFrItemStockConfigure().get(0).getSettingValue()) ;
 		

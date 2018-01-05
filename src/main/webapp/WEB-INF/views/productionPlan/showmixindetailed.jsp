@@ -121,7 +121,23 @@
 
 									<div class="col-md-2">Status</div>
 									<div class="col-md-3">
-										<input type="text" id="status" name="status"
+									<c:choose>
+										<c:when test="${mixheader.status==0}">
+											<c:set var="sts" value="Pending"></c:set>
+										</c:when>
+										<c:when test="${mixheader.status==1}">
+											<c:set var="sts" value="Start Production"></c:set>
+										</c:when>
+										<c:when test="${mixheader.status==2}">
+											<c:set var="sts" value="Production Completed"></c:set>
+										</c:when>
+									</c:choose>
+									
+									
+									
+									<input type="text" id="status" name="status"
+											value="${sts}" class="form-control" readonly>
+										<input type="hidden" id="status" name="status"
 											value="${mixheader.status}" class="form-control" readonly>
 									</div>
 								</div>

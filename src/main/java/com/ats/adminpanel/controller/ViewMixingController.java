@@ -20,6 +20,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
+import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.productionplan.GetMixingList;
 import com.ats.adminpanel.model.productionplan.MixingDetailed;
 import com.ats.adminpanel.model.productionplan.MixingHeader;
@@ -171,50 +172,65 @@ public class ViewMixingController {
 	public String updateProdctionQty(HttpServletRequest request, HttpServletResponse response) {
 		/*Constants.mainAct = 17;
 		Constants.subAct=184;*/
-		
-		for(int i=0;i<mixingHeader.getMixingDetailed().size();i++)
+		try
 		{
-			System.out.println(12);
+			for(int i=0;i<mixingHeader.getMixingDetailed().size();i++)
+			{
+				System.out.println(12);
+				 
+				 
+					System.out.println(13);
+					String production_Qty=request.getParameter("production_Qty"+mixingHeader.getMixingDetailed().get(i).getMixing_detailId());
+					String rejected_Qty=request.getParameter("rejected_Qty"+mixingHeader.getMixingDetailed().get(i).getMixing_detailId());
+					if(production_Qty!=null) {
+						System.out.println("production_Qty Qty   :"+production_Qty);
+						float productionQty=Float.parseFloat(production_Qty);
+						mixingHeader.getMixingDetailed().get(i).setProductionQty(productionQty);
+						System.out.println("productionQty  :"+productionQty);
+					}
+					else
+					{
+						mixingHeader.getMixingDetailed().get(i).setProductionQty(0);
+					}
+					
+					if(rejected_Qty!=null) {
+						System.out.println("rejected_Qty Qty   :"+rejected_Qty);
+						float rejectedQty=Float.parseFloat(rejected_Qty);
+						mixingHeader.getMixingDetailed().get(i).setRejectedQty(rejectedQty);
+						System.out.println("productionQty  :"+rejectedQty);
+					}
+					else
+					{
+						mixingHeader.getMixingDetailed().get(i).setRejectedQty(0);
+					}
+					System.out.println(2);
+				 
+			}
+			mixingHeader.setStatus(2);
+			mixingHeader.setMixingDetailed(mixingHeader.getMixingDetailed());
+			
+			System.out.println(mixingHeader.toString());
+			
+			RestTemplate rest = new RestTemplate();
+			 mixingHeader=rest.postForObject(Constants.url + "/insertMixingHeaderndDetailed",mixingHeader, MixingHeader.class);
 			 
-			 
-				System.out.println(13);
-				String production_Qty=request.getParameter("production_Qty"+mixingHeader.getMixingDetailed().get(i).getMixing_detailId());
-				String rejected_Qty=request.getParameter("rejected_Qty"+mixingHeader.getMixingDetailed().get(i).getMixing_detailId());
-				if(production_Qty!=null) {
-					System.out.println("production_Qty Qty   :"+production_Qty);
-					float productionQty=Float.parseFloat(production_Qty);
-					mixingHeader.getMixingDetailed().get(i).setProductionQty(productionQty);
-					System.out.println("productionQty  :"+productionQty);
-				}
-				else
-				{
-					mixingHeader.getMixingDetailed().get(i).setProductionQty(0);
-				}
-				
-				if(rejected_Qty!=null) {
-					System.out.println("rejected_Qty Qty   :"+rejected_Qty);
-					float rejectedQty=Float.parseFloat(rejected_Qty);
-					mixingHeader.getMixingDetailed().get(i).setRejectedQty(rejectedQty);
-					System.out.println("productionQty  :"+rejectedQty);
-				}
-				else
-				{
-					mixingHeader.getMixingDetailed().get(i).setRejectedQty(0);
-				}
-				System.out.println(2);
-			 
+			 if(mixingHeader!=null)
+			 {
+				 int mixId = mixingHeader.getMixId();
+				 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>();
+				 map.add("prodId", mixId);
+				 map.add("isProduction", 0);
+				 System.out.println("map"+map);
+				 
+				 Info info= rest.postForObject(Constants.url + "/updateStatusWhileCompletProd",map, Info.class);
+				 System.out.println("info"+info);
+			 }
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
 		}
-		mixingHeader.setStatus(2);
-		mixingHeader.setMixingDetailed(mixingHeader.getMixingDetailed());
 		
-		System.out.println(mixingHeader.toString());
-		
-		RestTemplate rest = new RestTemplate();
-		
-		
-		
-		
-		mixingHeader=rest.postForObject(Constants.url + "/insertMixingHeaderndDetailed",mixingHeader, MixingHeader.class);	
 		
 		
 		return "redirect:/getMixingList";

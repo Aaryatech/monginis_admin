@@ -126,7 +126,27 @@
 
 									<div class="col-md-2">Status</div>
 									<div class="col-md-3">
-										<input type="text" id="status" name="status"
+									<c:choose>
+										<c:when test="${billOfMaterialHeader.status==0}">
+											<c:set var="sts" value="Pending"></c:set>
+										</c:when>
+										<c:when test="${billOfMaterialHeader.status==1}">
+											<c:set var="sts" value="Approved"></c:set>
+										</c:when>
+										<c:when test="${billOfMaterialHeader.status==2}">
+											<c:set var="sts" value="Rejected"></c:set>
+										</c:when>
+										<c:when test="${billOfMaterialHeader.status==3}">
+											<c:set var="sts" value="Approved Rejected"></c:set>
+										</c:when>
+										<c:when test="${billOfMaterialHeader.status==4}">
+											<c:set var="sts" value="Request Closed"></c:set>
+										</c:when>
+									</c:choose>
+									<input type="text" id="status" name="status"
+											value="${sts}" class="form-control"
+											readonly>
+										<input type="hidden" id="status" name="status"
 											value="${billOfMaterialHeader.status}" class="form-control"
 											readonly>
 									</div>

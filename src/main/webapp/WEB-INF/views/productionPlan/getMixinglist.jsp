@@ -128,7 +128,7 @@
 															
 														</c:when>
 														<c:when test="${todaysmixrequest.status==1}">
-															<c:set var="sts" value="1"></c:set>
+															<c:set var="sts" value="Start Production"></c:set>
 															
 														</c:when>
 														<c:when test="${todaysmixrequest.status==2}">
@@ -455,7 +455,7 @@
 												}
 											else if(itemList.status==1)
 												{
-												var sts=itemList.status;
+												var sts="Start Production";
 												}
 											else if(itemList.status==2)
 												{

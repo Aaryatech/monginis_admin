@@ -142,6 +142,10 @@
 													  <c:set var = "status" value="Approved Rejected"/>
 													
 													</c:when>
+													<c:when test="${getbomList.status==4}">
+													  <c:set var = "status" value="Request Closed"/>
+													
+													</c:when>
 												</c:choose>
 
 													<tr>
@@ -425,22 +429,47 @@
 												
 												$('#table_grid tbody').append(tr);
 												}
-											else
-												{
-												stats="Rejected";
-												var tr = $('<tr></tr>');
-											  	tr.append($('<td style="color:red"></td>').html(key+1));
+											else if(itemList.status==2)
+											{
+											stats="Rejected";
+											var tr = $('<tr></tr>');
+										  	tr.append($('<td style="color:red"></td>').html(key+1));
 
-											  	tr.append($('<td style="color:red"></td>').html(itemList.fromDeptName));
+										  	tr.append($('<td style="color:red"></td>').html(itemList.fromDeptName));
+										  	
+
+										  	tr.append($('<td style="color:red"></td>').html(itemList.reqDate));
+										  
+										  	tr.append($('<td style="color:red"></td>').html(stats));
+										  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/bomDetailDepWise?reqId="+itemList.reqId+"&fromDept="+fromDept+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
+											
+											$('#table_grid tbody').append(tr);
+											}
+											else 
+												{
+												if(itemList.status==3)
+													{
+													stats="Approved Rejected";
+													}
+												else
+													{
+													stats="Request Closed";
+													}
+													
+												var tr = $('<tr></tr>');
+											  	tr.append($('<td style="color:green"></td>').html(key+1));
+
+											  	tr.append($('<td style="color:green"></td>').html(itemList.fromDeptName));
 											  	
 
-											  	tr.append($('<td style="color:red"></td>').html(itemList.reqDate));
+											  	tr.append($('<td style="color:green"></td>').html(itemList.reqDate));
 											  
-											  	tr.append($('<td style="color:red"></td>').html(stats));
+											  	tr.append($('<td style="color:green"></td>').html(stats));
 											  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
 												
 												$('#table_grid tbody').append(tr);
 												}
+											
 											
 												
 												
