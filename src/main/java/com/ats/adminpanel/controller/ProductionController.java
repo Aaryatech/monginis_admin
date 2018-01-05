@@ -422,9 +422,6 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 			
 
 			RestTemplate restTemplate = new RestTemplate();
-			
-			
-
 			List<PostProdPlanHeader> postProdPlanHeader = restTemplate.getForObject(Constants.url + "PostProdPlanHeaderVariationlist",
 					List.class);
 

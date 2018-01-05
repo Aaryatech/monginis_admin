@@ -196,6 +196,7 @@
 													<tr>
 														<th>Sr.No.</th>
 														<th>Name</th>
+														<th>Auto Request Qty</th>
 														<th>request Qty</th>
 														<th>issue Qty</th>
 														<c:choose>
@@ -220,20 +221,10 @@
 															<td><c:out value="${bomwithdetaild.rmName}" /></td>
 
 															<td><c:out value="${bomwithdetaild.rmReqQty}" /></td>
-
-															<c:choose>
-																<c:when test="${billOfMaterialHeader.status==0}">
-																	<td><input type="text"
-																		name='issue_qty<c:out
-																value="${bomwithdetaild.reqDetailId}" />'
-																		class="form-control"
-																		value=<c:out
-																value="${bomwithdetaild.rmIssueQty}" />></td>
-																</c:when>
-																<c:otherwise>
-																	<td><c:out value="${bomwithdetaild.rmIssueQty}" /></td>
-																</c:otherwise>
-															</c:choose>
+  															
+  															<td><c:out value="${bomwithdetaild.autoRmReqQty}" /></td>
+  															<td><c:out value="${bomwithdetaild.rmIssueQty}" /></td>
+																 
 
 															<c:choose>
 																<c:when test="${billOfMaterialHeader.status!=0}">

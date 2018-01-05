@@ -372,6 +372,15 @@
 								</div>
 								</div>
 							</div>
+							<div class="box-content">
+							
+							<div class="col-md-2" >Remark</div>
+									
+									<div class="col-md-3"><input type="text" id="Remark" name="Remark" value="" 
+									class="form-control" >
+									</div>
+									
+							</div><br><br>
 							<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										<input type="submit" class="btn btn-primary" value="Submit">
@@ -381,15 +390,7 @@
 								
 						
 							
-							<div class="box-content">
 							
-							<div class="col-md-2" >Remark</div>
-									
-									<div class="col-md-3"><input type="text" id="Remark" name="Remark" value="" 
-									class="form-control" >
-									</div>
-									
-							</div><br>
 							
 							
 								

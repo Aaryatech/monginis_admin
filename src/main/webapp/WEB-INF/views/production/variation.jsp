@@ -127,7 +127,8 @@
 														
 																
 																<td align="left"><c:out
-																value="${postProdPlanHeaderList.productionDate}" /></td>
+																value="${postProdPlanHeaderList.productionDate}" />
+																</td>
 																
 													  
 													<td align="left"><c:out

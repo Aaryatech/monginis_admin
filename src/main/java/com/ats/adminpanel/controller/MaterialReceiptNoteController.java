@@ -615,10 +615,11 @@ public class MaterialReceiptNoteController {
 			materialRecNote.setLrNo(lrno);
 			materialRecNote.setSupplierId(sup_id);
 			materialRecNote.setNoOfItem(no_of_items);
-			materialRecNote.setPhoto1(prevImage1);
-			materialRecNote.setPhoto2(prevImage2);
+			materialRecNote.setPhoto1("");
+			materialRecNote.setPhoto2("");
 			materialRecNote.setGateUserId(1);
 			materialRecNote.setGateRemark(remark);
+			materialRecNote.setPoDate("");
 
 			System.out.println("SEt header data" + materialRecNote.toString());
 			for (int i = 0; i < getmaterialRecNoteDetailslist.size(); i++) {

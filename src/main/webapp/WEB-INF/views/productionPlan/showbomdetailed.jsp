@@ -194,8 +194,9 @@
 													<tr>
 														<th>Sr.No.</th>
 														<th>Name</th>
-														<th>request Qty</th>
-														<th>issue Qty</th>
+														<th>Auto Request Qty</th>
+														<th>Request Qty</th>
+														<th>Issue Qty</th>
 														<c:choose>
 															<c:when test="${billOfMaterialHeader.status!=0}">
 																<th>Return Qty</th>
@@ -216,7 +217,7 @@
 															<td><c:out value="${count.index+1}" /></td>
 															<c:set var="srNo" value="${srNo+1}" />
 															<td><c:out value="${bomwithdetaild.rmName}" /></td>
-
+															<td><c:out value="${bomwithdetaild.autoRmReqQty}" /></td>
 															<td><c:out value="${bomwithdetaild.rmReqQty}" /></td>
 
 															<c:choose>
