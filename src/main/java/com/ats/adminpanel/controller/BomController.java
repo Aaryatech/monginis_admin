@@ -135,12 +135,7 @@ int globalIsPlan;
 		FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
 				FrItemStockConfigureList.class);
 		
-		map = new LinkedMultiValueMap<String, Object>();
-		String settingKey1 = new String();
-		settingKey1 = "MIX";
-		map.add("settingKeyList", settingKey1);
-		FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
-				FrItemStockConfigureList.class);
+		
 		
 		System.out.println("new Field Dept Id = "+userResponse.getUser().getDeptId());
 		
@@ -162,8 +157,7 @@ int globalIsPlan;
 
 		try {
 			
-			int fromDeptId=settingList1.getFrItemStockConfigure().get(0).getSettingValue();
-			String fromDeptName=settingList1.getFrItemStockConfigure().get(0).getSettingKey();
+			
 			
 			int toDeptId=settingList.getFrItemStockConfigure().get(0).getSettingValue();
 			String toDeptName=settingList.getFrItemStockConfigure().get(0).getSettingKey();
@@ -195,6 +189,16 @@ int globalIsPlan;
 			BillOfMaterialDetailed bomDetail = null;
 
 			if (isMixing == 1) {
+				
+				map = new LinkedMultiValueMap<String, Object>();
+				String settingKey1 = new String();
+				settingKey1 = "PROD";
+				map.add("settingKeyList", settingKey1);
+				FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+						FrItemStockConfigureList.class);
+				int fromDeptId=settingList1.getFrItemStockConfigure().get(0).getSettingValue();
+				String fromDeptName=settingList1.getFrItemStockConfigure().get(0).getSettingKey();
+				
 				billOfMaterialHeader.setIsProduction(1);
 				billOfMaterialHeader.setFromDeptId(fromDeptId);
 				billOfMaterialHeader.setFromDeptName(fromDeptName);
@@ -244,6 +248,14 @@ int globalIsPlan;
 			}
 
 			else {
+				map = new LinkedMultiValueMap<String, Object>();
+				String settingKey1 = new String();
+				settingKey1 = "MIX";
+				map.add("settingKeyList", settingKey1);
+				FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+						FrItemStockConfigureList.class);
+				int fromDeptId=settingList1.getFrItemStockConfigure().get(0).getSettingValue();
+				String fromDeptName=settingList1.getFrItemStockConfigure().get(0).getSettingKey();
 
 				billOfMaterialHeader.setFromDeptId(fromDeptId);
 				billOfMaterialHeader.setFromDeptName(fromDeptName);
