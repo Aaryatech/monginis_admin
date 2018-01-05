@@ -227,7 +227,7 @@
 				<div class=" box-content">
 					<div class="row">
 						<div class="col-md-12 table-responsive">
-							<table class="table table-bordered table-striped fill-head "
+							<table class="table table-advance "
 								style="width: 100%" id="table_grid">
 								<thead>
 									<tr>
@@ -320,12 +320,14 @@
 	
 		function searchOrders() {
 			
+			
 			$('#table_grid td').remove();
 			$('#table_grid th').remove();
 			
 			var isValid = validate();
 			
 			if (isValid) {
+				document.getElementById("searchFr").disabled=true;
 				var selectedMenu = $("#selectMenu").val();
 				var selectedFr = $("#selectFr").val();
 				var preOrderDate = document.getElementById("dp2").value;
@@ -352,7 +354,7 @@
 								function(data) {
 
 									//$('#table_grid td').remove();
-									
+											document.getElementById("searchFr").disabled=false;
 									$('#loader').hide();
 
 									if (data == "") {
@@ -366,27 +368,12 @@
 
 														var index = key + 1;
 
-														var tr = "<tr>";
+													 
+														var tr = $('<tr></tr>');
+														 
+													  	tr.append($('<td></td>').html(orderdata.itemName));
 
-														
-
-														var itemName = "<td>&nbsp;&nbsp;&nbsp;"
-																+ orderdata.itemName
-																+ "</td>";
-
-														
-
-														var trclosed = "</tr>";
-
-														$('#table_grid tbody')
-																.append(tr);
-													
-														$('#table_grid tbody')
-																.append(itemName);
-														
-													
-														
-														  
+													  
 													      $.each(frId, function(key, id){    
 													    	 	 var qty=0;
 													    	 	 if(orderdata.orderData!=null)
@@ -399,16 +386,16 @@
 													    	
 													    	  });	
 													    	 		 }
-													    		 var orderQty = "<td align=center><input onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' type=number min=0 max=500 class=form-control   id=itemId"+orderdata.itemId+"orderQty"+ id+ " name=itemId"+orderdata.itemId+"orderQty"+id+" value = "+qty +"></td>"; 
+													    		 //var orderQty = "<td align=center><input onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' type=number min=0 max=500 class=form-control   id=itemId"+orderdata.itemId+"orderQty"+ id+ " name=itemId"+orderdata.itemId+"orderQty"+id+" value = "+qty +"></td>"; 
 																
-													    	 $('#table_grid tbody')
-																.append(orderQty);
+													    		 tr.append($('<td></td>').html("<input onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' type=number min=0 max=500 class=form-control   id=itemId"+orderdata.itemId+"orderQty"+ id+ " name=itemId"+orderdata.itemId+"orderQty"+id+" value = "+qty +">"));
 													      });
 													    
 														
-														$('#table_grid tbody')
-														.append(trclosed);
-
+													  
+  
+													  	
+													  	$('#table_grid tbody').append(tr);
 													})
 									}
 														

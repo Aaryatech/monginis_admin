@@ -113,19 +113,21 @@
 									value="add_att">
 
 								<div class="form-group">
+								
+								<label class="col-sm-3 col-lg-2 control-label">Prod ID</label>
+									<div class="col-sm-5 col-lg-3 controls">
+										<input disabled type="text" value="${planHeader.productionHeaderId}"
+											id="prod_id" name="prod_id" class="form-control" />
+									</div>
+									
 									<label class="col-sm-3 col-lg-2 control-label">Prod
 										Date </label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input " type="text" name="prod_date" id="prod_date" class="form-control"
+										<input disabled type="text" name="prod_date" id="prod_date" class="form-control"
 											value="${planHeader.productionDate}" />
 									</div>
 
-									<label class="col-sm-3 col-lg-2 control-label">Time
-										Slot</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input type="text" value="${planHeader.timeSlot}"
-											name="time_slot" class="form-control" />
-									</div>
+									
 
 								</div>
 
@@ -133,14 +135,15 @@
 									<label class="col-sm-3 col-lg-2 control-label">Category
 									</label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input  type="text" name="cat_name" id="cat_name"
+										<input disabled type="text" name="cat_name" id="cat_name"
 											value="${planHeader.catName}" class="form-control" required />
 									</div>
 
-									<label class="col-sm-3 col-lg-2 control-label">Prod ID</label>
+									<label class="col-sm-3 col-lg-2 control-label">Time
+										Slot</label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input type="text" value="${planHeader.productionHeaderId}"
-											id="prod_id" name="prod_id" class="form-control" />
+										<input disabled type="text" value="${planHeader.timeSlot}"
+											name="time_slot" class="form-control" />
 									</div>
 
 								</div>
@@ -152,15 +155,16 @@
 										<thead>
 											<tr>
 
-												<th width="17" style="width: 18px">Item Name</th>
-												<th width="150" align="left">Stock</th>
-												<th width="150" align="left">Plan Qty</th>
-												<th width="150" align="left">Order Qty</th>
+												<th width="170" >Item Name</th>
+												<th width="120" align="left">Stock</th>
+												<th width="120" align="left">Plan Qty</th>
+												<th width="120" align="left">Order Qty</th>
 
 												<th width="150" align="left">Actual Prod</th>
+												<th width="120" style="width: 18px">Rej Qty</th>
 												<th width="150" align="left">Total Qty</th>
 
-												<th width="180" style="width: 18px">Rejected Qty</th>
+												
 
 											</tr>
 										</thead>
@@ -178,53 +182,80 @@
                                                       <c:choose>
          
                                                       <c:when test = "${planHeader.productionStatus==1}">
-													<td align="left"><input align="left" type="text" name="plan_qty${planDetail.productionDetailId}status1" id="plan_qty${planDetail.productionDetailId}status1"
+													<td align="left"><input align="left" type="text" name="plan_qty${planDetail.productionDetailId}" id="plan_qty${planDetail.productionDetailId}"
 														placeholder="Plan Qty" class="form-control" value="${planDetail.planQty}"
 														data-rule-required="true" style="width: 65px"/></td>
 														</button>
                                                     </c:when>
                                                        <c:otherwise>
-                                                           <td align="left"><input align="left" type="text" name="plan_qty${planDetail.productionDetailId}status2" id="plan_qty${planDetail.productionDetailId}status2"
+                                                           <td align="left"><input align="left" type="text" name="plan_qty${planDetail.productionDetailId}" id="plan_qty${planDetail.productionDetailId}"
 														placeholder="Plan Qty" class="form-control" value="${planDetail.planQty}"
 														data-rule-required="true" style="width: 65px" disabled/></td>
                                                        </c:otherwise>
                                                      </c:choose>
                                                      <c:choose>
                                                      <c:when test = "${planHeader.productionStatus==2}">
-													  <td align="left"><input align="left" type="text" name="order_qty${planDetail.productionDetailId}status1" id="order_qty${planDetail.productionDetailId}status1"
+													  <td align="left"><input align="left" type="text" name="order_qty${planDetail.productionDetailId}" id="order_qty${planDetail.productionDetailId}"
 														placeholder="Order Qty" class="form-control" value="${planDetail.orderQty}"
 														data-rule-required="true" style="width: 65px"/></td>
 														 </c:when>
 														  <c:otherwise>
-														   <td align="left"><input align="left" type="text" name="order_qty${planDetail.productionDetailId}status2" id="order_qty${planDetail.productionDetailId}status2"
+														   <td align="left"><input align="left" type="text" name="order_qty${planDetail.productionDetailId}" id="order_qty${planDetail.productionDetailId}"
 														   placeholder="Order Qty" class="form-control" value="${planDetail.orderQty}"
 														   data-rule-required="true" style="width: 65px" disabled/></td>
 														  </c:otherwise>
 														  </c:choose>
 														    <c:choose>
-                                                      <c:when test = "${planHeader.productionStatus==4}">
-													<td align="left"><input align="left" type="text" name="act_prod_qty${planDetail.productionDetailId}status4" id="act_prod_qty${planDetail.productionDetailId}status4"
-														placeholder="Actual Prod" class="form-control" value="${planDetail.productionQty}"
-														data-rule-required="true" style="width: 65px"disabled/></td>
-														 </c:when>
-														 <c:when test = "${planHeader.productionStatus==5}">
-														 	<td align="left"><input align="left" type="text" name="act_prod_qty${planDetail.productionDetailId}status5" id="act_prod_qty${planDetail.productionDetailId}status5"
-														    placeholder="Actual Prod" class="form-control" value="${planDetail.productionQty}"
-														    data-rule-required="true" style="width: 65px"disabled/></td>
-														 </c:when>
+                                                      <c:when test = "${planHeader.productionStatus==3}">
+                                                      
+                                                       <c:choose>
+                                                      <c:when test = "${planHeader.isPlanned==1}">
+													 <td align="left"><input align="left" type="text" name="act_prod_qty${planDetail.productionDetailId}" id="act_prod_qty${planDetail.productionDetailId}"
+														    placeholder="Actual Prod" class="form-control" value="${planDetail.planQty}"
+														    data-rule-required="true" style="width: 65px" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" onkeyup="changeQty(${planDetail.productionDetailId})" /></td>
+														    </c:when>
+														     <c:when test = "${planHeader.isPlanned==0}">
+													 <td align="left"><input align="left" type="text" name="act_prod_qty${planDetail.productionDetailId}" id="act_prod_qty${planDetail.productionDetailId}"
+														    placeholder="Actual Prod" class="form-control" value="${planDetail.orderQty}"
+														    data-rule-required="true" style="width: 65px" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" onkeyup="changeQty(${planDetail.productionDetailId})" /></td>
+														    </c:when>
+														    </c:choose>
+														    </c:when>
+														  
+														 
 														   <c:otherwise>
-														   <td align="left"><input align="left" type="text" name="act_prod_qty${planDetail.productionDetailId}status1" id="act_prod_qty${planDetail.productionDetailId}status1"
-														    placeholder="Actual Prod" class="form-control" value="${planDetail.productionQty}"
-														    data-rule-required="true" style="width: 65px" /></td>
-														   </c:otherwise>
+														  <td align="left"><input align="left" type="text" name="act_prod_qty${planDetail.productionDetailId}" id="act_prod_qty${planDetail.productionDetailId}"
+														    placeholder="Actual Prod" class="form-control" value="0"
+														    data-rule-required="true" style="width: 65px"disabled/></td>
+														  </c:otherwise>
 														 </c:choose>
-													<td align="left"><input align="left" type="text" name="total_qty${planDetail.productionDetailId}" id="total_qty${planDetail.productionDetailId}" 
-														placeholder="Total Qty" class="form-control" value="total"
-														data-rule-required="true" style="width: 65px" disabled/></td>
-														
-													<td align="left"><input align="left" type="text" name="rej_qty${planDetail.productionDetailId}"  id="rej_qty${planDetail.productionDetailId}" 
+														 
+														  <c:choose>
+                                                      <c:when test = "${planHeader.productionStatus==3}">
+														 	<td align="left"><input align="left" type="text" name="rej_qty${planDetail.productionDetailId}"  id="rej_qty${planDetail.productionDetailId}" 
 														placeholder="Rejected Qty" class="form-control" value="0"
+														data-rule-required="true" style="width: 65px" onkeyup="changeQty(${planDetail.productionDetailId})"/></td>
+														</c:when>
+														<c:otherwise>
+														<td align="left"><input align="left" type="text" name="rej_qty${planDetail.productionDetailId}"  id="rej_qty${planDetail.productionDetailId}" 
+														placeholder="Rejected Qty" class="form-control" value="0"
+														data-rule-required="true" style="width: 65px" disabled onkeyup="changeQty(${planDetail.productionDetailId})"/></td>
+														</c:otherwise>
+														</c:choose>
+														
+														 <c:choose>
+                                                      <c:when test = "${planHeader.isPlanned==0}">
+													<td align="left"><input align="left" type="text" name="total_qty${planDetail.productionDetailId}" id="total_qty${planDetail.productionDetailId}" 
+														placeholder="Total Qty" class="form-control" value="${planDetail.openingQty+planDetail.orderQty}"
 														data-rule-required="true" style="width: 65px" disabled/></td>
+														</c:when>
+														 <c:when test = "${planHeader.isPlanned==1}">
+													<td align="left"><input align="left" type="text" name="total_qty${planDetail.productionDetailId}" id="total_qty${planDetail.productionDetailId}" 
+														placeholder="Total Qty" class="form-control" value="${planDetail.openingQty+planDetail.planQty}"
+														data-rule-required="true" style="width: 65px" disabled/></td>
+														</c:when>
+														</c:choose>
+												
 
 
 													<%-- <td align="left"><a
@@ -425,6 +456,24 @@ $('#man_bom_button').click(function(){
     form.action ="${pageContext.request.contextPath}/goToManualBom";
     form.submit();
 });
+
+var specialKeys = new Array();
+specialKeys.push(8); //Backspace
+function IsNumeric(e) {
+    var keyCode = e.which ? e.which : e.keyCode
+    var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1);
+    //document.getElementById("error").style.display = ret ? "none" : "inline";
+    return ret;
+}
+
+function changeQty(id)
+{
+	var stkQty=document.getElementById("stk_qty"+id).value;
+	var actQty=document.getElementById("act_prod_qty"+id).value;
+	var rejQty=document.getElementById("rej_qty"+id).value;
+ document.getElementById("total_qty"+id).value=stkQty+actQty-rejQty;
+	
+	}
 
  /* function goToManBom(){
 		

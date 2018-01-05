@@ -173,7 +173,7 @@
 
 														</c:when>
 														<c:otherwise>
-															<td align="left"><c:out value="In Active"></c:out></td>
+															<td align="left"><c:out value="Pending"></c:out></td>
 
 														</c:otherwise>
 
@@ -182,11 +182,11 @@
 
 													<c:choose>
 														<c:when test="${planHeader.productionStatus==1}">
-															<td align="left"><c:out value="Planning"></c:out></td>
+															<td align="left"><c:out value="Yes"></c:out></td>
 
 														</c:when>
 														<c:otherwise>
-															<td align="left"><c:out value="In Active"></c:out></td>
+															<td align="left"><c:out value="No"></c:out></td>
 
 														</c:otherwise>
 

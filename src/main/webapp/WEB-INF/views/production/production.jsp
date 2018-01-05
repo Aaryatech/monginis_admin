@@ -170,7 +170,7 @@
 				<label class=" col-md-3 control-label menu_label">Production
 										Date</label>
 									<div class="col-md-6 controls">
-										<input class="form-control date-picker" id="datepicker" size="16"
+										<input value="${todayDate}" class="form-control date-picker" id="datepicker" size="16"
 											 type="text" name="production_date" required />
 									</div>
 
@@ -183,7 +183,7 @@
 								<div class="row" align="center">
 									<div
 										class="col-md-12">
-										<input class="btn btn-info" value="Search" id="callSubmit"
+										<input type="button" class="btn btn-info" value="Search" id="callsearch"
 											onclick="searchOrder()">
 
 
@@ -224,7 +224,7 @@
 								<div class="row">
 										<div class="col-md-12 table-responsive" >
 										 
-											<table width="60%" class="table table-bordered table-striped fill-head " id="table1" name="table1" align="left">
+											<table width="60%" class="table table-advance " id="table1" name="table1" align="left">
 												<thead>
 													<tr>
 														<th width="18" style="width: 18px">Sr No</th>
@@ -245,11 +245,11 @@
 
 
 
-
-
+</div>
+<br/><br/>
 									<div class="form-group col-md-8" align="left">
-										<label class=" col-md-3 control-label franchisee_label"></label>
-										<label class=" col-md-3 control-label menu_label">Select
+										<label class=" col-md-3   "></label>
+										<label class=" col-md-3   ">Select
 											Time Slot </label>
 										<div class="col-md-6 controls">
 
@@ -267,16 +267,15 @@
 										</div>
 
 
-									<br/>
-
+									 
 </div>
 
-				 
+				 <br/>
 							<div class="row" align="center">
 									<div
 										class="col-md-12">
 								<input type="submit" class="btn btn-primary"
-								  value="Submit" id="callSubmit">
+								  value="Submit" disabled id="callSubmit">
 						 </div>
 </div>
 
@@ -422,6 +421,7 @@ $(document).ready(function() {
 <script type="text/javascript">
 	function searchOrder()
 	{ 
+		
 		$('#table1 td').remove();
 		
 		var autoindex=0;
@@ -429,7 +429,7 @@ $(document).ready(function() {
 		
 		if (isValid) {
 			
-			
+			document.getElementById("callsearch").disabled=true;
 			var productionDate = document.getElementById("datepicker").value;
 			var selectedMenu=$("#selectMenu").val();
 			$('#loader').show();
@@ -446,14 +446,15 @@ $(document).ready(function() {
 
 								//$('#table_grid td').remove();
 								
-								
+								document.getElementById("callsearch").disabled=false;
 								$('#loader').hide();
-								/* if (data == "") {
+								  if (data == "") {
 									alert("No records found !!");
-
-								} */
+									document.getElementById("callSubmit").disabled=true;
+								}  
 								//alert(data);
-
+								else{
+									document.getElementById("callSubmit").disabled=false;
 								
 								$.each(data,function(key, order) {
 /* 
@@ -503,6 +504,7 @@ $(document).ready(function() {
 							$('#table1 tbody').append(tr);
 							
 														})
+							}
 														
 
 							});
@@ -531,7 +533,7 @@ $(document).ready(function() {
 
 					autoindex =  autoindex +1;
 
-									var tr = "<tr>";
+								/* 	var tr = "<tr>";
 
 									var index = "<td>&nbsp;&nbsp;&nbsp;"
 										+ autoindex + "</td>";
@@ -557,10 +559,15 @@ $(document).ready(function() {
 									$('#table1 tbody').append(itemName);
 									$('#table1 tbody').append(Qty);
 									
-									$('#table1 tbody').append(trclosed);
+									$('#table1 tbody').append(trclosed); */
 									
 									
-
+									var tr = $('<tr></tr>');
+									tr.append($('<td></td>').html(autoindex));
+									tr.append($('<td></td>').html(order.itemId));
+									tr.append($('<td></td>').html(order.itemName));
+									tr.append($('<td></td>').html(order.qty));
+									$('#table1 tbody').append(tr);
 								})
 									
 

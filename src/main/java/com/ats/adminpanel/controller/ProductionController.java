@@ -88,7 +88,7 @@ public class ProductionController {
 		timeSlot = new int[productionTimeSlot] ;
 		for(int i=0;i<productionTimeSlot;i++)
 			timeSlot[i]=i+1;
-		
+		model.addObject("todayDate",new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 		model.addObject("unSelectedCatList", categoryList);
 		model.addObject("productionTimeSlot", timeSlot);
 
@@ -252,7 +252,7 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 		postProductionHeader.setIsMixing(0);
 		postProductionHeader.setIsPlanned(0);
 		postProductionHeader.setProductionBatch("");
-		postProductionHeader.setProductionStatus(0);
+		postProductionHeader.setProductionStatus(2);
 		
 		
 	List<PostProductionDetail> postProductionDetailList=new ArrayList<>();
