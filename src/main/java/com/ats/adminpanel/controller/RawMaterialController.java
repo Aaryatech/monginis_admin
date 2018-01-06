@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -694,7 +695,7 @@ public class RawMaterialController {
 			
 			map.add("suppId", suppId);
 			map.add("rmId", rmId);
-			RmRateVerification rmRateVerification=new RmRateVerification();
+			RmRateVerification rmRateVerification=null;
 			try {
 		
 				rmRateVerification = rest.postForObject(Constants.url + "rawMaterial/getRmRateVerification",map,
@@ -707,7 +708,7 @@ public class RawMaterialController {
 				System.out.println(e.getMessage());
 			}
 			
-			System.out.println("List of Menu : "+ rmRateVerification.toString());
+		 
 			
 			return rmRateVerification;
 			
@@ -720,23 +721,25 @@ public class RawMaterialController {
 			 
 
 			String currRateDate=request.getParameter("curr_rate_date");
+			System.out.println(" curr_rate_date      : "+currRateDate);
 			String currRateTaxExtra=request.getParameter("curr_rate_tax_extra");
+			System.out.println(" currRateTaxExtra      : "+currRateTaxExtra);
 			String currRateTaxIncl=request.getParameter("curr_rate_tax_incl");
-			System.out.println(" Currr Date   extra : "+currRateTaxExtra);
+			System.out.println(" currRateTaxIncl : "+currRateTaxIncl);
 			
 			String rateDate=request.getParameter("rate_date");
-			System.out.println(" rateDate     extra : "+rateDate);
+			System.out.println(" rateDate      : "+rateDate);
 			String rateTaxExtra=request.getParameter("tax_extra");
-			System.out.println("Date 1  extra : "+rateTaxExtra);
+			System.out.println("rateTaxExtra : "+rateTaxExtra);
 			String rateTaxIncl=request.getParameter("tax_incl");
-			System.out.println(" rateTaxIncl     extra : "+rateTaxIncl);
+			System.out.println(" rateTaxIncl       : "+rateTaxIncl);
 			
 			String date1=request.getParameter("rate_date1");
-			System.out.println(" date1  fff    : "+date1);
+			System.out.println(" date1       : "+date1);
 			String rateTaxIncl1=request.getParameter("tax_incl1");
-			System.out.println(" rateTaxIncl1     extra : "+rateTaxIncl1);
+			System.out.println(" rateTaxIncl1       : "+rateTaxIncl1);
 			String rateTaxExtra1=request.getParameter("tax_extra1");
-			System.out.println(" rateTaxExtra1     extra : "+rateTaxExtra1);
+			System.out.println(" rateTaxExtra1       : "+rateTaxExtra1);
 			
 			
 			/*String date2=request.getParameter("date2");
@@ -755,31 +758,33 @@ public class RawMaterialController {
 				
 			RmRateVerification rmRateVerification=new RmRateVerification();
 			
-			if(rm_rate_ver_id!=null)
-			{
+			//if(rm_rate_ver_id!=null && rm_rate_ver_id!="" && rm_rate_ver_id!="0")
+			//{
 			int rmRateVerId=Integer.parseInt(rm_rate_ver_id);
 			rmRateVerification.setRmRateVerId(rmRateVerId);
-			}
-			
+			//}
+			System.out.println("R v Id ---"+rmRateVerId);
 			rmRateVerification.setRateDate(currRateDate);
 			rmRateVerification.setRateTaxExtra(Float.parseFloat(currRateTaxExtra));
 			rmRateVerification.setRateTaxIncl(Float.parseFloat(currRateTaxIncl));
-			if(rateTaxExtra!=null)
+			if(rmRateVerification.getRmRateVerId()==0)
 			{
-			rmRateVerification.setDate1(rateDate);
-			rmRateVerification.setRateTaxExtra1(Float.parseFloat(rateTaxExtra));
-			rmRateVerification.setRateTaxIncl1(Float.parseFloat(rateTaxIncl));
-			rmRateVerification.setDate2(date1);
-			rmRateVerification.setRateTaxExtra2(Float.parseFloat(rateTaxExtra1));
-			rmRateVerification.setRateTaxIncl2(Float.parseFloat(rateTaxIncl1));
-			}
-			else {
 				rmRateVerification.setDate1(currRateDate);
 				rmRateVerification.setRateTaxExtra1(Float.parseFloat(currRateTaxExtra));
 				rmRateVerification.setRateTaxIncl1(Float.parseFloat(currRateTaxIncl));
 				rmRateVerification.setDate2(currRateDate);
 				rmRateVerification.setRateTaxExtra2(Float.parseFloat(currRateTaxExtra));
 				rmRateVerification.setRateTaxIncl2(Float.parseFloat(currRateTaxIncl));
+			}
+			else {
+				
+				
+				rmRateVerification.setDate1(rateDate);
+				rmRateVerification.setRateTaxExtra1(Float.parseFloat(rateTaxExtra));
+				rmRateVerification.setRateTaxIncl1(Float.parseFloat(rateTaxIncl));
+				rmRateVerification.setDate2(date1);
+				rmRateVerification.setRateTaxExtra2(Float.parseFloat(rateTaxExtra1));
+				rmRateVerification.setRateTaxIncl2(Float.parseFloat(rateTaxIncl1));
 			}
 			rmRateVerification.setRmId(rmId);
 			rmRateVerification.setSuppId(suppId);

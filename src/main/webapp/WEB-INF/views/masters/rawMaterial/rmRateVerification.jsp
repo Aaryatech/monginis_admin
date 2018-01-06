@@ -120,7 +120,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Select
 										Supplier</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<select name="supp_id" id="supp_id" class="form-control">
+										<select name="supp_id" id="supp_id" class="form-control chosen">
 											<option value="-1">Select Supplier</option>
 											<c:forEach items="${supplierList}" var="supplierList"
 												varStatus="count">
@@ -131,7 +131,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Select
 										Row Material</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<select name="rm_id" id="rm_id" class="form-control">
+										<select name="rm_id" id="rm_id" class="form-control chosen">
 											<option value="-1">Select Row Material</option>
 											<c:forEach items="${RawmaterialList}" var="RawmaterialList"
 												varStatus="count">
