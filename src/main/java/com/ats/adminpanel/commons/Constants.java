@@ -3,8 +3,8 @@ package com.ats.adminpanel.commons;
 import java.io.File;
 
 public class Constants {
-	public static final String url="http://localhost:8098/";
-	//public static final String url = "http://132.148.143.124:8080/webapi/";
+//public static final String url="http://localhost:8098/";
+	public static final String url = "http://132.148.143.124:8080/webapi/";
 
 	public static final String SPCAKE_IMAGE_URL = "/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/MSPCAKE/";
 	public static final String FR_IMAGE_URL = "/opt/apache-tomcat-8.5.6/webapps/webapi/uploads/FR/";

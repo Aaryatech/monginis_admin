@@ -97,8 +97,8 @@
 								<i class="fa fa-bars"></i> Search Bill List
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a>
+								<!-- <a href="">Back to List</a> <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a> -->
 							</div>
 							<!-- <div class="box-tool">
 								<a data-action="collapse" href="#"><i
@@ -185,7 +185,7 @@
 								<div align="center" class="form-group">
 									<div
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										<input class="btn btn-primary" value="Submit" id="callSubmit"
+										<input type="button" class="btn btn-primary" value="Search" id="callSubmit"
 											onclick="callSearch()">
 
 
@@ -214,7 +214,7 @@
 								<div class="box">
 									<div class="box-title">
 										<h3>
-											<i class="fa fa-table"></i> Bill List
+											<i class="fa fa-table"></i> Bill List Header
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i
@@ -230,24 +230,38 @@
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
-														<th width="138" style="width: 18px" align="left">Sr
+														<!-- <th width="138" style="width: 18px" align="left">Sr
 															No</th>
-														<th width="138" align="left">Bill No</th>
+														<th width="138" align="left">Invoice No</th>
 														<th width="159" align="left">Date</th>
-														<th width="159" align="left">Franchise Name</th>
-														<th width="159" align="left">Taxable
+														<th width="200" align="left">Franchise Name</th>
+														<th width="200" align="left">Taxable
 															Amt</th>
-														<th width="91" align="left">Total tax</th>
-														<th width="105" align="left">Grand Total</th>
+														<th width="100" align="left">Total tax</th>
+														<th width="100" align="left">Total</th>
 
 														<th width="105" align="left">Status</th>
 														<th width="105" align="left">Remark</th>
-														<th width="300" align="center">Action</th>
+														<th width="200" align="center">Action</th> -->
+														
+														<th class="col-sm-1" align="left">Sr
+															No</th>
+														<th  class="col-md-1" align="left">Invoice No</th>
+														<th  class="col-md-1" align="left">Date</th>
+														<th  class="col-md-2" align="left">Franchise Name</th>
+														<th  class="col-md-1" align="left">Taxable
+															Amt</th>
+														<th  class="col-md-1" align="left">Total tax</th>
+														<th  class="col-md-1" align="left">Total</th>
+
+														<th  class="col-md-1" align="left">Status</th>
+<!-- 														<th width="105" align="left">Remark</th>
+ -->														<th  class="col-md-1" align="center">Action</th>
 
 													</tr>
 												</thead>
 												<tbody>
-													<c:forEach items="${billHeadersList}" var="billHeadersList"
+													<%-- <c:forEach items="${billHeadersList}" var="billHeadersList"
 														varStatus="count">
 
 														<tr>
@@ -275,7 +289,7 @@
 
 
 
-															<%-- <td align="left"><c:out value="${billHeadersList.status}" /></td> --%>
+															<td align="left"><c:out value="${billHeadersList.status}" /></td>
 
 															<td align="left"><a
 																href="viewBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><span
@@ -298,7 +312,7 @@
 
 
 														</tr>
-													</c:forEach>
+													</c:forEach> --%>
 
 												</tbody>
 											</table>
@@ -427,6 +441,7 @@
 			var toDate = document.getElementById("dp2").value;
 			
 			var routeId = document.getElementById("route_id").value;
+			
 			$('#loader').show();
 
 
@@ -452,46 +467,47 @@
 
 													var tr = $('<tr></tr>');
 
-												  	tr.append($('<td></td>').html(key+1));
+												  	tr.append($('<td class="col-sm-1"></td>').html(key+1));
 
-												  	tr.append($('<td></td>').html(bill.billNo));
+												  	tr.append($('<td class="col-md-1"></td>').html(bill.invoiceNo));
 
-												  	tr.append($('<td></td>').html(bill.billDate));
+												  	tr.append($('<td class="col-md-1"></td>').html(bill.billDate));
 
-												  	tr.append($('<td></td>').html(bill.frName));
+												  	tr.append($('<td class="col-md-2"></td>').html(bill.frName));
 
-												  	tr.append($('<td></td>').html(bill.taxableAmt));
+												  	tr.append($('<td class="col-md-1"></td>').html(bill.taxableAmt));
 												  	
-												  	tr.append($('<td></td>').html(bill.totalTax));
+												  	tr.append($('<td class="col-md-1"></td>').html(bill.totalTax));
 
-												  	tr.append($('<td></td>').html(bill.grandTotal));
+												  	tr.append($('<td class="col-md-1"></td>').html(bill.grandTotal));
 												  	
 												  	
 												  	
 												  	if (bill.status == 1) {
-												  		tr.append($('<td></td>').html("Pending"));
+												  		tr.append($('<td class="col-md-1"></td>').html("Pending"));
 												  		
 													} else if (bill.status == 2) {
-														tr.append($('<td></td>').html("Received"));
+														tr.append($('<td class="col-md-1"></td>').html("Received"));
 													} else if (bill.status == 3) {
-														tr.append($('<td></td>').html("GVN Applied"));
+														tr.append($('<td class="col-md-1"></td>').html("GVN Applied"));
 													} else if (bill.status == 4) {
-														tr.append($('<td></td>').html("GVN Approved"));
+														tr.append($('<td class="col-md-1"></td>').html("GVN Approved"));
 													} else if (bill.status == 5) {
-														tr.append($('<td></td>').html("GRN Applied"));
+														tr.append($('<td class="col-md-1"></td>').html("GRN Applied"));
 													} else if (bill.status == 6) {
-														tr.append($('<td></td>').html("GRN Approved"));
+														tr.append($('<td class="col-md-1"></td>').html("GRN Approved"));
 													} else if (bill.status == 7) {
-														tr.append($('<td></td>').html("Closed"));
+														tr.append($('<td class="col-md-1"></td>').html("Closed"));
 													}
 												  	
 												  	
-												  	tr.append($('<td></td>').html(bill.remark));
+/* 												  	tr.append($('<td></td>').html(bill.remark));
+ */
 
 
+												 	tr.append($('<td class="col-md-1"></td>').html("<a href='${pageContext.request.contextPath}/updateBillDetails/"+bill.billNo+"/"+bill.frName+"'<abbr title='Update Bill'></abbr><i class='fa fa-edit  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/viewBillDetails/"+bill.billNo+"/"+bill.frName+"'<abbr title='View Bill'></abbr><i class='fa fa-info  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/deleteBill/"+bill.billNo+"/"+bill.frName+"'<abbr title='Delete Bill'></abbr><i class='fa fa-trash-o  fa-lg'></i></a>"));
 
-
-												 	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/updateBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='update' value='Update'/></a><a href='${pageContext.request.contextPath}/viewBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='view' value='View'/></a><a href='${pageContext.request.contextPath}/deleteBill/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='deleteBill' value='Delete'/></a>"));
+												 	//tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/updateBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='update' value='Update'/></a><a href='${pageContext.request.contextPath}/viewBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='view' value='View'/></a><a href='${pageContext.request.contextPath}/deleteBill/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='deleteBill' value='Delete'/></a>"));
 												  
 												  	//tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> <input type=button id=delete"+orders.orderId+" onClick=deleteOrder("+orders.orderId+"); Value=Delete>"));
 

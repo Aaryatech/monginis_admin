@@ -37,10 +37,10 @@
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 <script>
-											window.jQuery
-													|| document
-															.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
-										</script>
+	window.jQuery
+			|| document
+					.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
+</script>
 
 <!--page specific css styles-->
 <script
@@ -121,7 +121,7 @@
 								<i class="fa fa-bars"></i>View Bill Details
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showBillList">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							<!-- <div class="box-tool">
@@ -134,8 +134,8 @@
 
 
 						<div class="box-content">
-							<form action="addItemProcess" class="form-horizontal"
-								method="post" id="validation-form" enctype="multipart/form-data">
+							<form action="" class="form-horizontal" method="post"
+								id="validation-form">
 
 
 								<div class="form-group">
@@ -180,72 +180,59 @@
 										<table width="100%" class="table table-advance" id="table1">
 											<thead>
 												<tr>
-
-													<th width="140" style="width: 30px" align="left">Sr No</th>
-													<th width="138" align="left">Item Name</th>
-													<th width="120" align="left">Group</th>
-													<th width="130" align="left">Order Qty</th>
-													<th width="130" align="right">Billed Qty</th>
-
-													<th width="100" align="left">MRP</th>
-													<th width="100" align="left">Rate</th>
-													<th width="140" align="left">Taxable Amt</th>
-													<th width="105" align="left">GST %</th>
-
-													<th width="105" align="left">Total Tax</th>
-													<th width="130" align="left">Grand Total</th>
-
-													<th width="159" align="left">Remark</th>
-
+													<th class="col-sm-1">Sr No</th>
+													<th class="col-md-1">Group</th>
+													<th class="col-md-2">Item Name</th>
+													<th class="col-sm-1">Ord Qty</th>
+													<th class="col-sm-1">Bill Qty</th>
+													<th class="col-sm-1">Rate</th>
+													<th class="col-md-2">Taxable Amt</th>
+													<th class="col-md-1">Sgst Rs</th>
+													<th class="col-md-1">Cgst Rs</th>
+													<th class="col-md-1">Igst Rs</th>
+													<th class="col-sm-1">GST%</th>
+													<th class="col-md-1">Total</th>
 												</tr>
-
 											</thead>
-
 											<tbody>
-
 												<c:forEach items="${billDetails}" var="billDetails"
 													varStatus="count">
-
 													<tr>
-														<td><c:out value="${count.index+1}" /></td>
-
-														<td align="left"><c:out
+														<td class="col-sm-1"><c:out value="${count.index+1}" /></td>
+														<td class="col-md-1"><c:out
+																value="${billDetails.catName}" /></td>
+														<td class="col-md-2"><c:out
 																value="${billDetails.itemName}" /></td>
 
-
-														<td align="left"><c:out
-																value="${billDetails.catName}" /></td>
-
-														<td align="center"><c:out
+														<td class="col-sm-1" align="center"><c:out
 																value="${billDetails.orderQty}" /></td>
 
-														<td align="center"><c:out value="${billDetails.billQty}" /></td>
+														<td class="col-sm-1" align="center"><c:out
+																value="${billDetails.billQty}" /></td>
 
-														<td align="left"><c:out value="${billDetails.mrp}" /></td>
-
-														<td align="left"><c:out value="${billDetails.rate}" /></td>
-														<td align="left"><c:out
+														<td class="col-sm-1"><c:out
+																value="${billDetails.baseRate}" /></td>
+														<td class="col-md-2"><c:out
 																value="${billDetails.taxableAmt}" /></td>
-																
+
+
+														<td class="col-md-1"><c:out
+																value="${billDetails.sgstRs}" /></td>
+														<td class="col-md-1"><c:out
+																value="${billDetails.cgstRs}" /></td>
+																<td class="col-md-1"><c:out
+																value="${billDetails.igstRs}" /></td>
+
 														<c:set var="sgstPer" value="${billDetails.sgstPer}" />
 														<c:set var="cgstPer" value="${billDetails.cgstPer}" />
+														<td class="col-md-1"><c:out value="${sgstPer + cgstPer}" /></td>
 
-														<td align="left"><c:out value="${sgstPer + cgstPer}" /></td>
+														<%-- <td align="left"><c:out
+																value="${billDetails.totalTax}" /></td> --%>
 
-														<td align="left"><c:out
-																value="${billDetails.totalTax}" /></td>
-
-													
-
-
-														<td align="center"><c:out
+														<td class="col-md-1"><c:out
 																value="${billDetails.grandTotal}" /></td>
 														<!-- Total -->
-
-
-														<td align="left"><c:out value="${billDetails.remark}" /></td>
-
-
 
 
 														<!-- <td rowspan="1" align="left"> <input

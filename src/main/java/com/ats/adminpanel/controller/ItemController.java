@@ -3,6 +3,8 @@ package com.ats.adminpanel.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.time.ZoneId;
@@ -143,10 +145,9 @@ public class ItemController {
 
 			RestTemplate restTemplate = new RestTemplate();
 
-			FrItemStockConfiResponse frItemStockConfiResponse = restTemplate
+			/*FrItemStockConfiResponse frItemStockConfiResponse = restTemplate
 					.getForObject(Constants.url + "getfrItemConfSetting", FrItemStockConfiResponse.class);
-			
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			*/
 
 
 			/*List<FrItemStockConfigure> frItemStockConfigures = new ArrayList<FrItemStockConfigure>();
@@ -162,7 +163,10 @@ public class ItemController {
 				}
 
 			}
+			
 */
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
 			String settingKey = "frItemStockType";
 
 			map.add("settingKeyList", settingKey);
@@ -179,11 +183,11 @@ public class ItemController {
 
 			itemsWithCategoriesList = itemsWithCategoryResponseList.getmCategoryList();
 
-			System.out.println("item Id Cat Name --" + itemsWithCategoriesList.toString());
+			//System.out.println("item Id Cat Name --" + itemsWithCategoriesList.toString());
 
 			for (int i = 0; i < itemsWithCategoriesList.size(); i++) {
 
-				System.out.println("cat id== " + itemsWithCategoriesList.get(i).getCatId());
+				//System.out.println("cat id== " + itemsWithCategoriesList.get(i).getCatId());
 				if (itemsWithCategoriesList.get(i).getCatId() == 5) {
 
 					itemsWithCategoriesList.remove(i);
@@ -194,7 +198,7 @@ public class ItemController {
 
 			for (int i = 0; i < itemsWithCategoriesList.size(); i++) {
 
-				System.out.println("cat id== " + itemsWithCategoriesList.get(i).getCatId());
+				//System.out.println("cat id== " + itemsWithCategoriesList.get(i).getCatId());
 				if (itemsWithCategoriesList.get(i).getCatId() == 6) {
 
 					itemsWithCategoriesList.remove(i);
@@ -479,13 +483,19 @@ public class ItemController {
 
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+		
+		 Timestamp timestamp = new Timestamp(System.currentTimeMillis());
+		 
+		 Date date=new Date();
+		 
 		System.out.println(sdf.format(cal.getTime()));
 
 		String curTimeStamp = sdf.format(cal.getTime());
 
 		try {
 			
-			upload.saveUploadedFiles(file, Constants.ITEM_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+			//upload.saveUploadedFiles(file, Constants.ITEM_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+			upload.saveUploadedFiles(file, Constants.ITEM_IMAGE_TYPE, itemName);
 			System.out.println("upload method called " + file.toString());
 			
 		} catch (IOException e) {
@@ -509,7 +519,7 @@ public class ItemController {
 		map.add("itemMrp1", itemMrp1);
 		map.add("itemMrp2", itemMrp2);
 		map.add("itemMrp3", itemMrp3);
-		map.add("itemImage", curTimeStamp+"-"+file.get(0).getOriginalFilename());
+		map.add("itemImage", itemName);
 		map.add("itemTax1", itemTax1);
 		map.add("itemTax2", itemTax2);
 		map.add("itemTax3", itemTax3);
