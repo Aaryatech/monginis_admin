@@ -173,6 +173,39 @@ public class PurchaseOrderController {
 		return model;
 	}
 	
+	@RequestMapping(value = "/searchPo", method = RequestMethod.GET)
+	@ResponseBody
+	public List<PurchaseOrderHeader> searchPo(HttpServletRequest request, HttpServletResponse response) {
+		 
+		List<PurchaseOrderHeader> list = new ArrayList<PurchaseOrderHeader>();
+		 
+		 try
+		 {
+			 String search = request.getParameter("search");
+			 System.out.println("String "+search);
+			 
+			 for(int i=0;i<getPurchaseOrderList.getPurchaseOrderHeaderList().size();i++)
+			 {
+				 String poNo=String.valueOf(getPurchaseOrderList.getPurchaseOrderHeaderList().get(i).getPoNo());
+				 System.out.println(poNo);
+				 for(int j=0;j<poNo.length();j++)
+				 {
+					 if(poNo.contains(search))
+					 {
+						 list.add(getPurchaseOrderList.getPurchaseOrderHeaderList().get(i));
+						 break;
+					 }
+				 }
+			 }
+			 
+			 System.out.println("list"+list);
+		 }catch(Exception e)
+		 {
+			 e.printStackTrace();
+		 }
+		return list;
+	}
+	
 	@RequestMapping(value = "/deletePoRecord/{poId}", method = RequestMethod.GET)
 	public String deletePoRecord(@PathVariable int poId) {
 

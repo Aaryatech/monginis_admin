@@ -86,7 +86,7 @@
 	<%-- <c:url var="getBillList" value="/generateNewBill"></c:url> --%>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-
+<c:url var="searchPo" value="/searchPo"></c:url>
 
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
@@ -142,8 +142,13 @@
         </a>
 				<!-- <button class="btn btn-info pull-left" style="margin-right: 5px;" >Add
 					New</button> -->
+					
 			</div>
-			
+			<div class="col-md-2">Search</div>
+					<div class="col-md-3">
+				<input type="text" onkeyup="search()" id="search" name="search" class="form-control" >
+					
+				</div>
 
 <br/>
 
@@ -353,5 +358,77 @@
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
+	 <script>
+		function search()
+		{
+			var search=document.getElementById("search").value; 
+			
+			$
+			.getJSON(
+					'${searchPo}',
+
+					{
+						 
+						search : search,
+						 
+						ajax : 'true'
+
+					},
+					function(data) {
+						
+						
+						$('#table_grid td').remove();
+						$('#loader').hide();
+
+						if (data == "") {
+							 
+
+						}
+					 
+
+					  $.each(
+									data,
+									function(key, itemList) {
+									
+
+										var tr = $('<tr></tr>');
+
+									 
+										
+										
+									  	tr.append($('<td></td>').html(key+1));
+
+									  	tr.append($('<td></td>').html(itemList.poNo));
+
+									  	tr.append($('<td></td>').html(itemList.poDate));
+									  	tr.append($('<td></td>').html(itemList.poType));
+									  	tr.append($('<td></td>').html(itemList.suppId));
+									   
+									  	tr.append($('<td></td>').html(itemList.poTotalValue));
+									  	tr.append($('<td></td>').html(itemList.poStatus));
+									  	 
+									  	tr.append($('<td></td>').html('  <a href="poHeaderWithDetailed/'+itemList.poId+'" class="action_btn" > <abbr title="Detail"><i class="fa fa-list"></i></abbr></a> <c:choose> <c:when test="'+itemList.poStatus==0+'"> <a href="deletePoRecord/'+itemList.poId+'" onClick="return confirm('Are you sure want to delete this record');"><abbr title='Delete'></abbr><spanclass="glyphicon glyphicon-remove"></span></a> </c:when> <c:when test="'+itemList.poStatus==3+'"> <a href="deletePoRecord/'+itemList.poId+'" onClick="return confirm('Are you sure want to delete this record');"><abbr title='Delete'></abbr><span class="glyphicon glyphicon-remove"></span></a> </c:when> </c:choose> '));
+									  	 
+
+
+
+
+
+										$('#table_grid tbody').append(tr);
+
+										 
+
+									})
+						
+					});
+			
+			
+		}
+		
+	
+		
+	</script>
+
+
 </body>
 </html>

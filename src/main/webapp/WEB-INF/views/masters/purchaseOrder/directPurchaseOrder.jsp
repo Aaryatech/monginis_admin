@@ -158,8 +158,8 @@
 				<div class="box-content">
 				<div class="col-md-2" >Supplier</div>
 									<div class="col-md-4">
-										<select name="supp_id" id="supp_id" class="form-control" tabindex="6">
-										<option value="-1" disabled="disabled" selected="selected">Select Supplier</option>
+										<select name="supp_id" id="supp_id" class="form-control" tabindex="6" required>
+										<option value="" disabled="disabled" selected="selected">Select Supplier</option>
 											 <c:forEach items="${supplierList}" var="supplierList"
 							varStatus="count">
 							  <option value="${supplierList.suppId}"><c:out value="${supplierList.suppName}"/></option>
@@ -171,24 +171,24 @@
 									</div>
 									<div class="col-md-2">Quotation Ref. No.  </div>
 				<div class="col-md-3">
-					<input type="text" placeholder="Enter Quotation No" name="quotation_ref_no" id="quotation_ref_no" class="form-control">
+					<input type="text" placeholder="Enter Quotation No" name="quotation_ref_no" id="quotation_ref_no" class="form-control" required>
 				</div>
 				 
 			</div><br/>
 			<div class="box-content">
 				<div class="col-md-2">Kind Attention</div>
 				<div class="col-md-4">
-					<input type="text" placeholder="Enter Kind Attenton" name="kind_attn" id="kind_attn" class="form-control">
+					<input type="text" placeholder="Enter Kind Attenton" name="kind_attn" id="kind_attn" class="form-control" required>
 				</div>
 				<div class="col-md-2">Delivery At</div>
 				<div class="col-md-3">
-					<input type="text"  placeholder="Enter Delivery At" name="delv_at" id="delv_at" class="form-control">
+					<input type="text"  placeholder="Enter Delivery At" name="delv_at" id="delv_at" class="form-control" required>
 				</div>
 				</div><br/>
 			<div class="box-content">
 				<div class="col-md-2" >Taxation</div>
 									<div class="col-md-4">
-										<select name="taxation" id="taxation" class="form-control" tabindex="6">
+										<select name="taxation" id="taxation" class="form-control" tabindex="6" required>
 										 
 										<option value="1">Inclusive</option>
 										<option value="2">Extra</option>
@@ -199,15 +199,15 @@
 									</div>
 									<div class="col-md-2">Delivery Date  </div>
 				<div class="col-md-3">
-					<input type="text" placeholder="Select delevery Date"name="delv_date"id="delv_date" class="form-control date-picker">
+					<input type="text" placeholder="Select delevery Date"name="delv_date"id="delv_date" class="form-control date-picker" required>
 				</div>
 				 
 			</div> <br/>
 			<div class="box-content">
 			<div class="col-md-2" >PO Type</div>
 									<div class="col-md-4">
-										<select name="po_type" id="po_type" class="form-control" tabindex="6">
-										<option value="-1" disabled="disabled">Select PO Type</option>
+										<select name="po_type" id="po_type" class="form-control" tabindex="6" required>
+										<option value="" disabled="disabled">Select PO Type</option>
 										<option value="1">Regular</option>
 										<option value="2">Open</option>
 											
@@ -218,7 +218,7 @@
 									
 									<div class="col-md-2" >Quotation Ref. Date</div>
 									<div class="col-md-3">
-										 <input type="text" placeholder="Select Quotation Date" name="quotation_date" id="quotation_date" class="form-control date-picker">
+										 <input type="text" placeholder="Select Quotation Date" name="quotation_date" id="quotation_date" class="form-control date-picker" required>
 									</div>
 									</div><br/>
 									<br/>
@@ -324,7 +324,7 @@
 		<div class="box-content">
 				<div class="col-md-2" >Payment Terms</div>
 									<div class="col-md-3">
-										<select name="pay_terms" id="pay_terms" class="form-control" tabindex="6">
+										<select name="pay_terms" id="pay_terms" class="form-control" tabindex="6" required>
 										<option value="-1" disabled="disabled" selected="selected">Select Pay Terms</option>
 											 <c:forEach items="${paymentTermsList}" var="paymentTermsList"
 							varStatus="count">
@@ -337,13 +337,13 @@
 									</div>
 									<div class="col-md-2">PO Validity </div>
 				<div class="col-md-3">
-					<input type="text"placeholder="Enter PO Validity" name="po_validity" id="po_validity" class="form-control">
+					<input type="text"placeholder="Enter PO Validity" name="po_validity" id="po_validity" class="form-control" required>
 				</div>
 				</div><br/>
 				 	<div class="box-content">
 				<div class="col-md-2" >Transportation</div>
 									<div class="col-md-3">
-										<select name="transportation" id="transportation" class="form-control" tabindex="6">
+										<select name="transportation" id="transportation" class="form-control" tabindex="6" required>
 										<option value="-1" disabled="disabled" selected="selected">Select Pay Terms</option>
 											 <c:forEach items="${transporterList}" var="transporterList"
 							varStatus="count">
@@ -356,7 +356,7 @@
 									</div>
 									<div class="col-md-2" >Freight</div>
 									<div class="col-md-3">
-										<select name="freight" id="freight" class="form-control" tabindex="6">
+										<select name="freight" id="freight" class="form-control" tabindex="6" required>
 										<option value="-1" disabled="disabled"selected="selected">Select Freight</option>
 										<option value="1">Not Applicable</option>
 										<option value="2">On Your Side</option>
@@ -367,7 +367,7 @@
 									<div class="box-content">
 								<div class="col-md-2" >Insurance</div>
 									<div class="col-md-3">
-										<select name="insurance" id="insurance" class="form-control" tabindex="6">
+										<select name="insurance" id="insurance" class="form-control" tabindex="6" required>
 										<option value="-1" disabled="disabled" selected="selected">Select Insurance Terms</option>
 										<option value="1">Not Applicable</option>
 										<option value="2">On Your Side</option>
@@ -376,7 +376,7 @@
 									</div>
 									<div class="col-md-2" >Sp.Instrucion</div>
 									<div class="col-md-3">
-					<input type="text" name="sp_instruction" placeholder="Enter Special Instruction" id="sp_instruction" class="form-control" placeholder="Enter Special Instruction">
+					<input type="text" name="sp_instruction" placeholder="Enter Special Instruction" id="sp_instruction" class="form-control" placeholder="Enter Special Instruction" required>
 				</div>
 									</div><br/><br/>
 			
