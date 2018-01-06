@@ -51,9 +51,19 @@ private String rmName;
 	 
 	private int rmIsCritical;
 	 
-
+	private int isTallySync;
 	 
 	private int delStatus;
+
+	
+	
+	public int getIsTallySync() {
+		return isTallySync;
+	}
+
+	public void setIsTallySync(int isTallySync) {
+		this.isTallySync = isTallySync;
+	}
 
 	public int getRmId() {
 		return rmId;
