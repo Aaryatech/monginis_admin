@@ -396,16 +396,20 @@ href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}
 		
 				var mulFactor = document.getElementById("mul_factor").value;
 
-		
+		//alert("Max = "+max);
+		//alert("Min = "+min);
 		
 		
 		var valid=true;
 		
-		if(max == min || max < min ){
+		if(parseInt(max) === parseInt(min)){
+			alert("Enter Max Qty  greater than Min Qty");
+			valid=false;
+		}else if(parseInt(min) > parseInt(max)){
 			alert("Enter Max Qty  greater than Min Qty");
 			valid=false;
 		}
-		else if(reOrder<=min || reOrder>=max ){
+		else if(parseInt(reOrder)<=parseInt(min) || parseInt(reOrder)>=parseInt(max)){
 			alert("Enter Reorder Qty between Min and Max Qty");
 			valid=false;
 		}

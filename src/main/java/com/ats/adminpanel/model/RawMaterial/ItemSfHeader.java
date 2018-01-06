@@ -13,7 +13,7 @@ public class ItemSfHeader{
 	
 	private String sfType;
 
-	private int sfWeight;
+	private float sfWeight;
 	
 	private int stockQty;
 	
@@ -111,11 +111,11 @@ public class ItemSfHeader{
 		this.sfType = sfType;
 	}
 
-	public int getSfWeight() {
+	public float getSfWeight() {
 		return sfWeight;
 	}
 
-	public void setSfWeight(int sfWeight) {
+	public void setSfWeight(float sfWeight) {
 		this.sfWeight = sfWeight;
 	}
 

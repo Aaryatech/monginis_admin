@@ -332,21 +332,24 @@
 		
 		var max=document.getElementById(itemId+'max'+index).value;
 		
-		alert("min= "+min);
-		alert("max= "+max);
-		alert("reorder "+reOrderQty);
+		//alert("min= "+min);
+		//alert("max= "+max);
+		//alert("reorder "+reOrderQty);
 
-		if(max<=min){
+		if(parseInt(max)<=parseInt(min)){
 			alert("Enter max qty greater than minQty");
 		isSubmit=false;
 		 //document.getElementById("callSubmit").style.display="none";
 
 		}
-		else if(reOrderQty>max||reOrderQty<=min){
+		else if(parseInt(reOrderQty)>parseInt(max)){
 			alert("Enter reOrderQty Between Min And Max Qty");
 			isSubmit=false;
 		 //document.getElementById("callSubmit").style.display="none";
 
+			}else if(parseInt(reOrderQty) <= parseInt(min)){
+				alert("Enter reOrderQty Between Min And Max Qty");
+				isSubmit=false;
 			}
 		
 		return isSubmit;
@@ -362,12 +365,10 @@
 			}else{
 				// document.getElementById("callSubmit").style.display="none";
 
-				
 				document.getElementById(itemId+'reorder'+index).value=0;
 				document.getElementById(itemId+'min'+index).value=0;
 				document.getElementById(itemId+'max'+index).value=0;
 				 document.getElementById("callSubmit").style.display="block";
-
 				
 			}
 		}

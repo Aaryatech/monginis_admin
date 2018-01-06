@@ -128,7 +128,7 @@ public class ItemSfController {
 		
 		int sfItemUoM=Integer.parseInt(request.getParameter("sf_item_uom"));
 				
-		int sfItewWeight=Integer.parseInt(request.getParameter("sf_item_weight"));
+		float sfItewWeight=Float.parseFloat(request.getParameter("sf_item_weight"));
 		
 		int sfStockQty=Integer.parseInt(request.getParameter("sf_stock_qty"));
 						
@@ -154,9 +154,9 @@ public class ItemSfController {
 		header.setMulFactor(mulFactor);
 		System.out.println("header= "+header.toString());
 
-		Info info=restTemplate.postForObject(Constants.url+"postSfItemHeader",header,Info.class);
+		//Info info=restTemplate.postForObject(Constants.url+"postSfItemHeader",header,Info.class);
 		
-		System.out.println("Insert Header response "+info.toString());
+		//System.out.println("Insert Header response "+info.toString());
 		
 		//List<GetItemSfHeader> itemHeaderList=restTemplate.getForObject(Constants.url+"getItemSfHeader",List.class);
 
@@ -170,7 +170,7 @@ public class ItemSfController {
 		catch (Exception e) {
 			
 			e.printStackTrace();
-			System.out.println("ex in header Insert = "+e.getMessage());
+			System.out.println("ex in Item Sf  header Insert = "+e.getMessage());
 			
 		}
 		

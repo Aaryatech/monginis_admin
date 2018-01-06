@@ -74,18 +74,18 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Add to Bom
+						<i class="fa fa-file-o"></i> Add to Bom 
 					</h1>
 				</div>
 			</div>
 			<!-- END Page Title -->
 			<c:choose>
 				<c:when test="${isMix==1}">
-					<c:set var="title" value="Production Request">
+					<c:set var="title" value="Production Request For BOM">
 					</c:set>
 				</c:when>
 				<c:otherwise>
-					<c:set var="title" value="Mixing Request">
+					<c:set var="title" value="Mixing Request For BOM">
 					</c:set>
 				</c:otherwise>
 			</c:choose>
@@ -116,8 +116,8 @@
 										<thead>
 											<tr>
 												<th width="17" style="width: 18px">Sr No</th>
-												<th width="100" align="left">Rm Id</th>
-												<th width="120" align="left">Rm Name</th>
+<!-- 												<th width="100" align="left">Rm Id</th>
+ -->												<th width="120" align="left">Rm Name</th>
 												<th width="100" align="left">Rm Type</th>
 												<th width="120" align="left">Qty</th>
 
@@ -132,8 +132,8 @@
 
 												<tr>
 													<td><c:out value="${count.index+1}" /></td>
-													<td align="left"><c:out
-															value="${planDetailForBom.rmId}" /></td>
+													<%-- <td align="left"><c:out
+															value="${planDetailForBom.rmId}" /></td> --%>
 													<td align="left"><c:out
 															value="${planDetailForBom.rmName}" /></td>
 													<c:choose>
