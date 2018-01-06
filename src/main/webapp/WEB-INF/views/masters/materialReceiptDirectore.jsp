@@ -12,7 +12,7 @@
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Material Receipt Directore</title>
+<title>Material Receipt Director</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -107,7 +107,7 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Material Receipt Directore
+					<i class="fa fa-file-o"></i>Material Receipt Director
 				</h1>
 				<!-- <h4>Bill for franchises</h4> -->
 			</div>
@@ -119,7 +119,7 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>Material Receipt Directore
+					<i class="fa fa-bars"></i>Material Receipt Director
 				</h3>
 
 			</div>
