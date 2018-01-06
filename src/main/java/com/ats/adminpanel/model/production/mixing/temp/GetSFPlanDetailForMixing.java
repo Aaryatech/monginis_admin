@@ -1,5 +1,6 @@
 package com.ats.adminpanel.model.production.mixing.temp;
 
+
 //same bean used for Bom and mixing
 
 public class GetSFPlanDetailForMixing {
@@ -25,6 +26,9 @@ public class GetSFPlanDetailForMixing {
 	private float planQty;
 	
 	int total;
+	
+	private float mulFactor;
+	private int sfId;
 	
 	
 
@@ -108,12 +112,29 @@ public class GetSFPlanDetailForMixing {
 		this.total = total;
 	}
 
+	public float getMulFactor() {
+		return mulFactor;
+	}
+
+	public void setMulFactor(float mulFactor) {
+		this.mulFactor = mulFactor;
+	}
+
+	public int getSfId() {
+		return sfId;
+	}
+
+	public void setSfId(int sfId) {
+		this.sfId = sfId;
+	}
+
 	@Override
 	public String toString() {
 		return "GetSFPlanDetailForMixing [itemDetailId=" + itemDetailId + ", itemId=" + itemId + ", rmType=" + rmType
 				+ ", rmId=" + rmId + ", uom=" + uom + ", rmQty=" + rmQty + ", noPiecesPerItem=" + noPiecesPerItem
-				+ ", rmName=" + rmName + ", planQty=" + planQty + ", total=" + total + "]";
+				+ ", rmName=" + rmName + ", planQty=" + planQty + ", total=" + total + ", mulFactor=" + mulFactor
+				+ ", sfId=" + sfId + "]";
 	}
-	
+
 	
 }
