@@ -1279,7 +1279,7 @@ public class RawMaterialController {
 	Item item = rest.postForObject("" + Constants.url + "getItem", map,Item.class);
 
 	ItemDetailList itemDetailsList= rest.postForObject(Constants.url + "rawMaterial/getItemDetails",map, ItemDetailList.class);
-
+	List<RmItemGroup> rmItemGroupList=rest.getForObject(Constants.url + "rawMaterial/getAllRmItemGroup", List.class);
 	
 	for(int i=0;i< itemDetailsList.getItemDetailList().size();i++)
 	{  
@@ -1300,7 +1300,7 @@ public class RawMaterialController {
 	}
 	model.addObject("itemDetailList", itemDetailsList.getItemDetailList());
 	model.addObject("item", item);
-	
+	model.addObject("rmItemGroupList", rmItemGroupList);
 	}
 	catch(Exception e)
 	{

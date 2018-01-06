@@ -62,7 +62,8 @@
 <c:url var="editItem" value="/editItem"/>
 <c:url var="addItemDetail" value="/addItemDetail"/>
 <c:url var="redirectToItemList" value="/redirectToItemList"/>
-
+	<c:url var="getRmCategory" value="/getRmCategory" />
+	<c:url var="getRmListByCatId" value="/getRmListByCatId" />
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
 
@@ -152,23 +153,53 @@
 								<div class="form-group">
 									<label class="col-sm-2 col-lg-2 control-label">RM Type</label>
 									<div class="col-sm-6 col-lg-4 controls">
-                                    <select name="rm_type" id="rm_type" class="form-control" placeholder="Raw Material Type"data-rule-required="true" >
-											<option value="0">Select RM Type</option>
+                                    <select name="rm_type" id="rm_type" class="form-control" placeholder="Raw Material Type"data-rule-required="true" onchange="return rmTypeChange()">
+											<option value="">Select RM Type</option>
 											<option value="1">Raw Material</option>
 											<option value="2">Semi Finished</option>
 									
 								   </select>									
 								   </div>
+                        <label class="col-sm-3 col-lg-1 control-label">Rm Group</label>
+									<div class="col-sm-6 col-lg-4 controls">
+										<select name="rm_group" id="rm_group" class="form-control" tabindex="6">
+										<option value="0" disabled="disabled" selected="selected">Select RM Group</option>
+											 <c:forEach items="${rmItemGroupList}" var="rmItemGroupList"
+							varStatus="count">
+							   <option value="${rmItemGroupList.grpId}"><c:out value="${rmItemGroupList.grpName}"/></option>
+ 													 
+												</c:forEach>
+						
 
-									<label class="col-sm-3 col-lg-1 control-label">Raw Material</label>
+										</select>
+									</div>
+								<!-- 	<label class="col-sm-3 col-lg-1 control-label">Raw Material</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<select name="rm_id" id="rm_id"class="form-control" placeholder="Raw Material"data-rule-required="true">
 											<option value="0">Select Raw Material</option>
 										    
-								</select>
-									</div>
+								</select> 
+									</div>-->
 								</div>
-							
+									<div class="form-group">
+				<div class="col-sm-2 col-lg-2 control-label" >RM Category</div>
+									<div class="col-md-4">
+									<select name="rm_cat" id="rm_cat" class="form-control" tabindex="6">
+										<option value="0"disabled="disabled" selected="selected">Select RM Category</option>
+											 
+										</select>
+									</div>
+			
+		                         <label class="col-sm-3 col-lg-1 control-label">Raw Material Item</label>
+								<div class="col-sm-6 col-lg-4 controls">
+									<select name="rm_id" id="rm_id"class="form-control"  tabindex="6"  placeholder="Raw Material"data-rule-required="true">
+											<option value="0">Select Raw Material</option>
+										    
+							     	</select> 	
+				                 </div>
+				
+									
+									</div>
 								<div class="form-group">
 								<!-- <label class="col-sm-3 col-lg-2 control-label">RM Unit</label>
 									<div class="col-sm-6 col-lg-4 controls">-->
@@ -397,14 +428,27 @@
 </body>
 
 <script type="text/javascript">
-$(document).ready(function() { 
+/* $(document).ready(function() { 
 	$('#rm_type').change(
-			function() {
+			 */
+			
+			function rmTypeChange() {
+					var rmType = $("#rm_type").val();
 
+				 if(rmType==2)
+					{
+					 document.getElementById("rm_group").options.selectedIndex =0;
+					 document.getElementById("rm_cat").options.selectedIndex =0;
+
+					 document.getElementById("rm_group").disabled = true;
+					 document.getElementById("rm_cat").disabled = true;
+
+					
+					
 				$('#loader').show();
 
 	$.getJSON('${getRawMaterialList}', {
-					rm_type : $(this).val(),
+					rm_type : rmType,
 					ajax : 'true',
 				},  function(data) {
 					$('#loader').hide();
@@ -419,10 +463,26 @@ $(document).ready(function() {
 					html += '</option>';
 					$('#rm_id').html(html);
 				});
-			});
+			}
+				 else
+					 {
+					 
+					 document.getElementById("rm_group").disabled = false;
+					 document.getElementById("rm_cat").disabled = false;
+					 document.getElementById("rm_id").innerHTML = "";	
+						var html = '<option value="0" selected >Select Raw Material</option>';
+						html += '</option>';
+						$('#rm_id').html(html);
+
+					 }
+			 
+			 
+			 
+			 
+			 }/* );
 			
 
-});
+}); */
 </script>
 <script type="text/javascript">
 function appendRmItem(rmId) {
@@ -452,7 +512,9 @@ function appendRmItem(rmId) {
 							}
 					}
 					html += '</option>';
+					//$("#rm_id").trigger("chosen:updated");
 					$('#rm_id').html(html);
+
 				});
 }
 </script>
@@ -655,6 +717,14 @@ function editItemDetail(token){
 
 		var len = data.length;
 
+		if(data.rmType==2)
+			{
+			 document.getElementById("rm_group").options.selectedIndex =0;
+			 document.getElementById("rm_cat").options.selectedIndex =0;
+
+			 document.getElementById("rm_group").disabled = true;
+			 document.getElementById("rm_cat").disabled = true;
+			}
 		         document.getElementById("rm_weight").value=data.rmWeight;
 				 document.getElementById("rm_qty").value=data.rmQty;
 				 document.getElementById("rm_type").options.selectedIndex =data.rmType;
@@ -831,6 +901,52 @@ function deleteItemDetail(key){
 	/* 	});
 });
 }); */
+
+</script>
+		
+		<script type="text/javascript">
+$(document).ready(function() { 
+	$('#rm_group').change(
+			function() {
+				$.getJSON('${getRmCategory}', {
+					grpId : $(this).val(),
+					ajax : 'true'
+				}, function(data) {
+					var html = '<option value="" disabled="disabled" selected >Select Category</option>';
+					
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].catId + '">'
+								+ data[i].catName + '</option>';
+					}
+					html += '</option>';
+					$('#rm_cat').html(html);
+					$('#rm_cat').formcontrol('refresh');
+
+				});
+			});
+});
+$(document).ready(function() { 
+	$('#rm_cat').change(
+			function() {
+				$.getJSON('${getRmListByCatId}', {
+					catId : $(this).val(),
+					ajax : 'true'
+				}, function(data) {
+					var html = '<option value="" disabled="disabled" selected >Select Category</option>';
+					
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].rmId + '">'
+								+ data[i].rmName + '</option>';
+					}
+					html += '</option>';
+					$('#rm_id').html(html);
+					$('#rm_id').formcontrol('refresh');
+
+				});
+			});
+});
 
 </script>
 </html>

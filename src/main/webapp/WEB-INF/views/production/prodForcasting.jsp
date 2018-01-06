@@ -162,7 +162,7 @@
 												<thead>
 													<tr>
 														<th width="30" align="left">Sr No</th>
-														<th width="70" align="left">Item Name</th>
+														<th width="130" align="left">Item Name</th>
 														<th width="100" align="left">
 															<div>
  									                     	<input class="form-control date-picker" id="datepicker1" size="16" type="text" name="datepicker1" value="" placeholder="Date1"  disabled/>
@@ -332,10 +332,10 @@
 			var todaysDate = new Date(todayTimeStamp);
 
 			var yesterdayString =  yesterdayDate.getDate()+ '-' + (yesterdayDate.getMonth() + 1) + '-' +yesterdayDate.getFullYear();
-			var todaysString =  todaysDate.getDate()+ '-' + (todaysDate.getMonth() + 1) + '-' +todaysDate.getFullYear();
+			var tommarowString =  (todaysDate.getDate()+1)+ '-' + (todaysDate.getMonth() + 1) + '-' +todaysDate.getFullYear();
 
 			$("#datepicker1").val(yesterdayString); 
-            $("#datepicker5").val(todaysString); 
+            $("#datepicker5").val(tommarowString); 
  
 			//alert(catId);
 			
