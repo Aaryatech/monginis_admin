@@ -133,7 +133,18 @@
 
 									<div class="col-md-2">Cat Id</div>
 									<div class="col-md-3">
-										<input type="text" id="itemGrp1"
+									<c:forEach items="${categoryList}" var="categoryList">
+									 	<c:choose>
+									 		<c:when test="${postProdPlanHeader.itemGrp1==categoryList.catId}">
+									 			
+									 			<input type="text" id="itemGrp1"
+												name="itemGrp1" value="${categoryList.catName}"
+												class="form-control" readonly>
+									 		
+									 		</c:when> 
+										</c:choose>
+									</c:forEach>
+										<input type="hidden" id="itemGrp1"
 											name="itemGrp1" value="${postProdPlanHeader.itemGrp1}"
 											class="form-control" readonly>
 
