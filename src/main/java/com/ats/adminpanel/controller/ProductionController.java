@@ -433,6 +433,7 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 
 				System.out.println("postProdPlanHeader"+postProdPlanHeader.toString());
 				model.addObject("postProdPlanHeaderList",postProdPlanHeader);
+				model.addObject("categoryList",categoryListComp.getmCategoryList());
 				
 			}catch(Exception e)
 			{

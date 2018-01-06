@@ -771,55 +771,62 @@ public class MaterialReceiptNoteController {
 	public ModelAndView showStoreMaterialReciept(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialReceiptStore");
+		try
+		{
+			int mrnId = Integer.parseInt(request.getParameter("mrnId"));
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("mrnId", mrnId);
 
-		int mrnId = Integer.parseInt(request.getParameter("mrnId"));
-		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-		map.add("mrnId", mrnId);
+			RestTemplate rest = new RestTemplate();
+			materialRecNoteHeader = rest.postForObject(Constants.url + "/getMaterialRecNotesHeaderDetails", map,
+					MaterialRecNote.class);
+			getmaterialRecNoteDetailslist = materialRecNoteHeader.getMaterialRecNoteDetails();
 
-		RestTemplate rest = new RestTemplate();
-		materialRecNoteHeader = rest.postForObject(Constants.url + "/getMaterialRecNotesHeaderDetails", map,
-				MaterialRecNote.class);
-		getmaterialRecNoteDetailslist = materialRecNoteHeader.getMaterialRecNoteDetails();
+			System.out.println("purchaseOrderListDetailedList   :" + materialRecNoteHeader.getMaterialRecNoteDetails());
 
-		System.out.println("purchaseOrderListDetailedList   :" + materialRecNoteHeader.getMaterialRecNoteDetails());
+			List<RmItemGroup> rmItemGroupList = rest.getForObject(Constants.url + "rawMaterial/getAllRmItemGroup",
+					List.class);
+			model.addObject("mrntype", rmItemGroupList);
 
-		List<RmItemGroup> rmItemGroupList = rest.getForObject(Constants.url + "rawMaterial/getAllRmItemGroup",
-				List.class);
-		model.addObject("mrntype", rmItemGroupList);
+			TransporterList transporterList = rest.getForObject(Constants.url + "/showTransporters", TransporterList.class);
 
-		TransporterList transporterList = rest.getForObject(Constants.url + "/showTransporters", TransporterList.class);
-
-		for (int i = 0; i < transporterList.getTransporterList().size(); i++) {
-			if (transporterList.getTransporterList().get(i).getTranId() == materialRecNoteHeader.getTransportId()) {
-				model.addObject("transname", transporterList.getTransporterList().get(i).getTranName());
-				break;
+			for (int i = 0; i < transporterList.getTransporterList().size(); i++) {
+				if (transporterList.getTransporterList().get(i).getTranId() == materialRecNoteHeader.getTransportId()) {
+					model.addObject("transname", transporterList.getTransporterList().get(i).getTranName());
+					break;
+				}
 			}
+			Supplist supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
+
+			System.out.println(supplierDetailsList.getSupplierDetailslist().toString());
+
+			int suupId = materialRecNoteHeader.getSupplierId();
+
+			for (int i = 0; i < supplierDetailsList.getSupplierDetailslist().size(); i++) {
+				if (suupId == supplierDetailsList.getSupplierDetailslist().get(i).getSuppId())
+					model.addObject("suppName", supplierDetailsList.getSupplierDetailslist().get(i).getSuppName());
+			}
+
+			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
+			map1.add("suppId", suupId);
+			System.out.println("SupplierId" + suupId);
+
+			GetPurchaseOrderList getPurchaseOrderList = rest
+					.postForObject(Constants.url + "purchaseOrder/purchaseorderList", map1, GetPurchaseOrderList.class);
+
+			System.out.println(getPurchaseOrderList.toString());
+
+			model.addObject("polist", purchaseOrderHeaderlist);
+			model.addObject("rawlist", rawlist);
+			model.addObject("materialRecNote", materialRecNoteHeader);
+			model.addObject("materialRecNoteDetail", getmaterialRecNoteDetailslist);
+			model.addObject("purchaseOrderList", getPurchaseOrderList.getPurchaseOrderHeaderList());
+		}catch(Exception e)
+		{
+			e.printStackTrace();
 		}
-		Supplist supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
 
-		System.out.println(supplierDetailsList.getSupplierDetailslist().toString());
-
-		int suupId = materialRecNoteHeader.getSupplierId();
-
-		for (int i = 0; i < supplierDetailsList.getSupplierDetailslist().size(); i++) {
-			if (suupId == supplierDetailsList.getSupplierDetailslist().get(i).getSuppId())
-				model.addObject("suppName", supplierDetailsList.getSupplierDetailslist().get(i).getSuppName());
-		}
-
-		MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
-		map1.add("suppId", suupId);
-		System.out.println("SupplierId" + suupId);
-
-		GetPurchaseOrderList getPurchaseOrderList = rest
-				.postForObject(Constants.url + "purchaseOrder/purchaseorderList", map1, GetPurchaseOrderList.class);
-
-		System.out.println(getPurchaseOrderList.toString());
-
-		model.addObject("polist", purchaseOrderHeaderlist);
-		model.addObject("rawlist", rawlist);
-		model.addObject("materialRecNote", materialRecNoteHeader);
-		model.addObject("materialRecNoteDetail", getmaterialRecNoteDetailslist);
-		model.addObject("purchaseOrderList", getPurchaseOrderList.getPurchaseOrderHeaderList());
+		
 		return model;
 	}
 
@@ -1115,33 +1122,38 @@ public class MaterialReceiptNoteController {
 					MaterialRecNote.class);
 			System.out.println("After Update  :" + materialRecNote.toString());
 			
-			if(!poSts.equals(""))
+			if(materialRecNote!=null && materialRecNote.getApainstPo()==1)
 			{
-				int po_sts=Integer.parseInt(poSts);
-				if(po_sts==1)
+				if(!poSts.equals("") || !poSts.equals(null))
 				{
-					purchaseOrderHeaderChangePoStsByDirector.setPoStatus(6);
+					int po_sts=Integer.parseInt(poSts);
+					if(po_sts==1)
+					{
+						purchaseOrderHeaderChangePoStsByDirector.setPoStatus(6);
+					}
+					else if(po_sts==2)
+					{
+						purchaseOrderHeaderChangePoStsByDirector.setPoStatus(7);
+					}
+					
+					
+					purchaseOrderHeaderChangePoStsByDirector.setDelvDateRem(DateConvertor.convertToDMY(purchaseOrderHeaderChangePoStsByDirector.getDelvDateRem()));
+					purchaseOrderHeaderChangePoStsByDirector.setQuotationRefDate(DateConvertor.convertToDMY(purchaseOrderHeaderChangePoStsByDirector.getQuotationRefDate()));
+					List<PurchaseOrderDetail> purchaseOrderDetail = new ArrayList<PurchaseOrderDetail>();
+					purchaseOrderHeaderChangePoStsByDirector.setPurchaseOrderDetail(purchaseOrderDetail);
+					System.out.println("purchaseOrderHeader "+purchaseOrderHeaderChangePoStsByDirector);
+					
+					 Info info=rest.postForObject(Constants.url + "purchaseOrder/insertPurchaseOrder",purchaseOrderHeaderChangePoStsByDirector, Info.class);
+					 System.out.println("Response :"+info.toString());
 				}
-				else if(po_sts==2)
-				{
-					purchaseOrderHeaderChangePoStsByDirector.setPoStatus(7);
-				}
-				
-				
-				purchaseOrderHeaderChangePoStsByDirector.setDelvDateRem(DateConvertor.convertToDMY(purchaseOrderHeaderChangePoStsByDirector.getDelvDateRem()));
-				purchaseOrderHeaderChangePoStsByDirector.setQuotationRefDate(DateConvertor.convertToDMY(purchaseOrderHeaderChangePoStsByDirector.getQuotationRefDate()));
-				List<PurchaseOrderDetail> purchaseOrderDetail = new ArrayList<PurchaseOrderDetail>();
-				purchaseOrderHeaderChangePoStsByDirector.setPurchaseOrderDetail(purchaseOrderDetail);
-				System.out.println("purchaseOrderHeader "+purchaseOrderHeaderChangePoStsByDirector);
-				
-				 Info info=rest.postForObject(Constants.url + "purchaseOrder/insertPurchaseOrder",purchaseOrderHeaderChangePoStsByDirector, Info.class);
-				 System.out.println("Response :"+info.toString());
+				 
 			}
+			
 			
 			
 		} catch (Exception e) {
 
-			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		return "redirect:/allDirectorMaterialReceiptNote";
 	}

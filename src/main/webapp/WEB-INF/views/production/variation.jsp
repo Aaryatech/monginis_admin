@@ -130,9 +130,29 @@
 																value="${postProdPlanHeaderList.productionDate}" />
 																</td>
 																
-													  
+																<c:forEach items="${categoryList}" var="categoryList"
+													varStatus="count">
+																<c:choose>
+													<c:when test="${postProdPlanHeaderList.itemGrp1==categoryList.catId}">
 													<td align="left"><c:out
-																value="${postProdPlanHeaderList.itemGrp1}" />  </td>
+																value="${categoryList.catName}" /></td>
+													</c:when>
+													 </c:choose>
+													 </c:forEach>
+													  
+													
+														
+														<%-- <c:forEach items="${categoryList}" var="categoryList"
+														varStatus="count">
+															 <c:choose> 
+																 <c:when test="${postProdPlanHeaderList.itemGrp1==categoryList.catId}"> 
+																<td align="left">
+															<c:out value="${categoryList.catId}" /></td>
+																
+																 </c:when> 
+															 </c:choose> 
+														</c:forEach> --%>
+														
 															
 															<td align="left"><c:out	
 																value="${postProdPlanHeaderList.timeSlot}" />

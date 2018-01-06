@@ -49,6 +49,18 @@ private int suppId;
 	private int delStatus;
 	 
 	private int suppCreditDays;
+	
+	private int isTallySync;
+	
+	
+
+	public int getIsTallySync() {
+		return isTallySync;
+	}
+
+	public void setIsTallySync(int isTallySync) {
+		this.isTallySync = isTallySync;
+	}
 
 	public int getSuppId() {
 		return suppId;
@@ -242,7 +254,8 @@ private int suppId;
 				+ suppPhone2 + ", suppEmail1=" + suppEmail1 + ", suppEmail2=" + suppEmail2 + ", suppEmail3="
 				+ suppEmail3 + ", suppEmail4=" + suppEmail4 + ", suppEmail5=" + suppEmail5 + ", suppGstin=" + suppGstin
 				+ ", suppCPerson=" + suppCPerson + ", suppPanNo=" + suppPanNo + ", suppFdaLic=" + suppFdaLic
-				+ ", suppPayId=" + suppPayId + ", delStatus=" + delStatus + ", suppCreditDays=" + suppCreditDays + "]";
+				+ ", suppPayId=" + suppPayId + ", delStatus=" + delStatus + ", suppCreditDays=" + suppCreditDays
+				+ ", isTallySync=" + isTallySync + "]";
 	}
 
 	 
