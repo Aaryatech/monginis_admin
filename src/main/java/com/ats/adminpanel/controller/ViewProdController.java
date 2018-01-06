@@ -205,54 +205,45 @@ public class ViewProdController {
 	
 		
 	}
-	
+
 	@RequestMapping(value = "/updateQty", method = RequestMethod.POST)
-	public ModelAndView updatePlanQty(HttpServletRequest request, HttpServletResponse response) {
+	public String updateQty(HttpServletRequest request, HttpServletResponse response) {
 		
 		ModelAndView model = new ModelAndView("production/prodDetail");
-
+		int prodId=0;
 		try {
 			int prodStatus=Integer.parseInt(request.getParameter("productionStatus"));
 
-	//	List<PostProductionPlanDetail> getProdPlanDetailList=new ArrayList<PostProductionPlanDetail>();
+			//int productionId=Integer.parseInt(request.getParameter("prod_id"));
+			//System.out.println("productionId"+productionId);
+
+			prodId=productionId;
+			
+			System.out.println("prodStatus"+prodStatus);
 		
 		   for(int i=0;i<postProdPlanDetailList.size();i++)
 		   {
 		 
 			 if(prodStatus==1)
 			 {
-			   int planQty=Integer.parseInt(request.getParameter("plan_qty"+postProdPlanDetailList.get(i).getProductionDetailId()+"status1"));
-			   System.out.println("planQty"+planQty);
+			     int planQty=Integer.parseInt(request.getParameter("plan_qty"+postProdPlanDetailList.get(i).getProductionDetailId()));
+			     System.out.println("planQty"+planQty);
 			   
-			   int prodQty=Integer.parseInt(request.getParameter("act_prod_qty"+postProdPlanDetailList.get(i).getProductionDetailId()+"status1"));
-			   System.out.println("prodQty:"+prodQty);
-			   
-				postProdPlanDetailList.get(i).setPlanQty(planQty);
-				postProdPlanDetailList.get(i).setProductionQty(prodQty);
+				 postProdPlanDetailList.get(i).setPlanQty(planQty);
 
 			 }
 			 else if(prodStatus==2)
 			 {
-				 int orderQty=Integer.parseInt(request.getParameter("order_qty"+postProdPlanDetailList.get(i).getProductionDetailId()+"status1"));
+				 int orderQty=Integer.parseInt(request.getParameter("order_qty"+postProdPlanDetailList.get(i).getProductionDetailId()));
 				 System.out.println("orderQty:"+orderQty);
 				 
-				 int prodQty=Integer.parseInt(request.getParameter("act_prod_qty"+postProdPlanDetailList.get(i).getProductionDetailId()+"status1"));
-				   System.out.println("prodQty:"+prodQty);
-			  
-					postProdPlanDetailList.get(i).setOrderQty(orderQty);
-					postProdPlanDetailList.get(i).setProductionQty(prodQty);
+				 postProdPlanDetailList.get(i).setOrderQty(orderQty);
 
 			 }
-			 else if(prodStatus==3)
-			 {
-				 int prodQty=Integer.parseInt(request.getParameter("act_prod_qty"+postProdPlanDetailList.get(i).getProductionDetailId()+"status1"));
-				   System.out.println("prodQty:"+prodQty);
-				   
-					postProdPlanDetailList.get(i).setProductionQty(prodQty);
-			 }
-			 
+		
 			
 		   }
+		   
 		System.out.println("ItemDetail List:"+postProdPlanDetailList.toString());
 		
 		RestTemplate restTemplate=new RestTemplate();
@@ -262,11 +253,68 @@ public class ViewProdController {
 
 		System.out.println("Info"+info.toString());
 		}
+	catch(Exception e)
+	{
+			System.out.println("Exception In Update Plan Qty"+e.getMessage());
+	}
+		return "redirect:/showProdHeader";
+	}
+	
+	@RequestMapping(value = "/completeProd", method = RequestMethod.POST)
+	public String completeProduction(HttpServletRequest request, HttpServletResponse response) {
+		
+		ModelAndView model = new ModelAndView("production/prodDetail");
+
+		try {
+			int prodStatus=Integer.parseInt(request.getParameter("productionStatus"));
+			int productionId=Integer.parseInt(request.getParameter("production_id"));
+			int isPlan=Integer.parseInt(request.getParameter("is_plan"));
+
+			System.out.println("completeProd prodStatus"+prodStatus);
+		
+		   for(int i=0;i<postProdPlanDetailList.size();i++)
+		   {
+			   int prodQty=Integer.parseInt(request.getParameter("act_prod_qty"+postProdPlanDetailList.get(i).getProductionDetailId()));
+			   System.out.println("prodQty:"+prodQty);
+			   
+				postProdPlanDetailList.get(i).setProductionQty(prodQty);
+
+		   }
+		   
+		System.out.println("ItemDetail List:"+postProdPlanDetailList.toString());
+		
+		RestTemplate restTemplate=new RestTemplate();
+
+		
+		Info info= restTemplate.postForObject(Constants.url + "updateProdQty",postProdPlanDetailList, Info.class);
+
+		if(info.getError()==false) {
+			
+			RestTemplate rest = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("productionId",productionId);
+			if(isPlan==1)
+			{
+				map.add("prodStatus",4);
+
+			}
+			else
+			{
+				map.add("prodStatus",5);
+
+			}
+
+			int isUpdated= rest.postForObject(Constants.url + "updateProductionStatus",map, Integer.class);
+
+			System.out.println("isProdUpdated:"+isUpdated);
+		}
+		System.out.println("Info"+info.toString());
+		}
 		catch(Exception e)
 		{
-			System.out.println("Exception In Update Plan Qty");
+			System.out.println("Exception In complete Production");
 		}
-		return model;
+		return "redirect:/showProdHeader";
 	}
 	@RequestMapping(value = "/addMixing", method = RequestMethod.GET)
 	public ModelAndView showMixing(HttpServletRequest request, HttpServletResponse response) {

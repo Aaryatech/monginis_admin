@@ -22,7 +22,7 @@ public class ItemDetail {
 	
 	private int rmQty;
 	
-	private int rmWeight;
+	private float rmWeight;
 	
 	private int delStatus;
 
@@ -100,11 +100,11 @@ public class ItemDetail {
 		this.rmQty = rmQty;
 	}
 
-	public int getRmWeight() {
+	public float getRmWeight() {
 		return rmWeight;
 	}
 
-	public void setRmWeight(int rmWeight) {
+	public void setRmWeight(float rmWeight) {
 		this.rmWeight = rmWeight;
 	}
 

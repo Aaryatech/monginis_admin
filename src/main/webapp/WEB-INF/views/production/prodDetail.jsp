@@ -130,6 +130,8 @@
 									
 
 								</div>
+                        <input type="hidden" value="${planHeader.isPlanned}" name="is_plan"/>
+                        <input type="hidden" value="${planHeader.productionHeaderId}" name="production_id"/>
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Category
@@ -225,7 +227,7 @@
 														 
 														   <c:otherwise>
 														  <td align="left"><input align="left" type="text" name="act_prod_qty${planDetail.productionDetailId}" id="act_prod_qty${planDetail.productionDetailId}"
-														    placeholder="Actual Prod" class="form-control" value="0"
+														    placeholder="Actual Prod" class="form-control" value="${planDetail.productionQty}"
 														    data-rule-required="true" style="width: 65px"disabled/></td>
 														  </c:otherwise>
 														 </c:choose>
@@ -291,13 +293,21 @@
                                    </c:choose>
 									&nbsp;&nbsp;&nbsp;&nbsp;
 									<c:choose>
+									 <c:when test = "${planHeader.productionStatus==1 or planHeader.productionStatus==2 or planHeader.productionStatus==3}">
 									  <c:when test = "${planHeader.isMixing==0}">
                                      <a href="${pageContext.request.contextPath}/addMixing"> <button type="button" class="btn btn-primary">
 											<i class="fa fa-check"></i> Req. Mixing
 										</button></a>
 										
                                     </c:when>
-         
+                                    </c:when>
+                                    
+                                     <c:when test = "${planHeader.productionStatus==4 or planHeader.productionStatus==5}">
+                                  <button type="button" class="btn btn-primary" disabled="disabled">
+											<i class="fa fa-check"></i> Req. Mixing
+										</button>
+										
+                                    </c:when>
                                     <c:when test = "${planHeader.isMixing==1}">
 								<button type="button" class="btn btn-primary"disabled="disabled">
 											<i class="fa fa-check"></i> Req. Mixing
@@ -305,6 +315,7 @@
 										
                                     </c:when>
                                    <c:otherwise>
+                                   
                                    </c:otherwise>
                                    </c:choose>
 										<input type="hidden" name="productionStatus" id="productionStatus" value="${planHeader.productionStatus}"/>
@@ -330,18 +341,18 @@
 									 <c:choose>
          
                                     <c:when test = "${planHeader.productionStatus==4}">
-										<button type="submit" class="btn btn-primary" disabled="disabled">
+										<button type="button" class="btn btn-primary" disabled="disabled">
 											<i class="fa fa-check"></i>Complete Production
 										</button>
                                     </c:when>
          
                                     <c:when test = "${planHeader.productionStatus==5}">
-									    <button type="submit" class="btn btn-primary" disabled="disabled">
+									    <button type="button" class="btn btn-primary" disabled="disabled">
 											<i class="fa fa-check"></i>Complete Production
 										</button>
                                     </c:when>
                                     <c:otherwise>
-									    <button type="submit" class="btn btn-primary">
+									    <button type="button" class="btn btn-primary"  id="complete_prod">
 											<i class="fa fa-check"></i>Complete Production
 										</button>
                                    </c:otherwise>
@@ -475,39 +486,14 @@ function changeQty(id)
 	
 	}
 
- /* function goToManBom(){
-		
-	 alert("inside got to man bom");
-		var prodDate=$("#prod_date").val();
-		
-		var prodId=$("#prod_id").val();
-		
-		alert(prodDate);
-		alert(prodId);
-
-		$.getJSON('${goToManualBom}',
-				{
-			
-			prodId : prodId,
-			prodDate :prodDate,
-			ajax : 'true',
-	});
-		
-		
-	} */
 </script>
 <script type="text/javascript">
-$("#editOrderQty").click(function() {
-	/* var i; 
 
-	var count=document.getElementById("cnt").value;	
-	for(i=0;i<=count;i++)
-		{
-	       $("#order_qty"+i).attr('disabled', !$("#order_qty"+i).attr('disabled'));
-	  
-		}  */
-	});
+$('#complete_prod').click(function(){
+    var form = document.getElementById("validation_form")
+    form.action ="${pageContext.request.contextPath}/completeProd";
+    form.submit();
+});
 </script>
-
 </body>
 </html>
