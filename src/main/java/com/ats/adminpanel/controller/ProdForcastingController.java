@@ -35,6 +35,7 @@ import com.ats.adminpanel.model.item.MCategoryList;
 import com.ats.adminpanel.model.production.GetOrderItemQty;
 import com.ats.adminpanel.model.production.GetProductionItemQty;
 import com.ats.adminpanel.model.production.GetRegSpCakeOrderQty;
+import com.ats.adminpanel.model.production.PlanQtyAjaxResponse;
 import com.ats.adminpanel.model.production.PostProdPlanHeader;
 import com.ats.adminpanel.model.production.PostProductionDetail;
 import com.ats.adminpanel.model.production.PostProductionHeader;
@@ -120,6 +121,7 @@ public class ProdForcastingController {
 		Item[] item = restTemplate.postForObject(Constants.url + "getItemsByCatId", map, Item[].class);
 		ArrayList<Item> itemList = new ArrayList<Item>(Arrays.asList(item));
 		System.out.println("Filter Item List " + itemList.toString());
+		
 		globalItemList=itemList;
 		// -------------------------------------------------------------------------------
 		MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
@@ -235,13 +237,14 @@ public class ProdForcastingController {
 	 */
 
 	@RequestMapping(value = "/getItemsProdQty", method = RequestMethod.GET)
-	public @ResponseBody List<GetProductionItemQty> getItemsProdQty(HttpServletRequest request,
+	public @ResponseBody PlanQtyAjaxResponse getItemsProdQty(HttpServletRequest request,
 			HttpServletResponse response) {
 
 		int maxTimeSlot=0;
-		
+		PlanQtyAjaxResponse planQtyAjaxResponse=new PlanQtyAjaxResponse();
+
 		System.out.println("In method");
-		getProdItemQtyList = new ArrayList<GetProductionItemQty>();
+		//List<GetProductionItemQty> getProdItemQtyList = new ArrayList<GetProductionItemQty>();
 
 		String productionDate = request.getParameter("prodDate");
 		System.out.println("prodDate" + productionDate);
@@ -255,18 +258,20 @@ public class ProdForcastingController {
 		map.add("productionDate", productionDate);
 		map.add("catId", selectedCat);
 		try {
-			ParameterizedTypeReference<List<GetProductionItemQty>> typeRef = new ParameterizedTypeReference<List<GetProductionItemQty>>() {
-			};
-			ResponseEntity<List<GetProductionItemQty>> responseEntity = rest.exchange(Constants.url + "getProduItemQty",
-					HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			
+			GetProductionItemQty[] responseEntity = rest.postForObject(Constants.url + "getProduItemQty",map,GetProductionItemQty[].class);
 
 			
 			//PostProdPlanHeader postProductionHeader= rest.postForObject(Constants.url + "getProductionTimeSlot", map,PostProdPlanHeader.class);
 
 			//maxTimeSlot=postProductionHeader.getTimeSlot();
+			ArrayList<GetProductionItemQty> getProdItemQtyList = new ArrayList<GetProductionItemQty>(Arrays.asList(responseEntity));
+			System.out.println("Filter Item List " + getProdItemQtyList.toString());
 			
-			getProdItemQtyList = responseEntity.getBody();
-
+			
+			planQtyAjaxResponse.setGetProductionItemQtyList(getProdItemQtyList);
+			planQtyAjaxResponse.setItemList(globalItemList);
+			System.out.println("planQtyAjaxResponse"+planQtyAjaxResponse.toString());
 			// getOrderItemQtyList=rest.postForObject(Constants.url + "getOrderAllItemQty",
 			// map, List.class);
 
@@ -276,7 +281,7 @@ public class ProdForcastingController {
 
 		System.out.println("List of Orders : " + getProdItemQtyList.toString());
 
-		return getProdItemQtyList;
+		return planQtyAjaxResponse;
 
 	}
 

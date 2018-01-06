@@ -452,17 +452,41 @@
 							},
 							function(data) {
 
-
+                               
 								var len = data.length;
-                                //alert(data.length);
-								//$('#table1 td').remove();
-
-
-								$.each(data,function(key, item) {
-									//alert(item.itemId);alert('qty'+id+''+item.itemId);
-									document.getElementById('qty'+id+''+item.itemId).value = item.qty;
+								$.each(data.itemList,function(key, item) {
+							         document.getElementById('qty'+id+''+item.id).value =0;
+							
+							})
+								
+								
+                                var prodQtyListLength=data.getProductionItemQtyList.length;
+                              if(prodQtyListLength>0)
+                                {
+								$.each(data.getProductionItemQtyList,function(key, prod) {
+									
+									$.each(data.itemList,function(key, item) {
+										
+										if(prod.itemId==item.id)
+											{
+									         document.getElementById('qty'+id+''+prod.itemId).value = prod.qty;
+											}
+										
+										
+									
+									})
 
 								})
+                                }
+                                else
+                                	{
+                                       $.each(data.itemList,function(key, item) {
+									         document.getElementById('qty'+id+''+item.id).value =0;
+									
+									})
+                                	
+                                	} 
+                                
 								
 							});
 		     

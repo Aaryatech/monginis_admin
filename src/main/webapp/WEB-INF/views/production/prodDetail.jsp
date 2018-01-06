@@ -293,14 +293,13 @@
                                    </c:choose>
 									&nbsp;&nbsp;&nbsp;&nbsp;
 									<c:choose>
-									 <c:when test = "${planHeader.productionStatus==1 or planHeader.productionStatus==2 or planHeader.productionStatus==3}">
-									  <c:when test = "${planHeader.isMixing==0}">
+									  <c:when test = "${planHeader.isMixing==0 && planHeader.productionStatus==1 or planHeader.productionStatus==2 or planHeader.productionStatus==3}">
                                      <a href="${pageContext.request.contextPath}/addMixing"> <button type="button" class="btn btn-primary">
 											<i class="fa fa-check"></i> Req. Mixing
 										</button></a>
 										
                                     </c:when>
-                                    </c:when>
+                                  
                                     
                                      <c:when test = "${planHeader.productionStatus==4 or planHeader.productionStatus==5}">
                                   <button type="button" class="btn btn-primary" disabled="disabled">
@@ -326,6 +325,7 @@
                                     <button type="submit" class="btn btn-primary" id="editPlanQty">
 											<i class="fa fa-check"></i> Edit Plan Qty
 									</button>
+									
                                     </c:when>
          
                                     <c:when test = "${planHeader.productionStatus==2}">
@@ -335,6 +335,7 @@
                                     </c:when>
          
                                    <c:otherwise>
+                                 
                                    </c:otherwise>
                                    </c:choose>
                                    &nbsp;&nbsp;&nbsp;&nbsp;
