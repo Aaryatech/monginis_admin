@@ -214,8 +214,8 @@ public class ViewProdController {
 		try {
 			int prodStatus=Integer.parseInt(request.getParameter("productionStatus"));
 
-			//int productionId=Integer.parseInt(request.getParameter("prod_id"));
-			//System.out.println("productionId"+productionId);
+			int productionId=Integer.parseInt(request.getParameter("production_id"));
+			System.out.println("productionId"+productionId);
 
 			prodId=productionId;
 			
@@ -257,19 +257,20 @@ public class ViewProdController {
 	{
 			System.out.println("Exception In Update Plan Qty"+e.getMessage());
 	}
-		return "redirect:/showProdHeader";
+		return "redirect:/getProdDetail/"+prodId;
 	}
 	
 	@RequestMapping(value = "/completeProd", method = RequestMethod.POST)
 	public String completeProduction(HttpServletRequest request, HttpServletResponse response) {
 		
 		ModelAndView model = new ModelAndView("production/prodDetail");
-
+		int prodId=0;
 		try {
 			int prodStatus=Integer.parseInt(request.getParameter("productionStatus"));
 			int productionId=Integer.parseInt(request.getParameter("production_id"));
 			int isPlan=Integer.parseInt(request.getParameter("is_plan"));
-
+			prodId=productionId;
+			
 			System.out.println("completeProd prodStatus"+prodStatus);
 		
 		   for(int i=0;i<postProdPlanDetailList.size();i++)
