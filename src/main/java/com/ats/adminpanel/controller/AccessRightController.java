@@ -6,9 +6,14 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
@@ -84,6 +89,7 @@ public class AccessRightController {
 					subModuleJson.setSubModuleDesc(accessRightSubModule.getSubModuleDesc());
 					subModuleJson.setSubModuleMapping(accessRightSubModule.getSubModuleMapping());
 					subModuleJson.setSubModulName(accessRightSubModule.getSubModulName());
+					subModuleJson.setType(accessRightSubModule.getType());
 					
 				for(int k=0;k<subModuleId.length;k++)
 				{
@@ -138,6 +144,7 @@ public class AccessRightController {
 			
 			System.out.println("JSON  "+newsLetterJSON);
 			assignRoleDetailList.setRoleJson(newsLetterJSON);
+			
 		} catch (JsonProcessingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -200,4 +207,25 @@ public class AccessRightController {
 		return "redirect:/showAssignRole";
 	}
 	
+	@RequestMapping(value = "/showAssignUserDetail/{userId}/{userName}/{roleName}", method = RequestMethod.GET)
+	public ModelAndView showAssignUserDetail(@PathVariable int userId, @PathVariable String userName, @PathVariable String roleName, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("accessRight/viewAssignRoleDetails");
+		
+		 MultiValueMap<String, Object> map=new LinkedMultiValueMap<String, Object>();
+		 map.add("usrId", userId);
+		 ParameterizedTypeReference<List<ModuleJson>> typeRef = new ParameterizedTypeReference<List<ModuleJson>>() {
+			};
+			ResponseEntity<List<ModuleJson>> responseEntity = rest.exchange(Constants.url + "getRoleJson",
+					HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			
+			 List<ModuleJson> newModuleList = responseEntity.getBody();
+			 
+			 model.addObject("moduleJsonList", newModuleList);
+			 model.addObject("userName",userName);
+			 model.addObject("roleName",roleName);
+			 
+	
+		return model;
+	}
 }

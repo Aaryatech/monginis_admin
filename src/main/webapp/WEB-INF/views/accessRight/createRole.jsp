@@ -188,7 +188,7 @@
 
 
 
-
+	<c:set var="index" value="0" />
 								<c:forEach items="${allModuleList}" var="allModuleList"
 									varStatus="count">
 									
@@ -209,7 +209,8 @@
 									<tr>
 			<!-- 	<td> &nbsp; </td>
 											</tr><tr>  -->
-										<td><c:out value="${count.index+1}" />  <input type="checkbox" id="aa${allModuleList.moduleId}" class="select_all" value="${allModuleList.moduleId}"
+										 <c:set var="index" value="${index+1 }" />
+												<td><c:out value="${index}" />    <input type="checkbox" id="aa${allModuleList.moduleId}" class="select_all" value="${allModuleList.moduleId}"
 																  onClick="selectAll(this, ${allModuleList.moduleId})"/></td>
 
 										<td><b><c:out value="${allModuleList.moduleName}" /></b></td>
@@ -331,7 +332,8 @@
 									<tr>
 			<!-- 	<td> &nbsp; </td>
 											</tr><tr>  -->
-										<td><c:out value="${count.index+1}" /></td>
+										 <c:set var="index" value="${index+1 }" />
+												<td><c:out value="${index}" /> </td>
 
 										<td><b><c:out value="${allModuleList.moduleName}" /></b></td>
 
@@ -453,7 +455,8 @@
 									<tr>
 			<!-- 	<td> &nbsp; </td>
 											</tr><tr>  -->
-										<td><c:out value="${count.index+1}" /></td>
+										 <c:set var="index" value="${index+1 }" />
+												<td><c:out value="${index}" /> </td>
 
 										<td><b><c:out value="${allModuleList.moduleName}" /></b></td>
 
@@ -575,7 +578,8 @@
 									<tr>
 			<!-- 	<td> &nbsp; </td>
 											</tr><tr>  -->
-										<td><c:out value="${count.index+1}" /></td>
+									 <c:set var="index" value="${index+1 }" />
+												<td><c:out value="${index}" /> </td>
 
 										<td><b><c:out value="${allModuleList.moduleName}" /></b></td>
 

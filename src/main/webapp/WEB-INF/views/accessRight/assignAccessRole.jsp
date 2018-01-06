@@ -114,7 +114,7 @@
 		</div>
 		<!-- END Page Title -->
 
-		
+
 		<!-- BEGIN Main Content -->
 		<div class="box">
 			<div class="box-title">
@@ -122,13 +122,61 @@
 					<i class="fa fa-bars"></i>Assign Access Role
 				</h3>
 
-			</div> 
-				<div class=" box-content">
-				<form id="validation-form"
-				action="submitAssignedRole"
-				method="post">
-				 
-				
+			</div>
+			<div class=" box-content">
+				<form id="validation-form" action="submitAssignedRole" method="post">
+
+					<div class="box-content">
+
+						<div class="col-md-2">Employee Name</div>
+						<div class="col-md-4" style="text-align: center">
+							<input type="text" name="empName" id="empName"
+								class="form-control" required data-rule-required="true" readonly>
+
+
+
+						</div>
+
+						<input type="hidden" id="empId" name="empId">
+					</div>
+					<br />
+					<br />
+					<br />
+					<div class="box-content">
+
+						<div class="col-md-2">Role</div>
+						<div class="col-md-4" style="text-align: center">
+							<select name="role" id="role" class="form-control" tabindex="6"
+								placeholder="Selete Role" required data-rule-required="true">
+
+
+								<option value="" disabled selected>Select Role</option>
+
+
+								<c:forEach items="${createdRoleList}" var="createdRoleList"
+									varStatus="count">
+									<option value="${createdRoleList.roleId}"><c:out value="${createdRoleList.roleName}"/></option>
+								</c:forEach>
+
+							</select>
+						</div>
+
+
+					</div>
+					<br />
+					<br />
+					<br />
+					<div class="box-content">
+
+						<div class="col-md-2"></div>
+						<div class="col-md-4" style="text-align: center">
+							<input type="submit" value="Submit" class="btn btn-info">
+
+						</div>
+					</div>
+					<br />
+					<br />
+
 					<div class="row">
 						<div class="col-md-12 table-responsive">
 							<table class="table table-bordered table-striped fill-head "
@@ -138,109 +186,77 @@
 										<th>Sr.No.</th>
 										<th>Users Name</th>
 										<th>Assigned Role</th>
-										<th>Add/Edit</th>
-										 
+										<th>Add/Edit/View</th>
+
 
 
 									</tr>
 								</thead>
-								
+
 								<tbody>
 
-									<c:forEach items="${userList}" var="userList"
-													varStatus="count">
- 
-													<tr>
-												 
-													 
-													  <c:set var = "empRoll" value=""/>
-													    <c:set var = "btnClass" value="glyphicon glyphicon-plus"/>
-														<td ><c:out value="${count.index+1}" /></td>
+									<c:forEach items="${userList}" var="userList" varStatus="count">
 
-														<td align="left"><c:out
-																value="${userList.username}" /></td>
-																
-																 
-																
-																  <c:forEach items="${createdRoleList}" var="createdRoleList"
-													varStatus="count">
-																<c:choose>
+										<tr>
+
+
+											<c:set var="empRoll" value="" />
+											<c:set var="btnClass" value="glyphicon glyphicon-plus" />
+											<c:set var="detail" value="" />
+											<c:set var="add" value="Assign" />
+											<td><c:out value="${count.index+1}" /></td>
+
+											<td align="left"><c:out value="${userList.username}" /></td>
+
+
+
+											<c:forEach items="${createdRoleList}" var="createdRoleList"
+												varStatus="count">
+												<c:choose>
 													<c:when test="${createdRoleList.roleId==userList.roleId}">
-													  <c:set var = "empRoll" value="${createdRoleList.roleName}"/>
-													 
-													  <c:set var = "btnClass" value="glyphicon glyphicon-edit"/>
+														<c:set var="empRoll" value="${createdRoleList.roleName}" />
+
+														<c:set var="btnClass" value="glyphicon glyphicon-edit" />
+														<c:set var="detail" value="glyphicon glyphicon-th-list" />
+														<c:set var="add" value="Edit" />
 													</c:when>
-													 </c:choose>
-													 </c:forEach>  
-													 
-													  <td align="left"><c:out
-																value="${empRoll}" /></td>
-																
-																
-												 	   
-															 
-																
-							<td><span class='<c:out value="${btnClass}" />'  onclick="editRole('${userList.username}', ${userList.id})"></span></td>
-										 				</tr>
-																 
-												</c:forEach>
+												</c:choose>
+											</c:forEach>
+
+											<td align="left"><c:out value="${empRoll}" /></td>
+
+
+
+
+
+											<td><span class='<c:out value="${btnClass}" />'
+												data-toggle="tooltip" title='<c:out value="${add}" />'
+						  						onclick="editRole('${userList.username}', ${userList.id})"></span>
+												<a
+												href="${pageContext.request.contextPath}/showAssignUserDetail/<c:out value="${userList.id}" />/<c:out value="${userList.username}" />/${empRoll}"
+												data-toggle="tooltip" title="Access Detail"> <span
+													class='<c:out value="${detail}" />'></span>
+											</a></td>
+										</tr>
+
+									</c:forEach>
 								</tbody>
 							</table>
 						</div>
 					</div>
-					
-					<input type="hidden" id="empId" name="empId">
-					
-					<div class="box-content">
 
-							<div class="col-md-2">Employee Name</div>
-							<div class="col-md-4" style="text-align: center">
-								<input type="text" name="empName" id="empName" class="form-control"
-									 required data-rule-required="true" readonly>
-								  
-									
-									  
-							</div>
 
- 
-						</div><br/><br/><br/>
-						
-					<div class="box-content">
 
-							<div class="col-md-2">Role</div>
-							<div class="col-md-4" style="text-align: center">
-								<select name="role" id="role" class="form-control"
-									tabindex="6" placeholder="Selete Role" required data-rule-required="true">
-								 
-									
-									<option value="" disabled selected>Select Role</option>
-									 
-									
-									  <c:forEach items="${createdRoleList}" var="createdRoleList"
-										varStatus="count">
-										<option value="${createdRoleList.roleId}"><c:out value="${createdRoleList.roleName}"/></option>
-									</c:forEach>  
 
-								</select>
-							</div>
 
- 
-						</div><br/><br/><br/>
-						<div class="box-content">
 
-							<div class="col-md-2"> </div>
-							<div class="col-md-4" style="text-align: center">
-						<input type="submit" value="Submit" class="btn btn-info">
-						
-						</div>
-						</div><br/>
-						
-</form>
+
+				</form>
+			</div>
+
+
+
 		</div>
-		
-				 
-	 
-	</div>
 	</div>
 	<!-- END Main Content -->
 
@@ -251,9 +267,9 @@
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
 
- 
 
-	
+
+
 
 	<!--basic scripts-->
 	<script
@@ -310,20 +326,20 @@
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
-		
-			<script type="text/javascript"
+
+	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
-<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-		
-		
-		
-		<script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
+
+
+
+	<script>
 		function editRole(empName, empId)
 		{
 			
@@ -334,8 +350,8 @@
 			 
 		}
 		</script>
-		
-		
-		
+
+
+
 </body>
 </html>

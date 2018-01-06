@@ -1087,15 +1087,21 @@ hr.margin-0  {margin: 0;}
 .table-advance i[class^="fa-"] {
     margin-right: 5px;
 }
-.table-advance tbody > tr:nth-child(even) > td,
-.table-advance tbody > tr:nth-child(even) > th {
+.table-advance tbody > tr:nth-child(even) > {
   background-color: #f6f6f6;
 }
+
+
 .table-advance tbody > tr {
     border-left: 4px solid #fff;
 }
 .table-advance tbody > tr:nth-child(even) {
     border-left: 4px solid #f6f6f6;
+     background-color: #f6f6f6;
+}
+
+.table-advance tbody > tr:hover{
+  background-color: #ffa;
 }
 .table-advance th,
 .table-advance td {
