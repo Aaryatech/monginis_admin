@@ -236,12 +236,18 @@ int globalIsPlan;
 				System.out.println(" insert List " + billOfMaterialHeader.toString());
 				int prodId=billOfMaterialHeader.getProductionId();
 				Info info = restTemplate.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);
+				System.out.println(info);
 				
-				map = new LinkedMultiValueMap<String, Object>();
-				map.add("productionId", prodId);
-				map.add("flag", 1);
-				int updateisBom = restTemplate.postForObject(Constants.url + "updateisMixingandBom", map,
-						Integer.class);
+				if(info.getError()==false)
+				{
+					map = new LinkedMultiValueMap<String, Object>();
+					map.add("productionId", prodId);
+					map.add("flag", 1);
+					int updateisBom = restTemplate.postForObject(Constants.url + "updateisMixingandBom", map,
+							Integer.class); 
+					System.out.println("updateIsBom "+updateisBom);
+				}
+				
 
 				 ret="redirect:/getBomListforProduction";
 				
@@ -293,13 +299,18 @@ int globalIsPlan;
 				System.out.println(" insert List " + billOfMaterialHeader.toString());
 				int mixId=billOfMaterialHeader.getProductionId();
 				Info info = restTemplate.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);
+				System.out.println(info);
+				
+				if(info.getError()==false)
+				{
+					map = new LinkedMultiValueMap<String, Object>(); 
+					map.add("mixId", mixId); 
+					int updateisBom = restTemplate.postForObject(Constants.url + "updateisBomInMixing", map,
+							Integer.class);
+					System.out.println("updateIsBom in Mixing "+updateisBom);
+				}
 
-				map = new LinkedMultiValueMap<String, Object>();
 				
-				map.add("mixId", mixId);
-				
-				int updateisBom = restTemplate.postForObject(Constants.url + "updateisBomInMixing", map,
-						Integer.class);
 				 ret="redirect:/getBomListforMixing";
 			}
 
