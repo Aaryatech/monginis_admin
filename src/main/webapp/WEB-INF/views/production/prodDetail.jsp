@@ -96,7 +96,7 @@
 								<i class="fa fa-bars"></i> View Production Detail
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showProdHeader">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -293,6 +293,7 @@
                                    </c:choose>
 									&nbsp;&nbsp;&nbsp;&nbsp;
 									<c:choose>
+									
 									  <c:when test = "${planHeader.isMixing==0 && planHeader.productionStatus==1 or planHeader.productionStatus==2 or planHeader.productionStatus==3}">
                                      <a href="${pageContext.request.contextPath}/addMixing"> <button type="button" class="btn btn-primary">
 											<i class="fa fa-check"></i> Req. Mixing

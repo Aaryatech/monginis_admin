@@ -77,7 +77,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>RM Unit Of Measure
+						<i class="fa fa-file-o"></i>Unit Of Measure Master
 					</h1>
 
 				</div>

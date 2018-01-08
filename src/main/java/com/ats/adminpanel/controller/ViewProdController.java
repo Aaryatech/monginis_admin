@@ -67,7 +67,7 @@ public class ViewProdController {
 	private int productionId;
 	private int isMixing;
 	private String globalProdDate;
-	
+	String fromDate,toDate;
 	@RequestMapping(value = "/showProdHeader", method = RequestMethod.GET)
 	public ModelAndView showProdHeader(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -80,7 +80,7 @@ public class ViewProdController {
 		RestTemplate restTemplate = new RestTemplate();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		
-		String fromDate,toDate;
+		
 		if(request.getParameter("from_date")==null || request.getParameter("to_date")==null) {
 		Date date=new Date();
 		DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
@@ -308,6 +308,21 @@ public class ViewProdController {
 			int isUpdated= rest.postForObject(Constants.url + "updateProductionStatus",map, Integer.class);
 
 			System.out.println("isProdUpdated:"+isUpdated);
+			try {
+			 map = new LinkedMultiValueMap<String, Object>();
+			 map.add("fromDate", fromDate);
+			 map.add("toDate", toDate);
+
+			GetProdPlanHeaderList prodHeader=restTemplate.postForObject(Constants.url + "getProdPlanHeader",map, GetProdPlanHeaderList.class);
+			
+			prodPlanHeaderList=new ArrayList<>();
+			
+			prodPlanHeaderList=prodHeader.getProdPlanHeader();
+			}
+			catch(Exception e)
+			{
+				System.out.println("Exception In Complete Production:"+e.getMessage());
+			}
 		}
 		System.out.println("Info"+info.toString());
 		}
@@ -315,7 +330,7 @@ public class ViewProdController {
 		{
 			System.out.println("Exception In complete Production");
 		}
-		return "redirect:/showProdHeader";
+		return "redirect:/getProdDetail/"+prodId;
 	}
 	@RequestMapping(value = "/addMixing", method = RequestMethod.GET)
 	public ModelAndView showMixing(HttpServletRequest request, HttpServletResponse response) {
