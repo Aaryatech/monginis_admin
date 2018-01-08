@@ -219,10 +219,11 @@
 															<td><c:out value="${count.index+1}" /></td>
 															<c:set var="srNo" value="${srNo+1}" />
 															<td><c:out value="${bomwithdetaild.rmName}" /></td>
-
+																
+																<td><c:out value="${bomwithdetaild.autoRmReqQty}" /></td>
 															<td><c:out value="${bomwithdetaild.rmReqQty}" /></td>
   															
-  															<td><c:out value="${bomwithdetaild.autoRmReqQty}" /></td>
+  															
   															<td><c:out value="${bomwithdetaild.rmIssueQty}" /></td>
 																 
 

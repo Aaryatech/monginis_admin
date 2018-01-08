@@ -394,15 +394,18 @@ public class MaterialReceiptNoteController {
 
 	}
 
+	int flag=0;
 	@RequestMapping(value = "/editGateEntry", method = RequestMethod.GET)
 	public ModelAndView editStoreMaterialReciept(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/editGateEntry");
 		addmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
 
+		flag = Integer.parseInt(request.getParameter("flag"));
 		int mrnId = Integer.parseInt(request.getParameter("mrnId"));
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("mrnId", mrnId);
+		System.out.println("flag"+flag);
 
 		RestTemplate rest = new RestTemplate();
 		materialRecNoteHeader = rest.postForObject(Constants.url + "/getMaterialRecNotesHeaderDetails", map,
@@ -642,7 +645,17 @@ public class MaterialReceiptNoteController {
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
-		return "redirect:/gateEntries";
+		
+		String ret=null;
+		if(flag==0)
+		{
+			ret="redirect:/gateEntries";
+		}
+		else if(flag==1)
+		{
+			ret="redirect:/showAllStoreMaterialReciept";
+		}
+		return ret;
 	}
 
 	@RequestMapping(value = "/submitMaterialStore", method = RequestMethod.POST)

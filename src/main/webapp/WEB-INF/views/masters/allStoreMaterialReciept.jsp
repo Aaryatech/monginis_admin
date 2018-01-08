@@ -197,7 +197,7 @@
 																
 						<td><a href="${pageContext.request.contextPath}/showStoreMaterialReciept?mrnId=${materialRecNoteList.mrnId}" class="action_btn" >
 						<abbr title="Details"><i class="fa fa-list"></i></abbr></a>
-						<a href="${pageContext.request.contextPath}/editGateEntry?mrnId=${materialRecNoteList.mrnId}"
+						<a href="${pageContext.request.contextPath}/editGateEntry?mrnId=${materialRecNoteList.mrnId}&flag=1"
 									><span class="glyphicon glyphicon-edit"><abbr title='Edit'></abbr></span> </a>
 						</td>
 						

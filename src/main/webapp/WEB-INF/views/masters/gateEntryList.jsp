@@ -157,7 +157,7 @@
 													 </c:forEach>
 																
 																
-						<td><a href="${pageContext.request.contextPath}/editGateEntry?mrnId=${materialRecNoteList.mrnId}" class="action_btn" >
+						<td><a href="${pageContext.request.contextPath}/editGateEntry?mrnId=${materialRecNoteList.mrnId}&flag=0" class="action_btn" >
 						<abbr title="Edit"><i class="fa fa-list"></i></abbr></a></td>
 						
 																</tr>

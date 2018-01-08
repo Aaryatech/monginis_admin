@@ -564,7 +564,7 @@
 		
 		function edit(key)
 		{
-			alert(key);
+			//alert(key);
 			document.getElementById("recdQty"+key).disabled = false;
 			document.getElementById("edit"+key).style.visibility="hidden";
 			document.getElementById("ok"+key).style.visibility="visible";
@@ -573,7 +573,7 @@
 		}
 		function submit(key)
 		{
-			alert("key"+key);
+			//alert("key"+key);
 			var qty=document.getElementById("recdQty"+key).value;
 			document.getElementById("recdQty"+key).disabled = true;
 			document.getElementById("edit"+key).style.visibility="visible";
@@ -599,7 +599,7 @@
 		}
 		function del(key)
 		{
-			alert("key1"+key);
+			//alert("key1"+key);
 			var key=key;
 			$('#loader').show();
 			$

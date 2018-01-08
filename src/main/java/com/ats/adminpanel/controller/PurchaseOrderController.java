@@ -809,7 +809,7 @@ public class PurchaseOrderController {
 	 	
 		
 		
-		return "redirect:/showDirectPurchaseOrder";
+		return "redirect:/showPurchaseOrder";
 	}
 
 	
