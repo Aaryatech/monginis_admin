@@ -249,4 +249,19 @@ public class BillOfMaterialHeader {
 		this.rejApproveDate = rejApproveDate;
 	}
 
+	@Override
+	public String toString() {
+		return "BillOfMaterialHeader [reqId=" + reqId + ", productionId=" + productionId + ", productionDate="
+				+ productionDate + ", isProduction=" + isProduction + ", fromDeptId=" + fromDeptId + ", fromDeptName="
+				+ fromDeptName + ", toDeptId=" + toDeptId + ", toDeptName=" + toDeptName + ", senderUserid="
+				+ senderUserid + ", reqDate=" + reqDate + ", approvedUserId=" + approvedUserId + ", approvedDate="
+				+ approvedDate + ", status=" + status + ", exBool1=" + exBool1 + ", delStatus=" + delStatus
+				+ ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exVarchar1=" + exVarchar1 + ", exVarchar2="
+				+ exVarchar2 + ", billOfMaterialDetailed=" + billOfMaterialDetailed + ", isPlan=" + isPlan
+				+ ", isManual=" + isManual + ", rejUserId=" + rejUserId + ", rejDate=" + rejDate + ", rejApproveUserId="
+				+ rejApproveUserId + ", rejApproveDate=" + rejApproveDate + "]";
+	}
+
+	
+	
 }

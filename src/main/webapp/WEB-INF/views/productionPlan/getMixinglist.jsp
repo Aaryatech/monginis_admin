@@ -77,7 +77,15 @@
 			<div class="page-title">
 				<div>
 					<h1>
+					<c:choose>
+						<c:when test="${flag==15}">
 						<i class="fa fa-file-o"></i> Search Mixing Todays List
+						</c:when>
+						<c:when test="${flag==14}">
+						<i class="fa fa-file-o"></i> Search Mixing List For Production Department
+						</c:when>
+					</c:choose>
+						
 					</h1>
 				</div>
 			</div>
@@ -159,7 +167,7 @@
 																</td>
 																
 																
-						<td><a href="${pageContext.request.contextPath}/viewDetailMixRequest?mixId=${todaysmixrequest.mixId}" class="action_btn" >
+						<td><a href="${pageContext.request.contextPath}/viewDetailMixRequest?mixId=${todaysmixrequest.mixId}&deptId=${deptId}" class="action_btn" >
 						<abbr title="Edit"><i class="fa fa-list"></i></abbr></a></td>
 						
 																</tr>
@@ -192,6 +200,8 @@
 									<div class="col-sm-5 col-lg-3 controls">
 										<input class="form-control date-picker" id="from_date" size="16"
 											 type="text" name="from_date" required />
+											 <input class="form-control " id="deptId" size="16"
+											 type="hidden" name="deptId" value="${flag}" required />
 									
 										</div>
 										
@@ -351,6 +361,7 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 		
 		<script type="text/javascript">
+		var deptId=$("#deptId").val();
 		function searchMix() {
 
 		 
@@ -403,9 +414,10 @@
 												  	tr.append($('<td></td>').html(itemList.productionBatch));
 												  	tr.append($('<td></td>').html(itemList.timeSlot));
 												  	tr.append($('<td></td>').html(sts));
-												  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailMixRequest?mixId="+itemList.mixId+"' class='action_btn'> <abbr title='detailes'> <i class='fa fa-list' ></i></abbr> "));
+												  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailMixRequest?mixId="+itemList.mixId+"&deptId="+deptId+"'  class='action_btn'> <abbr title='detailes'> <i class='fa fa-list' ></i></abbr> "));
+												  	 
 													$('#table_grid tbody').append(tr);
-
+													
 													 
  
 												})  
@@ -468,7 +480,7 @@
 											  	tr.append($('<td></td>').html(itemList.productionBatch));
 											  	tr.append($('<td></td>').html(itemList.timeSlot));
 											  	tr.append($('<td></td>').html(sts));
-											  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailMixRequest?mixId="+itemList.mixId+"' class='action_btn'> <abbr title='detailes'> <i class='fa fa-list' ></i></abbr> "));
+											  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailMixRequest?mixId="+itemList.mixId+"&deptId="+deptId+"' class='action_btn'> <abbr title='detailes'> <i class='fa fa-list' ></i></abbr> "));
 												
 												$('#table_grid tbody').append(tr);
 

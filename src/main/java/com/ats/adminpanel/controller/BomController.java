@@ -395,6 +395,7 @@ int globalIsPlan;
 		RestTemplate rest = new RestTemplate();
 		GetBillOfMaterialList getBillOfMaterialList= rest.postForObject(Constants.url + "/getBOMHeaderList",map, GetBillOfMaterialList.class);
 		getBOMListall  = getBillOfMaterialList.getBillOfMaterialHeader();
+		System.out.println("getBOMListall"+getBOMListall.toString());
 		return getBOMListall;
 	
 

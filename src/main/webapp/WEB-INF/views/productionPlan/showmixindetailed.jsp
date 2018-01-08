@@ -203,17 +203,17 @@
 															<td><c:out value="${mixwithdetaild.receivedQty}" /></td>
 
 															<c:choose>
-																<c:when test="${mixheader.status==0}">
+																<c:when test="${(mixheader.status==0) and (deptId==15)}">
 																	<td><input type="text"
 																		name='production_Qty<c:out
 																		value="${mixwithdetaild.mixing_detailId}" />'
 																		class="form-control"
-																		value=<c:out value="${mixwithdetaild.productionQty}" />></td>
+																		value=<c:out value="${mixwithdetaild.productionQty}" /> pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
 																<td><input type="text"
 																		name='rejected_Qty<c:out  
 																		value="${mixwithdetaild.mixing_detailId}" />'
 																		class="form-control"
-																		value=<c:out value="${mixwithdetaild.rejectedQty}" />></td>
+																		value=<c:out value="${mixwithdetaild.rejectedQty}" /> pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
 																
 																</c:when>
 																<c:otherwise>
@@ -240,7 +240,7 @@
 									<div align="center" class="form-group">
 										<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 											<c:choose>
-												<c:when test="${mixheader.status!=2}">
+												<c:when test="${(mixheader.status!=2) and (deptId==15)}">
 										 			<input type="submit" class="btn btn-primary"
 													value="complet Production">
 											    </c:when>
@@ -248,7 +248,7 @@
 								
 						
 											<c:choose>
-												<c:when test="${mixheader.status!=2}">
+												<c:when test="${(mixheader.status!=2) and (deptId==15)}">
 													<c:choose>
 														<c:when test="${mixheader.isBom==0}"> 
 															<a href="${pageContext.request.contextPath}/showBom/${mixheader.mixId}/0/${date}/0"><input type="button" class="btn btn-primary"

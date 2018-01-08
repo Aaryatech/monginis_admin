@@ -392,13 +392,13 @@
 							  $.each(
 											data,
 											function(key, itemList) {
-												var stats;
+												
 												var bgcolor;
 												
 												
-											if(itemList.status==0)
-												{
-												stats="Pending";
+											 if(itemList.status==0)
+												{ 
+												 var stats="Pending";
 												var tr = $('<tr></tr>');
 											  	tr.append($('<td></td>').html(key+1));
 
@@ -412,10 +412,10 @@
 												
 												$('#table_grid tbody').append(tr);
 												
-												}
+												} 
 											else if(itemList.status==1)
 												{
-												stats="Approved";
+												var stats="Approved";
 												var tr = $('<tr></tr>');
 											  	tr.append($('<td style="color:blue"></td>').html(key+1));
 
@@ -431,7 +431,7 @@
 												}
 											else if(itemList.status==2)
 											{
-											stats="Rejected";
+												 var stats="Rejected";
 											var tr = $('<tr></tr>');
 										  	tr.append($('<td style="color:red"></td>').html(key+1));
 
@@ -441,40 +441,36 @@
 										  	tr.append($('<td style="color:red"></td>').html(itemList.reqDate));
 										  
 										  	tr.append($('<td style="color:red"></td>').html(stats));
-										  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/bomDetailDepWise?reqId="+itemList.reqId+"&fromDept="+fromDept+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
+										  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
 											
 											$('#table_grid tbody').append(tr);
-											}
+											} 
+											 
 											else 
-												{
+											{
+												var stats;
 												if(itemList.status==3)
 													{
-													stats="Approved Rejected";
+													 stats="Approved Rejected";
 													}
-												else
-													{
-													stats="Request Closed";
-													}
-													
-												var tr = $('<tr></tr>');
-											  	tr.append($('<td style="color:green"></td>').html(key+1));
-
-											  	tr.append($('<td style="color:green"></td>').html(itemList.fromDeptName));
-											  	
-
-											  	tr.append($('<td style="color:green"></td>').html(itemList.reqDate));
-											  
-											  	tr.append($('<td style="color:green"></td>').html(stats));
-											  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
-												
-												$('#table_grid tbody').append(tr);
+												else{
+													stats="Closed";
 												}
-											
-											
-												
-												
-
 												 
+											var tr = $('<tr></tr>');
+										  	tr.append($('<td style="color:green"></td>').html(key+1));
+
+										  	tr.append($('<td style="color:green"></td>').html(itemList.fromDeptName));
+										  	
+
+										  	tr.append($('<td style="color:green"></td>').html(itemList.reqDate));
+										  
+										  	tr.append($('<td style="color:green"></td>').html(stats));
+										  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
+											
+											$('#table_grid tbody').append(tr);
+											} 
+											
 
 											})  
 							});

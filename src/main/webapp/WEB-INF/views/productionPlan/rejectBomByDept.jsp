@@ -179,12 +179,12 @@
 														
 														<td><input type="text" name='returnQty<c:out
 													value="${bomwithdetaild.reqDetailId}" />' class="form-control" value=
-													<c:out value="${bomwithdetaild.returnQty}" />></td>
+													<c:out value="${bomwithdetaild.returnQty}" /> pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
 														
 														
 													<td><input type="text" name='rejectedQty<c:out
 													value="${bomwithdetaild.reqDetailId}" />' class="form-control" value=
-													<c:out value="${bomwithdetaild.rejectedQty}" />></td>
+													<c:out value="${bomwithdetaild.rejectedQty}" /> pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
 													
 															
 															

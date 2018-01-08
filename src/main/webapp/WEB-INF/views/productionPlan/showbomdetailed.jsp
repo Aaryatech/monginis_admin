@@ -227,7 +227,7 @@
 																value="${bomwithdetaild.reqDetailId}" />'
 																		class="form-control"
 																		value=<c:out
-																value="${bomwithdetaild.rmIssueQty}" />></td>
+																value="${bomwithdetaild.rmIssueQty}" /> pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
 																</c:when>
 																<c:otherwise>
 																	<td><c:out value="${bomwithdetaild.rmIssueQty}" /></td>

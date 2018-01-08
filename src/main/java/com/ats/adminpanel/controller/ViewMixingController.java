@@ -21,6 +21,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.productionplan.GetMixingList;
 import com.ats.adminpanel.model.productionplan.MixingDetailed;
 import com.ats.adminpanel.model.productionplan.MixingHeader;
@@ -39,7 +40,7 @@ public class ViewMixingController {
 	public List<MixingDetailed> mixwithdetaild = new ArrayList<MixingDetailed>();
 	
 	public MixingHeader mixingHeader=new MixingHeader();
-	
+	 
 	
 	@RequestMapping(value = "/getMixingList", method = RequestMethod.GET)
 	public ModelAndView getMixingList(HttpServletRequest request, HttpServletResponse response) {
@@ -53,15 +54,52 @@ public class ViewMixingController {
 		RestTemplate rest = new RestTemplate();
 		
 			GetMixingList getMixingList= rest.getForObject(Constants.url + "/gettodaysMixingRequest", GetMixingList.class);
-		
-		
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			String settingKey1 = new String();
+			settingKey1 = "MIX";
+			map.add("settingKeyList", settingKey1);
+			RestTemplate restTemplate = new RestTemplate();
+			FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			 
+			System.out.println("flag "+settingList1.getFrItemStockConfigure().get(0).getSettingValue());
 		
 		
 		model.addObject("todaysmixrequest",getMixingList.getMixingHeaderList());
+		model.addObject("flag",settingList1.getFrItemStockConfigure().get(0).getSettingValue());
 		return model;
 
 	}
 	
+	@RequestMapping(value = "/getMixingListByProduction", method = RequestMethod.GET)
+	public ModelAndView getMixingListByProduction(HttpServletRequest request, HttpServletResponse response) {
+		/*Constants.mainAct = 17;
+		Constants.subAct=184;*/
+		
+		ModelAndView model = new ModelAndView("productionPlan/getMixinglist");//
+
+		
+		
+		RestTemplate rest = new RestTemplate();
+		
+			GetMixingList getMixingList= rest.getForObject(Constants.url + "/gettodaysMixingRequest", GetMixingList.class);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			String settingKey1 = new String();
+			settingKey1 = "PROD";
+			map.add("settingKeyList", settingKey1);
+			RestTemplate restTemplate = new RestTemplate();
+			FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			 
+			System.out.println("flag "+settingList1.getFrItemStockConfigure().get(0).getSettingValue());
+		
+		
+		model.addObject("todaysmixrequest",getMixingList.getMixingHeaderList());
+		model.addObject("flag",settingList1.getFrItemStockConfigure().get(0).getSettingValue());
+		return model;
+
+	}
 	
 	@RequestMapping(value = "/getMixingListWithDate", method = RequestMethod.GET)
 	@ResponseBody
@@ -142,8 +180,10 @@ public class ViewMixingController {
 		
 		
 		//String mixId=request.getParameter("mixId");
+		int deptId=Integer.parseInt(request.getParameter("deptId"));
 		int mixId=Integer.parseInt(request.getParameter("mixId"));
 		System.out.println(mixId);
+		System.out.println(deptId);
 		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("mixId",mixId);
@@ -164,6 +204,8 @@ public class ViewMixingController {
 
 			model.addObject("mixheader",mixingHeader);
 		model.addObject("mixwithdetaild", mixwithdetaild);
+		model.addObject("deptId", deptId);
+		 
 		
 		return model;
 	}
