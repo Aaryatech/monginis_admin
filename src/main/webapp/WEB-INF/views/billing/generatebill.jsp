@@ -130,7 +130,7 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>Menu
+					<i class="fa fa-bars"></i>Generate Franchise Bill
 				</h3>
 
 			</div>
@@ -191,9 +191,10 @@
 
 								</c:forEach>
 							</select>
+							
 						</div>
 
-						<label class="col-sm-3 col-lg-2 control-label">Select
+						<label class="col-sm-3 col-lg-2 control-label"><b>OR</b> Select
 							Franchisee </label>
 						<div class="col-sm-6 col-lg-4">
 

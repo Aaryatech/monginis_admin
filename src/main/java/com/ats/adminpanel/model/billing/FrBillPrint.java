@@ -4,7 +4,7 @@ import java.util.List;
 
 public class FrBillPrint {
 	
-	public List<GetBillDetail> billDetailsList;
+	public List<GetBillDetailPrint> billDetailsList;
 	
 	int frId;
 	int billNo;
@@ -12,6 +12,7 @@ public class FrBillPrint {
 	String frAddress;
 	String invoiceNo;
 	int isSameState;
+	String billDate;
 	
 	public String getInvoiceNo() {
 		return invoiceNo;
@@ -19,11 +20,11 @@ public class FrBillPrint {
 	public void setInvoiceNo(String invoiceNo) {
 		this.invoiceNo = invoiceNo;
 	}
-	public List<GetBillDetail> getBillDetailsList() {
+	public List<GetBillDetailPrint> getBillDetailsList() {
 		return billDetailsList;
 	}
-	public void setBillDetailsList(List<GetBillDetail> billDetailsList) {
-		this.billDetailsList = billDetailsList;
+	public void setBillDetailsList(List<GetBillDetailPrint> billDetails) {
+		this.billDetailsList = billDetails;
 	}
 	public int getFrId() {
 		return frId;
@@ -55,13 +56,18 @@ public class FrBillPrint {
 	public void setIsSameState(int isSameState) {
 		this.isSameState = isSameState;
 	}
+	public String getBillDate() {
+		return billDate;
+	}
+	public void setBillDate(String billDate) {
+		this.billDate = billDate;
+	}
+	
 	@Override
 	public String toString() {
 		return "FrBillPrint [billDetailsList=" + billDetailsList + ", frId=" + frId + ", billNo=" + billNo + ", frName="
 				+ frName + ", frAddress=" + frAddress + ", invoiceNo=" + invoiceNo + ", isSameState=" + isSameState
-				+ "]";
+				+ ", billDate=" + billDate + "]";
 	}
-	
-	
 
 }

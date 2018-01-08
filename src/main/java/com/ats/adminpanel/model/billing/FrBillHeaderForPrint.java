@@ -50,13 +50,7 @@ public class FrBillHeaderForPrint {
 		this.invoiceNo = invoiceNo;
 	}
 
-	public String getBillDate() {
-		return billDate;
-	}
-
-	public void setBillDate(String billDate) {
-		this.billDate = billDate;
-	}
+	 
 
 	public Integer getFrId() {
 		return frId;
@@ -136,6 +130,15 @@ public class FrBillHeaderForPrint {
 
 	public void setIsSameState(int isSameState) {
 		this.isSameState = isSameState;
+	}
+
+	
+	public String getBillDate() {
+		return billDate;
+	}
+
+	public void setBillDate(String billDate) {
+		this.billDate = billDate;
 	}
 
 	@Override

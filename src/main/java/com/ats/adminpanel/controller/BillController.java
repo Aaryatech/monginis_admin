@@ -71,6 +71,7 @@ import com.ats.adminpanel.model.billing.FrBillHeaderForPrint;
 import com.ats.adminpanel.model.billing.FrBillPrint;
 import com.ats.adminpanel.model.billing.FrBillTax;
 import com.ats.adminpanel.model.billing.GetBillDetail;
+import com.ats.adminpanel.model.billing.GetBillDetailPrint;
 import com.ats.adminpanel.model.billing.GetBillDetailsResponse;
 import com.ats.adminpanel.model.billing.GetBillHeader;
 import com.ats.adminpanel.model.billing.GetBillHeaderResponse;
@@ -107,6 +108,11 @@ public class BillController {
 	
 
 	public List<GetBillDetail> billDetailsList;
+	
+	public List<GetBillDetailPrint> billDetailsListForPrint;
+	
+	
+	
 	public GetBillHeader getBillHeader;
 
 	List<GetBillHeader> billHeadersList = new ArrayList<>();
@@ -746,6 +752,7 @@ public class BillController {
 		Constants.mainAct = 8;
 		Constants.subAct = 83;
 		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -770,13 +777,22 @@ public class BillController {
 			List<Route> routeList = new ArrayList<Route>();
 
 			routeList = allRouteListResponse.getRoute();
+			
+			
+			map.add("fromDate", todaysDate);
+			map.add("toDate", todaysDate);
+			//System.out.println("Inside is All fr Selected " + isAllFrSelected);
+
+			GetBillHeaderResponse billHeaderResponse = restTemplate
+					.postForObject(Constants.url + "getBillHeaderForAllFr", map, GetBillHeaderResponse.class);
+
+			billHeadersList = billHeaderResponse.getGetBillHeaders();
 
 			model.addObject("routeList", routeList);
 			model.addObject("todaysDate", todaysDate);
 			model.addObject("menuList", menuList);
 			model.addObject("allFrIdNameList", allFrIdNameList.getFrIdNamesList());
-			
-			
+			model.addObject("billHeadersList",billHeadersList);
 
 		} catch (Exception e) {
 			System.out.println("Exce in view Bills " + e.getMessage());
@@ -820,16 +836,12 @@ public class BillController {
 
 			routeList = allRouteListResponse.getRoute();
 			
-			
-			
 			String fromDate = request.getParameter("from_date");
 			String toDate = request.getParameter("to_date");
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-			
-			
-			map.add("fromDate", "05-01-2018");
-			map.add("toDate", "05-01-2018");
+			map.add("fromDate", todaysDate);
+			map.add("toDate", todaysDate);
 			//System.out.println("Inside is All fr Selected " + isAllFrSelected);
 			
 			
@@ -850,7 +862,7 @@ public class BillController {
 			
 			model.addObject("billHeadersList",billHeadersListForPrint);
 
-			System.out.println("bill header for print with address :  " + billHeadersListForPrint.toString());
+			System.out.println("First Header : bill header for print with address :  " + billHeadersListForPrint.toString());
 
 			model.addObject("routeList", routeList);
 			model.addObject("todaysDate", todaysDate);
@@ -906,12 +918,12 @@ public class BillController {
 			
 			
 			
-			 ParameterizedTypeReference<List<GetBillDetail>> typeRef = new ParameterizedTypeReference<List<GetBillDetail>>() {
+			 ParameterizedTypeReference<List<GetBillDetailPrint>> typeRef = new ParameterizedTypeReference<List<GetBillDetailPrint>>() {
 			};
-			ResponseEntity<List<GetBillDetail>> responseEntity = restTemplate.exchange(Constants.url + "getBillDetailsForPrint",
+			ResponseEntity<List<GetBillDetailPrint>> responseEntity = restTemplate.exchange(Constants.url + "getBillDetailsForPrint",
 					HttpMethod.POST, new HttpEntity<>(map), typeRef);
 			
-			List<GetBillDetail>	billDetailsResponse = responseEntity.getBody();
+			List<GetBillDetailPrint>	billDetailsResponse = responseEntity.getBody();
 			 
 
 			  /*List<GetBillDetail> billDetailsResponse = restTemplate.postForObject(Constants.url + "getBillDetailsForPrint",
@@ -919,19 +931,19 @@ public class BillController {
 			  
 			 
 */
-			billDetailsList = new ArrayList<GetBillDetail>();
-			billDetailsList = billDetailsResponse;
+			billDetailsListForPrint = new ArrayList<GetBillDetailPrint>();
+			billDetailsListForPrint = billDetailsResponse;
 			System.out.println(" *** get Bill response  " + billDetailsResponse.toString());
 			FrBillPrint billPrint=null;
 			for(int i=0;i<billHeadersListForPrint.size();i++) {
 				System.out.println("outside for Index I  = "+i);
 				  billPrint=new FrBillPrint();
-				 List<GetBillDetail> billDetails=new ArrayList<>();
+				 List<GetBillDetailPrint> billDetails=new ArrayList<>();
 
-				  for(int j=0;j<billDetailsList.size();j++) {
+				  for(int j=0;j<billDetailsListForPrint.size();j++) {
 						System.out.println("inner for Index J = "+j);
 
-					  if(billHeadersListForPrint.get(i).getBillNo()==billDetailsList.get(j).getBillNo()) {
+					  if(billHeadersListForPrint.get(i).getBillNo()==billDetailsListForPrint.get(j).getBillNo()) {
 						  
 							System.out.println("Inside If  Bill no  = "+billHeadersListForPrint.get(i).getBillNo());
 
@@ -941,10 +953,11 @@ public class BillController {
 						 billPrint.setFrName(billHeadersListForPrint.get(i).getFrName());
 						 billPrint.setInvoiceNo(billHeadersListForPrint.get(i).getInvoiceNo());
 						 billPrint.setIsSameState(billHeadersListForPrint.get(i).getIsSameState());
+						 billPrint.setBillDate(billHeadersListForPrint.get(i).getBillDate());
 
-						 billDetails.add(billDetailsList.get(j));
+						 billDetails.add(billDetailsListForPrint.get(j));
 						 
-						 FrBillTax billTax=new FrBillTax();
+						// FrBillTax billTax=new FrBillTax(); not used 
 						 
 						 
 						
@@ -956,7 +969,7 @@ public class BillController {
 
 			  }
 
-			System.out.println("bill Print List "+billPrintList.toString());
+			System.out.println(" after adding detail List : bill Print List "+billPrintList.toString());
 			model.addObject("billDetails",billPrintList);
 			HttpSession ses= request.getSession();
 			ses.setAttribute("billDetails", billPrintList);
@@ -984,12 +997,15 @@ System.out.println("IN Show bill Method");
 			//List<GenerateBill> generateNewBill=generateBillList.getGenerateBills();
 		//	System.out.println(" Data for PDF generateBillList "+ generateNewBill.toString());
 			//model.addObject("getBillList", generateBillList.getGenerateBills());
-           
+           DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			Calendar cal = Calendar.getInstance();
+
+			System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
 			model.addObject("billDetails",billPrintList);
 			model.addObject("vehicleNo", vehicleNo);
 			model.addObject("transportMode", transportMode);
-
-
+			model.addObject("dateTime", dateFormat.format(cal.getTime()));
+	
 			System.out.println("after Data ");
 		
 		}catch (Exception e) {

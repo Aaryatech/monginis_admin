@@ -185,8 +185,8 @@
 								<div align="center" class="form-group">
 									<div
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										<input type="button" class="btn btn-primary" value="Search" id="callSubmit"
-											onclick="callSearch()">
+										<input type="button" class="btn btn-primary" value="Search"
+											id="callSubmit" onclick="callSearch()">
 
 
 									</div>
@@ -243,63 +243,57 @@
 														<th width="105" align="left">Status</th>
 														<th width="105" align="left">Remark</th>
 														<th width="200" align="center">Action</th> -->
-														
-														<th class="col-sm-1" align="left">Sr
-															No</th>
-														<th  class="col-md-1" align="left">Invoice No</th>
-														<th  class="col-md-1" align="left">Date</th>
-														<th  class="col-md-2" align="left">Franchise Name</th>
-														<th  class="col-md-1" align="left">Taxable
-															Amt</th>
-														<th  class="col-md-1" align="left">Total tax</th>
-														<th  class="col-md-1" align="left">Total</th>
 
-														<th  class="col-md-1" align="left">Status</th>
-<!-- 														<th width="105" align="left">Remark</th>
- -->														<th  class="col-md-1" align="center">Action</th>
+														<th class="col-sm-1" align="left">Sr No</th>
+														<th class="col-md-1" align="left">Invoice No</th>
+														<th class="col-md-1" align="left">Date</th>
+														<th class="col-md-2" align="left">Franchise Name</th>
+														<th class="col-md-1" align="left">Taxable Amt</th>
+														<th class="col-md-1" align="left">Total tax</th>
+														<th class="col-md-1" align="left">Total</th>
+
+														<th class="col-md-1" align="left">Status</th>
+														<!-- 														<th width="105" align="left">Remark</th>
+ -->
+														<th class="col-md-1" align="center">Action</th>
 
 													</tr>
 												</thead>
 												<tbody>
-													<%-- <c:forEach items="${billHeadersList}" var="billHeadersList"
+													<c:forEach items="${billHeadersList}" var="billHeadersList"
 														varStatus="count">
 
 														<tr>
-															<td><c:out value="${count.index}" /></td>
+															<td class="col-sm-1"><c:out value="${count.index}" /></td>
+															<td class="col-md-1" align="left"><c:out
+																	value="${billHeadersList.invoiceNo}" /></td>
 
-															<td align="left"><c:out
-																	value="${billHeadersList.billNo}" /></td>
-
-
-															<td align="left"><c:out
+															<td class="col-md-1" align="left"><c:out
 																	value="${billHeadersList.billDate}" /></td>
 
-
-															<td align="left"><c:out
+															<td class="col-md-2" align="left"><c:out
 																	value="${billHeadersList.frName}" /></td>
-															<td align="left"><c:out
-																	value="${billHeadersList.total}" /></td>
-															<td align="left"><c:out
+															<td class="col-md-1" align="left"><c:out
+																	value="${billHeadersList.taxableAmt}" /></td>
+															<td class="col-md-1" align="left"><c:out
 																	value="${billHeadersList.totalTax}" /></td>
 															<td align="left"><c:out
-																	value="${billHeadersList.total + billHeadersList.totalTax}" /></td>
+																	value="${billHeadersList.grandTotal}" /></td>
+															<td align="left"><c:out
+																	value="${billHeadersList.status}" /></td>
 
-
-
-
-
-
-															<td align="left"><c:out value="${billHeadersList.status}" /></td>
-
-															<td align="left"><a
-																href="viewBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><span
-																	class="glyphicon glyphicon-list-alt"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+															<td align="left">
+															<a href="${pageContext.request.contextPath}/updateBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr title='Update Bill'></abbr>
+																<i class='fa fa-edit  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+																<a
+																href="${pageContext.request.contextPath}/viewBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
+																	title='View Bill'></abbr> <i class='fa fa-info  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
 
 																<a
-																href="updateBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"
-																onClick="return confirm('Are you sure want to edit this record');"><span
-																	class="glyphicon glyphicon-edit"></span></a></td>
-
+																href="${pageContext.request.contextPath}/deleteBill/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
+																	title='Delete Bill'></abbr> <i
+																	class='fa fa-trash-o  fa-lg'></i></a></td>
+										
 															<!-- <td rowspan="1" align="left"> <input
 																type="button" value="View"> <input type="button"
 																value="Edit"> <input type="button"
@@ -312,7 +306,7 @@
 
 
 														</tr>
-													</c:forEach> --%>
+													</c:forEach>
 
 												</tbody>
 											</table>
@@ -435,17 +429,17 @@
 		function callSearch() {
 
 			//var frId = document.getElementById("fr_id").value;
-			var array=[];
-			var frIds=$("#fr_id").val();
+			var array = [];
+			var frIds = $("#fr_id").val();
 			var fromDate = document.getElementById("dp1").value;
 			var toDate = document.getElementById("dp2").value;
-			
+
 			var routeId = document.getElementById("route_id").value;
-			
+
 			$('#loader').show();
 
-
-			$.getJSON(
+			$
+					.getJSON(
 							'${callGetBillListProcess}',
 							{
 								fr_id_list : JSON.stringify(frIds),
@@ -457,66 +451,132 @@
 							function(data) {
 								$('#table1 td').remove();
 								$('#loader').hide();
-								if(data==""){
+								if (data == "") {
 									alert("No Bill Found");
 								}
 
-								$.each(
+								$
+										.each(
 												data,
 												function(key, bill) {
 
 													var tr = $('<tr></tr>');
 
-												  	tr.append($('<td class="col-sm-1"></td>').html(key+1));
+													tr
+															.append($(
+																	'<td class="col-sm-1"></td>')
+																	.html(
+																			key + 1));
 
-												  	tr.append($('<td class="col-md-1"></td>').html(bill.invoiceNo));
+													tr
+															.append($(
+																	'<td class="col-md-1"></td>')
+																	.html(
+																			bill.invoiceNo));
 
-												  	tr.append($('<td class="col-md-1"></td>').html(bill.billDate));
+													tr
+															.append($(
+																	'<td class="col-md-1"></td>')
+																	.html(
+																			bill.billDate));
 
-												  	tr.append($('<td class="col-md-2"></td>').html(bill.frName));
+													tr
+															.append($(
+																	'<td class="col-md-2"></td>')
+																	.html(
+																			bill.frName));
 
-												  	tr.append($('<td class="col-md-1"></td>').html(bill.taxableAmt));
-												  	
-												  	tr.append($('<td class="col-md-1"></td>').html(bill.totalTax));
+													tr
+															.append($(
+																	'<td class="col-md-1"></td>')
+																	.html(
+																			bill.taxableAmt));
 
-												  	tr.append($('<td class="col-md-1"></td>').html(bill.grandTotal));
-												  	
-												  	
-												  	
-												  	if (bill.status == 1) {
-												  		tr.append($('<td class="col-md-1"></td>').html("Pending"));
-												  		
+													tr
+															.append($(
+																	'<td class="col-md-1"></td>')
+																	.html(
+																			bill.totalTax));
+
+													tr
+															.append($(
+																	'<td class="col-md-1"></td>')
+																	.html(
+																			bill.grandTotal));
+
+													if (bill.status == 1) {
+														tr
+																.append($(
+																		'<td class="col-md-1"></td>')
+																		.html(
+																				"Pending"));
+
 													} else if (bill.status == 2) {
-														tr.append($('<td class="col-md-1"></td>').html("Received"));
+														tr
+																.append($(
+																		'<td class="col-md-1"></td>')
+																		.html(
+																				"Received"));
 													} else if (bill.status == 3) {
-														tr.append($('<td class="col-md-1"></td>').html("GVN Applied"));
+														tr
+																.append($(
+																		'<td class="col-md-1"></td>')
+																		.html(
+																				"GVN Applied"));
 													} else if (bill.status == 4) {
-														tr.append($('<td class="col-md-1"></td>').html("GVN Approved"));
+														tr
+																.append($(
+																		'<td class="col-md-1"></td>')
+																		.html(
+																				"GVN Approved"));
 													} else if (bill.status == 5) {
-														tr.append($('<td class="col-md-1"></td>').html("GRN Applied"));
+														tr
+																.append($(
+																		'<td class="col-md-1"></td>')
+																		.html(
+																				"GRN Applied"));
 													} else if (bill.status == 6) {
-														tr.append($('<td class="col-md-1"></td>').html("GRN Approved"));
+														tr
+																.append($(
+																		'<td class="col-md-1"></td>')
+																		.html(
+																				"GRN Approved"));
 													} else if (bill.status == 7) {
-														tr.append($('<td class="col-md-1"></td>').html("Closed"));
+														tr
+																.append($(
+																		'<td class="col-md-1"></td>')
+																		.html(
+																				"Closed"));
 													}
-												  	
-												  	
-/* 												  	tr.append($('<td></td>').html(bill.remark));
- */
 
+													/* 												  	tr.append($('<td></td>').html(bill.remark));
+													 */
 
-												 	tr.append($('<td class="col-md-1"></td>').html("<a href='${pageContext.request.contextPath}/updateBillDetails/"+bill.billNo+"/"+bill.frName+"'<abbr title='Update Bill'></abbr><i class='fa fa-edit  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/viewBillDetails/"+bill.billNo+"/"+bill.frName+"'<abbr title='View Bill'></abbr><i class='fa fa-info  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/deleteBill/"+bill.billNo+"/"+bill.frName+"'<abbr title='Delete Bill'></abbr><i class='fa fa-trash-o  fa-lg'></i></a>"));
+													tr
+															.append($(
+																	'<td class="col-md-1"></td>')
+																	.html(
+																			"<a href='${pageContext.request.contextPath}/updateBillDetails/"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "'<abbr title='Update Bill'></abbr><i class='fa fa-edit  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/viewBillDetails/"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "'<abbr title='View Bill'></abbr><i class='fa fa-info  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/deleteBill/"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "'<abbr title='Delete Bill'></abbr><i class='fa fa-trash-o  fa-lg'></i></a>"));
 
-												 	//tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/updateBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='update' value='Update'/></a><a href='${pageContext.request.contextPath}/viewBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='view' value='View'/></a><a href='${pageContext.request.contextPath}/deleteBill/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='deleteBill' value='Delete'/></a>"));
-												  
-												  	//tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> <input type=button id=delete"+orders.orderId+" onClick=deleteOrder("+orders.orderId+"); Value=Delete>"));
+													//tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/updateBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='update' value='Update'/></a><a href='${pageContext.request.contextPath}/viewBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='view' value='View'/></a><a href='${pageContext.request.contextPath}/deleteBill/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='deleteBill' value='Delete'/></a>"));
 
+													//tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> <input type=button id=delete"+orders.orderId+" onClick=deleteOrder("+orders.orderId+"); Value=Delete>"));
 
-													$('#table1 tbody').append(tr);
+													$('#table1 tbody').append(
+															tr);
 
-													
-													
-													
 													/* var index = key + 1;
 													
 													var tr = "<tr>";
@@ -540,7 +600,7 @@
 															+ bill.taxableAmt
 															+ "</td>";
 															
-											
+													
 													var totalTax = "<td>&nbsp;&nbsp;&nbsp;&nbsp;"
 															+ bill.totalTax
 															+ "</td>";
@@ -577,7 +637,7 @@
 															+ bill.remark
 															+ "</td>";
 															
-											var action="<td>"+ "<a href='${pageContext.request.contextPath}/updateBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='update' value='Update'/></a><a href='${pageContext.request.contextPath}/viewBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='view' value='View'/></a><a href='${pageContext.request.contextPath}/deleteBill/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='deleteBill' value='Delete'/></a>"+"</td>";
+													var action="<td>"+ "<a href='${pageContext.request.contextPath}/updateBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='update' value='Update'/></a><a href='${pageContext.request.contextPath}/viewBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='view' value='View'/></a><a href='${pageContext.request.contextPath}/deleteBill/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='deleteBill' value='Delete'/></a>"+"</td>";
 
 													var trclosed = "</tr>";
 
@@ -595,7 +655,7 @@
 													$('#table1 tbody').append(action);
 
 													$('#table1 tbody').append(trclosed);
- */
+													 */
 												})
 
 							});
