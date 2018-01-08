@@ -203,7 +203,7 @@
 															<td><c:out value="${mixwithdetaild.receivedQty}" /></td>
 
 															<c:choose>
-																<c:when test="${(mixheader.status==0) and (deptId==15)}">
+																<c:when test="${(mixheader.status!=2) and (deptId==15)}">
 																	<td><input type="text"
 																		name='production_Qty<c:out
 																		value="${mixwithdetaild.mixing_detailId}" />'
