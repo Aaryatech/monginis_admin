@@ -41,6 +41,7 @@ import com.ats.adminpanel.model.production.PostProdPlanHeader;
 import com.ats.adminpanel.model.production.PostProductionDetail;
 import com.ats.adminpanel.model.production.PostProductionHeader;
 import com.ats.adminpanel.model.production.PostProductionPlanDetail;
+import com.ats.adminpanel.model.production.UpdateOrderStatus;
 
 @Controller
 @Scope("session")
@@ -159,7 +160,7 @@ public class ProductionController {
 			System.out.println(e.getMessage());
 		}
 		
-		System.out.println("List of Orders : "+ getOrderItemQtyList.toString());
+		//System.out.println("List of Orders : "+ getOrderItemQtyList.toString());
 		
 		return getOrderItemQtyList;
 		
@@ -218,6 +219,7 @@ public class ProductionController {
 //String productionDate=request.getParameter("production_date");
 			String selectTime=request.getParameter("selectTime");
 			String convertedDate=null;
+			
 			if(productionDate!=null && productionDate!="" && selectTime!=null && selectTime!="")
 			{
 try {
@@ -283,13 +285,24 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 		
 		orderId.add(String.valueOf(getOrderItemQtyList.get(i).getOrderId()));
 	}
+	
+	List<Integer> regOrderId=new ArrayList<Integer>();
+	regOrderId.add(0);
 	for(int i=0;i<getRegSpCakeOrderQtyList.size();i++)
 	{
 		postProductionDetail=new PostProductionDetail();
 		
 	postProductionDetail.setItemId(getRegSpCakeOrderQtyList.get(i).getItemId());
-	postProductionDetail.setProductionQty(getRegSpCakeOrderQtyList.get(i).getQty());
+	postProductionDetail.setOrderQty(getRegSpCakeOrderQtyList.get(i).getQty());
+	postProductionDetail.setProductionDate(convertedDate);
+	postProductionDetail.setOpeningQty(0);
+	postProductionDetail.setProductionQty(0);
+	postProductionDetail.setRejectedQty(0);
+	postProductionDetail.setProductionBatch("");
+	postProductionDetail.setPlanQty(0);
 	postProductionDetailList.add(postProductionDetail);
+	
+	regOrderId.add(getRegSpCakeOrderQtyList.get(i).getItemId());
 }
 			
 	postProductionHeader.setPostProductionDetail(postProductionDetailList);
@@ -301,13 +314,23 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 		
 		System.out.println("Info After post to production :   "+info.toString());
 		
-	 
-			
+	  
+		UpdateOrderStatus updateOrderStatus=new UpdateOrderStatus();
+		List<String> res =new ArrayList<String>();
+		res.add("0");
+		for(int i=0;i<getOrderItemQtyList.size();i++) {
+		  String orderId1 =getOrderItemQtyList.get(i).getItemId();
+		  res.add(orderId1);
+		}
+		updateOrderStatus.setOrderItemId(res);
+		updateOrderStatus.setRegOrderItemId(regOrderId);
+		updateOrderStatus.setProdDate(convertedDate);
 		 
-		MultiValueMap<String, Object> map=new LinkedMultiValueMap<>();
-		map.add("orderId", orderId);
 		
-		   info = restTemplate.postForObject(Constants.url + "updateIsBillGenerate", getOrderItemQtyList,
+		
+		
+		
+		   info = restTemplate.postForObject(Constants.url + "updateIsBillGenerate", updateOrderStatus,
 					Info.class);
 
 

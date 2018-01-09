@@ -142,7 +142,14 @@
 											
 											<c:forEach items="${unSelectedCatList}" var="unSelectedCat"
 													varStatus="count">
+													<c:choose>
+         
+                                                      <c:when test = "${unSelectedCat.catId==5 || unSelectedCat.catId==3}">
+                                                      </c:when>
+                                                      <c:otherwise>
 												<option value="${unSelectedCat.catId}"><c:out value="${unSelectedCat.catName}"/></option>
+												</c:otherwise>
+												</c:choose>
 												</c:forEach>
 
 										</select>
@@ -155,8 +162,8 @@
 					<label class=" col-md-3 control-label franchisee_label"></label>
 				<label class=" col-md-3 control-label menu_label">Menu</label>
 									<div class="col-md-6 controls">
-										<select data-placeholder="Select Menu"
-											class="form-control chosen-select" name="selectMenu"
+										<select data-placeholder="Select Menu" multiple="multiple"
+											class="form-control chosen-select chosen" name="selectMenu"
 											tabindex="-1" id="selectMenu" data-rule-required="true">
 												
 										</select>
@@ -230,7 +237,8 @@
 														<th width="18" style="width: 18px">Sr No</th>
 														<th width="50">Item Id</th>
 														<th width="100">Item Name</th>
-														<th width="100">Production Quantity</th>
+														<th width="100">Order Quantity</th>
+													<!-- 	<th width="100">Production Quantity</th> -->
 									
 													</tr>
 												</thead>
@@ -403,16 +411,25 @@ $(document).ready(function() {
 					selectedCat : $(this).val(),
 					ajax : 'true'
 				}, function(data) {
-					var html = '<option value="-1"><c:out value=""/></option>';
 					
 					var len = data.length;
+					$('#selectMenu').find('option').remove().end()
+					//var html = '<option value="-1"><c:out value=""/></option>';
+					
 					for ( var i = 0; i < len; i++) {
-						html += '<option value="' + data[i].menuId + '">'
-								+ data[i].menuTitle + '</option>';
-					}
-					html += '</option>';
-					$('#selectMenu').html(html);
-					$('#selectMenu').formcontrol('refresh');
+
+						
+
+						 $("#selectMenu").append(
+
+		                           $("<option ></option>").attr(
+
+		                               "value", data[i].menuId).text(data[i].menuTitle)
+
+		                       );
+
+					} 
+					$("#selectMenu").trigger("chosen:updated");
 
 				});
 			});
@@ -449,7 +466,7 @@ $(document).ready(function() {
 								document.getElementById("callsearch").disabled=false;
 								$('#loader').hide();
 								  if (data == "") {
-									alert("No records found !!");
+									//alert("No records found !!");
 									document.getElementById("callSubmit").disabled=true;
 								}  
 								//alert(data);
@@ -501,6 +518,7 @@ $(document).ready(function() {
 								tr.append($('<td></td>').html(order.qty));
 								 
 								 
+								 
 							$('#table1 tbody').append(tr);
 							
 														})
@@ -530,7 +548,7 @@ $(document).ready(function() {
 
 				
 				$.each(data,function(key, order) {
-
+					document.getElementById("callSubmit").disabled=false;
 					autoindex =  autoindex +1;
 
 								/* 	var tr = "<tr>";
@@ -567,6 +585,7 @@ $(document).ready(function() {
 									tr.append($('<td></td>').html(order.itemId));
 									tr.append($('<td></td>').html(order.itemName));
 									tr.append($('<td></td>').html(order.qty));
+									
 									$('#table1 tbody').append(tr);
 								})
 									
@@ -603,6 +622,15 @@ $(document).ready(function() {
 			return isValid;
 
 		}
+		
+		var specialKeys = new Array();
+        specialKeys.push(8); //Backspace
+        function IsNumeric(e) {
+            var keyCode = e.which ? e.which : e.keyCode
+            var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1);
+            
+            return ret;
+        }
 	</script>
 
 
