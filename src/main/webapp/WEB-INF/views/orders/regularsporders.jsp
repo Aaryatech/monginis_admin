@@ -32,7 +32,7 @@
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/css/datepicker.css" />
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.css" />
-
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
 <!--page specific css styles-->
@@ -181,7 +181,7 @@
 									</div>
 
 									<div class="box-content">
-
+						<c:set var="dis" value="none"/>
 										<div class="clearfix"></div>
 										<div class="table-responsive" style="border: 0">
 											<table width="100%" class="table table-advance" id="table1">
@@ -198,12 +198,13 @@
 														<th width="105" align="left">Rate</th>
 														<th width="75" align="left">Quantity</th>
 														<th width="91" align="left">Total</th>
-														<!-- <th width="87" align="left">View</th> -->
+														  <th width="87" align="left">View</th>  
 														<th width="87" align="left">PDF</th>
 													</tr>
 												</thead>
 												<tbody>
 													<c:forEach items="${regularSpCkOrderList}" var="spCakeOrderList" varStatus="count">
+														<c:set var="dis" value="block"/>
 														<tr>
 														<td><c:out value="${count.index+1}"/></td>
 															<td align="left"><c:out
@@ -231,9 +232,9 @@
 
 															<td align="left"><c:out value="${rate * qty}"></c:out></td>
 
-															<%-- <td align="left"><c:out value="PDF"></c:out></td> --%>
+															  <td align="left"><a href="${pageContext.request.contextPath}/showHtmlViewRegSpcakeOrder/${spCakeOrderList.rspId}" target="blank"><i class="fa fa-file-text-o" style="font-size:24px;"></i></a></td>  
 
-															<td align="left"><c:out value=" ADMIN PDF"></c:out></td>
+															 <td align="left"><a href="${pageContext.request.contextPath}/showRegSpcakeOrderPdf/${spCakeOrderList.rspId}" target="blank"><i class="fa fa-file-pdf-o" style="font-size:24px;"></i></a></td>  
 
 
 
@@ -247,6 +248,17 @@
 										</div>
 									</div>
 								</div>
+								<div class="form-group" style="display: <c:out value="${dis}" />;" id="range">
+								<div class="col-sm-2  controls">
+											<input type="text" class="form-control"  id="from"  placeholder="to no"  >
+											</div>
+											<div class="col-sm-2  controls">
+											<input type="text"  class="form-control" id="to" placeholder="from no" >
+											</div>
+											<div class="col-sm-3  controls">
+											<input type="button" id="from" class="btn btn-primary" value="EXPORT TO PDF IN RANGE" onclick="inRangePdf();">
+											</div>
+											</div>
 							</form>
 						</div>
 					</div>
@@ -327,5 +339,29 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+		
+		<script>
+		function inRangePdf()
+		{
+			var to=document.getElementById("to").value;
+			
+			var from=document.getElementById("from").value;
+			
+			if(from==null ||from=="")
+			{
+			alert("Enter to from");
+			}
+			else if(to==null ||to=="")
+				{
+				alert("Enter to no");
+				}
+			else{
+
+				window.open("${pageContext.request.contextPath}/showRegSpcakeOrderPdfInRange/"+from+"/"+to);
+				
+			}
+		}
+											
+	</script>
 </body>
 </html>

@@ -16,6 +16,8 @@
 <!--base css styles-->
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/loader.css">
+	
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/bootstrap.min.css">
@@ -210,6 +212,9 @@
 											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 										</div>
 									</div>
+									
+									<c:set var="dis" value="none"/>
+									
 									<div class="box-content">
 
 										<div class="clearfix"></div>
@@ -229,7 +234,7 @@
 														<th width="105" align="left">Rate</th>
 														<th width="75" align="left">Add Rate</th>
 														<th width="91" align="left">Total</th>
-														<!-- <th width="87" align="left">View</th> -->
+													  <th width="87" align="left">View</th>  
 														<th width="87" align="left">PDF</th>
 													</tr>
 												</thead>
@@ -237,6 +242,7 @@
 												
 													<c:forEach items="${spCakeOrderList}" var="spCakeOrder"
 														varStatus="count">
+														<c:set var="dis" value="block"/>
 														<tr>
 														
 															<td><c:out value="${count.index+1}" /></td>
@@ -282,10 +288,24 @@
 
 													</c:forEach>
 												</tbody>
+												
 											</table>
+											
+											
 										</div>
 									</div>
 								</div>
+								<div class="form-group" style="display: <c:out value="${dis}" />;" id="range">
+								<div class="col-sm-2  controls">
+											<input type="text" class="form-control"  id="from"  placeholder="to no"  >
+											</div>
+											<div class="col-sm-2  controls">
+											<input type="text"  class="form-control" id="to" placeholder="from no" >
+											</div>
+											<div class="col-sm-3  controls">
+											<input type="button" id="from" class="btn btn-primary" value="EXPORT TO PDF IN RANGE" onclick="inRangePdf();">
+											</div>
+											</div>
 							</form>
 						</div>
 					</div>
@@ -391,7 +411,7 @@
 								}
 								$.each(data,function(key, spCakeOrder) {
 
-									
+									document.getElementById('range').style.display = 'block';
 									var len=data.length
 									
 									
@@ -420,11 +440,13 @@
 									var totalValue=parseFloat(spCakeOrder.spTotalAddRate) + parseFloat(spCakeOrder.spPrice);
 
 								  	tr.append($('<td></td>').html(totalValue));
+								  	
+								  	tr.append($('<td></td>').html('<a href="${pageContext.request.contextPath}/showHtmlViewSpcakeOrder/'+spCakeOrder.spOrderNo+'" target="blank"><i class="fa fa-file-text-o" style="font-size:24px;"></i></a>'));  
+								  	
 
-								  	/* tr.append($('<td></td>').html("View")); */
+								  	  tr.append($('<td></td>').html('<a href="${pageContext.request.contextPath}/showSpcakeOrderPdf/'+spCakeOrder.spOrderNo+'" target="blank"><i class="fa fa-file-pdf-o" style="font-size:24px;"></i></a>'));  
 
-								  	tr.append($('<td></td>').html("PDF"));
-
+								
 									$('#table1 tbody').append(tr);
 									
 									})
@@ -432,6 +454,27 @@
 								});
 
 								}
+		
+		function inRangePdf()
+		{
+			var to=document.getElementById("to").value;
+			
+			var from=document.getElementById("from").value;
+			
+			if(from==null ||from=="")
+			{
+			alert("Enter to from");
+			}
+			else if(to==null ||to=="")
+				{
+				alert("Enter to no");
+				}
+			else{
+
+				window.open("${pageContext.request.contextPath}/showSpcakeOrderPdfInRange/"+from+"/"+to);
+				
+			}
+		}
 											
 	</script>
 
