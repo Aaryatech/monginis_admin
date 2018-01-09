@@ -195,36 +195,44 @@
 								 
 
 
-								<label class="col-sm-3 col-lg-2 control-label">RM min
+								<label class="col-sm-3 col-lg-2 control-label">BMS min
 									Quantity</label>
 								<div class="col-sm-6 col-lg-4 controls">
-									<input type="text" name="rm_min_qty" class="form-control"placeholder="Min Qty"data-rule-required="true"data-rule-number="true" />
+									<input type="text" name="rm_min_qty" id="rm_min_qty" class="form-control"placeholder="Min Qty"data-rule-required="true"data-rule-number="true" />
 								</div>
 						</div>
 
 						<div class="form-group">
 
-							<label class="col-sm-3 col-lg-2 control-label">RM max
+							<label class="col-sm-3 col-lg-2 control-label">BMS max
 								Quantity </label>
 
 							<div class="col-sm-6 col-lg-4 controls">
-								<input type="text" name="rm_max_qty" class="form-control"placeholder="Max Qty "data-rule-required="true" data-rule-number="true" />
+								<input type="text" name="rm_max_qty" id="rm_max_qty" class="form-control"placeholder="Max Qty "data-rule-required="true" data-rule-number="true" />
 							</div>
-						 
+						 <label class="col-sm-3 col-lg-2 control-label">BMS ROL Qty</label>
+						<div class="col-sm-6 col-lg-4 controls">
+							<input type="text" name="rm_rol_qty" id="rm_rol_qty" class="form-control"placeholder="Re Order level Qty"data-rule-required="true"data-rule-number="true" />
+						</div>
+					
+
+						
+					</div>
+					<div class="form-group">
 					<label class="col-sm-3 col-lg-2 control-label">RM Opening Rate
 						</label>
 						<div class="col-sm-6 col-lg-4 controls">
 							<input type="text" name="rm_op_rate" class="form-control"placeholder="RM Op Rate "data-rule-number="true" data-rule-required="true"/>
 						</div>
-
-						
-					</div>
-					<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">Rate </label>
 						<div class="col-sm-6 col-lg-4 controls">
 							<input type="text" name="rm_rate" class="form-control" placeholder="Rate"data-rule-required="true"data-rule-number="true" />
 						</div>
 
+					</div>
+
+					<div class="form-group">
+						
 						<label class="col-sm-3 col-lg-2 control-label">RM GST % </label>
 						<div class="col-sm-6 col-lg-4 controls">
 							<select name="rm_tax_id" class="form-control">
@@ -235,31 +243,24 @@
 												</c:forEach>
 							</select>
 						</div>
-					</div>
-
-					<div class="form-group">
-						<label class="col-sm-3 col-lg-2 control-label">RM ROL Qty</label>
-						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_rol_qty" class="form-control"placeholder="Re Order level "data-rule-required="true"data-rule-number="true" />
-						</div>
-						<label class="col-sm-3 col-lg-2 control-label">RM Issue
+						<label class="col-sm-3 col-lg-2 control-label">Store Issue
 							Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_iss_qty" class="form-control" placeholder="Issue Qty"data-rule-required="true"data-rule-number="true" />
+							<input type="text" name="rm_iss_qty" id="rm_iss_qty" class="form-control" placeholder="Store Issue Qty"data-rule-required="true"data-rule-number="true" />
 						</div>
 						
 					</div>
 				
 					<div class="form-group">
-						<label class="col-sm-3 col-lg-2 control-label">RM Opening Qty </label>
+						<label class="col-sm-3 col-lg-2 control-label">Store Opening Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_op_qty" class="form-control"placeholder="RM OP Qty"data-rule-required="true" data-rule-number="true" />
+							<input type="text" name="rm_op_qty"  id="rm_op_qty" class="form-control"placeholder="Store Opening Qty"data-rule-required="true" data-rule-number="true" />
 						</div>
 
-						<label class="col-sm-3 col-lg-2 control-label">RM Received
+						<label class="col-sm-3 col-lg-2 control-label">Store Received
 							Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_recd_qty" class="form-control" placeholder="Re Order Qty"data-rule-required="true" data-rule-number="true" />
+							<input type="text" name="rm_recd_qty"  id="rm_recd_qty" class="form-control" placeholder="Store Received Qty"data-rule-required="true" data-rule-number="true" />
 						</div>
 						</div>
 						<div class="form-group">
@@ -317,7 +318,7 @@
 							
 					<div class="row">
 						<div class="col-md-12" style="text-align: center">
-							<input type="submit" class="btn btn-info" value="Submit">
+							<input type="submit" class="btn btn-info" value="Submit" onclick="return validate()">
 
 
 						</div>
@@ -452,9 +453,52 @@ $(document).ready(function() {
 				});
 			});
 });
-
 </script>
+<script type="text/javascript">
+function validation() {
+	
+	var bmsMinQty=parseFloat($("#rm_min_qty").val());
+	var bmsMaxQty=parseFloat($("#rm_max_qty").val());
+	var bmsRolQty=parseFloat($("#rm_rol_qty").val());
 
+	var isValid = true;
+	if (bmsMinQty>bmsMaxQty) { 
+		isValid = false;
+		alert("Please Enter Valid BMS Max  Qty");
+	} else if (bmsRolQty>bmsMaxQty) {
+		isValid = false;
+		alert("Please Enter Valid BMS Reorder Level Qty");
+	} else if (bmsRolQty<bmsMinQty) {
+		isValid = false;
+		alert("Please Enter Valid BMS Reorder Level Qty");
+	}
+	
+	return isValid;
+}
+function validationForStore() {
+	
+	var bmsIssueQty=parseFloat($("#rm_iss_qty").val());
+	var bmsOpQty=parseFloat($("#rm_op_qty").val());
+	var bmsRecQty=parseFloat($("#rm_recd_qty").val());
+
+	var isValid = true;
+	if (bmsIssueQty>bmsOpQty) { 
+		isValid = false;
+		alert("Please Enter Valid Store Opening Qty");
+	} else if (bmsRecQty>bmsOpQty) {
+		isValid = false;
+		alert("Please Enter Valid Store Recieved Qty");
+	} else if (bmsRecQty<bmsIssueQty) {
+		isValid = false;
+		alert("Please Enter Valid Store Recieved Qty");
+	}
+	
+	return isValid;
+}
+function validate() {
+    return validation() && validationForStore();
+}
+</script> 
 
 </body>
 </html>
