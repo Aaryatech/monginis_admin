@@ -167,7 +167,7 @@
 																</td>
 																
 																
-						<td><a href="${pageContext.request.contextPath}/viewDetailMixRequest?mixId=${todaysmixrequest.mixId}&deptId=${deptId}" class="action_btn" >
+						<td><a href="${pageContext.request.contextPath}/viewDetailMixRequest?mixId=${todaysmixrequest.mixId}&deptId=${flag}" class="action_btn" >
 						<abbr title="Edit"><i class="fa fa-list"></i></abbr></a></td>
 						
 																</tr>

@@ -308,6 +308,19 @@ public class ViewProdController {
 			int isUpdated= rest.postForObject(Constants.url + "updateProductionStatus",map, Integer.class);
 
 			System.out.println("isProdUpdated:"+isUpdated);
+			
+			 if(isUpdated==1)
+			 {
+				  
+				 map = new LinkedMultiValueMap<String,Object>();
+				 map.add("prodId", productionId);
+				 map.add("isProduction", 1);
+				 System.out.println("map"+map);
+				 
+				 info= rest.postForObject(Constants.url + "/updateStatusWhileCompletProd",map, Info.class);
+				 System.out.println("info"+info);
+			 }
+			
 			try {
 			 map = new LinkedMultiValueMap<String, Object>();
 			 map.add("fromDate", fromDate);

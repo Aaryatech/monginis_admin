@@ -1179,7 +1179,7 @@ public class MaterialReceiptNoteController {
 
 		ModelAndView model = new ModelAndView("masters/allMaterialRecieptAccList");
 
-		List<SupplierDetails> supplierDetailsList = new ArrayList<SupplierDetails>();
+		 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 		map.add("status", "3,4");
@@ -1189,12 +1189,12 @@ public class MaterialReceiptNoteController {
 				GetMaterialRecNoteList.class);
 		System.out.println("materialRecNoteList  :" + materialRecNoteList.toString());
 
-		supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplier", List.class);
+		Supplist supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
 
-		System.out.println("Supplier List :" + supplierDetailsList.toString());
+		System.out.println("Supplier List :" + supplierDetailsList.getSupplierDetailslist().toString());
 		System.out.println("materialRecNoteList  " + materialRecNoteList.getMaterialRecNoteList());
 		model.addObject("materialRecNoteList", materialRecNoteList.getMaterialRecNoteList());
-		model.addObject("supplierDetailsList", supplierDetailsList);
+		model.addObject("supplierDetailsList", supplierDetailsList.getSupplierDetailslist());
 		return model;
 
 	}
@@ -1210,8 +1210,10 @@ public class MaterialReceiptNoteController {
 	public float cgst = 0;
 	public float sgst = 0;
 	public float igst = 0;
+	public float cess = 0;
 
 	MaterialRecNote materialRecNoteHeaderAcc = new MaterialRecNote();
+	int checkSupp;
 
 	@RequestMapping(value = "/materialRecieptAccDetail", method = RequestMethod.GET)
 	public ModelAndView materialRecieptAccDetail(HttpServletRequest request, HttpServletResponse response) {
@@ -1226,13 +1228,14 @@ public class MaterialReceiptNoteController {
 		cgst = 0;
 		sgst = 0;
 		igst = 0;
+		cess = 0;
 
 		int mrnId = Integer.parseInt(request.getParameter("mrnId"));
 		System.out.println("mrnId" + mrnId);
 		ModelAndView model = new ModelAndView("masters/materialRecieptAccDetail");
 
 		try {
-			List<SupplierDetails> supplierDetailsList = new ArrayList<SupplierDetails>();
+			 
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("mrnId", mrnId);
@@ -1242,7 +1245,11 @@ public class MaterialReceiptNoteController {
 					MaterialRecNote.class);
 			System.out.println(
 					"materialRecNoteHeaderAcc" + materialRecNoteHeaderAcc.getMaterialRecNoteDetails().toString());
-			supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplier", List.class);
+			
+			Supplist supplierList = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
+			//supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplier", List.class);
+			
+			 
 
 			int poId = materialRecNoteHeaderAcc.getPoId();
 			System.out.println("poId" + poId);
@@ -1269,6 +1276,13 @@ public class MaterialReceiptNoteController {
 					GetTaxListByRmId.class);
 
 			System.out.println("getTaxListByRmId " + getTaxListByRmId.getGetTaxByRmIdList());
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			int suppId=materialRecNoteHeaderAcc.getSupplierId();
+			map.add("suppId", suppId);
+			 checkSupp = rest.postForObject(Constants.url + "CheckSuppGst", map,
+					Integer.class);
+			System.out.println("checkSupp  "+checkSupp);
 
 			materialRecieptAccList = new ArrayList<MaterialRecieptAcc>();
 			MaterialRecieptAcc materialRecieptAcc = new MaterialRecieptAcc();
@@ -1335,18 +1349,36 @@ public class MaterialReceiptNoteController {
 									+ materialRecieptAcc.getOther1() + materialRecieptAcc.getOther2()));
 					taxableAmt = taxableAmt + materialRecieptAcc.getTaxableAmt();
 					System.out.println("taxableAmt" + taxableAmt);
+					
+					if(checkSupp==1)
+					{
+						materialRecieptAcc.setCgstAmt(materialRecieptAcc.getTaxableAmt() * materialRecieptAcc.getCgst() / 100);
+						cgst = cgst + materialRecieptAcc.getCgstAmt();
+						System.out.println("cgst" + cgst);
 
-					materialRecieptAcc
-							.setCgstAmt(materialRecieptAcc.getTaxableAmt() * materialRecieptAcc.getCgst() / 100);
-					cgst = cgst + materialRecieptAcc.getCgstAmt();
-					System.out.println("cgst" + cgst);
+						materialRecieptAcc.setSgstAmt(materialRecieptAcc.getTaxableAmt() * materialRecieptAcc.getSgst() / 100);
+						sgst = sgst + materialRecieptAcc.getSgstAmt();
+						System.out.println("sgst" + sgst);
 
-					materialRecieptAcc
-							.setSgstAmt(materialRecieptAcc.getTaxableAmt() * materialRecieptAcc.getSgst() / 100);
-					sgst = sgst + materialRecieptAcc.getSgstAmt();
-					System.out.println("sgst" + sgst);
+						materialRecieptAcc.setIgstAmt(0);
+						igst = igst + materialRecieptAcc.getIgstAmt();
+					}
+					else
+					{
+						materialRecieptAcc.setCgstAmt(0);
+						cgst = cgst + materialRecieptAcc.getCgstAmt();
+						System.out.println("cgst" + cgst);
 
-					materialRecieptAcc.setIgstAmt(0);
+						materialRecieptAcc.setSgstAmt(0);
+						sgst = sgst + materialRecieptAcc.getSgstAmt();
+						System.out.println("sgst" + sgst);
+
+						materialRecieptAcc.setIgstAmt(materialRecieptAcc.getTaxableAmt() * materialRecieptAcc.getIgst() / 100);
+						igst = igst + materialRecieptAcc.getIgstAmt();
+						
+					}
+
+					
 					materialRecieptAcc.setCessAmt(0);
 					materialRecieptAccList.add(materialRecieptAcc);
 
@@ -1366,6 +1398,8 @@ public class MaterialReceiptNoteController {
 			materialRecNoteHeaderAcc.setDiscAmt((materialRecNoteHeaderAcc.getBasicValue() - materialRecNoteHeaderAcc.getDiscAmt2())*materialRecNoteHeaderAcc.getDiscPer() / 100);
 			materialRecNoteHeaderAcc.setCgst(cgst);
 			materialRecNoteHeaderAcc.setSgst(sgst);
+			materialRecNoteHeaderAcc.setIgst(igst);
+			materialRecNoteHeaderAcc.setCess(cess);
 			float finalAmt = (materialRecNoteHeaderAcc.getBasicValue() - materialRecNoteHeaderAcc.getDiscAmt2()
 					- materialRecNoteHeaderAcc.getDiscAmt())
 					+ (materialRecNoteHeaderAcc.getFreightAmt() + materialRecNoteHeaderAcc.getInsuranceAmt() + other1
@@ -1376,9 +1410,9 @@ public class MaterialReceiptNoteController {
 
 			System.out.println("materialRecieptAccList " + materialRecieptAccList.toString());
 
-			System.out.println("Supplier List :" + supplierDetailsList.toString());
+			System.out.println("Supplier List :" + supplierList.getSupplierDetailslist().toString());
 			model.addObject("materialRecNoteHeader", materialRecNoteHeaderAcc);
-			model.addObject("supplierDetailsList", supplierDetailsList);
+			model.addObject("supplierDetailsList", supplierList.getSupplierDetailslist());
 			model.addObject("materialRecieptAccList", materialRecieptAccList);
 
 		} catch (Exception e) {
@@ -1396,17 +1430,28 @@ public class MaterialReceiptNoteController {
 		int index = Integer.parseInt(request.getParameter("index"));
 		float poRate = Float.parseFloat(request.getParameter("poRate"));
 		float discPer = Float.parseFloat(request.getParameter("discPer"));
+		float cessAmt = Float.parseFloat(request.getParameter("cessAmt"));
+		
 		System.out.println("index" + index);
 		System.out.println("discPer" + discPer);
 		System.out.println("poRate" + poRate);
+		System.out.println("cessAmt" + cessAmt);
 
 		try {
 
 			for (int i = 0; i < materialRecieptAccList.size(); i++) {
 				if (i == index) {
 					materialRecieptAccList.get(i).setPoRate(poRate);
-					materialRecieptAccList.get(i).setRateCal(materialRecieptAccList.get(i).getPoRate()
-							/ (1 + materialRecieptAccList.get(i).getGst() / 100));
+					if(materialRecieptAccList.get(i).getIncldTax()==1)
+					{
+						materialRecieptAccList.get(i).setRateCal(materialRecieptAccList.get(i).getPoRate()
+								/ (1 + materialRecieptAccList.get(i).getGst() / 100));
+					}
+					else
+					{
+						materialRecieptAccList.get(i).setRateCal(materialRecieptAccList.get(i).getPoRate());
+					}
+					
 					materialRecieptAccList.get(i).setValue(materialRecieptAccList.get(i).getReciedvedQty()
 							* materialRecieptAccList.get(i).getRateCal());
 					materialRecieptAccList.get(i).setDiscPer(discPer);
@@ -1421,11 +1466,24 @@ public class MaterialReceiptNoteController {
 					materialRecieptAccList.get(i).setCdAmt(
 							(materialRecieptAccList.get(i).getValue() - materialRecieptAccList.get(i).getDiscAmt())
 									* materialRecieptAccList.get(i).getCdPer() / 100);
-
-					materialRecieptAccList.get(i).setCgstAmt(materialRecieptAccList.get(i).getTaxableAmt()
-							* materialRecieptAccList.get(i).getCgst() / 100);
-					materialRecieptAccList.get(i).setSgstAmt(materialRecieptAccList.get(i).getTaxableAmt()
-							* materialRecieptAccList.get(i).getSgst() / 100);
+ 
+					if(checkSupp==1)
+					{
+						materialRecieptAccList.get(i).setCgstAmt(materialRecieptAccList.get(i).getTaxableAmt()
+								* materialRecieptAccList.get(i).getCgst() / 100);
+						materialRecieptAccList.get(i).setSgstAmt(materialRecieptAccList.get(i).getTaxableAmt()
+								* materialRecieptAccList.get(i).getSgst() / 100);
+						materialRecieptAccList.get(i).setIgstAmt(0);
+					}
+					else
+					{
+						materialRecieptAccList.get(i).setCgstAmt(0);
+						materialRecieptAccList.get(i).setSgstAmt(0);
+						materialRecieptAccList.get(i).setIgstAmt(materialRecieptAccList.get(i).getTaxableAmt()
+								* materialRecieptAccList.get(i).getIgst() / 100);
+						
+					}
+					materialRecieptAccList.get(i).setCessAmt(cessAmt);
 
 				}
 
@@ -1441,12 +1499,15 @@ public class MaterialReceiptNoteController {
 			cgst = 0;
 			sgst = 0;
 			igst = 0;
+			cess = 0;
 			for (int i = 0; i < materialRecieptAccList.size(); i++) {
 				valueTotal = valueTotal + materialRecieptAccList.get(i).getValue();
 				discAmtTotal = discAmtTotal + materialRecieptAccList.get(i).getDiscAmt();
 				taxableAmt = taxableAmt + materialRecieptAccList.get(i).getTaxableAmt();
 				cgst = cgst + materialRecieptAccList.get(i).getCgstAmt();
 				sgst = sgst + materialRecieptAccList.get(i).getSgstAmt();
+				igst = igst + materialRecieptAccList.get(i).getIgstAmt();
+				cess = cess + materialRecieptAccList.get(i).getCessAmt();
 
 			}
 			for (int i = 0; i < materialRecieptAccList.size(); i++) // cal freight amt
@@ -1480,12 +1541,15 @@ public class MaterialReceiptNoteController {
 			cgst = 0;
 			sgst = 0;
 			igst = 0;
+			cess = 0;
 			for (int i = 0; i < materialRecieptAccList.size(); i++) {
 				valueTotal = valueTotal + materialRecieptAccList.get(i).getValue();
 				discAmtTotal = discAmtTotal + materialRecieptAccList.get(i).getDiscAmt();
 				taxableAmt = taxableAmt + materialRecieptAccList.get(i).getTaxableAmt();
 				cgst = cgst + materialRecieptAccList.get(i).getCgstAmt();
 				sgst = sgst + materialRecieptAccList.get(i).getSgstAmt();
+				igst = igst + materialRecieptAccList.get(i).getIgstAmt();
+				cess = cess + materialRecieptAccList.get(i).getCessAmt();
 
 			}
 			for (int i = 0; i < materialRecieptAccList.size(); i++) // cal freight amt, insurance amnt;
@@ -1500,6 +1564,8 @@ public class MaterialReceiptNoteController {
 							* materialRecNoteHeaderAcc.getDiscPer() / 100);
 			materialRecNoteHeaderAcc.setCgst(cgst);
 			materialRecNoteHeaderAcc.setSgst(sgst);
+			materialRecNoteHeaderAcc.setIgst(igst);
+			materialRecNoteHeaderAcc.setCess(cess);
 			float finalAmt = (materialRecNoteHeaderAcc.getBasicValue() - materialRecNoteHeaderAcc.getDiscAmt2()
 					- materialRecNoteHeaderAcc.getDiscAmt())
 					+ (materialRecNoteHeaderAcc.getFreightAmt() + materialRecNoteHeaderAcc.getInsuranceAmt() + other1
@@ -1508,7 +1574,7 @@ public class MaterialReceiptNoteController {
 							+ materialRecNoteHeaderAcc.getRoundOff());
 			materialRecNoteHeaderAcc.setBillAmount(finalAmt);
 
-			System.out.println("discAmtTotal" + materialRecNoteHeaderAcc.getDiscAmt());
+			System.out.println("CessAmt" + materialRecNoteHeaderAcc.getCess());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1548,10 +1614,23 @@ public class MaterialReceiptNoteController {
 						+ (materialRecieptAccList.get(i).getFreightAmt() + materialRecieptAccList.get(i).getInsuAmt()
 								+ materialRecieptAccList.get(i).getOther1()
 								+ materialRecieptAccList.get(i).getOther2()));
-				materialRecieptAccList.get(i).setCgstAmt(
-						materialRecieptAccList.get(i).getTaxableAmt() * materialRecieptAccList.get(i).getCgst() / 100);
-				materialRecieptAccList.get(i).setSgstAmt(
-						materialRecieptAccList.get(i).getTaxableAmt() * materialRecieptAccList.get(i).getSgst() / 100);
+				
+				if(checkSupp==1)
+				{
+					materialRecieptAccList.get(i).setCgstAmt(materialRecieptAccList.get(i).getTaxableAmt()
+							* materialRecieptAccList.get(i).getCgst() / 100);
+					materialRecieptAccList.get(i).setSgstAmt(materialRecieptAccList.get(i).getTaxableAmt()
+							* materialRecieptAccList.get(i).getSgst() / 100);
+					materialRecieptAccList.get(i).setIgstAmt(0);
+				}
+				else
+				{
+					materialRecieptAccList.get(i).setCgstAmt(0);
+					materialRecieptAccList.get(i).setSgstAmt(0);
+					materialRecieptAccList.get(i).setIgstAmt(materialRecieptAccList.get(i).getTaxableAmt()
+							* materialRecieptAccList.get(i).getIgst() / 100);
+					
+				}
 
 			}
 			System.out.println("materialRecieptAccList" + materialRecieptAccList.toString());

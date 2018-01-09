@@ -358,7 +358,8 @@
 													</td>
 													<td><c:out value="${materialRecieptAccList.igstAmt}" />
 													</td>
-													<td><c:out value="${materialRecieptAccList.cessAmt}" />
+													<td><input style="width:200%;" onchange="changeRate(${count.index})" type="text" name="cessAmt${count.index}" id="cessAmt${count.index}"
+									value="${materialRecieptAccList.cessAmt}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
 													</td>
 													
 													<%-- <td>
@@ -583,6 +584,7 @@
 		var poRate = $("#poRate"+key+"").val();
 		
 		var discPer = $("#discPer"+key+"").val();
+		var cessAmt = $("#cessAmt"+key+"").val();
 		
 		
 		$
@@ -594,6 +596,7 @@
 					index : key,
 					poRate : poRate,
 					discPer : discPer,
+					cessAmt : cessAmt,
 				
 					ajax : 'true',
 
@@ -654,7 +657,9 @@
 								  	tr.append($('<td></td>').html(itemList.cgstAmt));
 								  	tr.append($('<td></td>').html(itemList.sgstAmt));
 								  	tr.append($('<td></td>').html(itemList.igstAmt));
-								  	tr.append($('<td></td>').html(itemList.cessAmt));
+								  	/* tr.append($('<td></td>').html(itemList.cessAmt)); */
+								  	tr.append($('<td style="width:200%;"></td>').html('<input style="width:200%;" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+
 								  
 								  	/* tr.append($('<td></td>').html('<span  class="glyphicon glyphicon-ok" onclick="changeRate('+key+')" id="ok'+key+'"></span>'));
 								  	  */
@@ -685,6 +690,8 @@
 										document.getElementById("discAmt").value=data.discAmt;
 										document.getElementById("cgst").value=data.cgst;
 										document.getElementById("sgst").value=data.sgst;
+										document.getElementById("igst").value=data.igst;
+										document.getElementById("cess").value=data.cess;
 								});
 					
 					
@@ -771,8 +778,9 @@
 								  	tr.append($('<td></td>').html(itemList.cgstAmt));
 								  	tr.append($('<td></td>').html(itemList.sgstAmt));
 								  	tr.append($('<td></td>').html(itemList.igstAmt));
-								  	tr.append($('<td></td>').html(itemList.cessAmt));
-								  
+								  	/* tr.append($('<td></td>').html(itemList.cessAmt)); */
+								  	tr.append($('<td style="width:200%;"></td>').html('<input style="width:200%;" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+
 								  	/* tr.append($('<td></td>').html('<span  class="glyphicon glyphicon-ok" onclick="changeRate('+key+')" id="ok'+key+'"></span>'));
 								  	 */
 									$('#table_grid tbody').append(tr);
@@ -797,6 +805,8 @@
 										document.getElementById("discAmt").value=data.discAmt;
 										document.getElementById("cgst").value=data.cgst;
 										document.getElementById("sgst").value=data.sgst;
+										document.getElementById("igst").value=data.igst;
+										document.getElementById("cess").value=data.cess;
 								});
 					
 				});
