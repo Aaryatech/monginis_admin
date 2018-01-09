@@ -284,7 +284,7 @@ public class SpCakeDetailController {
 		for(int i=0;i<spCakeDetailedList.size();i++)
 		{
 			if(i==index)
-			{
+			{ 
 		     getItemDetail=spCakeDetailedList.get(index);
 			}
 		
