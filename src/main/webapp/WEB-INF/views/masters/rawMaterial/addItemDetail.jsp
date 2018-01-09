@@ -192,7 +192,7 @@
 			
 		                         <label class="col-sm-3 col-lg-1 control-label">Raw Material Item</label>
 								<div class="col-sm-6 col-lg-4 controls">
-									<select name="rm_id" id="rm_id"class="form-control"  tabindex="6"  placeholder="Raw Material"data-rule-required="true">
+									<select name="rm_id" id="rm_id"class="form-control chosen"  tabindex="6"  placeholder="Raw Material"data-rule-required="true">
 											<option value="0">Select Raw Material</option>
 										    
 							     	</select> 	
@@ -462,6 +462,8 @@
 					}
 					html += '</option>';
 					$('#rm_id').html(html);
+					$("#rm_id").trigger("chosen:updated");
+					
 				});
 			}
 				 else
@@ -473,6 +475,7 @@
 						var html = '<option value="0" selected >Select Raw Material</option>';
 						html += '</option>';
 						$('#rm_id').html(html);
+						$("#rm_id").trigger("chosen:updated");
 
 					 }
 			 
@@ -514,6 +517,7 @@ function appendRmItem(rmId) {
 					html += '</option>';
 					//$("#rm_id").trigger("chosen:updated");
 					$('#rm_id').html(html);
+					$("#rm_id").trigger("chosen:updated");
 
 				});
 }
@@ -942,7 +946,7 @@ $(document).ready(function() {
 					}
 					html += '</option>';
 					$('#rm_id').html(html);
-					$('#rm_id').formcontrol('refresh');
+					$("#rm_id").trigger("chosen:updated");
 
 				});
 			});

@@ -175,18 +175,17 @@ public class SpCakeDetailController {
 			spCakeDetailed.setRmQty(rmQty);
 			spCakeDetailed.setRmName(rmName);
 			spCakeDetailed.setNoOfPiecesPerItem(baseQty);
-			for(int i=0;i<commonConfList.size();i++)
+			
+			for(int j=0;j<commonConfList.size();j++)
 			{
-				System.out.println("in for "+commonConfList.toString());
-				String name =commonConfList.get(i).getName();
-				System.out.println(name);
-				if(rmName.equals(name))
+				if(rmName.equals(commonConfList.get(j).getName()))
 				{
-					System.out.println(rmName+""+commonConfList.get(i).getName()+""+commonConfList.get(i).getRmUomId());
-					spCakeDetailed.setRmUomId(commonConfList.get(i).getRmUomId());
+					spCakeDetailed.setRmUomId(commonConfList.get(j).getRmUomId());
 					break;
 				}
 			}
+			
+			 
 			
 			spCakeDetailed.setDelStatus(0);
 			spCakeDetailedList.add(spCakeDetailed);

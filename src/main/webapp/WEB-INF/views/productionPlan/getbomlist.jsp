@@ -94,7 +94,7 @@
 								<i class="fa fa-table"></i> Search Bill Of Material List
 							</h3>
 							<div class="box-tool">
-								<input type="button" class="btn btn-primary" value="Datewise record" onclick="showdatewisetable()"> <a data-action="collapse" href="#"><i
+								<a  onclick="showdatewisetable()">Show Datewise Record</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 						</div>
@@ -191,7 +191,7 @@
 								<i class="fa fa-table"></i> Search Bill of Material List Date Wise
 							</h3>
 							<div class="box-tool">
-								<input type="button" class="btn btn-primary" value="Pending List" onclick="showdatewisetable()"> <a data-action="collapse" href="#"><i
+								<a  onclick="showdatewisetable()">Pending List</a>  <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
