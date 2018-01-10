@@ -34,6 +34,7 @@ import com.ats.adminpanel.model.RawMaterial.ItemSfHeaderList;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialDetails;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialDetailsList;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialUom;
+import com.ats.adminpanel.model.RawMaterial.RmItemGroup;
 import com.ats.adminpanel.model.RawMaterial.SfItemDetailList;
 import com.ats.adminpanel.model.franchisee.CommonConf;
 import com.ats.adminpanel.model.item.Item;
@@ -212,11 +213,14 @@ public class ItemSfController {
 		
 		 System.out.println("LIst :"+rawMaterialDetailsList.toString());
 		
+			List<RmItemGroup> rmItemGroupList=restTemplate.getForObject(Constants.url + "rawMaterial/getAllRmItemGroup", List.class);
+
 		model.addObject("rmDetailList",rawMaterialDetailsList.getRawMaterialDetailsList());
 		System.out.println("sf header List "+itemHeaderList.toString());
 		
 		sfDetailList=sfDetaiListItems.getSfItemDetail();
 		
+		model.addObject("rmItemGroupList", rmItemGroupList);
 		model.addObject("sfDetailList",sfDetailList);
 		model.addObject("itemHeaderList",itemHeaderList);
 		model.addObject("sfName",sfName);	

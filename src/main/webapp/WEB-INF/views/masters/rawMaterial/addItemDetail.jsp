@@ -173,13 +173,7 @@
 
 										</select>
 									</div>
-								<!-- 	<label class="col-sm-3 col-lg-1 control-label">Raw Material</label>
-									<div class="col-sm-6 col-lg-4 controls">
-										<select name="rm_id" id="rm_id"class="form-control" placeholder="Raw Material"data-rule-required="true">
-											<option value="0">Select Raw Material</option>
-										    
-								</select> 
-									</div>-->
+								
 								</div>
 									<div class="form-group">
 				<div class="col-sm-2 col-lg-2 control-label" >RM Category</div>
@@ -690,9 +684,17 @@ $(document).ready(function() {
  }
 	 document.getElementById("rm_weight").value="";
 	 document.getElementById("rm_type").selectedIndex = "0"; 
+		var html = '<option value="0" selected >Select Raw Material</option>';
+		html += '</option>';
+		$('#rm_id').html(html);
+		$("#rm_id").trigger("chosen:updated");
 	 document.getElementById("rm_id").selectedIndex = "0"; 
+	 
 	 document.getElementById("rm_qty").value="";
 	 document.getElementById("base_qty").value ="";
+	 document.getElementById("rm_group").selectedIndex = "0";  
+	 document.getElementById("rm_cat").selectedIndex = "0";  
+
 	}
 });
 
@@ -701,10 +703,15 @@ $(document).ready(function() {
 	$("#cancel").click(function() {
 		 document.getElementById("rm_weight").value="";
 		 document.getElementById("rm_type").selectedIndex = "0"; 
+			var html = '<option value="0" selected >Select Raw Material</option>';
+			html += '</option>';
+			$('#rm_id').html(html);
+			$("#rm_id").trigger("chosen:updated");
 		 document.getElementById("rm_id").selectedIndex = "0"; 
 		 document.getElementById("rm_qty").value="";
 		 document.getElementById("base_qty").value ="";
-		
+		 document.getElementById("rm_group").selectedIndex = "0";  
+		 document.getElementById("rm_cat").selectedIndex = "0";  
 	});
 });
 
@@ -729,6 +736,8 @@ function editItemDetail(token){
 			 document.getElementById("rm_group").disabled = true;
 			 document.getElementById("rm_cat").disabled = true;
 			}
+		document.getElementById("rm_group").disabled = true;
+		 document.getElementById("rm_cat").disabled = true;
 		         document.getElementById("rm_weight").value=data.rmWeight;
 				 document.getElementById("rm_qty").value=data.rmQty;
 				 document.getElementById("rm_type").options.selectedIndex =data.rmType;
@@ -844,71 +853,6 @@ function deleteItemDetail(key){
 </script>
 
 <script type="text/javascript">
-/* $(document).ready(function() {
-	$("#Submit").click(function() {
-
-	$.getJSON('${addItemDetail}', {
-	
-	
-		ajax : 'true',
-
-	}, function(data) {
-		
-		 //$('#loader').hide();
-		var len = data.length;
-
-		alert("Item Detail Saved Successfully");
-
-		
-		
-/* 		$('#table1 td').remove();
-
-		$.each(data,function(key, item) {
-
-	if(item.delStatus==0)
-    {	
-		var tr = $('<tr></tr>');
-
-	  	tr.append($('<td></td>').html(key+1));
-
-	  	tr.append($('<td></td>').html(item.itemName));
-
-	  	if(item.rmType==1)
-	  		{
-		  	
-	  		 tr.append($('<td></td>').html("Raw Material"));
-
-	  		}
-	  	else
-	  		{
-		  	tr.append($('<td></td>').html("Semi Finished"));
-
-	  		}
-
-	  	tr.append($('<td></td>').html(item.rmName));
-
-	  	tr.append($('<td></td>').html(item.rmUomId));
-	  	
-	  	tr.append($('<td></td>').html(item.rmWeight));
-	  	
-	  	tr.append($('<td></td>').html(item.rmQty));
-	  	
-	 	tr.append($('<td></td>').html("<a href='#' class='action_btn' onclick=editItemDetail("+key+")> <abbr title='edit'> <i class='fa fa-edit  fa-lg' ></i></abbr> </a> <a href='#' class='action_btn'onclick=deleteItemDetail("+key+ ")><abbr title='Delete'><i class='fa fa-trash-o  fa-lg'></i></abbr></a>"));
-	  
-	  //	tr.append($('<td></td>').html());
-	  	
-		$('#table1 tbody').append(tr);
-       }
-
-		}) */
-
-	/* 	});
-});
-}); */
-
-</script>
-		
-		<script type="text/javascript">
 $(document).ready(function() { 
 	$('#rm_group').change(
 			function() {

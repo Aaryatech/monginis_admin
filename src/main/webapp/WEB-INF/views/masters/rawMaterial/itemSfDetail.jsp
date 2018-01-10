@@ -68,7 +68,7 @@
 	<c:url var="getRawMaterial" value="/getRawMaterial" />
 
 	<c:url var="itemForEdit" value="/itemForEdit" />
-
+	<c:url var="getRmListByCatId" value="/getRmListByCatId" />
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
 
@@ -148,18 +148,39 @@
 										Material Type</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<select name="material_type" id="material_type"
-											class="form-control chosen" placeholder="Material Type"
+											class="form-control" placeholder="Material Type"
 											data-rule-required="true">
 											<option value="0">Select Material Type</option>
 											<option value="1">RM</option>
 											<option value="2">SF</option>
 										</select>
 									</div>
+                                      <label class="col-sm-3 col-lg-2 control-label">Rm Group</label>
+									<div class="col-sm-6 col-lg-4 controls">
+										<select name="rm_group" id="rm_group" class="form-control" tabindex="6">
+										<option value="0" disabled="disabled" selected="selected">Select RM Group</option>
+											 <c:forEach items="${rmItemGroupList}" var="rmItemGroupList"
+						            	varStatus="count">
+							   <option value="${rmItemGroupList.grpId}"><c:out value="${rmItemGroupList.grpName}"/></option>
+ 													 
+												</c:forEach>
+						
 
+										</select>
+									</div>
+                                </div>
+                 <div class="form-group">
+				<div class="col-sm-2 col-lg-2 control-label" >RM Category</div>
+									<div class="col-md-4">
+									<select name="rm_cat" id="rm_cat" class="form-control" tabindex="6">
+										<option value="0"disabled="disabled" selected="selected">Select RM Category</option>
+											 
+										</select>
+									</div>
 									<label class=" col-sm-3 col-lg-2 control-label">
 										Material Name</label>
 									<div class="col-sm-6 col-lg-4 controls" id="chooseRM">
-										<select class="form-control"  name="rm_material_name" id="rm_material_name"
+										<select class="form-control chosen"tabindex="6"   name="rm_material_name"  id="rm_material_name"
 											 placeholder="Material Name"
 											data-rule-required="true">
 											<option value="0">Select Material</option>
@@ -167,7 +188,7 @@
 										</select>
 									</div>
 
-								</div>
+				</div>
 
 								<div class="form-group">
 
@@ -391,9 +412,9 @@
 					if(validation){
 				
 				$.getJSON('${itemForEdit}', {
-					/* mat_type : materialType,
+					 mat_type : materialType,
 					mat_name_id : materialNameId,
-					mat_name : materialName, */
+					mat_name : materialName,
 					sf_weight : sfWeight,
 					qty : qty,
 					key : key1,
@@ -439,14 +460,18 @@
 
 				document.getElementById("sf_item_weight").value="";
 				document.getElementById("qty").value="";
-				//document.getElementById("material_type").options.selectedIndex = "0";
-				//document.getElementById("rm_material_name").options.selectedIndex = "0";
 				
 				$("#item_name_div").hide();
 				$("#item_name").hide();
 				$("#itemNameLabel").hide();
-				 document.getElementById("material_type").options[1].disabled = false;
-				 document.getElementById("material_type").options[2].disabled = false;
+				document.getElementById("material_type").options.selectedIndex = "0";
+
+				 
+				 var html = '<option value="0" selected >Select Raw Material</option>';
+					html += '</option>';
+					$('#rm_material_name').html(html);
+					$("#rm_material_name").trigger("chosen:updated");
+				 document.getElementById("rm_material_name").selectedIndex = "0"; 
 					}//end of validation
 			}// end of if
 			else{
@@ -513,6 +538,13 @@ tr.append($('<td></td>').html("<a href='#' class='action_btn' onclick=deleteSfDe
 			$("#material_type").val="0";
 			document.getElementById("material_type").options.selectedIndex = "0";
 			document.getElementById("rm_material_name").options.selectedIndex = "0";
+			 document.getElementById("rm_group").selectedIndex = "0";  
+			 document.getElementById("rm_cat").selectedIndex = "0";  
+			 var html = '<option value="0" selected >Select Raw Material</option>';
+				html += '</option>';
+				$('#rm_material_name').html(html);
+				$("#rm_material_name").trigger("chosen:updated");
+			 document.getElementById("rm_material_name").selectedIndex = "0"; 
 			}// end of validation if
 			}//end of else
 				editFlag=false;
@@ -584,40 +616,36 @@ function editSfDetail(token){
 		ajax : 'true',
 
 	}, function(data) {
-		//alert(data);
 		var len = data.length;
 
-		//$('#table1 td').remove();
- 
 		 $.each(data,function(key, sfDetail) {
 			editKey=key; 
 
-	//	var tr = $('<tr></tr>');
-		//var rmTypeName;
-		//alert(token);
 		if(key==token)
 			{
-		if(sfDetail.rmType == 1){
-			rmTypeName="RM";
-		}else if(sfDetail.rmType == 2){
-			rmTypeName="SF";
-		}
-		var m_type= sfDetail.rmType;
-				document.getElementById("sf_item_weight").value=sfDetail.rmWeight;
-				 document.getElementById("qty").value=sfDetail.rmQty;
+		//if(sfDetail.rmType == 1){
+		//	rmTypeName="RM";
+		//}else if(sfDetail.rmType == 2){
+		//	rmTypeName="SF";
+	//}
+		//var m_type= sfDetail.rmType;
+		if(sfDetail.rmType==2)
+			{
+			 document.getElementById("rm_group").options.selectedIndex =0;
+			 document.getElementById("rm_cat").options.selectedIndex =0;
+
+			 document.getElementById("rm_group").disabled = true;
+			 document.getElementById("rm_cat").disabled = true;
+			}
+				    document.getElementById("sf_item_weight").value=sfDetail.rmWeight;
+				    document.getElementById("qty").value=sfDetail.rmQty;
 					 document.getElementById("material_type").options.selectedIndex =sfDetail.rmType;
-					 
-					// document.getElementById("material_type").options[1].disabled = true;
-					// document.getElementById("material_type").options[2].disabled = true;
-					//document.getElementById("rm_material_name").options.selectedIndex =sfDetail.rmId;
+
 					$('#rm_material_name').val('sfDetail.rmId').prop('selected', true);
 					
 					document.getElementById("item_name").value=sfDetail.rmName;
-					
-					//$("#item_name_div").show();
-					//$("#item_name").show();
-					//$("#itemNameLabel").show();
-					
+					document.getElementById("rm_group").disabled = true;
+					 document.getElementById("rm_cat").disabled = true;
 					appendItem(sfDetail.rmId);
 				
 				 key1=key;
@@ -626,10 +654,7 @@ function editSfDetail(token){
 		 })  
 
 		});
-	/* document.getElementById("sf_item_weight").value="";
-	document.getElementById("qty").value="";
 	
-	$("#material_type").val("0"); */
 	
 }
 function appendItem(rmId){
@@ -659,6 +684,8 @@ function appendItem(rmId){
 					}
 					html += '</option>';
 					$('#rm_material_name').html(html);
+	    			$("#rm_material_name").trigger("chosen:updated");
+
 				});
 	
 }
@@ -685,16 +712,18 @@ function insertItemDetail(){
 $(document).ready(function() { 
 	$('#material_type').change(
 			function() {
-				$('#loader').show();
+				
 
-
+    if($(this).val()==2)
+    	{
+    	$('#loader').show();
 	$.getJSON('${getRawMaterial}', {
 		material_type : $(this).val(),
 					
 					ajax : 'true',
 				},  function(data) {
 					$('#loader').hide();
-
+                    
 					var html = '<option value="0" selected >Select Raw Material</option>';
 					
 					var len = data.length;
@@ -704,7 +733,23 @@ $(document).ready(function() {
 					}
 					html += '</option>';
 					$('#rm_material_name').html(html);
+					$("#rm_material_name").trigger("chosen:updated");
+
 				});
+	document.getElementById("rm_group").disabled = true;
+	 document.getElementById("rm_cat").disabled = true;
+    	}
+    else
+    	{
+    	     document.getElementById("rm_group").disabled = false;
+    		 document.getElementById("rm_cat").disabled = false;
+    			var html = '<option value="0" selected >Select Raw Material</option>';
+    			html += '</option>';
+    			$('#rm_material_name').html(html);
+    			$("#rm_material_name").trigger("chosen:updated");
+    		 document.getElementById("rm_material_name").selectedIndex = "0"; 
+    	}
+  
 			});
 			
 
@@ -741,9 +786,59 @@ function clearData(){
 	document.getElementById("qty").value="";
 	$("#material_type").val="0";
 	document.getElementById("material_type").options.selectedIndex = "0";
-	document.getElementById("rm_material_name").options.selectedIndex = "0";
+	 var html = '<option value="0" selected >Select Raw Material</option>';
+		html += '</option>';
+		$('#rm_material_name').html(html);
+		$("#rm_material_name").trigger("chosen:updated");
+	 document.getElementById("rm_material_name").selectedIndex = "0"; 
+	 document.getElementById("rm_group").selectedIndex = "0";  
+	 document.getElementById("rm_cat").selectedIndex = "0";  
 }
 </script>
+<script type="text/javascript">
+$(document).ready(function() { 
+	$('#rm_group').change(
+			function() {
+				$.getJSON('${getRmCategory}', {
+					grpId : $(this).val(),
+					ajax : 'true'
+				}, function(data) {
+					var html = '<option value="" disabled="disabled" selected >Select Category</option>';
+					
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].catId + '">'
+								+ data[i].catName + '</option>';
+					}
+					html += '</option>';
+					$('#rm_cat').html(html);
+					$('#rm_cat').formcontrol('refresh');
 
+				});
+			});
+});
+$(document).ready(function() { 
+	$('#rm_cat').change(
+			function() {
+				$.getJSON('${getRmListByCatId}', {
+					catId : $(this).val(),
+					ajax : 'true'
+				}, function(data) {
+					var html = '<option value="" disabled="disabled" selected >Select Category</option>';
+					
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].rmId + '">'
+								+ data[i].rmName + '</option>';
+					}
+					html += '</option>';
+					$('#rm_material_name').html(html);
+					$("#rm_material_name").trigger("chosen:updated");
+
+				});
+			});
+});
+
+</script>
 </body>
 </html>
