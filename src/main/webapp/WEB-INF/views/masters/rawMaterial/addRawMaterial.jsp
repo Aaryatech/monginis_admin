@@ -243,32 +243,31 @@
 												</c:forEach>
 							</select>
 						</div>
-						<label class="col-sm-3 col-lg-2 control-label">Store Issue
+						<label class="col-sm-3 col-lg-2 control-label">Store Min
 							Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_iss_qty" id="rm_iss_qty" class="form-control" placeholder="Store Issue Qty"data-rule-required="true"data-rule-number="true" />
+							<input type="text" name="rm_iss_qty" id="rm_iss_qty" class="form-control" placeholder="Store Min Qty"data-rule-required="true"data-rule-number="true" />
 						</div>
 						
 					</div>
 				
 					<div class="form-group">
-						<label class="col-sm-3 col-lg-2 control-label">Store Opening Qty </label>
+						<label class="col-sm-3 col-lg-2 control-label">Store Max Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_op_qty"  id="rm_op_qty" class="form-control"placeholder="Store Opening Qty"data-rule-required="true" data-rule-number="true" />
+							<input type="text" name="rm_op_qty"  id="rm_op_qty" class="form-control"placeholder="Store Max Qty"data-rule-required="true" data-rule-number="true" />
 						</div>
 
-						<label class="col-sm-3 col-lg-2 control-label">Store Received
+						<label class="col-sm-3 col-lg-2 control-label">Store ROL
 							Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_recd_qty"  id="rm_recd_qty" class="form-control" placeholder="Store Received Qty"data-rule-required="true" data-rule-number="true" />
+							<input type="text" name="rm_recd_qty"  id="rm_recd_qty" class="form-control" placeholder="Store ROL Qty"data-rule-required="true" data-rule-number="true" />
 						</div>
 						</div>
 						<div class="form-group">
-					<label class="col-sm-3 col-lg-2 control-label">RM Close
-							Qty </label>
+					<label class="col-sm-3 col-lg-2 control-label">RM HSNCD</label>
 
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_clo_qty" class="form-control" placeholder="Close Qty" data-rule-required="true"data-rule-number="true"  />
+							<input type="text" name="rm_clo_qty" class="form-control" placeholder="RM HSNCD" data-rule-required="true"data-rule-number="true"  />
 						</div>
 						<label class="col-sm-3 col-lg-2 control-label">RM Rejected
 							Qty </label>

@@ -81,7 +81,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Raw material Master
+						<i class="fa fa-file-o"></i>Raw Material Master
 					</h1>
 
 				</div>
