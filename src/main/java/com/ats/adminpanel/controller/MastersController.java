@@ -119,8 +119,8 @@ public class MastersController {
 		  
 		    ModelAndView mav = new ModelAndView("masters/rates");
 
-		    Constants.mainAct=2;
-			Constants.subAct=23;
+		    Constants.mainAct=1;
+			Constants.subAct=12;
 			
 			RestTemplate restTemplate = new RestTemplate();
 			AllRatesResponse allRatesListResponse=restTemplate.getForObject(
@@ -196,8 +196,8 @@ public class MastersController {
 	  public ModelAndView showAllMessages(HttpServletRequest request, HttpServletResponse response) {
 		  
 		    ModelAndView mav = new ModelAndView("masters/messages");
-		    Constants.mainAct=2;
-			Constants.subAct=24;
+		    Constants.mainAct=1;
+			Constants.subAct=9;
 
 			RestTemplate restTemplate = new RestTemplate();
 			AllspMessageResponse allspMessageList=restTemplate.getForObject(
@@ -216,8 +216,8 @@ public class MastersController {
 	  public ModelAndView showAllEvents(HttpServletRequest request, HttpServletResponse response) {
 		  System.out.println("List Event Request");
 		  ModelAndView mav = new ModelAndView("masters/events");
-		  Constants.mainAct=2;
-			Constants.subAct=22;
+		  Constants.mainAct=1;
+			Constants.subAct=11;
 
 			RestTemplate restTemplate = new RestTemplate();
 			AllEventListResponse allEventsListResponse=restTemplate.getForObject(
@@ -237,8 +237,8 @@ public class MastersController {
 	  public ModelAndView showAllFlavours(HttpServletRequest request, HttpServletResponse response) {
 		  System.out.println("List Flavour Request");
 		  ModelAndView mav = new ModelAndView("masters/flavours");
-		  Constants.mainAct=2;
-			Constants.subAct=21;
+		  Constants.mainAct=1;
+			Constants.subAct=10;
 			
 			RestTemplate restTemplate = new RestTemplate();
 			AllFlavoursListResponse allFlavoursListResponse=restTemplate.getForObject(

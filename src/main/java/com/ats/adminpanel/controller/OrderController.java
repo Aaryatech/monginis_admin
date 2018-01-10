@@ -51,8 +51,8 @@ public class OrderController {
 		
 		//ModelAndView model=new  ModelAndView("orders/orders");
 		ModelAndView model=new  ModelAndView("orders/orders");
-		Constants.mainAct=1;
-		Constants.subAct=11;
+		Constants.mainAct=4;
+		Constants.subAct=27;
 
 		
 		RestTemplate restTemplate = new RestTemplate();
@@ -191,6 +191,8 @@ public class OrderController {
 	public ModelAndView searchSpCakeOrder(HttpServletRequest request, HttpServletResponse response) {
 		
 		ModelAndView model=new ModelAndView("orders/spcakeorders");
+		Constants.mainAct=4;
+		Constants.subAct=28;
 		RestTemplate restTemplate = new RestTemplate();
 		AllFranchiseeList allFranchiseeList=restTemplate.getForObject(
 				Constants.url+"getAllFranchisee",
@@ -209,6 +211,8 @@ public class OrderController {
 	public ModelAndView regularSpCakeOrderProcess(HttpServletRequest request, HttpServletResponse response) {
 		
 		ModelAndView model=new ModelAndView("orders/regularsporders");
+		Constants.mainAct=4;
+		Constants.subAct=29;
 		RestTemplate restTemplate = new RestTemplate();
 		AllFranchiseeList allFranchiseeList=restTemplate.getForObject(
 				Constants.url+"getAllFranchisee",

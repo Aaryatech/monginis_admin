@@ -30,8 +30,8 @@ public class LatestNewsController {
 	@RequestMapping(value = "/addNews")
 	public ModelAndView redirectToAddNews(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("latestNews/addNew");
-		Constants.mainAct=5;
-		Constants.subAct=51;
+		//Constants.mainAct=5;
+		//Constants.subAct=51;
 		return model;
 	}
 	
@@ -105,8 +105,8 @@ public class LatestNewsController {
 		
 		ModelAndView model = new ModelAndView("latestNews/allLatestNews");
 		RestTemplate restTemplate = new RestTemplate();
-		Constants.mainAct=5;
-		Constants.subAct=52;
+		Constants.mainAct=1;
+		Constants.subAct=1;
 		try {
 			
 			AllSchedulerResponse allSchedulerResponse=restTemplate

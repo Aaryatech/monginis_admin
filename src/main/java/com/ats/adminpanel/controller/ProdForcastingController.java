@@ -56,8 +56,8 @@ public class ProdForcastingController {
 
 		ModelAndView model = new ModelAndView("production/prodForcasting");
 
-		Constants.mainAct = 16;
-		Constants.subAct = 163;
+		Constants.mainAct = 4;
+		Constants.subAct = 34;
 
 		try {
 

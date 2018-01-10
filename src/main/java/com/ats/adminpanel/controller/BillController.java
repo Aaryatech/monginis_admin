@@ -508,8 +508,8 @@ public class BillController {
 		logger.info("/showGenerateBill request mapping.");
 
 		ModelAndView model = new ModelAndView("billing/generatebill");
-		Constants.mainAct = 8;
-		Constants.subAct = 82;
+		Constants.mainAct =9;
+		Constants.subAct =19;
 		try {
 			ZoneId z = ZoneId.of("Asia/Calcutta");
 
@@ -768,8 +768,8 @@ public class BillController {
 
 		ModelAndView model = new ModelAndView("billing/viewbillheader");
 
-		Constants.mainAct = 8;
-		Constants.subAct = 83;
+		Constants.mainAct =2;
+		Constants.subAct =20;
 		try {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
@@ -827,8 +827,8 @@ public class BillController {
 
 		ModelAndView model = new ModelAndView("billing/billHeaderForPrint");
 
-		Constants.mainAct = 8;
-		Constants.subAct = 83;
+		//Constants.mainAct = 8;
+		//Constants.subAct = 83;
 		try {
 
 			RestTemplate restTemplate = new RestTemplate();
@@ -905,8 +905,8 @@ public class BillController {
 	public @ResponseBody List<FrBillHeaderForPrint> getBillListProcessForPrint(HttpServletRequest request,
 			HttpServletResponse response) {
 
-		Constants.mainAct = 8;
-		Constants.subAct = 83;
+		//Constants.mainAct = 8;
+		//Constants.subAct = 83;
 
 		billHeadersList = new ArrayList<>();
 
@@ -1026,8 +1026,8 @@ public class BillController {
 
 		ModelAndView model = new ModelAndView("billing/billDetailPdf");
 
-		Constants.mainAct = 8;
-		Constants.subAct = 83;
+		//Constants.mainAct = 8;
+		//Constants.subAct = 83;
 		try {
 			
 			vehicleNo=request.getParameter("vehicle_no");
@@ -1179,8 +1179,8 @@ System.out.println("IN Show bill PDF Method :/showBillPdf");
 	public @ResponseBody List<GetBillHeader> getBillListProcess(HttpServletRequest request,
 			HttpServletResponse response) {
 
-		Constants.mainAct = 8;
-		Constants.subAct = 83;
+		//Constants.mainAct = 8;
+		//Constants.subAct = 83;
 
 		billHeadersList = new ArrayList<>();
 

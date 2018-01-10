@@ -83,8 +83,8 @@ public class SpProductionController {
 	@RequestMapping(value = "/showAddEmployee", method = RequestMethod.GET)
 	public ModelAndView showAddEmployee(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 19;
-		Constants.subAct = 191;
+		Constants.mainAct=17;
+		Constants.subAct =90;
 
 		ModelAndView model = new ModelAndView("spProduction/addEmployee");
 		try {
@@ -119,8 +119,8 @@ public class SpProductionController {
 	@RequestMapping(value = "/showAddDepartment", method = RequestMethod.GET)
 	public ModelAndView showAddDepartment(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 2;
-		Constants.subAct = 26;
+		Constants.mainAct =17;
+		Constants.subAct =91;
 
 		ModelAndView model = new ModelAndView("masters/department");
 		try {
@@ -139,8 +139,8 @@ public class SpProductionController {
 	@RequestMapping(value = "/showAddStation", method = RequestMethod.GET)
 	public ModelAndView showAddStation(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 19;
-		Constants.subAct = 192;
+		Constants.mainAct =19;
+		Constants.subAct =95;
 
 		ModelAndView model = new ModelAndView("spProduction/addSpStation");
 		try {
@@ -165,8 +165,8 @@ public class SpProductionController {
 	@RequestMapping(value = "/showAddInstrument", method = RequestMethod.GET)
 	public ModelAndView showAddInstrument(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 19;
-		Constants.subAct = 193;
+		Constants.mainAct =19;
+		Constants.subAct =96;
 		RestTemplate restTemplate = new RestTemplate();
 
 		ModelAndView model = new ModelAndView("spProduction/addInstrument");
@@ -189,8 +189,8 @@ public class SpProductionController {
 	@RequestMapping(value = "/showAllInstrument", method = RequestMethod.GET)
 	public ModelAndView showAllInstrument(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 19;
-		Constants.subAct = 194;
+		Constants.mainAct =19;
+		Constants.subAct =97;
 
 		ModelAndView model = new ModelAndView("spProduction/instrumentsList");
 		try {
@@ -790,8 +790,8 @@ public class SpProductionController {
 	@RequestMapping(value = "/showAddShift", method = RequestMethod.GET)
 	public ModelAndView showAddShift(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 19;
-		Constants.subAct = 194;
+		Constants.mainAct =19;
+		Constants.subAct =98;
 
 		ModelAndView model = new ModelAndView("spProduction/addShift");
 		RestTemplate restTemplate = new RestTemplate();
@@ -877,8 +877,8 @@ public class SpProductionController {
 	@RequestMapping(value = "/configureStation", method = RequestMethod.GET)
 	public ModelAndView configureStation(HttpServletRequest request, HttpServletResponse response) {
 
-		 Constants.mainAct = 19;
-		 Constants.subAct = 195;
+		 Constants.mainAct =20;
+		 Constants.subAct =99;
 
 		ModelAndView model = new ModelAndView("spProduction/configureStation");
 		try {
@@ -1083,8 +1083,8 @@ public class SpProductionController {
 	@RequestMapping(value = "/instrumentAllocation", method = RequestMethod.GET)
 	public ModelAndView instrumentAllocation(HttpServletRequest request, HttpServletResponse response) {
 
-		 Constants.mainAct = 19;
-		 Constants.subAct = 196;
+		 Constants.mainAct =20;
+		 Constants.subAct =116;
 		int isEdit = 0;
 		ModelAndView model = new ModelAndView("spProduction/instrumentAlloc");
 		try {
@@ -1285,8 +1285,8 @@ public class SpProductionController {
 	@RequestMapping(value = "/instrVerification", method = RequestMethod.GET)
 	public ModelAndView instVerification(HttpServletRequest request, HttpServletResponse response) {
 
-	    Constants.mainAct = 19;
-		Constants.subAct = 197;
+	    Constants.mainAct =20;
+		Constants.subAct =101;
 		int isEdit = 0;
 		ModelAndView model = new ModelAndView("spProduction/InstVerification");
 		try {
@@ -1525,22 +1525,22 @@ public class SpProductionController {
 
 		ModelAndView model = new ModelAndView("spProduction/instVerifHeader");
 		
-		 Constants.mainAct = 19;
-			Constants.subAct = 198;
+		    Constants.mainAct =20;
+			Constants.subAct =117;
     try {
-		RestTemplate restTemplate = new RestTemplate();
+		 RestTemplate restTemplate = new RestTemplate();
 
-		List<GetInstVerifHeader> getInstVerifHeaderRes = restTemplate
+		 List<GetInstVerifHeader> getInstVerifHeaderRes = restTemplate
 				.getForObject(Constants.url + "/spProduction/getInstVerHeaders", List.class);
 
-		model.addObject("getInstVerifHeaderRes", getInstVerifHeaderRes);
-    }
-    catch(Exception e)
-    {
-    	System.out.println("Exception in /instrVerifDetails");
-    }
+		 model.addObject("getInstVerifHeaderRes", getInstVerifHeaderRes);
+        }
+        catch(Exception e)
+        {
+    	  System.out.println("Exception in /instrVerifDetails");
+        }
 		return model;
-	}
+	 }
 	// --------------------------------------------------------------------------------------------------------------
 	// -------------------------------------------------------------------------------------------------------
 		@RequestMapping(value = "/showInstrVeriDetails/{instVerifHId}", method = RequestMethod.GET)
@@ -1577,8 +1577,8 @@ public class SpProductionController {
 		@RequestMapping(value = "/showCkAllocToStation", method = RequestMethod.GET)
 		public ModelAndView showCkAllocToStation(HttpServletRequest request, HttpServletResponse response) {
 
-			 Constants.mainAct = 19;
-			 Constants.subAct = 199;
+			 Constants.mainAct =20;
+			 Constants.subAct =100;
 			ModelAndView model = new ModelAndView("spProduction/ckAllocToStation");
 	    try {
 			RestTemplate restTemplate = new RestTemplate();
@@ -1708,8 +1708,8 @@ public class SpProductionController {
 				public ModelAndView showSpCksAllocToStation(HttpServletRequest request, HttpServletResponse response) {
 
 					ModelAndView model = new ModelAndView("spProduction/stationwiseSpAllocList");
-					 Constants.mainAct = 19;
-					 Constants.subAct = 200;
+					 Constants.mainAct =20;
+					 Constants.subAct =115;
 					 try {
 							RestTemplate restTemplate = new RestTemplate();
 							SpStationList spStationList = restTemplate.getForObject(Constants.url + "/spProduction/getSpStationList",

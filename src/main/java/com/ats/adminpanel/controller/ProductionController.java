@@ -60,8 +60,8 @@ public class ProductionController {
 	public ModelAndView showProdForcasting(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("production/production");
-//		Constants.mainAct = 8;
-//		Constants.subAct = 82;
+	    Constants.mainAct = 4;
+		Constants.subAct = 32;
 
 		
 
@@ -441,8 +441,8 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 			
 			postProductionPlanDetaillist=new ArrayList<PostProductionPlanDetail>();
 			ModelAndView model = new ModelAndView("production/variation");
-			Constants.mainAct = 16;
-			Constants.subAct = 167;
+			Constants.mainAct =4;
+			Constants.subAct =35;
 				
 			try
 			{
@@ -463,9 +463,6 @@ for(int i=0;i<getOrderItemQtyList.size();i++)
 				e.printStackTrace();
 			}
 			
-
-			
-
 			return model;
 		}
 		

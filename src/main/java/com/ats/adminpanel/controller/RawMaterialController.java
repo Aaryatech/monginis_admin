@@ -70,6 +70,8 @@ public class RawMaterialController {
 	public ModelAndView showRowMaterial(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/addRawMaterial");
+		Constants.mainAct=9;
+		Constants.subAct=49;
 		
 		RestTemplate rest=new RestTemplate();
 		try {
@@ -97,6 +99,8 @@ public class RawMaterialController {
 	public ModelAndView showRmRateVerification(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/rmRateVerification");
+		Constants.mainAct=14;
+		Constants.subAct=85;
 			RestTemplate rest=new RestTemplate();
 			try {
 			RawMaterialDetailsList rawMaterialDetailsList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterial", RawMaterialDetailsList.class);
@@ -274,6 +278,7 @@ public class RawMaterialController {
 	public ModelAndView showRawMaterialDetails(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/showAllRawMaterial");
+		
       try {
 		String grp_id=request.getParameter("rm_group");
 		int grpId=Integer.parseInt(grp_id);
@@ -303,7 +308,9 @@ public class RawMaterialController {
 	public ModelAndView showRawMaterial(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/showAllRawMaterial");
-        try {
+		Constants.mainAct=13;
+		Constants.subAct=80;
+		try {
 		RestTemplate rest=new RestTemplate();
 		List<RmItemGroup> rmItemGroupList=rest.getForObject(Constants.url + "rawMaterial/getAllRmItemGroup", List.class);
 		System.out.println("Group list :: "+rmItemGroupList.toString());
@@ -462,6 +469,8 @@ public class RawMaterialController {
 	public ModelAndView showAddRmTax(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/addRmTax");
+		Constants.mainAct=25;
+		Constants.subAct=111;
 		RestTemplate rest=new RestTemplate();
         try {
 		RawMaterialTaxDetailsList rawMaterialTaxDetailsList=rest.getForObject(Constants.url + "rawMaterial/getAllRmTaxList",RawMaterialTaxDetailsList.class);
@@ -520,7 +529,8 @@ public class RawMaterialController {
 	public ModelAndView showAddRmUmo(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/addRmUom");
-		
+		Constants.mainAct=2;
+		Constants.subAct=23;
 		RestTemplate rest = new RestTemplate();
 		RawMaterialUomList rawMaterialUomList=rest.getForObject(Constants.url + "/rawMaterial/getRmUomList",RawMaterialUomList.class);
 		
@@ -840,8 +850,8 @@ public class RawMaterialController {
 				public ModelAndView showRmItemCategory(HttpServletRequest request, HttpServletResponse response) {
 				
 					ModelAndView model = new ModelAndView("masters/rmItemCategoryStores");
-					Constants.mainAct = 17;
-					Constants.subAct=176;
+					Constants.mainAct =9;
+					Constants.subAct=51;
 					
 					
 					List<RmItemGroup> rmItemGroupList =new ArrayList<RmItemGroup>();
@@ -876,8 +886,8 @@ public class RawMaterialController {
 				public ModelAndView showRmItemSubCategory(HttpServletRequest request, HttpServletResponse response) {
 				
 					ModelAndView model = new ModelAndView("masters/rmItemSubCatStores");
-					Constants.mainAct = 17;
-					Constants.subAct=178;
+					Constants.mainAct =9;
+					Constants.subAct=53;
 					
 					try {
 					RestTemplate restTemplate = new RestTemplate();
@@ -1150,8 +1160,8 @@ public class RawMaterialController {
 				@RequestMapping(value = "/showItemCatList")
 				public ModelAndView showItemCatList(HttpServletRequest request, HttpServletResponse response) {
 					ModelAndView mav = new ModelAndView("masters/rmItemCatStoreList");
-					Constants.mainAct = 17;
-					Constants.subAct=177;
+					Constants.mainAct =9;
+					Constants.subAct=52;
 					try {
 						RestTemplate restTemplate = new RestTemplate();
 
@@ -1174,8 +1184,8 @@ public class RawMaterialController {
 					@RequestMapping(value = "/showItemSubCatList")
 					public ModelAndView showItemSubCatList(HttpServletRequest request, HttpServletResponse response) {
 						ModelAndView mav = new ModelAndView("masters/rmItemSubCatStoreList");
-						Constants.mainAct = 17;
-						Constants.subAct=179;
+						Constants.mainAct =9;
+						Constants.subAct=54;
 						try {
 							RestTemplate restTemplate = new RestTemplate();
 

@@ -62,8 +62,8 @@ public class ItemSfController {
 	@RequestMapping(value = "/showItemSf", method = RequestMethod.GET)
 	public ModelAndView showItemSf(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 4;
-		Constants.subAct = 41;
+		Constants.mainAct = 3;
+		Constants.subAct = 24;
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/itemSf");
 		try {
@@ -113,9 +113,6 @@ public class ItemSfController {
 	@RequestMapping(value = "/insertSfItemHeader", method = RequestMethod.POST)
 	public String insertSfItemHeader(HttpServletRequest request, HttpServletResponse response) {
 		
-		Constants.mainAct=4;
-		Constants.subAct=41;
-
 		//ModelAndView model=new ModelAndView("masters/rawMaterial/itemSf");
 		
 		try {
@@ -183,9 +180,7 @@ public class ItemSfController {
 	@RequestMapping(value = "/showAddSfItemDetail/{sfId}/{sfName}/{sfTypeName}", method = RequestMethod.GET)
 	public ModelAndView showAddSfItemDetail(@PathVariable int sfId,@PathVariable String sfName,@PathVariable  String sfTypeName,HttpServletRequest request, HttpServletResponse response) {
 		
-		Constants.mainAct=4;
-		Constants.subAct=41;
-			System.out.println("Inside show details");
+		System.out.println("Inside show details");
 			
 		ModelAndView model=new ModelAndView("masters/rawMaterial/itemSfDetail");
 	
@@ -239,8 +234,6 @@ public class ItemSfController {
 	@RequestMapping(value = "/editSfItemHeader/{sfId}/{sfName}/{sfTypeName}", method = RequestMethod.GET)
 	public ModelAndView editSfItemDetail(@PathVariable int sfId,@PathVariable String sfName,@PathVariable  String sfTypeName,HttpServletRequest request, HttpServletResponse response) {
 		
-		Constants.mainAct=4;
-		Constants.subAct=41;
 			System.out.println("Inside show edit Item Header ");
 			
 		ModelAndView model=new ModelAndView("masters/rawMaterial/editItemSfHeader");
@@ -305,9 +298,6 @@ public class ItemSfController {
 	@RequestMapping(value = "/editSfHeader", method = RequestMethod.POST)
 	public String editSfHeader(HttpServletRequest request, HttpServletResponse response) {
 		
-		Constants.mainAct=4;
-		Constants.subAct=41;
-
 		ModelAndView model=new ModelAndView("masters/rawMaterial/itemSf");
 		
 		try {
@@ -377,8 +367,6 @@ public class ItemSfController {
 	@ResponseBody public List<ItemSfDetail> getItemDetail(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("Inside get Item Detail  " );
 
-		Constants.mainAct=4;
-		Constants.subAct=41;
 		ModelAndView model=new ModelAndView("masters/rawMaterial/itemSfDetail");
 		//add new Item
 		ItemSfDetail sfDetail=new ItemSfDetail();
@@ -463,8 +451,6 @@ public class ItemSfController {
 	@ResponseBody public List<ItemSfDetail> itemForEdit(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println(" Inside  Item For Edit " );
 
-		Constants.mainAct=4;
-		Constants.subAct=41;
 		ModelAndView model=new ModelAndView("masters/rawMaterial/itemSfDetail");
 		
 		int unitOM=0;
@@ -524,8 +510,6 @@ public class ItemSfController {
 	 public String insertItemDetail(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("i De " );
 		
-		Constants.mainAct=4;
-		Constants.subAct=41;
 		ModelAndView model = new ModelAndView("masters/rawMaterial/itemSf");
 
 		

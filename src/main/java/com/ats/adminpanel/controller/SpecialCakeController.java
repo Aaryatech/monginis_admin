@@ -56,8 +56,8 @@ public class SpecialCakeController {
 	public ModelAndView redirectToAddSpCake(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("spcake/addspcake");
-		Constants.mainAct=3;
-		Constants.subAct=31;
+		Constants.mainAct=1;
+		Constants.subAct=6;
 		RestTemplate restTemplate = new RestTemplate();
 		try {
 
@@ -91,8 +91,8 @@ public class SpecialCakeController {
 
 		System.out.println("inside ViewSpCkeList");
 		ModelAndView model = new ModelAndView("spcake/spcakelist");
-		Constants.mainAct=3;
-		Constants.subAct=32;
+		Constants.mainAct=1;
+		Constants.subAct=7;
 		RestTemplate restTemplate = new RestTemplate();
 
 		try {

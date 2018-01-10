@@ -78,8 +78,8 @@ public class CreditNoteController {
 	@RequestMapping(value = "/insertCreditNote", method = RequestMethod.POST)
 	public ModelAndView insertCreditNote(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 8;
-		Constants.subAct = 85;
+		//Constants.mainAct = 8;
+		//Constants.subAct = 85;
 		
 		ModelAndView model = new ModelAndView("creditNote/generateCreditNote");
 		System.out.println("inside insert credit note ");

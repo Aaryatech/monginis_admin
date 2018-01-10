@@ -36,7 +36,8 @@ public class SuppilerMasterController {
 	public ModelAndView showAddSupplier(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/addSupplier");
-
+		Constants.mainAct =13;
+		Constants.subAct =77;
 		return model;
 	}
 
@@ -131,7 +132,8 @@ public class SuppilerMasterController {
 	public ModelAndView showSupplierList(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/supplierList");
-
+		Constants.mainAct =13;
+		Constants.subAct =78;
 		RestTemplate rest = new RestTemplate();
 		supplierDetailsList = rest.getForObject(Constants.url + "getAllSupplier", List.class);
 
@@ -181,8 +183,8 @@ public class SuppilerMasterController {
 		public ModelAndView showAddTransporter(HttpServletRequest request, HttpServletResponse response) {
 
 			ModelAndView model = new ModelAndView("masters/addTransporter");
-			Constants.mainAct = 17;
-			Constants.subAct = 180;
+			Constants.mainAct =13;
+			Constants.subAct =81;
 
 			return model;
 		}
@@ -194,8 +196,8 @@ public class SuppilerMasterController {
 		public ModelAndView showAddPaymentTerms(HttpServletRequest request, HttpServletResponse response) {
 
 			ModelAndView model = new ModelAndView("masters/addPaymentTerms");
-			Constants.mainAct = 17;
-			Constants.subAct = 182;
+			Constants.mainAct =13;
+			Constants.subAct =83;
 
 			return model;
 		}
@@ -361,8 +363,8 @@ public class SuppilerMasterController {
 		@RequestMapping(value = "/showTransporterList")
 		public ModelAndView showTransporterList(HttpServletRequest request, HttpServletResponse response) {
 			ModelAndView mav = new ModelAndView("masters/transporterList");
-			Constants.mainAct = 17;
-			Constants.subAct = 181;
+			Constants.mainAct =13;
+			Constants.subAct =82;
 			try {
 				RestTemplate restTemplate = new RestTemplate();
 
@@ -387,8 +389,8 @@ public class SuppilerMasterController {
 		@RequestMapping(value = "/showPaymentTermsList")
 		public ModelAndView showPaymentTermsList(HttpServletRequest request, HttpServletResponse response) {
 			ModelAndView mav = new ModelAndView("masters/paymentTermsList");
-			Constants.mainAct = 17;
-			Constants.subAct = 183;
+			Constants.mainAct =13;
+			Constants.subAct =84;
 			try {
 				RestTemplate restTemplate = new RestTemplate();
 

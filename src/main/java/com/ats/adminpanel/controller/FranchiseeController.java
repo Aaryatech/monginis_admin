@@ -89,8 +89,8 @@ public class FranchiseeController {
 		logger.info("/showAddNewFranchisee request mapping.");
 
 		ModelAndView model = new ModelAndView("franchisee/addnewfranchisee");
-		Constants.mainAct = 7;
-		Constants.subAct = 71;
+		Constants.mainAct = 1;
+		Constants.subAct = 2;
 
 		RestTemplate restTemplate = new RestTemplate();
 		AllRoutesListResponse allRoutesListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
@@ -139,8 +139,8 @@ public class FranchiseeController {
 		logger.info("/configureFranchisee request mapping.");
 
 		ModelAndView mav = new ModelAndView("franchisee/configureFr");
-		Constants.mainAct = 7;
-		Constants.subAct = 73;
+		Constants.mainAct =2;
+		Constants.subAct =14;
 
 		try {
 			RestTemplate restTemplate = new RestTemplate();
@@ -222,8 +222,8 @@ public class FranchiseeController {
 	@RequestMapping(value = "/configureFranchiseesList")
 	public ModelAndView addconfigureFranchiseeList(HttpServletRequest request, HttpServletResponse response) {
 		logger.info("/configureFranchisee List request mapping.");
-		Constants.mainAct = 7;
-		Constants.subAct = 74;
+		Constants.mainAct =2;
+		Constants.subAct =15;
 		ModelAndView mav = new ModelAndView("franchisee/frlist");
 		try {
 
@@ -828,8 +828,8 @@ public class FranchiseeController {
 
 	@RequestMapping(value = "/listAllFranchisee")
 	public ModelAndView listAllFranchisee(HttpServletRequest request, HttpServletResponse response) {
-		Constants.mainAct = 7;
-		Constants.subAct = 72;
+		Constants.mainAct = 1;
+		Constants.subAct = 3;
 		RestTemplate restTemplate = new RestTemplate();
 		AllFranchiseeList allFranchiseeList = restTemplate.getForObject(Constants.url + "getAllFranchisee",
 				AllFranchiseeList.class);
@@ -1288,8 +1288,8 @@ public class FranchiseeController {
 		logger.info("/configureFranchisee request mapping.");
 
 		ModelAndView mav = new ModelAndView("franchisee/specialDayCkConf");
-		Constants.mainAct = 7;
-		Constants.subAct = 75;
+		Constants.mainAct =2;
+		Constants.subAct =16;
 
 		try {
 			RestTemplate restTemplate = new RestTemplate();
@@ -1340,8 +1340,8 @@ public class FranchiseeController {
 	@RequestMapping(value = "/configureSpecialDayCkList")
 	public ModelAndView configureSpecialDayCkList(HttpServletRequest request, HttpServletResponse response) {
 		logger.info("/configureFranchisee List request mapping.");
-		Constants.mainAct = 7;
-		Constants.subAct = 76;
+		Constants.mainAct =2;
+		Constants.subAct =17;
 		ModelAndView mav = new ModelAndView("franchisee/specialDayCkConfList");
 		try {
 
@@ -1698,8 +1698,8 @@ public class FranchiseeController {
 
 	@RequestMapping(value = "/showAddFranchiseSup")
 	public ModelAndView addFranchiseSup(HttpServletRequest request, HttpServletResponse response) {
-		Constants.mainAct = 7;
-		Constants.subAct = 77;
+		Constants.mainAct =2;
+		Constants.subAct =113;
 		ModelAndView mav = new ModelAndView("franchisee/addFranchiseSup");
 
 		RestTemplate restTemplate = new RestTemplate();
@@ -1829,8 +1829,8 @@ public class FranchiseeController {
 	// ------------------------------------showAddFrTarget--------------------------------------------
 	@RequestMapping(value = "/showAddFrTarget", method = RequestMethod.GET)
 	public ModelAndView showAddFrTarget(HttpServletRequest request, HttpServletResponse response) {
-		Constants.mainAct = 7;
-		Constants.subAct = 78;
+		Constants.mainAct =2;
+		Constants.subAct =114;
 		ModelAndView model = new ModelAndView("franchisee/addFrTarget");
 
 		List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August",

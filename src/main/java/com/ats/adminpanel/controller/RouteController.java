@@ -43,8 +43,8 @@ public class RouteController {
 		ModelAndView model = new ModelAndView("masters/route");
 		System.out.println("route disp");
 		
-		Constants.mainAct=2;
-		Constants.subAct=25;
+		Constants.mainAct=1;
+		Constants.subAct=8;
 		RestTemplate restTemplate = new RestTemplate();
 		try {
 			
