@@ -179,9 +179,9 @@
 													<th width="130" align="left">Fr Address</th>
 													</tr> -->
 
-													<h3>FR Name:${frDetails.frName}</h3>
-													<h3>Invoice No:${frDetails.invoiceNo}</h3>
-													<h3>Address:s${frDetails.frAddress}</h3>
+													<h4>FR Name:${frDetails.frName}</h4>
+													<h4>Invoice No:${frDetails.invoiceNo}</h4>
+													<h4>Address:${frDetails.frAddress}</h4>
 												<tr>
 													<th width="140" style="width: 30px" align="left">Sr No</th>
 													<th width="138" align="left">Item Name</th>
@@ -305,8 +305,13 @@
 									</div>
 								</div>
 							</c:forEach>
-							<a href="${pageContext.request.contextPath}/pdf?url=showBillPdf"
-								target="_blank">PDF</a>
+							<div
+										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-6">
+										<a href="${pageContext.request.contextPath}/pdf?url=showBillPdf"
+								target="_blank">PDF<i class="fa fa-file-pdf-o"></i></a>
+
+									</div>
+							
 						</form>
 					</div>
 				</div>

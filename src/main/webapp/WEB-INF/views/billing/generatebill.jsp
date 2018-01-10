@@ -304,10 +304,10 @@
 
 					<div class="row">
 						<div class="col-md-offset-6 col-md-6">
-							<button class="btn btn-info pull-right">Submit & PDF</button>
-
-							<a href="${pageContext.request.contextPath}/pdf?url=showBillPdf"
-								target="_blank">PDF</a>
+<!-- 							<button class="btn btn-info pull-right">Submit & PDF</button>
+ -->
+							<%-- <a href="${pageContext.request.contextPath}/pdf?url=showBillPdf"
+								target="_blank">PDF</a> --%>
 							<button class="btn btn-info pull-right"
 								style="margin-right: 5px;" onclick="submitBill()">Submit
 								Bill</button>

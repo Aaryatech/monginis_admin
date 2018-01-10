@@ -494,8 +494,8 @@ public class ItemController {
 
 		try {
 			
-			//upload.saveUploadedFiles(file, Constants.ITEM_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
-			upload.saveUploadedFiles(file, Constants.ITEM_IMAGE_TYPE, itemName);
+			upload.saveUploadedFiles(file, Constants.ITEM_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+			//upload.saveUploadedFiles(file, Constants.ITEM_IMAGE_TYPE, itemName);
 			System.out.println("upload method called " + file.toString());
 			
 		} catch (IOException e) {
@@ -519,7 +519,7 @@ public class ItemController {
 		map.add("itemMrp1", itemMrp1);
 		map.add("itemMrp2", itemMrp2);
 		map.add("itemMrp3", itemMrp3);
-		map.add("itemImage", itemName);
+		map.add("itemImage", curTimeStamp + "-" + file.get(0).getOriginalFilename());
 		map.add("itemTax1", itemTax1);
 		map.add("itemTax2", itemTax2);
 		map.add("itemTax3", itemTax3);

@@ -54,7 +54,7 @@
 </head>
 <body>
 
-	<c:url var="callGetBillListProcess" value="/getBillListProcess" />
+	<c:url var="callGetBillListProcess" value="/getBillListProcessForPrint" />
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -185,11 +185,11 @@
 
 
 									</div>
-									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Transport Mode</label>
-									<input type="text" name="transport_mode" value="By Road"/>
+									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Transport Mode<input type="text" class="form-control" name="transport_mode" value="By Road"/></label>
+									
 									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Vehicle No
-										 </label>
-									<input type="text" name="vehicle_no" value="0"/>
+										<input type="text" class="form-control" name="vehicle_no" value="0"/> </label>
+									
 								</div>
 
 
@@ -241,7 +241,7 @@
 														<th width="91" align="left">Total tax</th>
 														<th width="105" align="left">Grand Total</th>
 
-														<th width="300" align="center">Action</th>
+													<!-- 	<th width="300" align="center">Action</th> -->
 
 													</tr>
 												</thead>
@@ -272,14 +272,14 @@
 																	value="${billHeadersList.taxableAmt + billHeadersList.totalTax}" /></td>
 
 
-															<td align="left"><a
+															<%-- <td align="left"><a
 																href="viewBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><span
 																	class="glyphicon glyphicon-list-alt"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
 
 																<a
 																href="updateBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"
 																onClick="return confirm('Are you sure want to edit this record');"><span
-																	class="glyphicon glyphicon-edit"></span></a></td>
+																	class="glyphicon glyphicon-edit"></span></a></td> --%>
 
 															<!-- <td rowspan="1" align="left"> <input
 																type="button" value="View"> <input type="button"
@@ -303,7 +303,7 @@
 								style="margin-right: 5px;" onclick="submitBill()">Get
 								PDF</button> -->
 								
-								<input type="button"margin-right: 5px;" id= "btn_submit" onclick="submitBill()"value="getBillDetails"/>
+								<input type="button"margin-right: 5px;" id= "btn_submit" class="btn btn-primary" onclick="submitBill()"value="getBillDetails"/>
 									</div>
 
 
@@ -387,7 +387,6 @@
 			
 			
 			$('#btn_submit').click(function(){
-				alert("HI ....");
 			    var form = document.getElementById("validation-form")
 			    form.action ="${pageContext.request.contextPath}/getBillDetailForPrint";
 			    form.submit();
@@ -472,10 +471,11 @@
 												function(key, bill) {
 
 													var tr = $('<tr></tr>');
+												 	tr.append($('<td></td>').html("<input type='checkbox' name='select_to_print' value="+bill.billNo+">"));
 
 												  	tr.append($('<td></td>').html(key+1));
 
-												  	tr.append($('<td></td>').html(bill.billNo));
+												  	tr.append($('<td></td>').html(bill.invoiceNo));
 
 												  	tr.append($('<td></td>').html(bill.billDate));
 
@@ -487,40 +487,12 @@
 
 												  	tr.append($('<td></td>').html(bill.grandTotal));
 												  	
-												  	
-												  	
-												  	if (bill.status == 1) {
-												  		tr.append($('<td></td>').html("Pending"));
-												  		
-													} else if (bill.status == 2) {
-														tr.append($('<td></td>').html("Received"));
-													} else if (bill.status == 3) {
-														tr.append($('<td></td>').html("GVN Applied"));
-													} else if (bill.status == 4) {
-														tr.append($('<td></td>').html("GVN Approved"));
-													} else if (bill.status == 5) {
-														tr.append($('<td></td>').html("GRN Applied"));
-													} else if (bill.status == 6) {
-														tr.append($('<td></td>').html("GRN Approved"));
-													} else if (bill.status == 7) {
-														tr.append($('<td></td>').html("Closed"));
-													}
-												  	
-												  	
-												  	tr.append($('<td></td>').html(bill.remark));
-
-
-
-
-												 	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/updateBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='update' value='Update'/></a><a href='${pageContext.request.contextPath}/viewBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='view' value='View'/></a><a href='${pageContext.request.contextPath}/deleteBill/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='deleteBill' value='Delete'/></a>"));
+												 	//tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/updateBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='update' value='Update'/></a><a href='${pageContext.request.contextPath}/viewBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='view' value='View'/></a><a href='${pageContext.request.contextPath}/deleteBill/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='deleteBill' value='Delete'/></a>"));
 												  
 												  	//tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> <input type=button id=delete"+orders.orderId+" onClick=deleteOrder("+orders.orderId+"); Value=Delete>"));
 
-
 													$('#table1 tbody').append(tr);
 
-													
-													
 													
 													/* var index = key + 1;
 													

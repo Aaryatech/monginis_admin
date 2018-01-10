@@ -57,46 +57,48 @@ duplicate for tranpoter</p>
   </tr>
   <tr>
     <td width="20%" colspan="6" style="border-top:1px solid #313131;border-left:1px solid #313131; padding:10px;color:#FFF; font-size:15px;">
-        <p style="color:#000; font-size:16px; text-align:;left;margin:0px;"> Billed to:<b>${frDetails.frName}</b></p><br /><br /><br /><br />
+        <p style="color:#000; font-size:16px; text-align:;left;margin:0px;"> Billed to:<b>${frDetails.frName}</b> ${frDetails.frAddress}</p><br /><br /><br /><br />
     </td>
     <td width="20%" colspan="5" style="border-top:1px solid #313131;border-left:1px solid #313131; padding:10px;color:#FFF; font-size:15px;">
-        <p style="color:#000; font-size:16px; text-align:;left;margin:0px;"> Billed to: <b>${frDetails.frName}</b></p><br /><br /><br /><br />
+        <p style="color:#000; font-size:16px; text-align:;left;margin:0px;"> Billed to: <b>${frDetails.frName}</b> ${frDetails.frAddress}</p><br /><br /><br /><br />
     </td>
       </tr>
       </table>
       
       <table width="100%" border="0"  cellpadding="0" cellspacing="0" style="border-top:1px solid #313131;border-right:1px solid #313131;">
   <tr>
-    <td width="1%" rowspan="2"  style="border-top:1px solid #313131;border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;">Sr.</td>
-    <td width="7%" rowspan="2" style="border-top:1px solid #313131;border-left:1px solid #313131; padding:20px;color:#000; font-size:10px;">Item Decription</td>
-    <td width="1%" rowspan="2" style="border-top:1px solid #313131;border-left:1px solid #313131; padding:10px;color:#000; font-size:10px;">HSN Code</td>
-    <td width="1%" rowspan="2" style="border-top:1px solid #313131;border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;">Qty</td>
-    <td width="1%" rowspan="2" style="border-top:1px solid #313131;border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;">UOM </td>
-    <td width="1%" rowspan="2" style="border-top:1px solid #313131;border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;">Rate</td>
-    <td width="1%" rowspan="2" style="border-top:1px solid #313131;border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;">Amount</td>
-    <td width="1%" colspan="2" style="border-top:1px solid #313131;border-left:1px solid #313131; padding:10px;color:#000; font-size:10px; text-align:center;"> CGST</td>
-    <td width="1%" colspan="2" style="border-top:1px solid #313131;border-left:1px solid #313131; padding:10px;color:#000; font-size:10px;text-align:center;">SGST</td>
+    <td width="1%" rowspan="2"  style="border-top:1px solid #313131;border-bottom:1px solid #313131; border-bottom:1px solid #313131;border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;">Sr.</td>
+    <td align="left" width="3%" rowspan="2" style="border-top:1px solid #313131;border-bottom:1px solid #313131; border-left:1px solid #313131; padding:15px;color:#000; font-size:10px;">Item Decription</td>
+   <td align="center" width="1%" rowspan="2" style="border-top:1px solid #313131;border-bottom:1px solid #313131; border-left:1px solid #313131; padding:0.2px;color:#000; font-size:10px;">HSN Code</td>
+ 
+     
+ <td align="center" width="1%" rowspan="2" style="border-top:1px solid #313131; border-bottom:1px solid #313131; border-left:1px solid #313131; padding:4px;color:#000; font-size:10px;">Qty</td>
+    <td align="center" width="1%" rowspan="2" style="border-top:1px solid #313131;border-bottom:1px solid #313131; border-left:1px solid #313131; padding:4px;color:#000; font-size:10px;">UOM </td>
+    <td align="center" width="1%" rowspan="2" style="border-top:1px solid #313131;border-bottom:1px solid #313131; border-left:1px solid #313131; padding:4px;color:#000; font-size:10px;">Rate</td>
+    <td align="center" width="1%" rowspan="2" style="border-top:1px solid #313131;border-bottom:1px solid #313131; border-left:1px solid #313131; padding:4px;color:#000; font-size:10px;">Amount</td>
+    <td align="center" width="1%" colspan="2" style="border-top:1px solid #313131;border-bottom:1px solid #313131; border-left:1px solid #313131; padding:10px;color:#000; font-size:10px; text-align:center;"> CGST</td>
+    <td align="center" width="1%" colspan="2" style="border-top:1px solid #313131;border-bottom:1px solid #313131; border-left:1px solid #313131; padding:10px;color:#000; font-size:10px;text-align:center;">SGST</td>
   </tr>
   <tr>
-    <td style="border-top:1px solid #313131;border-left:1px solid #313131; padding:1px;color:#000; font-size:10px;">Rate% </td>
-    <td style="border-top:1px solid #313131;border-left:1px solid #313131; padding:2px;color:#000; font-size:10px;">Amount</td>
-    <td style="border-top:1px solid #313131;border-left:1px solid #313131; padding:1px;color:#000; font-size:10px;">Rate%</td>
-    <td style="border-top:1px solid #313131;border-left:1px solid #313131; padding:2px;color:#000; font-size:10px;">Amount</td>
+    <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:1px;color:#000; font-size:10px;">Rate% </td>
+    <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131;  padding:2px;color:#000; font-size:10px;">Amount</td>
+    <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:1px;color:#000; font-size:10px;">Rate%</td>
+    <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:2px;color:#000; font-size:10px;">Amount</td>
   </tr>
         <c:forEach items="${frDetails.billDetailsList}" var="billDetails" varStatus="count">
   
   <tr>
-    <td  style="border-top:1px solid #313131;border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;">${count.index+1}</td>
-    <td style="border-top:1px solid #313131;border-left:1px solid #313131; padding:20px;color:#000; font-size:10px;">${billDetails.itemName}</td>
-    <td style="border-top:1px solid #313131;border-left:1px solid #313131; padding:10px;color:#000; font-size:10px;">${billDetails.itemHsncd}</td>
-    <td style="border-top:1px solid #313131;border-left:1px solid #313131; padding:5px;color:#000;font-size:10px;">${billDetails.billQty}</td>
-    <td style="border-top:1px solid #313131;border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;">${billDetails.itemUom}</td>
-    <td style="border-top:1px solid #313131;border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;">${billDetails.baseRate}</td>
-    <td style="border-top:1px solid #313131;border-left:1px solid #313131; padding:5px;color:#000;font-size:10px;">${billDetails.taxableAmt}</td>
-    <td style="border-top:1px solid #313131;border-left:1px solid #313131; padding:1px;color:#000; font-size:10px;">${billDetails.cgstPer}</td>
-    <td style="border-top:1px solid #313131;border-left:1px solid #313131; padding:1px;color:#000; font-size:10px;">${billDetails.sgstPer}</td>
-    <td style="border-top:1px solid #313131;border-left:1px solid #313131; padding:2px;color:#000;font-size:10px;">${billDetails.cgstRs}</td>
-    <td style="border-top:1px solid #313131;border-left:1px solid #313131; padding:2px;color:#000;font-size:10px;">${billDetails.sgstRs}</td>
+    <td  style="border-top:0px solid #313131;border-left:1px solid #313131; padding:3px;color:#000; font-size:10px;">${count.index+1}</td>
+    <td style="border-top:0px solid #313131;border-left:1px solid #313131;  padding:15px;color:#000; font-size:10px;">${billDetails.itemName}</td>
+    <td style="border-top:0px solid #313131;border-left:1px solid #313131;  padding:3px;color:#000; font-size:10px;">${billDetails.itemHsncd}</td>
+    <td align="center" style="border-top:0px solid #313131;border-left:1px solid #313131; padding:3px;color:#000;font-size:10px;">${billDetails.billQty}</td>
+    <td align="center" style="border-top:0px solid #313131;border-left:1px solid #313131; padding:3px;color:#000; font-size:10px;">${billDetails.itemUom}</td>
+    <td align="center" style="border-top:0px solid #313131;border-left:1px solid #313131; padding:3px;color:#000; font-size:10px;">${billDetails.baseRate}</td>
+    <td align="center" style="border-top:0px solid #313131;border-left:1px solid #313131; padding:3px;color:#000;font-size:10px;">${billDetails.taxableAmt}</td>
+    <td align="center" style="border-top:0px solid #313131;border-left:1px solid #313131; padding:1px;color:#000; font-size:10px;">${billDetails.cgstPer}</td>
+    <td align="center" style="border-top:0px solid #313131;border-left:1px solid #313131; padding:1px;color:#000; font-size:10px;">${billDetails.sgstPer}</td>
+    <td align="center" style="border-top:0px solid #313131;border-left:1px solid #313131; padding:2px;color:#000;font-size:10px;">${billDetails.cgstRs}</td>
+    <td align="center" style="border-top:0px solid #313131;border-left:1px solid #313131; padding:2px;color:#000;font-size:10px;">${billDetails.sgstRs}</td>
   </tr>
   </c:forEach>
   
