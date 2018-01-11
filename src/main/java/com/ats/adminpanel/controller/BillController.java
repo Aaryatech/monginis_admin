@@ -236,7 +236,9 @@ public class BillController {
 				postBillDetailsList = new ArrayList();
 
 				float sumTaxableAmt = 0, sumTotalTax = 0, sumGrandTotal = 0;
-
+				float sumT1 = 0;
+				float sumT2 = 0;
+				float sumT3 = 0;
 				Map<Integer, String> frIdInvoiceMap = new HashMap<Integer, String>();
 
 				for (int j = 0; j < tempGenerateBillList.size(); j++) {
@@ -287,7 +289,7 @@ public class BillController {
 					System.out.println("Inner For frId " + gBill.getFrId());
 
 					
-
+					
 					if (gBill.getFrId() == frId) {
 						// map.add(frId,"sd");
 
@@ -318,11 +320,18 @@ public class BillController {
 						float sgstRs = (taxableAmt * tax1) / 100;
 						float cgstRs = (taxableAmt * tax2) / 100;
 						float igstRs = (taxableAmt * tax3) / 100;
+						
+						
+						
 
 						sgstRs = roundUp(sgstRs);
 						cgstRs = roundUp(cgstRs);
 						igstRs = roundUp(igstRs);
-
+						 
+						 
+						 //header.setSgstSum(sumT1);
+						// header.setCgstSum(sumT2);
+						 //header.setIgstSum(sumT3);
 						Float totalTax = sgstRs + cgstRs;
 						totalTax = roundUp(totalTax);
 
@@ -362,7 +371,11 @@ public class BillController {
 						billDetail.setIsGrngvnApplied(0);
 
 						billDetail.setGrnType(gBill.getGrnType());// newly added
-
+						
+							header.setSgstSum(header.getSgstSum()+billDetail.getSgstRs());
+							header.setCgstSum(header.getCgstSum()+billDetail.getCgstRs());
+							header.setIgstSum(header.getIgstSum()+billDetail.getIgstRs());
+						
 						int itemShelfLife = gBill.getItemShelfLife();
 
 						String deliveryDate = gBill.getDeliveryDate();
@@ -392,7 +405,9 @@ public class BillController {
 						postBillDetailsList.add(billDetail);
 
 						// header.setInvoiceNo(invoiceNo);
-
+						// header.setSgstSum(sumT1);
+						// header.setCgstSum(sumT2);
+						// header.setIgstSum(sumT3);
 						header.setFrCode(gBill.getFrCode());
 						header.setBillDate(billDate);
 						header.setRemark("");
@@ -400,9 +415,13 @@ public class BillController {
 
 			
 					}
-
+					
 				}
-
+				
+				//header.setTaxApplicable((int)sumT1+(int)sumT2+(int)sumT3);
+				//header.setSgstSum(sumT1);
+				// header.setCgstSum(sumT2);
+				// header.setIgstSum(sumT3);
 				header.setTaxableAmt(sumTaxableAmt);
 				header.setGrandTotal(sumGrandTotal);
 				header.setTotalTax(sumTotalTax);
@@ -429,9 +448,9 @@ public class BillController {
 
 			System.out.println("Test data : " + postBillDataCommon.toString());
 
-			Info info = restTemplate.postForObject(Constants.url + "insertBillData", postBillDataCommon, Info.class);
+			//Info info = restTemplate.postForObject(Constants.url + "insertBillData", postBillDataCommon, Info.class);
 
-			System.out.println("Info Data " + info.toString());
+			//System.out.println("Info Data " + info.toString());
 			
 			//model.addObject("postBillDataCommon","");
 

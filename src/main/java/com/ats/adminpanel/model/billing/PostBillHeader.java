@@ -49,7 +49,12 @@ public class PostBillHeader {
 	private String remark;
 	
 	private String time;
-	 
+	
+	private float sgstSum;
+	private float cgstSum;
+	private float igstSum;
+
+
 	
 	List<PostBillDetail> postBillDetailsList;
 	
@@ -174,13 +179,37 @@ public class PostBillHeader {
 		this.postBillDetailsList = postBillDetailsList;
 	}
 
+	public float getSgstSum() {
+		return sgstSum;
+	}
+
+	public void setSgstSum(float sgstSum) {
+		this.sgstSum = sgstSum;
+	}
+
+	public float getCgstSum() {
+		return cgstSum;
+	}
+
+	public void setCgstSum(float cgstSum) {
+		this.cgstSum = cgstSum;
+	}
+
+	public float getIgstSum() {
+		return igstSum;
+	}
+
+	public void setIgstSum(float igstSum) {
+		this.igstSum = igstSum;
+	}
+
 	@Override
 	public String toString() {
 		return "PostBillHeader [billNo=" + billNo + ", taxApplicable=" + taxApplicable + ", invoiceNo=" + invoiceNo
 				+ ", billDate=" + billDate + ", frId=" + frId + ", frCode=" + frCode + ", grandTotal=" + grandTotal
 				+ ", taxableAmt=" + taxableAmt + ", totalTax=" + totalTax + ", status=" + status + ", DelStatus="
-				+ DelStatus + ", remark=" + remark + ", time=" + time + ", postBillDetailsList=" + postBillDetailsList
-				+ "]";
+				+ DelStatus + ", remark=" + remark + ", time=" + time + ", sgstSum=" + sgstSum + ", cgstSum=" + cgstSum
+				+ ", igstSum=" + igstSum + ", postBillDetailsList=" + postBillDetailsList + "]";
 	}
 
 	
