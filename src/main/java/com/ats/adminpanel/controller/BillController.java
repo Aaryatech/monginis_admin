@@ -202,8 +202,7 @@ public class BillController {
 		System.out.println("Bill Date " + billDate);
 
 		ModelAndView model = new ModelAndView("billing/generatebill");
-		Constants.mainAct = 8;
-		Constants.subAct = 81;
+	
 
 		// settingValue
 		try {

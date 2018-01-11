@@ -25,8 +25,8 @@ public class UserController {
 		
 		 
 		ModelAndView model=new  ModelAndView("user/addUser");
-		/*Constants.mainAct=1;
-		Constants.subAct=11;*/
+		Constants.mainAct=22;
+		Constants.subAct=108;
 		RestTemplate restTemplate = new RestTemplate();
 		GetUserTypeList getUserTypeList=restTemplate.getForObject(Constants.url+"getAllUserType", GetUserTypeList.class);
 		DepartmentList departmentList=restTemplate.getForObject(Constants.url+"getAllDept", DepartmentList.class);

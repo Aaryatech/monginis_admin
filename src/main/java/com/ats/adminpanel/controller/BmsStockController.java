@@ -50,6 +50,8 @@ public class BmsStockController {
 
 		ModelAndView mav = new ModelAndView("stock/bmsStock");
 
+		Constants.mainAct =8;
+		Constants.subAct =48;
 		return mav;
 
 	}

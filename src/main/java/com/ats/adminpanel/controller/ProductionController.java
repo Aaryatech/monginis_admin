@@ -60,8 +60,8 @@ public class ProductionController {
 	public ModelAndView showProdForcasting(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("production/production");
-	    Constants.mainAct = 4;
-		Constants.subAct = 32;
+	    Constants.mainAct =4;
+		Constants.subAct =32;
 
 		
 

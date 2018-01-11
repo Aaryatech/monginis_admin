@@ -71,8 +71,8 @@ public class ViewProdController {
 	@RequestMapping(value = "/showProdHeader", method = RequestMethod.GET)
 	public ModelAndView showProdHeader(HttpServletRequest request, HttpServletResponse response) {
 		
-		Constants.mainAct=16;
-		Constants.subAct=164;
+		Constants.mainAct=4;
+		Constants.subAct=118;
 		postProdPlanDetailList=new ArrayList<PostProductionPlanDetail>();
 		
 		ModelAndView model = new ModelAndView("production/viewProdHeader");
@@ -134,8 +134,8 @@ public class ViewProdController {
 		
 		System.out.println("inside Prod Detail");
 		
-		Constants.mainAct=16;
-		Constants.subAct=164;
+		//Constants.mainAct=16;
+		//Constants.subAct=164;
 		ModelAndView model = new ModelAndView("production/prodDetail");
 		
 		try {
@@ -457,8 +457,8 @@ public class ViewProdController {
 	
 	@RequestMapping(value = "/addMixingreqst", method = RequestMethod.POST)
 	public String addMixingreqst(HttpServletRequest request, HttpServletResponse response) {
-		Constants.mainAct = 17;
-		Constants.subAct=184;
+		//Constants.mainAct = 17;
+		//Constants.subAct=184;
 		
 		
 

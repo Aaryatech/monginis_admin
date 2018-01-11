@@ -64,8 +64,8 @@ public class MaterialReceiptNoteController {
 
 	@RequestMapping(value = "/gateEntries", method = RequestMethod.GET)
 	public ModelAndView gateEntries(HttpServletRequest request, HttpServletResponse response) {
-		Constants.mainAct = 17;
-		Constants.subAct = 184;
+		Constants.mainAct =9;
+		Constants.subAct =55;
 
 		ModelAndView model = new ModelAndView("masters/gateEntryList");//
 

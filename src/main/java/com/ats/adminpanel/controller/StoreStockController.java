@@ -54,8 +54,8 @@ public class StoreStockController {
 	
 	@RequestMapping(value = "/showStoreOpeningStock", method = RequestMethod.GET)
 	public ModelAndView showStoreOpeningStock(HttpServletRequest request, HttpServletResponse response) {
-		 Constants.mainAct = 20;
-		Constants.subAct=203; 
+		 Constants.mainAct =10;
+		Constants.subAct=65; 
 		
 		ModelAndView model = new ModelAndView("stock/storeOpeningStock");//
 		
@@ -127,8 +127,8 @@ public class StoreStockController {
 	
 	@RequestMapping(value = "/showStoreStock", method = RequestMethod.GET)
 	public ModelAndView showStoreStock(HttpServletRequest request, HttpServletResponse response) {
-		 Constants.mainAct = 20;
-		Constants.subAct=204; 
+		 Constants.mainAct =10;
+		Constants.subAct=66; 
 		 
 		ModelAndView model = new ModelAndView("stock/storeStock");//
 		

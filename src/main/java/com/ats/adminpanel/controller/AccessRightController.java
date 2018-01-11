@@ -45,8 +45,8 @@ public class AccessRightController {
 	public ModelAndView showAccessRight(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("accessRight/createRole");
-		Constants.mainAct = 8;
-		Constants.subAct = 82;
+		Constants.mainAct =22;
+		Constants.subAct =106;
 		try {
 		  accessRightModuleList=rest.getForObject(Constants.url + "getAllModuleAndSubModule",
 				AccessRightModuleList.class);
@@ -165,8 +165,8 @@ public class AccessRightController {
 	public ModelAndView showAssignRloe(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("accessRight/assignAccessRole");
-		Constants.mainAct = 8;
-		Constants.subAct = 82;
+		Constants.mainAct =22;
+		Constants.subAct =107;
 		 try {
 			 
 			 MultiValueMap<String, Object> map=new LinkedMultiValueMap<String, Object>();

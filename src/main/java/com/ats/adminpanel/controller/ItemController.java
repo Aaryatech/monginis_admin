@@ -86,8 +86,8 @@ public class ItemController {
 	public ModelAndView addItem(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("items/addnewitem");
 
-		Constants.mainAct = 1;
-		Constants.subAct = 4;
+		Constants.mainAct =1;
+		Constants.subAct =4;
 		try {
 
 			System.out.println("Add Item Request");
@@ -138,8 +138,8 @@ public class ItemController {
 	public ModelAndView showFrItemConfiguration(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("Item Request");
 		ModelAndView model = new ModelAndView("items/itemConfig");
-		Constants.mainAct = 2;
-		Constants.subAct = 13;
+		Constants.mainAct =2;
+		Constants.subAct =13;
 
 		try {
 
@@ -540,8 +540,8 @@ public class ItemController {
 	public ModelAndView showAddItem(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("List Item Request");
 		ModelAndView mav = new ModelAndView("items/itemlist");
-		Constants.mainAct = 1;
-		Constants.subAct = 5;
+		Constants.mainAct =1;
+		Constants.subAct =5;
 
 		RestTemplate restTemplate = new RestTemplate();
 		// CategoryListResponse
@@ -883,7 +883,7 @@ public class ItemController {
 	public ModelAndView itemSupList(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView("items/itemSupList");
 		Constants.mainAct =1;
-		Constants.subAct = 110;
+		Constants.subAct =110;
 
 		RestTemplate restTemplate = new RestTemplate();
 		

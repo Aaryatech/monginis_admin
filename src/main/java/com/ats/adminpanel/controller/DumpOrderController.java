@@ -68,8 +68,8 @@ public class DumpOrderController {
 	public ModelAndView showDumpOrder(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("orders/dumporders");
-		Constants.mainAct = 8;
-		Constants.subAct = 82;
+		Constants.mainAct =4;
+		Constants.subAct =31;
 		
 		RestTemplate restTemplate = new RestTemplate();
 		try {

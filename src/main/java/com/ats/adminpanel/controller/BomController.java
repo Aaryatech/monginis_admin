@@ -335,8 +335,8 @@ int globalIsPlan;
 	
 	@RequestMapping(value = "/getBomList", method = RequestMethod.GET)
 	public ModelAndView getBomList(HttpServletRequest request, HttpServletResponse response) {
-		/*Constants.mainAct = 17;
-		Constants.subAct=184;*/
+		Constants.mainAct =4;
+		Constants.subAct=39;
 		
 		ModelAndView model = new ModelAndView("productionPlan/getbomlist");//
 		getbomList = new ArrayList<BillOfMaterialHeader>();

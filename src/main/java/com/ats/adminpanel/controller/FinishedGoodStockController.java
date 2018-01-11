@@ -54,8 +54,8 @@ public class FinishedGoodStockController {
 
 		ModelAndView model = new ModelAndView("stock/finishedGoodStock");
 
-		Constants.mainAct = 12;
-		Constants.subAct = 123;
+		Constants.mainAct =4;
+		Constants.subAct =40;
 
 		RestTemplate restTemplate = new RestTemplate();
 
@@ -114,9 +114,6 @@ public class FinishedGoodStockController {
 	public ModelAndView insertOpeningStock(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("stock/finishedGoodStock");
-
-		Constants.mainAct = 12;
-		Constants.subAct = 123;
 
 		FinishedGoodStock goodStockHeader = new FinishedGoodStock();
 
@@ -177,8 +174,8 @@ public class FinishedGoodStockController {
 	public ModelAndView showFinGoodStock(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("stock/showFinGoodStock");
-		Constants.mainAct = 12;
-		Constants.subAct = 123;
+		Constants.mainAct =4;
+		Constants.subAct =36;
 		
 		
 		RestTemplate restTemplate = new RestTemplate();
@@ -430,8 +427,8 @@ public class FinishedGoodStockController {
 
 		System.out.println("Inside Finished Good Day End ");
 
-		Constants.mainAct = 12;
-		Constants.subAct = 123;
+		//Constants.mainAct = 12;
+	//	Constants.subAct = 123;
 		RestTemplate restTemplate = new RestTemplate();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 

@@ -70,8 +70,8 @@ public class PushOrderController {
 	public ModelAndView showPushOrder(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("orders/pushorders");
-		Constants.mainAct = 8;
-		Constants.subAct = 82;
+		Constants.mainAct =4;
+		Constants.subAct =30;
 
 		RestTemplate restTemplate = new RestTemplate();
 

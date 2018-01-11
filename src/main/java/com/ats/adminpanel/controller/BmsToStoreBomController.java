@@ -58,8 +58,8 @@ public class BmsToStoreBomController {
 	@RequestMapping(value = "/showBmsToStoreBom", method = RequestMethod.GET)
 	public ModelAndView showInsertCreditNote(HttpServletRequest request, HttpServletResponse response) {
 
-	 	Constants.mainAct = 20;
-	 	Constants.subAct = 201;
+	 	Constants.mainAct =8;
+	 	Constants.subAct =46;
 
 		ModelAndView model = new ModelAndView("bmsToStore/bmsToStoreBom");
 
@@ -313,8 +313,8 @@ public class BmsToStoreBomController {
 	
 	@RequestMapping(value = "/getBomListBmsToStore", method = RequestMethod.GET)
 	public ModelAndView getBomList(HttpServletRequest request, HttpServletResponse response) {
-		 Constants.mainAct = 20;
-		Constants.subAct=202; 
+		 Constants.mainAct =8;
+		Constants.subAct=47; 
 		
 		ModelAndView model = new ModelAndView("bmsToStore/bmsToStoreBomHeader");//
 		getbomList = new ArrayList<BillOfMaterialHeader>();
@@ -493,8 +493,7 @@ public class BmsToStoreBomController {
 	
 	@RequestMapping(value = "/updateRejectedQtyToStore", method = RequestMethod.POST)
 	public String updateRejectedQty(HttpServletRequest request, HttpServletResponse response) {
-		Constants.mainAct = 17;
-		Constants.subAct=184;
+		
 		Date date= new Date();
 		HttpSession session=request.getSession();
 		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");

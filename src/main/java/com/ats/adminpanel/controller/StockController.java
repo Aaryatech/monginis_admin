@@ -59,8 +59,8 @@ public class StockController {
 		logger.info("/showFrOpeningStock request mapping.");
 
 		ModelAndView model = new ModelAndView("stock/fropeningstock");
-		Constants.mainAct = 17;
-		Constants.subAct = 171;
+		Constants.mainAct =2;
+		Constants.subAct =18;
 
 		RestTemplate restTemplate = new RestTemplate();
 
@@ -167,8 +167,7 @@ public class StockController {
 		logger.info("/showFrOpeningStock request mapping.");
 
 		ModelAndView model = new ModelAndView("stock/fropeningstock");
-		Constants.mainAct = 17;
-		Constants.subAct = 171;
+		
 
 		// stockQty
 		Date date = new Date();

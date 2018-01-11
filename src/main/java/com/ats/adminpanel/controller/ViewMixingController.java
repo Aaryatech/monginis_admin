@@ -44,8 +44,8 @@ public class ViewMixingController {
 	
 	@RequestMapping(value = "/getMixingList", method = RequestMethod.GET)
 	public ModelAndView getMixingList(HttpServletRequest request, HttpServletResponse response) {
-		/*Constants.mainAct = 17;
-		Constants.subAct=184;*/
+		Constants.mainAct =6;
+		Constants.subAct=42;
 		
 		ModelAndView model = new ModelAndView("productionPlan/getMixinglist");//
 

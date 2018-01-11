@@ -46,8 +46,8 @@ public class MessageController {
 
 		 ModelAndView mav = new ModelAndView("message/addNewMessage");
 		  //ModelAndView model = new ModelAndView("orders/orders");
-			Constants.mainAct=6;
-			Constants.subAct=61;
+			Constants.mainAct=1;
+			Constants.subAct=119;
 			return mav;
 	  }
 	/*@RequestMapping(value="/editMessage",method=RequestMethod.GET)
@@ -59,8 +59,8 @@ public class MessageController {
 	@RequestMapping(value="/showMessages",method=RequestMethod.GET)
 	  public ModelAndView showMessages(HttpServletRequest request, HttpServletResponse response) {
 		  System.out.println("Show Message Request");
-			Constants.mainAct=6;
-			Constants.subAct=62;
+			Constants.mainAct=1;
+			Constants.subAct=119;
 		 
 		  
 			RestTemplate restTemplate = new RestTemplate();

@@ -62,8 +62,8 @@ public class ItemSfController {
 	@RequestMapping(value = "/showItemSf", method = RequestMethod.GET)
 	public ModelAndView showItemSf(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 3;
-		Constants.subAct = 24;
+		Constants.mainAct =3;
+		Constants.subAct =24;
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/itemSf");
 		try {

@@ -89,8 +89,8 @@ public class FranchiseeController {
 		logger.info("/showAddNewFranchisee request mapping.");
 
 		ModelAndView model = new ModelAndView("franchisee/addnewfranchisee");
-		Constants.mainAct = 1;
-		Constants.subAct = 2;
+		Constants.mainAct =1;
+		Constants.subAct =2;
 
 		RestTemplate restTemplate = new RestTemplate();
 		AllRoutesListResponse allRoutesListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
@@ -828,8 +828,8 @@ public class FranchiseeController {
 
 	@RequestMapping(value = "/listAllFranchisee")
 	public ModelAndView listAllFranchisee(HttpServletRequest request, HttpServletResponse response) {
-		Constants.mainAct = 1;
-		Constants.subAct = 3;
+		Constants.mainAct =1;
+		Constants.subAct =3;
 		RestTemplate restTemplate = new RestTemplate();
 		AllFranchiseeList allFranchiseeList = restTemplate.getForObject(Constants.url + "getAllFranchisee",
 				AllFranchiseeList.class);

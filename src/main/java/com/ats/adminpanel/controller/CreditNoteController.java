@@ -43,8 +43,8 @@ public class CreditNoteController {
 	@RequestMapping(value = "/showInsertCreditNote", method = RequestMethod.GET)
 	public ModelAndView showInsertCreditNote(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 8;
-		Constants.subAct = 85;
+		Constants.mainAct =11;
+		Constants.subAct =72;
 
 		ModelAndView model = new ModelAndView("creditNote/generateCreditNote");
 

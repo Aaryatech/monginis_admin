@@ -415,6 +415,9 @@ public class PurchaseOrderController {
 	public ModelAndView poListAtDirector(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/purchaseOrder/poListAtDirectore");
+		Constants.mainAct =21;
+		Constants.subAct =103;
+
 		RestTemplate rest=new RestTemplate();
 		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>();

@@ -110,8 +110,8 @@ public class GrnGvnController {
 		ModelAndView model = new ModelAndView("grngvn/gateGrn");
 		try {
 
-			Constants.mainAct = 9;
-			Constants.subAct = 91;
+			Constants.mainAct =10;
+			Constants.subAct =67;
 
 		} catch (Exception e) {
 
@@ -125,8 +125,8 @@ public class GrnGvnController {
 	@RequestMapping(value = "/showGateGrnDetails", method = RequestMethod.GET)
 	public ModelAndView showGateGrnDetails(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 9;
-		Constants.subAct = 91;
+		//Constants.mainAct = 9;
+		//Constants.subAct = 91;
 
 		ModelAndView model = new ModelAndView("grngvn/gateGrn");
 
@@ -191,8 +191,8 @@ public class GrnGvnController {
 	@RequestMapping(value = "/insertGateGrnProcessAgree", method = RequestMethod.GET)
 	public String insertGateGrnProcessAgree(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 9;
-		Constants.subAct = 91;
+		//Constants.mainAct = 9;
+		//Constants.subAct = 91;
 
 		ModelAndView model = new ModelAndView("grngvn/gateGrn");
 
@@ -238,8 +238,8 @@ public class GrnGvnController {
 	@RequestMapping(value = "/insertGateGrnProcessDisAgree", method = RequestMethod.GET)
 	public String insertGateGrnProcessDisAgree(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 9;
-		Constants.subAct = 91;
+		//Constants.mainAct = 9;
+		//Constants.subAct = 91;
 
 		ModelAndView model = new ModelAndView("grngvn/gateGrn");
 		try {
@@ -289,8 +289,8 @@ public class GrnGvnController {
 	@RequestMapping(value = "/insertGateGrnByCheckBoxes", method = RequestMethod.POST) // Using checkboxes to insert
 	public String insertGateGrnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 9;
-		Constants.subAct = 91;
+		//Constants.mainAct = 9;
+		//Constants.subAct = 91;
 
 		ModelAndView model = new ModelAndView("grngvn/gateGrn");
 
@@ -418,8 +418,8 @@ public class GrnGvnController {
 		ModelAndView model = new ModelAndView("grngvn/accGrn");
 		try {
 
-			Constants.mainAct = 9;
-			Constants.subAct = 92;
+			Constants.mainAct =11;
+			Constants.subAct =70;
 
 		} catch (Exception e) {
 
@@ -434,9 +434,6 @@ public class GrnGvnController {
 
 	@RequestMapping(value = "/showAccountGrnDetails", method = RequestMethod.GET)
 	public ModelAndView showAccountGrnDetails(HttpServletRequest request, HttpServletResponse response) {
-
-		Constants.mainAct = 9;
-		Constants.subAct = 92;
 
 		ModelAndView model = new ModelAndView("grngvn/accGrn");
 
@@ -492,9 +489,6 @@ public class GrnGvnController {
 
 	@RequestMapping(value = "/insertAccGrnByCheckBoxes", method = RequestMethod.GET) // Using checkboxes to insert
 	public String insertAccGrnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
-
-		Constants.mainAct = 9;
-		Constants.subAct = 92;
 
 		ModelAndView model = new ModelAndView("grngvn/accGrn");
 
@@ -623,8 +617,6 @@ public class GrnGvnController {
 	@RequestMapping(value = "/insertAccGrnProcessAgree", method = RequestMethod.GET)
 	public String insertAccGrnProcessAgree(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 9;
-		Constants.subAct = 92;
 		System.out.println("using a href to call insert account agree ");
 
 		ModelAndView model = new ModelAndView("grngvn/accGrn");
@@ -670,9 +662,6 @@ public class GrnGvnController {
 
 	@RequestMapping(value = "/insertAccGrnProcessDisAgree", method = RequestMethod.GET)
 	public String insertAccGrnProcessDisAgree(HttpServletRequest request, HttpServletResponse response) {
-
-		Constants.mainAct = 9;
-		Constants.subAct = 92;
 
 		ModelAndView model = new ModelAndView("grngvn/accGrn");
 
@@ -729,8 +718,8 @@ public class GrnGvnController {
 		ModelAndView model = new ModelAndView("grngvn/gateGvn");
 		try {
 
-			Constants.mainAct = 12;
-			Constants.subAct = 121;
+			Constants.mainAct =10;
+			Constants.subAct =68;
 
 		} catch (Exception e) {
 
@@ -748,8 +737,6 @@ public class GrnGvnController {
 
 		ModelAndView model = new ModelAndView("grngvn/gateGvn");
 
-		Constants.mainAct = 12;
-		Constants.subAct = 121;
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		RestTemplate restTemplate = new RestTemplate();
@@ -803,8 +790,6 @@ public class GrnGvnController {
 	@RequestMapping(value = "/insertGateGvnByCheckBoxes", method = RequestMethod.GET) // Using checkboxes to insert
 	public String insertGateGvnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 12;
-		Constants.subAct = 121;
 
 		ModelAndView model = new ModelAndView("grngvn/gateGvn");
 		RestTemplate restTemplate = new RestTemplate();
@@ -931,8 +916,6 @@ public class GrnGvnController {
 	@RequestMapping(value = "/insertGateGvnProcessAgree", method = RequestMethod.GET)
 	public String insertGateGvnProcessAgree(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 9;
-		Constants.subAct = 91;
 		System.out.println("using a href to call insert Gate gvn");
 
 		ModelAndView model = new ModelAndView("grngvn/gateGvn");
@@ -982,8 +965,6 @@ public class GrnGvnController {
 	@RequestMapping(value = "/insertGateGvnProcessDisAgree", method = RequestMethod.GET)
 	public String insertGateGvnProcessDisAgree(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 12;
-		Constants.subAct = 121;
 		System.out.println("using Ajax to call disagree");
 
 		ModelAndView model = new ModelAndView("grngvn/gateGvn");
@@ -1035,8 +1016,8 @@ public class GrnGvnController {
 		ModelAndView model = new ModelAndView("grngvn/storeGvn");
 		try {
 
-			Constants.mainAct = 12;
-			Constants.subAct = 122;
+			//Constants.mainAct = 12;
+			//Constants.subAct = 122;
 
 		} catch (Exception e) {
 
@@ -1054,8 +1035,8 @@ public class GrnGvnController {
 
 		ModelAndView model = new ModelAndView("grngvn/storeGvn");
 
-		Constants.mainAct = 12;
-		Constants.subAct = 122;
+		//Constants.mainAct = 12;
+		//Constants.subAct = 122;
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		RestTemplate restTemplate = new RestTemplate();
@@ -1111,8 +1092,8 @@ public class GrnGvnController {
 	@RequestMapping(value = "/insertStoreGvnByCheckBoxes", method = RequestMethod.GET) // Using checkboxes to insert
 	public String insertStoreGvnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 12;
-		Constants.subAct = 122;
+		//Constants.mainAct = 12;
+		//Constants.subAct = 122;
 
 		ModelAndView model = new ModelAndView("grngvn/storeGvn");
 		RestTemplate restTemplate = new RestTemplate();
@@ -1238,8 +1219,8 @@ public class GrnGvnController {
 	@RequestMapping(value = "/insertStoreGvnProcessAgree", method = RequestMethod.GET)
 	public String insertStoreGvnProcessAgree(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 12;
-		Constants.subAct = 122;
+		//Constants.mainAct = 12;
+		//Constants.subAct = 122;
 
 		ModelAndView model = new ModelAndView("grngvn/storeGvn");
 
@@ -1285,8 +1266,8 @@ public class GrnGvnController {
 	@RequestMapping(value = "/insertStoreGvnProcessDisAgree", method = RequestMethod.GET)
 	public String insertStoreGvnProcessDisAgree(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 12;
-		Constants.subAct = 122;
+		//Constants.mainAct = 12;
+		//Constants.subAct = 122;
 
 		ModelAndView model = new ModelAndView("grngvn/storeGvn");
 		try {
@@ -1337,8 +1318,8 @@ public class GrnGvnController {
 		ModelAndView model = new ModelAndView("grngvn/accGvn");
 		try {
 
-			Constants.mainAct = 12;
-			Constants.subAct = 123;
+			Constants.mainAct =11;
+			Constants.subAct =71;
 
 		} catch (Exception e) {
 
@@ -1354,9 +1335,6 @@ public class GrnGvnController {
 	public ModelAndView showAccountGvnDetails(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("grngvn/accGvn");
-
-		Constants.mainAct = 12;
-		Constants.subAct = 123;
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		RestTemplate restTemplate = new RestTemplate();
@@ -1410,9 +1388,6 @@ public class GrnGvnController {
 
 	@RequestMapping(value = "/insertAccGvnByCheckBoxes", method = RequestMethod.GET) // Using checkboxes to insert
 	public String insertAccGvnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
-
-		Constants.mainAct = 12;
-		Constants.subAct = 123;
 
 		ModelAndView model = new ModelAndView("grngvn/accGvn");
 
@@ -1537,9 +1512,6 @@ public class GrnGvnController {
 	@RequestMapping(value = "/insertAccGvnProcessAgree", method = RequestMethod.GET)
 	public String insertAccGvnProcessAgree(HttpServletRequest request, HttpServletResponse response) {
 
-		Constants.mainAct = 12;
-		Constants.subAct = 123;
-
 		ModelAndView model = new ModelAndView("grngvn/accGvn");
 		
 		try {
@@ -1588,9 +1560,6 @@ public class GrnGvnController {
 
 	@RequestMapping(value = "/insertAccGvnProcessDisAgree", method = RequestMethod.GET)
 	public String insertAccGvnProcessDisAgree(HttpServletRequest request, HttpServletResponse response) {
-
-		Constants.mainAct = 12;
-		Constants.subAct = 123;
 
 		ModelAndView model = new ModelAndView("grngvn/accGvn");
 		
