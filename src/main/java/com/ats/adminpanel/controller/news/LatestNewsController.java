@@ -25,13 +25,11 @@ import com.ats.adminpanel.model.Scheduler;
 @Controller
 public class LatestNewsController {
 	
-	// latest news
-	
 	@RequestMapping(value = "/addNews")
 	public ModelAndView redirectToAddNews(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("latestNews/addNew");
-		//Constants.mainAct=5;
-		//Constants.subAct=51;
+		Constants.mainAct=1;
+		Constants.subAct=121;
 		return model;
 	}
 	

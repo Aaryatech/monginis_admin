@@ -3,7 +3,6 @@ package com.ats.adminpanel.model.RawMaterial;
 
 public class GetRawmaterialByGroup {
 
-	
 	private int rmId;
 	 
 	private String rmName;
@@ -22,12 +21,62 @@ public class GetRawmaterialByGroup {
 	 
 	private int rmPackQty;
 	
-  
 	private int rmRate;
 	 
+    private int bmsRolQty;
+	
+	private int storeRolQty;
+
+	private float sgstPer;
+	
+	private float cgstPer;
+	
+	private float igstPer;
+	
 	private int taxId;
 	 
 	private int rmIsCritical;
+
+	
+	public int getBmsRolQty() {
+		return bmsRolQty;
+	}
+
+	public void setBmsRolQty(int bmsRolQty) {
+		this.bmsRolQty = bmsRolQty;
+	}
+
+	public int getStoreRolQty() {
+		return storeRolQty;
+	}
+
+	public void setStoreRolQty(int storeRolQty) {
+		this.storeRolQty = storeRolQty;
+	}
+
+	public float getSgstPer() {
+		return sgstPer;
+	}
+
+	public void setSgstPer(float sgstPer) {
+		this.sgstPer = sgstPer;
+	}
+
+	public float getCgstPer() {
+		return cgstPer;
+	}
+
+	public void setCgstPer(float cgstPer) {
+		this.cgstPer = cgstPer;
+	}
+
+	public float getIgstPer() {
+		return igstPer;
+	}
+
+	public void setIgstPer(float igstPer) {
+		this.igstPer = igstPer;
+	}
 
 	public int getRmId() {
 		return rmId;
@@ -129,9 +178,9 @@ public class GetRawmaterialByGroup {
 	public String toString() {
 		return "GetRawmaterialByGroup [rmId=" + rmId + ", rmName=" + rmName + ", grpId=" + grpId + ", grpName="
 				+ grpName + ", catId=" + catId + ", catName=" + catName + ", subCatId=" + subCatId + ", sunCatName="
-				+ sunCatName + ", rmPackQty=" + rmPackQty + ", rmRate=" + rmRate + ", taxId=" + taxId
-				+ ", rmIsCritical=" + rmIsCritical + "]";
+				+ sunCatName + ", rmPackQty=" + rmPackQty + ", rmRate=" + rmRate + ", bmsRolQty=" + bmsRolQty
+				+ ", storeRolQty=" + storeRolQty + ", sgstPer=" + sgstPer + ", cgstPer=" + cgstPer + ", igstPer="
+				+ igstPer + ", taxId=" + taxId + ", rmIsCritical=" + rmIsCritical + "]";
 	}
-	
-	
+     
 }

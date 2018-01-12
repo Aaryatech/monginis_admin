@@ -68,6 +68,7 @@ import com.ats.adminpanel.model.item.FrItemStockConfiResponse;
 import com.ats.adminpanel.model.item.FrItemStockConfigure;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.item.ItemSup;
+import com.ats.adminpanel.model.masters.FrListForSupp;
 import com.ats.adminpanel.model.modules.ErrorMessage;
 
 @Controller
@@ -1698,19 +1699,17 @@ public class FranchiseeController {
 
 	@RequestMapping(value = "/showAddFranchiseSup")
 	public ModelAndView addFranchiseSup(HttpServletRequest request, HttpServletResponse response) {
-		Constants.mainAct =2;
+		Constants.mainAct =1;
 		Constants.subAct =113;
 		ModelAndView mav = new ModelAndView("franchisee/addFranchiseSup");
 
 		RestTemplate restTemplate = new RestTemplate();
-		AllFranchiseeList allFranchiseeList = restTemplate.getForObject(Constants.url + "getAllFranchisee",
-				AllFranchiseeList.class);
+		List<FrListForSupp> franchiseeList = restTemplate.getForObject(Constants.url + "getFrListForSupp",
+				List.class);
 
 		FranchiseSupList frSupList = restTemplate.getForObject(Constants.url + "/getFranchiseSupList",
 				FranchiseSupList.class);
 
-		List<FranchiseeList> franchiseeList = new ArrayList<FranchiseeList>();
-		franchiseeList = allFranchiseeList.getFranchiseeList();
 		System.out.println("Franchisee List:" + franchiseeList.toString());
 
 		mav.addObject("franchiseeList", franchiseeList);
@@ -1766,6 +1765,7 @@ public class FranchiseeController {
 			frSup.setPass3(pass3);
 			frSup.setPass4("pass4");
 			frSup.setPass5("pass5");
+			frSup.setIsTallySync(0);
 
 			RestTemplate restTemplate = new RestTemplate();
 

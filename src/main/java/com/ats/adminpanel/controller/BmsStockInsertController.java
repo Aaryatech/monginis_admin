@@ -43,8 +43,8 @@ public class BmsStockInsertController {
 	
 	@RequestMapping(value = "/bmsstock", method = RequestMethod.GET)
 	public ModelAndView bmsstock(HttpServletRequest request, HttpServletResponse response) {
-		/*Constants.mainAct = 17;
-		Constants.subAct=184;*/
+		Constants.mainAct =8;
+		Constants.subAct=122;
 		
 		ModelAndView model = new ModelAndView("productionPlan/bmsstock");//
 		

@@ -335,8 +335,8 @@ int globalIsPlan;
 	
 	@RequestMapping(value = "/getBomList", method = RequestMethod.GET)
 	public ModelAndView getBomList(HttpServletRequest request, HttpServletResponse response) {
-		Constants.mainAct =4;
-		Constants.subAct=39;
+		Constants.mainAct =8;
+		Constants.subAct=44;
 		
 		ModelAndView model = new ModelAndView("productionPlan/getbomlist");//
 		getbomList = new ArrayList<BillOfMaterialHeader>();
@@ -584,7 +584,9 @@ int globalIsPlan;
 	public ModelAndView getBomListforMixing(HttpServletRequest request, HttpServletResponse response) {
 	
 		List<BillOfMaterialHeader> getbomListsorted = new ArrayList<BillOfMaterialHeader>();
-		ModelAndView model = new ModelAndView("productionPlan/bomDepWise");//
+		ModelAndView model = new ModelAndView("productionPlan/bomDepWise");
+		Constants.mainAct =6;
+		Constants.subAct =41;
 		getbomList = new ArrayList<BillOfMaterialHeader>();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		FrItemStockConfigureList fromsettingvalue = new FrItemStockConfigureList();
@@ -651,7 +653,9 @@ int globalIsPlan;
 	public ModelAndView getBomListforProduction(HttpServletRequest request, HttpServletResponse response) {
 	
 		List<BillOfMaterialHeader> getbomListsorted = new ArrayList<BillOfMaterialHeader>(); 
-		ModelAndView model = new ModelAndView("productionPlan/bomDepWise");//
+		ModelAndView model = new ModelAndView("productionPlan/bomDepWise");
+		Constants.mainAct =4;
+		Constants.subAct =39;
 		getbomList = new ArrayList<BillOfMaterialHeader>();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		FrItemStockConfigureList fromsettingvalue = new FrItemStockConfigureList();

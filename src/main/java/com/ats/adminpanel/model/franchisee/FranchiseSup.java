@@ -28,7 +28,17 @@ public class FranchiseSup {
 
 	private String pass5;
 
+	private int isTallySync;
 	
+	
+	public int getIsTallySync() {
+		return isTallySync;
+	}
+
+	public void setIsTallySync(int isTallySync) {
+		this.isTallySync = isTallySync;
+	}
+
 	public String getPass1() {
 		return pass1;
 	}
