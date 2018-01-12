@@ -1706,6 +1706,8 @@ public class MaterialReceiptNoteController {
 								.setCessPer(materialRecieptAccList.get(i).getCess());
 						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
 								.setCessRs(materialRecieptAccList.get(i).getCessAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).
+								setAmount(materialRecieptAccList.get(i).getTaxableAmt());
 
 					}
 				}

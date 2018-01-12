@@ -146,7 +146,7 @@
 								<div class="form-group">
 									<label class="col-sm-2 col-lg-2 control-label">RM Type</label>
 									<div class="col-sm-6 col-lg-4 controls">
-                                    <select name="rm_type" id="rm_type" class="form-control" placeholder="Raw Material Type"data-rule-required="true" >
+                                    <select name="rm_type" id="rm_type" class="form-control chosen" placeholder="Raw Material Type" data-rule-required="true" >
 											<option value="-1">Select RM Type</option>
 											<option value="1">Raw Material</option>
 											<option value="2">Semi Finished</option>
@@ -156,7 +156,7 @@
 
 									<label class="col-sm-3 col-lg-1 control-label">Raw Material</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<select name="rm_id" id="rm_id" class="form-control" placeholder="Raw Material"data-rule-required="true">
+										<select name="rm_id" id="rm_id" class="form-control chosen" placeholder="Raw Material" data-rule-required="true">
 											<option value="-1">Select Raw Material</option>
 										    
 								</select>
@@ -385,7 +385,7 @@ var rm_type = $("#rm_type").val();
 					rm_type : rm_type,
 					ajax : 'true',
 				},  function(data) {
-					var html = '<option value="-1" selected >Select Raw Material</option>';
+					var html = '<option value="" selected >Select Raw Material</option>';
 					
 					var len = data.length;
 					for ( var i = 0; i < len; i++) {
@@ -394,6 +394,7 @@ var rm_type = $("#rm_type").val();
 					}
 					html += '</option>';
 					$('#rm_id').html(html);
+					$("#rm_id").trigger("chosen:updated");
 				});
 			});
 			
@@ -427,7 +428,7 @@ $(document).ready(function() {
 	var rmQty = $("#rm_qty").val();
 	//alert("rm_qty"+rmQty);
 	var rmName=$('#rm_id option:selected').text();
-	//alert(rmName);
+	//alert("rmName"+rmName);
 	if(editFlag==true)
 		{
 		editFlag=false;
@@ -585,21 +586,41 @@ function editItemDetail(token){
 		       
 				 document.getElementById("rm_qty").value=data.rmQty;
 				 document.getElementById("rm_type").options.selectedIndex =data.rmType;
+				/*  var ht = '<option value="" selected >Select Rm Type</option>';
+				 if(data.rmType==1)
+					 {
+					 ht += '<option value="' + data[i].id + '" selected>'
+						+ data[i].name + '</option>';
+					 } */
 				 document.getElementById("base_qty").value =data.noOfPiecesPerItem;
+				 document.getElementById("rm_id").options.selectedIndex =data.rmId;
+				 var id = data.rmId;
+				 //alert("id"+id+"data.rm_id"+data.rmId);
+				 
 					$.getJSON('${getRawMaterialListinSpcake}', {
 						rm_type : data.rmType,
 						ajax : 'true',
 					},  function(data) {
-						//var html = '<option value="">Select Raw Material</option>';
 						
+						var html = '<option value="" selected >Select Raw Material</option>';
+						//alert("id"+id);
 						var len = data.length;
 						for ( var i = 0; i < len; i++) {
+							if(data[i].id==id)
+								{
+								html += '<option value="' + data[i].id + '" selected>'
+								+ data[i].name + '</option>';
+								}
+							else
+								{
 							html += '<option value="' + data[i].id + '">'
 									+ data[i].name + '</option>';
+								}
 						}
 						
 						html += '</option>';
 						$('#rm_id').html(html);
+						$("#rm_id").trigger("chosen:updated");
 					});
 					//alert(data.rmId)
 					 document.getElementById("rm_id").value =data.rmId;
