@@ -194,14 +194,14 @@
 
 										<c:set var="strSpType" value="${flavoursList.spType}"></c:set>
 										<c:choose>
-											<c:when test="${flavoursList.spType=='1'}">
+											<c:when test="${flavoursList.spType==1}">
 												<td align="left"><c:out value="Chocolate" /></td>
 											</c:when>
-											<c:when test="${flavoursList.spType=='2'}">
+											<c:when test="${flavoursList.spType==2}">
 												<td align="left"><c:out value="FC" /></td>
                                            </c:when>
                                            <c:otherwise>
-                                           <td align="left"><c:out value="" /></td>
+                                           <td align="left"><c:out value=""/></td>
                                            </c:otherwise>
 										</c:choose>
 

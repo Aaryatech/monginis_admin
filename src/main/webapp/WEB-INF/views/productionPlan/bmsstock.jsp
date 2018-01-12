@@ -257,19 +257,13 @@
 		$('#item_type').change(
 				function() {
 					
-				 alert("in function");
 				 var itemType = $("#item_type").val();
 			
-				 alert("value "+itemType);
-				 
-				 
 					$.getJSON('${getSfndRawItem}', {
 						itemType : itemType,
 						ajax : 'true',
 					},
 							function(data) {
-						alert("hiieieie");
-						alert(data);
 						
 						$('#table_grid td').remove();
 						var srNo=0;

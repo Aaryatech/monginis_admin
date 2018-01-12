@@ -1,7 +1,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-
+ <%@ page import="java.text.SimpleDateFormat" %> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -60,7 +60,6 @@
   $( function() {
     $( "#datepicker2" ).datepicker({ dateFormat: 'dd-mm-yy' });
   } );
-  
   </script>
 	<c:url var="getSellBillHeader" value="/getSellBillHeader" />
 
@@ -105,7 +104,7 @@
 								<i class="fa fa-bars"></i> Search Sell Bill List
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href=""></a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							<!-- <div class="box-tool">
@@ -117,21 +116,20 @@
 
 
 						<div class="box-content">
-							<!-- <form class="form-horizontal" method="get" id="validation-form"> -->
-							<div class="form-group">
+     
+      						<div class="form-group">
 
 									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Select
 										Franchisee </label>
-									<div class="col-sm-9 col-lg-10 controls">
+									<div class="col-sm-9 col-lg-6 controls">
 
 										<select class="form-control chosen" multiple="multiple"
-											tabindex="6" name="fr_id" id="fr_id">
+											tabindex="6" name="fr_id" id="fr_id" required>
 
-											<option value="-1">All</option>
+											<option value="" disabled="disabled">Select Franchisee</option>
 											<c:forEach items="${allFrIdNameList}" var="allFrIdNameList"
 												varStatus="count">
 												<option value="${allFrIdNameList.frId}">${allFrIdNameList.frName}</option>
-
 											</c:forEach>
 
 										</select>
@@ -139,34 +137,28 @@
 
 
 								</div>
-
+               <br><br>
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">From
+									<label class="col-sm-2 col-lg-2 control-label">From
 										Date</label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="datepicker" size="16"
-											 type="text" name="from_Date" required />
+										<input class="form-control date-picker" id="datepicker" size="16" placeholder="From Date"
+											 type="text" name="from_Date" data-rule-required="true" />
 									</div>
-
-
-
-
-									<label class="col-sm-3 col-lg-2 control-label">To Date</label>
+									<label class="col-sm-2 col-lg-1 control-label">To Date</label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="datepicker2" size="16"
-											 type="text" name="to_Date" required />
+										<input class="form-control date-picker" id="datepicker2" size="16" placeholder="To Date"
+											 type="text" name="to_Date"  required />
 
 									</div>
 
 								</div>
-	
+	            <br><br>
 								<div align="center" class="form-group">
 									<div
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										<input class="btn btn-primary" value="Search..." id="callSubmit"
+										<input type="button" class="btn btn-primary" value="Search" id="callSubmit"
 											onclick="searchSellBill()">
-
-
 									</div>
 								</div>
 
@@ -210,10 +202,10 @@
 														<th width="138" align="left">Bill No</th>
 														<th width="159" align="left">Invoice No</th>
 														<th width="159" align="left">Bill date</th>
-														<th width="159" align="left">Franchisee Name</th>
+														<th width="190" align="left">Franchisee Name</th>
 														<th width="159" align="left">Grand Total</th>
-														<th width="91" align="left">Payable Amount</th>
-														<th width="105" align="left">Paid Amount</th>
+														<th width="190" align="left">Payable Amount</th>
+														<th width="180" align="left">Paid Amount</th>
 														<th width="105" align="left">Pay Mode</th>
 														<th width="159" align="left">Action</th>
 														
@@ -250,13 +242,6 @@
 
 	<!--basic scripts-->
 
-
-
-
-
-
-
-
 	<script
 		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
 	<script>
@@ -287,16 +272,11 @@
 	<script
 		src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
 
-
 	<!--page specific plugin scripts-->
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-
-
-
-
 
 	<!--flaty scripts-->
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
@@ -325,7 +305,6 @@
 	{ 
 		$('#table_grid td').remove();
 		
-		
 		var isValid = validate();
 		
 		if (isValid) {
@@ -334,7 +313,6 @@
 			var toDate = document.getElementById("datepicker2").value;
 			var frIds=$("#fr_id").val();
 			$('#loader').show();
-			
 			
 			$.getJSON('${getSellBillHeader}',{
 				
@@ -346,24 +324,16 @@
 							},
 							function(data) {
 
-								//$('#table_grid td').remove();
-								
-								
 								$('#loader').hide();
 								if (data == "") {
 									alert("No records found !!");
 
 								}
-								alert(data);
-
-								
 								$.each(data,function(key, sellBillData) {
 
 													var index = key + 1;
 
 													var tr = "<tr>";
-
-													
 
 													var sellBillNo = "<td>&nbsp;&nbsp;&nbsp;"
 															+ sellBillData.sellBillNo
@@ -397,11 +367,6 @@
 																				var viewBill = '<td>&nbsp;&nbsp;&nbsp;'
 																				+'<a href="${pageContext.request.contextPath}/viewBillDetails?sellBillNo='+ sellBillData.sellBillNo+'&billDate='+sellBillData.billDate+'&frName='+sellBillData.frName+'" class="action_btn" name='+'><abbr title="Details"><i class="fa fa-list"></i></abbr></a>'
 																				+ "</td>";
-
-
-
-													
-
 													var trclosed = "</tr>";
 
 													$('#table_grid tbody')
@@ -429,12 +394,9 @@
 													
 													$('#table_grid tbody')
 													.append(trclosed);
-													
-													
-
+												
 												})
-													
-
+										
 							});
 
 		}
@@ -443,13 +405,17 @@
 	<script type="text/javascript">
 	function validate() {
 	
-	
+		var frId =$("#fr_id").val();
 		var fromDate =$("#datepicker").val();
 		var toDate =$("#datepicker2").val();
 		
 
 		var isValid = true;
 
+		if(frId==""||frId==null){
+			isValid = false;
+			alert("Please select Franchise");
+		}else
 	 if (fromDate == "" || fromDate == null) {
 
 			isValid = false;

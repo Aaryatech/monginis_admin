@@ -147,35 +147,32 @@
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Type </label>
 									<div class="col-sm-9 col-lg-10 controls">
-										<label class="radio-inline"> </label>
 										<c:choose>
-											<c:when test="${strSpType.equals('0')}">
-
-
+											<c:when test="${strSpType==2}">
 
 												<label class="radio-inline"> <input type="radio"
-													name="sp_type" id="optionsRadios2" checked
-													value="${strSpType}" />FC
+													name="sp_type" id="optionsRadios2" checked="checked"
+													value="2"/>FC
 												</label>
 												<label class="radio-inline"> <input type="radio"
-													name="sp_type" id="optionsRadios2" value="1" />
+													name="sp_type" id="optionsRadios2" value="1"/>
 													Chocolate
 												</label>
 
 
 											</c:when>
-											<c:otherwise>
+											<c:when test="${strSpType==1}">
 
 												<label class="radio-inline"> <input type="radio"
-													name="sp_type" id="optionsRadios2" value="0" />
+													name="sp_type" id="optionsRadios2" value="2"/>
 													FC
 												</label>
 												<label class="radio-inline"> <input type="radio"
-													name="sp_type" id="optionsRadios2" checked
-													value="${strSpType}" />Chocolate
+													name="sp_type" id="optionsRadios2" checked="checked"
+													value="1"/>Chocolate
 												</label>
-											</c:otherwise>
-
+											</c:when>
+                                           <c:otherwise></c:otherwise>
 										</c:choose>
 
 									</div>

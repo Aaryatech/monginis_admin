@@ -194,7 +194,7 @@
 					
 						<div class="row" align="left">
 							<div class="col-md-12" style="text-align: center">
-								<button class="btn btn-info" onclick="getItems()">Search</button>
+								<button class="btn btn-primary" onclick="getItems()">Search</button>
 
 							</div>
 

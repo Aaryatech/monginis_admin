@@ -337,18 +337,18 @@
 		//alert("reorder "+reOrderQty);
 
 		if(parseInt(max)<=parseInt(min)){
-			alert("Enter max qty greater than minQty");
+			alert("Enter maximum Qty greater than minimum Qty");
 		isSubmit=false;
 		 //document.getElementById("callSubmit").style.display="none";
 
 		}
-		else if(parseInt(reOrderQty)>parseInt(max)){
-			alert("Enter reOrderQty Between Min And Max Qty");
+		else if(parseInt(reOrderQty)>=parseInt(max)){
+			alert("Enter reorder Qty between minimum and maximum Qty");
 			isSubmit=false;
 		 //document.getElementById("callSubmit").style.display="none";
 
 			}else if(parseInt(reOrderQty) <= parseInt(min)){
-				alert("Enter reOrderQty Between Min And Max Qty");
+				alert("Enter reorder Qty between minimum and maximum Qty");
 				isSubmit=false;
 			}
 		

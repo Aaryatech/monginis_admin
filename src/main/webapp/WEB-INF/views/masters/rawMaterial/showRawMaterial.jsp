@@ -311,7 +311,7 @@
 					</div>
 					
 					<div class="form-group">
-						<label class="col-sm-3 col-lg-2 control-label">RM HSNCD</label>
+						<label class="col-sm-3 col-lg-2 control-label">HSNCD</label>
 
 						<div class="col-sm-6 col-lg-4 controls">
 							<input type="text" value="${rawMaterialDetails.rmCloQty }" name="rm_clo_qty" id="rm_clo_qty" class="form-control" placeholder="RM HSNCD" data-rule-required="true" data-rule-number="true"/>
@@ -511,13 +511,11 @@ $('#delete').click(function(){
 $(document).ready(function() { 
 	$('#rm_group').change(
 			function() {
-				alert("fg");
 				$.getJSON('${getRmCategory}', {
 					grpId : $(this).val(),
 					ajax : 'true'
 				}, function(data) {
 					var html = '<option value="" selected >Select Category</option>';
-					alert(data);
 					var len = data.length;
 					for ( var i = 0; i < len; i++) {
 						html += '<option value="' + data[i].catId + '">'
@@ -533,7 +531,6 @@ $(document).ready(function() {
 $(document).ready(function() { 
 	$('#rm_cat').change(
 			function() {
-				alert("fg");
 				$.getJSON('${getRmSubCategory}', {
 					catId : $(this).val(),
 					ajax : 'true'
@@ -561,35 +558,35 @@ function validation() {
 	var bmsRolQty=parseFloat($("#rm_rol_qty").val());
 
 	var isValid = true;
-	if (bmsMinQty>bmsMaxQty) { 
+	if (bmsMinQty>=bmsMaxQty) { 
 		isValid = false;
-		alert("Please Enter Valid BMS Max  Qty");
-	} else if (bmsRolQty>bmsMaxQty) {
+		alert("BMS maximum qty is always greater than minimum Qty");
+	} else if (bmsRolQty>=bmsMaxQty) {
 		isValid = false;
-		alert("Please Enter Valid BMS Reorder Level Qty");
-	} else if (bmsRolQty<bmsMinQty) {
+		alert("BMS reorder level qty is between minimum qty & maximum qty");
+	} else if (bmsRolQty<=bmsMinQty) {
 		isValid = false;
-		alert("Please Enter Valid BMS Reorder Level Qty");
+		alert("BMS reorder level qty is between minimum qty & maximum qty");
 	}
 	
 	return isValid;
 }
 function validationForStore() {
 	
-	var bmsIssueQty=parseFloat($("#rm_iss_qty").val());
-	var bmsOpQty=parseFloat($("#rm_op_qty").val());
-	var bmsRecQty=parseFloat($("#rm_recd_qty").val());
+	var storeIssueQty=parseFloat($("#rm_iss_qty").val());
+	var storeOpQty=parseFloat($("#rm_op_qty").val());
+	var storeRecQty=parseFloat($("#rm_recd_qty").val());
 
 	var isValid = true;
-	if (bmsIssueQty>bmsOpQty) { 
+	if (storeIssueQty>=storeOpQty) { 
 		isValid = false;
-		alert("Please Enter Valid Store Opening Qty");
-	} else if (bmsRecQty>bmsOpQty) {
+		alert("Store maximum qty is always greater than minimum Qty");
+	} else if (storeRecQty>=storeOpQty) {
 		isValid = false;
-		alert("Please Enter Valid Store Recieved Qty");
-	} else if (bmsRecQty<bmsIssueQty) {
+		alert("Store reorder level qty is between minimum qty & maximum qty");
+	} else if (storeRecQty<=storeIssueQty) {
 		isValid = false;
-		alert("Please Enter Valid Store Recieved Qty");
+		alert("Store reorder level qty is between minimum qty & maximum qty");
 	}
 	
 	return isValid;

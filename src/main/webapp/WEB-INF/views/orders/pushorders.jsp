@@ -355,7 +355,7 @@
 													    	  else
 													    		{//var orderQty = "<td align=center><input onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' type=number min=0 max=500 class=form-control   id=itemId"+itemname.itemId+"orderQty"+ id+ " name=itemId"+itemname.itemId+"orderQty"+id+" value = "+qty+"></td>"; 
 	
-													    		tr.append($('<td></td>').html("<input onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' type=number min=0 max=500 class=form-control   id=itemId"+itemname.itemId+"orderQty"+ id+ " name=itemId"+itemname.itemId+"orderQty"+id+" value = "+qty+">"));
+													    		tr.append($('<td></td>').html("<input onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' type=number min=0 max=500 class=form-control   id=itemId"+itemname.itemId+"orderQty"+ id+ " name=itemId"+itemname.itemId+"orderQty"+id+" value = "+qty+" tabindex="+key+">"));
 													    		}
 												      });
 												    
@@ -431,7 +431,7 @@
     specialKeys.push(8); //Backspace
     function IsNumeric(e) {
         var keyCode = e.which ? e.which : e.keyCode
-        var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1);
+        var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1 || keyCode==9);
        // document.getElementById("error").style.display = ret ? "none" : "inline";
         return ret;
     }
