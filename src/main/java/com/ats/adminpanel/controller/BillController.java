@@ -144,16 +144,12 @@ public class BillController {
 		FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
 				FrItemStockConfigureList.class);
 
-		//System.out.println("SettingKeyList" + settingList.toString());
-
 		int settingValue = settingList.getFrItemStockConfigure().get(0).getSettingValue();
 
 		System.out.println("Setting Value Received " + settingValue);
 		int year = Year.now().getValue();
 		String strYear = String.valueOf(year);
 		strYear = strYear.substring(2);
-
-		//System.out.println("strYear= " + strYear);
 
 		int length = String.valueOf(settingValue).length();
 
@@ -507,7 +503,7 @@ public class BillController {
 		logger.info("/showGenerateBill request mapping.");
 
 		ModelAndView model = new ModelAndView("billing/generatebill");
-		Constants.mainAct =9;
+		Constants.mainAct =2;
 		Constants.subAct =19;
 		try {
 			ZoneId z = ZoneId.of("Asia/Calcutta");
@@ -1520,7 +1516,8 @@ System.out.println("IN Show bill PDF Method :/showBillPdf");
 	public ModelAndView viewBill(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("billing/sellBillHeader");
-
+		Constants.mainAct =2;
+		Constants.subAct =21;
 		RestTemplate restTemplate = new RestTemplate();
 		allFrIdNameList = new AllFrIdNameList();
 		try {
