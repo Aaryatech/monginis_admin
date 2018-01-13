@@ -442,7 +442,7 @@ div.panel {
 			}
 		}
 	</script>
-	<script>
+	<!-- <script>
 		$(document)
 				.ready(
 						function() {
@@ -502,7 +502,7 @@ div.panel {
 												}
 											});
 						});
-	</script>
+	</script> -->
 
 </body>
 </html>

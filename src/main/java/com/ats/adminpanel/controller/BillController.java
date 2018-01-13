@@ -304,30 +304,51 @@ public class BillController {
 
 						Float baseRate = (orderRate * 100) / (100 + (tax1 + tax2));
 						baseRate = roundUp(baseRate);
+						
+						Float taxableAmt = (float) (baseRate * Integer.parseInt(billQty));
+						taxableAmt = roundUp(taxableAmt);
+						
+						
+						float sgstRs = (taxableAmt * tax1) / 100;
+						float cgstRs = (taxableAmt * tax2) / 100;
+						float igstRs = (taxableAmt * tax3) / 100;
+						Float totalTax = sgstRs + cgstRs;
 
 						if (billQty == null || billQty == "") {// new code to handle hidden records
 							billQty = "0";
 						}
 
-						Float taxableAmt = (float) (baseRate * Integer.parseInt(billQty));
-						taxableAmt = roundUp(taxableAmt);
+						if(gBill.getIsSameState()==1) {
+							baseRate = (orderRate * 100) / (100 + (tax1 + tax2));
+							taxableAmt = (float) (baseRate * Integer.parseInt(billQty));
+							
 
-						float sgstRs = (taxableAmt * tax1) / 100;
-						float cgstRs = (taxableAmt * tax2) / 100;
-						float igstRs = (taxableAmt * tax3) / 100;
+							 sgstRs = (taxableAmt * tax1) / 100;
+							 cgstRs = (taxableAmt * tax2) / 100;
+							 igstRs = 0;
+							 totalTax = sgstRs + cgstRs;
+							
+						}
 						
-						
-						
+						else {
+							baseRate = (orderRate * 100) / (100 + (tax3));
+							taxableAmt = (float) (baseRate * Integer.parseInt(billQty));
+							
 
+							 sgstRs = 0;
+							 cgstRs = 0;
+							 igstRs = (taxableAmt * tax3) / 100;
+							 totalTax = igstRs;
+						}
+						
 						sgstRs = roundUp(sgstRs);
 						cgstRs = roundUp(cgstRs);
 						igstRs = roundUp(igstRs);
 						 
-						 
 						 //header.setSgstSum(sumT1);
 						// header.setCgstSum(sumT2);
 						 //header.setIgstSum(sumT3);
-						Float totalTax = sgstRs + cgstRs;
+						
 						totalTax = roundUp(totalTax);
 
 						Float grandTotal = totalTax + taxableAmt;

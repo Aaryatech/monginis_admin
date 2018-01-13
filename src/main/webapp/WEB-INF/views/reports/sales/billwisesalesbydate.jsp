@@ -3,16 +3,14 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 
-
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Franchisee Bill</title>
+<title>Sales Report Billwise</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -83,7 +81,7 @@
 <body>
 
 
-	<c:url var="getBillList" value="/generateNewBill"></c:url>
+	<c:url var="getBillList" value="/getSaleBillwise"></c:url>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -108,9 +106,9 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Franchise Bill
+					<i class="fa fa-file-o"></i>Billwise Report
 				</h1>
-				<h4>Bill for franchises</h4>
+				<h4></h4>
 			</div>
 		</div>
 		<!-- END Page Title -->
@@ -121,7 +119,7 @@
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
-				<li class="active">Franchise Bill</li>
+				<li class="active">Bill Report</li>
 			</ul>
 		</div>
 		<!-- END Breadcrumb -->
@@ -130,7 +128,7 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>Generate Franchise Bill
+					<i class="fa fa-bars"></i>View Billwise Sale
 				</h3>
 
 			</div>
@@ -140,33 +138,20 @@
 
 
 					<div class="form-group">
-						<label class="col-sm-3 col-lg-2	 control-label">Delivery
-							Date</label>
+						<label class="col-sm-3 col-lg-2	 control-label">From Date</label>
 						<div class="col-sm-6 col-lg-4 controls date_select">
-							<input class="form-control date-picker" id="deliveryDate"
-								name="deliveryDate" size="30" type="text" value="${todaysDate}" />
+							<input class="form-control date-picker" id="fromDate"
+								name="fromDate" size="30" type="text" value="${todaysDate}" />
 						</div>
 
 						<!-- </div>
 
 					<div class="form-group  "> -->
 
-						<label class="col-sm-3 col-lg-2	 control-label">Select
-							Menu</label>
-						<div class="col-sm-6 col-lg-4 controls">
-							<select data-placeholder="Choose Menu"
-								class="form-control chosen" multiple="multiple" tabindex="6"
-								id="selectMenu" name="selectMenu">
-
-								<option value="-1"><c:out value="All"/></option>
-
-								<c:forEach items="${unSelectedMenuList}" var="unSelectedMenu"
-									varStatus="count">
-									<option value="${unSelectedMenu.menuId}"><c:out value="${unSelectedMenu.menuTitle}"/></option>
-								</c:forEach>
-
-
-							</select>
+						<label class="col-sm-3 col-lg-2	 control-label">To Date</label>
+						<div class="col-sm-6 col-lg-4 controls date_select">
+							<input class="form-control date-picker" id="toDate" name="toDate"
+								size="30" type="text" value="${todaysDate}" />
 						</div>
 					</div>
 
@@ -191,11 +176,11 @@
 
 								</c:forEach>
 							</select>
-							
+
 						</div>
 
-						<label class="col-sm-3 col-lg-2 control-label"><b>OR</b> Select
-							Franchisee </label>
+						<label class="col-sm-3 col-lg-2 control-label"><b>OR</b>Select
+							Franchisee</label>
 						<div class="col-sm-6 col-lg-4">
 
 							<select data-placeholder="Choose Franchisee"
@@ -214,33 +199,13 @@
 					</div>
 				</div>
 
-
-				<%-- <div class="form-group col-md-9">
-					<label class=" col-md-2">Select
-						Franchise </label>
-					<div class=" col-md-7">
-						<select data-placeholder="Choose Franchisee"
-							class="form-control chosen " multiple="multiple" tabindex="6"
-							id="selectFr" name="selectFr">
-
-							<option value="-1"><c:out value="All"/></option>
-
-							<c:forEach items="${unSelectedFrList}" var="fr" varStatus="count">
-								<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
-							</c:forEach>
-						</select>
-					</div>
-
-				</div> --%>
-
-
 				<br>
 				<div class="row">
 					<div class="col-md-12" style="text-align: center;">
-						<button class="btn btn-info" onclick="generateNewBill()">Search
-							Bill</button>
-
-
+						<button class="btn btn-info" onclick="searchReport()">Search
+							Billwise Report</button>
+					<a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleReportByDatePdf"
+								target="_blank">PDF</a>
 					</div>
 				</div>
 
@@ -263,7 +228,7 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-list-alt"></i>Bill
+					<i class="fa fa-list-alt"></i>Bill Report
 				</h3>
 
 			</div>
@@ -279,18 +244,18 @@
 								<thead>
 									<tr>
 										<th>Sr.No.</th>
-										<th>Franchise Name</th>
-										<th>Menu Name</th>
-										<th>Item Name</th>
-										<th>Order Qty</th>
-										<th>Bill Qty</th>
-										<th>Base Rate</th>
-										<th>Amount</th>
-										<th>Tax %</th>
-										<th>SGST Rs</th>
-										<th>CGST Rs</th>
-										<th>IGST Rs</th>
+										<th>Bill No</th>
+										<th>Date</th>
+										<th>Party Name</th>
+										<th>City</th>
+										<th>GSTIN</th>
+										<th>Basic Value</th>
+										<th>CGST</th>
+										<th>SGST</th>
+										<th>IGST</th>
+										<th>Round Off</th>
 										<th>Total</th>
+
 									</tr>
 								</thead>
 								<tbody>
@@ -300,19 +265,6 @@
 						</div>
 					</div>
 
-
-
-					<div class="row">
-						<div class="col-md-offset-6 col-md-6">
-<!-- 							<button class="btn btn-info pull-right">Submit & PDF</button>
- -->
-							<%-- <a href="${pageContext.request.contextPath}/pdf?url=showBillPdf"
-								target="_blank">PDF</a> --%>
-							<button class="btn btn-info pull-right"
-								style="margin-right: 5px;" onclick="submitBill()">Submit
-								Bill</button>
-						</div>
-					</div>
 				</div>
 			</form>
 		</div>
@@ -326,28 +278,16 @@
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
 
-	<script type="text/javascript">
-			function submitBill() {
-
-				//submitBillForm.submit();
-				 //window.open("${pageContext.request.contextPath}/pdf?url=showBillPdf");
-				 
-				// window.open("${pageContext.request.contextPath}/showBillListForPrint");
-			}
-		</script>
-
 
 	<script type="text/javascript">
-		function generateNewBill() {
+		function searchReport() {
+		//	var isValid = validate();
 
-			var isValid = validate();
-
-			if (isValid) {
 				var selectedFr = $("#selectFr").val();
 				var routeId=$("#selectRoute").val();
 				
-				var selectedMenu = $("#selectMenu").val();
-				var deliveryDate = $("#deliveryDate").val();
+				var from_date = $("#fromDate").val();
+				var to_date = $("#toDate").val();
 
 				$('#loader').show();
 
@@ -357,8 +297,8 @@
 
 								{
 									fr_id_list : JSON.stringify(selectedFr),
-									menu_id_list : JSON.stringify(selectedMenu),
-									deliveryDate : deliveryDate,
+									fromDate : from_date,
+									toDate : to_date,
 									route_id:routeId,
 									ajax : 'true'
 
@@ -376,198 +316,61 @@
 									$
 											.each(
 													data,
-													function(key, bill) {
-														
-														if(bill.orderQty>0){
-
+													function(key, report) {
 														var index = key + 1;
+														//var tr = "<tr>";
+														
+														
+														var tr = $('<tr></tr>');
 
-														var tr = "<tr>";
+													  	tr.append($('<td></td>').html(key+1));
 
-														var index = "<td>&nbsp;&nbsp;&nbsp;"
-																+ index
-																+ "</td>";
+													  	tr.append($('<td></td>').html(report.invoiceNo));
 
-														var frName = "<td>&nbsp;&nbsp;&nbsp;"
-																+ bill.frName
-																+ "</td>";
+													  	tr.append($('<td></td>').html(report.billDate));
 
-														var menuTitle = "<td>&nbsp;&nbsp;&nbsp;"
-																+ bill.menuTitle
-																+ "</td>";
+													  	tr.append($('<td></td>').html(report.frName));
+													  	
+													  	
+													  	tr.append($('<td></td>').html(report.frCity));
 
-														/* var itemId = "<td>&nbsp;&nbsp;&nbsp;"
-																+ bill.itemId
-																+ "</td>"; */
+													  	tr.append($('<td></td>').html(report.frGstNo));
 
-														var itemName = "<td >&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-																+ bill.itemName
-																+ "</td>";
-
-														var orderQty = "<td align=center>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
-																+ bill.orderQty
-																+ "</td>";
-
-														 var billQty = "<td align=center><input type=number min=0 max=500 style='width: 5em' class=form-control   onkeyup= updateTotal("
-																+ bill.orderId + ","
-																+ bill.orderRate + ") onchange= updateTotal("+ bill.orderId+ ","+ bill.orderRate+ ")  id= billQty"+ bill.orderId+ " name=billQty"+bill.orderId+" value = "+ bill.orderQty+ "></td>"; 
-																
-																//var billQty = "<td align=center><input name=newId id=newId value=21 type=number ></td>";
-
-															var baseRateAmt	
-														if(bill.isSameState==1)	{
-														 baseRateAmt=(bill.orderRate*100)/(100+bill.itemTax1+bill.itemTax2);	
+													  	tr.append($('<td></td>').html(report.taxableAmt));
+													  	
+													  	if(report.isSameState==1){
+														  	tr.append($('<td></td>').html(report.cgstSum));
+														  	tr.append($('<td></td>').html(report.sgstSum));
+														  	tr.append($('<td></td>').html(0));
 														}
 														else{
-															baseRateAmt=(bill.orderRate*100)/(100+bill.itemTax3);	
+															tr.append($('<td></td>').html(0));
+														  	tr.append($('<td></td>').html(0));
+														  	tr.append($('<td></td>').html(report.igstSum));
 														}
-																
-														//var baseRateAmt=(bill.orderRate*100)/(100+bill.itemTax1+bill.itemTax2);
-														//alert("base Rate Amt ="+baseRateAmt);
-														baseRateAmt=baseRateAmt.toFixed(2);
-														var baseRate = "<td align=center>&nbsp;&nbsp;&nbsp;"
-															+ baseRateAmt+ "</td>";
+														tr.append($('<td></td>').html(report.roundOff));
+														var total;
+														
+														if(report.isSameState==1){
+															 total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum);
+														}
+														else{
 															
-														/* var orderRate = "<td align=center id=billRate"+bill.orderId+"  value="
-																+ bill.orderRate
-																+ ">"
-																+ bill.orderRate
-																+ "</td>" */;
-																var t1=parseFloat(bill.itemTax1);
-																var t2=parseFloat(bill.itemTax2);
-																var t3=parseFloat(bill.itemTax3);
-																//alert("taxes ="+t1+"-"+t2+"-"+t3);
+															 total=report.taxableAmt+report.igstSum;
+														}
 
-																var taxableAmt= baseRateAmt * bill.orderQty;
-																
-																taxableAmt=taxableAmt.toFixed(2);
-																//var taxableAmount = "<td align=center"+taxableAmt+">"+"</td>";
-																var taxableAmount ="<td align=center>&nbsp;&nbsp;&nbsp;"
-																+ taxableAmt+ "</td>";
-																//alert("taxable amt "+taxableAmt);
-																
-																var sgstRS=0;
-																var cgstRS=0;
-																var igstRS=0;
-																var totalTax=0;
-																if(bill.isSameState==1)	{
-																	
-																	 sgstRS=(t1*taxableAmt)/100;
-																	 cgstRS=(t2*taxableAmt)/100;
-																	 igstRS=0;
-																	 
-																	 totalTax=sgstRS+cgstRS;
-																}
-																else{
-																	
-																	 sgstRS=0;
-																	 cgstRS=0;
-																	 igstRS=(t3*taxableAmt)/100;
-																	 totalTax=igstRS;
-																}
-																//var sgstRS=(t1*taxableAmt)/100;
-																//var cgstRS=(t2*taxableAmt)/100;
-																//var igstRS=(t3*taxableAmt)/100;
-																sgstRS=sgstRS.toFixed(2);
-																cgstRS=cgstRS.toFixed(2);
-																igstRS=igstRS.toFixed(2);
-																
-																//alert("rs 1"+sgstRS);
-																//alert("rs 2 "+cgstRS);
-																//alert("rs 3 "+igstRS);
-																//var totalTax=sgstRS+cgstRS+igstRS;
-																//alert(totalTax);
+													  	tr.append($('<td></td>').html(total));
 
-																var sgst = "<td align=center>&nbsp;&nbsp;&nbsp;"
-																	+ sgstRS+ "</td>";
-
-																var cgst = "<td align=center>&nbsp;&nbsp;&nbsp;"
-																	+ cgstRS+ "</td>";
-																var igst ="<td align=center>&nbsp;&nbsp;&nbsp;"
-																	+ igstRS+ "</td>";
-																var totTaxP;
-																
-																if(bill.isSameState==1)	{
-																	 totTaxP=t1+t2;
-																	
-																}else{
-																	
-																	totTaxP=t3;
-																}
-																
-																var totTaxPer = "<td align=center>&nbsp;&nbsp;&nbsp;"
-																	+ totTaxP+ "</td>";
-																
-																	
-														var total = parseFloat(taxableAmt)+parseFloat(totalTax);
-																
-														total=total.toFixed(2);
+														$('#table_grid tbody')
+																.append(
+																		tr);
 														
-														var totaLBill = "<td align=center id=billTotal"+bill.orderId+">"
-																+ total
-																+ "</td>";
-
-														var trclosed = "</tr>";
-
-														$('#table_grid tbody')
-																.append(tr);
-														$('#table_grid tbody')
-																.append(index);
-														$('#table_grid tbody')
-																.append(frName);
-														$('#table_grid tbody')
-																.append(
-																		menuTitle);
-														/* $('#table_grid tbody')
-																.append(itemId); */
-														$('#table_grid tbody')
-																.append(
-																		itemName);
-														$('#table_grid tbody')
-																.append(
-																		orderQty);
-														$('#table_grid tbody')
-																.append(billQty);
-														$('#table_grid tbody')
-																.append(
-																		baseRateAmt);
-														$('#table_grid tbody')
-														.append(
-																taxableAmount);
-														 $('#table_grid tbody')
-															.append(
-																	totTaxPer); 
-														 
-														 $('#table_grid tbody')
-															.append(
-																	sgst); 
-														 
-														 $('#table_grid tbody')
-															.append(
-																	cgst); 
-														 
-														 $('#table_grid tbody')
-															.append(
-																	igst); 
-														 
-													
-														 
-														
-														$('#table_grid tbody')
-																.append(
-																		totaLBill);
-
-														$('#table_grid tbody')
-																.append(
-																		trclosed);
-														
-													}
 
 													})
 
 								});
 
-			}
+			
 		}
 	</script>
 

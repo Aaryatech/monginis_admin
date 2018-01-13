@@ -45,6 +45,7 @@ public class GenerateBill {
 	int grnType;//newly Added
 	
 	int itemShelfLife;//newly Added
+	int isSameState;
 	
 	
 	
@@ -221,6 +222,14 @@ public class GenerateBill {
 		this.isPositive = isPositive;
 	}
 
+	public int getIsSameState() {
+		return isSameState;
+	}
+
+	public void setIsSameState(int isSameState) {
+		this.isSameState = isSameState;
+	}
+
 	@Override
 	public String toString() {
 		return "GenerateBill [orderId=" + orderId + ", frId=" + frId + ", isPositive=" + isPositive + ", menuId="
@@ -228,11 +237,8 @@ public class GenerateBill {
 				+ orderMrp + ", frName=" + frName + ", menuTitle=" + menuTitle + ", itemName=" + itemName + ", catId="
 				+ catId + ", frCode=" + frCode + ", rateType=" + rateType + ", subCatId=" + subCatId + ", itemTax1="
 				+ itemTax1 + ", itemTax2=" + itemTax2 + ", itemTax3=" + itemTax3 + ", grnType=" + grnType
-				+ ", itemShelfLife=" + itemShelfLife + ", deliveryDate=" + deliveryDate + "]";
+				+ ", itemShelfLife=" + itemShelfLife + ", isSameState=" + isSameState + ", deliveryDate=" + deliveryDate
+				+ "]";
 	}
-
-	
-	
-	
 
 }

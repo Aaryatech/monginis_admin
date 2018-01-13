@@ -49,6 +49,7 @@ public class BmsStockController {
 	public ModelAndView showBmsStock(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView mav = new ModelAndView("stock/bmsStock");
+		System.out.println("inside show BMS stock page ");
 
 		Constants.mainAct =8;
 		Constants.subAct =48;
@@ -58,15 +59,20 @@ public class BmsStockController {
 
 	@RequestMapping(value = "/getBmsStock", method = RequestMethod.POST)
 	public ModelAndView getBmsStock(HttpServletRequest request, HttpServletResponse response) {
-
+System.out.println("inside get Bms Stock Page ");
 		ModelAndView mav = new ModelAndView("stock/bmsStock");
-		
+		System.out.println("inside get BMS Stock Page  ");
 		try {
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		RestTemplate restTemplate = new RestTemplate();
-
+		
+		
+//if getCurrentStock
 		if (Integer.parseInt(request.getParameter("selectStock")) == 1) {
+			
+			System.out.println("inside If  get Current Stock is selected   ");
+
 
 			int rmType = Integer.parseInt(request.getParameter("matType"));
 			
@@ -138,8 +144,8 @@ public class BmsStockController {
 
 			System.out.println("curDate " + curDate);
 
-			map.add("fromDate", curDate);
-			map.add("toDate", curDate);
+			map.add("fromDate", DateConvertor.convertToYMD(curDate));
+			map.add("toDate",  DateConvertor.convertToYMD(curDate));
 			map.add("rmType", rmType);
 
 			ParameterizedTypeReference<List<BmsStockDetailed>> typeRef = new ParameterizedTypeReference<List<BmsStockDetailed>>() {
@@ -149,10 +155,10 @@ public class BmsStockController {
 
 			stockBetDate = responseEntity.getBody();
 
-			System.out.println("Bom Detailed bet date \n =" + stockBetDate.toString());
+			System.out.println("BMS Stock Bet Date  date \n =" + stockBetDate.toString());
 
-			GetBmsCurrentStock curStk = null;
-			BmsStockDetailed stkBetDate = null;
+			GetBmsCurrentStock curStk = new GetBmsCurrentStock();
+			BmsStockDetailed stkBetDate = new BmsStockDetailed();
 			boolean isSameItem = false;
 
 			for (int j = 0; j < bmsCurrentStock.size(); j++) {
@@ -293,8 +299,7 @@ public class BmsStockController {
 	
 	}
 
-	// Insert BMS Stock;
-
+	
 	@RequestMapping(value = "/dayEndProcess", method = RequestMethod.POST)
 	public ModelAndView dayEndProcess(HttpServletRequest request, HttpServletResponse response) {
 
