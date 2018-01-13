@@ -76,7 +76,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Prod Header
+						<i class="fa fa-file-o"></i>Production Header
 					</h1>
 
 				</div>
@@ -205,13 +205,7 @@
 									</table>
 								</div>
 
-								<div class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-										<button type="submit" class="btn btn-primary">
-											<i class="fa fa-check"></i> Save
-										</button>
-									</div>
-								</div>
+							
 							</form>
 						</div>
 					</div>

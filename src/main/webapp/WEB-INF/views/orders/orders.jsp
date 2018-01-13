@@ -456,7 +456,7 @@ $.getJSON('${callSearchOrdersProcess}', {
 
  	tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
   
- 	tr.append($('<td></td>').html('    <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> '));
+ 	tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit fa-lg" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove fa-lg" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
   		
  /*  tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> "));
    */	
@@ -489,12 +489,12 @@ $.getJSON('${callSearchOrdersProcess}', {
 			if(state)
 				{
 				$("#edit"+orderId).removeClass("glyphicon glyphicon-edit");
-				 $("#edit"+orderId).addClass("glyphicon glyphicon-save");
+				 $("#edit"+orderId).addClass("glyphicon glyphicon-ok");
 				document.getElementById(orderId).disabled=false;
 				
 				}
 			else{
-				$("#edit"+orderId).removeClass("glyphicon glyphicon-save");
+				$("#edit"+orderId).removeClass("glyphicon glyphicon-ok");
 				 $("#edit"+orderId).addClass("glyphicon glyphicon-edit");
 				document.getElementById(orderId).disabled=true;
 				$.getJSON('${callChangeQty}',
@@ -520,7 +520,7 @@ $.getJSON('${callSearchOrdersProcess}', {
         
         
 		</script>
-	<!-- <script type="text/javascript">
+	 <script type="text/javascript">
 		function deleteOrder(orderId)
 		{
 			
@@ -541,7 +541,7 @@ $.getJSON('${callSearchOrdersProcess}', {
 
 		}
 		
-		</script> -->
+		</script>
 
 
 </body>

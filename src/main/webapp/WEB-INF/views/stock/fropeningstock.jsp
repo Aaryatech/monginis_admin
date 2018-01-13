@@ -128,6 +128,8 @@
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
+				<li class="active">Sell Transaction<span
+					class="divider"><i class="fa fa-angle-right"></i></span></li>	
 				<li class="active">Franchise Opening Stock</li>
 			</ul>
 		</div>
@@ -160,10 +162,6 @@
 						</div>
 					</div>
 
-
-
-
-
 					<div class="form-group col-md-9">
 						<label class=" col-md-2 control-label menu_label">Select
 							Menu</label>
@@ -172,10 +170,6 @@
 							<select data-placeholder="Choose Menu"
 								class="form-control chosen" tabindex="6" id="selectMenu"
 								name="selectMenu">
-
-
-
-
 							</select>
 						</div>
 					</div>
@@ -191,7 +185,6 @@
 							class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
 						<span class="l-6"></span>
 					</div>
-					
 						<div class="row" align="left">
 							<div class="col-md-12" style="text-align: center">
 								<button class="btn btn-primary" onclick="getItems()">Search</button>
@@ -201,12 +194,9 @@
 						</div>
 					</div>
 
-					
-
 				</div>
 			</div>
-</div>
-
+        </div>
 			<div class="box">
 				<div class="box-title">
 					<h3>
@@ -238,14 +228,7 @@
 								</table>
 							</div>
 						</div>
-						
-						
-						
 					
-						
-
-
-
 						<div class="row">
 							<div class="col-md-offset-6 col-md-6">
 								<button  id="submitStock"  style="display:none;" class="btn btn-info pull-right"

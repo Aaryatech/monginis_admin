@@ -197,7 +197,7 @@
 											<tr>
 												<td><c:out value="${count.index+1}" /></td>
 												<td align="left"><c:out value="${itemsList.itemId}" /></td>
-												<td align="left"><c:out value="${itemsList.itemName}" /></td>
+												<a onclick="fun()"><td align="left"><c:out value="${itemsList.itemName}" /></td></a>
 												
 												<td align="left">
 												<img
@@ -329,4 +329,11 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 </body>
+<script type="text/javascript">
+fun()
+{
+  alert("hi");
+}
+
+</script>
 </html>

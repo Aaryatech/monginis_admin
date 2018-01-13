@@ -156,8 +156,8 @@ div.panel {
 										<select name="matType"
 										class="form-control chosen" tabindex="6" id="mat_Type"
 										required>
-										<option value="1">RM</option>
-										<option value="2">SF</option>
+										<option value="1">Raw Material</option>
+										<option value="2">Semi Finished</option>
 									</select>
 									</div>
 								</div>
