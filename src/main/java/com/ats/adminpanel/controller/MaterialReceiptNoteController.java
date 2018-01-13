@@ -955,9 +955,9 @@ public class MaterialReceiptNoteController {
 
 	@RequestMapping(value = "/showAllStoreMaterialReciept", method = RequestMethod.GET)
 	public ModelAndView showAllStoreMaterialReciept(HttpServletRequest request, HttpServletResponse response) {
-		/*
-		 * Constants.mainAct = 17; Constants.subAct=184;
-		 */
+		
+		  Constants.mainAct =10; Constants.subAct=61;
+		 
 		ModelAndView model = new ModelAndView("masters/allStoreMaterialReciept");
 		List<SupplierDetails> supplierDetailsList = new ArrayList<SupplierDetails>();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();

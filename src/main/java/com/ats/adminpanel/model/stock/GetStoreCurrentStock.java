@@ -57,6 +57,16 @@ public class GetStoreCurrentStock {
 	}
 
 
+	public String getStoreStockDate() {
+		return storeStockDate;
+	}
+
+
+	public void setStoreStockDate(String storeStockDate) {
+		this.storeStockDate = storeStockDate;
+	}
+
+
 	public int getRmId() {
 		return rmId;
 	}
@@ -97,19 +107,6 @@ public class GetStoreCurrentStock {
 	}
 
 
-	 
-
-
-	public String getStoreStockDate() {
-		return storeStockDate;
-	}
-
-
-	public void setStoreStockDate(String storeStockDate) {
-		this.storeStockDate = storeStockDate;
-	}
-
-
 	@Override
 	public String toString() {
 		return "GetStoreCurrentStock [storeStockDetailId=" + storeStockDetailId + ", storeOpeningStock="
@@ -117,6 +114,9 @@ public class GetStoreCurrentStock {
 				+ ", rmId=" + rmId + ", rmName=" + rmName + ", purRecQty=" + purRecQty + ", bmsIssueQty=" + bmsIssueQty
 				+ "]";
 	}
+
+
+	 
 
 
 	 

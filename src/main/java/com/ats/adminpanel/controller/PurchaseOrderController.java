@@ -150,6 +150,9 @@ public class PurchaseOrderController {
 		purchaseOrderDetailList=new ArrayList<PurchaseOrderDetail>();
 
 		ModelAndView model = new ModelAndView("masters/purchaseOrder/purchaseOrder");
+		Constants.mainAct =10;
+		Constants.subAct =56;
+
 		RestTemplate rest=new RestTemplate();
 		supplierDetailsList=new ArrayList<SupplierDetails>();
 		  supplierDetailsList=rest.getForObject(Constants.url + "getAllSupplier",   List.class);
@@ -317,6 +320,8 @@ public class PurchaseOrderController {
 	public ModelAndView poListAtPurchase(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/purchaseOrder/polistAtPurchase");
+		 Constants.mainAct =14;
+		 Constants.subAct =86;
 		RestTemplate rest=new RestTemplate();
 		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>();

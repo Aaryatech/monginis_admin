@@ -311,7 +311,7 @@
 					</div>
 					
 					<div class="form-group">
-						<label class="col-sm-3 col-lg-2 control-label">HSNCD</label>
+						<label class="col-sm-3 col-lg-2 control-label">HSN Code</label>
 
 						<div class="col-sm-6 col-lg-4 controls">
 							<input type="text" value="${rawMaterialDetails.rmCloQty }" name="rm_clo_qty" id="rm_clo_qty" class="form-control" placeholder="RM HSNCD" data-rule-required="true" data-rule-number="true"/>

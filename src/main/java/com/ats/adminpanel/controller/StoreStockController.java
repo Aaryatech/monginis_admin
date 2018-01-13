@@ -221,6 +221,8 @@ public class StoreStockController {
 				HttpMethod.POST, new HttpEntity<>(map), typeRef);
 		
 		getStoreCurrentStockList = responseEntity.getBody();
+		System.out.println("Res List "+getStoreCurrentStockList.toString());
+
 		}
 		catch (Exception e) {
 			System.out.println(e.getMessage());
