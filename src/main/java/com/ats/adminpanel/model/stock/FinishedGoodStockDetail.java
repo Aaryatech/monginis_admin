@@ -27,7 +27,7 @@ public class FinishedGoodStockDetail {
 
 	float frSaleQty;
 
-	float gateSaleQty;
+	float gateSaleQty;// ie Damaged Qty.
 
 	float cloT1;
 

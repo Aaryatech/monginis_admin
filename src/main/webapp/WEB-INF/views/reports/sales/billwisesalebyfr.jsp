@@ -77,6 +77,11 @@
 
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/resources/img/favicon.png">
+	
+	
+	<script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 </head>
 <body>
 
@@ -106,7 +111,7 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Billwise Report
+					<i class="fa fa-file-o"></i>Billwise Report by Fr
 				</h1>
 				<h4></h4>
 			</div>
@@ -204,6 +209,7 @@
 					<div class="col-md-12" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
 							Billwise Report</button>
+									    <button class="btn search_btn" onclick="showChart()" >Graph</button>
 							
 							<a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseByFrPdf"
 								target="_blank">PDF</a>
@@ -262,9 +268,31 @@
 
 								</tbody>
 							</table>
+								<div align="center" id="showchart" style="display: none">
 						</div>
 					</div>
 
+<!-- 				</div>
+				
+				<div id="chart" style="display: none"><br><br><br>
+	<hr><div  >
+	 
+			<div  id="chart_div" style="width:60%; height:300; float:left;" ></div> 
+		 
+			<div   id="PieChart_div" style="width:40%%; height:300; float: right;" ></div> 
+			</div>
+			
+				 
+				</div> -->
+				
+				
+				<div id="chart"  "> <br><br> <br>
+	<hr>
+        
+   
+    <div id="chart_div" style="width: 100%; height: 500px;"></div>
+			 
+				 
 				</div>
 			</form>
 		</div>
@@ -278,11 +306,13 @@
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
 
-
 	<script type="text/javascript">
 		function searchReport() {
 		//	var isValid = validate();
-
+	document.getElementById('chart').style.display ="display:none";
+		   document.getElementById("table_grid").style= "block";
+	
+		 
 				var selectedFr = $("#selectFr").val();
 				var routeId=$("#selectRoute").val();
 				
@@ -392,17 +422,7 @@
 		}
 	</script>
 
-	<script type="text/javascript">
-		function updateTotal(orderId, rate) {
-			
-			var newQty = $("#billQty" + orderId).val();
-
-			var total = parseFloat(newQty) * parseFloat(rate);
-
-
-			 $('#billTotal'+orderId).html(total);
-		}
-	</script>
+	
 
 	<script>
 $('.datepicker').datepicker({
@@ -441,6 +461,148 @@ function disableRoute(){
 	}
 //document.getElementById("selectRoute").disabled = true;
 
+}
+
+</script>
+	
+<script type="text/javascript">
+function showChart(){
+	
+	alert("Hi");
+		
+	$("#PieChart_div").empty();
+	$("#chart_div").empty();
+		document.getElementById('chart').style.display = "block";
+		   document.getElementById("table_grid").style="display:none";
+		 
+		   var selectedFr = $("#selectFr").val();
+			var routeId=$("#selectRoute").val();
+			
+			var from_date = $("#fromDate").val();
+			var to_date = $("#toDate").val();
+			
+			alert("fr "+selectedFr);
+
+			alert(from_date);
+			alert(to_date);
+			alert(routeId);
+			
+				  //document.getElementById('btn_pdf').style.display = "block";
+			$.getJSON(
+					'${getBillList}',
+
+					{
+						fr_id_list : JSON.stringify(selectedFr),
+						fromDate : from_date,
+						toDate : to_date,
+						route_id:routeId,
+						ajax : 'true'
+
+					},
+					function(data) {
+
+								alert(data);
+							 if (data == "") {
+									alert("No records found !!");
+
+								}
+							 var i=0;
+							 
+							 google.charts.load('current', {'packages':['corechart', 'bar']});
+							 google.charts.setOnLoadCallback(drawStuff);
+
+							 function drawStuff() {
+								 
+								 alert("Inside DrawStuff");
+ 
+							   var chartDiv = document.getElementById('chart_div');
+							   document.getElementById("chart_div").style.border = "thin dotted red";
+						       var dataTable = new google.visualization.DataTable();
+						      // alert("datatable "+dataTable);
+						       dataTable.addColumn('string', 'Franchisee Name'); // Implicit domain column.
+						       dataTable.addColumn('number', 'Base Value'); // Implicit data column.
+						       dataTable.addColumn('number', 'Total');
+						       $.each(data,function(key, report) {
+
+						    	   
+						    	  // alert("In Data")
+						    	   var baseValue=report.taxableAmt;
+									
+						    	  
+						    	   var total;
+									
+									if(report.isSameState==1){
+										 total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum);
+									}
+									else{
+										
+										 total=report.taxableAmt+report.igstSum;
+									}
+						    	  
+						    	  
+						    	  
+						    	  //var total=report.taxableAmt+report.sgstSum+report.cgstSum;
+									//alert("total ==="+total);
+									//alert("base Value "+baseValue);
+									
+									var frName=report.frName;
+									alert("frNAme "+frName);
+									//var date= item.billDate+'\nTax : ' + item.tax_per + '%';
+									
+								   dataTable.addRows([
+									 
+									   
+									   [frName, baseValue,total],
+									   
+								            // ["Sai", 12,14],
+								             //["Sai", 12,16],
+								            // ["Sai", 12,18],
+								            // ["Sai", 12,19],
+								             
+								           ]);
+								     }) 
+								   // var options = {title: 'Population (in millions)'};  
+
+            // Instantiate and draw the chart.
+          						    
+ var materialOptions = {
+						    	
+          width: 500,
+          chart: {
+            title: 'Date wise Tax Graph',
+            subtitle: 'Total tax & Taxable Amount per day'
+          },
+          series: {
+            0: { axis: 'distance' }, // Bind series 0 to an axis named 'distance'.
+            1: { axis: 'brightness' } // Bind series 1 to an axis named 'brightness'.
+          },
+          axes: {
+            y: {
+              distance: {label: 'Total Tax'}, // Left y-axis.
+              brightness: {side: 'right', label: 'Taxable Amount'} // Right y-axis.
+            }
+          }
+        };
+						       
+						       function drawMaterialChart() {
+						           var materialChart = new google.charts.Bar(chartDiv);
+						           
+						          // alert("mater chart "+materialChart);
+						           materialChart.draw(dataTable, google.charts.Bar.convertOptions(materialOptions));
+						          // button.innerText = 'Change to Classic';
+						          // button.onclick = drawClassicChart;
+						         }
+						       
+						        var chart = new google.visualization.ColumnChart(
+						                document.getElementById('chart_div'));
+						       chart.draw(dataTable,
+						          {width: 800, height: 600, title: 'Sales Summary Group By Fr Chart'});
+						      // drawMaterialChart();
+							 };
+							 
+										
+							  	});
+			
 }
 
 </script>
