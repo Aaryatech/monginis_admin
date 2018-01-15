@@ -160,6 +160,7 @@
 				<div class=" box-content">
 					<div class="row">
 						<div class="col-md-12 table-responsive">
+						 
 							<table class="table table-bordered table-striped fill-head "
 								style="width: 100%" id="table_grid">
 								<thead>
@@ -245,7 +246,7 @@
 																
 						<td>
 						
-						<a href="poHeaderWithDetailed/${purchaseorderlist.poId}" class="action_btn" >
+						<a href="poHeaderWithDetailed/${purchaseorderlist.poId}/${flag}" class="action_btn" >
 						<abbr title="Detail"><i class="fa fa-list"></i></abbr></a>
 						
 						<c:choose>

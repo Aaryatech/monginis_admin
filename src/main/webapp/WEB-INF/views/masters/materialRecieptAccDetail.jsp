@@ -243,19 +243,21 @@
 												<th>Sr.No.</th>
 												<th>Tax</th> 
 												<th>Item</th>
-												<th style="width:200%;">PO Rate</th>
+												<th style="width:500%;">PO Rate</th>
 												<th>Received Quantity</th>
 												<th>Rate</th> 
 												<th>Value</th>
-												<th style="width:200%;">Disc Per</th>
+												<th style="width:500%;">Disc Per</th>
 												<th>Disc Amt</th>
 												<th>Cd Per</th>
 												<th>Cd Amt</th>
 												<th>Division factor</th>
 												<th>Insu Amt</th>
 												<th>Freight Amt</th>
-												<th>Other1</th>
-												<th>Other2</th>
+												<th style="width:200%;">Other1(Discount)</th>
+												<th style="width:200%;">Other2(Discount)</th>
+												<th style="width:200%;">Other3(Extra Charges)</th>
+												<th style="width:200%;">Other4(Extra Charges)</th>
 												<th>GST</th>
 												<th>CGST</th>
 												<th>SGST</th>
@@ -284,22 +286,31 @@
 													<td><c:out
 															value="${count.index+1}" /></td>
 															
+													<c:choose>
+														<c:when test="${materialRecieptAccList.incldTax==1}">
+															<c:set var="tax" value="Including Tax"></c:set>
+														</c:when>
+														<c:otherwise>
+															<c:set var="tax" value="Including Tax"></c:set>
+														</c:otherwise>
+													</c:choose>
+															
 													<td><c:out
-															value="${materialRecieptAccList.incldTax}" /></td>
+															value="${tax}" /></td>
 
 													<td><c:out
 															value="${materialRecieptAccList.item}" /></td>
 															
 												<c:choose>
 													<c:when test="${materialRecieptAccList.incldTax==0}">
-													<td style="width:200%;"><input style="width:200%;" type="text"
+													<td ><input style="width:75px" type="text"
 													onchange="changeRate(${count.index})"
 													name="poRate${count.index}"  id="poRate${count.index}"
 									  class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
 													
 													</c:when>
 													<c:otherwise>
-													<td><input style="width:200%;" type="text"
+													<td ><input style="width:75px" type="text"
 													name="poRate${count.index}" id="poRate${count.index}"
 									value="${materialRecieptAccList.poRate}" class="form-control" readonly></td>
 													</c:otherwise>
@@ -317,9 +328,8 @@
 													
 													<td><c:out value="${materialRecieptAccList.value}" />
 													</td>
-													<td style="width:200%;">
-													
-													<input style="width:200%;" onchange="changeRate(${count.index})" type="text" name="discPer${count.index}" id="discPer${count.index}"
+													<td> 
+													<input style="width:50px;" onchange="changeRate(${count.index})" type="text" name="discPer${count.index}" id="discPer${count.index}"
 									value="${materialRecieptAccList.discPer}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
 													
 													</td>
@@ -335,9 +345,17 @@
 													</td>
 													<td><c:out value="${materialRecieptAccList.freightAmt}" />
 													</td>
-													<td><c:out value="${materialRecieptAccList.other1}" />
+													<td><input style="width:100%;" onchange="changeRate(${count.index})" type="text" name="other1${count.index}" id="other1${count.index}"
+									value="${materialRecieptAccList.other1}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
 													</td>
-													<td><c:out value="${materialRecieptAccList.other2}" />
+													<td><input style="width:100%;" onchange="changeRate(${count.index})" type="text" name="other2${count.index}" id="other2${count.index}"
+									value="${materialRecieptAccList.other2}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
+													</td>
+													<td><input style="width:100%;" onchange="changeRate(${count.index})" type="text" name="other3${count.index}" id="other3${count.index}"
+									value="${materialRecieptAccList.other3}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
+													</td>
+													<td><input style="width:100%;" onchange="changeRate(${count.index})" type="text" name="other4${count.index}" id="other4${count.index}"
+									value="${materialRecieptAccList.other4}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
 													</td>
 													<td><c:out value="${materialRecieptAccList.gst}" />
 													</td>
@@ -358,7 +376,7 @@
 													</td>
 													<td><c:out value="${materialRecieptAccList.igstAmt}" />
 													</td>
-													<td><input style="width:200%;" onchange="changeRate(${count.index})" type="text" name="cessAmt${count.index}" id="cessAmt${count.index}"
+													<td><input style="width:50px" onchange="changeRate(${count.index})" type="text" name="cessAmt${count.index}" id="cessAmt${count.index}"
 									value="${materialRecieptAccList.cessAmt}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
 													</td>
 													
@@ -429,6 +447,42 @@
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="insuranceAmt" id="insuranceAmt" class="form-control"
 									value="${materialRecNoteHeader.insuranceAmt}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
+									</div>
+									
+							
+							</div><br>
+							<div class="box-content">
+									<div class="col-md-2">Other1</div>
+									<div class="col-md-3">
+										<input style="text-align:right; width:150px" type="text" name="Other1" id="Other1" class="form-control"
+									value="${materialRecNoteHeader.other1}" readonly>
+									</div>
+									
+							
+							</div><br>
+							<div class="box-content">
+									<div class="col-md-2">Other2</div>
+									<div class="col-md-3">
+										<input style="text-align:right; width:150px" type="text" name="Other2" id="Other2" class="form-control"
+									value="${materialRecNoteHeader.other2}" readonly>
+									</div>
+									
+							
+							</div><br>
+							<div class="box-content">
+									<div class="col-md-2">Other3</div>
+									<div class="col-md-3">
+										<input style="text-align:right; width:150px" type="text" name="Other3" id="Other3" class="form-control"
+									value="${materialRecNoteHeader.other3}" readonly>
+									</div>
+									
+							
+							</div><br>
+							<div class="box-content">
+									<div class="col-md-2">Other4</div>
+									<div class="col-md-3">
+										<input style="text-align:right; width:150px" type="text" name="Other4" id="Other4" class="form-control"
+									value="${materialRecNoteHeader.other4}" readonly>
 									</div>
 									
 							
@@ -585,6 +639,10 @@
 		
 		var discPer = $("#discPer"+key+"").val();
 		var cessAmt = $("#cessAmt"+key+"").val();
+		var other1 = $("#other1"+key+"").val();
+		var other2 = $("#other2"+key+"").val();
+		var other3 = $("#other3"+key+"").val();
+		var other4 = $("#other4"+key+"").val();
 		
 		
 		$
@@ -597,7 +655,10 @@
 					poRate : poRate,
 					discPer : discPer,
 					cessAmt : cessAmt,
-				
+					other3 : other3,
+					other1 : other1,
+					other2 : other2,
+					other4 : other4,
 					ajax : 'true',
 
 				},
@@ -623,19 +684,19 @@
 								  	tr.append($('<td></td>').html(itemList.item));
 								  	if(itemList.incldTax==0)
 								  		{
-								  		tr.append($('<td style="width:200%;"></td>').html('<input style="width:200%;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  		tr.append($('<td></td>').html('<input style="width:75px;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 
 								  		}
 								  	else
 								  		{
-								  		tr.append($('<td style="width:200%;"></td>').html('<input style="width:200%;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" readonly>'));
+								  		tr.append($('<td></td>').html('<input style="width:75px;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" readonly>'));
 								  		
 										}
 								  	tr.append($('<td></td>').html(itemList.reciedvedQty));
 								  	tr.append($('<td></td>').html(itemList.rateCal));
 								  	tr.append($('<td></td>').html(itemList.value));
 								  	
-								  	tr.append($('<td style="width:200%;"></td>').html('<input style="width:200%;" type="text" onchange="changeRate('+key+')" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 
 
 								  	tr.append($('<td></td>').html(itemList.discAmt));
@@ -644,9 +705,15 @@
 								  	tr.append($('<td></td>').html(itemList.divFactor));
 								  	tr.append($('<td></td>').html(itemList.insuAmt));
 								  	tr.append($('<td></td>').html(itemList.freightAmt));
-								  	
-								  	tr.append($('<td></td>').html(itemList.other1));
+								  	tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="other1'+key+'" value="'+itemList.other1+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="other2'+key+'" value="'+itemList.other2+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+ 									tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="other3'+key+'" value="'+itemList.other3+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+ 									tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="other4'+key+'" value="'+itemList.other4+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+
+								  	/* tr.append($('<td></td>').html(itemList.other1));
 								  	tr.append($('<td></td>').html(itemList.other2));
+								  	tr.append($('<td></td>').html(itemList.other3));
+								  	tr.append($('<td></td>').html(itemList.other4)); */
 								  	
 								  	tr.append($('<td></td>').html(itemList.gst));
 								  	tr.append($('<td></td>').html(itemList.cgst));
@@ -658,7 +725,7 @@
 								  	tr.append($('<td></td>').html(itemList.sgstAmt));
 								  	tr.append($('<td></td>').html(itemList.igstAmt));
 								  	/* tr.append($('<td></td>').html(itemList.cessAmt)); */
-								  	tr.append($('<td style="width:200%;"></td>').html('<input style="width:200%;" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td ></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 
 								  
 								  	/* tr.append($('<td></td>').html('<span  class="glyphicon glyphicon-ok" onclick="changeRate('+key+')" id="ok'+key+'"></span>'));
@@ -688,6 +755,10 @@
 										document.getElementById("billAmount").value=data.billAmount;
 										document.getElementById("discAmt2").value=data.discAmt2;
 										document.getElementById("discAmt").value=data.discAmt;
+										document.getElementById("Other1").value=data.other1;
+										document.getElementById("Other2").value=data.other2;
+										document.getElementById("Other3").value=data.other3;
+										document.getElementById("Other4").value=data.other4;
 										document.getElementById("cgst").value=data.cgst;
 										document.getElementById("sgst").value=data.sgst;
 										document.getElementById("igst").value=data.igst;
@@ -745,19 +816,19 @@
 								  	tr.append($('<td></td>').html(itemList.item));
 								  	if(itemList.incldTax==0)
 								  		{
-								  		tr.append($('<td style="width:200%;"></td>').html('<input style="width:200%;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  		tr.append($('<td></td>').html('<input style="width:50px" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 
 								  		}
 								  	else
 								  		{
-								  		tr.append($('<td style="width:200%;"></td>').html('<input style="width:200%;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" readonly>'));
+								  		tr.append($('<td></td>').html('<input style="width:50px" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" readonly>'));
 								  		
 										}
 								  	tr.append($('<td></td>').html(itemList.reciedvedQty));
 								  	tr.append($('<td></td>').html(itemList.rateCal));
 								  	tr.append($('<td></td>').html(itemList.value));
 								  	
-								  	tr.append($('<td style="width:200%;"></td>').html('<input style="width:200%;" type="text" onchange="changeRate('+key+')" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td ></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 
 
 								  	tr.append($('<td></td>').html(itemList.discAmt));
@@ -766,8 +837,14 @@
 								  	tr.append($('<td></td>').html(itemList.divFactor));
 								  	tr.append($('<td></td>').html(itemList.insuAmt));
 								  	tr.append($('<td></td>').html(itemList.freightAmt));
-								  	tr.append($('<td></td>').html(itemList.other1));
-								  	tr.append($('<td></td>').html(itemList.other2));
+								  	
+								  	tr.append($('<td></td>').html('<input style="width:50px" type="text" onchange="changeRate('+key+')" id="other1'+key+'" value="'+itemList.other1+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="other2'+key+'" value="'+itemList.other2+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+ 									tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="other3'+key+'" value="'+itemList.other3+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+ 									tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="other4'+key+'" value="'+itemList.other4+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+
+								  	/* tr.append($('<td></td>').html(itemList.other1));
+								  	tr.append($('<td></td>').html(itemList.other2)); */
 								
 								  	tr.append($('<td></td>').html(itemList.gst));
 								  	tr.append($('<td></td>').html(itemList.cgst));
@@ -779,7 +856,7 @@
 								  	tr.append($('<td></td>').html(itemList.sgstAmt));
 								  	tr.append($('<td></td>').html(itemList.igstAmt));
 								  	/* tr.append($('<td></td>').html(itemList.cessAmt)); */
-								  	tr.append($('<td style="width:200%;"></td>').html('<input style="width:200%;" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td ></td>').html('<input style="width:50px" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 
 								  	/* tr.append($('<td></td>').html('<span  class="glyphicon glyphicon-ok" onclick="changeRate('+key+')" id="ok'+key+'"></span>'));
 								  	 */
@@ -803,6 +880,10 @@
 										document.getElementById("billAmount").value=data.billAmount;
 										document.getElementById("basicValue").value=data.basicValue;
 										document.getElementById("discAmt").value=data.discAmt;
+										document.getElementById("other1").value=data.other1;
+										document.getElementById("other2").value=data.other2;
+										document.getElementById("other3").value=data.other3;
+										document.getElementById("other4").value=data.other4;
 										document.getElementById("cgst").value=data.cgst;
 										document.getElementById("sgst").value=data.sgst;
 										document.getElementById("igst").value=data.igst;

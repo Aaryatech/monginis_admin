@@ -2,8 +2,7 @@ package com.ats.adminpanel.model.materialreceipt;
 
 
 import java.util.Date;
-import java.util.List;
-
+import java.util.List; 
 public class MaterialRecNote {
 
 
@@ -58,7 +57,11 @@ public class MaterialRecNote {
 		
 		private int isTallySync;
 		private int delStatus;
-		private int status;
+		private int status; 
+		private float other1; 
+		private float other2; 
+		private float other3; 
+		private float other4;
 		
 		List<MaterialRecNoteDetails> materialRecNoteDetails;
 
@@ -437,6 +440,40 @@ public class MaterialRecNote {
 		public void setMaterialRecNoteDetails(List<MaterialRecNoteDetails> materialRecNoteDetails) {
 			this.materialRecNoteDetails = materialRecNoteDetails;
 		}
+		
+		
+
+		public float getOther1() {
+			return other1;
+		}
+
+		public void setOther1(float other1) {
+			this.other1 = other1;
+		}
+
+		public float getOther2() {
+			return other2;
+		}
+
+		public void setOther2(float other2) {
+			this.other2 = other2;
+		}
+
+		public float getOther3() {
+			return other3;
+		}
+
+		public void setOther3(float other3) {
+			this.other3 = other3;
+		}
+
+		public float getOther4() {
+			return other4;
+		}
+
+		public void setOther4(float other4) {
+			this.other4 = other4;
+		}
 
 		@Override
 		public String toString() {
@@ -453,7 +490,8 @@ public class MaterialRecNote {
 					+ ", insuranceAmt=" + insuranceAmt + ", cgst=" + cgst + ", sgst=" + sgst + ", igst=" + igst
 					+ ", cess=" + cess + ", roundOff=" + roundOff + ", billAmount=" + billAmount + ", useridAcc="
 					+ useridAcc + ", accRemark=" + accRemark + ", isTallySync=" + isTallySync + ", delStatus="
-					+ delStatus + ", status=" + status + ", materialRecNoteDetails=" + materialRecNoteDetails + "]";
+					+ delStatus + ", status=" + status + ", other1=" + other1 + ", other2=" + other2 + ", other3="
+					+ other3 + ", other4=" + other4 + ", materialRecNoteDetails=" + materialRecNoteDetails + "]";
 		}
 
 		 

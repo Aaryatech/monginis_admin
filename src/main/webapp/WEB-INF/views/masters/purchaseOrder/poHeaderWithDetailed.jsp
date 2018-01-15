@@ -341,14 +341,14 @@
 									<div class="row">
 						<div class="col-md-12" style="text-align: center">
 							<c:choose>
-								<c:when test="${purchaseOrderHeader.poStatus==0}"> 
+								<c:when test="${(purchaseOrderHeader.poStatus==0) and (flag==0)}"> 
 									<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}" ><input type="button" value="Edit" class="btn btn-info">
 									</a>
 								
 								<a href="${pageContext.request.contextPath}/requestPOStoreToPurchase/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Purchase" class="btn btn-info">
 								</a>
 							</c:when>
-							 <c:when test="${purchaseOrderHeader.poStatus==3}">
+							 <c:when test="${(purchaseOrderHeader.poStatus==3) and (flag==0)}">
 							 	<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}" ><input type="button" value="Edit" class="btn btn-info">
 								</a>
 								
@@ -356,7 +356,7 @@
 								</a>
           						 
 						</c:when>
-						<c:when test="${purchaseOrderHeader.poStatus==1}"> 
+						<c:when test="${(purchaseOrderHeader.poStatus==4) and (flag==1)}"> 
 									<a href="${pageContext.request.contextPath}/requestPOPurachaseToDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Directore" class="btn btn-info">
 									</a>
 								
@@ -364,8 +364,8 @@
 						onClick="return confirm('You Want To Reject This Record To Store');" ><input type="button" value="Reject To Store" class="btn btn-info">
 								</a>
 							</c:when>
-							 <c:when test="${purchaseOrderHeader.poStatus==4}">
-							 	<a href="${pageContext.request.contextPath}/requestPOPurachaseToDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Purchase" class="btn btn-info">
+							 <c:when test="${(purchaseOrderHeader.poStatus==1) and (flag==1)}">
+							 	<a href="${pageContext.request.contextPath}/requestPOPurachaseToDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Directore" class="btn btn-info">
 									</a>
 								
 								<a href="${pageContext.request.contextPath}/rejectPOPurachaseToStore/${purchaseOrderHeader.poId}"
@@ -374,7 +374,7 @@
           						 
 						</c:when>
 						
-						<c:when test="${purchaseOrderHeader.poStatus==2}"> 
+						<c:when test="${(purchaseOrderHeader.poStatus==2) and (flag==2)}"> 
 									<a href="${pageContext.request.contextPath}/requestPOFinalByDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Approve" class="btn btn-info">
 									</a>
 								

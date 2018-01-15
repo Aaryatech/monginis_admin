@@ -64,7 +64,7 @@ public class MaterialReceiptNoteController {
 
 	@RequestMapping(value = "/gateEntries", method = RequestMethod.GET)
 	public ModelAndView gateEntries(HttpServletRequest request, HttpServletResponse response) {
-		Constants.mainAct =10;
+		Constants.mainAct =9;
 		Constants.subAct =55;
 
 		ModelAndView model = new ModelAndView("masters/gateEntryList");//
@@ -832,7 +832,7 @@ public class MaterialReceiptNoteController {
 			model.addObject("polist", purchaseOrderHeaderlist);
 			model.addObject("rawlist", rawlist);
 			model.addObject("materialRecNote", materialRecNoteHeader);
-			model.addObject("materialRecNoteDetail", getmaterialRecNoteDetailslist);
+			model.addObject("materialRecNoteDetail", materialRecNoteHeader.getMaterialRecNoteDetails());
 			model.addObject("purchaseOrderList", getPurchaseOrderList.getPurchaseOrderHeaderList());
 		}catch(Exception e)
 		{
@@ -955,9 +955,9 @@ public class MaterialReceiptNoteController {
 
 	@RequestMapping(value = "/showAllStoreMaterialReciept", method = RequestMethod.GET)
 	public ModelAndView showAllStoreMaterialReciept(HttpServletRequest request, HttpServletResponse response) {
-		
-		  Constants.mainAct =10; Constants.subAct=61;
-		 
+		/*
+		 * Constants.mainAct = 17; Constants.subAct=184;
+		 */
 		ModelAndView model = new ModelAndView("masters/allStoreMaterialReciept");
 		List<SupplierDetails> supplierDetailsList = new ArrayList<SupplierDetails>();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -990,8 +990,10 @@ public class MaterialReceiptNoteController {
 
 	@RequestMapping(value = "/allDirectorMaterialReceiptNote", method = RequestMethod.GET)
 	public ModelAndView allMaterialReceiptNote(HttpServletRequest request, HttpServletResponse response) {
-		Constants.mainAct =21; 
-		 Constants.subAct=104;
+		/*
+		 * Constants.mainAct = 17; Constants.subAct=184;
+		 */
+
 		ModelAndView model = new ModelAndView("masters/allMaterialReceiptNote");
 		String viewAll = request.getParameter("viewAll");
 
@@ -1171,7 +1173,10 @@ public class MaterialReceiptNoteController {
 
 	@RequestMapping(value = "/allMaterialRecieptAccList", method = RequestMethod.GET)
 	public ModelAndView allMaterialRecieptAccList(HttpServletRequest request, HttpServletResponse response) {
-		 Constants.mainAct =11; Constants.subAct=73;
+		/*
+		 * Constants.mainAct = 17; Constants.subAct=184;
+		 */
+
 		ModelAndView model = new ModelAndView("masters/allMaterialRecieptAccList");
 
 		 
@@ -1199,8 +1204,10 @@ public class MaterialReceiptNoteController {
 	public float cdAmtTotal = 0;
 	public float freightAmtTotal = 0;
 	public float insuAmtTotal = 0;
-	public float other1 = 0;
-	public float other2 = 0;
+	public float other1total = 0;
+	public float other2total = 0;
+	public float other3total = 0;
+	public float other4total = 0;
 	public float taxableAmt = 0;
 	public float cgst = 0;
 	public float sgst = 0;
@@ -1217,8 +1224,10 @@ public class MaterialReceiptNoteController {
 		cdAmtTotal = 0;
 		freightAmtTotal = 0;
 		insuAmtTotal = 0;
-		other1 = 0;
-		other2 = 0;
+		other1total = 0;
+		other2total = 0;
+		other3total = 0;
+		other4total = 0;
 		taxableAmt = 0;
 		cgst = 0;
 		sgst = 0;
@@ -1396,9 +1405,9 @@ public class MaterialReceiptNoteController {
 			materialRecNoteHeaderAcc.setIgst(igst);
 			materialRecNoteHeaderAcc.setCess(cess);
 			float finalAmt = (materialRecNoteHeaderAcc.getBasicValue() - materialRecNoteHeaderAcc.getDiscAmt2()
-					- materialRecNoteHeaderAcc.getDiscAmt())
-					+ (materialRecNoteHeaderAcc.getFreightAmt() + materialRecNoteHeaderAcc.getInsuranceAmt() + other1
-							+ other2 + materialRecNoteHeaderAcc.getCgst() + materialRecNoteHeaderAcc.getSgst()
+					- materialRecNoteHeaderAcc.getDiscAmt()-other1total-other2total)
+					+ (materialRecNoteHeaderAcc.getFreightAmt() + materialRecNoteHeaderAcc.getInsuranceAmt() + other3total
+							+ other4total + materialRecNoteHeaderAcc.getCgst() + materialRecNoteHeaderAcc.getSgst()
 							+ materialRecNoteHeaderAcc.getIgst() + materialRecNoteHeaderAcc.getCess()
 							+ materialRecNoteHeaderAcc.getRoundOff());
 			materialRecNoteHeaderAcc.setBillAmount(finalAmt);
@@ -1426,11 +1435,19 @@ public class MaterialReceiptNoteController {
 		float poRate = Float.parseFloat(request.getParameter("poRate"));
 		float discPer = Float.parseFloat(request.getParameter("discPer"));
 		float cessAmt = Float.parseFloat(request.getParameter("cessAmt"));
+		float other1 = Float.parseFloat(request.getParameter("other1"));
+		float other2 = Float.parseFloat(request.getParameter("other2"));
+		float other3 = Float.parseFloat(request.getParameter("other3"));
+		float other4 = Float.parseFloat(request.getParameter("other4"));
 		
 		System.out.println("index" + index);
 		System.out.println("discPer" + discPer);
 		System.out.println("poRate" + poRate);
 		System.out.println("cessAmt" + cessAmt);
+		System.out.println("other1" + other1);
+		System.out.println("other2" + other2);
+		System.out.println("other3" + other3);
+		System.out.println("other4" + other4);
 
 		try {
 
@@ -1461,6 +1478,10 @@ public class MaterialReceiptNoteController {
 					materialRecieptAccList.get(i).setCdAmt(
 							(materialRecieptAccList.get(i).getValue() - materialRecieptAccList.get(i).getDiscAmt())
 									* materialRecieptAccList.get(i).getCdPer() / 100);
+					materialRecieptAccList.get(i).setOther1(other1);
+					materialRecieptAccList.get(i).setOther2(other2);
+					materialRecieptAccList.get(i).setOther3(other3);
+					materialRecieptAccList.get(i).setOther4(other4);
  
 					if(checkSupp==1)
 					{
@@ -1488,8 +1509,10 @@ public class MaterialReceiptNoteController {
 			cdAmtTotal = 0;
 			freightAmtTotal = 0;
 			insuAmtTotal = 0;
-			other1 = 0;
-			other2 = 0;
+			other1total = 0;
+			other2total = 0;
+			other3total = 0;
+			other4total = 0;
 			taxableAmt = 0;
 			cgst = 0;
 			sgst = 0;
@@ -1503,6 +1526,10 @@ public class MaterialReceiptNoteController {
 				sgst = sgst + materialRecieptAccList.get(i).getSgstAmt();
 				igst = igst + materialRecieptAccList.get(i).getIgstAmt();
 				cess = cess + materialRecieptAccList.get(i).getCessAmt();
+				other1total = other1total + materialRecieptAccList.get(i).getOther1();
+				other2total = other2total + materialRecieptAccList.get(i).getOther2();
+				other3total = other3total + materialRecieptAccList.get(i).getOther3();
+				other4total = other4total + materialRecieptAccList.get(i).getOther4();
 
 			}
 			for (int i = 0; i < materialRecieptAccList.size(); i++) // cal freight amt
@@ -1530,8 +1557,10 @@ public class MaterialReceiptNoteController {
 			cdAmtTotal = 0;
 			freightAmtTotal = 0;
 			insuAmtTotal = 0;
-			other1 = 0;
-			other2 = 0;
+			other1total = 0;
+			other2total = 0;
+			other3total = 0;
+			other4total = 0;
 			taxableAmt = 0;
 			cgst = 0;
 			sgst = 0;
@@ -1545,6 +1574,10 @@ public class MaterialReceiptNoteController {
 				sgst = sgst + materialRecieptAccList.get(i).getSgstAmt();
 				igst = igst + materialRecieptAccList.get(i).getIgstAmt();
 				cess = cess + materialRecieptAccList.get(i).getCessAmt();
+				other1total = other1total + materialRecieptAccList.get(i).getOther1();
+				other2total = other2total + materialRecieptAccList.get(i).getOther2();
+				other3total = other3total + materialRecieptAccList.get(i).getOther3();
+				other4total = other4total + materialRecieptAccList.get(i).getOther4();
 
 			}
 			for (int i = 0; i < materialRecieptAccList.size(); i++) // cal freight amt, insurance amnt;
@@ -1561,10 +1594,14 @@ public class MaterialReceiptNoteController {
 			materialRecNoteHeaderAcc.setSgst(sgst);
 			materialRecNoteHeaderAcc.setIgst(igst);
 			materialRecNoteHeaderAcc.setCess(cess);
+			materialRecNoteHeaderAcc.setOther1(other1total);
+			materialRecNoteHeaderAcc.setOther2(other2total);
+			materialRecNoteHeaderAcc.setOther3(other3total);
+			materialRecNoteHeaderAcc.setOther4(other4total);
 			float finalAmt = (materialRecNoteHeaderAcc.getBasicValue() - materialRecNoteHeaderAcc.getDiscAmt2()
-					- materialRecNoteHeaderAcc.getDiscAmt())
-					+ (materialRecNoteHeaderAcc.getFreightAmt() + materialRecNoteHeaderAcc.getInsuranceAmt() + other1
-							+ other2 + materialRecNoteHeaderAcc.getCgst() + materialRecNoteHeaderAcc.getSgst()
+					- materialRecNoteHeaderAcc.getDiscAmt()-other1total-other2total)
+					+ (materialRecNoteHeaderAcc.getFreightAmt() + materialRecNoteHeaderAcc.getInsuranceAmt() + other3total
+							+ other4total + materialRecNoteHeaderAcc.getCgst() + materialRecNoteHeaderAcc.getSgst()
 							+ materialRecNoteHeaderAcc.getIgst() + materialRecNoteHeaderAcc.getCess()
 							+ materialRecNoteHeaderAcc.getRoundOff());
 			materialRecNoteHeaderAcc.setBillAmount(finalAmt);
@@ -1703,6 +1740,11 @@ public class MaterialReceiptNoteController {
 								.setCessRs(materialRecieptAccList.get(i).getCessAmt());
 						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).
 								setAmount(materialRecieptAccList.get(i).getTaxableAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther1(materialRecieptAccList.get(i).getOther1());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther2(materialRecieptAccList.get(i).getOther2()); 
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther3(materialRecieptAccList.get(i).getOther3()); 
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther4(materialRecieptAccList.get(i).getOther4());
+
 
 					}
 				}

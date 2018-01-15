@@ -217,7 +217,7 @@
 													  				
 																
 						<td>
-						<a href="poHeaderWithDetailed/${purchaseorderlist.poId}" class="action_btn" >
+						<a href="poHeaderWithDetailed/${purchaseorderlist.poId}/${flag}" class="action_btn" >
 						<abbr title="Detail"><i class="fa fa-list"></i></abbr></a>
 						
 						

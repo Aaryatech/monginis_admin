@@ -19,6 +19,8 @@ public class MaterialRecieptAcc {
 	private float freightAmt;
 	private float other1;
 	private float other2;
+	private float other3;
+	private float other4;
 	private int taxId;
 	private float gst;
 	private float cgst;
@@ -33,6 +35,18 @@ public class MaterialRecieptAcc {
 	
 	
 	
+	public float getOther3() {
+		return other3;
+	}
+	public void setOther3(float other3) {
+		this.other3 = other3;
+	}
+	public float getOther4() {
+		return other4;
+	}
+	public void setOther4(float other4) {
+		this.other4 = other4;
+	}
 	public int getTaxId() {
 		return taxId;
 	}
@@ -208,10 +222,10 @@ public class MaterialRecieptAcc {
 				+ ", incldTax=" + incldTax + ", poRate=" + poRate + ", reciedvedQty=" + reciedvedQty + ", rateCal="
 				+ rateCal + ", value=" + value + ", discPer=" + discPer + ", discAmt=" + discAmt + ", cdPer=" + cdPer
 				+ ", cdAmt=" + cdAmt + ", divFactor=" + divFactor + ", insuAmt=" + insuAmt + ", freightAmt="
-				+ freightAmt + ", other1=" + other1 + ", other2=" + other2 + ", taxId=" + taxId + ", gst=" + gst
-				+ ", cgst=" + cgst + ", sgst=" + sgst + ", igst=" + igst + ", cess=" + cess + ", taxableAmt="
-				+ taxableAmt + ", cgstAmt=" + cgstAmt + ", sgstAmt=" + sgstAmt + ", igstAmt=" + igstAmt + ", cessAmt="
-				+ cessAmt + "]";
+				+ freightAmt + ", other1=" + other1 + ", other2=" + other2 + ", other3=" + other3 + ", other4=" + other4
+				+ ", taxId=" + taxId + ", gst=" + gst + ", cgst=" + cgst + ", sgst=" + sgst + ", igst=" + igst
+				+ ", cess=" + cess + ", taxableAmt=" + taxableAmt + ", cgstAmt=" + cgstAmt + ", sgstAmt=" + sgstAmt
+				+ ", igstAmt=" + igstAmt + ", cessAmt=" + cessAmt + "]";
 	}
 	
 	

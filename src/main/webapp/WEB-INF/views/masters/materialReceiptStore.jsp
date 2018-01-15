@@ -515,6 +515,7 @@
 	$(document).ready(function() { 
 		$('#poref_id').change(
 				function() {
+					alert("poid"+$(this).val());
 				 
 					$.getJSON('${withPoRef}', {
 						
@@ -562,13 +563,27 @@
 												
 							});
 					
+					$.getJSON('${withPoRefDate}', {
+						
+						 
+						ajax : 'true',
+					},
+							function(data) {
+						
+						
+						
+						document.getElementById("po_date").value=data[0].poDate;
+						document.getElementById("po_no").value=data[0].poNo;
+												
+							});
+					
 			})
 						 
 	});
 	
 	
 	
-	$(document).ready(function() { 
+	/* $(document).ready(function() { 
 		$('#poref_id').change(
 				function() {
 				 
@@ -588,7 +603,7 @@
 					
 			})
 						 
-	});
+	}); */
 	</script> 
 	
 	

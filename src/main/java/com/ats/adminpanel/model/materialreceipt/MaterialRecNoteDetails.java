@@ -37,6 +37,10 @@ public class MaterialRecNoteDetails {
 		private int directorApproved;
 		private int delStatus;
 		private int status;
+		private float other1; 
+		private float other2; 
+		private float other3; 
+		private float other4;
 		
 		
 
@@ -303,18 +307,54 @@ public class MaterialRecNoteDetails {
 		public void setStatus(int status) {
 			this.status = status;
 		}
+		
+		
+
+		public float getOther1() {
+			return other1;
+		}
+
+		public void setOther1(float other1) {
+			this.other1 = other1;
+		}
+
+		public float getOther2() {
+			return other2;
+		}
+
+		public void setOther2(float other2) {
+			this.other2 = other2;
+		}
+
+		public float getOther3() {
+			return other3;
+		}
+
+		public void setOther3(float other3) {
+			this.other3 = other3;
+		}
+
+		public float getOther4() {
+			return other4;
+		}
+
+		public void setOther4(float other4) {
+			this.other4 = other4;
+		}
 
 		@Override
 		public String toString() {
 			return "MaterialRecNoteDetails [mrnDetailId=" + mrnDetailId + ", mrnId=" + mrnId + ", mrnNo=" + mrnNo
 					+ ", supplierId=" + supplierId + ", rmId=" + rmId + ", rmName=" + rmName + ", rmUom=" + rmUom
 					+ ", recdQty=" + recdQty + ", poId=" + poId + ", poQty=" + poQty + ", stockQty=" + stockQty
-					+ ", rejectedQty=" + rejectedQty + ", poRate=" + poRate + ", value=" + value + ", discPer=" + discPer
-					+ ", discAmt=" + discAmt + ", gstPer=" + gstPer + ", freightPer=" + freightPer + ", freightAmt="
-					+ freightAmt + ", insurancePer=" + insurancePer + ", insurance_amt=" + insurance_amt + ", cgstPer="
-					+ cgstPer + ", cgstRs=" + cgstRs + ", sgstPer=" + sgstPer + ", sgstRs=" + sgstRs + ", igstPer="
-					+ igstPer + ", igstRs=" + igstRs + ", cessPer=" + cessPer + ", cessRs=" + cessRs + ", amount=" + amount
-					+ ", directorApproved=" + directorApproved + ", delStatus=" + delStatus + ", status=" + status + "]";
+					+ ", rejectedQty=" + rejectedQty + ", poRate=" + poRate + ", value=" + value + ", discPer="
+					+ discPer + ", discAmt=" + discAmt + ", gstPer=" + gstPer + ", freightPer=" + freightPer
+					+ ", freightAmt=" + freightAmt + ", insurancePer=" + insurancePer + ", insurance_amt="
+					+ insurance_amt + ", cgstPer=" + cgstPer + ", cgstRs=" + cgstRs + ", sgstPer=" + sgstPer
+					+ ", sgstRs=" + sgstRs + ", igstPer=" + igstPer + ", igstRs=" + igstRs + ", cessPer=" + cessPer
+					+ ", cessRs=" + cessRs + ", amount=" + amount + ", directorApproved=" + directorApproved
+					+ ", delStatus=" + delStatus + ", status=" + status + ", other1=" + other1 + ", other2=" + other2
+					+ ", other3=" + other3 + ", other4=" + other4 + "]";
 		}
 	   
 	}
