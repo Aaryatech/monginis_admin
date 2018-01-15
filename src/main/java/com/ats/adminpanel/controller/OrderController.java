@@ -10,6 +10,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.spi.LocationAwareLogger;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -25,6 +27,7 @@ import com.ats.adminpanel.model.GetOrder;
 import com.ats.adminpanel.model.GetOrderListResponse;
 import com.ats.adminpanel.model.GetRegSpCakeOrders;
 import com.ats.adminpanel.model.GetSpCakeOrders;
+import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.Order;
 import com.ats.adminpanel.model.RegularSpCkOrder;
 import com.ats.adminpanel.model.RegularSpCkOrdersResponse;
@@ -38,11 +41,14 @@ import com.fasterxml.jackson.annotation.JsonFormat.Value;
 
 
 @Controller
+@Scope("session")
 public class OrderController {
-	static  List<FranchiseeList> franchiseeList= new ArrayList<FranchiseeList>();
-	static  List<FranchiseeList> tempFrList= new ArrayList<FranchiseeList>();
-	static  List<FranchiseeList> selectedFrList= new ArrayList<FranchiseeList>();
-	static List<Menu> menuList;
+	public List<FranchiseeList> franchiseeList= new ArrayList<FranchiseeList>();
+	  public List<FranchiseeList> tempFrList= new ArrayList<FranchiseeList>();
+	  public  List<FranchiseeList> selectedFrList= new ArrayList<FranchiseeList>();
+	public List<SpCakeOrdersBean> spCakeOrderList = new ArrayList<SpCakeOrdersBean>();
+	List<GetOrder> orderList=null;
+	public List<Menu> menuList;
 	SpCakeOrdersBeanResponse orderListResponse;
 	RegularSpCkOrdersResponse regOrderListResponse ;
 	
@@ -112,8 +118,7 @@ public class OrderController {
 		System.out.println("frIds  New ="+frIdString);
 		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-		
-		List<GetOrder> orderList = new ArrayList<GetOrder>();
+		orderList = new ArrayList<GetOrder>();
 		
 		List<String> franchIds=new ArrayList();
 		franchIds=Arrays.asList(frIdString);
@@ -232,10 +237,9 @@ public class OrderController {
 	public  @ResponseBody List<SpCakeOrdersBean> spCakeOrderProcess(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = null;
 		System.out.println("/inside search sp cake order process  ");
-		List<SpCakeOrdersBean> spCakeOrderList = new ArrayList<SpCakeOrdersBean>();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		RestTemplate restTemplate1 = new RestTemplate();
-
+		spCakeOrderList = new ArrayList<SpCakeOrdersBean>();
 		try {
 			model = new ModelAndView("orders/spcakeorders");
 			model.addObject("franchiseeList", franchiseeList);
@@ -297,39 +301,67 @@ public class OrderController {
 		return spCakeOrderList;
 	}
 	
-	
-	@RequestMapping(value = "/regularSpCkOrderProcess")
+	boolean isDelete=false;
+	public String[] frIds=null;
+	public String prodDate=null;
+	@RequestMapping(value = "/regularSpCkOrderProcess",method = RequestMethod.POST)
 	public ModelAndView regularSpCkOrderProcess(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = null;
 		System.out.println("/inside search sp cake order process  ");
 
 		try {
 			model = new ModelAndView("orders/regularsporders");
-			model.addObject("franchiseeList", franchiseeList);
+			//model.addObject("franchiseeList", franchiseeList);
+			model.addObject("isDelete",0);
 
-			String[] frIds = request.getParameterValues("fr_id[]");
-			System.out.println("ALL FR IDs:"+frIds);
-			
+			 frIds= request.getParameterValues("fr_id[]");
 
-			String prodDate = request.getParameter("prod_date");
+			 prodDate=request.getParameter("prod_date");
 			System.out.println("prodDate:"+prodDate);
+		
+			List<String> frIdList = (List) Arrays.asList(frIds);
+			
+			RestTemplate restTemplate = new RestTemplate();
 
+			List<FranchiseeList> selectedFrList=new ArrayList<>();
+			List<FranchiseeList> remFrList=new ArrayList<FranchiseeList>();
+			
+			AllFranchiseeList allFranchiseeList=restTemplate.getForObject(Constants.url+"getAllFranchisee",AllFranchiseeList.class);
+			
+			franchiseeList=allFranchiseeList.getFranchiseeList();
+			remFrList=franchiseeList;
+
+			try {
+			for(int i=0;i<frIdList.size();i++)
+			{
+				for(int j=0;j<franchiseeList.size();j++)
+				{
+					if(Integer.parseInt(frIdList.get(i))==franchiseeList.get(j).getFrId())
+					{
+						selectedFrList.add(franchiseeList.get(j));
+						remFrList.remove(j);
+					}
+				}
+			}
+			}
+			catch (NullPointerException e) {
+                System.out.println("Null Pointer Exc in Reg Sp Order");
+			}
+			catch(Exception e)
+			{
+                System.out.println(" Exc in Reg Sp Order:order Controller"+e.getMessage());
+
+			}
+
+			
+			model.addObject("todayDate", prodDate);
+			model.addObject("frIdList", selectedFrList);
+			model.addObject("franchiseeList", remFrList);
 			
 			if (frIds[0].toString().equals("0")) {
 				System.out.println("all fr selected");
+				model.addObject("frIdList", franchiseeList);
 
-				/*String[] parts;
-				parts = prodDate.split("/");
-				String part1 = parts[0];
-				String part2 = parts[1];
-				String part3 = parts[2];
-				StringBuilder dateSb = new StringBuilder();
-				dateSb.append(part3 + "/");
-				dateSb.append(part2 + "/");
-				dateSb.append(part1);
-				String finalDate = dateSb.toString();
-				System.out.println("final date is" + finalDate);
-*/
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 							
@@ -400,23 +432,121 @@ public class OrderController {
 	//ganesh 24-10-2017
 	
 	@RequestMapping(value = "/callDeleteOrder",method = RequestMethod.GET)
-	public  @ResponseBody  void deleteOrder(HttpServletRequest request, HttpServletResponse response) {
+	public  @ResponseBody  List<GetOrder> deleteOrder(HttpServletRequest request, HttpServletResponse response) {
 	
+		try {
 		System.out.println("/inside delete order process  ");
-		
-		String orderId = request.getParameter("order_id");
+        int orderId = Integer.parseInt(request.getParameter("order_id"));
 		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("orderId", orderId);
-		map.add("orderStatus", 1);
+		RestTemplate restTemp = new RestTemplate();
+		Integer isDeleted= restTemp.postForObject(Constants.url + "DeleteOrder", map, Integer.class);
+		
+		if(isDeleted!=0)
+		{
+			if(!orderList.isEmpty())
+			{
+				for(int i=0;i<orderList.size();i++)
+				{
+					if(orderList.get(i).getOrderId()==orderId)
+					{
+						orderList.remove(i);
+					}
+				}
+			}
+		}
+		}
+		catch(Exception e)
+		{
+			System.out.println("Exception In delete Order"+e.getMessage());
+		}
+		return orderList;
+	}
+	@RequestMapping(value = "/deleteSpOrder",method = RequestMethod.GET)
+	public  @ResponseBody List<SpCakeOrdersBean> deleteSpOrder(HttpServletRequest request, HttpServletResponse response) {
+	
+		System.out.println("/inside delete Sporder process  ");
+		
+		int spOrderNo = Integer.parseInt(request.getParameter("sp_order_no"));
+		
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("spOrderNo", spOrderNo);
+
+		RestTemplate restTemp = new RestTemplate();
+
+		Info info= restTemp.postForObject(Constants.url + "deleteSpCkOrder", map, Info.class);
+		
+		if(info.getError()==false)
+		{
+			if(!spCakeOrderList.isEmpty())
+			{
+				for(int i=0;i<spCakeOrderList.size();i++)
+				{
+					if(spCakeOrderList.get(i).getSpOrderNo()==spOrderNo)
+					{
+						spCakeOrderList.remove(i);
+					}
+				}
+			}
+		}
+		return spCakeOrderList;
+	}
+	@RequestMapping(value = "/deleteRegSpOrder/{rspId}",method = RequestMethod.GET)
+	public  ModelAndView deleteRegSpOrder(@PathVariable int rspId,HttpServletRequest request, HttpServletResponse response) {
+		
+	
+		ModelAndView model = new ModelAndView("orders/regularsporders");
+
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("rspId", rspId);
 		
 		RestTemplate restTemp = new RestTemplate();
 
-		String s= restTemp.postForObject(Constants.url + "DeleteOrder", map, String.class);
+		Info info= restTemp.postForObject(Constants.url + "deleteRegularSpOrder", map, Info.class);
+		System.out.println("Info"+info.toString());
 		
-		//return "Success";
+		List<String> frIdList = (List) Arrays.asList(frIds);
+		
+		RestTemplate restTemplate = new RestTemplate();
+
+		List<FranchiseeList> selectedFrList=new ArrayList<>();
+		List<FranchiseeList> remFrList=new ArrayList<FranchiseeList>();
+		
+		AllFranchiseeList allFranchiseeList=restTemplate.getForObject(Constants.url+"getAllFranchisee",AllFranchiseeList.class);
+		
+		franchiseeList=allFranchiseeList.getFranchiseeList();
+		remFrList=franchiseeList;
+
+		try {
+		for(int i=0;i<frIdList.size();i++)
+		{
+			for(int j=0;j<franchiseeList.size();j++)
+			{
+				if(Integer.parseInt(frIdList.get(i))==franchiseeList.get(j).getFrId())
+				{
+					selectedFrList.add(franchiseeList.get(j));
+					remFrList.remove(j);
+				}
+			}
+		}
+		}
+		catch (NullPointerException e) {
+            System.out.println("Null Pointer Exc in Reg Sp Order");
+		}
+		catch(Exception e)
+		{
+            System.out.println(" Exc in Reg Sp Order:order Controller"+e.getMessage());
+
+		}
+
+		
+		model.addObject("todayDate", prodDate);
+		model.addObject("frIdList", selectedFrList);
+		model.addObject("franchiseeList", remFrList);
+		model.addObject("isDelete",1);
+		return model;
 	}
-	
 	@RequestMapping(value = "/callChangeQty",method = RequestMethod.GET)
 	public  @ResponseBody  void updateOrderQty(HttpServletRequest request, HttpServletResponse response) {
 	

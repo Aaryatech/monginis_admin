@@ -49,7 +49,7 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 </head>
-<body>
+<body onload="searchOrder(${isDelete})">
 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
@@ -118,11 +118,16 @@
 
 										<select data-placeholder="Select Franchisee"
 											class="form-control chosen" multiple="multiple" tabindex="6"
-											name="fr_id[]" id="fr_id[]">
+											name="fr_id[]" id="fr_id">
 
 											<option value="0">All</option>
 											<c:forEach items="${franchiseeList}" var="franchiseeList">
 												<option value="${franchiseeList.frId}">${franchiseeList.frName}</option>
+
+
+											</c:forEach>
+											<c:forEach items="${frIdList}" var="franchiseeList">
+												<option value="${franchiseeList.frId}"selected>${franchiseeList.frName}</option>
 
 
 											</c:forEach>
@@ -154,8 +159,8 @@
 									<label class="col-sm-3 col-lg-2 control-label">Production
 										Date</label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input value="${todayDate }" class="form-control date-picker" id="dp2" size="16"
-											type="text" name="prod_date" required />
+										<input value="${todayDate}" class="form-control date-picker" id="dp2" size="16"
+											type="text" name="prod_date" id="prod_date" required />
 									</div>
 								</div>
 
@@ -200,6 +205,8 @@
 														<th width="91" align="left">Total</th>
 														  <th width="87" align="left">View</th>  
 														<th width="87" align="left">PDF</th>
+														<th width="87" align="left">Action</th>
+														
 													</tr>
 												</thead>
 												<tbody>
@@ -236,6 +243,7 @@
 
 															 <td align="left"><a href="${pageContext.request.contextPath}/showRegSpcakeOrderPdf/${spCakeOrderList.rspId}" target="blank"><i class="fa fa-file-pdf-o" style="font-size:24px;"></i></a></td>  
 
+															 <td align="left"><a href="${pageContext.request.contextPath}/deleteRegSpOrder/${spCakeOrderList.rspId}"><i class="glyphicon glyphicon-remove" style="font-size:24px;"></i></a></td>  
 
 
 
@@ -363,5 +371,16 @@
 		}
 											
 	</script>
+	<script type="text/javascript">
+
+function searchOrder(isDelete){
+	if(isDelete==1)
+		{
+    var form = document.getElementById("validation-form")
+    form.action ="${pageContext.request.contextPath}/regularSpCkOrderProcess";
+    form.submit();
+		}
+}
+</script>
 </body>
 </html>

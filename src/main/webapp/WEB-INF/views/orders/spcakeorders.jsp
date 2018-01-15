@@ -59,7 +59,7 @@
 
 	<c:url var="callspCakeOrderProcess" value="/spCakeOrderProcess" />
 
-
+      <c:url var="deleteSpOrder" value="/deleteSpOrder" />
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -236,6 +236,8 @@
 														<th width="91" align="left">Total</th>
 													  <th width="87" align="left">View</th>  
 														<th width="87" align="left">PDF</th>
+													<th width="87" align="left">Action</th>
+														
 													</tr>
 												</thead>
 												<tbody>
@@ -445,6 +447,7 @@
 								  	
 
 								  	  tr.append($('<td></td>').html('<a href="${pageContext.request.contextPath}/showSpcakeOrderPdf/'+spCakeOrder.spOrderNo+'" target="blank"><i class="fa fa-file-pdf-o" style="font-size:24px;"></i></a>'));  
+								  	  tr.append($('<td></td>').html('<a href=# class=action_btn onclick=deleteSpOrder('+spCakeOrder.spOrderNo+');><abbr title=Delete><i class="glyphicon glyphicon-remove"></i></abbr></a>')); 
 
 								
 									$('#table1 tbody').append(tr);
@@ -477,11 +480,64 @@
 		}
 											
 	</script>
+    <script type="text/javascript">
+		function deleteSpOrder(spOrderNo) {
+			
+			 if (confirm("Do you want to Delete this order?") == true) {
+			$.getJSON('${deleteSpOrder}',
+					{
+			        	sp_order_no:spOrderNo,
+						ajax : 'true',
+					},
+					function(data) {
+						$('#table1 td').remove();
+						$('#loader').hide();
+						if(data==""){
+							alert("No Orders Found");
+						}
+						$.each(data,function(key, spCakeOrder) {
 
+							document.getElementById('range').style.display = 'block';
+							var len=data.length
+							
+							var tr = $('<tr></tr>');
 
+						  	tr.append($('<td></td>').html(key+1));
 
+						  	tr.append($('<td></td>').html(spCakeOrder.frName));
 
+						  	tr.append($('<td></td>').html(spCakeOrder.itemId));
 
+						  	tr.append($('<td></td>').html(spCakeOrder.spName));
 
+						  	tr.append($('<td></td>').html(spCakeOrder.spfName));
+						  	
+						  	tr.append($('<td></td>').html(spCakeOrder.spEvents));
+
+						  	tr.append($('<td></td>').html(spCakeOrder.spDeliveryDate));
+
+						  	tr.append($('<td></td>').html(spCakeOrder.spPrice));
+
+						  	tr.append($('<td></td>').html(spCakeOrder.spTotalAddRate));
+						  	
+							var totalValue=parseFloat(spCakeOrder.spTotalAddRate) + parseFloat(spCakeOrder.spPrice);
+
+						  	tr.append($('<td></td>').html(totalValue));
+						  	
+						  	tr.append($('<td></td>').html('<a href="${pageContext.request.contextPath}/showHtmlViewSpcakeOrder/'+spCakeOrder.spOrderNo+'" target="blank"><i class="fa fa-file-text-o" style="font-size:24px;"></i></a>'));  
+						  	
+
+						  	  tr.append($('<td></td>').html('<a href="${pageContext.request.contextPath}/showSpcakeOrderPdf/'+spCakeOrder.spOrderNo+'" target="blank"><i class="fa fa-file-pdf-o" style="font-size:24px;"></i></a>'));  
+						  	  tr.append($('<td></td>').html('<a href=# class=action_btn onclick=deleteSpOrder('+spCakeOrder.spOrderNo+');><abbr title=Delete><i class="glyphicon glyphicon-remove"></i></abbr></a>')); 
+
+						
+							$('#table1 tbody').append(tr);
+							
+							})
+
+					});
+			 }
+		}
+	</script>
 </body>
 </html>

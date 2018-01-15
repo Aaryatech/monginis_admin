@@ -452,20 +452,11 @@ $.getJSON('${callSearchOrdersProcess}', {
 
   	tr.append($('<td></td>').html(orders.catName));
 
-  /* 	tr.append($('<td></td>').html(orders.id)); */
-
  	tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
   
- 	tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit fa-lg" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove fa-lg" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
+ 	tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
   		
- /*  tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> "));
-   */	
-  	  	//tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+");<i class='fa fa-pencil'></i>>"));
-
-  	
-  	//<input type=button id=delete"+orders.orderId+" onClick=deleteOrder("+orders.orderId+"); Value=Delete>
-
-
+ 
 	$('#table1 tbody').append(tr);
 
 })
@@ -524,18 +515,46 @@ $.getJSON('${callSearchOrdersProcess}', {
 		function deleteOrder(orderId)
 		{
 			
-			var txt;
-		    if (confirm("You want to Delete Order!") == true) {
+		    if (confirm("Do you want to Delete this order?") == true) {
 		    	$.getJSON('${callDeleteOrder}',
 						{
 							order_id : orderId,
 							
 							ajax : 'true'
 							
-						});
-		    } 
-		    
+						}, function(data) {
+
+							$('#loader').hide();
+							var len = data.length;
+
+
+							$('#table1 td').remove();
+
+							$.each(data,function(key, orders) {
+
+							var tr = $('<tr></tr>');
+
+						  	tr.append($('<td></td>').html(key+1));
+
+						  	tr.append($('<td></td>').html(orders.frName));
+
+						  	tr.append($('<td></td>').html(orders.itemName));
+
+						  	tr.append($('<td></td>').html(orders.catName));
+
+						 	tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
+						  
+						 	tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
+						  		
+						 
+							$('#table1 tbody').append(tr);
+
+						})
+
 					
+		    } );
+		    
+		    }		
 			
 			
 
