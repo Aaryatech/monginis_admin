@@ -6,6 +6,15 @@ private String name;
 private int qty;
 private int rmUomId;
 
+
+
+private float  curClosingQty;//new Field Added Sachin
+
+
+private float curOpeQty;//new fiedl
+
+
+
 public int getRmUomId() {
 	return rmUomId;
 }
@@ -30,10 +39,24 @@ public String getName() {
 public void setName(String name) {
 	this.name = name;
 }
+public float getCurClosingQty() {
+	return curClosingQty;
+}
+public void setCurClosingQty(float curClosingQty) {
+	this.curClosingQty = curClosingQty;
+}
+public float getCurOpeQty() {
+	return curOpeQty;
+}
+public void setCurOpeQty(float curOpeQty) {
+	this.curOpeQty = curOpeQty;
+}
 @Override
 public String toString() {
-	return "CommonConf [id=" + id + ", name=" + name + ", qty=" + qty + "]";
+	return "CommonConf [id=" + id + ", name=" + name + ", qty=" + qty + ", rmUomId=" + rmUomId + ", curClosingQty="
+			+ curClosingQty + ", curOpeQty=" + curOpeQty + "]";
 }
+
 
 
 }

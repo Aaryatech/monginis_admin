@@ -26,6 +26,13 @@ public class GetOrderItemQty {
 	private Date productionDate;
 
 	private String itemName;
+	
+	
+	
+	private float  curClosingQty;//new Field Added Sachin
+
+
+	private float curOpeQty;//new fiedl
 
 	
 	public String getItemName() {
@@ -84,13 +91,23 @@ public class GetOrderItemQty {
 		this.productionDate = productionDate;
 	}
 
-	@Override
-	public String toString() {
-		return "GetOrderItemQty [orderId=" + orderId + ", qty=" + qty + ", itemId=" + itemId + ", menuId=" + menuId
-				+ ", itemGrp1=" + itemGrp1 + ", productionDate=" + productionDate + ", itemName=" + itemName + "]";
+	public float getCurClosingQty() {
+		return curClosingQty;
 	}
 
-	 
+	public void setCurClosingQty(float curClosingQty) {
+		this.curClosingQty = curClosingQty;
+	}
+
+	public float getCurOpeQty() {
+		return curOpeQty;
+	}
+
+	public void setCurOpeQty(float curOpeQty) {
+		this.curOpeQty = curOpeQty;
+	}
+
+	
 	 
 
 	 

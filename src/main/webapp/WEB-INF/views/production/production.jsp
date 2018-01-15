@@ -237,6 +237,9 @@
 														<th width="18" style="width: 18px">Sr No</th>
 														<th width="50">Item Id</th>
 														<th width="100">Item Name</th>
+														
+													<th width="100">Cur Closing Qty</th>
+													<th width="100">cur Opening Qty</th>
 														<th width="100">Order Quantity</th>
 													<!-- 	<th width="100">Production Quantity</th> -->
 									
@@ -515,6 +518,9 @@ $(document).ready(function() {
 							  	tr.append($('<td></td>').html(key+1));			  	
 							  	tr.append($('<td></td>').html(order.itemId));
 								tr.append($('<td></td>').html(order.itemName));
+								tr.append($('<td></td>').html(order.curClosingQty));
+								tr.append($('<td></td>').html(order.curOpeQty));
+								
 								tr.append($('<td></td>').html(order.qty));
 								 
 								 

@@ -31,6 +31,12 @@ public class PostProductionPlanDetail {
 	private int int4;
 	
 	
+	private float  curClosingQty;//new Field Added Sachin
+	
+	
+	 private float curOpeQty;//new fiedl
+	 
+	
 
 		public int getInt4() {
 		return int4;
@@ -121,14 +127,31 @@ public class PostProductionPlanDetail {
 			this.itemId = itemId;
 		}
 
+		
+
+		public float getCurClosingQty() {
+			return curClosingQty;
+		}
+
+		public void setCurClosingQty(float curClosingQty) {
+			this.curClosingQty = curClosingQty;
+		}
+
+		public float getCurOpeQty() {
+			return curOpeQty;
+		}
+
+		public void setCurOpeQty(float curOpeQty) {
+			this.curOpeQty = curOpeQty;
+		}
+
 		@Override
 		public String toString() {
 			return "PostProductionPlanDetail [productionDetailId=" + productionDetailId + ", productionHeaderId="
 					+ productionHeaderId + ", planQty=" + planQty + ", orderQty=" + orderQty + ", openingQty="
 					+ openingQty + ", rejectedQty=" + rejectedQty + ", productionQty=" + productionQty + ", itemId="
 					+ itemId + ", productionBatch=" + productionBatch + ", productionDate=" + productionDate + ", int4="
-					+ int4 + "]";
+					+ int4 + ", curClosingQty=" + curClosingQty + ", curOpeQty=" + curOpeQty + "]";
 		}
-
 
 }

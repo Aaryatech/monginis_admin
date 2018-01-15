@@ -164,6 +164,7 @@
 													<tr>
 														<th>Sr.No.</th>
 														<th>Item Name</th>
+														<th>Curent Closing</th>
 														<th>plan Qty</th>
 														<th>production Qty</th>
 														<th>Order Qty</th>
@@ -190,6 +191,7 @@
 																	</c:when>
 																</c:choose>
 															</c:forEach>
+															<td><c:out value="${postProdPlanHeaderDetailed.curClosingQty}" /></td><!--  newly Added  -->
 															
 															<td><c:out value="${postProdPlanHeaderDetailed.planQty}" /></td>
 															<td><c:out value="${postProdPlanHeaderDetailed.productionQty}" /></td>

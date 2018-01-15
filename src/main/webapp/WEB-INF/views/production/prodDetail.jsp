@@ -166,7 +166,6 @@
 												<th width="120" style="width: 18px">Rej Qty</th>
 												<th width="150" align="left">Total Qty</th>
 
-												
 
 											</tr>
 										</thead>
@@ -177,7 +176,7 @@
 												<tr>
 													<td align="left"><c:out value="${planDetail.itemName}" /></td>
 													
-													<td align="left"><input align="left" type="text"  value="${planDetail.openingQty}"
+													<td align="left"><input align="left" type="text"  value="${planDetail.curOpeQty}"
 														placeholder="Stock Qty" class="form-control" name="stk_qty${planDetail.productionDetailId}" id="stk_qty${planDetail.productionDetailId}"
 														data-rule-required="true" style="width: 65px" disabled/></td>
 

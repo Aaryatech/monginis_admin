@@ -1,5 +1,6 @@
 package com.ats.adminpanel.controller;
 
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -40,6 +41,10 @@ import com.ats.adminpanel.model.production.PostProdPlanHeader;
 import com.ats.adminpanel.model.production.PostProductionDetail;
 import com.ats.adminpanel.model.production.PostProductionHeader;
 import com.ats.adminpanel.model.production.PostProductionPlanDetail;
+import com.ats.adminpanel.model.stock.FinishedGoodStock;
+import com.ats.adminpanel.model.stock.FinishedGoodStockDetail;
+import com.ats.adminpanel.model.stock.GetCurProdAndBillQty;
+import com.ats.adminpanel.model.stock.GetCurProdAndBillQtyList;
 
 @Controller
 public class ProdForcastingController {
@@ -50,6 +55,10 @@ public class ProdForcastingController {
 	public static String productionDate;
 	public static int selectedCat;
 	public static List<Item> globalItemList; 
+	
+	
+	GetCurProdAndBillQtyList getCurProdAndBillQtyList = new GetCurProdAndBillQtyList();
+
 
 	@RequestMapping(value = "/showProdForcast", method = RequestMethod.GET)
 	public ModelAndView showProdForcasting(HttpServletRequest request, HttpServletResponse response) {
@@ -158,6 +167,200 @@ public class ProdForcastingController {
 			}
 			commonConfList.add(commonConf);
 		}
+		
+		
+		
+		
+		// new Code
+		List<FinishedGoodStockDetail> updateStockDetailList = new ArrayList<>();
+
+		try {
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			DateFormat dfYmd = new SimpleDateFormat("yyyy-MM-dd");
+			map = new LinkedMultiValueMap<String, Object>();
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("stockStatus", 0);
+
+			FinishedGoodStock stockHeader = restTemplate.postForObject(Constants.url + "getFinGoodStockHeader", map,
+					FinishedGoodStock.class);
+
+			System.out.println("stock Header " + stockHeader.toString());
+
+			Date stockDate = stockHeader.getFinGoodStockDate();
+
+			List<GetCurProdAndBillQty> getCurProdAndBillQty = new ArrayList<>();
+			map = new LinkedMultiValueMap<String, Object>();
+
+			System.out.println("stock date " + stockDate);
+			String stkDate = dfYmd.format(stockDate);
+			//int selCate=Integer.parseInt(selectedCat);
+			System.out.println("stk Date for get Cur Prod and Bill Qty "+stkDate);
+			
+			System.out.println("stk CatId for get Cur Prod and Bill Qty "+catId);
+			map = new LinkedMultiValueMap<String, Object>();
+			
+			map.add("prodDate", stkDate);
+			map.add("catId", catId);
+			map.add("delStatus", 0);
+
+			getCurProdAndBillQtyList = restTemplate.postForObject(Constants.url + "getCurrentProdAndBillQty", map,
+					GetCurProdAndBillQtyList.class);
+
+			getCurProdAndBillQty = getCurProdAndBillQtyList.getGetCurProdAndBillQty();
+
+			System.out.println("Cur Prod And Bill Qty Listy " + getCurProdAndBillQty.toString());
+			DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+
+			String stockkDate = df.format(stockDate);
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("stockDate", stockkDate);
+
+			ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
+			};
+			ResponseEntity<List<FinishedGoodStockDetail>> responseEntity = restTemplate.exchange(
+					Constants.url + "getFinGoodStockDetail", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			List<FinishedGoodStockDetail> finGoodDetail = responseEntity.getBody();
+
+			System.out.println("Finished Good Stock Detail " + finGoodDetail.toString());
+
+			FinishedGoodStockDetail stockDetail = new FinishedGoodStockDetail();
+			GetCurProdAndBillQty curProdBilQty = new GetCurProdAndBillQty();
+
+			for (int i = 0; i < getCurProdAndBillQty.size(); i++) {
+
+				curProdBilQty = getCurProdAndBillQty.get(i);
+
+				for (int j = 0; j < finGoodDetail.size(); j++) {
+
+					stockDetail = finGoodDetail.get(j);
+
+					if (curProdBilQty.getId() == stockDetail.getItemId()) {
+
+						System.out.println(
+								"item Id Matched " + curProdBilQty.getId() + "and " + stockDetail.getItemId());
+
+						float a = 0, b = 0, c = 0;
+
+						float cloT1 = 0;
+						float cloT2 = 0;
+						float cloT3 = 0;
+
+						float curClosing = 0;
+
+						float totalClosing = 0;
+
+						int billQty = curProdBilQty.getBillQty() + curProdBilQty.getDamagedQty();
+						int prodQty = curProdBilQty.getProdQty();
+						int rejQty = curProdBilQty.getRejectedQty();
+
+						float t1 = stockDetail.getOpT1();
+						float t2 = stockDetail.getOpT2();
+						float t3 = stockDetail.getOpT3();
+
+						System.out.println("t1 : " + t1 + " t2: " + t2 + " t3: " + t3);
+
+						if (t3 > 0) {
+
+							if (billQty < t3) {
+								c = billQty;
+							} else {
+								c = t3;
+							}
+
+						} // end of t3>0
+
+						if (t2 > 0) {
+
+							if ((billQty - c) < t2) {
+								b = (billQty - c);
+							} else {
+
+								b = t2;
+							}
+
+						} // end of t2>0
+
+						if (t1 > 0) {
+
+							if ((billQty - c - b) < t1) {
+
+								a = (billQty - b - c);
+
+							} else {
+
+								a = t1;
+							}
+						} // end of if t1>0
+
+						System.out.println("---------");
+						System.out.println("bill Qty = " + curProdBilQty.getBillQty());
+						System.out.println(" for Item Id " + curProdBilQty.getId());
+						System.out.println("a =" + a + "b = " + b + "c= " + c);
+						float damagedQty = curProdBilQty.getDamagedQty();
+
+						float curIssue = billQty - (a + b + c);
+
+						System.out.println("cur Issue qty =" + curIssue);
+
+						cloT1 = t1 - a;
+						cloT2 = t2 - b;
+						cloT3 = t3 - c;
+
+						curClosing = prodQty - rejQty - curIssue;
+
+						totalClosing = ((t1 + t2 + t3) + (prodQty - rejQty)) - billQty;
+						stockDetail.setCloCurrent(curClosing);
+						stockDetail.setCloT1(cloT1);
+						stockDetail.setCloT2(cloT2);
+						stockDetail.setCloT3(cloT3);
+						stockDetail.setFrSaleQty(billQty);
+						stockDetail.setGateSaleQty(damagedQty);
+						stockDetail.setProdQty(prodQty);
+						stockDetail.setRejQty(rejQty);
+						stockDetail.setTotalCloStk(totalClosing);
+
+						updateStockDetailList.add(stockDetail);
+
+						System.out.println("closing Qty  : t1 " + cloT1 + " t2 " + cloT2 + " t3 " + cloT3);
+
+						System.out.println("cur Closing " + curClosing);
+						System.out.println("total closing " + totalClosing);
+
+						System.out.println("---------");
+
+					} // end of if isSameItem =true
+				} // end of Inner For Loop
+			} // End of outer For loop
+
+		} catch (Exception e) {
+			System.out.println("Excein Prod Controller get Current Fin good Stock " + e.getMessage());
+			e.printStackTrace();
+
+		}
+		
+		for(int i=0;i<commonConfList.size();i++) {
+			
+			for(int j=0;j<updateStockDetailList.size();j++) {
+				
+				if(commonConfList.get(i).getId()==updateStockDetailList.get(j).getItemId()) {
+					
+					commonConfList.get(i).setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
+					
+					commonConfList.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk());
+					
+				}
+				
+				
+			}
+		}
+		
+		
+		
+//end of new Codes
+
+
 
 		System.out.println("------------------------");
 
@@ -295,7 +498,8 @@ public class ProdForcastingController {
 
 		// String productionDate=request.getParameter("production_date");
 		List<CommonConf> prodPlanItems=new ArrayList<CommonConf>();
-		
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
 		for(Item item:globalItemList)
 		{
 			CommonConf commonConf=new CommonConf();
@@ -325,6 +529,16 @@ public class ProdForcastingController {
 			System.out.println(e.getMessage());
 		}
 
+		
+				
+		
+		
+		
+		
+		
+		
+		
+		
 		System.out.println("productionDate"+productionDate);
 		String convertedDate = null;
 		if (productionDate != null && productionDate != "" && selectTime != null && selectTime != "") {

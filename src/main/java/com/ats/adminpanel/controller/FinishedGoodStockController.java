@@ -241,7 +241,7 @@ public class FinishedGoodStockController {
 			System.out.println("stock date " + stockDate);
 			String prodDate = dfYmd.format(stockDate);
 			map.add("prodDate", prodDate);
-			map.add("catId", catId);
+			map.add("catId", selectedCat);
 			map.add("delStatus", 0);
 
 			getCurProdAndBillQtyList = restTemplate.postForObject(Constants.url + "getCurrentProdAndBillQty", map,

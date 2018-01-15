@@ -12,9 +12,24 @@ public class Variance {
 		private int orderQty;
 		
 		
+	/*	private float  curClosingQty;//new Field Added Sachin
 		
 		
+		 private float curOpeQty;//new fiedl
 		 
+		
+		public float getCurClosingQty() {
+			return curClosingQty;
+		}
+		public void setCurClosingQty(float curClosingQty) {
+			this.curClosingQty = curClosingQty;
+		}
+		public float getCurOpeQty() {
+			return curOpeQty;
+		}
+		public void setCurOpeQty(float curOpeQty) {
+			this.curOpeQty = curOpeQty;
+		}*/
 		public int getId() {
 			return id;
 		}
@@ -50,7 +65,6 @@ public class Variance {
 			return "Variance [id=" + id + ", itemName=" + itemName + ", itemId=" + itemId + ", prodRejectedQty="
 					+ prodRejectedQty + ", orderQty=" + orderQty + "]";
 		}
-		
 		
 		
 }
