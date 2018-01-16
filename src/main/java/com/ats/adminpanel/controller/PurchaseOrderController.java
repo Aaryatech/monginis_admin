@@ -111,7 +111,6 @@ public class PurchaseOrderController {
 					SupPaymentTermsList.class);
 
 			System.out.println("Payment Term List Response:" + supPaymentTerms.toString());
-			transporterList = rest.getForObject(Constants.url + "/showTransporters",TransporterList.class);
 
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			LocalDate localDate = LocalDate.now();
@@ -151,9 +150,6 @@ public class PurchaseOrderController {
 		purchaseOrderDetailList=new ArrayList<PurchaseOrderDetail>();
 
 		ModelAndView model = new ModelAndView("masters/purchaseOrder/purchaseOrder");
-		Constants.mainAct =10;
-		Constants.subAct =56;
-
 		RestTemplate rest=new RestTemplate();
 		supplierDetailsList=new ArrayList<SupplierDetails>();
 		  supplierDetailsList=rest.getForObject(Constants.url + "getAllSupplier",   List.class);
@@ -174,6 +170,7 @@ public class PurchaseOrderController {
 			
 			model.addObject("purchaseorderlist",getPurchaseOrderList.getPurchaseOrderHeaderList());
 			model.addObject("supplierList", supplierDetailsList);
+			model.addObject("flag", 0);
 		return model;
 	}
 	
@@ -258,18 +255,19 @@ public class PurchaseOrderController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/poHeaderWithDetailed/{poId}", method = RequestMethod.GET)
-	public ModelAndView poHeaderWithDetailed(@PathVariable int poId,HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/poHeaderWithDetailed/{poId}/{flag}", method = RequestMethod.GET)
+	public ModelAndView poHeaderWithDetailed(@PathVariable int poId,@PathVariable int flag,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/purchaseOrder/poHeaderWithDetailed");
 		try
 		{
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>();
 			map.add("poId", poId);
-			
+			System.out.println("flag"+flag);
 			RestTemplate rest=new RestTemplate();
 			PurchaseOrderHeader purchaseOrderHeader=rest.postForObject(Constants.url + "purchaseOrder/getpurchaseorderHeaderWithDetailed",map, PurchaseOrderHeader.class);
 			 System.out.println("Response :"+purchaseOrderHeader.toString());
+			 model.addObject("flag",flag);
 			 model.addObject("purchaseOrderHeader",purchaseOrderHeader);
 			 model.addObject("supplierList", supplierDetailsList);
 			 model.addObject("transporterList", transporterList.getTransporterList());
@@ -321,8 +319,6 @@ public class PurchaseOrderController {
 	public ModelAndView poListAtPurchase(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/purchaseOrder/polistAtPurchase");
-		 Constants.mainAct =14;
-		 Constants.subAct =86;
 		RestTemplate rest=new RestTemplate();
 		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>();
@@ -338,7 +334,7 @@ public class PurchaseOrderController {
 			  transporterList=new TransporterList();
 				transporterList = rest.getForObject(Constants.url + "/showTransporters",TransporterList.class);
 						System.out.println("Transporter List Response:" + transporterList.toString());
-			
+			model.addObject("flag", 1);
 			model.addObject("purchaseorderlist",getPurchaseOrderList.getPurchaseOrderHeaderList());
 			model.addObject("supplierList", supplierDetailsList);
 		return model;
@@ -439,7 +435,7 @@ public class PurchaseOrderController {
 			  transporterList=new TransporterList();
 				transporterList = rest.getForObject(Constants.url + "/showTransporters",TransporterList.class);
 						System.out.println("Transporter List Response:" + transporterList.toString());
-			
+			 model.addObject("flag", 2);
 			model.addObject("purchaseorderlist",getPurchaseOrderList.getPurchaseOrderHeaderList());
 			model.addObject("supplierList", supplierDetailsList);
 		return model;
