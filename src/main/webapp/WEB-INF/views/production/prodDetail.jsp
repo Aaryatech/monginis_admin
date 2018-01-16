@@ -156,7 +156,6 @@
 									<table width="100%" class="table table-advance" id="table1">
 										<thead>
 											<tr>
-
 												<th width="170" >Item Name</th>
 												<th width="120" align="left">Stock</th>
 												<th width="120" align="left">Plan Qty</th>
@@ -165,7 +164,6 @@
 												<th width="150" align="left">Actual Prod</th>
 												<th width="120" style="width: 18px">Rej Qty</th>
 												<th width="150" align="left">Total Qty</th>
-
 
 											</tr>
 										</thead>

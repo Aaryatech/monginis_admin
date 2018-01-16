@@ -176,6 +176,7 @@ public class BmsStockInsertController {
 			List<BmsStockDetailed> bmsStockDetailedlist = new ArrayList<BmsStockDetailed>();
 			for(int i=0;i<sfndRawItemlist.size();i++)
 			{
+				if(sfndRawItemlist.get(i).getQty()>0) {
 				BmsStockDetailed bmsStockDetailed = new BmsStockDetailed();
 				bmsStockDetailed.setBmsStockDeatilId(0);
 				bmsStockDetailed.setBmsStockId(0);
@@ -191,6 +192,7 @@ public class BmsStockInsertController {
 				 bmsStockDetailed.setRmUom(sfndRawItemlist.get(i).getUomId());
 				 bmsStockDetailedlist.add(bmsStockDetailed);
 				 
+			}
 			}
 			bmsStockHeader.setBmsStockDetailed(bmsStockDetailedlist);
 			System.out.println("bmsStockHeader  "+bmsStockHeader.toString());

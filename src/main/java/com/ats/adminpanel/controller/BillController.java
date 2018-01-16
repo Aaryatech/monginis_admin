@@ -464,9 +464,9 @@ public class BillController {
 
 			System.out.println("Test data : " + postBillDataCommon.toString());
 
-			//Info info = restTemplate.postForObject(Constants.url + "insertBillData", postBillDataCommon, Info.class);
+			Info info = restTemplate.postForObject(Constants.url + "insertBillData", postBillDataCommon, Info.class);
 
-			//System.out.println("Info Data " + info.toString());
+			System.out.println("Info Data " + info.toString());
 			
 			//model.addObject("postBillDataCommon","");
 

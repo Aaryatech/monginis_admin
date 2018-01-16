@@ -275,7 +275,7 @@
 					  	tr.append($('<td></td>').html(key+1));			  	
 					  	tr.append($('<td></td>').html(itemList.name));
 						tr.append($('<td></td>').html(itemList.uomName));
-						tr.append($('<td></td>').html("<input type='text' class='form-control' name='stockQty"+itemList.itemId+"' >"));
+						tr.append($('<td></td>').html("<input type='text' class='form-control' value=0 name='stockQty"+itemList.itemId+"' >"));
 					$('#table_grid tbody').append(tr);
 						 });
 												

@@ -142,7 +142,7 @@ System.out.println("inside get Bms Stock Page ");
 
 			String curDate = sdf.format(c.getTime());
 
-			System.out.println("curDate " + curDate);
+			System.out.println("curDate for Stock bet date to get current Stock " + DateConvertor.convertToYMD(curDate));
 
 			map.add("fromDate", DateConvertor.convertToYMD(curDate));
 			map.add("toDate",  DateConvertor.convertToYMD(curDate));
@@ -171,10 +171,22 @@ System.out.println("inside get Bms Stock Page ");
 					if (stkBetDate.getRmId() == curStk.getRmId()) {
 
 						isSameItem = true;
+						curStk.setOpeningQty(stkBetDate.getBmsOpeningStock());
+						
+						System.out.println("Opening qty set for Item "+curStk.getRmName()+"Qty "+stkBetDate.getBmsOpeningStock());
+
+						float closingQty = curStk.getOpeningQty() +curStk.getStore_issue_qty()+
+								curStk.getProd_return_qty()+curStk.getMixing_return_qty()-
+								(curStk.getProd_issue_qty()+curStk.getMixing_issue_qty()+curStk.getStore_rejected_qty());
+								
+						curStk.setClosingQty(closingQty);
+
+						bmsCurrentStock.set(j, curStk);
+
 					}
 				}
 
-				if (isSameItem == true) {
+				/*if (isSameItem == true) {
 
 					curStk.setOpeningQty(stkBetDate.getBmsOpeningStock());
 
@@ -186,7 +198,7 @@ System.out.println("inside get Bms Stock Page ");
 
 					bmsCurrentStock.set(j, curStk);
 
-				}
+				}*/
 
 			}
 			
@@ -400,7 +412,7 @@ System.out.println("inside get Bms Stock Page ");
 					BmsStockHeader.class);// end of update bms stock Day end Process
 			
 			//Inserting next Day Entry for BMS Stock//
-			
+			System.out.println("Inserting next day stock Entry for BMS Stock");
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			Calendar c = Calendar.getInstance();
 			c.setTime(globalHeaderDate); // Now use today date.
