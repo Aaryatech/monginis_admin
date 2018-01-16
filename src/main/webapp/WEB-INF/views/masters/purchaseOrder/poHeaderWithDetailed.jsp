@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -295,9 +295,16 @@
 		<div class="box-content">
 				<div class="col-md-2" >Payment Terms</div>
 									<div class="col-md-3">
+									<c:forEach items="${supPaymentTerms}" var="supPaymentTerms" varStatus="count">
+											 	<c:choose>
+											 		<c:when test="${supPaymentTerms.payId==purchaseOrderHeader.payId}">
+											 			<input type="text" name="supPaymentTerms" id="supPaymentTerms" class="form-control" value="${supPaymentTerms.payDesc}" readonly>
+													 </c:when>
+												 </c:choose>
+											</c:forEach>
 									
-									<input type="text" name="pay_terms" id="pay_terms" value="${purchaseOrderHeader.payId}" class="form-control" readonly>
-				
+									<%-- <input type="text" name="pay_terms" id="pay_terms" value="${purchaseOrderHeader.payId}" class="form-control" readonly>
+				 --%>
 								
 									</div>
 									<div class="col-md-2">PO Validity </div>
@@ -342,14 +349,14 @@
 						<div class="col-md-12" style="text-align: center">
 							<c:choose>
 								<c:when test="${(purchaseOrderHeader.poStatus==0) and (flag==0)}"> 
-									<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}" ><input type="button" value="Edit" class="btn btn-info">
+									<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}/${flag}" ><input type="button" value="Edit" class="btn btn-info">
 									</a>
 								
 								<a href="${pageContext.request.contextPath}/requestPOStoreToPurchase/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Purchase" class="btn btn-info">
 								</a>
 							</c:when>
 							 <c:when test="${(purchaseOrderHeader.poStatus==3) and (flag==0)}">
-							 	<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}" ><input type="button" value="Edit" class="btn btn-info">
+							 	<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}/${flag}" ><input type="button" value="Edit" class="btn btn-info">
 								</a>
 								
 								<a href="${pageContext.request.contextPath}/requestPOStoreToPurchase/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Purchase" class="btn btn-info">
@@ -357,6 +364,8 @@
           						 
 						</c:when>
 						<c:when test="${(purchaseOrderHeader.poStatus==4) and (flag==1)}"> 
+						<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}/${flag}" ><input type="button" value="Edit" class="btn btn-info">
+								</a>
 									<a href="${pageContext.request.contextPath}/requestPOPurachaseToDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Directore" class="btn btn-info">
 									</a>
 								
@@ -364,7 +373,10 @@
 						onClick="return confirm('You Want To Reject This Record To Store');" ><input type="button" value="Reject To Store" class="btn btn-info">
 								</a>
 							</c:when>
+							
 							 <c:when test="${(purchaseOrderHeader.poStatus==1) and (flag==1)}">
+							 <a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}/${flag}" ><input type="button" value="Edit" class="btn btn-info">
+								</a>
 							 	<a href="${pageContext.request.contextPath}/requestPOPurachaseToDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Directore" class="btn btn-info">
 									</a>
 								
@@ -375,6 +387,8 @@
 						</c:when>
 						
 						<c:when test="${(purchaseOrderHeader.poStatus==2) and (flag==2)}"> 
+						<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}/${flag}" ><input type="button" value="Edit" class="btn btn-info">
+								</a>
 									<a href="${pageContext.request.contextPath}/requestPOFinalByDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Approve" class="btn btn-info">
 									</a>
 								

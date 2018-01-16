@@ -1,29 +1,15 @@
 package com.ats.adminpanel.controller;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
+ 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+import java.util.ArrayList; 
+import java.util.List; 
 import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
+import javax.servlet.http.HttpServletResponse; 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.core.io.InputStreamSource;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.context.annotation.Scope; 
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -32,37 +18,26 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestMethod; 
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.web.servlet.ModelAndView;
-
+import org.springframework.web.client.RestTemplate; 
+import org.springframework.web.servlet.ModelAndView; 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;
 import com.ats.adminpanel.model.RawMaterial.Info;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialDetails;
-import com.ats.adminpanel.model.RawMaterial.RawMaterialDetailsList;
-import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetails;
-import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetailsList;
-import com.ats.adminpanel.model.RawMaterial.RmItemCategory;
-import com.ats.adminpanel.model.RawMaterial.RmItemGroup;
-import com.ats.adminpanel.model.item.Item;
-import com.ats.adminpanel.model.materialreceipt.GetMaterialRecNoteList;
-import com.ats.adminpanel.model.materialreceipt.MaterialRecNote;
+import com.ats.adminpanel.model.RawMaterial.RawMaterialDetailsList; 
+import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetailsList; 
+import com.ats.adminpanel.model.RawMaterial.RmItemGroup; 
 import com.ats.adminpanel.model.materialreceipt.Supplist;
 import com.ats.adminpanel.model.purchaseorder.GetPurchaseOrderList;
 import com.ats.adminpanel.model.purchaseorder.GetRmRateAndTax;
 import com.ats.adminpanel.model.purchaseorder.PurchaseOrderDetail;
-import com.ats.adminpanel.model.purchaseorder.PurchaseOrderHeader;
-
-import com.ats.adminpanel.model.remarks.GetAllRemarksList;
+import com.ats.adminpanel.model.purchaseorder.PurchaseOrderHeader; 
 import com.ats.adminpanel.model.supplierMaster.SupPaymentTermsList;
 import com.ats.adminpanel.model.supplierMaster.SupplierDetails;
-import com.ats.adminpanel.model.supplierMaster.TransporterList;
-import com.sun.javafx.UnmodifiableArrayList;
+import com.ats.adminpanel.model.supplierMaster.TransporterList; 
 
 @Controller
 @Scope("session")
@@ -111,6 +86,16 @@ public class PurchaseOrderController {
 					SupPaymentTermsList.class);
 
 			System.out.println("Payment Term List Response:" + supPaymentTerms.toString());
+			
+			 getRawMaterialDetailList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterialList", GetRawMaterialDetailList.class);
+				System.out.println("RM Details : "+getRawMaterialDetailList.getRawMaterialDetailsList().toString());
+				
+				supplierDetailsList=new ArrayList<SupplierDetails>();
+				  supplierDetailsList=rest.getForObject(Constants.url + "getAllSupplier",   List.class);
+				
+				transporterList=new TransporterList();
+				transporterList = rest.getForObject(Constants.url + "/showTransporters",TransporterList.class);
+						System.out.println("Transporter List Response:" + transporterList.toString());
 
 			DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			LocalDate localDate = LocalDate.now();
@@ -154,19 +139,20 @@ public class PurchaseOrderController {
 		supplierDetailsList=new ArrayList<SupplierDetails>();
 		  supplierDetailsList=rest.getForObject(Constants.url + "getAllSupplier",   List.class);
 		  
-		  getRawMaterialDetailList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterialList", GetRawMaterialDetailList.class);
-		System.out.println("RM Details : "+getRawMaterialDetailList.getRawMaterialDetailsList().toString());
-			
-			  
-		transporterList=new TransporterList();
-		transporterList = rest.getForObject(Constants.url + "/showTransporters",TransporterList.class);
-				System.out.println("Transporter List Response:" + transporterList.toString());
+		  transporterList=new TransporterList();
+			transporterList = rest.getForObject(Constants.url + "/showTransporters",TransporterList.class);
+					System.out.println("Transporter List Response:" + transporterList.toString());
 		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>();
 		map.add("status", "0,1,3");
 		
 		 getPurchaseOrderList=rest.postForObject(Constants.url + "purchaseOrder/getpurchaseorderList",map, GetPurchaseOrderList.class);
 			System.out.println("Purchase Order : "+getPurchaseOrderList.getPurchaseOrderHeaderList());
+			
+			for(int i=0;i<getPurchaseOrderList.getPurchaseOrderHeaderList().size();i++)
+			{
+				getPurchaseOrderList.getPurchaseOrderHeaderList().get(i).setPoDate(DateConvertor.convertToDMY(getPurchaseOrderList.getPurchaseOrderHeaderList().get(i).getPoDate()));
+			}
 			
 			model.addObject("purchaseorderlist",getPurchaseOrderList.getPurchaseOrderHeaderList());
 			model.addObject("supplierList", supplierDetailsList);
@@ -189,14 +175,13 @@ public class PurchaseOrderController {
 			 {
 				 String poNo=String.valueOf(getPurchaseOrderList.getPurchaseOrderHeaderList().get(i).getPoNo());
 				 System.out.println(poNo);
-				 for(int j=0;j<poNo.length();j++)
-				 {
+				  
 					 if(poNo.contains(search))
 					 {
 						 list.add(getPurchaseOrderList.getPurchaseOrderHeaderList().get(i));
 						 break;
 					 }
-				 }
+				 
 			 }
 			 
 			 System.out.println("list"+list);
@@ -205,6 +190,55 @@ public class PurchaseOrderController {
 			 e.printStackTrace();
 		 }
 		return list;
+	}
+	
+	@RequestMapping(value = "/dateWisePo", method = RequestMethod.GET)
+	@ResponseBody
+	public List<PurchaseOrderHeader> dateWisePo(HttpServletRequest request, HttpServletResponse response) {
+		 
+		List<PurchaseOrderHeader> list = new ArrayList<PurchaseOrderHeader>();
+		GetPurchaseOrderList getPurchaseOrderList=null;
+		 
+		 try
+		 {
+			 String fromDate = request.getParameter("from_date");
+			 String toDate = request.getParameter("to_date");
+			 System.out.println("fromDate "+fromDate);
+			 System.out.println("toDate "+toDate);
+			 
+			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>();
+				map.add("status", "0,1,3");
+				map.add("fromDate",DateConvertor.convertToYMD(fromDate));
+				map.add("toDate",DateConvertor.convertToYMD(toDate));
+				RestTemplate rest=new RestTemplate();
+				 getPurchaseOrderList=rest.postForObject(Constants.url + "purchaseOrder/dateWisePo",map, GetPurchaseOrderList.class);
+					System.out.println("Purchase Order : "+getPurchaseOrderList.getPurchaseOrderHeaderList());
+			 
+			 System.out.println("list"+list);
+		 }catch(Exception e)
+		 {
+			 e.printStackTrace();
+		 }
+		return getPurchaseOrderList.getPurchaseOrderHeaderList();
+	}
+	
+	@RequestMapping(value = "/supplier", method = RequestMethod.GET)
+	@ResponseBody
+	public List<SupplierDetails> supplier(HttpServletRequest request, HttpServletResponse response) {
+		 
+		 
+		 
+		 try
+		 {
+			 RestTemplate rest=new RestTemplate();
+			 supplierDetailsList=rest.getForObject(Constants.url + "getAllSupplier",   List.class);
+			 
+			 System.out.println("supplierDetailsList"+supplierDetailsList);
+		 }catch(Exception e)
+		 {
+			 e.printStackTrace();
+		 }
+		return supplierDetailsList;
 	}
 	
 	@RequestMapping(value = "/deletePoRecord/{poId}", method = RequestMethod.GET)
@@ -224,8 +258,8 @@ public class PurchaseOrderController {
 	}
 	
 	
-	@RequestMapping(value = "/editPurchaseOrder/{poId}", method = RequestMethod.GET)
-	public ModelAndView editPurchaseOrder(@PathVariable int poId,HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/editPurchaseOrder/{poId}/{flag}", method = RequestMethod.GET)
+	public ModelAndView editPurchaseOrder(@PathVariable int poId,@PathVariable int flag,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/purchaseOrder/editPurchaseOrder");
 		RestTemplate rest=new RestTemplate();
@@ -244,13 +278,15 @@ public class PurchaseOrderController {
 			
 			purchaseOrderHeaderedit.setDelvDateRem(DateConvertor.convertToDMY(purchaseOrderHeaderedit.getDelvDateRem()));
 			purchaseOrderHeaderedit.setQuotationRefDate(DateConvertor.convertToDMY(purchaseOrderHeaderedit.getQuotationRefDate()));
-			
+			 
 			editPurchaseOrderDetailList=purchaseOrderHeaderedit.getPurchaseOrderDetail();
 			model.addObject("purchaseOrderHeader",purchaseOrderHeaderedit);
 			model.addObject("purchaseOrderDetailedList",editPurchaseOrderDetailList);
 			model.addObject("supplierList", supplierDetailsList);
+			model.addObject("supPaymentTerms", supPaymentTerms.getSupPaymentTermsList());
 			model.addObject("transporterList", transporterList.getTransporterList());
 			model.addObject("RawmaterialList",rmItemGroupList);
+			model.addObject("flag",flag);
 			
 		return model;
 	}
@@ -267,9 +303,19 @@ public class PurchaseOrderController {
 			RestTemplate rest=new RestTemplate();
 			PurchaseOrderHeader purchaseOrderHeader=rest.postForObject(Constants.url + "purchaseOrder/getpurchaseorderHeaderWithDetailed",map, PurchaseOrderHeader.class);
 			 System.out.println("Response :"+purchaseOrderHeader.toString());
+			 
+			 supPaymentTerms=new SupPaymentTermsList();
+			  supPaymentTerms = rest.getForObject(Constants.url + "/showPaymentTerms",
+					SupPaymentTermsList.class);
+			  System.out.println("supPaymentTerms"+supPaymentTerms.getSupPaymentTermsList());
+			 
+			 purchaseOrderHeader.setDelvDateRem(DateConvertor.convertToDMY(purchaseOrderHeader.getDelvDateRem()));
+			 purchaseOrderHeader.setPoDate(DateConvertor.convertToDMY(purchaseOrderHeader.getPoDate()));
+			 purchaseOrderHeader.setQuotationRefDate(DateConvertor.convertToDMY(purchaseOrderHeader.getQuotationRefDate()));
 			 model.addObject("flag",flag);
 			 model.addObject("purchaseOrderHeader",purchaseOrderHeader);
 			 model.addObject("supplierList", supplierDetailsList);
+			 model.addObject("supPaymentTerms", supPaymentTerms.getSupPaymentTermsList());
 			 model.addObject("transporterList", transporterList.getTransporterList());
 			 
 		}catch(Exception e)
@@ -287,6 +333,7 @@ public class PurchaseOrderController {
 		try
 		{
 			PurchaseOrderHeader purchaseOrderHeader = new PurchaseOrderHeader();
+			System.out.println("poId"+poId);
 			for(int i=0;i<=getPurchaseOrderList.getPurchaseOrderHeaderList().size();i++)
 			{
 				if(getPurchaseOrderList.getPurchaseOrderHeaderList().get(i).getPoId()==poId)
@@ -295,6 +342,7 @@ public class PurchaseOrderController {
 					break;
 				}
 			}
+			purchaseOrderHeader.setPoDate(DateConvertor.convertToYMD(purchaseOrderHeader.getPoDate()));
 			purchaseOrderHeader.setDelvDateRem(DateConvertor.convertToDMY(purchaseOrderHeader.getDelvDateRem()));
 			purchaseOrderHeader.setQuotationRefDate(DateConvertor.convertToDMY(purchaseOrderHeader.getQuotationRefDate()));
 			purchaseOrderHeader.setPoStatus(1);
@@ -334,6 +382,10 @@ public class PurchaseOrderController {
 			  transporterList=new TransporterList();
 				transporterList = rest.getForObject(Constants.url + "/showTransporters",TransporterList.class);
 						System.out.println("Transporter List Response:" + transporterList.toString());
+						for(int i=0;i<getPurchaseOrderList.getPurchaseOrderHeaderList().size();i++)
+						{
+							getPurchaseOrderList.getPurchaseOrderHeaderList().get(i).setPoDate(DateConvertor.convertToDMY(getPurchaseOrderList.getPurchaseOrderHeaderList().get(i).getPoDate()));
+						}
 			model.addObject("flag", 1);
 			model.addObject("purchaseorderlist",getPurchaseOrderList.getPurchaseOrderHeaderList());
 			model.addObject("supplierList", supplierDetailsList);
@@ -356,7 +408,7 @@ public class PurchaseOrderController {
 					break;
 				}
 			}
-			
+			purchaseOrderHeader.setPoDate(DateConvertor.convertToYMD(purchaseOrderHeader.getPoDate()));
 			purchaseOrderHeader.setDelvDateRem(DateConvertor.convertToDMY(purchaseOrderHeader.getDelvDateRem()));
 			purchaseOrderHeader.setQuotationRefDate(DateConvertor.convertToDMY(purchaseOrderHeader.getQuotationRefDate()));
 			purchaseOrderHeader.setPoStatus(2);
@@ -391,7 +443,7 @@ public class PurchaseOrderController {
 					break;
 				}
 			}
-			
+			purchaseOrderHeader.setPoDate(DateConvertor.convertToYMD(purchaseOrderHeader.getPoDate()));
 			purchaseOrderHeader.setDelvDateRem(DateConvertor.convertToDMY(purchaseOrderHeader.getDelvDateRem()));
 			purchaseOrderHeader.setQuotationRefDate(DateConvertor.convertToDMY(purchaseOrderHeader.getQuotationRefDate()));
 			purchaseOrderHeader.setPoStatus(3);
@@ -435,6 +487,10 @@ public class PurchaseOrderController {
 			  transporterList=new TransporterList();
 				transporterList = rest.getForObject(Constants.url + "/showTransporters",TransporterList.class);
 						System.out.println("Transporter List Response:" + transporterList.toString());
+						for(int i=0;i<getPurchaseOrderList.getPurchaseOrderHeaderList().size();i++)
+						{
+							getPurchaseOrderList.getPurchaseOrderHeaderList().get(i).setPoDate(DateConvertor.convertToDMY(getPurchaseOrderList.getPurchaseOrderHeaderList().get(i).getPoDate()));
+						}
 			 model.addObject("flag", 2);
 			model.addObject("purchaseorderlist",getPurchaseOrderList.getPurchaseOrderHeaderList());
 			model.addObject("supplierList", supplierDetailsList);
@@ -455,7 +511,7 @@ public class PurchaseOrderController {
 					break;
 				}
 			}
-			
+			purchaseOrderHeader.setPoDate(DateConvertor.convertToYMD(purchaseOrderHeader.getPoDate()));
 			purchaseOrderHeader.setDelvDateRem(DateConvertor.convertToDMY(purchaseOrderHeader.getDelvDateRem()));
 			purchaseOrderHeader.setQuotationRefDate(DateConvertor.convertToDMY(purchaseOrderHeader.getQuotationRefDate()));
 			purchaseOrderHeader.setPoStatus(5);
@@ -532,7 +588,7 @@ public class PurchaseOrderController {
 					break;
 				}
 			}
-			
+			purchaseOrderHeader.setPoDate(DateConvertor.convertToYMD(purchaseOrderHeader.getPoDate()));
 			purchaseOrderHeader.setDelvDateRem(DateConvertor.convertToDMY(purchaseOrderHeader.getDelvDateRem()));
 			purchaseOrderHeader.setQuotationRefDate(DateConvertor.convertToDMY(purchaseOrderHeader.getQuotationRefDate()));
 			purchaseOrderHeader.setPoStatus(4);
@@ -752,17 +808,14 @@ public class PurchaseOrderController {
 			int poType = Integer.parseInt(request.getParameter("po_type"));
 			int quotationRefNo = Integer.parseInt(request.getParameter("quotation_ref_no"));
 			int suppId = Integer.parseInt(request.getParameter("supp_id"));
-			String poDate = request.getParameter("po_date");
-			
-			int payId=0;
-			
+			String poDate = request.getParameter("po_date"); 
 			int insuRem=Integer.parseInt(request.getParameter("insurance"));
 			int freidhtRem=Integer.parseInt(request.getParameter("freight"));
 			 
 			int tranId=Integer.parseInt(request.getParameter("transportation"));
 			String spRem= request.getParameter("sp_instruction");
-			int validity=0;
-			//float poTotalValue;
+			int validity=Integer.parseInt(request.getParameter("po_validity"));
+			int payId=Integer.parseInt(request.getParameter("pay_terms"));
 			int poStatus=0;
 		
 			int approvedId=0;
@@ -964,7 +1017,8 @@ public class PurchaseOrderController {
 	
 	@RequestMapping(value = "/submitEditPurchaseOrder", method = RequestMethod.POST)
 	public String submitEditPurchaseOrder(HttpServletRequest request, HttpServletResponse response) {
-		
+		String ret=null;
+		int flag = Integer.parseInt(request.getParameter("flag"));
 		try
 		{
 			int taxationRem = Integer.parseInt(request.getParameter("taxation"));
@@ -979,16 +1033,17 @@ public class PurchaseOrderController {
 			int quotationRefNo = Integer.parseInt(request.getParameter("quotation_ref_no"));
 			int suppId = Integer.parseInt(request.getParameter("supp_id"));
 			String poDate = request.getParameter("po_date");
-			
-			int payId=0;
+			int poStatus=Integer.parseInt(request.getParameter("status"));
+			int validity=Integer.parseInt(request.getParameter("po_validity"));
+			int payId=Integer.parseInt(request.getParameter("pay_terms"));
 			
 			int insuRem=Integer.parseInt(request.getParameter("insurance"));
 			int freidhtRem=Integer.parseInt(request.getParameter("freight"));
 			 
 			int tranId=Integer.parseInt(request.getParameter("transportation"));
 			String spRem= request.getParameter("sp_instruction");
-			int validity=0;
-			int poStatus=0;
+			 
+			
 		
 			int approvedId=0;
 			int delStatusId=0;
@@ -1039,9 +1094,20 @@ public class PurchaseOrderController {
 			e.printStackTrace();
 		}
 	 	
-		
-		
-		return "redirect:/showPurchaseOrder";
+		if(flag==0)
+		{
+			ret="redirect:/showPurchaseOrder";
+		}
+		else if(flag==1)
+		{
+			ret="redirect:/poListAtPurchase";
+		}
+		else if(flag==2)
+		{
+			ret="redirect:/poListAtDirector";
+		}
+		 
+		return ret;
 	}
 	 
 }

@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -51,6 +51,7 @@
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-switch/static/stylesheets/bootstrap-switch.css" />
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css" />
+	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <style>
 @media only screen and (min-width: 1200px) {
 	.franchisee_label, .menu_label {
@@ -83,10 +84,12 @@
 <body>
 
 
-	<%-- <c:url var="getBillList" value="/generateNewBill"></c:url> --%>
+	
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <c:url var="searchPo" value="/searchPo"></c:url>
+<c:url var="supplier" value="/supplier"></c:url>
+<c:url var="dateWisePo" value="/dateWisePo"></c:url>
 
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
@@ -127,11 +130,15 @@
 		<!-- END Breadcrumb -->
 		
 		<!-- BEGIN Main Content -->
-		<div class="box">
+		<div class="box" id="polist">
 			<div class="box-title">
 				<h3>
 					<i class="fa fa-bars"></i>PO List
 				</h3>
+				<div class="box-tool">
+								<a  onclick="showdatewisetable()">Show Datewise Record</a> <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
 
 			</div>
 			<div class=" box-content">
@@ -160,10 +167,11 @@
 				<div class=" box-content">
 					<div class="row">
 						<div class="col-md-12 table-responsive">
-						 
+						 <input type="hidden" name="flag" id="flag" value="${flag}">
 							<table class="table table-bordered table-striped fill-head "
 								style="width: 100%" id="table_grid">
 								<thead>
+								
 									<tr>
 										<th>Sr.No.</th>
 										<th>PO.No.</th>
@@ -189,6 +197,14 @@
 													  <c:set var = "color" value="black"/>
 													</c:otherwise>
 											</c:choose>
+											<c:choose>
+													<c:when test="${purchaseorderlist.poType==1}">
+													<c:set var = "type" value="Inclusive"/>
+													</c:when>
+													<c:otherwise>
+													  <c:set var = "type" value="Open"/>
+													</c:otherwise>
+											</c:choose>
 											
 											<c:choose>
 													<c:when test="${purchaseorderlist.poStatus==0}">
@@ -211,13 +227,13 @@
 																
 																<td align="left" style="color: <c:out value = "${color}"/>"><c:out
 																value="${purchaseorderlist.poNo}" /></td>
-																
+																 
 																<td align="left" style="color: <c:out value = "${color}"/>"><c:out
 																value="${purchaseorderlist.poDate}" />  </td>
-																
+																 
 																
 																<td align="left" style="color: <c:out value = "${color}"/>"><c:out	
-																value="${purchaseorderlist.poType}" />
+																value="${type}" />
 																</td>
 																
 																<c:forEach items="${supplierList}" var="supplierList"
@@ -282,7 +298,7 @@
 					</div>
 
 
-
+</div>
 
 		 
 
@@ -293,6 +309,102 @@
 
 	 
 	</div>
+	<div class="box" id="datewise_table" style="display: none">
+			<div class="box-title">
+				<h3>
+					<i class="fa fa-bars"></i>Date Wise
+				</h3>
+				<div class="box-tool">
+								<a  onclick="showdatewisetable()">PO List</a> <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
+
+			</div>
+			<div class=" box-content"> 
+			
+						<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">From Date:</label>
+									<div class="col-sm-5 col-lg-3 controls">
+										<input class="form-control date-picker" id="from_date" size="16"
+											 type="text" name="from_date" required />
+									
+										</div>
+										
+										<label class="col-sm-3 col-lg-2 control-label">To Date:</label>
+									<div class="col-sm-5 col-lg-3 controls">
+										<input class="form-control date-picker" id="to_date" size="16"
+											 type="text" name="to_date" required />
+									
+										</div>
+										
+										
+										</div><br>
+			
+			</div>
+			<div class=" box-content">
+								<div class="form-group">
+								
+								<div align="center" class="form-group">
+									<div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
+										
+				
+										<input class="btn btn-primary" value="View All" id="searchmixall"
+											onclick="searchPo()">
+
+									</div><br>
+									
+									<div align="center" id="loader" style="display: none">
+
+									<span>
+										<h4>
+											<font color="#343690">Loading</font>
+										</h4>
+									</span> <span class="l-1"></span> <span class="l-2"></span> <span
+										class="l-3"></span> <span class="l-4"></span> <span
+										class="l-5"></span> <span class="l-6"></span>
+								</div>	
+									
+									
+								</div>
+								</div>
+								</div>
+			 
+				<div class=" box-content">
+					<div class="row">
+						<div class="col-md-12 table-responsive">
+						 <input type="hidden" name="flag" id="flag" value="${flag}">
+							<table class="table table-bordered table-striped fill-head "
+								style="width: 100%" id="table_grid">
+								<thead>
+								
+									<tr>
+										<th>Sr.No.</th>
+										<th>PO.No.</th>
+										<th>PO Date</th>
+										<th>Po Type</th>
+										<th>Suppiler</th>
+										<th>Value</th>
+										<th>Status</th>
+										<th colspan="2">Action</th>
+
+									</tr>
+								</thead>
+								<tbody> 
+
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+
+</div>
+
+		 
+
+		 
+	 
+
+			</div>
 	<!-- END Main Content -->
 
 	<footer>
@@ -363,6 +475,8 @@
 		function search()
 		{
 			var search=document.getElementById("search").value; 
+			var flag = document.getElementById("flag").value;
+			$('#loader').show();
 			
 			$
 			.getJSON(
@@ -382,33 +496,79 @@
 						$('#loader').hide();
 
 						if (data == "") {
-							 
+							 	alert("No Record");
 
-						}
-					 
+						} 
+						
+						
+						$.getJSON(
+								'${supplier}',
 
-					  $.each(
-									data,
-									function(key, itemList) {
-									
+								{ 
+									ajax : 'true'
 
-										var tr = $('<tr></tr>');
-
+								},
+								function(sp) { 
 									 
+									
+								var splength=sp.length;
+								 
+
+					  $.each(data,function(key, itemList) {
+									
+										var spname;
+										var type;
+										var status;
+										var tr = $('<tr></tr>');
 										
-										
+										if(itemList.poType==1)
+											{
+											type="Inclusive";
+											}
+										else
+											{
+											type="Open";
+											}
+										if(itemList.poStatus==0)
+										{
+											status="Pending";
+										}
+									else if(itemList.poStatus==1)
+										{
+											status="Requested";
+										}
+									else if(itemList.poStatus==3)
+									{
+										status="Rejected";
+									}
+ 
 									  	tr.append($('<td></td>').html(key+1));
 
-									  	tr.append($('<td></td>').html(itemList.poNo));
-
+									  	tr.append($('<td></td>').html(itemList.poNo)); 
 									  	tr.append($('<td></td>').html(itemList.poDate));
-									  	tr.append($('<td></td>').html(itemList.poType));
-									  	tr.append($('<td></td>').html(itemList.suppId));
-									   
+									  	tr.append($('<td></td>').html(type));
+									  	for(var i=0;i<splength;i++)
+									  		{
+									  			if(itemList.suppId==sp[i].suppId)
+									  				{
+									  				spname=sp[i].suppName;
+									  				break;
+									  				}
+									  		}
+									  	tr.append($('<td></td>').html(spname)); 
 									  	tr.append($('<td></td>').html(itemList.poTotalValue));
-									  	tr.append($('<td></td>').html(itemList.poStatus));
+									  	tr.append($('<td></td>').html(status));
+									  	if(itemList.poStatus==0 || itemList.poStatus==3)
+									  		{
+									  		tr.append($('<td></td>').html('  <a href="poHeaderWithDetailed/'+itemList.poId+'/'+flag+'" class="action_btn" > <abbr title="Detail"><i class="fa fa-list"></i></abbr></a> <a href="deletePoRecord/'+itemList.poId+'" onClick="return confirm("Are you sure want to delete this record");"><abbr title="Delete"></abbr><spanclass="glyphicon glyphicon-remove"></span></a><a href="deletePoRecord/'+itemList.poId+'" onClick="return confirm("Are you sure want to delete this record");"><abbr title="Delete"></abbr><span class="glyphicon glyphicon-remove"></span></a>'));
+										  	
+									  		}
+									  	else
+									  		{
+									  		tr.append($('<td></td>').html('  <a href="poHeaderWithDetailed/'+itemList.poId+'/'+flag+'" class="action_btn" > <abbr title="Detail"><i class="fa fa-list"></i></abbr></a>'));
+										  	
+									  		}
 									  	 
-									  	tr.append($('<td></td>').html('  <a href="poHeaderWithDetailed/'+itemList.poId+'" class="action_btn" > <abbr title="Detail"><i class="fa fa-list"></i></abbr></a> <c:choose> <c:when test="'+itemList.poStatus==0+'"> <a href="deletePoRecord/'+itemList.poId+'" onClick="return confirm('Are you sure want to delete this record');"><abbr title='Delete'></abbr><spanclass="glyphicon glyphicon-remove"></span></a> </c:when> <c:when test="'+itemList.poStatus==3+'"> <a href="deletePoRecord/'+itemList.poId+'" onClick="return confirm('Are you sure want to delete this record');"><abbr title='Delete'></abbr><span class="glyphicon glyphicon-remove"></span></a> </c:when> </c:choose> '));
 									  	 
 
 
@@ -420,6 +580,8 @@
 										 
 
 									})
+									
+					});
 						
 					});
 			
@@ -429,7 +591,145 @@
 	
 		
 	</script>
+	<script>
+		function searchPo()
+		{
+			var from_date=document.getElementById("from_date").value; 
+			var to_date=document.getElementById("to_date").value; 
+			var flag = document.getElementById("flag").value;
+			$('#loader').show();
+			$
+			.getJSON(
+					'${dateWisePo}',
 
+					{
+						 
+						from_date : from_date,
+						to_date : to_date,
+						ajax : 'true'
+
+					},
+					function(data) {
+						
+						
+						$('#table_grid td').remove();
+						$('#loader').hide();
+
+						if (data == "") {
+							 
+							alert("No Record");
+						} 
+						
+						
+						$.getJSON(
+								'${supplier}',
+
+								{ 
+									ajax : 'true'
+
+								},
+								function(sp) { 
+									 
+									
+								var splength=sp.length;
+								 
+
+					  $.each(data,function(key, itemList) {
+									
+										var spname;
+										var type;
+										var status;
+										var tr = $('<tr></tr>');
+										
+										if(itemList.poType==1)
+											{
+											type="Inclusive";
+											}
+										else
+											{
+											type="Open";
+											}
+										if(itemList.poStatus==0)
+										{
+											status="Pending";
+										}
+									else if(itemList.poStatus==1)
+										{
+											status="Requested";
+										}
+									else if(itemList.poStatus==3)
+									{
+										status="Rejected";
+									}
+ 
+									  	tr.append($('<td></td>').html(key+1));
+
+									  	tr.append($('<td></td>').html(itemList.poNo)); 
+									  	tr.append($('<td></td>').html(itemList.poDate));
+									  	tr.append($('<td></td>').html(type));
+									  	for(var i=0;i<splength;i++)
+									  		{
+									  			if(itemList.suppId==sp[i].suppId)
+									  				{
+									  				spname=sp[i].suppName;
+									  				break;
+									  				}
+									  		}
+									  	tr.append($('<td></td>').html(spname)); 
+									  	tr.append($('<td></td>').html(itemList.poTotalValue));
+									  	tr.append($('<td></td>').html(status));
+									  	 
+									  	if(itemList.poStatus==0 || itemList.poStatus==3)
+								  		{
+								  		tr.append($('<td></td>').html('  <a href="poHeaderWithDetailed/'+itemList.poId+'/'+flag+'" class="action_btn" > <abbr title="Detail"><i class="fa fa-list"></i></abbr></a> <a href="deletePoRecord/'+itemList.poId+'" onClick="return confirm("Are you sure want to delete this record");"><abbr title="Delete"></abbr><spanclass="glyphicon glyphicon-remove"></span></a><a href="deletePoRecord/'+itemList.poId+'" onClick="return confirm("Are you sure want to delete this record");"><abbr title="Delete"></abbr><span class="glyphicon glyphicon-remove"></span></a>'));
+									  	
+								  		}
+								  	else
+								  		{
+								  		tr.append($('<td></td>').html('  <a href="poHeaderWithDetailed/'+itemList.poId+'/'+flag+'" class="action_btn" > <abbr title="Detail"><i class="fa fa-list"></i></abbr></a>'));
+									  	
+								  		}
+
+
+
+
+
+										$('#table_grid tbody').append(tr);
+
+										 
+
+									})
+									
+					});
+						
+					});
+			
+			
+		}
+		
+	
+		
+	</script>
+<script type="text/javascript">
+	var div=0
+	function showdatewisetable() {
+		
+		if(div==0)
+		{
+			$('#polist').hide();
+			$("#datewise_table").show();
+			div=1;
+		}
+		else if(div==1)
+		{
+			$('#polist').show();
+			$("#datewise_table").hide();
+			div=0;
+		}
+	 
+}
+		
+	</script>
 
 </body>
 </html>

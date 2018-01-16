@@ -344,7 +344,7 @@
 				<div class="col-md-2" >Transportation</div>
 									<div class="col-md-3">
 										<select name="transportation" id="transportation" class="form-control" tabindex="6" required>
-										<option value="-1" disabled="disabled" selected="selected">Select Pay Terms</option>
+										<option value="" disabled="disabled" selected="selected">Select Pay Terms</option>
 											 <c:forEach items="${transporterList}" var="transporterList"
 							varStatus="count">
 							   <option value="${transporterList.tranId}"><c:out value="${transporterList.tranName}"/></option>
@@ -357,7 +357,7 @@
 									<div class="col-md-2" >Freight</div>
 									<div class="col-md-3">
 										<select name="freight" id="freight" class="form-control" tabindex="6" required>
-										<option value="-1" disabled="disabled"selected="selected">Select Freight</option>
+										<option value="" disabled="disabled"selected="selected">Select Freight</option>
 										<option value="1">Not Applicable</option>
 										<option value="2">On Your Side</option>
 										<option value="3">On Our Side</option>
@@ -368,7 +368,7 @@
 								<div class="col-md-2" >Insurance</div>
 									<div class="col-md-3">
 										<select name="insurance" id="insurance" class="form-control" tabindex="6" required>
-										<option value="-1" disabled="disabled" selected="selected">Select Insurance Terms</option>
+										<option value="" disabled="disabled" selected="selected">Select Insurance Terms</option>
 										<option value="1">Not Applicable</option>
 										<option value="2">On Your Side</option>
 										<option value="3">On Our Side</option>
@@ -376,7 +376,7 @@
 									</div>
 									<div class="col-md-2" >Sp.Instrucion</div>
 									<div class="col-md-3">
-					<input type="text" name="sp_instruction" placeholder="Enter Special Instruction" id="sp_instruction" class="form-control" placeholder="Enter Special Instruction" required>
+					<input type="text" name="sp_instruction" placeholder="Enter Special Instruction" id="sp_instruction" class="form-control"  required>
 				</div>
 									</div><br/><br/>
 			

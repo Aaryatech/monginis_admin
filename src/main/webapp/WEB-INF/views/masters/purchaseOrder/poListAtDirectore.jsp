@@ -164,11 +164,17 @@
 											<c:choose>
 													<c:when test="${purchaseorderlist.poStatus==1}">
 													<c:set var = "color" value="red"/>
-													</c:when>
-													
-													
+													</c:when> 
 													<c:otherwise>
 													  <c:set var = "color" value="black"/>
+													</c:otherwise>
+											</c:choose>
+											<c:choose>
+													<c:when test="${purchaseorderlist.poType==1}">
+													<c:set var = "type" value="Inclusive"/>
+													</c:when>
+													<c:otherwise>
+													  <c:set var = "type" value="Open"/>
 													</c:otherwise>
 											</c:choose>
 											
@@ -194,7 +200,7 @@
 																
 																
 																<td align="left" style="color: <c:out value = "${color}"/>"><c:out	
-																value="${purchaseorderlist.poType}" />
+																value="${type}" />
 																</td>
 																
 																<c:forEach items="${supplierList}" var="supplierList"

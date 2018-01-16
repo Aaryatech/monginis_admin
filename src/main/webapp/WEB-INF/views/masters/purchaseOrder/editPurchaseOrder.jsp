@@ -156,6 +156,7 @@
 				<div class="col-md-2">PO Date</div> 
 				<div class="col-md-3">
 				<input type="text" id="po_date" name="po_date" value="${purchaseOrderHeader.poDate}" class="form-control" readonly>
+				<input type="hidden" id="flag" name="flag" value="${flag}" class="form-control">
 				<input type="hidden" id="status" name="status" value="${purchaseOrderHeader.poStatus}" class="form-control">
 				
 				</div>
@@ -186,18 +187,18 @@
 									</div>
 									<div class="col-md-2">Quotation Ref. No.  </div>
 				<div class="col-md-3">
-					<input type="text" name="quotation_ref_no" id="quotation_ref_no" value="${purchaseOrderHeader.quotationRefNo}" class="form-control">
+					<input type="text" name="quotation_ref_no" id="quotation_ref_no" value="${purchaseOrderHeader.quotationRefNo}" class="form-control" required>
 				</div>
 				 
 			</div><br/>
 			<div class="box-content">
 				<div class="col-md-2">Kind Attention</div>
 				<div class="col-md-4">
-					<input type="text" name="kind_attn" id="kind_attn" value="${purchaseOrderHeader.kindAttn}" class="form-control">
+					<input type="text" name="kind_attn" id="kind_attn" value="${purchaseOrderHeader.kindAttn}" class="form-control" required>
 				</div>
 				<div class="col-md-2">Delivery At</div>
 				<div class="col-md-3">
-					<input type="text" name="delv_at" id="delv_at" value="${purchaseOrderHeader.delvAtRem}" class="form-control">
+					<input type="text" name="delv_at" id="delv_at" value="${purchaseOrderHeader.delvAtRem}" class="form-control" required>
 				</div>
 				</div><br/>
 			<div class="box-content">
@@ -225,7 +226,7 @@
 									<div class="col-md-2">Delivery Date  </div>
 				<div class="col-md-3">
 					<input type="text" name="delv_date" id="delv_date" class="form-control date-picker" 
-					value="${purchaseOrderHeader.delvDateRem}">
+					value="${purchaseOrderHeader.delvDateRem}" required>
 				</div>
 				 
 			</div> <br/>
@@ -253,7 +254,7 @@
 									</div>
 									<div class="col-md-2" >Quotation Ref. Date</div>
 									<div class="col-md-3">
-										 <input type="text" name="quotation_date" id="quotation_date" value="${purchaseOrderHeader.quotationRefDate}" class="form-control date-picker">
+										 <input type="text" name="quotation_date" id="quotation_date" value="${purchaseOrderHeader.quotationRefDate}" class="form-control date-picker" required>
 									</div>
 									</div><br><br>
 									<hr/>
@@ -400,10 +401,18 @@
 				<div class="col-md-2" >Payment Terms</div>
 									<div class="col-md-3">
 										<select name="pay_terms" id="pay_terms" class="form-control" tabindex="6">
-										<option value="-1">Select Pay Terms</option>
-											 <c:forEach items="${paymentTermsList}" var="paymentTermsList"
+										<c:forEach items="${supPaymentTerms}" var="supPaymentTerms" varStatus="count">
+												<c:choose>
+													<c:when test="${supPaymentTerms.payId==purchaseOrderHeader.payId}">
+										
+														<option selected value="${supPaymentTerms.payId}">${supPaymentTerms.payDesc}</option>
+													</c:when>
+										
+												</c:choose> 
+										</c:forEach> 
+											 <c:forEach items="${supPaymentTerms}" var="supPaymentTerms"
 							varStatus="count">
-							   <option value="${paymentTermsList.payId}"><c:out value="${paymentTermsList.payDesc}"/></option>
+							   <option value="${supPaymentTerms.payId}"><c:out value="${supPaymentTerms.payDesc}"/></option>
  													 
 												</c:forEach>
 						
@@ -412,7 +421,7 @@
 									</div>
 									<div class="col-md-2">PO Validity </div>
 				<div class="col-md-3">
-					<input type="text" name="po_validity" id="po_validity" class="form-control">
+					<input type="text" name="po_validity" id="po_validity" value="${purchaseOrderHeader.validity}" class="form-control">
 				</div>
 				</div><br/>
 				 	<div class="box-content">
@@ -443,8 +452,8 @@
 									</div>
 									<div class="col-md-2" >Freight</div>
 									<div class="col-md-3">
-										<select name="freight" id="freight" class="form-control" tabindex="6">
-										<option value="-1">Select Freight</option>
+										<select name="freight" id="freight" class="form-control" tabindex="6" required>
+										<option value="">Select Freight</option>
 										<option value="1">Not Applicable</option>
 										<option value="2">On Your Side</option>
 										<option value="3">On Our Side</option>
@@ -454,8 +463,8 @@
 									<div class="box-content">
 								<div class="col-md-2" >Insurance</div>
 									<div class="col-md-3">
-										<select name="insurance" id="insurance" class="form-control" tabindex="6">
-										<option value="-1">Select Insurance Terms</option>
+										<select name="insurance" id="insurance" class="form-control" tabindex="6" required>
+										<option value="">Select Insurance Terms</option>
 										<option value="1">Not Applicable</option>
 										<option value="2">On Your Side</option>
 										<option value="3">On Our Side</option>
@@ -463,7 +472,7 @@
 									</div>
 									<div class="col-md-2" >Sp.Instrucion</div>
 									<div class="col-md-3">
-					<input type="text" name="sp_instruction" id="sp_instruction" class="form-control" placeholder="Enter Special Instruction">
+					<input type="text" name="sp_instruction" id="sp_instruction" class="form-control" value="${purchaseOrderHeader.spRem}" required>
 				</div>
 									</div><br/><br/>
 			
@@ -509,8 +518,10 @@
 				var po_date = $("#po_date").val();
 				var rm_id = $("#rm_id").val();
 				var disc_per = $("#disc_per").val();
-				$('#loader').show();
 				
+				
+				if(validate()){	
+					$('#loader').show();
 				$
 				.getJSON(
 						'${getRmRateAndTax}',
@@ -620,8 +631,64 @@
 				}
 				
 		});
+				}
 			 
 		}
+	</script>
+	<script type="text/javascript">
+		function validate() {
+			
+
+			 
+	 
+			var rm_qty = $("#rm_qty").val();
+			var supp_id = $("#supp_id").val();
+  
+			var rm_id = $("#rm_id").val();
+			var disc_per = $("#disc_per").val();
+
+			var isValid = true;
+
+			if (rm_qty=="") {
+
+				isValid = false;
+				alert("Please enter valid qty");
+
+			}
+			else if (isNaN(rm_qty) || rm_qty <= 0){
+				isValid = false;
+				alert("Please enter valid qty");
+			}
+			else if (rm_id == "" || rm_id == null) {
+
+				isValid = false;
+				alert("Please select RM Item");
+
+			}
+			
+			else if (supp_id == "" || supp_id == null) {
+
+				isValid = false;
+				alert("Please select Supplier");
+
+			}
+			
+			else if (  disc_per=="") {
+
+				isValid = false;
+				alert("Please enter valid Discount %");
+				
+
+			}
+			else if(isNaN(disc_per) || disc_per < 0)
+				{
+				isValid = false;
+				alert("Please enter valid Discount %");
+				}
+			return isValid;
+
+		}
+		
 	</script>
 
 	<script type="text/javascript">
@@ -795,26 +862,7 @@
 		
 	</script>
 
-<!--   <script>
-    /*
-//  jquery equivalent
-jQuery(document).ready(function() {
-   jQuery(".main-table").clone(true).appendTo('#table-scroll .faux-table').addClass('clone');
-   jQuery(".main-table.clone").clone(true).appendTo('#table-scroll .faux-table').addClass('clone2');
- });
-*/
-(function() {
-  var fauxTable = document.getElementById("faux-table");
-  var mainTable = document.getElementById("table_grid");
-  var clonedElement = table_grid.cloneNode(true);
-  var clonedElement2 = table_grid.cloneNode(true);
-  clonedElement.id = "";
-  clonedElement2.id = "";
-  fauxTable.appendChild(clonedElement);
-  fauxTable.appendChild(clonedElement2);
-})();
-
-</script> -->
+ 
 
 
 	<!--basic scripts-->
