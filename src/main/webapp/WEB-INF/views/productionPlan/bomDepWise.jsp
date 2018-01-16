@@ -79,10 +79,10 @@
 					<h1>
 					 <c:choose> 
 					 	<c:when test="${fromDept==14}">
-						<i class="fa fa-file-o"></i> Search Bill Of Material For PRODUCTION
+						<i class="fa fa-file-o"></i> Search Bill Of Material For Production
 						</c:when>
 						<c:when test="${fromDept==15}">
-						<i class="fa fa-file-o"></i> Search Bill Of Material For MIXING
+						<i class="fa fa-file-o"></i> Search Bill Of Material For Mixing
 						</c:when>
 						<c:otherwise>
 						<i class="fa fa-file-o"></i> Search Bill Of Department Wise
@@ -116,7 +116,7 @@
 					
 					
 						<div class="col-md-12 table-responsive">
-							<table class="table table-bordered table-striped fill-head "
+							<table class="table table-bordered table-striped"
 								style="width: 100%" id="table_grid1">
 								<thead>
 									<tr>

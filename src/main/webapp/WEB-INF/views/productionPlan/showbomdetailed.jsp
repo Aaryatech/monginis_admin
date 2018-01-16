@@ -96,7 +96,7 @@
 								<i class="fa fa-table"></i>Bill of Material Request Detailed
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/getBomList">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 
@@ -188,7 +188,7 @@
 								<div class=" box-content">
 									<div class="row">
 										<div class="col-md-12 table-responsive">
-											<table class="table table-bordered table-striped fill-head "
+											<table class="table table-bordered table-advance"
 												style="width: 100%" id="table_grid">
 												<thead>
 													<tr>
@@ -227,7 +227,7 @@
 																value="${bomwithdetaild.reqDetailId}" />'
 																		class="form-control"
 																		value=<c:out
-																value="${bomwithdetaild.rmIssueQty}" /> pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
+																value="${bomwithdetaild.rmReqQty}"/> pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
 																</c:when>
 																<c:otherwise>
 																	<td><c:out value="${bomwithdetaild.rmIssueQty}" /></td>

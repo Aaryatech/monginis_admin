@@ -182,52 +182,39 @@ div.panel {
 
 								</div>
 
-
-
-								<div class="form-group">
-									<div>
-										<div class="colOuter" style="display: none"
+								<div class="form-group" style="display: none"
 											id=select_month_year>
-											<div class="col-md-2">
-												<div class="col1title">Select Month From :</div>
-											</div>
-											<div class="col-md-2" align="left">
-
+									
+												<label class="col-sm-3 col-lg-2 control-label">
+												Select Month From</label>
+											<div class="col-sm-5 col-lg-3 controls">
 												<input type='text' placeholder="Select From Month"
-													value="2017-12-12" name="from_stockdate" required
+													value="16-01-2018" name="from_stockdate" required
 													class="form-control date-picker" />
 											</div>
 
 											<div class="col3"></div>
 
-											<div class="col-md-2">
-												<div class="col1title">To :</div>
-											</div>
-											<div class="col-md-2" align="left">
+												<label class="col-sm-3 col-lg-2 control-label">To :</label>
+											<div class="col-sm-5 col-lg-3 controls">
 												<input type='text' placeholder="Select To Month"
-													value="2017-12-12" name="to_stockdate" required
+													value="16-01-2018" name="to_stockdate" required
 													class="form-control date-picker" />
 											</div>
 
 										</div>
 
-										<div class="colOuter" style="display: none" id=select_date>
-											<div class="col-md-2">
-												<div class="col1title">From Date:</div>
-											</div>
-											<div class="col-md-2" align="left">
-
+										<div class="form-group" style="display: none" id=select_date>
+											<label class="col-sm-3 col-lg-2 control-label">From Date:</label>
+											<div class="col-sm-5 col-lg-3 controls">
 												<input id="fromdatepicker" class="form-control date-picker"
 													placeholder="From Date" name="from_datepicker" type="text">
-
 											</div>
 
 											<div class="col3"></div>
 
-											<div class="col-md-2">
-												<div class="col1title">To Date:</div>
-											</div>
-											<div class="col-md-2" align="left">
+											<label class="col-sm-3 col-lg-2 control-label">To Date:</label>
+											<div class="col-sm-5 col-lg-3 controls">
 												<input id="todatepicker" class="form-control date-picker"
 													placeholder="To Date" name="to_datepicker" type="text">
 
@@ -235,9 +222,7 @@ div.panel {
 
 										</div>
 
-									</div>
 
-								</div>
 								<div  class="form-group">
 											<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 								             <input type="submit" class="btn btn-primary" value="Search">
