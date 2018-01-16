@@ -136,9 +136,9 @@
 								<thead>
 									<tr>
 										<th>Sr.No.</th>
-										<th>Raw Material Name</th>
+										<th style="width: 400px">Raw Material Name</th>
 										
-										<th> Uom</th>
+										<th style="width: 100px"> Uom</th>
 										<th style="width: 200px"> Qty</th>
 										
 
@@ -175,20 +175,13 @@
 									</table>
 								</div>
 								</div>
-							</div>
-							
-							
-							
-												<div align="center" class="form-group">
-												<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+									<div class="form-group">
+												<div class="col-sm-9 col-sm-offset-3 col-lg-11 col-lg-offset-3">
 										
 													<input type="submit" class="btn btn-primary" value="Submit">
 												</div>
-											</div>
-													
-							
-									
-
+									</div>
+							</div>
 							
 							<div class="box-content">
 							
