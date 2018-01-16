@@ -321,6 +321,8 @@ public class BmsToStoreBomController {
 		HttpSession session=request.getSession();
 		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
 		FrItemStockConfigureList settingList = null;
+		
+		FrItemStockConfigureList settingList2 = null;
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		RestTemplate rest = new RestTemplate();
 		
@@ -334,8 +336,18 @@ public class BmsToStoreBomController {
 			settingList = rest.postForObject(Constants.url + "getDeptSettingValue", map,
 					FrItemStockConfigureList.class);
 			
+			
 			map = new LinkedMultiValueMap<String, Object>();
-			map.add("fromDept",userResponse.getUser().getDeptId());         
+			String settingKey2 = new String(); 
+			settingKey2 = "BMS"; 
+			map.add("settingKeyList", settingKey2);
+			
+			
+			settingList2 = rest.postForObject(Constants.url + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("fromDept",settingList2.getFrItemStockConfigure().get(0).getSettingValue());         
 			map.add("toDept",settingList.getFrItemStockConfigure().get(0).getSettingValue());           
 			map.add("status","0"); 
 			

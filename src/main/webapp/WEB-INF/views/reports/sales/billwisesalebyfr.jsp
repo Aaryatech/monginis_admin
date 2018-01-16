@@ -289,9 +289,18 @@
 				<div id="chart"  "> <br><br> <br>
 	<hr>
         
+    <table class="columns">
+      <tr>
+        <td><div id="chart_div" style="width: 50%" ></div></td>
+        <td><div id="PieChart_div" style="width: 50%"></div></td>
+      </tr>
+    </table>
    
-    <div id="chart_div" style="width: 100%; height: 500px;"></div>
-			 
+    <!-- <div id="chart_div" style="width: 100%; height: 700px;"></div>
+    
+    
+     <div id="PieChart_div" style="width: 100%; height: 700px;"></div>
+			  -->
 				 
 				</div>
 			</form>
@@ -517,11 +526,22 @@ function showChart(){
  
 							   var chartDiv = document.getElementById('chart_div');
 							   document.getElementById("chart_div").style.border = "thin dotted red";
+							   
+							   
+							   var PiechartDiv = document.getElementById('PieChart_div');
+							   document.getElementById("PieChart_div").style.border = "thin dotted red";
+							   
+							   
 						       var dataTable = new google.visualization.DataTable();
-						      // alert("datatable "+dataTable);
 						       dataTable.addColumn('string', 'Franchisee Name'); // Implicit domain column.
 						       dataTable.addColumn('number', 'Base Value'); // Implicit data column.
 						       dataTable.addColumn('number', 'Total');
+						       
+						       var piedataTable = new google.visualization.DataTable();
+						       piedataTable.addColumn('string', 'Franchisee Name'); // Implicit domain column.
+						       piedataTable.addColumn('number', 'Total');
+						       
+						       
 						       $.each(data,function(key, report) {
 
 						    	   
@@ -560,8 +580,17 @@ function showChart(){
 								            // ["Sai", 12,19],
 								             
 								           ]);
-								     }) 
-								   // var options = {title: 'Population (in millions)'};  
+								   
+								   
+								   
+								   piedataTable.addRows([
+									 
+									   
+									   [frName, total],
+									   
+								          
+								           ]);
+								     }) // end of  $.each(data,function(key, report) {-- function
 
             // Instantiate and draw the chart.
           						    
@@ -570,7 +599,9 @@ function showChart(){
           width: 500,
           chart: {
             title: 'Date wise Tax Graph',
-            subtitle: 'Total tax & Taxable Amount per day'
+            subtitle: 'Total tax & Taxable Amount per day',
+           
+
           },
           series: {
             0: { axis: 'distance' }, // Bind series 0 to an axis named 'distance'.
@@ -595,8 +626,15 @@ function showChart(){
 						       
 						        var chart = new google.visualization.ColumnChart(
 						                document.getElementById('chart_div'));
+						        
+						        var Piechart = new google.visualization.PieChart(
+						                document.getElementById('PieChart_div'));
 						       chart.draw(dataTable,
-						          {width: 800, height: 600, title: 'Sales Summary Group By Fr Chart'});
+						          {width: 600, height: 600, title: 'Sales Summary Group By Fr'});
+						       
+						       
+						       Piechart.draw(piedataTable,
+								          {width: 600, height: 600, title: 'Sales Summary Group By Fr',is3D:true});
 						      // drawMaterialChart();
 							 };
 							 
