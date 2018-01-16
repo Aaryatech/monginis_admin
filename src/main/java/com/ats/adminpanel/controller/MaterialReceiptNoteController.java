@@ -64,7 +64,7 @@ public class MaterialReceiptNoteController {
 
 	@RequestMapping(value = "/gateEntries", method = RequestMethod.GET)
 	public ModelAndView gateEntries(HttpServletRequest request, HttpServletResponse response) {
-		Constants.mainAct =9;
+		Constants.mainAct=10;
 		Constants.subAct =55;
 
 		ModelAndView model = new ModelAndView("masters/gateEntryList");//
@@ -955,9 +955,7 @@ public class MaterialReceiptNoteController {
 
 	@RequestMapping(value = "/showAllStoreMaterialReciept", method = RequestMethod.GET)
 	public ModelAndView showAllStoreMaterialReciept(HttpServletRequest request, HttpServletResponse response) {
-		/*
-		 * Constants.mainAct = 17; Constants.subAct=184;
-		 */
+		  Constants.mainAct =10; Constants.subAct=61;
 		ModelAndView model = new ModelAndView("masters/allStoreMaterialReciept");
 		List<SupplierDetails> supplierDetailsList = new ArrayList<SupplierDetails>();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -990,9 +988,8 @@ public class MaterialReceiptNoteController {
 
 	@RequestMapping(value = "/allDirectorMaterialReceiptNote", method = RequestMethod.GET)
 	public ModelAndView allMaterialReceiptNote(HttpServletRequest request, HttpServletResponse response) {
-		/*
-		 * Constants.mainAct = 17; Constants.subAct=184;
-		 */
+		Constants.mainAct =21; 
+		 Constants.subAct=104;
 
 		ModelAndView model = new ModelAndView("masters/allMaterialReceiptNote");
 		String viewAll = request.getParameter("viewAll");
@@ -1173,10 +1170,7 @@ public class MaterialReceiptNoteController {
 
 	@RequestMapping(value = "/allMaterialRecieptAccList", method = RequestMethod.GET)
 	public ModelAndView allMaterialRecieptAccList(HttpServletRequest request, HttpServletResponse response) {
-		/*
-		 * Constants.mainAct = 17; Constants.subAct=184;
-		 */
-
+		 Constants.mainAct =11; Constants.subAct=73;
 		ModelAndView model = new ModelAndView("masters/allMaterialRecieptAccList");
 
 		 
