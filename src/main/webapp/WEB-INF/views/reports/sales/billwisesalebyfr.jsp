@@ -289,28 +289,29 @@
 				<div id="chart"  "> <br><br> <br>
 	<hr>
         
-    <table class="columns">
+    <!-- <table class="columns">
       <tr>
         <td><div id="chart_div" style="width: 50%" ></div></td>
         <td><div id="PieChart_div" style="width: 50%"></div></td>
       </tr>
-    </table>
+    </table> -->
    
-    <!-- <div id="chart_div" style="width: 100%; height: 700px;"></div>
+    <div id="chart_div" style="width: 100%; height: 700px;"></div>
     
     
      <div id="PieChart_div" style="width: 100%; height: 700px;"></div>
-			  -->
+			 
 				 
 				</div>
 			</form>
 		</div>
 	</div>
 	<!-- END Main Content -->
-
+	
 	<footer>
 	<p>2017 © Monginis.</p>
 	</footer>
+	
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>

@@ -269,19 +269,19 @@
 							</table>
 						</div>
 					</div>
-
 				</div>
 				
-				<!-- <table class="columns">
+	
+          
+   <!--  <table class="columns">
       <tr>
-        <td><div id="chart_div" style="width: 50%" ></div></td>
-        <td><div id="PieChart_div" style="width: 50%"></div></td>
+        <td><div id="chart_div" style="width: 100%" ></div></td>
+        <td><div id="PieChart_div" style="width: 100%"></div></td>
       </tr>
     </table>
-     -->
-     
-      <div id="chart_div" style="width: 50%" ></div>
-        <div id="PieChart_div" style="width: 50%"></div>
+      -->
+      <div id="chart_div" style="width: 100%" ></div>
+        <div id="PieChart_div" style="width: 100%"></div>
 			</form>
 		</div>
 	</div>
@@ -466,8 +466,10 @@ function showChart(){
 		
 	$("#PieChart_div").empty();
 	$("#chart_div").empty();
-		document.getElementById('chart').style.display = "block";
-		  // document.getElementById("table_grid").style="display:none";
+		document.getElementById('chart_div').style.display = "block";
+		document.getElementById('PieChart_div').style.display = "block";
+
+		   document.getElementById("table_grid").style="display:none";
 		 
 		   var selectedFr = $("#selectFr").val();
 			var routeId=$("#selectRoute").val();
@@ -519,7 +521,7 @@ function showChart(){
 							   
 						       var dataTable = new google.visualization.DataTable();
 						       dataTable.addColumn('string', 'Franchisee Name'); // Implicit domain column.
-						       dataTable.addColumn('number', 'Base Value'); // Implicit data column.
+						       dataTable.addColumn('number', 'netValue'); // Implicit data column.
 						       dataTable.addColumn('number', 'Total');
 						       
 						       var piedataTable = new google.visualization.DataTable();
@@ -533,13 +535,13 @@ function showChart(){
 						    	   
 						    	   var royPer=3;											  	
 									var netValue=report.tBillTaxableAmt-(report.tGrnTaxableAmt+report.tGvnTaxableAmt);
-									netValue=netValue.toFixed();
+									//netValue=netValue.toFixed();
 									
 								  //	alert("netVAlue"+netValue);
 								  	//alert("Per"+royPer);
-								  	rAmt=parseFloat(netValue) * parseFloat(royPer)/100;
+								  	var rAmt=netValue * royPer/100;
 								  	//alert("Amt="+rAmt)
-								  	rAmt=rAmt.toFixed(2);
+								  //	rAmt=rAmt.toFixed(2);
 						    	   
 						    	  
 									var frName=report.frName;
@@ -547,9 +549,9 @@ function showChart(){
 									//var date= item.billDate+'\nTax : ' + item.tax_per + '%';
 									
 								   dataTable.addRows([
-									 
+									  
 									   
-									   [frName, rAmt,aAmt],
+									   [frName, netValue,rAmt],
 									   
 								            // ["Sai", 12,14],
 								             //["Sai", 12,16],
@@ -558,7 +560,7 @@ function showChart(){
 								             
 								           ]);
 								   
-								   
+								   alert("g1");
 								   
 								   piedataTable.addRows([
 									 
@@ -607,11 +609,11 @@ function showChart(){
 						        var Piechart = new google.visualization.PieChart(
 						                document.getElementById('PieChart_div'));
 						       chart.draw(dataTable,
-						          {width: 600, height: 600, title: 'Sales Royalty Group By Fr'});
+						          {width: 1100, height: 600, title: 'Sales Royalty Group By Fr'});
 						       
 						       
 						       Piechart.draw(piedataTable,
-								          {width: 600, height: 600, title: 'Sales royalty Group By Fr',is3D:true});
+								          {width: 1100, height: 600, title: 'Sales royalty Group By Fr',is3D:true});
 						      // drawMaterialChart();
 							 };
 							 

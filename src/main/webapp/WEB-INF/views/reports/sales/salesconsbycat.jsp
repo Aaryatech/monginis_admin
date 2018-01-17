@@ -77,6 +77,12 @@
 
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/resources/img/favicon.png">
+	
+	
+	<script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
 </head>
 <body>
 
@@ -223,6 +229,7 @@
 							
 						<button class="btn btn-info" onclick="searchReport()">Search
 							 Report</button>
+													<button class="btn search_btn" onclick="showChart()">Graph</button>
 							
 							<a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleRoyaltyByCatPdf"
 								target="_blank">PDF</a>
@@ -286,6 +293,10 @@
 					</div>
 
 				</div>
+				
+				<div id="chart_div" style="width: 100%; height: 700px;"></div>
+				<div id="PieChart_div" style="width: 100%; height: 700px;"></div>
+				
 			</form>
 		</div>
 	</div>
@@ -393,14 +404,7 @@
 														
 													  	tr.append($('<td></td>').html(netQty));
 													  	tr.append($('<td></td>').html(netValue));
-													  	var royPer=3;
-													  	/* tr.append($('<td></td>').html(royPer));
 													  	
-													  	rAmt=netValue*royPer/100;
-													  	rAmt=rAmt.toFixed(2);
-													  	
-													  	tr.append($('<td></td>').html(rAmt));
-													  	 */
 														$('#table_grid tbody')
 																.append(
 																		tr);
@@ -415,6 +419,161 @@
 			
 		}
 	</script>
+	
+	
+	<script type="text/javascript">
+function showChart(){
+	
+	alert("Hi");
+		
+	$("#PieChart_div").empty();
+	$("#chart_div").empty();
+		//document.getElementById('chart').style.display = "block";
+		   document.getElementById("table_grid").style="display:none";
+		 
+		   var selectedFr = $("#selectFr").val();
+			var routeId=$("#selectRoute").val();
+			
+			var from_date = $("#fromDate").val();
+			var to_date = $("#toDate").val();
+			//alert("fr "+selectedFr);
+			//alert(from_date);
+			//alert(to_date);
+			//alert(routeId);
+			
+				  //document.getElementById('btn_pdf').style.display = "block";
+			$.getJSON(
+					'${getBillList}',
+
+					{
+						fr_id_list : JSON.stringify(selectedFr),
+						fromDate : from_date,
+						toDate : to_date,
+						route_id:routeId,
+						ajax : 'true'
+
+					},
+					function(data) {
+
+								alert(data);
+							 if (data == "") {
+									alert("No records found !!");
+
+								}
+							 var i=0;
+							 
+							 google.charts.load('current', {'packages':['corechart', 'bar']});
+							 google.charts.setOnLoadCallback(drawStuff);
+
+							 function drawStuff() {
+								 
+								// alert("Inside DrawStuff");
+ 
+							   var chartDiv = document.getElementById('chart_div');
+							   document.getElementById("chart_div").style.border = "thin dotted red";
+							   
+							   
+							   var PiechartDiv = document.getElementById('PieChart_div');
+							   document.getElementById("PieChart_div").style.border = "thin dotted red";
+							   
+							   
+						       var dataTable = new google.visualization.DataTable();
+						       dataTable.addColumn('string', 'Category'); // Implicit domain column.
+						      dataTable.addColumn('number', 'Net Qty'); // Implicit data column.
+						       dataTable.addColumn('number', 'Net Value');
+						       
+						       var piedataTable = new google.visualization.DataTable();
+						       piedataTable.addColumn('string', 'Category'); // Implicit domain column.
+						       piedataTable.addColumn('number', 'Net Value');
+						       
+						       $
+								.each(
+										data.categoryList,
+										function(key, cat) {
+											$
+											.each(
+													data.salesReportRoyalty,
+													function(key, report) {
+														
+														if(cat.catId==report.catId){
+															var netQty=report.tBillQty-(report.tGrnQty+report.tGvnQty);
+														  	netQty=netQty.toFixed(2);
+														  	
+														  	
+															var netValue=report.tBillTaxableAmt-(report.tGrnTaxableAmt+report.tGvnTaxableAmt);
+															netValue=netValue.toFixed();
+															
+															var catName=cat.catName; 
+								
+								   dataTable.addRows([
+									   
+									   [catName,netQty,netValue],
+								           
+								           ]);
+								   
+								   piedataTable.addRows([
+									 
+									   
+									   [catName, netValue],
+									   
+								          
+								           ]);
+								     }) // end of  $.each(data,function(key, report) {-- function
+													
+								     }	 
+								  }) 
+										  
+            // Instantiate and draw the chart.
+          						    
+ var materialOptions = {
+						    	
+          width: 500,
+          chart: {
+            title: 'Date wise Tax Graph',
+            subtitle: 'Total tax & Taxable Amount per day',
+           
+
+          },
+          series: {
+            0: { axis: 'distance' }, // Bind series 0 to an axis named 'distance'.
+            1: { axis: 'brightness' } // Bind series 1 to an axis named 'brightness'.
+          },
+          axes: {
+            y: {
+              distance: {label: 'Total Tax'}, // Left y-axis.
+              brightness: {side: 'right', label: 'Taxable Amount'} // Right y-axis.
+            }
+          }
+        };
+						       
+						       function drawMaterialChart() {
+						           var materialChart = new google.charts.Bar(chartDiv);
+						           
+						           materialChart.draw(dataTable, google.charts.Bar.convertOptions(materialOptions));
+						        
+						         }
+						       
+						        var chart = new google.visualization.ColumnChart(
+						                document.getElementById('chart_div'));
+						        
+						        var Piechart = new google.visualization.PieChart(
+						                document.getElementById('PieChart_div'));
+						       chart.draw(dataTable,
+						          {width: 1000, height: 600, title: 'Sales Summary Group By Month'});
+						       
+						       
+						       Piechart.draw(piedataTable,
+								          {width: 1000, height: 600, title: 'Sales Summary Group By Month',is3D:true});
+						      // drawMaterialChart();
+							 };
+							 
+										
+							  	});
+			
+}
+
+</script>
+	
 
 	<script type="text/javascript">
 		function validate() {

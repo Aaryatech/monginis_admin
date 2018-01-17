@@ -66,6 +66,18 @@ public class SalesReportController {
 	
 	List<SalesReportRoyaltyFr> royaltyFrList;
 	static RoyaltyListBean staticRoyaltyBean=new RoyaltyListBean();
+	
+	
+	
+
+	@RequestMapping(value = "/showSaleReports", method = RequestMethod.GET)
+	public ModelAndView showSaleReporPage(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/viewSalesReports");
+		
+		return model;
+
+	}
 
 	@RequestMapping(value = "/showSaleReportByDate", method = RequestMethod.GET)
 	public ModelAndView showSaleReportByDate(HttpServletRequest request, HttpServletResponse response) {

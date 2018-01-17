@@ -276,8 +276,8 @@
 
 				</div>
 
-				<div id="chart_div" style="width: 50%; height: 700px;"></div>
-				<div id="PieChart_div" style="width: 50%; height: 700px;"></div>
+				<div id="chart_div" style="width: 100%; height: 700px;"></div>
+				<div id="PieChart_div" style="width: 100%; height: 700px;"></div>
 
 			</form>
 		</div>
@@ -434,7 +434,7 @@ function disableRoute(){
 
 
 
-	<script type="text/javascript">
+<script type="text/javascript">
 function showChart(){
 	
 	alert("Hi");
@@ -579,11 +579,11 @@ function showChart(){
 						        var Piechart = new google.visualization.PieChart(
 						                document.getElementById('PieChart_div'));
 						       chart.draw(dataTable,
-						          {width: 500, height: 600, title: 'Sales Summary Group By Month'});
+						          {width: 1000, height: 600, title: 'Sales Summary Group By Month'});
 						       
 						       
 						       Piechart.draw(piedataTable,
-								          {width: 500, height: 600, title: 'Sales Summary Group By Month',is3D:true});
+								          {width: 1000, height: 600, title: 'Sales Summary Group By Month',is3D:true});
 						      // drawMaterialChart();
 							 };
 							 
