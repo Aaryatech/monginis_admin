@@ -65,7 +65,8 @@ public class PurchaseOrderController {
 	public ModelAndView showPurchaseOrder(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/purchaseOrder/directPurchaseOrder");
-		
+		Constants.mainAct =10;
+		Constants.subAct =57;
 		
 		purchaseOrderDetailList=new ArrayList<PurchaseOrderDetail>();
 		RestTemplate rest=new RestTemplate();
