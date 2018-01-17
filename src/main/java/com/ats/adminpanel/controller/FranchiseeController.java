@@ -1197,10 +1197,18 @@ public class FranchiseeController {
 			String frAgreementDate = request.getParameter("fr_agreement_date");
 			System.out.println("20] frAgreementDate " + frAgreementDate);
 
-			String frGstType = request.getParameter("fr_gst_type");
+			int frGstType = Integer.parseInt(request.getParameter("fr_gst_type"));
 			System.out.println("21] frGstType " + frGstType);
 
-			String frGstNo = request.getParameter("fr_gst_no");
+			String frGstNo;
+			if (frGstType == 0) {
+				frGstNo = "NA";
+
+			} else {
+				frGstNo = request.getParameter("fr_gst_no");
+
+			}
+			
 			System.out.println("22] frGstNo " + frGstNo);
 
 			String stockType = request.getParameter("stock_type");
