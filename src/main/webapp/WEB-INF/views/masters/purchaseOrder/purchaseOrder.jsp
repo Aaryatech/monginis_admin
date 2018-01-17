@@ -345,13 +345,14 @@
 								<div class="form-group">
 								
 								<div align="center" class="form-group">
-									<div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										
+									<!-- <div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0"> -->
+										<input class="btn btn-primary" value="Pending" id="searchmixall"
+											onclick="pending()">
 				
 										<input class="btn btn-primary" value="View All" id="searchmixall"
 											onclick="searchPo()">
 
-									</div><br>
+									<!-- </div><br> -->
 									
 									<div align="center" id="loader" style="display: none">
 
@@ -374,7 +375,7 @@
 						<div class="col-md-12 table-responsive">
 						 <input type="hidden" name="flag" id="flag" value="${flag}">
 							<table class="table table-bordered table-striped fill-head "
-								style="width: 100%" id="table_grid">
+								style="width: 100%" id="table_grid1">
 								<thead>
 								
 									<tr>
@@ -597,6 +598,7 @@
 			var from_date=document.getElementById("from_date").value; 
 			var to_date=document.getElementById("to_date").value; 
 			var flag = document.getElementById("flag").value;
+			var all =1;
 			$('#loader').show();
 			$
 			.getJSON(
@@ -606,13 +608,14 @@
 						 
 						from_date : from_date,
 						to_date : to_date,
+						all : all,
 						ajax : 'true'
 
 					},
 					function(data) {
 						
 						
-						$('#table_grid td').remove();
+						$('#table_grid1 td').remove();
 						$('#loader').hide();
 
 						if (data == "") {
@@ -653,14 +656,30 @@
 										{
 											status="Pending";
 										}
-									else if(itemList.poStatus==1)
+										else if(itemList.poStatus==1)
 										{
-											status="Requested";
+											status="Requested to Purchase";
 										}
-									else if(itemList.poStatus==3)
-									{
-										status="Rejected";
-									}
+										else if(itemList.poStatus==3)
+										{
+										status="Rejected By Purchase";
+										}
+										if(itemList.poStatus==4)
+										{
+											status="Rejected By Director";
+										}
+										else if(itemList.poStatus==5)
+										{
+											status="Approved Po By Director";
+										}
+										else if(itemList.poStatus==6)
+										{
+										status="Partially Closed";
+										}
+										else if(itemList.poStatus==7)
+										{
+										status="Closed";
+										}
  
 									  	tr.append($('<td></td>').html(key+1));
 
@@ -694,7 +713,7 @@
 
 
 
-										$('#table_grid tbody').append(tr);
+										$('#table_grid1 tbody').append(tr);
 
 										 
 
@@ -706,7 +725,106 @@
 			
 			
 		}
-		
+		function pending()
+		{
+			var from_date=document.getElementById("from_date").value; 
+			var to_date=document.getElementById("to_date").value; 
+			var flag = document.getElementById("flag").value;
+			var all =0;
+			$('#loader').show();
+			$
+			.getJSON(
+					'${dateWisePo}',
+
+					{
+						 
+						from_date : from_date,
+						to_date : to_date,
+						all : all,
+						ajax : 'true'
+
+					},
+					function(data) {
+						
+						
+						$('#table_grid1 td').remove();
+						$('#loader').hide();
+
+						if (data == "") {
+							 
+							alert("No Record");
+						} 
+						
+						
+						$.getJSON(
+								'${supplier}',
+
+								{ 
+									ajax : 'true'
+
+								},
+								function(sp) { 
+									 
+									
+								var splength=sp.length;
+								 
+
+					  $.each(data,function(key, itemList) {
+									
+										var spname;
+										var type;
+										var status;
+										var tr = $('<tr></tr>');
+										
+										if(itemList.poType==1)
+											{
+											type="Inclusive";
+											}
+										else
+											{
+											type="Open";
+											}
+										if(itemList.poStatus==0)
+										{
+											status="Pending";
+										}
+									 
+ 
+									  	tr.append($('<td></td>').html(key+1));
+
+									  	tr.append($('<td></td>').html(itemList.poNo)); 
+									  	tr.append($('<td></td>').html(itemList.poDate));
+									  	tr.append($('<td></td>').html(type));
+									  	for(var i=0;i<splength;i++)
+									  		{
+									  			if(itemList.suppId==sp[i].suppId)
+									  				{
+									  				spname=sp[i].suppName;
+									  				break;
+									  				}
+									  		}
+									  	tr.append($('<td></td>').html(spname)); 
+									  	tr.append($('<td></td>').html(itemList.poTotalValue));
+									  	tr.append($('<td></td>').html(status));
+									  	 
+									  	if(itemList.poStatus==0 || itemList.poStatus==3)
+								  		{
+								  		tr.append($('<td></td>').html('  <a href="poHeaderWithDetailed/'+itemList.poId+'/'+flag+'" class="action_btn" > <abbr title="Detail"><i class="fa fa-list"></i></abbr></a> <a href="deletePoRecord/'+itemList.poId+'" onClick="return confirm("Are you sure want to delete this record");"><abbr title="Delete"></abbr><spanclass="glyphicon glyphicon-remove"></span></a><a href="deletePoRecord/'+itemList.poId+'" onClick="return confirm("Are you sure want to delete this record");"><abbr title="Delete"></abbr><span class="glyphicon glyphicon-remove"></span></a>'));
+									  	
+								  		}
+								   
+										$('#table_grid1 tbody').append(tr);
+
+										 
+
+									})
+									
+					});
+						
+					});
+			
+			
+		}
 	
 		
 	</script>

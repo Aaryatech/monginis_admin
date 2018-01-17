@@ -198,21 +198,34 @@ public class PurchaseOrderController {
 		 
 		List<PurchaseOrderHeader> list = new ArrayList<PurchaseOrderHeader>();
 		GetPurchaseOrderList getPurchaseOrderList=null;
-		 
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>();
 		 try
 		 {
 			 String fromDate = request.getParameter("from_date");
 			 String toDate = request.getParameter("to_date");
+			 int status = Integer.parseInt(request.getParameter("all"));
+			 String sts=null;
 			 System.out.println("fromDate "+fromDate);
 			 System.out.println("toDate "+toDate);
-			 
-			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>();
-				map.add("status", "0,1,3");
+			 System.out.println("status "+status);
+			 if(status==1)
+			 {
+				 sts="0,1,3,4,5,6,7"; 
+			 }
+			 else
+			 {
+				 sts="0"; 
+			 }
+			 	map.add("status", sts);
 				map.add("fromDate",DateConvertor.convertToYMD(fromDate));
 				map.add("toDate",DateConvertor.convertToYMD(toDate));
 				RestTemplate rest=new RestTemplate();
 				 getPurchaseOrderList=rest.postForObject(Constants.url + "purchaseOrder/dateWisePo",map, GetPurchaseOrderList.class);
 					System.out.println("Purchase Order : "+getPurchaseOrderList.getPurchaseOrderHeaderList());
+					for(int i=0;i<getPurchaseOrderList.getPurchaseOrderHeaderList().size();i++)
+					{
+						getPurchaseOrderList.getPurchaseOrderHeaderList().get(i).setPoDate(DateConvertor.convertToDMY(getPurchaseOrderList.getPurchaseOrderHeaderList().get(i).getPoDate()));
+					}
 			 
 			 System.out.println("list"+list);
 		 }catch(Exception e)
@@ -230,8 +243,6 @@ public class PurchaseOrderController {
 		 
 		 try
 		 {
-			 RestTemplate rest=new RestTemplate();
-			 supplierDetailsList=rest.getForObject(Constants.url + "getAllSupplier",   List.class);
 			 
 			 System.out.println("supplierDetailsList"+supplierDetailsList);
 		 }catch(Exception e)
