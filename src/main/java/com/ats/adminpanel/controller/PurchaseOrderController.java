@@ -653,11 +653,18 @@ public class PurchaseOrderController {
 		
 		map.add("rmId", rmId);
 		map.add("suppId", suppId);
-		
+		try {
 		  getRmRateAndTax=rest.postForObject(Constants.url +"purchaseOrder/getRmDetailByRmId", map, GetRmRateAndTax.class);
 		if(getRmRateAndTax!=null)
 		{
-			res=1;
+			
+				getRmRateAndTax.toString();
+				res=1;
+			
+			 
+		}
+		}catch (Exception e) {
+			 
 		}
 		return res;
 	}
