@@ -1738,7 +1738,7 @@ System.out.println("IN Show bill Method");
 	public void showPDF(HttpServletRequest request, HttpServletResponse response) {
 
 		String url = request.getParameter("url");
-		System.out.println("URL "+url);
+		 System.out.println("URL "+url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
 		File f = new File("/home/ats-11/pdf/ordermemo221.pdf");
 System.out.println("I am here "+f.toString());
