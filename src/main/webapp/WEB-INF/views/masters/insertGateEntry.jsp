@@ -318,7 +318,7 @@
 								
 							<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-										<input type="submit" class="btn btn-primary" value="Submit">
+										<input type="submit" class="btn btn-primary" value="Submit" onclick="check();">
 <!-- 										<button type="button" class="btn">Cancel</button>
  -->									</div>
 								</div><br><br>
@@ -574,7 +574,20 @@ function validation()
 return isValid;
 	
 }
-
+function check()
+{
+	
+	var supp_id = $("#supp_id").val();
+	var tran_id = $("#tran_id").val();
+	if(supp_id=="")
+		{
+		alert("Select Supplier");
+		}
+	else if(tran_id=="")
+	{
+	alert("Select Tranporter");
+	}
+}
 </script>
 	
 								

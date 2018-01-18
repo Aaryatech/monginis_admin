@@ -187,7 +187,7 @@
 									</div>
 									<div class="col-md-2">Quotation Ref. No.  </div>
 				<div class="col-md-3">
-					<input type="text" name="quotation_ref_no" id="quotation_ref_no" value="${purchaseOrderHeader.quotationRefNo}" class="form-control" required>
+					<input type="text" name="quotation_ref_no" id="quotation_ref_no" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" value="${purchaseOrderHeader.quotationRefNo}" class="form-control" required>
 				</div>
 				 
 			</div><br/>
@@ -204,7 +204,7 @@
 			<div class="box-content">
 				<div class="col-md-2" >Taxation</div>
 									<div class="col-md-4">
-										<select name="taxation" id="taxation" class="form-control" tabindex="6">
+										<select name="taxation" id="taxation" class="form-control chosen" tabindex="6">
 										<c:choose>
 											<c:when test="${purchaseOrderHeader.taxationRem==1}">
 											<c:set var="tax" value="Inclusive"></c:set>
@@ -233,7 +233,7 @@
 			<div class="box-content">
 			<div class="col-md-2" >PO Type</div>
 									<div class="col-md-4">
-										<select name="po_type" id="po_type" class="form-control" tabindex="6">
+										<select name="po_type" id="po_type" class="form-control chosen" tabindex="6">
 										<c:choose>
 											<c:when test="${purchaseOrderHeader.poType==1}">
 											<c:set var="poType" value="Regular"></c:set>
@@ -262,7 +262,7 @@
 									<div class="box-content">
 										<div class="col-md-2" >Rm Group</div>
 											<div class="col-md-4">
-											<select name="rm_group" id="rm_group" class="form-control" tabindex="6" onchange="getCat()">
+											<select name="rm_group" id="rm_group" class="form-control chosen" tabindex="6" onchange="getCat()">
 											<option value="-1" disabled="disabled" selected="selected">Select RM Group</option>
 											 <c:forEach items="${RawmaterialList}" var="RawmaterialList"
 											varStatus="count">
@@ -284,7 +284,7 @@
 			
 			<div class="col-md-2">RM Category </div>
 								<div class="col-md-4">
-										<select name="rm_cat" id="rm_cat" class="form-control" tabindex="6" onchange="getRm()">
+										<select name="rm_cat" id="rm_cat" class="form-control chosen" tabindex="6" onchange="getRm()">
 										<option value="-1"disabled="disabled" selected="selected">Select RM Category</option>
 											 
 										</select>
@@ -304,7 +304,7 @@
 			
 								<div class="col-md-2" >Item</div>
 									<div class="col-md-4">
-										<select name="rm_id" id="rm_id" class="form-control"placeholder="Select RM " tabindex="6">
+										<select name="rm_id" id="rm_id" class="form-control chosen" placeholder="Select RM " tabindex="6">
 										<option value="-1" disabled="disabled" selected="selected">Select Raw Material</option>
 											 
 						
@@ -400,7 +400,7 @@
 		<div class="box-content">
 				<div class="col-md-2" >Payment Terms</div>
 									<div class="col-md-3">
-										<select name="pay_terms" id="pay_terms" class="form-control" tabindex="6">
+										<select name="pay_terms" id="pay_terms" class="form-control chosen" tabindex="6">
 										<c:forEach items="${supPaymentTerms}" var="supPaymentTerms" varStatus="count">
 												<c:choose>
 													<c:when test="${supPaymentTerms.payId==purchaseOrderHeader.payId}">
@@ -421,13 +421,13 @@
 									</div>
 									<div class="col-md-2">PO Validity </div>
 				<div class="col-md-3">
-					<input type="text" name="po_validity" id="po_validity" value="${purchaseOrderHeader.validity}" class="form-control">
+					<input type="text" name="po_validity" id="po_validity" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" value="${purchaseOrderHeader.validity}" class="form-control" required>
 				</div>
 				</div><br/>
 				 	<div class="box-content">
 				<div class="col-md-2" >Transportation</div>
 									<div class="col-md-3">
-										<select name="transportation" id="transportation" class="form-control" tabindex="6">
+										<select name="transportation" id="transportation" class="form-control chosen" tabindex="6">
 										
 										<c:forEach items="${transporterList}" var="transporterList" varStatus="count">
 												<c:choose>
@@ -452,7 +452,7 @@
 									</div>
 									<div class="col-md-2" >Freight</div>
 									<div class="col-md-3">
-										<select name="freight" id="freight" class="form-control" tabindex="6" required>
+										<select name="freight" id="freight" class="form-control chosen" tabindex="6" required>
 										<option value="">Select Freight</option>
 										<option value="1">Not Applicable</option>
 										<option value="2">On Your Side</option>
@@ -463,7 +463,7 @@
 									<div class="box-content">
 								<div class="col-md-2" >Insurance</div>
 									<div class="col-md-3">
-										<select name="insurance" id="insurance" class="form-control" tabindex="6" required>
+										<select name="insurance" id="insurance" class="form-control chosen" tabindex="6" required>
 										<option value="">Select Insurance Terms</option>
 										<option value="1">Not Applicable</option>
 										<option value="2">On Your Side</option>
@@ -472,13 +472,13 @@
 									</div>
 									<div class="col-md-2" >Sp.Instrucion</div>
 									<div class="col-md-3">
-					<input type="text" name="sp_instruction" id="sp_instruction" class="form-control" value="${purchaseOrderHeader.spRem}" required>
+					<input type="text" name="sp_instruction" id="sp_instruction" class="form-control" value="${purchaseOrderHeader.spRem}" required >
 				</div>
 									</div><br/><br/>
 			
 			<div class="row">
 						<div class="col-md-12" style="text-align: center">
-							<input type="submit" class="btn btn-info" value="Submit">
+							<input type="submit" class="btn btn-info" value="Submit" onclick="check();">
 
 
 						</div>
@@ -548,8 +548,9 @@
 			 
 				function(data) {
 				if(data==0){
-					alert("Item rate  is not verified !!");
 					$('#loader').hide();
+					alert("Item rate  is not verified !!");
+					
 				}
 				else{
 					
@@ -708,6 +709,7 @@
 						}
 						html += '</option>';
 						$('#rm_cat').html(html);
+						$('#rm_cat').trigger("chosen:updated");
 						$('#rm_cat').formcontrol('refresh');
 
 					});
@@ -728,6 +730,7 @@
 						}
 						html += '</option>';
 						$('#rm_id').html(html);
+						$('#rm_id').trigger("chosen:updated");
 						$('#rm_id').formcontrol('refresh');
 
 					});
@@ -862,7 +865,31 @@
 		
 	</script>
 
- 
+  <script type="text/javascript">
+        var specialKeys = new Array();
+        specialKeys.push(8); //Backspace
+        function IsNumeric(e) {
+            var keyCode = e.which ? e.which : e.keyCode
+            var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1 || keyCode==9);
+            //document.getElementById("error").style.display = ret ? "none" : "inline";
+            return ret;
+        }
+        
+        function check()
+        {
+        	
+        	var freight = $("#freight").val();
+        	var insurance = $("#insurance").val();
+        	if(freight=="")
+        		{
+        		alert("Enter Freight Amt");
+        		}
+        	else if(insurance=="")
+    		{
+    		alert("Enter Insurance Amt");
+    		}
+        }
+    </script>
 
 
 	<!--basic scripts-->
