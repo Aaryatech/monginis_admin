@@ -134,7 +134,7 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>Direct PO
+					<i class="fa fa-bars"></i>Direct Purchase Order
 				</h3>
 
 			</div>
@@ -156,7 +156,7 @@
 				</div>
 				</div><br/>
 				<div class="box-content">
-				<div class="col-md-2" >Supplier</div>
+				<div class="col-md-2" >Supplier Name</div>
 									<div class="col-md-4">
 										<select name="supp_id" id="supp_id" class="form-control chosen" tabindex="6" required>
 										<option value="" disabled="disabled" selected="selected">Select Supplier</option>
