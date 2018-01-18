@@ -36,6 +36,7 @@ import com.ats.adminpanel.model.RawMaterial.RawMaterialDetails;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialDetailsList;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialUom;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialUomList;
+import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.login.UserResponse;
 import com.ats.adminpanel.model.stock.GetStoreCurrentStock;
 import com.ats.adminpanel.model.stock.StoreStockDetail;
@@ -170,8 +171,10 @@ public class StoreStockController {
 		StoreStockDetailList storeStockDetailList=rest.postForObject(Constants.url +"getMonthWiseStoreStock", map, StoreStockDetailList.class);
 		System.out.println("Res List "+storeStockDetailList.toString());
 		
-		
-		return storeStockDetailList.getStoreStockDetailList();
+		List<StoreStockDetail> storeStockList=new ArrayList<StoreStockDetail>();
+		if(storeStockDetailList.getStoreStockDetailList()!=null && !storeStockDetailList.getStoreStockDetailList().isEmpty())
+				storeStockList=storeStockDetailList.getStoreStockDetailList();
+		return  storeStockList;
 		
 		 
 	}
@@ -193,8 +196,10 @@ public class StoreStockController {
 		 
 		StoreStockDetailList storeStockDetailList=rest.postForObject(Constants.url +"getMonthWiseStoreStock", map, StoreStockDetailList.class);
 		System.out.println("Res List "+storeStockDetailList.toString());
-		
-		return storeStockDetailList.getStoreStockDetailList();
+		List<StoreStockDetail> storeStockList=new ArrayList<StoreStockDetail>();
+		if(storeStockDetailList.getStoreStockDetailList()!=null && !storeStockDetailList.getStoreStockDetailList().isEmpty())
+				storeStockList=storeStockDetailList.getStoreStockDetailList();
+		return storeStockList;
 	}
 	
 	//getCurrentStoreStock
@@ -211,10 +216,19 @@ public class StoreStockController {
 		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
 		int deptId=userResponse.getUser().getDeptId();
 		
+		String settingKey = new String();
 		MultiValueMap<String, Object> map=new LinkedMultiValueMap<>();
-		map.add("deptId", deptId);
-		 
+		settingKey = "STORE";
+
+		map.add("settingKeyList", settingKey);
+
+		FrItemStockConfigureList settingList = rest.postForObject(Constants.url + "getDeptSettingValue", map,
+				FrItemStockConfigureList.class);
 		try {
+		map=new LinkedMultiValueMap<>();
+		map.add("deptId", settingList.getFrItemStockConfigure().get(0).getSettingValue());
+		 
+		System.out.println("Dept id :"+settingList.getFrItemStockConfigure().get(0).getSettingValue());
 		ParameterizedTypeReference<List<GetStoreCurrentStock>> typeRef = new ParameterizedTypeReference<List<GetStoreCurrentStock>>() {
 		};
 		ResponseEntity<List<GetStoreCurrentStock>> responseEntity = rest.exchange(Constants.url + "getCurrentStoreStock",
@@ -258,6 +272,7 @@ public class StoreStockController {
 					storeStockDetailList.get(i).setBmsIssueQty(getStoreCurrentStockList.get(j).getBmsIssueQty());
 					 float closingQty=getStoreCurrentStockList.get(j).getStoreOpeningStock()+getStoreCurrentStockList.get(j).getPurRecQty()-getStoreCurrentStockList.get(j).getBmsIssueQty();
 					storeStockDetailList.get(i).setStoreClosingStock(closingQty);
+					break;
 				}
 			}
 		}
@@ -325,6 +340,7 @@ public class StoreStockController {
 				 
 				storeStockDetail.setStoreOpeningStock(storeStockDetailList.get(j).getStoreClosingStock());
 				newStoreStockDetailList.add(storeStockDetail);
+				break;
 			}
 				}
 			}

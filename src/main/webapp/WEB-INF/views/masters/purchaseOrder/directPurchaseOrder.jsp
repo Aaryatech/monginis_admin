@@ -134,7 +134,7 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>Direct PO
+					<i class="fa fa-bars"></i>Direct Purchase Order
 				</h3>
 
 			</div>
@@ -156,9 +156,9 @@
 				</div>
 				</div><br/>
 				<div class="box-content">
-				<div class="col-md-2" >Supplier</div>
+				<div class="col-md-2" >Supplier Name</div>
 									<div class="col-md-4">
-										<select name="supp_id" id="supp_id" class="form-control" tabindex="6" required>
+										<select name="supp_id" id="supp_id" class="form-control chosen" tabindex="6" required>
 										<option value="" disabled="disabled" selected="selected">Select Supplier</option>
 											 <c:forEach items="${supplierList}" var="supplierList"
 							varStatus="count">
@@ -171,7 +171,7 @@
 									</div>
 									<div class="col-md-2">Quotation Ref. No.  </div>
 				<div class="col-md-3">
-					<input type="text" placeholder="Enter Quotation No" name="quotation_ref_no" id="quotation_ref_no" class="form-control" required>
+					<input type="text" placeholder="Enter Quotation No" name="quotation_ref_no" id="quotation_ref_no" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" required>
 				</div>
 				 
 			</div><br/>
@@ -232,9 +232,9 @@
 									
 									
 									<div class="box-content">
-				<div class="col-md-2" >Rm Group</div>
+				<div class="col-md-2" >Raw Material Group</div>
 									<div class="col-md-4">
-										<select name="rm_group" id="rm_group" class="form-control" tabindex="6">
+										<select name="rm_group" id="rm_group" class="form-control chosen" tabindex="6">
 										<option value="-1" disabled="disabled" selected="selected">Select RM Group</option>
 											 <c:forEach items="${rmItemGroupList}" var="rmItemGroupList"
 							varStatus="count">
@@ -247,16 +247,16 @@
 									</div>
 									<div class="col-md-2">Quantity </div>
 				<div class="col-md-3">
-					<input type="text" placeholder="Enetr RM Quantity" name="rm_qty" id="rm_qty" class="form-control">
+					<input type="text" placeholder="Enetr RM Quantity" name="rm_qty" id="rm_qty" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;">
 				</div>
 				 
 			</div><br/>
 			
 			<div class="box-content">
 			
-			<div class="col-md-2">RM Category </div>
+			<div class="col-md-2">Raw Material Category </div>
 								<div class="col-md-4">
-										<select name="rm_cat" id="rm_cat" class="form-control" tabindex="6">
+										<select name="rm_cat" id="rm_cat" class="form-control chosen" tabindex="6">
 										<option value="-1"disabled="disabled" selected="selected">Select RM Category</option>
 											 
 										</select>
@@ -265,7 +265,7 @@
 				
 				<div class="col-md-2">Discount % </div>
 				<div class="col-md-3">
-					<input type="text" placeholder="Enter Discount %" name="disc_per" id="disc_per" value="0" class="form-control">
+					<input type="text" placeholder="Enter Discount %" name="disc_per" id="disc_per" value="0" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;">
 				</div>
 				
 									
@@ -274,9 +274,9 @@
 			 <br/>
 			<div class="box-content">
 			
-								<div class="col-md-2" >Item</div>
+								<div class="col-md-2" >Items</div>
 									<div class="col-md-4">
-										<select name="rm_id" id="rm_id" class="form-control"placeholder="Select RM " tabindex="6">
+										<select name="rm_id" id="rm_id" class="form-control chosen"placeholder="Select RM " tabindex="6">
 										<option value="-1" disabled="disabled" selected="selected">Select Raw Material</option>
 											 
 						
@@ -337,8 +337,9 @@
 									</div>
 									<div class="col-md-2">PO Validity </div>
 				<div class="col-md-3">
-					<input type="text"placeholder="Enter PO Validity" name="po_validity" id="po_validity" class="form-control" required>
+					<input type="text"placeholder="Enter PO Validity" name="po_validity" id="po_validity" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" required>
 				</div>
+				<div class="col-md-1">Days </div>
 				</div><br/>
 				 	<div class="box-content">
 				<div class="col-md-2" >Transportation</div>
@@ -749,7 +750,7 @@ $(document).ready(function() {
 					}
 					html += '</option>';
 					$('#rm_cat').html(html);
-					$('#rm_cat').formcontrol('refresh');
+					$('#rm_cat').trigger("chosen:updated");
 
 				});
 			});
@@ -761,7 +762,7 @@ $(document).ready(function() {
 					catId : $(this).val(),
 					ajax : 'true'
 				}, function(data) {
-					var html = '<option value="" disabled="disabled" selected >Select Category</option>';
+					var html = '<option value="" disabled="disabled" selected >Select Raw Material</option>';
 					
 					var len = data.length;
 					for ( var i = 0; i < len; i++) {
@@ -770,11 +771,25 @@ $(document).ready(function() {
 					}
 					html += '</option>';
 					$('#rm_id').html(html);
-					$('#rm_id').formcontrol('refresh');
+					$("#rm_id").trigger("chosen:updated");
 
 				});
+				
+			 
+	
 			});
 });
+
+
+var specialKeys = new Array();
+specialKeys.push(8); //Backspace
+function IsNumeric(e) {
+    var keyCode = e.which ? e.which : e.keyCode
+    var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1 || keyCode==9);
+   // document.getElementById("error").style.display = ret ? "none" : "inline";
+    return ret;
+}
+
 
 </script>
 

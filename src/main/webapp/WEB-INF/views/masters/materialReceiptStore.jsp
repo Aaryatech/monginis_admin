@@ -92,7 +92,7 @@
 							</h3>
 							
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/mrnentry">MRN ENTRY</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAllStoreMaterialReciept">All Store Material Reciept</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -174,11 +174,21 @@
 												<c:choose>
 													<c:when test="${materialRecNote.status==2}">
 													<div class="col-md-2" >Against PO</div>
-									<div class="col-md-3">
-									<input type="text" id="po_id" name="po_id" value="${materialRecNote.apainstPo}" 
-									class="form-control" readonly>
-										
-										</div>
+													<c:choose>
+														<c:when test="${materialRecNote.apainstPo==1}">
+															<c:set var="Po" value="Yes"></c:set> 
+														</c:when>
+														<c:otherwise>
+															<c:set var="Po" value="No"></c:set> 
+														</c:otherwise> 
+													</c:choose>
+															<div class="col-md-3">
+															<input type="text" id="Po" name="Po" value="${Po}" 
+															class="form-control" readonly>
+															<input type="hidden" id="po_id" name="po_id" value="${materialRecNote.apainstPo}" 
+															class="form-control" readonly>
+																
+																</div>
 										
 													</c:when>
 													

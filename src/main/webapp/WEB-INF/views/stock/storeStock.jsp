@@ -445,16 +445,17 @@ div.panel {
 			 
 			  var selectId=document.getElementById("selectStock").value;
 			  
-			  $('#loader').show();
+			
 			  
 			   if(selectId==1) {
-					alert("get Current stock");
+				   $('#loader').show();
 					$.getJSON('${getCurrentStoreStock}', {
 						fromDate : fromDate,
 						toDate : toDate,
 						ajax : 'true'
 					}, function(data) {
 						$('#loader').hide();
+						$('#table1 td').remove();
 						if(data=="")
 						{
 						alert("No Record Found");
@@ -462,7 +463,7 @@ div.panel {
 					else
 						{
 						
-						$('#table1 td').remove();
+					
 					 
 					 $.each(data,function(key, stockList) {
 												 
@@ -483,16 +484,19 @@ div.panel {
 				} 
 			  
 			   else if(selectId==2){
+				   
 				var fromDate=document.getElementById("from_stockdate").value;
 				  var toDate=document.getElementById("to_stockdate").value;
 				 
 				if(fromDate!=null && fromDate!="" && toDate!=null && toDate!=""){
+					$('#loader').show();
 				$.getJSON('${getMonthWiseStoreStock}', {
 					fromDate : fromDate,
 					toDate : toDate,
 					ajax : 'true'
 				}, function(data) {
 					$('#loader').hide();
+					$('#table1 td').remove();
 					if(data=="")
 					{
 						alert("No Record Found");
@@ -500,7 +504,7 @@ div.panel {
 				else
 					{
 					
-					$('#table1 td').remove();
+				
 				 
 				 $.each(data,function(key, stockList) {
 											
@@ -525,17 +529,20 @@ div.panel {
 				}
 			}
 			else if(selectId=3){
+				
 				var fromDate=document.getElementById("from_stockdate").value;
 				  var toDate=document.getElementById("to_stockdate").value;
-				//alert("Get stock between Month");
+				 
 				if(fromDate!=null && fromDate!="" && toDate!=null && toDate!=""){
-					
+					  $('#loader').show();
 					$.getJSON('${getDateWiseStoreStock}', {
 						fromDate : fromDate,
 						toDate : toDate,
 						ajax : 'true'
 					}, function(data) {
+					 
 						$('#loader').hide();
+						$('#table1 td').remove();
 						if(data=="")
 						{
 						alert("No Record Found");
@@ -543,7 +550,7 @@ div.panel {
 					else
 						{
 						
-						$('#table1 td').remove();
+						
 					 
 					 $.each(data,function(key, stockList) {
 												 

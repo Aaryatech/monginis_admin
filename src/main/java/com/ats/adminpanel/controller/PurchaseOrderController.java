@@ -65,7 +65,8 @@ public class PurchaseOrderController {
 	public ModelAndView showPurchaseOrder(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/purchaseOrder/directPurchaseOrder");
-		
+		Constants.mainAct =10;
+		Constants.subAct =57;
 		
 		purchaseOrderDetailList=new ArrayList<PurchaseOrderDetail>();
 		RestTemplate rest=new RestTemplate();
@@ -652,11 +653,18 @@ public class PurchaseOrderController {
 		
 		map.add("rmId", rmId);
 		map.add("suppId", suppId);
-		
+		try {
 		  getRmRateAndTax=rest.postForObject(Constants.url +"purchaseOrder/getRmDetailByRmId", map, GetRmRateAndTax.class);
 		if(getRmRateAndTax!=null)
 		{
-			res=1;
+			
+				getRmRateAndTax.toString();
+				res=1;
+			
+			 
+		}
+		}catch (Exception e) {
+			 
 		}
 		return res;
 	}
