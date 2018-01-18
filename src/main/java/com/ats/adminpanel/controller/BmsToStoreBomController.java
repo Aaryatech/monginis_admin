@@ -198,7 +198,7 @@ public class BmsToStoreBomController {
 			
 			String settingKey = new String();
 
-			settingKey = "STORE";
+			settingKey = "BMS" + "," + "STORE";
 
 			map.add("settingKeyList", settingKey);
 			
@@ -207,15 +207,35 @@ public class BmsToStoreBomController {
 			FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
 					FrItemStockConfigureList.class);
 			
+			 
+			
 			System.out.println("new Field Dept Id = "+userResponse.getUser().getDeptId());
 			
-		  
+			int toDeptId=0;
+			String toDeptName=new String();
+			List<FrItemStockConfigure> settingKeyList = settingList.getFrItemStockConfigure();
+			for (int i = 0; i < settingKeyList.size(); i++) {
+
+				if (settingKeyList.get(i).getSettingKey().equalsIgnoreCase("BMS")) {
+
+					deptId = settingKeyList.get(i).getSettingValue();
+
+				}
+				if (settingKeyList.get(i).getSettingKey().equalsIgnoreCase("STORE")) {
+
+					toDeptId = settingKeyList.get(i).getSettingValue();
+					toDeptName=settingKeyList.get(i).getSettingKey();
+				}
+				 
+
+			}
+			
 			 
 
 			try {
 				
-				int toDeptId=settingList.getFrItemStockConfigure().get(0).getSettingValue();
-				String toDeptName=settingList.getFrItemStockConfigure().get(0).getSettingKey();
+				//int toDeptId=settingList.getFrItemStockConfigure().get(0).getSettingValue();
+				  toDeptName=settingList.getFrItemStockConfigure().get(0).getSettingKey();
 				
 				Date date = new Date();
 
@@ -320,35 +340,50 @@ public class BmsToStoreBomController {
 		getbomList = new ArrayList<BillOfMaterialHeader>();
 		HttpSession session=request.getSession();
 		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
-		FrItemStockConfigureList settingList = null;
-		
-		FrItemStockConfigureList settingList2 = null;
+		 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		RestTemplate rest = new RestTemplate();
-		
+		int fromDept=0;
 		try
 		{
-			String settingKey = new String(); 
-			settingKey = "STORE"; 
+			String settingKey = new String();
+
+			settingKey = "BMS" + "," + "STORE";
+
 			map.add("settingKeyList", settingKey);
 			
+			// web Service to get Dept Name And Dept Id for bom toDept and toDeptId
 			
-			settingList = rest.postForObject(Constants.url + "getDeptSettingValue", map,
+			FrItemStockConfigureList settingList = rest.postForObject(Constants.url + "getDeptSettingValue", map,
 					FrItemStockConfigureList.class);
 			
+			 
+			
+			System.out.println("new Field Dept Id = "+userResponse.getUser().getDeptId());
+			
+			int toDeptId=0;
+			
+			String toDeptName=new String();
+			List<FrItemStockConfigure> settingKeyList = settingList.getFrItemStockConfigure();
+			for (int i = 0; i < settingKeyList.size(); i++) {
+
+				if (settingKeyList.get(i).getSettingKey().equalsIgnoreCase("BMS")) {
+
+					fromDept = settingKeyList.get(i).getSettingValue();
+
+				}
+				if (settingKeyList.get(i).getSettingKey().equalsIgnoreCase("STORE")) {
+
+					toDeptId = settingKeyList.get(i).getSettingValue();
+					toDeptName=settingKeyList.get(i).getSettingKey();
+				}
+				 
+
+			}
 			
 			map = new LinkedMultiValueMap<String, Object>();
-			String settingKey2 = new String(); 
-			settingKey2 = "BMS"; 
-			map.add("settingKeyList", settingKey2);
-			
-			
-			settingList2 = rest.postForObject(Constants.url + "getDeptSettingValue", map,
-					FrItemStockConfigureList.class);
-			
-			map = new LinkedMultiValueMap<String, Object>();
-			map.add("fromDept",settingList2.getFrItemStockConfigure().get(0).getSettingValue());         
-			map.add("toDept",settingList.getFrItemStockConfigure().get(0).getSettingValue());           
+			map.add("fromDept",fromDept);         
+			map.add("toDept",toDeptId);           
 			map.add("status","0"); 
 			
 			GetBillOfMaterialList getBillOfMaterialList= rest.postForObject(Constants.url + "/getBOMHeaderBmsAndStore",map, GetBillOfMaterialList.class);
@@ -362,7 +397,7 @@ public class BmsToStoreBomController {
 		{
 			System.out.println("error in controller "+e.getMessage());
 		}
-		model.addObject("settingvalue",settingList.getFrItemStockConfigure().get(0).getSettingValue()) ;
+		model.addObject("settingvalue",fromDept) ;
 		model.addObject("deptId",userResponse.getUser().getDeptId()) ;
 		model.addObject("getbomList",getbomList) ;
 		return model;
@@ -380,6 +415,7 @@ public class BmsToStoreBomController {
 		System.out.println("in controller");
 		String frmdate=request.getParameter("from_date");
 		String todate=request.getParameter("to_date");
+		  
 		
 		try {
 			     
@@ -388,13 +424,34 @@ public class BmsToStoreBomController {
 			String tdate=DateConvertor.convertToYMD(todate);
 			
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			String settingKey = new String(); 
+			settingKey = "STORE"; 
+			map.add("settingKeyList", settingKey);
+			
+			RestTemplate rest = new RestTemplate();
+			FrItemStockConfigureList settingList = rest.postForObject(Constants.url + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			String settingKey2 = new String(); 
+			settingKey2 = "BMS"; 
+			map.add("settingKeyList", settingKey2);
+			
+			
+			FrItemStockConfigureList settingList2 = rest.postForObject(Constants.url + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("fromDept",settingList2.getFrItemStockConfigure().get(0).getSettingValue());         
+			map.add("toDept",settingList.getFrItemStockConfigure().get(0).getSettingValue());   
 			map.add("frmdate",frdate);
 			map.add("todate",tdate);
-			map.add("fromDept",0);             
-			map.add("toDept",17);            
+			map.add("fromDept",16);             
+			            
 			
 			System.out.println("in getBOMListWithDate   "+frdate+tdate);
-			RestTemplate rest = new RestTemplate();
+			
 			GetBillOfMaterialList getBillOfMaterialList= rest.postForObject(Constants.url + "/getBOMHeaderListBmsAndStore",map, GetBillOfMaterialList.class);
 			getBOMListall  = getBillOfMaterialList.getBillOfMaterialHeader();
 		}catch(Exception e)

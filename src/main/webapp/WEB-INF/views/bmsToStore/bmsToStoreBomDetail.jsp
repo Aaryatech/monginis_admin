@@ -51,6 +51,8 @@
 #disableMe {
 	pointer-events: none;
 }
+
+
 </style>
 </head>
 <body>
@@ -189,7 +191,7 @@
 
 													</tr>
 												</thead>
-												<tbody>
+												<tbody class="abc">
 													<c:set var="srNo" value="0" />
 													<c:forEach items="${bomwithdetaild}" var="bomwithdetaild"
 														varStatus="count">
@@ -237,7 +239,8 @@
 
 
 								<c:choose>
-									<c:when test="${billOfMaterialHeader.status==0 && deptId==billOfMaterialHeader.toDeptId}">
+									<%-- <c:when test="${billOfMaterialHeader.status==0 && deptId==billOfMaterialHeader.toDeptId}"> --%>
+									<c:when test="${billOfMaterialHeader.status==0}">
 										<div align="center" class="form-group">
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
@@ -248,7 +251,8 @@
 										</div>
 									</c:when>
 									
-									<c:when test="${billOfMaterialHeader.status==1 && deptId==billOfMaterialHeader.fromDeptId}">
+									<%-- <c:when test="${billOfMaterialHeader.status==1 && deptId==billOfMaterialHeader.fromDeptId}"> --%>
+									<c:when test="${billOfMaterialHeader.status==1}">
 										<div align="center" class="form-group">
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
@@ -265,7 +269,8 @@
 
 
 
-									<c:when test="${billOfMaterialHeader.status ==2 && deptId==billOfMaterialHeader.toDeptId}">
+									<%-- <c:when test="${billOfMaterialHeader.status ==2 && deptId==billOfMaterialHeader.toDeptId}"> --%>
+									<c:when test="${billOfMaterialHeader.status ==2}">
 										<div align="center" class="form-group">
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
