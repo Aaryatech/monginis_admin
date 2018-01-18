@@ -82,12 +82,12 @@ duplicate for tranpoter</p>
     <td style="border-left:1px solid #313131;  padding:3px 10px;color:#000; font-size:10px;">${billDetails.itemHsncd}</td>
     <td align="center" style="border-left:1px solid #313131; padding:3px 10px;color:#000;font-size:10px;">${billDetails.billQty}</td>
     <td align="center" style="border-left:1px solid #313131; padding:3px 10px;color:#000; font-size:10px;">${billDetails.itemUom}</td>
-    <td align="center" style="border-left:1px solid #313131; padding:3px 10px;color:#000; font-size:10px;">${billDetails.baseRate}</td>
-    <td align="center" style="border-left:1px solid #313131; padding:3px 10px;color:#000;font-size:10px;">${billDetails.taxableAmt}</td>
+    <td align="right" style="border-left:1px solid #313131; padding:3px 10px;color:#000; font-size:10px;">${billDetails.baseRate}</td>
+    <td align="right" style="border-left:1px solid #313131; padding:3px 10px;color:#000;font-size:10px;">${billDetails.taxableAmt}</td>
     <td align="center" style="border-left:1px solid #313131; padding:3px 10px;color:#000; font-size:10px;">${billDetails.cgstPer}</td>
     <td align="center" style="border-left:1px solid #313131; padding:3px 10px;color:#000; font-size:10px;">${billDetails.sgstPer}</td>
-    <td align="center" style="border-left:1px solid #313131; padding:3px 10px;color:#000;font-size:10px;">${billDetails.cgstRs}</td>
-    <td align="center" style="border-left:1px solid #313131; padding:3px 10px;color:#000;font-size:10px;">${billDetails.sgstRs}</td>
+    <td align="right" style="border-left:1px solid #313131; padding:3px 10px;color:#000;font-size:10px;">${billDetails.cgstRs}</td>
+    <td align="right" style="border-left:1px solid #313131; padding:3px 10px;color:#000;font-size:10px;">${billDetails.sgstRs}</td>
   </tr>
   </c:forEach>
   

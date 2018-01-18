@@ -91,7 +91,6 @@
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
-
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
 
@@ -314,9 +313,16 @@
 		function searchReport() {
 		//	var isValid = validate();
 
+		
+		
+		//document.getElementById('chart').style.display = "block";
+		  document.getElementById("PieChart_div").style="display:none";
+		  document.getElementById("chart_div").style="display:none";
+
+		 
 				var selectedFr = $("#selectFr").val();
 				var routeId=$("#selectRoute").val();
-				
+				var isGraph=0;
 				
 				var selectedCat = $("#selectCat").val();
 
@@ -334,7 +340,8 @@
 									fromDate : from_date,
 									toDate : to_date,
 									route_id:routeId,
-									cat_id_list : JSON.stringify(selectedCat), 
+									cat_id_list : JSON.stringify(selectedCat),
+									is_graph:isGraph,
 									ajax : 'true'
 
 								},
@@ -429,32 +436,37 @@ function showChart(){
 	$("#PieChart_div").empty();
 	$("#chart_div").empty();
 		//document.getElementById('chart').style.display = "block";
-		   document.getElementById("table_grid").style="display:none";
-		 
+		  document.getElementById("table_grid").style="display:none";
+		  document.getElementById("PieChart_div").style="block";
+		  document.getElementById("chart_div").style="block";
+
 		   var selectedFr = $("#selectFr").val();
 			var routeId=$("#selectRoute").val();
-			
+			var selectedCat = $("#selectCat").val();
 			var from_date = $("#fromDate").val();
 			var to_date = $("#toDate").val();
-			//alert("fr "+selectedFr);
-			//alert(from_date);
-			//alert(to_date);
-			//alert(routeId);
 			
-				  //document.getElementById('btn_pdf').style.display = "block";
-			$.getJSON(
-					'${getBillList}',
+			var isGraph=1;
+			$('#loader').show();
 
-					{
-						fr_id_list : JSON.stringify(selectedFr),
-						fromDate : from_date,
-						toDate : to_date,
-						route_id:routeId,
-						ajax : 'true'
+			$
+					.getJSON(
+							'${getBillList}',
+
+							{
+								fr_id_list : JSON.stringify(selectedFr),
+								fromDate : from_date,
+								toDate : to_date,
+								route_id:routeId,
+								cat_id_list : JSON.stringify(selectedCat), 
+								is_graph:isGraph,
+
+								ajax : 'true'
 
 					},
 					function(data) {
 
+						$('#loader').hide();
 								alert(data);
 							 if (data == "") {
 									alert("No records found !!");
@@ -472,57 +484,51 @@ function showChart(){
 							   var chartDiv = document.getElementById('chart_div');
 							   document.getElementById("chart_div").style.border = "thin dotted red";
 							   
-							   
 							   var PiechartDiv = document.getElementById('PieChart_div');
 							   document.getElementById("PieChart_div").style.border = "thin dotted red";
 							   
-							   
 						       var dataTable = new google.visualization.DataTable();
 						       dataTable.addColumn('string', 'Category'); // Implicit domain column.
-						      dataTable.addColumn('number', 'Net Qty'); // Implicit data column.
-						       dataTable.addColumn('number', 'Net Value');
+						      dataTable.addColumn('number', 'NetQty'); // Implicit data column.
+						       dataTable.addColumn('number', 'NetValue');
 						       
 						       var piedataTable = new google.visualization.DataTable();
 						       piedataTable.addColumn('string', 'Category'); // Implicit domain column.
-						       piedataTable.addColumn('number', 'Net Value');
+						       piedataTable.addColumn('number', 'NetValue');
 						       
 						       $
 								.each(
 										data.categoryList,
 										function(key, cat) {
+											var netQty=0;
+											var netValue=0;
 											$
 											.each(
 													data.salesReportRoyalty,
 													function(key, report) {
 														
-														if(cat.catId==report.catId){
-															var netQty=report.tBillQty-(report.tGrnQty+report.tGvnQty);
-														  	netQty=netQty.toFixed(2);
-														  	
-														  	
-															var netValue=report.tBillTaxableAmt-(report.tGrnTaxableAmt+report.tGvnTaxableAmt);
-															netValue=netValue.toFixed();
+														if(cat.catId===report.catId){
+															 netQty=netQty+report.tBillQty-(report.tGrnQty+report.tGvnQty);
+														  	//netQty=netQty.toFixed(2);
+															 netValue=netValue+report.tBillTaxableAmt-(report.tGrnTaxableAmt+report.tGvnTaxableAmt);
+															//netValue=netValue.toFixed(2);
+															var catName=report.cat_name; 
+															//alert("CatName"+catName);
 															
-															var catName=cat.catName; 
-								
+															//alert("netValue"+netValue);
+															//alert("netQty"+netQty);
+														
 								   dataTable.addRows([
-									   
 									   [catName,netQty,netValue],
-								           
 								           ]);
 								   
 								   piedataTable.addRows([
-									 
-									   
-									   [catName, netValue],
-									   
-								          
+									   [catName,netValue],
 								           ]);
-								     }) // end of  $.each(data,function(key, report) {-- function
+														}			
+								     }) 
 													
-								     }	 
-								  }) 
-										  
+								  })
             // Instantiate and draw the chart.
           						    
  var materialOptions = {

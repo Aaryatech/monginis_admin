@@ -105,7 +105,6 @@ public class BillController {
 	 static List<GenerateBill> staticGetGenerateBills= new ArrayList<>();
 	List<String> frList = new ArrayList<>();
 	
-	
 
 	public List<GetBillDetail> billDetailsList;
 	
@@ -119,8 +118,7 @@ public class BillController {
 	
 	List<FrBillHeaderForPrint> billHeadersListForPrint = new ArrayList<>();
 	
-	public static  List<FrBillPrint> billPrintList=new ArrayList<>();
-	
+	public static  List<FrBillPrint> billPrintList;
 
 	List<GetSellBillHeader> getSellBillHeaderList;
 	List<GetSellBillDetail> getSellBillDetailList;
@@ -916,6 +914,7 @@ public class BillController {
 		return model;
 
 	}
+	
 	//Search Bill Header for PDF providing fromDate,toDate,route/frIds...
 	@RequestMapping(value = "/getBillListProcessForPrint", method = RequestMethod.GET)
 	public @ResponseBody List<FrBillHeaderForPrint> getBillListProcessForPrint(HttpServletRequest request,
@@ -1041,7 +1040,7 @@ public class BillController {
 	public ModelAndView getBillDetailForPrint(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("billing/billDetailPdf");
-
+		billPrintList=new ArrayList<>();
 		//Constants.mainAct = 8;
 		//Constants.subAct = 83;
 		try {
@@ -1050,7 +1049,6 @@ public class BillController {
 			transportMode=request.getParameter("transport_mode");
 			
 			System.out.println("Vehicle No "+vehicleNo+"Transport Mode = " + transportMode);
-			
 
 				System.out.println("Inside new form action ");
 			
@@ -1070,9 +1068,7 @@ public class BillController {
 			
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			
-
 			map.add("billNoList", billList);
-			
 			
 			
 			 ParameterizedTypeReference<List<GetBillDetailPrint>> typeRef = new ParameterizedTypeReference<List<GetBillDetailPrint>>() {
@@ -1082,6 +1078,29 @@ public class BillController {
 			//List<GetBillDetailPrint>	billDetailsResponse =new ArrayList<>();
 			
 			List<GetBillDetailPrint>	billDetailsResponse = responseEntity.getBody();
+			
+			System.out.println("bill No in Header "+billHeadersListForPrint.toString());
+			
+			System.out.println("selected bills for Printing "+billList);
+			System.out.println("Size Here Now  "+billHeadersListForPrint.size());
+			billHeadersListForPrint=new ArrayList<>();
+			
+			//billHeadersListForPrint=getBillListProcessForPrint(request, response);
+			//List<FrBillHeaderForPrint> getBillListProcessForPrint
+			
+			/*List<String> billing=Arrays.asList(billList);
+
+			for(int a=0;a<billing.size();a++) {
+			
+			if(billHeadersListForPrint.get(a).getBillNo()!=Integer.parseInt(billing.get(a)) ){
+				
+				System.out.println("billHeader print removing bill"+billHeadersListForPrint.get(a));
+				
+				billHeadersListForPrint.remove(a);
+				
+			}
+			
+		}		*/
 
 			  /*List<GetBillDetail> billDetailsResponse = restTemplate.postForObject(Constants.url + "getBillDetailsForPrint",
 					map, List.class);
@@ -1104,11 +1123,51 @@ public class BillController {
 			billHeadersListForPrint=tempList;*/
 			
 			
+			map = new LinkedMultiValueMap<String, Object>();
+			
+			map.add("billNoList", billList);
+		
+			ParameterizedTypeReference<List<FrBillHeaderForPrint>> typeRef2 = new ParameterizedTypeReference<List<FrBillHeaderForPrint>>() {
+			};
+			ResponseEntity<List<FrBillHeaderForPrint>> responseEntity2 = restTemplate.exchange(Constants.url + "getFrBillHeaderForPrintSelectedBill",
+					HttpMethod.POST, new HttpEntity<>(map), typeRef2);
+			billHeadersListForPrint=new ArrayList<>();
+			//List<GetBillDetail>	billDetailsResponse = responseEntity.getBody();
+			billHeadersListForPrint=responseEntity2.getBody();
+		
+			System.out.println("in new BHLFP"+billHeadersListForPrint.toString());
+			/*List<FrBillHeaderForPrint> temHeaderList=billHeadersListForPrint;
+			
+			System.out.println("length of bil String "+selectedBills.length);
+			for(int k=0;k<selectedBills.length;k++) {
+				System.out.println("Inside for Loop 1 ");
+				
+				for(int y=0;y<temHeaderList.size();y++) {
+					System.out.println("Inside for Loop 2 ");
+
+					
+					int bNo=Integer.valueOf(selectedBills[k]);
+					
+					System.out.println("bill No "+bNo);
+				if(temHeaderList.get(y).getBillNo()==bNo){
+					
+					System.out.println("Inside If Loop ");
+
+					System.out.println("billHeader print removing bill"+temHeaderList.get(k));
+					billHeadersListForPrint.remove(y);
+					
+				}
+			}
+			}*/
+			
 			
 			billDetailsListForPrint = new ArrayList<GetBillDetailPrint>();
 			billDetailsListForPrint = billDetailsResponse;
 			System.out.println(" *** get Bill detail for Print response :: " + billDetailsListForPrint.toString());
-			FrBillPrint billPrint=null;
+			
+			System.out.println("Size Here Now  "+billHeadersListForPrint.size());
+			
+			FrBillPrint billPrint;
 			for(int i=0;i<billHeadersListForPrint.size();i++) {
 				  billPrint=new FrBillPrint();
 				 List<GetBillDetailPrint> billDetails=new ArrayList<>();
@@ -1130,14 +1189,14 @@ public class BillController {
 						 billDetails.add(billDetailsListForPrint.get(j));
 						 
 						// FrBillTax billTax=new FrBillTax(); not used 
-						 
-						 
 						
 					  }//end of if 
 					  
 				  }
 				  billPrint.setBillDetailsList(billDetails);
-				  //billPrintList=new ArrayList<>();
+				 //billPrintList=new ArrayList<>();
+				  
+				  if(billPrint!=null)
 				  billPrintList.add(billPrint);
 
 			  }
@@ -1696,7 +1755,7 @@ System.out.println("I am here "+f.toString());
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo221.pdf";
-		String filePath = "/home/ats-11/pdf/ordermemo221.pdf";
+		String filePath = "/ordermemo221.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;

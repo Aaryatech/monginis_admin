@@ -414,7 +414,7 @@
 																
 																//var billQty = "<td align=center><input name=newId id=newId value=21 type=number ></td>";
 
-															var baseRateAmt	
+															var baseRateAmt	;
 														if(bill.isSameState==1)	{
 														 baseRateAmt=(bill.orderRate*100)/(100+bill.itemTax1+bill.itemTax2);	
 														}
@@ -530,7 +530,7 @@
 																.append(billQty);
 														$('#table_grid tbody')
 																.append(
-																		baseRateAmt);
+																		baseRate);
 														$('#table_grid tbody')
 														.append(
 																taxableAmount);

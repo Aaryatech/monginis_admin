@@ -185,14 +185,12 @@
 
 
 									</div>
-									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Transport Mode<input type="text" class="form-control" name="transport_mode" value="By Road"/></label>
+									<!-- <label for="textfield2" class="col-xs-3 col-lg-2 control-label">Transport Mode<input type="text" class="form-control" name="transport_mode" value="By Road"/></label>
 									
 									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Vehicle No
 										<input type="text" class="form-control" name="vehicle_no" value="0"/> </label>
-									
+									 -->
 								</div>
-
-
 
 
 
@@ -224,6 +222,17 @@
 									</div>
 
 									<div class="box-content">
+									
+												
+								<div align="center" class="form-group">
+									
+									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Transport Mode<input type="text" class="form-control" name="transport_mode" value="By Road" data-rule-required="true"/></label>
+									
+									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Vehicle No
+										<input type="text" class="form-control" name="vehicle_no" value="0" data-rule-required="true"/> </label>
+									
+								</div>
+										
 
 										<div class="clearfix"></div>
 										<div class="table-responsive" style="border: 0">
@@ -299,14 +308,14 @@
 											</table>
 										</div>
 										
+							
+										
 										<!-- <button class="btn btn-info pull-right"
 								style="margin-right: 5px;" onclick="submitBill()">Get
 								PDF</button> -->
 								
 								<input type="button"margin-right: 5px;" id= "btn_submit" class="btn btn-primary" onclick="submitBill()"value="getBillDetails"/>
 									</div>
-
-
 								</div>
 							</form>
 						</div>

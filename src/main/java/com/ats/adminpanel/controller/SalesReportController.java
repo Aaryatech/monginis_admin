@@ -20,6 +20,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
@@ -55,18 +56,17 @@ import com.ats.adminpanel.model.salesreport.SalesReportRoyalty;
 import com.ats.adminpanel.model.salesreport.SalesReportRoyaltyFr;
 
 @Controller
-@Scope("session")
+//@Scope("session")
 public class SalesReportController {
 
 	List<String> frList = new ArrayList<>();
 	AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
-	static List<SalesReportBillwise> saleListForPdf ;
+	static  List<SalesReportBillwise> saleListForPdf ;//it is Static 
 	static String todaysDate;
 	static List<SalesReportRoyalty> royaltyListForPdf;
 	
 	List<SalesReportRoyaltyFr> royaltyFrList;
 	static RoyaltyListBean staticRoyaltyBean=new RoyaltyListBean();
-	
 	
 	
 
@@ -248,7 +248,9 @@ public class SalesReportController {
 		System.out.println("inside showSaleReportByFr ");
 		// Constants.mainAct =2;
 		// Constants.subAct =20;
-
+		HttpSession session=request.getSession();
+		
+		System.out.println("session Id in show Page  "+session.getId());
 		try {
 			ZoneId z = ZoneId.of("Asia/Calcutta");
 
@@ -375,6 +377,14 @@ public class SalesReportController {
 
 				saleList = responseEntity.getBody();
 				saleListForPdf=new ArrayList<>();
+				String name="Sachin";
+				
+				HttpSession session=request.getSession();
+				
+				System.out.println("session Id  In Ajax Call "+session.getId());
+				session.setAttribute("pdfData", saleList);
+				
+				session.setAttribute("name", name);
 				saleListForPdf=saleList;
 				
 				System.out.println("sales List Bill Wise "+saleList.toString());
@@ -394,6 +404,20 @@ public class SalesReportController {
 		ModelAndView model = new ModelAndView("reports/sales/pdf/billwisesalebyfrPdf");
 		try {
 
+			
+			HttpSession session=request.getSession();
+			List<SalesReportBillwise> saleList=new ArrayList<>();
+			
+			//session.setAttribute("pdfData", saleList);
+			 saleList=(List<SalesReportBillwise>)session.getAttribute("pdfData");
+				System.out.println("session Id in PDF Mapping "+session.getId());
+
+			 String name=(String)request.getSession().getAttribute("name");
+			 
+			 System.out.println("name using session : ="+name);
+			
+			System.out.println("sale List Inside Pdf using session "+saleList);
+			
 		System.out.println("inside PDf data "+saleListForPdf.toString());
 		
 		model.addObject("fromDate",todaysDate);
@@ -1497,6 +1521,8 @@ public class SalesReportController {
 			String toDate = request.getParameter("toDate");
 			String routeId = request.getParameter("route_id");
 			
+			int isGraph = Integer.parseInt(request.getParameter("is_graph"));
+			
 			String selectedCat=request.getParameter("cat_id_list");
 			
 			boolean isAllFrSelected = false;
@@ -1582,16 +1608,34 @@ public class SalesReportController {
 				map.add("frIdList", selectedFr);
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
-
+				if(isGraph==0) {
 				ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
 				};
+				
 				ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate
 						.exchange(Constants.url + "getSaleReportRoyConsoByCat", HttpMethod.POST, new HttpEntity<>(map), typeRef);
-
+			
+				
 				royaltyList = responseEntity.getBody();
 				royaltyListForPdf=new ArrayList<>();
 				
 				royaltyListForPdf=royaltyList;
+				}
+				
+				
+				if(isGraph==1) {
+					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
+					};
+					
+					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate
+							.exchange(Constants.url + "getSaleReportRoyConsoByCatForGraph", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+				
+					
+					royaltyList = responseEntity.getBody();
+					royaltyListForPdf=new ArrayList<>();
+					
+					royaltyListForPdf=royaltyList;
+					}
 				
 				System.out.println("royaltyList List Bill Wise "+royaltyList.toString());
 				
@@ -1603,8 +1647,6 @@ public class SalesReportController {
 				//allFrIdNameList = new AllFrIdNameList();
 				System.out.println("Category list  " +categoryList);
 				List<MCategoryList> tempList = new ArrayList<>();	
-				
-				
 				
 				//royaltyBean.setCategoryList(categoryList);
 				Map<Integer, String> catNameId = new HashMap<Integer, String>();
