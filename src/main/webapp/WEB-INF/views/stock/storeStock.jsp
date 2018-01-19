@@ -287,14 +287,7 @@ div.panel {
 														<th>Material Name</th>
 														<th>Invert Qty</th>
 														<th>BOM Qty</th>
-														<!-- <th>Prod Issue Qty</th>
-														<th>Prod Rej Qty</th>
-														<th>Prod Return Qty</th>
-														<th>Mix Issue Qty</th>
-														<th>Mix Return Qty</th>
-														<th>Mix Rej Qty</th>
-														<th>Store Issue Qty</th>
-														<th>Store Rej Qty</th> -->
+														 
 														<th>Opening Stock</th>
 														<th>Closing Qty</th>
 													<!-- 	<th>Status</th> -->
@@ -324,7 +317,7 @@ div.panel {
 
 											</table>
 										</div>
-
+<input type="hidden" id="stockDate">
 										<!-- this is for ajax call<input type="submit" class="btn btn-primary" value="Submit"
 										id="callSubmit" onclick="callSubmitGrn(); getGrnId();"> -->
 
@@ -333,8 +326,8 @@ div.panel {
 											 <div class="row">
 					<div class="col-md-12" style="text-align: center" >
 
-											<input type="submit" value="Day End Process"
-												class="btn btn-warning" id="submitDay">  
+											<input type="button" value="Day End Process"
+												class="btn btn-warning" id="submitDay" onclick="dayEnd()">  
 
 </div>
 										</div>
@@ -443,6 +436,23 @@ div.panel {
 		 */
 		 </script>
 			<script>
+			<script>
+			 
+			//document.getElementById("stockDate").value;
+			
+			var today = new Date();
+var dd = today.getDate();
+var mm = today.getMonth()+1; //January is 0!
+
+var yyyy = today.getFullYear();
+if(dd<10){
+    dd='0'+dd;
+} 
+if(mm<10){
+    mm='0'+mm;
+} 
+var today = dd+'-'+mm+'-'+yyyy;
+
 		function getStock(){
 			 
 			  var selectId=document.getElementById("selectStock").value;
@@ -477,6 +487,7 @@ div.panel {
 				  	tr.append($('<td></td>').html(stockList.bmsIssueQty));
 				  	tr.append($('<td></td>').html(stockList.storeOpeningStock));
 				  	tr.append($('<td></td>').html(stockList.storeClosingStock));
+					document.getElementById("stockDate").value = stockList.storeStockDate;
 				$('#table1 tbody').append(tr);
 				
 											})
@@ -579,7 +590,15 @@ div.panel {
 			
 			 
 		}
-		
+		function dayEnd()
+		{
+			var stockDate=document.getElementById("stockDate").value;
+			if(stockDate>today)
+				alert(" You can't day end today, please try tomarrow !!");
+			else{
+				  document.getElementById("validation-form").submit();
+			}
+		}
 	</script>
 	 
 	 <script>

@@ -3,6 +3,7 @@ package com.ats.adminpanel.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
+import java.time.Period;
 import java.time.YearMonth;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -152,6 +153,7 @@ public class StoreStockController {
 		System.out.println("Date  "+fromDate+"And "+toDate);
 		
 		DateTimeFormatter f = DateTimeFormatter.ofPattern( "dd-MM-uuuu" );
+		
 		YearMonth ym = YearMonth.parse( fromDate , f );
 		System.out.println(1);
 		LocalDate fDate = ym.atDay( 1 );
@@ -161,12 +163,15 @@ public class StoreStockController {
 		LocalDate tDate = ym1.atEndOfMonth();
 		System.out.println("tdate"+tDate);
 		
-		
+		if(tDate.isAfter(LocalDate.now()) || tDate.isEqual(LocalDate.now())){
+			System.out.println("GGGGGGGGGGGGGGG   Date is greater than today"+LocalDate.now().minus(Period.ofDays(1)));
+			tDate=LocalDate.now().minus(Period.ofDays(1));
+			}
 		System.out.println("Month Date    :"+ tDate+"     "+ fDate);
 		
 		MultiValueMap<String, Object> map=new LinkedMultiValueMap<>();
-		map.add("fromDate", fDate);
-		map.add("toDate", tDate);
+		map.add("fromDate",""+fDate);
+		map.add("toDate",""+tDate);
 		 
 		StoreStockDetailList storeStockDetailList=rest.postForObject(Constants.url +"getMonthWiseStoreStock", map, StoreStockDetailList.class);
 		System.out.println("Res List "+storeStockDetailList.toString());
@@ -190,9 +195,18 @@ public class StoreStockController {
 		String toDate=request.getParameter("toDate");
 		System.out.println("Date  "+fromDate+"And "+toDate);
 		
+		DateTimeFormatter f = DateTimeFormatter.ofPattern( "dd-MM-uuuu" );
+		  LocalDate tDate = LocalDate.parse(toDate, f);
+		
+		if(tDate.isAfter(LocalDate.now()) || tDate.isEqual(LocalDate.now())){
+			System.out.println("GGGGGGGGGGGGGGG   Date is greater than today"+LocalDate.now().minus(Period.ofDays(1)));
+			tDate=LocalDate.now().minus(Period.ofDays(1));
+			
+			}
+		System.out.println("ppppppppp  "+tDate);
 		MultiValueMap<String, Object> map=new LinkedMultiValueMap<>();
 		map.add("fromDate", DateConvertor.convertToYMD(fromDate));
-		map.add("toDate",  DateConvertor.convertToYMD(toDate));
+		map.add("toDate", ""+tDate );
 		 
 		StoreStockDetailList storeStockDetailList=rest.postForObject(Constants.url +"getMonthWiseStoreStock", map, StoreStockDetailList.class);
 		System.out.println("Res List "+storeStockDetailList.toString());
