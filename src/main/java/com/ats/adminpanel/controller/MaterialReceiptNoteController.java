@@ -30,7 +30,9 @@ import com.ats.adminpanel.model.MaterialRecieptAcc;
 import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;
 import com.ats.adminpanel.model.RawMaterial.Info;
 import com.ats.adminpanel.model.RawMaterial.RmItemGroup;
+import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.materialreceipt.GetMaterialRecNoteList;
+import com.ats.adminpanel.model.materialreceipt.GetMaterialReceiptByDate;
 import com.ats.adminpanel.model.materialreceipt.GetTaxListByRmId;
 import com.ats.adminpanel.model.materialreceipt.MaterialRecNote;
 import com.ats.adminpanel.model.materialreceipt.MaterialRecNoteDetails;
@@ -88,6 +90,118 @@ public class MaterialReceiptNoteController {
 		return model;
 
 	}
+	
+	@RequestMapping(value = "/allRecordwithDate", method = RequestMethod.GET)
+	public @ResponseBody List<GetMaterialReceiptByDate> allRecordwithDate(HttpServletRequest request,
+			HttpServletResponse response) {
+		System.out.println("hello");
+		String fromDate =  request.getParameter("from_date");
+		String toDate =  request.getParameter("to_date");
+		int flag = Integer.parseInt(request.getParameter("flag"));
+		List<GetMaterialReceiptByDate> getMaterialRecNoteList = new ArrayList<GetMaterialReceiptByDate>();
+		System.out.println("fromDate"+fromDate);
+		System.out.println("toDate"+toDate);
+		System.out.println("flag"+flag);
+		RestTemplate rest = new RestTemplate();
+		String status=null;
+
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			if(flag==0)
+			{
+				status="0,1,2,3,4,5";
+			}
+			else if(flag==1)
+			{
+				status="0,1,2,3,4,5";
+			}
+			else if(flag==2)
+			{
+				status="1,2,3,4,5";
+			}
+			else if(flag==3)
+			{
+				status="3,4,5";
+			}
+			map.add("status", status);
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+			map.add("flag", flag);
+			System.out.println("map"+map);
+			getMaterialRecNoteList = rest.postForObject(Constants.url + "/getAllMaterialRecNotes",map,
+					List.class);
+			System.out.println("getMaterialRecNoteList"+getMaterialRecNoteList);
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+			 
+		}
+
+		return getMaterialRecNoteList;
+
+	}
+	
+	@RequestMapping(value = "/allRecordwithDateDetailed", method = RequestMethod.GET)
+	public @ResponseBody ModelAndView allRecordwithDateDetailed(HttpServletRequest request,
+			HttpServletResponse response) {
+		System.out.println("hello");
+		int mrnId = Integer.parseInt(request.getParameter("mrnId"));
+		System.out.println("mrnId"+mrnId);
+		ModelAndView model = new ModelAndView("masters/detailedGateEntry");
+		List<SupplierDetails> supplierDetailsList = new ArrayList<SupplierDetails>();
+		RestTemplate rest = new RestTemplate(); 
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("mrnId", mrnId);
+			MaterialRecNote materialRecNote = rest.postForObject(Constants.url + "/getMaterialRecNotesHeaderDetails", map,
+					MaterialRecNote.class);
+			
+			supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplier", List.class);
+			TransporterList transporterList = rest.getForObject(Constants.url + "/showTransporters", TransporterList.class);
+			System.out.println("materialRecNote"+materialRecNote);
+			model.addObject("materialRecNote",materialRecNote);
+			model.addObject("supplierDetailsList",supplierDetailsList);
+			model.addObject("transporterList",transporterList.getTransporterList());
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+			 
+		}
+
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/allRecordwithDateAccDetailed", method = RequestMethod.GET)
+	public @ResponseBody ModelAndView allRecordwithDateAccDetailed(HttpServletRequest request,
+			HttpServletResponse response) {
+		System.out.println("hello");
+		int mrnId = Integer.parseInt(request.getParameter("mrnId"));
+		System.out.println("mrnId"+mrnId);
+		ModelAndView model = new ModelAndView("masters/detailedGateEntryAcc");
+		List<SupplierDetails> supplierDetailsList = new ArrayList<SupplierDetails>();
+		RestTemplate rest = new RestTemplate(); 
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("mrnId", mrnId);
+			MaterialRecNote materialRecNote = rest.postForObject(Constants.url + "/getMaterialRecNotesHeaderDetails", map,
+					MaterialRecNote.class);
+			
+			supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplier", List.class);
+			TransporterList transporterList = rest.getForObject(Constants.url + "/showTransporters", TransporterList.class);
+			System.out.println("materialRecNote"+materialRecNote);
+			model.addObject("materialRecNote",materialRecNote);
+			model.addObject("supplierDetailsList",supplierDetailsList);
+			model.addObject("transporterList",transporterList.getTransporterList());
+			 
+		} catch (Exception e) {
+			e.printStackTrace();
+			 
+		}
+
+		return model;
+
+	}
 
 	@RequestMapping(value = "/addGateEntry", method = RequestMethod.GET)
 	public ModelAndView addGateEntry(HttpServletRequest request, HttpServletResponse response) {
@@ -136,7 +250,7 @@ public class MaterialReceiptNoteController {
 		/*
 		 * Constants.mainAct = 17; Constants.subAct=184;
 		 */
-
+		RestTemplate rest = new RestTemplate();
 		materialRecNoteDetailslist = new ArrayList<>();
 
 		/*
@@ -186,6 +300,15 @@ public class MaterialReceiptNoteController {
 		MaterialRecNote materialRecNote = new MaterialRecNote();
 
 		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			String settingKey = new String();
+			settingKey = "mrn_no";
+			map.add("settingKeyList", settingKey);
+			FrItemStockConfigureList settingList = rest.postForObject(Constants.url + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			mrn_no=String.valueOf(settingList.getFrItemStockConfigure().get(0).getSettingValue());
+			System.out.println("mrn_no"+mrn_no);
+			
 			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
 			Date date = new Date();
 			System.out.println(dateFormat.format(date));
@@ -283,7 +406,7 @@ public class MaterialReceiptNoteController {
 
 			materialRecNote.setMaterialRecNoteDetails(materialRecNoteDetailslist);
 			System.out.println("materialRecNoteDetailslist" + materialRecNoteDetailslist.size());
-			RestTemplate rest = new RestTemplate();
+			
 			materialRecNotes = rest.postForObject(Constants.url + "/postMaterialRecNote", materialRecNote,
 					MaterialRecNote.class);// enter first form
 			if(materialRecNotes!=null)
