@@ -149,7 +149,41 @@
 									</div>
 
 								</div>
+                                                   <c:choose>
+														<c:when test="${planHeader.productionStatus==1}">
+									                    <c:set var="sts" value="Planning"></c:set>
 
+														</c:when>
+														<c:when test="${planHeader.productionStatus==2}">
+														  <c:set var="sts" value="Added From Order"></c:set>
+
+														</c:when>
+														<c:when test="${planHeader.productionStatus==3}">
+															 <c:set var="sts" value="Production Started"></c:set>
+
+														</c:when>
+														<c:when test="${planHeader.productionStatus==4}">
+															 <c:set var="sts" value="Production Completed"></c:set>
+
+														</c:when>
+														<c:when test="${planHeader.productionStatus==5}">
+														 <c:set var="sts" value="Closed"></c:set>
+
+														</c:when>
+														<c:otherwise>
+															<c:out value=""></c:out>
+
+														</c:otherwise>
+
+													</c:choose>
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Status
+									</label>
+									<div class="col-sm-5 col-lg-3 controls">
+										<input disabled type="text" name="status" id="status"
+											value="${sts}" class="form-control"/>
+									</div>
+								</div>
 								<div class="clearfix"></div>
 
 								<div class="table-responsive" style="border: 0">

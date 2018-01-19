@@ -172,8 +172,24 @@
 															<td align="left"><c:out value="Planning"></c:out></td>
 
 														</c:when>
+														<c:when test="${planHeader.productionStatus==2}">
+															<td align="left"><c:out value="Added From Order"></c:out></td>
+
+														</c:when>
+														<c:when test="${planHeader.productionStatus==3}">
+															<td align="left"><c:out value="Production Started"></c:out></td>
+
+														</c:when>
+														<c:when test="${planHeader.productionStatus==4}">
+															<td align="left"><c:out value="Production Completed"></c:out></td>
+
+														</c:when>
+														<c:when test="${planHeader.productionStatus==5}">
+															<td align="left"><c:out value="Closed"></c:out></td>
+
+														</c:when>
 														<c:otherwise>
-															<td align="left"><c:out value="Pending"></c:out></td>
+															<td align="left"><c:out value=""></c:out></td>
 
 														</c:otherwise>
 

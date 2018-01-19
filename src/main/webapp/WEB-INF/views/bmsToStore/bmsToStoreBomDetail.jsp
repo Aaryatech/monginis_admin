@@ -98,7 +98,7 @@
 								<i class="fa fa-table"></i>Bill of Material Request Detailed
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/getBomListBmsToStore">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 
@@ -111,7 +111,7 @@
 								action="${pageContext.request.contextPath}/approvedBomFromStore"
 								method="post">
 								<div class="box-content">
-									<div class="col-md-2">Bill Of Material Request Date</div>
+									<div class="col-md-3">Bill Of Material Request Date</div>
 
 									<div class="col-md-3">
 										<input type="text" id="mix_date" name="mix_date"
@@ -126,10 +126,27 @@
 
 								<div class="box-content">
 
-									<div class="col-md-2">Status</div>
+									<div class="col-md-3">Status</div>
 									<div class="col-md-3">
+									<c:choose>
+									<c:when test="${billOfMaterialHeader.status==0}">
+									<c:set var="sts" value="Pending"></c:set>
+									</c:when>
+									<c:when test="${billOfMaterialHeader.status==1}">
+										<c:set var="sts" value="Approved"></c:set>
+									</c:when>
+									<c:when test="${billOfMaterialHeader.status==2}">
+										<c:set var="sts" value="Rejected"></c:set>
+									</c:when>
+									<c:when test="${billOfMaterialHeader.status==3}">
+										<c:set var="sts" value="Approved Rejected"></c:set>
+									</c:when>
+									<c:when test="${billOfMaterialHeader.status==4}">
+										<c:set var="sts" value="Request Closed"></c:set>
+									</c:when>
+									</c:choose>
 										<input type="text" id="status" name="status"
-											value="${billOfMaterialHeader.status}" class="form-control"
+											value="${sts}" class="form-control"
 											readonly>
 									</div>
 								</div>
@@ -138,7 +155,7 @@
 								<div class="box-content">
 
 
-									<div class="col-md-2">From Department Name</div>
+									<div class="col-md-3">From Department</div>
 									<div class="col-md-3">
 										<input class="form-control" id="time_slot" size="16"
 											type="text" name="time_slot"
@@ -151,7 +168,7 @@
 								<div class="box-content">
 
 
-									<div class="col-md-2">To Department Name</div>
+									<div class="col-md-3">To Department</div>
 									<div class="col-md-3">
 										<input class="form-control" id="time_slot" size="16"
 											type="text" name="time_slot"

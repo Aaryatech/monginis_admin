@@ -159,7 +159,7 @@ div.panel {
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Select
-										View Option Date</label>
+										View Option</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<select name="selectStock"  class="form-control chosen"
 											tabindex="6" id="selectStock" onchange="showDiv(this)"
@@ -173,8 +173,15 @@ div.panel {
 										</select>
 									</div>
 
-								</div>
 								
+								 <div class="row" id="currentStockButton">
+	                              <div class="col-sm-5 col-lg-2 controls">
+					            	<input type="button"  class="btn btn-primary" value="Get Stock" onclick="getStock()">
+					 
+                                 </div>
+
+					       </div>
+							</div>	
 							<br/>
 
 							<div class="form-group">
@@ -192,10 +199,9 @@ div.panel {
 												 
 										</div> 
 
-										  <div class="col-md-1"></div> 
 
-										<div class="col-md-2">
-											<div class="col1title"> To :</div>
+										<div class="col-md-1">
+											 To :
 										</div>
 										<div class="col-md-3" align="center">
 											<input type='text' placeholder="Select To Date" 
@@ -229,18 +235,14 @@ div.panel {
 									</div> -->
 
 								</div>
-
-							</div><br/><br/>
-							
-							<div class="row">
-					<div class="col-md-12" style="text-align: center">
+    <div class="row" style="display: none" id="datewiseStockButton">
+	<div class="col-sm-5 col-lg-2 controls">
 						<input type="button"  class="btn btn-primary" value="Get Stock" onclick="getStock()">
 					 
-
+</div>
 
 					</div>
-				</div><br/>
-							
+							</div>
 							<!-- </form> -->
 
 
@@ -590,15 +592,23 @@ div.panel {
 				
 				if (select == 1) {
 					document.getElementById('select_month_year').style = "display:none";
+					document.getElementById('currentStockButton').style = "block";
+					document.getElementById('datewiseStockButton').style = "display:none";
+
 					document.getElementById('submitDay').disabled =false;
 				} else if (select == 2) {
 					document.getElementById('select_month_year').style.display = "block";
+					document.getElementById('currentStockButton').style = "display:none";
+					document.getElementById('datewiseStockButton').style = "block";
 
 				  	document.getElementById('submitDay').disabled =true; 
 				} else if (select == 3) {
+					document.getElementById('datewiseStockButton').style = "block";
 
 				  	document.getElementById('submitDay').disabled =true; 
 					document.getElementById('select_month_year').style.display = "block";
+					document.getElementById('currentStockButton').style = "display:none";
+
 				}
 				
 				
