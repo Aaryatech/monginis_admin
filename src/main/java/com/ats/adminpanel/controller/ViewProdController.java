@@ -712,7 +712,7 @@ public class ViewProdController {
 		for(int i=0;i<addmixingDetailedlist.size();i++)
 		{
 			System.out.println("in second for ");
-			int prod_qty = Integer.parseInt(request.getParameter("editQty"+count));
+			float prod_qty = Float.parseFloat(request.getParameter("editQty"+i));
 			System.out.println("prodqty  "+prod_qty);
 			addmixingDetailedlist.get(i).setProductionQty(prod_qty);
 			count++;
