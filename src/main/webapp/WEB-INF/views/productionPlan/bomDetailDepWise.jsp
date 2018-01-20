@@ -283,7 +283,10 @@
 								</c:choose>
 
 
-
+	<div style="text-align: center;">
+								<a href="${pageContext.request.contextPath}/showProdBOMPdf"
+								target="_blank">PDF</a>
+								</div>
 
 								<div class="box-content"></div>
 								<br>

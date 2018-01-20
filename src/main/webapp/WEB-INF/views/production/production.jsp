@@ -193,7 +193,6 @@
 										<input type="button" class="btn btn-info" value="Search" id="callsearch"
 											onclick="searchOrder()">
 
-
 									</div>
 								</div>
 
@@ -237,16 +236,13 @@
 														<th width="18" style="width: 18px">Sr No</th>
 														<th width="50">Item Id</th>
 														<th width="100">Item Name</th>
-														
-													<th width="100">Cur Closing Qty</th>
-													<th width="100">cur Opening Qty</th>
+														<th width="100">Cur Closing Qty</th>
+														<th width="100">cur Opening Qty</th>
 														<th width="100">Order Quantity</th>
 													<!-- 	<th width="100">Production Quantity</th> -->
-									
 													</tr>
 												</thead>
 												<tbody>
-											
 												
 												</tbody>
 												
@@ -404,8 +400,6 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-
-
 	<script type="text/javascript">
 $(document).ready(function() { 
 	$('#selectCategory').change(

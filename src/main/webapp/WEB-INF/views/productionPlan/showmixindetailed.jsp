@@ -281,6 +281,12 @@
 <input type="hidden" name="mixId" value="${mixheader.mixId}">
 <input type="hidden" name="isMixing" value="1">
 
+
+	<div style="text-align: center;">
+								<a href="${pageContext.request.contextPath}/showMixReqPdf"
+								target="_blank">PDF</a>
+								</div>
+
 							</form>
 						</div>
 					</div>

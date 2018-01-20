@@ -1,8 +1,15 @@
 package com.ats.adminpanel.controller;
 
+import java.awt.Desktop;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +34,8 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.RawMaterial.ItemDetailList;
+import com.ats.adminpanel.model.itextpdf.FooterTable;
+import com.ats.adminpanel.model.production.GetOrderItemQty;
 import com.ats.adminpanel.model.production.GetProdPlanDetail;
 import com.ats.adminpanel.model.production.GetProdPlanDetailList;
 import com.ats.adminpanel.model.production.GetProdPlanHeader;
@@ -44,6 +53,18 @@ import com.ats.adminpanel.model.stock.FinishedGoodStock;
 import com.ats.adminpanel.model.stock.FinishedGoodStockDetail;
 import com.ats.adminpanel.model.stock.GetCurProdAndBillQty;
 import com.ats.adminpanel.model.stock.GetCurProdAndBillQtyList;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 @Controller
 @Scope("session")
@@ -67,7 +88,6 @@ public class ViewProdController {
 	// temp Mix table beans
 	TempMixingList tempMixingList;
 	List<TempMixing> tempMixing = new ArrayList<>();
-	
 	
 	List<GetProdPlanHeader> prodPlanHeaderList;
 	
@@ -137,7 +157,7 @@ public class ViewProdController {
 		return model;
 		
 	}	
-	
+	List<FinishedGoodStockDetail> updateStockDetailList;
 	
 	@RequestMapping(value = "/getProdDetail/{productionHeaderId}", method = RequestMethod.GET)
 	public ModelAndView getProdDetail(@PathVariable("productionHeaderId")int productionHeaderId,
@@ -206,7 +226,7 @@ public class ViewProdController {
 		
 		
 		// new Code
-		List<FinishedGoodStockDetail> updateStockDetailList = new ArrayList<>();
+		 updateStockDetailList = new ArrayList<>();
 
 		try {
 			DateFormat dfYmd = new SimpleDateFormat("yyyy-MM-dd");
@@ -405,6 +425,130 @@ public class ViewProdController {
 		
 	}
 
+	
+	@RequestMapping(value = "/showProdByOrderPdf", method = RequestMethod.GET)
+	public void  showProdByOrderPdf(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+		  BufferedOutputStream outStream = null;
+		System.out.println("Inside Pdf prod From Order");
+		Document doc=new Document();
+			
+		
+		List<GetProdPlanDetail> moneyOutList = prodPlanDetailList;
+		
+		moneyOutList = prodPlanDetailList;
+		Document document = new Document(PageSize.A4);
+		//  ByteArrayOutputStream out = new ByteArrayOutputStream();
+		 
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+
+		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
+		String timeStamp=dateFormat.format(cal.getTime());
+		String FILE_PATH="/home/ats-11/REPORT.pdf";
+		File file=new File(FILE_PATH);
+		
+		PdfWriter writer = null;
+		
+		
+		 FileOutputStream out=new FileOutputStream(FILE_PATH);
+		   try {
+			    writer=PdfWriter.getInstance(document,out);
+		} catch (DocumentException e) {
+			
+			e.printStackTrace();
+		}
+		
+		 PdfPTable table = new PdfPTable(3);
+		 try {
+		 System.out.println("Inside PDF Table try");
+		 table.setWidthPercentage(100);
+	     table.setWidths(new float[]{0.9f, 1.4f,1.4f});
+	     Font headFont = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK);
+	     Font headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
+	     Font f=new Font(FontFamily.TIMES_ROMAN,12.0f,Font.UNDERLINE,BaseColor.BLUE);
+	     
+	     PdfPCell hcell;
+	     hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+
+	     hcell = new PdfPCell(new Phrase("Item Name", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	    
+	     hcell = new PdfPCell(new Phrase("Order Quantity", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	 
+	     int index=0;
+	     for (GetProdPlanDetail getMoneyOut : moneyOutList) {
+	       index++;
+	         PdfPCell cell;
+
+	        cell = new PdfPCell(new Phrase(String.valueOf(index),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         table.addCell(cell);
+
+	        
+	         cell = new PdfPCell(new Phrase(getMoneyOut.getItemName(),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(2);
+	         table.addCell(cell);
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(getMoneyOut.getOrderQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(2);
+	         table.addCell(cell);
+	         
+	        	         
+	         //FooterTable footerEvent = new FooterTable(table);
+	        // writer.setPageEvent(footerEvent);
+	     }
+
+	     document.open();
+	     Paragraph company = new Paragraph("G F P L",f);
+	     company.setAlignment(Element.ALIGN_CENTER);
+	     document.add(company);
+	     document.add(new Paragraph(" "));
+
+	     Paragraph heading = new Paragraph("Report");
+	     heading.setAlignment(Element.ALIGN_CENTER);
+	     document.add(heading);
+
+	     document.add(new Paragraph(" "));
+	     document.add(table);
+	 	 int totalPages=writer.getPageNumber();
+	 	
+	 	 System.out.println("Page no "+totalPages);
+	     
+	 	  document.close();
+	     
+	     Desktop d=Desktop.getDesktop();
+	     
+	     if(file.exists()) {
+	    	 try {
+				d.open(file);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+	     }
+	     
+	 } catch (DocumentException ex) {
+	 
+		 System.out.println("Pdf Generation Error: BOm Prod  View Prod"+ex.getMessage());
+		 
+		 ex.printStackTrace();
+	   
+	 }
+
+		
+	}
+	
+	
+	
 	@RequestMapping(value = "/updateQty", method = RequestMethod.POST)
 	public String updateQty(HttpServletRequest request, HttpServletResponse response) {
 		
@@ -712,7 +856,7 @@ public class ViewProdController {
 		for(int i=0;i<addmixingDetailedlist.size();i++)
 		{
 			System.out.println("in second for ");
-			float prod_qty = Float.parseFloat(request.getParameter("editQty"+i));
+			int prod_qty = Integer.parseInt(request.getParameter("editQty"+count));
 			System.out.println("prodqty  "+prod_qty);
 			addmixingDetailedlist.get(i).setProductionQty(prod_qty);
 			count++;
