@@ -72,8 +72,9 @@ public class MaterialReceiptNoteController {
 		Constants.mainAct=10;
 		Constants.subAct =55;
 
-		ModelAndView model = new ModelAndView("masters/gateEntryList");//
-
+		ModelAndView model = null ;
+		try {
+			model = new ModelAndView("masters/gateEntryList");
 		List<SupplierDetails> supplierDetailsList = new ArrayList<SupplierDetails>();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("status", 0);
@@ -90,6 +91,10 @@ public class MaterialReceiptNoteController {
 		model.addObject("materialRecNoteList", materialRecNoteList.getMaterialRecNoteList());
 		model.addObject("supplierDetailsList", supplierDetailsList);
 		model.addObject("transportlist", transporterList.getTransporterList());
+		}catch (Exception e) {
+			System.out.println("Ex in  showing Gate Entry"+e.getMessage());
+			e.printStackTrace();
+		}
 		return model;
 
 	}
@@ -196,7 +201,7 @@ public class MaterialReceiptNoteController {
 			model.addObject("materialRecNote",materialRecNote);
 			model.addObject("supplierDetailsList",supplierDetailsList);
 			model.addObject("transporterList",transporterList.getTransporterList());
-			 
+			 model.addObject("imageUrl",Constants.GATE_ENTRY_IMG_URL);
 		} catch (Exception e) {
 			e.printStackTrace();
 			 
@@ -554,6 +559,8 @@ public class MaterialReceiptNoteController {
 		model.addObject("supplierList", supplierDetailsList.getSupplierDetailslist());
 		model.addObject("transport", transporterList.getTransporterList());
 		model.addObject("rmlist", getRawMaterialDetail.getRawMaterialDetailsList());
+		
+		model.addObject("imageUrl",Constants.GATE_ENTRY_IMG_URL);
 		return model;
 	}
 
@@ -744,8 +751,8 @@ public class MaterialReceiptNoteController {
 			materialRecNote.setLrNo(lrno);
 			materialRecNote.setSupplierId(sup_id);
 			materialRecNote.setNoOfItem(no_of_items);
-			materialRecNote.setPhoto1("");
-			materialRecNote.setPhoto2("");
+			materialRecNote.setPhoto1(prevImage1);
+			materialRecNote.setPhoto2(prevImage2);
 			materialRecNote.setGateUserId(1);
 			materialRecNote.setGateRemark(remark);
 			materialRecNote.setPoDate("");
@@ -1266,12 +1273,11 @@ public class MaterialReceiptNoteController {
 			 }
 			
 			
-			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 			e.printStackTrace();
 		}
-		model.addObject("imageUrl", materialRecNote);
+		model.addObject("imageUrl", Constants.GATE_ENTRY_IMG_URL);
 		model.addObject("materialRecNoteHeader", materialRecNote);
 		model.addObject("materialRecNoteDetail", materialRecNote.getMaterialRecNoteDetails());
 		model.addObject("allRemarksList", getAllRemarksList.getGetAllRemarks());

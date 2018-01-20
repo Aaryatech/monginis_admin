@@ -255,13 +255,12 @@
 									data-provides="fileupload">
 									<div class="fileupload-new img-thumbnail"
 										style="width: 150px; height: 150px;">
-										<img src='"${imageUrl}"${materialRecNoteHeader.photo1}'
+										<img src="${imageUrl}${materialRecNoteHeader.photo1}"
 											onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';"
 											alt="" />
 									</div>
 									<div class="fileupload-preview fileupload-exists img-thumbnail"
 										style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-
 								</div>
 
 							</div>
@@ -272,7 +271,7 @@
 									data-provides="fileupload">
 									<div class="fileupload-new img-thumbnail"
 										style="width: 200px; height: 150px;">
-										<img src='"${imageUrl}"${materialRecNoteHeader.photo2}'
+										<img src="${imageUrl}${materialRecNoteHeader.photo2}"
 											onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';"
 											alt="" />
 									</div>

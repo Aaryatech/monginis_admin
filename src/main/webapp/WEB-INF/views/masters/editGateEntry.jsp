@@ -266,15 +266,15 @@
 									
 								</div>
 									<div class="col1">
-									<label class="col-sm-2 col-lg-2 control-label">Image</label>
+									<label class="col-sm-2 col-lg-2 control-label">Image ${imageUrl}${materialRecNoteHeader.photo2}</label>
 									<div class="col-sm-2 col-lg-4 controls">
 										<div class="fileupload fileupload-new"
 											data-provides="fileupload">
 											<div class="fileupload-new img-thumbnail"
 												style="width: 200px; height: 150px;">
-												<img
-													src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
-													alt="" />
+												<img src="${imageUrl}${materialRecNoteHeader.photo1}"
+											onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';"
+											alt="" />
 											</div>
 											<div
 												class="fileupload-preview fileupload-exists img-thumbnail"
@@ -299,9 +299,9 @@
 											data-provides="fileupload">
 											<div class="fileupload-new img-thumbnail"
 												style="width: 200px; height: 150px;">
-												<img
-													src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
-													alt="" />
+												<img src="${imageUrl}${materialRecNoteHeader.photo2}"
+											onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';"
+											alt="" />
 											</div>
 											<div
 												class="fileupload-preview fileupload-exists img-thumbnail"
