@@ -142,6 +142,7 @@
 										<th>lrNo</th>
 										<th>Vehical</th>
 										<th>Transport</th>
+										<th>Status</th>
 										<th>Action</th>
 
 									</tr>
@@ -152,11 +153,13 @@
 													varStatus="count">
 											<c:choose>
 													<c:when test="${materialRecNoteList.status==2}">
+													<c:set var="status" value="Rejected By Director"></c:set>
 													<c:set var = "color" value="red"/>
 													</c:when>
 													
 													
 													<c:otherwise>
+													<c:set var="status" value="Pending"></c:set>
 													  <c:set var = "color" value="black"/>
 													</c:otherwise>
 													</c:choose>
@@ -187,8 +190,7 @@
 															<td align="left" style="color: <c:out value = "${color}"/>"><c:out	
 																value="${materialRecNoteList.vehicleNo}" />
 																</td>
-																
-																
+													 
 																<c:forEach items="${transportlist}" var="transportlist"
 													varStatus="count">
 																<c:choose>
@@ -198,7 +200,9 @@
 													</c:when>
 													 </c:choose>
 													 </c:forEach>
-																
+																<td align="left" style="color: <c:out value = "${color}"/>"><c:out	
+																value="${status}" />
+																</td>
 																
 						<td><a href="${pageContext.request.contextPath}/showStoreMaterialReciept?mrnId=${materialRecNoteList.mrnId}" class="action_btn" >
 						<abbr title="Details"><i class="fa fa-list"></i></abbr></a>

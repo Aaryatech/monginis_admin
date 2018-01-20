@@ -134,18 +134,37 @@
 							
 							<div class="col-md-2" >MRN Type</div>
 									<div class="col-md-3">
-										<select name="mrntype" id="mrntype" class="form-control" tabindex="-1" required>
-									
-										<option selected value="">Select MRN Type</option>
-											
-											<c:forEach items="${mrntype}" var="mrntype">
-                                              
-                                              
-										<option value="${mrntype.grpId}"><c:out value="${mrntype.grpName}"></c:out> </option>
+										
+										<c:choose>
+													<c:when test="${materialRecNote.status==2}">
 													
-
-											</c:forEach>
-										</select>
+													<select name="mrntype" id="mrntype" class="form-control" tabindex="-1" required>
+													<c:forEach items="${mrntype}" var="mrntype">
+														<c:choose>
+														<c:when test="${mrntype.grpId==materialRecNote.mrnType}">
+														<option selected value="${mrntype.grpId}"><c:out value="${mrntype.grpName}"></c:out></option>
+														</c:when>
+														</c:choose>
+													
+													</c:forEach>
+												 
+													<c:forEach items="${mrntype}" var="mrntype"> 
+													<option value="${mrntype.grpId}"><c:out value="${mrntype.grpName}"></c:out> </option> 
+													</c:forEach> 
+													</select>
+													</c:when>
+													
+										<c:otherwise>
+										
+											<select name="mrntype" id="mrntype" class="form-control" tabindex="-1" required>
+												<option selected value="">Select MRN Type</option> 
+												<c:forEach items="${mrntype}" var="mrntype"> 
+													<option value="${mrntype.grpId}"><c:out value="${mrntype.grpName}"></c:out> </option> 
+												</c:forEach> 
+											</select>
+										</c:otherwise>
+										
+										</c:choose>
 									</div>
 									
 									<div class="col-md-2">Supplier </div>
@@ -503,9 +522,10 @@
 				var po_id = $(this).val();
 				if(po_id==1)
 				{
-					document.getElementById("poref_id").disabled = false;
+					document.getElementById("poref_id").disabled = false; 
 					document.getElementById("po_date").disabled = false;
 					document.getElementById("poref_id").required=true;
+					
 					
 				 
 				 
@@ -515,6 +535,8 @@
 				{
 					document.getElementById("poref_id").disabled = true;
 					document.getElementById("po_date").disabled = true;
+					document.getElementById("poref_id").value="";
+					document.getElementById("po_date").value ="";
 				 
 				}
 		})

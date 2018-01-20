@@ -151,6 +151,19 @@
 
 									<c:forEach items="${materialRecNoteList}" var="materialRecNoteList"
 													varStatus="count">
+													
+													<c:choose>
+														<c:when test="${materialRecNoteList.apainstPo==1}">
+														<c:set var="po" value="${materialRecNoteList.poNo}"></c:set> 
+														<c:set var="podate" value="${materialRecNoteList.poDate}"></c:set>
+														</c:when>
+														<c:otherwise>
+														<c:set var="po" value="Without Po"></c:set> 
+														<c:set var="podate" value="-"></c:set>
+														
+														</c:otherwise>
+														
+													</c:choose>
 
 												<c:choose>
 													<c:when test="${materialRecNoteList.status==3}">
@@ -173,7 +186,7 @@
 																value="${materialRecNoteList.mrnNo}" /></td>
 																
 																<td align="left" style="color:${color}"><c:out
-																value="${materialRecNoteList.poNo}" /></td>
+																value="${po}" /></td>
 																
 																<c:forEach items="${supplierDetailsList}" var="supplierDetailsList"
 													varStatus="count">
@@ -193,7 +206,7 @@
 												 
 															
 															<td align="left" style="color:${color}"><c:out	
-																value="${materialRecNoteList.poDate}" />
+																value="${podate}" />
 																</td>
 																
 														
@@ -208,7 +221,7 @@
 													<td align="left" style="color:${color}"><c:out value="Reject to Account"></c:out></td>
 													</c:when>
 													<c:when test="${materialRecNoteList.status =='4'}">
-													<td align="left" style="color:${color}"><c:out value="Approved"></c:out></td>
+													<td align="left" style="color:${color}"><c:out value="Approved By Director"></c:out></td>
 													</c:when>
 													
 												</c:choose>

@@ -220,7 +220,7 @@
 							<c:choose>
 							
 							
-							 	<c:when test="${(purchaseOrderHeader.poType==1) and (materialRecNoteHeader.poId!=0)}">
+							 	<c:when test="${(purchaseOrderHeader.poType==1) and (materialRecNoteHeader.poId!=0) and (purchaseOrderHeader.poStatus!=7)}">
 							 	
 							 		<div class="col-md-2">Po Status</div>
 									<div class="col-md-3">

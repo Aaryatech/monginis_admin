@@ -2,7 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
+ 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -291,7 +291,7 @@
 															<c:set var="tax" value="Including Tax"></c:set>
 														</c:when>
 														<c:otherwise>
-															<c:set var="tax" value="Including Tax"></c:set>
+															<c:set var="tax" value="No Including"></c:set>
 														</c:otherwise>
 													</c:choose>
 															
@@ -523,20 +523,21 @@
 									
 							
 							</div><br>
-							<div class="box-content">
-									<div class="col-md-2">Round Off</div>
-									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="roundOff" id="roundOff" class="form-control"
-									value="${materialRecNoteHeader.roundOff}" readonly>
-									</div>
-									
 							
-							</div><br>
 							<div class="box-content">
 									<div class="col-md-2">Bill Total</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="billAmount" id="billAmount" class="form-control"
 									value="${materialRecNoteHeader.billAmount}" readonly>
+									</div>
+									
+							
+							</div><br>
+							<div class="box-content">
+									<div class="col-md-2">Round Off</div>
+									<div class="col-md-3">
+										<input style="text-align:right; width:150px" type="text" name="roundOff" id="roundOff" class="form-control"
+									value="${materialRecNoteHeader.roundOff}" readonly>
 									</div>
 									
 							
@@ -676,11 +677,19 @@
 								
 								
 								
-						
+									var tax;
+									if(itemList.incldTax==1)
+										{
+										tax="Including Tax";
+										}
+									else
+										{
+										tax="No Including";
+										}
 									var tr = $('<tr></tr>');
 									tr.append($('<td></td>').html(key+1));
 
-								  	tr.append($('<td></td>').html(itemList.incldTax));
+								  	tr.append($('<td></td>').html(tax));
 								  	tr.append($('<td></td>').html(itemList.item));
 								  	if(itemList.incldTax==0)
 								  		{
@@ -763,6 +772,7 @@
 										document.getElementById("sgst").value=data.sgst;
 										document.getElementById("igst").value=data.igst;
 										document.getElementById("cess").value=data.cess;
+										document.getElementById("roundOff").value=data.roundOff;
 								});
 					
 					
@@ -874,20 +884,24 @@
 
 									},
 								function(data)
-								{
+								{ 
+										alert("data.igst"+data.igst);
+										 
+										alert("round off"+data.roundOff); 
 										
-										document.getElementById("discAmt2").value=data.discAmt2;
-										document.getElementById("billAmount").value=data.billAmount;
 										document.getElementById("basicValue").value=data.basicValue;
+										document.getElementById("billAmount").value=data.billAmount;
+										document.getElementById("discAmt2").value=data.discAmt2;
 										document.getElementById("discAmt").value=data.discAmt;
-										document.getElementById("other1").value=data.other1;
-										document.getElementById("other2").value=data.other2;
-										document.getElementById("other3").value=data.other3;
-										document.getElementById("other4").value=data.other4;
+										document.getElementById("Other1").value=data.other1;
+										document.getElementById("Other2").value=data.other2;
+										document.getElementById("Other3").value=data.other3;
+										document.getElementById("Other4").value=data.other4;
 										document.getElementById("cgst").value=data.cgst;
 										document.getElementById("sgst").value=data.sgst;
 										document.getElementById("igst").value=data.igst;
 										document.getElementById("cess").value=data.cess;
+										document.getElementById("roundOff").value=data.roundOff;
 								});
 					
 				});

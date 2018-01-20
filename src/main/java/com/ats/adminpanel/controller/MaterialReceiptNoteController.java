@@ -2,6 +2,8 @@ package com.ats.adminpanel.controller;
 
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -1034,7 +1036,7 @@ public class MaterialReceiptNoteController {
 					materialRecNoteDetails.setSupplierId(purchaseDetail.getSuppId());
 					materialRecNoteDetails.setPoId(purchaseDetail.getPoId());
 					materialRecNoteDetails.setPoQty(purchaseDetail.getPoQty());
-					materialRecNoteDetails.setRecdQty(0);
+					materialRecNoteDetails.setRecdQty(purchaseDetail.getPoQty());
 					materialRecNoteDetails.setStockQty(0);
 					materialRecNoteDetails.setRejectedQty(0);
 					materialRecNoteDetails.setValue(0);
@@ -1330,7 +1332,7 @@ public class MaterialReceiptNoteController {
 	public float sgst = 0;
 	public float igst = 0;
 	public float cess = 0;
-
+	DecimalFormat df = new DecimalFormat("#.00");
 	MaterialRecNote materialRecNoteHeaderAcc = new MaterialRecNote();
 	int checkSupp;
 
@@ -1441,12 +1443,12 @@ public class MaterialReceiptNoteController {
 					}
 					if (materialRecieptAcc.getIncldTax() == 1) {
 						materialRecieptAcc
-								.setRateCal(materialRecieptAcc.getPoRate() / (1 + materialRecieptAcc.getGst() / 100));
+								.setRateCal(Float.valueOf(df.format(materialRecieptAcc.getPoRate() / (1 + materialRecieptAcc.getGst() / 100))));
 					} else {
 						materialRecieptAcc.setRateCal(materialRecieptAcc.getPoRate());
 					}
 
-					materialRecieptAcc.setValue(materialRecieptAcc.getReciedvedQty() * materialRecieptAcc.getRateCal());
+					materialRecieptAcc.setValue(Float.valueOf(df.format(materialRecieptAcc.getReciedvedQty() * materialRecieptAcc.getRateCal())));
 					valueTotal = valueTotal + materialRecieptAcc.getValue();// for calculate total Value
 					System.out.println("valueTotal" + valueTotal);
 
@@ -1464,20 +1466,20 @@ public class MaterialReceiptNoteController {
 					materialRecieptAcc.setOther2(0);
 
 					materialRecieptAcc.setCess(0);
-					materialRecieptAcc.setTaxableAmt(materialRecieptAcc.getValue() - materialRecieptAcc.getDiscAmt()
+					materialRecieptAcc.setTaxableAmt(Float.valueOf(df.format(materialRecieptAcc.getValue() - materialRecieptAcc.getDiscAmt()
 							- materialRecieptAcc.getCdAmt()
 							+ (materialRecieptAcc.getFreightAmt() + materialRecieptAcc.getInsuAmt()
-									+ materialRecieptAcc.getOther1() + materialRecieptAcc.getOther2()));
+									+ materialRecieptAcc.getOther1() + materialRecieptAcc.getOther2()))));
 					taxableAmt = taxableAmt + materialRecieptAcc.getTaxableAmt();
 					System.out.println("taxableAmt" + taxableAmt);
 					
 					if(checkSupp==1)
 					{
-						materialRecieptAcc.setCgstAmt(materialRecieptAcc.getTaxableAmt() * materialRecieptAcc.getCgst() / 100);
+						materialRecieptAcc.setCgstAmt(Float.valueOf(df.format(materialRecieptAcc.getTaxableAmt() * materialRecieptAcc.getCgst() / 100)));
 						cgst = cgst + materialRecieptAcc.getCgstAmt();
 						System.out.println("cgst" + cgst);
 
-						materialRecieptAcc.setSgstAmt(materialRecieptAcc.getTaxableAmt() * materialRecieptAcc.getSgst() / 100);
+						materialRecieptAcc.setSgstAmt(Float.valueOf(df.format(materialRecieptAcc.getTaxableAmt() * materialRecieptAcc.getSgst() / 100)));
 						sgst = sgst + materialRecieptAcc.getSgstAmt();
 						System.out.println("sgst" + sgst);
 
@@ -1494,7 +1496,7 @@ public class MaterialReceiptNoteController {
 						sgst = sgst + materialRecieptAcc.getSgstAmt();
 						System.out.println("sgst" + sgst);
 
-						materialRecieptAcc.setIgstAmt(materialRecieptAcc.getTaxableAmt() * materialRecieptAcc.getIgst() / 100);
+						materialRecieptAcc.setIgstAmt(Float.valueOf(df.format(materialRecieptAcc.getTaxableAmt() * materialRecieptAcc.getIgst() / 100)));
 						igst = igst + materialRecieptAcc.getIgstAmt();
 						
 					}
@@ -1516,7 +1518,7 @@ public class MaterialReceiptNoteController {
 
 			materialRecNoteHeaderAcc.setBasicValue(valueTotal);
 			materialRecNoteHeaderAcc.setDiscAmt2(discAmtTotal);
-			materialRecNoteHeaderAcc.setDiscAmt((materialRecNoteHeaderAcc.getBasicValue() - materialRecNoteHeaderAcc.getDiscAmt2())*materialRecNoteHeaderAcc.getDiscPer() / 100);
+			materialRecNoteHeaderAcc.setDiscAmt(Float.valueOf(df.format((materialRecNoteHeaderAcc.getBasicValue() - materialRecNoteHeaderAcc.getDiscAmt2())*materialRecNoteHeaderAcc.getDiscPer() / 100)));
 			materialRecNoteHeaderAcc.setCgst(cgst);
 			materialRecNoteHeaderAcc.setSgst(sgst);
 			materialRecNoteHeaderAcc.setIgst(igst);
@@ -1527,7 +1529,7 @@ public class MaterialReceiptNoteController {
 							+ other4total + materialRecNoteHeaderAcc.getCgst() + materialRecNoteHeaderAcc.getSgst()
 							+ materialRecNoteHeaderAcc.getIgst() + materialRecNoteHeaderAcc.getCess()
 							+ materialRecNoteHeaderAcc.getRoundOff());
-			materialRecNoteHeaderAcc.setBillAmount(finalAmt);
+			materialRecNoteHeaderAcc.setBillAmount(Float.valueOf(df.format(finalAmt)));
 
 			System.out.println("materialRecieptAccList " + materialRecieptAccList.toString());
 
@@ -1547,6 +1549,8 @@ public class MaterialReceiptNoteController {
 	@RequestMapping(value = "/updatedetailed", method = RequestMethod.GET)
 	@ResponseBody
 	public List<MaterialRecieptAcc> updatedetailed(HttpServletRequest request, HttpServletResponse response) {
+		DecimalFormat df = new DecimalFormat("#.00");
+		 
 
 		int index = Integer.parseInt(request.getParameter("index"));
 		float poRate = Float.parseFloat(request.getParameter("poRate"));
@@ -1573,28 +1577,28 @@ public class MaterialReceiptNoteController {
 					materialRecieptAccList.get(i).setPoRate(poRate);
 					if(materialRecieptAccList.get(i).getIncldTax()==1)
 					{
-						materialRecieptAccList.get(i).setRateCal(materialRecieptAccList.get(i).getPoRate()
-								/ (1 + materialRecieptAccList.get(i).getGst() / 100));
+						
+						materialRecieptAccList.get(i).setRateCal(Float.valueOf(df.format(materialRecieptAccList.get(i).getPoRate()
+								/ (1 + materialRecieptAccList.get(i).getGst() / 100))));
 					}
 					else
 					{
 						materialRecieptAccList.get(i).setRateCal(materialRecieptAccList.get(i).getPoRate());
 					}
 					
-					materialRecieptAccList.get(i).setValue(materialRecieptAccList.get(i).getReciedvedQty()
-							* materialRecieptAccList.get(i).getRateCal());
+					materialRecieptAccList.get(i).setValue(Float.valueOf(df.format(materialRecieptAccList.get(i).getReciedvedQty()* materialRecieptAccList.get(i).getRateCal())));
 					materialRecieptAccList.get(i).setDiscPer(discPer);
-					materialRecieptAccList.get(i).setDiscAmt(materialRecieptAccList.get(i).getValue()
-							* materialRecieptAccList.get(i).getDiscPer() / 100);
-					materialRecieptAccList.get(i).setTaxableAmt(materialRecieptAccList.get(i).getValue()
+					materialRecieptAccList.get(i).setDiscAmt(Float.valueOf(df.format(materialRecieptAccList.get(i).getValue()
+							* materialRecieptAccList.get(i).getDiscPer() / 100)));
+					materialRecieptAccList.get(i).setTaxableAmt(Float.valueOf(df.format(materialRecieptAccList.get(i).getValue()
 							- materialRecieptAccList.get(i).getDiscAmt() - materialRecieptAccList.get(i).getCdAmt()
 							+ (materialRecieptAccList.get(i).getFreightAmt()
 									+ materialRecieptAccList.get(i).getInsuAmt()
 									+ materialRecieptAccList.get(i).getOther1()
-									+ materialRecieptAccList.get(i).getOther2()));
+									+ materialRecieptAccList.get(i).getOther2()))));
 					materialRecieptAccList.get(i).setCdAmt(
-							(materialRecieptAccList.get(i).getValue() - materialRecieptAccList.get(i).getDiscAmt())
-									* materialRecieptAccList.get(i).getCdPer() / 100);
+							Float.valueOf(df.format((materialRecieptAccList.get(i).getValue() - materialRecieptAccList.get(i).getDiscAmt())
+									* materialRecieptAccList.get(i).getCdPer() / 100)));
 					materialRecieptAccList.get(i).setOther1(other1);
 					materialRecieptAccList.get(i).setOther2(other2);
 					materialRecieptAccList.get(i).setOther3(other3);
@@ -1602,18 +1606,18 @@ public class MaterialReceiptNoteController {
  
 					if(checkSupp==1)
 					{
-						materialRecieptAccList.get(i).setCgstAmt(materialRecieptAccList.get(i).getTaxableAmt()
-								* materialRecieptAccList.get(i).getCgst() / 100);
-						materialRecieptAccList.get(i).setSgstAmt(materialRecieptAccList.get(i).getTaxableAmt()
-								* materialRecieptAccList.get(i).getSgst() / 100);
+						materialRecieptAccList.get(i).setCgstAmt(Float.valueOf(df.format(materialRecieptAccList.get(i).getTaxableAmt()
+								* materialRecieptAccList.get(i).getCgst() / 100)));
+						materialRecieptAccList.get(i).setSgstAmt(Float.valueOf(df.format(materialRecieptAccList.get(i).getTaxableAmt()
+								* materialRecieptAccList.get(i).getSgst() / 100)));
 						materialRecieptAccList.get(i).setIgstAmt(0);
 					}
 					else
 					{
 						materialRecieptAccList.get(i).setCgstAmt(0);
 						materialRecieptAccList.get(i).setSgstAmt(0);
-						materialRecieptAccList.get(i).setIgstAmt(materialRecieptAccList.get(i).getTaxableAmt()
-								* materialRecieptAccList.get(i).getIgst() / 100);
+						materialRecieptAccList.get(i).setIgstAmt(Float.valueOf(df.format(materialRecieptAccList.get(i).getTaxableAmt()
+								* materialRecieptAccList.get(i).getIgst() / 100)));
 						
 					}
 					materialRecieptAccList.get(i).setCessAmt(cessAmt);
@@ -1667,6 +1671,7 @@ public class MaterialReceiptNoteController {
 	@RequestMapping(value = "/updateHeader", method = RequestMethod.GET)
 	@ResponseBody
 	public MaterialRecNote updateHeader(HttpServletRequest request, HttpServletResponse response) {
+		DecimalFormat df = new DecimalFormat("#.00");
 		try {
 			System.out.println("ala");
 			valueTotal = 0;
@@ -1683,6 +1688,7 @@ public class MaterialReceiptNoteController {
 			sgst = 0;
 			igst = 0;
 			cess = 0;
+			float finalAmt=0;
 			for (int i = 0; i < materialRecieptAccList.size(); i++) {
 				valueTotal = valueTotal + materialRecieptAccList.get(i).getValue();
 				discAmtTotal = discAmtTotal + materialRecieptAccList.get(i).getDiscAmt();
@@ -1705,8 +1711,8 @@ public class MaterialReceiptNoteController {
 			materialRecNoteHeaderAcc.setBasicValue(valueTotal);
 			materialRecNoteHeaderAcc.setDiscAmt2(discAmtTotal);
 			materialRecNoteHeaderAcc
-					.setDiscAmt((materialRecNoteHeaderAcc.getBasicValue() - materialRecNoteHeaderAcc.getDiscAmt2())
-							* materialRecNoteHeaderAcc.getDiscPer() / 100);
+					.setDiscAmt(Float.valueOf(df.format((materialRecNoteHeaderAcc.getBasicValue() - materialRecNoteHeaderAcc.getDiscAmt2())
+							* materialRecNoteHeaderAcc.getDiscPer() / 100)));
 			materialRecNoteHeaderAcc.setCgst(cgst);
 			materialRecNoteHeaderAcc.setSgst(sgst);
 			materialRecNoteHeaderAcc.setIgst(igst);
@@ -1715,15 +1721,17 @@ public class MaterialReceiptNoteController {
 			materialRecNoteHeaderAcc.setOther2(other2total);
 			materialRecNoteHeaderAcc.setOther3(other3total);
 			materialRecNoteHeaderAcc.setOther4(other4total);
-			float finalAmt = (materialRecNoteHeaderAcc.getBasicValue() - materialRecNoteHeaderAcc.getDiscAmt2()
+			System.out.println("before submit" + finalAmt);
+			finalAmt = (materialRecNoteHeaderAcc.getBasicValue() - materialRecNoteHeaderAcc.getDiscAmt2()
 					- materialRecNoteHeaderAcc.getDiscAmt()-other1total-other2total)
 					+ (materialRecNoteHeaderAcc.getFreightAmt() + materialRecNoteHeaderAcc.getInsuranceAmt() + other3total
 							+ other4total + materialRecNoteHeaderAcc.getCgst() + materialRecNoteHeaderAcc.getSgst()
-							+ materialRecNoteHeaderAcc.getIgst() + materialRecNoteHeaderAcc.getCess()
-							+ materialRecNoteHeaderAcc.getRoundOff());
-			materialRecNoteHeaderAcc.setBillAmount(finalAmt);
-
-			System.out.println("CessAmt" + materialRecNoteHeaderAcc.getCess());
+							+ materialRecNoteHeaderAcc.getIgst() + materialRecNoteHeaderAcc.getCess());
+			materialRecNoteHeaderAcc.setBillAmount(Float.valueOf(df.format(finalAmt)));
+			materialRecNoteHeaderAcc.setRoundOff(Math.round(finalAmt));
+			 
+			System.out.println("BillAmount" + materialRecNoteHeaderAcc.getBillAmount());
+			System.out.println(" RoundOff" + materialRecNoteHeaderAcc.getRoundOff());
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -1751,33 +1759,33 @@ public class MaterialReceiptNoteController {
 
 			for (int i = 0; i < materialRecieptAccList.size(); i++) {
 				materialRecieptAccList.get(i).setCdPer(discPer);
-				materialRecieptAccList.get(i).setCdAmt(
+				materialRecieptAccList.get(i).setCdAmt(Float.valueOf(df.format(
 						(materialRecieptAccList.get(i).getValue() - materialRecieptAccList.get(i).getDiscAmt())
-								* materialRecieptAccList.get(i).getCdPer() / 100);
+								* materialRecieptAccList.get(i).getCdPer() / 100)));
 				materialRecieptAccList.get(i)
-						.setFreightAmt(materialRecieptAccList.get(i).getDivFactor() * freightAmt / 100);
+						.setFreightAmt(Float.valueOf(df.format(materialRecieptAccList.get(i).getDivFactor() * freightAmt / 100)));
 				materialRecieptAccList.get(i)
 						.setInsuAmt(materialRecieptAccList.get(i).getDivFactor() * insuranceAmt / 100);
-				materialRecieptAccList.get(i).setTaxableAmt(materialRecieptAccList.get(i).getValue()
+				materialRecieptAccList.get(i).setTaxableAmt(Float.valueOf(df.format(materialRecieptAccList.get(i).getValue()
 						- materialRecieptAccList.get(i).getDiscAmt() - materialRecieptAccList.get(i).getCdAmt()
 						+ (materialRecieptAccList.get(i).getFreightAmt() + materialRecieptAccList.get(i).getInsuAmt()
 								+ materialRecieptAccList.get(i).getOther1()
-								+ materialRecieptAccList.get(i).getOther2()));
+								+ materialRecieptAccList.get(i).getOther2()))));
 				
 				if(checkSupp==1)
 				{
-					materialRecieptAccList.get(i).setCgstAmt(materialRecieptAccList.get(i).getTaxableAmt()
-							* materialRecieptAccList.get(i).getCgst() / 100);
-					materialRecieptAccList.get(i).setSgstAmt(materialRecieptAccList.get(i).getTaxableAmt()
-							* materialRecieptAccList.get(i).getSgst() / 100);
+					materialRecieptAccList.get(i).setCgstAmt(Float.valueOf(df.format(materialRecieptAccList.get(i).getTaxableAmt()
+							* materialRecieptAccList.get(i).getCgst() / 100)));
+					materialRecieptAccList.get(i).setSgstAmt(Float.valueOf(df.format(materialRecieptAccList.get(i).getTaxableAmt()
+							* materialRecieptAccList.get(i).getSgst() / 100)));
 					materialRecieptAccList.get(i).setIgstAmt(0);
 				}
 				else
 				{
 					materialRecieptAccList.get(i).setCgstAmt(0);
 					materialRecieptAccList.get(i).setSgstAmt(0);
-					materialRecieptAccList.get(i).setIgstAmt(materialRecieptAccList.get(i).getTaxableAmt()
-							* materialRecieptAccList.get(i).getIgst() / 100);
+					materialRecieptAccList.get(i).setIgstAmt(Float.valueOf(df.format(materialRecieptAccList.get(i).getTaxableAmt()
+							* materialRecieptAccList.get(i).getIgst() / 100)));
 					
 				}
 
