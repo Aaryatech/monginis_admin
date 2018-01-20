@@ -51,6 +51,7 @@
 <body>
 <c:url var="gateEntryList" value="/gateEntryList"></c:url>
 <c:url var="withPoRef" value="/withPoRef"></c:url>
+<c:url var="withoutPo" value="/withoutPo"></c:url>
 <c:url var="withPoRefDate" value="/withPoRefDate"></c:url>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
@@ -269,7 +270,7 @@
 													<c:otherwise>
 													<div class="col-md-2" >PO Reference</div>
 														<div class="col-md-3">
-													<input  id="po_no" type="hidden" name="po_no" />
+													
 													 <select name="poref_id" id="poref_id" class="form-control" tabindex="-1"  disabled>
 														<option value="">Select Po Ref</option>
 											
@@ -291,7 +292,7 @@
 										<div class="col-md-3">
 										<input class="form-control" id="po_date" size="16"
 											type="text" name="po_date" value="${materialRecNote.poDate}" placeholder="PO Date"  readonly />
-										
+										<input  id="po_no" type="text" name="po_no" />
 											
 									</div>
 													</c:otherwise>
@@ -537,6 +538,8 @@
 					document.getElementById("po_date").disabled = true;
 					document.getElementById("poref_id").value="";
 					document.getElementById("po_date").value ="";
+					document.getElementById("po_no").value="";
+					 
 				 
 				}
 		})
@@ -547,7 +550,7 @@
 	$(document).ready(function() { 
 		$('#poref_id').change(
 				function() {
-					alert("poid"+$(this).val());
+					//alert("poid"+$(this).val());
 				 
 					$.getJSON('${withPoRef}', {
 						
@@ -592,22 +595,24 @@
 												})
 												
 							}
+						
+						$.getJSON('${withPoRefDate}', {
+							
+							 
+							ajax : 'true',
+						},
+								function(data) {
+							
+							
+							
+							document.getElementById("po_date").value=data[0].poDate;
+							document.getElementById("po_no").value=data[0].poNo;
+													
+								});
 												
 							});
 					
-					$.getJSON('${withPoRefDate}', {
-						
-						 
-						ajax : 'true',
-					},
-							function(data) {
-						
-						
-						
-						document.getElementById("po_date").value=data[0].poDate;
-						document.getElementById("po_no").value=data[0].poNo;
-												
-							});
+					
 					
 			})
 						 
@@ -615,27 +620,63 @@
 	
 	
 	
-	/* $(document).ready(function() { 
-		$('#poref_id').change(
+	$(document).ready(function() { 
+		$('#po_id').change(
 				function() {
-				 
-					$.getJSON('${withPoRefDate}', {
+					alert("poid"+$(this).val());
+					var id=$(this).val();
+				   if($(this).val()==2)
+					   {
+					$.getJSON('${withoutPo}', {
 						
-						 
-						ajax : 'true',
+						poref_id : $(this).val(),
+						ajax : 'true'
 					},
 							function(data) {
+						if(data=="")
+							{
+							
+							}
+						else
+							{
+							
+							$('#table_grid td').remove();
+						
+							
 						
 						
-						
-						document.getElementById("po_date").value=data[0].poDate;
-						document.getElementById("po_no").value=data[0].poNo;
+						var srNo=document.getElementById("srNo").value;
+						 $.each(data,function(key, itemList) {
+													
+						var tr = $('<tr></tr>');
+
+					  	tr.append($('<td></td>').html(key+1));			  	
+					  	tr.append($('<td></td>').html(itemList.rmName));
+						tr.append($('<td></td>').html(itemList.recdQty));
+						tr.append($('<td></td>').html(itemList.poQty));
+						if(itemList.mrnDetailId!=0)
+							{
+						tr.append($('<td></td>').html("<input type='text' class='form-control' name='stockQty"+itemList.mrnDetailId+"' required>"));
+						tr.append($('<td></td>').html("<input type='text' class='form-control' name='rejectedQty"+itemList.mrnDetailId+"' required>"));
+							}
+						else
+							{
+							tr.append($('<td></td>').html("0"));
+							tr.append($('<td></td>').html("0"));
+							}
+						tr.append($('<td></td>').html(itemList.poRate));
+					$('#table_grid tbody').append(tr);
+					
+												})
+												
+							}
 												
 							});
-					
+				}
+					 
 			})
-						 
-	}); */
+			 		 
+	});
 	</script> 
 	
 	

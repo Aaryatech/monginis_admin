@@ -904,16 +904,16 @@ public class MaterialReceiptNoteController {
 		}
 		return "redirect:/showAllStoreMaterialReciept";
 	}
-
+	int mrnIdStore=0;
 	@RequestMapping(value = "/showStoreMaterialReciept", method = RequestMethod.GET)
 	public ModelAndView showStoreMaterialReciept(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialReceiptStore");
 		try
 		{
-			int mrnId = Integer.parseInt(request.getParameter("mrnId"));
+			mrnIdStore = Integer.parseInt(request.getParameter("mrnId"));
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("mrnId", mrnId);
+			map.add("mrnId", mrnIdStore);
 
 			RestTemplate rest = new RestTemplate();
 			materialRecNoteHeader = rest.postForObject(Constants.url + "/getMaterialRecNotesHeaderDetails", map,
@@ -973,17 +973,23 @@ public class MaterialReceiptNoteController {
 
 		try {
 			
-			 getmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
-			 System.out.println("null size "+getmaterialRecNoteDetailslist.size());
-			 getmaterialRecNoteDetailslist=materialRecNoteHeader.getMaterialRecNoteDetails();
+			purchaseOrderDetailedListcomp = new ArrayList<PurchaseOrderDetail>();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("mrnId", mrnIdStore);
+
+			RestTemplate rest = new RestTemplate();
+			materialRecNoteHeader = rest.postForObject(Constants.url + "/getMaterialRecNotesHeaderDetails", map,
+					MaterialRecNote.class);
+			getmaterialRecNoteDetailslist = materialRecNoteHeader.getMaterialRecNoteDetails();
+			
 			 System.out.println("initial size "+getmaterialRecNoteDetailslist.size());
 			int poId = Integer.parseInt(request.getParameter("poref_id"));
 			System.out.println("poref_id" + poId);
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			 map = new LinkedMultiValueMap<String, Object>();
 			map.add("poId", poId);
 
-			RestTemplate rest = new RestTemplate();
+			 
 			PurchaseOrderDetailedList purchaseOrderDetailedList = rest.postForObject(
 					Constants.url + "purchaseOrder/purchaseorderdetailedList", map, PurchaseOrderDetailedList.class);
 			purchaseOrderDetailedListcomp = purchaseOrderDetailedList.getPurchaseOrderDetaillist();
@@ -1077,6 +1083,39 @@ public class MaterialReceiptNoteController {
 		return getmaterialRecNoteDetailslist;
 
 	}
+	
+	@RequestMapping(value = "/withoutPo", method = RequestMethod.GET)
+	public @ResponseBody List<MaterialRecNoteDetails> withoutPo(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+			System.out.println("whithout po");
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("mrnId", mrnIdStore);
+
+			RestTemplate rest = new RestTemplate();
+			materialRecNoteHeader = rest.postForObject(Constants.url + "/getMaterialRecNotesHeaderDetails", map,
+					MaterialRecNote.class);
+			getmaterialRecNoteDetailslist = materialRecNoteHeader.getMaterialRecNoteDetails();
+			 
+			 
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+			e.printStackTrace();
+		}
+
+		return getmaterialRecNoteDetailslist;
+
+	}
+	@RequestMapping(value = "/withPoRefDate", method = RequestMethod.GET)
+	public @ResponseBody List<PurchaseOrderDetail> withPoRefDate(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		System.out.println("poDate"+purchaseOrderDetailedListcomp.get(0).getPoDate());
+		System.out.println("poDate"+purchaseOrderDetailedListcomp.get(0).getPoNo());
+		purchaseOrderDetailedListcomp.get(0).setPoDate(DateConvertor.convertToDMY(purchaseOrderDetailedListcomp.get(0).getPoDate()));
+		return purchaseOrderDetailedListcomp;
+
+	}
 
 	@RequestMapping(value = "/showAllStoreMaterialReciept", method = RequestMethod.GET)
 	public ModelAndView showAllStoreMaterialReciept(HttpServletRequest request, HttpServletResponse response) {
@@ -1101,15 +1140,7 @@ public class MaterialReceiptNoteController {
 		return model;
 	}
 
-	@RequestMapping(value = "/withPoRefDate", method = RequestMethod.GET)
-	public @ResponseBody List<PurchaseOrderDetail> withPoRefDate(HttpServletRequest request,
-			HttpServletResponse response) {
-
-		System.out.println(podate);
-		purchaseOrderDetailedListcomp.get(0).setPoDate(DateConvertor.convertToDMY(purchaseOrderDetailedListcomp.get(0).getPoDate()));
-		return purchaseOrderDetailedListcomp;
-
-	}
+	
 
 	@RequestMapping(value = "/allDirectorMaterialReceiptNote", method = RequestMethod.GET)
 	public ModelAndView allMaterialReceiptNote(HttpServletRequest request, HttpServletResponse response) {
