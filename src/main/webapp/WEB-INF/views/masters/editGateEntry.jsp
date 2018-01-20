@@ -203,16 +203,15 @@
 									<label class="col-sm-1 col-lg-2 control-label" for="Vehicle No">Vehicle No</label>
 									<div class="col-sm-1 col-lg-3 controls">
 										<input type="text" name="vehicle_no" value="${materialRecNote.vehicleNo}" id="vehicle_no"
-											placeholder="Vehicle No" class="form-control"
-											/>
+											placeholder="Vehicle No" class="form-control" required/>
 									</div>
 								</div>
 								<div class="col1">
 									<label class="col-sm-1 col-lg-2 control-label" for="LR No">LR No</label>
 									<div class="col-sm-1 col-lg-3 controls">
 										<input type="text" name="lr_no" id="lr_no" value="${materialRecNote.lrNo}"
-											placeholder="LR No" class="form-control"
-											data-rule-number="true"/>
+											placeholder="LR No" class="form-control" pattern="\d+" 
+											required/>
 									</div>
 								</div>
 								<div class="form-group">
@@ -251,7 +250,7 @@
 										<input type="text" name="no_of_items" id="no_of_items"
 										 value="${materialRecNote.noOfItem}"
 											placeholder="No of Items" class="form-control"
-											data-rule-number="true"/>
+											pattern="\d+" required/>
 									</div>
 								</div>
 								 <div class="col1">

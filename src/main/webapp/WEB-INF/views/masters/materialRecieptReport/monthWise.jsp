@@ -202,12 +202,14 @@
 										 
 										<th style="text-align:center;">Basic Value</th>
 										<th style="text-align:center;">Discount</th>
+										<th style="text-align:center;">Other</th>
 										<th style="text-align:center;">Freight Amt</th>
 										<th style="text-align:center;">Insurance Amt</th>
 										 
 										<th style="text-align:center;">CGST</th>
 										<th style="text-align:center;">SGST</th>
 										<th style="text-align:center;">IGST</th> 
+										<th style="text-align:center;">Cess</th> 
 										<th style="text-align:center;">Total</th>
 										
 									</tr>
@@ -359,13 +361,14 @@
 											  	tr.append($('<td style="text-align:center;"></td>').html(itemList.month)); 
 											  	 
 											  	tr.append($('<td style="text-align:right"></td>').html((itemList.basicValue).toFixed(2)));
-											  	tr.append($('<td style="text-align:right"></td>').html((itemList.discAmt).toFixed(2))); 
+											  	tr.append($('<td style="text-align:right"></td>').html((itemList.discAmt).toFixed(2)));
+											  	tr.append($('<td style="text-align:right"></td>').html((itemList.other).toFixed(2)));
 											  	tr.append($('<td style="text-align:right"></td>').html((itemList.freightAmt).toFixed(2))); 
 											  	tr.append($('<td style="text-align:right"></td>').html((itemList.insuranceAmt).toFixed(2))); 
 											  	tr.append($('<td style="text-align:right"></td>').html((itemList.cgst).toFixed(2)));
 											  	tr.append($('<td style="text-align:right"></td>').html((itemList.sgst).toFixed(2)));
 											  	tr.append($('<td style="text-align:right"></td>').html((itemList.igst).toFixed(2))); 
-											  	 
+											  	tr.append($('<td style="text-align:right"></td>').html((itemList.cess).toFixed(2)));
 											  	tr.append($('<td style="text-align:right"></td>').html((itemList.billAmount).toFixed(2))); 
 											  	 
 												$('#table_grid tbody').append(tr);

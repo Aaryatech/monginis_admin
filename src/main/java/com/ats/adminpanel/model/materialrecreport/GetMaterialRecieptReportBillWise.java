@@ -21,11 +21,28 @@ public class GetMaterialRecieptReportBillWise {
 	private float discAmt; 
 	private float freightAmt; 
 	private float insuranceAmt; 
+	private float other;
 	private float cgst; 
 	private float sgst; 
 	private float igst; 
 	private float roundOff; 
 	private float billAmount;
+	private float cess;
+	
+	
+	
+	public float getOther() {
+		return other;
+	}
+	public void setOther(float other) {
+		this.other = other;
+	}
+	public float getCess() {
+		return cess;
+	}
+	public void setCess(float cess) {
+		this.cess = cess;
+	}
 	public int getMrnId() {
 		return mrnId;
 	}
@@ -142,8 +159,8 @@ public class GetMaterialRecieptReportBillWise {
 				+ ", invoiceNumber=" + invoiceNumber + ", invDate=" + invDate + ", supplierId=" + supplierId
 				+ ", suppName=" + suppName + ", suppCity=" + suppCity + ", suppGstin=" + suppGstin + ", basicValue="
 				+ basicValue + ", discAmt=" + discAmt + ", freightAmt=" + freightAmt + ", insuranceAmt=" + insuranceAmt
-				+ ", cgst=" + cgst + ", sgst=" + sgst + ", igst=" + igst + ", roundOff=" + roundOff + ", billAmount="
-				+ billAmount + "]";
+				+ ", other=" + other + ", cgst=" + cgst + ", sgst=" + sgst + ", igst=" + igst + ", roundOff=" + roundOff
+				+ ", billAmount=" + billAmount + ", cess=" + cess + "]";
 	}
 	
 	

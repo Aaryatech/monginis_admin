@@ -9,12 +9,29 @@ public class GetMaterialRecieptReportMonthWise {
 	private String month; 
 	private float basicValue; 
 	private float discAmt; 
+	private float other;
 	private float freightAmt; 
 	private float insuranceAmt; 
 	private float cgst; 
 	private float sgst; 
 	private float igst; 
+	private float cess;
 	private float billAmount;
+	
+	
+	
+	public float getOther() {
+		return other;
+	}
+	public void setOther(float other) {
+		this.other = other;
+	}
+	public float getCess() {
+		return cess;
+	}
+	public void setCess(float cess) {
+		this.cess = cess;
+	}
 	public int getMrnId() {
 		return mrnId;
 	}
@@ -78,8 +95,9 @@ public class GetMaterialRecieptReportMonthWise {
 	@Override
 	public String toString() {
 		return "GetMaterialRecieptReportMonthWise [mrnId=" + mrnId + ", month=" + month + ", basicValue=" + basicValue
-				+ ", discAmt=" + discAmt + ", freightAmt=" + freightAmt + ", insuranceAmt=" + insuranceAmt + ", cgst="
-				+ cgst + ", sgst=" + sgst + ", igst=" + igst + ", billAmount=" + billAmount + "]";
+				+ ", discAmt=" + discAmt + ", other=" + other + ", freightAmt=" + freightAmt + ", insuranceAmt="
+				+ insuranceAmt + ", cgst=" + cgst + ", sgst=" + sgst + ", igst=" + igst + ", cess=" + cess
+				+ ", billAmount=" + billAmount + "]";
 	}
 
 	

@@ -134,10 +134,14 @@ public class MaterialRecieptReportController {
 	@RequestMapping(value = "/billWisePdf", method = RequestMethod.GET)
 	public ModelAndView billWisePdf(HttpServletRequest request, HttpServletResponse response) 
 	{
-		
+		 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/billwise");
 		try
 		{
+			/*String fromDate = request.getParameter("from_date");
+			String toDate = request.getParameter("to_date");
+			System.out.println("fromDate"+fromDate);
+			System.out.println("toDate"+toDate);*/
 			model.addObject("staticlist",billWisePdf);
 			System.out.println("billWisePdf"+billWisePdf);
 		}catch(Exception e)
