@@ -243,8 +243,11 @@
 												<th>Sr.No.</th>
 												<th>Tax</th> 
 												<th>Item</th>
-												<th style="width:500%;">PO Rate</th>
-												<th>Received Quantity</th>
+												<th>In Qty</th>
+												<th>Stock Qty</th>
+												<th>Rejected Qty</th>
+												<th>Varified Rate</th>
+												<th style="width:500%;">PO Rate</th> 
 												<th>Rate</th> 
 												<th>Value</th>
 												<th style="width:500%;">Disc Per</th>
@@ -298,31 +301,30 @@
 													<td><c:out
 															value="${tax}" /></td>
 
-													<td><c:out
+													<td style="width:75px"><c:out
 															value="${materialRecieptAccList.item}" /></td>
+													<td><input style="width:75px" type="text"
+													onchange="changeRate(${count.index})"
+													name="recQty${count.index}"  id="recQty${count.index}"
+									  class="form-control" value="${materialRecieptAccList.reciedvedQty}" pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
+														 
+														 
 															
-												<c:choose>
-													<c:when test="${materialRecieptAccList.incldTax==0}">
+													<td><c:out
+															value="${materialRecieptAccList.stockQty}" /></td>
+													<td><c:out
+															value="${materialRecieptAccList.rejectedQty}" /></td>
+													 
 													<td ><input style="width:75px" type="text"
 													onchange="changeRate(${count.index})"
 													name="poRate${count.index}"  id="poRate${count.index}"
-									  class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
+									  class="form-control" value="${materialRecieptAccList.varifiedRate}" pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
 													
-													</c:when>
-													<c:otherwise>
-													<td ><input style="width:75px" type="text"
-													name="poRate${count.index}" id="poRate${count.index}"
-									value="${materialRecieptAccList.poRate}" class="form-control" readonly></td>
-													</c:otherwise>
-												
-												</c:choose>
-													
-
-													<td>
-														<c:out value="${materialRecieptAccList.reciedvedQty}" />
-													</td>
-
-
+													 
+													<td ><c:out
+															value="${materialRecieptAccList.poRate}" />
+									  				</td>
+													 
 													<td><c:out value="${materialRecieptAccList.rateCal}" />
 													</td>
 													
@@ -636,14 +638,14 @@
 	{
 	
 		
-		var poRate = $("#poRate"+key+"").val();
-		
-		var discPer = $("#discPer"+key+"").val();
-		var cessAmt = $("#cessAmt"+key+"").val();
-		var other1 = $("#other1"+key+"").val();
-		var other2 = $("#other2"+key+"").val();
-		var other3 = $("#other3"+key+"").val();
-		var other4 = $("#other4"+key+"").val();
+		var varifiedRate = $("#poRate"+key+"").val(); 
+		var recQty = $("#recQty"+key+"").val(); 
+		var discPer = $("#discPer"+key+"").val(); 
+		var cessAmt = $("#cessAmt"+key+"").val(); 
+		var other1 = $("#other1"+key+"").val(); 
+		var other2 = $("#other2"+key+"").val(); 
+		var other3 = $("#other3"+key+"").val(); 
+		var other4 = $("#other4"+key+"").val(); 
 		
 		
 		$
@@ -653,7 +655,8 @@
 				{
 					 
 					index : key,
-					poRate : poRate,
+					varifiedRate : varifiedRate,
+					recQty : recQty,
 					discPer : discPer,
 					cessAmt : cessAmt,
 					other3 : other3,
@@ -691,17 +694,15 @@
 
 								  	tr.append($('<td></td>').html(tax));
 								  	tr.append($('<td></td>').html(itemList.item));
-								  	if(itemList.incldTax==0)
-								  		{
-								  		tr.append($('<td></td>').html('<input style="width:75px;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-
-								  		}
-								  	else
-								  		{
-								  		tr.append($('<td></td>').html('<input style="width:75px;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" readonly>'));
-								  		
-										}
-								  	tr.append($('<td></td>').html(itemList.reciedvedQty));
+								  	tr.append($('<td></td>').html('<input style="width:75px;" type="text" onchange="changeRate('+key+')" id="recQty'+key+'" value="'+itemList.reciedvedQty+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	 
+								  	tr.append($('<td></td>').html(itemList.stockQty));
+								  	tr.append($('<td></td>').html(itemList.rejectedQty));
+								  	
+								  	tr.append($('<td></td>').html('<input style="width:75px;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.varifiedRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html(itemList.poRate));
+										 
+								  	
 								  	tr.append($('<td></td>').html(itemList.rateCal));
 								  	tr.append($('<td></td>').html(itemList.value));
 								  	
@@ -824,17 +825,13 @@
 
 								  	tr.append($('<td></td>').html(itemList.incldTax));
 								  	tr.append($('<td></td>').html(itemList.item));
-								  	if(itemList.incldTax==0)
-								  		{
-								  		tr.append($('<td></td>').html('<input style="width:50px" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-
-								  		}
-								  	else
-								  		{
-								  		tr.append($('<td></td>').html('<input style="width:50px" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.poRate+'" class="form-control" readonly>'));
-								  		
-										}
-								  	tr.append($('<td></td>').html(itemList.reciedvedQty));
+								  	tr.append($('<td></td>').html('<input style="width:75px;" type="text" onchange="changeRate('+key+')" id="recQty'+key+'" value="'+itemList.reciedvedQty+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	
+								  	tr.append($('<td></td>').html(itemList.stockQty));
+								  	tr.append($('<td></td>').html(itemList.rejectedQty));
+								  	
+								  	tr.append($('<td></td>').html('<input style="width:75px;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.varifiedRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html(itemList.poRate));
 								  	tr.append($('<td></td>').html(itemList.rateCal));
 								  	tr.append($('<td></td>').html(itemList.value));
 								  	

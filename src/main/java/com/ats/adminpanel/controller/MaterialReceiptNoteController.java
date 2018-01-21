@@ -36,6 +36,7 @@ import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.materialreceipt.GetMaterialRecNoteList;
 import com.ats.adminpanel.model.materialreceipt.GetMaterialReceiptByDate;
 import com.ats.adminpanel.model.materialreceipt.GetTaxListByRmId;
+import com.ats.adminpanel.model.materialreceipt.ItemRateByRmIdAndSuppId;
 import com.ats.adminpanel.model.materialreceipt.MaterialRecNote;
 import com.ats.adminpanel.model.materialreceipt.MaterialRecNoteDetails;
 import com.ats.adminpanel.model.materialreceipt.Supplist;
@@ -855,12 +856,12 @@ public class MaterialReceiptNoteController {
 				System.out.println(12);
 				// MaterialRecNoteDetails
 				// materialRecNoteDetails=getmaterialRecNoteDetailslist.get(i);
-				if (getmaterialRecNoteDetailslist.get(i).getMrnDetailId() != 0) {
+				//if (getmaterialRecNoteDetailslist.get(i).getMrnDetailId() != 0) {
 					System.out.println(13);
 					String stock_qty = request
-							.getParameter("stockQty" + getmaterialRecNoteDetailslist.get(i).getMrnDetailId());
+							.getParameter("stockQty" + i);
 					String rejected_Qty = request
-							.getParameter("rejectedQty" + getmaterialRecNoteDetailslist.get(i).getMrnDetailId());
+							.getParameter("rejectedQty" + i);
 
 					if (stock_qty != null) {
 						System.out.println("Stock Qty   :" + stock_qty);
@@ -871,7 +872,7 @@ public class MaterialReceiptNoteController {
 						getmaterialRecNoteDetailslist.get(i).setStockQty(0);
 					}
 					if (rejected_Qty != null) {
-						System.out.println("rejectedQty   :" + stock_qty);
+						System.out.println("rejectedQty   :" + rejected_Qty);
 						int rejectedQty = Integer.parseInt(rejected_Qty);
 						getmaterialRecNoteDetailslist.get(i).setRejectedQty(rejectedQty);
 						System.out.println("rejectedQty   :" + rejectedQty);
@@ -885,7 +886,7 @@ public class MaterialReceiptNoteController {
 									* getmaterialRecNoteDetailslist.get(i).getPoRate());
 
 					System.out.println(2);
-				}
+				//}
 			}
 			materialRecNote.setMaterialRecNoteDetails(getmaterialRecNoteDetailslist);
 
@@ -1042,7 +1043,7 @@ public class MaterialReceiptNoteController {
 					materialRecNoteDetails.setSupplierId(purchaseDetail.getSuppId());
 					materialRecNoteDetails.setPoId(purchaseDetail.getPoId());
 					materialRecNoteDetails.setPoQty(purchaseDetail.getPoQty());
-					materialRecNoteDetails.setRecdQty(purchaseDetail.getPoQty());
+					materialRecNoteDetails.setRecdQty(0);
 					materialRecNoteDetails.setStockQty(0);
 					materialRecNoteDetails.setRejectedQty(0);
 					materialRecNoteDetails.setValue(0);
@@ -1204,10 +1205,9 @@ public class MaterialReceiptNoteController {
 
 			for (int i = 0; i < supplierDetailsList.getSupplierDetailslist().size(); i++) {
 				if (supId == supplierDetailsList.getSupplierDetailslist().get(i).getSuppId()) {
-					System.out
-							.println("SuppName1 :" + supplierDetailsList.getSupplierDetailslist().get(i).getSuppName());
-
+					 
 					model.addObject("suppName1", supplierDetailsList.getSupplierDetailslist().get(i).getSuppName());
+					break;
 				}
 			}
 			map = new LinkedMultiValueMap<String, Object>();
@@ -1226,19 +1226,50 @@ public class MaterialReceiptNoteController {
 				if (materialRecNote.getTransportId() == transporterList.getTransporterList().get(i).getTranId()) {
 
 					model.addObject("transportName", transporterList.getTransporterList().get(i).getTranName());
+					break;
 				}
 			}
 			
+			if(materialRecNote.getApainstPo()==1)
+			{
 			map = new LinkedMultiValueMap<String, Object>();
-			int poid=materialRecNote.getPoId();
+			int poid=materialRecNote.getPoId(); 
 			map.add("poId", poid);
 			purchaseOrderHeaderChangePoStsByDirector = rest.postForObject(Constants.url + "purchaseOrder/getpurchaseorderHeader", map,
 					PurchaseOrderHeader.class);
 			System.out.println("purchaseOrderHeader " + purchaseOrderHeaderChangePoStsByDirector.toString());
+			}
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			String id = new String();
+			 for(int i=0;i<materialRecNote.getMaterialRecNoteDetails().size();i++)
+			 { 
+				 id=id+","+materialRecNote.getMaterialRecNoteDetails().get(i).getRmId();
+			 }
+			map.add("suppId", supId);
+			map.add("rmId", id);
+			System.out.println("map"+map);
+			ItemRateByRmIdAndSuppId itemRateByRmIdAndSuppId = rest.postForObject(Constants.url + "/getRateByRmId", map,
+					ItemRateByRmIdAndSuppId.class);
+			System.out.println("itemRateByRmIdAndSuppId " + itemRateByRmIdAndSuppId.toString());
+			
+			 for(int i=0;i<materialRecNote.getMaterialRecNoteDetails().size();i++)
+			 { 
+				 for(int j=0;j<itemRateByRmIdAndSuppId.getItemRateByRmIdAndSuppId().size();j++)
+				 {
+					 if(materialRecNote.getMaterialRecNoteDetails().get(i).getRmId()==itemRateByRmIdAndSuppId.getItemRateByRmIdAndSuppId().get(j).getRmId())
+							 {
+						 materialRecNote.getMaterialRecNoteDetails().get(i).setVarifiedRate(itemRateByRmIdAndSuppId.getItemRateByRmIdAndSuppId().get(j).getRate());
+							 }
+				 }
+				  
+			 }
+			
 			
 			
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
+			e.printStackTrace();
 		}
 		model.addObject("imageUrl", materialRecNote);
 		model.addObject("materialRecNoteHeader", materialRecNote);
@@ -1442,22 +1473,21 @@ public class MaterialReceiptNoteController {
 			MaterialRecieptAcc materialRecieptAcc = new MaterialRecieptAcc();
 
 			for (int i = 0; i < materialRecNoteHeaderAcc.getMaterialRecNoteDetails().size(); i++) {
-				materialRecieptAcc = new MaterialRecieptAcc();
-				if (materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getRecdQty() != 0) {
-					materialRecieptAcc.setMrnDetailedId(
-							materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getMrnDetailId());
+				
+					materialRecieptAcc = new MaterialRecieptAcc();
+				 
+					materialRecieptAcc.setMrnDetailedId(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getMrnDetailId());
 					materialRecieptAcc.setItem(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getRmName());
 					if (materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getPoId() != 0) {
 						materialRecieptAcc.setIncldTax(purchaseOrderHeader.getTaxationRem());
 					} else {
 						materialRecieptAcc.setIncldTax(0);
 					}
-
-					materialRecieptAcc
-							.setPoRate(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getPoRate());
-					materialRecieptAcc
-							.setReciedvedQty(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getRecdQty());
-
+					materialRecieptAcc.setVarifiedRate(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getVarifiedRate());
+					materialRecieptAcc.setPoRate(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getPoRate());
+					materialRecieptAcc.setReciedvedQty(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getRecdQty());
+					materialRecieptAcc.setStockQty(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getStockQty());
+					materialRecieptAcc.setRejectedQty(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getRecdQty()-materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getStockQty());
 					materialRecieptAcc.setRmId(materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).getRmId());
 
 					for (int j = 0; j < getTaxListByRmId.getGetTaxByRmIdList().size(); j++) {
@@ -1474,9 +1504,9 @@ public class MaterialReceiptNoteController {
 					}
 					if (materialRecieptAcc.getIncldTax() == 1) {
 						materialRecieptAcc
-								.setRateCal(Float.valueOf(df.format(materialRecieptAcc.getPoRate() / (1 + materialRecieptAcc.getGst() / 100))));
+								.setRateCal(Float.valueOf(df.format(materialRecieptAcc.getVarifiedRate() / (1 + materialRecieptAcc.getGst() / 100))));
 					} else {
-						materialRecieptAcc.setRateCal(materialRecieptAcc.getPoRate());
+						materialRecieptAcc.setRateCal(materialRecieptAcc.getVarifiedRate());
 					}
 
 					materialRecieptAcc.setValue(Float.valueOf(df.format(materialRecieptAcc.getReciedvedQty() * materialRecieptAcc.getRateCal())));
@@ -1487,7 +1517,7 @@ public class MaterialReceiptNoteController {
 					materialRecieptAcc.setDiscAmt(0);
 					discAmtTotal = discAmtTotal + materialRecieptAcc.getDiscAmt();
 					System.out.println("discAmtTotal" + discAmtTotal);
-
+						
 					materialRecieptAcc.setCdPer(0);
 					materialRecieptAcc.setCdAmt(0);
 					materialRecieptAcc.setDivFactor(0);
@@ -1536,7 +1566,7 @@ public class MaterialReceiptNoteController {
 					materialRecieptAcc.setCessAmt(0);
 					materialRecieptAccList.add(materialRecieptAcc);
 
-				}
+				
 
 			}
 
@@ -1561,7 +1591,7 @@ public class MaterialReceiptNoteController {
 							+ materialRecNoteHeaderAcc.getIgst() + materialRecNoteHeaderAcc.getCess()
 							+ materialRecNoteHeaderAcc.getRoundOff());
 			materialRecNoteHeaderAcc.setBillAmount(Float.valueOf(df.format(finalAmt)));
-
+			materialRecNoteHeaderAcc.setRoundOff(Math.round(finalAmt));
 			System.out.println("materialRecieptAccList " + materialRecieptAccList.toString());
 
 			System.out.println("Supplier List :" + supplierList.getSupplierDetailslist().toString());
@@ -1584,7 +1614,8 @@ public class MaterialReceiptNoteController {
 		 
 
 		int index = Integer.parseInt(request.getParameter("index"));
-		float poRate = Float.parseFloat(request.getParameter("poRate"));
+		float varifiedRate = Float.parseFloat(request.getParameter("varifiedRate"));
+		int recQty = Integer.parseInt(request.getParameter("recQty"));
 		float discPer = Float.parseFloat(request.getParameter("discPer"));
 		float cessAmt = Float.parseFloat(request.getParameter("cessAmt"));
 		float other1 = Float.parseFloat(request.getParameter("other1"));
@@ -1594,29 +1625,31 @@ public class MaterialReceiptNoteController {
 		
 		System.out.println("index" + index);
 		System.out.println("discPer" + discPer);
-		System.out.println("poRate" + poRate);
+		System.out.println("recQty" + recQty);
+		System.out.println("varifiedRate" + varifiedRate);
 		System.out.println("cessAmt" + cessAmt);
-		System.out.println("other1" + other1);
-		System.out.println("other2" + other2);
-		System.out.println("other3" + other3);
-		System.out.println("other4" + other4);
+		System.out.println("other1 " + other1);
+		System.out.println("other2 " + other2);
+		System.out.println("other3 " + other3);
+		System.out.println("other4 " + other4);
 
 		try {
 
 			for (int i = 0; i < materialRecieptAccList.size(); i++) {
 				if (i == index) {
-					materialRecieptAccList.get(i).setPoRate(poRate);
+					materialRecieptAccList.get(i).setVarifiedRate(varifiedRate);
 					if(materialRecieptAccList.get(i).getIncldTax()==1)
 					{
 						
-						materialRecieptAccList.get(i).setRateCal(Float.valueOf(df.format(materialRecieptAccList.get(i).getPoRate()
+						materialRecieptAccList.get(i).setRateCal(Float.valueOf(df.format(materialRecieptAccList.get(i).getVarifiedRate()
 								/ (1 + materialRecieptAccList.get(i).getGst() / 100))));
 					}
 					else
 					{
-						materialRecieptAccList.get(i).setRateCal(materialRecieptAccList.get(i).getPoRate());
+						materialRecieptAccList.get(i).setRateCal(materialRecieptAccList.get(i).getVarifiedRate());
 					}
-					
+					materialRecieptAccList.get(i).setReciedvedQty(recQty);
+					materialRecieptAccList.get(i).setRejectedQty(materialRecieptAccList.get(i).getReciedvedQty()-materialRecieptAccList.get(i).getStockQty());
 					materialRecieptAccList.get(i).setValue(Float.valueOf(df.format(materialRecieptAccList.get(i).getReciedvedQty()* materialRecieptAccList.get(i).getRateCal())));
 					materialRecieptAccList.get(i).setDiscPer(discPer);
 					materialRecieptAccList.get(i).setDiscAmt(Float.valueOf(df.format(materialRecieptAccList.get(i).getValue()
@@ -1863,43 +1896,30 @@ public class MaterialReceiptNoteController {
 				for (int j = 0; j < materialRecieptAccList.size(); j++) {
 					if (materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
 							.getMrnDetailId() == materialRecieptAccList.get(j).getMrnDetailedId()) {
-
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setPoRate(materialRecieptAccList.get(i).getPoRate());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setValue(materialRecieptAccList.get(i).getValue());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setDiscPer(materialRecieptAccList.get(i).getDiscPer());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setDiscAmt(materialRecieptAccList.get(i).getDiscAmt());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setGstPer(materialRecieptAccList.get(i).getGst());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setFreightAmt(materialRecieptAccList.get(i).getFreightAmt());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setInsurance_amt(materialRecieptAccList.get(i).getInsuAmt());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setCgstPer(materialRecieptAccList.get(i).getCgst());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setCgstRs(materialRecieptAccList.get(i).getCgstAmt());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setSgstPer(materialRecieptAccList.get(i).getSgst());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setSgstRs(materialRecieptAccList.get(i).getSgstAmt());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setIgstPer(materialRecieptAccList.get(i).getIgst());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setIgstRs(materialRecieptAccList.get(i).getIgstAmt());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setCessPer(materialRecieptAccList.get(i).getCess());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i)
-								.setCessRs(materialRecieptAccList.get(i).getCessAmt());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).
-								setAmount(materialRecieptAccList.get(i).getTaxableAmt());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther1(materialRecieptAccList.get(i).getOther1());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther2(materialRecieptAccList.get(i).getOther2()); 
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther3(materialRecieptAccList.get(i).getOther3()); 
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther4(materialRecieptAccList.get(i).getOther4());
+						
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setRecdQty(materialRecieptAccList.get(j).getReciedvedQty());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setRejectedQty(materialRecieptAccList.get(j).getRejectedQty());
+						
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setVarifiedRate(materialRecieptAccList.get(j).getVarifiedRate());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setValue(materialRecieptAccList.get(j).getValue());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setDiscPer(materialRecieptAccList.get(j).getDiscPer());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setDiscAmt(materialRecieptAccList.get(j).getDiscAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setGstPer(materialRecieptAccList.get(j).getGst());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setFreightAmt(materialRecieptAccList.get(j).getFreightAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setInsurance_amt(materialRecieptAccList.get(j).getInsuAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setCgstPer(materialRecieptAccList.get(j).getCgst());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setCgstRs(materialRecieptAccList.get(j).getCgstAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setSgstPer(materialRecieptAccList.get(j).getSgst());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setSgstRs(materialRecieptAccList.get(j).getSgstAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setIgstPer(materialRecieptAccList.get(j).getIgst());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setIgstRs(materialRecieptAccList.get(j).getIgstAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setCessPer(materialRecieptAccList.get(j).getCess());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setCessRs(materialRecieptAccList.get(j).getCessAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setAmount(materialRecieptAccList.get(j).getTaxableAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther1(materialRecieptAccList.get(j).getOther1());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther2(materialRecieptAccList.get(j).getOther2()); 
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther3(materialRecieptAccList.get(j).getOther3()); 
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther4(materialRecieptAccList.get(j).getOther4());
 
 
 					}

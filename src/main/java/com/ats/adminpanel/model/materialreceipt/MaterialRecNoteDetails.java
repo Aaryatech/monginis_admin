@@ -41,7 +41,7 @@ public class MaterialRecNoteDetails {
 		private float other2; 
 		private float other3; 
 		private float other4;
-		
+		private float varifiedRate;
 		
 
 		public int getMrnDetailId() {
@@ -342,6 +342,15 @@ public class MaterialRecNoteDetails {
 			this.other4 = other4;
 		}
 
+		
+		public float getVarifiedRate() {
+			return varifiedRate;
+		}
+
+		public void setVarifiedRate(float varifiedRate) {
+			this.varifiedRate = varifiedRate;
+		}
+
 		@Override
 		public String toString() {
 			return "MaterialRecNoteDetails [mrnDetailId=" + mrnDetailId + ", mrnId=" + mrnId + ", mrnNo=" + mrnNo
@@ -354,7 +363,7 @@ public class MaterialRecNoteDetails {
 					+ ", sgstRs=" + sgstRs + ", igstPer=" + igstPer + ", igstRs=" + igstRs + ", cessPer=" + cessPer
 					+ ", cessRs=" + cessRs + ", amount=" + amount + ", directorApproved=" + directorApproved
 					+ ", delStatus=" + delStatus + ", status=" + status + ", other1=" + other1 + ", other2=" + other2
-					+ ", other3=" + other3 + ", other4=" + other4 + "]";
+					+ ", other3=" + other3 + ", other4=" + other4 + ", varifiedRate=" + varifiedRate + "]";
 		}
 	   
 	}

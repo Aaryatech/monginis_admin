@@ -224,7 +224,7 @@
 							 	
 							 		<div class="col-md-2">Po Status</div>
 									<div class="col-md-3">
-									<select name="po_sts" id="po_sts" class="form-control" tabindex="6" required>
+									<select name="po_sts" id="po_sts" class="form-control chosen" tabindex="6" required>
 									<option  value="">Select Transporter</option>
 									<option  value="1">Partially Closed</option>
 									<option  value="2">Closed</option>
@@ -308,9 +308,11 @@
 													<c:out value = "${disabledFlag}"/> /> Select All</th>
 												<th>Sr.No.</th>
 												<th>Item</th>
+												<th>In Quantity</th>
 												<th>Stock Quantity</th>
 												<th>PO Quantity</th>
 												<th>PO Rate</th>
+												<th>Varified Rate</th>
 												<th>Value</th>
 
 											</tr>
@@ -352,6 +354,9 @@
 
 													<td align="left" style="color: <c:out value = "${color}"/>"><c:out
 															value="${materialRecNoteDetail.rmName}" /></td>
+															
+													<td align="left" style="color: <c:out value = "${color}"/>"><c:out
+															value="${materialRecNoteDetail.recdQty}" /></td>
 
 													<td align="left" style="color: <c:out value = "${color}"/>"><c:out
 															value="${materialRecNoteDetail.stockQty}" /></td>
@@ -364,10 +369,13 @@
 													<td align="left" style="color: <c:out value = "${color}"/>">
 														<c:out value="${materialRecNoteDetail.poRate}" />
 													</td>
-
+													
+													<td align="left" style="color: <c:out value = "${color}"/>">
+														<c:out value="${materialRecNoteDetail.varifiedRate}" />
+													</td>
 
 													<td align="left" style="color: <c:out value = "${color}"/>"><c:out
-															value="${materialRecNoteDetail.poRate*materialRecNoteDetail.poQty}" />
+															value="${materialRecNoteDetail.varifiedRate*materialRecNoteDetail.stockQty}" />
 													</td>
 
 

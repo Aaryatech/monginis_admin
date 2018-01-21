@@ -8,6 +8,8 @@ public class MaterialRecieptAcc {
 	private int incldTax;
 	private float poRate;
 	private int reciedvedQty;
+	private int stockQty;
+	private int rejectedQty;
 	private float rateCal;
 	private float value ;
 	private float discPer;
@@ -32,9 +34,28 @@ public class MaterialRecieptAcc {
 	private float sgstAmt;
 	private float igstAmt;
 	private float cessAmt;
+	private float varifiedRate;
 	
 	
 	
+	public float getVarifiedRate() {
+		return varifiedRate;
+	}
+	public void setVarifiedRate(float varifiedRate) {
+		this.varifiedRate = varifiedRate;
+	}
+	public int getStockQty() {
+		return stockQty;
+	}
+	public void setStockQty(int stockQty) {
+		this.stockQty = stockQty;
+	}
+	public int getRejectedQty() {
+		return rejectedQty;
+	}
+	public void setRejectedQty(int rejectedQty) {
+		this.rejectedQty = rejectedQty;
+	}
 	public float getOther3() {
 		return other3;
 	}
@@ -219,13 +240,14 @@ public class MaterialRecieptAcc {
 	@Override
 	public String toString() {
 		return "MaterialRecieptAcc [mrnDetailedId=" + mrnDetailedId + ", item=" + item + ", rmId=" + rmId
-				+ ", incldTax=" + incldTax + ", poRate=" + poRate + ", reciedvedQty=" + reciedvedQty + ", rateCal="
-				+ rateCal + ", value=" + value + ", discPer=" + discPer + ", discAmt=" + discAmt + ", cdPer=" + cdPer
-				+ ", cdAmt=" + cdAmt + ", divFactor=" + divFactor + ", insuAmt=" + insuAmt + ", freightAmt="
-				+ freightAmt + ", other1=" + other1 + ", other2=" + other2 + ", other3=" + other3 + ", other4=" + other4
-				+ ", taxId=" + taxId + ", gst=" + gst + ", cgst=" + cgst + ", sgst=" + sgst + ", igst=" + igst
-				+ ", cess=" + cess + ", taxableAmt=" + taxableAmt + ", cgstAmt=" + cgstAmt + ", sgstAmt=" + sgstAmt
-				+ ", igstAmt=" + igstAmt + ", cessAmt=" + cessAmt + "]";
+				+ ", incldTax=" + incldTax + ", poRate=" + poRate + ", reciedvedQty=" + reciedvedQty + ", stockQty="
+				+ stockQty + ", rejectedQty=" + rejectedQty + ", rateCal=" + rateCal + ", value=" + value + ", discPer="
+				+ discPer + ", discAmt=" + discAmt + ", cdPer=" + cdPer + ", cdAmt=" + cdAmt + ", divFactor="
+				+ divFactor + ", insuAmt=" + insuAmt + ", freightAmt=" + freightAmt + ", other1=" + other1 + ", other2="
+				+ other2 + ", other3=" + other3 + ", other4=" + other4 + ", taxId=" + taxId + ", gst=" + gst + ", cgst="
+				+ cgst + ", sgst=" + sgst + ", igst=" + igst + ", cess=" + cess + ", taxableAmt=" + taxableAmt
+				+ ", cgstAmt=" + cgstAmt + ", sgstAmt=" + sgstAmt + ", igstAmt=" + igstAmt + ", cessAmt=" + cessAmt
+				+ ", varifiedRate=" + varifiedRate + "]";
 	}
 	
 	

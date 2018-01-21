@@ -62,7 +62,7 @@ public class MaterialRecNote {
 		private float other2; 
 		private float other3; 
 		private float other4;
-		
+		 
 		List<MaterialRecNoteDetails> materialRecNoteDetails;
 
 		public int getMrnId() {
@@ -474,6 +474,8 @@ public class MaterialRecNote {
 		public void setOther4(float other4) {
 			this.other4 = other4;
 		}
+		
+		 
 
 		@Override
 		public String toString() {

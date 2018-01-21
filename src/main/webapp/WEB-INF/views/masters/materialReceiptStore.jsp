@@ -292,7 +292,7 @@
 										<div class="col-md-3">
 										<input class="form-control" id="po_date" size="16"
 											type="text" name="po_date" value="${materialRecNote.poDate}" placeholder="PO Date"  readonly />
-										<input  id="po_no" type="text" name="po_no" />
+										<input  id="po_no" type="hidden" name="po_no" />
 											
 									</div>
 													</c:otherwise>
@@ -354,7 +354,8 @@
 
 													<tr>
 														<td style="color: <c:out value = "${color}"/>"><c:out value="${count.index+1}" /></td>
- 														<c:set var = "srNo" value="${srNo+1}"/>
+ 														<c:set var = "srNo" value="${count.index}"/>
+ 														
 														<td align="left" style="color: <c:out value = "${color}"/>"><c:out
 																value="${materialRecNoteDetail.rmName}" /></td>
 
@@ -369,21 +370,21 @@
 													<c:when test="${materialRecNoteDetail.status==1}">
 														
 														<td align="left" style="color: <c:out value = "${color}"/>"><input type="text" name='stockQty<c:out
-																value="${materialRecNoteDetail.mrnDetailId}" />' class="form-control" value=
+																value="${srNo}" />' class="form-control" value=
 																<c:out
 																value="${materialRecNoteDetail.stockQty}" /> readonly></td>
 														 <td align="left" style="color: <c:out value = "${color}"/>"><input type="text" name='rejectedQty<c:out
-																value="${materialRecNoteDetail.mrnDetailId}" />' class="form-control" value=
+																value="${srNo}" />' class="form-control" value=
 																<c:out
 																value="${materialRecNoteDetail.rejectedQty}" /> readonly></td>
 													
 													</c:when>
 												
 													<c:otherwise>
-													<td align="left" style="color: <c:out value = "${color}"/>"><input type="text" name='stockQty<c:out
-																value="${materialRecNoteDetail.mrnDetailId}" />' class="form-control"  required="true" data-rule-number="true"></td>
-														 <td align="left" style="color: <c:out value = "${color}"/>"><input type="text" name='rejectedQty<c:out
-																value="${materialRecNoteDetail.mrnDetailId}" />' class="form-control"  required="true" data-rule-number="true"></td>
+													<td align="left" style="color: <c:out value = "${color}"/>"><input type="text" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;"
+													 name='stockQty<c:out value="${srNo}" />' class="form-control" value="${materialRecNoteDetail.recdQty}" required></td>
+														 <td align="left" style="color: <c:out value = "${color}"/>"><input type="text" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" 
+														 name='rejectedQty<c:out value="${srNo}" />' class="form-control" value="${0}" required></td>
 													  
 													</c:otherwise>
 													</c:choose>
@@ -579,16 +580,16 @@
 					  	tr.append($('<td></td>').html(itemList.rmName));
 						tr.append($('<td></td>').html(itemList.recdQty));
 						tr.append($('<td></td>').html(itemList.poQty));
-						if(itemList.mrnDetailId!=0)
-							{
-						tr.append($('<td></td>').html("<input type='text' class='form-control' name='stockQty"+itemList.mrnDetailId+"' required>"));
-						tr.append($('<td></td>').html("<input type='text' class='form-control' name='rejectedQty"+itemList.mrnDetailId+"' required>"));
-							}
+						/* if(itemList.mrnDetailId!=0)
+							{ */
+						tr.append($('<td></td>').html("<input type='text' class='form-control' onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' value='"+itemList.recdQty+"' name='stockQty"+key+"' required>"));
+						tr.append($('<td></td>').html("<input type='text' class='form-control' onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' value='"+0+"'name='rejectedQty"+key+"' required>"));
+							/* }
 						else
 							{
 							tr.append($('<td></td>').html("0"));
 							tr.append($('<td></td>').html("0"));
-							}
+							} */
 						tr.append($('<td></td>').html(itemList.poRate));
 					$('#table_grid tbody').append(tr);
 					
@@ -654,16 +655,16 @@
 					  	tr.append($('<td></td>').html(itemList.rmName));
 						tr.append($('<td></td>').html(itemList.recdQty));
 						tr.append($('<td></td>').html(itemList.poQty));
-						if(itemList.mrnDetailId!=0)
-							{
-						tr.append($('<td></td>').html("<input type='text' class='form-control' name='stockQty"+itemList.mrnDetailId+"' required>"));
-						tr.append($('<td></td>').html("<input type='text' class='form-control' name='rejectedQty"+itemList.mrnDetailId+"' required>"));
-							}
+						/* if(itemList.mrnDetailId!=0)
+							{ */
+						tr.append($('<td></td>').html("<input type='text' class='form-control' onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' value='"+itemList.recdQty+"' name='stockQty"+key+"' required>"));
+						tr.append($('<td></td>').html("<input type='text' class='form-control' onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' value='"+0+"' name='rejectedQty"+key+"' required>"));
+						/* 	}
 						else
 							{
 							tr.append($('<td></td>').html("0"));
 							tr.append($('<td></td>').html("0"));
-							}
+							} */
 						tr.append($('<td></td>').html(itemList.poRate));
 					$('#table_grid tbody').append(tr);
 					
@@ -678,7 +679,16 @@
 			 		 
 	});
 	</script> 
-	
+ <script type="text/javascript">
+        var specialKeys = new Array();
+        specialKeys.push(8); //Backspace
+        function IsNumeric(e) {
+            var keyCode = e.which ? e.which : e.keyCode
+            var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1 || keyCode==9);
+            //document.getElementById("error").style.display = ret ? "none" : "inline";
+            return ret;
+        }
+        </script>
 	
 								
 							
