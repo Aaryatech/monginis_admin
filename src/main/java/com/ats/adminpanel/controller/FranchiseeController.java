@@ -478,7 +478,7 @@ public class FranchiseeController {
 			} else if (settingType == 2) {
 				date = Integer.parseInt(request.getParameter("date"));
 				System.out.println("date" + date);
-				day = 0;
+				day = date;
 			} else {
 				day = Integer.parseInt(request.getParameter("day"));
 				System.out.println("day:" + day);

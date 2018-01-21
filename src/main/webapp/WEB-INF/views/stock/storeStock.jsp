@@ -159,7 +159,7 @@ div.panel {
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Select
-										View Option</label>
+										View Option Date</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<select name="selectStock"  class="form-control chosen"
 											tabindex="6" id="selectStock" onchange="showDiv(this)"
@@ -173,15 +173,8 @@ div.panel {
 										</select>
 									</div>
 
+								</div>
 								
-								 <div class="row" id="currentStockButton">
-	                              <div class="col-sm-5 col-lg-2 controls">
-					            	<input type="button"  class="btn btn-primary" value="Get Stock" onclick="getStock()">
-					 
-                                 </div>
-
-					       </div>
-							</div>	
 							<br/>
 
 							<div class="form-group">
@@ -199,9 +192,10 @@ div.panel {
 												 
 										</div> 
 
+										  <div class="col-md-1"></div> 
 
-										<div class="col-md-1">
-											 To :
+										<div class="col-md-2">
+											<div class="col1title"> To :</div>
 										</div>
 										<div class="col-md-3" align="center">
 											<input type='text' placeholder="Select To Date" 
@@ -235,14 +229,18 @@ div.panel {
 									</div> -->
 
 								</div>
-    <div class="row" style="display: none" id="datewiseStockButton">
-	<div class="col-sm-5 col-lg-2 controls">
+
+							</div><br/><br/>
+							
+							<div class="row">
+					<div class="col-md-12" style="text-align: center">
 						<input type="button"  class="btn btn-primary" value="Get Stock" onclick="getStock()">
 					 
-</div>
+
 
 					</div>
-							</div>
+				</div><br/>
+							
 							<!-- </form> -->
 
 
@@ -436,8 +434,7 @@ div.panel {
 		 */
 		 </script>
 			<script>
-			<script>
-			 
+		 
 			//document.getElementById("stockDate").value;
 			
 			var today = new Date();
@@ -452,6 +449,10 @@ if(mm<10){
     mm='0'+mm;
 } 
 var today = dd+'-'+mm+'-'+yyyy;
+
+
+//document.getElementById("stockDate").value = today;
+
 
 		function getStock(){
 			 
@@ -487,7 +488,8 @@ var today = dd+'-'+mm+'-'+yyyy;
 				  	tr.append($('<td></td>').html(stockList.bmsIssueQty));
 				  	tr.append($('<td></td>').html(stockList.storeOpeningStock));
 				  	tr.append($('<td></td>').html(stockList.storeClosingStock));
-					document.getElementById("stockDate").value = stockList.storeStockDate;
+				  	//alert(stockList.storeStockDate);
+				  	document.getElementById("stockDate").value = stockList.storeStockDate;
 				$('#table1 tbody').append(tr);
 				
 											})
@@ -590,6 +592,8 @@ var today = dd+'-'+mm+'-'+yyyy;
 			
 			 
 		}
+		
+		
 		function dayEnd()
 		{
 			var stockDate=document.getElementById("stockDate").value;
@@ -611,23 +615,15 @@ var today = dd+'-'+mm+'-'+yyyy;
 				
 				if (select == 1) {
 					document.getElementById('select_month_year').style = "display:none";
-					document.getElementById('currentStockButton').style = "block";
-					document.getElementById('datewiseStockButton').style = "display:none";
-
 					document.getElementById('submitDay').disabled =false;
 				} else if (select == 2) {
 					document.getElementById('select_month_year').style.display = "block";
-					document.getElementById('currentStockButton').style = "display:none";
-					document.getElementById('datewiseStockButton').style = "block";
 
 				  	document.getElementById('submitDay').disabled =true; 
 				} else if (select == 3) {
-					document.getElementById('datewiseStockButton').style = "block";
 
 				  	document.getElementById('submitDay').disabled =true; 
 					document.getElementById('select_month_year').style.display = "block";
-					document.getElementById('currentStockButton').style = "display:none";
-
 				}
 				
 				

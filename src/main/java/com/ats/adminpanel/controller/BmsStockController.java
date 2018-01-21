@@ -1,6 +1,9 @@
 package com.ats.adminpanel.controller;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -255,8 +258,17 @@ System.out.println("inside get Bms Stock Page ");
 			System.out.println("from Date " + DateConvertor.convertToYMD(fromStockdate) + "\n Todate "
 					+ DateConvertor.convertToYMD(toStockdate) + "\n RM type  " + rmType);
 
+			DateTimeFormatter f = DateTimeFormatter.ofPattern( "dd-MM-uuuu" );
+			  LocalDate tDate = LocalDate.parse(toStockdate, f);
+			
+			if(tDate.isAfter(LocalDate.now()) || tDate.isEqual(LocalDate.now())){
+				System.out.println("   Date is greater than today"+LocalDate.now().minus(Period.ofDays(1)));
+				tDate=LocalDate.now().minus(Period.ofDays(1));
+				
+				}
+			
 			map.add("fromDate", DateConvertor.convertToYMD(fromStockdate));
-			map.add("toDate", DateConvertor.convertToYMD(toStockdate));
+			map.add("toDate", ""+tDate);
 			map.add("rmType", rmType);
 
 			List<BmsStockDetailed> stockBetDate = new ArrayList<>();

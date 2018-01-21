@@ -199,11 +199,11 @@ public class StoreStockController {
 		  LocalDate tDate = LocalDate.parse(toDate, f);
 		
 		if(tDate.isAfter(LocalDate.now()) || tDate.isEqual(LocalDate.now())){
-			System.out.println("GGGGGGGGGGGGGGG   Date is greater than today"+LocalDate.now().minus(Period.ofDays(1)));
+			System.out.println("    Date is greater than today"+LocalDate.now().minus(Period.ofDays(1)));
 			tDate=LocalDate.now().minus(Period.ofDays(1));
 			
 			}
-		System.out.println("ppppppppp  "+tDate);
+		 
 		MultiValueMap<String, Object> map=new LinkedMultiValueMap<>();
 		map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 		map.add("toDate", ""+tDate );

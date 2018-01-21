@@ -2,6 +2,9 @@ package com.ats.adminpanel.controller;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -11,7 +14,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.bouncycastle.dvcs.CPDRequestBuilder;
+
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -396,11 +399,22 @@ public class FinishedGoodStockController {
 			
 			updateStockDetailList=new ArrayList<FinishedGoodStockDetail>();
 			
+			
+			DateTimeFormatter f = DateTimeFormatter.ofPattern( "dd-MM-uuuu" );
+			  LocalDate tDate = LocalDate.parse(toDate, f);
+			
+			if(tDate.isAfter(LocalDate.now()) || tDate.isEqual(LocalDate.now())){
+				System.out.println("    Date is greater than today"+LocalDate.now().minus(Period.ofDays(1)));
+				tDate=LocalDate.now().minus(Period.ofDays(1));
+				
+				}
+			
+			
 			map = new LinkedMultiValueMap<String, Object>();
 			
 			map.add("stockStatus", 1);
 			map.add("stockFromDate", fromDate);
-			map.add("stockToDate", toDate);
+			map.add("stockToDate", ""+tDate);
 			
 			ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
 			};
