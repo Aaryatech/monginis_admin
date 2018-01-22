@@ -307,6 +307,10 @@
 											<div class="col-sm-3  controls">
 											<input type="button" id="from" class="btn btn-primary" value="EXPORT TO PDF IN RANGE" onclick="inRangePdf();">
 											</div>
+											<div class="col-sm-3  controls">
+											<%-- <a onclick="exportToExcel()" id="expExcel" href="${pageContext.request.contextPath}/download" disabled="true" class="btn btn-primary">EXPORT TO Excel</a> --%>
+											<input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
+											</div>
 											</div>
 							</form>
 						</div>
@@ -410,9 +414,10 @@
 								$('#loader').hide();
 								if(data==""){
 									alert("No Orders Found");
+									document.getElementById("expExcel").disabled=true;
 								}
 								$.each(data,function(key, spCakeOrder) {
-
+									document.getElementById("expExcel").disabled=false;
 									document.getElementById('range').style.display = 'block';
 									var len=data.length
 									
@@ -494,9 +499,10 @@
 						$('#loader').hide();
 						if(data==""){
 							alert("No Orders Found");
+							document.getElementById("expExcel").disabled=true;
 						}
 						$.each(data,function(key, spCakeOrder) {
-
+							document.getElementById("expExcel").disabled=false;
 							document.getElementById('range').style.display = 'block';
 							var len=data.length
 							
@@ -538,6 +544,16 @@
 					});
 			 }
 		}
+		
+		
 	</script>
+		<script>
+	function exportToExcel()
+		{
+			 
+			window.open("${pageContext.request.contextPath}/exportToExcel");
+					document.getElementById("expExcel").disabled=true;
+		}
+			</script>
 </body>
 </html>

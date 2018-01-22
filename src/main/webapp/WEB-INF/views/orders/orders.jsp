@@ -217,7 +217,7 @@ th:hover::after {
 
 
 
-
+<c:set var="dis" value="none"/>
 
 
 								<div class="box">
@@ -262,7 +262,7 @@ th:hover::after {
 												<tbody>
 													<c:forEach items="${orderList}" var="orderList"
 														varStatus="count">
-
+							<c:set var="dis" value="block"/>
 														<tr>
 															<td><c:out value="${count.index+1}" /></td>
 
@@ -321,6 +321,14 @@ th:hover::after {
 
 
 								</div>
+								<div class="form-group" style="display: <c:out value="${dis}" />;" id="range">
+								 
+											 
+											 
+											<div class="col-sm-3  controls">
+											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
+											</div>
+											</div>
 							</form>
 						</div>
 					</div>
@@ -433,7 +441,7 @@ $.getJSON('${callSearchOrdersProcess}', {
 	ajax : 'true'
 
 }, function(data) {
-
+	document.getElementById("expExcel").disabled=true;
 	$('#loader').hide();
 	var len = data.length;
 
@@ -441,7 +449,8 @@ $.getJSON('${callSearchOrdersProcess}', {
 	$('#table1 td').remove();
 
 	$.each(data,function(key, orders) {
-
+		document.getElementById("expExcel").disabled=false;
+		document.getElementById('range').style.display = 'block';
 	var tr = $('<tr></tr>');
 
   	tr.append($('<td></td>').html(key+1));
@@ -523,15 +532,16 @@ $.getJSON('${callSearchOrdersProcess}', {
 							ajax : 'true'
 							
 						}, function(data) {
-
+							document.getElementById("expExcel").disabled=true;
 							$('#loader').hide();
 							var len = data.length;
 
 
 							$('#table1 td').remove();
-
+							
 							$.each(data,function(key, orders) {
-
+								document.getElementById("expExcel").disabled=false;
+								document.getElementById('range').style.display = 'block';
 							var tr = $('<tr></tr>');
 
 						  	tr.append($('<td></td>').html(key+1));
@@ -562,6 +572,13 @@ $.getJSON('${callSearchOrdersProcess}', {
 		
 		</script>
 
-
+<script>
+	function exportToExcel()
+		{
+			 
+			window.open("${pageContext.request.contextPath}/exportToExcel");
+					document.getElementById("expExcel").disabled=true;
+		}
+			</script>
 </body>
 </html>

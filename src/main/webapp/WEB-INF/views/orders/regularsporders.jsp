@@ -266,6 +266,9 @@
 											<div class="col-sm-3  controls">
 											<input type="button" id="from" class="btn btn-primary" value="EXPORT TO PDF IN RANGE" onclick="inRangePdf();">
 											</div>
+											<div class="col-sm-3  controls">
+											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" >
+											</div>
 											</div>
 							</form>
 						</div>
@@ -380,6 +383,13 @@ function searchOrder(isDelete){
     form.action ="${pageContext.request.contextPath}/regularSpCkOrderProcess";
     form.submit();
 		}
+}
+
+function exportToExcel()
+{
+	 
+	window.open("${pageContext.request.contextPath}/exportToExcel");
+			document.getElementById("expExcel").disabled=true;
 }
 </script>
 </body>

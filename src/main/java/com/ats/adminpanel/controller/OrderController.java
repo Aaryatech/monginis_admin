@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.spi.LocationAwareLogger;
 import org.springframework.context.annotation.Scope;
@@ -22,7 +23,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.ats.adminpanel.commons.Commons;
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.GetOrder;
 import com.ats.adminpanel.model.GetOrderListResponse;
 import com.ats.adminpanel.model.GetRegSpCakeOrders;
@@ -186,6 +189,50 @@ public class OrderController {
 		}// end of else
 		
 
+		
+	List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+		
+		ExportToExcel expoExcel=new ExportToExcel();
+		List<String> rowData=new ArrayList<String>();
+		 
+		rowData.add("Franchisee Name");
+		rowData.add("Type");
+		rowData.add("Item Id");
+		rowData.add("Item Name");
+		rowData.add("Quantity");
+	
+		
+		 
+		 
+		
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+		for(int i=0;i<orderList.size();i++)
+		{
+			  expoExcel=new ExportToExcel();
+			 rowData=new ArrayList<String>();
+			 
+			rowData.add(orderList.get(i).getFrName());
+			
+			rowData.add(orderList.get(i).getCatName());
+			rowData.add(""+orderList.get(i).getId());
+			rowData.add(orderList.get(i).getItemName());
+			rowData.add(""+orderList.get(i).getOrderQty());
+			
+			
+			 
+			
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			System.out.println("List"+orderList.get(i).toString());
+		}
+		 
+		
+		
+		HttpSession session = request.getSession();
+		session.setAttribute("exportExcelList", exportToExcelList);
+		
+		
 		return orderList;
 	}
 
@@ -297,7 +344,52 @@ public class OrderController {
 		} catch (Exception e) {
 			System.out.println("exception in order display" + e.getMessage());
 		}
-
+		 
+		
+		List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+		
+		ExportToExcel expoExcel=new ExportToExcel();
+		List<String> rowData=new ArrayList<String>();
+		rowData.add("Order No");
+		rowData.add("Franchisee Name");
+	
+		rowData.add("Item Id");
+		rowData.add("Sp Code");
+		rowData.add("Sp Name");
+		rowData.add("Sp Flavour");
+		
+		rowData.add("Event");
+		rowData.add("Price");
+		rowData.add("Sp Total Add Rate");
+		
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+		for(int i=0;i<spCakeOrderList.size();i++)
+		{
+			  expoExcel=new ExportToExcel();
+			 rowData=new ArrayList<String>();
+			rowData.add(""+spCakeOrderList.get(i).getSpOrderNo());
+			rowData.add(spCakeOrderList.get(i).getFrName());
+		
+			rowData.add(spCakeOrderList.get(i).getItemId());
+			rowData.add(spCakeOrderList.get(i).getSpCode());
+			
+			rowData.add(spCakeOrderList.get(i).getSpfName());
+			rowData.add(spCakeOrderList.get(i).getSpName());
+			rowData.add(spCakeOrderList.get(i).getSpEvents());
+			rowData.add(""+spCakeOrderList.get(i).getSpPrice());
+			rowData.add(""+spCakeOrderList.get(i).getSpTotalAddRate());
+			
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			System.out.println("List"+spCakeOrderList.get(i).toString());
+		}
+		 
+		
+		
+		HttpSession session = request.getSession();
+		session.setAttribute("exportExcelList", exportToExcelList);
+		
 		return spCakeOrderList;
 	}
 	
@@ -426,6 +518,59 @@ public class OrderController {
 			System.out.println("exception in order display" + e.getMessage());
 		}
 
+		
+	List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+		
+		ExportToExcel expoExcel=new ExportToExcel();
+		List<String> rowData=new ArrayList<String>();
+		 
+		rowData.add("Franchisee Name");
+	 
+		rowData.add("Item Id");
+		rowData.add("Item Name");
+		
+		rowData.add("Mrp");
+		rowData.add("Rate");
+		
+		rowData.add("Quantity");
+	
+		rowData.add("Sub Total");
+		 
+		 
+		
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+		for(int i=0;i<regOrderListResponse.getRegularSpCkOrdersList().size();i++)
+		{
+			  expoExcel=new ExportToExcel();
+			 rowData=new ArrayList<String>();
+			 
+			rowData.add(regOrderListResponse.getRegularSpCkOrdersList().get(i).getFrName());
+			
+			rowData.add(""+regOrderListResponse.getRegularSpCkOrdersList().get(i).getId());
+			 
+			rowData.add(regOrderListResponse.getRegularSpCkOrdersList().get(i).getItemName());
+			
+			rowData.add(""+regOrderListResponse.getRegularSpCkOrdersList().get(i).getMrp());
+			rowData.add(""+regOrderListResponse.getRegularSpCkOrdersList().get(i).getRate());
+			rowData.add(""+regOrderListResponse.getRegularSpCkOrdersList().get(i).getQty());
+			rowData.add(""+regOrderListResponse.getRegularSpCkOrdersList().get(i).getRspSubTotal());
+			
+			
+			
+			 
+			
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			 
+		}
+		 
+		
+		
+		HttpSession session = request.getSession();
+		session.setAttribute("exportExcelList", exportToExcelList);
+		
+		
 		return model;
 	}
 
