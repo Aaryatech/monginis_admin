@@ -35,9 +35,12 @@ import com.ats.adminpanel.model.ExportToExcel;
 @Controller
 public class ExportExcelController {
 
- 
- 	// ExportToExcel expoExcel=new ExportToExcel();
-	 //private final List<String> cities = Arrays.asList("New York", "London", "Am", "San Fo");
+/*	<dependency>
+    <groupId>org.apache.poi</groupId>
+    <artifactId>poi-ooxml</artifactId>
+    <version>3.13</version>
+</dependency>*/
+
 	
 	List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 	  @RequestMapping(value = "/exportToExcel", method = RequestMethod.GET)
