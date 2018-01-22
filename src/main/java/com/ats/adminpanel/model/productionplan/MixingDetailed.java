@@ -27,7 +27,8 @@ public class MixingDetailed {
 	private float rejectedQty;
 	
 	
-	
+	float originalQty;//new fields added 22 Jan 2018
+	float autoOrderQty;//new fields added 22 Jan 2018
 	
 	
 	public float getRejectedQty() {
@@ -127,14 +128,28 @@ public class MixingDetailed {
 	public void setExBool1(int exBool1) {
 		this.exBool1 = exBool1;
 	}
+	public float getOriginalQty() {
+		return originalQty;
+	}
+	public void setOriginalQty(float originalQty) {
+		this.originalQty = originalQty;
+	}
+	public float getAutoOrderQty() {
+		return autoOrderQty;
+	}
+	public void setAutoOrderQty(float autoOrderQty) {
+		this.autoOrderQty = autoOrderQty;
+	}
 	@Override
 	public String toString() {
 		return "MixingDetailed [mixing_detailId=" + mixing_detailId + ", mixingId=" + mixingId + ", sfId=" + sfId
 				+ ", sfName=" + sfName + ", receivedQty=" + receivedQty + ", productionQty=" + productionQty
 				+ ", mixingDate=" + mixingDate + ", exInt1=" + exInt1 + ", exInt2=" + exInt2 + ", exInt3=" + exInt3
 				+ ", exVarchar1=" + exVarchar1 + ", exVarchar2=" + exVarchar2 + ", exVarchar3=" + exVarchar3
-				+ ", exBool1=" + exBool1 + "]";
+				+ ", exBool1=" + exBool1 + ", uom=" + uom + ", rejectedQty=" + rejectedQty + ", originalQty="
+				+ originalQty + ", autoOrderQty=" + autoOrderQty + "]";
 	}
+	
 	
 	
 

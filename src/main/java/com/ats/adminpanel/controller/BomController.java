@@ -531,7 +531,6 @@ int globalIsPlan;
 	     Paragraph company = new Paragraph("G F P L",f);
 	     company.setAlignment(Element.ALIGN_CENTER);
 	     document.add(company);
-	     document.add(new Paragraph(" "));
 
 	     Paragraph heading = new Paragraph("Report");
 	     heading.setAlignment(Element.ALIGN_CENTER);

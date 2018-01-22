@@ -169,7 +169,9 @@
 									</c:when>
 								</c:choose>
 
-
+	<div style="text-align: center;">
+								<a href="${pageContext.request.contextPath}/showMixReqPdf"
+								target="_blank">PDF</a></div>
 							</form>
 						</div>
 					</div>

@@ -56,7 +56,7 @@ import com.ats.adminpanel.model.salesreport.SalesReportRoyalty;
 import com.ats.adminpanel.model.salesreport.SalesReportRoyaltyFr;
 
 @Controller
-//@Scope("session")
+@Scope("session")
 public class SalesReportController {
 
 	List<String> frList = new ArrayList<>();
@@ -1706,7 +1706,7 @@ public class SalesReportController {
 		String url = request.getParameter("url");
 		System.out.println("URL "+url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
-		File f = new File("/home/ats-11/pdf/ordermemo221.pdf");
+		File f = new File("ordermemo221.pdf");
 System.out.println("I am here "+f.toString());
 		try {
 			runConverter(Constants.ReportURL + url, f);
@@ -1721,7 +1721,7 @@ System.out.println("I am here "+f.toString());
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo221.pdf";
-		String filePath = "/home/ats-11/pdf/ordermemo221.pdf";
+		String filePath = "/ordermemo221.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;

@@ -272,7 +272,7 @@
 											data-provides="fileupload">
 											<div class="fileupload-new img-thumbnail"
 												style="width: 200px; height: 150px;">
-												<img src="${imageUrl}${materialRecNoteHeader.photo1}"
+												<img src="${imageUrl}${materialRecNote.photo1}"
 											onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';"
 											alt="" />
 											</div>
@@ -299,7 +299,7 @@
 											data-provides="fileupload">
 											<div class="fileupload-new img-thumbnail"
 												style="width: 200px; height: 150px;">
-												<img src="${imageUrl}${materialRecNoteHeader.photo2}"
+												<img src="${imageUrl}${materialRecNote.photo2}"
 											onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';"
 											alt="" />
 											</div>

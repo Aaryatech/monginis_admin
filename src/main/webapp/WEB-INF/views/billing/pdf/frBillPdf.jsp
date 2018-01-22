@@ -84,9 +84,9 @@ duplicate for tranpoter</p>
     <td align="center" style="border-left:1px solid #313131; padding:3px 10px;color:#000; font-size:10px;">${billDetails.itemUom}</td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 10px;color:#000; font-size:10px;">${billDetails.baseRate}</td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 10px;color:#000;font-size:10px;">${billDetails.taxableAmt}</td>
-    <td align="center" style="border-left:1px solid #313131; padding:3px 10px;color:#000; font-size:10px;">${billDetails.cgstPer}</td>
-    <td align="center" style="border-left:1px solid #313131; padding:3px 10px;color:#000; font-size:10px;">${billDetails.sgstPer}</td>
-    <td align="right" style="border-left:1px solid #313131; padding:3px 10px;color:#000;font-size:10px;">${billDetails.cgstRs}</td>
+    <td align="right" style="border-left:1px solid #313131; padding:3px 10px;color:#000; font-size:10px;">${billDetails.cgstPer}</td>
+    <td align="right" style="border-left:1px solid #313131; padding:3px 10px;color:#000; font-size:10px;">${billDetails.cgstRs}</td>
+    <td align="right" style="border-left:1px solid #313131; padding:3px 10px;color:#000;font-size:10px;">${billDetails.sgstPer}</td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 10px;color:#000;font-size:10px;">${billDetails.sgstRs}</td>
   </tr>
   </c:forEach>
@@ -120,10 +120,8 @@ duplicate for tranpoter</p>
     <td colspan="6"  width="50%" style="border-bottom:1px solid #313131;border-top:1px solid #313131;border-left:1px solid #313131; padding:10px;color:#000; font-size:12px;">
      <p style="color:#000; font-size:12px; text-align:left;margin:0px;">Subject to : Aurangabad</p>
 </td>
-    <td colspan="5" width="38%" style="border-bottom:1px solid #313131;border-top:1px solid #313131;border-left:1px solid #313131; padding:10px;color:#000;font-size:15px;">sdfads</td>
+    <td colspan="5" width="38%" style="border-bottom:1px solid #313131;border-top:1px solid #313131;border-left:1px solid #313131; padding:10px;color:#000;font-size:15px;">Authorised Signature</td>
   </tr>
-  
- 
   
 </table>
 <div style="page-break-after: always;"></div>

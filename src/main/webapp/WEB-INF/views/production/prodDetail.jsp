@@ -130,9 +130,7 @@
 									
 
 								</div>
-								<div style="text-align: center;">
-								<a href="${pageContext.request.contextPath}/showProdByOrderPdf"
-								target="_blank">PDF</a></div>
+								
                         <input type="hidden" value="${planHeader.isPlanned}" name="is_plan"/>
                         <input type="hidden" value="${planHeader.productionHeaderId}" name="production_id"/>
 
@@ -407,6 +405,10 @@
 										
 									</div>
 								</div>
+								
+								<div style="text-align: center;">
+								<a href="${pageContext.request.contextPath}/showProdByOrderPdf"
+								target="_blank">PDF</a></div>
 							</form>
 						</div>
 					</div>

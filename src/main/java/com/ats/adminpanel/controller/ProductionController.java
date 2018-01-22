@@ -62,6 +62,7 @@ import com.ats.adminpanel.model.production.PostProductionDetail;
 import com.ats.adminpanel.model.production.PostProductionHeader;
 import com.ats.adminpanel.model.production.PostProductionPlanDetail;
 import com.ats.adminpanel.model.production.UpdateOrderStatus;
+import com.ats.adminpanel.model.productionplan.MixingDetailed;
 import com.ats.adminpanel.model.salesreport.OrderFromProdPdfView;
 import com.ats.adminpanel.model.stock.FinishedGoodStock;
 import com.ats.adminpanel.model.stock.FinishedGoodStockDetail;
@@ -819,6 +820,7 @@ public class ProductionController {
 	List<PostProductionPlanDetail> postProductionPlanDetaillist = new ArrayList<PostProductionPlanDetail>();
 	PostProdPlanHeader postProdPlanHeader = new PostProdPlanHeader();
 	CategoryListResponse categoryListComp = new CategoryListResponse();
+	public List<Item> pdfItemList;
 
 	@RequestMapping(value = "/listForVariation", method = RequestMethod.GET)
 	public ModelAndView listForVariation(HttpServletRequest request, HttpServletResponse response) {
@@ -919,7 +921,7 @@ public class ProductionController {
 			AllItemsListResponse allItemsListResponse = restTemplate.getForObject(Constants.url + "getAllItems",
 					AllItemsListResponse.class);
 			List<Item> itemsList = allItemsListResponse.getItems();
-
+			pdfItemList=allItemsListResponse.getItems();
 			System.out.println("getVarianceorderlistforsort size " + getVarianceorderlistforsort.size());
 			System.out.println("unsort size " + getQtyforVariance.getVarianceorderlist().size());
 			System.out.println(postProductionPlanDetaillist.toString());
@@ -1107,7 +1109,6 @@ public class ProductionController {
 
 			}
 
-			
 
 			// end of new Code
 
@@ -1123,6 +1124,241 @@ public class ProductionController {
 		return model;
 	}
 
+	
+	
+	//postProductionPlanDetaillist
+	@RequestMapping(value = "/showVariencePdf", method = RequestMethod.GET)
+	public void  showProdByOrderPdf(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+		  BufferedOutputStream outStream = null;
+		System.out.println("Inside show Prod BOM Pdf ");
+		Document doc=new Document();
+			
+		
+		List<PostProductionPlanDetail> postProdDetailList = postProductionPlanDetaillist;
+		
+		postProdDetailList = postProductionPlanDetaillist;
+		Document document = new Document(PageSize.A4);
+		//  ByteArrayOutputStream out = new ByteArrayOutputStream();
+		 
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+
+		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
+		String timeStamp=dateFormat.format(cal.getTime());
+		String FILE_PATH="/home/ats-11/REPORT.pdf";
+		File file=new File(FILE_PATH);
+		
+		PdfWriter writer = null;
+		
+		
+		 FileOutputStream out=new FileOutputStream(FILE_PATH);
+		   try {
+			    writer=PdfWriter.getInstance(document,out);
+		} catch (DocumentException e) {
+			
+			e.printStackTrace();
+		}
+		
+		 PdfPTable table = new PdfPTable(11);
+		 try {
+		 System.out.println("Inside PDF Table try");
+		 table.setWidthPercentage(100);
+	     table.setWidths(new float[]{0.9f, 2.9f,1.4f,0.9f, 1.4f,1.4f,0.9f, 1.4f,1.4f,0.9f, 1.4f});
+	     Font headFont = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK);
+	     Font headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
+	     Font f=new Font(FontFamily.TIMES_ROMAN,12.0f,Font.UNDERLINE,BaseColor.BLUE);
+	     
+	     PdfPCell hcell;
+	     hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+
+	     hcell = new PdfPCell(new Phrase("Item Description", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
+
+	     hcell = new PdfPCell(new Phrase("OP BAL", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
+	     hcell = new PdfPCell(new Phrase("PLAN", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
+	     hcell = new PdfPCell(new Phrase("PROD", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
+	     hcell = new PdfPCell(new Phrase("TOTAL", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+
+	     hcell = new PdfPCell(new Phrase("Order", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
+
+	     hcell = new PdfPCell(new Phrase("VARI", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
+	     hcell = new PdfPCell(new Phrase("CLBAL", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
+	     
+	     hcell = new PdfPCell(new Phrase("P-2", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
+	     hcell = new PdfPCell(new Phrase("D", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
+	 
+	     int index=0;
+	     for(int j=0;j<pdfItemList.size();j++) {
+	     
+	     for (PostProductionPlanDetail planDetail : postProdDetailList) {
+	      
+
+	        if(pdfItemList.get(j).getId()==planDetail.getItemId()) {
+	        	
+	        	 index++;
+		         PdfPCell cell;
+
+		        cell = new PdfPCell(new Phrase(String.valueOf(index),headFont));
+		         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+		         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+		         table.addCell(cell);
+	        
+		       System.out.println("Inside Item Matched ");
+	         cell = new PdfPCell(new Phrase(pdfItemList.get(j).getItemName(),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(10);
+	         table.addCell(cell);
+	        
+	         cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getCurOpeQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(10);
+	         table.addCell(cell);
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getPlanQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(10);
+	         table.addCell(cell);
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getProductionQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(10);
+	         table.addCell(cell);
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getCurOpeQty()+planDetail.getProductionQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(10);
+	         table.addCell(cell);
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getOrderQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(10);
+	         table.addCell(cell);
+	         
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf((planDetail.getCurOpeQty()+planDetail.getProductionQty())-planDetail.getOrderQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(10);
+	         table.addCell(cell);
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getOrderQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(10);
+	         table.addCell(cell);
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf("P-2"),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(10);
+	         table.addCell(cell);
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf("D"),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(10);
+	         table.addCell(cell);
+	         break;
+	        }
+	         //FooterTable footerEvent = new FooterTable(table);
+	        // writer.setPageEvent(footerEvent);
+	     }
+	     }
+	     document.open();
+	     Paragraph company = new Paragraph("G F P L",f);
+	     company.setAlignment(Element.ALIGN_CENTER);
+	     document.add(company);
+	     document.add(new Paragraph(" "));
+
+	     Paragraph heading = new Paragraph("Report");
+	     heading.setAlignment(Element.ALIGN_CENTER);
+	     document.add(heading);
+
+	     document.add(new Paragraph(" "));
+	     document.add(table);
+	 	 int totalPages=writer.getPageNumber();
+	 	/*com.ats.adminpanel.model.itextpdf.Header event; // = new com.ats.adminpanel.model.itextpdf.Header();
+	 	for(int i=1;i<totalPages;i++) {
+	 	 event = new com.ats.adminpanel.model.itextpdf.Header();
+	 	event.setHeader(new Phrase(String.format("page %s", i)));
+	 	
+	 	writer.setPageEvent(event);
+	 	}
+	 	
+	 	
+	 	 FooterTable footerEvent = new FooterTable(table);
+	 	 */
+	 	 
+	 //	 document.add(new Paragraph(""+document.setPageCount(document.getPageNumber()));
+	     
+	 	 System.out.println("Page no "+totalPages);
+	     
+	    // document.addHeader("Page" ,String.valueOf(totalPages));
+	    // writer.setPageEvent((PdfPageEvent) new Phrase());
+	    
+	     document.close();
+	     
+	     Desktop d=Desktop.getDesktop();
+	     
+	     if(file.exists()) {
+	    	 try {
+				d.open(file);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	     }
+	     
+	 } catch (DocumentException ex) {
+	 
+		 System.out.println("Pdf Generation Error: Prod From Orders"+ex.getMessage());
+		 
+		 ex.printStackTrace();
+	   
+	 }
+
+		ModelAndView model = new ModelAndView("production/pdf/productionPdf");
+		//model.addObject("prodFromOrderReport",updateStockDetailList);
+
+	
+	}
+	
 	@RequestMapping(value = "/updateOrderQtyinPlan", method = RequestMethod.POST)
 	public String updateOrderQtyinPlan(HttpServletRequest request, HttpServletResponse response) {
 

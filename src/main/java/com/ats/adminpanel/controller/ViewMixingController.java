@@ -237,7 +237,6 @@ public class ViewMixingController {
 		  BufferedOutputStream outStream = null;
 		System.out.println("Inside show Prod BOM Pdf ");
 		Document doc=new Document();
-			
 		
 		List<MixingDetailed> mixDetailList = mixwithdetaild;
 		
@@ -264,11 +263,11 @@ public class ViewMixingController {
 			e.printStackTrace();
 		}
 		
-		 PdfPTable table = new PdfPTable(3);
+		 PdfPTable table = new PdfPTable(5);
 		 try {
 		 System.out.println("Inside PDF Table try");
 		 table.setWidthPercentage(100);
-	     table.setWidths(new float[]{0.9f, 1.4f,1.4f});
+	     table.setWidths(new float[]{0.9f, 1.4f,1.4f,1.4f,1.4f});
 	     Font headFont = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK);
 	     Font headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
 	     Font f=new Font(FontFamily.TIMES_ROMAN,12.0f,Font.UNDERLINE,BaseColor.BLUE);
@@ -278,13 +277,22 @@ public class ViewMixingController {
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	     table.addCell(hcell);
 
-	     hcell = new PdfPCell(new Phrase("Item Name", headFont1));
+	     hcell = new PdfPCell(new Phrase("SF Name", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	     table.addCell(hcell);
 	    
 	     hcell = new PdfPCell(new Phrase("Order Quantity", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	     table.addCell(hcell);
+	     
+	     hcell = new PdfPCell(new Phrase("Add Weight", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
+	     hcell = new PdfPCell(new Phrase("Ori Quantity", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
 	 
 	     int index=0;
 	     for (MixingDetailed mixDetail : mixDetailList) {
@@ -300,13 +308,27 @@ public class ViewMixingController {
 	         cell = new PdfPCell(new Phrase(mixDetail.getSfName(),headFont));
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	         cell.setPaddingRight(2);
+	         cell.setPaddingRight(4);
 	         table.addCell(cell);
 	         
-	         cell = new PdfPCell(new Phrase(String.valueOf(mixDetail.getProductionQty()),headFont));
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf("Mul Factor"),headFont));
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	         cell.setPaddingRight(2);
+	         cell.setPaddingRight(4);
+	         table.addCell(cell);
+	         
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(mixDetail.getReceivedQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(4);
+	         table.addCell(cell);
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(mixDetail.getOriginalQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(4);
 	         table.addCell(cell);
 	        	         
 	         //FooterTable footerEvent = new FooterTable(table);
@@ -333,8 +355,6 @@ public class ViewMixingController {
 	 	
 	 	writer.setPageEvent(event);
 	 	}
-	 	
-	 	
 	 	 FooterTable footerEvent = new FooterTable(table);
 	 	 */
 	 	 

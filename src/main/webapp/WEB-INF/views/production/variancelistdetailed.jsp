@@ -243,8 +243,12 @@
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 
 												<input type="submit" class="btn btn-primary"
-													value="complet Production">
+													value="complet Production">&nbsp;&nbsp;&nbsp;&nbsp;
+													<a href="${pageContext.request.contextPath}/showVariencePdf"
+								target="_blank">PDF</a></div>
 											</div>
+											
+											
 										</div>
 				
 								
