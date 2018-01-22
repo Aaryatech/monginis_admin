@@ -4,33 +4,13 @@
 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Dashboard - Admin</title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
-<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-<!--base css styles-->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/assets/font-awesome/css/font-awesome.min.css">
-
-<!--page specific css styles-->
-
-<!--flaty css styles-->
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/flaty.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/flaty-responsive.css">
-
-<link rel="shortcut icon" href="${pageContext.request.contextPath}/resources/img/favicon.png">
-</head>
 <body>
+<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<!-- BEGIN Container -->
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+	 
 
 
 	<div class="container" id="main-container">

@@ -7,7 +7,7 @@
 <title>Monginis Admin-Sales Report</title>
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 	<body>
-	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+	 
 </head>
 <body>
 
