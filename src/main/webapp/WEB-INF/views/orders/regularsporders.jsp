@@ -264,7 +264,7 @@
 											<input type="text"  class="form-control" id="to" placeholder="from no" >
 											</div>
 											<div class="col-sm-3  controls">
-											<input type="button" id="from" class="btn btn-primary" value="EXPORT TO PDF IN RANGE" onclick="inRangePdf();">
+			 								<input type="button" id="from" class="btn btn-primary" value="EXPORT TO PDF IN RANGE" onclick="inRangePdf();">
 											</div>
 											<div class="col-sm-3  controls">
 											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" >
