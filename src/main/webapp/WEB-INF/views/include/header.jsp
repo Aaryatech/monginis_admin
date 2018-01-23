@@ -42,7 +42,8 @@
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.css" />
 	
-	  
+	  <link rel="shortcut icon"
+	href="${pageContext.request.contextPath}/resources/img/monginislogo.png">
 
 
 <script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
@@ -53,13 +54,6 @@
 										</script>
 
 <!--page specific css styles-->
-
-<script
-	src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
-	
-	<script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
-	
 <script
 	src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
 <script

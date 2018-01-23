@@ -35,7 +35,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.jasper.tagplugins.jstl.core.Catch;
 import org.omg.CORBA.ORBPackage.InvalidName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -1739,22 +1738,24 @@ System.out.println("IN Show bill Method");
 		String url = request.getParameter("url");
 		 System.out.println("URL "+url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
-		File f = new File("/home/ats-11/ordermemo221.pdf");
-System.out.println("I am here "+f.toString());
+		//File f = new File("/home/ats-11/ordermemo222.pdf");
+		 
+		File f = new File("/ordermemo222.pdf");
+		System.out.println("I am here "+f.toString());
 		try {
 			runConverter(Constants.ReportURL + url, f);
 			System.out.println("Come on lets get ");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-
 			System.out.println("Pdf conversion exception " + e.getMessage());
 		}
 
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		String filename = "/ordermemo221.pdf";
-		String filePath = "/home/ats-11/ordermemo221.pdf";
+		String filename = "/ordermemo222.pdf";
+		//String filePath = "/home/ats-11/ordermemo221.pdf";
+		String filePath = "/ordermemo222.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;
@@ -1828,6 +1829,8 @@ System.out.println("I am here "+f.toString());
 
 			if (unitsValue.equals("mm")) {
 				pd4ml.setPageInsetsMM(new Insets(topValue, leftValue, bottomValue, rightValue));
+				
+				
 			} else {
 				pd4ml.setPageInsets(new Insets(topValue, leftValue, bottomValue, rightValue));
 			}

@@ -44,7 +44,7 @@ th {
 <h3 align="center">Galdhar Foods Pvt Ltd</h3>
 <p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
 <p align="center">(All Sales)</p>
-<p align="center">Sales Report (Date wise R2)</p>
+<p align="center">Sales Report (Fr wise )</p><!-- Report 2 -->
 
 <div align="center">From ${fromDate}- To ${toDate}</div>
 	<table width="100%" border="0" cellspacing="0" cellpadding="0"
@@ -112,7 +112,7 @@ th {
 			</c:forEach>
 				<tr>
 				
-					<td colspan='6'><b>Total</b></td>
+					<td colspan='4'><b>Total</b></td>
 					<td><b><fmt:formatNumber type="number"
 								maxFractionDigits="2" value="${taxAmount}" /></b></td>
 					<td><b><fmt:formatNumber type="number"

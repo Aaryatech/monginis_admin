@@ -2,12 +2,13 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 <script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
-	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+<script type="text/javascript"
+	src="https://www.gstatic.com/charts/loader.js"></script>
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 
@@ -131,11 +132,14 @@
 					<div class="col-md-12" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
 							Billwise Report</button>
-							
-							  <button class="btn search_btn" onclick="showChart()" >Graph</button>
-							  
-							<a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseGrpByDatePdf"
-								target="_blank">PDF</a>
+
+						<button class="btn search_btn" onclick="showChart()">Graph</button>
+
+						<button class="btn btn-primary" value="PDF" id="PDFButton"
+							onclick="genPdf()">PDF</button>
+
+						<%-- <a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseGrpByDatePdf"
+								target="_blank">PDF</a> --%>
 
 					</div>
 				</div>
@@ -190,17 +194,17 @@
 							</table>
 						</div>
 					</div>
- 
+
 				</div>
 				<div id="chart_div" style="width: 100%; height: 700px;"></div>
-    		 	<div id="PieChart_div" style="width: 100%; height: 700px;"></div>
+				<div id="PieChart_div" style="width: 100%; height: 700px;"></div>
 			</form>
 		</div>
 	</div>
 	<!-- END Main Content -->
 
 	<footer>
-	<p>2017 © Monginis.</p>
+		<p>2017 © Monginis.</p>
 	</footer>
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -318,8 +322,8 @@
 		}
 	</script>
 
-	
-	
+
+
 	<script type="text/javascript">
 
 function disableFr(){
@@ -346,7 +350,7 @@ function disableRoute(){
 </script>
 
 
-<script type="text/javascript">
+	<script type="text/javascript">
 function showChart(){
 	
 	alert("Hi");
@@ -505,7 +509,14 @@ function showChart(){
 							  	});
 			
 }
-
+function genPdf()
+{
+	var from_date = $("#fromDate").val();
+	var to_date = $("#toDate").val();
+	
+	window.open('pdfForReport?url=showSaleBillwiseGrpByDatePdf/'+from_date+'/'+to_date);
+	
+	}
 </script>
 
 	<!--basic scripts-->

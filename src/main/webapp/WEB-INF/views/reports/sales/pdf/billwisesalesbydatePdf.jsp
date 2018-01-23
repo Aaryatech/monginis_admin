@@ -44,7 +44,7 @@ th {
 <h3 align="center">Galdhar Foods Pvt Ltd</h3>
 <p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
 <p align="center">(All Sales)</p>
-<p align="center">Sales Report (Date wise R1)</p>
+<p align="center">Sales Report (Bill Wise)</p><!-- report1  -->
 
 <div align="center">From ${fromDate}- To ${toDate}</div>
 	<table width="100%" border="0" cellspacing="0" cellpadding="0"

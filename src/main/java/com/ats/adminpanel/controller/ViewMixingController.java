@@ -249,7 +249,7 @@ public class ViewMixingController {
 
 		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
 		String timeStamp=dateFormat.format(cal.getTime());
-		String FILE_PATH="/home/ats-11/REPORT.pdf";
+		String FILE_PATH=Constants.REPORT_SAVE;
 		File file=new File(FILE_PATH);
 		
 		PdfWriter writer = null;

@@ -131,8 +131,11 @@
 							Billwise Report</button>
 									    <button class="btn search_btn" onclick="showChart()" >Graph</button>
 							
-							<a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseByFrPdf"
-								target="_blank">PDF</a>
+							
+												<button class="btn btn-primary" value="PDF" id="PDFButton" onclick="genPdf()">PDF</button>
+							
+							<%-- <a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseByFrPdf"
+								target="_blank">PDF</a> --%>
 
 					</div>
 				</div>
@@ -164,8 +167,7 @@
 			<form id="submitBillForm"
 				action="${pageContext.request.contextPath}/submitNewBill"
 				method="post">
-				<div class=" box-content">
-					<div class="row">
+				
 						<div class="col-md-12 table-responsive">
 							<table class="table table-bordered table-striped fill-head "
 								style="width: 100%" id="table_grid">
@@ -181,7 +183,6 @@
 										<th>IGST</th>
 										<th>Round Off</th>
 										<th>Total</th>
-
 									</tr>
 								</thead>
 								<tbody>
@@ -564,6 +565,16 @@ function showChart(){
 			
 }
 
+					
+					
+function genPdf()
+{
+	var from_date = $("#fromDate").val();
+	var to_date = $("#toDate").val();
+	
+	window.open('pdfForReport?url=showSaleBillwiseByFrPdf/'+from_date+'/'+to_date);
+	
+	}
 </script>
 
 	<!--basic scripts-->

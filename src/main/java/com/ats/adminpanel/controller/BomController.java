@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.tomcat.util.bcel.classfile.Constant;
+//import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -464,7 +464,7 @@ int globalIsPlan;
 
 		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
 		String timeStamp=dateFormat.format(cal.getTime());
-		String FILE_PATH="/home/ats-11/REPORT.pdf";
+		String FILE_PATH=Constants.REPORT_SAVE;
 		File file=new File(FILE_PATH);
 		
 		PdfWriter writer = null;

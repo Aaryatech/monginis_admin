@@ -44,7 +44,7 @@ th {
 <h3 align="center">Galdhar Foods Pvt Ltd</h3>
 <p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
 <p align="center">(All Sales)</p>
-<p align="center">Sales Report (Month wise)</p><!-- Report 4 R4 -->
+<p align="center">Sales Report (Sales Royalty Fr Wise)</p><!--  -->
 
 <div align="center">From ${fromDate}- To ${toDate}</div>
 	<table width="100%" border="0" cellspacing="0" cellpadding="0"
@@ -52,79 +52,66 @@ th {
 		<thead>
 			<tr class="bgpink">
 				<th>Sr.No.</th>
-				<th>Month</th>
-				<th>Basic Value</th>
-				<th>CGST</th>
-				<th>SGST</th>
-				<th>IGST</th>
-				<th>Round Off</th>
-				<th>Total</th>
+				<th>Fr Name</th>
+				<th>City</th>
+				<th>Sale Value</th>
+				<th>Grn Value</th>
+				<th>Gvn Value</th>
+				<th>%</th>
+				<th>Net Value</th>
 			</tr>
 		</thead>
 		<tbody>
-			<c:set var="taxAmount" value="${0}" />
-			<c:set var="igst" value="${0 }" />
-			<c:set var="cgst" value="${0 }" />
-			<c:set var="sgst" value="${0 }" />
-			<c:set var="grandTotal" value="${0 }" />
+			<c:set var="grandNetValue" value="${0 }" />
+			<c:set var="grandGrnValue" value="${0 }" />
+			<c:set var="grandGvnValue" value="${0 }" />
+			<c:set var="FinalNetValue" value="${0 }" />
 			<c:forEach items="${report}" var="report" varStatus="count">
 				<tr>
 					<td><c:out value="${count.index+1}" /></td>
 					<td><c:out value="${report.month}" /></td>
-					<td><c:out value="${report.taxableAmt}" /></td>
-					<c:choose>
-					<c:when test="${report.isSameState eq 1}">
+					<td><c:out value="${report.tBillTaxableAmt}" /></td>
 					
-					<td><c:out value="${report.cgstSum}" /></td>
-					<td><c:out value="${report.sgstSum}"></c:out></td>
-					<td><c:out value="0" /></td>
-					<c:set var="total" value="${report.cgstSum +report.sgstSum + report.taxableAmt}" />
-										<c:set var="sgst" value="${sgst + report.sgstSum }" />
+					<td><c:out value="${report.tGrnTaxableAmt}" /></td>
+					<td><c:out value="${report.tGvnTaxableAmt}"></c:out></td>
+					<td><c:out value="3" /></td>
 					
-					<c:set var="cgst" value="${cgst + report.cgstSum }" />
-					</c:when>
+					<c:set var="netValue" value="${report.tBillTaxableAmt -(report.tGrnTaxableAmt + report.tGvnTaxableAmt)}" />
 					
-					<c:when test="${report.isSameState eq 0}">
-					<c:set var="total" value="${report.igstSum+ report.taxableAmt}" />
-					<c:set var="igst" value="${igst + report.igstSum}" />
+					<c:set var="grandNetValue"
+						value="${grandNetValue + netValue}" />
+						
+					<c:set var="grandGrnValue" value="${grandGrnValue + report.tGrnTaxableAmt}" />
 					
-					<td><c:out value="0" /></td>
-					<td><c:out value="0"></c:out></td>
-					<td><c:out value="${report.igstSum}" /></td>
-					</c:when>
-					</c:choose>
-					
-					<c:set var="taxAmount" value="${taxAmount + report.taxableAmt}" />
-					
-					<c:set var="grandTotal"
-						value="${grandTotal+total}" />
-				<td><c:out value="${report.roundOff}"/></td>
-					<%-- <td><c:out value="${total}" /></td> --%>
-					
+										<c:set var="grandGvnValue" value="${grandGvnValue + report.tGvnTaxableAmt}" />
+				
+					<td><c:out value="${netValue}" /></td>
+					<c:set var="rAmt"
+						value="${netValue*3/100}" />
+						
+							<c:set var="FinalNetValue"
+						value="${FinalNetValue + rAmt}" />
+						
 					<td><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${total}" /></td>
+								maxFractionDigits="2" value="${rAmt}" /></td>
 				</tr>
 
 			</c:forEach>
 				<tr>
-				
-					<td colspan='2'><b>Total</b></td>
+					<td colspan='3'><b>Total</b></td>
 					<td><b><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${taxAmount}" /></b></td>
+								maxFractionDigits="2" value="${grandNetValue}" /></b></td>
 					<td><b><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${cgst}" /></b></td>
+								maxFractionDigits="2" value="${grandGrnValue}" /></b></td>
 					<td><b><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${sgst}" /></b></td>
+								maxFractionDigits="2" value="${grandGvnValue}" /></b></td>
 					<td><b><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${igst}" /></b></td>
+								maxFractionDigits="2" value="${FinalNetValue}" /></b></td>
 					<td></td>
-					<td><b><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${grandTotal}" /></b></td>
-					<!--  <td><b>Total</b></td> -->
+					
 				</tr>
 		</tbody>
 	</table>
-	
 
 	<!-- END Main Content -->
 

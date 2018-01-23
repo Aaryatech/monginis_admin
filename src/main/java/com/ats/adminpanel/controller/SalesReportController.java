@@ -30,6 +30,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -66,6 +67,11 @@ public class SalesReportController {
 	static List<SalesReportRoyalty> royaltyListForPdf;
 	
 	List<SalesReportRoyaltyFr> royaltyFrList;
+	
+	static List<SalesReportRoyaltyFr> staticRoyaltyFrList;
+
+	
+	
 	static RoyaltyListBean staticRoyaltyBean=new RoyaltyListBean();
 	
 	
@@ -226,21 +232,23 @@ public class SalesReportController {
 	}
 	
 	
-	@RequestMapping(value = "/showSaleReportByDatePdf", method = RequestMethod.GET)
-	public ModelAndView showSaleReportByDatePdf(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/showSaleReportByDatePdf/{fDate}/{tDate}", method = RequestMethod.GET)
+	public ModelAndView showSaleReportByDatePdf(@PathVariable String fDate,@PathVariable String tDate,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("reports/sales/pdf/billwisesalesbydatePdf");
 
 		System.out.println("inside PDf data "+saleListForPdf.toString());
 		
-		model.addObject("fromDate",todaysDate);
+		model.addObject("fromDate",fDate);
 		
-		model.addObject("toDate",todaysDate);
+		model.addObject("toDate",tDate);
 		
 		model.addObject("report",saleListForPdf);
 		
 		return model;
 	}
+	
+	//report 2
 	@RequestMapping(value = "/showSaleReportByFr", method = RequestMethod.GET)
 	public ModelAndView showSaleReportByFr(HttpServletRequest request, HttpServletResponse response) {
 
@@ -251,6 +259,7 @@ public class SalesReportController {
 		HttpSession session=request.getSession();
 		
 		System.out.println("session Id in show Page  "+session.getId());
+		
 		try {
 			ZoneId z = ZoneId.of("Asia/Calcutta");
 
@@ -398,8 +407,8 @@ public class SalesReportController {
 		return saleList;
 	}
 	
-	@RequestMapping(value = "/showSaleBillwiseByFrPdf", method = RequestMethod.GET)
-	public ModelAndView showSaleBillwiseByFrPdf(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/showSaleBillwiseByFrPdf/{fDate}/{tDate}", method = RequestMethod.GET)
+	public ModelAndView showSaleBillwiseByFrPdf(@PathVariable String fDate,@PathVariable String tDate,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("reports/sales/pdf/billwisesalebyfrPdf");
 		try {
@@ -418,11 +427,11 @@ public class SalesReportController {
 			
 			System.out.println("sale List Inside Pdf using session "+saleList);
 			
-		System.out.println("inside PDf data "+saleListForPdf.toString());
+			System.out.println("inside PDf data "+saleListForPdf.toString());
 		
-		model.addObject("fromDate",todaysDate);
+		model.addObject("fromDate",fDate);
 		
-		model.addObject("toDate",todaysDate);
+		model.addObject("toDate",tDate);
 		
 		model.addObject("report",saleListForPdf);
 		}catch (Exception e) {
@@ -433,6 +442,8 @@ public class SalesReportController {
 		return model;
 	}
 	
+	
+	//report 3
 	@RequestMapping(value = "/showSaleReportGrpByDate", method = RequestMethod.GET)
 	public ModelAndView showSaleReportGrpByDate(HttpServletRequest request, HttpServletResponse response) {
 
@@ -583,23 +594,25 @@ public class SalesReportController {
 		
 	}
 	
-	
-	@RequestMapping(value = "/showSaleBillwiseGrpByDatePdf", method = RequestMethod.GET)
-	public ModelAndView showSaleBillwiseGrpByDate(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/showSaleBillwiseGrpByDatePdf/{fDate}/{tDate}", method = RequestMethod.GET)
+	public ModelAndView showSaleBillwiseGrpByDate(@PathVariable String fDate,@PathVariable
+			String tDate,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("reports/sales/pdf/billwisesalesgrpbydatePdf");
 		try {
 
 		System.out.println("inside PDf data "+saleListForPdf.toString());
 		
-		model.addObject("fromDate",todaysDate);
+		model.addObject("fromDate",fDate);
 		
-		model.addObject("toDate",todaysDate);
+		model.addObject("toDate",tDate);
 		
 		model.addObject("report",saleListForPdf);
 		}catch (Exception e) {
+			
 			System.out.println("Exce in show Sale Bill wise by fr PDF "+e.getMessage());
 			e.printStackTrace();
+			
 		}
 		
 		return model;
@@ -759,17 +772,18 @@ public class SalesReportController {
 	}
 	
 	
-	@RequestMapping(value = "/showSaleBillwiseGrpByMonthPdf", method = RequestMethod.GET)
-	public ModelAndView showSaleBillwiseGrpByMonthPdf(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/showSaleBillwiseGrpByMonthPdf/{fDate}/{tDate}", method = RequestMethod.GET)
+	public ModelAndView showSaleBillwiseGrpByMonthPdf(@PathVariable String fDate, @PathVariable String tDate,
+			HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("reports/sales/pdf/billwisesalesgrpbymonthPdf");
 		try {
 
 		System.out.println("inside PDf data "+saleListForPdf.toString());
 		
-		model.addObject("fromDate",todaysDate);
+		model.addObject("fromDate",fDate);
 		
-		model.addObject("toDate",todaysDate);
+		model.addObject("toDate",tDate);
 		
 		model.addObject("report",saleListForPdf);
 		}catch (Exception e) {
@@ -779,8 +793,6 @@ public class SalesReportController {
 		
 		return model;
 	}
-	
-	
 	
 	
 	//*******************************************************************//
@@ -949,17 +961,18 @@ public class SalesReportController {
 	}
 	
 	
-	@RequestMapping(value = "/showSaleRoyaltyByCatPdf", method = RequestMethod.GET)
-	public ModelAndView showSaleBil(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/showSaleRoyaltyByCatPdf/{fDate}/{tDate}", method = RequestMethod.GET)
+	public ModelAndView showSaleBil(@PathVariable String fDate, @PathVariable String tDate,
+			HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("reports/sales/pdf/billwisesalesgrpbymonthPdf");
+		ModelAndView model = new ModelAndView("reports/sales/pdf/salesroyaltybycatPdf");
 		try {
 
 		System.out.println("inside PDf data staticRoyaltyBean "+staticRoyaltyBean.toString());
 		
-		model.addObject("fromDate",todaysDate);
+		model.addObject("fromDate",fDate);
 		
-		model.addObject("toDate",todaysDate);
+		model.addObject("toDate",tDate);
 		
 		model.addObject("catList",staticRoyaltyBean.getCategoryList());
 		model.addObject("royaltyList",staticRoyaltyBean.getSalesReportRoyalty());
@@ -1113,7 +1126,9 @@ public class SalesReportController {
 				//royaltyListForPdf=new ArrayList<>();
 				
 				//royaltyListForPdf=royaltyList;
+				staticRoyaltyFrList=new ArrayList<>();
 				
+				staticRoyaltyFrList=royaltyFrList;
 				System.out.println("royalty List List royaltyFr List "+royaltyFrList.toString());
 				
 				//allFrIdNameList = new AllFrIdNameList();
@@ -1130,6 +1145,34 @@ public class SalesReportController {
 	}
 	
 	//royalty fr pdf is not done
+	
+	
+	@RequestMapping(value = "/showSaleRoyaltyByFrPdf/{fDate}/{tDate}", method = RequestMethod.GET)
+	public ModelAndView showSaleRoyaltyByFrPdf(@PathVariable String fDate, @PathVariable String tDate,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/sales/pdf/salesroyaltybyfrPdf");
+		try {
+
+		System.out.println("inside PDf data royaltyFrList "+staticRoyaltyFrList.toString());
+		
+		model.addObject("fromDate",fDate);
+		
+		model.addObject("toDate",tDate);
+		
+		model.addObject("report",staticRoyaltyFrList);
+		
+		}catch (Exception e) {
+			System.out.println("Exce in show showSaleRoyaltyByFrPdf "+e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return model;
+	}
+	
+	
+	
+	
 	
 	//report no 8
 	@RequestMapping(value = "/showSaleReportItemwise", method = RequestMethod.GET)
@@ -1706,8 +1749,12 @@ public class SalesReportController {
 		String url = request.getParameter("url");
 		System.out.println("URL "+url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
-		File f = new File("ordermemo221.pdf");
-System.out.println("I am here "+f.toString());
+		//File f = new File("/home/ats-11/pdf/ordermemo221.pdf");
+		
+		File f = new File("/ordermemo223.pdf");
+
+		System.out.println("I am here "+f.toString());
+		
 		try {
 			runConverter(Constants.ReportURL + url, f);
 			System.out.println("Come on lets get ");
@@ -1720,8 +1767,10 @@ System.out.println("I am here "+f.toString());
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		String filename = "ordermemo221.pdf";
-		String filePath = "/ordermemo221.pdf";
+		String filename = "ordermemo223.pdf";
+		//String filePath = "/home/ats-11/pdf/ordermemo221.pdf";
+		
+		String filePath = "/ordermemo223.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;

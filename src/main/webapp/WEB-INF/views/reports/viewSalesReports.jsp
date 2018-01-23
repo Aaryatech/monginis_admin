@@ -2,24 +2,22 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+	 
+
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-<<<<<<< HEAD
+	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+<body>
+ 
+	<div class="container" id="main-container">
+
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
-			<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
-			<div id="sidebar-collapse" class="visible-lg">
-				<i class="fa fa-angle-double-left"></i>
-			</div>
-			<!-- END Sidebar Collapse Button -->
-		</div>
-=======
-	 
-</head>
-<body>
 
->>>>>>> branch 'master' of https://github.com/Aaryatech/monginis_admin.git
+			<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
+			</div>
+			</div>
+
 <a href="${pageContext.request.contextPath}/showSaleReportByDate">showSaleReportByDate</a><br>
 <a href="${pageContext.request.contextPath}/showSaleReportByFr">showSaleReportByFr</a><br>
 <a href="${pageContext.request.contextPath}/showSaleReportGrpByDate">showSaleReportGrpByDate</a><br>

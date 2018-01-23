@@ -112,7 +112,6 @@
 													<h4>Invoice No:${frDetails.invoiceNo}</h4>
 													<h4>Address:${frDetails.frAddress}</h4>
 												<tr>
-													<th width="140" style="width: 30px" align="left">Sr No</th>
 													<th width="138" align="left">Item Name</th>
 													<th width="120" align="left">Group</th>
 													<th width="130" align="right">Billed Qty</th>
@@ -153,7 +152,6 @@
 												<c:forEach items="${frDetails.billDetailsList}"
 													var="billDetails">
 													<tr>
-														<td><c:out value="${count.index+1}" /></td>
 
 														<td align="left"><c:out
 																value="${billDetails.itemName}" /></td>
@@ -236,7 +234,7 @@
 							</c:forEach>
 							<div
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-6">
-										<a href="${pageContext.request.contextPath}/pdf?url=showBillPdf"
+										<a href='${pageContext.request.contextPath}/pdf?url=showBillPdf'
 								target="_blank">PDF<i class="fa fa-file-pdf-o"></i></a>
 
 									</div>

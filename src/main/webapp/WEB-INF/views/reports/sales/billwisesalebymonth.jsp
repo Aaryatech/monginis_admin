@@ -132,10 +132,13 @@
 
 						<button class="btn search_btn" onclick="showChart()">Graph</button>
 
-						<a
+<button class="btn btn-primary" value="PDF" id="PDFButton"
+							onclick="genPdf()">PDF</button>
+
+						<%-- <a
 							href="${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseGrpByMonthPdf"
 							target="_blank">PDF</a>
-
+ --%>
 					</div>
 				</div>
 
@@ -507,6 +510,15 @@ function showChart(){
 							  	});
 			
 }
+					
+function genPdf()
+{
+	var from_date = $("#fromDate").val();
+	var to_date = $("#toDate").val();
+	
+	window.open('pdfForReport?url=showSaleBillwiseGrpByMonthPdf/'+from_date+'/'+to_date);
+	
+	}
 
 </script>
 
