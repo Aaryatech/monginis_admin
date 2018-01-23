@@ -1,100 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
-
-<html>
-<head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Material Receipt Gate Entry</title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-
-<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-<!--base css styles-->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/assets/font-awesome/css/font-awesome.min.css">
-
-<!--page specific css styles-->
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.min.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/jquery-tags-input/jquery.tagsinput.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/jquery-pwstrength/jquery.pwstrength.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-duallistbox/duallistbox/bootstrap-duallistbox.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/dropzone/downloads/css/dropzone.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/css/colorpicker.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/compiled/timepicker.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/clockface/css/clockface.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/css/datepicker.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-switch/static/stylesheets/bootstrap-switch.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css" />
-
-<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-<script>
-											window.jQuery
-													|| document
-															.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
-										</script>
-
-<!--page specific css styles-->
-<script
-	src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
-
-<!--page specific plugin scripts-->
-<script
-	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
-
-<!--flaty css styles-->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/flaty.css"/>
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/flaty-responsive.css"/>
-
-<link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/resources/img/favicon.png"/>
-
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
-</head>
-<body onload="startTime()">
-
+	pageEncoding="UTF-8"%><%@ taglib
+	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+	 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+ 
+	
+<body onload="startTime()">
+
+	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include> 
+
+ 
 	<c:url var="gateEntryList" value="/gateEntryList"></c:url>
 	<c:url var="editRmQtyOnGate" value="/editRmQtyOnGate"></c:url>
 	<c:url var="deleteRmItem" value="/deleteRmItem"></c:url>

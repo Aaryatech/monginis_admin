@@ -21,79 +21,78 @@
 <!--page specific css styles-->
 
 <!--flaty css styles-->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/flaty.css">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/flaty-responsive.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/loader.css">
 
-<link rel="icon" href="${pageContext.request.contextPath}/resources/img/monginislogo.png" type="image/x-icon" >
+
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.css" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.css" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/compiled/timepicker.css" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/assets/clockface/css/clockface.css" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/css/datepicker.css" />
+<link rel="stylesheet" type="text/css"
+	href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.css" />
+	
+	  
+
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>
+											window.jQuery
+													|| document
+															.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
+										</script>
+
+<!--page specific css styles-->
+
+<script
+	src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
+	
+	<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
+	
+<script
+	src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
+
+<!--page specific plugin scripts-->
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
+<script
+	src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
+	
+	<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
+	
+	<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
+	
 </head>
-<body>
-
-
-	<!-- BEGIN Navbar -->
-
-	<div id="navbar" class="navbar"  style="width:100%; text-align:center; padding:0px 0px;">
-		<button type="button" class="navbar-toggle navbar-btn collapsed"
-			data-toggle="collapse" data-target="#sidebar">
-			<span class="fa fa-bars"></span>
-		</button>
-
-		<!-- BEGIN Navbar Buttons -->
-		<ul class="nav flaty-nav pull-right">
-
-			<!-- BEGIN Button User -->
-			<li class="user-profile"><a data-toggle="dropdown" href="#"
-				class="user-menu dropdown-toggle"> <!--<img class="nav-user-photo" src="resoucres/img/demo/avatar/avatar1.jpg" alt="Penny's Photo" />-->
-					<span class="hhh" id="user_info"> Admin </span> <i
-					class="fa fa-caret-down"></i>
-			</a> <!-- BEGIN User Dropdown -->
-				<ul class="dropdown-menu dropdown-navbar" id="user_menu">
-					<!--<li class="nav-header">
-                            <i class="fa fa-clock-o"></i>
-                            Logined From 20:45
-                        </li>-->
-
-					<li>
-						<%-- <c:url value="/logout" var="logoutUser" />
-					
-					<a href=""> <i
-							class="fa fa-off"></i> Logout
-					</a> --%> <a href="${pageContext.request.contextPath}/logout">Logout <c:out
-								value="${sessionScope['userName']}" />
-					</a>
-
-					</li>
-</ul>
-					
-			
-	</div>
-	<!-- END Navbar -->
 
 	
-	
-	<%-- <script
-		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-	<script>
-		window.jQuery
-				|| document
-						.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
-	</script>
-	<script src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
-	<script
-		src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
-
-	page specific plugin scripts
-	<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
-
-	flaty scripts
-	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
-	<script src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
- --%>
-</body>
-</html>
