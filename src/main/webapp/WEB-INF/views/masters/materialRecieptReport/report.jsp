@@ -146,7 +146,7 @@
 								</div>
 								 </div>
 								</div>
-						
+						 
 						<div class=" box-content">
 					<div class="row">
 					
@@ -189,6 +189,14 @@
 									
 								</tbody>
 							</table>
+							<div class="form-group" style="display: none;" id="range">
+								 
+											 
+											 
+											<div class="col-sm-3  controls">
+											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
+											</div>
+											</div>
 							<div id="chart" > <br><br> <br>
 							 
       							
@@ -318,12 +326,16 @@
 
 								if (data == "") {
 									alert("No records found !!");
+									document.getElementById("expExcel").disabled=true;
 
 								}
 							 
 
 							  $.each( data, function(key, itemList) {
 												
+								  document.getElementById("expExcel").disabled=false;
+									document.getElementById('range').style.display = 'block';
+									
 												var tr = $('<tr></tr>');
 											  	tr.append($('<td ></td>').html(key+1));
 											  	tr.append($('<td style="text-align:center;"></td>').html(itemList.mrnNo)); 
@@ -503,7 +515,12 @@ function showChart(){
 							  	});
 			
 }
-
+function exportToExcel()
+{
+	 
+	window.open("${pageContext.request.contextPath}/exportToExcel");
+			document.getElementById("expExcel").disabled=true;
+}
 </script>
 	
 	

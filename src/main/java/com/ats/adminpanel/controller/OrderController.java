@@ -231,7 +231,7 @@ public class OrderController {
 		
 		HttpSession session = request.getSession();
 		session.setAttribute("exportExcelList", exportToExcelList);
-		
+		session.setAttribute("excelName", "Orders");
 		
 		return orderList;
 	}
@@ -389,7 +389,7 @@ public class OrderController {
 		
 		HttpSession session = request.getSession();
 		session.setAttribute("exportExcelList", exportToExcelList);
-		
+		session.setAttribute("excelName", "SpCakeOrders");
 		return spCakeOrderList;
 	}
 	
@@ -569,7 +569,7 @@ public class OrderController {
 		
 		HttpSession session = request.getSession();
 		session.setAttribute("exportExcelList", exportToExcelList);
-		
+		session.setAttribute("excelName", "RegSpCakeOrders");
 		
 		return model;
 	}

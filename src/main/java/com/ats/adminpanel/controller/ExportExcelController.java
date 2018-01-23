@@ -2,8 +2,7 @@ package com.ats.adminpanel.controller;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.ArrayList; 
 import java.util.Date;
 import java.util.List;
 
@@ -11,11 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.poi.hssf.usermodel.HSSFFont;
-import org.apache.poi.hssf.util.HSSFColor;
-import org.apache.poi.ss.usermodel.CellStyle;
-import org.apache.poi.ss.usermodel.Font;
-import org.apache.poi.ss.usermodel.IndexedColors;
+import org.apache.poi.hssf.usermodel.HSSFFont; 
+import org.apache.poi.ss.usermodel.Font; 
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFCellStyle;
 import org.apache.poi.xssf.usermodel.XSSFColor;
@@ -27,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.ats.adminpanel.commons.Commons;
+ 
 import com.ats.adminpanel.model.ExportToExcel;
 
  
@@ -53,15 +49,13 @@ public class ExportExcelController {
 	        	
 	        	  exportToExcelList=(List)session.getAttribute("exportExcelList"); 
 	        	System.out.println("Excel List :"+exportToExcelList.toString());
-	        	//expoExcel.setRowData(cities);
-	        	//exportToExcelList.add(expoExcel);
-	        	//exportToExcelList.add(expoExcel);
-	        	
+	         
+	        	String excelName=(String)session.getAttribute("excelName"); 
 	            wb=createWorkbook();
 	         
 	            response.setContentType("application/vnd.ms-excel");
 	            String date=new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-	            response.setHeader("Content-disposition", "attachment; filename=exportToExcel-"+date+".xlsx");
+	            response.setHeader("Content-disposition", "attachment; filename="+excelName+"-"+date+".xlsx");
 	            wb.write(response.getOutputStream());
 	        	
 	        } catch (IOException ioe) {
@@ -92,7 +86,7 @@ public class ExportExcelController {
 	            
 	           
 	            cell.setCellValue(exportToExcelList.get(rowIndex).getRowData().get(j));
-	          System.out.println(exportToExcelList.get(rowIndex).getRowData().get(j));
+	           
 	             
 	      
 	        }
