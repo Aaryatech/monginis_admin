@@ -111,7 +111,7 @@
 
 
 
-
+<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>

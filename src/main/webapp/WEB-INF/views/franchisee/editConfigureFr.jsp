@@ -52,7 +52,7 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 
-
+<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 
 <!--basic scripts-->

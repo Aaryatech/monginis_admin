@@ -108,7 +108,7 @@
 	src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-
+<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 <style type="text/css">
 select {
     width: 180px;

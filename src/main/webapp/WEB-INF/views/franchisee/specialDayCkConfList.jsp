@@ -33,7 +33,7 @@
 <link rel="stylesheet" type="text/css"
 	href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.css" />
 
-
+<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 <!--page specific css styles-->
 

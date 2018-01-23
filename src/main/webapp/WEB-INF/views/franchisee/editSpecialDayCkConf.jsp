@@ -110,7 +110,7 @@
 <!-- http://api.jquery.com/jQuery.getJSON/ -->
 
 
-
+<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 
 <script type="text/javascript"
