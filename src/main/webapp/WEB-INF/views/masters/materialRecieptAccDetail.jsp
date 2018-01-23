@@ -129,7 +129,7 @@
 			<div class=" box-content">
 
 				<div class="box">
-					<form id="validation-form" class="form-horizontal"
+					<form onsubmit="return confirm('Do you really want to submit the form?');" id="validation-form" class="form-horizontal"
 						action="${pageContext.request.contextPath}/submitMaterialAcc" method="post">
 
 						<div class="box-content">
@@ -222,12 +222,12 @@
 
 
 						</div>
-						<br>  <br>
+						
 				</c:when>
 				</c:choose>
 
 						
-
+					<br>  <br>
 				
 
 						<div class=" box-content">
@@ -251,27 +251,27 @@
 												<th>Rate</th> 
 												<th>Value</th>
 												<th style="width:500%;">Disc Per</th>
-												<th>Disc Amt</th>
-												<th>Cd Per</th>
-												<th>Cd Amt</th>
+												<th>Disc Rs</th>
+												<th>Cd %</th>
+												<th>Cd Rs</th>
 												<th>Division factor</th>
-												<th>Insu Amt</th>
-												<th>Freight Amt</th>
-												<th style="width:200%;">Other1(Discount)</th>
-												<th style="width:200%;">Other2(Discount)</th>
-												<th style="width:200%;">Other3(Extra Charges)</th>
-												<th style="width:200%;">Other4(Extra Charges)</th>
+												<th>Insu Rs</th>
+												<th>Freight Rs</th>
+												<th style="width:200%;">Other1 Rs(Discount)</th>
+												<th style="width:200%;">Other2 Rs(Discount)</th>
+												<th style="width:200%;">Other3 Rs(Extra Charges)</th>
+												<th style="width:200%;">Other4 Rs(Extra Charges)</th>
 												<th>GST</th>
 												<th>CGST</th>
 												<th>SGST</th>
 												<th>IGST</th>
 												<th>CESS</th>
-												<th>Taxable Amt</th>
+												<th>Taxable Rs</th>
 												
-												<th>CGST Amt</th>
-												<th>SGST Amt</th>
-												<th>IGST Amt</th>
-												<th>CESS Amt</th>
+												<th>CGST Rs</th>
+												<th>SGST Rs</th>
+												<th>IGST Rs</th>
+												<th>CESS Rs</th>
 												
 
 											</tr>
@@ -302,8 +302,10 @@
 															value="${tax}" /></td>
 
 													<td style="width:75px"><c:out
-															value="${materialRecieptAccList.item}" /></td>
-													<td><input style="width:75px" type="text"
+															value="${materialRecieptAccList.item}" /> 
+													</td>
+															
+													<td><input style="width:100px" type="text"
 													onchange="changeRate(${count.index})"
 													name="recQty${count.index}"  id="recQty${count.index}"
 									  class="form-control" value="${materialRecieptAccList.reciedvedQty}" pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
@@ -315,7 +317,7 @@
 													<td><c:out
 															value="${materialRecieptAccList.rejectedQty}" /></td>
 													 
-													<td ><input style="width:75px" type="text"
+													<td ><input style="width:100px" type="text"
 													onchange="changeRate(${count.index})"
 													name="poRate${count.index}"  id="poRate${count.index}"
 									  class="form-control" value="${materialRecieptAccList.varifiedRate}" pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
@@ -331,7 +333,7 @@
 													<td><c:out value="${materialRecieptAccList.value}" />
 													</td>
 													<td> 
-													<input style="width:50px;" onchange="changeRate(${count.index})" type="text" name="discPer${count.index}" id="discPer${count.index}"
+													<input style="width:100px;" onchange="changeRate(${count.index})" type="text" name="discPer${count.index}" id="discPer${count.index}"
 									value="${materialRecieptAccList.discPer}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
 													
 													</td>
@@ -347,17 +349,15 @@
 													</td>
 													<td><c:out value="${materialRecieptAccList.freightAmt}" />
 													</td>
-													<td><input style="width:100%;" onchange="changeRate(${count.index})" type="text" name="other1${count.index}" id="other1${count.index}"
+													<td><input style="width:100px;" onchange="changeRate(${count.index})" type="text" name="other1${count.index}" id="other1${count.index}"
 									value="${materialRecieptAccList.other1}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
 													</td>
-													<td><input style="width:100%;" onchange="changeRate(${count.index})" type="text" name="other2${count.index}" id="other2${count.index}"
-									value="${materialRecieptAccList.other2}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
+													<td><c:out value="${materialRecieptAccList.other2}" />  
 													</td>
-													<td><input style="width:100%;" onchange="changeRate(${count.index})" type="text" name="other3${count.index}" id="other3${count.index}"
+													<td><input style="width:100px;" onchange="changeRate(${count.index})" type="text" name="other3${count.index}" id="other3${count.index}"
 									value="${materialRecieptAccList.other3}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
 													</td>
-													<td><input style="width:100%;" onchange="changeRate(${count.index})" type="text" name="other4${count.index}" id="other4${count.index}"
-									value="${materialRecieptAccList.other4}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
+													<td><c:out value="${materialRecieptAccList.other4}" /> 
 													</td>
 													<td><c:out value="${materialRecieptAccList.gst}" />
 													</td>
@@ -378,7 +378,7 @@
 													</td>
 													<td><c:out value="${materialRecieptAccList.igstAmt}" />
 													</td>
-													<td><input style="width:50px" onchange="changeRate(${count.index})" type="text" name="cessAmt${count.index}" id="cessAmt${count.index}"
+													<td><input style="width:100px" onchange="changeRate(${count.index})" type="text" name="cessAmt${count.index}" id="cessAmt${count.index}"
 									value="${materialRecieptAccList.cessAmt}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
 													</td>
 													
@@ -397,7 +397,9 @@
 						</div>
 						
 							<div class="box-content">
-								<h5>Summary</h5>
+							 
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
 									<div class="col-md-2">value</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="basicValue" id="basicValue" class="form-control"
@@ -407,7 +409,8 @@
 							
 							</div><br>
 							<div class="box-content">
-								
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
 									<div class="col-md-2">Perticular Disc Total Amt</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="discAmt2" id="discAmt2" class="form-control"
@@ -418,14 +421,19 @@
 							</div><br>
 						
 						<div class="box-content"> 
-						 <div class="col-md-2">Per Disc</div>
+							<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
+						 	<div class="col-md-2">Per Disc</div>
 							<div class="col-md-3">
 					 
 								<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="discPer" id="discPer"
 									value="${materialRecNoteHeader.discPer}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
 									 
 							</div>
-							
+						</div><br>
+							<div class="box-content">
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div> 
 						   <div class="col-md-2">Cash Disc</div>
 							<div class="col-md-3">
 					 
@@ -436,6 +444,8 @@
 							</div>
 						</div><br>
 						<div class="box-content">
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
 									<div class="col-md-2">Freight Amt</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="freightAmt" id="freightAmt" class="form-control"
@@ -445,6 +455,8 @@
 							
 							</div><br>
 							<div class="box-content">
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
 									<div class="col-md-2">Insu Amt</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="insuranceAmt" id="insuranceAmt" class="form-control"
@@ -454,43 +466,53 @@
 							
 							</div><br>
 							<div class="box-content">
-									<div class="col-md-2">Other1</div>
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
+									<div class="col-md-2">Other1 Rs</div>
 									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="Other1" id="Other1" class="form-control"
+										<input style="text-align:right; width:150px" type="text" name="Other1" id="other1" class="form-control"
 									value="${materialRecNoteHeader.other1}" readonly>
 									</div>
 									
 							
 							</div><br>
 							<div class="box-content">
-									<div class="col-md-2">Other2</div>
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
+									<div class="col-md-2">Other2 Rs</div>
 									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="Other2" id="Other2" class="form-control"
-									value="${materialRecNoteHeader.other2}" readonly>
+										<input style="text-align:right; width:150px" type="text" name="other2" onchange="changeFreightAmt();" id="other2" class="form-control"
+									value="${materialRecNoteHeader.other2}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
 									</div>
 									
 							
 							</div><br>
 							<div class="box-content">
-									<div class="col-md-2">Other3</div>
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
+									<div class="col-md-2">Other3 Rs</div>
 									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="Other3" id="Other3" class="form-control"
+										<input style="text-align:right; width:150px" type="text" name="Other3" id="other3" class="form-control"
 									value="${materialRecNoteHeader.other3}" readonly>
 									</div>
 									
 							
 							</div><br>
 							<div class="box-content">
-									<div class="col-md-2">Other4</div>
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
+									<div class="col-md-2">Other4 Rs</div>
 									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="Other4" id="Other4" class="form-control"
-									value="${materialRecNoteHeader.other4}" readonly>
+										<input style="text-align:right; width:150px" type="text" name="other4" onchange="changeFreightAmt();" id="other4" class="form-control"
+									value="${materialRecNoteHeader.other4}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
 									</div>
 									
 							
 							</div><br>
 							<div class="box-content">
-									<div class="col-md-2">CGST</div>
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
+									<div class="col-md-2">CGST Rs</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="cgst" id="cgst" class="form-control"
 									value="${materialRecNoteHeader.cgst}" readonly>
@@ -499,7 +521,9 @@
 							
 							</div><br>
 							<div class="box-content">
-									<div class="col-md-2">SGST</div>
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
+									<div class="col-md-2">SGST Rs</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="sgst" id="sgst" class="form-control"
 									value="${materialRecNoteHeader.sgst}" readonly>
@@ -508,7 +532,9 @@
 							
 							</div><br>
 							<div class="box-content">
-									<div class="col-md-2">IGST</div>
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
+									<div class="col-md-2">IGST Rs</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="igst" id="igst" class="form-control"
 									value="${materialRecNoteHeader.igst}" readonly>
@@ -517,7 +543,9 @@
 							
 							</div><br>
 							<div class="box-content">
-									<div class="col-md-2">Cess</div>
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
+									<div class="col-md-2">Cess Rs</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="cess" id="cess" class="form-control"
 									value="${materialRecNoteHeader.cess}" readonly>
@@ -527,6 +555,8 @@
 							</div><br>
 							
 							<div class="box-content">
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
 									<div class="col-md-2">Bill Total</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="billAmount" id="billAmount" class="form-control"
@@ -536,6 +566,8 @@
 							
 							</div><br>
 							<div class="box-content">
+								<div class="col-md-3"></div>
+								<div class="col-md-4"></div>
 									<div class="col-md-2">Round Off</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="roundOff" id="roundOff" class="form-control"
@@ -552,8 +584,7 @@
 
 						<div class="row">
 							<div class="col-md-12" style="text-align: center">
-								 <input type="submit" class="btn btn-info"
-									value="Submit" >
+								 <input type="submit" class="btn btn-info" value="Submit" >
 							</div>
 						</div>
 
@@ -638,14 +669,60 @@
 	{
 	
 		
-		var varifiedRate = $("#poRate"+key+"").val(); 
+		var varifiedRate = $("#poRate"+key+"").val();  
 		var recQty = $("#recQty"+key+"").val(); 
 		var discPer = $("#discPer"+key+"").val(); 
 		var cessAmt = $("#cessAmt"+key+"").val(); 
 		var other1 = $("#other1"+key+"").val(); 
-		var other2 = $("#other2"+key+"").val(); 
-		var other3 = $("#other3"+key+"").val(); 
-		var other4 = $("#other4"+key+"").val(); 
+		var other3 = $("#other3"+key+"").val();  
+		
+		if (recQty=="" || isNaN(recQty)) {
+
+			 
+			alert("Please Enter Valid Received Qty Of Item "+(key+1));
+			document.getElementById("recQty"+key+"").value="0";
+			recQty=0;
+
+		}
+		if (varifiedRate=="" || isNaN(varifiedRate)) {
+
+			 
+			alert("Please Enter Valid VarifiedRate Of Item "+(key+1));
+			document.getElementById("poRate"+key+"").value="0";
+			varifiedRate=0;
+
+		}
+		 if (discPer=="" || isNaN(discPer)) {
+
+			 
+			alert("Please Enter Valid Discount % Of Item "+(key+1));
+			document.getElementById("discPer"+key+"").value="0";
+			discPer=0;
+
+		}
+		if (cessAmt=="" || isNaN(cessAmt)) {
+
+			 
+			alert("Please Enter Valid Cess Amt Of Item "+(key+1));
+			document.getElementById("cessAmt"+key+"").value="0";
+			cessAmt=0;
+
+		}
+		if (other1=="" || isNaN(other1)) { 
+			
+			alert("Please Enter Valid Other1 Amt Of Item "+(key+1));
+			document.getElementById("other1"+key+"").value="0";
+			other1=0;
+
+		}
+		if (other3=="" || isNaN(other3)) {
+
+			 
+			alert("Please Enter Valid Other3 Amt Of Item "+(key+1));
+			document.getElementById("other3"+key+"").value="0";
+			other3=0;
+
+		}
 		
 		
 		$
@@ -660,9 +737,7 @@
 					discPer : discPer,
 					cessAmt : cessAmt,
 					other3 : other3,
-					other1 : other1,
-					other2 : other2,
-					other4 : other4,
+					other1 : other1, 
 					ajax : 'true',
 
 				},
@@ -693,20 +768,20 @@
 									tr.append($('<td></td>').html(key+1));
 
 								  	tr.append($('<td></td>').html(tax));
-								  	tr.append($('<td></td>').html(itemList.item));
-								  	tr.append($('<td></td>').html('<input style="width:75px;" type="text" onchange="changeRate('+key+')" id="recQty'+key+'" value="'+itemList.reciedvedQty+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html(itemList.item)); 
+								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="recQty'+key+'" value="'+itemList.reciedvedQty+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 								  	 
 								  	tr.append($('<td></td>').html(itemList.stockQty));
 								  	tr.append($('<td></td>').html(itemList.rejectedQty));
 								  	
-								  	tr.append($('<td></td>').html('<input style="width:75px;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.varifiedRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.varifiedRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 								  	tr.append($('<td></td>').html(itemList.poRate));
 										 
 								  	
 								  	tr.append($('<td></td>').html(itemList.rateCal));
 								  	tr.append($('<td></td>').html(itemList.value));
 								  	
-								  	tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 
 
 								  	tr.append($('<td></td>').html(itemList.discAmt));
@@ -715,16 +790,10 @@
 								  	tr.append($('<td></td>').html(itemList.divFactor));
 								  	tr.append($('<td></td>').html(itemList.insuAmt));
 								  	tr.append($('<td></td>').html(itemList.freightAmt));
-								  	tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="other1'+key+'" value="'+itemList.other1+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-								  	tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="other2'+key+'" value="'+itemList.other2+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
- 									tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="other3'+key+'" value="'+itemList.other3+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
- 									tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="other4'+key+'" value="'+itemList.other4+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-
-								  	/* tr.append($('<td></td>').html(itemList.other1));
+								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="other1'+key+'" value="'+itemList.other1+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 								  	tr.append($('<td></td>').html(itemList.other2));
-								  	tr.append($('<td></td>').html(itemList.other3));
-								  	tr.append($('<td></td>').html(itemList.other4)); */
-								  	
+								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="other3'+key+'" value="'+itemList.other3+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html(itemList.other4)); 
 								  	tr.append($('<td></td>').html(itemList.gst));
 								  	tr.append($('<td></td>').html(itemList.cgst));
 								  	tr.append($('<td></td>').html(itemList.sgst));
@@ -733,18 +802,10 @@
 								  	tr.append($('<td></td>').html(itemList.taxableAmt));
 								  	tr.append($('<td></td>').html(itemList.cgstAmt));
 								  	tr.append($('<td></td>').html(itemList.sgstAmt));
-								  	tr.append($('<td></td>').html(itemList.igstAmt));
-								  	/* tr.append($('<td></td>').html(itemList.cessAmt)); */
-								  	tr.append($('<td ></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html(itemList.igstAmt)); 
+								  	tr.append($('<td ></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 
-								  
-								  	/* tr.append($('<td></td>').html('<span  class="glyphicon glyphicon-ok" onclick="changeRate('+key+')" id="ok'+key+'"></span>'));
-								  	  */
-
-
-
-
-
+								   
 									$('#table_grid tbody').append(tr);
 								
 
@@ -765,10 +826,10 @@
 										document.getElementById("billAmount").value=data.billAmount;
 										document.getElementById("discAmt2").value=data.discAmt2;
 										document.getElementById("discAmt").value=data.discAmt;
-										document.getElementById("Other1").value=data.other1;
-										document.getElementById("Other2").value=data.other2;
-										document.getElementById("Other3").value=data.other3;
-										document.getElementById("Other4").value=data.other4;
+										document.getElementById("other1").value=data.other1;
+										document.getElementById("other2").value=data.other2;
+										document.getElementById("other3").value=data.other3;
+										document.getElementById("other4").value=data.other4;
 										document.getElementById("cgst").value=data.cgst;
 										document.getElementById("sgst").value=data.sgst;
 										document.getElementById("igst").value=data.igst;
@@ -787,12 +848,56 @@
 	function changeFreightAmt()
 	{
 		 
-		var discPer = $("#discPer").val();
-		
-		var freightAmt = $("#freightAmt").val();
-		
+		var discPer = $("#discPer").val(); 
+		var freightAmt = $("#freightAmt").val(); 
 		var insuranceAmt = $("#insuranceAmt").val();
+		var other2 = $("#other2").val(); 
+		var other4 = $("#other4").val(); 
+		 
+
+		if (discPer=="" || isNaN(discPer)) {
+
+			isValid = false;
+			alert("Please Enter Valid Discount %");
+			document.getElementById("discPer").value="0";
+			discPer=0;
+
+		}
+		if (freightAmt=="" || isNaN(freightAmt)) {
+
+			isValid = false;
+			alert("Please Enter Valid Freight Amt");
+			document.getElementById("freightAmt").value="0";
+			freightAmt=0;
+
+		}
+		if (insuranceAmt=="" || isNaN(insuranceAmt)) {
+
+			isValid = false;
+			alert("Please Enter Valid Insurance Amt");
+			document.getElementById("insuranceAmt").value="0";
+			insuranceAmt=0;
+
+		}
+		if (other2=="" || isNaN(other2)) {
+
+			isValid = false;
+			alert("Please Enter Valid Other2 Amt");
+			document.getElementById("other2").value="0";
+			other2=0;
+
+		}
+		if (other4=="" || isNaN(other4)) {
+
+			isValid = false;
+			alert("Please Enter Valid Other4 Amt");
+			document.getElementById("other4").value="0";
+			other4=0;
+
+		}
+		 
 		
+	 
 		
 		$
 		.getJSON(
@@ -803,6 +908,8 @@
 					discPer : discPer,
 					freightAmt : freightAmt,
 					insuranceAmt : insuranceAmt,
+					other4 : other4,
+					other2 : other2,
 					ajax : 'true',
 
 				},
@@ -818,24 +925,34 @@
 							function(key, itemList) {
 								
 								
+								var tax;
+								if(itemList.incldTax==1)
+									{
+									tax="Including Tax";
+									}
+								else
+									{
+									tax="No Including";
+									}
 								
 						
 									var tr = $('<tr></tr>');
 									tr.append($('<td></td>').html(key+1));
 
-								  	tr.append($('<td></td>').html(itemList.incldTax));
+								  	tr.append($('<td></td>').html(tax));
 								  	tr.append($('<td></td>').html(itemList.item));
-								  	tr.append($('<td></td>').html('<input style="width:75px;" type="text" onchange="changeRate('+key+')" id="recQty'+key+'" value="'+itemList.reciedvedQty+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	  
+								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="recQty'+key+'" value="'+itemList.reciedvedQty+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 								  	
 								  	tr.append($('<td></td>').html(itemList.stockQty));
 								  	tr.append($('<td></td>').html(itemList.rejectedQty));
 								  	
-								  	tr.append($('<td></td>').html('<input style="width:75px;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.varifiedRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.varifiedRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 								  	tr.append($('<td></td>').html(itemList.poRate));
 								  	tr.append($('<td></td>').html(itemList.rateCal));
 								  	tr.append($('<td></td>').html(itemList.value));
 								  	
-								  	tr.append($('<td ></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td ></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 
 
 								  	tr.append($('<td></td>').html(itemList.discAmt));
@@ -845,11 +962,10 @@
 								  	tr.append($('<td></td>').html(itemList.insuAmt));
 								  	tr.append($('<td></td>').html(itemList.freightAmt));
 								  	
-								  	tr.append($('<td></td>').html('<input style="width:50px" type="text" onchange="changeRate('+key+')" id="other1'+key+'" value="'+itemList.other1+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-								  	tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="other2'+key+'" value="'+itemList.other2+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
- 									tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="other3'+key+'" value="'+itemList.other3+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
- 									tr.append($('<td></td>').html('<input style="width:50px;" type="text" onchange="changeRate('+key+')" id="other4'+key+'" value="'+itemList.other4+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-
+								  	tr.append($('<td></td>').html('<input style="width:100px" type="text" onchange="changeRate('+key+')" id="other1'+key+'" value="'+itemList.other1+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html(itemList.other2));
+								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="other3'+key+'" value="'+itemList.other3+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html(itemList.other4));
 								  	/* tr.append($('<td></td>').html(itemList.other1));
 								  	tr.append($('<td></td>').html(itemList.other2)); */
 								
@@ -861,12 +977,10 @@
 								  	tr.append($('<td></td>').html(itemList.taxableAmt));
 								  	tr.append($('<td></td>').html(itemList.cgstAmt));
 								  	tr.append($('<td></td>').html(itemList.sgstAmt));
-								  	tr.append($('<td></td>').html(itemList.igstAmt));
-								  	/* tr.append($('<td></td>').html(itemList.cessAmt)); */
-								  	tr.append($('<td ></td>').html('<input style="width:50px" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html(itemList.igstAmt)); 
+								  	tr.append($('<td ></td>').html('<input style="width:100px" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 
-								  	/* tr.append($('<td></td>').html('<span  class="glyphicon glyphicon-ok" onclick="changeRate('+key+')" id="ok'+key+'"></span>'));
-								  	 */
+								   
 									$('#table_grid tbody').append(tr);
 								
 
@@ -882,18 +996,15 @@
 									},
 								function(data)
 								{ 
-										alert("data.igst"+data.igst);
 										 
-										alert("round off"+data.roundOff); 
-										
 										document.getElementById("basicValue").value=data.basicValue;
 										document.getElementById("billAmount").value=data.billAmount;
 										document.getElementById("discAmt2").value=data.discAmt2;
 										document.getElementById("discAmt").value=data.discAmt;
-										document.getElementById("Other1").value=data.other1;
-										document.getElementById("Other2").value=data.other2;
-										document.getElementById("Other3").value=data.other3;
-										document.getElementById("Other4").value=data.other4;
+										document.getElementById("other1").value=data.other1;
+										document.getElementById("other2").value=data.other2;
+										document.getElementById("other3").value=data.other3;
+										document.getElementById("other4").value=data.other4;
 										document.getElementById("cgst").value=data.cgst;
 										document.getElementById("sgst").value=data.sgst;
 										document.getElementById("igst").value=data.igst;
@@ -902,10 +1013,13 @@
 								});
 					
 				});
-		
+	 
 		
 	}
+	
+	  
 	</script>
+	
 
 </body>
 </html>
