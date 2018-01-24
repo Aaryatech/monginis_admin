@@ -318,10 +318,7 @@
 
 						</div>
 						
-							<div class="box-content">
-							 
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+							<div class="box-content"> 
 									<div class="col-md-2">value</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="basicValue" id="basicValue" class="form-control"
@@ -330,9 +327,9 @@
 									
 							
 							</div><br>
-							<div class="box-content">
+							<div class="box-content"><!-- 
 								<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+								<div class="col-md-4"></div> -->
 									<div class="col-md-2">Perticular Disc Total Amt</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="discAmt2" id="discAmt2" class="form-control"
@@ -343,31 +340,24 @@
 							</div><br>
 						
 						<div class="box-content"> 
-							<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+							 
 						 	<div class="col-md-2">Per Disc</div>
-							<div class="col-md-3">
-					 
+							  <div class="col-md-3">
 								<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="discPer" id="discPer"
 									value="${materialRecNoteHeader.discPer}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
-									 
-							</div>
-						</div><br>
-							<div class="box-content">
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div> 
-						   <div class="col-md-2">Cash Disc</div>
-							<div class="col-md-3">
+									 </div> 
+									  <div class="col-md-2">Cash Disc</div>
+											<div class="col-md-3">
 					 
-								<input style="text-align:right; width:150px" type="text" name="discAmt" id="discAmt"
+									<input style="text-align:right; width:150px" type="text" name="discAmt" id="discAmt"
 									value="${materialRecNoteHeader.discAmt}" class="form-control"
 									readonly>
 									 
 							</div>
-						</div><br>
-						<div class="box-content">
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+							 </div><br>
+						  
+						
+						<div class="box-content"> 
 									<div class="col-md-2">Freight Amt</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="freightAmt" id="freightAmt" class="form-control"
@@ -377,8 +367,7 @@
 							
 							</div><br>
 							<div class="box-content">
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+								 
 									<div class="col-md-2">Insu Amt</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="insuranceAmt" id="insuranceAmt" class="form-control"
@@ -388,8 +377,7 @@
 							
 							</div><br>
 							<div class="box-content">
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+								 
 									<div class="col-md-2">Other1 Rs</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="Other1" id="other1" class="form-control"
@@ -399,8 +387,7 @@
 							
 							</div><br>
 							<div class="box-content">
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+								 
 									<div class="col-md-2">Other2 Rs</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="other2" onchange="changeFreightAmt();" id="other2" class="form-control"
@@ -410,8 +397,7 @@
 							
 							</div><br>
 							<div class="box-content">
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+								 
 									<div class="col-md-2">Other3 Rs</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="Other3" id="other3" class="form-control"
@@ -421,8 +407,7 @@
 							
 							</div><br>
 							<div class="box-content">
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+								 
 									<div class="col-md-2">Other4 Rs</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="other4" onchange="changeFreightAmt();" id="other4" class="form-control"
@@ -432,8 +417,7 @@
 							
 							</div><br>
 							<div class="box-content">
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+								 
 									<div class="col-md-2">CGST Rs</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="cgst" id="cgst" class="form-control"
@@ -443,8 +427,7 @@
 							
 							</div><br>
 							<div class="box-content">
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+								 
 									<div class="col-md-2">SGST Rs</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="sgst" id="sgst" class="form-control"
@@ -454,8 +437,7 @@
 							
 							</div><br>
 							<div class="box-content">
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+								 
 									<div class="col-md-2">IGST Rs</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="igst" id="igst" class="form-control"
@@ -465,8 +447,7 @@
 							
 							</div><br>
 							<div class="box-content">
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+								 
 									<div class="col-md-2">Cess Rs</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="cess" id="cess" class="form-control"
@@ -477,8 +458,7 @@
 							</div><br>
 							
 							<div class="box-content">
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+								 
 									<div class="col-md-2">Bill Total</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="billAmount" id="billAmount" class="form-control"
@@ -488,8 +468,7 @@
 							
 							</div><br>
 							<div class="box-content">
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div>
+								 
 									<div class="col-md-2">Round Off</div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="roundOff" id="roundOff" class="form-control"

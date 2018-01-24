@@ -1749,7 +1749,8 @@ public class MaterialReceiptNoteController {
 					materialRecieptAccList.get(i).setOther2(0);
 					materialRecieptAccList.get(i).setOther4(0);
 					materialRecieptAccList.get(i).setFreightAmt(0);
-					materialRecieptAccList.get(i).setInsuAmt(0);
+					materialRecieptAccList.get(i).setInsuAmt(0); 
+					 
 				}
 				else
 				{
@@ -1835,7 +1836,7 @@ public class MaterialReceiptNoteController {
 							+ other4total + materialRecNoteHeaderAcc.getCgst() + materialRecNoteHeaderAcc.getSgst()
 							+ materialRecNoteHeaderAcc.getIgst() + materialRecNoteHeaderAcc.getCess());
 			materialRecNoteHeaderAcc.setBillAmount(Float.valueOf(df.format(finalAmt)));
-			materialRecNoteHeaderAcc.setRoundOff(Math.round(finalAmt));
+			materialRecNoteHeaderAcc.setRoundOff(Math.round(finalAmt)-materialRecNoteHeaderAcc.getBillAmount());
 			 
 			System.out.println("cgst" + materialRecNoteHeaderAcc.getCgst());
 			System.out.println(" sgst" + materialRecNoteHeaderAcc.getSgst());
