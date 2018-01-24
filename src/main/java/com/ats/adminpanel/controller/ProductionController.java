@@ -12,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URLConnection;
 import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -24,15 +25,19 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -1133,7 +1138,7 @@ public class ProductionController {
 		System.out.println("Inside show Prod BOM Pdf ");
 		Document doc=new Document();
 			
-		
+		 File openFile = null;
 		List<PostProductionPlanDetail> postProdDetailList = postProductionPlanDetaillist;
 		
 		postProdDetailList = postProductionPlanDetaillist;
@@ -1152,6 +1157,8 @@ public class ProductionController {
 		
 		
 		 FileOutputStream out=new FileOutputStream(FILE_PATH);
+		 
+		
 		   try {
 			    writer=PdfWriter.getInstance(document,out);
 		} catch (DocumentException e) {
@@ -1313,6 +1320,11 @@ public class ProductionController {
 	     document.add(new Paragraph(" "));
 	     document.add(table);
 	 	 int totalPages=writer.getPageNumber();
+	 	 
+	 	 
+	 	 document.close();
+	 	 
+	 	 
 	 	/*com.ats.adminpanel.model.itextpdf.Header event; // = new com.ats.adminpanel.model.itextpdf.Header();
 	 	for(int i=1;i<totalPages;i++) {
 	 	 event = new com.ats.adminpanel.model.itextpdf.Header();
@@ -1332,9 +1344,8 @@ public class ProductionController {
 	    // document.addHeader("Page" ,String.valueOf(totalPages));
 	    // writer.setPageEvent((PdfPageEvent) new Phrase());
 	    
-	     document.close();
-	     
-	     Desktop d=Desktop.getDesktop();
+	  
+	    /* Desktop d=Desktop.getDesktop();
 	     
 	     if(file.exists()) {
 	    	 try {
@@ -1344,6 +1355,50 @@ public class ProductionController {
 				e.printStackTrace();
 			}
 	     }
+	     */
+	 	
+	 	//InputStream is = this.getClass().getClassLoader().getResourceAsStream(FILE_PATH);
+	 	 
+	 	 
+	 	  openFile=new File(FILE_PATH);
+	 	 System.out.println("file Name  Open "+openFile.getName());
+	 	 InputStream inputStream =new BufferedInputStream(new FileInputStream(openFile));
+	 	 
+	 	 try {
+			System.out.println("inputStream== "+inputStream.read());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	 	 
+	 	String mimeType = null;
+	 	
+	 	System.out.println("");
+	 	 try {
+			 mimeType=URLConnection.guessContentTypeFromStream(inputStream);
+			 
+			 System.out.println("MIME TYpe "+mimeType);
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+	 	 mimeType="application/pdf";
+	 	 
+	 	 response.setContentType(mimeType);
+	 	 
+	 	 response.setContentLength((int)openFile.length());
+	 	 response.setHeader("Content-Disposition", String.format("attachement; filename=\"%s\"", openFile.getName()));
+	 	 System.out.println("Response setting "+response.toString());
+	 	 
+	 	 try {
+			FileCopyUtils.copy(inputStream,response.getOutputStream());
+			System.out.println("response.getOutputStream == "+response.getOutputStream() );
+			
+		} catch (IOException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+	 	 
 	     
 	 } catch (DocumentException ex) {
 	 
@@ -1355,7 +1410,7 @@ public class ProductionController {
 
 		ModelAndView model = new ModelAndView("production/pdf/productionPdf");
 		//model.addObject("prodFromOrderReport",updateStockDetailList);
-
+//return openFile;
 	
 	}
 	

@@ -66,11 +66,13 @@ public class SalesReportController {
 	static String todaysDate;
 	static List<SalesReportRoyalty> royaltyListForPdf;
 	
+	static List<SalesReportBillwiseAllFr> staticSaleByAllFr;
+
 	List<SalesReportRoyaltyFr> royaltyFrList;
 	
 	static List<SalesReportRoyaltyFr> staticRoyaltyFrList;
 
-	
+	static List<SalesReportItemwise> staticSaleListItemWise;
 	
 	static RoyaltyListBean staticRoyaltyBean=new RoyaltyListBean();
 	
@@ -1146,7 +1148,7 @@ public class SalesReportController {
 	
 	//royalty fr pdf is not done
 	
-	
+	//done pdf
 	@RequestMapping(value = "/showSaleRoyaltyByFrPdf/{fDate}/{tDate}", method = RequestMethod.GET)
 	public ModelAndView showSaleRoyaltyByFrPdf(@PathVariable String fDate, @PathVariable String tDate,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -1310,7 +1312,7 @@ public class SalesReportController {
 
 				saleList = responseEntity.getBody();
 				saleListForPdf=new ArrayList<>();
-				
+				staticSaleListItemWise=saleList;
 				//saleListForPdf=saleList;
 				
 				System.out.println("sales List Bill Wise "+saleList.toString());
@@ -1326,7 +1328,29 @@ public class SalesReportController {
 		
 	}
 	//pdf for r8 to be done
-	
+	//pdf for r8
+	@RequestMapping(value = "/showSaleReportItemwisePdf/{fDate}/{tDate}", method = RequestMethod.GET)
+	public ModelAndView showSaleReportItemwisePdf(@PathVariable String fDate, @PathVariable String tDate,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/sales/pdf/salesreportitemwisePdf");
+		try {
+
+		System.out.println("inside PDf data staticSaleListItemWise "+staticSaleListItemWise.toString());
+		
+		model.addObject("fromDate",fDate);
+		
+		model.addObject("toDate",tDate);
+		
+		model.addObject("report",staticSaleListItemWise);
+		
+		}catch (Exception e) {
+			System.out.println("Exce in show staticSaleListItemWisePdf "+e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return model;
+	}
 	
 	
 	//report 7
@@ -1463,8 +1487,8 @@ public class SalesReportController {
 						.exchange(Constants.url + "getSaleReportBillwiseAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 				saleList = responseEntity.getBody();
-				saleListForPdf=new ArrayList<>();
-				
+				staticSaleByAllFr=new ArrayList<>();
+				staticSaleByAllFr=saleList;
 				//saleListForPdf=saleList;
 				
 				System.out.println("sales List Bill Wise all fr  "+saleList.toString());
@@ -1480,6 +1504,29 @@ public class SalesReportController {
 	}
 	//pdf to be done
 	
+	//pdf report 7
+	@RequestMapping(value = "/showSaleReportBillwiseAllFrPdf/{fDate}/{tDate}", method = RequestMethod.GET)
+	public ModelAndView showSaleReportBillwiseAllFrPdf(@PathVariable String fDate, @PathVariable String tDate,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/sales/pdf/salereportbillallfrPdf");
+		try {
+
+		System.out.println("inside PDf data staticSaleByAllFr "+staticSaleByAllFr.toString());
+		
+		model.addObject("fromDate",fDate);
+		
+		model.addObject("toDate",tDate);
+		
+		model.addObject("report",staticSaleByAllFr);
+		
+		}catch (Exception e) {
+			System.out.println("Exce in show staticSaleByAllFr "+e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return model;
+	}
 	
 	
 	//report no 10 conso by category report
@@ -1745,11 +1792,11 @@ public class SalesReportController {
 
 	@RequestMapping(value = "/pdfForReport", method = RequestMethod.GET)
 	public void showPDF(HttpServletRequest request, HttpServletResponse response) {
-
+		System.out.println("Inside PDf For Report URL ");
 		String url = request.getParameter("url");
 		System.out.println("URL "+url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
-		//File f = new File("/home/ats-11/pdf/ordermemo221.pdf");
+		//File f = new File("/home/ats-11/pdf/ordermemo223.pdf");
 		
 		File f = new File("/ordermemo223.pdf");
 
@@ -1768,7 +1815,7 @@ public class SalesReportController {
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo223.pdf";
-		//String filePath = "/home/ats-11/pdf/ordermemo221.pdf";
+		//String filePath = "/home/ats-11/pdf/ordermemo223.pdf";
 		
 		String filePath = "/ordermemo223.pdf";
 

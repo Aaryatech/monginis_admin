@@ -127,10 +127,16 @@
 					<div class="col-md-12" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
 							Billwise Report</button>
-
+							
+							
+																			<button class="btn btn-primary" value="PDF" id="PDFButton" onclick="genPdf()">PDF</button>
+							
+							
+							
+<%-- 
 						<a
-							href="${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseByFrPdf"
-							target="_blank">PDF</a>
+							href='${pageContext.request.contextPath}/pdfForReport?url=showSaleReportItemwisePdf'
+							target="_blank">PDF</a> --%>
 
 					</div>
 				</div>
@@ -160,7 +166,6 @@
 			</div>
 
 			<form id="submitBillForm"
-				action="${pageContext.request.contextPath}/submitNewBill"
 				method="post">
 				<div class=" box-content">
 					<div class="row">
@@ -262,12 +267,13 @@
 														  	tr.append($('<td></td>').html(report.igstSum));
 														} */
 													  	//tr.append($('<td></td>').html(report.igstSum));
-														tr.append($('<td></td>').html(report.taxableAmtSum));
-														tr.append($('<td></td>').html(report.cgstRsSum));
-														tr.append($('<td></td>').html(report.sgstRsSum));
-														tr.append($('<td></td>').html(report.igstRsSum));
+														tr.append($('<td></td>').html(report.taxableAmtSum.toFixed(2)));
+														tr.append($('<td></td>').html(report.cgstRsSum.toFixed(2)));
+														tr.append($('<td></td>').html(report.sgstRsSum.toFixed(2)));
+														tr.append($('<td></td>').html(report.igstRsSum.toFixed(2)));
 														
-														var total;
+														var total=report.sgstRsSum+report.cgstRsSum;
+														total=total.toFixed(2);
 														
 													  	tr.append($('<td></td>').html(total));
 
@@ -363,6 +369,19 @@ function disableRoute(){
 //document.getElementById("selectRoute").disabled = true;
 
 }
+
+</script>
+
+<script type="text/javascript">
+function genPdf()
+{
+	var from_date = $("#fromDate").val();
+	var to_date = $("#toDate").val();
+	window.open('${pageContext.request.contextPath}/pdfForReport?url=showSaleReportItemwisePdf/'+from_date+'/'+to_date);
+
+	//window.open('${pageContext.request.contextPath}/pdfForReport?url=showSaleReportItemwisePdf/'+from_date+'/'+to_date);
+	
+	}	//window.open('pdfForReport?url=showSaleBillwiseByFrPdf/'+from_date+'/'+to_date);
 
 </script>
 

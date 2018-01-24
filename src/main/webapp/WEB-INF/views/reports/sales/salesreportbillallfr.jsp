@@ -2,11 +2,11 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 
@@ -87,7 +87,7 @@
 
 				<!-- <div class="col-sm-9 col-lg-5 controls">
  -->
-				<div class="row">
+				<%-- <div class="row">
 					<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">Select
 							Route</label>
@@ -122,7 +122,7 @@
 
 						</div>
 					</div>
-				</div>
+				</div> --%>
 
 				<br>
 				<div class="row">
@@ -130,10 +130,15 @@
 						<button class="btn btn-info" onclick="searchReport()">Search
 							Billwise Report</button>
 
-						<a
-							href="${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseByFrPdf"
-							target="_blank">PDF</a>
 
+						<button class="btn btn-primary" value="PDF" id="PDFButton"
+							onclick="genPdf()">PDF</button>
+
+
+						<%-- <a
+							href='${pageContext.request.contextPath}/pdfForReport?url=showSaleReportBillwiseAllFrPdf'
+							target="_blank">PDF</a>
+ --%>
 					</div>
 				</div>
 
@@ -174,7 +179,7 @@
 										<th>Sr.No.</th>
 										<th>Invoice No</th>
 										<th>Date</th>
-										<th>Franchisee Name</th>
+										<th>Party Name</th>
 										<th>City</th>
 										<th>GSTIN</th>
 										<th>HSNCD</th>
@@ -200,7 +205,7 @@
 	<!-- END Main Content -->
 
 	<footer>
-	<p>2017 © Monginis.</p>
+		<p>2017 © Monginis.</p>
 	</footer>
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -210,9 +215,9 @@
 	<script type="text/javascript">
 		function searchReport() {
 		//	var isValid = validate();
-
-				var selectedFr = $("#selectFr").val();
-				var routeId=$("#selectRoute").val();
+alert("HI ");
+				//var selectedFr = $("#selectFr").val();
+				//var routeId=$("#selectRoute").val();
 				
 				var from_date = $("#fromDate").val();
 				var to_date = $("#toDate").val();
@@ -224,10 +229,10 @@
 								'${getBillList}',
 
 								{
-									fr_id_list : JSON.stringify(selectedFr),
+									//fr_id_list : JSON.stringify(selectedFr),
 									fromDate : from_date,
 									toDate : to_date,
-									route_id:routeId,
+									//route_id:routeId,
 									ajax : 'true'
 
 								},
@@ -251,13 +256,15 @@
 													  	tr.append($('<td></td>').html(key+1));
 													  	tr.append($('<td></td>').html(report.invoiceNo));
 													  	tr.append($('<td></td>').html(report.billDate));
-													  	
 													  	tr.append($('<td></td>').html(report.frName));
 													  	tr.append($('<td></td>').html(report.frCity));
-													  	
+													  	tr.append($('<td></td>').html(report.frGstNo));
+													  	tr.append($('<td></td>').html(report.itemHsncd));
+
 														if(report.isSameState==1){
 															
 															var taxRate=report.itemTax1+report.itemTax2;
+															taxRate=taxRate.toFixed();
 														  	tr.append($('<td></td>').html(taxRate));
 														  //	tr.append($('<td></td>').html(report.sgstSum));
 														  //	tr.append($('<td></td>').html(0));
@@ -268,11 +275,10 @@
 														  	tr.append($('<td></td>').html(report.itemTax3));
 														} 
 													  	//tr.append($('<td></td>').html(report.igstSum));
-														tr.append($('<td></td>').html(report.taxableAmtSum));
-														tr.append($('<td></td>').html(report.cgstRsSum));
-														tr.append($('<td></td>').html(report.sgstRsSum));
-														tr.append($('<td></td>').html(report.igstRsSum));
-														
+														tr.append($('<td></td>').html(report.taxableAmtSum.toFixed(2)));
+														tr.append($('<td></td>').html(report.cgstRsSum.toFixed(2)));
+														tr.append($('<td></td>').html(report.sgstRsSum.toFixed(2)));
+														tr.append($('<td></td>').html(report.igstRsSum.toFixed(2)));
 														
 														$('#table_grid tbody')
 																.append(
@@ -369,6 +375,18 @@ function disableRoute(){
 
 </script>
 
+	<script type="text/javascript">
+
+function genPdf()
+{
+	var from_date = $("#fromDate").val();
+	var to_date = $("#toDate").val();
+	
+	window.open('${pageContext.request.contextPath}/pdfForReport?url=showSaleReportBillwiseAllFrPdf/'+from_date+'/'+to_date);
+	
+	}
+	
+</script>
 	<!--basic scripts-->
 	<script
 		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>

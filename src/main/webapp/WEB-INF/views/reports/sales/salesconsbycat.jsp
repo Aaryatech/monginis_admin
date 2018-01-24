@@ -152,13 +152,13 @@
 							Report</button>
 						<button class="btn search_btn" onclick="showChart()">Graph</button>
 
-						<a
+
+						<button class="btn btn-primary" value="PDF" id="PDFButton"
+							onclick="genPdf()">PDF</button>
+						<%-- <a
 							href="${pageContext.request.contextPath}/pdfForReport?url=showSaleRoyaltyByCatPdf"
 							target="_blank">PDF</a>
-
-
-
-
+ --%>
 					</div>
 
 
@@ -707,6 +707,17 @@
 			}
 		</script>
 
+
+		<script type="text/javascript">
+			function genPdf() {
+				var from_date = $("#fromDate").val();
+				var to_date = $("#toDate").val();
+
+				window.open('pdfForReport?url=showSaleRoyaltyByCatPdf/'
+						+ from_date + '/' + to_date);
+
+			}
+		</script>
 		<!--basic scripts-->
 		<script
 			src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>

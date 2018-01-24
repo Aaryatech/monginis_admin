@@ -8,16 +8,6 @@
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 <body>
- 
-	<div class="container" id="main-container">
-
-		<!-- BEGIN Sidebar -->
-		<div id="sidebar" class="navbar-collapse collapse">
-
-			<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
-			</div>
-			</div>
-
 <a href="${pageContext.request.contextPath}/showSaleReportByDate">showSaleReportByDate</a><br>
 <a href="${pageContext.request.contextPath}/showSaleReportByFr">showSaleReportByFr</a><br>
 <a href="${pageContext.request.contextPath}/showSaleReportGrpByDate">showSaleReportGrpByDate</a><br>

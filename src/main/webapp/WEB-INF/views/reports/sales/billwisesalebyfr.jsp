@@ -399,7 +399,7 @@ function disableRoute(){
 <script type="text/javascript">
 function showChart(){
 	
-	alert("Hi");
+	
 		
 	$("#PieChart_div").empty();
 	$("#chart_div").empty();
@@ -412,11 +412,6 @@ function showChart(){
 			var from_date = $("#fromDate").val();
 			var to_date = $("#toDate").val();
 			
-			alert("fr "+selectedFr);
-
-			alert(from_date);
-			alert(to_date);
-			alert(routeId);
 			
 				  //document.getElementById('btn_pdf').style.display = "block";
 			$.getJSON(
@@ -444,7 +439,7 @@ function showChart(){
 
 							 function drawStuff() {
 								 
-								 alert("Inside DrawStuff");
+								// alert("Inside DrawStuff");
  
 							   var chartDiv = document.getElementById('chart_div');
 							   document.getElementById("chart_div").style.border = "thin dotted red";
@@ -488,7 +483,7 @@ function showChart(){
 									//alert("base Value "+baseValue);
 									
 									var frName=report.frName;
-									alert("frNAme "+frName);
+									//alert("frNAme "+frName);
 									//var date= item.billDate+'\nTax : ' + item.tax_per + '%';
 									
 								   dataTable.addRows([
@@ -572,7 +567,7 @@ function genPdf()
 	var from_date = $("#fromDate").val();
 	var to_date = $("#toDate").val();
 	
-	window.open('pdfForReport?url=showSaleBillwiseByFrPdf/'+from_date+'/'+to_date);
+	window.open('/pdfForReport?url=showSaleBillwiseByFrPdf/'+from_date+'/'+to_date);
 	
 	}
 </script>

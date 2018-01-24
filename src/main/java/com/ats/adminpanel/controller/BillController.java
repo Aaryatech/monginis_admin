@@ -1216,12 +1216,12 @@ public class BillController {
 	
 	@RequestMapping(value = "/showBillPdf", method = RequestMethod.GET)
 	public ModelAndView showBillPdf(HttpServletRequest request, HttpServletResponse response) {
-System.out.println("IN Show bill PDF Method :/showBillPdf");
+ System.out.println("Inside Show Bill PDf ****************************************************************");
 		ModelAndView model = new ModelAndView("billing/pdf/frBillPdf");
 //ModelAndView model = new ModelAndView("billing/billDetailPdf");
 
 		try {
-           System.out.println(" Data for PDF billPrintList "+ billPrintList.toString());
+           System.out.println(" Data for PDF billPrintList %%%%%%%%%%%%%%%%%% "+ billPrintList.toString());
 
           // staticGetGenerateBills=generateBillList.getGenerateBills();
            
@@ -1753,8 +1753,8 @@ System.out.println("IN Show bill Method");
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		String filename = "/ordermemo222.pdf";
-		//String filePath = "/home/ats-11/ordermemo221.pdf";
+		String filename = "ordermemo222.pdf";
+		//String filePath = "/home/ats-11/ordermemo222.pdf";
 		String filePath = "/ordermemo222.pdf";
 
 		// construct the complete absolute path of the file
@@ -1840,5 +1840,6 @@ System.out.println("IN Show bill Method");
 			pd4ml.render(urlstring, fos);
 		}
 	}
+	
 	}
   

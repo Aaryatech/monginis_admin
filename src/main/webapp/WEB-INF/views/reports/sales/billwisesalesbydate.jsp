@@ -357,8 +357,10 @@ function genPdf()
 {
 	var from_date = $("#fromDate").val();
 	var to_date = $("#toDate").val();
+	//alert("in Gen PDF by date ");
+	window.open('${pageContext.request.contextPath}/pdfForReport?url=showSaleReportByDatePdf/'+from_date+'/'+to_date);
 	
-	window.open('pdfForReport?url=showSaleReportByDatePdf/'+from_date+'/'+to_date);
+	//window.open("${pageContext.request.contextPath}/pdfForReport?url=showSaleReportByDatePdf/"+from_date+"/"+to_date);
 	
 	}
 
