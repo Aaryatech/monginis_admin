@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.annotation.Resource;
+ 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,20 +24,22 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ats.adminpanel.commons.Commons;
+ 
 import com.ats.adminpanel.commons.Constants;
+ 
 import com.ats.adminpanel.model.Login;
 import com.ats.adminpanel.model.OrderCount;
 import com.ats.adminpanel.model.OrderCountsResponse;
-import com.ats.adminpanel.model.accessright.AccessRightModule;
+ 
 import com.ats.adminpanel.model.accessright.ModuleJson;
-import com.ats.adminpanel.model.item.Item;
-import com.ats.adminpanel.model.login.User;
+ 
+ 
 import com.ats.adminpanel.model.login.UserResponse;
-import com.ats.adminpanel.session.UserSession;
+ 
 
 /**
  * Handles requests for the application home page.
@@ -205,7 +207,8 @@ public class HomeController {
 					 
 					 
 						session.setAttribute("newModuleList", newModuleList);
-						 
+						session.setAttribute("sessionModuleId", 0);
+						session.setAttribute("sessionSubModuleId", 0);
 						
 					
 				//	System.out.println("Role Json "+Commons.newModuleList.toString());
@@ -275,6 +278,19 @@ public class HomeController {
 
 		return model;
 
+	}
+	
+	
+ 
+	
+	@RequestMapping(value = "/setSubModId", method = RequestMethod.GET)
+	public @ResponseBody void setSubModId(HttpServletRequest request,
+		HttpServletResponse response) {
+		int subModId=Integer.parseInt(request.getParameter("subModId"));
+		int modId=Integer.parseInt(request.getParameter("modId"));
+		HttpSession session = request.getSession();
+		session.setAttribute("sessionModuleId", modId);
+		session.setAttribute("sessionSubModuleId",subModId);
 	}
 	
 }
