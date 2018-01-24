@@ -597,6 +597,10 @@
 		var cessAmt = $("#cessAmt"+key+"").val(); 
 		var other1 = $("#other1"+key+"").val(); 
 		var other3 = $("#other3"+key+"").val();  
+		var freightAmt = $("#freightAmt").val(); 
+		var insuranceAmt = $("#insuranceAmt").val();
+		var other2 = $("#other2").val(); 
+		var other4 = $("#other4").val(); 
 		
 		if (recQty=="" || isNaN(recQty)) {
 
@@ -659,7 +663,11 @@
 					discPer : discPer,
 					cessAmt : cessAmt,
 					other3 : other3,
-					other1 : other1, 
+					other1 : other1,
+					freightAmt : freightAmt,
+					insuranceAmt : insuranceAmt,
+					other4 : other4,
+					other2 : other2,
 					ajax : 'true',
 
 				},

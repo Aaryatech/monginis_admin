@@ -5,13 +5,29 @@
 	 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+	 
+<style>
+#disableMe {
+	pointer-events: none;
+}
+
+</style>
 	<body>
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
-	
+
+
+<!--page specific css styles-->
+
+<!--flaty css styles-->
+
+
+ 
 	<c:url var="gateEntryList" value="/gateEntryList"></c:url>
 	<c:url var="withPoRef" value="/withPoRef"></c:url>
-	<c:url var="withPoRefDate" value="/withPoRefDate"></c:url> 
+	<c:url var="withPoRefDate" value="/withPoRefDate"></c:url>
+
+
 
 
 	<div class="container" id="main-container">

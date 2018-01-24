@@ -209,10 +209,11 @@
 								
 				  
 							</div><br> 
-							
-							<div class="col1">
-									<label class="col-sm-2 col-lg-2 control-label">Image</label>
-									<div class="col-sm-2 col-lg-4 controls">
+						<div class=" box-content">
+								<div class="row">	
+							 
+									<div class="col-md-2">Image</div>
+									<div class="col-md-3">
 										<div class="fileupload fileupload-new"
 											data-provides="fileupload">
 											<div class="fileupload-new img-thumbnail"
@@ -225,10 +226,10 @@
 										</div>
 
 									</div>
-								</div>
-									<div class="form-group">
-									<label class="col-sm-2 col-lg-1 control-label">Image</label>
-									<div class="col-sm-2 col-lg-4 controls">
+								 
+								 
+									<div class="col-md-2">Image</div>
+									<div class="col-md-3">
 										<div class="fileupload fileupload-new"
 											data-provides="fileupload">
 											<div class="fileupload-new img-thumbnail"
@@ -241,8 +242,9 @@
 										</div>
 
 									</div>
-								</div>	
-							
+							 	
+							</div>
+							</div>
 							<div class=" box-content">
 								<div class="row">
 								<div class="col-md-12 table-responsive">

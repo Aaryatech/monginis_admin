@@ -62,8 +62,7 @@ public class MaterialReceiptNoteController {
 
 	MaterialRecNote materialRecNotes;
 	public List<MaterialRecNoteDetails> getmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
-	public List<MaterialRecNoteDetails> addmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
-	private String podate;
+	public List<MaterialRecNoteDetails> addmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>(); 
 	public List<PurchaseOrderDetail> purchaseOrderDetailedListcomp;
 	List<MaterialRecieptAcc> materialRecieptAccList = new ArrayList<MaterialRecieptAcc>();
 
@@ -170,7 +169,7 @@ public class MaterialReceiptNoteController {
 			model.addObject("materialRecNote",materialRecNote);
 			model.addObject("supplierDetailsList",supplierDetailsList);
 			model.addObject("transporterList",transporterList.getTransporterList());
-			 
+			model.addObject("imageUrl",Constants.GATE_ENTRY_IMG_URL);
 		} catch (Exception e) {
 			e.printStackTrace();
 			 
@@ -1007,8 +1006,7 @@ public class MaterialReceiptNoteController {
 
 			int mrnId = 0;
 			String mrnNo = null;
-			for (int i = 0; i < purchaseOrderDetailedListcomp.size(); i++) {
-				podate = purchaseOrderDetailedListcomp.get(i).getPoDate();
+			for (int i = 0; i < purchaseOrderDetailedListcomp.size(); i++) { 
 				PurchaseOrderDetail purchaseDetail = purchaseOrderDetailedListcomp.get(i);
 				int poRmId = purchaseDetail.getRmId();
 				System.out.println("purchaseDetaiil" + purchaseDetail.getPoRate());
@@ -1635,8 +1633,10 @@ public class MaterialReceiptNoteController {
 		float cessAmt = Float.parseFloat(request.getParameter("cessAmt"));
 		float other1 = Float.parseFloat(request.getParameter("other1"));
 		float other3 = Float.parseFloat(request.getParameter("other3"));
-		 
-		
+		float freightAmt = Float.parseFloat(request.getParameter("freightAmt"));
+		float insuranceAmt = Float.parseFloat(request.getParameter("insuranceAmt"));
+		float other2 = Float.parseFloat(request.getParameter("other2"));
+		float other4 = Float.parseFloat(request.getParameter("other4")); 
 		System.out.println("index" + index);
 		System.out.println("discPer" + discPer);
 		System.out.println("recQty" + recQty);
@@ -1644,6 +1644,10 @@ public class MaterialReceiptNoteController {
 		System.out.println("cessAmt" + cessAmt);
 		System.out.println("other1 " + other1); 
 		System.out.println("other3 " + other3); 
+		System.out.println("freightAmt" + freightAmt);
+		System.out.println("insuranceAmt" + insuranceAmt);
+		System.out.println("other2 " + other2); 
+		System.out.println("other4 " + other4); 
 
 		try {
 
@@ -1679,7 +1683,7 @@ public class MaterialReceiptNoteController {
 					materialRecieptAccList.get(i).setCdAmt(
 							Float.valueOf(df.format((materialRecieptAccList.get(i).getValue() - materialRecieptAccList.get(i).getDiscAmt())
 									* materialRecieptAccList.get(i).getCdPer() / 100)));
-					materialRecieptAccList.get(i).setOther1(other1); 
+					materialRecieptAccList.get(i).setOther1(other1);
 					materialRecieptAccList.get(i).setOther3(other3); 
 					materialRecieptAccList.get(i).setTaxableAmt(Float.valueOf(df.format(materialRecieptAccList.get(i).getValue()
 							- materialRecieptAccList.get(i).getDiscAmt() - materialRecieptAccList.get(i).getCdAmt()
@@ -1739,11 +1743,23 @@ public class MaterialReceiptNoteController {
 			for (int i = 0; i < materialRecieptAccList.size(); i++) // cal freight amt
 			{
 				float divFactor = materialRecieptAccList.get(i).getValue() / valueTotal * 100;
-				if(Float.isNaN(divFactor)) 
+				if(Float.isNaN(divFactor))
+				{
 					materialRecieptAccList.get(i).setDivFactor(0); 
+					materialRecieptAccList.get(i).setOther2(0);
+					materialRecieptAccList.get(i).setOther4(0);
+					materialRecieptAccList.get(i).setFreightAmt(0);
+					materialRecieptAccList.get(i).setInsuAmt(0);
+				}
 				else
-					materialRecieptAccList.get(i).setDivFactor(Float.valueOf(df.format(divFactor)));  
-			}
+				{
+					materialRecieptAccList.get(i).setDivFactor(Float.valueOf(df.format(divFactor)));
+					materialRecieptAccList.get(i).setOther2(materialRecieptAccList.get(i).getDivFactor() * other2 / 100);
+					materialRecieptAccList.get(i).setOther4(materialRecieptAccList.get(i).getDivFactor() * other4 / 100);
+					materialRecieptAccList.get(i).setFreightAmt(materialRecieptAccList.get(i).getDivFactor() * freightAmt / 100);
+					materialRecieptAccList.get(i).setInsuAmt(materialRecieptAccList.get(i).getDivFactor() * insuranceAmt / 100);
+				}
+			}	
 
 			System.out.println("materialRecieptAccList " + materialRecieptAccList.toString());
 			 

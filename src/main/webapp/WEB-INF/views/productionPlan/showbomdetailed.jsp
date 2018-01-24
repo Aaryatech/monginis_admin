@@ -1,20 +1,30 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 	 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+	 
+<style>
+#disableMe {
+	pointer-events: none;
+}
+
+</style>
 	<body>
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
-	<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
-	 
+	<c:url var="gateEntryList" value="/gateEntryList"></c:url>
+	<c:url var="withPoRef" value="/withPoRef"></c:url>
+	<c:url var="withPoRefDate" value="/withPoRefDate"></c:url> 
+
 	<div class="container" id="main-container">
 
 		<!-- BEGIN Sidebar -->
-		<div id="sidebar" class="navbar-collapse collapse"> 
+		<div id="sidebar" class="navbar-collapse collapse">
+
+			<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
 
 			<div id="sidebar-collapse" class="visible-lg">
 				<i class="fa fa-angle-double-left"></i>

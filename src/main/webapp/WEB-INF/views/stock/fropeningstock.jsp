@@ -1,98 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
+	pageEncoding="UTF-8"%><%@ taglib
+	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+	 
 
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Franchisee Bill</title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-<!--base css styles-->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/assets/font-awesome/css/font-awesome.min.css">
-
-<!--page specific css styles-->
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.min.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/jquery-tags-input/jquery.tagsinput.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/jquery-pwstrength/jquery.pwstrength.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-duallistbox/duallistbox/bootstrap-duallistbox.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/dropzone/downloads/css/dropzone.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/css/colorpicker.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/compiled/timepicker.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/clockface/css/clockface.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/css/datepicker.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-switch/static/stylesheets/bootstrap-switch.css" />
-<link rel="stylesheet" type="text/css"
-	href="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.css" />
-<style>
-
-
-@media only screen and (min-width: 1200px) {
-	.franchisee_label, .menu_label {
-		width: 22%;
-	}
-	.franchisee_select, .menu_select {
-		width: 76%;
-	}
-	.date_label {
-		width: 40%;
-	}
-	.date_select {
-		width: 50%;
-		padding-right: 0px;
-	}
-}
-</style>
-<!--flaty css styles-->
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/flaty.css">
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/loader.css">
-
-<link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/flaty-responsive.css">
-
-<link rel="shortcut icon"
-	href="${pageContext.request.contextPath}/resources/img/favicon.png">
-<script type="text/javascript"
-	src="${pageContext.request.contextPath}/resources/js/jquery-1.10.2.min.js"></script>
-
-</head>
-<body>
+	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+	<body>
+ 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 
 	<c:url var="getMenuForFr" value="/getMenuListByFr"></c:url>
 	<c:url var="getItemListByMenu" value="/getItemListById"></c:url>
-
-
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+ 
 
 
 	<!-- BEGIN Sidebar -->
