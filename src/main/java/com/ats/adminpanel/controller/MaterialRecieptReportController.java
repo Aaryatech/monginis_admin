@@ -1085,7 +1085,8 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
-		File f = new File("C:/pdf/ordermemo221.pdf");
+		//File f = new File("c:/pdf/ordermemo221.pdf");
+		File f = new File("/ordermemo221.pdf");
 		System.out.println("I am here " + f.toString());
 		try {
 			runConverter(Constants.ReportURL + url, f);
@@ -1100,7 +1101,8 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo221.pdf";
-		String filePath = "C:/pdf/ordermemo221.pdf";
+		//String filePath = "c:/pdf/ordermemo221.pdf";
+		String filePath = "/ordermemo221.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;
