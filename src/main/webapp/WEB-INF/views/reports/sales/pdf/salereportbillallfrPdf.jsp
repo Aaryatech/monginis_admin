@@ -41,28 +41,29 @@ th {
 </style>
 </head>
 <body onload="myFunction()">
-<h3 align="center">Galdhar Foods Pvt Ltd</h3>
-<p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
-<p align="center">(All Sales)</p>
-<p align="center">Sales Report (Bill Wise)</p><!-- report1  -->
+	<h3 align="center">Galdhar Foods Pvt Ltd</h3>
+	<p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
+	<p align="center">(All Sales)</p>
+	<p align="center">Sales Report (Fr wise )</p>
+	<!-- Report 2 -->
 
-<div align="center">From ${fromDate}- To ${toDate}</div>
+	<div align="center">From ${fromDate}- To ${toDate}</div>
 	<table width="100%" border="0" cellspacing="0" cellpadding="0"
 		id="table_grid" class="table table-bordered">
 		<thead>
 			<tr class="bgpink">
 				<th>Sr.No.</th>
-				<th>Bill No</th>
+				<th>Invoice No</th>
 				<th>Date</th>
 				<th>Party Name</th>
 				<th>City</th>
 				<th>GSTIN</th>
-				<th>Basic Value</th>
+				<th>HSNCD</th>
+				<th>Tax Rate</th>
+				<th>Taxable Value</th>
 				<th>CGST</th>
 				<th>SGST</th>
 				<th>IGST</th>
-				<th>Round Off</th>
-				<th>Total</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -79,60 +80,56 @@ th {
 					<td><c:out value="${report.frName}" /></td>
 					<td><c:out value="${report.frCity}" /></td>
 					<td><c:out value="${report.frGstNo}" /></td>
-					<td><c:out value="${report.taxableAmt}" /></td>
+					<td><c:out value="${report.itemHsncd}" /></td>
+
 					<c:choose>
-					<c:when test="${report.isSameState eq 1}">
-					
-					<td><c:out value="${report.cgstSum}" /></td>
-					<td><c:out value="${report.sgstSum}"></c:out></td>
-					<td><c:out value="0" /></td>
-					<c:set var="total" value="${report.cgstSum +report.sgstSum + report.taxableAmt}" />
-										<c:set var="sgst" value="${sgst + report.sgstSum }" />
-					
-					<c:set var="cgst" value="${cgst + report.cgstSum }" />
-					</c:when>
-					
-					<c:when test="${report.isSameState eq 0}">
-					<c:set var="total" value="${report.igstSum+ report.taxableAmt}" />
-					<c:set var="igst" value="${igst + report.igstSum}" />
-					
-					<td><c:out value="0" /></td>
-					<td><c:out value="0"></c:out></td>
-					<td><c:out value="${report.igstSum}" /></td>
-					</c:when>
+						<c:when test="${report.isSameState eq 1}">
+							<td><c:out value="${report.itemTax1+report.itemTax2}" /></td>
+						</c:when>
+						<c:when test="${report.isSameState eq 0}">
+							<td><c:out value="${report.itemTax3}" /></td>
+						</c:when>
 					</c:choose>
+<c:set var="taxAmount" value="${taxAmount+report.taxableAmtSum}" />
+
+<c:set var="cgst" value="${cgst+report.cgstRsSum}" />
+
+<c:set var="sgst" value="${sgst+report.sgstRsSum}" />
+
+<c:set var="igst" value="${igst+report.igstRsSum}" />
+
+					<td><c:out value="${report.taxableAmtSum}" /></td>
 					
-					<c:set var="taxAmount" value="${taxAmount + report.taxableAmt}" />
-					
-					<c:set var="grandTotal"
-						value="${grandTotal+total}" />
-				<td><c:out value="${report.roundOff}"/></td>
 					<%-- <td><c:out value="${total}" /></td> --%>
-					
-					<td><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${total}" /></td>
+
+					<td><fmt:formatNumber type="number" maxFractionDigits="2"
+							value="${report.cgstRsSum}" /></td>
+							
+								<td><fmt:formatNumber type="number" maxFractionDigits="2"
+							value="${report.sgstRsSum}" /></td>
+							
+								<td><fmt:formatNumber type="number" maxFractionDigits="2"
+							value="${report.igstRsSum}" /></td>
 				</tr>
 
 			</c:forEach>
-				<tr>
-				
-					<td colspan='6'><b>Total</b></td>
-					<td><b><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${taxAmount}" /></b></td>
-					<td><b><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${cgst}" /></b></td>
-					<td><b><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${sgst}" /></b></td>
-					<td><b><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${igst}" /></b></td>
-					<td></td>
-					<td><b><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${grandTotal}" /></b></td>
-					<!--  <td><b>Total</b></td> -->
-				</tr>
+			<tr>
+
+				<td colspan='8'><b>Total</b></td>
+				<td><b><fmt:formatNumber type="number"
+							maxFractionDigits="2" value="${taxAmount}" /></b></td>
+				<td><b><fmt:formatNumber type="number"
+							maxFractionDigits="2" value="${cgst}" /></b></td>
+				<td><b><fmt:formatNumber type="number"
+							maxFractionDigits="2" value="${sgst}" /></b></td>
+				<td><b><fmt:formatNumber type="number"
+							maxFractionDigits="2" value="${igst}" /></b></td>
+				<td></td>
+				<!--  <td><b>Total</b></td> -->
+			</tr>
 		</tbody>
 	</table>
-	
+
 
 	<!-- END Main Content -->
 

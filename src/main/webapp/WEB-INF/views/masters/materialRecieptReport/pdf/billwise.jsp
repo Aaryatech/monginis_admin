@@ -35,7 +35,7 @@ th {
 <p align="center">A-89, Shendra M.I.D.C., Aurangabad</p> 
 <p align="center">Inward Report (Bill wise )</p>
 
-<div align="center">From ${fromDate}- To ${toDate}</div>
+<div align="center">From ${from_date} - To ${to_date}</div>
 
 	<table width="100%" border="0" cellspacing="0"
 														cellpadding="0" id="table_grid" class="table table-bordered">
@@ -81,9 +81,9 @@ th {
 													<td style="text-align:center;"><c:out value="${count.index+1}" /></td>
 													 
 													<td style="text-align:center;"><c:out value="${staticlist.mrnNo}" /></td>
-													<td style="text-align:center;"><c:out value="${staticlist.invBookDate}" /></td>
+													<td style="text-align:center;"><fmt:formatDate pattern = "dd-MM-yyyy" value = "${staticlist.invBookDate}" /></td>
 													<td style="text-align:center;"><c:out value="${staticlist.invoiceNumber}" /></td>
-													<td style="text-align:center;"><c:out value="${staticlist.invDate}" /></td>
+													<td style="text-align:center;"><fmt:formatDate pattern = "dd-MM-yyyy" value = "${staticlist.invDate}" /></td>
 													<td style="text-align:center;"><c:out value="${staticlist.suppName}" /></td>
 													<td style="text-align:center;"><c:out value="${staticlist.suppCity}" /></td>
 													<td style="text-align:center;"><c:out value="${staticlist.suppGstin}" /></td>

@@ -67,7 +67,7 @@ th {
 													<td style="text-align:center"><c:out value="${count.index+1}" /></td>
 													 
 													<td style="text-align:center"><c:out value="${staticlist.mrnNo}" /></td>
-													<td  style="text-align:center;"><c:out value="${staticlist.invBookDate}" /></td>
+													<td style="text-align:center;"><fmt:formatDate pattern = "dd-MM-yyyy" value = "${staticlist.invBookDate}" /></td>
 													<td  style="text-align:center"><c:out value="${staticlist.invoiceNumber}" /></td>
 													<td  style="text-align:center"><c:out value="${staticlist.suppName}" /></td>
 													<td  style="text-align:center"><c:out value="${staticlist.hsncdNo}" />  

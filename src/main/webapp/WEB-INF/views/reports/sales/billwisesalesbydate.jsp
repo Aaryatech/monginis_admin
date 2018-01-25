@@ -128,8 +128,7 @@
 					<div class="col-md-12" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
 							Billwise Report</button>
-					<a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleReportByDatePdf"
-								target="_blank">PDF</a>
+					<button class="btn btn-primary" value="PDF" id="PDFButton" onclick="genPdf()">PDF</button>
 					</div>
 				</div>
 
@@ -228,7 +227,8 @@
 
 								},
 								function(data) {
-
+									
+								
 									$('#table_grid td').remove();
 									$('#loader').hide();
 
@@ -352,6 +352,18 @@ $('.datepicker').datepicker({
     	    startDate: '-3d'
     }
 });
+
+function genPdf()
+{
+	var from_date = $("#fromDate").val();
+	var to_date = $("#toDate").val();
+	//alert("in Gen PDF by date ");
+	window.open('${pageContext.request.contextPath}/pdfForReport?url=showSaleReportByDatePdf/'+from_date+'/'+to_date);
+	
+	//window.open("${pageContext.request.contextPath}/pdfForReport?url=showSaleReportByDatePdf/"+from_date+"/"+to_date);
+	
+	}
+
 
 </script>
 

@@ -130,9 +130,13 @@
 						<button class="btn btn-info" onclick="searchReport()">Search
 							Billwise Report</button>
 							
-							<a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleRoyaltyByCatPdf"
+							
+							<button class="btn btn-primary" value="PDF" id="PDFButton"
+							onclick="genPdf()">PDF</button>
+							
+						<%-- 	<a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleRoyaltyByCatPdf"
 								target="_blank">PDF</a>
-
+ --%>
 					</div>
 				</div>
 
@@ -395,6 +399,16 @@ function disableRoute(){
 //document.getElementById("selectRoute").disabled = true;
 
 }
+
+
+function genPdf()
+{
+	var from_date = $("#fromDate").val();
+	var to_date = $("#toDate").val();
+	
+	window.open('pdfForReport?url=showSaleRoyaltyByCatPdf/'+from_date+'/'+to_date);
+	
+	}
 
 </script>
 

@@ -52,25 +52,23 @@ th {
 		<thead>
 			<tr class="bgpink">
 				<th>Sr.No.</th>
-				<th>Item Name</th>
-				<th>Sale Qty</th>
-				<th>Sale Value</th>
-				<th>GRN Qty</th>
-				<th>GRN Value</th>
-				<th>GVN Qty</th>
-				<th>GVN Value</th>
-				<th>Net Qty</th>
-				<th>Net Value</th>
-				<th>Royalty %</th>
-				<th>Royalty Amt</th>
+											<th>Item Name</th>
+											<th>Sale Qty</th>
+											<th>Sale Value</th>
+											<th>GRN Qty</th>
+											<th>GRN Value</th>
+											<th>GVN Qty</th>
+											<th>GVN Value</th>
+											<th>Net Qty</th>
+											<th>Net Value</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:set var="taxAmount" value="${0}" />
-			<c:set var="igst" value="${0 }" />
-			<c:set var="cgst" value="${0 }" />
-			<c:set var="sgst" value="${0 }" />
-			<c:set var="grandTotal" value="${0 }" />
+			<c:set var="igst" value="${0}" />
+			<c:set var="cgst" value="${0}" />
+			<c:set var="sgst" value="${0}" />
+			<c:set var="grandTotal" value="${0}" />
 			<c:forEach items="${catList}" var="report" varStatus="count">
 				<tr>
 
@@ -79,7 +77,6 @@ th {
 					<td><c:out value="" /></td>
 					<td><c:out value="" /></td>
 					<td><c:out value="" /></td>
-
 					<td><c:out value="" /></td>
 					<td><c:out value="" /></td>
 					<td><c:out value="" /></td>

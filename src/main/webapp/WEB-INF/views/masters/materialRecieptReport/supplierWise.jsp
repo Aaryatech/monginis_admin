@@ -120,8 +120,8 @@
 										 
 										<input type="button" class="btn btn-primary" value="View All" id="searchmixall"
 											onclick="searchsupplierwise()">
-											<a href="${pageContext.request.contextPath}/materialRec?url=supplierWisePdf"
-								target="_blank"><input type="button" class="btn btn-primary" value="Pdf"  ></a>
+											<a <%-- href="${pageContext.request.contextPath}/materialRec?url=supplierWisePdf" --%>
+								target="_blank"><input type="button" class="btn btn-primary" value="Pdf"  onclick="getPdf()"></a>
 								<button class="btn search_btn" onclick="showChart()" >Graph</button>
 
 									</div><br>
@@ -293,12 +293,31 @@
 			var to_date = $("#to_date").val();
 			var suppliers = $("#suppliers").val();
 			
+			var valid=0;
+			
+			if(from_date=="")
+				{
+				alert("Enter Valid From Date");
+				valid=1;
+				
+				}
+			else if(to_date=="")
+				{
+				alert("Enter Valid To Date");
+				valid=1;
+				}
+			else if(suppliers==null)
+			{
+			alert("Select Minimum One Supplier");
+			valid=1;
+			}
+		
+			if(valid==0)
+			{
 			
 			$('#loader').show();
 
-			$
-					.getJSON(
-							'${materialRecieptsSupplierWiseReport}',
+			$.getJSON('${materialRecieptsSupplierWiseReport}',
 
 							{
 								 
@@ -347,7 +366,7 @@
 											})  
 							});
 
-		 
+			}
 	}
 		 
 	</script>
@@ -360,9 +379,29 @@ function showChart(){
 	var from_date = $("#from_date").val();
 	var to_date = $("#to_date").val();
 	
-	//alert(from_date);
-	//alert(to_date);
-	//alert(suppliers);
+	var valid=0;
+	
+	if(from_date=="")
+		{
+		alert("Enter Valid From Date");
+		valid=1;
+		
+		}
+	else if(to_date=="")
+		{
+		alert("Enter Valid To Date");
+		valid=1;
+		}
+	else if(suppliers==null)
+	{
+	alert("Select Minimum One Supplier");
+	valid=1;
+	}
+
+	if(valid==0)
+	{
+	
+	$('#loader').show();
 		
 	$("#PieChart_div").empty();
 	$("#chart_div").empty();
@@ -383,7 +422,7 @@ function showChart(){
 					},
 					function(data) {
 
-								//alert(data);
+						$('#loader').hide();
 							 if (data == "") {
 									alert("No records found !!");
 
@@ -497,7 +536,7 @@ function showChart(){
 							 
 										
 							  	});
-			
+					}
 }
 function exportToExcel()
 {
@@ -505,6 +544,37 @@ function exportToExcel()
 	window.open("${pageContext.request.contextPath}/exportToExcel");
 			document.getElementById("expExcel").disabled=true;
 }
+
+function getPdf()
+{
+    var from_date = $("#from_date").val();
+    //alert("from_date"+from_date);
+    var to_date = $("#to_date").val();
+    var supplier=$("#suppliers").val();
+    var valid=0;
+	
+		if(from_date=="")
+			{
+			alert("Enter Valid From Date");
+			valid=1;
+			
+			}
+		else if(to_date=="")
+			{
+			alert("Enter Valid To Date");
+			valid=1;
+			}
+		else if(supplier==null)
+		{
+		alert("Select Minimum One Supplier");
+		valid=1;
+		}
+	
+		if(valid==0)
+		{
+	    	window.open('${pageContext.request.contextPath}/materialRec?url=supplierWisePdf/'+from_date+'/'+to_date+'/'+supplier);
+		}
+    }
 </script>
 	
 </body>

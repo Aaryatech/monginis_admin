@@ -2,13 +2,14 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	
-	 <script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
-	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	
+<script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+<script type="text/javascript"
+	src="https://www.gstatic.com/charts/loader.js"></script>
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 	<c:url var="getBillList" value="/getSaleRoyaltyByFr"></c:url>
@@ -62,8 +63,6 @@
 
 			<div class="box-content">
 				<div class="row">
-
-
 					<div class="form-group">
 						<label class="col-sm-3 col-lg-2	 control-label">From Date</label>
 						<div class="col-sm-6 col-lg-4 controls date_select">
@@ -131,11 +130,16 @@
 					<div class="col-md-12" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
 							Billwise Report</button>
-																    <button class="btn search_btn" onclick="showChart()" >Graph</button>
+						<button class="btn search_btn" onclick="showChart()">Graph</button>
+						
+							<button class="btn btn-primary" value="PDF" id="PDFButton"
+							onclick="genPdf()">PDF</button>
 							
-							<a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleRoyaltyByCatPdf"
-								target="_blank">PDF</a>
+							
 
+						<%-- 	<a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleRoyaltyByCatPdf"
+								target="_blank">PDF</a>
+ --%>
 					</div>
 				</div>
 
@@ -158,7 +162,7 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-list-alt"></i>Royalty  Report (R6)
+					<i class="fa fa-list-alt"></i>Royalty Report (R6)
 				</h3>
 
 			</div>
@@ -191,25 +195,25 @@
 						</div>
 					</div>
 				</div>
-				
-	
-          
-   <!--  <table class="columns">
+
+
+
+				<!--  <table class="columns">
       <tr>
         <td><div id="chart_div" style="width: 100%" ></div></td>
         <td><div id="PieChart_div" style="width: 100%"></div></td>
       </tr>
     </table>
       -->
-      <div id="chart_div" style="width: 100%" ></div>
-        <div id="PieChart_div" style="width: 100%"></div>
+				<div id="chart_div" style="width: 100%"></div>
+				<div id="PieChart_div" style="width: 100%"></div>
 			</form>
 		</div>
 	</div>
 	<!-- END Main Content -->
 
 	<footer>
-	<p>2017 © Monginis.</p>
+		<p>2017 © Monginis.</p>
 	</footer>
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -274,10 +278,10 @@
 														netValue=netValue.toFixed();
 														
 													  	tr.append($('<td></td>').html(netValue));
-													  	alert("netVAlue"+netValue);
-													  	alert("Per"+royPer);
+													  	//alert("netVAlue"+netValue);
+													  	//alert("Per"+royPer);
 													  	rAmt=parseFloat(netValue) * parseFloat(royPer)/100;
-													  	alert("Amt="+rAmt)
+													  //	alert("Amt="+rAmt)
 													  	rAmt=rAmt.toFixed(2);
 													  	
 													  	tr.append($('<td></td>').html(rAmt));
@@ -380,10 +384,10 @@ function disableRoute(){
 </script>
 
 
-<script type="text/javascript">
+	<script type="text/javascript">
 function showChart(){
 	
-	alert("Hi");
+	//alert("Hi");
 		
 	$("#PieChart_div").empty();
 	$("#chart_div").empty();
@@ -398,11 +402,11 @@ function showChart(){
 			var from_date = $("#fromDate").val();
 			var to_date = $("#toDate").val();
 			
-			alert("fr "+selectedFr);
+			//alert("fr "+selectedFr);
 
-			alert(from_date);
-			alert(to_date);
-			alert(routeId);
+			//alert(from_date);
+			//alert(to_date);
+			//alert(routeId);
 			
 				  //document.getElementById('btn_pdf').style.display = "block";
 			$.getJSON(
@@ -418,7 +422,6 @@ function showChart(){
 					},
 					function(data) {
 
-								alert(data);
 							 if (data == "") {
 									alert("No records found !!");
 
@@ -430,7 +433,6 @@ function showChart(){
 
 							 function drawStuff() {
 								 
-								 alert("Inside DrawStuff");
  
 							   var chartDiv = document.getElementById('chart_div');
 							   document.getElementById("chart_div").style.border = "thin dotted red";
@@ -449,11 +451,8 @@ function showChart(){
 						       piedataTable.addColumn('string', 'Franchisee Name'); // Implicit domain column.
 						       piedataTable.addColumn('number', 'Total');
 						       
-						       
 						       $.each(data,function(key, report) {
 
-						    	   
-						    	   
 						    	   var royPer=3;											  	
 									var netValue=report.tBillTaxableAmt-(report.tGrnTaxableAmt+report.tGvnTaxableAmt);
 									//netValue=netValue.toFixed();
@@ -466,7 +465,6 @@ function showChart(){
 						    	   
 						    	  
 									var frName=report.frName;
-									alert("frNAme "+frName);
 									//var date= item.billDate+'\nTax : ' + item.tax_per + '%';
 									
 								   dataTable.addRows([
@@ -542,6 +540,16 @@ function showChart(){
 							  	});
 			
 }
+
+function genPdf()
+{
+	var from_date = $("#fromDate").val();
+	var to_date = $("#toDate").val();
+	
+	window.open('pdfForReport?url=showSaleRoyaltyByFrPdf/'+from_date+'/'+to_date);
+	
+	}
+
 
 </script>
 

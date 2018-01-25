@@ -66,7 +66,7 @@ th {
 													<td style="text-align:center;"><c:out value="${count.index+1}" /></td>
 													 
 													<td style="text-align:center;"><c:out value="${staticlist.rmName}" /></td>
-													<td  style="text-align:right"><c:out value="${staticlist.hsncdNo}" /></td>
+													<td  style="text-align:center"><c:out value="${staticlist.hsncdNo}" /></td>
 													<td  style="text-align:right"><c:out value="${staticlist.taxRate}" /></td>
 													<td  style="text-align:right"><c:out value="${staticlist.recdQty}" /></td>  
 													<td  style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.cgst}"/>

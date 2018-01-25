@@ -33,6 +33,8 @@
 </head>
 <body>
 
+ 
+<c:url var="setSubModId" value="/setSubModId" />
 
 	<!-- BEGIN Navbar -->
 
@@ -84,7 +86,7 @@
 									varStatus="count">
 
 				<c:choose>
-					<c:when test="${allModuleList.moduleId==Constants.mainAct}">
+					<c:when test="${allModuleList.moduleId==sessionScope.sessionModuleId}">
 						<li class="active">
 					</c:when>
 
@@ -105,14 +107,14 @@
 				
 
 					<c:choose>
-						<c:when test="${allSubModuleList.subModuleId==Constants.subAct}">
+						<c:when test="${allSubModuleList.subModuleId==sessionScope.sessionSubModuleId}">
 							<li class="active">
 						</c:when>
 						<c:otherwise>
 							<li>
 						</c:otherwise>
 					</c:choose>
-					<a href="${pageContext.request.contextPath}/<c:out value="${allSubModuleList.subModuleMapping}" />"><c:out value="${allSubModuleList.subModulName}" /></a>
+					<a onclick="selectSubMod(${allSubModuleList.subModuleId},${allSubModuleList.moduleId})" href="${pageContext.request.contextPath}/<c:out value="${allSubModuleList.subModuleMapping}" />"><c:out value="${allSubModuleList.subModulName}" /></a>
 					</li>
 
 
@@ -199,5 +201,22 @@
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
  --%>
+ 
+ <script>
+ 
+ 
+  
+
+  
+ function selectSubMod(subModId, modId){
+	 
+	 $.getJSON('${setSubModId}', {
+		 subModId : subModId,
+		 modId : modId,
+						ajax : 'true'
+					});
+ }
+ 
+ </script>
 </body>
 </html>

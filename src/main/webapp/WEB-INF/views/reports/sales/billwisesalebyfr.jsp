@@ -131,8 +131,11 @@
 							Billwise Report</button>
 									    <button class="btn search_btn" onclick="showChart()" >Graph</button>
 							
-							<a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseByFrPdf"
-								target="_blank">PDF</a>
+							
+												<button class="btn btn-primary" value="PDF" id="PDFButton" onclick="genPdf()">PDF</button>
+							
+							<%-- <a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseByFrPdf"
+								target="_blank">PDF</a> --%>
 
 					</div>
 				</div>
@@ -164,8 +167,7 @@
 			<form id="submitBillForm"
 				action="${pageContext.request.contextPath}/submitNewBill"
 				method="post">
-				<div class=" box-content">
-					<div class="row">
+				
 						<div class="col-md-12 table-responsive">
 							<table class="table table-bordered table-striped fill-head "
 								style="width: 100%" id="table_grid">
@@ -181,7 +183,6 @@
 										<th>IGST</th>
 										<th>Round Off</th>
 										<th>Total</th>
-
 									</tr>
 								</thead>
 								<tbody>
@@ -398,7 +399,7 @@ function disableRoute(){
 <script type="text/javascript">
 function showChart(){
 	
-	alert("Hi");
+	
 		
 	$("#PieChart_div").empty();
 	$("#chart_div").empty();
@@ -411,11 +412,6 @@ function showChart(){
 			var from_date = $("#fromDate").val();
 			var to_date = $("#toDate").val();
 			
-			alert("fr "+selectedFr);
-
-			alert(from_date);
-			alert(to_date);
-			alert(routeId);
 			
 				  //document.getElementById('btn_pdf').style.display = "block";
 			$.getJSON(
@@ -443,7 +439,7 @@ function showChart(){
 
 							 function drawStuff() {
 								 
-								 alert("Inside DrawStuff");
+								// alert("Inside DrawStuff");
  
 							   var chartDiv = document.getElementById('chart_div');
 							   document.getElementById("chart_div").style.border = "thin dotted red";
@@ -487,7 +483,7 @@ function showChart(){
 									//alert("base Value "+baseValue);
 									
 									var frName=report.frName;
-									alert("frNAme "+frName);
+									//alert("frNAme "+frName);
 									//var date= item.billDate+'\nTax : ' + item.tax_per + '%';
 									
 								   dataTable.addRows([
@@ -564,6 +560,16 @@ function showChart(){
 			
 }
 
+					
+					
+function genPdf()
+{
+	var from_date = $("#fromDate").val();
+	var to_date = $("#toDate").val();
+	
+	window.open('${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseByFrPdf/'+from_date+'/'+to_date);
+	
+	}
 </script>
 
 	<!--basic scripts-->

@@ -127,8 +127,8 @@
 				
 										<input type="button" class="btn btn-primary" value="View All" id="searchmixall"
 											onclick="searchbillwise()">
-											<a href="${pageContext.request.contextPath}/materialRec?url=billWisePdf"
-								target="_blank"><input type="button" class="btn btn-primary" value="Pdf"  ></a>
+											<a <%-- href="${pageContext.request.contextPath}/materialRec?url=billWisePdf" --%>
+								target="_blank"><input type="button" class="btn btn-primary" value="Pdf" onclick="getPdf()" ></a>
 								<button class="btn search_btn" onclick="showChart()" >Graph</button>
 
 									</div><br> 
@@ -304,12 +304,31 @@
 			var from_date = $("#from_date").val();
 			var to_date = $("#to_date").val();
 			var suppliers = $("#suppliers").val();
+			 
+			var valid=0;
 			
+			if(from_date=="")
+				{
+				alert("Enter Valid From Date");
+				valid=1;
+				
+				}
+			else if(to_date=="")
+				{
+				alert("Enter Valid To Date");
+				valid=1;
+				}
+			else if(suppliers==null)
+			{
+			alert("Select Minimum One Supplier");
+			valid=1;
+			}
+			
+			if(valid==0)
+			{
 			$('#loader').show();
 
-			$
-					.getJSON(
-							'${materialRecieptBillWiseReport}',
+			$.getJSON('${materialRecieptBillWiseReport}',
 
 							{
 								 
@@ -363,7 +382,7 @@
 											})  
 							});
 
-		 
+		}
 	}
 		 
 	</script>
@@ -376,15 +395,33 @@ function showChart(){
 	var from_date = $("#from_date").val();
 	var to_date = $("#to_date").val();
 	
-	//alert(from_date);
-	//alert(to_date);
-	//alert(suppliers);
+	var valid=0;
+	
+	if(from_date=="")
+		{
+		alert("Enter Valid From Date");
+		valid=1;
+		
+		}
+	else if(to_date=="")
+		{
+		alert("Enter Valid To Date");
+		valid=1;
+		}
+	else if(suppliers==null)
+	{
+	alert("Select Minimum One Supplier");
+	valid=1;
+	}
+	
+	if(valid==0)
+	{
 		
 	$("#PieChart_div").empty();
 	$("#chart_div").empty();
 		document.getElementById('chart').style.display = "block";
 		   document.getElementById("table_grid").style="display:none";
-		 
+		   $('#loader').show();
 		     
 			$.getJSON(
 					'${materialRecieptBillWiseReport}',
@@ -400,6 +437,7 @@ function showChart(){
 					function(data) {
 
 								//alert(data);
+								$('#loader').hide();
 							 if (data == "") {
 									alert("No records found !!");
 
@@ -513,7 +551,7 @@ function showChart(){
 							 
 										
 							  	});
-			
+					}
 }
 function exportToExcel()
 {
@@ -521,6 +559,37 @@ function exportToExcel()
 	window.open("${pageContext.request.contextPath}/exportToExcel");
 			document.getElementById("expExcel").disabled=true;
 }
+
+function getPdf()
+{
+    var from_date = $("#from_date").val();
+    
+    var to_date = $("#to_date").val();
+    var supplier=$("#suppliers").val();
+	var valid=0;
+	
+		if(from_date=="")
+			{
+			alert("Enter Valid From Date");
+			valid=1;
+			
+			}
+		else if(to_date=="")
+			{
+			alert("Enter Valid To Date");
+			valid=1;
+			}
+		else if(supplier==null)
+		{
+		alert("Select Minimum One Supplier");
+		valid=1;
+		}
+	
+		if(valid==0)
+		{
+	    	window.open('${pageContext.request.contextPath}/materialRec?url=billWisePdf/'+from_date+'/'+to_date+'/'+supplier);
+		}
+    }
 </script>
 	
 	
