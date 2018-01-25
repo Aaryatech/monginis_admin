@@ -5,6 +5,23 @@
 	 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+	<style>
+  
+/* #search {
+   
+    
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 100%;
+  font-size: 14px;
+  padding: 5px 5px 5px 30px;
+  border: 1px solid #ddd;
+  margin-bottom: 0px;
+   margin-top: 5px;
+} */
+
+</style>
+ <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
 	<body>
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
@@ -101,15 +118,24 @@
 
 
 									</div>
+										
 								 
 					
-					</form>
+					</form> 
+					<div class="col-md-9" ></div> 
+					<label for="search" class="col-md-3" id="search">
+    <i class="fa fa-search" style="font-size:20px"></i>
+									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search for Raw Material names.." title="Type in a name">
+										</label>  
 				</div>
 				
 				
 
 									<div class="clearfix"></div>
 									<div class="table-responsive" style="border: 0">
+									 
+				
+									 
 										<table width="100%" class="table table-advance" id="table1">
 											<thead>
 												<tr>
@@ -292,10 +318,26 @@
 				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 				
 
-<script type="text/javascript">
-
+ 
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table1");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
 </script>
-
 
 </body>
 </html>

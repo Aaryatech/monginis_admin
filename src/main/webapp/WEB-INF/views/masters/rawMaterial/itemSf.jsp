@@ -5,6 +5,8 @@
 	 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+ 
+ <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
 	<body>
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
@@ -174,7 +176,11 @@
 
 									</div>
 								</div>
-
+	<div class="col-md-9" ></div> 
+					<label for="search" class="col-md-3" id="search">
+    <i class="fa fa-search" style="font-size:20px"></i>
+									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search for Raw Material names.." title="Type in a name">
+										</label>  
 								<div class="clearfix"></div>
 								<div class="table-responsive" style="border: 0">
 									<table width="100%" class="table table-advance" id="table1">
@@ -418,7 +424,25 @@ href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}
 		
 	}
 	</script>
-
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table1");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+</script>
 </body>
 </html>
 

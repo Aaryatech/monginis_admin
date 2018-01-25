@@ -291,6 +291,7 @@ public class HomeController {
 		HttpSession session = request.getSession();
 		session.setAttribute("sessionModuleId", modId);
 		session.setAttribute("sessionSubModuleId",subModId);
+		 session.removeAttribute( "exportExcelList" );
 	}
 	
 }

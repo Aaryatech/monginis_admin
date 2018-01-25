@@ -5,6 +5,7 @@
 	 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+	 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
 	<body>
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
@@ -51,7 +52,11 @@
 						</div>
 
 						<div class="box-content">
-
+<div class="col-md-9" ></div> 
+					<label for="search" class="col-md-3" id="search">
+    <i class="fa fa-search" style="font-size:20px"></i>
+									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search for transporter names.." title="Type in a name">
+										</label>  
 							<div class="clearfix"></div>
 
 
@@ -180,5 +185,27 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+		
+		<script>
+function myFunction() {
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table1");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+</script>
+
+
 </body>
 </html>
