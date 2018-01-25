@@ -120,8 +120,8 @@
 										 
 										<input type="button" class="btn btn-primary" value="View All" id="searchmixall"
 											onclick="searchsupplierwise()">
-											<a href="${pageContext.request.contextPath}/materialRec?url=supplierWisePdf"
-								target="_blank"><input type="button" class="btn btn-primary" value="Pdf"  ></a>
+											<a <%-- href="${pageContext.request.contextPath}/materialRec?url=supplierWisePdf" --%>
+								target="_blank"><input type="button" class="btn btn-primary" value="Pdf"  onclick="getPdf()"></a>
 								<button class="btn search_btn" onclick="showChart()" >Graph</button>
 
 									</div><br>
@@ -505,6 +505,16 @@ function exportToExcel()
 	window.open("${pageContext.request.contextPath}/exportToExcel");
 			document.getElementById("expExcel").disabled=true;
 }
+
+function getPdf()
+{
+    var from_date = $("#from_date").val();
+    //alert("from_date"+from_date);
+    var to_date = $("#to_date").val();
+    var supplier=$("#suppliers").val();
+    window.open('${pageContext.request.contextPath}/materialRec?url=supplierWisePdf/'+from_date+'/'+to_date+'/'+supplier);
+   
+    }
 </script>
 	
 </body>

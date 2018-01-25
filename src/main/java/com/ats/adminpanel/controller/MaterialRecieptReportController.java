@@ -25,6 +25,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -49,7 +50,7 @@ import com.ats.adminpanel.model.materialrecreport.GetMaterialRecieptReportMonthW
 public class MaterialRecieptReportController {
 
 	Supplist supplierDetailsList = new Supplist();
-	static List<GetMaterialRecieptReportBillWise> billWisePdf;
+
 
 	@RequestMapping(value = "/purchaseReport", method = RequestMethod.GET)
 	public ModelAndView purchaseReport(HttpServletRequest request, HttpServletResponse response) {
@@ -120,7 +121,7 @@ public class MaterialRecieptReportController {
 			
 			materialRecieptBillWiseReport = responseEntity.getBody();
 			
-			billWisePdf = materialRecieptBillWiseReport;
+			 
 			System.out.println("materialRecieptBillWiseReport" + materialRecieptBillWiseReport.toString());
 
 		} catch (Exception e) {
@@ -211,18 +212,57 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	@RequestMapping(value = "/billWisePdf", method = RequestMethod.GET)
-	public ModelAndView billWisePdf(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/billWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
+	public ModelAndView billWisePdf(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String supplier[],HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/billwise");
 		try {
-			/*
-			 * String fromDate = request.getParameter("from_date"); String toDate =
-			 * request.getParameter("to_date"); System.out.println("fromDate"+fromDate);
-			 * System.out.println("toDate"+toDate);
-			 */
-			model.addObject("staticlist", billWisePdf);
-			System.out.println("billWisePdf" + billWisePdf);
+			List<GetMaterialRecieptReportBillWise> materialRecieptBillWiseReport = new ArrayList<GetMaterialRecieptReportBillWise>();
+
+			RestTemplate rest = new RestTemplate();
+			
+			StringBuilder sb = new StringBuilder();
+			String suppliers = null;
+
+			supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
+			if (supplier[0].equals("-1")) {
+				System.out.println("in if");
+				for (int i = 0; i < supplierDetailsList.getSupplierDetailslist().size(); i++) {
+					sb = sb.append(supplierDetailsList.getSupplierDetailslist().get(i).getSuppId() + ",");
+
+				}
+
+				suppliers = sb.toString();
+				suppliers = suppliers.substring(0, suppliers.length() - 1);
+				System.out.println("suppliers id list is" + suppliers.toString());
+
+			} else {
+				for (int i = 0; i < supplier.length; i++) {
+					sb = sb.append(supplier[i] + ",");
+
+				}
+
+				suppliers = sb.toString();
+				suppliers = suppliers.substring(0, suppliers.length() - 1);
+				System.out.println("suppliers id list is" + suppliers.toString());
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("fromDate", DateConvertor.convertToYMD(from_date));
+			map.add("toDate", DateConvertor.convertToYMD(to_date));
+			map.add("suppId", suppliers);
+		 
+			
+			ParameterizedTypeReference<List<GetMaterialRecieptReportBillWise>> typeRef = new ParameterizedTypeReference<List<GetMaterialRecieptReportBillWise>>() {
+			};
+			ResponseEntity<List<GetMaterialRecieptReportBillWise>> responseEntity = rest.exchange(Constants.url + "materialRecieptBillWiseReport",
+					HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			
+			materialRecieptBillWiseReport = responseEntity.getBody();
+			model.addObject("staticlist", materialRecieptBillWiseReport);
+			model.addObject("from_date", from_date);
+			model.addObject("to_date", to_date);
+			System.out.println("billWisePdf" + materialRecieptBillWiseReport);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -391,13 +431,57 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	@RequestMapping(value = "/supplierWisePdf", method = RequestMethod.GET)
-	public ModelAndView supplierWisePdf(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/supplierWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
+	public ModelAndView supplierWisePdf(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String supplier[],HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/supplierwisepdf");
 		try {
-			model.addObject("staticlist", supplierWisePdf);
-			System.out.println("supplierWisePdf" + supplierWisePdf);
+			List<GetMaterialRecieptReportBillWise> materialRecieptBillWiseReport = new ArrayList<GetMaterialRecieptReportBillWise>();
+
+			RestTemplate rest = new RestTemplate();
+			
+			StringBuilder sb = new StringBuilder();
+			String suppliers = null;
+
+			supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
+			if (supplier[0].equals("-1")) {
+				System.out.println("in if");
+				for (int i = 0; i < supplierDetailsList.getSupplierDetailslist().size(); i++) {
+					sb = sb.append(supplierDetailsList.getSupplierDetailslist().get(i).getSuppId() + ",");
+
+				}
+
+				suppliers = sb.toString();
+				suppliers = suppliers.substring(0, suppliers.length() - 1);
+				System.out.println("suppliers id list is" + suppliers.toString());
+
+			} else {
+				for (int i = 0; i < supplier.length; i++) {
+					sb = sb.append(supplier[i] + ",");
+
+				}
+
+				suppliers = sb.toString();
+				suppliers = suppliers.substring(0, suppliers.length() - 1);
+				System.out.println("suppliers id list is" + suppliers.toString());
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("fromDate", DateConvertor.convertToYMD(from_date));
+			map.add("toDate", DateConvertor.convertToYMD(to_date));
+			map.add("suppId", suppliers);
+		 
+			
+			ParameterizedTypeReference<List<GetMaterialRecieptReportBillWise>> typeRef = new ParameterizedTypeReference<List<GetMaterialRecieptReportBillWise>>() {
+			};
+			ResponseEntity<List<GetMaterialRecieptReportBillWise>> responseEntity = rest.exchange(Constants.url + "materialRecieptSupplierWiseReport",
+					HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			
+			materialRecieptBillWiseReport = responseEntity.getBody();
+			model.addObject("staticlist", materialRecieptBillWiseReport);
+			model.addObject("from_date", from_date);
+			model.addObject("to_date", to_date);
+			System.out.println("supplierWisePdf" + materialRecieptBillWiseReport);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

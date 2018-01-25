@@ -94,9 +94,9 @@
 									<tr>
 										<th>Sr.No.</th>
 										<th>Name</th>
-										
-										<th> Uom</th>
 										<th> Qty</th>
+										<th> Uom</th>
+										
 										
 
 									</tr>
@@ -232,8 +232,10 @@
 
 					  	tr.append($('<td></td>').html(key+1));			  	
 					  	tr.append($('<td></td>').html(itemList.name));
-						tr.append($('<td></td>').html(itemList.uomName));
-						tr.append($('<td></td>').html("<input type='text' class='form-control' value=0 name='stockQty"+itemList.itemId+"' >"));
+					  	tr.append($('<td></td>').html("<input type='text' class='form-control' onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' value="+itemList.qty+" name='stockQty"+itemList.itemId+"' >"));
+						
+						tr.append($('<td></td>').html(itemList.uomName)); 
+						
 					$('#table_grid tbody').append(tr);
 						 });
 												
@@ -243,6 +245,14 @@
 						 
 	});
 		
+	var specialKeys = new Array();
+	specialKeys.push(8); //Backspace
+	function IsNumeric(e) {
+	    var keyCode = e.which ? e.which : e.keyCode
+	    var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1 || keyCode==9);
+	   // document.getElementById("error").style.display = ret ? "none" : "inline";
+	    return ret;
+	}
 	</script> 				
 </body>
 </html>

@@ -35,7 +35,7 @@ th {
 <p align="center">A-89, Shendra M.I.D.C., Aurangabad</p> 
 <p align="center">Inward Report (Bill wise )</p>
 
-<div align="center">From ${fromDate}- To ${toDate}</div>
+<div align="center">From ${from_date} - To ${to_date}</div>
 
 	<table width="100%" border="0" cellspacing="0"
 														cellpadding="0" id="table_grid" class="table table-bordered">
