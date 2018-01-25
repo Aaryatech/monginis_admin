@@ -661,7 +661,7 @@
 	<script type="text/javascript">
 		function edit(key)
 		{
-			alert(key);
+			//alert(key);
 			document.getElementById("poQty"+key).disabled = false;
 			document.getElementById("edit"+key).style.visibility="hidden";
 			document.getElementById("ok"+key).style.visibility="visible";
@@ -672,15 +672,15 @@
 		{
 			
 			var qty=document.getElementById("poQty"+key).value;
-			alert(qty);
+			//alert(qty);
 			var rate=document.getElementById("poRate"+key).value;
-			alert("rate"+rate);
+			//alert("rate"+rate);
 			 document.getElementById("poValue"+key).value=qty*rate;
 			
 		}
 		function submit(key)
 		{
-			alert("key"+key);
+			//alert("key"+key);
 			var qty=document.getElementById("poQty"+key).value;
 			document.getElementById("poQty"+key).disabled = true;
 			document.getElementById("edit"+key).style.visibility="visible";
@@ -707,7 +707,7 @@
 		
 		function del(key)
 		{
-			alert("key1"+key);
+			//alert("key1"+key);
 			var key=key;
 			$('#loader').show();
 			$

@@ -136,9 +136,11 @@
 													<tr>
 														<th>Sr.No.</th>
 														<th>Sf Name</th>
+														<th>Original Qty</th>
+														<th>Auto Order Qty</th>
 														<th>Received Qty</th>
 														<th>Production Qty</th>
-														<th>Rejected Qty</th>
+														<th>Rejected Qty</th> 
 														<th>Mixing Date</th>
 
 
@@ -154,7 +156,8 @@
 															<td><c:out value="${count.index+1}" /></td>
 															<c:set var="srNo" value="${srNo+1}" />
 															<td><c:out value="${mixwithdetaild.sfName}" /></td>
-
+															<td><c:out value="${mixwithdetaild.originalQty}" /></td>
+															<td><c:out value="${mixwithdetaild.autoOrderQty}" /></td>
 
 															<td><c:out value="${mixwithdetaild.receivedQty}" /></td>
 

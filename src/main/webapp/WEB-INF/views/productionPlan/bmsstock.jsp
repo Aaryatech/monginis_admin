@@ -77,7 +77,16 @@
 							</div><br><br><br>
 							
 							
-							
+							<div align="center" id="loader" style="display: none">
+
+							<span>
+								<h4>
+									<font color="#343690">Loading</font>
+								</h4>
+							</span> <span class="l-1"></span> <span class="l-2"></span> <span
+						class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
+					<span class="l-6"></span>
+				</div>
 							
 							
 							
@@ -216,13 +225,13 @@
 				function() {
 					
 				 var itemType = $("#item_type").val();
-			
+				 $('#loader').show();
 					$.getJSON('${getSfndRawItem}', {
 						itemType : itemType,
 						ajax : 'true',
 					},
 							function(data) {
-						
+						$('#loader').hide();
 						$('#table_grid td').remove();
 						var srNo=0;
 						

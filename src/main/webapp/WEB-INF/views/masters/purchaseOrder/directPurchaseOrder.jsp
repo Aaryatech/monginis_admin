@@ -114,12 +114,10 @@
 			<div class="box-content">
 				<div class="col-md-2" >Taxation</div>
 									<div class="col-md-4">
-										<select name="taxation" id="taxation" class="form-control" tabindex="6" required>
-										 
+										<select name="taxation" id="taxation" class="form-control chosen" tabindex="6" required>
+										 <option value="2">Extra</option>
 										<option value="1">Inclusive</option>
-										<option value="2">Extra</option>
-											
-						
+										 
 
 										</select>
 									</div>
@@ -132,7 +130,7 @@
 			<div class="box-content">
 			<div class="col-md-2" >PO Type</div>
 									<div class="col-md-4">
-										<select name="po_type" id="po_type" class="form-control" tabindex="6" required>
+										<select name="po_type" id="po_type" class="form-control chosen" tabindex="6" required>
 										<option value="" disabled="disabled">Select PO Type</option>
 										<option value="1">Regular</option>
 										<option value="2">Open</option>
@@ -250,8 +248,8 @@
 		<div class="box-content">
 				<div class="col-md-2" >Payment Terms</div>
 									<div class="col-md-3">
-										<select name="pay_terms" id="pay_terms" class="form-control" tabindex="6" required>
-										<option value="-1" disabled="disabled" selected="selected">Select Pay Terms</option>
+										<select name="pay_terms" id="pay_terms" class="form-control chosen" tabindex="6" required>
+										<option value="" disabled="disabled" selected="selected">Select Pay Terms</option>
 											 <c:forEach items="${paymentTermsList}" var="paymentTermsList"
 							varStatus="count">
 							   <option value="${paymentTermsList.payId}"><c:out value="${paymentTermsList.payDesc}"/></option>
@@ -265,12 +263,12 @@
 				<div class="col-md-3">
 					<input type="text"placeholder="Enter PO Validity" name="po_validity" id="po_validity" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" required>
 				</div>
-				<div class="col-md-1">Days </div>
+				 
 				</div><br/>
 				 	<div class="box-content">
 				<div class="col-md-2" >Transportation</div>
 									<div class="col-md-3">
-										<select name="transportation" id="transportation" class="form-control" tabindex="6" required>
+										<select name="transportation" id="transportation" class="form-control chosen" tabindex="6" required>
 										<option value="" disabled="disabled" selected="selected">Select Pay Terms</option>
 											 <c:forEach items="${transporterList}" var="transporterList"
 							varStatus="count">
@@ -283,7 +281,7 @@
 									</div>
 									<div class="col-md-2" >Freight</div>
 									<div class="col-md-3">
-										<select name="freight" id="freight" class="form-control" tabindex="6" required>
+										<select name="freight" id="freight" class="form-control chosen" tabindex="6" required>
 										<option value="" disabled="disabled"selected="selected">Select Freight</option>
 										<option value="1">Not Applicable</option>
 										<option value="2">On Your Side</option>
@@ -294,7 +292,7 @@
 									<div class="box-content">
 								<div class="col-md-2" >Insurance</div>
 									<div class="col-md-3">
-										<select name="insurance" id="insurance" class="form-control" tabindex="6" required>
+										<select name="insurance" id="insurance" class="form-control chosen" tabindex="6" required>
 										<option value="" disabled="disabled" selected="selected">Select Insurance Terms</option>
 										<option value="1">Not Applicable</option>
 										<option value="2">On Your Side</option>
@@ -309,7 +307,7 @@
 			
 			<div class="row">
 						<div class="col-md-12" style="text-align: center">
-							<input type="submit" class="btn btn-info" value="Submit">
+							<input type="submit" class="btn btn-info" value="Submit" onclick="check()">
 
 
 						</div>
@@ -534,7 +532,7 @@
 		}
 		function edit(key)
 		{
-			alert(key);
+			//alert(key);
 			document.getElementById("poQty"+key).disabled = false;
 			document.getElementById("edit"+key).style.visibility="hidden";
 			document.getElementById("ok"+key).style.visibility="visible";
@@ -555,7 +553,9 @@
 		{
 			var qty=document.getElementById("poQty"+key).value;
 			document.getElementById("poQty"+key).disabled = true;
-			alert(qty);
+			//alert(qty);
+			document.getElementById("edit"+key).style.visibility="visible";
+			document.getElementById("ok"+key).style.visibility="hidden";
 			$
 			.getJSON(
 					'${updateRmQty}',
@@ -716,6 +716,31 @@ function IsNumeric(e) {
     return ret;
 }
 
+function check()
+{
+	
+	var transportation = $("#transportation").val();
+	var pay_terms = $("#pay_terms").val();
+	// alert(transportation);
+	var freight = $("#freight").val();
+	var insurance = $("#insurance").val();
+	if(transportation==null)
+	{
+	alert("Select Transporter ");
+	}
+	else if(pay_terms==null)
+	{
+	alert("Select Payment ");
+	}
+	else if(freight==null)
+		{
+		alert("Enter Freight Amt");
+		}
+	else if(insurance==null)
+	{
+	alert("Enter Insurance Amt");
+	}
+}
 
 </script>
 

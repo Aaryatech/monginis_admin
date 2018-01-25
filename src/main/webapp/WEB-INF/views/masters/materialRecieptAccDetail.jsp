@@ -330,7 +330,7 @@
 							<div class="box-content"><!-- 
 								<div class="col-md-3"></div>
 								<div class="col-md-4"></div> -->
-									<div class="col-md-2">Perticular Disc Total Amt</div>
+									<div class="col-md-2">Perticular Disc Total <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="discAmt2" id="discAmt2" class="form-control"
 									value="${materialRecNoteHeader.discAmt2}" readonly>
@@ -341,12 +341,12 @@
 						
 						<div class="box-content"> 
 							 
-						 	<div class="col-md-2">Per Disc</div>
+						 	<div class="col-md-2">Per Disc %</div>
 							  <div class="col-md-3">
 								<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="discPer" id="discPer"
 									value="${materialRecNoteHeader.discPer}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
 									 </div> 
-									  <div class="col-md-2">Cash Disc</div>
+									  <div class="col-md-2">Cash Disc Amt <i class="fa fa-inr" style="font-size:13px"></i></div>
 											<div class="col-md-3">
 					 
 									<input style="text-align:right; width:150px" type="text" name="discAmt" id="discAmt"
@@ -358,7 +358,7 @@
 						  
 						
 						<div class="box-content"> 
-									<div class="col-md-2">Freight Amt</div>
+									<div class="col-md-2">Freight Amt <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="freightAmt" id="freightAmt" class="form-control"
 									value="${materialRecNoteHeader.freightAmt}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
@@ -368,7 +368,7 @@
 							</div><br>
 							<div class="box-content">
 								 
-									<div class="col-md-2">Insu Amt</div>
+									<div class="col-md-2">Insu Amt <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="insuranceAmt" id="insuranceAmt" class="form-control"
 									value="${materialRecNoteHeader.insuranceAmt}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
@@ -378,7 +378,7 @@
 							</div><br>
 							<div class="box-content">
 								 
-									<div class="col-md-2">Other1 Rs</div>
+									<div class="col-md-2">Other1(Discount) <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="Other1" id="other1" class="form-control"
 									value="${materialRecNoteHeader.other1}" readonly>
@@ -388,7 +388,7 @@
 							</div><br>
 							<div class="box-content">
 								 
-									<div class="col-md-2">Other2 Rs</div>
+									<div class="col-md-2">Other2 (Discount) <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="other2" onchange="changeFreightAmt();" id="other2" class="form-control"
 									value="${materialRecNoteHeader.other2}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
@@ -398,7 +398,7 @@
 							</div><br>
 							<div class="box-content">
 								 
-									<div class="col-md-2">Other3 Rs</div>
+									<div class="col-md-2">Other3(Extra) <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="Other3" id="other3" class="form-control"
 									value="${materialRecNoteHeader.other3}" readonly>
@@ -408,7 +408,7 @@
 							</div><br>
 							<div class="box-content">
 								 
-									<div class="col-md-2">Other4 Rs</div>
+									<div class="col-md-2">Other4(Extra) <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="other4" onchange="changeFreightAmt();" id="other4" class="form-control"
 									value="${materialRecNoteHeader.other4}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
@@ -418,7 +418,7 @@
 							</div><br>
 							<div class="box-content">
 								 
-									<div class="col-md-2">CGST Rs</div>
+									<div class="col-md-2">CGST <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="cgst" id="cgst" class="form-control"
 									value="${materialRecNoteHeader.cgst}" readonly>
@@ -428,7 +428,7 @@
 							</div><br>
 							<div class="box-content">
 								 
-									<div class="col-md-2">SGST Rs</div>
+									<div class="col-md-2">SGST <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="sgst" id="sgst" class="form-control"
 									value="${materialRecNoteHeader.sgst}" readonly>
@@ -438,7 +438,7 @@
 							</div><br>
 							<div class="box-content">
 								 
-									<div class="col-md-2">IGST Rs</div>
+									<div class="col-md-2">IGST <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="igst" id="igst" class="form-control"
 									value="${materialRecNoteHeader.igst}" readonly>
@@ -448,7 +448,7 @@
 							</div><br>
 							<div class="box-content">
 								 
-									<div class="col-md-2">Cess Rs</div>
+									<div class="col-md-2">Cess <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="cess" id="cess" class="form-control"
 									value="${materialRecNoteHeader.cess}" readonly>
@@ -459,7 +459,7 @@
 							
 							<div class="box-content">
 								 
-									<div class="col-md-2">Bill Total</div>
+									<div class="col-md-2">Bill Total <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="billAmount" id="billAmount" class="form-control"
 									value="${materialRecNoteHeader.billAmount}" readonly>
@@ -469,7 +469,7 @@
 							</div><br>
 							<div class="box-content">
 								 
-									<div class="col-md-2">Round Off</div>
+									<div class="col-md-2">Round Off <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-3">
 										<input style="text-align:right; width:150px" type="text" name="roundOff" id="roundOff" class="form-control"
 									value="${materialRecNoteHeader.roundOff}" readonly>
