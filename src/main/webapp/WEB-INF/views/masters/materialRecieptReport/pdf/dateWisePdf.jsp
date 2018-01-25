@@ -74,7 +74,7 @@ th {
 								  	<c:forEach items="${staticlist}" var="staticlist" varStatus="count">
 												<tr>
 													<td style="text-align:center;"><c:out value="${count.index+1}" /></td> 
-													<td style="text-align:center;"><c:out value="${staticlist.invBookDate}" /></td>
+													<td style="text-align:center;"><fmt:formatDate pattern = "dd-MM-yyyy" value = "${staticlist.invBookDate}" /></td>
 													<td style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.basicValue}"/>
 													</td>
 													 <c:set var="basicValue" value="${basicValue + staticlist.basicValue}"/>

@@ -6,12 +6,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.io.OutputStream;
-import java.sql.Date;
+import java.io.OutputStream; 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.mail.Session;
+ 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,8 +35,7 @@ import org.zefer.pd4ml.PD4ML;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.ExportToExcel;
-import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;
-import com.ats.adminpanel.model.item.Item;
+import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList; 
 import com.ats.adminpanel.model.materialreceipt.Supplist;
 import com.ats.adminpanel.model.materialrecreport.GetMaterialRecieptReportBillWise;
 import com.ats.adminpanel.model.materialrecreport.GetMaterialRecieptReportHsnCodeWise;
@@ -270,7 +267,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	static List<GetMaterialRecieptReportBillWise> supplierWisePdf;
+	 
 
 	@RequestMapping(value = "/materialRecieptsSupplierWise", method = RequestMethod.GET)
 	public ModelAndView materialRecieptsSupplierWise(HttpServletRequest request, HttpServletResponse response) {
@@ -341,7 +338,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 			materialRecieptsSupplierWiseReport = responseEntity.getBody();
 			
 			System.out.println("materialRecieptBillWiseReport" + materialRecieptsSupplierWiseReport.toString());
-			supplierWisePdf = materialRecieptsSupplierWiseReport;
+			 
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -436,7 +433,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/supplierwisepdf");
 		try {
-			List<GetMaterialRecieptReportBillWise> materialRecieptBillWiseReport = new ArrayList<GetMaterialRecieptReportBillWise>();
+			List<GetMaterialRecieptReportBillWise> materialRecieptsSupplierWiseReport = new ArrayList<GetMaterialRecieptReportBillWise>();
 
 			RestTemplate rest = new RestTemplate();
 			
@@ -477,11 +474,11 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 			ResponseEntity<List<GetMaterialRecieptReportBillWise>> responseEntity = rest.exchange(Constants.url + "materialRecieptSupplierWiseReport",
 					HttpMethod.POST, new HttpEntity<>(map), typeRef);
 			
-			materialRecieptBillWiseReport = responseEntity.getBody();
-			model.addObject("staticlist", materialRecieptBillWiseReport);
+			materialRecieptsSupplierWiseReport = responseEntity.getBody();
+			model.addObject("staticlist", materialRecieptsSupplierWiseReport);
 			model.addObject("from_date", from_date);
 			model.addObject("to_date", to_date);
-			System.out.println("supplierWisePdf" + materialRecieptBillWiseReport);
+			System.out.println("supplierWisePdf" + materialRecieptsSupplierWiseReport);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -489,7 +486,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	static List<GetMaterialRecieptReportBillWise> dateWisePdf;
+	 
 
 	@RequestMapping(value = "/materialRecieptsDateWise", method = RequestMethod.GET)
 	public @ResponseBody ModelAndView materialRecieptsDateWise(HttpServletRequest request,
@@ -560,7 +557,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 			materialRecieptsDateWiseReport = responseEntity.getBody();
 			
 			System.out.println("materialRecieptBillWiseReport" + materialRecieptsDateWiseReport.toString());
-			dateWisePdf = materialRecieptsDateWiseReport;
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -649,13 +646,59 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	@RequestMapping(value = "/dateWisePdf", method = RequestMethod.GET)
-	public ModelAndView dateWisePdf(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/dateWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
+	public ModelAndView dateWisePdf(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String supplier[],HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/dateWisePdf");
 		try {
-			model.addObject("staticlist", dateWisePdf);
-			System.out.println("dateWisePdf" + dateWisePdf);
+			
+			List<GetMaterialRecieptReportBillWise> materialRecieptsDateWiseReport = new ArrayList<GetMaterialRecieptReportBillWise>();
+
+			RestTemplate rest = new RestTemplate();
+			
+			StringBuilder sb = new StringBuilder();
+			String suppliers = null;
+
+			supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
+			if (supplier[0].equals("-1")) {
+				System.out.println("in if");
+				for (int i = 0; i < supplierDetailsList.getSupplierDetailslist().size(); i++) {
+					sb = sb.append(supplierDetailsList.getSupplierDetailslist().get(i).getSuppId() + ",");
+
+				}
+
+				suppliers = sb.toString();
+				suppliers = suppliers.substring(0, suppliers.length() - 1);
+				System.out.println("suppliers id list is" + suppliers.toString());
+
+			} else {
+				for (int i = 0; i < supplier.length; i++) {
+					sb = sb.append(supplier[i] + ",");
+
+				}
+
+				suppliers = sb.toString();
+				suppliers = suppliers.substring(0, suppliers.length() - 1);
+				System.out.println("suppliers id list is" + suppliers.toString());
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("fromDate", DateConvertor.convertToYMD(from_date));
+			map.add("toDate", DateConvertor.convertToYMD(to_date));
+			map.add("suppId", suppliers);
+		 
+			
+			ParameterizedTypeReference<List<GetMaterialRecieptReportBillWise>> typeRef = new ParameterizedTypeReference<List<GetMaterialRecieptReportBillWise>>() {
+			};
+			ResponseEntity<List<GetMaterialRecieptReportBillWise>> responseEntity = rest.exchange(Constants.url + "materialRecieptDateWiseReport",
+					HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			
+			materialRecieptsDateWiseReport = responseEntity.getBody();
+			model.addObject("staticlist", materialRecieptsDateWiseReport);
+			model.addObject("fromDate", from_date);
+			model.addObject("toDate", to_date);
+			model.addObject("staticlist", materialRecieptsDateWiseReport);
+			System.out.println("dateWisePdf" + materialRecieptsDateWiseReport);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -663,7 +706,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	static List<GetMaterialRecieptReportItemWise> ItemWisepdf;
+	 
 	GetRawMaterialDetailList getRawMaterialDetail = new GetRawMaterialDetailList();
 
 	@RequestMapping(value = "/materialRecieptsItemWise", method = RequestMethod.GET)
@@ -735,7 +778,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 			
 			
 			System.out.println("materialRecieptBillWiseReport" + materialRecieptsItemWiseReport.toString());
-			ItemWisepdf = materialRecieptsItemWiseReport;
+		 
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -811,24 +854,61 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	@RequestMapping(value = "/itemWisePdf", method = RequestMethod.GET)
-	public ModelAndView itemWisePdf(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/itemWisePdf/{from_date}/{to_date}/{item}", method = RequestMethod.GET)
+	public ModelAndView itemWisePdf(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String item[],HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/itemWisePdf");
 		try {
 
-			/*
-			 * RestTemplate rest = new RestTemplate(); MultiValueMap<String, Object> map =
-			 * new LinkedMultiValueMap<String, Object>(); map.add("fromDate",
-			 * DateConvertor.convertToYMD(fromDate)); map.add("toDate",
-			 * DateConvertor.convertToYMD(todate)); map.add("item", items);
-			 * List<GetMaterialRecieptReportItemWise> materialRecieptsItemWiseReport =
-			 * rest.postForObject(Constants.url + "/materialRecieptItemWiseReport",map,
-			 * List.class);
-			 * System.out.println("ItemWisepdf"+materialRecieptsItemWiseReport.toString());
-			 */
-			model.addObject("staticlist", ItemWisepdf);
-			System.out.println("ItemWisepdf" + ItemWisepdf);
+			List<GetMaterialRecieptReportItemWise> materialRecieptsItemWiseReport = new ArrayList<GetMaterialRecieptReportItemWise>();
+
+			RestTemplate rest = new RestTemplate();
+			System.out.println("fromDate" + from_date);
+			System.out.println("todate" + to_date);
+			System.out.println("item" + item.toString());
+
+			StringBuilder sb = new StringBuilder();
+			String items = null;
+
+			getRawMaterialDetail = rest.getForObject(Constants.url + "rawMaterial/getAllRawMaterialList",
+					GetRawMaterialDetailList.class);
+			if (item[0].equals("-1")) {
+				System.out.println("in if");
+				for (int i = 0; i < getRawMaterialDetail.getRawMaterialDetailsList().size(); i++) {
+					sb = sb.append(getRawMaterialDetail.getRawMaterialDetailsList().get(i).getRmId() + ",");
+
+				}
+				items = sb.toString();
+				items = items.substring(0, items.length() - 1);
+				System.out.println("items id list is" + items.toString());
+
+			} else {
+				for (int i = 0; i < item.length; i++) {
+					sb = sb.append(item[i] + ",");
+
+				}
+
+				items = sb.toString();
+				items = items.substring(0, items.length() - 1);
+				System.out.println("items id list is" + items.toString());
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("fromDate", DateConvertor.convertToYMD(from_date));
+			map.add("toDate", DateConvertor.convertToYMD(to_date));
+			map.add("item", items);
+		 
+			ParameterizedTypeReference<List<GetMaterialRecieptReportItemWise>> typeRef = new ParameterizedTypeReference<List<GetMaterialRecieptReportItemWise>>() {
+			};
+			ResponseEntity<List<GetMaterialRecieptReportItemWise>> responseEntity = rest.exchange(Constants.url + "materialRecieptItemWiseReport",
+					HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			
+			materialRecieptsItemWiseReport = responseEntity.getBody();
+			 
+			model.addObject("staticlist", materialRecieptsItemWiseReport);
+			model.addObject("fromDate", from_date);
+			model.addObject("toDate", to_date);
+			System.out.println("ItemWisepdf" + materialRecieptsItemWiseReport);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -836,7 +916,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	static List<GetMaterialRecieptReportHsnCodeWise> HsndCodeReportpdf;
+	 
 
 	@RequestMapping(value = "/materialRecieptsHsndCodeWise", method = RequestMethod.GET)
 	public ModelAndView materialRecieptsHsndCodeWise(HttpServletRequest request, HttpServletResponse response) {
@@ -907,7 +987,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 			
 			materialRecieptHsndCodeReport = responseEntity.getBody();
 			
-			HsndCodeReportpdf = materialRecieptHsndCodeReport;
+			 
 			System.out.println("materialRecieptHsndCodeReport" + materialRecieptHsndCodeReport.toString());
 
 		} catch (Exception e) {
@@ -976,13 +1056,61 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	@RequestMapping(value = "/HsnCodeWisePdf", method = RequestMethod.GET)
-	public ModelAndView HsnCodeWisePdf(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/HsnCodeWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
+	public ModelAndView HsnCodeWisePdf(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String supplier[],HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/HsnCodeWisePdf");
 		try {
-			model.addObject("staticlist", HsndCodeReportpdf);
-			System.out.println("HsndCodeReportpdf" + HsndCodeReportpdf);
+			
+			List<GetMaterialRecieptReportHsnCodeWise> materialRecieptHsndCodeReport = new ArrayList<GetMaterialRecieptReportHsnCodeWise>();
+
+			RestTemplate rest = new RestTemplate();
+			
+			StringBuilder sb = new StringBuilder();
+			String suppliers = null;
+
+			supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
+			if (supplier[0].equals("-1")) {
+				System.out.println("in if");
+				for (int i = 0; i < supplierDetailsList.getSupplierDetailslist().size(); i++) {
+					sb = sb.append(supplierDetailsList.getSupplierDetailslist().get(i).getSuppId() + ",");
+
+				}
+
+				suppliers = sb.toString();
+				suppliers = suppliers.substring(0, suppliers.length() - 1);
+				System.out.println("suppliers id list is" + suppliers.toString());
+
+			} else {
+				for (int i = 0; i < supplier.length; i++) {
+					sb = sb.append(supplier[i] + ",");
+
+				}
+
+				suppliers = sb.toString();
+				suppliers = suppliers.substring(0, suppliers.length() - 1);
+				System.out.println("suppliers id list is" + suppliers.toString());
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("fromDate", DateConvertor.convertToYMD(from_date));
+			map.add("toDate", DateConvertor.convertToYMD(to_date));
+			map.add("suppId", suppliers);
+		 
+			
+			ParameterizedTypeReference<List<GetMaterialRecieptReportHsnCodeWise>> typeRef = new ParameterizedTypeReference<List<GetMaterialRecieptReportHsnCodeWise>>() {
+			};
+			ResponseEntity<List<GetMaterialRecieptReportHsnCodeWise>> responseEntity = rest.exchange(Constants.url + "materialRecieptHsnCodeWiseReport",
+					HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			
+			materialRecieptHsndCodeReport = responseEntity.getBody();
+			
+			materialRecieptHsndCodeReport = responseEntity.getBody();
+			model.addObject("staticlist", materialRecieptHsndCodeReport);
+			model.addObject("fromDate", from_date);
+			model.addObject("toDate", to_date);
+			model.addObject("staticlist", materialRecieptHsndCodeReport);
+			System.out.println("HsndCodeReportpdf" + materialRecieptHsndCodeReport);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -990,8 +1118,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	static List<GetMaterialRecieptReportMonthWise> monthwisepdf;
-
+	 
 	@RequestMapping(value = "/materialRecieptsMonthWise", method = RequestMethod.GET)
 	public ModelAndView materialRecieptsMonthWise(HttpServletRequest request, HttpServletResponse response) {
 
@@ -1060,7 +1187,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 			materialRecieptMonthReport = responseEntity.getBody();
 			
 			
-			monthwisepdf = materialRecieptMonthReport;
+		 
 			System.out.println("materialRecieptMonthReport" + materialRecieptMonthReport.toString());
 
 		} catch (Exception e) {
@@ -1136,13 +1263,61 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	@RequestMapping(value = "/monthWisePdf", method = RequestMethod.GET)
-	public ModelAndView monthWisePdf(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/monthWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
+	public ModelAndView monthWisePdf(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String supplier[],HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/monthWisePdf");
 		try {
-			model.addObject("staticlist", monthwisepdf);
-			System.out.println("monthwisepdf" + monthwisepdf);
+			
+			List<GetMaterialRecieptReportMonthWise> materialRecieptMonthReport = new ArrayList<GetMaterialRecieptReportMonthWise>();
+
+			RestTemplate rest = new RestTemplate();
+			
+			StringBuilder sb = new StringBuilder();
+			String suppliers = null;
+
+			supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
+			if (supplier[0].equals("-1")) {
+				System.out.println("in if");
+				for (int i = 0; i < supplierDetailsList.getSupplierDetailslist().size(); i++) {
+					sb = sb.append(supplierDetailsList.getSupplierDetailslist().get(i).getSuppId() + ",");
+
+				}
+
+				suppliers = sb.toString();
+				suppliers = suppliers.substring(0, suppliers.length() - 1);
+				System.out.println("suppliers id list is" + suppliers.toString());
+
+			} else {
+				for (int i = 0; i < supplier.length; i++) {
+					sb = sb.append(supplier[i] + ",");
+
+				}
+
+				suppliers = sb.toString();
+				suppliers = suppliers.substring(0, suppliers.length() - 1);
+				System.out.println("suppliers id list is" + suppliers.toString());
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("fromDate", DateConvertor.convertToYMD(from_date));
+			map.add("toDate", DateConvertor.convertToYMD(to_date));
+			map.add("suppId", suppliers);
+		 
+			
+			ParameterizedTypeReference<List<GetMaterialRecieptReportMonthWise>> typeRef = new ParameterizedTypeReference<List<GetMaterialRecieptReportMonthWise>>() {
+			};
+			ResponseEntity<List<GetMaterialRecieptReportMonthWise>> responseEntity = rest.exchange(Constants.url + "materialRecieptMonthWiseReport",
+					HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			
+			materialRecieptMonthReport = responseEntity.getBody();
+			
+			materialRecieptMonthReport = responseEntity.getBody();
+			model.addObject("staticlist", materialRecieptMonthReport);
+			model.addObject("fromDate", from_date);
+			model.addObject("toDate", to_date);
+			model.addObject("staticlist", materialRecieptMonthReport);
+			System.out.println("monthwisepdf" + materialRecieptMonthReport);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
