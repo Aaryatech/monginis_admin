@@ -206,6 +206,16 @@ public class SalesReportController {
 				
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
+				ParameterizedTypeReference<List<SalesReportBillwise>> typeRef = new ParameterizedTypeReference<List<SalesReportBillwise>>() {
+				};
+				ResponseEntity<List<SalesReportBillwise>> responseEntity = restTemplate
+						.exchange(Constants.url + "getSaleReportBillwiseAllFrSelected", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+				saleList = responseEntity.getBody();
+				saleListForPdf=new ArrayList<>();
+				saleListForPdf=saleList;
+				System.out.println("sales List Bill Wise "+saleList.toString());
+
 
 			} else {
 				System.out.println("Inside else Few fr Selected ");
@@ -373,6 +383,26 @@ public class SalesReportController {
 				
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
+				
+				ParameterizedTypeReference<List<SalesReportBillwise>> typeRef = new ParameterizedTypeReference<List<SalesReportBillwise>>() {
+				};
+				ResponseEntity<List<SalesReportBillwise>> responseEntity = restTemplate
+						.exchange(Constants.url + "getSaleReportBillwiseByFrAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+				saleList = responseEntity.getBody();
+				saleListForPdf=new ArrayList<>();
+				String name="Sachin";
+				
+				HttpSession session=request.getSession();
+				
+				System.out.println("session Id  In Ajax Call "+session.getId());
+				session.setAttribute("pdfData", saleList);
+				
+				session.setAttribute("name", name);
+				saleListForPdf=saleList;
+				
+				System.out.println("sales List Bill Wise "+saleList.toString());
+				
 
 			} else {
 				System.out.println("Inside else Few fr Selected ");
@@ -565,6 +595,21 @@ public class SalesReportController {
 				
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
+				
+				
+
+				ParameterizedTypeReference<List<SalesReportBillwise>> typeRef = new ParameterizedTypeReference<List<SalesReportBillwise>>() {
+				};
+				ResponseEntity<List<SalesReportBillwise>> responseEntity = restTemplate
+						.exchange(Constants.url + "getSaleReportBillwiseByDateAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+				saleList = responseEntity.getBody();
+				saleListForPdf=new ArrayList<>();
+				
+				saleListForPdf=saleList;
+				
+				System.out.println("sales List Bill Wise "+saleList.toString());
+
 
 			} else {
 				System.out.println("Inside else Few fr Selected ");
@@ -742,6 +787,21 @@ public class SalesReportController {
 				
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
+				
+				
+				ParameterizedTypeReference<List<SalesReportBillwise>> typeRef = new ParameterizedTypeReference<List<SalesReportBillwise>>() {
+				};
+				ResponseEntity<List<SalesReportBillwise>> responseEntity = restTemplate
+						.exchange(Constants.url + "getSaleReportBillwiseByMonthAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+				saleList = responseEntity.getBody();
+				saleListForPdf=new ArrayList<>();
+				
+				saleListForPdf=saleList;
+				
+				System.out.println("sales List Bill Wise "+saleList.toString());
+				
+				
 
 			} else {
 				System.out.println("Inside else Few fr Selected ");
@@ -1420,19 +1480,21 @@ public class SalesReportController {
 
 		try {
 			System.out.println("Inside get Sale Item  Wise");
-			String selectedFr = request.getParameter("fr_id_list");
+			//String selectedFr = request.getParameter("fr_id_list");
 			String fromDate = request.getParameter("fromDate");
 			String toDate = request.getParameter("toDate");
 			String routeId = request.getParameter("route_id");
+			
+			String selectedFr;
 
-			boolean isAllFrSelected = false;
-			selectedFr = selectedFr.substring(1, selectedFr.length() - 1);
-			selectedFr = selectedFr.replaceAll("\"", "");
+			//boolean isAllFrSelected = false;
+			//selectedFr = selectedFr.substring(1, selectedFr.length() - 1);
+			//selectedFr = selectedFr.replaceAll("\"", "");
 
-			frList = new ArrayList<>();
-			frList = Arrays.asList(selectedFr);
+			//frList = new ArrayList<>();
+			//frList = Arrays.asList(selectedFr);
 
-			if (!routeId.equalsIgnoreCase("0")) {
+			/*if (!routeId.equalsIgnoreCase("0")) {
 
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
@@ -1461,23 +1523,23 @@ public class SalesReportController {
 			} // end of if
 
 			if (frList.contains("-1")) {
-				isAllFrSelected = true;
-			}
+				//isAllFrSelected = true;
+			}*/
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
-
-			if (isAllFrSelected) {
+			if(1==4) {}
+			/*if (isAllFrSelected) {
 
 				System.out.println("Inside If all fr Selected ");
 				
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
 
-			} else {
+			}*/ else {
 				System.out.println("Inside else Few fr Selected ");
 				
-				map.add("frIdList", selectedFr);
+				//map.add("frIdList", selectedFr);
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
 

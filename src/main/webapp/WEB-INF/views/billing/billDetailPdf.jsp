@@ -327,8 +327,7 @@
 
 function genPdf()
 {
-	
-	window.open('${pageContext.request.contextPath}/pdf?url=showBillPdf/');
+	window.open('${pageContext.request.contextPath}/pdf?url=showBillPdf');
 }
 
 

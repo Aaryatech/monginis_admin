@@ -567,7 +567,7 @@ function genPdf()
 	var from_date = $("#fromDate").val();
 	var to_date = $("#toDate").val();
 	
-	window.open('/pdfForReport?url=showSaleBillwiseByFrPdf/'+from_date+'/'+to_date);
+	window.open('${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseByFrPdf/'+from_date+'/'+to_date);
 	
 	}
 </script>
