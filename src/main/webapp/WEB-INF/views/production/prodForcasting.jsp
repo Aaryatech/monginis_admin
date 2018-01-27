@@ -124,7 +124,7 @@
  -->														<th width="90" align="left">Cur Opening</th>
 														
 														<th width="90" align="left">
-															<div>
+										 					<div>
  									                     	<input class="form-control date-picker" id="datepicker1" size="16" type="text" name="datepicker1" value="" placeholder="Date1"  disabled/>
  <%-- 								                     	  <a href="${pageContext.request.contextPath}/"> <span class="	glyphicon glyphicon-circle-arrow-right"></span></a>
  --%>								                     	  
