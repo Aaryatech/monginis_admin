@@ -177,6 +177,7 @@
 															<td><c:out value="${0}" /></td>
 															<td><c:out value="${0}" /></td>
 															<td><c:out value="${0}" /></td>
+															<td><c:out value="${0}" /></td>
 															<td><c:out value="${getVarianceorderlistforsort.orderQty}" /></td>
 															
 															

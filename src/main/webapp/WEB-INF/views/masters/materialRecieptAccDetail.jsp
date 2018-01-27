@@ -164,7 +164,7 @@
 
 												<th>Sr.No.</th>
 												<th>Tax</th> 
-												<th>Item</th>
+												<th style="width:100px">Item</th>
 												<th>In Qty</th>
 												<th>Stock Qty</th>
 												<th>Rejected Qty</th>
@@ -172,28 +172,28 @@
 												<th style="width:500%;">PO Rate</th> 
 												<th>Rate</th> 
 												<th>Value</th>
-												<th style="width:500%;">Disc Per</th>
-												<th>Disc Rs</th>
-												<th>Cd %</th>
-												<th>Cd Rs</th>
+												<th style="width:500%;">Disc%</th>
+												<th>Disc Amt <i class="fa fa-inr" style="font-size:13px"></i></th>
+												<th>Cd%</th>
+												<th>Cd Amt <i class="fa fa-inr" style="font-size:13px"></i></th>
 												<th>Division factor</th>
-												<th>Insu Rs</th>
-												<th>Freight Rs</th>
-												<th style="width:200%;">Other1 Rs(Discount)</th>
-												<th style="width:200%;">Other2 Rs(Discount)</th>
-												<th style="width:200%;">Other3 Rs(Extra Charges)</th>
-												<th style="width:200%;">Other4 Rs(Extra Charges)</th>
-												<th>GST</th>
-												<th>CGST</th>
-												<th>SGST</th>
-												<th>IGST</th>
-												<th>CESS</th>
-												<th>Taxable Rs</th>
+												<th>Insurance Amt <i class="fa fa-inr" style="font-size:13px"></i></th>
+												<th>Freight Amt <i class="fa fa-inr" style="font-size:13px"></i></th>
+												<th style="width:200%;">Other1(Discount) <i class="fa fa-inr" style="font-size:13px"></i></th>
+												<th style="width:200%;">Other2(Discount) <i class="fa fa-inr" style="font-size:13px"></i></th>
+												<th style="width:200%;">Other3(Extra Charges) <i class="fa fa-inr" style="font-size:13px"></i></th>
+												<th style="width:200%;">Other4(Extra Charges) <i class="fa fa-inr" style="font-size:13px"></i></th>
+												<th>GST%</th>
+												<th>CGST%</th>
+												<th>SGST%</th>
+												<th>IGST%</th>
+												<th>CESS%</th>
+												<th>Taxable<i class="fa fa-inr" style="font-size:13px"></i></th>
 												
-												<th>CGST Rs</th>
-												<th>SGST Rs</th>
-												<th>IGST Rs</th>
-												<th>CESS Rs</th>
+												<th>CGST<i class="fa fa-inr" style="font-size:13px"></i></th>
+												<th>SGST<i class="fa fa-inr" style="font-size:13px"></i></th>
+												<th>IGST<i class="fa fa-inr" style="font-size:13px"></i></th>
+												<th>CESS<i class="fa fa-inr" style="font-size:13px"></i></th>
 												
 
 											</tr>
@@ -223,84 +223,84 @@
 													<td><c:out
 															value="${tax}" /></td>
 
-													<td style="width:75px"><c:out
+													<td><c:out 
 															value="${materialRecieptAccList.item}" /> 
 													</td>
 															
-													<td><input style="width:100px" type="text"
+													<td><input style="text-align:right; width:70px"  type="text"
 													onchange="changeRate(${count.index})"
 													name="recQty${count.index}"  id="recQty${count.index}"
 									  class="form-control" value="${materialRecieptAccList.reciedvedQty}" pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
 														 
 														 
 															
-													<td><c:out
+													<td style="text-align:right;"><c:out
 															value="${materialRecieptAccList.stockQty}" /></td>
-													<td><c:out
+													<td style="text-align:right;"><c:out
 															value="${materialRecieptAccList.rejectedQty}" /></td>
 													 
-													<td ><input style="width:100px" type="text"
+													<td ><input style="text-align:right; width:100px" type="text"
 													onchange="changeRate(${count.index})"
 													name="poRate${count.index}"  id="poRate${count.index}"
 									  class="form-control" value="${materialRecieptAccList.varifiedRate}" pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
 													
 													 
-													<td ><c:out
+													<td style="text-align:right;"><c:out
 															value="${materialRecieptAccList.poRate}" />
 									  				</td>
 													 
-													<td><c:out value="${materialRecieptAccList.rateCal}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.rateCal}" />
 													</td>
 													
-													<td><c:out value="${materialRecieptAccList.value}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.value}" />
 													</td>
 													<td> 
-													<input style="width:100px;" onchange="changeRate(${count.index})" type="text" name="discPer${count.index}" id="discPer${count.index}"
+													<input style="text-align:right; width:50px" onchange="changeRate(${count.index})" type="text" name="discPer${count.index}" id="discPer${count.index}"
 									value="${materialRecieptAccList.discPer}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
 													
 													</td>
-													<td><c:out value="${materialRecieptAccList.discAmt}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.discAmt}" />
 													</td>
-													<td><c:out value="${materialRecieptAccList.cdPer}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.cdPer}" />
 													</td>
-													<td><c:out value="${materialRecieptAccList.cdAmt}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.cdAmt}" />
 													</td>
-													<td><c:out value="${materialRecieptAccList.divFactor}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.divFactor}" />
 													</td>
-													<td><c:out value="${materialRecieptAccList.insuAmt}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.insuAmt}" />
 													</td>
-													<td><c:out value="${materialRecieptAccList.freightAmt}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.freightAmt}" />
 													</td>
-													<td><input style="width:100px;" onchange="changeRate(${count.index})" type="text" name="other1${count.index}" id="other1${count.index}"
+													<td><input style="text-align:right; width:100px" onchange="changeRate(${count.index})" type="text" name="other1${count.index}" id="other1${count.index}"
 									value="${materialRecieptAccList.other1}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
 													</td>
-													<td><c:out value="${materialRecieptAccList.other2}" />  
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.other2}" />  
 													</td>
-													<td><input style="width:100px;" onchange="changeRate(${count.index})" type="text" name="other3${count.index}" id="other3${count.index}"
+													<td><input style="text-align:right; width:100px" onchange="changeRate(${count.index})" type="text" name="other3${count.index}" id="other3${count.index}"
 									value="${materialRecieptAccList.other3}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
 													</td>
-													<td><c:out value="${materialRecieptAccList.other4}" /> 
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.other4}" /> 
 													</td>
-													<td><c:out value="${materialRecieptAccList.gst}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.gst}" />
 													</td>
-													<td><c:out value="${materialRecieptAccList.cgst}" />
+													<td style="text-align:right"><c:out value="${materialRecieptAccList.cgst}" />
 													</td>
-													<td><c:out value="${materialRecieptAccList.sgst}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.sgst}" />
 													</td>
-													<td><c:out value="${materialRecieptAccList.igst}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.igst}" />
 													</td>
-													<td><c:out value="${materialRecieptAccList.cess}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.cess}" />
 													</td>
-													<td><c:out value="${materialRecieptAccList.taxableAmt}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.taxableAmt}" />
 													</td>
 													
-													<td><c:out value="${materialRecieptAccList.cgstAmt}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.cgstAmt}" />
 													</td>
-													<td><c:out value="${materialRecieptAccList.sgstAmt}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.sgstAmt}" />
 													</td>
-													<td><c:out value="${materialRecieptAccList.igstAmt}" />
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.igstAmt}" />
 													</td>
-													<td><input style="width:100px" onchange="changeRate(${count.index})" type="text" name="cessAmt${count.index}" id="cessAmt${count.index}"
+													<td><input style="text-align:right; width:100px" onchange="changeRate(${count.index})" type="text" name="cessAmt${count.index}" id="cessAmt${count.index}"
 									value="${materialRecieptAccList.cessAmt}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
 													</td>
 													
@@ -319,167 +319,130 @@
 						</div>
 						
 							<div class="box-content"> 
-									<div class="col-md-2">value</div>
-									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="basicValue" id="basicValue" class="form-control"
-									value="${materialRecNoteHeader.basicValue}" readonly>
-									</div>
-									
+									<div class="col-md-2">value <i class="fa fa-inr" style="font-size:13px"></i></div>
+										<div class="col-md-2">
+											<input style="text-align:right; width:150px" type="text" name="basicValue" id="basicValue" class="form-control"
+										value="${materialRecNoteHeader.basicValue}" readonly>
+										</div>
+									<div class="col-md-2">Freight Amt <i class="fa fa-inr" style="font-size:13px"></i></div>
+										<div class="col-md-2">
+											<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="freightAmt" id="freightAmt" class="form-control"
+										value="${materialRecNoteHeader.freightAmt}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
+										</div>
+									<div class="col-md-2">CGST <i class="fa fa-inr" style="font-size:13px"></i></div>
+										<div class="col-md-2">
+											<input style="text-align:right; width:150px" type="text" name="cgst" id="cgst" class="form-control"
+										value="${materialRecNoteHeader.cgst}" readonly>
+										</div>
+							
 							
 							</div><br>
-							<div class="box-content"><!-- 
-								<div class="col-md-3"></div>
-								<div class="col-md-4"></div> -->
-									<div class="col-md-2">Perticular Disc Total <i class="fa fa-inr" style="font-size:13px"></i></div>
-									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="discAmt2" id="discAmt2" class="form-control"
-									value="${materialRecNoteHeader.discAmt2}" readonly>
+							<div class="box-content">
+									<div class="col-md-2">Particular Disc Total <i class="fa fa-inr" style="font-size:13px"></i></div>
+										<div class="col-md-2">
+											<input style="text-align:right; width:150px" type="text" name="discAmt2" id="discAmt2" class="form-control"
+										value="${materialRecNoteHeader.discAmt2}" readonly>
+										</div>
+									<div class="col-md-2">Insu Amt <i class="fa fa-inr" style="font-size:13px"></i></div>
+										<div class="col-md-2">
+											<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="insuranceAmt" id="insuranceAmt" class="form-control"
+										value="${materialRecNoteHeader.insuranceAmt}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
+										</div>
+									<div class="col-md-2">SGST <i class="fa fa-inr" style="font-size:13px"></i></div>
+									<div class="col-md-2">
+										<input style="text-align:right; width:150px" type="text" name="sgst" id="sgst" class="form-control"
+									value="${materialRecNoteHeader.sgst}" readonly>
 									</div>
-									
 							
 							</div><br>
 						
 						<div class="box-content"> 
 							 
 						 	<div class="col-md-2">Per Disc %</div>
-							  <div class="col-md-3">
-								<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="discPer" id="discPer"
+							  <div class="col-md-1">
+								<input style="text-align:right; width:50px" type="text" onchange="changeFreightAmt();" name="discPer" id="discPer"
 									value="${materialRecNoteHeader.discPer}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
-									 </div> 
-									  <div class="col-md-2">Cash Disc Amt <i class="fa fa-inr" style="font-size:13px"></i></div>
-											<div class="col-md-3">
-					 
-									<input style="text-align:right; width:150px" type="text" name="discAmt" id="discAmt"
+									
+									 </div>  
+											<div class="col-md-1"> 
+									<input style="text-align:right; width:60px" type="text" name="discAmt" id="discAmt"
 									value="${materialRecNoteHeader.discAmt}" class="form-control"
 									readonly>
 									 
 							</div>
 							 </div><br>
-						  
-						
-						<div class="box-content"> 
-									<div class="col-md-2">Freight Amt <i class="fa fa-inr" style="font-size:13px"></i></div>
-									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="freightAmt" id="freightAmt" class="form-control"
-									value="${materialRecNoteHeader.freightAmt}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
-									</div>
-									
-							
-							</div><br>
-							<div class="box-content">
-								 
-									<div class="col-md-2">Insu Amt <i class="fa fa-inr" style="font-size:13px"></i></div>
-									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" onchange="changeFreightAmt();" name="insuranceAmt" id="insuranceAmt" class="form-control"
-									value="${materialRecNoteHeader.insuranceAmt}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
-									</div>
-									
-							
-							</div><br>
-							<div class="box-content">
+						  <div class="box-content">
 								 
 									<div class="col-md-2">Other1(Discount) <i class="fa fa-inr" style="font-size:13px"></i></div>
-									<div class="col-md-3">
+									<div class="col-md-2">
 										<input style="text-align:right; width:150px" type="text" name="Other1" id="other1" class="form-control"
 									value="${materialRecNoteHeader.other1}" readonly>
 									</div>
-									
+									<div class="col-md-2">Other3(Extra) <i class="fa fa-inr" style="font-size:13px"></i></div>
+									<div class="col-md-2">
+										<input style="text-align:right; width:150px" type="text" name="Other3" id="other3" class="form-control"
+									value="${materialRecNoteHeader.other3}" readonly>
+									</div>
+									<div class="col-md-2">IGST <i class="fa fa-inr" style="font-size:13px"></i></div>
+									<div class="col-md-2">
+										<input style="text-align:right; width:150px" type="text" name="igst" id="igst" class="form-control"
+									value="${materialRecNoteHeader.igst}" readonly>
+									</div>
 							
 							</div><br>
 							<div class="box-content">
 								 
 									<div class="col-md-2">Other2 (Discount) <i class="fa fa-inr" style="font-size:13px"></i></div>
-									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="other2" onchange="changeFreightAmt();" id="other2" class="form-control"
-									value="${materialRecNoteHeader.other2}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
-									</div>
-									
-							
-							</div><br>
-							<div class="box-content">
-								 
-									<div class="col-md-2">Other3(Extra) <i class="fa fa-inr" style="font-size:13px"></i></div>
-									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="Other3" id="other3" class="form-control"
-									value="${materialRecNoteHeader.other3}" readonly>
-									</div>
-									
-							
-							</div><br>
-							<div class="box-content">
-								 
+										<div class="col-md-2">
+											<input style="text-align:right; width:150px" type="text" name="other2" onchange="changeFreightAmt();" id="other2" class="form-control"
+										value="${materialRecNoteHeader.other2}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
+										</div>
 									<div class="col-md-2">Other4(Extra) <i class="fa fa-inr" style="font-size:13px"></i></div>
-									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="other4" onchange="changeFreightAmt();" id="other4" class="form-control"
-									value="${materialRecNoteHeader.other4}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
-									</div>
-									
-							
-							</div><br>
-							<div class="box-content">
-								 
-									<div class="col-md-2">CGST <i class="fa fa-inr" style="font-size:13px"></i></div>
-									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="cgst" id="cgst" class="form-control"
-									value="${materialRecNoteHeader.cgst}" readonly>
-									</div>
-									
-							
-							</div><br>
-							<div class="box-content">
-								 
-									<div class="col-md-2">SGST <i class="fa fa-inr" style="font-size:13px"></i></div>
-									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="sgst" id="sgst" class="form-control"
-									value="${materialRecNoteHeader.sgst}" readonly>
-									</div>
-									
-							
-							</div><br>
-							<div class="box-content">
-								 
-									<div class="col-md-2">IGST <i class="fa fa-inr" style="font-size:13px"></i></div>
-									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="igst" id="igst" class="form-control"
-									value="${materialRecNoteHeader.igst}" readonly>
-									</div>
-									
-							
-							</div><br>
-							<div class="box-content">
-								 
+										<div class="col-md-2">
+											<input style="text-align:right; width:150px" type="text" name="other4" onchange="changeFreightAmt();" id="other4" class="form-control"
+										value="${materialRecNoteHeader.other4}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
+										</div>
 									<div class="col-md-2">Cess <i class="fa fa-inr" style="font-size:13px"></i></div>
-									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="cess" id="cess" class="form-control"
-									value="${materialRecNoteHeader.cess}" readonly>
-									</div>
-									
+										<div class="col-md-2">
+											<input style="text-align:right; width:150px" type="text" name="cess" id="cess" class="form-control"
+										value="${materialRecNoteHeader.cess}" readonly>
+										</div>
 							
 							</div><br>
-							
+						
+					 
 							<div class="box-content">
-								 
+								 	<div class="col-md-2"> </div>
+										<div class="col-md-2"> </div>
+									<div class="col-md-2"> </div>
+										<div class="col-md-2"> </div>
 									<div class="col-md-2">Bill Total <i class="fa fa-inr" style="font-size:13px"></i></div>
-									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="billAmount" id="billAmount" class="form-control"
-									value="${materialRecNoteHeader.billAmount}" readonly>
-									</div>
+										<div class="col-md-2">
+											<input style="text-align:right; width:150px" type="text" name="billAmount" id="billAmount" class="form-control"
+										value="${materialRecNoteHeader.billAmount}" readonly>
+										</div>
+									
 									
 							
 							</div><br>
+							
 							<div class="box-content">
 								 
+									<div class="col-md-2"> </div>
+										<div class="col-md-2"> </div>
+									<div class="col-md-2"> </div>
+										<div class="col-md-2"> </div>
+									
 									<div class="col-md-2">Round Off <i class="fa fa-inr" style="font-size:13px"></i></div>
-									<div class="col-md-3">
-										<input style="text-align:right; width:150px" type="text" name="roundOff" id="roundOff" class="form-control"
-									value="${materialRecNoteHeader.roundOff}" readonly>
-									</div>
+										<div class="col-md-2">
+											<input style="text-align:right; width:150px" type="text" name="roundOff" id="roundOff" class="form-control"
+										value="${materialRecNoteHeader.roundOff}" readonly>
+										</div>
 									
 							
 							</div><br>
-
-
-				
+							  
+							 
 						<br />
 						<br />
 
@@ -678,41 +641,41 @@
 
 								  	tr.append($('<td></td>').html(tax));
 								  	tr.append($('<td></td>').html(itemList.item)); 
-								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="recQty'+key+'" value="'+itemList.reciedvedQty+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html('<input style="text-align:right; width:70px" type="text" onchange="changeRate('+key+')" id="recQty'+key+'" value="'+itemList.reciedvedQty+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 								  	 
-								  	tr.append($('<td></td>').html(itemList.stockQty));
-								  	tr.append($('<td></td>').html(itemList.rejectedQty));
+								  	tr.append($('<td style="text-align:right;"></td>').html(itemList.stockQty));
+								  	tr.append($('<td style="text-align:right;"></td>').html(itemList.rejectedQty));
 								  	
-								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.varifiedRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-								  	tr.append($('<td></td>').html(itemList.poRate));
+								  	tr.append($('<td></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.varifiedRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.poRate).toFixed(2)));
 										 
 								  	
-								  	tr.append($('<td></td>').html(itemList.rateCal));
-								  	tr.append($('<td></td>').html(itemList.value));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.rateCal).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.value).toFixed(2)));
 								  	
-								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html('<input style="text-align:right; width:50px" type="text" onchange="changeRate('+key+')" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 
 
-								  	tr.append($('<td></td>').html(itemList.discAmt));
-								  	tr.append($('<td></td>').html(itemList.cdPer));
-								  	tr.append($('<td></td>').html(itemList.cdAmt));
-								  	tr.append($('<td></td>').html(itemList.divFactor));
-								  	tr.append($('<td></td>').html(itemList.insuAmt));
-								  	tr.append($('<td></td>').html(itemList.freightAmt));
-								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="other1'+key+'" value="'+itemList.other1+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-								  	tr.append($('<td></td>').html(itemList.other2));
-								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="other3'+key+'" value="'+itemList.other3+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-								  	tr.append($('<td></td>').html(itemList.other4)); 
-								  	tr.append($('<td></td>').html(itemList.gst));
-								  	tr.append($('<td></td>').html(itemList.cgst));
-								  	tr.append($('<td></td>').html(itemList.sgst));
-								  	tr.append($('<td></td>').html(itemList.igst));
-								  	tr.append($('<td></td>').html(itemList.cess));
-								  	tr.append($('<td></td>').html(itemList.taxableAmt));
-								  	tr.append($('<td></td>').html(itemList.cgstAmt));
-								  	tr.append($('<td></td>').html(itemList.sgstAmt));
-								  	tr.append($('<td></td>').html(itemList.igstAmt)); 
-								  	tr.append($('<td ></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.discAmt).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cdPer).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cdAmt).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.divFactor).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.insuAmt).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.freightAmt).toFixed(2)));
+								  	tr.append($('<td></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="other1'+key+'" value="'+itemList.other1+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other2).toFixed(2)));
+								  	tr.append($('<td></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="other3'+key+'" value="'+itemList.other3+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other4).toFixed(2))); 
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.gst).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cgst).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.sgst).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.igst).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cess).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.taxableAmt).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cgstAmt).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.sgstAmt).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.igstAmt).toFixed(2))); 
+								  	tr.append($('<td ></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 
 								   
 									$('#table_grid tbody').append(tr);
@@ -851,43 +814,43 @@
 								  	tr.append($('<td></td>').html(tax));
 								  	tr.append($('<td></td>').html(itemList.item));
 								  	  
-								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="recQty'+key+'" value="'+itemList.reciedvedQty+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td></td>').html('<input style="text-align:right; width:70px" type="text" onchange="changeRate('+key+')" id="recQty'+key+'" value="'+itemList.reciedvedQty+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 								  	
-								  	tr.append($('<td></td>').html(itemList.stockQty));
-								  	tr.append($('<td></td>').html(itemList.rejectedQty));
+								  	tr.append($('<td style="text-align:right;"></td>').html(itemList.stockQty));
+								  	tr.append($('<td style="text-align:right;"></td>').html(itemList.rejectedQty));
 								  	
-								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.varifiedRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-								  	tr.append($('<td></td>').html(itemList.poRate));
-								  	tr.append($('<td></td>').html(itemList.rateCal));
-								  	tr.append($('<td></td>').html(itemList.value));
+								  	tr.append($('<td></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="poRate'+key+'" value="'+itemList.varifiedRate+'" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.poRate).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.rateCal).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.value).toFixed(2)));
 								  	
-								  	tr.append($('<td ></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td ></td>').html('<input style="text-align:right; width:50px" type="text" onchange="changeRate('+key+')" id="discPer'+key+'" value="'+itemList.discPer+'"  class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 
 
-								  	tr.append($('<td></td>').html(itemList.discAmt));
-								  	tr.append($('<td></td>').html(itemList.cdPer));
-								  	tr.append($('<td></td>').html(itemList.cdAmt));
-								  	tr.append($('<td></td>').html(itemList.divFactor));
-								  	tr.append($('<td></td>').html(itemList.insuAmt));
-								  	tr.append($('<td></td>').html(itemList.freightAmt));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.discAmt).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cdPer).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cdAmt).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.divFactor).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.insuAmt).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.freightAmt).toFixed(2)));
 								  	
-								  	tr.append($('<td></td>').html('<input style="width:100px" type="text" onchange="changeRate('+key+')" id="other1'+key+'" value="'+itemList.other1+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-								  	tr.append($('<td></td>').html(itemList.other2));
-								  	tr.append($('<td></td>').html('<input style="width:100px;" type="text" onchange="changeRate('+key+')" id="other3'+key+'" value="'+itemList.other3+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-								  	tr.append($('<td></td>').html(itemList.other4));
+								  	tr.append($('<td></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="other1'+key+'" value="'+itemList.other1+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other2).toFixed(2)));
+								  	tr.append($('<td></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="other3'+key+'" value="'+itemList.other3+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other4).toFixed(2)));
 								  	/* tr.append($('<td></td>').html(itemList.other1));
 								  	tr.append($('<td></td>').html(itemList.other2)); */
 								
-								  	tr.append($('<td></td>').html(itemList.gst));
-								  	tr.append($('<td></td>').html(itemList.cgst));
-								  	tr.append($('<td></td>').html(itemList.sgst));
-								  	tr.append($('<td></td>').html(itemList.igst));
-								  	tr.append($('<td></td>').html(itemList.cess));
-								  	tr.append($('<td></td>').html(itemList.taxableAmt));
-								  	tr.append($('<td></td>').html(itemList.cgstAmt));
-								  	tr.append($('<td></td>').html(itemList.sgstAmt));
-								  	tr.append($('<td></td>').html(itemList.igstAmt)); 
-								  	tr.append($('<td ></td>').html('<input style="width:100px" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.gst).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cgst).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.sgst).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.igst).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cess).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.taxableAmt).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cgstAmt).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.sgstAmt).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.igstAmt).toFixed(2))); 
+								  	tr.append($('<td ></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 
 								   
 									$('#table_grid tbody').append(tr);
