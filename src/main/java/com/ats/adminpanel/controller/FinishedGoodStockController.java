@@ -370,10 +370,14 @@ try {
 				
 				Date curDate=new Date();
 				
-				if(curDate.after(stockDate) || curDate.equals(stockDate)) {
+				if(stockDate.before(curDate) || curDate.equals(stockDate)) {
 					System.out.println("Current Date is After Stock Date Allow to End Previous Days Day End  ");
 					
 					isDayEndEnable=1;//Allow to End A day
+				}else {
+				
+					isDayEndEnable=1;
+					
 				}
 
 				List<GetCurProdAndBillQty> getCurProdAndBillQty = new ArrayList<>();
@@ -659,9 +663,9 @@ System.out.println("If All Category Selected Option");
 
 	}
 
-	@RequestMapping(value = "/finishedGoodDayEnd", method = RequestMethod.GET)
-	@ResponseBody
-	public String finishedGoodDayEnd(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/finishedGoodDayEnd", method = RequestMethod.POST)
+	
+	public ModelAndView finishedGoodDayEnd(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("stock/finishedGoodStock");
 
@@ -885,7 +889,7 @@ System.out.println("If All Category Selected Option");
 			e.printStackTrace();
 		}
 
-		return "Success";
+		return model;
 
 	}
 

@@ -2,11 +2,11 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
- 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 
 	<div class="container" id="main-container">
@@ -59,14 +59,13 @@
 								class="form-horizontal" method="post" id="validation-form">
 								<div class="form_group">
 									<label class="col-sm-3 col-lg-2 control-label">Select
-										Material Type</label> 
-										<div class="col-sm-5 col-lg-3 controls">
-										<select name="matType"
-										class="form-control chosen" tabindex="6" id="mat_Type"
-										required>
-										<option value="1">Raw Material</option>
-										<option value="2">Semi Finished</option>
-									</select>
+										Material Type</label>
+									<div class="col-sm-5 col-lg-3 controls">
+										<select name="matType" class="form-control chosen"
+											tabindex="6" id="mat_Type" required>
+											<option value="1">Raw Material</option>
+											<option value="2">Semi Finished</option>
+										</select>
 									</div>
 								</div>
 
@@ -91,50 +90,51 @@
 								</div>
 
 								<div class="form-group" style="display: none"
-											id=select_month_year>
-									
-												<label class="col-sm-3 col-lg-2 control-label">
-												Select Month From</label>
-											<div class="col-sm-5 col-lg-3 controls">
-												<input type='text' placeholder="Select From Month"
-													value="16-01-2018" name="from_stockdate" required
-													class="form-control date-picker" />
-											</div>
+									id=select_month_year>
 
-											<div class="col3"></div>
+									<label class="col-sm-3 col-lg-2 control-label"> Select
+										Month From</label>
+									<div class="col-sm-5 col-lg-3 controls">
+										<input type='text' placeholder="Select From Month"
+											value="16-01-2018" name="from_stockdate" required
+											class="form-control date-picker" />
+									</div>
 
-												<label class="col-sm-3 col-lg-2 control-label">To :</label>
-											<div class="col-sm-5 col-lg-3 controls">
-												<input type='text' placeholder="Select To Month"
-													value="16-01-2018" name="to_stockdate" required
-													class="form-control date-picker" />
-											</div>
+									<div class="col3"></div>
 
-										</div>
+									<label class="col-sm-3 col-lg-2 control-label">To :</label>
+									<div class="col-sm-5 col-lg-3 controls">
+										<input type='text' placeholder="Select To Month"
+											value="16-01-2018" name="to_stockdate" required
+											class="form-control date-picker" />
+									</div>
 
-										<div class="form-group" style="display: none" id=select_date>
-											<label class="col-sm-3 col-lg-2 control-label">From Date:</label>
-											<div class="col-sm-5 col-lg-3 controls">
-												<input id="fromdatepicker" class="form-control date-picker"
-													placeholder="From Date" name="from_datepicker" type="text">
-											</div>
+								</div>
 
-											<div class="col3"></div>
+								<div class="form-group" style="display: none" id=select_date>
+									<label class="col-sm-3 col-lg-2 control-label">From
+										Date:</label>
+									<div class="col-sm-5 col-lg-3 controls">
+										<input id="fromdatepicker" class="form-control date-picker"
+											placeholder="From Date" name="from_datepicker" type="text">
+									</div>
 
-											<label class="col-sm-3 col-lg-2 control-label">To Date:</label>
-											<div class="col-sm-5 col-lg-3 controls">
-												<input id="todatepicker" class="form-control date-picker"
-													placeholder="To Date" name="to_datepicker" type="text">
+									<div class="col3"></div>
 
-											</div>
+									<label class="col-sm-3 col-lg-2 control-label">To Date:</label>
+									<div class="col-sm-5 col-lg-3 controls">
+										<input id="todatepicker" class="form-control date-picker"
+											placeholder="To Date" name="to_datepicker" type="text">
 
-										</div>
+									</div>
+
+								</div>
 
 
-								<div  class="form-group">
-											<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-								             <input type="submit" class="btn btn-primary" value="Search">
-								             </div>
+								<div class="form-group">
+									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+										<input type="submit" class="btn btn-primary" value="Search">
+									</div>
 								</div>
 							</form>
 
@@ -158,110 +158,110 @@
 
 										<div class="clearfix"></div>
 										<div class="table-responsive" style="border: 0">
-										
-										<c:choose>
-										<c:when test="${isRm==1}">
-											<table width="100%"
-												class="table table-advance table-responsive table-position"
-												id="table1">
-												<thead>
-													<tr>
-														<th>Sr No</th>
-														<th>Mat Name</th>
-														<th>Prod Issue Qty</th>
-														<th>Prod Rej Qty</th>
-														<th>Prod Return Qty</th>
-														<th>Mix Issue Qty</th>
-														<th>Mix Return Qty</th>
-														<th>Mix Rej Qty</th>
-														<th>Store Issue Qty</th>
-														<th>Store Rej Qty</th>
-														<th>Opening Stock</th>
-														<th>Closing Qty</th>
-														
-													</tr>
 
-												</thead>
-												<tbody>
-													<c:forEach items="${stockList}" var="stockList"
-														varStatus="count">
+											<c:choose>
+												<c:when test="${isRm==1}">
+													<table width="100%"
+														class="table table-advance table-responsive table-position"
+														id="table1">
+														<thead>
+															<tr>
+																<th>Sr No</th>
+																<th>Mat Name</th>
+																<th>Opening Stock</th>
+																<th>Prod Issue Qty</th>
+																<th>Prod Rej Qty</th>
+																<th>Prod Return Qty</th>
+																<th>Mix Issue Qty</th>
+																<th>Mix Return Qty</th>
+																<th>Mix Rej Qty</th>
+																<th>Store Issue Qty</th>
+																<th>Store Rej Qty</th>
 
-														<tr>
-															<td><c:out value="${count.index+1}"></c:out></td>
-															<td><c:out value="${stockList.rmName}"></c:out></td>
-															<td><c:out value="${stockList.prod_issue_qty}"></c:out>
-															</td>
-															<td><c:out value="${stockList.prod_rejected_qty}"></c:out>
-															</td>
-															<td><c:out value="${stockList.prod_return_qty}"></c:out>
-															</td>
-															<td><c:out value="${stockList.mixing_issue_qty}"></c:out>
-															<td><c:out value="${stockList.mixing_rejected_qty}"></c:out>
-															<td><c:out value="${stockList.mixing_return_qty}"></c:out>
-															<td><c:out value="${stockList.store_issue_qty}"></c:out>
-															</td>
-															<td><c:out value="${stockList.store_rejected_qty}"></c:out>
-															</td>
-															<td><c:out value="${stockList.openingQty}"></c:out>
-															<td><c:out value="${stockList.closingQty}"></c:out>
-														
+																<th>Closing Qty</th>
 
-														</tr>
-													</c:forEach>
-												</tbody>
+															</tr>
 
-											</table>
-											</c:when>
-											<c:otherwise>
-											
-												<table width="100%"
-												class="table table-advance table-responsive table-position"
-												id="table1">
-												<thead>
-													<tr>
+														</thead>
+														<tbody>
+															<c:forEach items="${stockList}" var="stockList"
+																varStatus="count">
 
-														<th>Sr No</th>
-														<th>Mat Name</th>
-														<th>Prod Issue Qty</th>
-														<th>Prod Rej Qty</th>
-														<th>Prod Return Qty</th>
-														<th>Mix Issue Qty</th>
-													
-														<th>Mix Rej Qty</th>
-														<th>Opening Stock</th>
-														<th>Closing Qty</th>
-														
+																<tr>
+																	<td><c:out value="${count.index+1}"></c:out></td>
+																	<td><c:out value="${stockList.rmName}"></c:out></td>
 
-													</tr>
+																	<td><c:out value="${stockList.bmsOpeningStock}"></c:out>
+																	<td><c:out value="${stockList.prod_issue_qty}"></c:out>
+																	</td>
+																	<td><c:out value="${stockList.prod_rejected_qty}"></c:out>
+																	</td>
+																	<td><c:out value="${stockList.prod_return_qty}"></c:out>
+																	</td>
+																	<td><c:out value="${stockList.mixing_issue_qty}"></c:out>
+																	<td><c:out
+																			value="${stockList.mixing_rejected_qty}"></c:out>
+																	<td><c:out value="${stockList.mixing_return_qty}"></c:out>
+																	<td><c:out value="${stockList.store_issue_qty}"></c:out>
+																	</td>
+																	<td><c:out value="${stockList.store_rejected_qty}"></c:out>
+																	</td>
+																	<td><c:out value="${stockList.closingQty}"></c:out>
+																</tr>
+															</c:forEach>
+														</tbody>
 
-												</thead>
-												<tbody>
-													<c:forEach items="${stockList}" var="stockList"
-														varStatus="count">
+													</table>
+												</c:when>
+												<c:otherwise>
 
-														<tr>
-															<td><c:out value="${count.index+1}"></c:out></td>
-															<td><c:out value="${stockList.sfName}"></c:out></td>
-															<td><c:out value="${stockList.prod_issue_qty}"></c:out>
-															</td>
-															<td><c:out value="${stockList.prod_rejected_qty}"></c:out>
-															</td>
-															<td><c:out value="${stockList.prod_return_qty}"></c:out>
-															</td>
-															<td><c:out value="${stockList.mixing_issue_qty}"></c:out>
-															<td><c:out value="${stockList.mixing_rejected_qty}"></c:out>
-															</td>
-															<td><c:out value="${stockList.bms_opening_stock}"></c:out>
-															<td><c:out value="${stockList.closingQty}"></c:out>
-														
+													<table width="100%"
+														class="table table-advance table-responsive table-position"
+														id="table1">
+														<thead>
+															<tr>
 
-														</tr>
-													</c:forEach>
-												</tbody>
+																<th>Sr No</th>
+																<th>Mat Name</th>
+																<th>Opening Stock</th>
+																<th>Prod Issue Qty</th>
+																<th>Prod Rej Qty</th>
+																<th>Prod Return Qty</th>
+																<th>Mix Issue Qty</th>
 
-											</table>
-											
-											</c:otherwise>
+																<th>Mix Rej Qty</th>
+
+																<th>Closing Qty</th>
+
+
+															</tr>
+
+														</thead>
+														<tbody>
+															<c:forEach items="${stockList}" var="stockList"
+																varStatus="count">
+
+																<tr>
+																	<td><c:out value="${count.index+1}"></c:out></td>
+																	<td><c:out value="${stockList.sfName}"></c:out></td>
+																	<td><c:out value="${stockList.bms_opening_stock}"></c:out>
+																	<td><c:out value="${stockList.prod_issue_qty}"></c:out>
+																	</td>
+																	<td><c:out value="${stockList.prod_rejected_qty}"></c:out>
+																	</td>
+																	<td><c:out value="${stockList.prod_return_qty}"></c:out>
+																	</td>
+																	<td><c:out value="${stockList.mixing_issue_qty}"></c:out>
+																	<td><c:out
+																			value="${stockList.mixing_rejected_qty}"></c:out></td>
+																	<td><c:out value="${stockList.closingQty}"></c:out>
+																</tr>
+															</c:forEach>
+														</tbody>
+
+													</table>
+
+												</c:otherwise>
 											</c:choose>
 										</div>
 
@@ -279,10 +279,10 @@
 
 												</c:when>
 
-											
+
 												<c:when test="${showDayEnd == 0}">
-													<input type="submit" value="Day End Process" disabled="disabled"
-														class="btn btn-warning">
+													<input type="submit" value="Day End Process"
+														disabled="disabled" class="btn btn-warning">
 
 												</c:when>
 
@@ -301,7 +301,7 @@
 			</div>
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+				<p>2017 © MONGINIS.</p>
 			</footer>
 
 
