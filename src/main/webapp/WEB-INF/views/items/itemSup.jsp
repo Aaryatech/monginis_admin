@@ -160,15 +160,15 @@
 									</div>
 							  </div>
 							  <div class="col2">
-									<label class="col-sm-3 col-lg-2 control-label">Input Per Qty</label>
+									<label class="col-sm-3 col-lg-2 control-label">Input Per Unit</label>
 									<div class="col-sm-9 col-lg-3 controls">
 										<input type="text" name="input_per_qty" id="input_per_qty"
-											placeholder="Input Per Qty" class="form-control"
+											placeholder="Input Per Unit" class="form-control"
 											data-rule-required="true"  data-rule-number="true" value="${itemSupp.inputPerQty}"/>
 									</div>
 							  </div>
 							      <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Is Gate Sale?</label>
+									<label class="col-sm-3 col-lg-2 control-label">Gate Sale Allowed?</label>
 									<div class="col-sm-9 col-lg-3 controls">
 												<c:choose>
 												<c:when test="${itemSupp.isGateSale==0}">
@@ -203,7 +203,7 @@
 									</div>
 							  </div>
 							    <div class="col2">
-									<label class="col-sm-3 col-lg-2 control-label">Is Gate Sale Discount?</label>
+									<label class="col-sm-3 col-lg-2 control-label">Gate Sale Discount Allowed?</label>
 									<div class="col-sm-9 col-lg-3 controls">
 												<c:choose>
 												<c:when test="${itemSupp.isGateSaleDisc==0}">
@@ -238,7 +238,7 @@
 									</div>
 							  </div>
 							    <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Is Allow BirthDay?</label>
+									<label class="col-sm-3 col-lg-2 control-label">Allowed For Employee Birthday?</label>
 									<div class="col-sm-9 col-lg-3 controls">
 												<c:choose>
 												<c:when test="${itemSupp.isAllowBday==0}">

@@ -76,7 +76,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Special Day Cake Configuration
+						<i class="fa fa-file-o"></i>Configured Special Day Cake List
 					</h1>
 				</div>
 			</div>

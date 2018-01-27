@@ -30,7 +30,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Items
+						<i class="fa fa-file-o"></i> Item Ledger
 					</h1>
 				</div>
 			</div>

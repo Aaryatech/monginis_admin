@@ -31,7 +31,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Franchise Supplement
+						<i class="fa fa-file-o"></i>Franchisee Supplement
 					</h1>
 
 				</div>
@@ -46,7 +46,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> Add Franchise Supplement
+								<i class="fa fa-bars"></i> Add Franchisee Supplement
 							</h3>
 							<div class="box-tool">
 								<a href="${pageContext.request.contextPath}/"></a> <a data-action="collapse" href="#"><i
@@ -65,7 +65,7 @@
 	                    <input type="hidden" name="id" id="id" value="${frSup.id}"/>
 							 
 							  <div class="col2">
-									<label class="col-sm-3 col-lg-2 control-label">Franchise</label>
+									<label class="col-sm-3 col-lg-2 control-label">Franchisee</label>
 									<div class="col-sm-9 col-lg-3 controls">
 									<select name="fr_id" id="fr_id" class="form-control" placeholder="Select Franchise"  data-rule-required="true">
 											<option value="">Select Franchise</option>
@@ -111,7 +111,7 @@
 									
 							  </div>
 							  <div class="col2">
-									<label class="col-sm-3 col-lg-2 control-label">Password1</label>
+									<label class="col-sm-3 col-lg-2 control-label">Owner Password</label>
 									<div class="col-sm-9 col-lg-3 controls">
 										<input type="text" name="pass1" id="pass1"
 											placeholder="User1 Password" class="form-control"
@@ -119,7 +119,7 @@
 									</div>
 							  </div>
 							    <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Password2</label>
+									<label class="col-sm-3 col-lg-2 control-label">Captain Password</label>
 									<div class="col-sm-9 col-lg-3 controls">
 										<input type="text" name="pass2" id="pass2"
 											placeholder="User2 Password" class="form-control"
@@ -127,7 +127,7 @@
 									</div>
 							  </div>
 							    <div class="col2">
-									<label class="col-sm-3 col-lg-2 control-label">Password3</label>
+									<label class="col-sm-3 col-lg-2 control-label">CSP Password</label>
 									<div class="col-sm-9 col-lg-3 controls">
 										<input type="text" name="pass3" id="pass3"
 											placeholder="User3 Password" class="form-control"
@@ -145,7 +145,7 @@
 								<div class="box">
 									<div class="box-title">
 										<h3>
-											<i class="fa fa-table"></i>Franchise List
+											<i class="fa fa-table"></i>Franchisee List
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i
@@ -162,7 +162,7 @@
 												<thead>
 													<tr>
 														<th width="45" style="width: 18px">Sr.No.</th>
-														<th width="100" align="left">Franchise Name</th>
+														<th width="100" align="left">Franchisee Name</th>
 														<th width="100" align="left">PAN No.</th>
 														<th width="100" align="left">State</th>
 														<th width="100" align="left">Country</th>

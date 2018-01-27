@@ -197,7 +197,7 @@
 								</div>
 
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Image</label>
+									<label class="col-sm-3 col-lg-2 control-label">Product Image</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<div class="fileupload fileupload-new"
 											data-provides="fileupload">

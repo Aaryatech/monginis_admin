@@ -32,7 +32,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Franchisees
+						<i class="fa fa-file-o"></i> Franchisee
 					</h1>
 				</div>
 			</div>
@@ -47,7 +47,7 @@
 							<div class="box">
 								<div class="box-title">
 									<h3>
-										<i class="fa fa-bars"></i>  Franchisees List
+										<i class="fa fa-bars"></i>  Franchisee List
 									</h3>
 									<div class="box-tool">
 										<a href="${pageContext.request.contextPath}/listAllFranchisee">Back to
@@ -123,15 +123,15 @@
                 <td align="left">
                  <c:choose>
                     <c:when test="${franchiseeList.frGstType==0}">
-                          <c:out value="Composite"/> 
+                          <c:out value="Non-Registered"/> 
                     </c:when>
                      <c:when test="${franchiseeList.frGstType==2000000}">
-                          <c:out value="Above 20 Lakh"/> 
+                          <c:out value="Composite"/> 
                     </c:when>
-                     <c:when test="${franchiseeList.frGstType==7500000}">
-                          <c:out value="Above 75 Lakh"/> 
+                     <c:when test="${franchiseeList.frGstType==10000000}">
+                          <c:out value="Above 75 lakh"/> 
                     </c:when>
-                <c:otherwise><c:out value="Composite"/> </c:otherwise>
+                <c:otherwise><c:out value="Above 75 lakh"/> </c:otherwise>
               </c:choose>
                 
                

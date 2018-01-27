@@ -32,7 +32,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Franchisees
+						<i class="fa fa-file-o"></i> Franchisee
 					</h1>
 				</div>
 			</div>
@@ -65,7 +65,7 @@
 											<label class="col-sm-3 col-lg-2 control-label" for="fr_code">Code</label>
 											<div class="col-sm-6 col-lg-4 controls">
 												<input type="text" name="fr_code" id="fr_code"
-													class="form-control" placeholder="Code" required/>
+													class="form-control" value="${frCode}"  required/>
 											</div>
 										</div>
 
@@ -300,11 +300,11 @@
 											</div>
 										</div>
                                           <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">FBA License Date</label>
+											<label class="col-sm-3 col-lg-2 control-label">FDA License Date</label>
 											<div class="col-sm-5 col-lg-4 controls">
 												<input class="form-control date-picker" id="fba_license_date" size="16"
 													type="text" name="fba_license_date"
-													required placeholder="FBA License Date"/>
+													required placeholder="FDA License Date"/>
 											</div>
 										</div>
 										 <div class="form-group">

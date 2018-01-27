@@ -1604,7 +1604,8 @@ public class MaterialReceiptNoteController {
 							+ materialRecNoteHeaderAcc.getIgst() + materialRecNoteHeaderAcc.getCess()
 							+ materialRecNoteHeaderAcc.getRoundOff());
 			materialRecNoteHeaderAcc.setBillAmount(Float.valueOf(df.format(finalAmt)));
-			materialRecNoteHeaderAcc.setRoundOff(Math.round(finalAmt));
+			materialRecNoteHeaderAcc.setRoundOff(Float.valueOf(df.format(materialRecNoteHeaderAcc.getBillAmount()-(int)materialRecNoteHeaderAcc.getBillAmount())));
+			 
 			System.out.println("materialRecieptAccList " + materialRecieptAccList.toString());
 
 			System.out.println("Supplier List :" + supplierList.getSupplierDetailslist().toString());
@@ -1836,7 +1837,11 @@ public class MaterialReceiptNoteController {
 							+ other4total + materialRecNoteHeaderAcc.getCgst() + materialRecNoteHeaderAcc.getSgst()
 							+ materialRecNoteHeaderAcc.getIgst() + materialRecNoteHeaderAcc.getCess());
 			materialRecNoteHeaderAcc.setBillAmount(Float.valueOf(df.format(finalAmt)));
-			materialRecNoteHeaderAcc.setRoundOff(Math.round(finalAmt)-materialRecNoteHeaderAcc.getBillAmount());
+			int integer = (int)materialRecNoteHeaderAcc.getBillAmount();
+			double decimal = materialRecNoteHeaderAcc.getBillAmount()-(int)materialRecNoteHeaderAcc.getBillAmount();
+			System.out.println("integer"+integer);
+			System.out.println("decimal"+decimal);
+			materialRecNoteHeaderAcc.setRoundOff(Float.valueOf(df.format(materialRecNoteHeaderAcc.getBillAmount()-(int)materialRecNoteHeaderAcc.getBillAmount())));
 			 
 			System.out.println("cgst" + materialRecNoteHeaderAcc.getCgst());
 			System.out.println(" sgst" + materialRecNoteHeaderAcc.getSgst());

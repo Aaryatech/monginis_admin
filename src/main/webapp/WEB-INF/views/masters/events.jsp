@@ -29,7 +29,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Events
+						<i class="fa fa-file-o"></i> Event Ledger
 					</h1>
 
 				</div>
@@ -44,7 +44,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> Add Event
+								<i class="fa fa-bars"></i>Event
 							</h3>
 							<div class="box-tool">
 								<a href=""></a> <a data-action="collapse" href="#"><i

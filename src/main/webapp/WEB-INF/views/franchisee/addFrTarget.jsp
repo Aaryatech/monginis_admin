@@ -38,7 +38,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Franchise Target
+						<i class="fa fa-file-o"></i>Franchisee Target
 					</h1>
 
 				</div>
@@ -53,10 +53,10 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> Add Franchise Target
+								<i class="fa fa-bars"></i> Add Franchisee Yearly Target
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showAddFrTarget">REFRESH</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAddFrTarget"></a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -67,7 +67,7 @@
         <form action="${pageContext.request.contextPath}/addFrTargetProcess" class="form-horizontal" method="post" id="validation-form">
 						<div class="box-content">
 							  <div class="col2">
-									<label class="col-sm-1 col-lg-2 control-label">Franchise</label>
+									<label class="col-sm-1 col-lg-2 control-label">Franchisee</label>
 									<div class="col-sm-9 col-lg-3 controls">
 									<select name="fr_id" id="fr_id" class="form-control" placeholder="Select Franchise" data-rule-required="true">
 											<option value="-1">Select Franchise</option>
@@ -125,7 +125,7 @@
 								<div class="box">
 									<div class="box-title">
 										<h3>
-											<i class="fa fa-table"></i>Franchise Target
+											<i class="fa fa-table"></i>Franchisee Target
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i

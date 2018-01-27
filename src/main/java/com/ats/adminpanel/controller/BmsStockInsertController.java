@@ -24,11 +24,14 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.BmsStockDetailed;
 import com.ats.adminpanel.model.BmsStockHeader;
+import com.ats.adminpanel.model.BmsStockItemList;
+import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.SfndRawItem;
 import com.ats.adminpanel.model.RawMaterial.GetItemSfHeader;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialDetailsList;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialUom;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialUomList;
+import com.itextpdf.text.log.SysoCounter;
 
 
 
@@ -37,9 +40,9 @@ import com.ats.adminpanel.model.RawMaterial.RawMaterialUomList;
 @Scope("session")
 public class BmsStockInsertController {
 	
-	public List<SfndRawItem> sfndRawItemlist = new ArrayList<SfndRawItem>();
+	public List<BmsStockItemList> sfndRawItemlist = new ArrayList<BmsStockItemList>();
 	public int value;
-	
+	BmsStockHeader bmsStockHeaderedit= new BmsStockHeader();
 	
 	@RequestMapping(value = "/bmsstock", method = RequestMethod.GET)
 	public ModelAndView bmsstock(HttpServletRequest request, HttpServletResponse response) {
@@ -56,11 +59,11 @@ public class BmsStockInsertController {
 	
 	@RequestMapping(value = "/getSfndRawItem", method = RequestMethod.GET)
 	@ResponseBody
-	public List<SfndRawItem> getSfndRawItem(HttpServletRequest request, HttpServletResponse response) {
+	public List<BmsStockItemList> getSfndRawItem(HttpServletRequest request, HttpServletResponse response) {
 		/*Constants.mainAct = 17;
 		Constants.subAct=184;*/
-		SfndRawItem sfndRawItem = new SfndRawItem();
-		sfndRawItemlist = new ArrayList<SfndRawItem>();
+		BmsStockItemList sfndRawItem = new BmsStockItemList();
+		sfndRawItemlist = new ArrayList<BmsStockItemList>();
 		
 		RestTemplate rest = new RestTemplate();
 		List<GetItemSfHeader> itemHeaderList=new ArrayList<GetItemSfHeader>();
@@ -71,35 +74,78 @@ public class BmsStockInsertController {
 	                RawMaterialUomList.class);
 
 	        List<RawMaterialUom> uomList = rawMaterialUomList.getRawMaterialUom();
-		try
-		{
+	        
+	        MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+	        map.add("type", value);
+	        try
+			{ 
+	        bmsStockHeaderedit =  rest.postForObject(Constants.url + "getBmsStockForEdit",map,BmsStockHeader.class);
+	        System.out.println("bmsStockHeader"+bmsStockHeaderedit);
+	      
+		
 			
 			if(value==1)
 			{
 				System.out.println("in If  ");
 				RawMaterialDetailsList rawMaterialDetailsList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterial", RawMaterialDetailsList.class);
-				
-				for(int i=0;i<rawMaterialDetailsList.getRawMaterialDetailsList().size();i++)
+				if(bmsStockHeaderedit!=null)
 				{
-					sfndRawItem = new SfndRawItem();
-					sfndRawItem.setItemId(rawMaterialDetailsList.getRawMaterialDetailsList().get(i).getRmId());
-					sfndRawItem.setName(rawMaterialDetailsList.getRawMaterialDetailsList().get(i).getRmName());
-					for(int j=0;j<uomList.size();j++)
+					for(int k=0;k<rawMaterialDetailsList.getRawMaterialDetailsList().size();k++)
 					{
-						if(uomList.get(j).getUomId()==rawMaterialDetailsList.getRawMaterialDetailsList().get(i).getRmUomId())
+						 
+						for(int i=0;i<bmsStockHeaderedit.getBmsStockDetailed().size();i++)
 						{
-							sfndRawItem.setUomId(uomList.get(j).getUomId());
-							sfndRawItem.setUomName(uomList.get(j).getUom());
+							if(rawMaterialDetailsList.getRawMaterialDetailsList().get(k).getRmId()==bmsStockHeaderedit.getBmsStockDetailed().get(i).getRmId())
+							{
+								sfndRawItem = new BmsStockItemList();
+								sfndRawItem.setBsmId(bmsStockHeaderedit.getBmsStockDetailed().get(i).getBmsStockDeatilId());
+								sfndRawItem.setItemId(bmsStockHeaderedit.getBmsStockDetailed().get(i).getRmId());
+								sfndRawItem.setName(bmsStockHeaderedit.getBmsStockDetailed().get(i).getRmName());
+								sfndRawItem.setQty(bmsStockHeaderedit.getBmsStockDetailed().get(i).getBmsOpeningStock());
+								for(int j=0;j<uomList.size();j++)
+								{
+									if(uomList.get(j).getUomId()==bmsStockHeaderedit.getBmsStockDetailed().get(i).getRmUom())
+									{
+										sfndRawItem.setUomId(uomList.get(j).getUomId());
+										sfndRawItem.setUomName(uomList.get(j).getUom());
+									}
+								}
+								sfndRawItemlist.add(sfndRawItem); 
+							}
+							
 						}
+						 
+						
 					}
-					sfndRawItemlist.add(sfndRawItem);
+					
+					
+					
 				}
+				else
+				{
+					for(int i=0;i<rawMaterialDetailsList.getRawMaterialDetailsList().size();i++)
+					{
+						sfndRawItem = new BmsStockItemList();
+						sfndRawItem.setItemId(rawMaterialDetailsList.getRawMaterialDetailsList().get(i).getRmId());
+						sfndRawItem.setName(rawMaterialDetailsList.getRawMaterialDetailsList().get(i).getRmName());
+						for(int j=0;j<uomList.size();j++)
+						{
+							if(uomList.get(j).getUomId()==rawMaterialDetailsList.getRawMaterialDetailsList().get(i).getRmUomId())
+							{
+								sfndRawItem.setUomId(uomList.get(j).getUomId());
+								sfndRawItem.setUomName(uomList.get(j).getUom());
+							}
+						}
+						sfndRawItemlist.add(sfndRawItem);
+					}
+				}
+				
 				System.out.println(sfndRawItemlist.toString());
 			}
 			else if(value==2)
 			{
 				System.out.println("in if else ");
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				  map = new LinkedMultiValueMap<String, Object>();
 				
 				map.add("delStatus", 0);
 				ParameterizedTypeReference<List<GetItemSfHeader>> typeRef = new ParameterizedTypeReference<List<GetItemSfHeader>>() {
@@ -110,21 +156,59 @@ public class BmsStockInsertController {
 				itemHeaderList = responseEntity.getBody();
 				System.out.println("sf List "+itemHeaderList.toString());
 				
-				for(int i=0;i<itemHeaderList.size();i++)
+				if(bmsStockHeaderedit!=null)
 				{
-					sfndRawItem = new SfndRawItem();
-					sfndRawItem.setItemId(itemHeaderList.get(i).getSfId());
-					sfndRawItem.setName(itemHeaderList.get(i).getSfName());
-					for(int j=0;j<uomList.size();j++)
+					for(int k=0;k<itemHeaderList.size();k++)
 					{
-						if(uomList.get(j).getUomId()==itemHeaderList.get(j).getSfUomId())
+						 
+						for(int i=0;i<bmsStockHeaderedit.getBmsStockDetailed().size();i++)
 						{
-							sfndRawItem.setUomId(uomList.get(j).getUomId());
-							sfndRawItem.setUomName(uomList.get(j).getUom());
+							if(itemHeaderList.get(k).getSfId()==bmsStockHeaderedit.getBmsStockDetailed().get(i).getRmId())
+							{
+								sfndRawItem = new BmsStockItemList();
+								sfndRawItem.setBsmId(bmsStockHeaderedit.getBmsStockDetailed().get(i).getBmsStockDeatilId());
+								sfndRawItem.setItemId(bmsStockHeaderedit.getBmsStockDetailed().get(i).getRmId());
+								sfndRawItem.setName(bmsStockHeaderedit.getBmsStockDetailed().get(i).getRmName());
+								sfndRawItem.setQty(bmsStockHeaderedit.getBmsStockDetailed().get(i).getBmsOpeningStock());
+								for(int j=0;j<uomList.size();j++)
+								{
+									if(uomList.get(j).getUomId()==bmsStockHeaderedit.getBmsStockDetailed().get(i).getRmUom())
+									{
+										sfndRawItem.setUomId(uomList.get(j).getUomId());
+										sfndRawItem.setUomName(uomList.get(j).getUom());
+									}
+								}
+								sfndRawItemlist.add(sfndRawItem);
+								 
+							}
+							
 						}
+						 
 					}
-					sfndRawItemlist.add(sfndRawItem);
+					
+					
+					
 				}
+				else
+				{
+					for(int i=0;i<itemHeaderList.size();i++)
+					{
+						sfndRawItem = new BmsStockItemList();
+						sfndRawItem.setItemId(itemHeaderList.get(i).getSfId());
+						sfndRawItem.setName(itemHeaderList.get(i).getSfName());
+						for(int j=0;j<uomList.size();j++)
+						{
+							if(uomList.get(j).getUomId()==itemHeaderList.get(j).getSfUomId())
+							{
+								sfndRawItem.setUomId(uomList.get(j).getUomId());
+								sfndRawItem.setUomName(uomList.get(j).getUom());
+							}
+						}
+						sfndRawItemlist.add(sfndRawItem);
+					}
+				}
+				
+				
 			}
 				
 			System.out.println(sfndRawItemlist.toString());
@@ -147,58 +231,98 @@ public class BmsStockInsertController {
 		
 		try
 		{
-			Date date = new Date();
-			
-			 bmsStockHeader.setBmsStockId(0);
-			 bmsStockHeader.setBmsStockDate(date);
-			 bmsStockHeader.setBmsStatus(0);
-			 if(value==1)
-				 bmsStockHeader.setRmType(1);
-			 else
-				 bmsStockHeader.setRmType(2);
-			 bmsStockHeader.setExInt(0);
-			 bmsStockHeader.setExInt1(0);
-			 bmsStockHeader.setExBoll(0);
-			 bmsStockHeader.setExBoll1(0);
-			 bmsStockHeader.setExVarchar("");
-			 
-			 int qty;
-			 
-			 for(int i=0;i<sfndRawItemlist.size();i++)
-			 {
-				 qty=Integer.parseInt(request.getParameter("stockQty"+sfndRawItemlist.get(i).getItemId()));
-				 System.out.println("qty  "+qty);
-				 sfndRawItemlist.get(i).setQty(qty);
-				 
-			 }
-			 
-			
-			List<BmsStockDetailed> bmsStockDetailedlist = new ArrayList<BmsStockDetailed>();
-			for(int i=0;i<sfndRawItemlist.size();i++)
+			if(bmsStockHeaderedit!=null)
 			{
-				if(sfndRawItemlist.get(i).getQty()>0) {
-				BmsStockDetailed bmsStockDetailed = new BmsStockDetailed();
-				bmsStockDetailed.setBmsStockDeatilId(0);
-				bmsStockDetailed.setBmsStockId(0);
-				bmsStockDetailed.setBmsStockDate(date);
+				  
+				 int qty;
+				 
+				 for(int i=0;i<sfndRawItemlist.size();i++)
+				 {
+					 qty=Integer.parseInt(request.getParameter("stockQty"+sfndRawItemlist.get(i).getItemId()));
+					 System.out.println("qty  "+qty);
+					 sfndRawItemlist.get(i).setQty(qty);
+					 
+				 }
+				 
+				System.out.println("sfndRawItemlist"+sfndRawItemlist);
+				List<BmsStockDetailed> bmsStockDetailedlist = new ArrayList<BmsStockDetailed>();
+				
+				for(int i=0;i<sfndRawItemlist.size();i++)
+				{
+				 
+					for(int j=0;j<bmsStockHeaderedit.getBmsStockDetailed().size();j++)
+					{
+						
+							if(bmsStockHeaderedit.getBmsStockDetailed().get(j).getBmsStockDeatilId()==sfndRawItemlist.get(i).getBsmId()) 
+							{ 
+								bmsStockHeaderedit.getBmsStockDetailed().get(j).setBmsOpeningStock(sfndRawItemlist.get(i).getQty());
+								  
+							}
+							
+								
+					}
+				}
+				
+				 
+					 
+				System.out.println("bmsStockHeaderedit  "+bmsStockHeaderedit.toString());
+				RestTemplate rest = new RestTemplate();
+				 
+				bmsStockHeaderedit =  rest.postForObject(Constants.url + "insertBmsStock",bmsStockHeaderedit,BmsStockHeader.class);
+				 
+			}
+			else
+			{
+				Date date = new Date();
+				
+				 bmsStockHeader.setBmsStockId(0);
+				 bmsStockHeader.setBmsStockDate(date);
+				 bmsStockHeader.setBmsStatus(0);
 				 if(value==1)
 					 bmsStockHeader.setRmType(1);
 				 else
 					 bmsStockHeader.setRmType(2);
-				 bmsStockDetailed.setRmId(sfndRawItemlist.get(i).getItemId());
-				 bmsStockDetailed.setRmName(sfndRawItemlist.get(i).getName());
-				 bmsStockDetailed.setBmsOpeningStock(sfndRawItemlist.get(i).getQty());
-				 bmsStockDetailed.setRmType(value);
-				 bmsStockDetailed.setRmUom(sfndRawItemlist.get(i).getUomId());
-				 bmsStockDetailedlist.add(bmsStockDetailed);
+				 bmsStockHeader.setExInt(0);
+				 bmsStockHeader.setExInt1(0);
+				 bmsStockHeader.setExBoll(0);
+				 bmsStockHeader.setExBoll1(0);
+				 bmsStockHeader.setExVarchar("");
 				 
+				 int qty;
+				 
+				 for(int i=0;i<sfndRawItemlist.size();i++)
+				 {
+					 qty=Integer.parseInt(request.getParameter("stockQty"+sfndRawItemlist.get(i).getItemId()));
+					 System.out.println("qty  "+qty);
+					 sfndRawItemlist.get(i).setQty(qty);
+					 
+				 }
+				 
+				
+				List<BmsStockDetailed> bmsStockDetailedlist = new ArrayList<BmsStockDetailed>();
+				for(int i=0;i<sfndRawItemlist.size();i++)
+				{
+					 
+					BmsStockDetailed bmsStockDetailed = new BmsStockDetailed();
+					bmsStockDetailed.setBmsStockDeatilId(0);
+					bmsStockDetailed.setBmsStockId(0);
+					bmsStockDetailed.setBmsStockDate(date); 
+					 bmsStockDetailed.setRmId(sfndRawItemlist.get(i).getItemId());
+					 bmsStockDetailed.setRmName(sfndRawItemlist.get(i).getName());
+					 bmsStockDetailed.setBmsOpeningStock(sfndRawItemlist.get(i).getQty());
+					 bmsStockDetailed.setRmType(value);
+					 bmsStockDetailed.setRmUom(sfndRawItemlist.get(i).getUomId());
+					 bmsStockDetailedlist.add(bmsStockDetailed);
+					 
+				 
+				}
+				bmsStockHeader.setBmsStockDetailed(bmsStockDetailedlist);
+				System.out.println("bmsStockHeader  "+bmsStockHeader.toString());
+				RestTemplate rest = new RestTemplate();
+				 
+				bmsStockHeader =  rest.postForObject(Constants.url + "insertBmsStock",bmsStockHeader,BmsStockHeader.class);
 			}
-			}
-			bmsStockHeader.setBmsStockDetailed(bmsStockDetailedlist);
-			System.out.println("bmsStockHeader  "+bmsStockHeader.toString());
-			RestTemplate rest = new RestTemplate();
-			 
-			bmsStockHeader =  rest.postForObject(Constants.url + "insertBmsStock",bmsStockHeader,BmsStockHeader.class);
+			
 			
 		}catch(Exception e)
 		{
@@ -211,5 +335,6 @@ public class BmsStockInsertController {
 		return "redirect:/bmsstock";
 
 	}
-
+	
+	 
 }

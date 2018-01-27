@@ -35,7 +35,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Franchisees
+						<i class="fa fa-file-o"></i> Franchisee
 					</h1>
 				</div>
 			</div>
@@ -103,7 +103,7 @@
 	                                 </div>
 	                                 
 		                             <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Franchisee Target</label>
+											<label class="col-sm-3 col-lg-2 control-label">Franchise Target</label>
 											<div class="col-sm-9 col-lg-4 controls">
 												<input type="text" name="fr_target" id="fr_target" placeholder="Franchisee Target"
 													class="form-control" data-rule-required="true"
@@ -351,11 +351,11 @@
 											</div>
 										</div>
                                           <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">FBA License Date</label>
+											<label class="col-sm-3 col-lg-2 control-label">FDA License Date</label>
 											<div class="col-sm-5 col-lg-4 controls">
 												<input class="form-control date-picker" id="fr_license_date" size="16"
 													type="text" name="fr_license_date"value="${franchiseeList.fbaLicenseDate}"
-													required placeholder="FBA License Date"/>
+													required placeholder="FDA License Date"/>
 											</div>
 										</div>
 										 <div class="form-group">
@@ -376,24 +376,24 @@
 						                            	<c:set var="frGstType" value="${franchiseeList.frGstType}"></c:set>    
 						                            	      <c:choose>
                                                                    <c:when test="${franchiseeList.frGstType=='0'}">
-                                                           <option value="0" selected>Composite</option>
-                                                           <option value="2000000" >Above 20Lakh</option>
-                                                           <option value="7500000" >Above 75Lakh</option>
+                                                           <option value="0" selected>Non Registered</option>
+                                                           <option value="2000000" >Composite</option>
+                                                           <option value="10000000" >Regular</option>
                                                                                                             
                                                                    </c:when>
                                                                    <c:when test="${franchiseeList.frGstType=='2000000'}">
-                                                                       <option value="0" >Composite</option>
-                                                                      <option value="2000000" selected>Above 20Lakh</option>
-                                                                      <option value="7500000" >Above 75Lakh</option>
+                                                                       <option value="0" >Non Registered</option>
+                                                                      <option value="2000000" selected>Composite</option>
+                                                                      <option value="10000000" >Regular</option>
                                                            
                                                                       </c:when>
                                                                       
-                                                                       <c:when test="${franchiseeList.frGstType=='7500000'}">
-                                                                         <option value="0" >Composite</option>
+                                                                       <c:when test="${franchiseeList.frGstType=='10000000'}">
+                                                                         <option value="0" >Non Registered</option>
                                                                        
-                                                                        <option value="2000000" >Above 20Lakh</option>
+                                                                        <option value="2000000" >Composite</option>
                                                                        
-                                                                        <option value="7500000" selected>Above 75Lakh</option>
+                                                                        <option value="10000000" selected>Regular</option>
                                                                            </c:when>
                                                                     <c:otherwise>
                                                                     

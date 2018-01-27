@@ -28,7 +28,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Flavours
+						<i class="fa fa-file-o"></i> Flavour Ledger
 					</h1>
 
 				</div>

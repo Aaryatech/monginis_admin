@@ -30,7 +30,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Item Supp
+						<i class="fa fa-file-o"></i> Item Supplement
 					</h1>
 				</div>
 			</div>
@@ -43,10 +43,10 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i> Items Supp List
+								<i class="fa fa-table"></i>Item Supplement Ledger
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showAddItemSup">Add New Item Supp</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAddItemSup">Add New Item Supplement</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 						</div>
@@ -66,10 +66,10 @@
 											<th width="100" align="left">UOM</th>
 											<th width="103" align="left">Actual Weight</th>
 											<th width="137" align="left">Base Weight</th>
-											<th width="200" align="left">Input Per Qty</th>
-									       <th width="200" align="left">Is Gate Sale?</th>
-							               <th width="200" align="left">Is Gate Sale Disc?</th>
-							               <th width="200" align="left">Is Allow Birthday?</th>
+											<th width="200" align="left">Input Per Unit</th>
+									       <th width="200" align="left">Gate Sale Allowed?</th>
+							               <th width="200" align="left">Gate Sale Disc Allowed?</th>
+							               <th width="200" align="left">Allowed For Emp Birthday?</th>
 
 											<th width="150" align="left">Action</th>
 										</tr>

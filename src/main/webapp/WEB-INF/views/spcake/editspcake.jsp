@@ -124,6 +124,33 @@
 											</div> 
 											
 										</div>
+												<div> <input type="hidden" name="prevImage" value="${specialCake.spImage}"></div>
+
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Image</label>
+											<div class="col-sm-9 col-lg-10 controls">
+												<div class="fileupload fileupload-new"
+													data-provides="fileupload">
+													<div class="fileupload-new img-thumbnail"
+														style="width: 200px; height: 150px;">
+														 <img src="${url}${specialCake.spImage}" width="150" height="100"  onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';"/> 
+													</div>
+													<div
+														class="fileupload-preview fileupload-exists img-thumbnail"
+														style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+													<div>
+														<span class="btn btn-default btn-file"><span
+															class="fileupload-new">Select image</span> <span
+															class="fileupload-exists">Change</span> <input
+															type="file" class="file-input" name="sp_image"
+															id="sp_image" value="${specialCake.spImage }" /></span> <a
+															href="#" class="btn btn-default fileupload-exists"
+															data-dismiss="fileupload">Remove</a>
+													</div>
+												</div>
+
+											</div>
+										</div>
                                         <div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Description</label>
 											<div class="col-sm-9 col-lg-10 controls">
@@ -275,33 +302,7 @@
 													data-rule-number="true"  data-rule-required="true" value="${specialCake.mrpRate3}"/>
 											</div>
 										</div>
-										<div> <input type="hidden" name="prevImage" value="${specialCake.spImage}"></div>
-
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Image</label>
-											<div class="col-sm-9 col-lg-10 controls">
-												<div class="fileupload fileupload-new"
-													data-provides="fileupload">
-													<div class="fileupload-new img-thumbnail"
-														style="width: 200px; height: 150px;">
-														 <img src="${url}${specialCake.spImage}" width="150" height="100"  onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';"/> 
-													</div>
-													<div
-														class="fileupload-preview fileupload-exists img-thumbnail"
-														style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-													<div>
-														<span class="btn btn-default btn-file"><span
-															class="fileupload-new">Select image</span> <span
-															class="fileupload-exists">Change</span> <input
-															type="file" class="file-input" name="sp_image"
-															id="sp_image" value="${specialCake.spImage }" /></span> <a
-															href="#" class="btn btn-default fileupload-exists"
-															data-dismiss="fileupload">Remove</a>
-													</div>
-												</div>
-
-											</div>
-										</div>
+								
 
                                       <div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Order Qty
