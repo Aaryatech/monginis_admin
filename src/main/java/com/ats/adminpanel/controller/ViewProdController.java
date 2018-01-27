@@ -7,6 +7,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,6 +17,7 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.poi.util.SystemOutLogger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -185,6 +187,8 @@ public class ViewProdController {
 			prodPlanDetailList = new ArrayList<>();
 
 			prodPlanDetailList = prodDetail.getProdPlanDetail();
+			
+			System.out.println("Porduction Details Received "+prodPlanDetailList.toString());
 
 			GetProdPlanHeader planHeader = new GetProdPlanHeader();
 
@@ -195,6 +199,8 @@ public class ViewProdController {
 				if (prodPlanHeaderList.get(i).getProductionHeaderId() == globalHeaderId) {
 
 					planHeader = prodPlanHeaderList.get(i);
+					
+					System.out.println("Prod Header Received ID = "+planHeader.getProductionHeaderId());
 				}
 
 			}
@@ -220,10 +226,7 @@ public class ViewProdController {
 				postProdPlanDetailList.add(postProductionPlanDetail);
 			}
 
-			model.addObject("planDetail", prodPlanDetailList);
-
-			model.addObject("planHeader", planHeader);
-
+			
 			// new Code
 			updateStockDetailList = new ArrayList<>();
 
@@ -407,10 +410,13 @@ public class ViewProdController {
 			}
 
 			// end of new Code
+			model.addObject("planDetail", prodPlanDetailList);
+
+			model.addObject("planHeader", planHeader);
 
 		} catch (Exception e) {
 
-			System.out.println("in catch model ");
+			System.out.println("in catch model show Prod Detail  ");
 
 			e.printStackTrace();
 
@@ -437,7 +443,7 @@ public class ViewProdController {
 
 		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
 		String timeStamp = dateFormat.format(cal.getTime());
-		String FILE_PATH = "/home/ats-11/REPORT.pdf";
+		String FILE_PATH = Constants.REPORT_SAVE;
 		File file = new File(FILE_PATH);
 
 		PdfWriter writer = null;
@@ -454,7 +460,7 @@ public class ViewProdController {
 		try {
 			System.out.println("Inside PDF Table try");
 			table.setWidthPercentage(100);
-			table.setWidths(new float[] { 0.9f, 1.4f, 1.4f });
+			table.setWidths(new float[] { 0.4f, 1.0f, 0.4f });
 			Font headFont = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK);
 			Font headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
 			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
@@ -467,13 +473,14 @@ public class ViewProdController {
 			hcell = new PdfPCell(new Phrase("Item Name", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(hcell);
+			
+			System.out.println("Plan Header data "+pdfPlanHeader.getIsPlanned());
 
-			if (pdfPlanHeader.getIsPlanned() == 0) {
-
+			if (pdfPlanHeader.getIsPlanned()==0) {
 				hcell = new PdfPCell(new Phrase("Order Quantity", headFont1));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(hcell);
-			} else {
+			} else if(pdfPlanHeader.getIsPlanned()==1) {
 				hcell = new PdfPCell(new Phrase("Plan Quantity", headFont1));
 				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				table.addCell(hcell);
@@ -491,7 +498,7 @@ public class ViewProdController {
 
 				cell = new PdfPCell(new Phrase(getMoneyOut.getItemName(), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 				cell.setPaddingRight(2);
 				table.addCell(cell);
 
@@ -514,20 +521,27 @@ public class ViewProdController {
 			}
 
 			document.open();
-			Paragraph company = new Paragraph("G F P L", f);
+			Paragraph company = new Paragraph("Galdhar Foods Pvt.Ltd\n" + 
+					"Factory Add: A-32 Shendra, MIDC, Auraangabad-4331667" + 
+					"Phone:0240-2466217, Email: aurangabad@monginis.net", f);
 			company.setAlignment(Element.ALIGN_CENTER);
 			document.add(company);
 			document.add(new Paragraph(" "));
-
-			Paragraph heading = new Paragraph("Report");
+			if (pdfPlanHeader.getIsPlanned() == 1) {
+			Paragraph heading = new Paragraph("Report-Production Planning (Kitchen Department) " +pdfPlanHeader.getCatName());
 			heading.setAlignment(Element.ALIGN_CENTER);
 			document.add(heading);
-
-			Paragraph title = new Paragraph("Job Card");
+			}
+			if (pdfPlanHeader.getIsPlanned() == 0) {
+			Paragraph heading = new Paragraph("Report Job Card " +pdfPlanHeader.getCatName());
 			heading.setAlignment(Element.ALIGN_CENTER);
-			document.add(title);
-
-			document.add(new Paragraph(" "));
+			document.add(heading);
+			}
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+			
+			document.add(new Paragraph(""+ reportDate));
+			document.add(new Paragraph("\n"));
 			document.add(table);
 			int totalPages = writer.getPageNumber();
 

@@ -85,6 +85,7 @@ System.out.println("inside get Bms Stock Page ");
 			String settingKey = new String();
 
 			settingKey = "PROD" + "," + "MIX" + ","  + "STORE";
+			map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("settingKeyList", settingKey);
 
@@ -121,7 +122,8 @@ System.out.println("inside get Bms Stock Page ");
 			System.out.println("Prod Dept Id " + prodDeptId);
 
 			System.out.println("Store Dept Id " + storeDeptId);
-
+			map = new LinkedMultiValueMap<String, Object>();
+			
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("prodDeptId", prodDeptId);
 			map.add("storeDeptId", storeDeptId);
@@ -146,6 +148,8 @@ System.out.println("inside get Bms Stock Page ");
 			String curDate = sdf.format(c.getTime());
 
 			System.out.println("curDate for Stock bet date to get current Stock " + DateConvertor.convertToYMD(curDate));
+			
+			map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("fromDate", DateConvertor.convertToYMD(curDate));
 			map.add("toDate",  DateConvertor.convertToYMD(curDate));
@@ -209,6 +213,8 @@ System.out.println("inside get Bms Stock Page ");
 			
 			Date headerDate=new Date();
 			
+			
+			
 			map = new LinkedMultiValueMap<String, Object>();
 			
 			map.add("status", 0);
@@ -266,16 +272,19 @@ System.out.println("inside get Bms Stock Page ");
 				tDate=LocalDate.now().minus(Period.ofDays(1));
 				
 				}
+			map = new LinkedMultiValueMap<String, Object>();
 			
 			map.add("fromDate", DateConvertor.convertToYMD(fromStockdate));
-			map.add("toDate", ""+tDate);
+			map.add("toDate", ""+ DateConvertor.convertToYMD(toStockdate));
 			map.add("rmType", rmType);
+			map.add("bmsStatus", 1);
+
 
 			List<BmsStockDetailed> stockBetDate = new ArrayList<>();
 
 			ParameterizedTypeReference<List<BmsStockDetailed>> typeRef = new ParameterizedTypeReference<List<BmsStockDetailed>>() {
 			};
-			ResponseEntity<List<BmsStockDetailed>> responseEntity = restTemplate.exchange(Constants.url + "getBmsStock",
+			ResponseEntity<List<BmsStockDetailed>> responseEntity = restTemplate.exchange(Constants.url + "getBmsStockBetDateMonth",
 					HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 			stockBetDate = responseEntity.getBody();

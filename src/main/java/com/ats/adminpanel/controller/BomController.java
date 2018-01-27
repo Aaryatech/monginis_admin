@@ -19,7 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.tomcat.util.bcel.classfile.Constant;
+//import org.apache.tomcat.util.bcel.classfile.Constant;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -464,7 +464,7 @@ int globalIsPlan;
 
 		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
 		String timeStamp=dateFormat.format(cal.getTime());
-		String FILE_PATH="/home/ats-11/REPORT.pdf";
+		String FILE_PATH=Constants.REPORT_SAVE;
 		File file=new File(FILE_PATH);
 		
 		PdfWriter writer = null;
@@ -482,7 +482,7 @@ int globalIsPlan;
 		 try {
 		 System.out.println("Inside PDF Table try");
 		 table.setWidthPercentage(100);
-	     table.setWidths(new float[]{0.9f, 1.4f,1.4f});
+	     table.setWidths(new float[]{0.5f, 1.4f,0.5f});
 	     Font headFont = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK);
 	     Font headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
 	     Font f=new Font(FontFamily.TIMES_ROMAN,12.0f,Font.UNDERLINE,BaseColor.BLUE);
@@ -513,7 +513,7 @@ int globalIsPlan;
 	        
 	         cell = new PdfPCell(new Phrase(bomDetail.getRmName(),headFont));
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 	         cell.setPaddingRight(2);
 	         table.addCell(cell);
 	         
@@ -528,14 +528,19 @@ int globalIsPlan;
 	     }
 
 	     document.open();
-	     Paragraph company = new Paragraph("G F P L",f);
-	     company.setAlignment(Element.ALIGN_CENTER);
+	     Paragraph company = new Paragraph("Galdhar Foods Pvt.Ltd\n" + 
+					"Factory Add: A-32 Shendra, MIDC, Auraangabad-4331667" + 
+					"Phone:0240-2466217, Email: aurangabad@monginis.net", f);	     company.setAlignment(Element.ALIGN_CENTER);
 	     document.add(company);
 
-	     Paragraph heading = new Paragraph("Report");
+	     Paragraph heading = new Paragraph("Report-Request to BMS");
 	     heading.setAlignment(Element.ALIGN_CENTER);
 	     document.add(heading);
-
+	     DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+			
+			document.add(new Paragraph(""+ reportDate));
+			document.add(new Paragraph("\n"));
 	     document.add(new Paragraph(" "));
 	     document.add(table);
 	 	 int totalPages=writer.getPageNumber();
