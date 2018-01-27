@@ -47,13 +47,11 @@ th {
 										<th style="text-align:center;">Basic Value</th>
 										<th style="text-align:center;">Discount</th>
 										<th style="text-align:center;">Other</th>
-										<th style="text-align:center;">Freight Amt</th>
-										<th style="text-align:center;">Insurance Amt</th>
-										 
+										<th style="text-align:center;">Fret Amt</th>
+										<th style="text-align:center;">Insu Amt</th> 
 										<th style="text-align:center;">CGST</th>
 										<th style="text-align:center;">SGST</th>
-										<th style="text-align:center;">IGST</th>
-										<th style="text-align:center;">Round Off</th>
+										<th style="text-align:center;">IGST</th> 
 										<th style="text-align:center;">Cess</th>
 										<th style="text-align:center;">Total</th>
 								  </tr>
@@ -95,8 +93,7 @@ th {
 													<td style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.sgst}"/>
 													 </td> <c:set var="sgst"  value="${sgst+staticlist.sgst }"/>
 													<td style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.igst}"/>
-													  </td> <c:set var="igst"  value="${igst + staticlist.igst}"/>
-													<td style="text-align:right"><c:out value="${staticlist.roundOff}" /></td>
+													  </td> <c:set var="igst"  value="${igst + staticlist.igst}"/> 
 													<td style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.cess}"/>
 													 </td>
 													 	 <c:set var="cess" value="${cess + staticlist.cess}"/>
@@ -118,7 +115,7 @@ th {
 								 <td style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${cgst}"/></b></td>
 								   <td style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${sgst}"/></b></td>
 								     <td style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${igst}"/></b></td> 
-								     <td></td>
+								     
 								     <td style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value ="${cess}"/></b></td>
 								     <td style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${billAmount}"/></b></td>
 								      

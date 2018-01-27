@@ -43,22 +43,19 @@ th {
 									<tr class="bgpink">
 									
 									<th style="text-align:center;">Sr.No.</th>
-										<th style="text-align:center;">Inward No</th>
+										<th style="text-align:center;">Inv No</th>
 										<th style="text-align:center;">Booking Date</th>
 										<th style="text-align:center;">Bill No</th> 
-										<th style="text-align:center;">Bill Date</th>
-										<th style="text-align:center;">Party Name</th>
-										<th style="text-align:center;">City</th>
+										<th style="text-align:center;">Party Name</th> 
 										<th style="text-align:center;">GSTIN</th> 
 										<th style="text-align:center;">Basic Value</th>
 										<th style="text-align:center;">Discount</th>
 										<th style="text-align:center;">Other</th>
-										<th style="text-align:center;">Freight Amt</th>
-										<th style="text-align:center;">Insurance Amt</th> 
+										<th style="text-align:center;">Frgt Amt</th>
+										<th style="text-align:center;">Insu Amt</th> 
 										<th style="text-align:center;">CGST</th>
 										<th style="text-align:center;">SGST</th>
-										<th style="text-align:center;">IGST</th>
-										<th style="text-align:center;">Round Off</th>
+										<th style="text-align:center;">IGST</th> 
 										<th style="text-align:center;">Cess</th>
 										<th style="text-align:center;">Total</th>
 								  </tr>
@@ -78,15 +75,13 @@ th {
 								<c:set var="billAmount"  value="${0 }"/>
 								  	<c:forEach items="${staticlist}" var="staticlist" varStatus="count">
 												<tr>
-													<td style="text-align:center;"><c:out value="${count.index+1}" /></td>
+													<td ><c:out value="${count.index+1}" /></td>
 													 
-													<td style="text-align:center;"><c:out value="${staticlist.mrnNo}" /></td>
-													<td style="text-align:center;"><fmt:formatDate pattern = "dd-MM-yyyy" value = "${staticlist.invBookDate}" /></td>
-													<td style="text-align:center;"><c:out value="${staticlist.invoiceNumber}" /></td>
-													<td style="text-align:center;"><fmt:formatDate pattern = "dd-MM-yyyy" value = "${staticlist.invDate}" /></td>
-													<td style="text-align:center;"><c:out value="${staticlist.suppName}" /></td>
-													<td style="text-align:center;"><c:out value="${staticlist.suppCity}" /></td>
-													<td style="text-align:center;"><c:out value="${staticlist.suppGstin}" /></td>
+													<td><c:out value="${staticlist.mrnNo}" /></td>
+													<td ><fmt:formatDate pattern = "dd-MM-yyyy" value = "${staticlist.invBookDate}" /></td>
+													<td><c:out value="${staticlist.invoiceNumber}" /></td> 
+													<td ><c:out value="${staticlist.suppName}" /></td> 
+													<td ><c:out value="${staticlist.suppGstin}" /></td>
 													
 													<td style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.basicValue}"/>
 													</td>
@@ -105,7 +100,7 @@ th {
 													 </td> <c:set var="sgst"  value="${sgst+staticlist.sgst }"/>
 													<td style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.igst}"/>
 													  </td> <c:set var="igst"  value="${igst + staticlist.igst}"/>
-													<td style="text-align:right"><c:out value="${staticlist.roundOff}" /></td>
+													 
 													<td style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.cess}"/>
 													 </td><c:set var="cess"  value="${cess+staticlist.cess }"/>
 													<td style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.billAmount}"/>
@@ -117,8 +112,6 @@ th {
 												</c:forEach>
 								  <tr>
 								  <td colspan='5'><b>Total</b></td>
-								  <td></td>
-								  <td></td>
 								  <td></td> 
 								  <td style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value ="${basicValue}"/></b></td>
 								  <td style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value ="${discAmt}"/></b></td>
@@ -128,7 +121,7 @@ th {
 								  <td style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${cgst}"/></b></td>
 								   <td style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${sgst}"/></b></td>
 								     <td style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${igst}"/></b></td> 
-								     <td></td>
+								    
 								      <td style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${cess}"/></b></td>
 								     <td style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${billAmount}"/></b></td>
 								      <!--  <td><b>Total</b></td> -->

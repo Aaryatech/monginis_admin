@@ -1325,7 +1325,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	private Dimension format = PD4Constants.A4;
+	private Dimension format = PD4Constants.A2;
 	private boolean landscapeValue = false;
 	private int topValue = 0;
 	private int leftValue = 0;
