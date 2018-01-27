@@ -684,7 +684,7 @@ public class ProductionController {
 
 				postProductionDetail.setOrderQty(getOrderItemQtyList.get(i).getQty());
 				postProductionDetail.setProductionDate(convertedDate);
-				postProductionDetail.setOpeningQty(0);
+				postProductionDetail.setOpeningQty((int) getOrderItemQtyList.get(i).getCurOpeQty());
 				postProductionDetail.setProductionQty(0);
 				postProductionDetail.setProductionBatch("");
 				postProductionDetail.setRejectedQty(0);
@@ -892,44 +892,8 @@ public class ProductionController {
 			model.addObject("getQtyforVariance", getQtyforVariance.getVarianceorderlist());
 			System.out.println("unsort size " + getQtyforVariance.getVarianceorderlist().size());
 
-			List<Variance> getVarianceorderlistforsort = new ArrayList<Variance>();
-			getVarianceorderlistforsort = getQtyforVariance.getVarianceorderlist();
-
-			for (int i = 0; i < postProductionPlanDetaillist.size(); i++) {
-				int planItemid = postProductionPlanDetaillist.get(i).getItemId();
-
-				for (int j = 0; j < getVarianceorderlistforsort.size(); j++) {
-					int varianceItemId = getVarianceorderlistforsort.get(j).getId();
-
-					if (planItemid == varianceItemId) {
-
-						int orderQty = getVarianceorderlistforsort.get(j).getOrderQty()
-								+ getVarianceorderlistforsort.get(j).getProdRejectedQty();
-						System.out.println("updated orderQty" + orderQty);
-						postProductionPlanDetaillist.get(i).setOrderQty(orderQty);
-
-						int remainingProQty = postProductionPlanDetaillist.get(i).getOrderQty()
-								- (postProductionPlanDetaillist.get(i).getOpeningQty()
-										+ postProductionPlanDetaillist.get(i).getProductionQty());
-
-						if (remainingProQty > 0) {
-							postProductionPlanDetaillist.get(i).setInt4(remainingProQty);
-						} else {
-							postProductionPlanDetaillist.get(i).setInt4(0);
-						}
-						getVarianceorderlistforsort.remove(j);
-					}
-
-				}
-
-			}
-			AllItemsListResponse allItemsListResponse = restTemplate.getForObject(Constants.url + "getAllItems",
-					AllItemsListResponse.class);
-			List<Item> itemsList = allItemsListResponse.getItems();
-			pdfItemList=allItemsListResponse.getItems();
-			System.out.println("getVarianceorderlistforsort size " + getVarianceorderlistforsort.size());
-			System.out.println("unsort size " + getQtyforVariance.getVarianceorderlist().size());
-			System.out.println(postProductionPlanDetaillist.toString());
+			
+			
 
 			// new Code
 			List<FinishedGoodStockDetail> updateStockDetailList = new ArrayList<>();
@@ -1091,11 +1055,7 @@ public class ProductionController {
 					} // end of Inner For Loop
 				} // End of outer For loop
 
-			} catch (Exception e) {
-				System.out.println("Excein Prod Controller get Current Fin good Stock " + e.getMessage());
-				e.printStackTrace();
-
-			}
+			
 
 			for (int i = 0; i < postProductionPlanDetaillist.size(); i++) {
 
@@ -1107,16 +1067,63 @@ public class ProductionController {
 								.setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
 
 						postProductionPlanDetaillist.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk());
-
+						postProductionPlanDetaillist.get(i).setOpeningQty((int)postProductionPlanDetaillist.get(i).getCurClosingQty());
 					}
 
 				}
 
 			}
 
-System.out.println("Fianl Post Prod Detail  List "+postProductionPlanDetaillist.toString());
+			System.out.println("Fianl Post Prod Detail  List "+postProductionPlanDetaillist.toString());
 			// end of new Code
 
+			} catch (Exception e) {
+				System.out.println("Excein Prod Controller get Current Fin good Stock " + e.getMessage());
+				e.printStackTrace();
+
+			}
+			
+			List<Variance> getVarianceorderlistforsort = new ArrayList<Variance>();
+			getVarianceorderlistforsort = getQtyforVariance.getVarianceorderlist();
+
+			for (int i = 0; i < postProductionPlanDetaillist.size(); i++) {
+				int planItemid = postProductionPlanDetaillist.get(i).getItemId();
+
+				for (int j = 0; j < getVarianceorderlistforsort.size(); j++) {
+					int varianceItemId = getVarianceorderlistforsort.get(j).getId();
+
+					if (planItemid == varianceItemId) {
+
+						int orderQty = getVarianceorderlistforsort.get(j).getOrderQty()
+								+ getVarianceorderlistforsort.get(j).getProdRejectedQty();
+						System.out.println("updated orderQty" + orderQty);
+						postProductionPlanDetaillist.get(i).setOrderQty(orderQty);
+
+						int remainingProQty = postProductionPlanDetaillist.get(i).getOrderQty()
+								- (postProductionPlanDetaillist.get(i).getOpeningQty()
+										+ postProductionPlanDetaillist.get(i).getProductionQty());
+
+						if (remainingProQty > 0) {
+							postProductionPlanDetaillist.get(i).setInt4(remainingProQty);
+						} else {
+							postProductionPlanDetaillist.get(i).setInt4(0);
+						}
+						getVarianceorderlistforsort.remove(j);
+					}
+
+				}
+
+			}
+			AllItemsListResponse allItemsListResponse = restTemplate.getForObject(Constants.url + "getAllItems",
+					AllItemsListResponse.class);
+			List<Item> itemsList = allItemsListResponse.getItems();
+			pdfItemList=allItemsListResponse.getItems();
+			System.out.println("getVarianceorderlistforsort size " + getVarianceorderlistforsort.size());
+			System.out.println("unsort size " + getQtyforVariance.getVarianceorderlist().size());
+			System.out.println(postProductionPlanDetaillist.toString());
+			
+			
+			
 			model.addObject("postProdPlanHeader", postProdPlanHeader);
 			model.addObject("getVarianceorderlistforsort", getVarianceorderlistforsort);
 			model.addObject("itemsList", itemsList);
@@ -1432,6 +1439,7 @@ System.out.println("Fianl Post Prod Detail  List "+postProductionPlanDetaillist.
 					postProductionPlanDetailnew.setRejectedQty(0);
 					postProductionPlanDetailnew.setPlanQty(0);
 					postProductionPlanDetailnew.setInt4(0);
+					postProductionPlanDetailnew.setOpeningQty((int) postProductionPlanDetaillist.get(i).getCurOpeQty());
 					postProductionPlanDetailnew.setProductionDate(Pdate);
 					postProductionPlanDetailnew.setProductionBatch("");
 					postProductionPlanDetailnewplan.add(postProductionPlanDetailnew);
@@ -1444,7 +1452,8 @@ System.out.println("Fianl Post Prod Detail  List "+postProductionPlanDetaillist.
 			Info updateOrderQtyinPlan = restTemplate.postForObject(Constants.url + "postProductionPlan",
 					postProdPlanHeader, Info.class);
 			System.out.println("updateOrderQtyinPlan " + updateOrderQtyinPlan);
-			if (updateOrderQtyinPlan.getError() == false) {
+			System.out.println("postProductionPlanDetailnewplan " + postProductionPlanDetailnewplan.size());
+			if (updateOrderQtyinPlan.getError() == false && postProductionPlanDetailnewplan.size()!=0) {
 				System.out.println("in if insert new plan");
 				postProdPlanHeadernewplan.setPostProductionPlanDetail(postProductionPlanDetailnewplan);
 				Info insertNewinPlan = restTemplate.postForObject(Constants.url + "postProductionPlan",
