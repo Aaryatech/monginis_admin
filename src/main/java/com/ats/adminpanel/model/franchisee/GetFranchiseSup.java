@@ -28,7 +28,37 @@ public class GetFranchiseSup {
 	
 	private int isTallySync;
 	
+
+    private int frequency;
 	
+	private String pestControlDate;
+	
+	private String remainderDate;
+	
+	public int getFrequency() {
+		return frequency;
+	}
+
+	public void setFrequency(int frequency) {
+		this.frequency = frequency;
+	}
+
+	public String getPestControlDate() {
+		return pestControlDate;
+	}
+
+	public void setPestControlDate(String pestControlDate) {
+		this.pestControlDate = pestControlDate;
+	}
+
+	public String getRemainderDate() {
+		return remainderDate;
+	}
+
+	public void setRemainderDate(String remainderDate) {
+		this.remainderDate = remainderDate;
+	}
+
 	public int getIsTallySync() {
 		return isTallySync;
 	}
@@ -138,7 +168,8 @@ public class GetFranchiseSup {
 		return "GetFranchiseSup [id=" + id + ", frId=" + frId + ", frName=" + frName + ", frPanNo=" + frPanNo
 				+ ", frState=" + frState + ", frCountry=" + frCountry + ", delStatus=" + delStatus + ", pass1=" + pass1
 				+ ", pass2=" + pass2 + ", pass3=" + pass3 + ", pass4=" + pass4 + ", pass5=" + pass5 + ", isTallySync="
-				+ isTallySync + "]";
+				+ isTallySync + ", frequency=" + frequency + ", pestControlDate=" + pestControlDate + ", remainderDate="
+				+ remainderDate + "]";
 	}
     
 }

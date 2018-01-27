@@ -1827,6 +1827,12 @@ public class FranchiseeController {
 
 			String pass3 = request.getParameter("pass3");
 
+			String pestControlDate=request.getParameter("pest_control_date");
+			
+			String remainderDate=request.getParameter("remainder_date");
+			
+			int frequency=Integer.parseInt(request.getParameter("frequency"));
+
 			FranchiseSup frSup = new FranchiseSup();
 			frSup.setId(id);
 			frSup.setFrId(frId);
@@ -1839,6 +1845,9 @@ public class FranchiseeController {
 			frSup.setPass3(pass3);
 			frSup.setPass4("pass4");
 			frSup.setPass5("pass5");
+			frSup.setPestControlDate(pestControlDate);
+			frSup.setFrequency(frequency);
+			frSup.setRemainderDate(remainderDate);
 			frSup.setIsTallySync(0);
 
 			RestTemplate restTemplate = new RestTemplate();

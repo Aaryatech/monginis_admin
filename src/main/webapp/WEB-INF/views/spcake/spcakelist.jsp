@@ -75,6 +75,9 @@
 																<th width="282" align="left">Code</th>
 																<th width="218" align="left">Name</th>
 																<th width="106" align="left">Type</th>
+																<th width="206" align="left">Min Weight</th>
+																<th width="206" align="left">Max Weight</th>
+																<th width="206" align="left">Book Before</th>
 																<th width="66" align="left">Action</th>
 															</tr>
 														</thead>
@@ -108,6 +111,13 @@
 																				
 																			</c:otherwise>
 																		</c:choose>
+																			<td align="left"><c:out
+																			value="${specialCake.spMinwt}  "></c:out></td>
+																				<td align="left"><c:out
+																			value="${specialCake.spMaxwt}  "></c:out></td>
+																				<td align="left"><c:out
+																			value="${specialCake.spBookb4}  "></c:out></td>
+																			
 																	<td align="left"><a
 																		href="updateSpCake/${specialCake.spId}"><span
 																			class="glyphicon glyphicon-edit"></span></a>

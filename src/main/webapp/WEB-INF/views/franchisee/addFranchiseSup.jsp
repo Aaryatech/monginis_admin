@@ -134,6 +134,32 @@
 											data-rule-required="true" value="${frSup.pass3}"/>
 									</div>
 							  </div>
+							  <div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Pest Control Date</label>
+									<div class="col-sm-9 col-lg-3 controls">
+									
+								<input class="form-control date-picker" id="pest_control_date" size="16"
+													type="text" name="pest_control_date"
+													required placeholder="Pest Control Date" value="${frSup.pestControlDate}"/>
+									</div>
+							  </div>
+							   <div class="col2">
+									<label class="col-sm-3 col-lg-2 control-label">Frequency</label>
+									<div class="col-sm-9 col-lg-3 controls">
+										<input type="text" name="frequency" id="frequency"
+											placeholder="Frequency" class="form-control"
+											data-rule-required="true" value="${frSup.frequency}"/>
+									</div>
+							  </div>
+							  <div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Remainder Date</label>
+									<div class="col-sm-9 col-lg-3 controls">
+										
+										<input class="form-control date-picker" id="remainder_date" size="16"
+													type="text" name="remainder_date"
+													required placeholder="Remainder Date" value="${frSup.remainderDate}"/>
+									</div>
+							  </div>
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										<input type="submit" class="btn btn-primary" value="Submit">
@@ -141,7 +167,6 @@
  -->									</div>
 								</div>
 							</form>
-							<br>
 								<div class="box">
 									<div class="box-title">
 										<h3>

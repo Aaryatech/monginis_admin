@@ -69,7 +69,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="item_id" id="item_id"
 											placeholder="Item Id" class="form-control"
-											data-rule-required="true" />
+											data-rule-required="true" value="${itemId}" />
 									</div>
 								</div>
 								<div class="form-group">
