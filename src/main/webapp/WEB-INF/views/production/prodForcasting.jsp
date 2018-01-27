@@ -118,10 +118,10 @@
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
-														<th width="30" align="left">Sr No</th>
-														<th width="90" align="left">Item Name</th>
-														<th width="90" align="left">Cur Closing</th>
-														<th width="90" align="left">Cur Opening</th>
+														<th width="20" align="left">Sr No</th>
+														<th width="110" align="left">Item Name</th>
+<!-- 														<th width="30" align="left">Cur Closing</th>
+ -->														<th width="90" align="left">Cur Opening</th>
 														
 														<th width="90" align="left">
 															<div>
@@ -340,9 +340,9 @@
 															+ "</td>";
 															
 															
-															var curClosing = "<td align=center colspan='2'><input type=text  class=form-control  id= curClos"+ item.id+ " name=curClos"+item.id+" value ="+item.curClosingQty+"></td>"; 
-
-															var curOpening = "<td align=center colspan='2'><input type=text  class=form-control  id= curOpe"+ item.id+ " name=curOpe"+item.id+" value ="+item.curOpeQty+"></td>"; 
+/* 															var curClosing = "<td align=center colspan='2'><input type=text  class=form-control  id= curClos"+ item.id+ " name=curClos"+item.id+" value ="+item.curClosingQty+"></td>"; 
+ */
+															var curOpening = "<td align=center colspan='1'><input type=text  class=form-control  id= curOpe"+ item.id+ " name=curOpe"+item.id+" value ="+item.curOpeQty+"></td>"; 
 
 
 													var qty1 = "<td align=center colspan='2'><input type=text  class=form-control  id= qty1"+ item.id+ " name=qty1"+item.id+" value = "+item.qty+ " disabled></td>"; 
@@ -367,9 +367,7 @@
 													$('#table1 tbody')
 															.append(itemName);
 													
-													$('#table1 tbody')
-													.append(curClosing);
-													
+												
 													$('#table1 tbody')
 													.append(curOpening);
 													
