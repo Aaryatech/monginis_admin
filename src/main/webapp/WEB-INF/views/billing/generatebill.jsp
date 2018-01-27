@@ -32,7 +32,7 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Franchise Bill
+					<i class="fa fa-file-o"></i>Franchisee FR Invoice
 				</h1>
 				<h4>Bill for franchises</h4>
 			</div>
@@ -54,7 +54,7 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>Generate Franchise Bill
+					<i class="fa fa-bars"></i>Generate Franchisee Bill
 				</h3>
 
 			</div>
