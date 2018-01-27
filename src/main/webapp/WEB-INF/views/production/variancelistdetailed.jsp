@@ -199,35 +199,32 @@
 
 								
 									
-										<div align="center" class="form-group">
-											<div
-												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+									<div class="row">
+									<div class="col-md-12" style="text-align: center">
 
 												<input type="submit" class="btn btn-primary"
-													value="complet Production">&nbsp;&nbsp;&nbsp;&nbsp;
+													value="complet Production">
+													<a href="${pageContext.request.contextPath}/insertProductionPlanWithoutCompletProd"
+													target="_blank"><input type="button" class="btn btn-primary" value="P 2 Production"></a>
 													<a href="${pageContext.request.contextPath}/showVariencePdf"
-								target="_blank">PDF</a></div>
-											</div>
-											
+													target="_blank"><input type="button" class="btn btn-primary" value="PDF"></a> 
+									</div>
+									</div>
+													
+											 
+											</form>
 											
 										</div>
-				
-								
-
-								
-								
-
-
+				 
 								<div class="box-content"></div>
 								<br>
 								<br>
-								<br>
-
-							</form>
-						</div>
-					</div>
-				</div>
+								<br> 
+						</div> 
+					</div> 
+				</div> 
 			</div>
+			
 		</div>
 		<!-- END Main Content -->
 		<footer>

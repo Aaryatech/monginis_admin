@@ -1,15 +1,29 @@
 package com.ats.adminpanel.controller;
 
  
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList; 
 import java.util.List; 
 import javax.mail.internet.MimeMessage;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse; 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope; 
+import org.springframework.context.annotation.Scope;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.core.io.InputStreamSource;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -18,10 +32,15 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod; 
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.client.RestTemplate; 
-import org.springframework.web.servlet.ModelAndView; 
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.commons.CommonsMultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.zefer.pd4ml.PD4Constants;
+import org.zefer.pd4ml.PD4ML;
+
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;
@@ -31,13 +50,15 @@ import com.ats.adminpanel.model.RawMaterial.RawMaterialDetailsList;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetailsList; 
 import com.ats.adminpanel.model.RawMaterial.RmItemGroup; 
 import com.ats.adminpanel.model.materialreceipt.Supplist;
+import com.ats.adminpanel.model.materialrecreport.GetMaterialRecieptReportMonthWise;
 import com.ats.adminpanel.model.purchaseorder.GetPurchaseOrderList;
 import com.ats.adminpanel.model.purchaseorder.GetRmRateAndTax;
 import com.ats.adminpanel.model.purchaseorder.PurchaseOrderDetail;
 import com.ats.adminpanel.model.purchaseorder.PurchaseOrderHeader; 
 import com.ats.adminpanel.model.supplierMaster.SupPaymentTermsList;
 import com.ats.adminpanel.model.supplierMaster.SupplierDetails;
-import com.ats.adminpanel.model.supplierMaster.TransporterList; 
+import com.ats.adminpanel.model.supplierMaster.TransporterList;
+import com.itextpdf.text.log.SysoCounter; 
 
 @Controller
 @Scope("session")
@@ -304,6 +325,7 @@ public class PurchaseOrderController {
 			
 		return model;
 	}
+	static PurchaseOrderHeader purchaseOrderHeaderPdf;
 	
 	@RequestMapping(value = "/poHeaderWithDetailed/{poId}/{flag}", method = RequestMethod.GET)
 	public ModelAndView poHeaderWithDetailed(@PathVariable int poId,@PathVariable int flag,HttpServletRequest request, HttpServletResponse response) {
@@ -317,7 +339,7 @@ public class PurchaseOrderController {
 			RestTemplate rest=new RestTemplate();
 			PurchaseOrderHeader purchaseOrderHeader=rest.postForObject(Constants.url + "purchaseOrder/getpurchaseorderHeaderWithDetailed",map, PurchaseOrderHeader.class);
 			 System.out.println("Response :"+purchaseOrderHeader.toString());
-			 
+			 purchaseOrderHeaderPdf=purchaseOrderHeader;
 			 supPaymentTerms=new SupPaymentTermsList();
 			  supPaymentTerms = rest.getForObject(Constants.url + "/showPaymentTerms",
 					SupPaymentTermsList.class);
@@ -513,11 +535,29 @@ public class PurchaseOrderController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/requestPOFinalByDirectore/{poId}", method = RequestMethod.GET)
-	public String requestPOFinalByDirectore(@PathVariable int poId,HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/poPdf", method = RequestMethod.GET)
+	public ModelAndView monthWisePdf( HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/poPdf");
+		try {
+			
+			 model.addObject("purchaseOrderHeaderPdf", purchaseOrderHeaderPdf);
+			System.out.println("purchaseOrderHeaderPdf" + purchaseOrderHeaderPdf);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+	
+	
+	@RequestMapping(value = "/requestPOFinalByDirectore", method = RequestMethod.POST)
+	public String requestPOFinalByDirectore(final @RequestParam CommonsMultipartFile attachFile,HttpServletRequest request, HttpServletResponse response) {
 
 		try
 		{
+			int poId = Integer.parseInt(request.getParameter("poId"));
+			System.out.println("poId "+ poId);
 			PurchaseOrderHeader purchaseOrderHeader = new PurchaseOrderHeader();
 			for(int i=0;i<=getPurchaseOrderList.getPurchaseOrderHeaderList().size();i++)
 			{
@@ -544,13 +584,15 @@ public class PurchaseOrderController {
 			 {
 				 String phonno = null;
 				 String email = null;
+				 String email2 = null; 
 				 Supplist supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
 				 for(int i=0;i<supplierDetailsList.getSupplierDetailslist().size();i++)
 				 {
 					 if(supplierDetailsList.getSupplierDetailslist().get(i).getSuppId()==purchaseOrderHeader.getSuppId())
 					 {
 						 phonno=supplierDetailsList.getSupplierDetailslist().get(i).getSuppMob1();
-						 email=supplierDetailsList.getSupplierDetailslist().get(i).getSuppEmail1();
+						 email= supplierDetailsList.getSupplierDetailslist().get(i).getSuppEmail1(); 
+						 email2= supplierDetailsList.getSupplierDetailslist().get(i).getSuppEmail2();
 						 break;
 					 }
 				 }
@@ -564,7 +606,7 @@ public class PurchaseOrderController {
 				 map.add("country", "91");
 				 map.add("response", "json");
 				String String=rest.postForObject("http://control.bestsms.co.in/api/sendhttp.php",map, String.class);
-				final String e_mail=email;
+				final String[] e_mail={email,email2};
 				mailSender.send(new MimeMessagePreparator() {
 
 					@Override
@@ -573,6 +615,18 @@ public class PurchaseOrderController {
 						messageHelper.setTo(e_mail);
 						messageHelper.setSubject("Email Testing");
 						messageHelper.setText("Nana Po Approved");
+						
+						String attachName = attachFile.getOriginalFilename();
+						if ( attachFile.getSize()>0) {
+							System.out.println("Attaching file to mail");
+							messageHelper.addAttachment(attachName, new InputStreamSource() {
+
+								@Override
+								public InputStream getInputStream() throws IOException {
+									return attachFile.getInputStream();
+								}
+							});
+						}
 
 					}
 
@@ -1133,4 +1187,124 @@ public class PurchaseOrderController {
 		return ret;
 	}
 	 
+	
+	private Dimension format = PD4Constants.A4;
+	private boolean landscapeValue = false;
+	private int topValue = 0;
+	private int leftValue = 0;
+	private int rightValue = 0;
+	private int bottomValue = 0;
+	private String unitsValue = "m";
+	private String proxyHost = "";
+	private int proxyPort = 0;
+
+	private int userSpaceWidth = 750;
+	private static int BUFFER_SIZE = 1024;
+
+	@RequestMapping(value = "/purchase", method = RequestMethod.GET)
+	public void showPDF(HttpServletRequest request, HttpServletResponse response) {
+
+		String url = request.getParameter("url");
+		System.out.println("URL " + url);
+		// http://monginis.ap-south-1.elasticbeanstalk.com
+		File f = new File("c:/pdf/ordermemo221.pdf");
+		//File f = new File("/ordermemo221.pdf");
+		System.out.println("I am here " + f.toString());
+		try {
+			runConverter(Constants.ReportURL + url, f);
+			System.out.println("Come on lets get ");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+
+			System.out.println("Pdf conversion exception " + e.getMessage());
+		}
+
+		// get absolute path of the application
+		ServletContext context = request.getSession().getServletContext();
+		String appPath = context.getRealPath("");
+		String filename = "ordermemo221.pdf";
+		String filePath = "c:/pdf/ordermemo221.pdf";
+		//String filePath = "/ordermemo221.pdf";
+
+		// construct the complete absolute path of the file
+		String fullPath = appPath + filePath;
+		File downloadFile = new File(filePath);
+		FileInputStream inputStream = null;
+		try {
+			inputStream = new FileInputStream(downloadFile);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			// get MIME type of the file
+			String mimeType = context.getMimeType(fullPath);
+			if (mimeType == null) {
+				// set to binary type if MIME mapping not found
+				mimeType = "application/pdf";
+			}
+			System.out.println("MIME type: " + mimeType);
+
+			String headerKey = "Content-Disposition";
+
+			// response.addHeader("Content-Disposition", "attachment;filename=report.pdf");
+			response.setContentType("application/pdf");
+
+			// get output stream of the response
+			OutputStream outStream;
+
+			outStream = response.getOutputStream();
+
+			byte[] buffer = new byte[BUFFER_SIZE];
+			int bytesRead = -1;
+
+			// write bytes read from the input stream into the output stream
+
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outStream.write(buffer, 0, bytesRead);
+			}
+
+			inputStream.close();
+			outStream.close();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void runConverter(String urlstring, File output) throws IOException {
+
+		if (urlstring.length() > 0) {
+			if (!urlstring.startsWith("http://") && !urlstring.startsWith("file:")) {
+				urlstring = "http://" + urlstring;
+			}
+
+			java.io.FileOutputStream fos = new java.io.FileOutputStream(output);
+
+			if (proxyHost != null && proxyHost.length() != 0 && proxyPort != 0) {
+				System.getProperties().setProperty("proxySet", "true");
+				System.getProperties().setProperty("proxyHost", proxyHost);
+				System.getProperties().setProperty("proxyPort", "" + proxyPort);
+			}
+
+			PD4ML pd4ml = new PD4ML();
+
+			try {
+				pd4ml.setPageSize(landscapeValue ? pd4ml.changePageOrientation(format) : format);
+			} catch (Exception e) {
+				System.out.println("Pdf conversion ethod excep " + e.getMessage());
+			}
+
+			if (unitsValue.equals("mm")) {
+				pd4ml.setPageInsetsMM(new Insets(topValue, leftValue, bottomValue, rightValue));
+			} else {
+				pd4ml.setPageInsets(new Insets(topValue, leftValue, bottomValue, rightValue));
+			}
+
+			pd4ml.setHtmlWidth(userSpaceWidth);
+
+			pd4ml.render(urlstring, fos);
+		}
+	}
 }

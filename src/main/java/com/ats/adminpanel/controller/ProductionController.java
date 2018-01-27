@@ -1466,5 +1466,61 @@ public class ProductionController {
 		}
 		return "redirect:/listForVariation";
 	}
+	
+	@RequestMapping(value = "/insertProductionPlanWithoutCompletProd", method = RequestMethod.GET)
+	public String insertProductionPlanWithoutCompletProd(HttpServletRequest request, HttpServletResponse response) {
+
+		List<PostProductionPlanDetail> postProductionPlanDetailnewplan = new ArrayList<PostProductionPlanDetail>();
+		PostProductionPlanDetail postProductionPlanDetailnew = new PostProductionPlanDetail();
+		PostProdPlanHeader postProdPlanHeadernewplan = new PostProdPlanHeader();
+		Date date = new Date();
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+		String Pdate = formatter.format(date);
+		System.out.println(Pdate);
+
+		RestTemplate restTemplate = new RestTemplate();
+		try {
+			postProdPlanHeadernewplan.setProductionStatus(2);
+			postProdPlanHeadernewplan.setItemGrp1(postProdPlanHeader.getItemGrp1());
+			postProdPlanHeadernewplan.setProductionDate(Pdate);
+			postProdPlanHeadernewplan.setTimeSlot(postProdPlanHeader.getTimeSlot());
+			postProdPlanHeadernewplan.setProductionBatch("");
+			for (int i = 0; i < postProductionPlanDetaillist.size(); i++) {
+				if (postProductionPlanDetaillist.get(i).getInt4() > 0) {
+					postProductionPlanDetailnew = new PostProductionPlanDetail();
+					postProductionPlanDetailnew.setItemId(postProductionPlanDetaillist.get(i).getItemId());
+					postProductionPlanDetailnew.setOpeningQty(0);
+					postProductionPlanDetailnew.setOrderQty(postProductionPlanDetaillist.get(i).getInt4());
+					postProductionPlanDetailnew.setProductionQty(0);
+					postProductionPlanDetailnew.setRejectedQty(0);
+					postProductionPlanDetailnew.setPlanQty(0);
+					postProductionPlanDetailnew.setInt4(0);
+					postProductionPlanDetailnew.setOpeningQty((int) postProductionPlanDetaillist.get(i).getCurOpeQty());
+					postProductionPlanDetailnew.setProductionDate(Pdate);
+					postProductionPlanDetailnew.setProductionBatch("");
+					postProductionPlanDetailnewplan.add(postProductionPlanDetailnew);
+
+				}
+			}
+
+			//postProdPlanHeader.setProductionStatus(5);
+			postProdPlanHeader.setPostProductionPlanDetail(postProductionPlanDetaillist);
+			Info updateOrderQtyinPlan = restTemplate.postForObject(Constants.url + "postProductionPlan",
+					postProdPlanHeader, Info.class);
+			System.out.println("updateOrderQtyinPlan " + updateOrderQtyinPlan);
+			System.out.println("postProductionPlanDetailnewplan " + postProductionPlanDetailnewplan.size());
+			if (updateOrderQtyinPlan.getError() == false && postProductionPlanDetailnewplan.size()!=0) {
+				System.out.println("in if insert new plan");
+				postProdPlanHeadernewplan.setPostProductionPlanDetail(postProductionPlanDetailnewplan);
+				Info insertNewinPlan = restTemplate.postForObject(Constants.url + "postProductionPlan",
+						postProdPlanHeadernewplan, Info.class);
+				System.out.println("insertNewinPlan" + insertNewinPlan);
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/listForVariation";
+	}
 
 }

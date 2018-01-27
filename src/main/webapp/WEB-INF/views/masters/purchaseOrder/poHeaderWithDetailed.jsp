@@ -64,8 +64,8 @@
 					 
 		<div class="box">
 			<form id="submitPurchaseOrder"
-				action="${pageContext.request.contextPath}/"
-				method="post">
+				action="${pageContext.request.contextPath}/requestPOFinalByDirectore"
+				method="post" enctype="multipart/form-data">
 			<div class="box-content">
 				<div class="col-md-2">PO No.  </div>
 				<div class="col-md-4"><input type="text" id="po_no" name="po_no" value="${purchaseOrderHeader.poNo}" class="form-control" readonly>
@@ -155,10 +155,16 @@
 									
 						</div>	<br/>		
 							
-			<div class="box-content">
-			
-					</div><br/>
-			
+							 <c:choose>
+									<c:when test="${purchaseOrderHeader.poStatus==2}">
+										<div class="box-content">
+											<div class="col-md-2" >Select Pdf</div>
+												<div class="col-md-4"> 
+													<input type="file" name="attachFile" size="60" required/> 
+												</div> 
+									</div><br/>
+									</c:when>  
+							</c:choose>
 			
 			
 				<div class=" box-content">
@@ -311,7 +317,10 @@
 						<c:when test="${(purchaseOrderHeader.poStatus==2) and (flag==2)}"> 
 						<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}/${flag}" ><input type="button" value="Edit" class="btn btn-info">
 								</a>
-									<a href="${pageContext.request.contextPath}/requestPOFinalByDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Approve" class="btn btn-info">
+								<input type="hidden" name="poId" value="${purchaseOrderHeader.poId}">
+									 <input type="submit" value="Approve" class="btn btn-info">
+									 
+								<a href="${pageContext.request.contextPath}/purchase?url=poPdf" target="_blank"><input type="button" value="Pdf" class="btn btn-info">
 									</a>
 								
 								<a href="${pageContext.request.contextPath}/rejectPODirectoreToPurchase/${purchaseOrderHeader.poId}"

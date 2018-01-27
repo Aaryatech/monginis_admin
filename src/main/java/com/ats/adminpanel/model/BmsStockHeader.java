@@ -3,6 +3,8 @@ package com.ats.adminpanel.model;
 import java.util.Date;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 
 
 public class BmsStockHeader {
@@ -25,6 +27,7 @@ public class BmsStockHeader {
 	public void setBmsStockId(int bmsStockId) {
 		this.bmsStockId = bmsStockId;
 	}
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public Date getBmsStockDate() {
 		return bmsStockDate;
 	}
