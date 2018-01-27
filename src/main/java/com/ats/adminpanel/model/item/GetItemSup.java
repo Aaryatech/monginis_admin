@@ -15,6 +15,8 @@ public class GetItemSup{
 	
 	private String itemHsncd;
 	
+	private int uomId;
+	
 	private String itemUom;
 	
 	private float actualWeight;
@@ -31,6 +33,15 @@ public class GetItemSup{
 	
 	private int delStatus;
 	
+	
+	public int getUomId() {
+		return uomId;
+	}
+
+	public void setUomId(int uomId) {
+		this.uomId = uomId;
+	}
+
 	public boolean isError() {
 		return error;
 	}
