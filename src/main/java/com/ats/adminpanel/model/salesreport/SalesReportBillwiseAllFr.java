@@ -12,7 +12,7 @@ public class SalesReportBillwiseAllFr {
 	
 	private String frName;
 	
-	private Date billDate;
+	private String billDate;
 	
 	private int frId;
 	
@@ -57,10 +57,10 @@ public class SalesReportBillwiseAllFr {
 	public void setFrName(String frName) {
 		this.frName = frName;
 	}
-	public Date getBillDate() {
+	public String getBillDate() {
 		return billDate;
 	}
-	public void setBillDate(Date billDate) {
+	public void setBillDate(String billDate) {
 		this.billDate = billDate;
 	}
 	public int getFrId() {
