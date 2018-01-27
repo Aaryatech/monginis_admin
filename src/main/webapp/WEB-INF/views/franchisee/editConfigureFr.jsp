@@ -151,7 +151,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Franchisees
+						<i class="fa fa-file-o"></i> Franchisee
 					</h1>
 				</div>
 			</div>
@@ -182,8 +182,7 @@
 										id="validation-form" method="post">
 
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Franchisee
-												Name</label>
+											<label class="col-sm-3 col-lg-2 control-label">Franchisee</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="fr_id" id="fr_id" value="${frName}"
 													placeholder="Franchisee Name" class="form-control"
@@ -198,8 +197,7 @@
 
 
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Menu
-												Name</label>
+											<label class="col-sm-3 col-lg-2 control-label">Menu</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="menu" id="menu" value="${menuName}"
 													placeholder="Franchisee Name" class="form-control"
@@ -249,8 +247,7 @@
 										</div>
 
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Setting
-												Type</label>
+											<label class="col-sm-3 col-lg-2 control-label">Order Frequency</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<select data-placeholder="Select Type" name="typeselector"
 													class="form-control chosen" tabindex="-1"
@@ -292,18 +289,24 @@
 											<div id="2" class="formgroup" style="display: none">
 											<label class="col-sm-3 col-lg-2 control-label">Date</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												
-												<select class="form-control chosen" name="date" id="date">
+												<c:set var="sel" value=""/>
+												<select class="form-control chosen" name="date[]" id="date" multiple="multiple">
 													<option value="0">Select Date</option>
-													 <c:forEach var = "i" begin = "1" end = "31">
-													<c:choose>
-													<c:when test="${i==franchiseeList.date}">
-													 <option value="${i}" selected>${i}</option>
-													</c:when>
-													<c:otherwise>
-       													<option value="${i}">${i}</option>
-       												</c:otherwise>	
-       												</c:choose>
+													 <c:forEach items="${remDate}" var="remDate">
+													 <c:set var="sel" value=""/>
+													   <c:forEach items="${date}" var="date">
+													   
+       													<c:choose>
+       													<c:when test="${remDate==date}">
+       													 <c:set var="sel" value="selected"/>
+       													
+       													</c:when>
+       												
+       													</c:choose>
+                                                     </c:forEach>
+       													 <option value="${remDate}" <c:out value="${sel}"/>>${remDate}</option>
+													
+                                                     
                                                      </c:forEach>
                                                     
 												</select>	
@@ -313,10 +316,27 @@
 										<div id="3" class="formgroup" style="display: none">
 											<label class="col-sm-3 col-lg-2 control-label">Day</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<select class="form-control input-sm" name="day" id="day">
+													<c:set var="sel1" value=""/>
+											
+												<select class="form-control chosen" name="day[]" id="day" multiple="multiple">
 
+                                                       <c:forEach items="${allDays}" var="allDays">
+													 <c:set var="sel1" value=""/>
+                                                     <c:forEach items="${frDay}" var="day">
+                                                         
+                                                         <c:choose>
+       													<c:when test="${allDays.key==day}">
+       													 <c:set var="sel1" value="selected"/>
+       													
+       													</c:when>
+       												
+       													</c:choose>
+                                                    </c:forEach>
+                                                              <option value="${allDays.key}" <c:out value="${sel1}"/>>${allDays.value}</option>
+                                                    
+                                                     </c:forEach>
 
-													<c:choose>
+													<%-- <c:choose>
 														<c:when test="${frDay=='1'}">
 															<option selected value="1">Sunday</option>
 															<option value="2">Monday</option>
@@ -410,7 +430,7 @@
 														
 
 
-													</c:choose>
+													</c:choose> --%>
 												</select>
 
 											</div>

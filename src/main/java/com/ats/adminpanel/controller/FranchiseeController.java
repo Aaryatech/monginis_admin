@@ -54,6 +54,7 @@ import com.ats.adminpanel.model.SpDayConfigure;
 import com.ats.adminpanel.model.SpecialCake;
 import com.ats.adminpanel.model.franchisee.AllFranchiseeAndMenu;
 import com.ats.adminpanel.model.franchisee.AllFranchiseeList;
+import com.ats.adminpanel.model.franchisee.AllMenuResponse;
 import com.ats.adminpanel.model.franchisee.CommonConf;
 import com.ats.adminpanel.model.franchisee.FrTarget;
 import com.ats.adminpanel.model.franchisee.FrTargetList;
@@ -97,6 +98,18 @@ public class FranchiseeController {
 		AllRoutesListResponse allRoutesListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
 				AllRoutesListResponse.class);
 
+		Integer maxFrId=restTemplate.getForObject(Constants.url + "getUnigueFrCode",Integer.class);
+		
+		int maxFrIdLenth=String.valueOf(maxFrId).length();
+		maxFrIdLenth=5-maxFrIdLenth;
+		StringBuilder frCode=new StringBuilder("DB");
+		
+		for(int i=0;i<maxFrIdLenth;i++)
+		{ String j="0";
+			frCode.append(j);
+		}
+		frCode.append(String.valueOf(maxFrId));
+		
 		List<Route> routeList = new ArrayList<Route>();
 		routeList = allRoutesListResponse.getRoute();
 		FrItemStockConfiResponse frItemStockConfiResponse = restTemplate
@@ -112,9 +125,9 @@ public class FranchiseeController {
 				settingValue = frItemStockConfigures.get(i).getSettingValue();
 			}
 
-			if (frItemStockConfigures.get(i).getSettingKey().equalsIgnoreCase("composite")
-					|| frItemStockConfigures.get(i).getSettingKey().equalsIgnoreCase("Above 20 lakh")
-					|| frItemStockConfigures.get(i).getSettingKey().equalsIgnoreCase("Above 75 lakh")) {
+			if (frItemStockConfigures.get(i).getSettingKey().equalsIgnoreCase("Non Registered")
+					|| frItemStockConfigures.get(i).getSettingKey().equalsIgnoreCase("composite")
+					|| frItemStockConfigures.get(i).getSettingKey().equalsIgnoreCase("Regular")) {
 
 				fileredFrItemStockConfigures.add(frItemStockConfigures.get(i));
 			}
@@ -127,7 +140,7 @@ public class FranchiseeController {
 		model.addObject("frItemStockConfigures", fileredFrItemStockConfigures);
 		System.out.println("Event List" + routeList.toString());
 		model.addObject("routeList", routeList);
-
+        model.addObject("frCode", frCode);
 		return model;
 	}
 	// ----------------------------------------END-------------------------------------------
@@ -258,8 +271,7 @@ public class FranchiseeController {
 
 	// ----------------------------------------END--------------------------------------------
 
-	// -------------------------ADD NEW FRANCHISEE
-	// PROCESS-------------------------------
+	// -------------------------ADD NEW FRANCHISEE PROCESS-------------------------------
 
 	@RequestMapping(value = "/addNewFrProcess", method = RequestMethod.POST)
 	public String displayLogin(HttpServletRequest request, HttpServletResponse response,
@@ -427,9 +439,10 @@ public class FranchiseeController {
 		ModelAndView model = new ModelAndView("franchisee/configureFr");
 		try {
 
-			int date;
-			int day;
-
+			String date[];
+			String day[];
+			String convertedDate = "0";
+			String convertedDays = "0";
 			String fromTime = request.getParameter("frm_time");
 
 			System.out.println(fromTime);
@@ -473,17 +486,36 @@ public class FranchiseeController {
 			System.out.println("settingType" + settingType);
 
 			if (settingType == 1) {
-				date = 0;
-				day = 0;
+				//date ="0";
+				//day = "0";
 			} else if (settingType == 2) {
-				date = Integer.parseInt(request.getParameter("date"));
-				System.out.println("date" + date);
-				day = date;
-			} else {
-				day = Integer.parseInt(request.getParameter("day"));
-				System.out.println("day:" + day);
+				date =request.getParameterValues("date[]");
+				
+				StringBuilder sbForDate = new StringBuilder();
 
-				date = 0;
+				for (int i = 0; i < date.length; i++) {
+					sbForDate = sbForDate.append(date[i] + ",");
+
+				}
+				 convertedDate = sbForDate.toString();
+				 convertedDate = convertedDate.substring(0, convertedDate.length() - 1);
+
+				System.out.println("date" + convertedDate);
+				//day ="0";
+			} else {
+				day = request.getParameterValues("day[]");
+				
+				StringBuilder sbForDay = new StringBuilder();
+
+				for (int i = 0; i < day.length; i++) {
+					sbForDay = sbForDay.append(day[i] + ",");
+
+				}
+				 convertedDays = sbForDay.toString();
+				 convertedDays = convertedDays.substring(0, convertedDays.length() - 1);
+				System.out.println("day:" + convertedDays);
+
+				//date ="0";
 			}
 
 			RestTemplate rest = new RestTemplate();
@@ -495,9 +527,8 @@ public class FranchiseeController {
 			map.add("catId", selectedCatId);
 			map.add("itemShow", items);
 			map.add("settingType", settingType);
-			map.add("date", date);
-			System.out.println("day" + day);
-			map.add("day", day);
+			map.add("date", convertedDate);
+			map.add("day", convertedDays);
 
 			ErrorMessage errorMessage = rest.postForObject(Constants.url + "configureFranchisee", map,
 					ErrorMessage.class);
@@ -514,16 +545,16 @@ public class FranchiseeController {
 
 		return "redirect:/configureFranchiseesList";
 	}
-	// ----------------------------------------END--------------------------------------------
+	// ----------------------------------------END------------------------------------
 
-	// ----------------------UPDATE CONFIGURED
-	// FRANCHISEE-------------------------------------
+	// ----------------------UPDATE CONFIGURED FRANCHISEE------------------------------
 
 	@RequestMapping(value = "/updateFranchiseeConf/updateFranchiseeProcess", method = RequestMethod.POST)
 	public String updateConfFr(HttpServletRequest request, HttpServletResponse response) {
-		int date = 0;
-		int day = 0;
-
+		String[] date;
+		String[] day;
+		String convertedDate = "0";
+		String convertedDays = "0";
 		ModelAndView model = new ModelAndView("franchisee/configureFr");
 		try {
 			String fromTime = "";
@@ -565,16 +596,35 @@ public class FranchiseeController {
 			System.out.println("item id list is" + strItems.toString());
 
 			if (settingType == 1) {
-				date =0;
-				day =0;
+				//date =0;
+				//day =0;
 			} else if (settingType == 2) {
-				date = Integer.parseInt(request.getParameter("date"));
-				day =0;
-			} else {
-				day = Integer.parseInt(request.getParameter("day"));
+				date =request.getParameterValues("date[]");
+				
+				StringBuilder sbForDate = new StringBuilder();
 
-				date =0;
-			}
+				for (int i = 0; i < date.length; i++) {
+					sbForDate = sbForDate.append(date[i] + ",");
+
+				}
+				 convertedDate = sbForDate.toString();
+				 convertedDate = convertedDate.substring(0, convertedDate.length() - 1);
+					System.out.println("date" + convertedDate);
+
+			} else {
+				day =request.getParameterValues("day[]");
+
+				StringBuilder sbForDay = new StringBuilder();
+
+				for (int i = 0; i < day.length; i++) {
+					sbForDay = sbForDay.append(day[i] + ",");
+
+				}
+				 convertedDays = sbForDay.toString();
+				 convertedDays = convertedDays.substring(0, convertedDays.length() - 1);
+					System.out.println("convertedDays" + convertedDays);
+
+				}
 
 
 			RestTemplate rest = new RestTemplate();
@@ -583,9 +633,8 @@ public class FranchiseeController {
 			map.add("toTime", sqlToTime.toString());
 
 			map.add("settingType", settingType);
-			map.add("day", day);
-			System.out.println("date:"+date);
-			map.add("date", date);
+			map.add("day", convertedDays);
+			map.add("date", convertedDate);
 			map.add("itemShow", strItems);
 			map.add("settingId", settingId);
 
@@ -649,8 +698,7 @@ public class FranchiseeController {
 
 	// ----------------------------------------END--------------------------------------------
 
-	// ----------------------EDIT CONFIGURED FRANCHISEE FORM
-	// SHOW-------------------------------------
+	// ----------------------EDIT CONFIGURED FRANCHISEE FORM SHOW------------------------
 
 	@RequestMapping(value = "/updateFranchiseeConf/{settingId}", method = RequestMethod.GET)
 	public ModelAndView updateFranchiseeConf(@PathVariable int settingId) {
@@ -659,7 +707,6 @@ public class FranchiseeController {
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-		// map.add("settingId", settingId);
 		RestTemplate restTemplate = new RestTemplate();
 
 		franchiseeAndMenuList = restTemplate.getForObject(Constants.url + "getFranchiseeAndMenu",
@@ -677,7 +724,8 @@ public class FranchiseeController {
 
 		franchiseeList.getSettingId();
 
-		int date = franchiseeList.getDate();
+		String date = franchiseeList.getDate();
+		List<String> dateList = Arrays.asList(date.split("\\s*,\\s*"));
 
 		System.out.println("selected franchisee is" + franchiseeList.toString());
 		int frId = franchiseeList.getFrId();
@@ -808,13 +856,30 @@ public class FranchiseeController {
 			e.printStackTrace();
 		}
 
-		int day = franchiseeList.getDay();
-
-		model.addObject("frDay", day);
-
-		SimpleDateFormat format = new SimpleDateFormat("MMMM yyyy");
-
-		model.addObject("date", date);
+		String day = franchiseeList.getDay();
+		List<String> dayList = Arrays.asList(day.split("\\s*,\\s*"));
+        System.out.println("days"+dayList.toString());
+        List<String> dates=new ArrayList<>();
+       
+    
+        for(int i=1;i<=31;i++)
+        {
+        	dates.add(""+i);
+        		
+        }
+        HashMap<String,String> allDays=new HashMap<String,String>();  
+        allDays.put("1","Sunday");  
+        allDays.put("2","Monday");  
+        allDays.put("3","Tuesday");  
+        allDays.put("4","Wednesday");  
+        allDays.put("5","Thursday");  
+        allDays.put("6","Friday");  
+        allDays.put("7","Saturday");  
+        
+		model.addObject("frDay", dayList);
+		model.addObject("remDate",dates);
+        model.addObject("allDays", allDays);
+		model.addObject("date", dateList);
 
 		model.addObject("franchiseeList", franchiseeList);
 
@@ -923,12 +988,13 @@ public class FranchiseeController {
 	@RequestMapping(value = "/getAllMenu", method = RequestMethod.GET)
 	public @ResponseBody List<Menu> findAllMenus() {
 		logger.debug("finding all Menu");
+		AllMenuResponse allMenus=new AllMenuResponse();
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 
-			allFranchiseeAndMenuList = new AllFranchiseeAndMenu();
-			allFranchiseeAndMenuList = restTemplate.getForObject(Constants.url + "getAllFranchiseeAndMenu",
-					AllFranchiseeAndMenu.class);
+			
+			 allMenus = restTemplate.getForObject(Constants.url + "getAllMenu",
+					AllMenuResponse.class);
 
 			System.out.println("Franchisee Controller Response " + allFranchiseeAndMenuList.getAllMenu());
 
@@ -936,7 +1002,7 @@ public class FranchiseeController {
 			System.out.println("Franchisee Controller Exception " + e.getMessage());
 		}
 
-		return allFranchiseeAndMenuList.getAllMenu();
+		return allMenus.getMenuConfigurationPage();
 	}
 	// ----------------------------------------END---------------------------------------------------------
 	// ----------------------------------------DELETE FRANCHISEE

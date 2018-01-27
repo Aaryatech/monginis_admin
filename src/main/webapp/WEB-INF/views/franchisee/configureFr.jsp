@@ -148,7 +148,7 @@ select {
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Franchisees
+						<i class="fa fa-file-o"></i> Franchisee
 					</h1>
 				</div>
 			</div>
@@ -230,8 +230,7 @@ select {
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Setting
-												Type</label>
+											<label class="col-sm-3 col-lg-2 control-label">Order Frequency</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<select data-placeholder="Select Type" name="typeselector"
 													class="form-control chosen" tabindex="-1"
@@ -251,7 +250,7 @@ select {
 										<div id="2" class="formgroup" style="display: none">
 											<label class="col-sm-3 col-lg-2 control-label">Date</label>
 											<div class="col-sm-9 col-lg-10 controls">
-											<select class="form-control chosen" name="date" id="date">
+											<select class="form-control chosen" name="date[]" id="date" multiple="multiple">
 													<option value="0">Select Date</option>
 													 <c:forEach var = "i" begin = "1" end = "31">
        													<option value="${i}">${i}</option>
@@ -263,7 +262,7 @@ select {
 										<div id="3" class="formgroup" style="display: none">
 											<label class="col-sm-3 col-lg-2 control-label">Day</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<select class="form-control input-sm" name="day" id="day">
+												<select class="form-control chosen" name="day[]" id="day" multiple="multiple">
 													<option value="">Select Day</option>
 													<option value="1">Sunday</option>
 													<option value="2">Monday</option>
