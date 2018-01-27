@@ -74,7 +74,7 @@ th {
 												<tr>
 													<td style="text-align:center;"><c:out value="${count.index+1}" /></td>
 													 
-													<td style="text-align:center;"><c:out value="${staticlist.month}" /></td>
+													<td><c:out value="${staticlist.month}" /></td>
 													<td  style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.basicValue}"/></td>
 													<c:set var="basicValue"  value="${basicValue+staticlist.basicValue }"/>
 													<td  style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.discAmt}"/> </td>
