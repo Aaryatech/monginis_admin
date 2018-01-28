@@ -192,21 +192,21 @@
 																	<td><c:out value="${stockList.rmName}"></c:out></td>
 
 																	<td><c:out value="${stockList.bmsOpeningStock}"></c:out>
-																	<td><c:out value="${stockList.prod_issue_qty}"></c:out>
+																	<td><c:out value="${stockList.prodIssueQty}"></c:out>
 																	</td>
-																	<td><c:out value="${stockList.prod_rejected_qty}"></c:out>
+																	<td><c:out value="${stockList.prodRejectedQty}"></c:out>
 																	</td>
-																	<td><c:out value="${stockList.prod_return_qty}"></c:out>
+																	<td><c:out value="${stockList.prodReturnQty}"></c:out>
 																	</td>
-																	<td><c:out value="${stockList.mixing_issue_qty}"></c:out>
+																	<td><c:out value="${stockList.mixingIssueQty}"></c:out>
 																	<td><c:out
-																			value="${stockList.mixing_rejected_qty}"></c:out>
-																	<td><c:out value="${stockList.mixing_return_qty}"></c:out>
-																	<td><c:out value="${stockList.store_issue_qty}"></c:out>
+																			value="${stockList.mixingRejectedQty}"></c:out>
+																	<td><c:out value="${stockList.mixingReturnQty}"></c:out>
+																	<td><c:out value="${stockList.storeIssueQty}"></c:out>
 																	</td>
-																	<td><c:out value="${stockList.store_rejected_qty}"></c:out>
+																	<td><c:out value="${stockList.storeRejectedQty}"></c:out>
 																	</td>
-																	<td><c:out value="${stockList.closingQty}"></c:out>
+																	<td><c:out value="${stockList.bmsClosingStock}"></c:out>
 																</tr>
 															</c:forEach>
 														</tbody>
@@ -233,7 +233,6 @@
 
 																<th>Closing Qty</th>
 
-
 															</tr>
 
 														</thead>
@@ -244,17 +243,17 @@
 																<tr>
 																	<td><c:out value="${count.index+1}"></c:out></td>
 																	<td><c:out value="${stockList.sfName}"></c:out></td>
-																	<td><c:out value="${stockList.bms_opening_stock}"></c:out>
-																	<td><c:out value="${stockList.prod_issue_qty}"></c:out>
+																	<td><c:out value="${stockList.bmsOpeningStock}"></c:out>
+																	<td><c:out value="${stockList.prodIssueQty}"></c:out>
 																	</td>
-																	<td><c:out value="${stockList.prod_rejected_qty}"></c:out>
+																	<td><c:out value="${stockList.prodRejectedQty}"></c:out>
 																	</td>
-																	<td><c:out value="${stockList.prod_return_qty}"></c:out>
+																	<td><c:out value="${stockList.prodReturnQty}"></c:out>
 																	</td>
-																	<td><c:out value="${stockList.mixing_issue_qty}"></c:out>
+																	<td><c:out value="${stockList.mixingIssueQty}"></c:out>
 																	<td><c:out
-																			value="${stockList.mixing_rejected_qty}"></c:out></td>
-																	<td><c:out value="${stockList.closingQty}"></c:out>
+																			value="${stockList.mixingRejectedQty}"></c:out></td>
+																	<td><c:out value="${stockList.bmsClosingStock}"></c:out>
 																</tr>
 															</c:forEach>
 														</tbody>

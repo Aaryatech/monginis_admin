@@ -48,7 +48,7 @@ public class BmsStockController {
 
 	List<GetBmsCurrentStock> bmsCurrentStock, bmsRmStockBetDate = new ArrayList<>();
 
-	List<GetCurrentBmsSFStock> bmsCurrentStockSf = new ArrayList<>();
+	List<GetCurrentBmsSFStock> bmsCurrentStockSf,bmsSfStockBetDate = new ArrayList<>();
 
 	List<BmsStockDetailed> stockBetDate = new ArrayList<>();
 
@@ -149,10 +149,10 @@ public class BmsStockController {
 					for (int i = 0; i < bmsCurrentStock.size(); i++) {
 						stock = new GetBmsCurrentStock();
 						stock = bmsCurrentStock.get(i);
-						bmsCurrentStock.get(i).setClosingQty(
-								(stock.getBmsOpeningStock() + stock.getProd_return_qty() + stock.getStore_issue_qty())
-										- stock.getProd_issue_qty() + stock.getMixing_issue_qty()
-										+ stock.getProd_rejected_qty() + stock.getMixing_rejected_qty());
+						bmsCurrentStock.get(i).setBmsClosingStock(0);
+						bmsCurrentStock.get(i).setBmsClosingStock((
+								(stock.getBmsOpeningStock() + stock.getProdReturnQty() + stock.getStoreIssueQty())
+										- (stock.getProdIssueQty() + stock.getMixingIssueQty())));
 
 					}
 
@@ -201,11 +201,10 @@ public class BmsStockController {
 					for (int i = 0; i < bmsCurrentStockSf.size(); i++) {
 						stock = new GetCurrentBmsSFStock();
 						stock = bmsCurrentStockSf.get(i);
-
+						bmsCurrentStockSf.get(i).setBmsClosingStock(0);
 						bmsCurrentStockSf.get(i)
-								.setClosingQty((stock.getBms_opening_stock() + stock.getMixing_issue_qty()
-										+ stock.getProd_return_qty()) - stock.getProd_issue_qty()
-										+ stock.getProd_rejected_qty() + stock.getMixing_rejected_qty());
+								.setBmsClosingStock(((stock.getBmsOpeningStock() + stock.getMixingIssueQty()
+										+ stock.getProdReturnQty()) - stock.getProdIssueQty()));
 
 					}
 					mav.addObject("stockList", bmsCurrentStockSf);
@@ -352,10 +351,30 @@ public class BmsStockController {
 					mav.addObject("stockList", bmsRmStockBetDate);
 				}
 
-				else {
+				else if(globalRmType==2) {
 					// get SF Stock Bet Date
 
 					System.out.println("It is SF Stock Betw Date");
+					String fromStockdate = request.getParameter("from_datepicker");
+					String toStockdate = request.getParameter("to_datepicker");
+					map = new LinkedMultiValueMap<String, Object>();
+
+					map.add("fromDate", fromStockdate);
+					map.add("toDate", toStockdate);
+					
+					map.add("fromDate", fromStockdate);
+					map.add("toDate", toStockdate);
+
+					// map.add("rmType", rmType);
+
+					currentBmsSFStockList = restTemplate.postForObject(Constants.url + "getBmsStockSFBetDate", map,
+							GetCurrentBmsSFStockList.class);
+					bmsSfStockBetDate = new ArrayList<>();
+					bmsSfStockBetDate = currentBmsSFStockList.getCurrentBmsSFStock();
+					System.out.println("Sf current Stock List " + bmsCurrentStockSf.toString());
+					mav.addObject("isRm", String.valueOf(2));
+					mav.addObject("stockList", bmsSfStockBetDate);
+					
 				}
 				/*
 				 * System.out.println("Inside Else stock btw Date ");
@@ -480,10 +499,10 @@ public class BmsStockController {
 
 						BmsStockDetailed bmsStockDetailed = bmsStockDetailedList.get(i);
 
-						float stockQty = bmsStockDetailed.getBmsOpeningStock() + getBmsCurrentStock.getStore_issue_qty()
-								+ getBmsCurrentStock.getProd_return_qty() + getBmsCurrentStock.getMixing_return_qty()
-								- (getBmsCurrentStock.getProd_issue_qty() + getBmsCurrentStock.getMixing_issue_qty()
-										+ getBmsCurrentStock.getStore_rejected_qty());
+						float stockQty = bmsStockDetailed.getBmsOpeningStock() + getBmsCurrentStock.getStoreIssueQty()
+								+ getBmsCurrentStock.getProdIssueQty() + getBmsCurrentStock.getMixingReturnQty()
+								- (getBmsCurrentStock.getProdIssueQty() + getBmsCurrentStock.getMixingIssueQty()
+										);
 						bmsStockDetailedList.get(i).setClosingQty(stockQty);
 
 						BmsStockDetailed newBmsStock = new BmsStockDetailed();
@@ -503,18 +522,18 @@ public class BmsStockController {
 						newBmsStock.setRmUom(bmsStockDetailed.getRmId());
 
 						newBmsStock.setIsDelStatus(bmsStockDetailed.getIsDelStatus());
-						newBmsStock.setMixingIssueQty(getBmsCurrentStock.getMixing_issue_qty());
+						newBmsStock.setMixingIssueQty(getBmsCurrentStock.getMixingIssueQty());
 						newBmsStock.setMixingReceiveRejectedQty(bmsStockDetailed.getMixingReceiveRejectedQty());
-						newBmsStock.setMixingRecQty(getBmsCurrentStock.getMixing_issue_qty());
-						newBmsStock.setMixingRejected(getBmsCurrentStock.getMixing_rejected_qty());
-						newBmsStock.setMixingReturnQty(getBmsCurrentStock.getMixing_return_qty());
-						newBmsStock.setProdIssueQty(getBmsCurrentStock.getProd_issue_qty());
-						newBmsStock.setProdRejectedQty(getBmsCurrentStock.getProd_rejected_qty());
-						newBmsStock.setProdReturnQty(getBmsCurrentStock.getProd_return_qty());
-						newBmsStock.setStoreRejectedQty(getBmsCurrentStock.getStore_rejected_qty());
-						newBmsStock.setProdReturnQty(getBmsCurrentStock.getProd_return_qty());
+						newBmsStock.setMixingRecQty(getBmsCurrentStock.getMixingIssueQty());
+						newBmsStock.setMixingRejected(getBmsCurrentStock.getMixingRejectedQty());
+						newBmsStock.setMixingReturnQty(getBmsCurrentStock.getMixingReturnQty());
+						newBmsStock.setProdIssueQty(getBmsCurrentStock.getProdIssueQty());
+						newBmsStock.setProdRejectedQty(getBmsCurrentStock.getProdRejectedQty());
+						newBmsStock.setProdReturnQty(getBmsCurrentStock.getProdIssueQty());
+						newBmsStock.setStoreRejectedQty(getBmsCurrentStock.getStoreRejectedQty());
+						newBmsStock.setProdReturnQty(getBmsCurrentStock.getProdIssueQty());
 
-						newBmsStock.setStoreRecQty(getBmsCurrentStock.getStore_issue_qty());
+						newBmsStock.setStoreRecQty(getBmsCurrentStock.getStoreIssueQty());
 
 						stokDetailList.add(newBmsStock);
 
@@ -603,8 +622,8 @@ public class BmsStockController {
 							GetCurrentBmsSFStock getBmsCurrentStock =bmsCurrentStockSf.get(j);
 
 							BmsStockDetailed bmsStockDetailed = bmsStockDetailedList.get(i);
-							float stockQty=(bmsStockDetailed.getBmsOpeningStock()+getBmsCurrentStock.getMixing_issue_qty()+
-									getBmsCurrentStock.getProd_return_qty())-getBmsCurrentStock.getProd_issue_qty();
+							float stockQty=(bmsStockDetailed.getBmsOpeningStock()+getBmsCurrentStock.getMixingIssueQty()+
+									getBmsCurrentStock.getProdReturnQty())-getBmsCurrentStock.getProdIssueQty();
 							
 							bmsStockDetailedList.get(i).setClosingQty(stockQty);
 
@@ -625,16 +644,16 @@ public class BmsStockController {
 							newBmsStock.setRmUom(bmsStockDetailed.getRmId());
 
 							newBmsStock.setIsDelStatus(bmsStockDetailed.getIsDelStatus());
-							newBmsStock.setMixingIssueQty(getBmsCurrentStock.getMixing_issue_qty());
+							newBmsStock.setMixingIssueQty(getBmsCurrentStock.getMixingIssueQty());
 							newBmsStock.setMixingReceiveRejectedQty(bmsStockDetailed.getMixingReceiveRejectedQty());
-							newBmsStock.setMixingRecQty(getBmsCurrentStock.getMixing_issue_qty());
-							newBmsStock.setMixingRejected(getBmsCurrentStock.getMixing_rejected_qty());
+							newBmsStock.setMixingRecQty(getBmsCurrentStock.getMixingIssueQty());
+							newBmsStock.setMixingRejected(getBmsCurrentStock.getMixingRejectedQty());
 							newBmsStock.setMixingReturnQty(0);
-							newBmsStock.setProdIssueQty(getBmsCurrentStock.getProd_issue_qty());
-							newBmsStock.setProdRejectedQty(getBmsCurrentStock.getProd_rejected_qty());
-							newBmsStock.setProdReturnQty(getBmsCurrentStock.getProd_return_qty());
+							newBmsStock.setProdIssueQty(getBmsCurrentStock.getProdIssueQty());
+							newBmsStock.setProdRejectedQty(getBmsCurrentStock.getProdRejectedQty());
+							newBmsStock.setProdReturnQty(getBmsCurrentStock.getProdReturnQty());
 							newBmsStock.setStoreRejectedQty(0);
-							newBmsStock.setProdReturnQty(getBmsCurrentStock.getProd_return_qty());
+							newBmsStock.setProdReturnQty(getBmsCurrentStock.getProdReturnQty());
 
 							newBmsStock.setStoreRecQty(0);
 

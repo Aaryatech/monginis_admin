@@ -5,113 +5,192 @@ public class GetBmsCurrentStock {
 	
 	private int rmId;
 	private String rmName;
-	float prod_issue_qty;
-	float prod_rejected_qty;
-	float prod_return_qty;
-	float mixing_issue_qty;
-	float mixing_rejected_qty; 
-	float mixing_return_qty;
-	float store_issue_qty; 
-	float store_rejected_qty;
-	float bmsOpeningStock;
-	float openingQty;
+	float prodIssueQty;
+	float prodRejectedQty;
 	
-	float closingQty;
+	float prodReturnQty;
+	float mixingIssueQty;
+	float mixingRejectedQty; 
+	float mixingReturnQty;
+	float storeIssueQty; 
+	float storeRejectedQty;
+	float bmsOpeningStock;
+	
+	float bmsClosingStock;
+	
+	
 	
 	private int rmUomId;
-	
+
+
+
 	public int getRmId() {
 		return rmId;
 	}
+
+
+
 	public void setRmId(int rmId) {
 		this.rmId = rmId;
 	}
+
+
+
 	public String getRmName() {
 		return rmName;
 	}
+
+
+
 	public void setRmName(String rmName) {
 		this.rmName = rmName;
 	}
-	public float getProd_issue_qty() {
-		return prod_issue_qty;
+
+
+
+	public float getProdIssueQty() {
+		return prodIssueQty;
 	}
-	public void setProd_issue_qty(float prod_issue_qty) {
-		this.prod_issue_qty = prod_issue_qty;
+
+
+
+	public void setProdIssueQty(float prodIssueQty) {
+		this.prodIssueQty = prodIssueQty;
 	}
-	public float getProd_rejected_qty() {
-		return prod_rejected_qty;
+
+
+
+	public float getProdRejectedQty() {
+		return prodRejectedQty;
 	}
-	public void setProd_rejected_qty(float prod_rejected_qty) {
-		this.prod_rejected_qty = prod_rejected_qty;
+
+
+
+	public void setProdRejectedQty(float prodRejectedQty) {
+		this.prodRejectedQty = prodRejectedQty;
 	}
-	public float getProd_return_qty() {
-		return prod_return_qty;
+
+
+
+	public float getProdReturnQty() {
+		return prodReturnQty;
 	}
-	public void setProd_return_qty(float prod_return_qty) {
-		this.prod_return_qty = prod_return_qty;
+
+
+
+	public void setProdReturnQty(float prodReturnQty) {
+		this.prodReturnQty = prodReturnQty;
 	}
-	public float getMixing_issue_qty() {
-		return mixing_issue_qty;
+
+
+
+	public float getMixingIssueQty() {
+		return mixingIssueQty;
 	}
-	public void setMixing_issue_qty(float mixing_issue_qty) {
-		this.mixing_issue_qty = mixing_issue_qty;
+
+
+
+	public void setMixingIssueQty(float mixingIssueQty) {
+		this.mixingIssueQty = mixingIssueQty;
 	}
-	public float getMixing_rejected_qty() {
-		return mixing_rejected_qty;
+
+
+
+	public float getMixingRejectedQty() {
+		return mixingRejectedQty;
 	}
-	public void setMixing_rejected_qty(float mixing_rejected_qty) {
-		this.mixing_rejected_qty = mixing_rejected_qty;
+
+
+
+	public void setMixingRejectedQty(float mixingRejectedQty) {
+		this.mixingRejectedQty = mixingRejectedQty;
 	}
-	public float getMixing_return_qty() {
-		return mixing_return_qty;
+
+
+
+	public float getMixingReturnQty() {
+		return mixingReturnQty;
 	}
-	public void setMixing_return_qty(float mixing_return_qty) {
-		this.mixing_return_qty = mixing_return_qty;
+
+
+
+	public void setMixingReturnQty(float mixingReturnQty) {
+		this.mixingReturnQty = mixingReturnQty;
 	}
-	public float getStore_issue_qty() {
-		return store_issue_qty;
+
+
+
+	public float getStoreIssueQty() {
+		return storeIssueQty;
 	}
-	public void setStore_issue_qty(float store_issue_qty) {
-		this.store_issue_qty = store_issue_qty;
+
+
+
+	public void setStoreIssueQty(float storeIssueQty) {
+		this.storeIssueQty = storeIssueQty;
 	}
-	public float getStore_rejected_qty() {
-		return store_rejected_qty;
+
+
+
+	public float getStoreRejectedQty() {
+		return storeRejectedQty;
 	}
-	public void setStore_rejected_qty(float store_rejected_qty) {
-		this.store_rejected_qty = store_rejected_qty;
+
+
+
+	public void setStoreRejectedQty(float storeRejectedQty) {
+		this.storeRejectedQty = storeRejectedQty;
 	}
-	public float getOpeningQty() {
-		return openingQty;
-	}
-	public void setOpeningQty(float openingQty) {
-		this.openingQty = openingQty;
-	}
-	public int getRmUomId() {
-		return rmUomId;
-	}
-	public void setRmUomId(int rmUomId) {
-		this.rmUomId = rmUomId;
-	}
-	public float getClosingQty() {
-		return closingQty;
-	}
-	public void setClosingQty(float closingQty) {
-		this.closingQty = closingQty;
-	}
+
+
+
 	public float getBmsOpeningStock() {
 		return bmsOpeningStock;
 	}
+
+
+
 	public void setBmsOpeningStock(float bmsOpeningStock) {
 		this.bmsOpeningStock = bmsOpeningStock;
 	}
+
+
+
+	public float getBmsClosingStock() {
+		return bmsClosingStock;
+	}
+
+
+
+	public void setBmsClosingStock(float bmsClosingStock) {
+		this.bmsClosingStock = bmsClosingStock;
+	}
+
+
+
+	public int getRmUomId() {
+		return rmUomId;
+	}
+
+
+
+	public void setRmUomId(int rmUomId) {
+		this.rmUomId = rmUomId;
+	}
+
+
+
 	@Override
 	public String toString() {
-		return "GetBmsCurrentStock [rmId=" + rmId + ", rmName=" + rmName + ", prod_issue_qty=" + prod_issue_qty
-				+ ", prod_rejected_qty=" + prod_rejected_qty + ", prod_return_qty=" + prod_return_qty
-				+ ", mixing_issue_qty=" + mixing_issue_qty + ", mixing_rejected_qty=" + mixing_rejected_qty
-				+ ", mixing_return_qty=" + mixing_return_qty + ", store_issue_qty=" + store_issue_qty
-				+ ", store_rejected_qty=" + store_rejected_qty + ", bmsOpeningStock=" + bmsOpeningStock
-				+ ", openingQty=" + openingQty + ", closingQty=" + closingQty + ", rmUomId=" + rmUomId + "]";
+		return "GetBmsCurrentStock [rmId=" + rmId + ", rmName=" + rmName + ", prodIssueQty=" + prodIssueQty
+				+ ", prodRejectedQty=" + prodRejectedQty + ", prodReturnQty=" + prodReturnQty + ", mixingIssueQty="
+				+ mixingIssueQty + ", mixingRejectedQty=" + mixingRejectedQty + ", mixingReturnQty=" + mixingReturnQty
+				+ ", storeIssueQty=" + storeIssueQty + ", storeRejectedQty=" + storeRejectedQty + ", bmsOpeningStock="
+				+ bmsOpeningStock + ", bmsClosingStock=" + bmsClosingStock + ", rmUomId=" + rmUomId + "]";
 	}
+	
+	
+	
+	
 
 }
