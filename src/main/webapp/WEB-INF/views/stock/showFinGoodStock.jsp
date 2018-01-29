@@ -69,7 +69,10 @@
 									<label class="col-sm-3 col-lg-2 control-label">Category</label>
 
 									<div class="col-sm-9 col-lg-10 controls">
-										<select class="form-control chosen" name="catId" id="catId">
+										<select class="form-control chosen" name="catId" id="catId" onclick="DayEndEnable()">
+
+
+											<option value="-1" >All</option>
 
 											<c:forEach items="${catList}" var="catList">
 
@@ -223,8 +226,10 @@
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
 										<!-- 										<input type="submit" class="btn btn-primary" value="Submit">
  -->
-										<input type="button" class="btn btn-danger"
-											value="Day End Process" id="dayEndButton">
+ 
+ 
+											<input type="button" class="btn btn-danger"
+											value="Day End Process" id="dayEndButton"  disabled/>
 
 									</div>
 
@@ -325,6 +330,8 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+		
+		
 
 	<script type="text/javascript">
 		function searchItemsByCategory() {
@@ -337,9 +344,18 @@
 			var to_datepicker = $('#to_datepicker').val();
 
 			var from_datepicker = $('#from_datepicker').val();
-
+			
 			var option = $("#selectStock").val();
-
+			
+			if(option==1 && catId==-1){
+				alert("Inside Button Enable ");
+				$('#dayEndButton').removeAttr('disabled');
+			}
+			else{
+				alert("In Else Buttton Disabledd ");
+				$("#dayEndButton").disabled=true;
+				//$('#dayEndButton').removeAttr('enabled');
+			}
 			$('#loader').show();
 
 			$
@@ -462,7 +478,9 @@
 												})
 
 							});
-
+			if(stock.isDayEndEnable==1){
+			$('#dayEndButton').removeAttr('disabled');
+			}
 		}
 	</script>
 
@@ -479,12 +497,18 @@
 
 					ajax : 'true',
 
-				}
-				/* complete:function(data) {
-				alert(data);
-				$('#loader').hide();
+				},
+				function(data) {
+				alert("Completed");
+					//$('#table1 td').remove();
 
-				} */
+					$('#loader').hide();
+					if (data == "") {
+						alert("No records found !!");
+
+					}
+				}
+
 				);
 
 			} else {

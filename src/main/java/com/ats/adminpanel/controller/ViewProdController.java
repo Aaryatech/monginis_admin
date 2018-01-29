@@ -231,15 +231,20 @@ public class ViewProdController {
 			updateStockDetailList = new ArrayList<>();
 
 			try {
-				DateFormat dfYmd = new SimpleDateFormat("yyyy-MM-dd");
+				
+				
 				map = new LinkedMultiValueMap<String, Object>();
-				map = new LinkedMultiValueMap<String, Object>();
-				map.add("stockStatus", 0);
+				map.add("stockDate", globalProdDate);
 
-				FinishedGoodStock stockHeader = restTemplate.postForObject(Constants.url + "getFinGoodStockHeader", map,
+				FinishedGoodStock stockHeader = restTemplate.postForObject(Constants.url + "getFinGoodStockHeaderByDate", map,
 						FinishedGoodStock.class);
-
+				DateFormat dfYmd = new SimpleDateFormat("yyyy-MM-dd");
+				
+				/*FinishedGoodStock stockHeader = restTemplate.postForObject(Constants.url + "getFinGoodStockHeader", map,
+						FinishedGoodStock.class);
+*/
 				System.out.println("stock Header " + stockHeader.toString());
+				if(stockHeader.getFinGoodStockStatus()==0) {
 
 				Date stockDate = stockHeader.getFinGoodStockDate();
 
@@ -257,6 +262,13 @@ public class ViewProdController {
 				map.add("catId", planHeader.getCatId());
 				map.add("delStatus", 0);
 
+				map.add("timestamp", stockHeader.getTimestamp());
+				
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Calendar cal = Calendar.getInstance();
+				 
+				map.add("curTimeStamp", dateFormat.format(cal.getTime()));
+
 				getCurProdAndBillQtyList = restTemplate.postForObject(Constants.url + "getCurrentProdAndBillQty", map,
 						GetCurProdAndBillQtyList.class);
 
@@ -268,7 +280,7 @@ public class ViewProdController {
 				String stockkDate = df.format(stockDate);
 				map = new LinkedMultiValueMap<String, Object>();
 				map.add("stockDate", stockkDate);
-
+				map.add("catId", planHeader.getCatId());
 				ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
 				};
 				ResponseEntity<List<FinishedGoodStockDetail>> responseEntity = restTemplate.exchange(
@@ -386,7 +398,18 @@ public class ViewProdController {
 						} // end of if isSameItem =true
 					} // end of Inner For Loop
 				} // End of outer For loop
-
+				
+				
+				}//end of if stockStatus ==0
+				
+				else {
+					
+					
+					//calc Stock Between Date
+					
+					
+					
+				}
 			} catch (Exception e) {
 				System.out.println("Excein Prod Controller get Current Fin good Stock " + e.getMessage());
 				e.printStackTrace();

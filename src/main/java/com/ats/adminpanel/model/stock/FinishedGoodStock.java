@@ -8,7 +8,7 @@ public class FinishedGoodStock {
 int finStockId;
 int catId;
 Date finGoodStockDate;
-
+String timestamp;//new field 27-01-18
 int finGoodStockStatus;
 int delStatus;
 
@@ -76,11 +76,24 @@ int delStatus;
 	}
 
 
+	public String getTimestamp() {
+		return timestamp;
+	}
+
+
+	public void setTimestamp(String timestamp) {
+		this.timestamp = timestamp;
+	}
+
+
 	@Override
 	public String toString() {
 		return "FinishedGoodStock [finStockId=" + finStockId + ", catId=" + catId + ", finGoodStockDate="
-				+ finGoodStockDate + ", finGoodStockStatus=" + finGoodStockStatus + ", delStatus=" + delStatus
-				+ ", finishedGoodStockDetail=" + finishedGoodStockDetail + "]";
+				+ finGoodStockDate + ", timestamp=" + timestamp + ", finGoodStockStatus=" + finGoodStockStatus
+				+ ", delStatus=" + delStatus + ", finishedGoodStockDetail=" + finishedGoodStockDetail + "]";
 	}
+
+
+	
 
 }

@@ -2,21 +2,15 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
- 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
- 	
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+
 	<c:url var="findItemsByCategory" value="/getItemsByCatIdForFinGood"></c:url>
 
-
-
 	<c:url var="finishedGoodDayEnd" value="/finishedGoodDayEnd"></c:url>
-
- 
-
-
 	<div class="container" id="main-container">
 
 		<!-- BEGIN Sidebar -->
@@ -68,11 +62,14 @@
 						<div class="box-content">
 							<form class="form-horizontal" id="validation-form">
 
-								<div class="form-group">
+								<%-- <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Category</label>
 
 									<div class="col-sm-9 col-lg-10 controls">
 										<select class="form-control chosen" name="catId" id="catId">
+
+
+										<option value="-1">All</option>
 
 											<c:forEach items="${catList}" var="catList">
 
@@ -86,16 +83,16 @@
 
 								</div>
 
-								
+								 --%>
 
-
+								<!-- 
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
 
 										<input type="button" class="btn btn-info" name="submit"
 											value="submit" onclick="searchItemsByCategory()" />
 									</div>
-								</div>
+								</div> -->
 								<input type="hidden" id="selectedCatId" name="selectedCatId" />
 
 							</form>
@@ -130,6 +127,16 @@
 													</tr>
 												</thead>
 												<tbody>
+											
+													<c:forEach items="${itemsList}" var="item" varStatus="count">
+														<tr>
+															<td><c:out value="${count.index+1}"></c:out></td>
+															<td><c:out value="${item.itemName}"></c:out></td>
+															<td><input type=text  class=form-control  id="qty1${item.id}" value="0" name="qty1${item.id}" ></td>
+															<td><input type=text  class=form-control  id="qty2${item.id}" value="0" name="qty2${item.id}"  ></td>
+															<td><input type=text  class=form-control  id="qty3${item.id}" value="0" name="qty3${item.id}"  ></td>
+														</tr>
+													</c:forEach>
 
 												</tbody>
 											</table>
@@ -146,8 +153,8 @@
 
 										<!-- <input type="button" class="btn btn-danger"
 											value="Day End Process" id="dayEndButton"> -->
-											
-											
+
+
 
 									</div>
 
@@ -166,7 +173,7 @@
 
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+				<p>2017 © MONGINIS.</p>
 			</footer>
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -241,11 +248,10 @@
 	<script type="text/javascript">
 		function searchItemsByCategory() {
 			
-			var catId = $("#catId").val();
+			/* var catId = $("#catId").val();
 			document.getElementById("selectedCatId").value =catId;
-			
+			 */
 			var option= $("#selectStock").val();
-		
 			
 			$('#loader').show();
 
@@ -254,8 +260,8 @@
 							'${findItemsByCategory}',
 							{
 								
-								catId : catId,
-								option : option,
+							/* 	catId : catId,
+								option : option, */
 								ajax : 'true'
 
 							},
@@ -342,19 +348,14 @@ if(option==1){
 
 	$.getJSON('${finishedGoodDayEnd}',
 			{
-				
 				ajax : 'true',
 				
-				 complete: function() {
-						
-					alert("completed ")
 				
-				 }
 	
-}
+})
 	$('#loader').hide();
 
-);
+));
 
 }else{alert("Please Select Current Stock")}});
 

@@ -60,40 +60,7 @@
 						</div> -->
 
 
-						<!-- <form action="addItemProcess" class="form-horizontal"
-							method="post" id="validation-form" enctype="multipart/form-data"> -->
-
-							<%-- <div class="box-content">
-							
-
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Bill No</label>
-									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="bill_no" id="bill_no"
-											placeholder="Bill No" class="form-control" value="${billNo}"
-											data-rule-required="true" readonly="readonly" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label" for="item_name">Bill
-										date</label>
-									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="bill_date" id="bill_date"
-											placeholder="Bill Date" class="form-control"
-											value="${billDate}" data-rule-required="true"
-											data-rule-minlength="3" readonly="readonly" />
-									</div>
-								</div>
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Franchise
-										Name</label>
-									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="fr_name" id="fr_name"
-											placeholder="Franchisee Name" class="form-control"
-											data-rule-required="true" readonly="readonly"
-											value="${frName}" />
-									</div>
-								</div> --%>
+			
 							<c:forEach items="${billDetails}" var="frDetails"
 								varStatus="count">
 								<div class="box-content">

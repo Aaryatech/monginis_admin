@@ -1739,7 +1739,7 @@ System.out.println("IN Show bill Method");
 		String url = request.getParameter("url");
 		 System.out.println("URL "+url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
-		File f = new File("/home/ats-11/ordermemo221.pdf");
+		File f = new File("/ordermemo221.pdf");
 System.out.println("I am here "+f.toString());
 		try {
 			runConverter(Constants.ReportURL + url, f);
@@ -1753,8 +1753,8 @@ System.out.println("I am here "+f.toString());
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		String filename = "/ordermemo221.pdf";
-		String filePath = "/home/ats-11/ordermemo221.pdf";
+		String filename = "ordermemo221.pdf";
+		String filePath = "/ordermemo221.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;

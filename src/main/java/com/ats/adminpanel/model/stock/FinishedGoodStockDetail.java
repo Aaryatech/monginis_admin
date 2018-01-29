@@ -41,6 +41,18 @@ public class FinishedGoodStockDetail {
 	
 	int delStatus;
 	
+	int catId;//new Field //27 Jan 18
+	
+	
+	int isDayEndEnable; //new Field /27 Jan temp var to enable/disable a Day End Button
+
+	public int getCatId() {
+		return catId;
+	}
+
+	public void setCatId(int catId) {
+		this.catId = catId;
+	}
 
 	public int getFinStockDetailId() {
 		return finStockDetailId;
@@ -194,6 +206,14 @@ public class FinishedGoodStockDetail {
 		this.delStatus = delStatus;
 	}
 
+	public int getIsDayEndEnable() {
+		return isDayEndEnable;
+	}
+
+	public void setIsDayEndEnable(int isDayEndEnable) {
+		this.isDayEndEnable = isDayEndEnable;
+	}
+
 	@Override
 	public String toString() {
 		return "FinishedGoodStockDetail [finStockDetailId=" + finStockDetailId + ", finStockId=" + finStockId
@@ -201,7 +221,7 @@ public class FinishedGoodStockDetail {
 				+ ", opT2=" + opT2 + ", opT3=" + opT3 + ", opTotal=" + opTotal + ", prodQty=" + prodQty + ", rejQty="
 				+ rejQty + ", frSaleQty=" + frSaleQty + ", gateSaleQty=" + gateSaleQty + ", cloT1=" + cloT1 + ", cloT2="
 				+ cloT2 + ", cloT3=" + cloT3 + ", cloCurrent=" + cloCurrent + ", totalCloStk=" + totalCloStk
-				+ ", delStatus=" + delStatus + "]";
+				+ ", delStatus=" + delStatus + ", catId=" + catId + ", isDayEndEnable=" + isDayEndEnable + "]";
 	}
 
 	

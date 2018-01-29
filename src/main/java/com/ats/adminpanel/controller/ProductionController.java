@@ -232,6 +232,12 @@ public class ProductionController {
 			map.add("prodDate", prodDate);
 			map.add("catId", selCate);
 			map.add("delStatus", 0);
+			map.add("timestamp", stockHeader.getTimestamp());
+			
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Calendar cal = Calendar.getInstance();
+			 
+			map.add("curTimeStamp", dateFormat.format(cal.getTime()));
 
 			getCurProdAndBillQtyList = restTemplate.postForObject(Constants.url + "getCurrentProdAndBillQty", map,
 					GetCurProdAndBillQtyList.class);
@@ -244,6 +250,8 @@ public class ProductionController {
 			String stkDate = df.format(stockDate);
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("stockDate", stkDate);
+			
+			map.add("catId", selectedCat);
 			//RestTemplate restTemplate = new RestTemplate();
 
 			ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef1 = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
@@ -924,6 +932,14 @@ public class ProductionController {
 				map.add("prodDate", stkDate);
 				map.add("catId", groupType);
 				map.add("delStatus", 0);
+				
+				map.add("timestamp", stockHeader.getTimestamp());
+				
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Calendar cal = Calendar.getInstance();
+				 
+				map.add("curTimeStamp", dateFormat.format(cal.getTime()));
+
 
 				getCurProdAndBillQtyList = restTemplate.postForObject(Constants.url + "getCurrentProdAndBillQty", map,
 						GetCurProdAndBillQtyList.class);
@@ -936,7 +952,7 @@ public class ProductionController {
 				String stockkDate = df.format(stockDate);
 				map = new LinkedMultiValueMap<String, Object>();
 				map.add("stockDate", stockkDate);
-
+				map.add("catId", selectedCat);
 				ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
 				};
 				ResponseEntity<List<FinishedGoodStockDetail>> responseEntity = restTemplate.exchange(
