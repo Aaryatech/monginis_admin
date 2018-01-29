@@ -425,6 +425,8 @@ public class ViewProdController {
 						prodPlanDetailList.get(i).setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
 
 						prodPlanDetailList.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk());
+						
+						prodPlanDetailList.get(i).setOpTotal(updateStockDetailList.get(j).getOpTotal());
 
 					}
 
@@ -749,7 +751,7 @@ public class ViewProdController {
 				tempMx.setQty(planMixing.getTotal());
 
 				tempMx.setRmId(planMixing.getRmId());
-				tempMx.setSfId(1);
+				tempMx.setSfId(planMixing.getSfId());
 
 				tempMx.setProdHeaderId(globalHeaderId);
 

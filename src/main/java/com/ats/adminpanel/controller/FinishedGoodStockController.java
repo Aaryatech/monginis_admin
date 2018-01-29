@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.CategoryListResponse;
@@ -38,6 +39,7 @@ import com.ats.adminpanel.model.stock.FinishedGoodStock;
 import com.ats.adminpanel.model.stock.FinishedGoodStockDetail;
 import com.ats.adminpanel.model.stock.GetCurProdAndBillQty;
 import com.ats.adminpanel.model.stock.GetCurProdAndBillQtyList;
+import com.itextpdf.text.log.SysoCounter;
 
 @Controller
 public class FinishedGoodStockController {
@@ -52,11 +54,18 @@ public class FinishedGoodStockController {
 
 	List<GetCurProdAndBillQty> getCurProdAndBillQty;
 
+	
+	List<FinishedGoodStockDetail> showFinStockDetail= new ArrayList<FinishedGoodStockDetail>();
+	
+	int isFirstStock=0;
+	
+	FinishedGoodStock showStockHeader;
+	
 	@RequestMapping(value = "/showFinishedGoodStock", method = RequestMethod.GET)
 	public ModelAndView showFinishedGoodStock(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("stock/finishedGoodStock");
-
+try {
 		Constants.mainAct = 4;
 		Constants.subAct = 40;
 
@@ -97,8 +106,58 @@ public class FinishedGoodStockController {
 			}
 
 		}
-		model.addObject("itemsList", itemsList);
+		showFinStockDetail= new ArrayList<FinishedGoodStockDetail>();
+		 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>(); 
+		 map.add("stockStatus", 0);
+
+		FinishedGoodStock stockHeader = restTemplate.postForObject(Constants.url + "getFinGoodStockHeader", map,
+				FinishedGoodStock.class);
+		DateFormat dfYmd = new SimpleDateFormat("dd-MM-yyyy");
+		
+		
+		if(stockHeader!=null) {
+			
+			showStockHeader=stockHeader;
+			String sDate=dfYmd.format(stockHeader.getFinGoodStockDate());
+			
+			System.out.println("s Date ==="+sDate);
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("stockDate", sDate);
+			
+			ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
+			};
+			ResponseEntity<List<FinishedGoodStockDetail>> responseEntity = restTemplate.exchange(
+					Constants.url + "getFinGoodStockDetailAllCat", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			showFinStockDetail = responseEntity.getBody();
+			
+		}
+		else {
+			 System.out.println("showFinStockDetail"+showFinStockDetail.toString());
+			 
+			 for(int i=0;i<itemsList.size();i++) {
+				 FinishedGoodStockDetail detail=new FinishedGoodStockDetail();
+				 detail.setItemName(itemsList.get(i).getItemName());
+				 detail.setCatId(Integer.parseInt(itemsList.get(i).getItemGrp1()));
+				 detail.setItemId(itemsList.get(i).getId());
+				 
+				 showFinStockDetail.add(detail);
+			 }
+			 
+			 
+			 //assign name to detail Object ;
+			isFirstStock=1;
+		}
+		
+		//model.addObject("itemsList", itemsList);
+		
+		model.addObject("itemsList", showFinStockDetail);
 		globalItemList = itemsList;
+}catch (Exception e) {
+	
+	System.out.println("Exe in showing add Fin good Stock Page "+e.getMessage());
+	e.printStackTrace();
+}
 		return model;
 
 	}
@@ -146,23 +205,28 @@ public class FinishedGoodStockController {
 	public ModelAndView insertOpeningStock(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("stock/finishedGoodStock");
+		RestTemplate restTemplate = new RestTemplate();
+
+		if(isFirstStock==1){
+			System.out.println("Its Opening Stock Insert call");
 
 		FinishedGoodStock goodStockHeader = new FinishedGoodStock();
 
 		List<FinishedGoodStockDetail> finGoodStockList = new ArrayList<>();
-
-		RestTemplate restTemplate = new RestTemplate();
+		FinishedGoodStockDetail detail;
 
 		for (int i = 0; i < globalItemList.size(); i++) {
+			//detail=new FinishedGoodStockDetail();
+			// detail=showFinStockDetail.get(i);
+			
+			float t1 = Float.parseFloat(request.getParameter("qty1"+globalItemList.get(i).getId()));
+			float t2 = Float.parseFloat(request.getParameter("qty2"+globalItemList.get(i).getId()));
+			float t3 = Float.parseFloat(request.getParameter("qty3"+globalItemList.get(i).getId()));
 
-			int t1 = Integer.parseInt(request.getParameter("qty1" + globalItemList.get(i).getId()));
-			int t2 = Integer.parseInt(request.getParameter("qty2" + globalItemList.get(i).getId()));
-			int t3 = Integer.parseInt(request.getParameter("qty3" + globalItemList.get(i).getId()));
-
-			System.out.println("t1 for Item :" + globalItemList.get(i).getItemName() + ":" + t1);
-			System.out.println("t2 for Item :" + globalItemList.get(i).getItemName() + ":" + t2);
-			System.out.println("t3 for Item :" + globalItemList.get(i).getItemName() + ":" + t3);
-
+			//System.out.println("t1 for Item :" + detail.getItemName() + ":" + t1);
+			//System.out.println("t2 for Item :" + detail.getItemName() + ":" + t2);
+			//System.out.println("t3 for Item :" + detail.getItemName() + ":" + t3);
+			
 			FinishedGoodStockDetail finGoodStockDetail = new FinishedGoodStockDetail();
 
 			finGoodStockDetail.setItemId(globalItemList.get(i).getId());
@@ -188,9 +252,50 @@ public class FinishedGoodStockController {
 
 		Info info = restTemplate.postForObject(Constants.url + "insertFinishedGoodOpStock", goodStockHeader,
 				Info.class);
+		
+		isFirstStock=0;
+		
+		}//end of if isFirstStock
+		else if(isFirstStock==0){ 
+			
+			System.out.println("Its Opening Stock Update call");
 
-		info.toString();
+			FinishedGoodStockDetail detail;
+			List<FinishedGoodStockDetail> finGoodStockList = new ArrayList<>();
 
+			for(int i=0;i<showFinStockDetail.size();i++) {
+				
+				detail=showFinStockDetail.get(i);
+				
+				
+				float t1 = Float.parseFloat(request.getParameter("qty1" + detail.getItemId()));
+				float t2 = Float.parseFloat(request.getParameter("qty2" + detail.getItemId()));
+				float t3 = Float.parseFloat(request.getParameter("qty3" + detail.getItemId()));
+
+				System.out.println("t1 for Item :" + detail.getItemName() + ":" + t1);
+				System.out.println("t2 for Item :" + detail.getItemName() + ":" + t2);
+				System.out.println("t3 for Item :" + detail.getItemName() + ":" + t3);
+				
+			/*	detail.setItemId(detail.getItemId());
+				detail.setItemName(detail.getItemName());*/
+				detail.setOpT1(t1);
+				detail.setOpT2(t2);
+				detail.setOpT3(t3);
+				detail.setOpTotal(t1 + t2 + t3);
+				/*detail.setStockDate(new Date());
+				detail.setDelStatus(0);
+				detail.setCatId(detail.getCatId());
+				*/
+				finGoodStockList.add(detail);
+				
+			}
+			showStockHeader.setFinishedGoodStockDetail(finGoodStockList);
+			
+			Info info = restTemplate.postForObject(Constants.url + "insertFinishedGoodOpStock", showStockHeader,
+					Info.class);
+			
+		}
+		
 		return model;
 
 	}

@@ -132,9 +132,9 @@
 														<tr>
 															<td><c:out value="${count.index+1}"></c:out></td>
 															<td><c:out value="${item.itemName}"></c:out></td>
-															<td><input type=text  class=form-control  id="qty1${item.id}" value="0" name="qty1${item.id}" ></td>
-															<td><input type=text  class=form-control  id="qty2${item.id}" value="0" name="qty2${item.id}"  ></td>
-															<td><input type=text  class=form-control  id="qty3${item.id}" value="0" name="qty3${item.id}"  ></td>
+															<td><input type=text  class=form-control  id="qty1${item.itemId}" value="${item.opT1}" name="qty1${item.itemId}" ></td>
+															<td><input type=text  class=form-control  id="qty2${item.itemId}" value="${item.opT2}" name="qty2${item.itemId}"  ></td>
+															<td><input type=text  class=form-control  id="qty3${item.itemId}" value="${item.opT3}" name="qty3${item.itemId}"  ></td>
 														</tr>
 													</c:forEach>
 
@@ -296,11 +296,11 @@
 															
 								
 											
-												    	var qty1 = "<td align=center ><input type=text  class=form-control  id= qty1"+ item.id+ " value=0 name=qty1"+item.id+"  ></td>"; 
+												    	var qty1 = "<td align=center ><input type=text  class=form-control  id= qty1"+ item.itemId+ " value=0 name=qty1"+item.itemId+"  ></td>"; 
 														
-														var qty2 = "<td align=center ><input type=text  class=form-control  id= qty2"+ item.id+ " value=0 name=qty2"+item.id+"  ></td>";
+														var qty2 = "<td align=center ><input type=text  class=form-control  id= qty2"+ item.itemId+ " value=0 name=qty2"+item.itemId+"  ></td>";
 
-														var qty3 = "<td align=center ><input type=text  class=form-control  id= qty3"+ item.id+ " value=0 name=qty3"+item.id+"  ></td>";
+														var qty3 = "<td align=center ><input type=text  class=form-control  id= qty3"+ item.itemId+ " value=0 name=qty3"+item.itemId+"  ></td>";
 												    	
 								 				var trclosed = "</tr>";
 

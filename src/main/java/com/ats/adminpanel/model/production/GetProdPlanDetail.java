@@ -33,6 +33,9 @@ private float  curClosingQty;//new Field Added Sachin
 
 private float curOpeQty;//new fiedl
 
+private float opTotal;
+
+
 	public int getProductionDetailId() {
 		return productionDetailId;
 	}
@@ -137,15 +140,25 @@ private float curOpeQty;//new fiedl
 		this.curOpeQty = curOpeQty;
 	}
 
+	public float getOpTotal() {
+		return opTotal;
+	}
+
+	public void setOpTotal(float opTotal) {
+		this.opTotal = opTotal;
+	}
+
 	@Override
 	public String toString() {
 		return "GetProdPlanDetail [productionDetailId=" + productionDetailId + ", productionHeaderId="
 				+ productionHeaderId + ", planQty=" + planQty + ", orderQty=" + orderQty + ", openingQty=" + openingQty
 				+ ", rejectedQty=" + rejectedQty + ", productionQty=" + productionQty + ", itemId=" + itemId
 				+ ", itemName=" + itemName + ", productionBatch=" + productionBatch + ", productionDate="
-				+ productionDate + ", curClosingQty=" + curClosingQty + ", curOpeQty=" + curOpeQty + "]";
+				+ productionDate + ", curClosingQty=" + curClosingQty + ", curOpeQty=" + curOpeQty + ", opTotal="
+				+ opTotal + "]";
 	}
 
+	
 	
 	
 }
