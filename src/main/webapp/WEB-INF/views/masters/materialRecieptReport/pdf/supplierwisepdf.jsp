@@ -32,7 +32,7 @@ th {
 <body onload="myFunction()">
 <h3 align="center">Galdhar Foods Pvt Ltd</h3>
 <p align="center">A-89, Shendra M.I.D.C., Aurangabad</p> 
-<p align="center">Inward Report (Supplier wise )</p>
+<p align="center">Purchase Report (Supplier wise )</p>
 
 <div align="center">From ${from_date} - To ${to_date}</div>
 	<table width="100%" border="0" cellspacing="0"

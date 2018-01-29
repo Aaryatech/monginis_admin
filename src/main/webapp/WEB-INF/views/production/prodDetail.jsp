@@ -149,6 +149,7 @@
 											<tr>
 												<th width="170" >Item Name</th>
 												<th width="120" align="left">Stock</th>
+												<th width="120" align="left">Opening Qty</th>
 												<th width="120" align="left">Plan Qty</th>
 												<th width="120" align="left">Order Qty</th>
 
@@ -168,6 +169,9 @@
 													<td align="left"><input align="left" type="text"  value="${planDetail.curOpeQty}"
 														placeholder="Stock Qty" class="form-control" name="stk_qty${planDetail.productionDetailId}" id="stk_qty${planDetail.productionDetailId}"
 														data-rule-required="true" style="width: 65px" disabled/></td>
+													<td align="left"><input align="left" type="text"  value="${planDetail.opTotal}"
+														placeholder="Opening Qty" class="form-control" name="op_total${planDetail.productionDetailId}" id="op_total${planDetail.productionDetailId}"
+														data-rule-required="true" style="width: 65px"/></td>
 
                                                       <c:choose>
          

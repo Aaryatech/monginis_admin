@@ -32,7 +32,7 @@ th {
 <body onload="myFunction()">
 <h3 align="center">Galdhar Foods Pvt Ltd</h3>
 <p align="center">A-89, Shendra M.I.D.C., Aurangabad</p> 
-<p align="center">Inward Report (Month wise )</p>
+<p align="center">Purchase Report (Month wise )</p>
 
 <div align="center">From ${fromDate}- To ${toDate}</div>
 
@@ -72,7 +72,7 @@ th {
 								<c:set var="billAmount"  value="${0 }"/>
 								  	<c:forEach items="${staticlist}" var="staticlist" varStatus="count">
 												<tr>
-													<td style="text-align:center;"><c:out value="${count.index+1}" /></td>
+													<td><c:out value="${count.index+1}" /></td>
 													 
 													<td><c:out value="${staticlist.month}" /></td>
 													<td  style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.basicValue}"/></td>

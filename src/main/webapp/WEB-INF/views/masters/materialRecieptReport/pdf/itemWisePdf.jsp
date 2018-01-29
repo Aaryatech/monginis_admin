@@ -33,7 +33,7 @@ th {
 
 <h3 align="center">Galdhar Foods Pvt Ltd</h3>
 <p align="center">A-89, Shendra M.I.D.C., Aurangabad</p> 
-<p align="center">Inward Report (Item wise )</p>
+<p align="center">Purchase Report (Item wise )</p>
 
 <div align="center">From ${fromDate}- To ${toDate}</div>
 
@@ -63,7 +63,7 @@ th {
 								<c:set var="taxableAmt"  value="${0 }"/>
 								  	<c:forEach items="${staticlist}" var="staticlist" varStatus="count">
 												<tr>
-													<td style="text-align:center;"><c:out value="${count.index+1}" /></td>
+													<td><c:out value="${count.index+1}" /></td>
 													 
 													<td><c:out value="${staticlist.rmName}" /></td>
 													<td  style="text-align:center"><c:out value="${staticlist.hsncdNo}" /></td>

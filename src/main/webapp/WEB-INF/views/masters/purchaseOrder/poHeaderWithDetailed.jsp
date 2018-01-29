@@ -65,7 +65,7 @@
 		<div class="box">
 			<form id="submitPurchaseOrder"
 				action="${pageContext.request.contextPath}/requestPOFinalByDirectore"
-				method="post" enctype="multipart/form-data">
+				method="post" enctype="multipart/form-data" onsubmit="return(validate());">
 			<div class="box-content">
 				<div class="col-md-2">PO No.  </div>
 				<div class="col-md-4"><input type="text" id="po_no" name="po_no" value="${purchaseOrderHeader.poNo}" class="form-control" readonly>
@@ -156,11 +156,11 @@
 						</div>	<br/>		
 							
 							 <c:choose>
-									<c:when test="${purchaseOrderHeader.poStatus==2}">
+									<c:when test="${(purchaseOrderHeader.poStatus==2) and (flag==2)}">
 										<div class="box-content">
 											<div class="col-md-2" >Select Pdf</div>
 												<div class="col-md-4"> 
-													<input type="file" name="attachFile" size="60" required/> 
+													<input type="file" id="file" name="attachFile" size="60" data-rule-required="true"/> 
 												</div> 
 									</div><br/>
 									</c:when>  
@@ -317,10 +317,10 @@
 						<c:when test="${(purchaseOrderHeader.poStatus==2) and (flag==2)}"> 
 						<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}/${flag}" ><input type="button" value="Edit" class="btn btn-info">
 								</a>
-								<input type="hidden" name="poId" value="${purchaseOrderHeader.poId}">
-									 <input type="submit" value="Approve" class="btn btn-info">
+								<input type="hidden" id="poId" name="poId" value="${purchaseOrderHeader.poId}">
+									 <input type="submit" id="submit" value="Approve" class="btn btn-info" disabled>
 									 
-								<a href="${pageContext.request.contextPath}/purchase?url=poPdf" target="_blank"><input type="button" value="Pdf" class="btn btn-info">
+								<a <%-- href="${pageContext.request.contextPath}/purchase?url=poPdf" --%> target="_blank"><input type="button" value="Pdf" class="btn btn-info" onclick="getPdf()">
 									</a>
 								
 								<a href="${pageContext.request.contextPath}/rejectPODirectoreToPurchase/${purchaseOrderHeader.poId}"
@@ -412,7 +412,27 @@
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
+	<script>	
+		function getPdf()
+	{
+    var poId = $("#poId").val();
+    document.getElementById('submit').disabled=false;
+    
+	    	window.open('${pageContext.request.contextPath}/purchase?url=poPdf/'+poId);
+		 
+    }
 		
+		function validate(){
+		    var inp = document.getElementById('file');
+		    var fileName = inp.value;
+		    var ext = fileName.substring(fileName.lastIndexOf('.') + 1); 
+		    if(inp.files.length == 0 || ext!="pdf"){
+		        alert("Valid file Required");
+		   inp.focus();
+		    return false;
+		    }
+		}
+</script>
 		
 		
 		

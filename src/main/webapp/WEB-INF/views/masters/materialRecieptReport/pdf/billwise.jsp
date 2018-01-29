@@ -33,7 +33,7 @@ th {
  
 <h3 align="center">Galdhar Foods Pvt Ltd</h3>
 <p align="center">A-89, Shendra M.I.D.C., Aurangabad</p> 
-<p align="center">Inward Report (Bill wise )</p>
+<p align="center">Purchase Report (Bill wise )</p>
 
 <div align="center">From ${from_date} - To ${to_date}</div>
 

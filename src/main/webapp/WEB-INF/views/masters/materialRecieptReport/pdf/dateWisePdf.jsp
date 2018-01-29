@@ -33,7 +33,7 @@ th {
 
 <h3 align="center">Galdhar Foods Pvt Ltd</h3>
 <p align="center">A-89, Shendra M.I.D.C., Aurangabad</p> 
-<p align="center">Inward Report (Date wise )</p>
+<p align="center">Purchase Report (Date wise )</p>
 
 <div align="center">From ${fromDate}- To ${toDate}</div>
 	<table width="100%" border="0" cellspacing="0"
@@ -71,8 +71,8 @@ th {
 								<c:set var="billAmount"  value="${0 }"/>
 								  	<c:forEach items="${staticlist}" var="staticlist" varStatus="count">
 												<tr>
-													<td style="text-align:center;"><c:out value="${count.index+1}" /></td> 
-													<td style="text-align:center;"><fmt:formatDate pattern = "dd-MM-yyyy" value = "${staticlist.invBookDate}" /></td>
+													<td><c:out value="${count.index+1}" /></td> 
+													<td><fmt:formatDate pattern = "dd-MM-yyyy" value = "${staticlist.invBookDate}" /></td>
 													<td style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.basicValue}"/>
 													</td>
 													 <c:set var="basicValue" value="${basicValue + staticlist.basicValue}"/>

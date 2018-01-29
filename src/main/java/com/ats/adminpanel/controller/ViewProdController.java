@@ -658,9 +658,12 @@ public class ViewProdController {
 			for (int i = 0; i < postProdPlanDetailList.size(); i++) {
 				int prodQty = Integer.parseInt(
 						request.getParameter("act_prod_qty" + postProdPlanDetailList.get(i).getProductionDetailId()));
+				float opTotal = Float.parseFloat(
+						request.getParameter("op_total" + postProdPlanDetailList.get(i).getProductionDetailId()));
 				System.out.println("prodQty:" + prodQty);
 
 				postProdPlanDetailList.get(i).setProductionQty(prodQty);
+				postProdPlanDetailList.get(i).setOpeningQty((int)opTotal);
 
 			}
 
@@ -716,6 +719,7 @@ public class ViewProdController {
 			System.out.println("Info" + info.toString());
 		} catch (Exception e) {
 			System.out.println("Exception In complete Production");
+			e.printStackTrace();
 		}
 		return "redirect:/getProdDetail/" + prodId;
 	}

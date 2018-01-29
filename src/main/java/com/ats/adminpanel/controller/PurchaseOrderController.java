@@ -43,6 +43,7 @@ import org.zefer.pd4ml.PD4ML;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
+import com.ats.adminpanel.model.GetPoHeaderForPdf;
 import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;
 import com.ats.adminpanel.model.RawMaterial.Info;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialDetails;
@@ -339,7 +340,7 @@ public class PurchaseOrderController {
 			RestTemplate rest=new RestTemplate();
 			PurchaseOrderHeader purchaseOrderHeader=rest.postForObject(Constants.url + "purchaseOrder/getpurchaseorderHeaderWithDetailed",map, PurchaseOrderHeader.class);
 			 System.out.println("Response :"+purchaseOrderHeader.toString());
-			 purchaseOrderHeaderPdf=purchaseOrderHeader;
+			 
 			 supPaymentTerms=new SupPaymentTermsList();
 			  supPaymentTerms = rest.getForObject(Constants.url + "/showPaymentTerms",
 					SupPaymentTermsList.class);
@@ -535,14 +536,20 @@ public class PurchaseOrderController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/poPdf", method = RequestMethod.GET)
-	public ModelAndView monthWisePdf( HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/poPdf/{poId}", method = RequestMethod.GET)
+	public ModelAndView monthWisePdf(@PathVariable String poId,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/poPdf");
 		try {
+			System.out.println("poId"+poId);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>();
+			map.add("poId", poId); 
+			RestTemplate rest=new RestTemplate();
+			GetPoHeaderForPdf getPoHeaderForPdf=rest.postForObject(Constants.url + "purchaseOrder/poDetailedForPdf",map, GetPoHeaderForPdf.class);
+			 System.out.println("Response :"+getPoHeaderForPdf.toString());
 			
-			 model.addObject("purchaseOrderHeaderPdf", purchaseOrderHeaderPdf);
-			System.out.println("purchaseOrderHeaderPdf" + purchaseOrderHeaderPdf);
+			 model.addObject("purchaseOrderHeaderPdf", getPoHeaderForPdf);
+			System.out.println("purchaseOrderHeaderPdf" + getPoHeaderForPdf);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

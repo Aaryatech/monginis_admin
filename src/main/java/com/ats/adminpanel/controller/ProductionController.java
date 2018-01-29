@@ -100,12 +100,12 @@ public class ProductionController {
 
 	// AllFrIdNameList allFrIdNameList;
 	List<Menu> menuList;
-	public static List<MCategoryList> categoryList;
-	public static String selectedCat;
-	public static String productionDate;
-	public static List<GetRegSpCakeOrderQty> getRegSpCakeOrderQtyList;
-	public static List<GetOrderItemQty> getOrderItemQtyList;
-	public static int[] timeSlot;
+	public List<MCategoryList> categoryList;
+	public String selectedCat;
+	public String productionDate;
+	public List<GetRegSpCakeOrderQty> getRegSpCakeOrderQtyList;
+	public List<GetOrderItemQty> getOrderItemQtyList;
+	public int[] timeSlot;
 	
 	int selCate;
 	
@@ -1082,8 +1082,7 @@ public class ProductionController {
 						postProductionPlanDetaillist.get(i)
 								.setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
 
-						postProductionPlanDetaillist.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk());
-						postProductionPlanDetaillist.get(i).setOpeningQty((int)postProductionPlanDetaillist.get(i).getCurClosingQty());
+						postProductionPlanDetaillist.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk()); 
 					}
 
 				}
@@ -1442,7 +1441,7 @@ public class ProductionController {
 		try {
 			postProdPlanHeadernewplan.setProductionStatus(2);
 			postProdPlanHeadernewplan.setItemGrp1(postProdPlanHeader.getItemGrp1());
-			postProdPlanHeadernewplan.setProductionDate(Pdate);
+			postProdPlanHeadernewplan.setProductionDate(postProdPlanHeader.getProductionDate());
 			postProdPlanHeadernewplan.setTimeSlot(postProdPlanHeader.getTimeSlot());
 			postProdPlanHeadernewplan.setProductionBatch("");
 			for (int i = 0; i < postProductionPlanDetaillist.size(); i++) {
@@ -1454,9 +1453,8 @@ public class ProductionController {
 					postProductionPlanDetailnew.setProductionQty(0);
 					postProductionPlanDetailnew.setRejectedQty(0);
 					postProductionPlanDetailnew.setPlanQty(0);
-					postProductionPlanDetailnew.setInt4(0);
-					postProductionPlanDetailnew.setOpeningQty((int) postProductionPlanDetaillist.get(i).getCurOpeQty());
-					postProductionPlanDetailnew.setProductionDate(Pdate);
+					postProductionPlanDetailnew.setInt4(0); 
+					postProductionPlanDetailnew.setProductionDate(postProductionPlanDetaillist.get(i).getProductionDate());
 					postProductionPlanDetailnew.setProductionBatch("");
 					postProductionPlanDetailnewplan.add(postProductionPlanDetailnew);
 
@@ -1498,7 +1496,7 @@ public class ProductionController {
 		try {
 			postProdPlanHeadernewplan.setProductionStatus(2);
 			postProdPlanHeadernewplan.setItemGrp1(postProdPlanHeader.getItemGrp1());
-			postProdPlanHeadernewplan.setProductionDate(Pdate);
+			postProdPlanHeadernewplan.setProductionDate(postProdPlanHeader.getProductionDate());
 			postProdPlanHeadernewplan.setTimeSlot(postProdPlanHeader.getTimeSlot());
 			postProdPlanHeadernewplan.setProductionBatch("");
 			for (int i = 0; i < postProductionPlanDetaillist.size(); i++) {
@@ -1510,9 +1508,8 @@ public class ProductionController {
 					postProductionPlanDetailnew.setProductionQty(0);
 					postProductionPlanDetailnew.setRejectedQty(0);
 					postProductionPlanDetailnew.setPlanQty(0);
-					postProductionPlanDetailnew.setInt4(0);
-					postProductionPlanDetailnew.setOpeningQty((int) postProductionPlanDetaillist.get(i).getCurOpeQty());
-					postProductionPlanDetailnew.setProductionDate(Pdate);
+					postProductionPlanDetailnew.setInt4(0); 
+					postProductionPlanDetailnew.setProductionDate(postProductionPlanDetaillist.get(i).getProductionDate());
 					postProductionPlanDetailnew.setProductionBatch("");
 					postProductionPlanDetailnewplan.add(postProductionPlanDetailnew);
 
