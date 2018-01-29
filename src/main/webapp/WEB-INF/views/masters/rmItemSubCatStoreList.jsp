@@ -55,6 +55,7 @@
 							<div class="clearfix"></div>
 
 
+<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
 
 							<div class="table-responsive" style="border: 0">

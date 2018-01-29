@@ -50,6 +50,7 @@
 						</div>
 
 						<div class="box-content">
+<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
 							<div class="clearfix"></div>
 

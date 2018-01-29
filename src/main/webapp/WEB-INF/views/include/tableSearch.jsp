@@ -2,7 +2,7 @@
   <div class="col-md-9" ></div> 
 					<label for="search" class="col-md-3" id="search">
     <i class="fa fa-search" style="font-size:20px"></i>
-									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search for Raw Material names.." title="Type in a name">
+									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search.." title="Type in a name">
 										</label>  
   
   <script>

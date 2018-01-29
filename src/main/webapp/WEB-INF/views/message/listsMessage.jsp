@@ -52,7 +52,8 @@
 						</div>
 
 						<div class="box-content">
-
+ <jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
+ 
 							<div class="clearfix"></div>
 							<div class="table-responsive" style="border: 0">
 								<table width="100%" class="table table-advance" id="table1">
