@@ -319,9 +319,11 @@ public class ItemSfController {
 		
 		float sfMinQty=Float.parseFloat(request.getParameter("sf_min_qty"));
 		
-		float sfMaxQty=Float.parseFloat(request.getParameter("sf_min_qty"));
+		float sfMaxQty=Float.parseFloat(request.getParameter("sf_max_qty"));
 		
 		float mulFactor=Float.parseFloat(request.getParameter("mul_factor"));
+		
+		System.out.println("sfMaxQty"+sfMaxQty);
 		
 		ItemSfHeader header=new ItemSfHeader();
 		

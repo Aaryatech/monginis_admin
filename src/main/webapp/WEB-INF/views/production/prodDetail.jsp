@@ -480,12 +480,12 @@ function changeQty(id)
 	var opQty=parseFloat(document.getElementById("op_total"+id).value); 
 	var actQty=parseFloat(document.getElementById("act_prod_qty"+id).value);
 	var rejQty=parseFloat(document.getElementById("rej_qty"+id).value);
-	alert(opQty);
+	/* alert(opQty);
 	alert(actQty);
-	alert(rejQty);
+	alert(rejQty); */
 	var total = opQty+actQty-rejQty;
  document.getElementById("total_qty"+id).value=total;
- alert(total);
+ /* alert(total); */
 	
 	}
 

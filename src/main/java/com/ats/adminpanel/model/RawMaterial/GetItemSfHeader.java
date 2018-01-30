@@ -22,7 +22,19 @@ public class GetItemSfHeader {
 	
 	private float reorderLevelQty;
 	
+	private float mulFactor;
+	
 	private int delStatus;
+	
+	
+
+	public float getMulFactor() {
+		return mulFactor;
+	}
+
+	public void setMulFactor(float mulFactor) {
+		this.mulFactor = mulFactor;
+	}
 
 	public String getSfTypeName() {
 		return sfTypeName;
@@ -118,8 +130,8 @@ public class GetItemSfHeader {
 	public String toString() {
 		return "GetItemSfHeader [sfId=" + sfId + ", sfName=" + sfName + ", sfUomId=" + sfUomId + ", sfType=" + sfType
 				+ ", sfTypeName=" + sfTypeName + ", sfWeight=" + sfWeight + ", stockQty=" + stockQty + ", minLevelQty="
-				+ minLevelQty + ", maxLevelQty=" + maxLevelQty + ", reorderLevelQty=" + reorderLevelQty + ", delStatus="
-				+ delStatus + "]";
+				+ minLevelQty + ", maxLevelQty=" + maxLevelQty + ", reorderLevelQty=" + reorderLevelQty + ", mulFactor="
+				+ mulFactor + ", delStatus=" + delStatus + "]";
 	}
 
 	

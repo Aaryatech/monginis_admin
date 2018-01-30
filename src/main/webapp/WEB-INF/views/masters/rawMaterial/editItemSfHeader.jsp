@@ -182,6 +182,7 @@
 								<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="mul_factor" id="mul_factor"
 											class="form-control" placeholder="Multiplication Factot"
+											value="${editHeader.mulFactor}"
 											data-rule-required="true" data-rule-number="true"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
@@ -292,22 +293,31 @@
 <script type="text/javascript">
 	function validateQty() {
 		
-		var min = document.getElementById("sf_min_qty").value;
-		var max = document.getElementById("sf_max_qty").value;
-		var reOrder = document.getElementById("sf_reorder_level_qty").value;
+		var min = parseFloat(document.getElementById("sf_min_qty").value);
+		var max = parseFloat(document.getElementById("sf_max_qty").value);
+		var reOrder = parseFloat(document.getElementById("sf_reorder_level_qty").value);
 		var sfName = document.getElementById("sf_item_name").value;
 		var sfType = document.getElementById("sf_item_type").value;
 		var uom = document.getElementById("sf_item_uom").value;
-		var weight = document.getElementById("sf_item_weight").value;
-		var stockQty = document.getElementById("sf_stock_qty").value;
+		var weight = parseFloat(document.getElementById("sf_item_weight").value);
+		var stockQty = parseFloat(document.getElementById("sf_stock_qty").value);
 		
 				var mulFactor = document.getElementById("mul_factor").value;
 
+		/* alert("min"+min);
+		alert("max"+max);
+		alert("reOrder"+reOrder);
+		alert("sfName"+sfName);
+		alert("sfType"+sfType);
+		alert("uom"+uom);
+		alert("weight"+weight);
+		alert("stockQty"+stockQty);
+		alert("mulFactor"+mulFactor); */
 		
 		
 		var valid=true;
 		
-		if(max == min || max < min ){
+		if(max <= min ){
 			alert("Enter Max Qty  greater than Min Qty");
 			valid=false;
 		}
