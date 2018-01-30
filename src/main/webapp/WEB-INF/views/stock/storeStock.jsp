@@ -5,6 +5,14 @@
 	 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+	 
+	<style type="text/css">
+	   tbody td, thead th {
+            width: 16.2%;
+            float: left;
+        }
+	</style>
+	 
 	<body>
  	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 <c:url var="getCurrentStoreStock" value="/getCurrentStoreStock" />
@@ -180,6 +188,7 @@
 									</div>
 
 									<div class="box-content">
+<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
 										<div class="clearfix"></div>
 										<div class="table-responsive" style="border: 0">
