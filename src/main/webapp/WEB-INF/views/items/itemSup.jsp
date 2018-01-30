@@ -138,11 +138,24 @@
 							  <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">UOM</label>
 									<div class="col-sm-9 col-lg-3 controls">
-										<input type="text" name="item_uom" id="item_uom"
-											placeholder="Item UOM" class="form-control"
-											data-rule-required="true" value="${itemSupp.itemUom}"/>
+												<select name="item_uom" id="item_uom" class="form-control"placeholder="Item UOM"
+												 data-rule-required="true" onchange="uomChanged()">
+											<option value="">Select Item UOM</option>
+											<c:forEach items="${rmUomList}" var="rmUomList"
+													varStatus="count">
+													<c:choose>
+													<c:when test="${rmUomList.uomId==itemSupp.uomId}">
+														<option value="${rmUomList.uomId}" selected><c:out value="${rmUomList.uom}"/></option>
+													</c:when>
+													<c:otherwise>
+														<option value="${rmUomList.uomId}"><c:out value="${rmUomList.uom}"/></option>
+													</c:otherwise>
+													</c:choose>
+												</c:forEach>
+										</select>
 									</div>
 							  </div>
+							  <input type="hidden" name="uom" id="uom" value="${itemSupp.itemUom}"/> 
 							  <div class="col2">
 									<label class="col-sm-3 col-lg-2 control-label">Actual Weight</label>
 									<div class="col-sm-9 col-lg-3 controls">
@@ -167,6 +180,34 @@
 											data-rule-required="true"  data-rule-number="true" value="${itemSupp.inputPerQty}"/>
 									</div>
 							  </div>
+						    <div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Type Of Tray</label>
+									<div class="col-sm-9 col-lg-3 controls">
+												<select name="tray_type" id="tray_type" class="form-control"placeholder="Type Of Tray"
+												 data-rule-required="true">
+											<option value="">Select Type Of Tray</option>
+											<c:forEach items="${trayTypes}" var="trayTypes"
+													varStatus="count">
+													<c:choose>
+													<c:when test="${trayTypes.typeId==itemSupp.trayType}">
+														<option value="${trayTypes.typeId}" selected><c:out value="${trayTypes.typeName}"/></option>
+													</c:when>
+													<c:otherwise>
+														<option value="${trayTypes.typeId}"><c:out value="${trayTypes.typeName}"/></option>
+													</c:otherwise>
+													</c:choose>
+												</c:forEach>
+										</select>
+									</div>
+							  </div>
+							    <div class="col2">
+									<label class="col-sm-3 col-lg-2 control-label">No. Of Item Per Tray</label>
+									<div class="col-sm-9 col-lg-3 controls">
+										<input type="text" name="no_of_item" id="no_of_item"
+											placeholder="No. Of Item Per Tray" class="form-control"
+											data-rule-required="true"  data-rule-number="true" value="${itemSupp.noOfItemPerTray}"/>
+									</div>
+							  </div> 
 							      <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Gate Sale Allowed?</label>
 									<div class="col-sm-9 col-lg-3 controls">
@@ -392,5 +433,13 @@ $(document).ready(function() {
 
 			});
 });
+</script>
+<script type="text/javascript">
+
+			function uomChanged() {
+				
+				document.getElementById('uom').value=$('#item_uom option:selected').text();
+				
+			}
 </script>
 </html>

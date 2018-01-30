@@ -136,12 +136,54 @@
 									<div class="box-content">
 
 										<div class="clearfix"></div>
-										<div class="table-responsive" style="border: 0">
+										
+										<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+										<th width="138" style="width: 18px" align="left">Sr
+															No</th>
+														<th width="138" align="left">Bill No</th>
+														<th width="159" align="left">Invoice No</th>
+														<th width="159" align="left">Bill date</th>
+														<th width="190" align="left">Franchisee Name</th>
+														<th width="159" align="left">Grand Total</th>
+														<th width="190" align="left">Payable Amount</th>
+														<th width="180" align="left">Paid Amount</th>
+														<th width="105" align="left">Pay Mode</th>
+														<th width="159" align="left">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table  class="table table-advance" id="table_grid" name="table_grid">
+											<thead>
+												<tr class="bgpink">
+										<th width="138" style="width: 18px" align="left">Sr
+															No</th>
+														<th width="138" align="left">Bill No</th>
+														<th width="159" align="left">Invoice No</th>
+														<th width="159" align="left">Bill date</th>
+														<th width="190" align="left">Franchisee Name</th>
+														<th width="159" align="left">Grand Total</th>
+														<th width="190" align="left">Payable Amount</th>
+														<th width="180" align="left">Paid Amount</th>
+														<th width="105" align="left">Pay Mode</th>
+														<th width="159" align="left">Action</th>
+												</tr>
+												</thead>
+										
+										<!-- <div class="table-responsive" style="border: 0">
 											<table width="100%" class="table table-advance" id="table_grid" name="table_grid">
 												<thead>
 													<tr>
-														<!-- <th width="138" style="width: 18px" align="left">Sr
-															No</th> -->
+														<th width="138" style="width: 18px" align="left">Sr
+															No</th>
 														<th width="138" align="left">Bill No</th>
 														<th width="159" align="left">Invoice No</th>
 														<th width="159" align="left">Bill date</th>
@@ -153,7 +195,7 @@
 														<th width="159" align="left">Action</th>
 														
 													</tr>
-												</thead>
+												</thead> -->
 												<tbody>
 											
 												
@@ -278,6 +320,9 @@
 
 													var tr = "<tr>";
 
+													var indexfortable="<td>&nbsp;&nbsp;&nbsp;"
+														+  index
+														+ "</td>";
 													var sellBillNo = "<td>&nbsp;&nbsp;&nbsp;"
 															+ sellBillData.sellBillNo
 															+ "</td>";
@@ -314,6 +359,9 @@
 
 													$('#table_grid tbody')
 															.append(tr);
+													
+													$('#table_grid tbody')
+													.append(indexfortable);
 													$('#table_grid tbody')
 															.append(sellBillNo);
 													$('#table_grid tbody')

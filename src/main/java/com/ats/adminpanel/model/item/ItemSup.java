@@ -14,6 +14,12 @@ public class ItemSup {
 	
 	private String itemUom;
 	
+	private int uomId;
+	
+	private int trayType;
+	
+	private int noOfItemPerTray;
+	
 	private float actualWeight;
 	
 	private float baseWeight;
@@ -29,6 +35,31 @@ public class ItemSup {
 	private int delStatus;
 
 	
+	
+	public int getUomId() {
+		return uomId;
+	}
+
+	public void setUomId(int uomId) {
+		this.uomId = uomId;
+	}
+
+	public int getTrayType() {
+		return trayType;
+	}
+
+	public void setTrayType(int trayType) {
+		this.trayType = trayType;
+	}
+
+	public int getNoOfItemPerTray() {
+		return noOfItemPerTray;
+	}
+
+	public void setNoOfItemPerTray(int noOfItemPerTray) {
+		this.noOfItemPerTray = noOfItemPerTray;
+	}
+
 	public boolean getError() {
 		return error;
 	}
@@ -135,10 +166,11 @@ public class ItemSup {
 
 	@Override
 	public String toString() {
-		return "ItemSup [id=" + id + ", itemId=" + itemId + ", itemHsncd=" + itemHsncd + ", itemUom=" + itemUom
+		return "ItemSup [error=" + error + ", message=" + message + ", id=" + id + ", itemId=" + itemId + ", itemHsncd="
+				+ itemHsncd + ", itemUom=" + itemUom + ", trayType=" + trayType + ", noOfItemPerTray=" + noOfItemPerTray
 				+ ", actualWeight=" + actualWeight + ", baseWeight=" + baseWeight + ", inputPerQty=" + inputPerQty
 				+ ", isGateSale=" + isGateSale + ", isGateSaleDisc=" + isGateSaleDisc + ", isAllowBday=" + isAllowBday
 				+ ", delStatus=" + delStatus + "]";
 	}
-
+    
 }

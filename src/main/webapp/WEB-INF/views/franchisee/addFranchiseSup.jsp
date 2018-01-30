@@ -5,7 +5,7 @@
 	 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-<body onload="disableFranchise(${isEdit})">
+    <body onload="disableFranchise(${isEdit})">
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
@@ -140,7 +140,7 @@
 									
 								<input class="form-control date-picker" id="pest_control_date" size="16"
 													type="text" name="pest_control_date"
-													required placeholder="Pest Control Date" value="${frSup.pestControlDate}"/>
+													required placeholder="Pest Control Date" value="${frSup.pestControlDate}" onblur="return onPestControlDateChange()"/>
 									</div>
 							  </div>
 							   <div class="col2">
@@ -151,7 +151,7 @@
 											data-rule-required="true" value="${frSup.frequency}"/>
 									</div>
 							  </div>
-							  <div class="form-group">
+							  <%-- <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Remainder Date</label>
 									<div class="col-sm-9 col-lg-3 controls">
 										
@@ -159,7 +159,7 @@
 													type="text" name="remainder_date"
 													required placeholder="Remainder Date" value="${frSup.remainderDate}"/>
 									</div>
-							  </div>
+							  </div> --%>
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										<input type="submit" class="btn btn-primary" value="Submit">
@@ -178,8 +178,108 @@
 											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 										</div>
 									</div>
+                                   <div class="box-content">
+<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
-									<div class="box-content">
+
+							<div class="clearfix"></div>
+							
+							
+							
+							
+							
+								<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+										<th width="45" style="width: 18px">Sr.No.</th>
+														<th width="100" align="left">Franchisee</th>
+														<th width="100" align="left">PAN No.</th>
+														<th width="100" align="left">State</th>
+														<th width="100" align="left">Country</th>
+														<th width="290" align="left">PestControl Date</th>
+														<th width="60" align="right">Frequency</th>
+														<th width="190" align="left">Remainder Date</th>
+													<th width="70" align="left">Pass1</th>
+													<th width="70" align="left">Pass2</th>
+													<th width="70" align="left">Pass3</th>
+												
+														<th width="81" align="left">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+										<th width="45" style="width: 18px">Sr.No.</th>
+														<th width="100" align="left">Franchisee</th>
+														<th width="100" align="left">PAN No.</th>
+														<th width="100" align="left">State</th>
+														<th width="100" align="left">Country</th>
+														<th width="290" align="left">PestControl Date</th>
+														<th width="60" align="right">Frequency</th>
+														<th width="190" align="left">Remainder Date</th>
+													<th width="70" align="left">Pass1</th>
+													<th width="70" align="left">Pass2</th>
+													<th width="70" align="left">Pass3</th>
+												
+														<th width="81" align="left">Action</th>
+												</tr>
+												</thead>
+												<tbody>
+											
+	                              <c:forEach items="${frSupList}" var="frSupList" varStatus="count">
+														<tr>
+														
+															<td><c:out value="${count.index+1}"/></td>
+															<td align="left"><c:out
+																	value="${frSupList.frName}"></c:out></td>
+															<td align="left"><c:out
+																	value="${frSupList.frPanNo}"></c:out></td>	
+												        	<td align="left"><c:out
+																	value="${frSupList.frState}"></c:out></td>		
+															<td align="left"><c:out
+																	value="${frSupList.frCountry}"></c:out></td>		
+															<td align="left"><c:out
+																	value="${frSupList.pestControlDate}"></c:out></td>	
+															<td align="center"><c:out
+																	value="${frSupList.frequency}"></c:out></td>		
+															<td align="left"><c:out
+																	value="${frSupList.remainderDate}"></c:out></td>												
+															<td align="left"><c:out
+																	value="${frSupList.pass1}"></c:out></td>
+															<td align="left"><c:out
+																	value="${frSupList.pass2}"></c:out></td>
+															<td align="left"><c:out
+																	value="${frSupList.pass3}"></c:out></td>
+															
+																	
+															<td align="left"><a href="${pageContext.request.contextPath}/updateFranchiseSup/${frSupList.id}"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
+                                                        </td>		
+																												
+       													
+														</tr>
+
+													</c:forEach>  
+
+
+							</tbody>
+
+						</table>
+					</div>
+				</div>
+				
+						</div>
+                                  
+
+									<%-- <div class="box-content">
 
 										<div class="clearfix"></div>
 										<div class="table-responsive" style="border: 0">
@@ -187,13 +287,16 @@
 												<thead>
 													<tr>
 														<th width="45" style="width: 18px">Sr.No.</th>
-														<th width="100" align="left">Franchisee Name</th>
+														<th width="100" align="left">Franchisee</th>
 														<th width="100" align="left">PAN No.</th>
 														<th width="100" align="left">State</th>
 														<th width="100" align="left">Country</th>
-													<th width="100" align="left">Pass1</th>
-													<th width="100" align="left">Pass2</th>
-													<th width="100" align="left">Pass3</th>
+														<th width="290" align="left">PestControl Date</th>
+														<th width="60" align="right">Frequency</th>
+														<th width="190" align="left">Remainder Date</th>
+													<th width="70" align="left">Pass1</th>
+													<th width="70" align="left">Pass2</th>
+													<th width="70" align="left">Pass3</th>
 												
 														<th width="81" align="left">Action</th>
 													</tr>
@@ -210,7 +313,13 @@
 												        	<td align="left"><c:out
 																	value="${frSupList.frState}"></c:out></td>		
 															<td align="left"><c:out
-																	value="${frSupList.frCountry}"></c:out></td>							
+																	value="${frSupList.frCountry}"></c:out></td>		
+															<td align="left"><c:out
+																	value="${frSupList.pestControlDate}"></c:out></td>	
+															<td align="center"><c:out
+																	value="${frSupList.frequency}"></c:out></td>		
+															<td align="left"><c:out
+																	value="${frSupList.remainderDate}"></c:out></td>												
 															<td align="left"><c:out
 																	value="${frSupList.pass1}"></c:out></td>
 															<td align="left"><c:out
@@ -231,7 +340,7 @@
 											</table>
 										</div>
 									</div>
-								</div>
+ --%>								</div>
 							
 						</div>
 					</div>
@@ -319,5 +428,31 @@ function disableFranchise(isEdit) {
 		}
 
 }
-</script>
+</script><!-- 
+<script type="text/javascript">
+$(document).ready(function () {
+    $('#pest_control_date').datepicker();
+    $('#remainder_date').datepicker();
+});
+
+
+function onPestControlDateChange() {
+	//$('#remainder_date').datepicker({ dateFormat: 'dd-mm-yy' }).val();
+	
+    var tt = document.getElementById('pest_control_date').value;
+    var numberOfDaysToAdd =document.getElementById("frequency").value;
+
+    var date = new Date(tt);
+    var newdate = new Date(date);
+
+    newdate.setDate(newdate.getDate());
+    
+    var dd = newdate.getDate()+numberOfDaysToAdd;
+    var mm = newdate.getMonth() + 1;
+    var y = newdate.getFullYear();
+
+    var someFormattedDate = mm + '-' + dd + '-' + y;
+    document.getElementById('remainder_date').value = someFormattedDate;
+}
+</script> -->
 </html>

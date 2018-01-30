@@ -8,7 +8,7 @@
 	<body>
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
-
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
 	<div class="container" id="main-container">
 
 		<!-- BEGIN Sidebar -->
@@ -131,27 +131,53 @@
 						</div>
 
 						<div class="box-content">
+<div class="col-md-9" ></div> 
+					<label for="search" class="col-md-3" id="search">
+    <i class="fa fa-search" style="font-size:20px"></i>
+									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search items by name.." title="Type in a name">
+										</label>  
 
 							<div class="clearfix"></div>
-							<div class="table-responsive" style="border: 0">
-								<table width="100%" class="table table-advance" id="table1">
-									<thead>
-										<tr>
-											<th width="17" style="width: 18px">#</th>
-											<th width="180" align="left">Iteam Id</th>
-											<th width="223" align="left">Item Name</th>
-											<th width="423" align="left">Image</th>
-											<th width="243" align="left">Rate</th>
-											<th width="137" align="left">MRP</th>
-											<th width="150" align="left">Action</th>
-										</tr>
-									</thead>
-									<tbody>
-										<c:forEach items="${itemsList}" var="itemsList" varStatus="count">
+							
+								<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+														<th width="138" style="width: 18px" align="left">Sr No</th>
+											<th class="col-md-2">Item Id</th>
+											<th class="col-md-2">Item Name</th>
+											<th class="col-md-2">Image</th>
+											<th class="col-md-1">Rate</th>
+											<th class="col-md-2">MRP</th>
+											<th class="col-md-2">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+													<th width="138" style="width: 18px" align="left">Sr No</th>
+											<th class="col-md-2">Item Id</th>
+											<th class="col-md-2">Item Name</th>
+											<th class="col-md-2">Image</th>
+											<th class="col-md-1">Rate</th>
+											<th class="col-md-2">MRP</th>
+											<th class="col-md-2">Action</th>
+												</tr>
+												</thead>
+												<tbody>
+											
+	<c:forEach items="${itemsList}" var="itemsList" varStatus="count">
 											<tr>
 												<td><c:out value="${count.index+1}" /></td>
 												<td align="left"><c:out value="${itemsList.itemId}" /></td>
-												<a onclick="fun()"><td align="left"><c:out value="${itemsList.itemName}" /></td></a>
+												<td align="left"><c:out value="${itemsList.itemName}"/></td>
 												
 												<td align="left">
 												<img
@@ -172,42 +198,17 @@
 
 										</c:forEach>
 
-									</tbody>
-								</table>
-							</div>
+
+							</tbody>
+
+						</table>
+					</div>
+				</div>
+				
 						</div>
 					</div>
 				</div>
 			</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -283,11 +284,26 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 </body>
-<script type="text/javascript">
-fun()
-{
-  alert("hi");
-}
 
+ 
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table1");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
 </script>
+
 </html>

@@ -27,6 +27,10 @@ public class GetItemSup{
 	
 	private int isGateSale;
 	
+    private int trayType;
+	
+	private int noOfItemPerTray;
+	 
 	private int isGateSaleDisc;
 	
 	private int isAllowBday;
@@ -34,6 +38,22 @@ public class GetItemSup{
 	private int delStatus;
 	
 	
+	public int getTrayType() {
+		return trayType;
+	}
+
+	public void setTrayType(int trayType) {
+		this.trayType = trayType;
+	}
+
+	public int getNoOfItemPerTray() {
+		return noOfItemPerTray;
+	}
+
+	public void setNoOfItemPerTray(int noOfItemPerTray) {
+		this.noOfItemPerTray = noOfItemPerTray;
+	}
+
 	public int getUomId() {
 		return uomId;
 	}
@@ -156,10 +176,13 @@ public class GetItemSup{
 
 	@Override
 	public String toString() {
-		return "GetItemSup [id=" + id + ", itemId=" + itemId + ", itemName=" + itemName + ", itemHsncd=" + itemHsncd
-				+ ", itemUom=" + itemUom + ", actualWeight=" + actualWeight + ", baseWeight=" + baseWeight
-				+ ", inputPerQty=" + inputPerQty + ", isGateSale=" + isGateSale + ", isGateSaleDisc=" + isGateSaleDisc
-				+ ", isAllowBday=" + isAllowBday + ", delStatus=" + delStatus + "]";
+		return "GetItemSup [error=" + error + ", message=" + message + ", id=" + id + ", itemId=" + itemId
+				+ ", itemName=" + itemName + ", itemHsncd=" + itemHsncd + ", uomId=" + uomId + ", itemUom=" + itemUom
+				+ ", actualWeight=" + actualWeight + ", baseWeight=" + baseWeight + ", inputPerQty=" + inputPerQty
+				+ ", isGateSale=" + isGateSale + ", trayType=" + trayType + ", noOfItemPerTray=" + noOfItemPerTray
+				+ ", isGateSaleDisc=" + isGateSaleDisc + ", isAllowBday=" + isAllowBday + ", delStatus=" + delStatus
+				+ "]";
 	}
+    
 	
 }

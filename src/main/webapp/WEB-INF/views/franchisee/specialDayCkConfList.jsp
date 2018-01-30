@@ -106,8 +106,87 @@
 												</div>
 											</div>
 											
+	<div class="box-content">
+<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
+ 
 
-											<div class="box-content">
+							<div class="clearfix"></div>
+							
+							
+							
+							
+							
+								<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+										<th width="17" style="width: 18px">#</th>
+																<th width="300" align="left">Event Name</th>
+																<th width="170" align="left">From Order Date</th>
+																<th width="170" align="left">To Order Date</th>
+																<th width="170" align="left">From Delivery Date</th>
+																<th width="170" align="left">To Delivery Date</th>
+																<th width="90" align="left">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+												<th width="17" style="width: 18px">#</th>
+																<th width="300" align="left">Event Name</th>
+																<th width="170" align="left">From Order Date</th>
+																<th width="170" align="left">To Order Date</th>
+																<th width="170" align="left">From Delivery Date</th>
+																<th width="170" align="left">To Delivery Date</th>
+																<th width="90" align="left">Action</th>
+												</tr>
+												</thead>
+												<tbody>
+		<c:forEach items="${configureSpDayFrList}"
+																var="configureSpDayFrList" varStatus="count">
+
+
+																<tr>
+																	<td><c:out value="${count.index+1}"></c:out></td>
+																	<td align="left"><c:out
+																			value="${configureSpDayFrList.spdayName}"></c:out> <!-- <img src="http://monginisaurangabad.com/admin/uploads/cakes/0L6KEg55AhP18.jpg" alt="" width="150" height="100" /> -->
+																	</td>
+																	<td align="left"><c:out
+																			value="${configureSpDayFrList.orderFromDate}  "></c:out></td>
+																	<td align="left"><c:out
+																			value="${configureSpDayFrList.orderToDate}  "></c:out></td>
+																	<td align="left"><c:out
+																			value="${configureSpDayFrList.deliveryFromDate}"></c:out></td>
+                                                                    <td align="left"><c:out
+																			value="${configureSpDayFrList.deliveryToDate}"></c:out></td>
+
+																	<td align="left"><a
+																		href="${pageContext.request.contextPath}/updateConfSpDayCk/${configureSpDayFrList.spdayId}"><span
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+
+																		 <a
+																		href="${pageContext.request.contextPath}/deleteConfSpDayCk/${configureSpDayFrList.spdayId}"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove"></span></a></td> 
+																</tr>
+													</c:forEach>
+
+
+							</tbody>
+
+						</table>
+					</div>
+				</div>
+				
+						</div>
+										<%-- 	<div class="box-content">
 						
 												<div class="clearfix"></div>
 												<div class="table-responsive" style="border: 0">
@@ -166,7 +245,7 @@
 													</div>
 												</div> -->
 												</form>
-											</div>
+											</div> --%>
 										</div>
 									</div>
 								</div>

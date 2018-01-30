@@ -5,6 +5,8 @@
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 	<body>
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+	<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
+	
 	<div class="container" id="main-container">
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
@@ -45,13 +47,108 @@
 							</div>
 						</div>
 
-						<div class="box-content">
-<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
+       	<div class="box-content">
+<div class="col-md-9" ></div> 
+					<label for="search" class="col-md-3" id="search">
+    <i class="fa fa-search" style="font-size:20px"></i>
+									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search by message.." title="Type in a name">
+										</label>  
 
 							<div class="clearfix"></div>
+							
+							
+							
+							
+							
+								<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+												<th width="17" style="width: 18px">#</th>
+											<th width="163" align="left">Date</th>
+											<th width="358" align="left">Message</th>
+											<th width="194" align="left">Occasion Name</th>
+											<th width="102" align="left">Status</th>
+											<th width="88" align="left">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+											<th width="17" style="width: 18px">#</th>
+											<th width="163" align="left">Date</th>
+											<th width="358" align="left">Message</th>
+											<th width="194" align="left">Occasion Name</th>
+											<th width="102" align="left">Status</th>
+											<th width="88" align="left">Action</th>
+												</tr>
+												</thead>
+												<tbody>
+											
+	<%int c=1; %>
+										<c:forEach items="${schedulerList}" var="schedulerList">
 
 
 
+											<tr>
+												<td>	<%=c++%>
+											<c:out
+														value="${c}" /> 
+												</td>
+												<td align="left"><c:out
+														value="${schedulerList.schDate} - ${schedulerList.schTodate}" /></td>
+												<td align="left"><c:out
+														value="${schedulerList.schMessage}" /></td>
+												<td align="left"><c:out
+														value="${schedulerList.schOccasionname}" /></td>
+														
+														<c:choose>
+																			<c:when test="${schedulerList.isActive==1}">
+																			<td align="left"><c:out value="Active"></c:out></td>
+																				
+																			</c:when>
+																			<c:otherwise>
+																			<td align="left"><c:out value="In Active"></c:out></td>
+																				
+																			</c:otherwise>
+																			
+																			
+																		</c:choose>
+														
+														
+												<%-- <td align="left"><c:out
+														value="${schedulerList.isActive}" /></td> --%>
+												<td align="left"><a
+													href="updateNews/${schedulerList.schId}"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+
+													<a href="deleteNews/${schedulerList.schId}"
+													onClick="return confirm('Are you sure want to delete this record');"><span
+														class="glyphicon glyphicon-remove"></span></a></td>
+											</tr>
+										</c:forEach>
+
+
+
+							</tbody>
+
+						</table>
+					</div>
+				</div>
+				
+				</div>
+
+
+						<%-- <div class="box-content">
+
+							<div class="clearfix"></div>
 
 							<div class="table-responsive" style="border: 0">
 								<table width="100%" class="table table-advance" id="table1">
@@ -97,8 +194,8 @@
 																		</c:choose>
 														
 														
-												<%-- <td align="left"><c:out
-														value="${schedulerList.isActive}" /></td> --%>
+												<td align="left"><c:out
+														value="${schedulerList.isActive}" /></td>
 												<td align="left"><a
 													href="updateNews/${schedulerList.schId}"><span
 														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
@@ -112,7 +209,7 @@
 									</tbody>
 								</table>
 							</div>
-						</div>
+						</div> --%>
 					</div>
 				</div>
 			</div>
@@ -192,4 +289,23 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 </body>
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table1");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+</script>
 </html>

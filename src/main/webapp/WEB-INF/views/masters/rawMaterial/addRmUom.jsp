@@ -93,7 +93,64 @@
 										</div>
 									</div>
 
-									<div class="box-content">
+	<div class="box-content">
+<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
+
+							<div class="clearfix"></div>
+							
+							
+							
+							
+							
+								<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+												<th width="55" style="width: 18px">Sr.No.</th>
+														<th width="360" align="center">Unit Of Measure</th>
+														<th width="50" align="left">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+										<th width="55" style="width: 18px">Sr.No.</th>
+														<th width="360" align="center">Unit Of Measure</th>
+														<th width="50" align="left">Action</th>
+												</tr>
+												</thead>
+												<tbody>
+					  <c:forEach items="${rmUomList}" var="rmUomList" varStatus="count">
+														<tr>
+														
+															<td><c:out value="${count.index+1}"/></td>
+															<td align="left"><c:out
+																	value="${rmUomList.uom}"></c:out></td>
+															
+															<td align="left"><a href="updateRmUom/${rmUomList.uomId}"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;
+                                                        
+                                                        <a href="deleteRmUom/${rmUomList.uomId}"
+													    onClick="return confirm('Are you sure want to delete this record');"><span
+														class="glyphicon glyphicon-remove"></span></a></td>	
+														</tr>
+												</c:forEach> 
+
+							</tbody>
+
+						</table>
+					</div>
+				</div>
+				
+						</div>
+									<%-- <div class="box-content">
 
 										<div class="clearfix"></div>
 										<div class="table-responsive" style="border: 0">
@@ -124,7 +181,7 @@
 										</tbody>
 									</table>
 								</div>
-							</div>
+							</div> --%>
 					</div>
 				</div>
 

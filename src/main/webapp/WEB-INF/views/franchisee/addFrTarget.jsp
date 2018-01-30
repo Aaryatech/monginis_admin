@@ -22,6 +22,7 @@
 
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
 
 			<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
 
@@ -135,9 +136,53 @@
 									</div>
 
 									<div class="box-content">
-
+<div class="col-md-9" ></div> 
+					<label for="search" class="col-md-3" id="search">
+    <i class="fa fa-search" style="font-size:20px"></i>
+									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search Month.." title="Type in a name">
+										</label>  
 										<div class="clearfix"></div>
-										<div class="table-responsive" style="border: 0">
+										
+										
+								<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+												<th width="10" style="width: 8px">Sr.No</th>
+             											<th width="10" >#</th>
+														
+														<th width="80" align="left">Month</th>
+														<th width="95" align="left">Target</th>
+														<th width="95" align="left">Achieved Target</th>
+														<th width="95" align="left">Award</th>
+														<th width="95" align="left">Remark</th>
+													    <th width="80" align="left">Status</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+												<th width="10" style="width: 8px">Sr.No</th>
+             											<th width="10" >#</th>
+														
+														<th width="80" align="left">Month</th>
+														<th width="95" align="left">Target</th>
+														<th width="95" align="left">Achieved Target</th>
+														<th width="95" align="left">Award</th>
+														<th width="95" align="left">Remark</th>
+													    <th width="80" align="left">Status</th>
+												</tr>
+												</thead>
+												<tbody>
+										
+										<!-- <div class="table-responsive" style="border: 0">
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
@@ -152,7 +197,7 @@
 													    <th width="80" align="left">Status</th>
 													</tr>
 												</thead>
-												<tbody>
+												<tbody> -->
 												 <c:forEach items="${months}" var="months" varStatus="count">
 														<tr>
 														
@@ -388,6 +433,25 @@ function chkRequest(isSave)
 		searchFrMonthTarget();
 		}
 	
+}
+</script>
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table1");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
 }
 </script>
 </html>

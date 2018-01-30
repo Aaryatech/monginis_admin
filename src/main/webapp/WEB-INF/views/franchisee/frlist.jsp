@@ -61,25 +61,50 @@
 												</div>
 											</div>
 											
+                                           	<div class="box-content">
+<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
-											<div class="box-content">
-						
-												<div class="clearfix"></div>
-												<div class="table-responsive" style="border: 0">
-													<table width="100%" class="table table-advance" id="table1">
-														<thead>
-															<tr>
-																<th width="17" style="width: 18px">#</th>
+
+							<div class="clearfix"></div>
+							
+							
+							
+							
+							
+								<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+												<th width="17" style="width: 18px">#</th>
 																<th width="364" align="left">Franchisee Name</th>
 																<th width="282" align="left">Menu Title</th>
 																<th width="218" align="left">Category Name</th>
 																<!-- <th width="106" align="left">Items</th> -->
 																<th width="66" align="left">Type</th>
 																<th width="66" align="left">Action</th>
-															</tr>
-														</thead>
-														<tbody>
-															<c:forEach items="${configureFrList}"
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+												<th width="17" style="width: 18px">#</th>
+																<th width="364" align="left">Franchisee Name</th>
+																<th width="282" align="left">Menu Title</th>
+																<th width="218" align="left">Category Name</th>
+																<!-- <th width="106" align="left">Items</th> -->
+																<th width="66" align="left">Type</th>
+																<th width="66" align="left">Action</th>
+												</tr>
+												</thead>
+												<tbody>
+						<c:forEach items="${configureFrList}"
 																var="configureFrList" varStatus="count">
 
 
@@ -122,7 +147,78 @@
 																		onClick="return confirm('Are you sure want to delete this record');"><span
 																			class="glyphicon glyphicon-remove"></span></a></td> --%>
 																</tr>
-																<div>
+																
+													</c:forEach>
+
+
+							</tbody>
+
+						</table>
+					</div>
+				</div>
+				
+						</div>
+											<%-- <div class="box-content">
+						
+												<div class="clearfix"></div>
+												<div class="table-responsive" style="border: 0">
+													<table width="100%" class="table table-advance" id="table1">
+														<thead>
+															<tr>
+																<th width="17" style="width: 18px">#</th>
+																<th width="364" align="left">Franchisee Name</th>
+																<th width="282" align="left">Menu Title</th>
+																<th width="218" align="left">Category Name</th>
+																<!-- <th width="106" align="left">Items</th> -->
+																<th width="66" align="left">Type</th>
+																<th width="66" align="left">Action</th>
+															</tr>
+														</thead>
+														<tbody>
+															<c:forEach items="${configureFrList}"
+																var="configureFrList" varStatus="count">
+
+
+																<tr>
+																	<td><c:out value="${count.index+1}"></c:out></td>
+																	<td align="left"><c:out
+																			value="${configureFrList.frName}"></c:out> <!-- <img src="http://monginisaurangabad.com/admin/uploads/cakes/0L6KEg55AhP18.jpg" alt="" width="150" height="100" /> -->
+																	</td>
+																	<td align="left"><c:out
+																			value="${configureFrList.menuTitle}  "></c:out></td>
+																	<td align="left"><c:out
+																			value="${configureFrList.catName}  "></c:out></td>
+																	<td align="left"><c:out
+																			value="${configureFrList.itemShow}"></c:out></td>
+
+
+																
+																	
+
+
+																	<c:choose>
+																		<c:when test="${configureFrList.settingType==1}">
+																			<td align="left"><c:out value="Daily"></c:out></td>
+																		</c:when>
+																		<c:when test="${configureFrList.settingType==2}">
+																			<td align="left"><c:out value="Date"></c:out></td>
+																		</c:when>
+																		<c:when test="${configureFrList.settingType==3}">
+																			<td align="left"><c:out value="Day"></c:out></td>
+																		</c:when>
+																	</c:choose>
+
+
+																	<td align="left"><a
+																		href="updateFranchiseeConf/${configureFrList.settingId}"><span
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+
+																		<a
+																		href="deleteSpecialCake/${configureFrList.settingId}"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove"></span></a></td>
+																</tr>
+																
 													</c:forEach>
 														</tbody>
 													</table>
@@ -135,7 +231,7 @@
 													</div>
 												</div> -->
 												</form>
-											</div>
+											</div> --%>
 										</div>
 									</div>
 								</div>

@@ -52,7 +52,81 @@
 						</div>
 
 						<div class="box-content">
- <jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
+
+
+							<div class="clearfix"></div>
+							
+							
+							
+							
+							
+								<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+																						<th width="17" style="width: 18px">#</th>
+											<th width="221" align="left">Date</th>
+											<th width="301" align="left">Image</th>
+											<th width="185" align="left">Header</th>
+											<th width="291" align="left">Message</th>
+											<th width="190" align="center">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+																							<th width="17" style="width: 18px">#</th>
+											<th width="221" align="left">Date</th>
+											<th width="301" align="left">Image</th>
+											<th width="185" align="left">Header</th>
+											<th width="291" align="left">Message</th>
+											<th width="190" align="center">Action</th>
+												</tr>
+												</thead>
+												<tbody>
+	 <c:forEach items="${message}" var="message" varStatus="count">
+										<tr>
+											<td><c:out value="${count.index+1}"/></td>
+											<td align="left"><c:out value="${message.msgFrdt} ${message.msgTodt}" /></td>
+											<%-- <td align="left"><c:out value="${message.msgImage}" /></td> --%>
+											<td align="left"><img src="${url}${message.msgImage}" width="120" height="100"  onerror="this.src='resources/img/No_Image_Available.jpg';" /></td>
+											
+											
+											<td align="left"><c:out value="${message.msgHeader}"/></td>
+											<td align="left"><c:out value="${message.msgDetails}" /></td>
+											<td align="center"><a
+												href="updateMessage/${message.msgId}"><span
+													class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
+
+												<a
+												href="deleteMessage/${message.msgId}"
+												onClick="return confirm('Are you sure want to delete this record');"><span
+													class="glyphicon glyphicon-remove"></span></a></td>
+										</tr>
+
+</c:forEach>
+
+
+							</tbody>
+
+						</table>
+					</div>
+				</div>
+				
+						</div>
+<%-- 
+
+
+						<div class="box-content">
+                       <jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
  
 							<div class="clearfix"></div>
 							<div class="table-responsive" style="border: 0">
@@ -73,7 +147,7 @@
 										<tr>
 											<td><c:out value="${count.index+1}"/></td>
 											<td align="left"><c:out value="${message.msgFrdt} ${message.msgTodt}" /></td>
-											<%-- <td align="left"><c:out value="${message.msgImage}" /></td> --%>
+											<td align="left"><c:out value="${message.msgImage}" /></td>
 											<td align="left"><img src="${url}${message.msgImage}" width="120" height="100"  onerror="this.src='resources/img/No_Image_Available.jpg';" /></td>
 											
 											
@@ -94,7 +168,7 @@
 									</tbody>
 								</table>
 							</div>
-						</div>
+						</div> --%>
 					</div>
 				</div>
 			</div>

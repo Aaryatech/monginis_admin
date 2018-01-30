@@ -125,16 +125,138 @@
 														</div>
 													</div>
 												</form>
-
+<br><br>
 
 												<form action="frItemStockConfigurationProcess"
 													name="validation-from2" id="validation-from" method="post">
 
+<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
 													<c:set var="settingValue" value="${settingValue}" />
 
-													<div class="clearfix"></div>
-													<div class="table-responsive" border="1">
+
+	<div class="box-content">
+
+
+							<div class="clearfix"></div>
+							
+								<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+														
+																	<th width="17" style="width: 18px">#</th>
+																	<th width="200" align="left">Item Name</th>
+
+
+
+																	<c:forEach begin="1" end="${settingValue}" var="cc"
+																		varStatus="count">
+
+																		<th width="200" align="right">Type ${count.index}</th>
+
+																	</c:forEach>
+
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+													
+																	<th width="17" style="width: 18px">#</th>
+																	<th width="200" align="left">Item Name</th>
+
+
+
+																	<c:forEach begin="1" end="${settingValue}" var="cc"
+																		varStatus="count">
+
+																		<th width="200" align="right">Type ${count.index}</th>
+
+																	</c:forEach>
+
+												</tr>
+												</thead>
+												<tbody>
+		<c:forEach items="${itemList}" var="item"
+																	varStatus="count">
+
+																	<c:set var="id" value="${item.itemId}" />
+
+
+																	<tr>
+
+																		<td align="left">${count.index+1}</td>
+
+																		<td align="left"><c:out value="${item.itemName}" />
+																			<input type="hidden" name="cat_name" value="${cId}">
+
+
+																		</td>
+
+
+																		<c:forEach items="${item.stockDetails}"
+																			var="stDetails" varStatus="count">
+																			<td align="left"><input type="hidden"
+																				name="${item.itemId}stockId${count.index}"
+																				value="${stDetails.frStockId}">
+																				<div align="center"
+																					class="col-sm-9 col-lg-10 controls">
+																					Min <input align="left" type="text"
+																						name="${item.itemId}min${count.index}"
+																						id="${item.itemId}min${count.index}"
+																						placeholder="Min" class="form-control"
+																						data-rule-required="true" style="width: 65px"
+																						value="${stDetails.minQty}" />
+																				</div>
+
+																				<div align="center"
+																					class="col-sm-9 col-lg-10 controls">
+																					Max <input type="text"
+																						name="${item.itemId}max${count.index}"
+																						id="${item.itemId}max${count.index}"
+																						placeholder="Max" class="form-control"
+																						data-rule-required="true" style="width: 65px"
+																						value="${stDetails.maxQty}"
+																						/>
+																				</div>
+
+																				<div align="center"
+																					class="col-sm-9 col-lg-10 controls">
+																					Reorder <input type="text"
+																						name="${item.itemId}reorder${count.index}"
+																						id="${item.itemId}reorder${count.index}"
+																						placeholder="reorder" class="form-control"
+																						data-rule-required="true" style="width: 65px"
+																						value="${stDetails.reorderQty}"
+																						onblur="enableSubmit(${item.itemId},${count.index});" />
+																				</div></td>
+
+
+																		</c:forEach>
+																		<td></td>
+
+																	</tr>
+
+																</c:forEach>
+
+															</tbody>
+						</table>
+					</div>
+				</div>
+				
+						</div>
+
+
+
+												<%-- 	<div class="table-responsive" border="1">
 														<table width="100%" class="table table-advance"
 															id="table1">
 															<thead>
@@ -224,7 +346,7 @@
 
 															</tbody>
 														</table>
-													</div>
+													</div> --%>
 
 
 													<div class="form-group">

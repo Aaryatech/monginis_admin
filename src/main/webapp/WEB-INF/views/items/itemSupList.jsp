@@ -10,6 +10,7 @@
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 	<div class="container" id="main-container">
+<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
 
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
@@ -50,8 +51,121 @@
 									class="fa fa-chevron-up"></i></a>
 							</div>
 						</div>
+                          <div class="box-content">
+<div class="col-md-9" ></div> 
+					<label for="search" class="col-md-3" id="search">
+    <i class="fa fa-search" style="font-size:20px"></i>
+									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search items.." title="Type in a name">
+										</label>  
 
-						<div class="box-content">
+
+							<div class="clearfix"></div>
+							
+							
+							
+							
+							
+								<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+														<th width="17" style="width: 18px">#</th>
+											<th width="160" align="left">Item Id</th>
+											<th width="300" align="left">Item Name</th>
+											
+											<th width="240" align="center">HSN Code</th>
+											<th width="200" align="left">Unit Of Measure</th>
+											<th width="193" align="left">Actual Weight</th>
+											<th width="167" align="left">Base Weight</th>
+											<th width="200" align="left">Input Per Unit</th>
+									   <!--     <th width="200" align="left">Gate Sale Allowed?</th>
+							               <th width="200" align="left">Gate Sale Disc Allowed?</th>
+							               <th width="200" align="left">Allowed For Emp Birthday?</th> -->
+
+											<th width="150" align="left">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+												<th width="17" style="width: 18px">#</th>
+											<th width="160" align="left">Item Id</th>
+											<th width="300" align="left">Item Name</th>
+											
+											<th width="240" align="center">HSN Code</th>
+											<th width="200" align="left">Unit Of Measure</th>
+											<th width="193" align="left"> Weight</th>
+											<th width="167" align="left"> Weight</th>
+											<th width="200" align="left">Unit</th>
+									    <!--    <th width="200" align="left">Allowed?</th>
+							               <th width="200" align="left">Allowed?</th>
+							               <th width="200" align="left">Birthday?</th>
+ -->
+											<th width="150" align="left">Action</th>
+												</tr>
+												</thead>
+												<tbody>
+			 <c:forEach items="${itemsList}" var="itemsList" varStatus="count">
+											<tr>
+												<td><c:out value="${count.index+1}" /></td>
+												<td align="left"><c:out value="${itemsList.itemId}" /></td>
+												<td align="left"><c:out value="${itemsList.itemName}" /></td>
+												
+												<td align="left"><c:out value="${itemsList.itemHsncd}" /></td>
+												<td align="left"><c:out value="${itemsList.itemUom}" /></td>
+										        <td align="left"><c:out value="${itemsList.actualWeight}" /></td>
+												<td align="left"><c:out value="${itemsList.baseWeight}" /></td>
+											    <td align="left"><c:out value="${itemsList.inputPerQty}" /></td>
+											<%-- 	<c:choose><c:when test="${itemsList.isGateSale==0}">
+												<td align="left"><c:out value="NO" /></td>
+												</c:when>
+												<c:when test="${itemsList.isGateSale==1}">
+												<td align="left"><c:out value="YES" /></td>
+												</c:when>
+												</c:choose>
+												
+												<c:choose><c:when test="${itemsList.isGateSaleDisc==0}">
+												<td align="left"><c:out value="NO" /></td>
+												</c:when>
+												<c:when test="${itemsList.isGateSaleDisc==1}">
+												<td align="left"><c:out value="YES" /></td>
+												</c:when>
+												</c:choose>
+												<c:choose>
+												<c:when test="${itemsList.isAllowBday==0}">
+												<td align="left"><c:out value="NO" /></td>
+												</c:when>
+												<c:when test="${itemsList.isAllowBday==1}">
+												<td align="left"><c:out value="YES" /></td>
+												</c:when>
+												</c:choose> --%>
+												<td align="left"><a href="updateItemSup/${itemsList.id}"><span
+														class="glyphicon glyphicon-edit"></span></a>
+                                             </td>
+											</tr>
+
+										</c:forEach>
+
+
+
+							</tbody>
+
+						</table>
+					</div>
+				</div>
+				
+						</div>
+
+
+
+						<%-- <div class="box-content">
 
 							<div class="clearfix"></div>
 							<div class="table-responsive" style="border: 0">
@@ -119,7 +233,7 @@
 									</tbody>
 								</table>
 							</div>
-						</div>
+						</div> --%>
 					</div>
 				</div>
 			</div>
@@ -196,4 +310,23 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 </body>
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table1");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+</script>
 </html>

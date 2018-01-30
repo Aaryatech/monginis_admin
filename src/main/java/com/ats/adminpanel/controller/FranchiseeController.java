@@ -4,12 +4,14 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -1829,10 +1831,15 @@ public class FranchiseeController {
 
 			String pestControlDate=request.getParameter("pest_control_date");
 			
-			String remainderDate=request.getParameter("remainder_date");
-			
 			int frequency=Integer.parseInt(request.getParameter("frequency"));
-
+			
+			//	String remainderDate=request.getParameter("remainder_date");
+			
+			 Date pestCtrlDate=new SimpleDateFormat("dd-MM-yyyy").parse(pestControlDate);  
+			 Date newDate = addDays(pestCtrlDate,frequency);
+			 DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");  
+			 String remainderDate = dateFormat.format(newDate);  
+			 
 			FranchiseSup frSup = new FranchiseSup();
 			frSup.setId(id);
 			frSup.setFrId(frId);
@@ -1872,7 +1879,13 @@ public class FranchiseeController {
 
 		return "redirect:/showAddFranchiseSup";
 	}
-
+	public static Date addDays(Date date, int days) {
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.setTime(date);
+		cal.add(Calendar.DATE, days);
+				
+		return cal.getTime();
+	}
 	// ------------------------------ADD Franchisee
 	// Process------------------------------------
 	@RequestMapping(value = "/updateFranchiseSup/{id}", method = RequestMethod.GET)
@@ -2060,6 +2073,13 @@ public class FranchiseeController {
 					if (frTotalSale != null || frTotalSale.getTotalSale() != 0) {
 						float achievedSale = frTotalSale.getTotalSale();
 						frTargetList.getFrTargetList().get(i).setFrAchievedSale(achievedSale);
+					}
+					if(frTotalSale.getTotalSale()==0)
+					{
+						frTotalSale=new FrTotalSale();
+						frTotalSale.setFrId(frTargetList.getFrTargetList().get(i).getFrId());
+						frTotalSale.setMonth(frTargetList.getFrTargetList().get(i).getFrTargetMonth());
+						frTotalSale.setTotalSale(0.0f);
 					}
 
 				}

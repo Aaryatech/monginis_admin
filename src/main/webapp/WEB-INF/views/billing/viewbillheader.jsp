@@ -177,24 +177,47 @@
 									<div class="box-content">
 
 										<div class="clearfix"></div>
-										<div class="table-responsive" style="border: 0">
+										<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+														<th class="col-sm-1" align="left">Sr No</th>
+														<th class="col-md-2" align="left">Invoice No</th>
+														<th class="col-md-2" align="left">Date</th>
+														<th class="col-md-2" align="left">Franchise Name</th>
+														<th class="col-md-1" align="left">Taxable Amt</th>
+														<th class="col-md-1" align="left">Total tax</th>
+														<th class="col-md-1" align="left">Total</th>
+														<th class="col-md-1" align="left">Status</th>
+														<th class="col-md-2" align="left">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+														<th class="col-sm-1" align="left">Sr No</th>
+														<th class="col-md-2" align="left">Invoice No</th>
+														<th class="col-md-2" align="left">Date</th>
+														<th class="col-md-2" align="left">Franchise Name</th>
+														<th class="col-md-1" align="left">Taxable Amt</th>
+														<th class="col-md-1" align="left">Total tax</th>
+														<th class="col-md-1" align="left">Total</th>
+														<th class="col-md-1" align="left">Status</th>
+														<th class="col-md-1" align="left">Action</th>
+												</tr>
+												</thead>
+												<tbody>
+										<!-- <div class="table-responsive" style="border: 0">
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
-														<!-- <th width="138" style="width: 18px" align="left">Sr
-															No</th>
-														<th width="138" align="left">Invoice No</th>
-														<th width="159" align="left">Date</th>
-														<th width="200" align="left">Franchise Name</th>
-														<th width="200" align="left">Taxable
-															Amt</th>
-														<th width="100" align="left">Total tax</th>
-														<th width="100" align="left">Total</th>
-
-														<th width="105" align="left">Status</th>
-														<th width="105" align="left">Remark</th>
-														<th width="200" align="center">Action</th> -->
-
 														<th class="col-sm-1" align="left">Sr No</th>
 														<th class="col-md-1" align="left">Invoice No</th>
 														<th class="col-md-1" align="left">Date</th>
@@ -202,20 +225,16 @@
 														<th class="col-md-1" align="left">Taxable Amt</th>
 														<th class="col-md-1" align="left">Total tax</th>
 														<th class="col-md-1" align="left">Total</th>
-
 														<th class="col-md-1" align="left">Status</th>
-														<!-- 														<th width="105" align="left">Remark</th>
- -->
 														<th class="col-md-1" align="center">Action</th>
-
 													</tr>
 												</thead>
-												<tbody>
+												<tbody> -->
 													<c:forEach items="${billHeadersList}" var="billHeadersList"
 														varStatus="count">
 
 														<tr>
-															<td class="col-sm-1"><c:out value="${count.index}" /></td>
+															<td class="col-sm-1"><c:out value="${count.index+1}" /></td>
 															<td class="col-md-1" align="left"><c:out
 																	value="${billHeadersList.invoiceNo}" /></td>
 
@@ -235,10 +254,10 @@
 
 															<td align="left">
 															<a href="${pageContext.request.contextPath}/updateBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr title='Update Bill'></abbr>
-																<i class='fa fa-edit  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+																<i class='fa fa-edit  fa-lg'></i></a>&nbsp;
 																<a
 																href="${pageContext.request.contextPath}/viewBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
-																	title='View Bill'></abbr> <i class='fa fa-info  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+																	title='View Bill'></abbr> <i class='fa fa-info  fa-lg'></i></a>&nbsp;
 
 																<a
 																href="${pageContext.request.contextPath}/deleteBill/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr

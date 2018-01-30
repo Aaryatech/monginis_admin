@@ -96,7 +96,66 @@
 										</div>
 									</div>
 
-									<div class="box-content">
+						<div class="box-content">
+<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
+
+
+							<div class="clearfix"></div>
+							
+							
+							
+							
+							
+								<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+										<th width="45" style="width: 18px">#</th>
+														<th width="939" align="left">Name</th>
+														<th width="81" align="left">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+											<th width="45" style="width: 18px">#</th>
+														<th width="939" align="left">Name</th>
+														<th width="81" align="left">Action</th>
+												</tr>
+												</thead>
+												<tbody>
+							<c:forEach items="${spMessageList}" var="spMessageList" varStatus="count">
+														<tr>
+															<td><c:out value="${count.index+1}"/></td>
+															<td align="left"><c:out
+																	value="${spMessageList.spMsgText}" /></td>
+															<td align="left"><a
+																href="${pageContext.request.contextPath}/updateSpMessage/${spMessageList.spMsgId}"><span
+																	class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+
+																<a href="${pageContext.request.contextPath}/deleteSpMessage/${spMessageList.spMsgId}"
+																onClick="return confirm('Are you sure want to delete this record');"><span
+																	class="glyphicon glyphicon-remove"></span></a></td>
+														</tr>
+													</c:forEach>
+
+
+
+							</tbody>
+
+						</table>
+					</div>
+				</div>
+				
+						</div>
+							<%-- 		<div class="box-content">
 
 										<div class="clearfix"></div>
 										<div class="table-responsive" style="border: 0">
@@ -127,7 +186,7 @@
 												</tbody>
 											</table>
 										</div>
-									</div>
+									</div> --%>
 								</div>
 							</form>
 						</div>

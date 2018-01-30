@@ -40,6 +40,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.TrayType;
+import com.ats.adminpanel.model.RawMaterial.RawMaterialUom;
 import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.CategoryListResponse;
 import com.ats.adminpanel.model.item.FrItemStock;
@@ -99,7 +101,9 @@ public class ItemController {
 			mCategoryList = new ArrayList<MCategoryList>();
 			mCategoryList = categoryListResponse.getmCategoryList();
 			System.out.println("Main Cat is  " + categoryListResponse.toString());
+			Integer maxId=restTemplate.getForObject(Constants.url + "getUniqueItemCode",Integer.class);
 
+			model.addObject("itemId", maxId);
 			model.addObject("mCategoryList", mCategoryList);
 
 		} catch (Exception e) {
@@ -842,6 +846,11 @@ public class ItemController {
 					resCatList.add(mCat);
 				}
 			}
+		    List<RawMaterialUom> rawMaterialUomList=restTemplate.getForObject(Constants.url + "rawMaterial/getRmUom", List.class);
+		    model.addObject("rmUomList", rawMaterialUomList);
+		    List<TrayType> trayTypeList=restTemplate.getForObject(Constants.url+"/getTrayTypes", List.class);
+            System.out.println("Tray Types:"+trayTypeList.toString());
+            model.addObject("trayTypes", trayTypeList);
 
 			model.addObject("mCategoryList", resCatList);
 			model.addObject("isEdit", 0);
@@ -889,9 +898,12 @@ public class ItemController {
 		
 		try {
               ItemSupList itemSupList=restTemplate.getForObject(Constants.url+"/getItemSupList", ItemSupList.class);
-			
+          
+              List<TrayType> trayTypeList=restTemplate.getForObject(Constants.url+"/getTrayTypes", List.class);
+              System.out.println("Tray Types:"+trayTypeList.toString());
+              mav.addObject("trayTypes", trayTypeList);
 			mav.addObject("itemsList", itemSupList.getItemSupList());
-			
+
 		} catch (Exception e) {
 			System.out.println("Exc In /itemSupList" + e.getMessage());
 		}
@@ -920,13 +932,18 @@ public class ItemController {
 
 				String itemHsncd = request.getParameter("item_hsncd");
 
-				String itemUom = request.getParameter("item_uom");
+				int uomId = Integer.parseInt(request.getParameter("item_uom"));
+				
+				String uom=request.getParameter("uom");
 
 				float actualWeight = Float.parseFloat(request.getParameter("actual_weight"));
 
 				float baseWeight = Float.parseFloat(request.getParameter("base_weight"));
 
 				float inputPerQty = Float.parseFloat(request.getParameter("input_per_qty"));
+				int trayType=Integer.parseInt(request.getParameter("tray_type"));
+				
+				int noOfItemPerTray = Integer.parseInt(request.getParameter("no_of_item"));
 				
 				int isGateSale = Integer.parseInt(request.getParameter("is_gate_sale"));
 				
@@ -937,7 +954,8 @@ public class ItemController {
 				ItemSup itemSup=new ItemSup();
 				itemSup.setId(id);
 				itemSup.setItemId(itemId);
-				itemSup.setItemUom(itemUom);
+				itemSup.setUomId(uomId);
+				itemSup.setItemUom(uom);
 				itemSup.setItemHsncd(itemHsncd);
 				itemSup.setIsGateSale(isGateSale);
 				itemSup.setActualWeight(actualWeight);
@@ -945,6 +963,8 @@ public class ItemController {
 				itemSup.setInputPerQty(inputPerQty);
 				itemSup.setIsGateSaleDisc(isGateSaleDisc);
 				itemSup.setIsAllowBday(isAllowBday);
+				itemSup.setNoOfItemPerTray(noOfItemPerTray);
+				itemSup.setTrayType(trayType);
 				itemSup.setDelStatus(0);
 				
 				RestTemplate restTemplate = new RestTemplate();
@@ -986,7 +1006,12 @@ public class ItemController {
 				
 	              GetItemSup itemSupRes=restTemplate.postForObject(Constants.url+"/getItemSup",map, GetItemSup.class);
 				System.out.println("itemSupRes"+itemSupRes.toString() );
-				mav.addObject("itemSupp", itemSupRes);
+			    List<RawMaterialUom> rawMaterialUomList=restTemplate.getForObject(Constants.url + "rawMaterial/getRmUom", List.class);
+			    mav.addObject("rmUomList", rawMaterialUomList);
+			    List<TrayType> trayTypeList=restTemplate.getForObject(Constants.url+"/getTrayTypes", List.class);
+	              
+	              mav.addObject("trayTypes", trayTypeList);
+			    mav.addObject("itemSupp", itemSupRes);
 				mav.addObject("isEdit", 1);
 
 			} catch (Exception e) {

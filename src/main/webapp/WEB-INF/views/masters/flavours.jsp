@@ -122,8 +122,85 @@
 						<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 					</div>
 				</div>
+               			<div class="box-content">
+ 
+<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
-				<div class="box-content">
+							<div class="clearfix"></div>
+							
+							
+							
+							
+							
+								<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+											<th width="17" style="width: 18px">#</th>
+									<th width="348" align="left">Name</th>
+									<th width="322" align="left">Add on rate</th>
+									<th width="290" align="left">Type</th>
+									<th width="80" align="left">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+											<th width="17" style="width: 18px">#</th>
+									<th width="348" align="left">Name</th>
+									<th width="322" align="left">Add on rate</th>
+									<th width="290" align="left">Type</th>
+									<th width="80" align="left">Action</th>
+												</tr>
+												</thead>
+												<tbody>
+					<c:forEach items="${flavoursList}" var="flavoursList" varStatus="count">
+									<tr>
+										<td><c:out value="${count.index+1}" /></td>
+										<td align="left"><c:out value="${flavoursList.spfName}" /></td>
+										<td align="left"><c:out
+												value="${flavoursList.spfAdonRate}" /></td>
+
+										<c:set var="strSpType" value="${flavoursList.spType}"></c:set>
+										<c:choose>
+											<c:when test="${flavoursList.spType==1}">
+												<td align="left"><c:out value="Chocolate" /></td>
+											</c:when>
+											<c:when test="${flavoursList.spType==2}">
+												<td align="left"><c:out value="FC" /></td>
+                                           </c:when>
+                                           <c:otherwise>
+                                           <td align="left"><c:out value=""/></td>
+                                           </c:otherwise>
+										</c:choose>
+
+										<td align="left"><a
+											href="updateFlavour/${flavoursList.spfId}"><span
+												class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+
+											<a href="deleteFlavour/${flavoursList.spfId}"
+											onClick="return confirm('Are you sure want to delete this record');"><span
+												class="glyphicon glyphicon-remove"></span></a>
+										</td>
+									</tr>
+								</c:forEach>
+
+							</tbody>
+
+						</table>
+					</div>
+				</div>
+				
+						</div>
+
+				<%-- <div class="box-content">
 <jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
 					<div class="clearfix"></div>
@@ -174,7 +251,7 @@
 					</div>
 
 				</div>
-			</div>
+ --%>			</div>
 
 
 			<!-- END Main Content -->
