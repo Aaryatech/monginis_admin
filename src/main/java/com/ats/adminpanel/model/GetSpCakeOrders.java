@@ -40,7 +40,8 @@ public class GetSpCakeOrders {
 
 	 
 	private String spfName;
-
+    private String cusChoicePhoto;
+    private String orderPhoto;
 
 	public int getSpOrderNo() {
 		return spOrderNo;
@@ -202,6 +203,26 @@ public class GetSpCakeOrders {
 	}
 
 
+	public String getCusChoicePhoto() {
+		return cusChoicePhoto;
+	}
+
+
+	public void setCusChoicePhoto(String cusChoicePhoto) {
+		this.cusChoicePhoto = cusChoicePhoto;
+	}
+
+
+	public String getOrderPhoto() {
+		return orderPhoto;
+	}
+
+
+	public void setOrderPhoto(String orderPhoto) {
+		this.orderPhoto = orderPhoto;
+	}
+
+
 	@Override
 	public String toString() {
 		return "GetSpCakeOrders [spOrderNo=" + spOrderNo + ", frName=" + frName + ", frMob=" + frMob + ", spName="
@@ -209,7 +230,7 @@ public class GetSpCakeOrders {
 				+ ", spSubTotal=" + spSubTotal + ", spAdvance=" + spAdvance + ", rmAmount=" + rmAmount
 				+ ", spDeliveryDate=" + spDeliveryDate + ", spSelectedWeight=" + spSelectedWeight + ", spDeliveryPlace="
 				+ spDeliveryPlace + ", spCustName=" + spCustName + ", spCustMobNo=" + spCustMobNo + ", spfName="
-				+ spfName + "]";
+				+ spfName + ", cusChoicePhoto=" + cusChoicePhoto + ", orderPhoto=" + orderPhoto + "]";
 	}
 
  

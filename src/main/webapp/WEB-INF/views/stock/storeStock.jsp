@@ -12,7 +12,7 @@
             width: 100%;
         }
 
-        thead, tbody, tr, td, th { display: block; }
+        thead, tbody, trtd, , th { display: block; }
 
         tr:after {
             content: ' ';
@@ -38,7 +38,7 @@
         }
 
  
-	</style>
+	 
 	   tbody td, thead th {
             width: 16.2%;
             float: left;

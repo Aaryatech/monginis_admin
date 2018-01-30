@@ -721,7 +721,7 @@ public class OrderController {
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("spOrderNo", spOrderNo);
 		List<GetSpCakeOrders> orderListResponse = restTemp.postForObject(Constants.url + "getSpCakeOrderBySpOrderNo", map, List.class);
-		
+	 
 		model.addObject("spCakeOrder",orderListResponse.get(0) );
 	return model;	
 	}
@@ -737,6 +737,8 @@ public class OrderController {
 		
 		System.out.println("SpOrder"+orderListResponse.toString());
 		model.addObject("spCakeOrder",orderListResponse );
+		model.addObject("imgUrl", Constants.SP_CAKE_FOLDER);
+		model.addObject("imgUrl2", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
 		return model;	
 	}
 	
@@ -766,6 +768,8 @@ public class OrderController {
 		System.out.println("SpOrder"+orderListResponse.toString());
 		model.addObject("spCakeOrder",orderListResponse );
 		model.addObject("from",from);
+		model.addObject("imgUrl", Constants.SP_CAKE_FOLDER);
+		model.addObject("imgUrl2", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
 		return model;
 	}
 	
