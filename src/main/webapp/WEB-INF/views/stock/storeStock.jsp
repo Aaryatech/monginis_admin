@@ -7,6 +7,38 @@
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 	 
 	<style type="text/css">
+	 <style type="text/css">
+	table {
+            width: 100%;
+        }
+
+        thead, tbody, tr, td, th { display: block; }
+
+        tr:after {
+            content: ' ';
+            display: block;
+            visibility: hidden;
+            clear: both;
+        }
+
+        thead th {
+            height: 35px;
+
+             text-align: left; 
+        }
+
+        tbody {
+            height: 500px;
+            overflow-y: auto;
+           
+        }
+
+        thead {
+             fallback  
+        }
+
+ 
+	</style>
 	   tbody td, thead th {
             width: 16.2%;
             float: left;

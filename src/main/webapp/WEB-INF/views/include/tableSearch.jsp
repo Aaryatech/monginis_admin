@@ -4,38 +4,7 @@
     <i class="fa fa-search" style="font-size:20px"></i>
 									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search.." title="Type in a name">
 										</label>  
-  <style type="text/css">
-	table {
-            width: 100%;
-        }
-
-        thead, tbody, tr, td, th { display: block; }
-
-        tr:after {
-            content: ' ';
-            display: block;
-            visibility: hidden;
-            clear: both;
-        }
-
-        thead th {
-            height: 35px;
-
-             text-align: left; 
-        }
-
-        tbody {
-            height: 500px;
-            overflow-y: auto;
-           
-        }
-
-        thead {
-             fallback  
-        }
-
  
-	</style>
   <script>
 function myFunction() {
   var input, filter, table, tr, td, i;
