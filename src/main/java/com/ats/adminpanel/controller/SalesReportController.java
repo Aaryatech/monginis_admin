@@ -43,6 +43,7 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllFrIdName;
 import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.AllRoutesListResponse;
+import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
@@ -240,6 +241,64 @@ public class SalesReportController {
 			e.printStackTrace();
 
 		}
+		
+		//exportToExcel
+		List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+			
+			ExportToExcel expoExcel=new ExportToExcel();
+			List<String> rowData=new ArrayList<String>();
+			 
+			rowData.add("Bill No");
+			rowData.add("Invoice No");
+			rowData.add("Bill Date");
+			rowData.add("Franchisee Code");
+			rowData.add("Franchisee Name");
+			rowData.add("Franchisee City");
+			rowData.add("Franchisee Gst No");
+			rowData.add("sgst sum");
+			rowData.add("cgst sum");
+			rowData.add("igst sum");
+			rowData.add("Total Tax");
+			rowData.add("Grand Total");
+			rowData.add("Taxable Amt");
+		 
+		 
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			for(int i=0;i<saleList.size();i++)
+			{
+				  expoExcel=new ExportToExcel();
+				 rowData=new ArrayList<String>();
+				 
+				rowData.add(""+saleList.get(i).getBillNo());
+				rowData.add(saleList.get(i).getInvoiceNo());
+				rowData.add(saleList.get(i).getBillDate());
+		
+				rowData.add(""+saleList.get(i).getFrId());
+				rowData.add(saleList.get(i).getFrName());
+				
+				rowData.add(saleList.get(i).getFrCity());
+				rowData.add(saleList.get(i).getFrGstNo());
+				rowData.add(""+saleList.get(i).getSgstSum());
+				rowData.add(""+saleList.get(i).getCgstSum());
+				rowData.add(""+saleList.get(i).getIgstSum());
+				rowData.add(""+saleList.get(i).getTotalTax());
+				rowData.add(""+saleList.get(i).getGrandTotal());
+				rowData.add(""+saleList.get(i).getTaxableAmt());
+				
+				 
+				
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				 
+			}
+			 
+			
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "SaleBillWiseDate");
+		
 		return saleList;
 	}
 	
@@ -436,6 +495,64 @@ public class SalesReportController {
 			e.printStackTrace();
 
 		}
+		
+
+		//exportToExcel
+		List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+			
+			ExportToExcel expoExcel=new ExportToExcel();
+			List<String> rowData=new ArrayList<String>();
+			 
+			rowData.add("Bill No");
+			rowData.add("Invoice No");
+			rowData.add("Bill Date");
+			rowData.add("Franchisee Code");
+			rowData.add("Franchisee Name");
+			rowData.add("Franchisee City");
+			rowData.add("Franchisee Gst No");
+			rowData.add("sgst sum");
+			rowData.add("cgst sum");
+			rowData.add("igst sum");
+			rowData.add("Total Tax");
+			rowData.add("Grand Total");
+			rowData.add("Taxable Amt");
+		 
+		 
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			for(int i=0;i<saleList.size();i++)
+			{
+				  expoExcel=new ExportToExcel();
+				 rowData=new ArrayList<String>();
+				 
+				rowData.add(""+saleList.get(i).getBillNo());
+				rowData.add(saleList.get(i).getInvoiceNo());
+				rowData.add(saleList.get(i).getBillDate());
+		
+				rowData.add(""+saleList.get(i).getFrId());
+				rowData.add(saleList.get(i).getFrName());
+				
+				rowData.add(saleList.get(i).getFrCity());
+				rowData.add(saleList.get(i).getFrGstNo());
+				rowData.add(""+saleList.get(i).getSgstSum());
+				rowData.add(""+saleList.get(i).getCgstSum());
+				rowData.add(""+saleList.get(i).getIgstSum());
+				rowData.add(""+saleList.get(i).getTotalTax());
+				rowData.add(""+saleList.get(i).getGrandTotal());
+				rowData.add(""+saleList.get(i).getTaxableAmt());
+				
+				 
+				
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				 
+			}
+			 
+			
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "SaleBillWiseFr");
 		return saleList;
 	}
 	
@@ -636,7 +753,63 @@ public class SalesReportController {
 			e.printStackTrace();
 
 		}
-	
+
+		//exportToExcel
+		List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+			
+			ExportToExcel expoExcel=new ExportToExcel();
+			List<String> rowData=new ArrayList<String>();
+			 
+			rowData.add("Bill No");
+			rowData.add("Invoice No");
+			rowData.add("Bill Date");
+			rowData.add("Franchisee Code");
+			rowData.add("Franchisee Name");
+			rowData.add("Franchisee City");
+			rowData.add("Franchisee Gst No");
+			rowData.add("sgst sum");
+			rowData.add("cgst sum");
+			rowData.add("igst sum");
+			rowData.add("Total Tax");
+			rowData.add("Grand Total");
+			rowData.add("Taxable Amt");
+		 
+		 
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			for(int i=0;i<saleList.size();i++)
+			{
+				  expoExcel=new ExportToExcel();
+				 rowData=new ArrayList<String>();
+				 
+				rowData.add(""+saleList.get(i).getBillNo());
+				rowData.add(saleList.get(i).getInvoiceNo());
+				rowData.add(saleList.get(i).getBillDate());
+		
+				rowData.add(""+saleList.get(i).getFrId());
+				rowData.add(saleList.get(i).getFrName());
+				
+				rowData.add(saleList.get(i).getFrCity());
+				rowData.add(saleList.get(i).getFrGstNo());
+				rowData.add(""+saleList.get(i).getSgstSum());
+				rowData.add(""+saleList.get(i).getCgstSum());
+				rowData.add(""+saleList.get(i).getIgstSum());
+				rowData.add(""+saleList.get(i).getTotalTax());
+				rowData.add(""+saleList.get(i).getGrandTotal());
+				rowData.add(""+saleList.get(i).getTaxableAmt());
+				
+				 
+				
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				 
+			}
+			 
+			
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "BillWiseGroupByDate");
 		return saleList;
 		
 	}
@@ -829,6 +1002,63 @@ public class SalesReportController {
 
 		}
 	
+		
+		//exportToExcel
+				List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+					
+					ExportToExcel expoExcel=new ExportToExcel();
+					List<String> rowData=new ArrayList<String>();
+					 
+					rowData.add("Bill No");
+					rowData.add("Invoice No");
+					rowData.add("Bill Date");
+					rowData.add("Franchisee Code");
+					rowData.add("Franchisee Name");
+					rowData.add("Franchisee City");
+					rowData.add("Franchisee Gst No");
+					rowData.add("sgst sum");
+					rowData.add("cgst sum");
+					rowData.add("igst sum");
+					rowData.add("Total Tax");
+					rowData.add("Grand Total");
+					rowData.add("Taxable Amt");
+				 
+				 
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					for(int i=0;i<saleList.size();i++)
+					{
+						  expoExcel=new ExportToExcel();
+						 rowData=new ArrayList<String>();
+						 
+						rowData.add(""+saleList.get(i).getBillNo());
+						rowData.add(saleList.get(i).getInvoiceNo());
+						rowData.add(saleList.get(i).getBillDate());
+				
+						rowData.add(""+saleList.get(i).getFrId());
+						rowData.add(saleList.get(i).getFrName());
+						
+						rowData.add(saleList.get(i).getFrCity());
+						rowData.add(saleList.get(i).getFrGstNo());
+						rowData.add(""+saleList.get(i).getSgstSum());
+						rowData.add(""+saleList.get(i).getCgstSum());
+						rowData.add(""+saleList.get(i).getIgstSum());
+						rowData.add(""+saleList.get(i).getTotalTax());
+						rowData.add(""+saleList.get(i).getGrandTotal());
+						rowData.add(""+saleList.get(i).getTaxableAmt());
+						
+						 
+						
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
+						 
+					}
+					 
+					
+					
+					HttpSession session = request.getSession();
+					session.setAttribute("exportExcelList", exportToExcelList);
+					session.setAttribute("excelName", "SaleBillWiseByMonth");
 		return saleList;
 		
 	}
@@ -1018,6 +1248,7 @@ public class SalesReportController {
 
 		}
 	
+
 		return royaltyBean;
 		
 	}
@@ -1202,6 +1433,57 @@ public class SalesReportController {
 
 		}
 	
+		
+		//exportToExcel
+				List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+					
+					ExportToExcel expoExcel=new ExportToExcel();
+					List<String> rowData=new ArrayList<String>();
+					 
+					 
+					rowData.add("fr Id");
+					rowData.add("Franchisee Code");
+					rowData.add("Franchisee Name");
+					rowData.add("Franchisee City");
+			 
+					rowData.add("Grn Taxable Amt");
+					rowData.add("Gvn Taxable Amt");
+					rowData.add("Taxable Amt");
+				 
+				 
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					for(int i=0;i<royaltyFrList.size();i++)
+					{
+						  expoExcel=new ExportToExcel();
+						 rowData=new ArrayList<String>();
+						 
+						 
+						rowData.add(""+royaltyFrList.get(i).getFrId());
+				
+						rowData.add(""+royaltyFrList.get(i).getFrId());
+						rowData.add(royaltyFrList.get(i).getFrName());
+						
+						rowData.add(royaltyFrList.get(i).getFrCity());
+						 
+						rowData.add(""+royaltyFrList.get(i).gettGrnTaxableAmt());
+						rowData.add(""+royaltyFrList.get(i).gettGvnTaxableAmt());
+						rowData.add(""+royaltyFrList.get(i).gettBillTaxableAmt());
+						
+						 
+						
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
+						 
+					}
+					 
+					
+					
+					HttpSession session = request.getSession();
+					session.setAttribute("exportExcelList", exportToExcelList);
+					session.setAttribute("excelName", "RoyaltyFrList");
+			
+					
 		return royaltyFrList;
 		
 	}
@@ -1384,6 +1666,62 @@ public class SalesReportController {
 
 		}
 	
+
+		//exportToExcel
+		List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+			
+			ExportToExcel expoExcel=new ExportToExcel();
+			List<String> rowData=new ArrayList<String>();
+			 
+			rowData.add("Item Id");
+		
+			rowData.add("Item Name");
+			rowData.add("Item Hsn Code");
+			rowData.add("Bill Qty Sum");
+			rowData.add("Item Tax1");
+			rowData.add("Item Tax2");
+			rowData.add("Item Tax2");
+			rowData.add("Total Tax");
+			rowData.add("sgst sum");
+			rowData.add("cgst sum");
+			rowData.add("igst sum");
+		 
+			rowData.add("Taxable Amt");
+		 
+		 
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			for(int i=0;i<saleList.size();i++)
+			{
+				  expoExcel=new ExportToExcel();
+				 rowData=new ArrayList<String>();
+				 
+				rowData.add(""+saleList.get(i).getId());
+			 
+				rowData.add(""+saleList.get(i).getItemName());
+				rowData.add(""+saleList.get(i).getItemHsncd());
+				rowData.add(""+saleList.get(i).getBillQtySum());
+				rowData.add(""+saleList.get(i).getItemTax1());
+			 
+				rowData.add(""+saleList.get(i).getItemTax2());
+				rowData.add(""+saleList.get(i).getItemTax3());
+				rowData.add(""+saleList.get(i).getSgstRsSum());
+				rowData.add(""+saleList.get(i).getCgstRsSum());
+			 
+				rowData.add(""+saleList.get(i).getIgstRsSum());
+				rowData.add(""+saleList.get(i).getTaxableAmtSum());
+				 
+				
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				 
+			}
+			 
+			
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "SaleReportItemWise");
 		return saleList;
 		
 	}
@@ -1562,6 +1900,76 @@ public class SalesReportController {
 
 		}
 	
+		
+		//exportToExcel
+		List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+			
+			ExportToExcel expoExcel=new ExportToExcel();
+			List<String> rowData=new ArrayList<String>();
+			 
+			rowData.add("Bill No");
+			rowData.add("Invoice No");
+			rowData.add("Bill Date");
+			rowData.add("Franchisee Id");
+			rowData.add("Franchisee Name");
+			rowData.add("Franchisee City");
+			rowData.add("Franchisee Gst No");
+			rowData.add("Item Name");
+			rowData.add("Item Hsn Code");
+			rowData.add("Item Tax1");
+			rowData.add("Item Tax2");
+			rowData.add("Item Tax2");
+			rowData.add("Total Tax");
+			rowData.add("sgst sum");
+			rowData.add("cgst sum");
+			rowData.add("igst sum");
+		 
+			rowData.add("Taxable Amt");
+		 
+		 
+			/* float taxableAmtSum;
+			 float sgstRsSum;
+			 float cgstRsSum;
+			 float igstRsSum;*/
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			for(int i=0;i<saleList.size();i++)
+			{
+				  expoExcel=new ExportToExcel();
+				 rowData=new ArrayList<String>();
+				 
+				rowData.add(""+saleList.get(i).getBillNo());
+				rowData.add(saleList.get(i).getInvoiceNo());
+				rowData.add(saleList.get(i).getBillDate());
+		
+				rowData.add(""+saleList.get(i).getFrId());
+				rowData.add(saleList.get(i).getFrName());
+				
+				rowData.add(saleList.get(i).getFrCity());
+				rowData.add(saleList.get(i).getFrGstNo());
+				rowData.add(""+saleList.get(i).getItemName());
+				rowData.add(""+saleList.get(i).getItemHsncd());
+				rowData.add(""+saleList.get(i).getItemTax1());
+			 
+				rowData.add(""+saleList.get(i).getItemTax2());
+				rowData.add(""+saleList.get(i).getItemTax3());
+				rowData.add(""+saleList.get(i).getSgstRsSum());
+				rowData.add(""+saleList.get(i).getCgstRsSum());
+			 
+				rowData.add(""+saleList.get(i).getIgstRsSum());
+				rowData.add(""+saleList.get(i).getTaxableAmtSum());
+				 
+				
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				 
+			}
+			 
+			
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "BillWiseAllFr");
 		return saleList;
 	}
 	//pdf to be done

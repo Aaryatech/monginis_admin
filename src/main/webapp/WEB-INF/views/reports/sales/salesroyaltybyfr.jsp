@@ -193,6 +193,14 @@
 								</tbody>
 							</table>
 						</div>
+						<div class="form-group" style="display: none;" id="range">
+								 
+											 
+											 
+											<div class="col-sm-3  controls">
+											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
+											</div>
+											</div>
 					</div>
 				</div>
 
@@ -251,6 +259,7 @@
 
 									if (data == "") {
 										alert("No records found !!");
+										  document.getElementById("expExcel").disabled=true;
 
 									}
 
@@ -259,7 +268,8 @@
 									.each(
 											data,
 											function(key, report) {
-														
+												  document.getElementById("expExcel").disabled=false;
+													document.getElementById('range').style.display = 'block';
 														//alert("Hi");
 														 srNo=key+1;
 														//var index = key + 1;
@@ -550,7 +560,12 @@ function genPdf()
 	
 	}
 
-
+function exportToExcel()
+{
+	 
+	window.open("${pageContext.request.contextPath}/exportToExcel");
+			document.getElementById("expExcel").disabled=true;
+}
 </script>
 
 	<!--basic scripts-->

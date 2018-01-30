@@ -192,6 +192,14 @@
 								</tbody>
 							</table>
 						</div>
+						<div class="form-group" style="display: none;" id="range">
+								 
+											 
+											 
+											<div class="col-sm-3  controls">
+											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
+											</div>
+											</div>
 					</div>
 
 				</div>
@@ -239,6 +247,7 @@
 
 									if (data == "") {
 										alert("No records found !!");
+										  document.getElementById("expExcel").disabled=true;
 
 									}
 
@@ -246,6 +255,8 @@
 											.each(
 													data,
 													function(key, report) {
+														  document.getElementById("expExcel").disabled=false;
+															document.getElementById('range').style.display = 'block';
 														var index = key + 1;
 														//var tr = "<tr>";
 														var tr = $('<tr></tr>');
@@ -382,7 +393,12 @@ function genPdf()
 	//window.open('${pageContext.request.contextPath}/pdfForReport?url=showSaleReportItemwisePdf/'+from_date+'/'+to_date);
 	
 	}	//window.open('pdfForReport?url=showSaleBillwiseByFrPdf/'+from_date+'/'+to_date);
-
+	function exportToExcel()
+	{
+		 
+		window.open("${pageContext.request.contextPath}/exportToExcel");
+				document.getElementById("expExcel").disabled=true;
+	}
 </script>
 
 	<!--basic scripts-->
