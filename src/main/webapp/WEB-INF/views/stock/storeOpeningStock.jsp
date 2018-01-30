@@ -54,33 +54,8 @@
 						<div class="box-content">
 
 							<form id="completproduction" action="${pageContext.request.contextPath}/insertStoreOpeningStock" method="post">
-							<!-- 
-							<div class="box-content">
-							
-							<div class="col-md-2">Item Type</div>
-							<div class="col-md-3">
-								<select data-placeholder="Select Item type" class="form-control" name="item_type" 
-										tabindex="-1" id="item_type"  >
-											<option selected value="-1">Select Item type</option>
-											<option  value="1">Raw Material</option>
-											<option  value="2">Semi Finished</option>
-											
-											
-											</select>
-								
-							
-							</div>
-							
-							</div><br><br><br>
-							
-							 -->
-							
-							
-							
-							
-						
-							
-							
+							 
+							 
 							
 							<div class=" box-content">
 								<div class="row">
@@ -104,19 +79,19 @@
 														varStatus="count">
 
 														<tr>
-															<td><c:out value="${count.index+1}"></c:out></td>
+															<td><c:out value="${count.index+1}"></c:out></td> 
 															<td><c:out value="${rmList.rmName}"></c:out></td>
 															
 															<c:forEach items="${uomList}" var="uomList" >
 														<c:choose>
-														<c:when test="${uomList.uomId == rmList.rmUomId}">
+														<c:when test="${uomList.uomId == rmList.rmUom}">
 															<td><c:out value="${uomList.uom}"></c:out>
 															</td>
 															</c:when>
 															</c:choose>
 															</c:forEach>
 															
-															<td>  <input type='text' class='form-control' value='0' name='stockQty<c:out value="${rmList.rmId}" />' > 
+															<td>  <input type='text' class='form-control' value='${rmList.storeOpeningStock}' name='stockQty<c:out value="${rmList.rmId}" />' > 
 															</td>
 															 
 
