@@ -234,6 +234,7 @@ public class ProductionController {
 			map.add("delStatus", 0);
 			map.add("timestamp", stockHeader.getTimestamp());
 			
+			
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
 			 
