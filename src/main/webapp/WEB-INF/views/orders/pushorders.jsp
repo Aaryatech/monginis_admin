@@ -134,6 +134,15 @@
 							</select>
 						</div>
 					</div>
+					
+					<div class="form-group col-md-8">
+					<label class=" col-md-3 control-label franchisee_label"></label>
+						<label class=" col-md-3 control-label franchisee_label">Date</label>
+						<div class="col-sm-5 col-lg-3 controls">
+										<input class="form-control" id="date" size="16"
+											type="text" name="date" value="${date}" readonly />
+									</div>
+					</div>
 
 
 

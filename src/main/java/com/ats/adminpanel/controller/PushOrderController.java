@@ -100,10 +100,10 @@ public class PushOrderController {
 			}
 		}
 		System.out.println(" Fr " + allFrIdNameList.getFrIdNamesList());
-
+		java.util.Date utilDate = new java.util.Date(); 
 		model.addObject("unSelectedMenuList", selectedMenuList);
 		model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
-
+		model.addObject("date",new SimpleDateFormat("dd-MM-yyyy").format(utilDate));
 		return model;
 	}
 

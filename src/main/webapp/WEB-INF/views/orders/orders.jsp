@@ -136,14 +136,13 @@ th:hover::after {
 									</div>
 								</div>
 
-								<!-- <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Production
-										Date</label>
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Date</label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="dp2" size="16"
-											type="text" name="prod_date" required />
+										<input class="form-control date-picker" id="date" size="16"
+											type="text" name="date" value="${date}" required />
 									</div>
-								</div> -->
+								</div>
 
 
 								<div align="center" class="form-group">
@@ -382,14 +381,15 @@ function callSearch() {
 	var frIds=$("#fr_id").val();
 		
 
-	/* var prodDate = document.getElementById("dp2").value; */
+	var date = $("#date").val(); 
+	//alert(date);
 	$('#loader').show();
 
 $.getJSON('${callSearchOrdersProcess}', {
 
 	fr_id_list : JSON.stringify(frIds),
 	item_id_list : JSON.stringify(itemIds),
-	
+	date : date,
 	
 	ajax : 'true'
 

@@ -415,7 +415,9 @@ public class ViewProdController {
 				e.printStackTrace();
 
 			}
-
+			
+			int status = Integer.valueOf(planHeader.getProductionStatus());
+			System.out.println("status"+status);
 			for (int i = 0; i < prodPlanDetailList.size(); i++) {
 
 				for (int j = 0; j < updateStockDetailList.size(); j++) {
@@ -426,7 +428,12 @@ public class ViewProdController {
 
 						prodPlanDetailList.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk());
 						
-						prodPlanDetailList.get(i).setOpeningQty((int) updateStockDetailList.get(j).getOpTotal());
+						if(status<4)
+						{
+							prodPlanDetailList.get(i).setOpeningQty((int)updateStockDetailList.get(j).getOpTotal());
+						}
+						
+						
 
 					}
 
