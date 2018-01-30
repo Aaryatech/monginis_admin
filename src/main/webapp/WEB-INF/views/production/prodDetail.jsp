@@ -148,7 +148,7 @@
 										<thead>
 											<tr>
 												<th width="170" >Item Name</th>
-												<th width="120" align="left">Stock</th>
+												<th width="120" align="left">Current Stock</th>
 												<th width="120" align="left">Opening Qty</th>
 												<th width="120" align="left">Plan Qty</th>
 												<th width="120" align="left">Order Qty</th>
@@ -168,8 +168,8 @@
 													
 													<td align="left"><input align="left" type="text"  value="${planDetail.curOpeQty}"
 														placeholder="Stock Qty" class="form-control" name="stk_qty${planDetail.productionDetailId}" id="stk_qty${planDetail.productionDetailId}"
-														data-rule-required="true" style="width: 65px" disabled/></td>
-													<td align="left"><input align="left" type="text"  value="${planDetail.opTotal}"
+														data-rule-required="true" style="width: 65px"  /></td>
+													<td align="left"><input align="left" type="text"  value="${planDetail.openingQty}"
 														placeholder="Opening Qty" class="form-control" name="op_total${planDetail.productionDetailId}" id="op_total${planDetail.productionDetailId}"
 														data-rule-required="true" style="width: 65px"/></td>
 
@@ -179,7 +179,7 @@
 													<td align="left"><input align="left" type="text" name="plan_qty${planDetail.productionDetailId}" id="plan_qty${planDetail.productionDetailId}"
 														placeholder="Plan Qty" class="form-control" value="${planDetail.planQty}"
 														data-rule-required="true" style="width: 65px"/></td>
-														</button>
+													 
                                                     </c:when>
                                                        <c:otherwise>
                                                            <td align="left"><input align="left" type="text" name="plan_qty${planDetail.productionDetailId}" id="plan_qty${planDetail.productionDetailId}"
@@ -232,7 +232,7 @@
 														</c:when>
 														<c:otherwise>
 														<td align="left"><input align="left" type="text" name="rej_qty${planDetail.productionDetailId}"  id="rej_qty${planDetail.productionDetailId}" 
-														placeholder="Rejected Qty" class="form-control" value="0"
+														placeholder="Rejected Qty" class="form-control" value="${planDetail.rejectedQty}"
 														data-rule-required="true" style="width: 65px" disabled onkeyup="changeQty(${planDetail.productionDetailId})"/></td>
 														</c:otherwise>
 														</c:choose>
@@ -477,10 +477,15 @@ function IsNumeric(e) {
 
 function changeQty(id)
 {
-	var stkQty=document.getElementById("stk_qty"+id).value;
-	var actQty=document.getElementById("act_prod_qty"+id).value;
-	var rejQty=document.getElementById("rej_qty"+id).value;
- document.getElementById("total_qty"+id).value=stkQty+actQty-rejQty;
+	var opQty=parseFloat(document.getElementById("op_total"+id).value); 
+	var actQty=parseFloat(document.getElementById("act_prod_qty"+id).value);
+	var rejQty=parseFloat(document.getElementById("rej_qty"+id).value);
+	alert(opQty);
+	alert(actQty);
+	alert(rejQty);
+	var total = opQty+actQty-rejQty;
+ document.getElementById("total_qty"+id).value=total;
+ alert(total);
 	
 	}
 

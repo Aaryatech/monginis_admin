@@ -426,7 +426,7 @@ public class ViewProdController {
 
 						prodPlanDetailList.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk());
 						
-						prodPlanDetailList.get(i).setOpTotal(updateStockDetailList.get(j).getOpTotal());
+						prodPlanDetailList.get(i).setOpeningQty((int) updateStockDetailList.get(j).getOpTotal());
 
 					}
 
@@ -660,10 +660,14 @@ public class ViewProdController {
 						request.getParameter("act_prod_qty" + postProdPlanDetailList.get(i).getProductionDetailId()));
 				float opTotal = Float.parseFloat(
 						request.getParameter("op_total" + postProdPlanDetailList.get(i).getProductionDetailId()));
+				float rejQty = Float.parseFloat(
+						request.getParameter("rej_qty" + postProdPlanDetailList.get(i).getProductionDetailId()));
+				
 				System.out.println("prodQty:" + prodQty);
 
 				postProdPlanDetailList.get(i).setProductionQty(prodQty);
 				postProdPlanDetailList.get(i).setOpeningQty((int)opTotal);
+				postProdPlanDetailList.get(i).setRejectedQty((int)rejQty);
 
 			}
 

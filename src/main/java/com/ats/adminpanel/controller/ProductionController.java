@@ -691,8 +691,7 @@ public class ProductionController {
 				postProductionDetail.setItemId(Integer.parseInt(a));
 
 				postProductionDetail.setOrderQty(getOrderItemQtyList.get(i).getQty());
-				postProductionDetail.setProductionDate(convertedDate);
-				postProductionDetail.setOpeningQty((int) getOrderItemQtyList.get(i).getCurOpeQty());
+				postProductionDetail.setProductionDate(convertedDate); 
 				postProductionDetail.setProductionQty(0);
 				postProductionDetail.setProductionBatch("");
 				postProductionDetail.setRejectedQty(0);
