@@ -285,15 +285,20 @@
 			
 			var catId = $("#catId").val();
 			document.getElementById("selectedCatId").value =catId;
-			var todayTimeStamp = +new Date; // Unix timestamp in milliseconds
+			var d = new Date();
+			d.setDate(d.getDate() + 2);
+			var todayTimeStamp = +d; // Unix timestamp in milliseconds
 			var oneDayTimeStamp = 1000 * 60 * 60 * 24; // Milliseconds in a day
 			var diff = todayTimeStamp - oneDayTimeStamp;
+			var diff1 = diff - oneDayTimeStamp;
 			var yesterdayDate = new Date(diff);
+			var yesterdayDate1 = new Date(diff1);
 			var todaysDate = new Date(todayTimeStamp);
 
-			var yesterdayString =  yesterdayDate.getDate()+ '-' + (yesterdayDate.getMonth() + 1) + '-' +yesterdayDate.getFullYear();
-			var tommarowString =  (todaysDate.getDate()+1)+ '-' + (todaysDate.getMonth() + 1) + '-' +todaysDate.getFullYear();
-
+			var tommarowString =  yesterdayDate.getDate()+ '-' + (yesterdayDate.getMonth() + 1) + '-' +yesterdayDate.getFullYear();
+			var yesterdayString =  (yesterdayDate1.getDate())+ '-' + (yesterdayDate1.getMonth() + 1) + '-' +yesterdayDate1.getFullYear();
+            
+			
 			$("#datepicker1").val(yesterdayString); 
             $("#datepicker5").val(tommarowString); 
  
