@@ -1,6 +1,8 @@
 package com.ats.adminpanel.model.stock;
 
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
  
 
 public class StoreStockDetail {
@@ -55,11 +57,11 @@ private int storeStockDetailId;
 	}
 
  
-
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public String getStoreStockDate() {
 		return storeStockDate;
 	}
-
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
 	public void setStoreStockDate(String storeStockDate) {
 		this.storeStockDate = storeStockDate;
 	}
