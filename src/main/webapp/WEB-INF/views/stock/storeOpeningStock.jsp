@@ -81,7 +81,7 @@
 														<tr>
 															<td><c:out value="${count.index+1}"></c:out></td> 
 															<td><c:out value="${rmList.rmName}"></c:out></td>
-															
+														
 															<c:forEach items="${uomList}" var="uomList" >
 														<c:choose>
 														<c:when test="${uomList.uomId == rmList.rmUom}">
@@ -91,9 +91,9 @@
 															</c:choose>
 															</c:forEach>
 															
-															<td>  <input type='text' class='form-control' value='${rmList.storeOpeningStock}' name='stockQty<c:out value="${rmList.rmId}" />' > 
+															<td>  <input type='text' class='form-control' value='${rmList.storeOpeningStock}' pattern='[+-]?([0-9]*[.])?[0-9]+' name='stockQty<c:out value="${rmList.rmId}" />' required> 
 															</td>
-															 
+															  
 
 														</tr>
 													</c:forEach>

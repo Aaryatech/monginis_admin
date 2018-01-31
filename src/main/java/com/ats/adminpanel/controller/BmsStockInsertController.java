@@ -92,6 +92,7 @@ public class BmsStockInsertController {
 				{
 					for(int k=0;k<rawMaterialDetailsList.getRawMaterialDetailsList().size();k++)
 					{
+						int flag=0;
 						 
 						for(int i=0;i<bmsStockHeaderedit.getBmsStockDetailed().size();i++)
 						{
@@ -111,7 +112,24 @@ public class BmsStockInsertController {
 									}
 								}
 								sfndRawItemlist.add(sfndRawItem); 
+								flag=1;
 							}
+							
+						}
+						if(flag==0)
+						{ 
+							sfndRawItem = new BmsStockItemList();
+							sfndRawItem.setItemId(rawMaterialDetailsList.getRawMaterialDetailsList().get(k).getRmId());
+							sfndRawItem.setName(rawMaterialDetailsList.getRawMaterialDetailsList().get(k).getRmName());
+							for(int j=0;j<uomList.size();j++)
+							{
+								if(uomList.get(j).getUomId()==rawMaterialDetailsList.getRawMaterialDetailsList().get(k).getRmUomId())
+								{
+									sfndRawItem.setUomId(uomList.get(j).getUomId());
+									sfndRawItem.setUomName(uomList.get(j).getUom());
+								}
+							}
+							sfndRawItemlist.add(sfndRawItem);
 							
 						}
 						 
@@ -160,6 +178,7 @@ public class BmsStockInsertController {
 				{
 					for(int k=0;k<itemHeaderList.size();k++)
 					{
+						int flag=0;
 						 
 						for(int i=0;i<bmsStockHeaderedit.getBmsStockDetailed().size();i++)
 						{
@@ -178,9 +197,27 @@ public class BmsStockInsertController {
 										sfndRawItem.setUomName(uomList.get(j).getUom());
 									}
 								}
+								flag=1;
 								sfndRawItemlist.add(sfndRawItem);
 								 
 							}
+							
+						}
+						if(flag==0)
+						{
+
+							sfndRawItem = new BmsStockItemList();
+							sfndRawItem.setItemId(itemHeaderList.get(k).getSfId());
+							sfndRawItem.setName(itemHeaderList.get(k).getSfName());
+							for(int j=0;j<uomList.size();j++)
+							{
+								if(uomList.get(j).getUomId()==itemHeaderList.get(j).getSfUomId())
+								{
+									sfndRawItem.setUomId(uomList.get(j).getUomId());
+									sfndRawItem.setUomName(uomList.get(j).getUom());
+								}
+							}
+							sfndRawItemlist.add(sfndRawItem);
 							
 						}
 						 
@@ -249,26 +286,52 @@ public class BmsStockInsertController {
 				
 				for(int i=0;i<sfndRawItemlist.size();i++)
 				{
+					int flag=0;
 				 
 					for(int j=0;j<bmsStockHeaderedit.getBmsStockDetailed().size();j++)
 					{
 						
-							if(bmsStockHeaderedit.getBmsStockDetailed().get(j).getBmsStockDeatilId()==sfndRawItemlist.get(i).getBsmId()) 
+							if(bmsStockHeaderedit.getBmsStockDetailed().get(j).getBmsStockDeatilId()==sfndRawItemlist.get(i).getBsmId() && 
+									bmsStockHeaderedit.getBmsStockDetailed().get(j).getBmsOpeningStock()!=sfndRawItemlist.get(i).getQty()) 
 							{ 
 								bmsStockHeaderedit.getBmsStockDetailed().get(j).setBmsOpeningStock(sfndRawItemlist.get(i).getQty());
-								  
+								bmsStockDetailedlist.add(bmsStockHeaderedit.getBmsStockDetailed().get(j)); 
+								flag=1;
+								break;
 							}
 							
 								
 					}
+					if(sfndRawItemlist.get(i).getBsmId()==0 && flag==0) 
+					{
+						BmsStockDetailed bmsStockDetailed = new BmsStockDetailed();
+						bmsStockDetailed.setBmsStockDeatilId(0);
+						bmsStockDetailed.setBmsStockId(bmsStockHeaderedit.getBmsStockId());
+						bmsStockDetailed.setBmsStockDate(bmsStockHeaderedit.getBmsStockDate()); 
+						bmsStockDetailed.setRmId(sfndRawItemlist.get(i).getItemId());
+						bmsStockDetailed.setRmName(sfndRawItemlist.get(i).getName());
+						bmsStockDetailed.setBmsOpeningStock(sfndRawItemlist.get(i).getQty());
+						bmsStockDetailed.setRmType(value);
+						bmsStockDetailed.setRmUom(sfndRawItemlist.get(i).getUomId());
+						bmsStockDetailedlist.add(bmsStockDetailed);
+					}
 				}
 				
 				 
-					 
+				 
+				bmsStockHeaderedit.setBmsStockDetailed(bmsStockDetailedlist);
 				System.out.println("bmsStockHeaderedit  "+bmsStockHeaderedit.toString());
 				RestTemplate rest = new RestTemplate();
 				 
 				bmsStockHeaderedit =  rest.postForObject(Constants.url + "insertBmsStock",bmsStockHeaderedit,BmsStockHeader.class);
+				
+				/*if(bmsStockDetailedlist!=null)
+				{
+					System.out.println("bmsStockDetailedlist"+bmsStockDetailedlist);
+					Info info =  rest.postForObject(Constants.url + "insertBmsStockDetailed",bmsStockDetailedlist,Info.class);
+					System.out.println("info"+info);
+					
+				}*/
 				 
 			}
 			else

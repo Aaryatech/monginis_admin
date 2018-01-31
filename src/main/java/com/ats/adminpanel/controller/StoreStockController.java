@@ -53,7 +53,7 @@ public class StoreStockController {
 	public  List<GetStoreCurrentStock> getStoreCurrentStockList;
 	public int flag=0;
 	RestTemplate rest = new RestTemplate();
-	
+	List<StoreStockDetail> storeStockDetailList=new ArrayList<>();
 	@RequestMapping(value = "/showStoreOpeningStock", method = RequestMethod.GET)
 	public ModelAndView showStoreOpeningStock(HttpServletRequest request, HttpServletResponse response) {
 		 Constants.mainAct =10;
@@ -63,19 +63,23 @@ public class StoreStockController {
 		flag=0;
 		
 		try {
-			List<StoreStockDetail> storeStockDetailList=new ArrayList<>();
+			storeStockDetailList=new ArrayList<>();
+			storeStockHeader = new StoreStockHeader();
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("status", 0); 
 			storeStockHeader=rest.postForObject(Constants.url +"getCurrentStoreStockHeader",map, StoreStockHeader.class);
+			System.out.println("storeStockHeaderforedit"+storeStockHeader);
+			
 			RawMaterialUomList rawMaterialUomList = rest.getForObject(Constants.url + "rawMaterial/getRmUomList",
 	                RawMaterialUomList.class); 
-			System.out.println("storeStockHeaderforedit"+storeStockHeader);
+			
+			 rawMaterialDetailsList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterial", RawMaterialDetailsList.class);
+	           
+			
 			if(storeStockHeader==null)
 			{
 					System.out.println("in if");
-					flag=1;
-		            rawMaterialDetailsList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterial", RawMaterialDetailsList.class);
-		            storeStockHeader = new StoreStockHeader();
+					flag=1; 
 		            for(int i=0;i<rawMaterialDetailsList.getRawMaterialDetailsList().size();i++)
 		            {
 		            	StoreStockDetail storeStockDetail = new StoreStockDetail();
@@ -85,15 +89,59 @@ public class StoreStockController {
 		    			storeStockDetail.setRmName(rawMaterialDetailsList.getRawMaterialDetailsList().get(i).getRmName());
 		    			storeStockDetail.setRmUom(rawMaterialDetailsList.getRawMaterialDetailsList().get(i).getRmUomId());
 		    			storeStockDetailList.add(storeStockDetail);
-		            }
-		            storeStockHeader.setStoreStockDetailList(storeStockDetailList);
+		            } 
 		            
 			}
+			else
+			{
+				System.out.println("in else");
+				for(int i=0;i<rawMaterialDetailsList.getRawMaterialDetailsList().size();i++)
+	            {
+					int add=0;
+					for(int k=0;k<storeStockHeader.getStoreStockDetailList().size();k++)
+					{
+						 
+						if(storeStockHeader.getStoreStockDetailList().get(k).getRmId()==rawMaterialDetailsList.getRawMaterialDetailsList().get(i).getRmId())
+						{
+							StoreStockDetail storeStockDetail = new StoreStockDetail();
+							storeStockDetail.setStoreStockDetailId(storeStockHeader.getStoreStockDetailList().get(k).getStoreStockDetailId());
+							storeStockDetail.setStoreStockDate(storeStockHeader.getStoreStockDetailList().get(k).getStoreStockDate());
+							storeStockDetail.setStoreStockId(storeStockHeader.getStoreStockDetailList().get(k).getStoreStockId());
+							storeStockDetail.setStoreOpeningStock(storeStockHeader.getStoreStockDetailList().get(k).getStoreOpeningStock());
+							storeStockDetail.setStoreClosingStock(storeStockHeader.getStoreStockDetailList().get(k).getStoreClosingStock());
+			            	storeStockDetail.setRmName(storeStockHeader.getStoreStockDetailList().get(k).getRmName());
+			            	storeStockDetail.setRmId(storeStockHeader.getStoreStockDetailList().get(k).getRmId());
+			            	storeStockDetail.setRmGroup(storeStockHeader.getStoreStockDetailList().get(k).getRmGroup());
+			    			storeStockDetail.setRmName(storeStockHeader.getStoreStockDetailList().get(k).getRmName());
+			    			storeStockDetail.setRmUom(storeStockHeader.getStoreStockDetailList().get(k).getRmUom());
+			    			storeStockDetail.setPurRecQty(storeStockHeader.getStoreStockDetailList().get(k).getPurRecQty());
+			    			storeStockDetail.setBmsIssueQty(storeStockHeader.getStoreStockDetailList().get(k).getBmsIssueQty());
+			    			storeStockDetailList.add(storeStockDetail);
+			    			add=1;
+							
+						}
+		            	
+		            }
+					if(add==0)
+					{
+						StoreStockDetail storeStockDetail = new StoreStockDetail();
+		            	storeStockDetail.setRmName(rawMaterialDetailsList.getRawMaterialDetailsList().get(i).getRmName());
+		            	storeStockDetail.setRmId(rawMaterialDetailsList.getRawMaterialDetailsList().get(i).getRmId());
+		            	storeStockDetail.setRmGroup(rawMaterialDetailsList.getRawMaterialDetailsList().get(i).getGrpId());
+		    			storeStockDetail.setRmName(rawMaterialDetailsList.getRawMaterialDetailsList().get(i).getRmName());
+		    			storeStockDetail.setRmUom(rawMaterialDetailsList.getRawMaterialDetailsList().get(i).getRmUomId());
+		    			storeStockDetailList.add(storeStockDetail);
+					}
+				}
+				
+			}
 			 
+			
 	        System.out.println("Uom List "+rawMaterialUomList.getRawMaterialUom().toString());
-	        System.out.println("Rm List  "+storeStockHeader.getStoreStockDetailList());
+	        System.out.println("storeStockDetailList"+storeStockDetailList);
+	        System.out.println("storeStockHeader"+storeStockHeader);
 	        model.addObject("uomList",rawMaterialUomList.getRawMaterialUom());
-	        model.addObject("rmList",storeStockHeader.getStoreStockDetailList());
+	        model.addObject("rmList",storeStockDetailList);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
@@ -109,22 +157,72 @@ public class StoreStockController {
 		{
 			if(flag==0)
 			{
-				for(int i=0;i<storeStockHeader.getStoreStockDetailList().size();i++)
+				List<StoreStockDetail> storeStockDetailListnew=new ArrayList<>();
+				for(int i=0;i<storeStockDetailList.size();i++)
 				{
-					 float openingStock=Float.parseFloat(request.getParameter("stockQty"+storeStockHeader.getStoreStockDetailList().get(i).getRmId()));
-					 storeStockHeader.getStoreStockDetailList().get(i).setStoreOpeningStock(openingStock); 
+					 float openingStock=Float.parseFloat(request.getParameter("stockQty"+storeStockDetailList.get(i).getRmId()));
+					 storeStockDetailList.get(i).setStoreOpeningStock(openingStock); 
 				} 
+				
+				for(int i=0;i<storeStockDetailList.size();i++)
+				{
+				 int add=0;
+					for(int j=0;j<storeStockHeader.getStoreStockDetailList().size();j++)
+					{
+						
+							if(storeStockHeader.getStoreStockDetailList().get(j).getStoreStockDetailId()==storeStockDetailList.get(i).getStoreStockDetailId() && 
+									storeStockHeader.getStoreStockDetailList().get(j).getStoreOpeningStock()!=storeStockDetailList.get(i).getStoreOpeningStock()) 
+							{ 
+								storeStockHeader.getStoreStockDetailList().get(j).setStoreOpeningStock(storeStockDetailList.get(i).getStoreOpeningStock());
+								storeStockDetailListnew.add(storeStockHeader.getStoreStockDetailList().get(j));
+								add=1;
+								break;
+							}
+							
+								
+					}
+					if(storeStockDetailList.get(i).getStoreStockDetailId()==0 && add==0) 
+					{
+						StoreStockDetail storeStockDetail=new StoreStockDetail(); 
+						storeStockDetail.setRmId(storeStockDetailList.get(i).getRmId());
+						storeStockDetail.setBmsIssueQty(0);
+						storeStockDetail.setExBool(0);
+						storeStockDetail.setExInt1(0);
+						storeStockDetail.setExInt2(0);
+						storeStockDetail.setIsDelete(0);
+						storeStockDetail.setPurRecQty(0.0f);
+						storeStockDetail.setStoreStockDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
+						storeStockDetail.setRmGroup(storeStockDetailList.get(i).getRmGroup());
+						storeStockDetail.setRmName(storeStockDetailList.get(i).getRmName());
+						storeStockDetail.setRmUom(storeStockDetailList.get(i).getRmUom());
+						storeStockDetail.setStoreOpeningStock(storeStockDetailList.get(i).getStoreOpeningStock());
+						storeStockDetail.setStoreClosingStock(0);
+						storeStockDetailListnew.add(storeStockDetail);
+					}
+				}
+				
+				 
+				storeStockHeader.setStoreStockDetailList(storeStockDetailListnew);
 				System.out.println("Before Insert "+storeStockHeader.toString());
-				  storeStockHeader=rest.postForObject(Constants.url +"insertStoreOpeningStock",storeStockHeader, StoreStockHeader.class);
+				storeStockHeader=rest.postForObject(Constants.url +"insertStoreOpeningStock",storeStockHeader, StoreStockHeader.class);
+				
+				/*if(storeStockDetailListnew!=null)
+				{
+					System.out.println("storeStockDetailListnew"+storeStockDetailListnew);
+					storeStockHeader.setStoreStockDetailList(storeStockDetailListnew);
+					Info info =  rest.postForObject(Constants.url + "insertStoreOpeningStock",storeStockHeader,Info.class);
+					System.out.println("info"+info);
+					
+				}*/
 				
 				System.out.println("Res : "+storeStockHeader.toString());
 			}
 			else
 			{
 				System.out.println("insert new");
-				StoreStockHeader storeStockHeaderin=new StoreStockHeader();
-				List<StoreStockDetail> storeStockDetailList=new ArrayList<>();
+				StoreStockHeader storeStockHeaderin=new StoreStockHeader(); 
 				StoreStockDetail storeStockDetail=new StoreStockDetail();
+				List<StoreStockDetail> storeStockDetailListnew=new ArrayList<>();
 				storeStockHeaderin.setStoreStockDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 				storeStockHeaderin.setStoreStockStatus(0);
 				storeStockHeaderin.setExBoll1(0);
@@ -133,10 +231,10 @@ public class StoreStockController {
 				storeStockHeaderin.setExInt2(0);
 				 
 				
-				for(int i=0;i<storeStockHeader.getStoreStockDetailList().size();i++)
+				for(int i=0;i<storeStockDetailList.size();i++)
 				{
 					storeStockDetail=new StoreStockDetail(); 
-					storeStockDetail.setRmId(storeStockHeader.getStoreStockDetailList().get(i).getRmId());
+					storeStockDetail.setRmId(storeStockDetailList.get(i).getRmId());
 					storeStockDetail.setBmsIssueQty(0);
 					storeStockDetail.setExBool(0);
 					storeStockDetail.setExInt1(0);
@@ -144,16 +242,16 @@ public class StoreStockController {
 					storeStockDetail.setIsDelete(0);
 					storeStockDetail.setPurRecQty(0.0f);
 					storeStockDetail.setStoreStockDate(new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
-					storeStockDetail.setRmGroup(storeStockHeader.getStoreStockDetailList().get(i).getRmGroup());
-					storeStockDetail.setRmName(storeStockHeader.getStoreStockDetailList().get(i).getRmName());
-					storeStockDetail.setRmUom(storeStockHeader.getStoreStockDetailList().get(i).getRmUom());
+					storeStockDetail.setRmGroup(storeStockDetailList.get(i).getRmGroup());
+					storeStockDetail.setRmName(storeStockDetailList.get(i).getRmName());
+					storeStockDetail.setRmUom(storeStockDetailList.get(i).getRmUom());
 					storeStockDetail.setStoreClosingStock(0);
 					
-					 float openingStock=Float.parseFloat(request.getParameter("stockQty"+storeStockHeader.getStoreStockDetailList().get(i).getRmId()));
+					 float openingStock=Float.parseFloat(request.getParameter("stockQty"+storeStockDetailList.get(i).getRmId()));
 					storeStockDetail.setStoreOpeningStock(openingStock);
-					storeStockDetailList.add(storeStockDetail);
+					storeStockDetailListnew.add(storeStockDetail);
 				}
-				storeStockHeaderin.setStoreStockDetailList(storeStockDetailList);
+				storeStockHeaderin.setStoreStockDetailList(storeStockDetailListnew);
 				System.out.println("Before Insert "+storeStockHeaderin.toString());
 				storeStockHeaderin=rest.postForObject(Constants.url +"insertStoreOpeningStock",storeStockHeaderin, StoreStockHeader.class);
 				
