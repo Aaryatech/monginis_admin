@@ -915,7 +915,7 @@ public class ProductionController {
 				FinishedGoodStock stockHeader = restTemplate.postForObject(Constants.url + "getFinGoodStockHeader", map,
 						FinishedGoodStock.class);
 
-				System.out.println("stock Header " + stockHeader.toString());
+				System.out.println("stock Header for varience detailed  " + stockHeader.toString());
 
 				Date stockDate = stockHeader.getFinGoodStockDate();
 
@@ -952,7 +952,7 @@ public class ProductionController {
 				String stockkDate = df.format(stockDate);
 				map = new LinkedMultiValueMap<String, Object>();
 				map.add("stockDate", stockkDate);
-				map.add("catId", selectedCat);
+				map.add("catId", groupType);
 				ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
 				};
 				ResponseEntity<List<FinishedGoodStockDetail>> responseEntity = restTemplate.exchange(

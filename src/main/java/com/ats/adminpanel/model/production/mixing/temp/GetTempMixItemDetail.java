@@ -14,7 +14,16 @@ private int tempId;
 	
 	private String uom;
 	
-	int total;
+	float total;
+	float mulFactor;
+
+	public float getMulFactor() {
+		return mulFactor;
+	}
+
+	public void setMulFactor(float mulFactor) {
+		this.mulFactor = mulFactor;
+	}
 
 	public int getTempId() {
 		return tempId;
@@ -64,19 +73,19 @@ private int tempId;
 		this.uom = uom;
 	}
 
-	public int getTotal() {
+	public float getTotal() {
 		return total;
 	}
 
-	public void setTotal(int total) {
+	public void setTotal(float total) {
 		this.total = total;
 	}
 
 	@Override
 	public String toString() {
 		return "GetTempMixItemDetail [tempId=" + tempId + ", sfId=" + sfId + ", rmId=" + rmId + ", rmName=" + rmName
-				+ ", rmType=" + rmType + ", uom=" + uom + ", total=" + total + "]";
+				+ ", rmType=" + rmType + ", uom=" + uom + ", total=" + total + ", mulFactor=" + mulFactor + "]";
 	}
-	
 
+	
 }

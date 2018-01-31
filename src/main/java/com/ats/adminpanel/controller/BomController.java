@@ -96,7 +96,7 @@ int globalIsPlan;
 
 			RestTemplate restTemplate = new RestTemplate();
 			if (isMix == 1) {
-
+System.out.println("It is Production BOM ");
 				map.add("headerId", prodHeaderId);
 
 				getSFPlanDetailForBomList = restTemplate.postForObject(Constants.url + "getSfPlanDetailForBom", map,
@@ -110,7 +110,7 @@ int globalIsPlan;
 				
 			} else if (isMix == 0) {
 				
-				System.out.println("inside Else");
+				System.out.println("inside Else: It is Mixing BOM ");
 
 				map = new LinkedMultiValueMap<String, Object>();
 

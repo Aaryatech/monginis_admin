@@ -1,10 +1,7 @@
 package com.ats.adminpanel.model.production.mixing.temp;
 
-
-//same bean used for Bom and mixing
-
-public class GetSFPlanDetailForMixing {
-
+public class ProdMixingReqP1 {
+	
 	
 	private int itemDetailId;
 	
@@ -16,7 +13,6 @@ public class GetSFPlanDetailForMixing {
 	
 	private String uom;
 	
-	
 	private float rmQty;
 	
 	private float noPiecesPerItem;
@@ -24,11 +20,13 @@ public class GetSFPlanDetailForMixing {
 	private String rmName;
 	
 	private float planQty;
+	private float orderQty;
 	
-	int total;
+	float mulFactor;
 	
-	//private float mulFactor; // Not in new Query by sumit Sir 30 Jan 2018
-	//private int sfId;
+	float total;
+	
+	float prevTotal;// 31 Jan :new field to hold total to calculate auto received  qty and original qty
 	
 	
 
@@ -104,19 +102,44 @@ public class GetSFPlanDetailForMixing {
 		this.planQty = planQty;
 	}
 
-	public int getTotal() {
+	public float getOrderQty() {
+		return orderQty;
+	}
+
+	public void setOrderQty(float orderQty) {
+		this.orderQty = orderQty;
+	}
+
+	public float getMulFactor() {
+		return mulFactor;
+	}
+
+	public void setMulFactor(float mulFactor) {
+		this.mulFactor = mulFactor;
+	}
+
+	public float getTotal() {
 		return total;
 	}
 
-	public void setTotal(int total) {
+	public void setTotal(float total) {
 		this.total = total;
+	}
+
+	public float getPrevTotal() {
+		return prevTotal;
+	}
+
+	public void setPrevTotal(float prevTotal) {
+		this.prevTotal = prevTotal;
 	}
 
 	@Override
 	public String toString() {
-		return "GetSFPlanDetailForMixing [itemDetailId=" + itemDetailId + ", itemId=" + itemId + ", rmType=" + rmType
-				+ ", rmId=" + rmId + ", uom=" + uom + ", rmQty=" + rmQty + ", noPiecesPerItem=" + noPiecesPerItem
-				+ ", rmName=" + rmName + ", planQty=" + planQty + ", total=" + total + "]";
+		return "ProdMixingReqP1 [itemDetailId=" + itemDetailId + ", itemId=" + itemId + ", rmType=" + rmType + ", rmId="
+				+ rmId + ", uom=" + uom + ", rmQty=" + rmQty + ", noPiecesPerItem=" + noPiecesPerItem + ", rmName="
+				+ rmName + ", planQty=" + planQty + ", orderQty=" + orderQty + ", mulFactor=" + mulFactor + ", total="
+				+ total + ", prevTotal=" + prevTotal + "]";
 	}
 
 }

@@ -841,6 +841,7 @@ try {
 				finStkDetail.setOpT1(prevDetail.getCloCurrent());
 				finStkDetail.setOpT2(prevDetail.getOpT1());
 				finStkDetail.setOpT3(prevDetail.getOpT2());
+				finStkDetail.setOpTotal(finStkDetail.getOpT1()+finStkDetail.getOpT2()+finStkDetail.getOpT3());
 				finStkDetail.setItemId(prevDetail.getItemId());
 				finStkDetail.setItemName(prevDetail.getItemName());
 				finStkDetail.setStockDate(finGoodStkDate);

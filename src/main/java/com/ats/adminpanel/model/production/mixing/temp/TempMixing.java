@@ -8,7 +8,7 @@ public class TempMixing {
 
 	private int rmId;
 
-	private int qty;
+	private float qty;
 	private int prodHeaderId;
 	
 
@@ -36,11 +36,11 @@ public class TempMixing {
 		this.rmId = rmId;
 	}
 
-	public int getQty() {
+	public float getQty() {
 		return qty;
 	}
 
-	public void setQty(int qty) {
+	public void setQty(float qty) {
 		this.qty = qty;
 	}
 

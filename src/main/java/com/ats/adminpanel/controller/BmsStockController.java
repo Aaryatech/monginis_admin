@@ -313,6 +313,7 @@ System.out.println("inside get Bms Stock Page ");
 				currentStock.setRmUomId(stkDetail.getRmUom());
 				currentStock.setStore_issue_qty(stkDetail.getStoreRecQty());
 				currentStock.setStore_rejected_qty(stkDetail.getStoreRejectedQty());
+				
 
 				bmsCurrentStock.add(currentStock);
 			}
