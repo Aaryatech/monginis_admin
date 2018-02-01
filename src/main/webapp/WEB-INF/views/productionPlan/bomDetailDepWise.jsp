@@ -122,14 +122,24 @@
 								</div>
 								<br>
 
-								<div class="box-content">
-
-
+								<div class="box-content"> 
+								<c:set var="prod" value="PROD"></c:set>
+								<c:set var="mix" value="MIX"></c:set>
+									<c:choose>
+									 	<c:when test="${billOfMaterialHeader.fromDeptName==prod}">
+									 	<c:set var="depname" value="Production"></c:set>
+									 	
+									 	</c:when>
+									 	<c:when test="${billOfMaterialHeader.fromDeptName==mix}">
+									 	<c:set var="depname" value="Mixing"></c:set>
+									 	
+									 	</c:when>
+									</c:choose>
 									<div class="col-md-2">From Department Name</div>
 									<div class="col-md-3">
 										<input class="form-control" id="time_slot" size="16"
 											type="text" name="time_slot"
-											value="${billOfMaterialHeader.fromDeptName}" readonly />
+											value="${depname}" readonly />
 									</div>
 
 
