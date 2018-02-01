@@ -793,8 +793,7 @@ System.out.println("It is Production BOM ");
 			
 			for(int i=0;i<getbomList.size();i++)
 			{
-				System.out.println(df.format(date)+df.format(getbomList.get(i).getReqDate()));
-				if(df.format(date).equals(df.format(getbomList.get(i).getReqDate())) || getbomList.get(i).getStatus()==0)
+				 if(df.format(date).equals(df.format(getbomList.get(i).getReqDate())) || getbomList.get(i).getStatus()==0)
 				{
 					getbomListsorted.add(getbomList.get(i));
 				}
@@ -863,8 +862,7 @@ System.out.println("It is Production BOM ");
 			
 			for(int i=0;i<getbomList.size();i++)
 			{
-				System.out.println(df.format(date)+df.format(getbomList.get(i).getReqDate()));
-				if(df.format(date).equals(df.format(getbomList.get(i).getReqDate())) || getbomList.get(i).getStatus()==0)
+				 if(df.format(date).equals(df.format(getbomList.get(i).getReqDate())) || getbomList.get(i).getStatus()==0)
 				{
 					getbomListsorted.add(getbomList.get(i));
 				}
@@ -985,46 +983,29 @@ System.out.println("It is Production BOM ");
 			HttpSession session=request.getSession();
 			UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
 			int fromDept= Integer.parseInt(request.getParameter("fromDept"));
-			
+			List<BillOfMaterialDetailed> getBillOfMaterialDetailed = new ArrayList<BillOfMaterialDetailed>();
 			int userId=userResponse.getUser().getId();
 			
 			for(int i=0;i<billOfMaterialHeader.getBillOfMaterialDetailed().size();i++)
 			{
-				System.out.println(12);
-				 
-				 
-					System.out.println(13);
-					String reject_qty=request.getParameter("rejectedQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId());
-					String return_qty=request.getParameter("returnQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId());
-					
-					if(reject_qty!=null) {
-						System.out.println("reject_qty Qty   :"+reject_qty);
-						float rejectqty= Float.parseFloat(reject_qty);
-						billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRejectedQty(rejectqty);
-						System.out.println("reject_qty  :"+rejectqty);
-					}
-					else
+				  
+					float reject_qty=Float.parseFloat(request.getParameter("rejectedQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId()));
+					float return_qty=Float.parseFloat(request.getParameter("returnQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId()));
+					if(reject_qty!=billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getRejectedQty() || return_qty!=billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReturnQty())
 					{
-						billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRejectedQty(0);
+						System.out.println("reject_qty Qty   :"+reject_qty); 
+						billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRejectedQty(reject_qty);   
+						System.out.println("return_qty Qty   :"+return_qty); 
+						billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setReturnQty(return_qty);  
+						System.out.println(2); 
+						getBillOfMaterialDetailed.add(billOfMaterialHeader.getBillOfMaterialDetailed().get(i));
 					}
-					
-					if(return_qty!=null) {
-						System.out.println("return_qty Qty   :"+return_qty);
-						float returnqty= Float.parseFloat(return_qty);
-						billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setReturnQty(returnqty);
-						System.out.println("return_qty  :"+returnqty);
-					}
-					else
-					{
-						billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setReturnQty(0);
-					}
-					System.out.println(2);
 				 
 			}
 			billOfMaterialHeader.setStatus(2);
 			billOfMaterialHeader.setRejDate(date);
 			billOfMaterialHeader.setRejUserId(userId);
-			
+			billOfMaterialHeader.setBillOfMaterialDetailed(getBillOfMaterialDetailed);
 			System.out.println(billOfMaterialHeader.toString());
 			
 			
