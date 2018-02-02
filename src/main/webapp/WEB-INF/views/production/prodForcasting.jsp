@@ -286,11 +286,12 @@
 			var catId = $("#catId").val();
 			document.getElementById("selectedCatId").value =catId;
 			var d = new Date();
+			var todayTimeStamp1 = +d; // Unix timestamp in milliseconds
 			d.setDate(d.getDate() + 2);
 			var todayTimeStamp = +d; // Unix timestamp in milliseconds
 			var oneDayTimeStamp = 1000 * 60 * 60 * 24; // Milliseconds in a day
 			var diff = todayTimeStamp - oneDayTimeStamp;
-			var diff1 = diff - oneDayTimeStamp;
+			var diff1 = todayTimeStamp1 - oneDayTimeStamp;
 			var yesterdayDate = new Date(diff);
 			var yesterdayDate1 = new Date(diff1);
 			var todaysDate = new Date(todayTimeStamp);

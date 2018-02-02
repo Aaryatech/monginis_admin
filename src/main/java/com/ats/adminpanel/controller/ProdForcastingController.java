@@ -487,7 +487,8 @@ map.add("timestamp", stockHeader.getTimestamp());
 			// map, List.class);
 
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			e.printStackTrace();
+			
 		}
 
 		System.out.println("List of Orders : " + getProdItemQtyList.toString());
@@ -507,7 +508,7 @@ map.add("timestamp", stockHeader.getTimestamp());
 		// String productionDate=request.getParameter("production_date");
 		List<CommonConf> prodPlanItems=new ArrayList<CommonConf>();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-
+		String planDate=request.getParameter("datepicker5");
 		for(Item item:globalItemList)
 		{
 			CommonConf commonConf=new CommonConf();
@@ -529,9 +530,14 @@ map.add("timestamp", stockHeader.getTimestamp());
 		String productionDate = null;
 		try
 		{
-		
-		 productionDate = new SimpleDateFormat("dd-MM-yyyy").format(new Date());
-		
+			Date dt = new Date();
+			Calendar c = Calendar.getInstance(); 
+			c.setTime(dt); 
+			c.add(Calendar.DATE, 1);
+			dt = c.getTime();
+
+		 productionDate = new SimpleDateFormat("dd-MM-yyyy").format(dt);
+		System.out.println("production Date"+productionDate);
 		}catch(Exception e)
 		{
 			System.out.println(e.getMessage());
@@ -556,7 +562,7 @@ map.add("timestamp", stockHeader.getTimestamp());
 				Date dmyDate = dmySDF.parse(productionDate);
 
 				convertedDate = ymdSDF.format(dmyDate);
-
+System.out.println("converted date"+convertedDate);
 			} catch (ParseException e) {
 
 				e.printStackTrace();
@@ -575,7 +581,7 @@ map.add("timestamp", stockHeader.getTimestamp());
 
 			postProductionHeader.setTimeSlot(timeSlot);
 			postProductionHeader.setItemGrp1(selectedCat);
-			postProductionHeader.setProductionDate(convertedDate);
+			postProductionHeader.setProductionDate(planDate);
 			postProductionHeader.setDelStatus(0);
 			postProductionHeader.setIsBom(0);
 			postProductionHeader.setIsMixing(0);
@@ -593,7 +599,7 @@ map.add("timestamp", stockHeader.getTimestamp());
 				postProductionDetail = new PostProductionPlanDetail();
 				int id = prodPlanItems.get(i).getId();
 				// System.out.println("a============"+a);
-
+				postProductionDetail.setProductionDate(planDate);
 				postProductionDetail.setItemId(id);
 				postProductionDetail.setOpeningQty(0);
 				postProductionDetail.setOrderQty(0);
