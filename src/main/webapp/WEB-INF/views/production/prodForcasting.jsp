@@ -284,7 +284,7 @@
 		function searchItemsByCategory() {
 			
 			var catId = $("#catId").val();
-			document.getElementById("selectedCatId").value =catId;
+	 		document.getElementById("selectedCatId").value =catId;
 			var d = new Date();
 			var todayTimeStamp1 = +d; // Unix timestamp in milliseconds
 			d.setDate(d.getDate() + 2);
