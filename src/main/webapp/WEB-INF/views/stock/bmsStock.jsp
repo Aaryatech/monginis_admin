@@ -158,12 +158,14 @@
 
 										<div class="clearfix"></div>
 										<div class="table-responsive" style="border: 0">
+										
+										<c:choose>
+										<c:when test="${isRm==1}">
 											<table width="100%"
 												class="table table-advance table-responsive table-position"
 												id="table1">
 												<thead>
 													<tr>
-
 														<th>Sr No</th>
 														<th>Mat Name</th>
 														<th>Prod Issue Qty</th>
@@ -177,7 +179,6 @@
 														<th>Opening Stock</th>
 														<th>Closing Qty</th>
 														
-
 													</tr>
 
 												</thead>
@@ -210,6 +211,58 @@
 												</tbody>
 
 											</table>
+											</c:when>
+											<c:otherwise>
+											
+												<table width="100%"
+												class="table table-advance table-responsive table-position"
+												id="table1">
+												<thead>
+													<tr>
+
+														<th>Sr No</th>
+														<th>Mat Name</th>
+														<th>Prod Issue Qty</th>
+														<th>Prod Rej Qty</th>
+														<th>Prod Return Qty</th>
+														<th>Mix Issue Qty</th>
+													
+														<th>Mix Rej Qty</th>
+														<th>Opening Stock</th>
+														<th>Closing Qty</th>
+														
+
+													</tr>
+
+												</thead>
+												<tbody>
+													<c:forEach items="${stockList}" var="stockList"
+														varStatus="count">
+
+														<tr>
+															<td><c:out value="${count.index+1}"></c:out></td>
+															<td><c:out value="${stockList.sfName}"></c:out></td>
+															<td><c:out value="${stockList.prod_issue_qty}"></c:out>
+															</td>
+															<td><c:out value="${stockList.prod_rejected_qty}"></c:out>
+															</td>
+															<td><c:out value="${stockList.prod_return_qty}"></c:out>
+															</td>
+															<td><c:out value="${stockList.mixing_issue_qty}"></c:out>
+															<td><c:out value="${stockList.mixing_rejected_qty}"></c:out>
+															</td>
+															<td><c:out value="${stockList.bms_opening_stock}"></c:out>
+															<td><c:out value="${stockList.closingQty}"></c:out>
+														
+
+														</tr>
+													</c:forEach>
+												</tbody>
+
+											</table>
+											
+											</c:otherwise>
+											</c:choose>
 										</div>
 
 
