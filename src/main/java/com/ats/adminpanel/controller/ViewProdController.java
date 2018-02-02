@@ -986,7 +986,7 @@ public class ViewProdController {
 				newItem.setRmName(tempMixItem.getRmName());
 				newItem.setRmType(tempMixItem.getRmType());
 				newItem.setRmId(tempMixItem.getRmId());
-				newItem.setTotal((int) Math.ceil(tempMixItem.getTotal()*tempMixItem.getMulFactor()));
+				newItem.setTotal((int) Math.ceil(tempMixItem.getTotal()));//do not multiply mulFact
 				newItem.setUom(tempMixItem.getUom());
 				newItem.setMulFactor(tempMixItem.getMulFactor());
 				newItem.setPrevTotal(tempMixItem.getTotal());
