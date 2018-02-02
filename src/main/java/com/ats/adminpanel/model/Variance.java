@@ -8,28 +8,16 @@ public class Variance {
 		private int id;
 		private String itemName;
 		 private String itemId;
-		private int prodRejectedQty;
+		private int spCakeQty;
 		private int orderQty;
-		
-		
-	/*	private float  curClosingQty;//new Field Added Sachin
-		
-		
-		 private float curOpeQty;//new fiedl
 		 
 		
-		public float getCurClosingQty() {
-			return curClosingQty;
+		public int getSpCakeQty() {
+			return spCakeQty;
 		}
-		public void setCurClosingQty(float curClosingQty) {
-			this.curClosingQty = curClosingQty;
+		public void setSpCakeQty(int spCakeQty) {
+			this.spCakeQty = spCakeQty;
 		}
-		public float getCurOpeQty() {
-			return curOpeQty;
-		}
-		public void setCurOpeQty(float curOpeQty) {
-			this.curOpeQty = curOpeQty;
-		}*/
 		public int getId() {
 			return id;
 		}
@@ -48,12 +36,7 @@ public class Variance {
 		public void setItemName(String itemName) {
 			this.itemName = itemName;
 		}
-		public int getProdRejectedQty() {
-			return prodRejectedQty;
-		}
-		public void setProdRejectedQty(int prodRejectedQty) {
-			this.prodRejectedQty = prodRejectedQty;
-		}
+		 
 		public int getOrderQty() {
 			return orderQty;
 		}
@@ -62,8 +45,8 @@ public class Variance {
 		}
 		@Override
 		public String toString() {
-			return "Variance [id=" + id + ", itemName=" + itemName + ", itemId=" + itemId + ", prodRejectedQty="
-					+ prodRejectedQty + ", orderQty=" + orderQty + "]";
+			return "Variance [id=" + id + ", itemName=" + itemName + ", itemId=" + itemId + ", spCakeQty=" + spCakeQty
+					+ ", orderQty=" + orderQty + "]";
 		}
 		
 		

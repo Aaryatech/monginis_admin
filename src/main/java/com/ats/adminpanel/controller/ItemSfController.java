@@ -109,6 +109,29 @@ public class ItemSfController {
 		return model;
 
 	}
+	
+	@RequestMapping(value = "/deleteItemSf/{sfId}", method = RequestMethod.GET)
+	public String deleteItemSf(@PathVariable int sfId,HttpServletRequest request, HttpServletResponse response) {
+  
+		try {
+
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("sfId", sfId);
+
+			Info info = restTemplate.postForObject(Constants.url + "/deleteSfItem",map,
+					Info.class);
+			
+				 
+			System.out.println("info" + info); 
+			
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		return "redirect:/showItemSf";
+
+	}
 
 	@RequestMapping(value = "/insertSfItemHeader", method = RequestMethod.POST)
 	public String insertSfItemHeader(HttpServletRequest request, HttpServletResponse response) {
@@ -134,7 +157,7 @@ public class ItemSfController {
 		
 		float sfMinQty=Float.parseFloat(request.getParameter("sf_min_qty"));
 		
-		float sfMaxQty=Float.parseFloat(request.getParameter("sf_min_qty"));
+		float sfMaxQty=Float.parseFloat(request.getParameter("sf_max_qty"));
 		
 		float mulFactor=Float.parseFloat(request.getParameter("mul_factor"));
 		
@@ -152,9 +175,9 @@ public class ItemSfController {
 		header.setMulFactor(mulFactor);
 		System.out.println("header= "+header.toString());
 
-		//Info info=restTemplate.postForObject(Constants.url+"postSfItemHeader",header,Info.class);
+		Info info=restTemplate.postForObject(Constants.url+"postSfItemHeader",header,Info.class);
 		
-		//System.out.println("Insert Header response "+info.toString());
+		System.out.println("Insert Header response "+info.toString());
 		
 		//List<GetItemSfHeader> itemHeaderList=restTemplate.getForObject(Constants.url+"getItemSfHeader",List.class);
 

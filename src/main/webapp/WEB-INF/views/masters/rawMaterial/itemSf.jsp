@@ -236,6 +236,8 @@ href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}
 														class="btn btn-primary"><i
 																class="fa fa-edit"></i></a>
 																
+												<a href="${pageContext.request.contextPath}/deleteItemSf/${itemHeaderList.sfId}"
+														class="btn bnt-primary" onClick="return confirm('Are you sure want to delete this record');"><span class="glyphicon glyphicon-trash"></span></a>
 																
 																</td>
 

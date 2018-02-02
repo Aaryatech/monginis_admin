@@ -50,11 +50,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
-
+import com.ats.adminpanel.model.AllFrIdNameList;
+import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.Variance;
 import com.ats.adminpanel.model.VarianceList;
 import com.ats.adminpanel.model.franchisee.AllMenuResponse;
+import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
+import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
 import com.ats.adminpanel.model.franchisee.Menu;
 import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.CategoryListResponse;
@@ -862,15 +866,11 @@ public class ProductionController {
 
 		return model;
 	}
-
+	
 	@RequestMapping(value = "/varianceDetailed", method = RequestMethod.GET)
 	public ModelAndView varianceDetailed(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("production/variancelistdetailed");
-		PostProductionPlanDetail postProductionPlanDetail = new PostProductionPlanDetail();
-		// Constants.mainAct = 8;
-		// Constants.subAct = 82;
-
+		ModelAndView model = new ModelAndView("production/variancelistdetailed"); 
 		int productionHeaderId = Integer.parseInt(request.getParameter("productionHeaderId"));
 		System.out.println("productionHeaderId" + productionHeaderId);
 		try {
@@ -880,6 +880,89 @@ public class ProductionController {
 
 			postProdPlanHeader = restTemplate.postForObject(Constants.url + "PostProdPlanHeaderwithDetailed", map,
 					PostProdPlanHeader.class);
+			
+			AllItemsListResponse allItemsListResponse = restTemplate.getForObject(Constants.url + "getAllItems",
+					AllItemsListResponse.class);
+			List<Item> itemsList = allItemsListResponse.getItems(); 
+			
+			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
+					AllRoutesListResponse.class);
+
+			List<Route> routeList = new ArrayList<Route>();
+
+			routeList = allRouteListResponse.getRoute();
+
+			// end get Routes
+
+			AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
+			 
+				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+				System.out.println("allFrIdNameList"+allFrIdNameList);
+				System.out.println("routeList"+routeList);
+			 
+			model.addObject("itemsList", itemsList);
+			model.addObject("allFrIdNameList", allFrIdNameList.getFrIdNamesList());
+			model.addObject("routeList", routeList); 
+			model.addObject("postProdPlanHeader", postProdPlanHeader); 
+			model.addObject("categoryList", categoryListComp.getmCategoryList());
+			model.addObject("postProdPlanHeaderDetailed", postProdPlanHeader.getPostProductionPlanDetail());
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	@RequestMapping(value = "/varianceDetailedCalculation", method = RequestMethod.POST)
+	public ModelAndView varianceDetailedCalculation(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("production/calculateVariance"); 
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			List<String> sbForRouteFrId = new ArrayList<String>();
+			int all=0;
+			String[] frId = request.getParameterValues("fr_id[]");
+			String rtid = request.getParameter("rtid"); 
+			System.out.println("rtid "+rtid);
+			System.out.println("frId "+frId);
+			
+			if(frId!=null)
+			{
+				if(frId[0].equals("0"))
+				{
+					all=1;
+				}
+				for(int i=0;i<frId.length;i++)
+				{
+					sbForRouteFrId.add(frId[i]);
+				}
+				System.out.println("sbForRouteFrId"+sbForRouteFrId);
+				
+			}
+			else
+			{
+				 
+				 map = new LinkedMultiValueMap<String, Object>(); 
+				map.add("routeId", rtid);
+
+				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
+						map, FrNameIdByRouteIdResponse.class);
+
+				List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+
+				System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+
+				
+				for (int i = 0; i < frNameIdByRouteIdList.size(); i++) { 
+					
+					sbForRouteFrId.add(String.valueOf(frNameIdByRouteIdList.get(i).getFrId()));
+				}
+ 
+				System.out.println("fr Id Route WISE = " + sbForRouteFrId);
+			}
+			
 			int groupType = postProdPlanHeader.getItemGrp1();
 			String prodDate = postProdPlanHeader.getProductionDate();
 			System.out.println(prodDate);
@@ -888,7 +971,8 @@ public class ProductionController {
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("Date", date);
 			map.add("groupType", groupType);
-
+			map.add("frId", sbForRouteFrId);
+			map.add("all", all);
 			VarianceList getQtyforVariance = restTemplate.postForObject(Constants.url + "getQtyforVariance", map,
 					VarianceList.class);
 
@@ -902,13 +986,8 @@ public class ProductionController {
 			System.out.println("unsort size " + getQtyforVariance.getVarianceorderlist().size());
 
 			
-			SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss ");
-			TimeZone istTimeZone = TimeZone.getTimeZone("Asia/Kolkata");
-			Date d = new Date();
-			sdf.setTimeZone(istTimeZone);
-			String strtime = sdf.format(d);
+			
 
-			System.out.println("NEW CODE STARTED "+strtime);
 			// new Code
 			List<FinishedGoodStockDetail> updateStockDetailList = new ArrayList<>();
 
@@ -1077,7 +1156,7 @@ public class ProductionController {
 					} // end of Inner For Loop
 				} // End of outer For loop
 
-				System.out.println("NEW CODE end  ");
+			
 
 			for (int i = 0; i < postProductionPlanDetaillist.size(); i++) {
 
@@ -1114,18 +1193,16 @@ public class ProductionController {
 					int varianceItemId = getVarianceorderlistforsort.get(j).getId();
 
 					if (planItemid == varianceItemId) {
-
-						int orderQty = getVarianceorderlistforsort.get(j).getOrderQty()
-								+ getVarianceorderlistforsort.get(j).getProdRejectedQty();
-						System.out.println("updated orderQty" + orderQty);
-						postProductionPlanDetaillist.get(i).setOrderQty(orderQty);
-
-						int remainingProQty = postProductionPlanDetaillist.get(i).getOrderQty()
-								- (postProductionPlanDetaillist.get(i).getOpeningQty()
-										+ postProductionPlanDetaillist.get(i).getProductionQty());
+ 
+						postProductionPlanDetaillist.get(i).setOrderQty(getVarianceorderlistforsort.get(j).getOrderQty());
+						System.out.println(postProductionPlanDetaillist.get(i).getOrderQty()+"-( ("+postProductionPlanDetaillist.get(i).getOpeningQty()+"+"+
+								postProductionPlanDetaillist.get(i).getProductionQty()+")-"+postProductionPlanDetaillist.get(i).getRejectedQty()+")");
+						float remainingProQty = postProductionPlanDetaillist.get(i).getOrderQty()
+								-( (postProductionPlanDetaillist.get(i).getCurOpeQty()
+										+ postProductionPlanDetaillist.get(i).getProductionQty())-postProductionPlanDetaillist.get(i).getRejectedQty());
 
 						if (remainingProQty > 0) {
-							postProductionPlanDetaillist.get(i).setInt4(remainingProQty);
+							postProductionPlanDetaillist.get(i).setInt4((int)remainingProQty);
 						} else {
 							postProductionPlanDetaillist.get(i).setInt4(0);
 						}
@@ -1142,6 +1219,7 @@ public class ProductionController {
 			System.out.println("getVarianceorderlistforsort size " + getVarianceorderlistforsort.size());
 			System.out.println("unsort size " + getQtyforVariance.getVarianceorderlist().size());
 			System.out.println(postProductionPlanDetaillist.toString());
+			
 			
 			
 			model.addObject("postProdPlanHeader", postProdPlanHeader);
