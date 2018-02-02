@@ -353,6 +353,8 @@ System.out.println("It is Production BOM ");
 	public List<BillOfMaterialHeader> getbomList = new ArrayList<BillOfMaterialHeader>();
 	BillOfMaterialHeader billOfMaterialHeader = new BillOfMaterialHeader();
 	List<BillOfMaterialDetailed> bomwithdetaild = new ArrayList<BillOfMaterialDetailed>();
+	FrItemStockConfigureList PROD = new FrItemStockConfigureList();
+	FrItemStockConfigureList MIX = new FrItemStockConfigureList();
 	
 	@RequestMapping(value = "/getBomList", method = RequestMethod.GET)
 	public ModelAndView getBomList(HttpServletRequest request, HttpServletResponse response) {
@@ -361,6 +363,7 @@ System.out.println("It is Production BOM ");
 		
 		ModelAndView model = new ModelAndView("productionPlan/getbomlist");//
 		getbomList = new ArrayList<BillOfMaterialHeader>();
+		
 		
 		RestTemplate rest = new RestTemplate();
 		try
@@ -371,16 +374,29 @@ System.out.println("It is Production BOM ");
 			SimpleDateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 			System.out.println("date"+df.format(date));
 			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			String key = new String();
+			key = "PROD";
+			map.add("settingKeyList", key);
+			 PROD = rest.postForObject(Constants.url + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			String key1 = new String();
+			key1 = "MIX";
+			map.add("settingKeyList", key1);
+			 MIX = rest.postForObject(Constants.url + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			
 			
 			System.out.println("getbomList"+getBillOfMaterialList.getBillOfMaterialHeader().toString());
 			for(int i=0;i<getBillOfMaterialList.getBillOfMaterialHeader().size();i++)
 			{
-				BillOfMaterialHeader billOfMaterialHeader=getBillOfMaterialList.getBillOfMaterialHeader().get(i);
-				int Status=billOfMaterialHeader.getStatus();
-				System.out.println("date"+df.format(billOfMaterialHeader.getReqDate()));
-				if(Status==0 || df.format(date).equals(df.format(billOfMaterialHeader.getReqDate())))
+				 
+				if(getBillOfMaterialList.getBillOfMaterialHeader().get(i).getStatus()==0 || df.format(date).equals(df.format(getBillOfMaterialList.getBillOfMaterialHeader().get(i).getReqDate())))
 				{
-					getbomList.add(getBillOfMaterialList.getBillOfMaterialHeader().get(i));
+					if(getBillOfMaterialList.getBillOfMaterialHeader().get(i).getFromDeptId()==PROD.getFrItemStockConfigure().get(0).getSettingValue() || getBillOfMaterialList.getBillOfMaterialHeader().get(i).getFromDeptId()==MIX.getFrItemStockConfigure().get(0).getSettingValue()) 
+						getbomList.add(getBillOfMaterialList.getBillOfMaterialHeader().get(i)); 
 				}
 			}
 			System.out.println("bomHeaderList"+getBillOfMaterialList.getBillOfMaterialHeader().toString());
@@ -402,6 +418,7 @@ System.out.println("It is Production BOM ");
 	public List<BillOfMaterialHeader> getBomAllListWithDate(HttpServletRequest request, HttpServletResponse response) {
 		/*Constants.mainAct = 17;
 		Constants.subAct=184;*/
+		RestTemplate rest = new RestTemplate();
 		String frmdate=request.getParameter("from_date");
 		String todate=request.getParameter("to_date");
 		
@@ -409,11 +426,14 @@ System.out.println("It is Production BOM ");
 		String frdate=DateConvertor.convertToYMD(frmdate);
 		String tdate=DateConvertor.convertToYMD(todate);
 		
-		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>(); 
+		map = new LinkedMultiValueMap<String, Object>();
 		map.add("frmdate",frdate);
 		map.add("todate",tdate);
-		System.out.println("in getBOMListWithDate   "+frdate+tdate);
-		RestTemplate rest = new RestTemplate();
+		map.add("bmsDeptId",PROD.getFrItemStockConfigure().get(0).getSettingValue());
+		map.add("mixDeptId",MIX.getFrItemStockConfigure().get(0).getSettingValue());
+		System.out.println("map " + map);
+		
 		GetBillOfMaterialList getBillOfMaterialList= rest.postForObject(Constants.url + "/getBOMHeaderList",map, GetBillOfMaterialList.class);
 		getBOMListall  = getBillOfMaterialList.getBillOfMaterialHeader();
 		System.out.println("getBOMListall"+getBOMListall.toString());
@@ -663,48 +683,27 @@ System.out.println("It is Production BOM ");
 		Constants.subAct=184;*/
 		Date date= new Date();
 		HttpSession session=request.getSession();
-		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
-		
+		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail"); 
 		
 		int userId=userResponse.getUser().getId();
 		
 		for(int i=0;i<billOfMaterialHeader.getBillOfMaterialDetailed().size();i++)
 		{
-			System.out.println(12);
-			 
 			 
 				System.out.println(13);
-				String reject_qty=request.getParameter("rejectedQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId());
-				String return_qty=request.getParameter("returnQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId());
-				
-				if(reject_qty!=null) {
-					System.out.println("reject_qty Qty   :"+reject_qty);
-					float rejectqty= Float.parseFloat(reject_qty);
-					billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRejectedQty(rejectqty);
-					System.out.println("reject_qty  :"+rejectqty);
-				}
-				else
-				{
-					billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRejectedQty(0);
-				}
-				
-				if(return_qty!=null) {
-					System.out.println("return_qty Qty   :"+return_qty);
-					float returnqty= Float.parseFloat(return_qty);
-					billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setReturnQty(returnqty);
-					System.out.println("return_qty  :"+returnqty);
-				}
-				else
-				{
-					billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setReturnQty(0);
-				}
-				System.out.println(2);
+				float reject_qty=Float.parseFloat(request.getParameter("rejectedQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId()));
+				float return_qty=Float.parseFloat(request.getParameter("returnQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId()));
+				System.out.println("reject_qty Qty   :"+reject_qty); 
+				billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRejectedQty(reject_qty);   
+				System.out.println("return_qty Qty   :"+return_qty); 
+				billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setReturnQty(return_qty);  
+				System.out.println(2);  
+				 
 			 
 		}
 		billOfMaterialHeader.setStatus(2);
 		billOfMaterialHeader.setRejDate(date);
-		billOfMaterialHeader.setRejUserId(userId);
-		
+		billOfMaterialHeader.setRejUserId(userId); 
 		System.out.println(billOfMaterialHeader.toString());
 		
 		RestTemplate rest = new RestTemplate();
@@ -735,7 +734,8 @@ System.out.println("It is Production BOM ");
 		billOfMaterialHeader.setRejApproveUserId(userId);
 		
 		billOfMaterialHeader.setStatus(3);//3 for Approve Rejected 
-		
+		List<BillOfMaterialDetailed> billOfMaterialDetailed = new ArrayList<BillOfMaterialDetailed>();
+		billOfMaterialHeader.setBillOfMaterialDetailed(billOfMaterialDetailed);
 		RestTemplate rest = new RestTemplate();
 		
 		Info info = rest.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);	
@@ -793,8 +793,7 @@ System.out.println("It is Production BOM ");
 			
 			for(int i=0;i<getbomList.size();i++)
 			{
-				System.out.println(df.format(date)+df.format(getbomList.get(i).getReqDate()));
-				if(df.format(date).equals(df.format(getbomList.get(i).getReqDate())) || getbomList.get(i).getStatus()==0)
+				 if(df.format(date).equals(df.format(getbomList.get(i).getReqDate())) || getbomList.get(i).getStatus()==0)
 				{
 					getbomListsorted.add(getbomList.get(i));
 				}
@@ -863,8 +862,7 @@ System.out.println("It is Production BOM ");
 			
 			for(int i=0;i<getbomList.size();i++)
 			{
-				System.out.println(df.format(date)+df.format(getbomList.get(i).getReqDate()));
-				if(df.format(date).equals(df.format(getbomList.get(i).getReqDate())) || getbomList.get(i).getStatus()==0)
+				 if(df.format(date).equals(df.format(getbomList.get(i).getReqDate())) || getbomList.get(i).getStatus()==0)
 				{
 					getbomListsorted.add(getbomList.get(i));
 				}
@@ -985,46 +983,29 @@ System.out.println("It is Production BOM ");
 			HttpSession session=request.getSession();
 			UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
 			int fromDept= Integer.parseInt(request.getParameter("fromDept"));
-			
+			List<BillOfMaterialDetailed> getBillOfMaterialDetailed = new ArrayList<BillOfMaterialDetailed>();
 			int userId=userResponse.getUser().getId();
 			
 			for(int i=0;i<billOfMaterialHeader.getBillOfMaterialDetailed().size();i++)
 			{
-				System.out.println(12);
-				 
-				 
-					System.out.println(13);
-					String reject_qty=request.getParameter("rejectedQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId());
-					String return_qty=request.getParameter("returnQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId());
-					
-					if(reject_qty!=null) {
-						System.out.println("reject_qty Qty   :"+reject_qty);
-						float rejectqty= Float.parseFloat(reject_qty);
-						billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRejectedQty(rejectqty);
-						System.out.println("reject_qty  :"+rejectqty);
-					}
-					else
+				  
+					float reject_qty=Float.parseFloat(request.getParameter("rejectedQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId()));
+					float return_qty=Float.parseFloat(request.getParameter("returnQty"+billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReqDetailId()));
+					if(reject_qty!=billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getRejectedQty() || return_qty!=billOfMaterialHeader.getBillOfMaterialDetailed().get(i).getReturnQty())
 					{
-						billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRejectedQty(0);
+						System.out.println("reject_qty Qty   :"+reject_qty); 
+						billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setRejectedQty(reject_qty);   
+						System.out.println("return_qty Qty   :"+return_qty); 
+						billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setReturnQty(return_qty);  
+						System.out.println(2); 
+						getBillOfMaterialDetailed.add(billOfMaterialHeader.getBillOfMaterialDetailed().get(i));
 					}
-					
-					if(return_qty!=null) {
-						System.out.println("return_qty Qty   :"+return_qty);
-						float returnqty= Float.parseFloat(return_qty);
-						billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setReturnQty(returnqty);
-						System.out.println("return_qty  :"+returnqty);
-					}
-					else
-					{
-						billOfMaterialHeader.getBillOfMaterialDetailed().get(i).setReturnQty(0);
-					}
-					System.out.println(2);
 				 
 			}
 			billOfMaterialHeader.setStatus(2);
 			billOfMaterialHeader.setRejDate(date);
 			billOfMaterialHeader.setRejUserId(userId);
-			
+			billOfMaterialHeader.setBillOfMaterialDetailed(getBillOfMaterialDetailed);
 			System.out.println(billOfMaterialHeader.toString());
 			
 			

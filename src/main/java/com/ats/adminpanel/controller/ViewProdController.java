@@ -1017,6 +1017,7 @@ System.out.println("Inside add Mixing request ");
 			mixingDetailed.setMixing_detailId(0);
 			mixingDetailed.setMixingId(0);
 			mixingDetailed.setSfId(prodMixingReqP1.get(i).getRmId());
+
 			mixingDetailed.setSfName(prodMixingReqP1.get(i).getRmName());
 			mixingDetailed.setReceivedQty(prodMixingReqP1.get(i).getTotal());
 
