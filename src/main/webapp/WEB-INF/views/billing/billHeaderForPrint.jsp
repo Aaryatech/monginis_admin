@@ -204,9 +204,9 @@
 														<th class="col-md-1">Invoice No</th>
 														<th class="col-md-1">Date</th>
 														<th class="col-md-2">Franchise Name</th>
-														<th class="col-sm-1">Taxable Amt</th>
+														<th class="col-md-2">Taxable Amt</th>
 														<th class="col-sm-1">Total tax</th>
-														<th class="col-md-1">Grand Total</th>
+														<th class="col-md-1">Total</th>
 														<th class="col-md-1">Action</th>
 														
 
@@ -234,12 +234,12 @@
 
 															<td class="col-md-2"><c:out
 																	value="${billHeadersList.frName}" /></td>
-															<td class="col-sm-1" align="right"><c:out
+															<td class="col-md-2" align="center"><c:out
 																	value="${billHeadersList.taxableAmt}" /></td>
-															<td class="col-sm-1" align="right"><c:out
+															<td class="col-sm-1" align="center"><c:out
 																	value="${billHeadersList.totalTax}" /></td>
 															
-															<td class="col-md-1" align="right">
+															<td class="col-md-1" align="center">
 															
 															<fmt:formatNumber type="number" maxFractionDigits="2" value="${billHeadersList.taxableAmt + billHeadersList.totalTax}" /></td>
 															
@@ -338,21 +338,22 @@
 
 	<script type="text/javascript">
 		function submitBill() {
-
 			//submitBillForm.submit();
 			// window.open("${pageContext.request.contextPath}/pdf?url=showBillPdf");
 
 			// window.open("${pageContext.request.contextPath}/showBillListForPrint");
+var form = document.getElementById("validation-form")
+form.action = "${pageContext.request.contextPath}/getBillDetailForPrint";
+form.submit();
 		}
-
 		$('#btn_submit')
 				.click(
 						function() {
-							var form = document
-									.getElementById("validation-form")
-							form.action = "${pageContext.request.contextPath}/BillDetailForPrint";
+							var form = document.getElementById("validation-form")
+							form.action = "${pageContext.request.contextPath}/getBillDetailForPrint";
 							form.submit();
 						});	
+		
 	</script>
 
 
@@ -462,19 +463,19 @@
 
 													tr
 															.append($(
-																	'<td class="col-sm-1" align="right"></td>')
+																	'<td class="col-md-2" align="center"></td>')
 																	.html(
 																			bill.taxableAmt.toFixed(2)));
 
 													tr
 															.append($(
-																	'<td class="col-sm-1" align="right"></td>')
+																	'<td class="col-sm-1" align="center"></td>')
 																	.html(
 																			bill.totalTax.toFixed(2)));
 
 													tr
 															.append($(
-																	'<td class="col-md-1" align="right"></td>')
+																	'<td class="col-md-1" align="center"></td>')
 																	.html(
 																			bill.grandTotal.toFixed(2)));
 													
@@ -483,7 +484,7 @@
 													//tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/updateBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='update' value='Update'/></a><a href='${pageContext.request.contextPath}/viewBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='view' value='View'/></a><a href='${pageContext.request.contextPath}/deleteBill/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='deleteBill' value='Delete'/></a>"));
 													
 													
-													tr.append($('<td class="col-md-1"></td>').html("<input type='checkbox' name='select_to_print' value="+bill.billNo+"><input type='button' id='btn_submit' name='btn_submit' onClick='submitBill()' value='BillDetail'>"));
+													tr.append($('<td class="col-md-2"></td>').html("<input type='checkbox' name='select_to_print' value="+bill.billNo+"><input type='button' id='btn_submit' name='btn_submit' onClick='submitBill()' value='BillDetail'  class='btn btn-primary'>"));
 
 													$('#table1 tbody').append(
 															tr);
