@@ -409,8 +409,26 @@ public class ViewProdController {
 				} // end of if stockStatus ==0
 
 				else {
+					System.out.println("Else Calc Stock Bet Date ");
 
 					// calc Stock Between Date
+					Date stockDate = stockHeader.getFinGoodStockDate();
+					
+					System.out.println("stock date " + stockDate);
+					String stkDate = dfYmd.format(stockDate);
+					
+					map = new LinkedMultiValueMap<String, Object>();
+
+					map.add("catId", planHeader.getCatId());
+					map.add("fromDate", stkDate);
+					map.add("toDate",  stkDate);
+					ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
+					};
+					ResponseEntity<List<FinishedGoodStockDetail>> responseEntity = restTemplate.exchange(
+							Constants.url + "getFinGoodStockBetTwoDateByCat", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+					updateStockDetailList = responseEntity.getBody();
+					
 
 				}
 			} catch (Exception e) {
@@ -582,7 +600,7 @@ public class ViewProdController {
 			System.out.println("Page no " + totalPages);
 
 			document.close();
-
+//Atul Sir code to open a Pdf File 
 			if (file != null) {
 
 				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
@@ -967,8 +985,8 @@ public class ViewProdController {
 				System.out.println("New Rm Item Found " + tempMixItem.getSfId() + "Name" + tempMixItem.getRmName());
 				newItem.setRmName(tempMixItem.getRmName());
 				newItem.setRmType(tempMixItem.getRmType());
-				newItem.setRmId(tempMixItem.getSfId());
-				newItem.setTotal((int) Math.ceil(tempMixItem.getTotal()));
+				newItem.setRmId(tempMixItem.getRmId());
+				newItem.setTotal((int) Math.ceil(tempMixItem.getTotal()*tempMixItem.getMulFactor()));
 				newItem.setUom(tempMixItem.getUom());
 				newItem.setMulFactor(tempMixItem.getMulFactor());
 				newItem.setPrevTotal(tempMixItem.getTotal());
@@ -1019,7 +1037,7 @@ public class ViewProdController {
 			mixingDetailed.setUom(prodMixingReqP1.get(i).getUom());
 			mixingDetailed.setMixingDate(date);
 			mixingDetailed.setExBool1(0);
-			mixingDetailed.setExInt2(0);
+			mixingDetailed.setExInt2((int)prodMixingReqP1.get(i).getMulFactor());//temp it is typecasted  to insert mulfactor
 			mixingDetailed.setExInt1(0);
 			mixingDetailed.setExInt3(0);
 			mixingDetailed.setExVarchar1("");
@@ -1031,8 +1049,6 @@ public class ViewProdController {
 			mixingDetailed
 					.setAutoOrderQty(prodMixingReqP1.get(i).getMulFactor() * prodMixingReqP1.get(i).getPrevTotal());// new
 																													// field
-																													// 22
-																													// Jan
 			addmixingDetailedlist.add(mixingDetailed);
 
 		}

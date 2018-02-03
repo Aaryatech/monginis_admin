@@ -14,7 +14,7 @@ private int sfDid;
 	
 	private String uom;
 	
-	int total;
+	float total;
 
 	public int getSfDid() {
 		return sfDid;
@@ -64,11 +64,11 @@ private int sfDid;
 		this.uom = uom;
 	}
 
-	public int getTotal() {
+	public float getTotal() {
 		return total;
 	}
 
-	public void setTotal(int total) {
+	public void setTotal(float total) {
 		this.total = total;
 	}
 

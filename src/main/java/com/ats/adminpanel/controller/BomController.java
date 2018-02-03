@@ -225,7 +225,6 @@ System.out.println("It is Production BOM ");
 				billOfMaterialHeader.setFromDeptName(fromDeptName);
 				billOfMaterialHeader.setIsPlan(globalIsPlan);
 
-				
 				billOfMaterialHeader.setIsPlan(0);
 
 				for (int i = 0; i < sfPlanDetailForBom.size(); i++) {
@@ -240,7 +239,7 @@ System.out.println("It is Production BOM ");
 					bomDetail.setRmIssueQty(0.0F);
 					bomDetail.setUom(sfPlanDetailForBom.get(i).getUom());
 					bomDetail.setRmType(sfPlanDetailForBom.get(i).getRmType());
-					bomDetail.setRmReqQty(Integer.parseInt(editQty));
+					bomDetail.setRmReqQty(Float.parseFloat(editQty));
 					bomDetail.setRmName(sfPlanDetailForBom.get(i).getRmName());
 					
 					bomDetail.setRejectedQty(0);
@@ -305,7 +304,7 @@ System.out.println("It is Production BOM ");
 					bomDetail.setAutoRmReqQty(sFMixingForBom.get(i).getTotal());
 					bomDetail.setRmName(sFMixingForBom.get(i).getRmName());
 					
-					bomDetail.setRmReqQty(Integer.parseInt(editQty));
+					bomDetail.setRmReqQty(Float.parseFloat(editQty));
 
 					bomDetail.setReturnQty(0);
 

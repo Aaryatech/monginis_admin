@@ -25,7 +25,7 @@ public class GetSFPlanDetailForMixing {
 	
 	private float planQty;
 	
-	int total;
+	float total;
 	
 	//private float mulFactor; // Not in new Query by sumit Sir 30 Jan 2018
 	//private int sfId;
@@ -104,11 +104,11 @@ public class GetSFPlanDetailForMixing {
 		this.planQty = planQty;
 	}
 
-	public int getTotal() {
+	public float getTotal() {
 		return total;
 	}
 
-	public void setTotal(int total) {
+	public void setTotal(float total) {
 		this.total = total;
 	}
 

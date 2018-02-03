@@ -3,11 +3,15 @@ package com.ats.adminpanel.controller;
 
 
 import java.awt.Desktop;
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -19,6 +23,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -322,7 +327,8 @@ public class ViewMixingController {
 	         cell.setPaddingRight(4);
 	         table.addCell(cell);
 	         
-	         cell = new PdfPCell(new Phrase(String.valueOf(2),headFont));
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(mixDetail.getExInt2()),headFont));
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	         cell.setPaddingRight(4);
@@ -379,7 +385,38 @@ public class ViewMixingController {
 	    
 	     document.close();
 	     
-	     Desktop d=Desktop.getDesktop();
+	     
+	   //Atul Sir code to open a Pdf File 
+			if (file != null) {
+
+				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+				if (mimeType == null) {
+
+					mimeType = "application/pdf";
+
+				}
+
+				response.setContentType(mimeType);
+
+				response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+				// response.setHeader("Content-Disposition", String.format("attachment;
+				// filename=\"%s\"", file.getName()));
+
+				response.setContentLength((int) file.length());
+
+				InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+				try {
+					FileCopyUtils.copy(inputStream, response.getOutputStream());
+				} catch (IOException e) {
+					System.out.println("Excep in Opening a Pdf File for Mixing");
+					e.printStackTrace();
+				}
+			}
+	     
+	    /* Desktop d=Desktop.getDesktop();
 	     
 	     if(file.exists()) {
 	    	 try {
@@ -388,7 +425,7 @@ public class ViewMixingController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	     }
+	     }*/
 	     
 	 } catch (DocumentException ex) {
 	 

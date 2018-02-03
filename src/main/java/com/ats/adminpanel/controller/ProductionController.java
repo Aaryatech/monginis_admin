@@ -187,29 +187,14 @@ public class ProductionController {
 	@RequestMapping(value = "/getProductionOrder", method = RequestMethod.GET)
 	public @ResponseBody List<GetOrderItemQty> generateOrderList(HttpServletRequest request,
 			HttpServletResponse response) {
-System.out.println("*********************************");
+
 		getOrderItemQtyList = new ArrayList<GetOrderItemQty>();
 
 		productionDate = request.getParameter("productionDate");
 		String selectedMenuList = request.getParameter("selectedMenu_list");
-		System.out.println("selectedMenuList"+selectedMenuList.toString());
-		if(selectedMenuList.contains("-1"))
-		{		System.out.println("selectedMenuList"+selectedMenuList.toString());
 
-			List<String> ids = new ArrayList<>();
-			for(int i=0;i<menuList.size();i++)
-			{
-				ids.add(String.valueOf(menuList.get(i).getMenuId()));
-			}
-			String idList = ids.toString();
-			selectedMenuList = idList.substring(1, idList.length() - 1);
-			selectedMenuList = selectedMenuList.replaceAll("\"", "");
-			System.out.println("selectedMenuList"+selectedMenuList.toString());
-		}else
-		{
 		selectedMenuList = selectedMenuList.substring(1, selectedMenuList.length() - 1);
 		selectedMenuList = selectedMenuList.replaceAll("\"", "");
-		}
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 		RestTemplate rest = new RestTemplate();
@@ -1454,8 +1439,36 @@ System.out.println("*********************************");
 	    // document.addHeader("Page" ,String.valueOf(totalPages));
 	    // writer.setPageEvent((PdfPageEvent) new Phrase());
 	    
-	  
-	     Desktop d=Desktop.getDesktop();
+	 	//Atul Sir code to open a Pdf File 
+			if (file != null) {
+
+				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+				if (mimeType == null) {
+
+					mimeType = "application/pdf";
+
+				}
+
+				response.setContentType(mimeType);
+
+				response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+				// response.setHeader("Content-Disposition", String.format("attachment;
+				// filename=\"%s\"", file.getName()));
+
+				response.setContentLength((int) file.length());
+
+				InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+				try {
+					FileCopyUtils.copy(inputStream, response.getOutputStream());
+				} catch (IOException e) {
+					System.out.println("Excep in Opening a Pdf File");
+					e.printStackTrace();
+				}
+			}
+	     /*Desktop d=Desktop.getDesktop();
 	     
 	     if(file.exists()) {
 	    	 try {
@@ -1464,7 +1477,7 @@ System.out.println("*********************************");
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-	     }
+	     }*/
 	     
 	 	
 	 	//InputStream is = this.getClass().getClassLoader().getResourceAsStream(FILE_PATH);

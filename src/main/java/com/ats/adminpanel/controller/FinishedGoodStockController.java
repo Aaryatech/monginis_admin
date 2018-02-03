@@ -612,22 +612,45 @@ try {
 
 				map = new LinkedMultiValueMap<String, Object>();
 
-				map.add("stockStatus", 1);
-				map.add("stockFromDate", fromDate);
-				map.add("stockToDate", "" + tDate);
-
+				//map.add("stockStatus", 1);
+				map.add("fromDate", fromDate);
+				map.add("toDate", "" + tDate);
+				
+				if(selectedCat==-1 || selectedCat==0) {
+					map = new LinkedMultiValueMap<String, Object>();
+System.out.println("If All Category Selected Option");
+					//map.add("stockStatus", 1);
+					map.add("fromDate", fromDate);
+					map.add("toDate", "" + tDate);
+					
 				ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
 				};
 				ResponseEntity<List<FinishedGoodStockDetail>> responseEntity = restTemplate.exchange(
-						Constants.url + "getFinGoodStockBetDate", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+						Constants.url + "getFinGoodStockBetTwoDate", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 				updateStockDetailList = responseEntity.getBody();
+				}else {
+					
+					System.out.println("If Specific Category Selected Option Cat ID ="+selectedCat);
 
+					map = new LinkedMultiValueMap<String, Object>();
+
+					map.add("catId", selectedCat);
+					map.add("fromDate", fromDate);
+					map.add("toDate", "" + tDate);
+					ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
+					};
+					ResponseEntity<List<FinishedGoodStockDetail>> responseEntity = restTemplate.exchange(
+							Constants.url + "getFinGoodStockBetTwoDateByCat", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+					updateStockDetailList = responseEntity.getBody();
+					
+				}
 			}
 
-			System.out.println("View Stock List " + updateStockDetailList.toString());
+			System.out.println("View Finish good Stock List " + updateStockDetailList.toString());
 		} catch (Exception e) {
-			System.out.println("Error In Getting Stock " + e.getMessage());
+			System.out.println("Error In Getting Finished good  Stock " + e.getMessage());
 			e.printStackTrace();
 		}
 		
