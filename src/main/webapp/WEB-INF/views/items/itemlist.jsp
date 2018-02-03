@@ -145,13 +145,13 @@
 									<table id="table2" class="main-table">
 											<thead>
 												<tr class="bgpink">
-														<th width="138" style="width: 18px" align="left">Sr No</th>
+														<th class="col-md-1">Sr No</th>
 											<th class="col-md-2">Item Id</th>
-											<th class="col-md-2">Item Name</th>
-											<th class="col-md-2">Image</th>
-											<th class="col-md-1">Rate</th>
+											<th class="col-md-3">Item Name</th>
+<!-- 											<th class="col-md-2">Image</th>
+ -->											<th class="col-md-2">Rate</th>
 											<th class="col-md-2">MRP</th>
-											<th class="col-md-2">Action</th>
+											<th class="col-md-1">Action</th>
 												</tr>
 												</thead>
 												</table>
@@ -162,13 +162,13 @@
 										<table id="table1" class="table table-advance">
 											<thead>
 												<tr class="bgpink">
-													<th width="138" style="width: 18px" align="left">Sr No</th>
+													<th class="col-md-1">Sr No</th>
 											<th class="col-md-2">Item Id</th>
-											<th class="col-md-2">Item Name</th>
-											<th class="col-md-2">Image</th>
-											<th class="col-md-1">Rate</th>
+											<th class="col-md-3">Item Name</th>
+<!-- 											<th class="col-md-2">Image</th>
+ -->											<th class="col-md-2">Rate</th>
 											<th class="col-md-2">MRP</th>
-											<th class="col-md-2">Action</th>
+											<th class="col-md-1">Action</th>
 												</tr>
 												</thead>
 												<tbody>
@@ -179,12 +179,12 @@
 												<td align="left"><c:out value="${itemsList.itemId}" /></td>
 												<td align="left"><c:out value="${itemsList.itemName}"/></td>
 												
-												<td align="left">
+											<%-- 	<td align="left">
 												<img
 													src="${url}${itemsList.itemImage}" width="120" height="100"
 													onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';"/>
 													
-												</td>
+												</td> --%>
 												<td align="left"><c:out value="${itemsList.itemRate1}" /></td>
 												<td align="left"><c:out value="${itemsList.itemMrp1}" /></td>
 												<td align="left"><a href="updateItem/${itemsList.id}"><span

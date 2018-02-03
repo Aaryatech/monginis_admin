@@ -5,8 +5,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
  
  <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
- <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 <body>
+ <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 <c:url var="findItemsByCategory" value="/getItemsByCategory"></c:url>
 <c:url var="getItemsProdQty" value="/getItemsProdQty"></c:url>
@@ -34,7 +34,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Production Plan
+						<i class="fa fa-file-o"></i>Plan Production
 					</h1>
 
 				</div>
@@ -49,7 +49,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> Production 
+								<i class="fa fa-bars"></i> Plan Production for Cakes
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -114,12 +114,27 @@
 									<div class="box-content">
 
 										<div class="clearfix"></div>
-										<div class="table-responsive" style="border: 0">
-											<table width="100%" class="table table-advance" id="table1">
+									
+										<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+										
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+										<!-- //removed text -->
+									<!-- 	<div class="table-responsive" style="border: 0">
+											<table width="100%" class="table table-advance" id="table1"> -->
 												<thead>
 													<tr>
-														<th width="20" align="left">Sr No</th>
-														<th width="110" align="left">Item Name</th>
+														<th width="20" align="left">No</th>
+														<th width="120" align="left">Item Name</th>
 <!-- 														<th width="30" align="left">Cur Closing</th>
  -->														<th width="90" align="left">Cur Opening</th>
 														
@@ -171,6 +186,7 @@
 												
 												</tbody>
 											</table>
+											</div><!-- //added div -->
 										</div>
 									</div>
 								</div>

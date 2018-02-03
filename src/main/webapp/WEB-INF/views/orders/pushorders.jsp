@@ -187,11 +187,30 @@
 				action="${pageContext.request.contextPath}/submitPushOrder"
 				method="post">
 				<div class=" box-content">
-					<div class="row">
-						<div class="col-md-12 table-responsive">
+					<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+										
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table_grid" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+									
+												</tr>
+												</thead>
+						<!-- <div class="col-md-12 table-responsive">
 							<table class="table table-advance"
 								style="width: 100%" id="table_grid">
-								<thead>
+								<thead> 
 									<tr>
 
 
@@ -199,7 +218,7 @@
 
 
 
-								</thead>
+								</thead>-->
 								<tbody>
 
 								</tbody>
@@ -210,7 +229,7 @@
 
 
 					<div class="row">
-						<div class="col-md-offset-6 col-md-6">
+						<div class="col-md-offset-6 col-md-5">
 
 							<button class="btn btn-info pull-right"
 								style="margin-right: 5px;" onclick="submitOrder()" id="submitOrder" disabled>Submit</button>
@@ -373,7 +392,7 @@
         var tr;
         tr = document.getElementById('table_grid').tHead.children[0];
 
-        tr.insertCell(0).outerHTML = "<th> ItemName</th>"
+        tr.insertCell(0).outerHTML = "<th aligh='right'>ItemName</th>"
         $.each($("#selectFr option:selected"), function(){            
         	frName.push($(this).text());
         	i++;

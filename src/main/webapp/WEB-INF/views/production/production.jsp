@@ -119,7 +119,7 @@
 										<select data-placeholder="Select Menu" multiple="multiple"
 											class="form-control chosen-select chosen" name="selectMenu"
 											tabindex="-1" id="selectMenu" data-rule-required="true">
-												
+										<option value="-1">ALL</option>
 										</select>
 									</div>
 
@@ -180,9 +180,35 @@
 						
 
 									<div class="box-content">
-
-								<div class="row">
-										<div class="col-md-12 table-responsive" >
+<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+	                                                    <th width="18" style="width: 18px">Sr No</th>
+														<th width="50">Item Id</th>
+														<th width="100">Item Name</th> 
+														<th width="100">Current Opening Qty</th>
+														<th width="100">Order Quantity</th></tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+											<th width="18" style="width: 18px">Sr No</th>
+														<th width="50">Item Id</th>
+														<th width="100">Item Name</th> 
+														<th width="100">Current Opening Qty</th>
+														<th width="100">Order Quantity</th>
+												</tr>
+												</thead>
+								
+										<!-- <div class="col-md-12 table-responsive" >
 										 
 											<table width="60%" class="table table-advance " id="table1" name="table1" align="left">
 												<thead>
@@ -192,9 +218,8 @@
 														<th width="100">Item Name</th> 
 														<th width="100">Current Opening Qty</th>
 														<th width="100">Order Quantity</th>
-													<!-- 	<th width="100">Production Quantity</th> -->
 													</tr>
-												</thead>
+												</thead> -->
 												<tbody>
 												
 												</tbody>
@@ -205,7 +230,7 @@
 
 
 
-</div>
+
 <br/><br/>
 									<div class="form-group col-md-8" align="left">
 										<label class=" col-md-3   "></label>
@@ -364,21 +389,25 @@ $(document).ready(function() {
 					
 					var len = data.length;
 					$('#selectMenu').find('option').remove().end()
-					//var html = '<option value="-1"><c:out value=""/></option>';
+					var html = '<option value="-1">ALL</option>';
 					
 					for ( var i = 0; i < len; i++) {
 
-						
+						html += '<option value="' +data[i].menuId+ '">'
+						+ data[i].menuTitle + '</option>';
 
-						 $("#selectMenu").append(
+						/*  $("#selectMenu").append(
 
 		                           $("<option ></option>").attr(
 
 		                               "value", data[i].menuId).text(data[i].menuTitle)
 
-		                       );
+		                       ); */
 
 					} 
+					html += '</option>';
+					$("#selectMenu").html(html);
+
 					$("#selectMenu").trigger("chosen:updated");
 
 				});

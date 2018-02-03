@@ -191,9 +191,9 @@ th:hover::after {
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
-														<th width="138" style="width: 18px" align="left">Sr
+														<th width="148" style="width: 18px" align="left">
 															No</th>
-														<th width="138" align="left">Franchise Name</th>
+														<th width="138" align="left">Franchisee Name</th>
 														<th width="159" align="left">Item Name</th>
 														<th width="159" align="left">Category</th>
 														<!-- <th width="159" align="left">Item Code</th> -->

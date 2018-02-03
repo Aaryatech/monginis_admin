@@ -83,7 +83,7 @@
 									<table id="table2" class="main-table">
 											<thead>
 												<tr class="bgpink">
-														<th width="138" style="width: 18px" align="left">Sr No</th>
+														<th width="138" style="width: 18px" align="left">No</th>
 																<th width="364" align="left">Image</th>
 																<th width="230" align="center">Code</th>
 																<th width="230" align="center">Name</th>
@@ -102,7 +102,7 @@
 										<table id="table1" class="table table-advance">
 											<thead>
 												<tr class="bgpink">
-													<th width="138" style="width: 18px" align="left">Sr No</th>
+													<th width="138" style="width: 18px" align="left">No</th>
 																<th width="364" align="left">Image</th>
 																<th width="230" align="center">Code</th>
 																<th width="230" align="center">Name</th>

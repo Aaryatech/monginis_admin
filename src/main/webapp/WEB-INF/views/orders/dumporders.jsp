@@ -169,8 +169,28 @@
 				action="${pageContext.request.contextPath}/submitDumpOrder"
 				method="post">
 				<div class=" box-content">
-					<div class="row">
-						<div class="col-md-12 table-responsive">
+					<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+												<th class="col-md-1"></th>
+									
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table_grid" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+											
+												</tr>
+												</thead>
+					<!-- 	<div class="col-md-12 table-responsive">
 							<table class="table table-advance "
 								style="width: 100%" id="table_grid">
 								<thead>
@@ -181,23 +201,24 @@
 
 									
 
-								</thead>
+								</thead> -->
 								<tbody>
 
 								</tbody>
 							</table>
 						</div>
-					</div>
+					
 
 
 
 					<div class="row" align="center">
-						<div class="col-md-offset-6 col-md-6" align="center">
+						<div class="col-md-offset-6 col-md-5" align="center">
 
 							<button class="btn btn-info pull-right"
 								style="margin-right: 5px;" onclick="submitOrder()" id="submitOrder" disabled>Submit</button>
 						</div>
 					</div>
+				</div>
 				</div>
 			</form>
 		</div>

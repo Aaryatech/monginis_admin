@@ -184,10 +184,10 @@
 <div class="col-md-9" ></div> 
 					<label for="search" class="col-md-3" id="search">
     <i class="fa fa-search" style="font-size:20px"></i>
-									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search for Raw Material names.." title="Type in a name">
+									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search.." title="Type in a name">
 										</label>  
 						<div class="clearfix"></div>
-						<div class="table-responsive" style="border: 0">
+						<!-- <div class="table-responsive" style="border: 0">
 							<table width="100%" class="table table-advance" id="table1">
 								<thead>
 									<tr>
@@ -198,12 +198,41 @@
 										<th width="120" align="left">Qty</th>
 										<th width="120" align="left">Weight</th>
 										<th width="120" align="left">Action</th>
-										<!-- 	<th width="140" align="left">GST %</th> -->
 
 									</tr>
 
-								</thead>
-
+								</thead> -->
+	<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+														<tr class="bgpink">
+											
+												<th width="140" style="width: 30px" align="left">Sr No</th>
+										<th width="138" align="left">Material Name</th>
+										<th width="120" align="left">Material Type</th>
+										<th width="120" align="left">Qty</th>
+										<th width="120" align="left">Weight</th>
+										<th width="120" align="left">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance" >
+											<thead>
+												<tr class="bgpink">
+										<th width="140" style="width: 30px" align="left">No</th>
+										<th width="138" align="left">Material Name</th>
+										<th width="120" align="left">Material Type</th>
+										<th width="120" align="left">Qty</th>
+										<th width="130" align="left">Weight</th>
+										<th width="120" align="left">Action</th>
+												</tr>
+												</thead>
 								<tbody>
 
 									<c:forEach items="${sfDetailList}" var="sfDetailList"
@@ -250,6 +279,7 @@
 
 								</tbody>
 							</table>
+						</div>
 						</div>
 <div class="row">
 									<div class="col-md-12" style="text-align: center;">

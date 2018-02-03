@@ -5,6 +5,8 @@
 	 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+		 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
+	
 	<body>
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
@@ -210,9 +212,47 @@
 									</div>
 
 									<div class="box-content">
-
+<div class="col-md-9" ></div> 
+					<label for="search" class="col-md-3" id="search">
+    <i class="fa fa-search" style="font-size:20px"></i>
+									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search.." title="Type in a name">
+										</label>  
 										<div class="clearfix"></div>
-										<div class="table-responsive" style="border: 0">
+										<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+									<th width="45" style="width: 18px">Sr.No.</th>
+														<th width="100" align="left">Item Name</th>
+														<th width="100" align="left">RM Type</th>
+														<th width="100" align="left">Raw Material</th>
+     													<th width="100" align="left">RM Weight</th>
+														<th width="100" align="left">RM Qty</th>
+														<th width="100" align="left">No. Of Pieces/Item</th>
+														<th width="81" align="left">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+											<th width="45" style="width: 18px">Sr.No.</th>
+														<th width="100" align="left">Item Name</th>
+														<th width="100" align="left">RM Type</th>
+														<th width="100" align="left">Raw Material</th>
+     													<th width="100" align="left">RM Weight</th>
+														<th width="100" align="left">RM Qty</th>
+														<th width="100" align="left">No. Of Pieces/Item</th>
+														<th width="81" align="left">Action</th>
+												</tr>
+												</thead>
+										<!-- <div class="table-responsive" style="border: 0">
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
@@ -220,13 +260,12 @@
 														<th width="100" align="left">Item Name</th>
 														<th width="100" align="left">RM Type</th>
 														<th width="100" align="left">Raw Material</th>
-<!-- 														<th width="100" align="left">RM Unit</th>
- -->														<th width="100" align="left">RM Weight</th>
+     													<th width="100" align="left">RM Weight</th>
 														<th width="100" align="left">RM Qty</th>
 														<th width="100" align="left">No. Of Pieces/Item</th>
 														<th width="81" align="left">Action</th>
 													</tr>
-												</thead>
+												</thead> -->
 												<tbody>
 													 <c:forEach items="${itemDetailList}" var="itemDetailList" varStatus="count">
 														<tr>
@@ -851,6 +890,25 @@ $(document).ready(function() {
 			});
 });
 
+</script>
+<script>
+function myFunction() {
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table1");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
 </script>
 </html>
 

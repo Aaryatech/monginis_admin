@@ -7,7 +7,6 @@
 <body onload="calTotalGstOnLoad()">
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	
-	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	
 	<c:url var="getGroup2ByCatId" value="/getGroup2ByCatId" />
 

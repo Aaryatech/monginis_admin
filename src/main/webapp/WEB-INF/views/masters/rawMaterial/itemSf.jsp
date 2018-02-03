@@ -179,9 +179,46 @@
 	<div class="col-md-9" ></div> 
 					<label for="search" class="col-md-3" id="search">
     <i class="fa fa-search" style="font-size:20px"></i>
-									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search for Raw Material names.." title="Type in a name">
+									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search.." title="Type in a name">
 										</label>  
 								<div class="clearfix"></div>
+									<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+											<th width="140" style="width: 30px" align="left">Sr No</th>
+												<th width="138" align="left">SF Name</th>
+												<th width="120" align="left">SF Type</th>
+												<th width="60" align="left">SF Weight</th>
+
+												<th width="80" align="left">Min Level Qty</th>
+												<th width="100" align="left">Reorder Level Qty</th>
+
+												<th width="120" align="left">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+											<th width="140" style="width: 30px" align="left">No</th>
+												<th width="138" align="left">SF Name</th>
+												<th width="120" align="left">SF Type</th>
+												<th width="60" align="left">SF Weight</th>
+
+												<th width="80" align="left">Min Level Qty</th>
+												<th width="100" align="left">Reorder Level Qty</th>
+
+												<th width="120" align="left">Action</th>
+												</tr>
+												</thead>
+								<!-- 
 								<div class="table-responsive" style="border: 0">
 									<table width="100%" class="table table-advance" id="table1">
 										<thead>
@@ -196,11 +233,11 @@
 												<th width="100" align="left">Reorder Level Qty</th>
 
 												<th width="120" align="left">Action</th>
-												<!-- 	<th width="140" align="left">GST %</th> -->
+													<th width="140" align="left">GST %</th>
 
 											</tr>
 
-										</thead>
+										</thead> -->
 
 										<tbody>
 

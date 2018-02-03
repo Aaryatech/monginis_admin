@@ -149,14 +149,12 @@
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
-														<th width="20" align="left">Sr No</th>
-														<th width="138" align="left">Franchise Name</th>
-													
+														<th width="20" align="left">No</th>
+														<th width="138" align="left">Franchisee</th>
+													<th width="208" align="left">Delivery Date</th>
 														<th width="159" align="left"><span
 															style="width: 130px;">Name</span></th>
-													
 														<th width="130" align="left">Event</th>
-														<th width="88" align="left">Delivery Date</th>
 														<th width="105" align="left">Rate</th>
 														<th width="75" align="left">Quantity</th>
 														<th width="91" align="left">Total</th>
@@ -173,15 +171,13 @@
 														<td><c:out value="${count.index+1}"/></td>
 															<td align="left"><c:out
 																	value="${spCakeOrderList.frName}"></c:out></td>
-														
+														<td align="left"><c:out
+																	value="${spCakeOrderList.rspDeliveryDt}"></c:out></td>
 															<td align="left"><c:out
 																	value="${spCakeOrderList.itemName}"></c:out></td>
 														
 															<td align="left"><c:out
 																	value="${spCakeOrderList.rspEvents}"></c:out></td>
-
-															<td align="left"><c:out
-																	value="${spCakeOrderList.rspDeliveryDt}"></c:out></td>
 
 															<td align="left"><c:out
 																	value="${spCakeOrderList.rate}"></c:out></td>

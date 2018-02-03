@@ -174,15 +174,16 @@
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
-														<th width="20" align="left">Sr No</th>
-														<th width="138" align="left">Franchise Name</th>
+														<th width="130" align="left">Sr No</th>
+														<th width="208" align="left">Franchisee</th>
+														<th width="203" align="left">Delivery Date</th>
 														<th width="159" align="left"><span
-															style="width: 130px;">Item Code</span></th>
+															style="width: 130px;">Name</span></th>	
 														<th width="159" align="left"><span
-															style="width: 130px;">Name</span></th>
+															style="width: 130px;">Sp Code</span></th>
+													<th width="105" align="left">Weight</th>
 														<th width="168" align="left">Flavour</th>
 														<th width="140" align="left">Event</th>
-														<th width="88" align="left">Delivery Date</th>
 														<th width="105" align="left">Rate</th>
 														<th width="75" align="left">Add Rate</th>
 														<th width="91" align="left">Total</th>
@@ -215,7 +216,8 @@
 
 															<td align="left"><c:out
 																	value="${spCakeOrder.spDeliveryDate}"></c:out></td>
-
+	                                                  <td align="left"><c:out
+																	value="${spCakeOrder.spSelectedWeight}"></c:out></td>
 															<td align="left"><c:out
 																	value="${spCakeOrder.spPrice}"></c:out></td>
 
@@ -381,23 +383,15 @@
 								  	tr.append($('<td></td>').html(key+1));
 
 								  	tr.append($('<td></td>').html(spCakeOrder.frName));
-
+								 	tr.append($('<td></td>').html(spCakeOrder.spDeliveryDate));
+								 	tr.append($('<td></td>').html(spCakeOrder.spName));
 								  	tr.append($('<td></td>').html(spCakeOrder.itemId));
-
-								  	tr.append($('<td></td>').html(spCakeOrder.spName));
-
+								 	tr.append($('<td></td>').html(spCakeOrder.spSelectedWeight));
 								  	tr.append($('<td></td>').html(spCakeOrder.spfName));
-								  	
 								  	tr.append($('<td></td>').html(spCakeOrder.spEvents));
-
-								  	tr.append($('<td></td>').html(spCakeOrder.spDeliveryDate));
-
 								  	tr.append($('<td></td>').html(spCakeOrder.spPrice));
-
 								  	tr.append($('<td></td>').html(spCakeOrder.spTotalAddRate));
-								  	
 									var totalValue=parseFloat(spCakeOrder.spTotalAddRate) + parseFloat(spCakeOrder.spPrice);
-
 								  	tr.append($('<td></td>').html(totalValue));
 								  	
 								  	tr.append($('<td></td>').html('<a href="${pageContext.request.contextPath}/showHtmlViewSpcakeOrder/'+spCakeOrder.spOrderNo+'" target="blank"><i class="fa fa-file-text-o" style="font-size:24px;"></i></a>'));  
@@ -462,20 +456,15 @@
 
 						  	tr.append($('<td></td>').html(key+1));
 
+
 						  	tr.append($('<td></td>').html(spCakeOrder.frName));
-
+						 	tr.append($('<td></td>').html(spCakeOrder.spDeliveryDate));
+						 	tr.append($('<td></td>').html(spCakeOrder.spName));
 						  	tr.append($('<td></td>').html(spCakeOrder.itemId));
-
-						  	tr.append($('<td></td>').html(spCakeOrder.spName));
-
+						 	tr.append($('<td></td>').html(spCakeOrder.spSelectedWeight));
 						  	tr.append($('<td></td>').html(spCakeOrder.spfName));
-						  	
 						  	tr.append($('<td></td>').html(spCakeOrder.spEvents));
-
-						  	tr.append($('<td></td>').html(spCakeOrder.spDeliveryDate));
-
 						  	tr.append($('<td></td>').html(spCakeOrder.spPrice));
-
 						  	tr.append($('<td></td>').html(spCakeOrder.spTotalAddRate));
 						  	
 							var totalValue=parseFloat(spCakeOrder.spTotalAddRate) + parseFloat(spCakeOrder.spPrice);

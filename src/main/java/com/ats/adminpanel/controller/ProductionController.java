@@ -187,14 +187,29 @@ public class ProductionController {
 	@RequestMapping(value = "/getProductionOrder", method = RequestMethod.GET)
 	public @ResponseBody List<GetOrderItemQty> generateOrderList(HttpServletRequest request,
 			HttpServletResponse response) {
-
+System.out.println("*********************************");
 		getOrderItemQtyList = new ArrayList<GetOrderItemQty>();
 
 		productionDate = request.getParameter("productionDate");
 		String selectedMenuList = request.getParameter("selectedMenu_list");
+		System.out.println("selectedMenuList"+selectedMenuList.toString());
+		if(selectedMenuList.contains("-1"))
+		{		System.out.println("selectedMenuList"+selectedMenuList.toString());
 
+			List<String> ids = new ArrayList<>();
+			for(int i=0;i<menuList.size();i++)
+			{
+				ids.add(String.valueOf(menuList.get(i).getMenuId()));
+			}
+			String idList = ids.toString();
+			selectedMenuList = idList.substring(1, idList.length() - 1);
+			selectedMenuList = selectedMenuList.replaceAll("\"", "");
+			System.out.println("selectedMenuList"+selectedMenuList.toString());
+		}else
+		{
 		selectedMenuList = selectedMenuList.substring(1, selectedMenuList.length() - 1);
 		selectedMenuList = selectedMenuList.replaceAll("\"", "");
+		}
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 		RestTemplate rest = new RestTemplate();

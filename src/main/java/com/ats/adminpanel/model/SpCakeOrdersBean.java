@@ -16,6 +16,8 @@ public class SpCakeOrdersBean {
     private float spTotalAddRate;
     private String frName;
     private String itemId;
+	private float spSelectedWeight;
+
 /*
     public int getFrId() {
     	return frId;
@@ -25,14 +27,20 @@ public class SpCakeOrdersBean {
     	this.frId = frId;
     }
     */
-    
-    
-   
+	
     public String getSpCode() {
         return spCode;
     }
 
-    public int getSpOrderNo() {
+    public float getSpSelectedWeight() {
+		return spSelectedWeight;
+	}
+
+	public void setSpSelectedWeight(float spSelectedWeight) {
+		this.spSelectedWeight = spSelectedWeight;
+	}
+
+	public int getSpOrderNo() {
 		return spOrderNo;
 	}
 
