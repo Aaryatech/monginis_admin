@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -901,8 +902,13 @@ public class ProductionController {
 			System.out.println("unsort size " + getQtyforVariance.getVarianceorderlist().size());
 
 			
-			
+			SimpleDateFormat sdf = new SimpleDateFormat("kk:mm:ss ");
+			TimeZone istTimeZone = TimeZone.getTimeZone("Asia/Kolkata");
+			Date d = new Date();
+			sdf.setTimeZone(istTimeZone);
+			String strtime = sdf.format(d);
 
+			System.out.println("NEW CODE STARTED "+strtime);
 			// new Code
 			List<FinishedGoodStockDetail> updateStockDetailList = new ArrayList<>();
 
@@ -1071,7 +1077,7 @@ public class ProductionController {
 					} // end of Inner For Loop
 				} // End of outer For loop
 
-			
+				System.out.println("NEW CODE end  ");
 
 			for (int i = 0; i < postProductionPlanDetaillist.size(); i++) {
 
@@ -1136,7 +1142,6 @@ public class ProductionController {
 			System.out.println("getVarianceorderlistforsort size " + getVarianceorderlistforsort.size());
 			System.out.println("unsort size " + getQtyforVariance.getVarianceorderlist().size());
 			System.out.println(postProductionPlanDetaillist.toString());
-			
 			
 			
 			model.addObject("postProdPlanHeader", postProdPlanHeader);
