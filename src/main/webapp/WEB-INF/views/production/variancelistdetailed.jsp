@@ -147,8 +147,39 @@
 
 
 								<div class=" box-content">
-									<div class="row">
-										<div class="col-md-12 table-responsive">
+								<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+														<th class="col-md-1">Sr No</th>
+														<th class="col-md-2">Item Name</th>
+														<th class="col-md-1">Current Closing</th>
+														<th class="col-md-1">plan Qty</th>
+														<th class="col-md-1">production Qty</th>
+														<th class="col-md-1">Order Qty</th>
+														<th class="col-md-1">Rejected Qty</th> 
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+														<th class="col-md-1">Sr No</th>
+														<th class="col-md-2">Item Name</th>
+														<th class="col-md-1">Current Closing</th>
+														<th class="col-md-1">plan Qty</th>
+														<th class="col-md-1">production Qty</th>
+														<th class="col-md-1">Order Qty</th>
+														<th class="col-md-1">Rejected Qty</th> 
+												</tr>
+												</thead>
+									<!-- 	<div class="col-md-12 table-responsive">
 											<table class="table table-bordered table-striped fill-head "
 												style="width: 100%" id="table_grid">
 												<thead>
@@ -164,7 +195,7 @@
 
 
 													</tr>
-												</thead>
+												</thead> -->
 												<tbody>
 													<c:set var="srNo" value="0" />
 													<c:forEach items="${postProdPlanHeaderDetailed}" var="postProdPlanHeaderDetailed"
@@ -195,7 +226,7 @@
 
 												</tbody>
 											</table>
-										</div>
+										
 									</div>
 								</div>
 

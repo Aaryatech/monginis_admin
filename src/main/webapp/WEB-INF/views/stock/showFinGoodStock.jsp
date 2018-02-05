@@ -183,6 +183,16 @@
 												class="fa fa-chevron-up"></i></a>
 											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 										</div>
+									</div><br>
+	<div
+										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-10">
+										<!-- 										<input type="submit" class="btn btn-primary" value="Submit">
+ -->
+ 
+ 
+											<input type="button" class="btn btn-danger"
+											value="Day End Process" id="dayEndButton"  disabled/>
+
 									</div>
 
 									<div class="box-content">
@@ -194,9 +204,9 @@
 													<tr>
 														<th width="30" align="left">Sr No</th>
 														<th width="120" align="left">Item Name</th>
-														<th width="50">T1</th>
-														<th width="50">T2</th>
-														<th width="50">T3</th>
+														<th width="50">T</th>
+														<th width="50">T-1</th>
+														<th width="50">T-2</th>
 														<th width="50">Op Total</th>
 
 														<th width="50">Prod Qty</th>
@@ -204,9 +214,9 @@
 														<th width="50">Bill Qty</th>
 														<th width="50">Dummy Qty</th>
 														<th width="50">Current Closing</th>
-														<th width="50">Clo T1</th>
-														<th width="50">Clo T2</th>
-														<th width="50">Clo T3</th>
+														<th width="50">Clo T</th>
+														<th width="50">Clo T-1</th>
+														<th width="50">Clo T-2</th>
 														<th width="70">Total Closing</th>
 													</tr>
 												</thead>

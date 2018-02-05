@@ -34,7 +34,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Prod Detail
+						<i class="fa fa-file-o"></i>Production Detail
 					</h1>
 
 				</div>
@@ -142,8 +142,45 @@
 									</div>
 								</div>
 								<div class="clearfix"></div>
+<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+											<th width="150" >Item Name</th>
+												<th width="110" align="left">Current Stock</th>
+												<th width="110" align="left">Opening Qty</th>
+												<th width="120" align="left">Plan Qty</th>
+												<th width="120" align="left">Order Qty</th>
 
-								<div class="table-responsive" style="border: 0">
+												<th width="150" align="left">Actual Prod</th>
+												<th width="120" align="left">Rej Qty</th>
+												<th width="150" align="left">Total Qty</th> not in use
+
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+													<th width="150" >Item Name</th>
+												<th width="120" align="left">Current Stock</th>
+												<th width="120" align="left">Opening Qty</th>
+												<th width="120" align="left">Plan Qty</th>
+												<th width="120" align="left">Order Qty</th>
+
+												<th width="150" align="left">Actual Prod</th>
+												<th width="120" align="left">Rej Qty</th>
+												<th width="150" align="left">Total Qty</th> not in use
+
+												</tr>
+												</thead>
+							<!-- 	<div class="table-responsive" style="border: 0">
 									<table width="100%" class="table table-advance" id="table1">
 										<thead>
 											<tr>
@@ -155,10 +192,10 @@
 
 												<th width="150" align="left">Actual Prod</th>
 												<th width="120" style="width: 18px">Rej Qty</th>
-												<th width="150" align="left">Total Qty</th> <!-- not in use -->
+												<th width="150" align="left">Total Qty</th> not in use
 
 											</tr>
-										</thead>
+										</thead> -->
 										<tbody>
 
 											<c:forEach items="${planDetail}" var="planDetail" varStatus="count">
@@ -369,7 +406,7 @@
 								<div style="text-align: center;">
 								<a href="${pageContext.request.contextPath}/showProdByOrderPdf"
 								target="_blank">PDF</a></div>
-							</form>
+						</div>	</form>
 						</div>
 					</div>
 

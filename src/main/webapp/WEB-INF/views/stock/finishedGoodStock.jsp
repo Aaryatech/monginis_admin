@@ -31,7 +31,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Finished Good Stock
+						<i class="fa fa-file-o"></i>Finished Good Stock Adjustment & Overview
 					</h1>
 
 				</div>
@@ -44,7 +44,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box">
-						<div class="box-title">
+					<!-- 	<div class="box-title">
 							<h3>
 								<i class="fa fa-bars"></i> Good Stock
 							</h3>
@@ -52,12 +52,12 @@
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
-							<!-- <div class="box-tool">
+							<div class="box-tool">
 								<a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a> <a data-action="close" href="#"><i
 									class="fa fa-times"></i></a>
-							</div> -->
-						</div>
+							</div>
+						</div> -->
 
 						<div class="box-content">
 							<form class="form-horizontal" id="validation-form">
@@ -112,9 +112,38 @@
 									</div>
 
 									<div class="box-content">
+<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
 										<div class="clearfix"></div>
-										<div class="table-responsive" style="border: 0">
+										<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+												<th width="30" align="left">Sr No</th>
+														<th width="120" align="left">Item Name</th>
+														<th width="100">T1</th>
+														<th width="100">T2</th>
+														<th width="100">T3</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+											<th width="30" align="left">Sr No</th>
+														<th width="120" align="left">Item Name</th>
+														<th width="100">T1</th>
+														<th width="100">T2</th>
+														<th width="100">T3</th>
+												</tr>
+												</thead>
+									<!-- 	<div class="table-responsive" style="border: 0">
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
@@ -125,7 +154,7 @@
 														<th width="50">T3</th>
 
 													</tr>
-												</thead>
+												</thead> -->
 												<tbody>
 											
 													<c:forEach items="${itemsList}" var="item" varStatus="count">

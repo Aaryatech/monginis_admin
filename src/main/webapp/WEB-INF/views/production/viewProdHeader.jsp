@@ -99,19 +99,48 @@
 
 
 								<div class="clearfix"></div>
-
-								<div class="table-responsive" style="border: 0">
+<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+										<th width="180" style="width: 90px">Prod ID</th>
+												<th width="200" align="left">Production Date</th>
+												<th width="358" align="left">Category</th>
+												<th width="194" align="left">Status</th>
+												<th width="102" align="left">IsPlanned</th>
+												<th width="88" align="left">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+												<th width="180" style="width: 90px">Prod ID</th>
+												<th width="200" align="left">Production Date</th>
+												<th width="358" align="left">Category</th>
+												<th width="194" align="left">Status</th>
+												<th width="102" align="left">IsPlanned</th>
+												<th width="88" align="left">Action</th>
+												</tr>
+												</thead>
+							<!-- 	<div class="table-responsive" style="border: 0">
 									<table width="100%" class="table table-advance" id="table1">
 										<thead>
 											<tr>
-												<th width="17" style="width: 18px">Prod ID</th>
-												<th width="163" align="left">Date</th>
+												<th width="180" style="width: 90px">Prod ID</th>
+												<th width="200" align="left">Production Date</th>
 												<th width="358" align="left">Category</th>
 												<th width="194" align="left">Status</th>
 												<th width="102" align="left">IsPlanned</th>
 												<th width="88" align="left">Action</th>
 											</tr>
-										</thead>
+										</thead> -->
 										<tbody>
 
 											<c:forEach items="${planHeader}" var="planHeader">
@@ -178,7 +207,7 @@
 									</table>
 								</div>
 
-							
+							</div>
 							</form>
 						</div>
 					</div>
