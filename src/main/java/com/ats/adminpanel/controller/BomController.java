@@ -78,9 +78,9 @@ public class BomController {
 	String prodOrMixDate;
 	int globalHeaderId;
 int globalIsPlan;
-	@RequestMapping(value = "/showBom/{prodHeaderId}/{isMix}/{date}/{isPlan}", method = RequestMethod.GET)
+	@RequestMapping(value = "/showBom/{prodHeaderId}/{isMix}/{date}/{isPlan}/{catId}", method = RequestMethod.GET)
 	public ModelAndView showBom2(@PathVariable int prodHeaderId, @PathVariable int isMix, @PathVariable String date,
-			@PathVariable int isPlan,
+			@PathVariable int isPlan,@PathVariable int catId,
 			HttpServletRequest request, HttpServletResponse response) throws ParseException {
 
 		prodOrMixDate = date;
@@ -89,7 +89,7 @@ int globalIsPlan;
 
 		globalIsPlan=isPlan;
 		ModelAndView mav = new ModelAndView("production/addBom");
-
+		mav.addObject("catId", catId);
 		try {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -164,6 +164,7 @@ System.out.println("It is Production BOM ");
 		System.out.println("isMix " + isMix);
 		int isMixing = Integer.parseInt(isMix);
 		System.out.println("inside insert Bom ");
+		int catId = Integer.parseInt(request.getParameter("catId"));
 		Date prodOrMixDate1 = null;
 
 		SimpleDateFormat dtFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -199,7 +200,7 @@ System.out.println("It is Production BOM ");
 			billOfMaterialHeader.setStatus(0);
 			billOfMaterialHeader.setToDeptId(toDeptId);
 			billOfMaterialHeader.setToDeptName(toDeptName);
-			
+			billOfMaterialHeader.setExInt1(catId);//Category
 			billOfMaterialHeader.setRejApproveDate(date);
 			billOfMaterialHeader.setRejApproveUserId(0);
 			billOfMaterialHeader.setRejDate(date);

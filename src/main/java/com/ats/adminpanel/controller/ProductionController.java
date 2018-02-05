@@ -896,7 +896,7 @@ public class ProductionController {
 			postProdPlanHeader = restTemplate.postForObject(Constants.url + "PostProdPlanHeaderwithDetailed", map,
 					PostProdPlanHeader.class);
 			
-			AllItemsListResponse allItemsListResponse = restTemplate.getForObject(Constants.url + "getAllItems",
+			AllItemsListResponse allItemsListResponse = restTemplate.getForObject(Constants.url + "getAllItemsBySorting",
 					AllItemsListResponse.class);
 			List<Item> itemsList = allItemsListResponse.getItems(); 
 			

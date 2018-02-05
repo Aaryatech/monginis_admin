@@ -209,8 +209,8 @@
 											<c:choose>
 												<c:when test="${(mixheader.status!=2) and (deptId==15)}">
 													<c:choose>
-														<c:when test="${mixheader.isBom==0}"> 
-															<a href="${pageContext.request.contextPath}/showBom/${mixheader.mixId}/0/${date}/0"><input type="button" class="btn btn-primary"
+														<c:when test="${mixheader.isBom==0}"> <!-- /showBom/${mixheader.mixId}/0/${date}/0/0 <--last 0 is cat id for mixing -->
+															<a href="${pageContext.request.contextPath}/showBom/${mixheader.mixId}/0/${date}/0/0"><input type="button" class="btn btn-primary"
 													value="Request to Bom"> </a>
  
 														</c:when>

@@ -67,7 +67,7 @@
 								name="validation-form" id="validation-form">
 								<div class="clearfix"></div>
 								<input type="hidden" name="isMix" value="${isMix}">
-
+	                            <input type="hidden" name="catId" value="${catId}">
 								<div class="table-responsive" style="border: 0">
 									<table width="100%" class="table table-advance" id="table1">
 										<thead>

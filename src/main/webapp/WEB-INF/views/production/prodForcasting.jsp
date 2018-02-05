@@ -357,8 +357,8 @@
 															+ index
 															+ "</td>";
 
-													var itemName = "<td>&nbsp;&nbsp;&nbsp;"
-															+ item.name
+													var itemName = "<td>"
+															+item.name
 															+ "</td>";
 															
 															
