@@ -155,7 +155,7 @@ public class PushOrderController {
 
 			ParameterizedTypeReference<List<Item>> typeRef = new ParameterizedTypeReference<List<Item>>() {
 			};
-			ResponseEntity<List<Item>> responseEntity = restTemplate.exchange(Constants.url + "getItemsByCatId",
+			ResponseEntity<List<Item>> responseEntity = restTemplate.exchange(Constants.url + "getItemsByCatIdAndSortId",
 					HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 			items = responseEntity.getBody();

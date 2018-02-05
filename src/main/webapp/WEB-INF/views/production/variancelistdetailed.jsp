@@ -122,10 +122,10 @@
 										</select>
 									 
 									</div>
-								<div class="col-md-2">Select Rout</div>
+								<div class="col-md-2">Select Route</div>
 									<div class="col-md-3">
 									<select name="rtid" id="rtid" class="form-control chosen" tabindex="6">
-											<option value="0">Select Rout</option> 
+											<option value="0">Select Route</option> 
 											<c:forEach items="${routeList}" var="routeList"> 
 												<option value="${routeList.routeId}"><c:out value="${routeList.routeName}"></c:out> </option>
 											 </c:forEach>

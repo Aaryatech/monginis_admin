@@ -186,9 +186,9 @@
 									<table id="table2" class="main-table">
 											<thead>
 												<tr class="bgpink">
-	                                                    <th width="18" style="width: 18px">Sr No</th>
-														<th width="50">Item Id</th>
-														<th width="100">Item Name</th> 
+	                                                    <th width="10" style="width: 10px">Sr No</th>
+														<th width="90">Item Id</th>
+														<th width="150">Item Name</th> 
 														<th width="100">Current Opening Qty</th>
 														<th width="100">Order Quantity</th></tr>
 												</thead>
@@ -200,9 +200,9 @@
 										<table id="table1" class="table table-advance">
 											<thead>
 												<tr class="bgpink">
-											<th width="18" style="width: 18px">Sr No</th>
-														<th width="50">Item Id</th>
-														<th width="100">Item Name</th> 
+											<th width="60" style="width: 50px">Sr No</th>
+														<th width="100">Item Id</th>
+														<th width="170">Item Name</th> 
 														<th width="100">Current Opening Qty</th>
 														<th width="100">Order Quantity</th>
 												</tr>

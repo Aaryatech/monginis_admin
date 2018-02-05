@@ -75,11 +75,11 @@
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Franchisee
 									</label>
-									<div class="col-sm-9 col-lg-10 controls">
+									<div class="col-sm-3 col-lg-4 controls">
 
 										<select data-placeholder="Select Franchisee"
 											class="form-control chosen" multiple="multiple" tabindex="6"
-											name="fr_id" id="fr_id">
+											name="fr_id" id="fr_id" onchange="disableRoute()">
 
 											<option value="0">All</option>
 											<c:forEach items="${franchiseeList}" var="franchiseeList">
@@ -90,7 +90,21 @@
 
 										</select>
 									</div>
-								</div>
+								<label class="col-sm-1 col-lg-1 control-label">
+							<b>OR</b></label><label class="col-sm-1 col-lg-1 control-label">Route</label>
+						<div class="col-sm-1 col-lg-4 controls">
+							<select data-placeholder="Select Route"
+								class="form-control chosen" name="selectRoute" id="selectRoute"
+								onchange="disableFr()">
+								<option value="0">Select Route</option>
+								<c:forEach items="${routeList}" var="route" varStatus="count">
+									<option value="${route.routeId}"><c:out value="${route.routeName}"/> </option>
+
+								</c:forEach>
+							</select>
+							
+						</div>
+						</div>
 
 								<%-- <div class="form-group">
 										<label for="textfield2"
@@ -353,6 +367,8 @@
 
 			var frIds=$("#fr_id").val();
 			var array=[];
+			var routeIds=$("#selectRoute").val();
+
 			var prodDate = document.getElementById("dp2").value;
 			$('#loader').show();
 					
@@ -360,7 +376,7 @@
 							{
 								fr_id_list : JSON.stringify(frIds),
 								prod_date : prodDate,
-								
+								route_id:routeIds,
 								ajax : 'true',
 							},
 							function(data) {
@@ -496,5 +512,29 @@
 					document.getElementById("expExcel").disabled=true;
 		}
 			</script>
+<script type="text/javascript">
+
+function disableFr(){
+
+	//alert("Inside Disable Fr ");
+document.getElementById("fr_id").disabled = true;
+
+}
+
+function disableRoute(){
+
+	//alert("Inside Disable route ");
+	var x=document.getElementById("selectRoute")
+	//alert(x.options.length);
+	var i;
+	for(i=0;i<x;i++){
+		document.getElementById("selectRoute").options[i].disabled;
+		 //document.getElementById("pets").options[2].disabled = true;
+	}
+//document.getElementById("selectRoute").disabled = true;
+
+}
+
+</script>
 </body>
 </html>

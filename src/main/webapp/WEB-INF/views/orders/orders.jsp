@@ -104,11 +104,11 @@ th:hover::after {
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Franchisee
 									</label>
-									<div class="col-sm-9 col-lg-10 controls">
+									<div class="col-sm-3 col-lg-4 controls">
 
 										<select data-placeholder="Select Franchisee"
 											class="form-control chosen" multiple="multiple" tabindex="6"
-											name="fr_id" id="fr_id">
+											name="fr_id" id="fr_id" onchange="disableRoute()">
 
 											<option value="0">All</option>
 											<c:forEach items="${franchiseeList}" var="franchiseeList">
@@ -118,8 +118,26 @@ th:hover::after {
 											</c:forEach>
 
 										</select>
+										
 									</div>
-								</div>
+							<!-- 	</div>
+							
+                        <div class="form-group"> -->
+						<label class="col-sm-1 col-lg-1 control-label">
+							<b>OR</b></label><label class="col-sm-1 col-lg-1 control-label">Route</label>
+						<div class="col-sm-1 col-lg-4 controls">
+							<select data-placeholder="Select Route"
+								class="form-control chosen" name="selectRoute" id="selectRoute"
+								onchange="disableFr()">
+								<option value="0">Select Route</option>
+								<c:forEach items="${routeList}" var="route" varStatus="count">
+									<option value="${route.routeId}"><c:out value="${route.routeName}"/> </option>
+
+								</c:forEach>
+							</select>
+							
+						</div>
+						</div>
 
 								<div class="form-group">
 									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Menu</label>
@@ -187,7 +205,39 @@ th:hover::after {
 									<div class="box-content">
 
 										<div class="clearfix"></div>
-										<div class="table-responsive" style="border: 0">
+										<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+                                             <th width="148" style="width: 18px" align="left">
+															No</th>
+														<th width="198" align="left">Franchisee Name</th>
+														<th width="190" align="left">Item Name</th>
+														<th width="199" align="left">Category</th>
+														<th width="199" align="left">Quantity</th>
+														<th width="100" align="right">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+										<th width="148" style="width: 18px" align="left">
+															No</th>
+														<th width="198" align="left">Franchisee Name</th>
+														<th width="190" align="left">Item Name</th>
+														<th width="199" align="left">Category</th>
+														<th width="199" align="left">Quantity</th>
+														<th width="100" align="right">Action</th>
+												</tr>
+												</thead>
+									<!-- 	<div class="table-responsive" style="border: 0">
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
@@ -196,9 +246,8 @@ th:hover::after {
 														<th width="138" align="left">Franchisee Name</th>
 														<th width="159" align="left">Item Name</th>
 														<th width="159" align="left">Category</th>
-														<!-- <th width="159" align="left">Item Code</th> -->
 														<th width="159" align="left">Quantity</th>
-														<th width="100" align="left">Action</th>
+														<th width="100" align="left">Action</th> -->
 
 														<!-- <th width="91" align="left">Quantity</th> -->
 														<!-- 	<th width="105" align="left">MRP</th> -->
@@ -209,8 +258,8 @@ th:hover::after {
 														<!-- <th width="70" align="left">Remarks</th>
 														<th width="70" align="left">Action</th> -->
 
-													</tr>
-												</thead>
+													<!-- </tr>
+												</thead> -->
 												<tbody>
 													<c:forEach items="${orderList}" var="orderList"
 														varStatus="count">
@@ -377,7 +426,7 @@ function callSearch() {
 	
 	var array=[];
 	
-
+	var routeIds=$("#selectRoute").val();
 	var frIds=$("#fr_id").val();
 		
 
@@ -389,6 +438,7 @@ $.getJSON('${callSearchOrdersProcess}', {
 
 	fr_id_list : JSON.stringify(frIds),
 	item_id_list : JSON.stringify(itemIds),
+	route_id:routeIds,
 	date : date,
 	
 	ajax : 'true'
@@ -533,5 +583,30 @@ $.getJSON('${callSearchOrdersProcess}', {
 					document.getElementById("expExcel").disabled=true;
 		}
 			</script>
+<script type="text/javascript">
+
+function disableFr(){
+
+	//alert("Inside Disable Fr ");
+document.getElementById("fr_id").disabled = true;
+
+}
+
+function disableRoute(){
+
+	//alert("Inside Disable route ");
+	var x=document.getElementById("selectRoute")
+	//alert(x.options.length);
+	var i;
+	for(i=0;i<x;i++){
+		document.getElementById("selectRoute").options[i].disabled;
+		 //document.getElementById("pets").options[2].disabled = true;
+	}
+//document.getElementById("selectRoute").disabled = true;
+
+}
+
+</script>
+
 </body>
 </html>

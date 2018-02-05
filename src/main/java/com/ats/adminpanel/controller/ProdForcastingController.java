@@ -81,7 +81,7 @@ public class ProdForcastingController {
 			System.out.println("catList :" + catList.toString());
 
 			for (MCategoryList mCategory : catList) {
-				if (mCategory.getCatId() != 5 && mCategory.getCatId() != 6) {
+				if (mCategory.getCatId() != 5 && mCategory.getCatId() != 6 && mCategory.getCatId() != 1 && mCategory.getCatId() != 3) {
 					filteredCatList.add(mCategory);
 
 				}
@@ -127,7 +127,7 @@ public class ProdForcastingController {
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("itemGrp1", catId);
 
-		Item[] item = restTemplate.postForObject(Constants.url + "getItemsByCatId", map, Item[].class);
+		Item[] item = restTemplate.postForObject(Constants.url + "getItemsByCatIdAndSortId", map, Item[].class);
 		ArrayList<Item> itemList = new ArrayList<Item>(Arrays.asList(item));
 		System.out.println("Filter Item List " + itemList.toString());
 		
