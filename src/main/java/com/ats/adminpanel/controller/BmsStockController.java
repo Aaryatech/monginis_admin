@@ -30,12 +30,17 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.BmsStockDetailed;
 import com.ats.adminpanel.model.BmsStockHeader;
+import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.item.FrItemStockConfigure;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.stock.GetBmsCurrentStock;
 import com.ats.adminpanel.model.stock.GetBmsCurrentStockList;
 import com.ats.adminpanel.model.stock.GetCurrentBmsSFStock;
 import com.ats.adminpanel.model.stock.GetCurrentBmsSFStockList;
+import com.ats.adminpanel.model.stock.UpdateBmsSfStock;
+import com.ats.adminpanel.model.stock.UpdateBmsSfStockList;
+import com.ats.adminpanel.model.stock.UpdateBmsStock;
+import com.ats.adminpanel.model.stock.UpdateBmsStockList;
 import com.itextpdf.awt.geom.CubicCurve2D;
 
 @Controller
@@ -48,7 +53,7 @@ public class BmsStockController {
 
 	List<GetBmsCurrentStock> bmsCurrentStock, bmsRmStockBetDate = new ArrayList<>();
 
-	List<GetCurrentBmsSFStock> bmsCurrentStockSf,bmsSfStockBetDate = new ArrayList<>();
+	List<GetCurrentBmsSFStock> bmsCurrentStockSf, bmsSfStockBetDate = new ArrayList<>();
 
 	List<BmsStockDetailed> stockBetDate = new ArrayList<>();
 
@@ -57,7 +62,7 @@ public class BmsStockController {
 	Date globalHeaderDate;
 
 	int globalRmType;
-	
+
 	int globalBmsHeaderId;
 
 	@RequestMapping(value = "/showBmsStock", method = RequestMethod.GET)
@@ -152,8 +157,8 @@ public class BmsStockController {
 						stock = new GetBmsCurrentStock();
 						stock = bmsCurrentStock.get(i);
 						bmsCurrentStock.get(i).setBmsClosingStock(0);
-						bmsCurrentStock.get(i).setBmsClosingStock((
-								(stock.getBmsOpeningStock() + stock.getProdReturnQty() + stock.getStoreIssueQty())
+						bmsCurrentStock.get(i).setBmsClosingStock(
+								((stock.getBmsOpeningStock() + stock.getProdReturnQty() + stock.getStoreIssueQty())
 										- (stock.getProdIssueQty() + stock.getMixingIssueQty())));
 
 					}
@@ -162,6 +167,9 @@ public class BmsStockController {
 					mav.addObject("stockList", bmsCurrentStock);
 
 				} // end of if rmtype==1 ie RM
+				
+				
+				
 				else if (rmType == 2) {
 					System.out.println("It is Current Stock Of RM ");
 
@@ -204,9 +212,9 @@ public class BmsStockController {
 						stock = new GetCurrentBmsSFStock();
 						stock = bmsCurrentStockSf.get(i);
 						bmsCurrentStockSf.get(i).setBmsClosingStock(0);
-						bmsCurrentStockSf.get(i)
-								.setBmsClosingStock(((stock.getBmsOpeningStock() + stock.getMixingIssueQty()
-										+ stock.getProdReturnQty()) - stock.getProdIssueQty()));
+						bmsCurrentStockSf.get(i).setBmsClosingStock(
+								((stock.getBmsOpeningStock() + stock.getMixingIssueQty() + stock.getProdReturnQty())
+										- stock.getProdIssueQty()));
 
 					}
 					mav.addObject("stockList", bmsCurrentStockSf);
@@ -308,19 +316,27 @@ public class BmsStockController {
 
 				globalHeaderDate = bmsStockHeader.getBmsStockDate();
 				
-				globalBmsHeaderId=bmsStockHeader.getBmsStockId();
+				SimpleDateFormat sdF=new SimpleDateFormat("yyyy-MM-dd");
+				
+				String globalDate=sdF.format(globalHeaderDate);
+				
+				globalHeaderDate=sdF.parse(globalDate);
+				
+				System.out.println("Global Header Date "+globalHeaderDate);
+
+				globalBmsHeaderId = bmsStockHeader.getBmsStockId();
 
 				int showDayEnd = 0;
 				if (headerDate.before(cDate) || headerDate.equals(cDate)) {
-					
-					System.out.println("Day End Dates Header Date "+headerDate+"curDate "+cDate);
+
+					System.out.println("Day End Dates Header Date " + headerDate + "curDate " + cDate);
 
 					showDayEnd = 1;
 
 				} else {
 					showDayEnd = 0;
-					
-					System.out.println("Day End Dates Header Date "+headerDate+"curDate "+cDate);
+
+					System.out.println("Day End Dates Header Date " + headerDate + "curDate " + cDate);
 
 				}
 
@@ -355,7 +371,7 @@ public class BmsStockController {
 					mav.addObject("stockList", bmsRmStockBetDate);
 				}
 
-				else if(globalRmType==2) {
+				else if (globalRmType == 2) {
 					// get SF Stock Bet Date
 
 					System.out.println("It is SF Stock Betw Date");
@@ -365,7 +381,7 @@ public class BmsStockController {
 
 					map.add("fromDate", fromStockdate);
 					map.add("toDate", toStockdate);
-					
+
 					map.add("fromDate", fromStockdate);
 					map.add("toDate", toStockdate);
 
@@ -378,7 +394,7 @@ public class BmsStockController {
 					System.out.println("Sf current Stock List " + bmsCurrentStockSf.toString());
 					mav.addObject("isRm", String.valueOf(2));
 					mav.addObject("stockList", bmsSfStockBetDate);
-					
+
 				}
 				/*
 				 * System.out.println("Inside Else stock btw Date ");
@@ -451,8 +467,8 @@ public class BmsStockController {
 				 * bmsCurrentStock);
 				 */
 			} // end of else Get Stock Between two Date
-			// System.out.println("New List After Adding closing and Opening Qty \n " +
-			// bmsCurrentStock.toString());
+				// System.out.println("New List After Adding closing and Opening Qty \n " +
+				// bmsCurrentStock.toString());
 
 		} catch (Exception e) {
 
@@ -472,6 +488,8 @@ public class BmsStockController {
 		try {
 
 			BmsStockHeader bmsStockHeader = new BmsStockHeader();
+			
+			BmsStockHeader bmsStockHeaderResponse = new BmsStockHeader();
 			List<BmsStockDetailed> stokDetailList = new ArrayList<>();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -482,231 +500,246 @@ public class BmsStockController {
 
 			// Update bms stock Day end Process
 
-			//map.add("fromDate", new SimpleDateFormat("yyyy-MM-dd").format(globalHeaderDate));
-			//map.add("toDate", new SimpleDateFormat("yyyy-MM-dd").format(globalHeaderDate));
-			//map.add("rmType", globalRmType);
-			
-			map.add("bmsStockId", 6);
-			System.out.println("Global bms Header Id "+globalBmsHeaderId);
+			// map.add("fromDate", new
+			// SimpleDateFormat("yyyy-MM-dd").format(globalHeaderDate));
+			// map.add("toDate", new
+			// SimpleDateFormat("yyyy-MM-dd").format(globalHeaderDate));
+			// map.add("rmType", globalRmType);
+
+			//map.add("bmsStockId", globalBmsHeaderId);
+			/*System.out.println("Global bms Header Id " + globalBmsHeaderId);
 
 			ParameterizedTypeReference<List<BmsStockDetailed>> typeRef = new ParameterizedTypeReference<List<BmsStockDetailed>>() {
 			};
-			ResponseEntity<List<BmsStockDetailed>> responseEntity = restTemplate.exchange(Constants.url + "getBmsStockDetail",
-					HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			ResponseEntity<List<BmsStockDetailed>> responseEntity = restTemplate
+					.exchange(Constants.url + "getBmsStockDetail", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 			bmsStockDetailedList = responseEntity.getBody();
+
+			System.out.println("bms Details " + bmsStockDetailedList.toString());*/
+
+			if (globalRmType == 1) {
+
+				System.out.println("current list size " + bmsCurrentStockList.getBmsCurrentStock().size());
+
+				//System.out.println("Detail List Size " + bmsStockDetailedList.size());
+				
+				 
+				
+				
+				UpdateBmsStockList rmUpdate=new UpdateBmsStockList();
+				
+				List<UpdateBmsStock> rmStockList= new  ArrayList<>();
 			
-			System.out.println("bms Details "+bmsStockDetailedList.toString());
-			
-			if(globalRmType==1) {
-				
-				System.out.println("current list size "+bmsCurrentStockList.getBmsCurrentStock().size());
-				
-				System.out.println("Detail List Size "+bmsStockDetailedList.size());
-			for (int i = 0; i < bmsStockDetailedList.size(); i++) {
-				
-				for (int j = 0; j < bmsCurrentStockList.getBmsCurrentStock().size(); j++) {
+					for (int j = 0; j < bmsCurrentStockList.getBmsCurrentStock().size(); j++) {
+
 					
-					if (bmsCurrentStockList.getBmsCurrentStock().get(i).getRmId() == bmsStockDetailedList.get(i)
-							.getRmId()) {
-						
-						System.out.println("RM id Matched ");
-						
-						GetBmsCurrentStock getBmsCurrentStock = bmsCurrentStockList.getBmsCurrentStock().get(j);
+							//System.out.println("RM id Matched ");
 
-						BmsStockDetailed bmsStockDetailed = bmsStockDetailedList.get(i);
-
-						/*float stockQty = bmsStockDetailed.getBmsOpeningStock() + getBmsCurrentStock.getStoreIssueQty()
-								+ getBmsCurrentStock.getProdIssueQty() + getBmsCurrentStock.getMixingReturnQty()
-								- (getBmsCurrentStock.getProdIssueQty() + getBmsCurrentStock.getMixingIssueQty()
-										);*/
-						bmsStockDetailedList.get(i).setClosingQty(getBmsCurrentStock.getBmsClosingStock());
-
-						BmsStockDetailed newBmsStock = new BmsStockDetailed();
-
-						bmsStockDetailed.setBmsStockDeatilId(bmsStockDetailedList.get(i).getBmsStockDeatilId());
-
-						newBmsStock.setClosingQty(bmsStockDetailed.getClosingQty());
-
-						newBmsStock.setBmsStockDeatilId(bmsStockDetailed.getBmsStockDeatilId());
-
-						newBmsStock.setBmsStockId(bmsStockDetailed.getBmsStockId());
-						newBmsStock.setBmsStockDate(bmsStockDetailed.getBmsStockDate());
-						newBmsStock.setRmId(bmsStockDetailed.getRmId());
-						newBmsStock.setRmName(bmsStockDetailed.getRmName());
-						newBmsStock.setBmsOpeningStock(bmsStockDetailed.getBmsOpeningStock());
-						newBmsStock.setRmType(bmsStockDetailed.getRmType());
-						newBmsStock.setRmUom(bmsStockDetailed.getRmId());
-
-						newBmsStock.setIsDelStatus(bmsStockDetailed.getIsDelStatus());
-						newBmsStock.setMixingIssueQty(getBmsCurrentStock.getMixingIssueQty());
-						newBmsStock.setMixingReceiveRejectedQty(bmsStockDetailed.getMixingReceiveRejectedQty());
-						newBmsStock.setMixingRecQty(getBmsCurrentStock.getMixingIssueQty());
-						newBmsStock.setMixingRejected(getBmsCurrentStock.getMixingRejectedQty());
-						newBmsStock.setMixingReturnQty(getBmsCurrentStock.getMixingReturnQty());
-						newBmsStock.setProdIssueQty(getBmsCurrentStock.getProdIssueQty());
-						newBmsStock.setProdRejectedQty(getBmsCurrentStock.getProdRejectedQty());
-						newBmsStock.setProdReturnQty(getBmsCurrentStock.getProdIssueQty());
-						newBmsStock.setStoreRejectedQty(getBmsCurrentStock.getStoreRejectedQty());
-						newBmsStock.setProdReturnQty(getBmsCurrentStock.getProdIssueQty());
-
-						newBmsStock.setStoreRecQty(getBmsCurrentStock.getStoreIssueQty());
-
-						stokDetailList.add(newBmsStock);
-						
-						if(getBmsCurrentStock.getRmId()==3000011) {
-						System.out.println("for Sugar ");
-							System.out.println("current Data "+bmsCurrentStock.get(i).toString());
-							System.out.println("Detail  Data "+bmsStockDetailed.toString());
-
-						}
-					}else {
-						System.out.println("RM Id Not matched ");
-					}
-				}
-			}
-
-			System.out.println("Stock Detail List new For Day End " + stokDetailList.toString());
-
-			bmsStockHeader.setBmsStockDetailed(stokDetailList);
-
-			bmsStockHeader.setBmsStockId(bmsStockDetailedList.get(0).getBmsStockId());
-			bmsStockHeader.setBmsStockDate(bmsStockDetailedList.get(0).getBmsStockDate());
-			bmsStockHeader.setBmsStatus(1);
-			bmsStockHeader.setRmType(bmsStockDetailedList.get(0).getRmType());
-			bmsStockHeader.setExInt(0);
-			bmsStockHeader.setExInt1(0);
-			bmsStockHeader.setExBoll(0);
-			bmsStockHeader.setExBoll1(0);
-			bmsStockHeader.setExVarchar("");
-
-			//bmsStockHeader = restTemplate.postForObject(Constants.url + "insertBmsStock", bmsStockHeader,
-					//BmsStockHeader.class);// end of update bms stock Day end Process
-			
-			//System.out.println("bsm RM Stock Header Update Response"+bmsStockHeader.toString());
-
-			// Inserting next Day Entry for BMS Stock//
-			System.out.println("Inserting next day stock Entry for BMS Stock");
-			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-			Calendar c = Calendar.getInstance();
-			c.setTime(globalHeaderDate); // Now use today date.
-			c.add(Calendar.DATE, 1); // Adding 1 day
-			String output = sdf.format(c.getTime());
-			System.out.println(output);
-			Date stockDate = sdf.parse(output);
-			System.out.println("new Date " + stockDate);
-
-			BmsStockHeader bmsStockHeaderInsert = new BmsStockHeader();
-
-			bmsStockHeaderInsert.setBmsStockId(0);
-			bmsStockHeaderInsert.setBmsStockDate(stockDate);
-			bmsStockHeaderInsert.setBmsStatus(0);
-			bmsStockHeaderInsert.setRmType(globalRmType);
-			bmsStockHeaderInsert.setExInt(0);
-			bmsStockHeaderInsert.setExInt1(0);
-			bmsStockHeaderInsert.setExBoll(0);
-			bmsStockHeaderInsert.setExBoll1(0);
-			bmsStockHeaderInsert.setExVarchar("");
-
-			List<BmsStockDetailed> bmsStockDetailedlist = new ArrayList<BmsStockDetailed>();
-
-			for (int i = 0; i < bmsStockDetailedList.size(); i++) {
-
-				BmsStockDetailed bmsStockDetailed = new BmsStockDetailed();
-				// bmsStockDetailed.setBmsStockId(0);
-				bmsStockDetailed.setBmsStockDate(stockDate);
-				// bmsStockHeader.setRmType(1);
-				bmsStockDetailed.setRmId(bmsStockDetailedList.get(i).getRmId());
-				bmsStockDetailed.setRmName(bmsStockDetailedList.get(i).getRmName());
-				bmsStockDetailed.setBmsOpeningStock(bmsStockDetailedList.get(i).getClosingQty());
-				bmsStockDetailed.setRmType(globalRmType);
-				bmsStockDetailed.setRmUom(bmsStockDetailedList.get(i).getRmUom());
-
-				bmsStockDetailedlist.add(bmsStockDetailed);
-
-			}
-			bmsStockHeaderInsert.setBmsStockDetailed(bmsStockDetailedlist);
-			
-			bmsStockHeader=new BmsStockHeader();
-			
-			//bmsStockHeader = restTemplate.postForObject(Constants.url + "insertBmsStock", bmsStockHeaderInsert,
-					//BmsStockHeader.class);// End of inserting BMS Stock for Next Day
-			
-			//System.out.println("bsm RM Stock Header Insert Response"+bmsStockHeader.toString());
-
-			
-			}
-			else if(globalRmType==2) {
-				//day end for Sf Stock
-				System.out.println("Day End For SF ");
-				
-				for (int i = 0; i < bmsStockDetailedList.size(); i++) {
-					for (int j = 0; j < bmsCurrentStockSf.size(); j++) {
-						if (bmsCurrentStockSf.get(i).getSfId() == bmsStockDetailedList.get(i)
-								.getRmId()) {
-							GetCurrentBmsSFStock getBmsCurrentStock =bmsCurrentStockSf.get(j);
-
-							BmsStockDetailed bmsStockDetailed = bmsStockDetailedList.get(i);
-							float stockQty=(bmsStockDetailed.getBmsOpeningStock()+getBmsCurrentStock.getMixingIssueQty()+
-									getBmsCurrentStock.getProdReturnQty())-getBmsCurrentStock.getProdIssueQty();
+							GetBmsCurrentStock getBmsCurrentStock = bmsCurrentStockList.getBmsCurrentStock().get(j);
 							
-							bmsStockDetailedList.get(i).setClosingQty(stockQty);
+							//GetCurrentBmsSFStock curStock=bmsCurrentStockSf.get(j);
+							UpdateBmsStock rmStock=new UpdateBmsStock();
+							
+							rmStock.setBmsClosingStock(getBmsCurrentStock.getBmsClosingStock());
+							rmStock.setProdIssueQty(getBmsCurrentStock.getProdIssueQty());
+							rmStock.setProdRejectedQty(getBmsCurrentStock.getProdRejectedQty());
+							rmStock.setProdReturnQty(getBmsCurrentStock.getProdReturnQty());
+							rmStock.setMixingIssueQty(getBmsCurrentStock.getMixingIssueQty());
+							rmStock.setMixingRejectedQty(getBmsCurrentStock.getMixingRejectedQty());
+							rmStock.setMixingReturnQty(getBmsCurrentStock.getMixingReturnQty());
+							rmStock.setStoreIssueQty(getBmsCurrentStock.getStoreIssueQty());
+							rmStock.setStoreRejectedQty(getBmsCurrentStock.getStoreRejectedQty());
+							rmStock.setRmId(getBmsCurrentStock.getRmId());
+							rmStock.setMixingReceiveRejectedQty(0);
+							rmStock.setMixingRecQty(0);
+							rmStock.setBmsStockId(globalBmsHeaderId);
+							
+							///
+							
+							rmStockList.add(rmStock);
+							map = new LinkedMultiValueMap<String, Object>();
+							map.add("prodIssueQty", getBmsCurrentStock.getProdIssueQty());
+							map.add("prodRejectedQty", getBmsCurrentStock.getProdRejectedQty());
+							map.add("prodReturnQty", getBmsCurrentStock.getProdReturnQty());
+							map.add("mixingIssueQty", getBmsCurrentStock.getMixingIssueQty());
+							map.add("mixingRejectedQty", getBmsCurrentStock.getMixingRejectedQty());
+							map.add("mixingReturnQty", getBmsCurrentStock.getMixingReturnQty());
+							map.add("storeIssueQty", getBmsCurrentStock.getStoreIssueQty());
+							map.add("storeRejectedQty", getBmsCurrentStock.getStoreRejectedQty());
+							map.add("bmsClosingStock", getBmsCurrentStock.getBmsClosingStock());
+							map.add("rmId", getBmsCurrentStock.getRmId());
+							map.add("mixingReceiveRejectedQty", 0);
+							map.add("mixingRecQty", 0);
+							map.add("bmsStockId", globalBmsHeaderId);
 
-							BmsStockDetailed newBmsStock = new BmsStockDetailed();
+						
+				}
+					
+					rmUpdate.setBmsStock(rmStockList);
 
-							bmsStockDetailed.setBmsStockDeatilId(bmsStockDetailedList.get(i).getBmsStockDeatilId());
+					Info updateBmsRmStockResponse=restTemplate.postForObject(Constants.url+"updateBmsStockForRM", rmUpdate, Info.class);
+					System.out.println("First response BMS Update "+updateBmsRmStockResponse);
 
-							newBmsStock.setClosingQty(bmsStockDetailed.getClosingQty());
+					
+				//System.out.println("Stock Detail List new For Day End " + stokDetailList.toString());
 
-							newBmsStock.setBmsStockDeatilId(bmsStockDetailed.getBmsStockDeatilId());
+			//	bmsStockHeader.setBmsStockDetailed(stokDetailList);
+					
+					System.out.println("Bms Id for BMS  rm Update "+globalBmsHeaderId);
 
-							newBmsStock.setBmsStockId(bmsStockDetailed.getBmsStockId());
-							newBmsStock.setBmsStockDate(bmsStockDetailed.getBmsStockDate());
-							newBmsStock.setRmId(bmsStockDetailed.getRmId());
-							newBmsStock.setRmName(bmsStockDetailed.getRmName());
-							newBmsStock.setBmsOpeningStock(bmsStockDetailed.getBmsOpeningStock());
-							newBmsStock.setRmType(bmsStockDetailed.getRmType());
-							newBmsStock.setRmUom(bmsStockDetailed.getRmId());
-
-							newBmsStock.setIsDelStatus(bmsStockDetailed.getIsDelStatus());
-							newBmsStock.setMixingIssueQty(getBmsCurrentStock.getMixingIssueQty());
-							newBmsStock.setMixingReceiveRejectedQty(bmsStockDetailed.getMixingReceiveRejectedQty());
-							newBmsStock.setMixingRecQty(getBmsCurrentStock.getMixingIssueQty());
-							newBmsStock.setMixingRejected(getBmsCurrentStock.getMixingRejectedQty());
-							newBmsStock.setMixingReturnQty(0);
-							newBmsStock.setProdIssueQty(getBmsCurrentStock.getProdIssueQty());
-							newBmsStock.setProdRejectedQty(getBmsCurrentStock.getProdRejectedQty());
-							newBmsStock.setProdReturnQty(getBmsCurrentStock.getProdReturnQty());
-							newBmsStock.setStoreRejectedQty(0);
-							newBmsStock.setProdReturnQty(getBmsCurrentStock.getProdReturnQty());
-
-							newBmsStock.setStoreRecQty(0);
-
-							stokDetailList.add(newBmsStock);
-
-						}//end of if
-					}//end of inner for
-				}//end of outer for
-
-				System.out.println("Stock Detail List new For Day End " + stokDetailList.toString());
-
-				bmsStockHeader.setBmsStockDetailed(stokDetailList);
-
-				bmsStockHeader.setBmsStockId(bmsStockDetailedList.get(0).getBmsStockId());
-				bmsStockHeader.setBmsStockDate(bmsStockDetailedList.get(0).getBmsStockDate());
+				bmsStockHeader.setBmsStockId(globalBmsHeaderId);
+				
+				bmsStockHeader.setBmsStatus(1);
+				
+				bmsStockHeader.setBmsStockDate(globalHeaderDate);
+				
+				bmsStockHeader.setRmType(1);
+				bmsStockHeader.setExInt(0);
+				bmsStockHeader.setExInt1(0);
+				bmsStockHeader.setExBoll(0);
+				bmsStockHeader.setExBoll1(0);
+				bmsStockHeader.setExVarchar(" ");
+			/*	bmsStockHeader.setBmsStockDate(bmsStockDetailedList.get(0).getBmsStockDate());
 				bmsStockHeader.setBmsStatus(1);
 				bmsStockHeader.setRmType(bmsStockDetailedList.get(0).getRmType());
 				bmsStockHeader.setExInt(0);
 				bmsStockHeader.setExInt1(0);
 				bmsStockHeader.setExBoll(0);
 				bmsStockHeader.setExBoll1(0);
+				bmsStockHeader.setExVarchar("");*/
+
+				bmsStockHeaderResponse = restTemplate.postForObject(Constants.url + "insertBmsStock",
+				 bmsStockHeader, BmsStockHeader.class);// end of update bms stock Day end Process
+
+				 System.out.println("bsm RM Stock Header Update Response"+bmsStockHeaderResponse.toString());
+
+				//Inserting next Day Entry for BMS Stock//
+				System.out.println("Inserting next day stock Entry for BMS Stock RM");
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+				Calendar c = Calendar.getInstance();
+				c.setTime(globalHeaderDate); // Now use today date.
+				c.add(Calendar.DATE, 1); // Adding 1 day
+				String output = sdf.format(c.getTime());
+				System.out.println(output);
+				Date stockDate = sdf.parse(output);
+				System.out.println("new Date " + stockDate);
+
+				BmsStockHeader bmsStockHeaderInsert = new BmsStockHeader();
+
+				bmsStockHeaderInsert.setBmsStockId(0);
+				bmsStockHeaderInsert.setBmsStockDate(stockDate);
+				bmsStockHeaderInsert.setBmsStatus(0);
+				bmsStockHeaderInsert.setRmType(globalRmType);
+				bmsStockHeaderInsert.setExInt(0);
+				bmsStockHeaderInsert.setExInt1(0);
+				bmsStockHeaderInsert.setExBoll(0);
+				bmsStockHeaderInsert.setExBoll1(0);
+				bmsStockHeaderInsert.setExVarchar("");
+
+				List<BmsStockDetailed> bmsStockDetailedlist = new ArrayList<BmsStockDetailed>();
+
+				for (int i = 0; i <  bmsCurrentStockList.getBmsCurrentStock().size(); i++) {
+
+					BmsStockDetailed bmsStockDetailed = new BmsStockDetailed();
+					
+					 GetBmsCurrentStock curStock=bmsCurrentStockList.getBmsCurrentStock().get(i);
+					 
+					 
+					// bmsStockDetailed.setBmsStockId(0);
+					bmsStockDetailed.setBmsStockDate(stockDate);
+					// bmsStockHeader.setRmType(1);
+					bmsStockDetailed.setRmId(curStock.getRmId());
+					bmsStockDetailed.setRmName(curStock.getRmName());
+					bmsStockDetailed.setBmsOpeningStock(curStock.getBmsClosingStock());
+					bmsStockDetailed.setRmType(globalRmType);
+					bmsStockDetailed.setRmUom(curStock.getRmUomId());
+					bmsStockDetailedlist.add(bmsStockDetailed);
+
+				}
+				bmsStockHeaderInsert.setBmsStockDetailed(bmsStockDetailedlist);
+
+				bmsStockHeader = new BmsStockHeader();
+
+				bmsStockHeader = restTemplate.postForObject(Constants.url + "insertBmsStock",bmsStockHeaderInsert,BmsStockHeader.class);// End of inserting BMS Stock for Next Day
+
+				System.out.println("bsm RM Stock Header Insert Response"+bmsStockHeader.toString());
+
+				
+				
+				
+			} else if (globalRmType == 2) {
+				
+				UpdateBmsSfStockList sfUpdate=new UpdateBmsSfStockList();
+				
+				List<UpdateBmsSfStock> sfStockList= new  ArrayList<>();
+				// day end for Sf Stock
+				System.out.println("Day End For SF ");
+
+			
+					for (int j = 0; j < bmsCurrentStockSf.size(); j++) {
+						
+							
+						GetCurrentBmsSFStock curStock=bmsCurrentStockSf.get(j);
+						UpdateBmsSfStock sfStock=new UpdateBmsSfStock();
+						
+						sfStock.setBmsClosingStock(curStock.getBmsClosingStock());
+						
+						sfStock.setProdIssueQty(curStock.getProdIssueQty());
+						sfStock.setProdRejectedQty(curStock.getProdRejectedQty());
+						sfStock.setProdReturnQty(curStock.getProdReturnQty());
+						sfStock.setMixingIssueQty(curStock.getMixingIssueQty());
+						sfStock.setMixingRejectedQty(curStock.getMixingRejectedQty());
+						sfStock.setSfId(curStock.getSfId());
+						sfStock.setBmsStockId(globalBmsHeaderId);
+
+						sfStockList.add(sfStock);
+
+							
+						}
+					sfUpdate.setBmsSfStock(sfStockList);
+					
+					Info  updateBmsSfStockResponse=restTemplate.postForObject(Constants.url+"updateBmsStockForSF", sfUpdate, Info.class);
+					
+					System.out.println("sf update Response "+updateBmsSfStockResponse);
+
+					// end of if
+					 // end of inner for
+				
+//commented before
+				System.out.println("Stock Detail List new For Day End " + stokDetailList.toString());
+
+				//bmsStockHeader.setBmsStockDetailed(stokDetailList);
+				System.out.println("Bms Id for SF  rm Update "+globalBmsHeaderId);
+
+				bmsStockHeader.setBmsStockId(globalBmsHeaderId);
+				
+				bmsStockHeader.setBmsStockDate(globalHeaderDate);
+				
+				
+				bmsStockHeader.setRmType(2);
+				bmsStockHeader.setExInt(0);
+				bmsStockHeader.setExInt1(0);
+				bmsStockHeader.setExBoll(0);
+				bmsStockHeader.setExBoll1(0);
 				bmsStockHeader.setExVarchar("");
 				
-				bmsStockHeader=new BmsStockHeader();
-				bmsStockHeader = restTemplate.postForObject(Constants.url + "insertBmsStock", bmsStockHeader,
+				
+				//bmsStockHeader.setBmsStockDate(bmsStockDetailedList.get(0).getBmsStockDate());
+				bmsStockHeader.setBmsStatus(1);
+				/*bmsStockHeader.setRmType(bmsStockDetailedList.get(0).getRmType());
+				bmsStockHeader.setExInt(0);
+				bmsStockHeader.setExInt1(0);
+				bmsStockHeader.setExBoll(0);
+				bmsStockHeader.setExBoll1(0);
+				bmsStockHeader.setExVarchar("");*/
+
+				//bmsStockHeader = new BmsStockHeader();
+				bmsStockHeaderResponse = restTemplate.postForObject(Constants.url + "insertBmsStock", bmsStockHeader,
 						BmsStockHeader.class);// end of update bms stock Day end Process
-				System.out.println("bMS SF Stock Header Update Response"+bmsStockHeader.toString());
+				System.out.println("bMS SF Stock Header Update Response" + bmsStockHeaderResponse.toString());
 				// Inserting next Day Entry for BMS Stock//
+				
 				System.out.println("Inserting next day stock Entry for BMS Stock");
 				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 				Calendar c = Calendar.getInstance();
@@ -731,30 +764,31 @@ public class BmsStockController {
 
 				List<BmsStockDetailed> bmsStockDetailedlist = new ArrayList<BmsStockDetailed>();
 
-				for (int i = 0; i < bmsStockDetailedList.size(); i++) {
+				for (int i = 0; i < bmsCurrentStockSf.size(); i++) {
 
 					BmsStockDetailed bmsStockDetailed = new BmsStockDetailed();
 					// bmsStockDetailed.setBmsStockId(0);
 					bmsStockDetailed.setBmsStockDate(stockDate);
 					// bmsStockHeader.setRmType(1);
-					bmsStockDetailed.setRmId(bmsStockDetailedList.get(i).getRmId());
-					bmsStockDetailed.setRmName(bmsStockDetailedList.get(i).getRmName());
-					bmsStockDetailed.setBmsOpeningStock(bmsStockDetailedList.get(i).getClosingQty());
+					bmsStockDetailed.setRmId(bmsCurrentStockSf.get(i).getSfId());
+					bmsStockDetailed.setRmName(bmsCurrentStockSf.get(i).getSfName());
+					bmsStockDetailed.setBmsOpeningStock(bmsCurrentStockSf.get(i).getBmsClosingStock());
 					bmsStockDetailed.setRmType(globalRmType);
-					bmsStockDetailed.setRmUom(bmsStockDetailedList.get(i).getRmUom());
+					bmsStockDetailed.setRmUom(bmsCurrentStockSf.get(i).getSfUomId());
 
 					bmsStockDetailedlist.add(bmsStockDetailed);
 
 				}
 				bmsStockHeaderInsert.setBmsStockDetailed(bmsStockDetailedlist);
 
-				bmsStockHeader=new BmsStockHeader();
+				bmsStockHeader = new BmsStockHeader();
 				bmsStockHeader = restTemplate.postForObject(Constants.url + "insertBmsStock", bmsStockHeaderInsert,
 						BmsStockHeader.class);// End of inserting BMS Stock for Next Day
-				System.out.println("bMS SF Stock Header iNSERT Response"+bmsStockHeader.toString());
-
+				System.out.println("bMS SF Stock Header iNSERT Response" + bmsStockHeader.toString());
 				
 			}
+
+			
 		} catch (Exception e) {
 
 			System.out.println("Error iN Inserting Day End Stock Process " + e.getMessage());
