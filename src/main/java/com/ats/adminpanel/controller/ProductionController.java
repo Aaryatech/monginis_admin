@@ -1207,7 +1207,8 @@ public class ProductionController {
 				for (int j = 0; j < updateStockDetailList.size(); j++) {
 
 					if (getVarianceorderlistforsort.get(i).getId() == updateStockDetailList.get(j).getItemId()) {
-
+							System.out.println("id"+getVarianceorderlistforsort.get(i).getId());
+							System.out.println("name"+getVarianceorderlistforsort.get(i).getItemName());
 						getVarianceorderlistforsort.get(i)
 								.setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
 

@@ -147,6 +147,7 @@
 																	<c:when test="${itemsList.id == postProdPlanHeaderDetailed.itemId }">
 																	<td><c:out value="${itemsList.itemName}" /></td>
 																	</c:when>
+																	 
 																</c:choose>
 															</c:forEach>
 															 

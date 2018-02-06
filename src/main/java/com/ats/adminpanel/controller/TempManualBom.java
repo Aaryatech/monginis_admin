@@ -37,46 +37,55 @@ import com.ats.adminpanel.model.spprod.MDeptList;
 public class TempManualBom {
 
 	public  List<CommonConf> commonConfs = new ArrayList<CommonConf>();
-	
+	List<BillOfMaterialDetailed> bomDetailList = new ArrayList<BillOfMaterialDetailed>();
 	boolean isMix=false;
 	
 	@RequestMapping(value = "/goToManualBom", method = RequestMethod.POST)
 	public ModelAndView manualBom(HttpServletRequest request, HttpServletResponse response) {
-int isProd=0;
-		int headerId = 0;
-		String prodDate = null; 
-		String mixOrProd=request.getParameter("isMixing");//isMixing is hidden field on showmixindetaile jsp: to determine which req
-		
-		if(mixOrProd==null) {
-		
-		 headerId = Integer.parseInt(request.getParameter("prod_id"));
-
-		 prodDate = request.getParameter("prod_date");
-		 isProd=1;
-		
-		}
-		
-		else {
-			isMix=true;
-			 headerId = Integer.parseInt(request.getParameter("mixId"));
-
-			 prodDate = request.getParameter("mix_date");
+		ModelAndView modelAndView = new ModelAndView();
+		bomDetailList = new ArrayList<BillOfMaterialDetailed>();
+		try
+		{
+			int isProd=0;
+			int headerId = 0;
+			String prodDate = null; 
+			String mixOrProd=request.getParameter("isMixing");//isMixing is hidden field on showmixindetaile jsp: to determine which req
 			
+			if(mixOrProd==null) {
+			
+			 headerId = Integer.parseInt(request.getParameter("production_id"));
+
+			 prodDate = request.getParameter("prod_date");
+			 isProd=1;
+			
+			}
+			
+			else {
+				isMix=true;
+				 headerId = Integer.parseInt(request.getParameter("mixId"));
+
+				 prodDate = request.getParameter("mix_date");
+				
+			}
+			
+			modelAndView = new ModelAndView("production/manualBom");
+			System.out.println("inside manual BoM");
+			RestTemplate restTemplate = new RestTemplate();
+
+			MDeptList mDeptList = restTemplate.getForObject(Constants.url + "/spProduction/mDeptList", MDeptList.class);
+			System.out.println("Response: " + mDeptList.toString());
+
+			modelAndView.addObject("deptList", mDeptList.getList());
+
+			modelAndView.addObject("prodHeaderId", headerId);
+
+			modelAndView.addObject("prodDate", prodDate);
+			modelAndView.addObject("isProd",isProd);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
 		}
-		
-		ModelAndView modelAndView = new ModelAndView("production/manualBom");
-		System.out.println("inside manual BoM");
-		RestTemplate restTemplate = new RestTemplate();
 
-		MDeptList mDeptList = restTemplate.getForObject(Constants.url + "/spProduction/mDeptList", MDeptList.class);
-		System.out.println("Response: " + mDeptList.toString());
-
-		modelAndView.addObject("deptList", mDeptList.getList());
-
-		modelAndView.addObject("prodHeaderId", headerId);
-
-		modelAndView.addObject("prodDate", prodDate);
-		modelAndView.addObject("isProd",isProd);
 
 		return modelAndView;
 
@@ -185,7 +194,7 @@ int isProd=0;
 
 	}
 
-	List<BillOfMaterialDetailed> bomDetailList = new ArrayList<BillOfMaterialDetailed>();
+	
 
 	@RequestMapping(value = "/manBomAddItem", method = RequestMethod.GET)
 	public @ResponseBody List<BillOfMaterialDetailed> manBomAddItem(HttpServletRequest request,

@@ -79,8 +79,8 @@
 									<label class="col-sm-3 col-lg-2 control-label">Prod
 										Date </label>
 									<div class="col-sm-5 col-lg-3 controls">
-										<input disabled type="text" name="prod_date" id="prod_date" class="form-control"
-											value="${planHeader.productionDate}" />
+										<input  type="text" name="prod_date" id="prod_date" class="form-control"
+											value="${planHeader.productionDate}" readonly/>
 									</div>
 
 									
@@ -395,11 +395,14 @@
 											<i class="fa fa-check"></i>Manual Bom
 										</button>
                                     </c:when>
-                                   
+                                     
                                    </c:choose>
-										
-									  
-										
+										 <c:choose>
+									   <c:when test = "${planHeader.isMixing==1}">
+									    <a href="${pageContext.request.contextPath}/manualMixing/${planHeader.productionHeaderId}/${planHeader.productionDate}/${planHeader.timeSlot}"><input type="button" class="btn btn-primary" id="man_bom_button"  value="Manual Mixing" >
+										 </a>
+                                   	 </c:when>
+										 </c:choose>
 									</div>
 								</div>
 								

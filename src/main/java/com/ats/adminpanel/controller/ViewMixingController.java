@@ -22,10 +22,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -34,7 +39,13 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.RawMaterial.GetItemSfHeader;
+import com.ats.adminpanel.model.RawMaterial.RawMaterialUom;
+import com.ats.adminpanel.model.RawMaterial.RawMaterialUomList;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
+import com.ats.adminpanel.model.production.mixing.temp.ProdMixingReqP1List;
+import com.ats.adminpanel.model.production.mixing.temp.TempMixing;
+import com.ats.adminpanel.model.productionplan.AddSfInManualMixing;
 import com.ats.adminpanel.model.productionplan.BillOfMaterialDetailed;
 import com.ats.adminpanel.model.productionplan.GetMixingList;
 import com.ats.adminpanel.model.productionplan.MixingDetailed;
@@ -510,7 +521,250 @@ public class ViewMixingController {
 		return "redirect:/getMixingList";
 	}
 	
-	
-	
+	public int prodIdManualMixing;
+	public String prodDateManualMixing;
+	public int timeSlotManualMixing;
+	List<RawMaterialUom> uomList= new ArrayList<RawMaterialUom>();
+	List<GetItemSfHeader> itemHeaderList=new ArrayList<GetItemSfHeader>();
+	@RequestMapping(value = "/manualMixing/{prodHder}/{prodDate}/{timeSlot}", method = RequestMethod.GET)
+	public ModelAndView showMixing(@PathVariable int prodHder,@PathVariable String prodDate,@PathVariable int timeSlot,HttpServletRequest request, HttpServletResponse response) {
 
+		ModelAndView mav = new ModelAndView("productionPlan/manualMixing");
+		itemHeaderList=new ArrayList<GetItemSfHeader>();
+		manualMixing = new ArrayList<AddSfInManualMixing>();
+		try {
+			prodIdManualMixing=prodHder;
+			prodDateManualMixing=prodDate;
+			timeSlotManualMixing=timeSlot;
+			System.out.println("prodHder"+prodHder);
+			System.out.println("prodDate"+prodDate);
+			System.out.println("timeSlot"+timeSlot);
+			RestTemplate restTemplate = new RestTemplate();
+			 RawMaterialUomList rawMaterialUomList = restTemplate.getForObject(Constants.url + "rawMaterial/getRmUomList",
+		                RawMaterialUomList.class); 
+		  uomList = rawMaterialUomList.getRawMaterialUom();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>(); 
+				
+				map.add("delStatus", 0);
+				ParameterizedTypeReference<List<GetItemSfHeader>> typeRef = new ParameterizedTypeReference<List<GetItemSfHeader>>() {
+				};
+				ResponseEntity<List<GetItemSfHeader>> responseEntity = restTemplate.exchange(Constants.url + "getItemSfHeaderList",
+						HttpMethod.POST, new HttpEntity<>(map), typeRef);
+				
+				itemHeaderList = responseEntity.getBody();
+				System.out.println("sf List "+itemHeaderList.toString());
+			
+			mav.addObject("prodHeaderId",prodHder);
+			mav.addObject("itemSfList",itemHeaderList);
+
+			 
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			System.out.println("Ex oc");
+		}
+
+		return mav;
+
+	}
+	public List<AddSfInManualMixing> manualMixing = new ArrayList<AddSfInManualMixing>();
+	@RequestMapping(value = "/getSfDtailed", method = RequestMethod.GET)
+	@ResponseBody
+	public GetItemSfHeader getSfDtailed(HttpServletRequest request, HttpServletResponse response) { 
+		 
+		GetItemSfHeader getItemSfHeader=new GetItemSfHeader();
+		try {
+			int sfId=Integer.parseInt(request.getParameter("sfName"));
+			System.out.println("sfId"+sfId); 
+			 
+			 for(int i=0;i<itemHeaderList.size();i++)
+			 {
+				 if(itemHeaderList.get(i).getSfId()==sfId)
+				 {
+					 getItemSfHeader=itemHeaderList.get(i);
+				 }
+			 }
+			 System.out.println("getItemSfHeader"+getItemSfHeader.toString());
+			 
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			System.out.println("Ex oc");
+		}
+
+		return getItemSfHeader;
+
+	}
+	
+	@RequestMapping(value = "/addSfIteminMixing", method = RequestMethod.GET)
+	@ResponseBody
+	public List<AddSfInManualMixing> addSfIteminMixing(HttpServletRequest request, HttpServletResponse response) {  
+		
+		try {
+			int sfId=Integer.parseInt(request.getParameter("materialNameId"));
+			String sfName=request.getParameter("materialName");
+			int qty=Integer.parseInt(request.getParameter("qty"));
+			float mulfactor=Float.parseFloat(request.getParameter("mulfactor"));
+			boolean add=true;
+			
+			System.out.println("sfId"+sfId); 
+			System.out.println("sfName"+sfName); 
+			System.out.println("sfId"+qty); 
+			System.out.println("mulfactor"+mulfactor); 
+			for(int i=0;i<manualMixing.size();i++)
+			{
+				if(manualMixing.get(i).getSfId()==sfId)
+				{
+					add=false;
+				}
+			}
+			if(add==true)
+			{
+				AddSfInManualMixing mixingDetailed = new AddSfInManualMixing();
+				mixingDetailed.setSfId(sfId);
+				mixingDetailed.setSfName(sfName);
+				mixingDetailed.setQty(qty);
+				mixingDetailed.setMulFactor(mulfactor);
+				mixingDetailed.setTotalQty(qty*mulfactor);
+				for(int i=0;i<itemHeaderList.size();i++)
+				{
+					if(sfId==itemHeaderList.get(i).getSfId())
+					{
+						mixingDetailed.setUomId(itemHeaderList.get(i).getSfUomId());
+						break;
+					}
+				}
+				
+				for(int i=0;i<uomList.size();i++)
+				{
+					if(mixingDetailed.getUomId()==uomList.get(i).getUomId())
+					{
+						mixingDetailed.setUomName(uomList.get(i).getUom());
+						break;
+					}
+				}
+				
+				manualMixing.add(mixingDetailed);
+			}
+			
+			  
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			System.out.println("Ex oc");
+		}
+
+		return manualMixing;
+
+	}
+	
+	@RequestMapping(value = "/updateQtyinMixing", method = RequestMethod.GET)
+	@ResponseBody
+	public List<AddSfInManualMixing> updateQtyinMixing(HttpServletRequest request, HttpServletResponse response) {  
+		
+		try {
+			int index=Integer.parseInt(request.getParameter("index")); 
+			int updateQty=Integer.parseInt(request.getParameter("updateQty")); 
+			
+			manualMixing.get(index).setQty(updateQty);
+			manualMixing.get(index).setTotalQty(manualMixing.get(index).getMulFactor()*manualMixing.get(index).getQty());
+			 
+			  
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			System.out.println("Ex oc");
+		}
+
+		return manualMixing;
+
+	}
+	@RequestMapping(value = "/deleteIteminMixing", method = RequestMethod.GET)
+	@ResponseBody
+	public List<AddSfInManualMixing> deleteIteminMixing(HttpServletRequest request, HttpServletResponse response) {  
+		
+		try {
+			int index=Integer.parseInt(request.getParameter("index")); 
+			
+			manualMixing.remove(index);
+			  
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			System.out.println("Ex oc");
+		}
+
+		return manualMixing;
+
+	}
+	
+	@RequestMapping(value = "/insertManualMixing", method = RequestMethod.POST) 
+	public String insertManualMixing(HttpServletRequest request, HttpServletResponse response) {  
+		
+		try {
+			MixingHeader mixingHeader = new MixingHeader(); 
+			Date date = new Date();
+			 
+			mixingHeader.setMixId(0);
+			
+			mixingHeader.setMixDate(date);
+			mixingHeader.setProductionId(prodIdManualMixing);
+			mixingHeader.setProductionBatch(""); 
+			mixingHeader.setTimeSlot(timeSlotManualMixing); 
+			mixingHeader.setExVarchar1("");
+			mixingHeader.setExVarchar2("");
+			mixingHeader.setExVarchar3("");
+
+			List<MixingDetailed> addmixingDetailedlist = new ArrayList<MixingDetailed>();
+
+			for (int i = 0; i < manualMixing.size(); i++) {
+				System.out.println("in for ");
+				MixingDetailed mixingDetailed = new MixingDetailed();
+				mixingDetailed.setMixing_detailId(0);
+				mixingDetailed.setMixingId(0);
+				mixingDetailed.setSfId(manualMixing.get(i).getSfId());
+
+				mixingDetailed.setSfName(manualMixing.get(i).getSfName());
+				mixingDetailed.setReceivedQty(manualMixing.get(i).getTotalQty());
+
+				mixingDetailed.setUom(manualMixing.get(i).getUomName());
+				mixingDetailed.setMixingDate(date);
+				mixingDetailed.setExBool1(0);
+				mixingDetailed.setExInt2((int)manualMixing.get(i).getMulFactor());//temp it is typecasted  to insert mulfactor
+				mixingDetailed.setExInt1(0);
+				mixingDetailed.setExInt3(0);
+				mixingDetailed.setExVarchar1("");
+				mixingDetailed.setExVarchar2("");
+				mixingDetailed.setExVarchar3("");
+
+				mixingDetailed.setOriginalQty(manualMixing.get(i).getQty());// new field 22 Jan
+
+				mixingDetailed.setAutoOrderQty(manualMixing.get(i).getTotalQty());// new // field
+				addmixingDetailedlist.add(mixingDetailed);
+
+			}
+			 
+			mixingHeader.setMixingDetailed(addmixingDetailedlist);
+			System.out.println("while inserting Mixing Header = " + mixingHeader.toString());
+			RestTemplate rest = new RestTemplate();
+			if(addmixingDetailedlist.size()>0)
+			{
+				MixingHeader mixingHeaderin = rest.postForObject(Constants.url + "insertMixingHeaderndDetailed", mixingHeader,
+						MixingHeader.class); 
+				System.out.println(mixingHeaderin.toString());
+			}
+			
+
+			 
+			  
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			System.out.println("Ex oc");
+		}
+		
+		return "redirect:/showProdHeader";
+
+	}
+	
 }
