@@ -88,8 +88,9 @@ public class BmsStockInsertController {
 			{
 				System.out.println("in If  ");
 				RawMaterialDetailsList rawMaterialDetailsList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterial", RawMaterialDetailsList.class);
-				if(bmsStockHeaderedit!=null)
+				if(bmsStockHeaderedit.getBmsStockId()!=0)
 				{
+					System.out.println("raw edit");
 					for(int k=0;k<rawMaterialDetailsList.getRawMaterialDetailsList().size();k++)
 					{
 						int flag=0;
@@ -141,6 +142,7 @@ public class BmsStockInsertController {
 				}
 				else
 				{
+					System.out.println("raw new");
 					for(int i=0;i<rawMaterialDetailsList.getRawMaterialDetailsList().size();i++)
 					{
 						sfndRawItem = new BmsStockItemList();
@@ -174,8 +176,9 @@ public class BmsStockInsertController {
 				itemHeaderList = responseEntity.getBody();
 				System.out.println("sf List "+itemHeaderList.toString());
 				
-				if(bmsStockHeaderedit!=null)
+				if(bmsStockHeaderedit.getBmsStockId()!=0)
 				{
+					System.out.println("sf edit");
 					for(int k=0;k<itemHeaderList.size();k++)
 					{
 						int flag=0;
@@ -228,6 +231,7 @@ public class BmsStockInsertController {
 				}
 				else
 				{
+					System.out.println("sf new");
 					for(int i=0;i<itemHeaderList.size();i++)
 					{
 						sfndRawItem = new BmsStockItemList();
@@ -253,6 +257,7 @@ public class BmsStockInsertController {
 		}catch(Exception e)
 		{
 			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
 		}
 		return sfndRawItemlist;
 		
@@ -268,9 +273,9 @@ public class BmsStockInsertController {
 		
 		try
 		{
-			if(bmsStockHeaderedit!=null)
+			if(bmsStockHeaderedit.getBmsStockId()!=0)
 			{
-				  
+				System.out.println("raw insertedit");
 				 int qty;
 				 
 				 for(int i=0;i<sfndRawItemlist.size();i++)
@@ -336,6 +341,7 @@ public class BmsStockInsertController {
 			}
 			else
 			{
+				System.out.println("insertnew");
 				Date date = new Date();
 				
 				 bmsStockHeader.setBmsStockId(0);
