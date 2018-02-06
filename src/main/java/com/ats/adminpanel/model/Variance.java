@@ -10,8 +10,31 @@ public class Variance {
 		 private String itemId;
 		private int spCakeQty;
 		private int orderQty;
+		
+		private float  curClosingQty; 
+		 private float curOpeQty;//new fiedl
+		 private int remainingQty;//new fiedl
+		 
 		 
 		
+		public int getRemainingQty() {
+			return remainingQty;
+		}
+		public void setRemainingQty(int remainingQty) {
+			this.remainingQty = remainingQty;
+		}
+		public float getCurClosingQty() {
+			return curClosingQty;
+		}
+		public void setCurClosingQty(float curClosingQty) {
+			this.curClosingQty = curClosingQty;
+		}
+		public float getCurOpeQty() {
+			return curOpeQty;
+		}
+		public void setCurOpeQty(float curOpeQty) {
+			this.curOpeQty = curOpeQty;
+		}
 		public int getSpCakeQty() {
 			return spCakeQty;
 		}
@@ -46,7 +69,8 @@ public class Variance {
 		@Override
 		public String toString() {
 			return "Variance [id=" + id + ", itemName=" + itemName + ", itemId=" + itemId + ", spCakeQty=" + spCakeQty
-					+ ", orderQty=" + orderQty + "]";
+					+ ", orderQty=" + orderQty + ", curClosingQty=" + curClosingQty + ", curOpeQty=" + curOpeQty
+					+ ", remainingQty=" + remainingQty + "]";
 		}
 		
 		

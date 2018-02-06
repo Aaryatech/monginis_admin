@@ -146,10 +146,10 @@
 									</div>
 
 
-								<div class=" box-content">
+							 
 								<div id="table-scroll" class="table-scroll">
 							 
-									<div id="faux-table" class="faux-table" aria="hidden">
+									<!-- <div id="faux-table" class="faux-table" aria="hidden">
 									<table id="table2" class="main-table">
 											<thead>
 												<tr class="bgpink">
@@ -164,8 +164,8 @@
 												</thead>
 												</table>
 									
-									</div>
-									<div class="table-wrap">
+									</div> -->
+									<%-- <div class="table-wrap">
 									
 										<table id="table1" class="table table-advance">
 											<thead>
@@ -227,7 +227,7 @@
 												</tbody>
 											</table>
 										
-									</div>
+									</div> --%>
 								</div>
 
 

@@ -121,9 +121,8 @@
 												<thead>
 													<tr>
 														<th>Sr.No.</th>
-														<th>Item Name</th>
-														<th>Curent Closing</th>
-														<th>Opening Qty</th>
+														<th>Item Name</th> 
+														<th>Current Stock</th>
 														<th>plan Qty</th>
 														<th>production Qty</th>
 														<th>Order Qty</th>
@@ -150,7 +149,7 @@
 																	</c:when>
 																</c:choose>
 															</c:forEach>
-															<td><c:out value="${postProdPlanHeaderDetailed.curClosingQty}" /></td><!--  newly Added  -->
+															 
 															<td><c:out value="${postProdPlanHeaderDetailed.curOpeQty}" /></td>
 															<td><c:out value="${postProdPlanHeaderDetailed.planQty}" /></td>
 															<td><c:out value="${postProdPlanHeaderDetailed.productionQty}" /></td>
@@ -172,13 +171,13 @@
 															<td><c:out value="${srNo+1}" /></td>
 															<c:set var="srNo" value="${srNo+1}" />
 															<td><c:out value="${getVarianceorderlistforsort.itemName}" /></td>
+															<td><c:out value="${getVarianceorderlistforsort.curOpeQty}" /></td>
 															<td><c:out value="${0}" /></td>
 															<td><c:out value="${0}" /></td>
-															<td><c:out value="${0}" /></td>
-															<td><c:out value="${0}" /></td>
+															 
 															<td><c:out value="${getVarianceorderlistforsort.orderQty}" /></td>
 															<td><c:out value="${0}" /></td>
-															<td><c:out value="${0}" /></td>
+															<td><c:out value="${getVarianceorderlistforsort.remainingQty}" /></td>
 															
 															
 															

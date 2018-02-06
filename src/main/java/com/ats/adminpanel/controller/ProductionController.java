@@ -854,7 +854,8 @@ public class ProductionController {
 	PostProdPlanHeader postProdPlanHeader = new PostProdPlanHeader();
 	CategoryListResponse categoryListComp = new CategoryListResponse();
 	public List<Item> pdfItemList;
-
+	List<Variance> getVarianceorderlistforsort = new ArrayList<Variance>();
+	
 	@RequestMapping(value = "/listForVariation", method = RequestMethod.GET)
 	public ModelAndView listForVariation(HttpServletRequest request, HttpServletResponse response) {
 
@@ -1182,7 +1183,7 @@ public class ProductionController {
 						postProductionPlanDetaillist.get(i)
 								.setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
 
-						postProductionPlanDetaillist.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk()); 
+						postProductionPlanDetaillist.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk()); //current stock
 					}
 
 				}
@@ -1198,8 +1199,32 @@ public class ProductionController {
 
 			}
 			
-			List<Variance> getVarianceorderlistforsort = new ArrayList<Variance>();
+			
 			getVarianceorderlistforsort = getQtyforVariance.getVarianceorderlist();
+			
+			for (int i = 0; i < getVarianceorderlistforsort.size(); i++) {
+
+				for (int j = 0; j < updateStockDetailList.size(); j++) {
+
+					if (getVarianceorderlistforsort.get(i).getId() == updateStockDetailList.get(j).getItemId()) {
+
+						getVarianceorderlistforsort.get(i)
+								.setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
+
+						getVarianceorderlistforsort.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk());
+						float remainingProQty = getVarianceorderlistforsort.get(i).getOrderQty()-getVarianceorderlistforsort.get(i).getCurOpeQty();
+
+						
+						if (remainingProQty > 0) {
+							getVarianceorderlistforsort.get(i).setRemainingQty((int)remainingProQty);
+						} else {
+							getVarianceorderlistforsort.get(i).setRemainingQty(0);
+						}
+					}
+
+				}
+
+			}
 
 			for (int i = 0; i < postProductionPlanDetaillist.size(); i++) {
 				int planItemid = postProductionPlanDetaillist.get(i).getItemId();
@@ -1212,9 +1237,7 @@ public class ProductionController {
 						postProductionPlanDetaillist.get(i).setOrderQty(getVarianceorderlistforsort.get(j).getOrderQty());
 						System.out.println(postProductionPlanDetaillist.get(i).getOrderQty()+"-( ("+postProductionPlanDetaillist.get(i).getOpeningQty()+"+"+
 								postProductionPlanDetaillist.get(i).getProductionQty()+")-"+postProductionPlanDetaillist.get(i).getRejectedQty()+")");
-						float remainingProQty = postProductionPlanDetaillist.get(i).getOrderQty()
-								-( (postProductionPlanDetaillist.get(i).getCurOpeQty()
-										+ postProductionPlanDetaillist.get(i).getProductionQty())-postProductionPlanDetaillist.get(i).getRejectedQty());
+						float remainingProQty = postProductionPlanDetaillist.get(i).getOrderQty()-postProductionPlanDetaillist.get(i).getCurOpeQty();
 
 						if (remainingProQty > 0) {
 							postProductionPlanDetaillist.get(i).setInt4((int)remainingProQty);
@@ -1483,60 +1506,7 @@ public class ProductionController {
 					e.printStackTrace();
 				}
 			}
-	     /*Desktop d=Desktop.getDesktop();
-	     
-	     if(file.exists()) {
-	    	 try {
-				d.open(file);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	     }*/
-	     
-	 	
-	 	//InputStream is = this.getClass().getClassLoader().getResourceAsStream(FILE_PATH);
-	 	 
-	 	 
-	 	 /* openFile=new File(FILE_PATH+"Report.pdf");
-	 	 System.out.println("file Name  Open "+openFile.getName());
-	 	 InputStream inputStream =new BufferedInputStream(new FileInputStream(openFile));
-	 	 
-	 	 try {
-			System.out.println("inputStream== "+inputStream.read());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-	 	 
-	 	String mimeType = null;
-	 	
-	 	System.out.println("");
-	 	 try {
-			 mimeType=URLConnection.guessContentTypeFromStream(inputStream);
-			 
-			 System.out.println("MIME TYpe "+mimeType);
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}
-	 	 mimeType="application/pdf";
-	 	 
-	 	 response.setContentType(mimeType);
-	 	 
-	 	 response.setContentLength((int)openFile.length());
-	 	 response.setHeader("Content-Disposition", String.format("attachement; filename=", openFile.getName()));
-	 	 System.out.println("Response setting "+response.toString());
-	 	 
-	 	 try {
-			FileCopyUtils.copy(inputStream,response.getOutputStream());
-			System.out.println("response.getOutputStream == "+response.getOutputStream() );
-			
-		} catch (IOException e2) {
-			// TODO Auto-generated catch block
-			e2.printStackTrace();
-		}*/
-	 	 
+	      
 	     
 	 } catch (DocumentException ex) {
 	 
@@ -1581,6 +1551,25 @@ public class ProductionController {
 					postProductionPlanDetailnew.setPlanQty(0);
 					postProductionPlanDetailnew.setInt4(0); 
 					postProductionPlanDetailnew.setProductionDate(postProductionPlanDetaillist.get(i).getProductionDate());
+					postProductionPlanDetailnew.setProductionBatch("");
+					postProductionPlanDetailnewplan.add(postProductionPlanDetailnew);
+
+				}
+				
+			}
+			for (int i = 0; i < getVarianceorderlistforsort.size(); i++) 
+			{
+				if (getVarianceorderlistforsort.get(i).getRemainingQty() > 0) 
+				{
+					postProductionPlanDetailnew = new PostProductionPlanDetail();
+					postProductionPlanDetailnew.setItemId(getVarianceorderlistforsort.get(i).getId());
+					postProductionPlanDetailnew.setOpeningQty(0);
+					postProductionPlanDetailnew.setOrderQty(getVarianceorderlistforsort.get(i).getRemainingQty());
+					postProductionPlanDetailnew.setProductionQty(0);
+					postProductionPlanDetailnew.setRejectedQty(0);
+					postProductionPlanDetailnew.setPlanQty(0);
+					postProductionPlanDetailnew.setInt4(0); 
+					postProductionPlanDetailnew.setProductionDate(postProdPlanHeader.getProductionDate());
 					postProductionPlanDetailnew.setProductionBatch("");
 					postProductionPlanDetailnewplan.add(postProductionPlanDetailnew);
 
@@ -1636,6 +1625,25 @@ public class ProductionController {
 					postProductionPlanDetailnew.setPlanQty(0);
 					postProductionPlanDetailnew.setInt4(0); 
 					postProductionPlanDetailnew.setProductionDate(postProductionPlanDetaillist.get(i).getProductionDate());
+					postProductionPlanDetailnew.setProductionBatch("");
+					postProductionPlanDetailnewplan.add(postProductionPlanDetailnew);
+
+				}
+			}
+			
+			for (int i = 0; i < getVarianceorderlistforsort.size(); i++) 
+			{
+				if (getVarianceorderlistforsort.get(i).getRemainingQty() > 0) 
+				{
+					postProductionPlanDetailnew = new PostProductionPlanDetail();
+					postProductionPlanDetailnew.setItemId(getVarianceorderlistforsort.get(i).getId());
+					postProductionPlanDetailnew.setOpeningQty(0);
+					postProductionPlanDetailnew.setOrderQty(getVarianceorderlistforsort.get(i).getRemainingQty());
+					postProductionPlanDetailnew.setProductionQty(0);
+					postProductionPlanDetailnew.setRejectedQty(0);
+					postProductionPlanDetailnew.setPlanQty(0);
+					postProductionPlanDetailnew.setInt4(0); 
+					postProductionPlanDetailnew.setProductionDate(postProdPlanHeader.getProductionDate());
 					postProductionPlanDetailnew.setProductionBatch("");
 					postProductionPlanDetailnewplan.add(postProductionPlanDetailnew);
 
