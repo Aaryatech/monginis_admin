@@ -44,12 +44,14 @@ import org.zefer.pd4ml.PD4ML;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.GetPoHeaderForPdf;
+import com.ats.adminpanel.model.RmRateVerificationList;
 import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;
 import com.ats.adminpanel.model.RawMaterial.Info;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialDetails;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialDetailsList; 
 import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetailsList; 
-import com.ats.adminpanel.model.RawMaterial.RmItemGroup; 
+import com.ats.adminpanel.model.RawMaterial.RmItemGroup;
+import com.ats.adminpanel.model.RawMaterial.RmRateVerification;
 import com.ats.adminpanel.model.materialreceipt.Supplist;
 import com.ats.adminpanel.model.materialrecreport.GetMaterialRecieptReportMonthWise;
 import com.ats.adminpanel.model.purchaseorder.GetPurchaseOrderList;
@@ -1193,7 +1195,170 @@ public class PurchaseOrderController {
 		 
 		return ret;
 	}
-	 
+	
+	public Supplist supplier = new Supplist();
+	GetRawMaterialDetailList rawMaterialList = new GetRawMaterialDetailList();
+	RmRateVerification rmRateVerification=new RmRateVerification();
+	
+	@RequestMapping(value = "/showRmRateVerificationList", method = RequestMethod.GET)
+	public ModelAndView showRmRateVerification(HttpServletRequest request, HttpServletResponse response) {
+		
+		ModelAndView model = new ModelAndView("masters/rawMaterial/rmRateVerificationList");
+		Constants.mainAct=14;
+		Constants.subAct=85;
+			RestTemplate rest=new RestTemplate();
+			try {
+				rawMaterialList =rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterialList", GetRawMaterialDetailList.class);
+				System.out.println("RM Details : "+rawMaterialList.getRawMaterialDetailsList().toString()); 
+		
+			supplier = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
+			System.out.println("supplier"+rawMaterialList.getRawMaterialDetailsList().toString()); 
+
+			model.addObject("supplierList", supplier.getSupplierDetailslist());
+			model.addObject("RawmaterialList", rawMaterialList.getRawMaterialDetailsList());
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/getRmRateVerificationList", method = RequestMethod.GET)
+	@ResponseBody
+	public List<RmRateVerificationList> getRmRateVerificationList(HttpServletRequest request, HttpServletResponse response) {
+
+		List<RmRateVerificationList> rmRateVerificationList = new ArrayList<RmRateVerificationList>();
+			RestTemplate rest=new RestTemplate();
+			try {
+				String supId = request.getParameter("supp_id");
+				String rmId = request.getParameter("rm_id");
+				
+				String supIdList = new String();
+				String rmIdList = new String();
+				
+				if(supId.equals("0"))
+				{
+					 for(int i=0;i<supplier.getSupplierDetailslist().size();i++)
+					 {
+						 supIdList = supIdList.concat(String.valueOf(supplier.getSupplierDetailslist().get(i).getSuppId()))+',';
+						 
+					 }
+					
+				}
+				else
+				{
+					supIdList=supId;
+				}
+				
+				if(rmId.equals("0"))
+				{
+					 for(int i=0;i<rawMaterialList.getRawMaterialDetailsList().size();i++)
+					 {
+						 rmIdList = rmIdList.concat(String.valueOf(rawMaterialList.getRawMaterialDetailsList().get(i).getRmId()))+','; 
+					 }
+					
+				}
+				else
+				{
+					rmIdList=rmId; 
+				}
+				
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("suppId", supIdList);
+				map.add("rmId", rmIdList);
+				System.out.println("map"+map);
+				 rmRateVerificationList=rest.postForObject(Constants.url +"rawMaterial/getRmRateVerificationList",map, List.class);
+		
+		System.out.println("rmRateVerificationList : "+rmRateVerificationList);
+		   }
+			catch(Exception e)
+			{
+				 e.printStackTrace();
+			}
+
+		return rmRateVerificationList;
+	}
+	
+	@RequestMapping(value = "/showRmRateVerificationDetailed/{suppId}/{rmId}", method = RequestMethod.GET)
+	public ModelAndView showRmRateVerificationDetailed(@PathVariable int suppId,@PathVariable int rmId,HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/rawMaterial/rmRateVerificationDetailed");
+		 
+			RestTemplate rest=new RestTemplate();
+			try {
+				
+				 System.out.println("suppId"+suppId);
+				 System.out.println("rmId"+rmId);
+				MultiValueMap<String, Object> map=new LinkedMultiValueMap<String, Object>(); 
+				map.add("suppId", suppId);
+				map.add("rmId", rmId);
+				
+				rmRateVerification=new RmRateVerification();
+					rmRateVerification = rest.postForObject(Constants.url + "rawMaterial/getRmRateVerification",map,
+							RmRateVerification.class);
+				 
+			 
+			model.addObject("rmRateVerification", rmRateVerification);
+			model.addObject("supplierList", supplier.getSupplierDetailslist());
+			model.addObject("RawmaterialList", rawMaterialList.getRawMaterialDetailsList());
+			}
+			catch(Exception e)
+			{
+				System.out.println("Exception In /showRmRateVerification"+e.getMessage());
+			}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/submitRmRateVerificationDetailed", method = RequestMethod.POST)
+	public String submitRmRateVerificationDetailed(HttpServletRequest request, HttpServletResponse response) {
+
+		 try
+		 {
+			 String currRateDate=request.getParameter("curr_rate_date");
+				System.out.println(" curr_rate_date      : "+currRateDate);
+				String currRateTaxExtra=request.getParameter("curr_rate_tax_extra");
+				System.out.println(" currRateTaxExtra      : "+currRateTaxExtra);
+				String currRateTaxIncl=request.getParameter("curr_rate_tax_incl");
+				System.out.println(" currRateTaxIncl : "+currRateTaxIncl);
+				
+				 
+				 if(currRateDate==null)
+				 {
+					 rmRateVerification.setRateTaxIncl(Float.valueOf(currRateTaxIncl));
+						rmRateVerification.setRateTaxExtra(Float.valueOf(currRateTaxExtra));
+				 }
+				 else
+				 {
+					 	rmRateVerification.setRateTaxIncl2(rmRateVerification.getRateTaxIncl1());
+						rmRateVerification.setRateTaxExtra2(rmRateVerification.getRateTaxExtra1());
+						rmRateVerification.setDate2(rmRateVerification.getDate1());
+						
+						rmRateVerification.setRateTaxIncl1(rmRateVerification.getRateTaxIncl());
+						rmRateVerification.setRateTaxExtra1(rmRateVerification.getRateTaxExtra());
+						rmRateVerification.setDate1(rmRateVerification.getRateDate());
+						
+						rmRateVerification.setRateTaxIncl(Float.valueOf(currRateTaxIncl));
+						rmRateVerification.setRateTaxExtra(Float.valueOf(currRateTaxExtra));
+						rmRateVerification.setRateDate(currRateDate);
+				 }
+				
+				
+				RestTemplate rest=new RestTemplate();
+				  Info info=rest.postForObject(Constants.url + "rawMaterial/insertRmRateVerification",rmRateVerification, Info.class);
+
+				  System.out.println("response : "+ info.toString());
+		 }catch(Exception e)
+		 {
+			 e.printStackTrace();
+		 }
+
+		
+		 
+		return "redirect:/showRmRateVerificationDetailed"+"/"+rmRateVerification.getSuppId()+"/"+rmRateVerification.getRmId();
+	}
 	
 	private Dimension format = PD4Constants.A4;
 	private boolean landscapeValue = false;

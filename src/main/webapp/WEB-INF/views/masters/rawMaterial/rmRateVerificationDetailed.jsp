@@ -54,7 +54,7 @@
 								<i class="fa fa-bars"></i>Raw material Rate Verification
 							</h3>
 							<div class="box-tool">
-								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
+								<a href="">Back to List</a> <a data-action="collapse" href="${pageContext.request.contextPath}/showRmRateVerificationList"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							<!-- <div class="box-tool">
@@ -66,7 +66,7 @@
 
 
 						<div class="box-content">
-							<form action="submitRmRateVerification" method="post"
+							<form action="${pageContext.request.contextPath}/submitRmRateVerificationDetailed" method="post"
 								class="form-horizontal" id="validation-form"
 								enctype="multipart/form-data" method="post">
 
@@ -74,56 +74,34 @@
 
 									<label class="col-sm-3 col-lg-2 control-label">Select
 										Supplier</label>
-									<div class="col-sm-6 col-lg-4 controls">
-										<select name="supp_id" id="supp_id" class="form-control chosen">
-											<option value="-1">Select Supplier</option>
-											<c:forEach items="${supplierList}" var="supplierList"
-												varStatus="count">
-												<option value="${supplierList.suppId}"><c:out value="${supplierList.suppName}"/></option>
-											</c:forEach>
-										</select>
+									<div class="col-sm-6 col-lg-4 controls"> 
+									<c:forEach items="${supplierList}" var="supplierList">
+										<c:choose>
+											<c:when test="${rmRateVerification.suppId==supplierList.suppId}"> 
+											<input type="text" name="supp_id" id="supp_id" value="${supplierList.suppName}" class="form-control" readonly/>
+											</c:when>
+										
+										</c:choose>
+									</c:forEach>
+										
 									</div>
 									<label class="col-sm-3 col-lg-2 control-label">Select
 										Row Material</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<select name="rm_id" id="rm_id" class="form-control chosen">
-											<option value="-1">Select Row Material</option>
-											<c:forEach items="${RawmaterialList}" var="RawmaterialList"
-												varStatus="count">
-												<option value="${RawmaterialList.rmId}"><c:out value="${RawmaterialList.rmName}"/></option>
-											</c:forEach>
-										</select>
+											<c:forEach items="${RawmaterialList}" var="RawmaterialList">
+										<c:choose>
+											<c:when test="${rmRateVerification.rmId==RawmaterialList.rmId}"> 
+											<input type="text" name="supp_id" id="supp_id" value="${RawmaterialList.rmName}" class="form-control" readonly/>
+											</c:when>
+										
+										</c:choose>
+									</c:forEach>
 									</div>
 
 
 
 								</div>
-								<div class=" " align="center">
-									<label class="col-sm-3 col-lg-2 control-label">UOM </label>
-									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="uom_id" id="uom_id"
-											class="form-control" disabled="disabled" />
-									</div>
-									<label class="col-sm-3 col-lg-2 control-label">Tax
-										Description </label>
-									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="tax_desc" id="tax_desc"
-											class="form-control" disabled="disabled" /> <input
-											type="hidden" name="tax_id" id="tax_id">
-									</div>
-
-								</div>
-								<br> <br>
-								<br>
-								<div class="row">
-									<div class="col-md-12" style="text-align: center">
-										<input type="button" id="search" class="btn btn-info"
-											value="Search" onclick="onSearch()" />
-
-
-
-									</div>
-								</div>
+								 
 								<hr>
 
 
@@ -137,11 +115,7 @@
 											type="text" name="curr_rate_date" data-rule-required="true" />
 									</div>
 
-
-									<!-- <label class="col-sm-3 col-lg-2 control-label"></label> -->
-									<!-- <div class="col-sm-6 col-lg-4 controls">
-										 	</div> -->
-
+ 
 								</div>
 
 
@@ -180,53 +154,53 @@
 								</div>
 
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label" id="date1">
-									</label> <input type="hidden" name="rate_date" id="rate_date">
+									<label class="col-sm-3 col-lg-2 control-label" id="date1">${rmRateVerification.rateDate}
+									</label> <input type="hidden" name="rate_date" id="rate_date" value="${rmRateVerification.rateDate}">
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="rate_tax_extra" id="rate_tax_extra"
-											class="form-control" disabled="disabled" />
-											<input type="hidden" name="tax_extra" id="tax_extra">
+											class="form-control" value="${rmRateVerification.rateTaxExtra}" disabled="disabled" />
+											<input type="hidden" name="tax_extra" id="tax_extra" value="${rmRateVerification.rateTaxExtra}">
 									</div>
 
 									<!-- <label class="col-sm-3 col-lg-2 control-label"> </label> -->
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="rate_tax_incl" id="rate_tax_incl"
-											class="form-control" disabled="disabled" />
-											<input type="hidden" name="tax_incl" id="tax_incl">
+											class="form-control" value="${rmRateVerification.rateTaxIncl}" disabled="disabled" />
+											<input type="hidden" name="tax_incl" id="tax_incl" value="${rmRateVerification.rateTaxIncl}">
 									</div>
 
 								</div>
 
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label" id="date2">
+									<label class="col-sm-3 col-lg-2 control-label" id="date2">${rmRateVerification.date1}
 									</label> <input type="hidden" name="rate_date1" id="rate_date1">
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="rate_tax_extra1" id="rate_tax_extra1"
-											class="form-control" disabled="disabled" />
+										<input type="text" value="${rmRateVerification.rateTaxExtra1}" name="rate_tax_extra1" id="rate_tax_extra1"
+											class="form-control" value="" disabled="disabled" />
 											<input type="hidden" name="tax_extra1" id="tax_extra1">
 									</div>
 
 									<!-- <label class="col-sm-3 col-lg-2 control-label">Last Date 1 Tax Rate Extra</label> -->
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="rate_tax_incl1" id="rate_tax_incl1"
-											class="form-control" disabled="disabled" />
+											class="form-control" value="${rmRateVerification.rateTaxIncl1}" disabled="disabled" />
 											<input type="hidden" name="tax_incl1" id="tax_incl1">
 									</div>
 								</div>
 
 								<div class="form-group">
 
-									<label class="col-sm-3 col-lg-2 control-label" id="date3">
+									<label class="col-sm-3 col-lg-2 control-label" id="date3">${rmRateVerification.date2}
 									</label> <input type="hidden" name="rate_date2" id="rate_date2">
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="rate_tax_extra2" id="rate_tax_extra2"
+										<input type="text" value="${rmRateVerification.rateTaxExtra2}" name="rate_tax_extra2" id="rate_tax_extra2"
 											class="form-control" disabled="disabled" />
 									</div>
 
 
 									<!-- <label class="col-sm-3 col-lg-2 control-label">Last Date 2</label> -->
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="rate_tax_incl2" id="rate_tax_incl2"
+										<input type="text" value="${rmRateVerification.rateTaxIncl2}" name="rate_tax_incl2" id="rate_tax_incl2"
 											class="form-control" disabled="disabled" />
 									</div>
 								</div>
@@ -235,8 +209,10 @@
 								<div class="row">
 									<div class="col-md-12" style="text-align: center">
 										<input type="submit" class="btn btn-primary" value="Submit">
-										<!-- <input type="button" id="search" class="btn btn-info"
-											value="Edit" onclick="onEdit()" /> -->
+										<input type="button" id="search" class="btn btn-info"
+											value="Edit" onclick="onEdit()" />
+											<input type="button" id="cancel" class="btn btn-info"
+											value="Cancel" onclick="addRate()" disabled/>
 
 
 									</div>
@@ -336,134 +312,30 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
 	<script type="text/javascript">
-$(document).ready(function() { 
-	$('#rm_id').change(
-			function() {
-				$.getJSON('${getUomTax}', {
-					rmId : $(this).val(),
-					ajax : 'true'
-				}, function(data) {
-					 
-					document.getElementById("uom_id").value=data.uom;
-					document.getElementById("tax_id").value=data.taxId;
-					document.getElementById("tax_desc").value=data.taxDesc;
-					
-				
-
-				});
-			});
-});
-function onSearch()
-{	
-	 
-
-
-
-
-	var selectedRmId = $("#rm_id").val();
-	var selectedSuppId = $("#supp_id").val();
- 
-   
-    
-	$.getJSON('${getRmRateVerification}',{
-		
-						rm_id : selectedRmId,
-						supp_id : selectedSuppId,
-					 
-						ajax : 'true'
-
-					},
-					function(data) {
-
-document.getElementById('date1').innerHTML = data.rateDate;
-
-document.getElementById("rate_date").value=data.rateDate;
-document.getElementById("tax_extra").value=data.rateTaxExtra;
-document.getElementById("rate_tax_extra").value=data.rateTaxExtra;
-document.getElementById("tax_incl").value=data.rateTaxIncl;
-document.getElementById("rate_tax_incl").value=data.rateTaxIncl;
-
-
-document.getElementById('date2').innerHTML = data.date1;
-
-document.getElementById("rate_date1").value=data.date1;
-document.getElementById("tax_extra1").value=data.rateTaxExtra1;
-document.getElementById("rate_tax_extra1").value=data.rateTaxExtra1;
-document.getElementById("tax_incl1").value=data.rateTaxIncl1;
-document.getElementById("rate_tax_incl1").value=data.rateTaxIncl1;
-
-document.getElementById('date3').innerHTML = data.date2;
-
-document.getElementById("rate_date2").value=data.date1;
-document.getElementById("rate_tax_extra2").value=data.rateTaxExtra2;
-document.getElementById("rate_tax_incl2").value=data.rateTaxIncl2;
-document.getElementById("rm_rate_ver_id").value=data.rmRateVerId;
-
-					});
-}
-
 function onEdit()
 {	
 	
 
-	document.getElementById("dp2").value=document.getElementById("rate_date").value;
-	document.getElementById("rate_date").value=document.getElementById("rate_date1").value;
-	document.getElementById("rate_date1").value=document.getElementById('rate_date2').value;
-		
-	document.getElementById("curr_rate_tax_extra").value=document.getElementById("tax_extra").value;
-	document.getElementById("tax_extra").value=document.getElementById("tax_extra1").value;
-	document.getElementById("tax_extra1").value=document.getElementById("rate_tax_extra2").value;
-	
+	document.getElementById("dp2").value=document.getElementById("rate_date").value; 
+	document.getElementById("curr_rate_tax_extra").value=document.getElementById("tax_extra").value; 
 	document.getElementById("curr_rate_tax_incl").value=document.getElementById("tax_incl").value;
-	document.getElementById("tax_incl").value=document.getElementById("tax_incl1").value;
-	document.getElementById("tax_incl1").value=document.getElementById("rate_tax_incl2").value;
+	document.getElementById("dp2").disabled=true;
+	document.getElementById("cancel").disabled=false;
 	
-	/* document.getElementById("tax_extra").value;
-	document.getElementById("rate_tax_extra").value;
-	document.getElementById("tax_incl").value;
-	document.getElementById("rate_tax_incl").value;
+	 
+}
 
-
+function addRate()
+{	
 	
 
-	document.getElementById("rate_date1").value;
-	document.getElementById("tax_extra1").value;
-	document.getElementById("rate_tax_extra1").value;
-	document.getElementById("tax_incl1").value;
-	document.getElementById("rate_tax_incl1").value;
-
+	document.getElementById("dp2").value="";
+	document.getElementById("curr_rate_tax_extra").value="";
+	document.getElementById("curr_rate_tax_incl").value="";
+	document.getElementById("dp2").disabled=false;
+	document.getElementById("cancel").disabled=true;
 	
-	document.getElementById("rate_tax_extra2").value;
-	document.getElementById("rate_tax_incl2").value;
-	document.getElementById("rm_rate_ver_id").value;
-	
-	
-	
-	
-	
-	
-	
-	document.getElementById('date1').innerHTML = data.rateDate;
-
-	document.getElementById("rate_date").value=data.rateDate;
-	document.getElementById("tax_extra").value=data.rateTaxExtra;
-	document.getElementById("rate_tax_extra").value=data.rateTaxExtra;
-	document.getElementById("tax_incl").value=data.rateTaxIncl;
-	document.getElementById("rate_tax_incl").value=data.rateTaxIncl;
-
-
-	document.getElementById('date2').innerHTML = data.date1;
-
-	document.getElementById("rate_date1").value=data.date1;
-	document.getElementById("tax_extra1").value=data.rateTaxExtra1;
-	document.getElementById("rate_tax_extra1").value=data.rateTaxExtra1;
-	document.getElementById("tax_incl1").value=data.rateTaxIncl1;
-	document.getElementById("rate_tax_incl1").value=data.rateTaxIncl1;
-
-	document.getElementById('date3').innerHTML = data.date2;
-	document.getElementById("rate_tax_extra2").value=data.rateTaxExtra2;
-	document.getElementById("rate_tax_incl2").value=data.rateTaxIncl2;
-	document.getElementById("rm_rate_ver_id").value=data.rmRateVerId; */
+	 
 }
 </script>
 </body>
