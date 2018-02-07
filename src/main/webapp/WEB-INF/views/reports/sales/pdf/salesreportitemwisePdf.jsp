@@ -17,42 +17,45 @@
 
 <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-
-<style type="text/css">
-table {
+ <style type="text/css">
+ table {
 	border-collapse: collapse;
-	width: 100%;
-}
-
-th, td {
-	text-align: left;
-	padding: 2px;
 	font-size: 10;
-}
+	width:100%;
 
-tr:nth-child(even) {
-	background-color: #f2f2f2
+} 
+p  {
+    color: black;
+    font-family: arial;
+    font-size: 60%;
+	margin-top: 0;
+	padding: 0;
+
+}
+h6  {
+    color: black;
+    font-family: arial;
+    font-size: 80%;
 }
 
 th {
 	background-color: #EA3291;
 	color: white;
+	
 }
 </style>
 </head>
 <body onload="myFunction()">
-	<h3 align="center">Galdhar Foods Pvt Ltd</h3>
-	<p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
-	<p align="center">(All Sales)</p>
-	<p align="center">Sales Report (Item Wise)</p><!--Report 8  -->
-	<!-- report 8  -->
+<h3 align="center">Galdhar Foods Pvt Ltd</h3>
+<p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
 
-	<div align="center">From ${fromDate}- To ${toDate}</div>
-	<table width="100%" border="0" cellspacing="0" cellpadding="0"
+<div align="center"> <h5> Sales Report (Item Wise)  &nbsp;&nbsp;&nbsp;&nbsp; From &nbsp; ${fromDate}  &nbsp;To &nbsp; ${toDate}</h5></div>
+
+	<table  align="center" border="1" cellspacing="0" cellpadding="1" 
 		id="table_grid" class="table table-bordered">
 		<thead>
 			<tr class="bgpink">
-				<th>Sr.No.</th>
+				<th height="25">Sr.No.</th>
 				<th>Item Name</th>
 				<th>HSNCD</th>
 				<th>Tax Rate</th>
@@ -76,7 +79,7 @@ th {
 					<td><c:out value="${count.index+1}" /></td>
 					<td><c:out value="${report.itemName}" /></td>
 					<td><c:out value="${report.itemHsncd}" /></td>
-					<td><c:out value="${report.itemTax1 + report.itemTax2}" /></td>
+					<td  width="100" align="right"><c:out value="${report.itemTax1 + report.itemTax2}" /></td>
 
 
 					<c:set var="qtySum" value="${report.billQtySum + qtySum}" />
@@ -88,7 +91,7 @@ th {
 					<c:set var="igstSum" value="${report.igstRsSum + igstSum}" />
 
 
-					<td><c:out value="${report.billQtySum}" /></td>
+					<td  width="100" align="right"><c:out value="${report.billQtySum}" /></td>
 					<td align="right"><c:out value="${report.taxableAmtSum}" /></td>
 					<td align="right"><c:out value="${report.cgstRsSum}"/></td>
 					<td align="right"><c:out value="${report.sgstRsSum}"/></td>
@@ -115,7 +118,7 @@ th {
 							maxFractionDigits="2" value="${cgstSum}" /></b></td>
 				<td align="right"><b><fmt:formatNumber type="number"
 							maxFractionDigits="2" value="${sgstSum}" /></b></td>
-							<td><b><fmt:formatNumber type="number"
+							<td  align="right"><b><fmt:formatNumber type="number"
 							maxFractionDigits="2" value="${igstSum}" /></b></td>
 							
 				<td align="right"><b><fmt:formatNumber type="number"

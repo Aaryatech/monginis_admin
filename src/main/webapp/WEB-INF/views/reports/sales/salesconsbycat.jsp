@@ -712,9 +712,10 @@
 			function genPdf() {
 				var from_date = $("#fromDate").val();
 				var to_date = $("#toDate").val();
-
-				window.open('pdfForReport?url=showSaleRoyaltyByCatPdf/'
-						+ from_date + '/' + to_date);
+				var selectedFr = $("#selectFr").val();
+				var routeId = $("#selectRoute").val();
+				window.open('pdfForReport?url=pdf/showSaleRoyaltyByCatPdf/'
+						+ from_date + '/' + to_date+'/'+selectedFr+'/'+routeId+'/');
 
 			}
 		</script>

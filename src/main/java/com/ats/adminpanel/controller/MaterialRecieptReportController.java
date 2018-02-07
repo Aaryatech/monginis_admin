@@ -31,6 +31,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.zefer.pd4ml.PD4Constants;
 import org.zefer.pd4ml.PD4ML;
+import org.zefer.pd4ml.PD4PageMark;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
@@ -209,7 +210,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	@RequestMapping(value = "/billWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
+	@RequestMapping(value = "pdf/billWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
 	public ModelAndView billWisePdf(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String supplier[],HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/billwise");
@@ -257,8 +258,8 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 			
 			materialRecieptBillWiseReport = responseEntity.getBody();
 			model.addObject("staticlist", materialRecieptBillWiseReport);
-			model.addObject("from_date", from_date);
-			model.addObject("to_date", to_date);
+			model.addObject("fromDate", from_date);
+			model.addObject("toDate", to_date);
 			System.out.println("billWisePdf" + materialRecieptBillWiseReport);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -428,7 +429,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	@RequestMapping(value = "/supplierWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
+	@RequestMapping(value = "pdf/supplierWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
 	public ModelAndView supplierWisePdf(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String supplier[],HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/supplierwisepdf");
@@ -646,7 +647,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	@RequestMapping(value = "/dateWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
+	@RequestMapping(value = "pdf/dateWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
 	public ModelAndView dateWisePdf(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String supplier[],HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/dateWisePdf");
@@ -854,7 +855,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	@RequestMapping(value = "/itemWisePdf/{from_date}/{to_date}/{item}", method = RequestMethod.GET)
+	@RequestMapping(value = "pdf/itemWisePdf/{from_date}/{to_date}/{item}", method = RequestMethod.GET)
 	public ModelAndView itemWisePdf(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String item[],HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/itemWisePdf");
@@ -1056,7 +1057,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	@RequestMapping(value = "/HsnCodeWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
+	@RequestMapping(value = "pdf/HsnCodeWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
 	public ModelAndView HsnCodeWisePdf(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String supplier[],HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/HsnCodeWisePdf");
@@ -1263,7 +1264,7 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	}
 
-	@RequestMapping(value = "/monthWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
+	@RequestMapping(value = "pdf/monthWisePdf/{from_date}/{to_date}/{supplier}", method = RequestMethod.GET)
 	public ModelAndView monthWisePdf(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String supplier[],HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/monthWisePdf");
@@ -1327,10 +1328,10 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	private Dimension format = PD4Constants.A2;
 	private boolean landscapeValue = false;
-	private int topValue = 0;
+	private int topValue = 8;
 	private int leftValue = 0;
 	private int rightValue = 0;
-	private int bottomValue = 0;
+	private int bottomValue =8;
 	private String unitsValue = "m";
 	private String proxyHost = "";
 	private int proxyPort = 0;
@@ -1340,12 +1341,121 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 	@RequestMapping(value = "/materialRec", method = RequestMethod.GET)
 	public void showPDF(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("Inside PDf For Report URL ");
+		String url = request.getParameter("url");
+		System.out.println("URL " + url);
+		
+		//File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/report.pdf");
+		File f = new File("/home/ats-12/pdf/report.pdf");
+
+		try {
+			runConverter(Constants.ReportURL + url, f,request,response);
+			//runConverter("www.google.com", f,request,response);
+
+		} catch (IOException e) {
+
+			System.out.println("Pdf conversion exception " + e.getMessage());
+		}
+
+		// get absolute path of the application
+		ServletContext context = request.getSession().getServletContext();
+		String appPath = context.getRealPath("");
+		 String filePath = "/home/ats-12/pdf/report.pdf";
+
+		//String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/report.pdf";
+
+		// construct the complete absolute path of the file
+		String fullPath = appPath + filePath;
+		File downloadFile = new File(filePath);
+		FileInputStream inputStream = null;
+		try {
+			inputStream = new FileInputStream(downloadFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			// get MIME type of the file
+			String mimeType = context.getMimeType(fullPath);
+			if (mimeType == null) {
+				// set to binary type if MIME mapping not found
+				mimeType = "application/pdf";
+			}
+			System.out.println("MIME type: " + mimeType);
+
+			String headerKey = "Content-Disposition";
+
+			// response.addHeader("Content-Disposition", "attachment;filename=report.pdf");
+			response.setContentType("application/pdf");
+
+			OutputStream outStream;
+
+			outStream = response.getOutputStream();
+
+			byte[] buffer = new byte[BUFFER_SIZE];
+			int bytesRead = -1;
+
+
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outStream.write(buffer, 0, bytesRead);
+			}
+
+			inputStream.close();
+			outStream.close();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void runConverter(String urlstring, File output, HttpServletRequest request, HttpServletResponse response ) throws IOException {
+
+		if (urlstring.length() > 0) {
+			if (!urlstring.startsWith("http://") && !urlstring.startsWith("file:")) {
+				urlstring = "http://" + urlstring;
+			}
+			System.out.println("PDF URL " + urlstring);
+			java.io.FileOutputStream fos = new java.io.FileOutputStream(output);
+
+			PD4ML pd4ml = new PD4ML();
+		
+			try {
+
+				Dimension landscapeA4 = pd4ml.changePageOrientation(PD4Constants.A4);
+				pd4ml.setPageSize(landscapeA4);
+			
+				PD4PageMark footer = new PD4PageMark();  
+				
+	            footer.setPageNumberTemplate("Page $[page] of $[total]");  
+	            footer.setPageNumberAlignment(PD4PageMark.RIGHT_ALIGN);  
+	            footer.setFontSize(10);  
+	            footer.setAreaHeight(20);     
+	            
+	            pd4ml.setPageFooter(footer); 
+				
+			} catch (Exception e) {
+				System.out.println("Pdf conversion method excep " + e.getMessage());
+			}
+
+			if (unitsValue.equals("mm")) {
+				pd4ml.setPageInsetsMM(new Insets(topValue, leftValue, bottomValue, rightValue));
+			} else {
+				pd4ml.setPageInsets(new Insets(topValue, leftValue, bottomValue, rightValue));
+			}
+
+			pd4ml.setHtmlWidth(userSpaceWidth);
+
+			pd4ml.render(urlstring, fos);
+		}
+	}
+	
+/*	public void showPDF(HttpServletRequest request, HttpServletResponse response) {
 
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
-		//File f = new File("c:/pdf/ordermemo221.pdf");
-		File f = new File("/ordermemo221.pdf");
+		File f = new File("/home/ats-12/pdf/Report.pdf");
+		//File f = new File("/ordermemo221.pdf");
 		System.out.println("I am here " + f.toString());
 		try {
 			runConverter(Constants.ReportURL + url, f);
@@ -1360,8 +1470,8 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo221.pdf";
-		//String filePath = "c:/pdf/ordermemo221.pdf";
-		String filePath = "/ordermemo221.pdf";
+		String filePath = "/home/ats-12/pdf/Report.pdf";
+		//String filePath = "/ordermemo221.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;
@@ -1443,6 +1553,6 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 
 			pd4ml.render(urlstring, fos);
 		}
-	}
+	}*/
 
 }

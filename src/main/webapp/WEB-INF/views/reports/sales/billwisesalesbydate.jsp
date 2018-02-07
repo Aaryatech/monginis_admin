@@ -368,9 +368,11 @@ function genPdf()
 {
 	var from_date = $("#fromDate").val();
 	var to_date = $("#toDate").val();
-	//alert("in Gen PDF by date ");
-	window.open('${pageContext.request.contextPath}/pdfForReport?url=showSaleReportByDatePdf/'+from_date+'/'+to_date);
-	
+	var selectedFr = $("#selectFr").val();
+	var routeId=$("#selectRoute").val();
+
+   window.open('${pageContext.request.contextPath}/pdfForReport?url=pdf/showSaleReportByDatePdf/'+from_date+'/'+to_date+'/'+selectedFr+'/'+routeId+'/');
+
 	//window.open("${pageContext.request.contextPath}/pdfForReport?url=showSaleReportByDatePdf/"+from_date+"/"+to_date);
 	
 	}

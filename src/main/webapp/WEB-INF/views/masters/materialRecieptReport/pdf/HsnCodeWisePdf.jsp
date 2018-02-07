@@ -10,39 +10,46 @@
 <title>Item wise Purchase Report</title>
 
 <style type="text/css">
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
+ table {
+	border-collapse: collapse;
+	font-size: 10;
+	width:100%;
 
-th, td {
-    text-align: left;
-      padding: 2px;
-    font-size: 10;
-}
+} 
+p  {
+    color: black;
+    font-family: arial;
+    font-size: 60%;
+	margin-top: 0;
+	padding: 0;
 
-tr:nth-child(even){background-color: #f2f2f2}
+}
+h6  {
+    color: black;
+    font-family: arial;
+    font-size: 80%;
+}
 
 th {
-    background-color: #EA3291;
-    color: white;
+	background-color: #EA3291;
+	color: white;
+	
 }
 </style>
+
 </head>
 <body onload="myFunction()">
-
 <h3 align="center">Galdhar Foods Pvt Ltd</h3>
-<p align="center">A-89, Shendra M.I.D.C., Aurangabad</p> 
-<p align="center">Purchase Report (HSN Code wise )</p>
+<p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
 
-<div align="center">From ${fromDate}- To ${toDate}</div>
+<div align="center"> <h5>Purchase Report (HSN Code wise )&nbsp;&nbsp;&nbsp;&nbsp; From &nbsp; ${fromDate}  &nbsp;To &nbsp; ${toDate}</h5></div>
 
-	<table width="100%" border="0" cellspacing="0"
-														cellpadding="0" id="table_grid" class="table table-bordered">
+<table  align="center" border="1" cellspacing="0" cellpadding="1" 
+		id="table_grid" class="table table-bordered">
 								<thead >
 									<tr class="bgpink">
 									<th>Sr.No.</th>
-										<th style="text-align:center;">Inward No</th>
+										<th style="text-align:center;height: 25px">Inward No</th>
 										<th style="text-align:center;">Booking Date</th>
 										<th style="text-align:center;">Bill No</th>  
 										<th style="text-align:center;">Party Name</th> 
@@ -71,13 +78,13 @@ th {
 													<td><c:out value="${staticlist.invoiceNumber}" /></td>
 													<td><c:out value="${staticlist.suppName}" /></td>
 													<td  style="text-align:center"><c:out value="${staticlist.hsncdNo}" />  
-													<td  style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.cgst}"/>
+													<td  style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2"  minFractionDigits="2" value = "${staticlist.cgst}"/>
 													 </td> <c:set var="cgst"  value="${cgst+staticlist.cgst }"/>
-													<td  style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.sgst}"/>
+													<td  style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2"  minFractionDigits="2" value = "${staticlist.sgst}"/>
 													 </td> <c:set var="sgst"  value="${sgst+staticlist.sgst }"/>
-													<td  style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.igst}"/>
+													<td  style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2"  minFractionDigits="2" value = "${staticlist.igst}"/>
 													  </td> <c:set var="igst"  value="${igst + staticlist.igst}"/> 
-													<td  style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${staticlist.taxableAmt}"/>
+													<td  style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value = "${staticlist.taxableAmt}"/>
 													  </td> 
 													 
 														<c:set var="taxableAmt"  value="${taxableAmt+staticlist.taxableAmt }"/>
@@ -87,11 +94,11 @@ th {
 								  <tr>
 								  <td colspan='6'><b>Total</b></td>
 								   
-								  <td  style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${cgst}"/></b></td>
-								   <td  style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${sgst}"/></b></td>
-								     <td  style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${igst}"/></b></td> 
+								  <td  style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2"  minFractionDigits="2" value = "${cgst}"/></b></td>
+								   <td  style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2"  minFractionDigits="2" value = "${sgst}"/></b></td>
+								     <td  style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2"  minFractionDigits="2" value = "${igst}"/></b></td> 
 								    
-								     <td  style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" value = "${taxableAmt}"/></b></td>
+								     <td  style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2"  minFractionDigits="2" value = "${taxableAmt}"/></b></td>
 								      <!--  <td><b>Total</b></td> -->
 								  </tr>
 							 </tbody>

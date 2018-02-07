@@ -2,8 +2,6 @@ package com.ats.adminpanel.model.spprod;
 
 import java.io.Serializable;
 
-
-
 public class GetEmployee implements Serializable{
 
 	private int empId;
@@ -22,7 +20,87 @@ public class GetEmployee implements Serializable{
 	
 	private String typeName;
 	
+	private String empMobile;
 	
+	private int discountId;
+	
+	private String discountHead;
+	
+	private String empDob;
+	
+	private String empDoj;
+	
+	private int empFamMemb;
+	
+	private float monthlyLimit;
+	
+	private float yearlyLimit;
+	
+	
+	public String getEmpMobile() {
+		return empMobile;
+	}
+
+	public void setEmpMobile(String empMobile) {
+		this.empMobile = empMobile;
+	}
+
+	public int getDiscountId() {
+		return discountId;
+	}
+
+	public void setDiscountId(int discountId) {
+		this.discountId = discountId;
+	}
+
+	public String getDiscountHead() {
+		return discountHead;
+	}
+
+	public void setDiscountHead(String discountHead) {
+		this.discountHead = discountHead;
+	}
+
+	public String getEmpDob() {
+		return empDob;
+	}
+
+	public void setEmpDob(String empDob) {
+		this.empDob = empDob;
+	}
+
+	public String getEmpDoj() {
+		return empDoj;
+	}
+
+	public void setEmpDoj(String empDoj) {
+		this.empDoj = empDoj;
+	}
+
+	public int getEmpFamMemb() {
+		return empFamMemb;
+	}
+
+	public void setEmpFamMemb(int empFamMemb) {
+		this.empFamMemb = empFamMemb;
+	}
+
+	public float getMonthlyLimit() {
+		return monthlyLimit;
+	}
+
+	public void setMonthlyLimit(float monthlyLimit) {
+		this.monthlyLimit = monthlyLimit;
+	}
+
+	public float getYearlyLimit() {
+		return yearlyLimit;
+	}
+
+	public void setYearlyLimit(float yearlyLimit) {
+		this.yearlyLimit = yearlyLimit;
+	}
+
 	public int getEmpType() {
 		return empType;
 	}
@@ -90,6 +168,10 @@ public class GetEmployee implements Serializable{
 	@Override
 	public String toString() {
 		return "GetEmployee [empId=" + empId + ", empName=" + empName + ", deptId=" + deptId + ", deptName=" + deptName
-				+ ", isUsed=" + isUsed + ", delStatus=" + delStatus + "]";
+				+ ", isUsed=" + isUsed + ", delStatus=" + delStatus + ", empType=" + empType + ", typeName=" + typeName
+				+ ", empMob=" + empMobile + ", discountId=" + discountId + ", discountHead=" + discountHead + ", empDob="
+				+ empDob + ", empDoj=" + empDoj + ", empFamMemb=" + empFamMemb + ", monthlyLimit=" + monthlyLimit
+				+ ", yearlyLimit=" + yearlyLimit + "]";
 	}
+    
 }

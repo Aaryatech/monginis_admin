@@ -34,6 +34,7 @@ import com.ats.adminpanel.model.RawMaterial.RmItemCategory;
 import com.ats.adminpanel.model.item.ErrorMessage;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.login.UserResponse;
+import com.ats.adminpanel.model.masters.GateSaleDiscount;
 import com.ats.adminpanel.model.productionplan.BillOfMaterialDetailed;
 import com.ats.adminpanel.model.productionplan.BillOfMaterialHeader;
 import com.ats.adminpanel.model.spprod.Employee;
@@ -76,6 +77,7 @@ public class SpProductionController {
 	private int helperId = 102;
 	private  InstVerificationHeader instVerificationHeaderRes = null;
 	private  int userId = 0;
+	private  int userType = 6;
 	private  StationSpCakeList stationSpCakeList=new StationSpCakeList();
 	private  List<GetAllocStationCk> getAllocStationCkRes=null;
 	private  List<GetSpDetailForBom> getSpDetailForBomList=null;
@@ -105,8 +107,13 @@ public class SpProductionController {
 
 			TypeList typeList = restTemplate.postForObject(Constants.url + "/spProduction/getTypeList", map,
 					TypeList.class);
-			System.out.println("Response: " + typeList.toString());
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("userType",userType);
+			List<GateSaleDiscount> discountList=restTemplate.postForObject(Constants.url + "/gatesale/getGateSaleDiscByUsrType", map,List.class);
 
+			System.out.println("Response: " + typeList.toString());
+            model.addObject("discountList", discountList);
 			model.addObject("typeList", typeList.getTypeList());
 			model.addObject("mDeptList", mDeptList.getList());
 			model.addObject("employeeList", employeeList.getEmployeeList());
@@ -430,7 +437,20 @@ public class SpProductionController {
 			int deptId = Integer.parseInt(request.getParameter("dept_id"));
 
 			int isUsed = Integer.parseInt(request.getParameter("is_used"));
-
+			
+			String empDob=request.getParameter("emp_dob");
+			
+			String empDoj=request.getParameter("emp_doj");
+			
+			int empFamMemb=Integer.parseInt(request.getParameter("emp_fam_memb"));
+			
+			String empMobile= request.getParameter("emp_mob");
+			
+			float monthlyLimit= Float.parseFloat(request.getParameter("monthly_limit"));
+			
+			float yearlyLimit= Float.parseFloat(request.getParameter("yearly_limit"));
+			
+			int discId= Integer.parseInt(request.getParameter("disc_id"));
 			Employee emp = new Employee();
 			emp.setEmpId(empId);
 			emp.setDeptId(deptId);
@@ -438,6 +458,13 @@ public class SpProductionController {
 			emp.setIsUsed(isUsed);
 			emp.setEmpType(empType);
 			emp.setDelStatus(0);
+			emp.setEmpDob(empDob);
+			emp.setEmpDoj(empDoj);
+			emp.setEmpFamMemb(empFamMemb);
+			emp.setEmpMobile(empMobile);
+			emp.setMonthlyLimit(monthlyLimit);
+			emp.setYearlyLimit(yearlyLimit);
+			emp.setDiscId(discId);
 
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -549,7 +576,13 @@ public class SpProductionController {
 			map.add("typeId", empType);
 			TypeList typeList = rest.postForObject(Constants.url + "/spProduction/getTypeList",map, TypeList.class);
 			System.out.println("Response: " + typeList.toString());
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("userType",userType);
+			List<GateSaleDiscount> discountList=rest.postForObject(Constants.url + "/gatesale/getGateSaleDiscByUsrType", map,List.class);
 
+			System.out.println("Response: " + typeList.toString());
+			mav.addObject("discountList", discountList);
 			if (emp.isError()) {
 
 				return mav;

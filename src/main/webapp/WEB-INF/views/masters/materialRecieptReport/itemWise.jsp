@@ -563,7 +563,7 @@ function getPdf()
 	
 		if(valid==0)
 		{
-	   		 window.open('${pageContext.request.contextPath}/materialRec?url=itemWisePdf/'+from_date+'/'+to_date+'/'+item);
+	   		 window.open('${pageContext.request.contextPath}/materialRec?url=pdf/itemWisePdf/'+from_date+'/'+to_date+'/'+item+'/');
 		}
     }
 </script>

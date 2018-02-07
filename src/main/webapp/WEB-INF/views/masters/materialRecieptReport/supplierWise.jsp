@@ -572,7 +572,7 @@ function getPdf()
 	
 		if(valid==0)
 		{
-	    	window.open('${pageContext.request.contextPath}/materialRec?url=supplierWisePdf/'+from_date+'/'+to_date+'/'+supplier);
+	    	window.open('${pageContext.request.contextPath}/materialRec?url=pdf/supplierWisePdf/'+from_date+'/'+to_date+'/'+supplier+'/');
 		}
     }
 </script>

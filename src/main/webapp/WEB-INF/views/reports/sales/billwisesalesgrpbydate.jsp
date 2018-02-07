@@ -521,11 +521,12 @@ function showChart(){
 			
 }
 function genPdf()
-{
+{   var selectedFr = $("#selectFr").val();
+    var routeId=$("#selectRoute").val();
 	var from_date = $("#fromDate").val();
 	var to_date = $("#toDate").val();
 	
-	window.open('pdfForReport?url=showSaleBillwiseGrpByDatePdf/'+from_date+'/'+to_date);
+	window.open('pdfForReport?url=pdf/showSaleBillwiseGrpByDatePdf/'+from_date+'/'+to_date+'/'+selectedFr+'/'+routeId+'/');
 	
 	}
 function exportToExcel()

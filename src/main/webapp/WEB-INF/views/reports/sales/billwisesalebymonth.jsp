@@ -526,8 +526,9 @@ function genPdf()
 {
 	var from_date = $("#fromDate").val();
 	var to_date = $("#toDate").val();
-	
-	window.open('${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseGrpByMonthPdf/'+from_date+'/'+to_date);
+	   var selectedFr = $("#selectFr").val();
+		var routeId=$("#selectRoute").val();
+	window.open('${pageContext.request.contextPath}/pdfForReport?url=pdf/showSaleBillwiseGrpByMonthPdf/'+from_date+'/'+to_date+'/'+selectedFr+'/'+routeId+'/');
 	
 	}
 function exportToExcel()

@@ -284,6 +284,7 @@ href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}
 										</tbody>
 									</table>
 								</div>
+								</div>
 
 							</form>
 						</div>

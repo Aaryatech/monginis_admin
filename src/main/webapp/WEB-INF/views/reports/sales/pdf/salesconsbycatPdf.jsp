@@ -17,42 +17,47 @@
 
 <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-
-<style type="text/css">
-table {
+ <style type="text/css">
+ table {
 	border-collapse: collapse;
-	width: 100%;
-}
-
-th, td {
-	text-align: left;
-	padding: 2px;
 	font-size: 10;
-}
+	width:100%;
 
-tr:nth-child(even) {
-	background-color: #f2f2f2
+} 
+p  {
+    color: black;
+    font-family: arial;
+    font-size: 60%;
+	margin-top: 0;
+	padding: 0;
+
+}
+h6  {
+    color: black;
+    font-family: arial;
+    font-size: 80%;
 }
 
 th {
 	background-color: #EA3291;
 	color: white;
+	
 }
 </style>
 </head>
 <body onload="myFunction()">
-	<h3 align="center">Galdhar Foods Pvt Ltd</h3>
-	<p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
+<h3 align="center">Galdhar Foods Pvt Ltd</h3>
+<p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
 	<p align="center">(Royalty)</p>
-	<p align="center">Royalty Report (Cat/Item wise )</p><!--Report R5  -->
+<div align="center"> <h5>Royalty Report (Cat/Item wise ) &nbsp;&nbsp;&nbsp;&nbsp; From &nbsp; ${fromDate}  &nbsp;To &nbsp; ${toDate}</h5></div>
+	
 
-	<div align="center">From ${fromDate}- To ${toDate}</div>
-	<table width="100%" border="0" cellspacing="0" cellpadding="0"
+<table  align="center" border="1" cellspacing="0" cellpadding="1" 
 		id="table_grid" class="table table-bordered">
 		<thead>
 			<tr class="bgpink">
-				<th>Sr.No.</th>
-											<th>Item Name</th>
+				<th height="25">Sr.No.</th>
+											<th height="25">Item Name</th>
 											<th>Sale Qty</th>
 											<th>Sale Value</th>
 											<th>GRN Qty</th>
@@ -97,21 +102,21 @@ th {
 						<c:when test="${royalty.catId==report.catId}">
 
 							<tr>
-								<td><c:out value="${srNo}" /></td>
+								<td width="100"><c:out value="${srNo}" /></td>
 								<c:set var="srNo" value="${srNo+1}"></c:set>
-								<td><c:out value="${royalty.item_name}" /></td>
-								<td><c:out value="${royalty.tBillQty}" /></td>
+								<td width="100" ><c:out value="${royalty.item_name}" /></td>
+								<td width="100" align="right"><c:out value="${royalty.tBillQty}" /></td>
 								<%-- <td><c:out value="${royalty.tBillTaxableAmt}" /></td> --%>
 									
-								<td><fmt:formatNumber
+								<td width="100" align="right"><fmt:formatNumber
 										type="number" maxFractionDigits="2"
 										value="${royalty.tBillTaxableAmt}" /></td>
 										
-								<td><c:out value="${royalty.tGrnQty}" /></td>
+								<td width="100" align="right"><c:out value="${royalty.tGrnQty}" /></td>
 
 <%-- 								<td><c:out value="${royalty.tGrnTaxableAmt}" /></td>
  --%>								
-								<td><fmt:formatNumber
+								<td width="100" align="right"><fmt:formatNumber
 										type="number" maxFractionDigits="2"
 										value="${royalty.tGrnTaxableAmt}" /></td>
 										
@@ -142,7 +147,7 @@ th {
  --%>								<td align="center"><c:out value="${3}" /></td>
 								<c:set var="rAmt" value="${(netValue*3)/100}"></c:set>
 
-								<td style="text-align: center;"><fmt:formatNumber
+								<td style="text-align: right;"><fmt:formatNumber
 										type="number" maxFractionDigits="2"
 										value="${rAmt}" />
 <%-- 								<td><c:out value="${rAmt}" /></td>
@@ -159,16 +164,16 @@ th {
 			<tr>
 
 				<td colspan='2'><b>Total</b></td>
-				<td><b><fmt:formatNumber type="number"
+				<td width="100" align="right"><b><fmt:formatNumber type="number"
 							maxFractionDigits="2" value="${taxAmount}" /></b></td>
-				<td><b><fmt:formatNumber type="number"
+				<td width="100" align="right"><b><fmt:formatNumber type="number"
 							maxFractionDigits="2" value="${cgst}" /></b></td>
-				<td><b><fmt:formatNumber type="number"
+				<td width="100" align="right"><b><fmt:formatNumber type="number"
 							maxFractionDigits="2" value="${sgst}" /></b></td>
-				<td><b><fmt:formatNumber type="number"
+				<td width="100" align="right"><b><fmt:formatNumber type="number"
 							maxFractionDigits="2" value="${igst}" /></b></td>
 				<td></td>
-				<td><b><fmt:formatNumber type="number"
+				<td width="100" align="right"><b><fmt:formatNumber type="number"
 							maxFractionDigits="2" value="${grandTotal}" /></b></td>
 				<!--  <td><b>Total</b></td> -->
 			</tr>

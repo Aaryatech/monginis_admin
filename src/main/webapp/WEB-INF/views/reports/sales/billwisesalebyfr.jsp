@@ -578,8 +578,10 @@ function genPdf()
 {
 	var from_date = $("#fromDate").val();
 	var to_date = $("#toDate").val();
-	
-	window.open('${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseByFrPdf/'+from_date+'/'+to_date);
+
+	var selectedFr = $("#selectFr").val();
+	var routeId=$("#selectRoute").val();
+	window.open('${pageContext.request.contextPath}/pdfForReport?url=pdf/showSaleBillwiseByFrPdf/'+from_date+'/'+to_date+'/'+selectedFr+'/'+routeId+'/');
 	
 	}
 function exportToExcel()

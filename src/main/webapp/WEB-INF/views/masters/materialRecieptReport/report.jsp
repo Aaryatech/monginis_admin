@@ -587,7 +587,7 @@ function getPdf()
 	
 		if(valid==0)
 		{
-	    	window.open('${pageContext.request.contextPath}/materialRec?url=billWisePdf/'+from_date+'/'+to_date+'/'+supplier);
+	    	window.open('${pageContext.request.contextPath}/materialRec?url=pdf/billWisePdf/'+from_date+'/'+to_date+'/'+supplier+'/');
 		}
     }
 </script>

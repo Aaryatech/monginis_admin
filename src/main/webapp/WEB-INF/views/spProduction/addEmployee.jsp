@@ -57,10 +57,10 @@
 
                       <input type="hidden" name="emp_id" id="emp_id" value="${emp.empId}"/>
                       
-								<div class="form-group">
+								<div class="col2">
 									<label class="col-sm-3 col-lg-2 control-label">Employee
 										Name</label>
-									<div class="col-sm-9 col-lg-10 controls">
+									<div class="col-sm-3 col-lg-4 controls">
 										<input type="text" name="emp_name" id="emp_name"
 											placeholder="Employee Name" class="form-control"
 											data-rule-required="true" value="${emp.empName}"/>
@@ -68,7 +68,7 @@
 								</div>
                                <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Department Name</label>
-									<div class="col-sm-9 col-lg-10 controls">
+									<div class="col-sm-3 col-lg-4 controls">
 									<select name="dept_id" id="dept_id" class="form-control" placeholder="Department Name" data-rule-required="true">
 											<option value="-1">Select Department Name</option>
 										    	<c:forEach items="${mDeptList}" var="mDeptList">
@@ -84,9 +84,9 @@
 								</select>	
 									</div>
 								</div>
-								    <div class="form-group">
+								  <div class="col2">
 									<label class="col-sm-3 col-lg-2 control-label">Employee Type</label>
-									<div class="col-sm-9 col-lg-10 controls">
+									<div class="col-sm-3 col-lg-4 controls">
 									<select name="emp_type" id="emp_type" class="form-control" placeholder="Employee Type" data-rule-required="true">
 											<option value="-1">Select Employee Type</option>
 											<c:forEach items="${typeList}" var="typeList">
@@ -103,9 +103,80 @@
 								</select>	
 									</div>
 								</div>
-                              <div class="form-group">
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Emp Family Members
+										</label>
+									<div class="col-sm-3 col-lg-4 controls">
+										<input type="text" name="emp_fam_memb" id="emp_fam_memb"
+											placeholder="Employee Family Member" class="form-control"
+											data-rule-required="true" value="${emp.empFamMemb}"/>
+									</div>
+								</div>
+								  <div class="col2">
+									<label class="col-sm-3 col-lg-2 control-label">Employee Discount</label>
+									<div class="col-sm-3 col-lg-4 controls">
+									<select name="disc_id" id="disc_id" class="form-control" placeholder="Employee Discount" data-rule-required="true">
+											<option value="-1">Select Employee Discount</option>
+											<c:forEach items="${discountList}" var="discountList">
+											<c:choose>
+													<c:when test="${discountList.discountId==emp.discId}">
+												          <option value="${discountList.discountId}" selected><c:out value="${discountList.discountHead}"></c:out></option>
+													</c:when>
+													<c:otherwise>
+										            	  <option value="${discountList.discountId}"><c:out value="${discountList.discountHead}"></c:out></option>
+													</c:otherwise>
+												</c:choose>
+										</c:forEach>
+												
+								</select>	
+									</div>
+								</div>
+									<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Mobile No.
+										</label>
+									<div class="col-sm-3 col-lg-4 controls">
+										<input type="number" name="emp_mob" id="emp_mob"
+											placeholder="Employee Mobile No." class="form-control" pattern="^\d{10}$" required
+											data-rule-required="true" value="${emp.empMobile}"/>
+									</div>
+								</div>
+									<div class="col2">
+											<label class="col-sm-3 col-lg-2 control-label">Date of Birth</label>
+											<div class="col-sm-3 col-lg-4 controls">
+												<input class="form-control date-picker" id="emp_dob" size="16"
+													type="text" name="emp_dob"
+													required placeholder="Date of Birth" value="${emp.empDob}"/>
+											</div>
+									</div>
+									<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Date of Joining</label>
+											<div class="col-sm-3 col-lg-4 controls">
+												<input class="form-control date-picker" id="emp_doj" size="16"
+													type="text" name="emp_doj"
+													required placeholder="Date of Joining" value="${emp.empDoj}"/>
+											</div>
+									</div>
+										<div class="col2">
+									<label class="col-sm-3 col-lg-2 control-label">Monthly Limit
+										</label>
+									<div class="col-sm-3 col-lg-4 controls">
+										<input type="number" name="monthly_limit" id="monthly_limit"
+											placeholder="Monthly Limit" class="form-control"
+											data-rule-required="true" value="${emp.monthlyLimit}"/>
+									</div>
+								</div>
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Yearly Limit
+										</label>
+									<div class="col-sm-3 col-lg-4 controls">
+										<input type="number" name="yearly_limit" id="yearly_limit"
+											placeholder="Yearly Limit" class="form-control"
+											data-rule-required="true" value="${emp.yearlyLimit}"/>
+									</div>
+								</div>
+                              <div class="col2">
 									<label class="col-sm-3 col-lg-2 control-label">Is Used?</label>
-									<div class="col-sm-9 col-lg-10 controls">
+									<div class="col-sm-3 col-lg-4 controls">
 											<c:choose>
 												
 												<c:when test="${emp.isUsed==0}">
@@ -148,9 +219,9 @@
 									</div>
 								</div>
 
-
+<br>
 								<div class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
+									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										<input type="submit" class="btn btn-primary" value="Submit">
 <!-- 										<button type="button" class="btn">Cancel</button>
  -->									</div>
@@ -170,21 +241,60 @@
 									</div>
 
 									<div class="box-content">
+<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
 										<div class="clearfix"></div>
-										<div class="table-responsive" style="border: 0">
+							<div id="table-scroll" class="table-scroll">
+								 		
+								<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+												<th width="45" style="width: 18px">Sr.No.</th>
+														<th width="100" align="left">Employee Name</th>
+														<th width="100" align="left">Department Name</th>
+														<th width="100" align="left">Mobile No.</th>
+														<th width="100" align="left">Monthly Limit</th>
+														<th width="100" align="left">Yearly Limit</th>
+													
+														
+														<th width="81" align="left">Action</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+												<th width="45" style="width: 18px">Sr.No.</th>
+														<th width="100" align="left">Employee Name</th>
+														<th width="100" align="left">Department Name</th>
+														<th width="100" align="left">Mobile No.</th>
+														<th width="100" align="left">Monthly Limit</th>
+														<th width="100" align="left">Yearly Limit</th>
+													
+														
+														<th width="81" align="left">Action</th>
+												</tr>
+												</thead> 
+                             <!--        <div class="table-responsive" style="border: 0">
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
 														<th width="45" style="width: 18px">Sr.No.</th>
 														<th width="100" align="left">Employee Name</th>
 														<th width="100" align="left">Department Name</th>
-														<th width="100" align="left">Employee Type</th>
-														<th width="100" align="left">Is Used</th>
+														<th width="100" align="left">Mobile No.</th>
+														<th width="100" align="left">Monthly Limit</th>
+														<th width="100" align="left">Yearly Limit</th>
+													
 														
 														<th width="81" align="left">Action</th>
 													</tr>
-												</thead>
+												</thead>  -->
 												<tbody>
 													  <c:forEach items="${employeeList}" var="employeeList" varStatus="count">
 														<tr>
@@ -192,11 +302,17 @@
 															<td><c:out value="${count.index+1}"/></td>
 															<td align="left"><c:out
 																	value="${employeeList.empName}"></c:out></td>
-															<td align="left"><c:out
-																	value="${employeeList.typeName}"></c:out></td>		
+															
 															<td align="left"><c:out
 																	value="${employeeList.deptName}"></c:out></td>
-															<c:choose>
+															<td align="left"><c:out
+																	value="${employeeList.empMobile}"></c:out></td>
+															<td align="left"><c:out
+																	value="${employeeList.monthlyLimit}"></c:out></td>
+															<td align="left"><c:out
+																	value="${employeeList.yearlyLimit}"></c:out></td>
+															<%-- <c:choose>
+															
 															<c:when test="${employeeList.isUsed==0}">
 															<td align="left"><c:out
 																	value="NO"></c:out></td>
@@ -205,7 +321,7 @@
 																<td align="left"><c:out
 																	value="YES"></c:out></td>
 															</c:when>
-															</c:choose>			
+															</c:choose>		 --%>	
 															<td align="left"><a href="${pageContext.request.contextPath}/updateEmp/${employeeList.empId}"><span
 														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
                                                         

@@ -574,7 +574,7 @@ function getPdf()
 	
 		if(valid==0)
 		{
-	   	 	window.open('${pageContext.request.contextPath}/materialRec?url=monthWisePdf/'+from_date+'/'+to_date+'/'+supplier);
+	   	 	window.open('${pageContext.request.contextPath}/materialRec?url=pdf/monthWisePdf/'+from_date+'/'+to_date+'/'+supplier+'/');
 		}
    
     }

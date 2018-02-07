@@ -223,7 +223,7 @@
 	<script type="text/javascript">
 		function searchReport() {
 		//	var isValid = validate();
-alert("HI ");
+              alert("HI ");
 				//var selectedFr = $("#selectFr").val();
 				//var routeId=$("#selectRoute").val();
 				
@@ -392,7 +392,7 @@ function genPdf()
 	var from_date = $("#fromDate").val();
 	var to_date = $("#toDate").val();
 	
-	window.open('${pageContext.request.contextPath}/pdfForReport?url=showSaleReportBillwiseAllFrPdf/'+from_date+'/'+to_date);
+	window.open('${pageContext.request.contextPath}/pdfForReport?url=pdf/showSaleReportBillwiseAllFrPdf/'+from_date+'/'+to_date);
 	
 	}
 function exportToExcel()
