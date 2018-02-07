@@ -2,6 +2,8 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<%@ page import = "java.util.Date" %>
+
 	 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
@@ -63,7 +65,7 @@
 						</div>
 
 						<div class="box-content">
-							<form class="form-horizontal" id="validation-form">
+							<form class="form-horizontal"  id="validation-form1">
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Category</label>
@@ -162,7 +164,7 @@
 
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-
+					
 										<input type="button" class="btn btn-info" name="submit"
 											value="Get Stock " onclick="searchItemsByCategory()" />
 									</div>
@@ -170,7 +172,7 @@
 								<input type="hidden" id="selectedCatId" name="selectedCatId" />
 
 							</form>
-							<form action="insertOpeningStock" method="post"
+							<form  method="post"
 								id="validation-form">
 
 								<div class="box">
@@ -189,9 +191,8 @@
 										<!-- 										<input type="submit" class="btn btn-primary" value="Submit">
  -->
  
- 
 											<input type="button" class="btn btn-danger"
-											value="Day End Process" id="dayEndButton"  disabled/>
+											value="Day End Process" id="dayEndButton" disabled="disabled"/>
 
 									</div>
 
@@ -238,12 +239,8 @@
  -->
  
  
-											<input type="button" class="btn btn-danger"
-											value="Day End Process" id="dayEndButton"  disabled/>
-
+ 
 									</div>
-
-
 
 								</div>
 								<div align="center" id="loader" style="display: none">
@@ -261,7 +258,7 @@
 
 
 					</div>
-					<!-- </form> -->
+					</form>
 				</div>
 
 			</div>
@@ -340,12 +337,11 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-		
-		
+	
 
 	<script type="text/javascript">
 		function searchItemsByCategory() {
-
+			
 			var catId = $("#catId").val();
 			document.getElementById("selectedCatId").value = catId;
 			//var to_datepicker = document.getElementById("to_datepicker").value ;
@@ -357,15 +353,7 @@
 			
 			var option = $("#selectStock").val();
 			
-			if(option==1 && catId==-1){
-				alert("Inside Button Enable ");
-				$('#dayEndButton').removeAttr('disabled');
-			}
-			else{
-				alert("In Else Buttton Disabledd ");
-				$("#dayEndButton").disabled=true;
-				//$('#dayEndButton').removeAttr('enabled');
-			}
+			
 			$('#loader').show();
 
 			$
@@ -384,6 +372,22 @@
 								$('#table1 td').remove();
 
 								$('#loader').hide();
+								
+								
+								if(data.isDayEndEnable==1){
+									if(option==1 && catId==-1){
+										
+										//alert("in if enable true");
+										//$('#dayEndButton').removeAttr('disabled');
+										 document.getElementById("dayEndButton").disabled = false; 
+
+									}
+									else{
+										//alert("in else disable true");
+										$("#dayEndButton").disabled=true;
+									}
+								}
+
 								if (data == "") {
 									alert("No records found !!");
 
@@ -391,9 +395,10 @@
 
 								$
 										.each(
-												data,
+												data.stockDetail,
 												function(key, stock) {
-
+													
+													
 													var index = key + 1;
 
 													var tr = "<tr>";
@@ -491,37 +496,43 @@
 			if(stock.isDayEndEnable==1){
 			$('#dayEndButton').removeAttr('disabled');
 			}
+		
 		}
+		
+	/* function 	decideDayEnd(){
+		alert("inside decide Day End ");
+		
+		if(2==2){
+		//$('#dayEndButton').removeAttr('enabled');
+			alert("2==2")
+			 document.getElementById("dayEndButton").disabled = true; 
+			//document.getElementById('dayEndButton').style = "display:none";
+		}
+		else{
+			alert("Else");
+			 document.getElementById("dayEndButton").disabled = false; 		
+			 }
+	} */
+
 	</script>
-
-
 
 	<script type="text/javascript">
 		$('#dayEndButton').click(function() {
 
 			var option = $("#selectStock").val();
 			if (option == 1) {
-				alert("Day End ");
-				$('#loader').show();
-				$.getJSON('${finishedGoodDayEnd}', {
-
-					ajax : 'true',
-
-				},
-				function(data) {
-				alert("Completed");
-					//$('#table1 td').remove();
-
-					$('#loader').hide();
-					if (data == "") {
-						alert("No records found !!");
-
-					}
+			var dayEnd=confirm("Day End ");
+				if(dayEnd==true){
+			 var form = document.getElementById("validation-form")
+			 
+			// alert(form);
+			  	  form.action ="${pageContext.request.contextPath}/finishedGoodDayEnd";
+			    form.submit();
 				}
-
-				);
-
-			} else {
+			    
+			}
+			
+			 else {
 
 				alert("Please Select Current Stock");
 

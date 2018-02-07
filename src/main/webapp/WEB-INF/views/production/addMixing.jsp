@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+	
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
  <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
  <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
@@ -91,15 +93,18 @@
 													<td align="left"><c:out value="${mixingList.mulFactor}" /></td>
 
 													<td align="left"><c:out value="${mixingList.total}" /></td>
-													<td align="left"><c:out
-															value="${mixingList.total * mixingList.mulFactor}" /></td>
-
+													<td align="left"><%-- c:out
+															value="${mixingList.total * mixingList.mulFactor}" /> --%>
+<fmt:formatNumber type="number" maxFractionDigits="2" var="total" value="${mixingList.total * mixingList.mulFactor}" />
+<c:out
+															value="${total}" />
+</td>
 
 													<td align="left"><input type="text" id="editQty"
 														size="2" class="form-control"
 														name="editQty<c:out
 																value="${count.index}"/>"
-														value="${mixingList.total * mixingList.mulFactor}"></td>
+														value="${total}"></td>
 
 													<td align="left"><c:out value="${mixingList.uom}"></c:out></td>
 

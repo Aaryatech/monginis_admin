@@ -805,6 +805,17 @@ public class ViewProdController {
 			// getSFPlanDetailForMixingList.getSfPlanDetailForMixing();
 			mav.addObject("mixingList", prodMixingReqP1);
 			System.out.println("sf Plan Detail For Mixing  " + sfPlanDetailForMixing.toString());
+			//ceil fun 6 feb
+			for(int i=0;i<prodMixingReqP1.size();i++) {
+				
+				System.out.println("total === "+prodMixingReqP1.get(i).getTotal());
+				
+				prodMixingReqP1.get(i).setTotal((int)Math.ceil(prodMixingReqP1.get(i).getTotal()));
+				
+				System.out.println("total seiled new  "+prodMixingReqP1.get(i).getTotal());
+				
+				
+			}
 
 			TempMixing tempMx = null;
 			/*

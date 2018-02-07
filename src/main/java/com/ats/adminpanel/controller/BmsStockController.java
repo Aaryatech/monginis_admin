@@ -57,6 +57,8 @@ public class BmsStockController {
 	Date globalHeaderDate;
 
 	int globalRmType;
+	
+	int globalBmsHeaderId;
 
 	@RequestMapping(value = "/showBmsStock", method = RequestMethod.GET)
 	public ModelAndView showBmsStock(HttpServletRequest request, HttpServletResponse response) {
@@ -305,6 +307,8 @@ public class BmsStockController {
 				}
 
 				globalHeaderDate = bmsStockHeader.getBmsStockDate();
+				
+				globalBmsHeaderId=bmsStockHeader.getBmsStockId();
 
 				int showDayEnd = 0;
 				if (headerDate.before(cDate) || headerDate.equals(cDate)) {
@@ -478,32 +482,45 @@ public class BmsStockController {
 
 			// Update bms stock Day end Process
 
-			map.add("fromDate", new SimpleDateFormat("yyyy-MM-dd").format(globalHeaderDate));
-			map.add("toDate", new SimpleDateFormat("yyyy-MM-dd").format(globalHeaderDate));
-			map.add("rmType", globalRmType);
+			//map.add("fromDate", new SimpleDateFormat("yyyy-MM-dd").format(globalHeaderDate));
+			//map.add("toDate", new SimpleDateFormat("yyyy-MM-dd").format(globalHeaderDate));
+			//map.add("rmType", globalRmType);
+			
+			map.add("bmsStockId", 6);
+			System.out.println("Global bms Header Id "+globalBmsHeaderId);
 
 			ParameterizedTypeReference<List<BmsStockDetailed>> typeRef = new ParameterizedTypeReference<List<BmsStockDetailed>>() {
 			};
-			ResponseEntity<List<BmsStockDetailed>> responseEntity = restTemplate.exchange(Constants.url + "getBmsStock",
+			ResponseEntity<List<BmsStockDetailed>> responseEntity = restTemplate.exchange(Constants.url + "getBmsStockDetail",
 					HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 			bmsStockDetailedList = responseEntity.getBody();
 			
+			System.out.println("bms Details "+bmsStockDetailedList.toString());
+			
 			if(globalRmType==1) {
-
+				
+				System.out.println("current list size "+bmsCurrentStockList.getBmsCurrentStock().size());
+				
+				System.out.println("Detail List Size "+bmsStockDetailedList.size());
 			for (int i = 0; i < bmsStockDetailedList.size(); i++) {
+				
 				for (int j = 0; j < bmsCurrentStockList.getBmsCurrentStock().size(); j++) {
+					
 					if (bmsCurrentStockList.getBmsCurrentStock().get(i).getRmId() == bmsStockDetailedList.get(i)
 							.getRmId()) {
+						
+						System.out.println("RM id Matched ");
+						
 						GetBmsCurrentStock getBmsCurrentStock = bmsCurrentStockList.getBmsCurrentStock().get(j);
 
 						BmsStockDetailed bmsStockDetailed = bmsStockDetailedList.get(i);
 
-						float stockQty = bmsStockDetailed.getBmsOpeningStock() + getBmsCurrentStock.getStoreIssueQty()
+						/*float stockQty = bmsStockDetailed.getBmsOpeningStock() + getBmsCurrentStock.getStoreIssueQty()
 								+ getBmsCurrentStock.getProdIssueQty() + getBmsCurrentStock.getMixingReturnQty()
 								- (getBmsCurrentStock.getProdIssueQty() + getBmsCurrentStock.getMixingIssueQty()
-										);
-						bmsStockDetailedList.get(i).setClosingQty(stockQty);
+										);*/
+						bmsStockDetailedList.get(i).setClosingQty(getBmsCurrentStock.getBmsClosingStock());
 
 						BmsStockDetailed newBmsStock = new BmsStockDetailed();
 
@@ -536,7 +553,15 @@ public class BmsStockController {
 						newBmsStock.setStoreRecQty(getBmsCurrentStock.getStoreIssueQty());
 
 						stokDetailList.add(newBmsStock);
+						
+						if(getBmsCurrentStock.getRmId()==3000011) {
+						System.out.println("for Sugar ");
+							System.out.println("current Data "+bmsCurrentStock.get(i).toString());
+							System.out.println("Detail  Data "+bmsStockDetailed.toString());
 
+						}
+					}else {
+						System.out.println("RM Id Not matched ");
 					}
 				}
 			}
@@ -555,10 +580,10 @@ public class BmsStockController {
 			bmsStockHeader.setExBoll1(0);
 			bmsStockHeader.setExVarchar("");
 
-			bmsStockHeader = restTemplate.postForObject(Constants.url + "insertBmsStock", bmsStockHeader,
-					BmsStockHeader.class);// end of update bms stock Day end Process
+			//bmsStockHeader = restTemplate.postForObject(Constants.url + "insertBmsStock", bmsStockHeader,
+					//BmsStockHeader.class);// end of update bms stock Day end Process
 			
-			System.out.println("bsm RM Stock Header Update Response"+bmsStockHeader.toString());
+			//System.out.println("bsm RM Stock Header Update Response"+bmsStockHeader.toString());
 
 			// Inserting next Day Entry for BMS Stock//
 			System.out.println("Inserting next day stock Entry for BMS Stock");
@@ -604,10 +629,10 @@ public class BmsStockController {
 			
 			bmsStockHeader=new BmsStockHeader();
 			
-			bmsStockHeader = restTemplate.postForObject(Constants.url + "insertBmsStock", bmsStockHeaderInsert,
-					BmsStockHeader.class);// End of inserting BMS Stock for Next Day
+			//bmsStockHeader = restTemplate.postForObject(Constants.url + "insertBmsStock", bmsStockHeaderInsert,
+					//BmsStockHeader.class);// End of inserting BMS Stock for Next Day
 			
-			System.out.println("bsm RM Stock Header Insert Response"+bmsStockHeader.toString());
+			//System.out.println("bsm RM Stock Header Insert Response"+bmsStockHeader.toString());
 
 			
 			}

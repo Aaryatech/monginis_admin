@@ -35,6 +35,7 @@ import com.ats.adminpanel.model.item.CategoryListResponse;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.item.MCategoryList;
 import com.ats.adminpanel.model.item.StockDetail;
+import com.ats.adminpanel.model.stock.FinGoodBean;
 import com.ats.adminpanel.model.stock.FinishedGoodStock;
 import com.ats.adminpanel.model.stock.FinishedGoodStockDetail;
 import com.ats.adminpanel.model.stock.GetCurProdAndBillQty;
@@ -330,10 +331,10 @@ try {
 	}
 
 	@RequestMapping(value = "/getFinGoodStock", method = RequestMethod.GET)
-	public @ResponseBody List<FinishedGoodStockDetail> getFinGoodStock(HttpServletRequest request,
+	public @ResponseBody FinGoodBean getFinGoodStock(HttpServletRequest request,
 			HttpServletResponse response) {
 		System.out.println("Inside get Fin good Ajax Call");
-
+		FinGoodBean bean=new FinGoodBean();
 		RestTemplate restTemplate = new RestTemplate();
 
 		int catId = Integer.parseInt(request.getParameter("catId"));
@@ -346,10 +347,10 @@ try {
 		List<FinishedGoodStockDetail> updateStockDetailList = new ArrayList<>();
 
 		try {
-			int isDayEndEnable=0;
+			
 			// Get Current Stock For Finished Good
 			if (option == 1) {
-				
+				int isDayEndEnable=0;
 				System.out.println("Cat ID OPTION ***********"+selectedCat);
 
 				System.out.println("inside option 1");
@@ -370,19 +371,22 @@ try {
 				
 				Date curDate=new Date();
 				
-				if(stockDate.before(curDate) || curDate.equals(stockDate)) {
-					System.out.println("Current Date is After Stock Date Allow to End Previous Days Day End  ");
-					
-					isDayEndEnable=1;//Allow to End A day
-				}else {
 				
-					isDayEndEnable=1;
-					
-				}
-
 				List<GetCurProdAndBillQty> getCurProdAndBillQty = new ArrayList<>();
 				
 				if(selectedCat==-1 || selectedCat==0) {
+					
+					
+					if(stockDate.before(curDate) || curDate.equals(stockDate)) {
+						System.out.println("Current Date is After Stock Date Allow to End Previous Days Day End  ");
+						
+						isDayEndEnable=1;//Allow to End A day
+					}else {
+					
+						isDayEndEnable=0;
+						
+					}
+					bean.setIsDayEndEnable(isDayEndEnable);
 					
 					System.out.println("Inside If Selected Cat iD ==-1");
 				map = new LinkedMultiValueMap<String, Object>();
@@ -491,9 +495,9 @@ try {
 
 						if (curProdBilQty.getId() == stockDetail.getItemId()) {
 
-							System.out.println(
+							/*System.out.println(
 									"item Id Matched " + curProdBilQty.getId() + "and " + stockDetail.getItemId());
-
+*/
 							float a = 0, b = 0, c = 0;
 
 							float cloT1 = 0;
@@ -512,7 +516,7 @@ try {
 							float t2 = stockDetail.getOpT2();
 							float t3 = stockDetail.getOpT3();
 							
-							stockDetail.setIsDayEndEnable(isDayEndEnable);
+							//stockDetail.setIsDayEndEnable(isDayEndEnable);
 
 							System.out.println("t1 : " + t1 + " t2: " + t2 + " t3: " + t3);
 
@@ -549,15 +553,15 @@ try {
 								}
 							} // end of if t1>0
 
-							System.out.println("---------");
-							System.out.println("bill Qty = " + curProdBilQty.getBillQty());
-							System.out.println(" for Item Id " + curProdBilQty.getId());
-							System.out.println("a =" + a + "b = " + b + "c= " + c);
+							//System.out.println("---------");
+							//System.out.println("bill Qty = " + curProdBilQty.getBillQty());
+							//System.out.println(" for Item Id " + curProdBilQty.getId());
+							//System.out.println("a =" + a + "b = " + b + "c= " + c);
 							float damagedQty = curProdBilQty.getDamagedQty();
 
 							float curIssue = billQty - (a + b + c);
 
-							System.out.println("cur Issue qty =" + curIssue);
+							//System.out.println("cur Issue qty =" + curIssue);
 
 							cloT1 = t1 - a;
 							cloT2 = t2 - b;
@@ -577,12 +581,12 @@ try {
 
 							updateStockDetailList.add(stockDetail);
 
-							System.out.println("closing Qty  : t1 " + cloT1 + " t2 " + cloT2 + " t3 " + cloT3);
+							//System.out.println("closing Qty  : t1 " + cloT1 + " t2 " + cloT2 + " t3 " + cloT3);
 
-							System.out.println("cur Closing " + curClosing);
-							System.out.println("total closing " + totalClosing);
+							//System.out.println("cur Closing " + curClosing);
+							//System.out.println("total closing " + totalClosing);
 
-							System.out.println("---------");
+							//System.out.println("---------");
 
 						} // end of if isSameItem =true
 					} // end of Inner For Loop
@@ -659,7 +663,10 @@ System.out.println("If All Category Selected Option");
 		}
 		
 		selectedCat=0;
-		return updateStockDetailList;
+		
+		System.out.println("isDayEnd "+bean.getIsDayEndEnable());
+		bean.setStockDetail(updateStockDetailList);
+		return bean;
 
 	}
 
@@ -740,8 +747,8 @@ System.out.println("If All Category Selected Option");
 
 					if (curProdBilQty.getId() == stockDetail.getItemId()) {
 
-						System.out
-								.println("item Id Matched " + curProdBilQty.getId() + "and " + stockDetail.getItemId());
+						//System.out
+							//	.println("item Id Matched " + curProdBilQty.getId() + "and " + stockDetail.getItemId());
 
 						float a = 0, b = 0, c = 0;
 
@@ -761,7 +768,7 @@ System.out.println("If All Category Selected Option");
 						float t2 = stockDetail.getOpT2();
 						float t3 = stockDetail.getOpT3();
 
-						System.out.println("t1 : " + t1 + " t2: " + t2 + " t3: " + t3);
+						//System.out.println("t1 : " + t1 + " t2: " + t2 + " t3: " + t3);
 
 						if (t3 > 0) {
 
@@ -796,10 +803,10 @@ System.out.println("If All Category Selected Option");
 							}
 						} // end of if t1>0
 
-						System.out.println("---------");
-						System.out.println("bill Qty = " + curProdBilQty.getBillQty());
-						System.out.println(" for Item Id " + curProdBilQty.getId());
-						System.out.println("a =" + a + "b = " + b + "c= " + c);
+						//System.out.println("---------");
+						//System.out.println("bill Qty = " + curProdBilQty.getBillQty());
+						//System.out.println(" for Item Id " + curProdBilQty.getId());
+						//System.out.println("a =" + a + "b = " + b + "c= " + c);
 						float damagedQty = curProdBilQty.getDamagedQty();
 
 						float curIssue = billQty - (a + b + c);
@@ -825,12 +832,12 @@ System.out.println("If All Category Selected Option");
 
 						updateStockDetailList.add(stockDetail);
 
-						System.out.println("closing Qty  : t1 " + cloT1 + " t2 " + cloT2 + " t3 " + cloT3);
+						//System.out.println("closing Qty  : t1 " + cloT1 + " t2 " + cloT2 + " t3 " + cloT3);
 
-						System.out.println("cur Closing " + curClosing);
-						System.out.println("total closing " + totalClosing);
+						//System.out.println("cur Closing " + curClosing);
+						//System.out.println("total closing " + totalClosing);
 
-						System.out.println("---------");
+						//System.out.println("---------");
 
 					} // end of if isSameItem =true
 				} // end of Inner For Loop
