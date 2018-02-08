@@ -15,7 +15,7 @@
 			<c:url var="getRmListByCatId" value="/getRmListByCatId" />
 						<c:url var="getRmRateAndTax" value="/getRmRateAndTax" />
 
-	
+	<c:url var="getUomForRawMaterial" value="/getUomForRawMaterial" />
 
 
 	<!-- BEGIN Sidebar -->
@@ -194,12 +194,16 @@
 					<div class="box-content">
 			
 								<div class="col-md-2">Discount % </div>
-								<div class="col-md-3">
+								<div class="col-md-2">
 									<input type="text" placeholder="Enter Discount %" name="disc_per" id="disc_per" value="0" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;">
+								</div>
+								<div class="col-md-1">Uom </div>
+								<div class="col-md-1">
+									<input type="text" placeholder="Uom" name="rm_uom" id="rm_uom" class="form-control" readonly>
 								</div>
 									
 								<div class="col-md-1"></div>
-								<div class="col-md-3">
+								<div class="col-md-2">
 									<input type="button" class="btn btn-info pull-right" onclick="addItem()" value="Add Item"> 
 								</div>
 					</div><br/>
@@ -694,7 +698,58 @@ $(document).ready(function() {
 	
 			});
 });
+ 
+ 
+ 
+ $(document).ready(function() { 
+	$('#rm_id').change(
+			function() {
+			var	rm_id =document.getElementById("rm_id").value; 
+			
+				$.getJSON('${getUomForRawMaterial}', { 
+					ajax : 'true'
+				}, function(uomlist) {
+					
+					 var uomlistlength = uomlist.length; 
+					 cId=document.getElementById("rm_cat").value; 
+								$.getJSON('${getRmListByCatId}', {
+									
+									catId : cId,
+									ajax : 'true'
+									
+								}, 
+								function(data) {
+									
+									var len = data.length;
+									var uom; 
+									for ( var i = 0; i < len; i++) { 
+											if(data[i].rmId==rm_id)
+												{
+												uom=data[i].rmUomId;
+												break;
+												} 
+									}
+									
+									for(var j = 0; j< uomlistlength; j++)
+									{
+									 
+									if(uom==uomlist[j].uomId)
+										{ 
+										document.getElementById("rm_uom").value=uomlist[j].uom;
+										break;
+										}
+									
+									}
+									
+									 
+								});
 
+				});
+				
+			 
+	
+			});
+});
 
 var specialKeys = new Array();
 specialKeys.push(8); //Backspace

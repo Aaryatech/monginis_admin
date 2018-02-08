@@ -49,7 +49,8 @@ import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;
 import com.ats.adminpanel.model.RawMaterial.Info;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialDetails;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialDetailsList; 
-import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetailsList; 
+import com.ats.adminpanel.model.RawMaterial.RawMaterialTaxDetailsList;
+import com.ats.adminpanel.model.RawMaterial.RawMaterialUom;
 import com.ats.adminpanel.model.RawMaterial.RmItemGroup;
 import com.ats.adminpanel.model.RawMaterial.RmRateVerification;
 import com.ats.adminpanel.model.materialreceipt.Supplist;
@@ -149,9 +150,28 @@ public class PurchaseOrderController {
 		RestTemplate rest=new RestTemplate();
 		RawMaterialDetailsList rawMaterialDetailsList=  rest.postForObject(Constants.url + "rawMaterial/getRawMaterialByCategory",map,
 				RawMaterialDetailsList.class);
-		
+		System.out.println("rawMaterialDetailsList"+rawMaterialDetailsList.getRawMaterialDetailsList());
 		
 		return rawMaterialDetailsList.getRawMaterialDetailsList();
+	}
+	
+	@RequestMapping(value = "/getUomForRawMaterial", method = RequestMethod.GET)
+	public @ResponseBody List<RawMaterialUom> getUomForRawMaterial(HttpServletRequest request,
+		HttpServletResponse response) {
+	
+		RestTemplate rest = new RestTemplate();
+		List<RawMaterialUom> rawMaterialUomList = new ArrayList<RawMaterialUom>();
+		try {
+			 rawMaterialUomList=rest.getForObject(Constants.url + "rawMaterial/getRmUom", List.class);
+			System.out.println("RM UOM data : "+rawMaterialUomList);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		
+		
+		return rawMaterialUomList;
 	}
 	
 	@RequestMapping(value = "/showPurchaseOrder", method = RequestMethod.GET)

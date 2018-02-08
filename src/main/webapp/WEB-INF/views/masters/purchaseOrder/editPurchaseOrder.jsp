@@ -14,7 +14,8 @@
 		<c:url var="deleteItem" value="/deleteItem"></c:url>
 		<c:url var="getRmCategory" value="/getRmCategory" />
 		<c:url var="getRmListByCatId" value="/getRmListByCatId" />
-						<c:url var="getRmRateAndTax" value="/getRmRateAndTax" /> 
+						<c:url var="getRmRateAndTax" value="/getRmRateAndTax" />
+						<c:url var="getUomForRawMaterial" value="/getUomForRawMaterial" /> 
 
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
@@ -193,35 +194,18 @@
 
 										</select>
 									</div>
-									<div class="col-md-2">Quantity </div>
-										<div class="col-md-3">
-										<input type="text" placeholder="Enetr RM Quantity" name="rm_qty" id="rm_qty" class="form-control">
-									</div>
-				 
-								</div><br/>
-								
-								<div class="box-content">
-			
-			<div class="col-md-2">RM Category </div>
-								<div class="col-md-4">
+									<div class="col-md-2">RM Category </div>
+								<div class="col-md-3">
 										<select name="rm_cat" id="rm_cat" class="form-control chosen" tabindex="6" onchange="getRm()">
 										<option value="-1"disabled="disabled" selected="selected">Select RM Category</option>
 											 
 										</select>
-				</div>
-				
-				
-				<div class="col-md-2">Discount % </div>
-				<div class="col-md-3">
-					<input type="text" placeholder="Enter Discount %" name="disc_per" id="disc_per" value="0" class="form-control">
-				</div>
-				
+								</div>
 									
 				 
-			</div><br>
-									
-							<div class="box-content">
-			
+								</div><br/>
+								
+								<div class="box-content">
 								<div class="col-md-2" >Item</div>
 									<div class="col-md-4">
 										<select name="rm_id" id="rm_id" class="form-control chosen" placeholder="Select RM " tabindex="6">
@@ -231,12 +215,35 @@
 
 										</select>
 									</div>	
+			
+								<div class="col-md-2">Quantity </div>
+										<div class="col-md-3">
+										<input type="text" placeholder="Enetr RM Quantity" name="rm_qty" id="rm_qty" class="form-control">
+									</div>
+				
+				
+				
+				
 									
-				<div class="col-md-1"></div>
-				<div class="col-md-3">
-				<input type="button" class="btn btn-info pull-right" onclick="addItem()" value="Add Item"> 
-					 
-			</div>
+				 
+			</div><br>
+									
+							<div class="box-content">
+			
+								<div class="col-md-2">Discount % </div>
+								<div class="col-md-2">
+									<input type="text" placeholder="Enter Discount %" name="disc_per" id="disc_per" value="0" class="form-control">
+								</div>
+								<div class="col-md-1">Uom </div>
+								<div class="col-md-1">
+									<input type="text" placeholder="Uom" name="rm_uom" id="rm_uom" class="form-control" readonly>
+								</div>
+									
+									<div class="col-md-2"></div>
+									<div class="col-md-2">
+									<input type="button" class="btn btn-info pull-right" onclick="addItem()" value="Add Item"> 
+										 
+								</div>
 					</div><br/>
 			
 			
@@ -810,6 +817,55 @@
 	</script>
 
   <script type="text/javascript">
+  $(document).ready(function() { 
+		$('#rm_id').change(
+				function() {
+				var	rm_id =document.getElementById("rm_id").value; 
+				
+					$.getJSON('${getUomForRawMaterial}', { 
+						ajax : 'true'
+					}, function(uomlist) {
+						
+						 var uomlistlength = uomlist.length; 
+						 cId=document.getElementById("rm_cat").value; 
+									$.getJSON('${getRmListByCatId}', {
+										
+										catId : cId,
+										ajax : 'true'
+										
+									}, 
+									function(data) {
+										
+										var len = data.length;
+										var uom; 
+										for ( var i = 0; i < len; i++) { 
+												if(data[i].rmId==rm_id)
+													{
+													uom=data[i].rmUomId;
+													break;
+													} 
+										}
+										
+										for(var j = 0; j< uomlistlength; j++)
+										{
+										 
+										if(uom==uomlist[j].uomId)
+											{ 
+											document.getElementById("rm_uom").value=uomlist[j].uom;
+											break;
+											}
+										
+										}
+										
+										 
+									});
+
+					});
+					
+				 
+		
+				});
+	});
         var specialKeys = new Array();
         specialKeys.push(8); //Backspace
         function IsNumeric(e) {
