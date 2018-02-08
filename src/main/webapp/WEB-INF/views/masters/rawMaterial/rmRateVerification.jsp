@@ -165,7 +165,7 @@
 										<input type="text" name="curr_rate_tax_extra"
 											id="curr_rate_tax_extra" class="form-control"
 											placeholder="Tax Rate Extra" data-rule-required="true"
-											onKeyPress="return isNumberCommaDot(event)" />
+											pattern="[+-]?([0-9]*[.])?[0-9]+" />
 									</div>
 
 
@@ -174,7 +174,7 @@
 										<input type="text" name="curr_rate_tax_incl"
 											id="curr_rate_tax_incl" class="form-control"
 											placeholder="Tax Rate Inclusive" data-rule-required="true"
-											onKeyPress="return isNumberCommaDot(event)" />
+											pattern="[+-]?([0-9]*[.])?[0-9]+" />
 									</div>
 
 								</div>
@@ -234,7 +234,7 @@
 
 								<div class="row">
 									<div class="col-md-12" style="text-align: center">
-										<input type="submit" class="btn btn-primary" value="Submit">
+										<input type="submit" class="btn btn-primary" id="submit" value="Submit" disabled>
 										<!-- <input type="button" id="search" class="btn btn-info"
 											value="Edit" onclick="onEdit()" /> -->
 
@@ -398,6 +398,7 @@ document.getElementById("rate_date2").value=data.date1;
 document.getElementById("rate_tax_extra2").value=data.rateTaxExtra2;
 document.getElementById("rate_tax_incl2").value=data.rateTaxIncl2;
 document.getElementById("rm_rate_ver_id").value=data.rmRateVerId;
+document.getElementById("submit").disabled=false;
 
 					});
 }

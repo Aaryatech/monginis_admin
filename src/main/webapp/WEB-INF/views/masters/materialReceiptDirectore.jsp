@@ -41,6 +41,10 @@
 				<h3>
 					<i class="fa fa-bars"></i>Material Receipt Director
 				</h3>
+				<div class="box-tool">
+								<a href="${pageContext.request.contextPath}/allDirectorMaterialReceiptNote">All Director Material Reciept</a> <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
 
 			</div>
 
@@ -109,6 +113,12 @@
 								<input type="text" id="mrn_type" name="mrn_type"
 									value='<c:out value = "${mrnName}"/>' class="form-control"
 									readonly>
+							</div>
+							<div class="col-md-1"></div>
+							<div class="col-md-2">Store Remark</div>
+							<div class="col-md-3">
+
+								${materialRecNoteHeader.storesRemark}
 							</div>
 							</div><br>
 							

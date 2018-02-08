@@ -156,65 +156,54 @@
 									
 									
 									<div class="box-content">
-				<div class="col-md-2" >Raw Material Group</div>
-									<div class="col-md-4">
-										<select name="rm_group" id="rm_group" class="form-control chosen" tabindex="6">
-										<option value="-1" disabled="disabled" selected="selected">Select RM Group</option>
-											 <c:forEach items="${rmItemGroupList}" var="rmItemGroupList"
-							varStatus="count">
-							   <option value="${rmItemGroupList.grpId}"><c:out value="${rmItemGroupList.grpName}"/></option>
- 													 
-												</c:forEach>
-						
-
-										</select>
-									</div>
-									<div class="col-md-2">Quantity </div>
-				<div class="col-md-3">
-					<input type="text" placeholder="Enetr RM Quantity" name="rm_qty" id="rm_qty" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;">
-				</div>
-				 
-			</div><br/>
-			
-			<div class="box-content">
-			
-			<div class="col-md-2">Raw Material Category </div>
-								<div class="col-md-4">
-										<select name="rm_cat" id="rm_cat" class="form-control chosen" tabindex="6">
-										<option value="-1"disabled="disabled" selected="selected">Select RM Category</option>
+										<div class="col-md-2" >Raw Material Group</div>
+											<div class="col-md-4">
+												<select name="rm_group" id="rm_group" class="form-control chosen" tabindex="6">
+												<option value="-1" disabled="disabled" selected="selected">Select RM Group</option>
+													 <c:forEach items="${rmItemGroupList}" var="rmItemGroupList" varStatus="count">
+									  						 <option value="${rmItemGroupList.grpId}"><c:out value="${rmItemGroupList.grpName}"/></option>
+		 											</c:forEach> 
+												</select>
+											</div>
+								<div class="col-md-2">Raw Material Category </div>
+										<div class="col-md-3">
+											<select name="rm_cat" id="rm_cat" class="form-control chosen" tabindex="6">
+												<option value="-1"disabled="disabled" selected="selected">Select RM Category</option>
 											 
-										</select>
-				</div>
-				
-				
-				<div class="col-md-2">Discount % </div>
-				<div class="col-md-3">
-					<input type="text" placeholder="Enter Discount %" name="disc_per" id="disc_per" value="0" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;">
-				</div>
-				
+											</select>
+										</div>
 									
 				 
-			</div>
-			 <br/>
-			<div class="box-content">
+									</div><br/>
 			
+					<div class="box-content">
 								<div class="col-md-2" >Items</div>
 									<div class="col-md-4">
 										<select name="rm_id" id="rm_id" class="form-control chosen"placeholder="Select RM " tabindex="6">
-										<option value="-1" disabled="disabled" selected="selected">Select Raw Material</option>
-											 
-						
-
+										<option value="-1" disabled="disabled" selected="selected">Select Raw Material</option> 
 										</select>
 									</div>	
+		 
+									<div class="col-md-2">Quantity </div>
+										<div class="col-md-3">
+											<input type="text" placeholder="Enetr RM Quantity" name="rm_qty" id="rm_qty" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;">
+										</div> 
+					</div>
+			 		<br/>
+			 
+					<div class="box-content">
+			
+								<div class="col-md-2">Discount % </div>
+								<div class="col-md-3">
+									<input type="text" placeholder="Enter Discount %" name="disc_per" id="disc_per" value="0" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;">
+								</div>
 									
-				<div class="col-md-1"></div>
-				<div class="col-md-3">
-				<input type="button" class="btn btn-info pull-right" onclick="addItem()" value="Add Item"> 
-					 
-			</div>
+								<div class="col-md-1"></div>
+								<div class="col-md-3">
+									<input type="button" class="btn btn-info pull-right" onclick="addItem()" value="Add Item"> 
+								</div>
 					</div><br/>
-			<br/>
+					<br/>
 			
 			
 				<div class=" box-content">
