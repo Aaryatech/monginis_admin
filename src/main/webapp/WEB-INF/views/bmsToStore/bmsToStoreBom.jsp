@@ -86,7 +86,7 @@
 										<th>RM Name</th>
 										<th>Re Order</th>
 										<th>Max Order</th>
-										<th>Crrent Stock Qty</th>
+										<th>Current Stock Qty</th>
 										 <th>Order Qty</th>
 									 
 
@@ -104,8 +104,7 @@
 													
 												 
 												 
-												 <c:forEach items="${rmStockList}" var="rmStockList"
-													varStatus="count">
+												 <c:forEach items="${rmStockList}" var="rmStockList" >
 													
 													
 													<c:choose>
@@ -118,7 +117,7 @@
 																id="select_to_approve" checked readonly
 																value="${rmList.rmId}"  
 																 ></td>
-																 <c:set var="orderQty" value="${rmList.rmMaxQty-rmStockList.closingQty  }" />
+																 <c:set var="orderQty" value="${rmList.rmMaxQty-rmStockList.closingQty}" />
 																  
 													</c:when>
 													 
@@ -143,22 +142,37 @@
 														<td align="left"  ><c:out
 																value="${rmList.rmName}" /></td>
 																
-																<td align="left"  ><c:out
+																<td align="right"  ><c:out
 																value="${rmList.rmRolQty}" /></td>
 																
 																 
 													  
-												 	 <td align="left"  ><c:out
-																value="${rmList.rmMaxQty}" />  
-															   
+												 	 <td align="right"  >${rmList.rmMaxQty}  
+																<input type="hidden" name='rmMaxQty${rmList.rmId }' class='form-control' readonly id='rmMaxQty${rmList.rmId }'   value="${rmList.rmMaxQty}">
 																</td>
-												 
-															
-													 <td align="left"  ><c:out	
-																value="${ rmStockList.closingQty}" />
+												 	
+													<td align="right"  >${rmStockList.closingQty}
+																<input type="hidden" name='closingQty${rmList.rmId }' class='form-control' readonly id='closingQty${rmList.rmId }'   value=<c:out value = "${rmStockList.closingQty}"/>>
 																</td>
-													  <td align="left"><input type=text name='orderQty${rmList.rmId }' class='form-control' readonly id='orderQty${rmList.rmId }'   value=<c:out value = "${orderQty}"/>>
-																</td>  	
+																
+																 <c:choose>
+													<c:when test="${rmStockList.closingQty < rmList.rmRolQty}">
+													<td align="right"><input type=text name='orderQty${rmList.rmId}' onkeyup="validation('${rmList.rmId}')" class='form-control'   id='orderQty${rmList.rmId }'   value=<c:out value = "${orderQty}"/>>
+																</td> 
+																  
+													</c:when>
+													 
+													 
+													
+													<c:otherwise>
+													  <td align="right"><input type=text name='orderQty${rmList.rmId}' onkeyup="validation('${rmList.rmId}')" class='form-control' readonly id='orderQty${rmList.rmId }'   value=<c:out value = "${orderQty}"/>>
+																</td>
+																   
+													
+													</c:otherwise>
+													</c:choose>
+													  <%-- <td align="right"><input type=text name='orderQty${rmList.rmId}' onkeyup="validation('${rmList.rmId}')" class='form-control' readonly id='orderQty${rmList.rmId }'   value=<c:out value = "${orderQty}"/>>
+																</td> --%>  	
 														
 												 
 												
@@ -283,6 +297,26 @@
 				document.getElementById("orderQty"+id).value=0;
 			}
 		}
+		function validation(id)
+		{
+			  
+			var maxQty=parseFloat(document.getElementById("rmMaxQty"+id).value); 
+			var stockQty=parseFloat(document.getElementById("closingQty"+id).value); 
+			var orderQty=parseFloat(document.getElementById("orderQty"+id).value); 
+			if((maxQty-stockQty)<orderQty)
+				{
+				document.getElementById("orderQty"+id).value=maxQty-stockQty;
+				alert("You Cannot Give Order Greater Than Max Qty ");
+				} 
+			else{
+				document.getElementById("orderQty"+id).value=orderQty;
+			}
+			if(isNaN(orderQty))
+				{
+				document.getElementById("orderQty"+id).value=0;
+				}
+		}
+		
 		</script>
 		
 		

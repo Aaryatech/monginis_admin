@@ -108,7 +108,7 @@ public class BmsToStoreBomController {
 				System.out.println("SettingKeyList" + settingList.toString());
 
 				
-				int prodDeptId = 0, storeDeptId = 0, mixDeptId = 0;
+				int prodDeptId = 0, bmsDeptId = 0, mixDeptId = 0;
 
 				List<FrItemStockConfigure> settingKeyList = settingList.getFrItemStockConfigure();
 
@@ -119,9 +119,9 @@ public class BmsToStoreBomController {
 						prodDeptId = settingKeyList.get(i).getSettingValue();
 
 					}
-					if (settingKeyList.get(i).getSettingKey().equalsIgnoreCase("Store")) {
+					if (settingKeyList.get(i).getSettingKey().equalsIgnoreCase("BMS")) {
 
-						storeDeptId = settingKeyList.get(i).getSettingValue();
+						bmsDeptId = settingKeyList.get(i).getSettingValue();
 
 					}
 					if (settingKeyList.get(i).getSettingKey().equalsIgnoreCase("Mix")) {
@@ -137,23 +137,29 @@ public class BmsToStoreBomController {
 				
 				map.add("prodDeptId", prodDeptId);
 				map.add("mixDeptId", mixDeptId);
-				map.add("storeDeptId", storeDeptId);
-				map.add("rmType", 1);
-				
-				GetBmsCurrentStockList getBmsCurrentStockList=rest.postForObject(Constants.url +"getCuurentBmsStock",map, GetBmsCurrentStockList.class);
+				map.add("bmsDeptId", bmsDeptId);
+				/*map.add("rmType", 1);*/
+				System.out.println("map"+map);
+				GetBmsCurrentStockList getBmsCurrentStockList=rest.postForObject(Constants.url +"/getCurentBmsStockRM",map, GetBmsCurrentStockList.class);
 			 
 			
 			for(int i=0;i<bmsStockDetailedList.size();i++)
 			{
 				for(int j=0;j<getBmsCurrentStockList.getBmsCurrentStock().size();j++)
 					{
-					if(getBmsCurrentStockList.getBmsCurrentStock().get(i).getRmId()==bmsStockDetailedList.get(i).getRmId())
+					if(getBmsCurrentStockList.getBmsCurrentStock().get(j).getRmId()==bmsStockDetailedList.get(i).getRmId())
 					{
-						GetBmsCurrentStock getBmsCurrentStock=getBmsCurrentStockList.getBmsCurrentStock().get(j);
-						BmsStockDetailed bmsStockDetailed=bmsStockDetailedList.get(i);
-							float stockQty=bmsStockDetailed.getBmsOpeningStock()+getBmsCurrentStock.getStoreIssueQty()+getBmsCurrentStock.getProdReturnQty()+getBmsCurrentStock.getMixingReturnQty()
+						GetBmsCurrentStock getBmsCurrentStock=getBmsCurrentStockList.getBmsCurrentStock().get(j); 
+							float stockQty=(getBmsCurrentStock.getBmsOpeningStock()+getBmsCurrentStock.getStoreIssueQty()+getBmsCurrentStock.getProdReturnQty()+getBmsCurrentStock.getMixingReturnQty())
 							-(getBmsCurrentStock.getProdIssueQty()+getBmsCurrentStock.getMixingIssueQty()+getBmsCurrentStock.getStoreRejectedQty());
 							bmsStockDetailedList.get(i).setClosingQty(stockQty);
+							
+							/*System.out.println("name"+getBmsCurrentStock.getRmName());
+							System.out.println("("+getBmsCurrentStock.getBmsOpeningStock()+"+"+getBmsCurrentStock.getStoreIssueQty()+"+"+getBmsCurrentStock.getProdReturnQty()+"+"+getBmsCurrentStock.getMixingReturnQty()
+							+")-("+getBmsCurrentStock.getProdIssueQty()+"+"+getBmsCurrentStock.getMixingIssueQty()+"+"+getBmsCurrentStock.getStoreRejectedQty()+")");
+							 
+							System.out.println("stockQty"+stockQty);*/
+							
 					}
 				}	
 			}
@@ -235,7 +241,7 @@ public class BmsToStoreBomController {
 			try {
 				
 				//int toDeptId=settingList.getFrItemStockConfigure().get(0).getSettingValue();
-				  toDeptName=settingList.getFrItemStockConfigure().get(0).getSettingKey();
+				  //toDeptName=settingList.getFrItemStockConfigure().get(0).getSettingKey();
 				
 				Date date = new Date();
 
