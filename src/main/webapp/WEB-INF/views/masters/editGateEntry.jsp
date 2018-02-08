@@ -53,8 +53,19 @@
 								<i class="fa fa-bars"></i>Edit Gate Entry
 							</h3>
 							<div class="box-tool">
+							<c:choose>
+								<c:when test="${flag==0}">
 								<a href="${pageContext.request.contextPath}/gateEntries">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
+								</c:when>
+								<c:when test="${flag==1}">
+								
+								<a href="${pageContext.request.contextPath}/showAllStoreMaterialReciept">Back to List</a> <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+								</c:when>
+							
+							</c:choose>
+								
 							</div>
 							
 						</div>
@@ -195,7 +206,7 @@
 									
 								</div>
 									<div class="col1">
-									<label class="col-sm-2 col-lg-2 control-label">Image ${imageUrl}${materialRecNoteHeader.photo2}</label>
+									<label class="col-sm-2 col-lg-2 control-label">Image</label>
 									<div class="col-sm-2 col-lg-4 controls">
 										<div class="fileupload fileupload-new"
 											data-provides="fileupload">
@@ -442,7 +453,7 @@
 				var rm_id = $("#rm_id").val();
 				var rm_qty = $("#rm_qty").val();
 				
-				
+				if(validation()==true){		
 				$('#loader').show();
 
 				$
@@ -487,7 +498,7 @@
 												})  
 								});
 
-			 
+				}
 		}
 		
 		function edit(key)
@@ -506,7 +517,7 @@
 			document.getElementById("recdQty"+key).disabled = true;
 			document.getElementById("edit"+key).style.visibility="visible";
 			document.getElementById("ok"+key).style.visibility="hidden";
-			alert(qty);
+			//alert(qty);
 			$
 			.getJSON(
 					'${editRmQtyinEditGate}',
@@ -574,5 +585,30 @@
 			
 		}
 	</script>
+	
+	<script type="text/javascript">
+function validation()
+{
+	
+	var rm_id = $("#rm_id").val();
+	var rm_qty = $("#rm_qty").val();
+	var isValid = true;
+	if(isNaN(rm_id) || rm_id < 0 || rm_id=="")
+	{
+	isValid = false;
+	alert("Please enter Raw Material");
+	}
+	
+	else if(isNaN(rm_qty) || rm_qty < 0 || rm_qty=="")
+	{
+	isValid = false;
+	alert("Please enter Quantity");
+	}
+	
+return isValid;
+	
+}
+ 
+</script>
 </body>
 </html>

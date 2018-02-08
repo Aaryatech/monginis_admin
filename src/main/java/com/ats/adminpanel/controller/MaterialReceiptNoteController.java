@@ -558,6 +558,7 @@ public class MaterialReceiptNoteController {
 		model.addObject("supplierList", supplierDetailsList.getSupplierDetailslist());
 		model.addObject("transport", transporterList.getTransporterList());
 		model.addObject("rmlist", getRawMaterialDetail.getRawMaterialDetailsList());
+		model.addObject("flag",flag);
 		
 		model.addObject("imageUrl",Constants.GATE_ENTRY_IMG_URL);
 		return model;

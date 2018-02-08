@@ -370,21 +370,45 @@
 
 										</select>
 									</div>
+									
+									<c:choose>
+										<c:when test="${purchaseOrderHeader.freidhtRem==1}">
+										<c:set var="freightAmt" value="Not Applicable"></c:set>
+										</c:when>
+										<c:when test="${purchaseOrderHeader.freidhtRem==2}">
+										<c:set var="freightAmt" value="On Your Side"></c:set>
+										</c:when>
+										<c:when test="${purchaseOrderHeader.freidhtRem==3}">
+										<c:set var="freightAmt" value="On Our Side"></c:set>
+										</c:when>
+									</c:choose>
 									<div class="col-md-2" >Freight</div>
 									<div class="col-md-3">
 										<select name="freight" id="freight" class="form-control chosen" tabindex="6" required>
-										<option value="">Select Freight</option>
+										<option value="${purchaseOrderHeader.freidhtRem}">${freightAmt}</option>
 										<option value="1">Not Applicable</option>
 										<option value="2">On Your Side</option>
 										<option value="3">On Our Side</option>
 										 </select>
 									</div>
 									</div><br/>
+									
+										<c:choose>
+											<c:when test="${purchaseOrderHeader.insuRem==1}">
+											<c:set var="InsuAmt" value="Not Applicable"></c:set>
+											</c:when>
+											<c:when test="${purchaseOrderHeader.insuRem==2}">
+											<c:set var="InsuAmt" value="On Your Side"></c:set>
+											</c:when>
+											<c:when test="${purchaseOrderHeader.insuRem==3}">
+											<c:set var="InsuAmt" value="On Our Side"></c:set>
+											</c:when>
+										</c:choose>
 									<div class="box-content">
 								<div class="col-md-2" >Insurance</div>
 									<div class="col-md-3">
 										<select name="insurance" id="insurance" class="form-control chosen" tabindex="6" required>
-										<option value="">Select Insurance Terms</option>
+										<option value="${purchaseOrderHeader.insuRem}">${InsuAmt}</option>
 										<option value="1">Not Applicable</option>
 										<option value="2">On Your Side</option>
 										<option value="3">On Our Side</option>

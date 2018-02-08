@@ -256,14 +256,36 @@
 							 		
 									<div class="col-md-2" >Freight</div>
 									<div class="col-md-3">
-										<input type="text" name="transportation" id="transportation" class="form-control" value="${purchaseOrderHeader.freidhtRem}" readonly>
+									<c:choose>
+										<c:when test="${purchaseOrderHeader.freidhtRem==1}">
+										<c:set var="freightAmt" value="Not Applicable"></c:set>
+										</c:when>
+										<c:when test="${purchaseOrderHeader.freidhtRem==2}">
+										<c:set var="freightAmt" value="On Your Side"></c:set>
+										</c:when>
+										<c:when test="${purchaseOrderHeader.freidhtRem==3}">
+										<c:set var="freightAmt" value="On Our Side"></c:set>
+										</c:when>
+									</c:choose>
+										<input type="text" name="transportation" id="transportation" class="form-control" value="${freightAmt}" readonly>
 									</div>
 									</div><br/>
 									
 									<div class="box-content">
 										<div class="col-md-2" >Insurance</div>
 											<div class="col-md-3">
-											<input type="text" name="insurance" id="insurance" class="form-control" value="${purchaseOrderHeader.insuRem}" readonly>
+											<c:choose>
+										<c:when test="${purchaseOrderHeader.insuRem==1}">
+										<c:set var="InsuAmt" value="Not Applicable"></c:set>
+										</c:when>
+										<c:when test="${purchaseOrderHeader.insuRem==2}">
+										<c:set var="InsuAmt" value="On Your Side"></c:set>
+										</c:when>
+										<c:when test="${purchaseOrderHeader.insuRem==3}">
+										<c:set var="InsuAmt" value="On Our Side"></c:set>
+										</c:when>
+									</c:choose>
+											<input type="text" name="insurance" id="insurance" class="form-control" value="${InsuAmt}" readonly>
 									
 					
 									</div>
