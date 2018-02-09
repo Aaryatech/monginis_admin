@@ -440,7 +440,7 @@
     var poId = $("#poId").val();
     document.getElementById('submit').disabled=false;
     
-	    	window.open('${pageContext.request.contextPath}/purchase?url=poPdf/'+poId);
+	    	window.open('${pageContext.request.contextPath}/purchase?url=pdf/poPdf/'+poId);
 		 
     }
 		

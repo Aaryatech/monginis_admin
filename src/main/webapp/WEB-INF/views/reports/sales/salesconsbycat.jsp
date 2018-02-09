@@ -429,11 +429,12 @@
 			}
 		</script>
 
-
+	
 		<script type="text/javascript">
 			function showChart() {
 
-				alert("Hi");
+			
+				
 
 				$("#PieChart_div").empty();
 				$("#chart_div").empty();
@@ -469,7 +470,7 @@
 								function(data) {
 
 									$('#loader').hide();
-									alert(data);
+								
 									if (data == "") {
 										alert("No records found !!");
 
@@ -712,9 +713,15 @@
 			function genPdf() {
 				var from_date = $("#fromDate").val();
 				var to_date = $("#toDate").val();
+				var selectedFr = $("#selectFr").val();
+				var routeId = $("#selectRoute").val();
+				var isGraph = 0;
+				var selectedCat = $("#selectCat").val();
 
-				window.open('pdfForReport?url=showSaleRoyaltyByCatPdf/'
-						+ from_date + '/' + to_date);
+				var selectedCat = $("#selectCat").val();
+
+				window.open('pdfForReport?url=pdf/getSaleReportRoyConsoByCatPdf/'
+						+ from_date + '/' + to_date+'/'+selectedFr+'/'+routeId+'/'+selectedCat);
 
 			}
 		</script>

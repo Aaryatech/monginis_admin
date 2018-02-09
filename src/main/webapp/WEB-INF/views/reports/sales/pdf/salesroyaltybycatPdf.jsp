@@ -151,7 +151,7 @@ th {
 								
 								<td width="100" align="right"><fmt:formatNumber
 										type="number" maxFractionDigits="2"  minFractionDigits="2" 
-										value="${netValue}" />
+										value="${netValue}" /></td>
 										
 <%-- 								<td><c:out value="${netValue}" /></td>
  --%>								<td align="right"><c:out value="${3}" /></td>

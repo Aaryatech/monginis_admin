@@ -558,7 +558,7 @@ public class PurchaseOrderController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/poPdf/{poId}", method = RequestMethod.GET)
+	@RequestMapping(value = "pdf/poPdf/{poId}", method = RequestMethod.GET)
 	public ModelAndView monthWisePdf(@PathVariable String poId,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/materialRecieptReport/pdf/poPdf");
@@ -1382,10 +1382,10 @@ public class PurchaseOrderController {
 	
 	private Dimension format = PD4Constants.A4;
 	private boolean landscapeValue = false;
-	private int topValue = 0;
+	private int topValue = 8;
 	private int leftValue = 0;
 	private int rightValue = 0;
-	private int bottomValue = 0;
+	private int bottomValue = 8;
 	private String unitsValue = "m";
 	private String proxyHost = "";
 	private int proxyPort = 0;
@@ -1399,7 +1399,7 @@ public class PurchaseOrderController {
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
-		File f = new File("c:/pdf/ordermemo221.pdf");
+		File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/Po.pdf");
 		//File f = new File("/ordermemo221.pdf");
 		System.out.println("I am here " + f.toString());
 		try {
@@ -1415,7 +1415,7 @@ public class PurchaseOrderController {
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo221.pdf";
-		String filePath = "c:/pdf/ordermemo221.pdf";
+		String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/Po.pdf";
 		//String filePath = "/ordermemo221.pdf";
 
 		// construct the complete absolute path of the file

@@ -285,7 +285,7 @@
 													  	tr.append($('<td></td>').html(report.tGvnTaxableAmt));
 
 													  	var netValue=report.tBillTaxableAmt-(report.tGrnTaxableAmt+report.tGvnTaxableAmt);
-														netValue=netValue.toFixed();
+														netValue=netValue.toFixed(2);
 														
 													  	tr.append($('<td></td>').html(netValue));
 													  	//alert("netVAlue"+netValue);

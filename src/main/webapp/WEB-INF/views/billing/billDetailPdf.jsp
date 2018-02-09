@@ -58,9 +58,10 @@
 									class="fa fa-times"></i></a>
 							</div>
 						</div> -->
-
-
-			
+             <input type="hidden" name="transport_mode" id="transport_mode" value="${transportMode }"/>
+            <input type="hidden" name="select_to_print" id="select_to_print" value="${selectedBills}"/>
+			    <input type="hidden" name="vehicle_no" id="vehicle_no" value="${vehicleNo }"/>
+			    
 							<c:forEach items="${billDetails}" var="frDetails"
 								varStatus="count">
 								<div class="box-content">
@@ -74,10 +75,11 @@
 													<th width="120" align="left">Invoice No</th>
 													<th width="130" align="left">Fr Address</th>
 													</tr> -->
-
+                                                     <section>
 													<h4>FR Name:${frDetails.frName}</h4>
 													<h4>Invoice No:${frDetails.invoiceNo}</h4>
 													<h4>Address:${frDetails.frAddress}</h4>
+													</section>
 												<tr>
 													<th width="138" align="left">Item Name</th>
 													<th width="120" align="left">Group</th>
@@ -202,7 +204,7 @@
 							<div
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-6">
 										
-										<!-- <button class="btn btn-primary" value="PDF" id="PDFButton" onclick="genPdf()">PDF</button> -->
+									 <button class="btn btn-primary" value="PDF" id="PDFButton" onclick="genPdf()">PDF</button> 	<!--
 										
 										<a href='${pageContext.request.contextPath}/pdf?url=showBillPdf'
 								target="_blank">PDF</a>
@@ -292,11 +294,21 @@
 
 <script type="text/javascript">
 
-function genPdf()
+/* function genPdf()
 {
 	window.open('${pageContext.request.contextPath}/pdf?url=showBillPdf');
-}
+} */
+function genPdf()
+{
+	var transport_mode = $("#transport_mode").val();
+	var select_to_print = $("#select_to_print").val();
+	var vehicle_no = $("#vehicle_no").val();
 
+   window.open('${pageContext.request.contextPath}/pdf?url=pdf/showBillPdf/'+transport_mode+'/'+vehicle_no+'/'+select_to_print+'/');
+
+	//window.open("${pageContext.request.contextPath}/pdfForReport?url=showSaleReportByDatePdf/"+from_date+"/"+to_date);
+	
+	}
 
 </script>
 

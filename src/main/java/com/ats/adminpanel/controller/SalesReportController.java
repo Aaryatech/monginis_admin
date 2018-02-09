@@ -2850,6 +2850,165 @@ public class SalesReportController {
 		return royaltyBean;
 		
 	}
+	@RequestMapping(value = "pdf/getSaleReportRoyConsoByCatPdf/{fromDate}/{toDate}/{selectedFr}/{routeId}/{selectedCat}", method = RequestMethod.GET)
+	public ModelAndView getSaleReportRoyConsoByCat(@PathVariable String fromDate,@PathVariable String toDate,@PathVariable String selectedFr,@PathVariable String routeId,@PathVariable String selectedCat,HttpServletRequest request,
+			HttpServletResponse response) {
+		ModelAndView model = new ModelAndView("reports/sales/pdf/salesconsbycatPdf");
+
+		List<SalesReportBillwise> saleList = new ArrayList<>();
+		List<SalesReportRoyalty> royaltyList = new ArrayList<>();
+		RoyaltyListBean royaltyBean=new RoyaltyListBean();
+		boolean isAllFrSelected = false;
+		boolean isAllCatSelected = false;
+		try {
+			System.out.println("Inside get Sale Bill Wise");
+		/*
+			
+		
+			selectedFr = selectedFr.substring(1, selectedFr.length() - 1);
+			selectedFr = selectedFr.replaceAll("\"", "");
+			
+			selectedCat = selectedCat.substring(1, selectedCat.length() - 1);
+			selectedCat = selectedCat.replaceAll("\"", "");
+
+			List<String> catList=new ArrayList<>();
+			catList=Arrays.asList(selectedCat);
+			frList = new ArrayList<>();
+			frList = Arrays.asList(selectedFr);*/
+
+			if (!routeId.equalsIgnoreCase("0")) {
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+				RestTemplate restTemplate = new RestTemplate();
+
+				map.add("routeId", routeId);
+
+				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
+						map, FrNameIdByRouteIdResponse.class);
+
+				List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+
+				System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+
+				StringBuilder sbForRouteFrId = new StringBuilder();
+				for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
+
+					sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
+
+				}
+
+				String strFrIdRouteWise = sbForRouteFrId.toString();
+				selectedFr = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+				System.out.println("fr Id Route WISE = " + selectedFr);
+
+			} // end of if
+
+			if (selectedFr.contains("-1")) {
+				isAllFrSelected = true;
+			}
+			
+			if (selectedCat.contains("-1")) {
+				isAllCatSelected = true;
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+			
+			
+
+			if (isAllCatSelected) {
+
+				System.out.println("Inside If all fr Selected ");
+				
+				map.add("fromDate", fromDate);
+				map.add("toDate", toDate);
+
+			}else {
+				
+				map.add("catIdList", selectedCat);
+				map.add("fromDate", fromDate);
+				map.add("toDate", toDate);
+				
+				
+			}
+
+			if (isAllFrSelected) {
+
+				System.out.println("Inside If all fr Selected ");
+				
+				map.add("fromDate", fromDate);
+				map.add("toDate", toDate);
+
+			} else {
+				System.out.println("Inside else Few fr Selected ");
+			//	map.add("catIdList", selectedCat);
+				map.add("frIdList", selectedFr);
+				map.add("fromDate", fromDate);
+				map.add("toDate", toDate);
+			
+				ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
+				};
+				
+				ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate
+						.exchange(Constants.url + "getSaleReportRoyConsoByCat", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			
+				
+				royaltyList = responseEntity.getBody();
+				royaltyListForPdf=new ArrayList<>();
+				
+				royaltyListForPdf=royaltyList;
+			
+				
+				System.out.println("royaltyList List Bill Wise "+royaltyList.toString());
+				
+				CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
+						CategoryListResponse.class);
+				List<MCategoryList> categoryList ;
+				
+				categoryList = categoryListResponse.getmCategoryList();
+				//allFrIdNameList = new AllFrIdNameList();
+				System.out.println("Category list  " +categoryList);
+				List<MCategoryList> tempList = new ArrayList<>();	
+				
+				//royaltyBean.setCategoryList(categoryList);
+				Map<Integer, String> catNameId = new HashMap<Integer, String>();
+
+				for(int i=0;i<categoryList.size();i++) {
+					
+					for(int j=0;j<royaltyList.size();j++) {
+						
+						if(categoryList.get(i).getCatId()==royaltyList.get(j).getCatId()) {
+							catNameId.put(categoryList.get(i).getCatId(), categoryList.get(i).getCatName());
+							
+							if(!tempList.contains(categoryList.get(i))){
+								
+								tempList.add(categoryList.get(i));
+								
+							}
+						}
+						
+					}
+					
+				}
+				
+				System.out.println("temp list "+tempList.toString()+"size of t List "+tempList.size());
+				royaltyBean.setCategoryList(tempList);
+				royaltyBean.setSalesReportRoyalty(royaltyList);
+                model.addObject("royaltyList", royaltyBean);
+                model.addObject("fromDate", fromDate);
+                model.addObject("toDate", toDate);
+
+                }
+		} catch (Exception e) {
+			System.out.println("get sale Report royaltyList by cat "+e.getMessage());
+			e.printStackTrace();
+
+		}
+	    
+		return model;
+		
+	}
 	
 	
 	//pdf function
@@ -2874,7 +3033,7 @@ public class SalesReportController {
 		System.out.println("URL " + url);
 		
 		//File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/report.pdf");
-		File f = new File("/home/ats-12/pdf/report.pdf");
+		File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/report.pdf");
 
 		try {
 			runConverter(Constants.ReportURL + url, f,request,response);
@@ -2888,9 +3047,9 @@ public class SalesReportController {
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		 String filePath = "/home/ats-12/pdf/report.pdf";
+		//String filePath = "/home/ats-12/pdf/report.pdf";
 
-		//String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/report.pdf";
+		String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/report.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;

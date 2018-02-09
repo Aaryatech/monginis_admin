@@ -55,6 +55,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import org.zefer.pd4ml.PD4Constants;
 import org.zefer.pd4ml.PD4ML;
+import org.zefer.pd4ml.PD4PageMark;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllFrIdName;
@@ -97,13 +98,13 @@ public class BillController {
 
 	private static final Logger logger = LoggerFactory.getLogger(BillController.class);
 
-	AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
-	List<Menu> menuList = new ArrayList<Menu>();
-	String selectedFrArray;
-	String selectedDate;
-	static public GenerateBillList generateBillList = new GenerateBillList();
-	 static List<GenerateBill> staticGetGenerateBills= new ArrayList<>();
-	List<String> frList = new ArrayList<>();
+	public AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
+	public List<Menu> menuList = new ArrayList<Menu>();
+	public String selectedFrArray;
+	public String selectedDate;
+	public  GenerateBillList generateBillList = new GenerateBillList();
+	public  List<GenerateBill> staticGetGenerateBills= new ArrayList<>();
+	public List<String> frList = new ArrayList<>();
 	
 
 	public List<GetBillDetail> billDetailsList;
@@ -112,23 +113,23 @@ public class BillController {
 	
 	
 	
-	public GetBillHeader getBillHeader;
+	public  GetBillHeader getBillHeader;
 
-	List<GetBillHeader> billHeadersList = new ArrayList<>();
+	public List<GetBillHeader> billHeadersList = new ArrayList<>();
 	
-	List<FrBillHeaderForPrint> billHeadersListForPrint = new ArrayList<>();
+	public List<FrBillHeaderForPrint> billHeadersListForPrint = new ArrayList<>();
 	
-	public static  List<FrBillPrint> billPrintList;
+	public  List<FrBillPrint> billPrintList;
 
-	List<GetSellBillHeader> getSellBillHeaderList;
-	List<GetSellBillDetail> getSellBillDetailList;
-	int bQty;
+	public List<GetSellBillHeader> getSellBillHeaderList;
+	public List<GetSellBillDetail> getSellBillDetailList;
+	public int bQty;
 
-	public static String transportMode;
+	public String transportMode;
 
-	public static String vehicleNo;
+	public String vehicleNo;
 
-	String getInvoiceNo() {
+	public String getInvoiceNo() {
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		RestTemplate restTemplate = new RestTemplate();
@@ -1047,14 +1048,14 @@ public class BillController {
 			
 			vehicleNo=request.getParameter("vehicle_no");
 			transportMode=request.getParameter("transport_mode");
-			
+			transportMode = transportMode.replaceAll("\\s", "-");
 			System.out.println("Vehicle No "+vehicleNo+"Transport Mode = " + transportMode);
 
 				System.out.println("Inside new form action ");
 			
 			RestTemplate restTemplate = new RestTemplate();
 			
-			
+			String selectedBill=request.getParameter("select_to_print");
 			String[] selectedBills=request.getParameterValues("select_to_print");
 			String billList=new String();
 					
@@ -1203,9 +1204,11 @@ public class BillController {
 
 			System.out.println(" after adding detail List : bill Print List "+billPrintList.toString());
 			model.addObject("billDetails",billPrintList);
-			HttpSession ses= request.getSession();
-			ses.setAttribute("billDetails", billPrintList);
-			
+		//	HttpSession ses= request.getSession();
+			//ses.setAttribute("billDetails", billPrintList);
+			model.addObject("vehicleNo", vehicleNo);
+			model.addObject("transportMode", transportMode);
+			model.addObject("selectedBills", billList);
 		}catch (Exception e) {
 			System.out.println("Exce in getting bill Detail for Print "+e.getMessage());
 			e.printStackTrace();
@@ -1215,20 +1218,173 @@ public class BillController {
 		
 	}
 	
-	@RequestMapping(value = "/showBillPdf", method = RequestMethod.GET)
-	public ModelAndView showBillPdf(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "pdf/showBillPdf/{transportMode}/{vehicleNo}/{selectedBills}", method = RequestMethod.GET)
+	public ModelAndView showBillPdf(@PathVariable String transportMode,@PathVariable String vehicleNo,@PathVariable String[] selectedBills,HttpServletRequest request, HttpServletResponse response) {
 System.out.println("IN Show bill PDF Method :/showBillPdf");
 		ModelAndView model = new ModelAndView("billing/pdf/frBillPdf");
-//ModelAndView model = new ModelAndView("billing/billDetailPdf");
 
-		try {
-           System.out.println(" Data for PDF billPrintList "+ billPrintList.toString());
+           billPrintList=new ArrayList<>();
+   		
+   		try {
+   			
+   			//vehicleNo=request.getParameter("vehicle_no");
+   			//transportMode=request.getParameter("transport_mode");
+   			
+   			System.out.println("Vehicle No "+vehicleNo+"Transport Mode = " + transportMode);
 
-          // staticGetGenerateBills=generateBillList.getGenerateBills();
-           
-			//List<GenerateBill> generateNewBill=generateBillList.getGenerateBills();
-		//	System.out.println(" Data for PDF generateBillList "+ generateNewBill.toString());
-			//model.addObject("getBillList", generateBillList.getGenerateBills());
+   				System.out.println("Inside new form action ");
+   			
+   			RestTemplate restTemplate = new RestTemplate();
+   			
+   			
+   			//String[] selectedBills=request.getParameterValues("select_to_print");
+   			String billList=new String();
+   					
+   			for(int i=0;i<selectedBills.length;i++) {
+   				billList=selectedBills[i]+","+billList;
+   			}
+   			
+   			billList=billList.substring(0, billList.length()-1);
+   			
+   			System.out.println("selected bills for Printing "+billList);
+   			
+   			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+   			
+   			map.add("billNoList", billList);
+   			
+   			
+   			 ParameterizedTypeReference<List<GetBillDetailPrint>> typeRef = new ParameterizedTypeReference<List<GetBillDetailPrint>>() {
+   			};
+   			ResponseEntity<List<GetBillDetailPrint>> responseEntity = restTemplate.exchange(Constants.url + "getBillDetailsForPrint",
+   					HttpMethod.POST, new HttpEntity<>(map), typeRef);
+   			//List<GetBillDetailPrint>	billDetailsResponse =new ArrayList<>();
+   			
+   			List<GetBillDetailPrint>	billDetailsResponse = responseEntity.getBody();
+   			
+   			System.out.println("bill No in Header "+billHeadersListForPrint.toString());
+   			
+   			System.out.println("selected bills for Printing "+billList);
+   			System.out.println("Size Here Now  "+billHeadersListForPrint.size());
+   			billHeadersListForPrint=new ArrayList<>();
+   			
+   			//billHeadersListForPrint=getBillListProcessForPrint(request, response);
+   			//List<FrBillHeaderForPrint> getBillListProcessForPrint
+   			
+   			/*List<String> billing=Arrays.asList(billList);
+
+   			for(int a=0;a<billing.size();a++) {
+   			
+   			if(billHeadersListForPrint.get(a).getBillNo()!=Integer.parseInt(billing.get(a)) ){
+   				
+   				System.out.println("billHeader print removing bill"+billHeadersListForPrint.get(a));
+   				
+   				billHeadersListForPrint.remove(a);
+   				
+   			}
+   			
+   		}		*/
+
+   			  /*List<GetBillDetail> billDetailsResponse = restTemplate.postForObject(Constants.url + "getBillDetailsForPrint",
+   					map, List.class);
+   			  
+   			 
+   */
+   			/*List<FrBillHeaderForPrint> tempList=new ArrayList<>();
+   			tempList=billHeadersListForPrint;
+   			System.out.println("temp List Before"+tempList);
+   			for(int p=0;p<selectedBills.length;p++) {
+   				System.out.println("selected Bill List "+p +""+selectedBills[p]);
+   				if(Integer.parseInt(selectedBills[p])==billHeadersListForPrint.get(p).getBillNo()) {
+   					
+   					tempList.remove(p);
+   			}
+   				
+   		}
+   			System.out.println("temp List After"+tempList);
+   			billHeadersListForPrint=new ArrayList<>();
+   			billHeadersListForPrint=tempList;*/
+   			
+   			
+   			map = new LinkedMultiValueMap<String, Object>();
+   			
+   			map.add("billNoList", billList);
+   		
+   			ParameterizedTypeReference<List<FrBillHeaderForPrint>> typeRef2 = new ParameterizedTypeReference<List<FrBillHeaderForPrint>>() {
+   			};
+   			ResponseEntity<List<FrBillHeaderForPrint>> responseEntity2 = restTemplate.exchange(Constants.url + "getFrBillHeaderForPrintSelectedBill",
+   					HttpMethod.POST, new HttpEntity<>(map), typeRef2);
+   			billHeadersListForPrint=new ArrayList<>();
+   			//List<GetBillDetail>	billDetailsResponse = responseEntity.getBody();
+   			billHeadersListForPrint=responseEntity2.getBody();
+   		
+   			System.out.println("in new BHLFP"+billHeadersListForPrint.toString());
+   			/*List<FrBillHeaderForPrint> temHeaderList=billHeadersListForPrint;
+   			
+   			System.out.println("length of bil String "+selectedBills.length);
+   			for(int k=0;k<selectedBills.length;k++) {
+   				System.out.println("Inside for Loop 1 ");
+   				
+   				for(int y=0;y<temHeaderList.size();y++) {
+   					System.out.println("Inside for Loop 2 ");
+
+   					
+   					int bNo=Integer.valueOf(selectedBills[k]);
+   					
+   					System.out.println("bill No "+bNo);
+   				if(temHeaderList.get(y).getBillNo()==bNo){
+   					
+   					System.out.println("Inside If Loop ");
+
+   					System.out.println("billHeader print removing bill"+temHeaderList.get(k));
+   					billHeadersListForPrint.remove(y);
+   					
+   				}
+   			}
+   			}*/
+   			
+   			
+   			billDetailsListForPrint = new ArrayList<GetBillDetailPrint>();
+   			billDetailsListForPrint = billDetailsResponse;
+   			System.out.println(" *** get Bill detail for Print response :: " + billDetailsListForPrint.toString());
+   			
+   			System.out.println("Size Here Now  "+billHeadersListForPrint.size());
+   			
+   			FrBillPrint billPrint;
+   			for(int i=0;i<billHeadersListForPrint.size();i++) {
+   				  billPrint=new FrBillPrint();
+   				 List<GetBillDetailPrint> billDetails=new ArrayList<>();
+
+   				  for(int j=0;j<billDetailsListForPrint.size();j++) {
+
+   					  if(billHeadersListForPrint.get(i).getBillNo()==billDetailsListForPrint.get(j).getBillNo()) {
+   						  
+   							System.out.println("Inside If  Bill no  = "+billHeadersListForPrint.get(i).getBillNo());
+
+   						 billPrint.setBillNo(billHeadersListForPrint.get(i).getBillNo());
+   						 billPrint.setFrAddress(billHeadersListForPrint.get(i).getFrAddress());
+   						 billPrint.setFrId(billHeadersListForPrint.get(i).getFrId());
+   						 billPrint.setFrName(billHeadersListForPrint.get(i).getFrName());
+   						 billPrint.setInvoiceNo(billHeadersListForPrint.get(i).getInvoiceNo());
+   						 billPrint.setIsSameState(billHeadersListForPrint.get(i).getIsSameState());
+   						 billPrint.setBillDate(billHeadersListForPrint.get(i).getBillDate());
+
+   						 billDetails.add(billDetailsListForPrint.get(j));
+   						 
+   						// FrBillTax billTax=new FrBillTax(); not used 
+   						
+   					  }//end of if 
+   					  
+   				  }
+   				  billPrint.setBillDetailsList(billDetails);
+   				 //billPrintList=new ArrayList<>();
+   				  
+   				  if(billPrint!=null)
+   				  billPrintList.add(billPrint);
+
+   			  }
+
+   			System.out.println(" after adding detail List : bill Print List "+billPrintList.toString());
+   	
            DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
 
@@ -1722,10 +1878,10 @@ System.out.println("IN Show bill Method");
 	
 	private Dimension format = PD4Constants.A4;
 	private boolean landscapeValue = false;
-	private int topValue = 0;
+	private int topValue = 8;
 	private int leftValue = 0;
 	private int rightValue = 0;
-	private int bottomValue = 0;
+	private int bottomValue =8;
 	private String unitsValue = "m";
 	private String proxyHost = "";
 	private int proxyPort = 0;
@@ -1739,10 +1895,10 @@ System.out.println("IN Show bill Method");
 		String url = request.getParameter("url");
 		 System.out.println("URL "+url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
-		File f = new File("/ordermemo221.pdf");
-System.out.println("I am here "+f.toString());
+		File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/bill.pdf");
+           System.out.println("I am here "+f.toString());
 		try {
-			runConverter(Constants.ReportURL + url, f);
+			runConverter(Constants.ReportURL + url, f,request,response);
 			System.out.println("Come on lets get ");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -1754,7 +1910,7 @@ System.out.println("I am here "+f.toString());
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo221.pdf";
-		String filePath = "/ordermemo221.pdf";
+		String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/bill.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;
@@ -1803,23 +1959,17 @@ System.out.println("I am here "+f.toString());
 		}
 	}
 
-	private void runConverter(String urlstring, File output) throws IOException {
-	
+	private void runConverter(String urlstring, File output, HttpServletRequest request, HttpServletResponse response ) throws IOException {
+
 		if (urlstring.length() > 0) {
 			if (!urlstring.startsWith("http://") && !urlstring.startsWith("file:")) {
 				urlstring = "http://" + urlstring;
 			}
-
+			System.out.println("PDF URL " + urlstring);
 			java.io.FileOutputStream fos = new java.io.FileOutputStream(output);
 
-			if (proxyHost != null && proxyHost.length() != 0 && proxyPort != 0) {
-				System.getProperties().setProperty("proxySet", "true");
-				System.getProperties().setProperty("proxyHost", proxyHost);
-				System.getProperties().setProperty("proxyPort", "" + proxyPort);
-			}
-
 			PD4ML pd4ml = new PD4ML();
-
+		
 			try {
 				pd4ml.setPageSize(landscapeValue ? pd4ml.changePageOrientation(format) : format);
 			} catch (Exception e) {

@@ -27,7 +27,10 @@ public class CheckUserInterceptor extends HandlerInterceptorAdapter {
 
         String path = request.getRequestURI().substring(request.getContextPath().length());
         System.out.println("path is: "+path);
-        
+      
+		if(path.startsWith("/pdf")) {
+			return true;
+		}
         try{
       	  String resourcesPath=path.substring(1, 4);
           System.out.println("substring is: "+resourcesPath);
