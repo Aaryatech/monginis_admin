@@ -105,13 +105,13 @@ System.out.println("It is Production BOM ");
 				sfPlanDetailForBom = getSFPlanDetailForBomList.getSfPlanDetailForMixing();
 
 				System.out.println("sf Plan Detail For Bom  " + sfPlanDetailForBom.toString());
-				//ceil fun 6 feb
+				/*//ceil fun 6 feb
 				for(int i=0;i<sfPlanDetailForBom.size();i++) {
 					
 					sfPlanDetailForBom.get(i).setTotal((int)Math.ceil(sfPlanDetailForBom.get(i).getTotal()));
 
 				}
-				
+				*/
 				mav.addObject("planDetailForBom", sfPlanDetailForBom);
 				
 			} else if (isMix == 0) {
@@ -128,11 +128,11 @@ System.out.println("It is Production BOM ");
 				sFMixingForBom = sFMixingForBomList.getsFMixingForBom();
 
 				System.out.println("sf Mixing Detail For Bom  " + sFMixingForBom.toString());
-				//ceil fun 6 feb
+				/*//ceil fun 6 feb
 				for(int i=0;i<sFMixingForBom.size();i++) {
 				sFMixingForBom.get(i).setTotal((int)Math.ceil(sFMixingForBom.get(i).getTotal()));
 				}
-
+*/
 				mav.addObject("planDetailForBom", sFMixingForBom);
 			}
 
