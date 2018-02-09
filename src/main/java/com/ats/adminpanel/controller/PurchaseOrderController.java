@@ -225,10 +225,9 @@ public class PurchaseOrderController {
 				  
 					 if(poNo.contains(search))
 					 {
-						 list.add(getPurchaseOrderList.getPurchaseOrderHeaderList().get(i));
-						 break;
+						 list.add(getPurchaseOrderList.getPurchaseOrderHeaderList().get(i)); 
 					 }
-				 
+					  
 			 }
 			 
 			 System.out.println("list"+list);
