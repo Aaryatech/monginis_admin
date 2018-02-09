@@ -582,6 +582,10 @@
 										{
 											status="Requested to Purchase";
 										}
+										else if(itemList.poStatus==2)
+										{
+											status="Requested to Director";
+										}
 										else if(itemList.poStatus==3)
 										{
 										status="Rejected By Purchase";
@@ -731,7 +735,7 @@
 									  	 
 									  	if(itemList.poStatus==0 || itemList.poStatus==3)
 								  		{
-								  		tr.append($('<td></td>').html('  <a href="poHeaderWithDetailed/'+itemList.poId+'/'+flag+'" class="action_btn" > <abbr title="Detail"><i class="fa fa-list"></i></abbr></a> <a href="deletePoRecord/'+itemList.poId+'" onClick="return confirm("Are you sure want to delete this record");"><abbr title="Delete"></abbr><spanclass="glyphicon glyphicon-remove"></span></a><a href="deletePoRecord/'+itemList.poId+'" onClick="return confirm("Are you sure want to delete this record");"><abbr title="Delete"></abbr><span class="glyphicon glyphicon-remove"></span></a>'));
+								  		tr.append($('<td></td>').html('  <a href="poHeaderWithDetailed/'+itemList.poId+'/'+flag+'" class="action_btn" > <abbr title="Detail"><i class="fa fa-list"></i></abbr></a> <a href="deletePoRecord/'+itemList.poId+'" onClick="Confirm("Are you sure want to delete this record");"><abbr title="Delete"></abbr><spanclass="glyphicon glyphicon-remove"></span></a><a href="deletePoRecord/'+itemList.poId+'" onClick="return confirm("Are you sure want to delete this record");"><abbr title="Delete"></abbr><span class="glyphicon glyphicon-remove"></span></a>'));
 									  	
 								  		}
 								   
@@ -768,8 +772,9 @@
 		}
 	 
 }
-		
+	
+	 
 	</script>
-
+  
 </body>
 </html>

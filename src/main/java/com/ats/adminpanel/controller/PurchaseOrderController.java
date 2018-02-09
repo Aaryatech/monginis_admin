@@ -256,7 +256,7 @@ public class PurchaseOrderController {
 			 System.out.println("status "+status);
 			 if(status==1)
 			 {
-				 sts="0,1,3,4,5,6,7"; 
+				 sts="0,1,2,3,4,5,6,7"; 
 			 }
 			 else
 			 {
@@ -1399,7 +1399,7 @@ public class PurchaseOrderController {
 		System.out.println("URL " + url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
 		File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/Po.pdf");
-		//File f = new File("/ordermemo221.pdf");
+		//File f = new File("C:/pdf/ordermemo221.pdf");
 		System.out.println("I am here " + f.toString());
 		try {
 			runConverter(Constants.ReportURL + url, f);
@@ -1415,6 +1415,7 @@ public class PurchaseOrderController {
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo221.pdf";
 		String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/Po.pdf";
+		//String filePath = "C:/pdf/ordermemo221.pdf";
 		//String filePath = "/ordermemo221.pdf";
 
 		// construct the complete absolute path of the file
