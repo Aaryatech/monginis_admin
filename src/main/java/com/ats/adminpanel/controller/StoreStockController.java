@@ -76,7 +76,7 @@ public class StoreStockController {
 			 rawMaterialDetailsList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterial", RawMaterialDetailsList.class);
 	           
 			
-			if(storeStockHeader==null)
+			if(storeStockHeader.getStoreStockId()==0)
 			{
 					System.out.println("in if");
 					flag=1; 
