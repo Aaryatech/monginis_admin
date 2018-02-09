@@ -324,13 +324,21 @@
 
 						</div>
 
+									<%-- <c:choose>
+										<c:when test="${materialRecNoteHeader.approvalRemark==null}">
+										<c:set var="sts" value="None"></c:set>
+										</c:when>
+										<c:otherwise>
+										<c:set var="sts" value="${materialRecNoteHeader.approvalRemark}"></c:set>
+										</c:otherwise>
+									</c:choose> --%>
 
 						<div class="box-content">
 
 							<div class="col-md-2">* Issue</div>
-							<div class="col-md-4" style="text-align: center">
-								<select name="issue" id="issue" class="form-control"
-									tabindex="6" required data-rule-required="true">
+							<div class="col-md-4" style="text-align: left;">
+								<select name="issue" id="issue" class="form-control chosen"
+									tabindex="1" required data-rule-required="true">
 									<option value="">None</option>
 									<c:forEach items="${allRemarksList}" var="allRemarksList"
 										varStatus="count">
@@ -355,9 +363,9 @@
 									onclick="rejectToAcc()"> <input type="button"
 									class="btn btn-info" id="btnApprov" value="Approve"
 									onclick="approve()" <c:out value = "${disabledFlag}"/>><br />
-								<br /> <input type="button" class="btn btn-info"
-									value="Back to List"
-									onclick="window.location.href='${pageContext.request.contextPath}/allMaterialReceiptNote'">
+								<br /> <a href='${pageContext.request.contextPath}/allDirectorMaterialReceiptNote'><input type="button" class="btn btn-info"
+									value="Back to List" >
+									</a>
 							</div>
 						</div>
 

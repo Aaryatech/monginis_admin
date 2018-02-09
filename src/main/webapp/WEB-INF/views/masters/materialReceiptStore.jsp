@@ -266,11 +266,12 @@
 											<c:choose>
 													<c:when test="${materialRecNote.status==2}">
 													<c:set var = "lable" value="${materialRecNote.approvalRemark}"/>
+													 <div class="col1">
+									<h4>&nbsp;&nbsp;&nbsp;&nbsp; Director Remark: <c:out value = "${lable}"/></h4>
+								</div><br><br>
 													</c:when>
 													</c:choose>
-							 <div class="col1">
-									<h4><c:out value = "${lable}"/></h4>
-								</div><br><br>
+							
 							
 							
 							<div class=" box-content">

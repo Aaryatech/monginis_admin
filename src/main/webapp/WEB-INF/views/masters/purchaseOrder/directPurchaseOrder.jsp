@@ -252,7 +252,7 @@
 
 										</select>
 									</div>
-									<div class="col-md-2">PO Validity </div>
+									<div class="col-md-2">PO Validity In Days </div>
 				<div class="col-md-3">
 					<input type="text"placeholder="Enter PO Validity" name="po_validity" id="po_validity" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" required>
 				</div>

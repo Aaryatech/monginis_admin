@@ -346,7 +346,7 @@
 
 										</select>
 									</div>
-									<div class="col-md-2">PO Validity </div>
+									<div class="col-md-2">PO Validity In Days</div>
 				<div class="col-md-3">
 					<input type="text" name="po_validity" id="po_validity" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" value="${purchaseOrderHeader.validity}" class="form-control" required>
 				</div>
