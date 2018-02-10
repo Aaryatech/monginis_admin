@@ -99,7 +99,7 @@ try {
 
 		for (int i = 0; i < tempItemList.size(); i++) {
 
-			if (tempItemList.get(i).getItemGrp1().equalsIgnoreCase("3")) {
+			if (tempItemList.get(i).getItemGrp1()==3) {
 				System.out.println("item removed " + itemsList.get(i).getItemName());
 
 				itemsList.remove(i);
@@ -139,7 +139,7 @@ try {
 			 for(int i=0;i<itemsList.size();i++) {
 				 FinishedGoodStockDetail detail=new FinishedGoodStockDetail();
 				 detail.setItemName(itemsList.get(i).getItemName());
-				 detail.setCatId(Integer.parseInt(itemsList.get(i).getItemGrp1()));
+				 detail.setCatId(itemsList.get(i).getItemGrp1());
 				 detail.setItemId(itemsList.get(i).getId());
 				 
 				 showFinStockDetail.add(detail);
@@ -238,7 +238,7 @@ try {
 			finGoodStockDetail.setOpTotal(t1 + t2 + t3);
 			finGoodStockDetail.setStockDate(new Date());
 			finGoodStockDetail.setDelStatus(0);
-			finGoodStockDetail.setCatId(Integer.parseInt(globalItemList.get(i).getItemGrp1()));
+			finGoodStockDetail.setCatId(globalItemList.get(i).getItemGrp1());
 			finGoodStockList.add(finGoodStockDetail);
 
 		}

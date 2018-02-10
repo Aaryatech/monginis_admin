@@ -597,7 +597,7 @@ public class ItemController {
 			System.out.println("item to show m cat is " + catId);
 			for (int i = 0; i < itemsList.size(); i++) {
 
-				if (Integer.parseInt(itemsList.get(i).getItemGrp1()) == catId) {
+				if (itemsList.get(i).getItemGrp1()== catId) {
 					tempItemsList.add(itemsList.get(i));
 
 				}
@@ -663,11 +663,11 @@ public class ItemController {
 		
 		Item item = restTemplate.postForObject("" + Constants.url + "getItem", map,Item.class);
 		System.out.println("ItemResponse" + item);
-		String grp1 = item.getItemGrp1();
-		mav.addObject("grp1", grp1);
+		//String grp1 = item.getItemGrp1();
+		mav.addObject("grp1", item.getItemGrp1());
 
-		String grp2 = item.getItemGrp2();
-		System.out.println("GrP 2=#### " + grp2);
+		//String grp2 = item.getItemGrp2();
+		//System.out.println("GrP 2=#### " + grp2);
 		// mav.addObject(" grp2 id",grp2);
 
 		mav.addObject("mCategoryList", mCategoryList);
@@ -675,7 +675,7 @@ public class ItemController {
 		List<SubCategory> subCategoryList = new ArrayList<SubCategory>();
 
 		for (int i = 0; i < mCategoryList.size(); i++) {
-			if (Integer.parseInt(item.getItemGrp1()) == (mCategoryList.get(i).getCatId()))
+			if (item.getItemGrp1() == (mCategoryList.get(i).getCatId()))
 				subCategoryList = mCategoryList.get(i).getSubCategory();
 
 		}
@@ -685,7 +685,7 @@ public class ItemController {
 		System.out.println("sub cat list is =" + subCategoryList.toString());
 		for (int i = 0; i < subCategoryList.size(); i++) {
 
-			if (subCategoryList.get(i).getSubCatId() == Integer.parseInt((item.getItemGrp2()))) {
+			if (subCategoryList.get(i).getSubCatId() == item.getItemGrp2()) {
 
 				selectedItem = subCategoryList.get(i).getSubCatName();
 				selectedItemId = subCategoryList.get(i).getSubCatId();
