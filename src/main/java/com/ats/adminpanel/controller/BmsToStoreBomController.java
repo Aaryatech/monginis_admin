@@ -138,7 +138,7 @@ public class BmsToStoreBomController {
 				map.add("prodDeptId", prodDeptId);
 				map.add("mixDeptId", mixDeptId);
 				map.add("bmsDeptId", bmsDeptId);
-				/*map.add("rmType", 1);*/
+				map.add("stockDate", new SimpleDateFormat("dd-MM-yyyy").format(bmsStockHeader.getBmsStockDate()));
 				System.out.println("map"+map);
 				GetBmsCurrentStockList getBmsCurrentStockList=rest.postForObject(Constants.url +"/getCurentBmsStockRM",map, GetBmsCurrentStockList.class);
 			 
