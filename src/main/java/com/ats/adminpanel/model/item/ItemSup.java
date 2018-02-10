@@ -34,8 +34,19 @@ public class ItemSup {
 	
 	private int delStatus;
 
+	private int isTallySync;
 	
 	
+	
+	
+	public int getIsTallySync() {
+		return isTallySync;
+	}
+
+	public void setIsTallySync(int isTallySync) {
+		this.isTallySync = isTallySync;
+	}
+
 	public int getUomId() {
 		return uomId;
 	}
@@ -167,10 +178,11 @@ public class ItemSup {
 	@Override
 	public String toString() {
 		return "ItemSup [error=" + error + ", message=" + message + ", id=" + id + ", itemId=" + itemId + ", itemHsncd="
-				+ itemHsncd + ", itemUom=" + itemUom + ", trayType=" + trayType + ", noOfItemPerTray=" + noOfItemPerTray
-				+ ", actualWeight=" + actualWeight + ", baseWeight=" + baseWeight + ", inputPerQty=" + inputPerQty
-				+ ", isGateSale=" + isGateSale + ", isGateSaleDisc=" + isGateSaleDisc + ", isAllowBday=" + isAllowBday
-				+ ", delStatus=" + delStatus + "]";
+				+ itemHsncd + ", itemUom=" + itemUom + ", uomId=" + uomId + ", trayType=" + trayType
+				+ ", noOfItemPerTray=" + noOfItemPerTray + ", actualWeight=" + actualWeight + ", baseWeight="
+				+ baseWeight + ", inputPerQty=" + inputPerQty + ", isGateSale=" + isGateSale + ", isGateSaleDisc="
+				+ isGateSaleDisc + ", isAllowBday=" + isAllowBday + ", delStatus=" + delStatus + ", isTallySync="
+				+ isTallySync + "]";
 	}
     
 }

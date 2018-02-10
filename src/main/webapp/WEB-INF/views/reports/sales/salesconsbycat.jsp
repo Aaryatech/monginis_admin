@@ -212,6 +212,14 @@
 									</tbody>
 								</table>
 							</div>
+							<div class="form-group" style="display: none;" id="range">
+								 
+											 
+											 
+											<div class="col-sm-3  controls">
+											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
+											</div>
+											</div>
 						</div>
 
 					</div>
@@ -272,6 +280,7 @@
 
 									if (data == "") {
 										alert("No records found !!");
+										  document.getElementById("expExcel").disabled=true;
 
 									}
 
@@ -279,6 +288,8 @@
 											.each(
 													data.categoryList,
 													function(key, cat) {
+														  document.getElementById("expExcel").disabled=false;
+															document.getElementById('range').style.display = 'block';
 
 														var tr = $('<tr></tr>');
 														tr
@@ -370,7 +381,7 @@
 																						.append($(
 																								'<td></td>')
 																								.html(
-																										report.tBillTaxableAmt));
+																										(report.tBillTaxableAmt).toFixed(2)));
 
 																				tr
 																						.append($(
@@ -723,6 +734,12 @@
 				window.open('pdfForReport?url=pdf/getSaleReportRoyConsoByCatPdf/'
 						+ from_date + '/' + to_date+'/'+selectedFr+'/'+routeId+'/'+selectedCat);
 
+			}
+			function exportToExcel()
+			{
+				 
+				window.open("${pageContext.request.contextPath}/exportToExcel");
+						document.getElementById("expExcel").disabled=true;
 			}
 		</script>
 		<!--basic scripts-->

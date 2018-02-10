@@ -45,6 +45,8 @@ public class SuppilerMasterController {
 	public String addSupplier(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView();
 		String strReturn = "redirect:/showSupplierList";
+
+		try {
 		System.out.println("In method");
 		String suppId = request.getParameter("supp_id");
 		System.out.println(suppId);
@@ -83,6 +85,7 @@ public class SuppilerMasterController {
 			model.addObject("supplierList", supplierDetailsList);
 		}
 
+		
 		supplierDetails.setSuppAddr(suppAddr);
 		supplierDetails.setSuppCity(suppCity);
 		supplierDetails.setSuppState(suppState);
@@ -106,13 +109,17 @@ public class SuppilerMasterController {
 		supplierDetails.setSuppPanNo(suppPanNo);
 		supplierDetails.setSuppName(suppName);
 		supplierDetails.setDelStatus(0);
-
+		supplierDetails.setIsTallySync(0);
 		System.out.println("Data  : " + supplierDetails);
 		RestTemplate rest = new RestTemplate();
 		Info info = rest.postForObject(Constants.url + "addNewSupplier", supplierDetails, Info.class);
 
 		System.out.println("Response : " + info.toString());
-
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
 		return strReturn;
 	}
 

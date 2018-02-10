@@ -510,6 +510,7 @@ function validation() {
 	var bmsRolQty=parseFloat($("#rm_rol_qty").val());
 
 	var isValid = true;
+	  if(bmsMinQty!=0 || bmsMaxQty!=0 || bmsRolQty!=0){
 	if (bmsMinQty>=bmsMaxQty) { 
 		isValid = false;
 		alert("BMS maximum qty is always greater than minimum Qty");
@@ -520,6 +521,7 @@ function validation() {
 		isValid = false;
 		alert("BMS reorder level qty is between minimum qty & maximum qty");
 	}
+	  }
 	
 	return isValid;
 }
@@ -528,8 +530,9 @@ function validationForStore() {
 	var storeIssueQty=parseFloat($("#rm_iss_qty").val());
 	var storeOpQty=parseFloat($("#rm_op_qty").val());
 	var storeRecQty=parseFloat($("#rm_recd_qty").val());
-
 	var isValid = true;
+
+    if(storeIssueQty!=0 || storeOpQty!=0 || storeRecQty!=0){
 	if (storeIssueQty>=storeOpQty) { 
 		isValid = false;
 		alert("Store maximum qty is always greater than minimum Qty");
@@ -540,7 +543,7 @@ function validationForStore() {
 		isValid = false;
 		alert("Store reorder level qty is between minimum qty & maximum qty");
 	}
-	
+    }
 	return isValid;
 }
 

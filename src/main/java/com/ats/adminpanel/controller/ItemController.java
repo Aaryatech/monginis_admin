@@ -876,7 +876,7 @@ public class ItemController {
 
 	RestTemplate restTemplate = new RestTemplate();
 
-	Item[] item = restTemplate.postForObject(Constants.url + "getItemsByCatId", map, Item[].class);
+	Item[] item = restTemplate.postForObject(Constants.url + "getItemsByCatIdForSup", map, Item[].class);
 
 	itemsList = new ArrayList<Item>(Arrays.asList(item));
 	
@@ -966,6 +966,7 @@ public class ItemController {
 				itemSup.setNoOfItemPerTray(noOfItemPerTray);
 				itemSup.setTrayType(trayType);
 				itemSup.setDelStatus(0);
+				itemSup.setIsTallySync(0);
 				
 				RestTemplate restTemplate = new RestTemplate();
 

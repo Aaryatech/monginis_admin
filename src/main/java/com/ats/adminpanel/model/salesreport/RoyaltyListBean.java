@@ -6,9 +6,9 @@ import com.ats.adminpanel.model.item.MCategoryList;
 
 public class RoyaltyListBean {
 	
-	static List<MCategoryList> categoryList;
+	 List<MCategoryList> categoryList;
 	
-	static List<SalesReportRoyalty> salesReportRoyalty;
+	 List<SalesReportRoyalty> salesReportRoyalty;
 
 	public List<MCategoryList> getCategoryList() {
 		return categoryList;

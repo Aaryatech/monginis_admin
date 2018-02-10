@@ -71,12 +71,12 @@
 										enctype="multipart/form-data" method="post">
 							
 						<div class="form-group">
-										<label class="col-sm-3 col-lg-2 control-label">Supplier Name</label>
+										<label class="col-sm-3 col-lg-2 control-label">Supplier Name*</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="supp_name" class="form-control"placeholder="Enter Supplier Name "data-rule-required="true" />
 									</div>
 
-									<label class="col-sm-3 col-lg-2 control-label">Supplier GSTIN </label>
+									<label class="col-sm-3 col-lg-2 control-label">Supplier GSTIN* </label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="supp_gstin" class="form-control" placeholder="Enter GSTIN " data-rule-required="true"/>
 									</div>
@@ -86,12 +86,12 @@
 								
 								
 								<div class="form-group">
-										<label class="col-sm-3 col-lg-2 control-label">Address</label>
+										<label class="col-sm-3 col-lg-2 control-label">Address*</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="supp_addr" class="form-control" placeholder="Address" data-rule-required="true"/>
 									</div>
 
-									<label class="col-sm-3 col-lg-2 control-label">City</label>
+									<label class="col-sm-3 col-lg-2 control-label">City*</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="supp_city" class="form-control"  placeholder="Enter City "data-rule-required="true"/>
 									</div>
@@ -99,7 +99,7 @@
 								</div>
 							
 								<div class="form-group">
-										<label class="col-sm-3 col-lg-2 control-label">State</label>
+										<label class="col-sm-3 col-lg-2 control-label">State*</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										 <!-- <select  name="supp_state"  class="form-control"> 
 										<option value="1">Maharashtra</option>
@@ -108,7 +108,7 @@
 									
 									</div>
 
-									<label class="col-sm-3 col-lg-2 control-label">Country</label>
+									<label class="col-sm-3 col-lg-2 control-label">Country*</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										  <!--<select  name="supp_country"  class="form-control">
 										<option value="1">India</option>
@@ -122,14 +122,14 @@
 							 
 								
 								<div class="form-group">
-										<label class="col-sm-3 col-lg-2 control-label">Mobile 1</label>
+										<label class="col-sm-3 col-lg-2 control-label">Mobile 1*</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="supp_mob1" class="form-control" placeholder="Enter Mobile 1 " data-rule-required="true" 
 													 pattern="^\d{10}$" required
 													onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 
-									<label class="col-sm-3 col-lg-2 control-label">Email 1</label>
+									<label class="col-sm-3 col-lg-2 control-label">Email 1*</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="email" name="supp_email1" class="form-control"  placeholder="Enter Email 1 "data-rule-required="true"
 													data-rule-email="true" />
@@ -139,7 +139,7 @@
 							 
 								
 							 <div class="form-group">
-										<label class="col-sm-3 col-lg-2 control-label">Mobile 2</label>
+										<label class="col-sm-3 col-lg-2 control-label">Mobile 2*</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="supp_mob2" class="form-control" placeholder="Enter Mobile 2 " data-rule-required="true"
 														 pattern="^\d{10}$" required
@@ -148,7 +148,7 @@
 
 									<label class="col-sm-3 col-lg-2 control-label">Email 2</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="email" name="supp_email2" class="form-control"placeholder="Enter Email 2 "data-rule-required="true"
+										<input type="email" name="supp_email2" class="form-control"placeholder="Enter Email 2 "
 													data-rule-email="true" />
 									</div>
 								 
@@ -156,13 +156,13 @@
 								 <div class="form-group">
 										<label class="col-sm-3 col-lg-2 control-label">Mobile 3</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="supp_mob3" class="form-control" placeholder="Enter Mobile 3 "data-rule-required="true"  pattern="^\d{10}$" required
+										<input type="text" name="supp_mob3" class="form-control" placeholder="Enter Mobile 3 "pattern="^\d{10}$" 
 													onKeyPress="return isNumberCommaDot(event)"   />
 									</div>
 
 									<label class="col-sm-3 col-lg-2 control-label">Email 3</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="email" name="supp_email3" class="form-control"placeholder="Enter Email 3 " data-rule-required="true"
+										<input type="email" name="supp_email3" class="form-control"placeholder="Enter Email 3 " 
 													data-rule-email="true"/>
 									</div>
 								 
@@ -171,14 +171,14 @@
 									<div class="form-group">
 										<label class="col-sm-3 col-lg-2 control-label">Phone 1</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="supp_phone1" class="form-control" placeholder="Enter Phone 1 "data-rule-required="true" data-rule-minlength="10"
+										<input type="number" name="supp_phone1" class="form-control" placeholder="Enter Phone 1 " data-rule-minlength="10"
 													data-rule-maxlength="11"
 													onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 
 									<label class="col-sm-3 col-lg-2 control-label">Email 4</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="email" name="supp_email4" class="form-control" placeholder="Enter Email 4 "data-rule-required="true"
+										<input type="email" name="supp_email4" class="form-control" placeholder="Enter Email 4 "
 													data-rule-email="true" />
 									</div>
 								 
@@ -187,14 +187,14 @@
 								<div class="form-group">
 										<label class="col-sm-3 col-lg-2 control-label">Phone 2</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="supp_phone2" class="form-control" placeholder="Enter Phone 2 "data-rule-required="true" data-rule-minlength="10"
+										<input type="number" name="supp_phone2" class="form-control" placeholder="Enter Phone 2 " data-rule-minlength="10"
 													data-rule-maxlength="11"
 													onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 
 									<label class="col-sm-3 col-lg-2 control-label">Email 5</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="email" name="supp_email5" class="form-control"placeholder="Enter Email 5 "data-rule-required="true"
+										<input type="email" name="supp_email5" class="form-control"placeholder="Enter Email 5 "
 													data-rule-email="true"/>
 									</div>
 								 
@@ -203,12 +203,12 @@
 								<br />
 							
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Supplier Contact Person</label>
+									<label class="col-sm-3 col-lg-2 control-label">Supplier Contact Person*</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="supp_c_person" class="form-control" placeholder="Supplier contact person" data-rule-required="true"/>
 									</div>
 
-									<label class="col-sm-3 col-lg-2 control-label">Supplier Pan No
+									<label class="col-sm-3 col-lg-2 control-label">Supplier Pan No*
 									</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="supp_panno" class="form-control"  placeholder="Supplier Pan No"data-rule-required="true"/>
@@ -217,19 +217,19 @@
 								</div>
 								 
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Supplier FDA Lic</label>
+									<label class="col-sm-3 col-lg-2 control-label">Supplier FDA Lic*</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="supp_fdalic" class="form-control" placeholder="Supplier FDA Lic"data-rule-required="true" />
 									</div>
 
-									<label class="col-sm-3 col-lg-2 control-label">Supplier Pay Id</label>
+									<label class="col-sm-3 col-lg-2 control-label">Supplier Pay Id*</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="supp_pay_id" class="form-control" placeholder=" Supplier Pay Id" data-rule-number="true"  data-rule-required="true"/>
 									</div>
 								</div>
 							 
 								<div class="form-group" >
-									<label class="col-sm-3 col-lg-2 control-label">Supplier Credit days</label>
+									<label class="col-sm-3 col-lg-2 control-label">Supplier Credit days*</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="supp_credit_days" class="form-control"  placeholder="Supplier Credit days" onKeyPress="return isNumberCommaDot(event)"data-rule-number="true" data-rule-required="true"/>
 									</div>

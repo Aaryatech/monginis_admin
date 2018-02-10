@@ -245,7 +245,7 @@ public class RawMaterialController {
 		rawMaterialDetails.setGrpId(Integer.parseInt(rmGroup));
 		rawMaterialDetails.setCatId(Integer.parseInt(rmCat));
 		rawMaterialDetails.setSubCatId(Integer.parseInt(rmSubCat));
-		 
+		rawMaterialDetails.setIsTallySync(0);
 		rawMaterialDetails.setDelStatus(0);
 		
 		System.out.println("Data  : "+rawMaterialDetails.toString());
