@@ -149,7 +149,6 @@ public class GrnGvnController {
 
 			getGrnGvnDetails = getGrnGvnDetailsList.getGrnGvnDetails();
 			
-			
 			//Ganesh Remrk
 			map=new LinkedMultiValueMap<String, Object>();
 			map.add("isFrUsed", 0);
@@ -349,10 +348,19 @@ public class GrnGvnController {
 						postGrnGvn.setApproveimedDateTimeGate(dateFormat.format(cal.getTime()));
 
 						postGrnGvn.setApprovedLoginStore(getGrnGvnDetails.get(j).getApprovedLoginStore());
+					
+						
+						if(getGrnGvnDetails.get(j).getApprovedDateTimeStore().matches("0000-00-00  00:00:00")) {
+							
+							System.out.println("Ex Matched ");
+							
+							postGrnGvn.setApprovedDateTimeStore("0000-00-00 00:00:00");
+						}
 						postGrnGvn.setApprovedDateTimeStore(getGrnGvnDetails.get(j).getApprovedDateTimeStore());
+						
 						postGrnGvn.setApprovedRemarkStore(getGrnGvnDetails.get(j).getApprovedRemarkStore());
 						postGrnGvn.setApprovedLoginAcc(getGrnGvnDetails.get(j).getApprovedLoginAcc());
-						postGrnGvn.setGrnApprovedDateTimeAcc(getGrnGvnDetails.get(j).getGrnApprovedDateTimeAcc());
+					postGrnGvn.setGrnApprovedDateTimeAcc(getGrnGvnDetails.get(j).getGrnApprovedDateTimeAcc());
 						postGrnGvn.setApprovedRemarkAcc(getGrnGvnDetails.get(j).getApprovedRemarkAcc());
 
 						postGrnGvn.setDelStatus(0);

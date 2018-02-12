@@ -114,7 +114,47 @@
 									<div class="box-content">
 
 										<div class="clearfix"></div>
-										<div class="table-responsive" style="border: 0">
+										
+										<div id="table-scroll" class="table-scroll">
+							 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table2" class="main-table">
+											<thead>
+												<tr class="bgpink">
+													<th></th>
+														<th class="col-md-1">Sr No</th>
+														<th class="col-md-1" align="center">Bill No</th>
+														<th class="col-md-2">Franchise Name</th>
+														<th class="col-md-2">Item Name</th>
+														<th class="col-md-1">GRN Type</th>
+														<th class="col-md-1">Qty</th>
+														<th class="col-md-2">Status</th>
+														<th class="col-md-2">Action</th>
+														
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+									<div class="table-wrap">
+									
+										<table id="table1" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+												<th></th>
+														<th class="col-md-1">Sr No</th>
+														<th class="col-md-1" align="center">Bill No</th>
+														<th class="col-md-2">Franchise Name</th>
+														<th class="col-md-2">Item Name</th>
+														<th class="col-md-1">GRN Type</th>
+														<th class="col-md-1">Qty</th>
+														<th class="col-md-2">Status</th>
+														<th class="col-md-2">Action</th>
+												</tr>
+												</thead>
+										
+										
+										<!-- <div class="table-responsive" style="border: 0">
 											<table width="100%"
 												class="table table-advance table-responsive table-position"
 												id="table1">
@@ -125,15 +165,13 @@
 														<th align="center">Bill No</th>
 														<th>Franchise Name</th>
 														<th>Item Name</th>
-														<th>TYPE of GRN</th>
-														<th align="center">Quantity</th>
+														<th>GRN Type</th>
+														<th>Qty</th>
 														<th>Status</th>
 														<th>Action</th>
 													</tr>
 
-
-
-												</thead>
+												</thead> -->
 												<tbody>
 													<c:forEach items="${grnList}" var="grnList"
 														varStatus="count">
@@ -168,42 +206,42 @@
 
 																</c:otherwise>
 															</c:choose>
-															<td align="center"><c:out value="${count.index+1}" /></td>
+															<td class="col-md-1" ><c:out value="${count.index+1}" /></td>
 
-															<td align="center"><c:out value="${grnList.billNo}" /></td>
+															<td class="col-md-1" ><c:out value="${grnList.billNo}" /></td>
 
-															<td align="left"><c:out value="${grnList.frName}" /></td>
+															<td class="col-md-2" ><c:out value="${grnList.frName}" /></td>
 
 
-															<td align="left"><c:out value="${grnList.itemName}" /></td>
+															<td class="col-md-2"><c:out value="${grnList.itemName}" /></td>
 
 															<c:choose>
 																<c:when test="${grnList.grnType==0}">
-																	<td align="left"><c:out value="GRN 1"></c:out></td>
+																	<td class="col-md-1"><c:out value="GRN 1"></c:out></td>
 
 																</c:when>
 
 
 																<c:when test="${grnList.grnType==1}">
-																	<td align="left"><c:out value="GRN 2"></c:out></td>
+																	<td class="col-md-1" ><c:out value="GRN 2"></c:out></td>
 
 																</c:when>
 
 
 																<c:when test="${grnList.grnType==2}">
-																	<td align="left"><c:out value="GRN 3"></c:out></td>
+																	<td  class="col-md-1"><c:out value="GRN 3"></c:out></td>
 
 																</c:when>
 																
 																<c:when test="${grnList.grnType==4}">
-																	<td align="left"><c:out value="GRN 4"></c:out></td>
+																	<td class="col-md-1"><c:out value="GRN 4"></c:out></td>
 
 																</c:when>
 
 															</c:choose>
 
 
-															<td align="center"><c:out
+															<td class="col-md-1"><c:out
 																	value="${grnList.grnGvnQty}" /> <input type="hidden"
 																name="approve_gate_login${grnList.grnGvnId}"
 																id="approve_gate_login${grnList.grnGvnId}"
@@ -212,47 +250,48 @@
 
 															<c:choose>
 																<c:when test="${grnList.grnGvnStatus==1}">
-																	<td align="left"><c:out value="Pending"></c:out></td>
+																	<td class="col-md-2"><c:out value="Pending"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==2}">
-																	<td align="left"><c:out value="approvedByGate"></c:out></td>
+																	<td class="col-md-2"><c:out value="approvedByGate"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==3}">
-																	<td align="left"><c:out value="rejectByGate"></c:out></td>
+																	<td class="col-md-2"><c:out value="rejectByGate"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==4}">
-																	<td align="left"><c:out value="approvedBystore"></c:out></td>
+																	<td class="col-md-2"><c:out value="approvedBystore"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==5}">
-																	<td align="left"><c:out value="rejectByStore"></c:out></td>
+																	<td class="col-md-2"><c:out value="rejectByStore"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==6}">
-																	<td align="left"><c:out value="approvedByAcc"></c:out></td>
+																	<td class="col-md-2"><c:out value="approvedByAcc"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==7}">
-																	<td align="left"><c:out value="rejectByAcc"></c:out></td>
+																	<td class="col-md-2"><c:out value="rejectByAcc"></c:out></td>
 
 																</c:when>
 
 															</c:choose>
-
+															
+									<!-- Action Button TD -->
+									
 															<c:choose>
 																<c:when test="${grnList.grnGvnStatus==2}">
 
 																	<td>
-
 
 																		<ul class="table-menu">
 																			<li><a href="" id="callSubmit"
@@ -318,7 +357,7 @@
 
 																<c:when test="${grnList.grnGvnStatus==3}">
 
-																	<td>
+																	<td >
 																		<ul class="table-menu">
 																			<li><a href="" id="callSubmit"  
 																				onclick="insertGrnCall(${grnList.grnGvnId})"><i
@@ -382,12 +421,9 @@
 
 																<c:when test="${grnList.grnGvnStatus==1}">
 
-																	<td>
+																	<td class="col-md-2">
 
-
-
-
-																		<ul class="table-menu">
+																		<ul class="table-menu" >
 
 																			<li><a href="" id="callSubmit"
 																				onclick="insertGrnCall(${grnList.grnGvnId})"><i
@@ -406,7 +442,7 @@
 																					
 																						<c:forEach items="${remarkList}" var="remarkList">
 																						
-																						<option value="${remarkList.remarkId}">${remarkList.remark}</option>
+																						<option value="${remarkList.remark}">${remarkList.remark}</option>
 																																										
 																						</c:forEach>
 																						</select>
@@ -433,10 +469,10 @@
 																					<div class="dropdown-menu">
 																						<div class="form">
 																							Franchisee Remark
-																							<textarea name="t1" readonly="readonly"
+																							<textarea name="t1" readonly="readonly" rows="20"
 																								class="form-control">${grnList.frGrnGvnRemark}</textarea>
 																							Factory remark
-																							<textarea name="t1" readonly="readonly"
+																							<textarea name="t1" readonly="readonly" rows="20"
 																								class="form-control">${grnList.approvedRemarkGate}</textarea>
 
 																						</div>
@@ -472,7 +508,7 @@
 																						<select name="gate_remark${grnList.grnGvnId}" id="gate_remark${grnList.grnGvnId}" class="form-control">
 																						<c:forEach items="${remarkList}" var="remarkList">
 																						
-																						<option value="remarkList.remarkId">${remarkList.remark}</option>
+																						<option value="${remarkList.remark}">${remarkList.remark}</option>
 																																																																										
 																																										
 																						
@@ -538,7 +574,7 @@
 
 											</table>
 										</div>
-
+</div>
 										<!-- this is for ajax call<input type="submit" class="btn btn-primary" value="Submit"
 										id="callSubmit" onclick="callSubmitGrn(); getGrnId();"> -->
 

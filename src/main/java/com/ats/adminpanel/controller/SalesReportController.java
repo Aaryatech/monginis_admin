@@ -1533,6 +1533,8 @@ public class SalesReportController {
 
 				System.out.println("Inside If all fr Selected ");
 				
+				//web serviece: getSalesReportRoyaltyAllFr
+				
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
 
@@ -1696,7 +1698,7 @@ public class SalesReportController {
 			if (isAllFrSelected) {
 
 				System.out.println("Inside If all fr Selected ");
-				
+				//getSalesReportRoyaltyAllFr
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
 
@@ -1863,7 +1865,7 @@ public class SalesReportController {
 			if (isAllFrSelected) {
 
 				System.out.println("Inside If all fr Selected ");
-				
+				//Web Service :getSalesReportRoyaltyFrAllFr
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
 
@@ -2164,6 +2166,8 @@ public class SalesReportController {
 
 			if (frList.contains("-1")) {
 				isAllFrSelected = true;
+				
+				//No frIds for Filter:it us based on Item  Selection :
 			}
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -2835,9 +2839,10 @@ public class SalesReportController {
 			if (isAllFrSelected) {
 
 				System.out.println("Inside If all fr Selected ");
-				
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
+				
+				//getSaleReportRoyConsoByCatAllFr
 
 			} else {
 				System.out.println("Inside else Few fr Selected ");

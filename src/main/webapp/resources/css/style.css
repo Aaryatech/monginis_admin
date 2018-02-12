@@ -5,6 +5,7 @@ div.panel {
 	max-height: 0;
 	overflow: hidden;
 	transition: max-height 0.2s ease-out;
+	  
 }
 .disableClick {
 	pointer-events: none;
@@ -27,6 +28,7 @@ div.panel {
 	overflow: auto;
 	position:relative;
 	z-index:1;
+	
 	
 height: auto;
 max-height: 590px;
@@ -96,11 +98,17 @@ min-height: 90px;
 }
 
 .table-menu li{ 
+	
 list-style-type:none;
-display:inline-block	
+display:inline-block
+
+
+ 
 }
 
 .table-menu .dropdown-menu {
     left: -158px;
-    padding:10px;
+    padding:15px;
+    
+   
 }
