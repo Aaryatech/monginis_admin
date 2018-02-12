@@ -312,7 +312,7 @@
 																				<div class="dropdown">
 																					<a class="dropdown-toggle" href="#"
 																						data-toggle="dropdown"><i class="fa fa-times"></i></a>
-																					<div class="dropdown-menu">
+																					<div class="dropdown-menu ">
 																						<div class="form">
 
 																							<select name="acc_remark${grnList.grnGvnId}"
@@ -337,6 +337,7 @@
 																					<a class="dropdown-toggle" href="#"
 																						data-toggle="dropdown"><i
 																						class="fa fa-info-circle"></i></a>
+																						
 																					<div class="dropdown-menu">
 																						<div class="form">
 																							Franchisee Remark
