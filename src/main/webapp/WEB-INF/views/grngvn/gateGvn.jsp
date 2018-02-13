@@ -146,7 +146,7 @@
 														<th>Bill No</th>
 														<th>Franchise Name</th>
 														<th>Item Name</th>
-														<th align="center">Gvn Qty</th>
+														<th>Gvn Qty</th>
 														<th>PHOTO 1</th>
 														<th>PHOTO 2</th>
 														<th>Status</th>

@@ -161,7 +161,7 @@
 
 																	<td><input type="checkbox" name="select_to_agree"
 																		disabled="disabled" id="${gvnList.grnGvnId}"
-																		value="${gvnList.grnGvnId}"></></td>
+																		value="${gvnList.grnGvnId}"/></td>
 
 
 																</c:otherwise>
