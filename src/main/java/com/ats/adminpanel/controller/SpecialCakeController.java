@@ -307,8 +307,12 @@ public class SpecialCakeController {
 		map.add("spId", spId);
 		RestTemplate restTemplate = new RestTemplate();
 		Info info = restTemplate.postForObject(Constants.url + "deleteSpecialCake", map, Info.class);
+		map = new LinkedMultiValueMap<String, Object>();
+		map.add("id", spId);
+		Info infoSpCk = restTemplate.postForObject(Constants.url + "deleteSpCakeSup", map, Info.class);
 
-		if (info.getError()) {
+		
+		if (info.getError()||infoSpCk.getError()) {
 			return "redirect:/showSpecialcake";
 		} else {
 			return "redirect:/showSpecialCake";
