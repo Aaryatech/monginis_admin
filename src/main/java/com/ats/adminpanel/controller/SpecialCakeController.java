@@ -33,16 +33,23 @@ import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.AllEventListResponse;
 import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.SpecialCake;
+import com.ats.adminpanel.model.TrayType;
 import com.ats.adminpanel.model.Event;
 import com.ats.adminpanel.model.EventNameId;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.InsertSpCakeResponse;
 import com.ats.adminpanel.model.Login;
 import com.ats.adminpanel.model.Route;
+import com.ats.adminpanel.model.SpCake;
 import com.ats.adminpanel.model.SpCakeResponse;
-import com.ats.adminpanel.model.SpecialCake;
+import com.ats.adminpanel.model.SpCakeSupplement;
 import com.ats.adminpanel.model.ViewSpCakeResponse;
+import com.ats.adminpanel.model.RawMaterial.RawMaterialUom;
+import com.ats.adminpanel.model.item.GetItemSup;
+import com.ats.adminpanel.model.item.ItemSup;
+import com.ats.adminpanel.model.item.ItemSupList;
 import com.ats.adminpanel.model.masters.AllRatesResponse;
+import com.ats.adminpanel.model.masters.GetSpCkSupplement;
 import com.ats.adminpanel.model.masters.Rate;
 import com.ats.adminpanel.model.ViewSpCakeListResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -661,5 +668,132 @@ int rate=0;
 		return "redirect:/showSpecialCake";
 
 	}
+	@RequestMapping(value = "/showSpSupplement", method = RequestMethod.GET)
+	public ModelAndView showSpSupplement(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView("spcake/spCakeSupp");
+		Constants.mainAct =1;
+		Constants.subAct =110;
 
+		RestTemplate restTemplate = new RestTemplate();
+		
+		try {
+			List<GetSpCkSupplement> spSuppList=restTemplate.getForObject(Constants.url+"/getSpCakeSuppList", List.class);
+			System.out.println("spSuppList" + spSuppList.toString());
+
+			List<SpCake> spList=restTemplate.getForObject(Constants.url+"/getSpCakeList", List.class);
+			System.out.println("spList" + spList.toString());
+
+			List<RawMaterialUom> rawMaterialUomList=restTemplate.getForObject(Constants.url + "rawMaterial/getRmUom", List.class);
+			mav.addObject("rmUomList", rawMaterialUomList);
+			mav.addObject("spSuppList", spSuppList);
+			mav.addObject("spList", spList);
+
+		} catch (Exception e) {
+			System.out.println("Exc In /spSupList" + e.getMessage());
+		}
+
+		return mav;
+
+	}
+	// ------------------------------ADD SpCakeSup Process------------------------------------
+		@RequestMapping(value = "/addSpCakeSupProcess", method = RequestMethod.POST)
+		public String addSpCakeSupProcess(HttpServletRequest request, HttpServletResponse response) {
+
+			ModelAndView model = new ModelAndView("spcake/spCakeSupp");
+			try {
+
+				int id = 0;
+
+				try {
+					id = Integer.parseInt(request.getParameter("id"));
+
+				} catch (Exception e) {
+					id = 0;
+					System.out.println("In Catch of addSpCakeSupProcess Process Exc:" + e.getMessage());
+
+				}
+
+				String spHsncd = request.getParameter("spck_hsncd");
+				int spId = Integer.parseInt(request.getParameter("sp_id"));
+
+				int uomId = Integer.parseInt(request.getParameter("spck_uom"));
+				
+				float spCess = Float.parseFloat(request.getParameter("sp_cess"));
+				
+				String spUom=request.getParameter("sp_uom_name");
+				
+				int cutSection= Integer.parseInt(request.getParameter("cut_section"));
+
+				
+				SpCakeSupplement spCakeSupplement=new SpCakeSupplement();
+				spCakeSupplement.setId(id);
+				spCakeSupplement.setUomId(uomId);
+				spCakeSupplement.setSpId(spId);
+				spCakeSupplement.setSpUom(spUom);
+				spCakeSupplement.setSpHsncd(spHsncd);
+				spCakeSupplement.setSpCess(spCess);
+				spCakeSupplement.setDelStatus(0);
+				spCakeSupplement.setIsTallySync(0);
+				spCakeSupplement.setCutSection(cutSection);
+				
+				RestTemplate restTemplate = new RestTemplate();
+
+				Info info = restTemplate.postForObject(Constants.url + "/saveSpCakeSup",
+						spCakeSupplement, Info.class);
+				System.out.println("Response: " + info.toString());
+
+				if (info.getError() == true) {
+
+					System.out.println("Error:True" + info.toString());
+					return "redirect:/showSpSupplement";
+
+				} else {
+					return "redirect:/showSpSupplement";
+				}
+
+			} catch (Exception e) {
+
+				System.out.println("Exception In Add SpSupp Process:" + e.getMessage());
+
+			}
+
+			return "redirect:/showSpSupplement";
+		}
+
+		// ----------------------------------------END---------------------------------------------------
+		// ----------------------------------------END---------------------------------------------------
+		
+		@RequestMapping(value = "/updateSpSupp/{id}", method = RequestMethod.GET)
+		public ModelAndView updateSpSupp(@PathVariable("id")int id,HttpServletRequest request, HttpServletResponse response) {
+			ModelAndView mav = new ModelAndView("spcake/spCakeSupp");
+			
+
+			RestTemplate restTemplate = new RestTemplate();
+			
+			try {
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("id", id);
+				
+				GetSpCkSupplement getSpCkSupplement=restTemplate.postForObject(Constants.url+"/getSpCakeSupp",map, GetSpCkSupplement.class);
+				System.out.println("getSpCkSupplement"+getSpCkSupplement.toString() );
+			    List<RawMaterialUom> rawMaterialUomList=restTemplate.getForObject(Constants.url + "rawMaterial/getRmUom", List.class);
+				List<GetSpCkSupplement> spSuppList=restTemplate.getForObject(Constants.url+"/getSpCakeSuppList", List.class);
+				System.out.println("spSuppList" + spSuppList.toString());
+
+				SpCakeResponse spCakeResponse = restTemplate.getForObject(Constants.url + "showSpecialCakeList",
+						SpCakeResponse.class);
+				mav.addObject("spSuppList", spSuppList);
+				mav.addObject("spList", spCakeResponse.getSpecialCake());
+			    
+			    mav.addObject("rmUomList", rawMaterialUomList);
+			 
+			    mav.addObject("spCkSupp", getSpCkSupplement);
+
+			} catch (Exception e) {
+				System.out.println("Exc In /updateSpSupp" + e.getMessage());
+			}
+
+			return mav;
+
+		}
 }

@@ -950,6 +950,8 @@ public class ItemController {
 				int isGateSaleDisc = Integer.parseInt(request.getParameter("is_gate_sale_disc"));
 
 				int isAllowBday= Integer.parseInt(request.getParameter("is_allow_bday"));
+				int cutSection= Integer.parseInt(request.getParameter("cut_section"));
+
 				
 				ItemSup itemSup=new ItemSup();
 				itemSup.setId(id);
@@ -967,6 +969,7 @@ public class ItemController {
 				itemSup.setTrayType(trayType);
 				itemSup.setDelStatus(0);
 				itemSup.setIsTallySync(0);
+				itemSup.setCutSection(cutSection);
 				
 				RestTemplate restTemplate = new RestTemplate();
 

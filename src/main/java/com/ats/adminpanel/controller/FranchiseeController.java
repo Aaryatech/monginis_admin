@@ -1833,6 +1833,8 @@ public class FranchiseeController {
 			
 			int frequency=Integer.parseInt(request.getParameter("frequency"));
 			
+			int noInRoute=Integer.parseInt(request.getParameter("no_in_route"));
+			
 			//	String remainderDate=request.getParameter("remainder_date");
 			
 			 Date pestCtrlDate=new SimpleDateFormat("dd-MM-yyyy").parse(pestControlDate);  
@@ -1856,7 +1858,8 @@ public class FranchiseeController {
 			frSup.setFrequency(frequency);
 			frSup.setRemainderDate(remainderDate);
 			frSup.setIsTallySync(0);
-
+			frSup.setNoInRoute(noInRoute);
+			
 			RestTemplate restTemplate = new RestTemplate();
 
 			Info info = restTemplate.postForObject(Constants.url + "/saveFranchiseSup", frSup, Info.class);

@@ -35,9 +35,19 @@ public class GetItemSup{
 	
 	private int isAllowBday;
 	
+	private int cutSection;
+	
 	private int delStatus;
 	
 	
+	public int getCutSection() {
+		return cutSection;
+	}
+
+	public void setCutSection(int cutSection) {
+		this.cutSection = cutSection;
+	}
+
 	public int getTrayType() {
 		return trayType;
 	}
@@ -180,9 +190,9 @@ public class GetItemSup{
 				+ ", itemName=" + itemName + ", itemHsncd=" + itemHsncd + ", uomId=" + uomId + ", itemUom=" + itemUom
 				+ ", actualWeight=" + actualWeight + ", baseWeight=" + baseWeight + ", inputPerQty=" + inputPerQty
 				+ ", isGateSale=" + isGateSale + ", trayType=" + trayType + ", noOfItemPerTray=" + noOfItemPerTray
-				+ ", isGateSaleDisc=" + isGateSaleDisc + ", isAllowBday=" + isAllowBday + ", delStatus=" + delStatus
-				+ "]";
+				+ ", isGateSaleDisc=" + isGateSaleDisc + ", isAllowBday=" + isAllowBday + ", cutSection=" + cutSection
+				+ ", delStatus=" + delStatus + "]";
 	}
-    
+
 	
 }

@@ -151,6 +151,14 @@
 											data-rule-required="true" value="${frSup.frequency}"/>
 									</div>
 							  </div>
+							   <div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">No. In Route</label>
+									<div class="col-sm-9 col-lg-3 controls">
+										<input type="text" name="no_in_route" id="no_in_route"
+											placeholder="No. In Route" class="form-control"
+											data-rule-required="true" value="${frSup.noInRoute}"/>
+									</div>
+							  </div>
 							  <%-- <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Remainder Date</label>
 									<div class="col-sm-9 col-lg-3 controls">

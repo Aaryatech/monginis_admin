@@ -28,6 +28,7 @@ public class GetFranchiseSup {
 	
 	private int isTallySync;
 	
+	private int noInRoute;;
 
     private int frequency;
 	
@@ -35,6 +36,15 @@ public class GetFranchiseSup {
 	
 	private String remainderDate;
 	
+	
+	public int getNoInRoute() {
+		return noInRoute;
+	}
+
+	public void setNoInRoute(int noInRoute) {
+		this.noInRoute = noInRoute;
+	}
+
 	public int getFrequency() {
 		return frequency;
 	}
@@ -168,8 +178,9 @@ public class GetFranchiseSup {
 		return "GetFranchiseSup [id=" + id + ", frId=" + frId + ", frName=" + frName + ", frPanNo=" + frPanNo
 				+ ", frState=" + frState + ", frCountry=" + frCountry + ", delStatus=" + delStatus + ", pass1=" + pass1
 				+ ", pass2=" + pass2 + ", pass3=" + pass3 + ", pass4=" + pass4 + ", pass5=" + pass5 + ", isTallySync="
-				+ isTallySync + ", frequency=" + frequency + ", pestControlDate=" + pestControlDate + ", remainderDate="
-				+ remainderDate + "]";
+				+ isTallySync + ", noInRoute=" + noInRoute + ", frequency=" + frequency + ", pestControlDate="
+				+ pestControlDate + ", remainderDate=" + remainderDate + "]";
 	}
-    
+
+	
 }

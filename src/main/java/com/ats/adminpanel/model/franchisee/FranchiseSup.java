@@ -34,9 +34,19 @@ public class FranchiseSup {
 	
 	private String remainderDate;
 	
+	private int noInRoute;;
+
 	private int isTallySync;
 	
 	
+	public int getNoInRoute() {
+		return noInRoute;
+	}
+
+	public void setNoInRoute(int noInRoute) {
+		this.noInRoute = noInRoute;
+	}
+
 	public int getFrequency() {
 		return frequency;
 	}
@@ -179,7 +189,7 @@ public class FranchiseSup {
 				+ frPanNo + ", frState=" + frState + ", frCountry=" + frCountry + ", delStatus=" + delStatus
 				+ ", pass1=" + pass1 + ", pass2=" + pass2 + ", pass3=" + pass3 + ", pass4=" + pass4 + ", pass5=" + pass5
 				+ ", frequency=" + frequency + ", pestControlDate=" + pestControlDate + ", remainderDate="
-				+ remainderDate + ", isTallySync=" + isTallySync + "]";
+				+ remainderDate + ", noInRoute=" + noInRoute + ", isTallySync=" + isTallySync + "]";
 	}
     
 }

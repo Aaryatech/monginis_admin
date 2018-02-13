@@ -180,7 +180,39 @@
 											data-rule-required="true"  data-rule-number="true" value="${itemSupp.inputPerQty}"/>
 									</div>
 							  </div>
-						    <div class="form-group">
+							    <div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Cut Section</label>
+									<div class="col-sm-9 col-lg-3 controls">
+										<select name="cut_section" id="cut_section" class="form-control"
+												 data-rule-required="true">
+											<option value="">Select Cut Section</option>
+											
+										<c:choose>
+										<c:when test="${itemSupp.cutSection==0}">
+										<option value="0" selected>Not Applicable</option>
+											<option value="1">Single Cut</option>
+											<option value="2">Double Cut</option>
+										</c:when>
+											<c:when test="${itemSupp.cutSection==1}">
+											<option value="0" >Not Applicable</option>
+											<option value="1"selected>Single Cut</option>
+											<option value="2">Double Cut</option>
+											</c:when>
+											<c:when test="${itemSupp.cutSection==2}">
+											<option value="0" >Not Applicable</option>
+											<option value="1">Single Cut</option>
+											<option value="2"selected>Double Cut</option>
+											</c:when>
+											<c:otherwise>
+										    <option value="0">Not Applicable</option>
+											<option value="1">Single Cut</option>
+											<option value="2">Double Cut</option>
+											</c:otherwise>
+										</c:choose>
+										</select>
+									</div>
+							  </div>
+						    <div class="col2">
 									<label class="col-sm-3 col-lg-2 control-label">Type Of Tray</label>
 									<div class="col-sm-9 col-lg-3 controls">
 												<select name="tray_type" id="tray_type" class="form-control"placeholder="Type Of Tray"
@@ -200,7 +232,7 @@
 										</select>
 									</div>
 							  </div>
-							    <div class="col2">
+							    <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">No. Of Item Per Tray</label>
 									<div class="col-sm-9 col-lg-3 controls">
 										<input type="text" name="no_of_item" id="no_of_item"
@@ -208,7 +240,7 @@
 											data-rule-required="true"  data-rule-number="true" value="${itemSupp.noOfItemPerTray}"/>
 									</div>
 							  </div> 
-							      <div class="form-group">
+							      <div class="col2">
 									<label class="col-sm-3 col-lg-2 control-label">Gate Sale Allowed?</label>
 									<div class="col-sm-9 col-lg-3 controls">
 												<c:choose>
@@ -243,7 +275,7 @@
 												</c:choose>
 									</div>
 							  </div>
-							    <div class="col2">
+							    <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Gate Sale Discount Allowed?</label>
 									<div class="col-sm-9 col-lg-3 controls">
 												<c:choose>
@@ -278,7 +310,7 @@
 												</c:choose>
 									</div>
 							  </div>
-							    <div class="form-group">
+							    <div class="col2">
 									<label class="col-sm-3 col-lg-2 control-label">Allowed For Employee Birthday?</label>
 									<div class="col-sm-9 col-lg-3 controls">
 												<c:choose>

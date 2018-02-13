@@ -36,9 +36,17 @@ public class ItemSup {
 
 	private int isTallySync;
 	
+	private int cutSection;
 	
 	
-	
+	public int getCutSection() {
+		return cutSection;
+	}
+
+	public void setCutSection(int cutSection) {
+		this.cutSection = cutSection;
+	}
+
 	public int getIsTallySync() {
 		return isTallySync;
 	}
@@ -182,7 +190,8 @@ public class ItemSup {
 				+ ", noOfItemPerTray=" + noOfItemPerTray + ", actualWeight=" + actualWeight + ", baseWeight="
 				+ baseWeight + ", inputPerQty=" + inputPerQty + ", isGateSale=" + isGateSale + ", isGateSaleDisc="
 				+ isGateSaleDisc + ", isAllowBday=" + isAllowBday + ", delStatus=" + delStatus + ", isTallySync="
-				+ isTallySync + "]";
+				+ isTallySync + ", cutSection=" + cutSection + "]";
 	}
-    
+
+	
 }
