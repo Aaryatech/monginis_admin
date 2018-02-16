@@ -115,7 +115,7 @@
 									<div class="col-md-3">
 									
 									<select name="fr_id[]" id="fr_id" class="form-control chosen" tabindex="6" multiple="multiple" data-placeholder="Select Franchisee" >
-											 <option selected value="0">all</option> 
+											 <option  value="0">all</option> 
 											<c:forEach items="${allFrIdNameList}" var="allFrIdNameList"> 
 												<option value="${allFrIdNameList.frId}"><c:out value="${allFrIdNameList.frName}"></c:out> </option>
 											 </c:forEach>
@@ -124,8 +124,8 @@
 									</div>
 								<div class="col-md-2">Select Route</div>
 									<div class="col-md-3">
-									<select name="rtid" id="rtid" class="form-control chosen" tabindex="6">
-											<option value="0">Select Route</option> 
+									<select name="rtid[]" id="rtid" class="form-control chosen" multiple="multiple" data-placeholder="Select Route" tabindex="6">
+											 
 											<c:forEach items="${routeList}" var="routeList"> 
 												<option value="${routeList.routeId}"><c:out value="${routeList.routeName}"></c:out> </option>
 											 </c:forEach>
@@ -134,19 +134,14 @@
 								
 				 
 							</div><br>
+							
+							<div class="form-group">
+									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+										<input type="submit" class="btn btn-primary" value="Calculate Variance" onclick="return ValidationEvent();">  
+ 									</div>
+								</div><br><br>
 									
-									<div class="row">
-									<div class="col-md-12" style="text-align: center">
-
-												
-													 
-													<input type="submit" class="btn btn-primary" value="Calculate Variance" onclick="return ValidationEvent();"> 
-												 
-									</div>
-									</div>
-
-
-							 
+									 
 								<div id="table-scroll" class="table-scroll">
 							 
 									<!-- <div id="faux-table" class="faux-table" aria="hidden">
@@ -333,7 +328,7 @@
 		var rtid = $("#rtid").val();
 		//alert("fr_id"+fr_id);
 		//alert("rtid"+rtid);
-			if (fr_id ==null && rtid == 0) 
+			if (fr_id ==null && rtid == null) 
 			{ 
 				alert("select any one");
 				return false;

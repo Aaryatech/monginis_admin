@@ -854,6 +854,8 @@ public class ProductionController {
 	PostProdPlanHeader postProdPlanHeader = new PostProdPlanHeader();
 	CategoryListResponse categoryListComp = new CategoryListResponse();
 	public List<Item> pdfItemList;
+	List<Route> routeList = new ArrayList<Route>();
+	AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
 	List<Variance> getVarianceorderlistforsort = new ArrayList<Variance>();
 	
 	@RequestMapping(value = "/listForVariation", method = RequestMethod.GET)
@@ -904,13 +906,13 @@ public class ProductionController {
 			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
 					AllRoutesListResponse.class);
 
-			List<Route> routeList = new ArrayList<Route>();
+			  routeList = new ArrayList<Route>();
 
 			routeList = allRouteListResponse.getRoute();
 
 			// end get Routes
 
-			AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
+			 allFrIdNameList = new AllFrIdNameList();
 			 
 				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
 				System.out.println("allFrIdNameList"+allFrIdNameList);
@@ -937,12 +939,13 @@ public class ProductionController {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			List<String> sbForRouteFrId = new ArrayList<String>();
+			String sbForRouteFrId = new String();
 			int all=0;
 			String[] frId = request.getParameterValues("fr_id[]");
-			String rtid = request.getParameter("rtid"); 
+			String[] rtid = request.getParameterValues("rtid[]"); 
 			System.out.println("rtid "+rtid);
 			System.out.println("frId "+frId);
+			int flag=0;
 			
 			if(frId!=null)
 			{
@@ -952,32 +955,42 @@ public class ProductionController {
 				}
 				for(int i=0;i<frId.length;i++)
 				{
-					sbForRouteFrId.add(frId[i]);
+					sbForRouteFrId = sbForRouteFrId.concat(frId[i]+",");
+							 
 				}
 				System.out.println("sbForRouteFrId"+sbForRouteFrId);
-				
+				flag=0;
 			}
 			else
 			{
+				 for(int j=0;j<rtid.length;j++)
+				 {
+					 map = new LinkedMultiValueMap<String, Object>(); 
+						map.add("routeId", rtid[j]);
+
+						FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
+								map, FrNameIdByRouteIdResponse.class);
+
+						List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+
+						System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+
+						
+						for (int i = 0; i < frNameIdByRouteIdList.size(); i++) { 
+							
+							sbForRouteFrId=sbForRouteFrId.concat(String.valueOf(frNameIdByRouteIdList.get(i).getFrId())+",");
+						}
+						flag=1;
+				 }
 				 
-				 map = new LinkedMultiValueMap<String, Object>(); 
-				map.add("routeId", rtid);
-
-				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
-						map, FrNameIdByRouteIdResponse.class);
-
-				List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
-
-				System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
-
-				
-				for (int i = 0; i < frNameIdByRouteIdList.size(); i++) { 
-					
-					sbForRouteFrId.add(String.valueOf(frNameIdByRouteIdList.get(i).getFrId()));
-				}
  
 				System.out.println("fr Id Route WISE = " + sbForRouteFrId);
 			}
+			model.addObject("flag",flag);
+			model.addObject("frId",frId);
+			model.addObject("rtid",rtid);
+			model.addObject("routeList",routeList);
+			model.addObject("allFrIdNameList",allFrIdNameList.getFrIdNamesList());
 			
 			int groupType = postProdPlanHeader.getItemGrp1();
 			String prodDate = postProdPlanHeader.getProductionDate();
@@ -989,6 +1002,7 @@ public class ProductionController {
 			map.add("groupType", groupType);
 			map.add("frId", sbForRouteFrId);
 			map.add("all", all);
+			System.out.println("map"+map);
 			VarianceList getQtyforVariance = restTemplate.postForObject(Constants.url + "getQtyforVariance", map,
 					VarianceList.class);
 
@@ -1207,8 +1221,7 @@ public class ProductionController {
 				for (int j = 0; j < updateStockDetailList.size(); j++) {
 
 					if (getVarianceorderlistforsort.get(i).getId() == updateStockDetailList.get(j).getItemId()) {
-							System.out.println("id"+getVarianceorderlistforsort.get(i).getId());
-							System.out.println("name"+getVarianceorderlistforsort.get(i).getItemName());
+							 
 						getVarianceorderlistforsort.get(i)
 								.setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
 
@@ -1236,9 +1249,7 @@ public class ProductionController {
 					if (planItemid == varianceItemId) {
  
 						postProductionPlanDetaillist.get(i).setOrderQty(getVarianceorderlistforsort.get(j).getOrderQty());
-						System.out.println(postProductionPlanDetaillist.get(i).getOrderQty()+"-( ("+postProductionPlanDetaillist.get(i).getOpeningQty()+"+"+
-								postProductionPlanDetaillist.get(i).getProductionQty()+")-"+postProductionPlanDetaillist.get(i).getRejectedQty()+")");
-						float remainingProQty = postProductionPlanDetaillist.get(i).getOrderQty()-postProductionPlanDetaillist.get(i).getCurOpeQty();
+						 float remainingProQty = postProductionPlanDetaillist.get(i).getOrderQty()-postProductionPlanDetaillist.get(i).getCurOpeQty();
 
 						if (remainingProQty > 0) {
 							postProductionPlanDetaillist.get(i).setInt4((int)remainingProQty);

@@ -62,9 +62,7 @@
 									<div class="col-md-2">Production Date</div>
 
 									<div class="col-md-3">
-										<input type="text" id="productionDate" name="productionDate"
-											value="${postProdPlanHeader.productionDate}"
-											class="form-control" readonly>
+									<c:out value="${postProdPlanHeader.productionDate}" />  
 									</div>
 
 
@@ -79,9 +77,7 @@
 
 									<div class="col-md-2">Time Slot</div>
 									<div class="col-md-3">
-										<input class="form-control" id="time_slot" size="16"
-											type="text" name="time_slot" value="${postProdPlanHeader.timeSlot}"
-											readonly />
+									 <c:out value="${postProdPlanHeader.timeSlot}" /> 
 									</div>
 
 								</div>
@@ -93,12 +89,8 @@
 									<div class="col-md-3">
 									<c:forEach items="${categoryList}" var="categoryList">
 									 	<c:choose>
-									 		<c:when test="${postProdPlanHeader.itemGrp1==categoryList.catId}">
-									 			
-									 			<input type="text" id="itemGrp1"
-												name="itemGrp1" value="${categoryList.catName}"
-												class="form-control" readonly>
-									 		
+									 		<c:when test="${postProdPlanHeader.itemGrp1==categoryList.catId}"> 
+									 			  <c:out value="${categoryList.catName}" /> 
 									 		</c:when> 
 										</c:choose>
 									</c:forEach>
@@ -109,7 +101,50 @@
 									</div>
 								</div>
 								<br>
+							<div class="box-content">
 
+								<c:choose>
+									<c:when test="${flag==0}">
+										<div class="col-md-2">Sorted by Franchisee</div>
+										<div class="col-md-3"> 
+										
+										<c:forEach items="${frId}" var="frId" varStatus="count"> 
+											<c:choose>
+												<c:when test="${frId==0}">
+													<c:out value="All" />
+												</c:when>  
+												<c:otherwise>
+													 <c:forEach items="${allFrIdNameList}" var="allFrIdNameList" >
+													  <c:choose>
+													  	<c:when test="${allFrIdNameList.frId==frId}">
+													  		<c:out value="${allFrIdNameList.frName}," />
+													  	</c:when>
+													  </c:choose> 
+												 	</c:forEach>
+												</c:otherwise> 
+											</c:choose>
+										 </c:forEach> 
+										 
+									</div>
+									</c:when>
+									<c:otherwise>
+									<div class="col-md-2">Sorted by Route</div>
+										<div class="col-md-3">
+												<c:forEach items="${rtid}" var="rtid" varStatus="count">  
+													 <c:forEach items="${routeList}" var="routeList" >
+													  <c:choose>
+													  	<c:when test="${routeList.routeId==rtid}">
+													  		<c:out value="${routeList.routeName}," />
+													  	</c:when>
+													  </c:choose> 
+												 	</c:forEach> 
+										 		</c:forEach>  
+									</div>
+									</c:otherwise>
+								</c:choose>
+									
+								</div>
+								<br>
 							 
 									
 									 
