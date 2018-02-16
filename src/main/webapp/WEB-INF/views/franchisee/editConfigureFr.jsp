@@ -596,7 +596,8 @@
 		<!-- END Content -->
 	</div>
 	<!-- END Container -->
-
+ <script
+	src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script> 
 
 	<%-- <script>
 function preferedTest() {
