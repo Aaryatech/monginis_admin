@@ -187,6 +187,38 @@
 											type="text" name="regDate"  required />
 									</div>
 							
+							</div><br>
+							
+							<div class="box-content">
+							
+									<div class="col-md-2">Servicing Frequency(Km)* </div>
+									<div class="col-md-3">
+									<input class="form-control" id="frqKm" placeholder="Servicing Frequency" size="16"
+											type="text" name="frqKm"  required />
+									</div>
+						
+									<div class="col-md-2">Wheel Change Frequency(Km)* </div>
+									<div class="col-md-3">
+									<input class="form-control" id="wheelChange" placeholder="Wheel Change Frequency" size="16"
+											type="text" name="wheelChange"  required />
+									</div>
+							
+							</div><br>
+							
+							<div class="box-content">
+							
+									<div class="col-md-2">Battery Change Frequency(Days)* </div>
+									<div class="col-md-3">
+									<input class="form-control" id="batryChange" placeholder="Battery Change Frequency" size="16"
+											type="text" name="batryChange"  required />
+									</div>
+						
+									<div class="col-md-2">Ac Change Frequency(Days)* </div>
+									<div class="col-md-3">
+									<input class="form-control" id="acChang" placeholder="Ac Change Frequency" size="16"
+											type="text" name="acChang"  required />
+									</div>
+							
 							</div><br><br>
 							
 							
@@ -444,6 +476,10 @@
 								document.getElementById("miniAvg").value=data.vehMiniAvg;
 								document.getElementById("fuelType").value=data.fuelType;
 								$('#fuelType').trigger("chosen:updated");
+								document.getElementById("frqKm").value=data.freqKIm;
+								document.getElementById("wheelChange").value=data.wheelChangeFreq;
+								document.getElementById("batryChange").value=data.battaryChangeFreq;
+								document.getElementById("acChang").value=data.acChangeFreq;
 								
 								
 								
@@ -603,6 +639,10 @@
 								document.getElementById("miniAvg").value="";
 								document.getElementById("fuelType").value="";
 								$('#fuelType').trigger("chosen:updated");
+								document.getElementById("frqKm").value="";
+								document.getElementById("wheelChange").value="";
+								document.getElementById("batryChange").value="";
+								document.getElementById("acChang").value="";
 		var html = '<option value="">Select Type</option>';
 		$('#typeId').html(html);
 		$('#typeId').trigger("chosen:updated");

@@ -22,6 +22,8 @@ import com.ats.adminpanel.model.logistics.Dealer;
 import com.ats.adminpanel.model.logistics.Document;
 import com.ats.adminpanel.model.logistics.DriverMaster;
 import com.ats.adminpanel.model.logistics.Make;
+import com.ats.adminpanel.model.logistics.SparePart;
+import com.ats.adminpanel.model.logistics.SprGroup;
 import com.ats.adminpanel.model.logistics.Variant;
 import com.ats.adminpanel.model.logistics.VehicalMaster;
 import com.ats.adminpanel.model.logistics.VehicalType; 
@@ -825,7 +827,10 @@ public class LogisticsController {
 			float cmpnyAvg = Float.parseFloat(request.getParameter("cmpnyAvg"));
 			float standAvg = Float.parseFloat(request.getParameter("standAvg"));
 			float miniAvg = Float.parseFloat(request.getParameter("miniAvg")); 
-			 
+			int frqKm =Integer.parseInt(request.getParameter("frqKm"));
+			int wheelChange =Integer.parseInt(request.getParameter("wheelChange"));
+			int batryChange =Integer.parseInt(request.getParameter("batryChange"));
+			int acChang =Integer.parseInt(request.getParameter("acChang"));
 
 			VehicalMaster insertVehicalMaster = new VehicalMaster();
 			if(vehId==null || vehId.equals(""))
@@ -846,6 +851,10 @@ public class LogisticsController {
 			insertVehicalMaster.setVehMiniAvg(miniAvg);
 			insertVehicalMaster.setPurchaseDate(purDate);
 			insertVehicalMaster.setRegDate(regDate);
+			insertVehicalMaster.setFreqKIm(frqKm);
+			insertVehicalMaster.setWheelChangeFreq(wheelChange);
+			insertVehicalMaster.setBattaryChangeFreq(batryChange);
+			insertVehicalMaster.setAcChangeFreq(acChang);
 			  
 			insertVehicalMaster = restTemplate.postForObject(Constants.url + "postVehicalMaster",insertVehicalMaster, VehicalMaster.class);
 			System.out.println("insertVariant"+insertVehicalMaster.toString());
@@ -906,5 +915,262 @@ public class LogisticsController {
 
 	}
 	
+	//--------------------------------------SpareGroup--------------------------------------------------
+	@RequestMapping(value = "/showSpareGroupList", method = RequestMethod.GET)
+	public ModelAndView showSpareGroupList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/showSpareGroupList"); 
+		try
+		{
+			
+			List<SprGroup> sprGroupList = restTemplate.getForObject(Constants.url + "getAllSprGroupList", List.class);
+			System.out.println("sprGroupList"+sprGroupList.toString());
+			 
+			model.addObject("sprGroupList",sprGroupList);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/insertSpareGroup", method = RequestMethod.POST)
+	public String  insertSpareGroup(HttpServletRequest request, HttpServletResponse response) {
+
+	 
+		try
+		{
+			String groupId = request.getParameter("groupId");
+			String groupName = request.getParameter("groupName"); 
+			int typeId =Integer.parseInt(request.getParameter("typeId")); 
+
+			SprGroup insertSprGroup = new SprGroup();
+			if(groupId==null || groupId.equals(""))
+				insertSprGroup.setGroupId(0);
+			else
+				insertSprGroup.setGroupId(Integer.parseInt(groupId)); 
+			insertSprGroup.setGroupName(groupName); 
+			insertSprGroup.setTypeId(typeId); 
+			  
+			insertSprGroup = restTemplate.postForObject(Constants.url + "postSprGroup",insertSprGroup, SprGroup.class);
+			System.out.println("insertSprGroup"+insertSprGroup.toString());
+		 
+			 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return "redirect:/showSpareGroupList";
+
+	}
+	
+	@RequestMapping(value = "/deleteSpareGroup/{groupId}", method = RequestMethod.GET)
+	public String deleteSpareGroup(@PathVariable int groupId, HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		try
+		{
+			 System.out.println("groupId"+groupId);
+        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+        	 map.add("groupId", groupId);
+        	 Info info = restTemplate.postForObject(Constants.url + "deleteSprGroup",map, Info.class);
+ 			System.out.println("info"+info.toString()); 
+		 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		 
+		return "redirect:/showSpareGroupList";
+
+	}
+	
+	@RequestMapping(value = "/editSpareGroup", method = RequestMethod.GET)
+	@ResponseBody
+	public SprGroup editSpareGroup(HttpServletRequest request, HttpServletResponse response) {
+		 
+		SprGroup editSpareGroup = new SprGroup();
+	        try
+			{ 
+	        	
+	        	int groupId = Integer.parseInt(request.getParameter("groupId"));
+	        	 System.out.println("groupId"+groupId);
+	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+	        	 map.add("groupId", groupId);
+	        	
+	        	 editSpareGroup = restTemplate.postForObject(Constants.url + "getSprGroupById", map, SprGroup.class);
+			 System.out.println("editSpareGroup " + editSpareGroup); 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return editSpareGroup;
+		
+
+	}
+	
+	//---------------------------------------------SparePart-----------------------------------------
+	
+	@RequestMapping(value = "/showSparePartList", method = RequestMethod.GET)
+	public ModelAndView showSparePartList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/showSparePartList"); 
+		try
+		{
+			
+			List<SparePart> getAllSparePart = restTemplate.getForObject(Constants.url + "getAllSparePart", List.class);
+			System.out.println("getAllSparePart"+getAllSparePart.toString());
+			List<Make> makeList = restTemplate.getForObject(Constants.url + "getAllMakeList", List.class);
+			System.out.println("makeList"+makeList.toString());
+			List<SprGroup> sprGroupList = restTemplate.getForObject(Constants.url + "getAllSprGroupList", List.class);
+			System.out.println("sprGroupList"+sprGroupList.toString());
+			model.addObject("sprGroupList",sprGroupList); 
+			model.addObject("makeList",makeList); 
+			model.addObject("sprPartList",getAllSparePart);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/groupByTypeId", method = RequestMethod.GET)
+	@ResponseBody
+	public List<SprGroup> groupByTypeId(HttpServletRequest request, HttpServletResponse response) {
+		 
+		List<SprGroup> groupByTypeId = new ArrayList<SprGroup>();
+	        try
+			{ 
+	        	
+	        	int typeId = Integer.parseInt(request.getParameter("typeId")); 
+	        	 System.out.println("typeId"+typeId); 
+	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+	        	 map.add("typeId", typeId); 
+	        	 groupByTypeId = restTemplate.postForObject(Constants.url + "getSprGroupListByTypeId", map, List.class);
+			 System.out.println("groupByTypeId " + groupByTypeId); 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return groupByTypeId;
+		
+
+	}
+	
+	@RequestMapping(value = "/insertSparePart", method = RequestMethod.POST)
+	public String  insertSparePart(HttpServletRequest request, HttpServletResponse response) {
+
+	 
+		try
+		{
+			String sprId = request.getParameter("sprId");
+			String partName = request.getParameter("partName");
+			int makeId =Integer.parseInt(request.getParameter("makeId"));
+			int typeId =Integer.parseInt(request.getParameter("typeId"));
+			int groupId =Integer.parseInt(request.getParameter("groupId")); 
+			int critical =Integer.parseInt(request.getParameter("critical")); 
+			String uom = request.getParameter("uom");
+			String date1 = request.getParameter("date1");
+			int rate1 = Integer.parseInt(request.getParameter("rate1"));
+			String date2 = request.getParameter("date2");
+			int rate2 = Integer.parseInt(request.getParameter("rate2"));
+			String date3 = request.getParameter("date3");
+			int rate3 = Integer.parseInt(request.getParameter("rate3"));  
+			int warnty =Integer.parseInt(request.getParameter("warnty"));
+			float cgst = Float.parseFloat(request.getParameter("cgst"));
+			float sgst = Float.parseFloat(request.getParameter("sgst"));
+			float igst = Float.parseFloat(request.getParameter("igst"));
+			int disc =Integer.parseInt(request.getParameter("disc"));
+			int extra =Integer.parseInt(request.getParameter("extra"));
+
+			SparePart insertSparePart = new SparePart();
+			if(sprId==null || sprId.equals(""))
+				insertSparePart.setSprId(0);
+			else
+				insertSparePart.setSprId(Integer.parseInt(sprId)); 
+			insertSparePart.setSprName(partName);
+			insertSparePart.setMakeId(makeId);
+			insertSparePart.setTypeId(typeId);
+			insertSparePart.setGroupId(groupId);
+			insertSparePart.setSprIscritical(critical);
+			insertSparePart.setSprUom(uom);
+			insertSparePart.setSprDate1(date1);
+			insertSparePart.setSprRate1(rate1);
+			insertSparePart.setSprDate2(date2);
+			insertSparePart.setSprRate2(rate2);
+			insertSparePart.setSprDate3(date3);
+			insertSparePart.setSprRate3(rate3);
+			insertSparePart.setSprWarrantyPeriod(warnty);
+			insertSparePart.setCgst(cgst);
+			insertSparePart.setSgst(sgst);
+			insertSparePart.setIgst(igst);
+			insertSparePart.setDisc(disc);
+			insertSparePart.setExtraCharges(extra);
+			
+			  System.out.println("after insert "+insertSparePart);
+			insertSparePart = restTemplate.postForObject(Constants.url + "postSparePart",insertSparePart, SparePart.class);
+			System.out.println("insertSparePart"+insertSparePart.toString());
+		 
+			 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return "redirect:/showSparePartList";
+
+	}
+	
+	@RequestMapping(value = "/deleteSparePart/{sprId}", method = RequestMethod.GET)
+	public String deleteSparePart(@PathVariable int sprId, HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		try
+		{
+			 System.out.println("sprId"+sprId);
+        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+        	 map.add("sprId", sprId);
+        	 Info info = restTemplate.postForObject(Constants.url + "deleteSparePart",map, Info.class);
+ 			System.out.println("info"+info.toString()); 
+		 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		 
+		return "redirect:/showSparePartList";
+
+	}
+	
+	@RequestMapping(value = "/editSparePart", method = RequestMethod.GET)
+	@ResponseBody
+	public SparePart editSparePart(HttpServletRequest request, HttpServletResponse response) {
+		 
+		SparePart editSparePart = new SparePart();
+	        try
+			{ 
+	        	
+	        	int sprId = Integer.parseInt(request.getParameter("sprId"));
+	        	 System.out.println("sprId"+sprId);
+	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+	        	 map.add("sprId", sprId);
+	        	
+	        	 editSparePart = restTemplate.postForObject(Constants.url + "getSparePartById", map, SparePart.class);
+			 System.out.println("editSparePart " + editSparePart); 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return editSparePart;
+		
+
+	}
 
 }

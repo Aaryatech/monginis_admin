@@ -1,6 +1,6 @@
 package com.ats.adminpanel.model.logistics;
 
-import java.util.Date;
+ 
 
 import com.fasterxml.jackson.annotation.JsonFormat; 
 public class VehicalMaster {
@@ -21,7 +21,12 @@ public class VehicalMaster {
 	private float vehCompAvg; 
 	private float vehStandAvg; 
 	private float vehMiniAvg; 
-	private int delStatus;
+	private int delStatus; 
+	private int freqKIm; 
+	private int wheelChangeFreq; 
+	private int battaryChangeFreq; 
+	private int acChangeFreq;
+	
 	public int getVehId() {
 		return vehId;
 	}
@@ -120,13 +125,41 @@ public class VehicalMaster {
 	public void setDelStatus(int delStatus) {
 		this.delStatus = delStatus;
 	}
+	
+	
+	public int getFreqKIm() {
+		return freqKIm;
+	}
+	public void setFreqKIm(int freqKIm) {
+		this.freqKIm = freqKIm;
+	}
+	public int getWheelChangeFreq() {
+		return wheelChangeFreq;
+	}
+	public void setWheelChangeFreq(int wheelChangeFreq) {
+		this.wheelChangeFreq = wheelChangeFreq;
+	}
+	public int getBattaryChangeFreq() {
+		return battaryChangeFreq;
+	}
+	public void setBattaryChangeFreq(int battaryChangeFreq) {
+		this.battaryChangeFreq = battaryChangeFreq;
+	}
+	public int getAcChangeFreq() {
+		return acChangeFreq;
+	}
+	public void setAcChangeFreq(int acChangeFreq) {
+		this.acChangeFreq = acChangeFreq;
+	}
 	@Override
 	public String toString() {
 		return "VehicalMaster [vehId=" + vehId + ", vehNo=" + vehNo + ", makeId=" + makeId + ", vehEngNo=" + vehEngNo
 				+ ", vehChesiNo=" + vehChesiNo + ", vehColor=" + vehColor + ", purchaseDate=" + purchaseDate
 				+ ", regDate=" + regDate + ", dealerId=" + dealerId + ", fuelType=" + fuelType + ", vehTypeId="
 				+ vehTypeId + ", variantId=" + variantId + ", vehCompAvg=" + vehCompAvg + ", vehStandAvg=" + vehStandAvg
-				+ ", vehMiniAvg=" + vehMiniAvg + ", delStatus=" + delStatus + "]";
+				+ ", vehMiniAvg=" + vehMiniAvg + ", delStatus=" + delStatus + ", freqKIm=" + freqKIm
+				+ ", wheelChangeFreq=" + wheelChangeFreq + ", battaryChangeFreq=" + battaryChangeFreq
+				+ ", acChangeFreq=" + acChangeFreq + "]";
 	}
 	
 	
