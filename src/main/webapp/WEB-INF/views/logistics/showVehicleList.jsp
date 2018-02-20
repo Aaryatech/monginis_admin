@@ -219,6 +219,37 @@
 											type="text" name="acChang"  required />
 									</div>
 							
+							</div><br>
+							<div class="box-content">
+							
+									<div class="col-md-2">Current Running Km* </div>
+									<div class="col-md-3">
+									<input class="form-control" id="currentRunningKm" placeholder="Current Running Km" size="16"
+											type="text" name="currentRunningKm"  required />
+									</div>
+									
+									<div class="col-md-2">Last Servicing Km* </div>
+									<div class="col-md-3">
+									<input class="form-control" id="lastServicingKm" placeholder="Last Servicing Km" size="16"
+											type="text" name="lastServicingKm"  required />
+									</div>
+							
+							</div><br> 
+							
+							<div class="box-content">
+							
+									<div class="col-md-2">Next Servicing Km* </div>
+									<div class="col-md-3">
+									<input class="form-control" id="nextServicingKm" placeholder="Next Servicing Km" size="16"
+											type="text" name="nextServicingKm"  required />
+									</div>
+									
+									<div class="col-md-2">Alert Next Servicing Km* </div>
+									<div class="col-md-3">
+									<input class="form-control" id="alertNextServicingKm" placeholder="Alert Next Servicing Km" size="16"
+											type="text" name="alertNextServicingKm"  required />
+									</div>
+							
 							</div><br><br>
 							
 							
@@ -476,13 +507,16 @@
 								document.getElementById("miniAvg").value=data.vehMiniAvg;
 								document.getElementById("fuelType").value=data.fuelType;
 								$('#fuelType').trigger("chosen:updated");
-								document.getElementById("frqKm").value=data.freqKIm;
+								document.getElementById("frqKm").value=data.freqKm;
 								document.getElementById("wheelChange").value=data.wheelChangeFreq;
 								document.getElementById("batryChange").value=data.battaryChangeFreq;
 								document.getElementById("acChang").value=data.acChangeFreq;
+								document.getElementById("currentRunningKm").value=data.currentRunningKm;
+								document.getElementById("lastServicingKm").value=data.lastServicingKm;
+								document.getElementById("nextServicingKm").value=data.nextServicingKm;
+								document.getElementById("alertNextServicingKm").value=data.alertNextServicingKm;
 								
-								
-								
+								   
 								$.getJSON('${typeByMakeId}', {
 									
 									makeId : data.makeId,
@@ -643,6 +677,10 @@
 								document.getElementById("wheelChange").value="";
 								document.getElementById("batryChange").value="";
 								document.getElementById("acChang").value="";
+								document.getElementById("currentRunningKm").value="";
+								document.getElementById("lastServicingKm").value="";
+								document.getElementById("nextServicingKm").value="";
+								document.getElementById("alertNextServicingKm").value="";
 		var html = '<option value="">Select Type</option>';
 		$('#typeId').html(html);
 		$('#typeId').trigger("chosen:updated");

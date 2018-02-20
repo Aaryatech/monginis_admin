@@ -635,6 +635,10 @@ public class PurchaseOrderController {
 				 map.add("response", "json");
 				String String=rest.postForObject("http://control.bestsms.co.in/api/sendhttp.php",map, String.class);
 				final String[] e_mail={email,email2};
+				System.out.println("email"+email);
+				System.out.println("email2"+email2);
+				System.out.println("e_mail"+e_mail);
+				System.out.println("phonno"+phonno);
 				mailSender.send(new MimeMessagePreparator() {
 
 					@Override
@@ -1398,8 +1402,8 @@ public class PurchaseOrderController {
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
-		File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/Po.pdf");
-		//File f = new File("C:/pdf/ordermemo221.pdf");
+		//File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/Po.pdf");
+		File f = new File("C:/pdf/ordermemo221.pdf");
 		System.out.println("I am here " + f.toString());
 		try {
 			runConverter(Constants.ReportURL + url, f);
@@ -1414,8 +1418,8 @@ public class PurchaseOrderController {
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo221.pdf";
-		String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/Po.pdf";
-		//String filePath = "C:/pdf/ordermemo221.pdf";
+		//String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/Po.pdf";
+		String filePath = "C:/pdf/ordermemo221.pdf";
 		//String filePath = "/ordermemo221.pdf";
 
 		// construct the complete absolute path of the file

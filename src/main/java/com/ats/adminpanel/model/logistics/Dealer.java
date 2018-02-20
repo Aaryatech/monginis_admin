@@ -1,4 +1,6 @@
-package com.ats.adminpanel.model.logistics; 
+package com.ats.adminpanel.model.logistics;
+ 
+
 public class Dealer {
 	
 	 
@@ -11,7 +13,9 @@ public class Dealer {
 	private String contactPerson;  
 	private String personMobileNo; 
 	private String contactPersonEmail; 
-	private int delStatus;
+	private int delStatus; 
+	private String gstnNo; 
+	private int isSameState;
 	public int getDealerId() {
 		return dealerId;
 	}
@@ -72,12 +76,26 @@ public class Dealer {
 	public void setDelStatus(int delStatus) {
 		this.delStatus = delStatus;
 	}
+	
+	
+	public String getGstnNo() {
+		return gstnNo;
+	}
+	public void setGstnNo(String gstnNo) {
+		this.gstnNo = gstnNo;
+	}
+	public int getIsSameState() {
+		return isSameState;
+	}
+	public void setIsSameState(int isSameState) {
+		this.isSameState = isSameState;
+	}
 	@Override
 	public String toString() {
 		return "Dealer [dealerId=" + dealerId + ", dealerName=" + dealerName + ", dealerMobileNo=" + dealerMobileNo
 				+ ", makeId=" + makeId + ", city=" + city + ", dealerEmail=" + dealerEmail + ", contactPerson="
 				+ contactPerson + ", personMobileNo=" + personMobileNo + ", contactPersonEmail=" + contactPersonEmail
-				+ ", delStatus=" + delStatus + "]";
+				+ ", delStatus=" + delStatus + ", gstnNo=" + gstnNo + ", isSameState=" + isSameState + "]";
 	}
 	
 	

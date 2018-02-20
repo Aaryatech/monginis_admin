@@ -102,6 +102,25 @@
 											type="email" name="email"   data-rule-email="true" required/>
 									</div>
 									
+									<div class="col-md-2">GSTN No* </div>
+									<div class="col-md-3">
+									<input class="form-control" id="gstnNo" placeholder="GSTN No" size="16"
+											type="text" name="gstnNo"  required/>
+									</div>
+								
+							</div><br>
+							
+							<div class="box-content">
+							
+							<div class="col-md-2">Is Same State* </div>
+									<div class="col-md-3">
+									  <select name="isSameState" id="isSameState" class="form-control chosen" tabindex="6" required>
+									  <option value="">Select</option>
+											<option value="1">Yes</option>
+											 <option value="2">No</option>
+										</select>
+									</div>
+									
 									
 								
 							</div><br>
@@ -336,6 +355,9 @@
 									document.getElementById("cntprn").value=data.contactPerson;
 									document.getElementById("mob2").value=data.personMobileNo;
 									document.getElementById("email2").value=data.contactPersonEmail; 
+									document.getElementById("gstnNo").value=data.gstnNo;
+									document.getElementById("isSameState").value=data.isSameState;
+									$('#isSameState').trigger("chosen:updated");
 									document.getElementById("cancel").disabled=false;
 								});
 
@@ -347,10 +369,15 @@
 
 	         //alert("hi");
 			 var makeId = $("#makeId").val();
+			 var isSameState = $("#isSameState").val();
 			 if(makeId=="")
 				 {
 				 alert("Select Company ");
 				 }
+			 else if(isSameState=="")
+			 {
+			 alert("Select Is Same State ");
+			 }
 			 
 		
 }
@@ -369,6 +396,9 @@
 			document.getElementById("cntprn").value="";
 			document.getElementById("mob2").value="";
 			document.getElementById("email2").value=""; 
+			document.getElementById("gstnNo").value="";
+			document.getElementById("isSameState").value="";
+			$('#isSameState').trigger("chosen:updated");
 		
 }
 		 

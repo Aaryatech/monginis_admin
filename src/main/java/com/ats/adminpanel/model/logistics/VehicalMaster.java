@@ -1,7 +1,7 @@
 package com.ats.adminpanel.model.logistics;
 
  
-
+ 
 import com.fasterxml.jackson.annotation.JsonFormat; 
 public class VehicalMaster {
 	
@@ -22,10 +22,14 @@ public class VehicalMaster {
 	private float vehStandAvg; 
 	private float vehMiniAvg; 
 	private int delStatus; 
-	private int freqKIm; 
+	private int freqKm; 
 	private int wheelChangeFreq; 
 	private int battaryChangeFreq; 
-	private int acChangeFreq;
+	private int acChangeFreq; 
+	private int currentRunningKm; 
+	private int lastServicingKm; 
+	private int nextServicingKm; 
+	private int alertNextServicingKm;
 	
 	public int getVehId() {
 		return vehId;
@@ -126,12 +130,12 @@ public class VehicalMaster {
 		this.delStatus = delStatus;
 	}
 	
-	
-	public int getFreqKIm() {
-		return freqKIm;
+	 
+	public int getFreqKm() {
+		return freqKm;
 	}
-	public void setFreqKIm(int freqKIm) {
-		this.freqKIm = freqKIm;
+	public void setFreqKm(int freqKm) {
+		this.freqKm = freqKm;
 	}
 	public int getWheelChangeFreq() {
 		return wheelChangeFreq;
@@ -151,15 +155,44 @@ public class VehicalMaster {
 	public void setAcChangeFreq(int acChangeFreq) {
 		this.acChangeFreq = acChangeFreq;
 	}
+	
+	
+	
+	public int getCurrentRunningKm() {
+		return currentRunningKm;
+	}
+	public void setCurrentRunningKm(int currentRunningKm) {
+		this.currentRunningKm = currentRunningKm;
+	}
+	public int getLastServicingKm() {
+		return lastServicingKm;
+	}
+	public void setLastServicingKm(int lastServicingKm) {
+		this.lastServicingKm = lastServicingKm;
+	}
+	public int getNextServicingKm() {
+		return nextServicingKm;
+	}
+	public void setNextServicingKm(int nextServicingKm) {
+		this.nextServicingKm = nextServicingKm;
+	}
+	public int getAlertNextServicingKm() {
+		return alertNextServicingKm;
+	}
+	public void setAlertNextServicingKm(int alertNextServicingKm) {
+		this.alertNextServicingKm = alertNextServicingKm;
+	}
 	@Override
 	public String toString() {
 		return "VehicalMaster [vehId=" + vehId + ", vehNo=" + vehNo + ", makeId=" + makeId + ", vehEngNo=" + vehEngNo
 				+ ", vehChesiNo=" + vehChesiNo + ", vehColor=" + vehColor + ", purchaseDate=" + purchaseDate
 				+ ", regDate=" + regDate + ", dealerId=" + dealerId + ", fuelType=" + fuelType + ", vehTypeId="
 				+ vehTypeId + ", variantId=" + variantId + ", vehCompAvg=" + vehCompAvg + ", vehStandAvg=" + vehStandAvg
-				+ ", vehMiniAvg=" + vehMiniAvg + ", delStatus=" + delStatus + ", freqKIm=" + freqKIm
+				+ ", vehMiniAvg=" + vehMiniAvg + ", delStatus=" + delStatus + ", freqKm=" + freqKm
 				+ ", wheelChangeFreq=" + wheelChangeFreq + ", battaryChangeFreq=" + battaryChangeFreq
-				+ ", acChangeFreq=" + acChangeFreq + "]";
+				+ ", acChangeFreq=" + acChangeFreq + ", currentRunningKm=" + currentRunningKm + ", lastServicingKm="
+				+ lastServicingKm + ", nextServicingKm=" + nextServicingKm + ", alertNextServicingKm="
+				+ alertNextServicingKm + "]";
 	}
 	
 	

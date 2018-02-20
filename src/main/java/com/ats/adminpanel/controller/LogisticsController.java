@@ -16,12 +16,16 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.ats.adminpanel.commons.Constants; 
+import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.logistics.Dealer;
 import com.ats.adminpanel.model.logistics.Document;
 import com.ats.adminpanel.model.logistics.DriverMaster;
 import com.ats.adminpanel.model.logistics.Make;
+import com.ats.adminpanel.model.logistics.ServDetail;
+import com.ats.adminpanel.model.logistics.ServDetailAddPart;
+import com.ats.adminpanel.model.logistics.ServHeader;
 import com.ats.adminpanel.model.logistics.SparePart;
 import com.ats.adminpanel.model.logistics.SprGroup;
 import com.ats.adminpanel.model.logistics.Variant;
@@ -312,6 +316,8 @@ public class LogisticsController {
 			String contactPerson = request.getParameter("cntprn");
 			String pMobile = request.getParameter("mob2");
 			String pEmail = request.getParameter("email2");
+			int isSameState = Integer.parseInt(request.getParameter("isSameState"));
+			String gstnNo = request.getParameter("gstnNo");
 
 			Dealer insertDealer = new Dealer();
 			if(dealerId==null || dealerId.equals(""))
@@ -326,7 +332,8 @@ public class LogisticsController {
 			insertDealer.setContactPerson(contactPerson);
 			insertDealer.setPersonMobileNo(pMobile);
 			insertDealer.setContactPersonEmail(pEmail);
-			
+			insertDealer.setIsSameState(isSameState);
+			insertDealer.setGstnNo(gstnNo);
 			
 			
 			
@@ -831,6 +838,10 @@ public class LogisticsController {
 			int wheelChange =Integer.parseInt(request.getParameter("wheelChange"));
 			int batryChange =Integer.parseInt(request.getParameter("batryChange"));
 			int acChang =Integer.parseInt(request.getParameter("acChang"));
+			int currentRunningKm =Integer.parseInt(request.getParameter("currentRunningKm"));
+			int lastServicingKm =Integer.parseInt(request.getParameter("lastServicingKm"));
+			int nextServicingKm =Integer.parseInt(request.getParameter("nextServicingKm"));
+			int alertNextServicingKm =Integer.parseInt(request.getParameter("alertNextServicingKm"));
 
 			VehicalMaster insertVehicalMaster = new VehicalMaster();
 			if(vehId==null || vehId.equals(""))
@@ -851,10 +862,14 @@ public class LogisticsController {
 			insertVehicalMaster.setVehMiniAvg(miniAvg);
 			insertVehicalMaster.setPurchaseDate(purDate);
 			insertVehicalMaster.setRegDate(regDate);
-			insertVehicalMaster.setFreqKIm(frqKm);
+			insertVehicalMaster.setFreqKm(frqKm);
 			insertVehicalMaster.setWheelChangeFreq(wheelChange);
 			insertVehicalMaster.setBattaryChangeFreq(batryChange);
 			insertVehicalMaster.setAcChangeFreq(acChang);
+			insertVehicalMaster.setCurrentRunningKm(currentRunningKm);
+			insertVehicalMaster.setLastServicingKm(lastServicingKm);
+			insertVehicalMaster.setNextServicingKm(nextServicingKm);
+			insertVehicalMaster.setAlertNextServicingKm(alertNextServicingKm);
 			  
 			insertVehicalMaster = restTemplate.postForObject(Constants.url + "postVehicalMaster",insertVehicalMaster, VehicalMaster.class);
 			System.out.println("insertVariant"+insertVehicalMaster.toString());
@@ -1170,6 +1185,430 @@ public class LogisticsController {
 	         
 		return editSparePart;
 		
+
+	}
+	
+	//----------------------------------------------Servicing-----------------------------------------------------------
+	List<ServDetailAddPart> addSparePartList = new ArrayList<ServDetailAddPart>();
+	
+	
+	@RequestMapping(value = "/showServicingList", method = RequestMethod.GET)
+	public ModelAndView showServicingList(HttpServletRequest request, HttpServletResponse response) {
+
+		List<ServHeader> servHeaderList = new ArrayList<ServHeader>();
+		ModelAndView model = new ModelAndView("logistics/showServicingList"); 
+		try
+		{
+		 servHeaderList = restTemplate.getForObject(Constants.url + "getServicingListPendingAndCurrentDate", List.class);
+		 model.addObject("servHeaderList",servHeaderList);
+		 model.addObject("flag",0);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/showServicingListToDirector", method = RequestMethod.GET)
+	public ModelAndView showServicingListToDirector(HttpServletRequest request, HttpServletResponse response) {
+
+		List<ServHeader> servHeaderList = new ArrayList<ServHeader>();
+		ModelAndView model = new ModelAndView("logistics/showServicingList"); 
+		try
+		{
+		 servHeaderList = restTemplate.getForObject(Constants.url + "getServicingListPendingAndCurrentDate", List.class);
+		 model.addObject("servHeaderList",servHeaderList);
+		 model.addObject("flag",1);
+			 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/getServicingWithDate", method = RequestMethod.GET)
+	@ResponseBody
+	public List<ServHeader> getServicingWithDate(HttpServletRequest request, HttpServletResponse response) {
+		 
+		List<ServHeader> getServicingWithDate = new ArrayList<ServHeader>();
+	        try
+			{ 
+	        	
+	        	String fromDate = request.getParameter("from_date");
+	        	String toDate = request.getParameter("to_date");
+	        	
+	        	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+	        	map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+	        	map.add("toDate", DateConvertor.convertToYMD(toDate));
+	        	getServicingWithDate = restTemplate.postForObject(Constants.url + "getServicingListBetweenDate",map, List.class);
+	        	 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return getServicingWithDate;
+		
+
+	}
+	
+	@RequestMapping(value = "/viewServicingDetail/{servId}/{flag}", method = RequestMethod.GET)
+	public ModelAndView viewServicingDetail(@PathVariable int servId, @PathVariable int flag, HttpServletRequest request, HttpServletResponse response) {
+
+		ServHeader viewServicingDetail = new ServHeader(); 
+		ModelAndView model = new ModelAndView("logistics/viewServicingDetail"); 
+		try
+		{
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+        	map.add("servId", servId); 
+        	viewServicingDetail = restTemplate.postForObject(Constants.url + "getServHeaderAndDetailById",map, ServHeader.class);
+        	
+        	List<SparePart> getAllSparePart = restTemplate.getForObject(Constants.url + "getAllSparePart", List.class);  
+        	List<Dealer> getAllDealerList = restTemplate.getForObject(Constants.url + "getAllDealerList", List.class);  
+			List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class);
+			List<SprGroup> sprGroupList = restTemplate.getForObject(Constants.url + "getAllSprGroupList", List.class);
+			
+			model.addObject("dealerList",getAllDealerList); 
+			model.addObject("sprGroupList",sprGroupList); 
+			model.addObject("sprPartList",getAllSparePart);
+			model.addObject("vehicleList",vehicleList);
+			 model.addObject("viewServicingDetail", viewServicingDetail);
+			 model.addObject("flag", flag);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return model; 
+	}
+	
+	@RequestMapping(value = "/approvedServiceBill/{servId}", method = RequestMethod.GET)
+	public String  approvedServiceBill(@PathVariable int servId,HttpServletRequest request, HttpServletResponse response) {
+
+	 
+		try
+		{
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+        	map.add("servId", servId); 
+        	Info info = restTemplate.postForObject(Constants.url + "approvedServiceHeader",map, Info.class); 
+        	System.out.println("info "+info);
+			 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		 
+		return "redirect:/showServicingListToDirector";
+
+	}
+	
+	
+	
+	@RequestMapping(value = "/insertSarvicing", method = RequestMethod.GET)
+	public ModelAndView insertSarvicing(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/insertSarvicing"); 
+		try
+		{
+			addSparePartList = new ArrayList<ServDetailAddPart>();
+			List<SparePart> getAllSparePart = restTemplate.getForObject(Constants.url + "getAllSparePart", List.class);
+			System.out.println("getAllSparePart"+getAllSparePart.toString());
+			List<Dealer> getAllDealerList = restTemplate.getForObject(Constants.url + "getAllDealerList", List.class);
+			System.out.println("getAllDealerList"+getAllDealerList.toString());
+			List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class);
+			System.out.println("vehicleList"+vehicleList.toString());
+			model.addObject("dealerList",getAllDealerList); 
+			model.addObject("sprPartList",getAllSparePart);
+			model.addObject("vehicleList",vehicleList);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+	
+	
+	@RequestMapping(value = "/addSparePart", method = RequestMethod.GET)
+	@ResponseBody
+	public List<ServDetailAddPart> addSparePart(HttpServletRequest request, HttpServletResponse response) {
+		 
+		
+	        try
+			{ 
+	        	
+	        	int sprId = Integer.parseInt(request.getParameter("sprId"));
+	        	String sprName = request.getParameter("sprName");
+	        	int groupId = Integer.parseInt(request.getParameter("groupId"));
+	        	String groupName = request.getParameter("groupName");
+	        	int vehId = Integer.parseInt(request.getParameter("vehId"));
+	        	String vehName = request.getParameter("vehName");
+	        	int spareRate = Integer.parseInt(request.getParameter("spareRate"));
+	        	int spareQty = Integer.parseInt(request.getParameter("spareQty"));
+	        	float taxaleAmtDetail = Float.parseFloat(request.getParameter("taxaleAmtDetail"));
+	        	float taxAmtDetail = Float.parseFloat(request.getParameter("taxAmtDetail"));
+	        	float totalDetail = Float.parseFloat(request.getParameter("totalDetail"));
+	        	float discDetail = Float.parseFloat(request.getParameter("discDetail"));
+	        	float extraChargeDetail = Float.parseFloat(request.getParameter("extraChargeDetail"));
+	        	int servTypeDetail = Integer.parseInt(request.getParameter("servTypeDetail")); 
+	        	 System.out.println("sprId"+sprId);
+	        	 System.out.println("sprId"+sprName);
+	        	 System.out.println("groupId"+groupId);
+	        	 System.out.println("sprId"+groupName);
+	        	 System.out.println("spareRate"+spareRate);
+	        	 System.out.println("spareQty"+spareQty);
+	        	 System.out.println("taxaleAmtDetail"+taxaleAmtDetail);
+	        	 System.out.println("taxAmtDetail"+taxAmtDetail);
+	        	 System.out.println("totalDetail"+totalDetail);
+	        	 System.out.println("discDetail"+discDetail);
+	        	 System.out.println("extraChargeDetail"+extraChargeDetail);
+	        	 System.out.println("servTypeDetail"+servTypeDetail); 
+	        	  
+	        	 
+	        	 ServDetailAddPart addSparePart = new ServDetailAddPart();
+	        	 addSparePart.setSprId(sprId);
+	        	 addSparePart.setPartName(sprName);
+	        	 addSparePart.setGroupId(groupId);
+	        	 addSparePart.setVehId(vehId);
+	        	 addSparePart.setVehName(vehName);
+	        	 addSparePart.setGroupName(groupName);
+	        	 addSparePart.setSprRate(spareRate);
+	        	 addSparePart.setSprQty(spareQty);
+	        	 addSparePart.setSprTaxableAmt(taxaleAmtDetail);
+	        	 addSparePart.setSprTaxAmt(taxAmtDetail);
+	        	 addSparePart.setTotal(totalDetail);
+	        	 addSparePart.setDisc(discDetail);
+	        	 addSparePart.setExtraCharges(extraChargeDetail);
+	        	 addSparePart.setServType(servTypeDetail); 
+	        	 addSparePartList.add(addSparePart);
+	        	 System.out.println("addSparePartList"+addSparePartList); 
+	        	 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return addSparePartList;
+		
+
+	}
+	
+	@RequestMapping(value = "/deleteSparePart", method = RequestMethod.GET)
+	@ResponseBody
+	public List<ServDetailAddPart> deleteSparePart(HttpServletRequest request, HttpServletResponse response) {
+		 
+		
+	        try
+			{ 
+	        	
+	        	int index = Integer.parseInt(request.getParameter("index")); 
+	        	 System.out.println("index"+index); 
+	        	 addSparePartList.remove(index);
+	        	 System.out.println("addSparePartList"+addSparePartList); 
+	        	 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return addSparePartList;
+		
+
+	}
+	
+	@RequestMapping(value = "/sparePartByGroupId", method = RequestMethod.GET)
+	@ResponseBody
+	public List<SparePart> sparePartByGroupId(HttpServletRequest request, HttpServletResponse response) {
+		 
+		List<SparePart> sparePartByGroupId = new ArrayList<SparePart>();
+	        try
+			{ 
+	        	
+	        	int groupId = Integer.parseInt(request.getParameter("groupId")); 
+	        	 System.out.println("groupId"+groupId); 
+	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+	        	 map.add("groupId", groupId); 
+	        	 sparePartByGroupId = restTemplate.postForObject(Constants.url + "sparePartByGroupId", map, List.class);
+			 System.out.println("groupByTypeId " + sparePartByGroupId); 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return sparePartByGroupId;
+		
+
+	}
+	
+	@RequestMapping(value = "/partDetailById", method = RequestMethod.GET)
+	@ResponseBody
+	public SparePart partDetailById(HttpServletRequest request, HttpServletResponse response) {
+		 
+		SparePart partDetailById = new SparePart();
+	        try
+			{ 
+	        	
+	        	int sprId = Integer.parseInt(request.getParameter("sprId")); 
+	        	int dealerId = Integer.parseInt(request.getParameter("dealerId"));
+	        	 System.out.println("sprId"+sprId); 
+	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+	        	 map.add("sprId", sprId); 
+	        	 partDetailById = restTemplate.postForObject(Constants.url + "getSparePartById", map, SparePart.class);
+			 System.out.println("partDetailById " + partDetailById); 
+			 
+			  map = new LinkedMultiValueMap<String, Object >();
+        	 map.add("dealerId", dealerId); 
+        	 Dealer dealer = restTemplate.postForObject(Constants.url + "getDealerById", map, Dealer.class);
+        	 
+        	 
+        	 if(dealer.getIsSameState()==1)
+        	 {
+        		 partDetailById.setIgst(0);
+        	 }
+        	 else
+        	 {
+        		 partDetailById.setCgst(0);
+        		 partDetailById.setSgst(0);
+        	 }
+        		 
+        	 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return partDetailById;
+		
+
+	}
+	
+	@RequestMapping(value = "/updateNextServicingDueKm", method = RequestMethod.GET)
+	@ResponseBody
+	public  VehicalMaster updateNextServicingDueKm(HttpServletRequest request, HttpServletResponse response) {
+		 
+		VehicalMaster vehicalMaster = new VehicalMaster();
+	        try
+			{ 
+	        	
+	        	int vehId = Integer.parseInt(request.getParameter("vehId"));
+	        	 System.out.println("vehId"+vehId);
+	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+	        	 map.add("vehicalId", vehId);
+	        	
+	        	 vehicalMaster = restTemplate.postForObject(Constants.url + "getVehicalById", map, VehicalMaster.class); 
+	        	 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return vehicalMaster;
+		
+
+	}
+	
+	@RequestMapping(value = "/submitServicing", method = RequestMethod.POST)
+	public String  submitServicing(HttpServletRequest request, HttpServletResponse response) {
+
+	 
+		try
+		{
+			String billNo = request.getParameter("billNo");
+			String billDate = request.getParameter("billDate"); 
+			int typeId =Integer.parseInt(request.getParameter("typeId"));
+			int servType =Integer.parseInt(request.getParameter("servType")); 
+			String servDate =request.getParameter("servDate"); 
+			int dealerId = Integer.parseInt(request.getParameter("dealerId"));
+			int vehId = Integer.parseInt(request.getParameter("vehId"));
+			String servAdvRem = request.getParameter("servAdvRem");
+			String servDoneRem = request.getParameter("servDoneRem");
+			int totPart = Integer.parseInt(request.getParameter("totPart")); 
+			float labCharge = Float.parseFloat(request.getParameter("labCharge")); 
+			float totDisc = Float.parseFloat(request.getParameter("totDisc"));
+			float totExtraCharge = Float.parseFloat(request.getParameter("totExtraCharge"));
+			float discOnBill = Float.parseFloat(request.getParameter("discOnBill"));
+			float extraOnBill = Float.parseFloat(request.getParameter("extraOnBill"));
+			float taxAmt =Float.parseFloat(request.getParameter("taxAmt"));
+			float taxaleAmt =Float.parseFloat(request.getParameter("taxaleAmt"));
+			float total =Float.parseFloat(request.getParameter("total"));
+			int servDoneKm =Integer.parseInt(request.getParameter("servDoneKm"));
+			int nextDueKm =Integer.parseInt(request.getParameter("nextDueKm"));
+
+			ServHeader servHeader = new ServHeader();
+			servHeader.setBillNo(billNo);
+			servHeader.setBillDate(billDate);
+			servHeader.setTypeId(typeId);
+			servHeader.setServType(servType);
+			servHeader.setServDate(servDate);
+			servHeader.setDealerId(dealerId);
+			servHeader.setVehId(vehId);
+			servHeader.setServAdviseRem(servAdvRem);
+			servHeader.setServDoneRem(servDoneRem);
+			servHeader.setSprTot(totPart);
+			servHeader.setLabChrge(labCharge);
+			servHeader.setTotalDisc(totDisc);
+			servHeader.setTotalExtra(totExtraCharge);
+			servHeader.setDiscOnBill(discOnBill);
+			servHeader.setExtraOnBill(extraOnBill);
+			servHeader.setTaxAmt(taxAmt);
+			servHeader.setTaxableAmt(taxaleAmt);
+			servHeader.setServDoneKm(servDoneKm);
+			servHeader.setNextDueKm(nextDueKm);
+			servHeader.setTotal(total);
+			String vehName=null;
+			List<ServDetail> servDetailList = new ArrayList<ServDetail>();
+			for(int i=0;i<addSparePartList.size();i++)
+			{
+				ServDetail servDetail = new ServDetail();
+				servDetail.setServDate(servDate);
+				servDetail.setServType(addSparePartList.get(i).getServType());
+				servDetail.setGroupId(addSparePartList.get(i).getGroupId());
+				servDetail.setSprId(addSparePartList.get(i).getSprId());
+				servDetail.setSprQty(addSparePartList.get(i).getSprQty());
+				servDetail.setSprRate(addSparePartList.get(i).getSprRate());
+				servDetail.setSprTaxableAmt(addSparePartList.get(i).getSprTaxableAmt());
+				servDetail.setSprTaxAmt(addSparePartList.get(i).getSprTaxAmt());
+				servDetail.setTotal(addSparePartList.get(i).getTotal());
+				servDetail.setDisc(addSparePartList.get(i).getDisc());
+				servDetail.setExtraCharges(addSparePartList.get(i).getExtraCharges());
+				vehName=addSparePartList.get(i).getVehName();
+				servDetailList.add(servDetail);
+			}
+			servHeader.setVehNo(vehName);
+			servHeader.setServDetail(servDetailList);
+			
+			  System.out.println("before insert "+servHeader);
+			  servHeader = restTemplate.postForObject(Constants.url + "postServHeader",servHeader, ServHeader.class);
+			System.out.println("insertSparePart"+servHeader.toString());
+			
+			if(servHeader!=null)
+			{
+				 
+	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+	        	 map.add("vehicalId", servHeader.getVehId()); 
+	        	 VehicalMaster vehicalMaster = restTemplate.postForObject(Constants.url + "getVehicalById", map, VehicalMaster.class);
+	        	 vehicalMaster.setLastServicingKm(servHeader.getServDoneKm()); 
+	        	 vehicalMaster.setNextServicingKm(servHeader.getNextDueKm());
+	        	 vehicalMaster.setAlertNextServicingKm(vehicalMaster.getNextServicingKm()-100);
+	        	 vehicalMaster = restTemplate.postForObject(Constants.url + "postVehicalMaster",vehicalMaster, VehicalMaster.class);
+	 			System.out.println("update Vehicle"+vehicalMaster.toString());
+				
+			}
+		 
+			 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return "redirect:/insertSarvicing";
 
 	}
 
