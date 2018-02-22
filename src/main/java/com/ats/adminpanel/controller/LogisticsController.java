@@ -1,5 +1,14 @@
 package com.ats.adminpanel.controller; 
-import java.util.ArrayList; 
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -7,17 +16,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Scope; 
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
+import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.logistics.Dealer;
 import com.ats.adminpanel.model.logistics.Document;
@@ -30,7 +43,8 @@ import com.ats.adminpanel.model.logistics.SparePart;
 import com.ats.adminpanel.model.logistics.SprGroup;
 import com.ats.adminpanel.model.logistics.Variant;
 import com.ats.adminpanel.model.logistics.VehicalMaster;
-import com.ats.adminpanel.model.logistics.VehicalType; 
+import com.ats.adminpanel.model.logistics.VehicalType;
+import com.ats.adminpanel.model.logistics.VehicleDcoument; 
 
 @Controller
 @Scope("session")
@@ -1229,6 +1243,54 @@ public class LogisticsController {
 
 	}
 	
+	String pdfName;
+	
+	@RequestMapping(value = "/viewLogisticsPdf/{billFile}", method = RequestMethod.GET)
+	public void viewLogisticsPdf(@PathVariable String billFile,HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		 System.out.println("billFile "+pdfName);
+			File file = new File(Constants.LOGIS_BILL_URL+pdfName);
+			System.out.println("file"+file);
+			if(file != null) {
+
+                String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+                if (mimeType == null) {
+
+                    mimeType = "application/pdf";
+
+                }
+
+                response.setContentType(mimeType);
+
+                response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+                // response.setHeader("Content-Disposition", String.format("attachment;
+                // filename=\"%s\"", file.getName()));
+
+                response.setContentLength((int) file.length());
+
+                InputStream inputStream = null;
+				try {
+					inputStream = new BufferedInputStream(new FileInputStream(file));
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+                try {
+                    FileCopyUtils.copy(inputStream, response.getOutputStream());
+                } catch (IOException e) {
+                    System.out.println("Excep in Opening a Pdf File");
+                    e.printStackTrace();
+                }
+            }
+
+       
+
+	}
+	
 	@RequestMapping(value = "/getServicingWithDate", method = RequestMethod.GET)
 	@ResponseBody
 	public List<ServHeader> getServicingWithDate(HttpServletRequest request, HttpServletResponse response) {
@@ -1266,6 +1328,8 @@ public class LogisticsController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
         	map.add("servId", servId); 
         	viewServicingDetail = restTemplate.postForObject(Constants.url + "getServHeaderAndDetailById",map, ServHeader.class);
+        	
+        	pdfName = viewServicingDetail.getBillFile();
         	
         	List<SparePart> getAllSparePart = restTemplate.getForObject(Constants.url + "getAllSparePart", List.class);  
         	List<Dealer> getAllDealerList = restTemplate.getForObject(Constants.url + "getAllDealerList", List.class);  
@@ -1516,7 +1580,7 @@ public class LogisticsController {
 	}
 	
 	@RequestMapping(value = "/submitServicing", method = RequestMethod.POST)
-	public String  submitServicing(HttpServletRequest request, HttpServletResponse response) {
+	public String  submitServicing(@RequestParam("attachFile") List<MultipartFile> attachFile, HttpServletRequest request, HttpServletResponse response) {
 
 	 
 		try
@@ -1530,7 +1594,7 @@ public class LogisticsController {
 			int vehId = Integer.parseInt(request.getParameter("vehId"));
 			String servAdvRem = request.getParameter("servAdvRem");
 			String servDoneRem = request.getParameter("servDoneRem");
-			int totPart = Integer.parseInt(request.getParameter("totPart")); 
+			float totPart = Float.parseFloat(request.getParameter("totPart")); 
 			float labCharge = Float.parseFloat(request.getParameter("labCharge")); 
 			float totDisc = Float.parseFloat(request.getParameter("totDisc"));
 			float totExtraCharge = Float.parseFloat(request.getParameter("totExtraCharge"));
@@ -1541,6 +1605,29 @@ public class LogisticsController {
 			float total =Float.parseFloat(request.getParameter("total"));
 			int servDoneKm =Integer.parseInt(request.getParameter("servDoneKm"));
 			int nextDueKm =Integer.parseInt(request.getParameter("nextDueKm"));
+			
+			VpsImageUpload upload = new VpsImageUpload();
+
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			System.out.println(sdf.format(cal.getTime()));
+
+			String curTimeStamp = sdf.format(cal.getTime());
+			String pdf = null;
+			try {
+				pdf = attachFile.get(0).getOriginalFilename();
+				 
+
+				upload.saveUploadedFiles(attachFile, Constants.LOGIS_BILL_PDF_TYPE,
+						 attachFile.get(0).getOriginalFilename());
+			 
+				System.out.println("upload method called for image Upload " + attachFile.toString());
+
+			} catch (IOException e) {
+
+				System.out.println("Exce in File Upload In GATE ENTRY  Insert " + e.getMessage());
+				e.printStackTrace();
+			}
 
 			ServHeader servHeader = new ServHeader();
 			servHeader.setBillNo(billNo);
@@ -1563,6 +1650,8 @@ public class LogisticsController {
 			servHeader.setServDoneKm(servDoneKm);
 			servHeader.setNextDueKm(nextDueKm);
 			servHeader.setTotal(total);
+			servHeader.setBillFile(pdf);
+			
 			String vehName=null;
 			List<ServDetail> servDetailList = new ArrayList<ServDetail>();
 			for(int i=0;i<addSparePartList.size();i++)
@@ -1609,6 +1698,208 @@ public class LogisticsController {
 			e.printStackTrace();
 		}
 		return "redirect:/insertSarvicing";
+
+	}
+	
+	//-----------------------------------------vehicleDocument-----------------------------------------
+	
+	@RequestMapping(value = "/insertVehicleDocument", method = RequestMethod.GET)
+	public ModelAndView insertVehicleDocument(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/insertVehicleDocument"); 
+		try
+		{ 
+			
+			List<Document> getAllDocumentList = restTemplate.getForObject(Constants.url + "getAllDocumentList", List.class);  
+			List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class); 
+			model.addObject("documentList",getAllDocumentList);  
+			model.addObject("vehicleList",vehicleList);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/submitVehicleDocument", method = RequestMethod.POST)
+	public String submitVehicleDocument(@RequestParam("documentFile") List<MultipartFile> documentFile,HttpServletRequest request, HttpServletResponse response) {
+ 
+		try
+		{
+			String vehDocId = request.getParameter("vehDocId");
+			String entryDate = request.getParameter("entryDate");
+			String docDate = request.getParameter("docDate"); 
+			int vehId =Integer.parseInt(request.getParameter("vehId"));
+			int docId =Integer.parseInt(request.getParameter("docId")); 
+			String expireDate = request.getParameter("expireDate");
+			String noficationDate = request.getParameter("noficationDate"); 
+			int currentKm =Integer.parseInt(request.getParameter("currentKm")); 
+			String document = request.getParameter("docPath");
+			
+			VehicleDcoument insert = new VehicleDcoument();
+			VpsImageUpload upload = new VpsImageUpload();
+			String docFile = null;
+			try {
+				docFile = documentFile.get(0).getOriginalFilename();
+				 
+
+				upload.saveUploadedFiles(documentFile, Constants.LOGIS_BILL_PDF_TYPE,
+						documentFile.get(0).getOriginalFilename());
+			 
+				System.out.println("upload method called for image Upload " + documentFile.toString());
+
+			} catch (IOException e) {
+
+				System.out.println("Exce in File Upload In GATE ENTRY  Insert " + e.getMessage());
+				e.printStackTrace();
+			}
+			if(vehDocId==null || vehDocId.equals(""))
+				insert.setVehDocId(0);
+			else
+				insert.setVehDocId(Integer.parseInt(vehDocId));
+			insert.setVehId(vehId);
+			insert.setDocId(docId);
+			insert.setCurrentKm(currentKm);
+			insert.setEntryDate(entryDate);
+			insert.setDocDate(docDate);
+			insert.setDocExpireDate(expireDate);
+			insert.setDocExpNotificationDate(noficationDate);
+			if(docFile!=null || !docFile.equals("")) 
+				insert.setDocPath(docFile); 
+			else
+				insert.setDocPath(document);
+				  
+			System.out.println("document " + document);
+			System.out.println("docFile " + docFile);
+			System.out.println("insert " + insert);
+			insert = restTemplate.postForObject(Constants.url + "postVehicleDocument",insert, VehicleDcoument.class);
+			
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return "redirect:/showVehicleDocumentList";
+
+	}
+	
+	@RequestMapping(value = "/showVehicleDocumentList", method = RequestMethod.GET)
+	public ModelAndView showVehicleDocumentList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/showVehicleDocumentList"); 
+		try
+		{ 
+			
+			List<Document> getAllDocumentList = restTemplate.getForObject(Constants.url + "getAllDocumentList", List.class);
+			List<VehicleDcoument> getAllVehicleDcoument = restTemplate.getForObject(Constants.url + "getAllVehicleDcoument", List.class);
+			List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class); 
+			model.addObject("documentList",getAllDocumentList);
+			model.addObject("vehicleDocument",getAllVehicleDcoument);
+			model.addObject("vehicleList",vehicleList);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/editVehicleDocument/{vehDocId}", method = RequestMethod.GET)
+	public ModelAndView editVehicleDocument(@PathVariable int vehDocId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/insertVehicleDocument"); 
+		try
+		{ 
+			
+			List<Document> getAllDocumentList = restTemplate.getForObject(Constants.url + "getAllDocumentList", List.class); 
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("vehDocId", vehDocId);
+			VehicleDcoument vehicleDcoument = restTemplate.postForObject(Constants.url + "getVehicleDcoumentById",map, VehicleDcoument.class); 
+			List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class); 
+			model.addObject("documentList",getAllDocumentList);
+			model.addObject("vehicleDocument",vehicleDcoument);
+			model.addObject("vehicleList",vehicleList);
+			model.addObject("vehDocId",vehDocId);
+			model.addObject("imageUrl",Constants.LOGIS_BILL_URL);
+			System.out.println(Constants.LOGIS_BILL_URL+vehicleDcoument.getDocPath());
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+	String documentFile;
+	@RequestMapping(value = "/viewDetailVehicleDocument/{vehDocId}", method = RequestMethod.GET)
+	public ModelAndView viewDetailVehicleDocument(@PathVariable int vehDocId, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/viewDetailVehicleDocument"); 
+		try
+		{ 
+			
+			List<Document> getAllDocumentList = restTemplate.getForObject(Constants.url + "getAllDocumentList", List.class); 
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("vehDocId", vehDocId);
+			VehicleDcoument vehicleDcoument = restTemplate.postForObject(Constants.url + "getVehicleDcoumentById",map, VehicleDcoument.class); 
+			List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class); 
+			model.addObject("documentList",getAllDocumentList);
+			model.addObject("vehicleDocument",vehicleDcoument);
+			model.addObject("vehicleList",vehicleList);
+			model.addObject("vehDocId",vehDocId); 
+			model.addObject("imageUrl",Constants.LOGIS_BILL_URL); 
+			documentFile = vehicleDcoument.getDocPath();
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/viewDocumentFile/{docPath}", method = RequestMethod.GET)
+	public void viewDocumentFile(@PathVariable String docPath,HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		 System.out.println("documentFile "+documentFile);
+			File file = new File(Constants.LOGIS_BILL_URL+documentFile);
+			System.out.println("file"+file);
+			if(file != null) {
+
+                String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+                if (mimeType == null) {
+
+                    mimeType = "application/pdf";
+
+                }
+
+                response.setContentType(mimeType);
+
+                response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+                // response.setHeader("Content-Disposition", String.format("attachment;
+                // filename=\"%s\"", file.getName()));
+
+                response.setContentLength((int) file.length());
+
+                InputStream inputStream = null;
+				try {
+					inputStream = new BufferedInputStream(new FileInputStream(file));
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+                try {
+                    FileCopyUtils.copy(inputStream, response.getOutputStream());
+                } catch (IOException e) {
+                    System.out.println("Excep in Opening a Pdf File");
+                    e.printStackTrace();
+                }
+            }
+
+       
 
 	}
 

@@ -264,6 +264,11 @@
 										</select>
 									
 									</div>
+									
+									<div class="col-md-2" >Select Pdf</div>
+												<div class="col-md-4"> 
+													<input type="file" id="file" name="attachFile" size="60" data-rule-required="true"/> 
+												</div>
 							
 							</div><br><br>
 							
@@ -403,6 +408,8 @@
 									</div>
 							
 							</div><br>
+							
+							 
 								
 							<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">

@@ -1226,7 +1226,7 @@ public class ProductionController {
 								.setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
 
 						getVarianceorderlistforsort.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk());
-						float remainingProQty = getVarianceorderlistforsort.get(i).getOrderQty()-getVarianceorderlistforsort.get(i).getCurOpeQty();
+						float remainingProQty = (getVarianceorderlistforsort.get(i).getOrderQty()+getVarianceorderlistforsort.get(i).getSpCakeQty())-getVarianceorderlistforsort.get(i).getCurOpeQty();
 
 						
 						if (remainingProQty > 0) {
@@ -1248,7 +1248,7 @@ public class ProductionController {
 
 					if (planItemid == varianceItemId) {
  
-						postProductionPlanDetaillist.get(i).setOrderQty(getVarianceorderlistforsort.get(j).getOrderQty());
+						postProductionPlanDetaillist.get(i).setOrderQty(getVarianceorderlistforsort.get(j).getOrderQty()+getVarianceorderlistforsort.get(j).getSpCakeQty());
 						 float remainingProQty = postProductionPlanDetaillist.get(i).getOrderQty()-postProductionPlanDetaillist.get(i).getCurOpeQty();
 
 						if (remainingProQty > 0) {

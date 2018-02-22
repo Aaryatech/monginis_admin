@@ -35,6 +35,7 @@ public class ServHeader {
 	private int nextDueKm; 
 	private int isApproved; 
 	private int delStatus; 
+	private String billFile;
 	List<ServDetail> servDetail;
 	public int getServId() {
 		return servId;
@@ -200,6 +201,14 @@ public class ServHeader {
 	public void setServDetail(List<ServDetail> servDetail) {
 		this.servDetail = servDetail;
 	}
+	
+	
+	public String getBillFile() {
+		return billFile;
+	}
+	public void setBillFile(String billFile) {
+		this.billFile = billFile;
+	}
 	@Override
 	public String toString() {
 		return "ServHeader [servId=" + servId + ", servDate=" + servDate + ", typeId=" + typeId + ", dealerId="
@@ -209,7 +218,8 @@ public class ServHeader {
 				+ ", totalDisc=" + totalDisc + ", totalExtra=" + totalExtra + ", discOnBill=" + discOnBill
 				+ ", extraOnBill=" + extraOnBill + ", taxAmt=" + taxAmt + ", taxableAmt=" + taxableAmt + ", roundOff="
 				+ roundOff + ", total=" + total + ", servDoneKm=" + servDoneKm + ", nextDueKm=" + nextDueKm
-				+ ", isApproved=" + isApproved + ", delStatus=" + delStatus + ", servDetail=" + servDetail + "]";
+				+ ", isApproved=" + isApproved + ", delStatus=" + delStatus + ", billFile=" + billFile + ", servDetail="
+				+ servDetail + "]";
 	}
 	
 	

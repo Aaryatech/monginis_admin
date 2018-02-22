@@ -306,10 +306,12 @@
 								<c:when test="${(viewServicingDetail.isApproved==0) and (flag==1)}"> 
 									<a href="${pageContext.request.contextPath}/approvedServiceBill/${viewServicingDetail.servId}" ><input type="button" value="Approve" class="btn btn-info">
 									</a>
-								 
+									 
 							</c:when>
-							  
+							 
 						</c:choose>
+						<a href="${pageContext.request.contextPath}/viewLogisticsPdf/${viewServicingDetail.billFile}" target="blank" ><input type="button" value="View Pdf" class="btn btn-info">
+									</a>
 							</div>
 						</div>
 			
