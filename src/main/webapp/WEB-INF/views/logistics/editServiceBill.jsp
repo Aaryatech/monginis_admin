@@ -9,13 +9,13 @@
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 <c:url var="groupByTypeId" value="/groupByTypeId"></c:url>
-	<c:url var="addSparePart" value="/addSparePart"></c:url>
+	<c:url var="addSparePartInEditInvoice" value="/addSparePartInEditInvoice"></c:url>
 	<c:url var="sparePartByGroupId" value="/sparePartByGroupId"></c:url>
 	<c:url var="partDetailById" value="/partDetailById"></c:url>
-	<c:url var="deleteSparePart" value="/deleteSparePart"></c:url>
+	<c:url var="deleteSparePartInEditInvoice" value="/deleteSparePartInEditInvoice"></c:url>
 	<c:url var="updateNextServicingDueKm" value="/updateNextServicingDueKm"></c:url>
-<c:url var="editInvoiceSparePart" value="/editInvoiceSparePart"></c:url>
-<c:url var="changeQtyOfSparePart" value="/changeQtyOfSparePart"></c:url>
+<c:url var="editSparePartInEditInvoice" value="/editSparePartInEditInvoice"></c:url>
+<c:url var="changeQtyOfSparePartInEditInvoice" value="/changeQtyOfSparePartInEditInvoice"></c:url>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -40,7 +40,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Servicing Bill
+						<i class="fa fa-file-o"></i>Edit Servicing Bill
 					</h1>
 				</div>
 			</div>
@@ -52,7 +52,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i>Servicing Bill
+								<i class="fa fa-table"></i>Edit Servicing Bill
 							</h3>
 							
 							<div class="box-tool">
@@ -65,16 +65,18 @@
 						
 						<div class="box-content">
 
-							<form id="submitMaterialStore" action="${pageContext.request.contextPath}/submitServicing" method="post"
+							<form id="submitMaterialStore" action="${pageContext.request.contextPath}/submitEditInvoice" method="post"
 							enctype="multipart/form-data">
 							<div class="box-content">
+							<input type="hidden" id="servId" name="servId" value="${editServicing.servId}" placeholder="Service Advice Remainder" class="form-control"  required>
+									
 								<div class="col-md-2">Bill No*</div>
-								<div class="col-md-3"><input type="text" id="billNo" name="billNo" placeholder="Bill No"  class="form-control" required>
+								<div class="col-md-3"><input type="text" id="billNo" name="billNo" placeholder="Bill No" value="${editServicing.billNo}" class="form-control" required>
 								</div>
 								
 								<div class="col-md-2">Bill Date* </div>
 									<div class="col-md-3">
-									<input class="form-control date-picker" id="billDate" placeholder="Servicing Date" size="16"
+									<input class="form-control date-picker" id="billDate" placeholder="Servicing Date" value="${editServicing.billDate}" size="16"
 											type="text" name="billDate"  required />
 									</div>
 					
@@ -84,9 +86,26 @@
 							
 								<div class="col-md-2">Type*</div>
 									<div class="col-md-3">
-									
+									<c:choose>
+										<c:when test="${editServicing.typeId==1}">
+											<c:set var="typeName" value="Servicing"></c:set>
+											<c:set var="typeIdValue" value="1"></c:set>
+										</c:when>
+										<c:when test="${editServicing.typeId==2}">
+											<c:set var="typeName" value="Wheel"></c:set>
+											<c:set var="typeIdValue" value="2"></c:set>
+										</c:when>
+										<c:when test="${editServicing.typeId==3}">
+											<c:set var="typeName" value="battery"></c:set>
+											<c:set var="typeIdValue" value="3"></c:set>
+										</c:when>
+										<c:when test="${editServicing.typeId==4}">
+											<c:set var="typeName" value="Ac"></c:set>
+											<c:set var="typeIdValue" value="4"></c:set>
+										</c:when>
+									</c:choose>
 									<select name="typeId" id="typeId" class="form-control chosen" tabindex="6" required>
-											<option value="">Select Type</option>
+											<option value="${typeIdValue}" selected>${typeName}</option>
 											<option value="1">Servicing</option>
 											 <option value="2">Wheel</option>
 											 <option value="3">Battery</option>
@@ -97,9 +116,19 @@
 									</div>
 								<div class="col-md-2">Servicing Type*</div>
 									<div class="col-md-3">
+									<c:choose>
+										<c:when test="${editServicing.servType==1}">
+											<c:set var="servTypeName" value="Regular"></c:set>
+											<c:set var="servTypeValue" value="1"></c:set>
+										</c:when>
+										<c:when test="${editServicing.servType==2}">
+											<c:set var="servTypeName" value="Break Down"></c:set>
+											<c:set var="servTypeValue" value="2"></c:set>
+										</c:when> 
+									</c:choose>
 									
 									<select name="servType" id="servType" class="form-control chosen" tabindex="6" required>
-											<option value="">Select Servicing Type</option>
+											<option value="${servTypeValue}">${servTypeName}</option>
 											<option value="1">Regular</option>
 											 <option value="2">Break Down</option>  
 										</select>
@@ -114,17 +143,24 @@
 							
 							<div class="col-md-2">Servicing Date* </div>
 									<div class="col-md-3">
-									<input class="form-control date-picker" id="servDate" placeholder="Servicing Date" size="16"
+									<input class="form-control date-picker" id="servDate" placeholder="Servicing Date" value="${editServicing.servDate}" size="16"
 											type="text" name="servDate"  required />
 									</div>
 									
 									<div class="col-md-2">Dealer*</div>
 									<div class="col-md-3"> 
 									<select name="dealerId" id="dealerId" class="form-control chosen" tabindex="6" required>
-									<option  value="">Select Dealer</option>
+									<c:forEach items="${dealerList}" var="dealerList"> 
+											<c:choose> 
+													<c:when test="${dealerList.dealerId==editServicing.dealerId}">
+														<option value="${dealerList.dealerId}" selected><c:out value="${dealerList.dealerName}"></c:out> </option>
+											 		</c:when> 
+											</c:choose>
+									 </c:forEach>
+									 
 									<c:forEach items="${dealerList}" var="dealerList"> 
 										<option value="${dealerList.dealerId}"><c:out value="${dealerList.dealerName}"></c:out> </option>
-											 </c:forEach>
+									 </c:forEach>
 									</select>
 								</div>
 								
@@ -137,7 +173,15 @@
 									<div class="col-md-2">Vehicle*</div>
 									<div class="col-md-3"> 
 									<select name="vehId" id="vehId" class="form-control chosen" tabindex="6" onchange="updateNextServicingDueKm()" required>
-									<option  value="">Select Vehicle</option>
+									
+										<c:forEach items="${vehicleList}" var="vehicleList"> 
+											<c:choose> 
+													<c:when test="${vehicleList.vehId==editServicing.vehId}">
+														<option value="${vehicleList.vehId}" selected><c:out value="${vehicleList.vehNo}"></c:out> </option>
+											 		</c:when> 
+											</c:choose>
+									 </c:forEach>
+									 
 									<c:forEach items="${vehicleList}" var="vehicleList"> 
 										<option value="${vehicleList.vehId}"><c:out value="${vehicleList.vehNo}"></c:out> </option>
 											 </c:forEach>
@@ -145,7 +189,7 @@
 								</div>
 									
 									<div class="col-md-2">Service Advice Remainder*</div>
-										<div class="col-md-3"><input type="text" id="servAdvRem" name="servAdvRem" placeholder="Service Advice Remainder" class="form-control"  required>
+										<div class="col-md-3"><input type="text" id="servAdvRem" name="servAdvRem" value="${editServicing.servAdviseRem}" placeholder="Service Advice Remainder" class="form-control"  required>
 									</div>
 							
 							</div><br>
@@ -162,6 +206,9 @@
 									<div class="col-md-3">
 										<select   class="form-control chosen" name="groupId" tabindex="-1" id="groupId"  >
 											<option   value="">Select Group</option> 
+											<c:forEach items="${sprGroupList}" var="sprGroupList"> 
+											<option value="${sprGroupList.groupId}"><c:out value="${sprGroupList.groupName}"></c:out> </option>
+											 </c:forEach>
 											</select>
 												 
 									</div>
@@ -311,6 +358,30 @@
 									</tr>
 								</thead>
 								<tbody>
+								
+								<c:forEach items="${servDetail}" var="servDetail"
+														varStatus="count">
+
+
+														<tr>
+															<td><c:out value="${count.index+1}" /></td>
+															<c:set var="srNo" value="${srNo+1}" />
+															<td><c:out value="${servDetail.partName}" /></td> 
+															<td><c:out value="${servDetail.groupName}" /></td>
+															<td><c:out value="${servDetail.sprQty}" /></td> 
+															<td><c:out value="${servDetail.sprRate}" /></td>
+															<td><c:out value="${servDetail.sprTaxAmt}" /></td>
+															<td><c:out value="${servDetail.sprTaxableAmt}" /></td>
+															<td><c:out value="${servDetail.disc}" /></td>
+															<td><c:out value="${servDetail.extraCharges}" /></td>
+															<td><c:out value="${servDetail.total}" /></td>
+															<td align="left"><span class='glyphicon glyphicon-edit' onclick="edit(${count.index})" id="edit${count.index}"></span> 
+		                                                    <span class="glyphicon glyphicon-remove" onclick="del(${count.index})" id="del${count.index}"></span>
+     														 </td>
+												  	 
+
+														</tr>
+													</c:forEach>
 
 								</tbody>
 							</table>
@@ -322,12 +393,12 @@
 							
 									<div class="col-md-2">Service Done Remainder*</div>
 									<div class="col-md-3"> 
-									<input type="text" id="servDoneRem" name="servDoneRem"  class="form-control" placeholder="Service Done Remainder" required>
+									<input type="text" id="servDoneRem" name="servDoneRem" value="${editServicing.servDoneRem}" class="form-control" placeholder="Service Done Remainder" required>
 									</div>
 								 
 									
 									<div class="col-md-2">Total Spare Part</div>
-										<div class="col-md-3"><input type="text" id="totPart" name="totPart" placeholder="Total Spare Part" class="form-control"  required>
+										<div class="col-md-3"><input type="text" value="${editServicing.sprTot}" id="totPart" name="totPart" placeholder="Total Spare Part" class="form-control"  required>
 									</div>
 							
 							</div><br>
@@ -337,12 +408,12 @@
 							
 									<div class="col-md-2">Labour Charge*</div>
 									<div class="col-md-3"> 
-									<input type="text" id="labCharge" name="labCharge" onkeyup="calculateHeader()" placeholder="Labour Charge" class="form-control"  required>
+									<input type="text" id="labCharge" name="labCharge" value="${editServicing.labChrge}" onkeyup="calculateHeader()" placeholder="Labour Charge" class="form-control"  required>
 									</div>
 								 
 									
 									<div class="col-md-2">Total Discount</div>
-										<div class="col-md-3"><input type="text" id="totDisc" name="totDisc" placeholder="Total Spare Part" class="form-control"   readonly>
+										<div class="col-md-3"><input type="text" id="totDisc" value="${editServicing.totalDisc}" name="totDisc" placeholder="Total Spare Part" class="form-control"   readonly>
 									</div>
 							
 							</div><br> 
@@ -351,12 +422,12 @@
 							
 									<div class="col-md-2">Total Extra Charge</div>
 									<div class="col-md-3"> 
-									<input type="text" id="totExtraCharge" name="totExtraCharge" placeholder="Total Extra Charge" class="form-control"   readonly>
+									<input type="text" id="totExtraCharge" name="totExtraCharge" value="${editServicing.totalExtra}" placeholder="Total Extra Charge" class="form-control"   readonly>
 									</div>
 								 
 									
 									<div class="col-md-2">Discount On Bill*</div>
-										<div class="col-md-3"><input type="text" id="discOnBill" onkeyup="calculateHeader()" name="discOnBill" placeholder="Discount On Bill" class="form-control"  required>
+										<div class="col-md-3"><input type="text" id="discOnBill" value="${editServicing.discOnBill}" onkeyup="calculateHeader()" name="discOnBill" placeholder="Discount On Bill" class="form-control"  required>
 									</div>
 							
 							</div><br>
@@ -365,12 +436,12 @@
 							
 									<div class="col-md-2">Extra Charges On Bill*</div>
 										<div class="col-md-3">
-										<input type="text" id="extraOnBill" name="extraOnBill" onkeyup="calculateHeader()" placeholder="Extra Charges On Bill" class="form-control"  required>
+										<input type="text" id="extraOnBill" name="extraOnBill" value="${editServicing.extraOnBill}" onkeyup="calculateHeader()" placeholder="Extra Charges On Bill" class="form-control"  required>
 									</div>
 								 
 									
 									<div class="col-md-2">Tax Amt*</div>
-										<div class="col-md-3"><input type="text" id="taxAmt" name="taxAmt" placeholder="Tax Amt" class="form-control"  required>
+										<div class="col-md-3"><input type="text" id="taxAmt" value="${editServicing.taxAmt}" name="taxAmt" placeholder="Tax Amt" class="form-control"  required>
 									</div>
 							
 							</div><br>
@@ -379,12 +450,12 @@
 							
 									<div class="col-md-2">Taxable Amt*</div>
 										<div class="col-md-3">
-										<input type="text" id="taxaleAmt" name="taxaleAmt" placeholder="Taxable Amt" class="form-control"  required>
+										<input type="text" id="taxaleAmt" name="taxaleAmt" value="${editServicing.taxableAmt}" placeholder="Taxable Amt" class="form-control"  required>
 									</div>
 								 
 									
 									<div class="col-md-2">Total*</div>
-										<div class="col-md-3"><input type="text" id="total" name="total" placeholder="Total" class="form-control"  required>
+										<div class="col-md-3"><input type="text" id="total" value="${editServicing.total}" name="total" placeholder="Total" class="form-control"  required>
 									</div>
 								 
 									 <input type="hidden" id="totalfirst" name="totalfirst" placeholder="Total" class="form-control"  required>
@@ -396,12 +467,12 @@
 							
 									<div class="col-md-2">Servicing Done Km*</div>
 										<div class="col-md-3">
-										<input type="text" id="servDoneKm" name="servDoneKm" placeholder="Servicing Done Km" onchange="updateNextServicingDueKm()" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" class="form-control"  required>
+										<input type="text" id="servDoneKm" value="${editServicing.servDoneKm}" name="servDoneKm" placeholder="Servicing Done Km" onchange="updateNextServicingDueKm()" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;" class="form-control"  required>
 									</div>
 								 
 									
 									<div class="col-md-2">Next Due Km*</div>
-										<div class="col-md-3"><input type="text" id="nextDueKm" name="nextDueKm" placeholder="Next Due Km" class="form-control"  required>
+										<div class="col-md-3"><input type="text" value="${editServicing.nextDueKm}" id="nextDueKm" name="nextDueKm" placeholder="Next Due Km" class="form-control"  required>
 									</div>
 							
 							</div><br>
@@ -409,7 +480,7 @@
 							 
 									<div class="col-md-2" >Select Pdf</div>
 												<div class="col-md-4"> 
-													<input type="file" id="file" name="attachFile" size="60" data-rule-required="true"/> 
+													<input type="file" id="file" name="attachFile" value="${editServicing.billFile}" size="60" data-rule-required="true"/> 
 												</div>
 							
 							</div><br>
@@ -539,7 +610,7 @@
 						$('#loader').show();
 
 						$ .getJSON(
-										'${addSparePart}',
+										'${addSparePartInEditInvoice}',
 
 										{
 											 
@@ -583,40 +654,39 @@
 		  									var taxaleAmt=0
 										  $.each( data, function(key, itemList) {
 														
-														 
-															 var tr = $('<tr></tr>');
-
-														  	tr.append($('<td></td>').html(key+1));
-
-														  	tr.append($('<td></td>').html(itemList.partName)); 
-														  	tr.append($('<td></td>').html(itemList.groupName));
-														  	tr.append($('<td></td>').html(itemList.sprQty));
-														  	tr.append($('<td></td>').html(itemList.sprRate));
-														  	tr.append($('<td></td>').html(itemList.sprTaxAmt));
-														  	taxAmt=taxAmt+itemList.sprTaxAmt;
-														  	tr.append($('<td></td>').html(itemList.sprTaxableAmt));
-														  	taxaleAmt=taxaleAmt+itemList.sprTaxableAmt;
-														  	tr.append($('<td></td>').html(itemList.disc));
-														  	disc=disc+itemList.disc;
-														  	tr.append($('<td></td>').html(itemList.extraCharges));
-														  	extraCharge=extraCharge+itemList.extraCharges;
-														  	tr.append($('<td></td>').html(itemList.total));
-														  	total=total+itemList.total;
-														  	if(itemList.groupId==2)
-													  		{
-													  		 
-													  		labourCharge=labourCharge+itemList.total;
-													  		}
-													  	else
-													  		{
-													  		 
-													  		totSparePart=totSparePart+itemList.total;
-													  		}
-														  	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
-														    $('#table_grid tbody').append(tr);
-
-															 
-		 
+														  if(itemList.delStatus==0)
+															{
+															  var tr = $('<tr></tr>');
+			
+															  	tr.append($('<td></td>').html(key+1));
+			
+															  	tr.append($('<td></td>').html(itemList.partName)); 
+															  	tr.append($('<td></td>').html(itemList.groupName));
+															  	tr.append($('<td></td>').html(itemList.sprQty));
+															  	tr.append($('<td></td>').html(itemList.sprRate));
+															  	tr.append($('<td></td>').html(itemList.sprTaxAmt));
+															  	taxAmt=taxAmt+itemList.sprTaxAmt;
+															  	tr.append($('<td></td>').html(itemList.sprTaxableAmt));
+															  	taxaleAmt=taxaleAmt+itemList.sprTaxableAmt;
+															  	tr.append($('<td></td>').html(itemList.disc));
+															  	disc=disc+itemList.disc;
+															  	tr.append($('<td></td>').html(itemList.extraCharges));
+															  	extraCharge=extraCharge+itemList.extraCharges;
+															  	tr.append($('<td></td>').html(itemList.total));
+															  	total=total+itemList.total;
+															  	if(itemList.groupId==2)
+														  		{
+														  		 
+														  		labourCharge=labourCharge+itemList.total;
+														  		}
+														  	else
+														  		{
+														  		 
+														  		totSparePart=totSparePart+itemList.total;
+														  		}
+															  	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
+															    $('#table_grid tbody').append(tr);
+															} 
 														})  
 														    
 											document.getElementById("total").value=(total).toFixed(2);
@@ -651,10 +721,11 @@
 						}
 					else
 						{
+						alert("in else");
 						$('#loader').show();
 
 						$ .getJSON(
-										'${changeQtyOfSparePart}',
+										'${changeQtyOfSparePartInEditInvoice}',
 
 										{
 											 
@@ -699,39 +770,40 @@
 										  $.each( data, function(key, itemList) {
 														
 														 
-															 var tr = $('<tr></tr>');
-
-														  	tr.append($('<td></td>').html(key+1));
-
-														  	tr.append($('<td></td>').html(itemList.partName)); 
-														  	tr.append($('<td></td>').html(itemList.groupName));
-														  	tr.append($('<td></td>').html(itemList.sprQty));
-														  	tr.append($('<td></td>').html(itemList.sprRate));
-														  	tr.append($('<td></td>').html(itemList.sprTaxAmt));
-														  	taxAmt=taxAmt+itemList.sprTaxAmt;
-														  	tr.append($('<td></td>').html(itemList.sprTaxableAmt));
-														  	taxaleAmt=taxaleAmt+itemList.sprTaxableAmt;
-														  	tr.append($('<td></td>').html(itemList.disc));
-														  	disc=disc+itemList.disc;
-														  	tr.append($('<td></td>').html(itemList.extraCharges));
-														  	extraCharge=extraCharge+itemList.extraCharges;
-														  	tr.append($('<td></td>').html(itemList.total));
-														  	total=total+itemList.total;
-														  	if(itemList.groupId==2)
-													  		{
-													  		 
-													  		labourCharge=labourCharge+itemList.total;
-													  		}
-													  	else
-													  		{
-													  		 
-													  		totSparePart=totSparePart+itemList.total;
-													  		}
-														  	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
-														    $('#table_grid tbody').append(tr);
-
-															 
-		 
+														  if(itemList.delStatus==0)
+															{
+															  var tr = $('<tr></tr>');
+			
+															  	tr.append($('<td></td>').html(key+1));
+			
+															  	tr.append($('<td></td>').html(itemList.partName)); 
+															  	tr.append($('<td></td>').html(itemList.groupName));
+															  	tr.append($('<td></td>').html(itemList.sprQty));
+															  	tr.append($('<td></td>').html(itemList.sprRate));
+															  	tr.append($('<td></td>').html(itemList.sprTaxAmt));
+															  	taxAmt=taxAmt+itemList.sprTaxAmt;
+															  	tr.append($('<td></td>').html(itemList.sprTaxableAmt));
+															  	taxaleAmt=taxaleAmt+itemList.sprTaxableAmt;
+															  	tr.append($('<td></td>').html(itemList.disc));
+															  	disc=disc+itemList.disc;
+															  	tr.append($('<td></td>').html(itemList.extraCharges));
+															  	extraCharge=extraCharge+itemList.extraCharges;
+															  	tr.append($('<td></td>').html(itemList.total));
+															  	total=total+itemList.total;
+															  	if(itemList.groupId==2)
+														  		{
+														  		 
+														  		labourCharge=labourCharge+itemList.total;
+														  		}
+														  	else
+														  		{
+														  		 
+														  		totSparePart=totSparePart+itemList.total;
+														  		}
+															  	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
+															    $('#table_grid tbody').append(tr);
+															}
+														 
 														})  
 														    
 											document.getElementById("total").value=(total).toFixed(2);
@@ -781,7 +853,7 @@
 
 			$
 					.getJSON(
-							'${editInvoiceSparePart}',
+							'${editSparePartInEditInvoice}',
 
 							{
 								 
@@ -851,7 +923,7 @@
 			$('#loader').show();
 			$
 			.getJSON(
-					'${deleteSparePart}',
+					'${deleteSparePartInEditInvoice}',
 
 					{
 						 
@@ -878,40 +950,41 @@
 
 						 $.each( data, function(key, itemList) {
 								
-							 
+						if(itemList.delStatus==0)
+							{
 							 var tr = $('<tr></tr>');
 
-						  	tr.append($('<td></td>').html(key+1)); 
-						  	tr.append($('<td></td>').html(itemList.partName)); 
-						  	tr.append($('<td></td>').html(itemList.groupName));
-						  	tr.append($('<td></td>').html(itemList.sprQty));
-						  	tr.append($('<td></td>').html(itemList.sprRate));
-						  	tr.append($('<td></td>').html(itemList.sprTaxAmt));
-						  	taxAmt=taxAmt+itemList.sprTaxAmt;
-						  	tr.append($('<td></td>').html(itemList.sprTaxableAmt));
-						  	taxaleAmt=taxaleAmt+itemList.sprTaxableAmt;
-						  	tr.append($('<td></td>').html(itemList.disc));
-						  	disc=disc+itemList.disc;
-						  	tr.append($('<td></td>').html(itemList.extraCharges));
-						  	extraCharge=extraCharge+itemList.extraCharges;
-						  	tr.append($('<td></td>').html(itemList.total));
-						  	total=total+itemList.total;
-						  	if(itemList.groupId==2)
-						  		{
-						  		 
-						  		labourCharge=labourCharge+itemList.total;
-						  		}
-						  	else
-						  		{
-						  		 
-						  		totSparePart=totSparePart+1;
-						  		}
-						  	
-						  	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
-						    $('#table_grid tbody').append(tr);
-
-							 
-
+							  	tr.append($('<td></td>').html(key+1)); 
+							  	tr.append($('<td></td>').html(itemList.partName)); 
+							  	tr.append($('<td></td>').html(itemList.groupName));
+							  	tr.append($('<td></td>').html(itemList.sprQty));
+							  	tr.append($('<td></td>').html(itemList.sprRate));
+							  	tr.append($('<td></td>').html(itemList.sprTaxAmt));
+							  	taxAmt=taxAmt+itemList.sprTaxAmt;
+							  	tr.append($('<td></td>').html(itemList.sprTaxableAmt));
+							  	taxaleAmt=taxaleAmt+itemList.sprTaxableAmt;
+							  	tr.append($('<td></td>').html(itemList.disc));
+							  	disc=disc+itemList.disc;
+							  	tr.append($('<td></td>').html(itemList.extraCharges));
+							  	extraCharge=extraCharge+itemList.extraCharges;
+							  	tr.append($('<td></td>').html(itemList.total));
+							  	total=total+itemList.total;
+							  	if(itemList.groupId==2)
+							  		{
+							  		 
+							  		labourCharge=labourCharge+itemList.total;
+							  		}
+							  	else
+							  		{
+							  		 
+							  		totSparePart=totSparePart+1;
+							  		}
+							  	
+							  	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
+							    $('#table_grid tbody').append(tr);
+							}
+							
+ 
 						})  
 						    
 						document.getElementById("total").value=(total).toFixed(2);

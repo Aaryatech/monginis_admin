@@ -6,7 +6,7 @@ public class ServDetailAddPart {
 	
 	private int servDetailId;  
 	private int servId; 
-	private Date servDate;
+	private String servDate;
 	private int servType;   
 	private int groupId; 
 	private String groupName;
@@ -18,10 +18,14 @@ public class ServDetailAddPart {
 	private int sprRate; 
 	private float sprTaxableAmt; 
 	private float sprTaxAmt;   
-	private float total; 
+	private float sprTaxAmtPer;
+	private float total;
+	private float discPer; 
 	private float disc; 
-	private float extraCharges; 
+	private float extraCharges;
+	private float extraChargesPer;
 	private int delStatus;
+	
 	public int getServDetailId() {
 		return servDetailId;
 	}
@@ -34,10 +38,10 @@ public class ServDetailAddPart {
 	public void setServId(int servId) {
 		this.servId = servId;
 	}
-	public Date getServDate() {
+	public String getServDate() {
 		return servDate;
 	}
-	public void setServDate(Date servDate) {
+	public void setServDate(String servDate) {
 		this.servDate = servDate;
 	}
 	public int getServType() {
@@ -131,13 +135,35 @@ public class ServDetailAddPart {
 	public void setVehName(String vehName) {
 		this.vehName = vehName;
 	}
+	
+	
+	public float getSprTaxAmtPer() {
+		return sprTaxAmtPer;
+	}
+	public void setSprTaxAmtPer(float sprTaxAmtPer) {
+		this.sprTaxAmtPer = sprTaxAmtPer;
+	}
+	public float getDiscPer() {
+		return discPer;
+	}
+	public void setDiscPer(float discPer) {
+		this.discPer = discPer;
+	}
+	public float getExtraChargesPer() {
+		return extraChargesPer;
+	}
+	public void setExtraChargesPer(float extraChargesPer) {
+		this.extraChargesPer = extraChargesPer;
+	}
 	@Override
 	public String toString() {
 		return "ServDetailAddPart [servDetailId=" + servDetailId + ", servId=" + servId + ", servDate=" + servDate
 				+ ", servType=" + servType + ", groupId=" + groupId + ", groupName=" + groupName + ", vehId=" + vehId
 				+ ", vehName=" + vehName + ", sprId=" + sprId + ", partName=" + partName + ", sprQty=" + sprQty
-				+ ", sprRate=" + sprRate + ", sprTaxableAmt=" + sprTaxableAmt + ", sprTaxAmt=" + sprTaxAmt + ", total="
-				+ total + ", disc=" + disc + ", extraCharges=" + extraCharges + ", delStatus=" + delStatus + "]";
+				+ ", sprRate=" + sprRate + ", sprTaxableAmt=" + sprTaxableAmt + ", sprTaxAmt=" + sprTaxAmt
+				+ ", sprTaxAmtPer=" + sprTaxAmtPer + ", total=" + total + ", discPer=" + discPer + ", disc=" + disc
+				+ ", extraCharges=" + extraCharges + ", extraChargesPer=" + extraChargesPer + ", delStatus=" + delStatus
+				+ "]";
 	}
 	
 	

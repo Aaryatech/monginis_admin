@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.net.URLConnection;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -1245,8 +1246,8 @@ public class LogisticsController {
 	
 	String pdfName;
 	
-	@RequestMapping(value = "/viewLogisticsPdf/{billFile}", method = RequestMethod.GET)
-	public void viewLogisticsPdf(@PathVariable String billFile,HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/viewLogisticsPdf", method = RequestMethod.GET)
+	public void viewLogisticsPdf(HttpServletRequest request, HttpServletResponse response) {
 
 		 
 		 System.out.println("billFile "+pdfName);
@@ -1418,19 +1419,9 @@ public class LogisticsController {
 	        	float discDetail = Float.parseFloat(request.getParameter("discDetail"));
 	        	float extraChargeDetail = Float.parseFloat(request.getParameter("extraChargeDetail"));
 	        	int servTypeDetail = Integer.parseInt(request.getParameter("servTypeDetail")); 
-	        	 System.out.println("sprId"+sprId);
-	        	 System.out.println("sprId"+sprName);
-	        	 System.out.println("groupId"+groupId);
-	        	 System.out.println("sprId"+groupName);
-	        	 System.out.println("spareRate"+spareRate);
-	        	 System.out.println("spareQty"+spareQty);
-	        	 System.out.println("taxaleAmtDetail"+taxaleAmtDetail);
-	        	 System.out.println("taxAmtDetail"+taxAmtDetail);
-	        	 System.out.println("totalDetail"+totalDetail);
-	        	 System.out.println("discDetail"+discDetail);
-	        	 System.out.println("extraChargeDetail"+extraChargeDetail);
-	        	 System.out.println("servTypeDetail"+servTypeDetail); 
-	        	  
+	        	int discPer = Integer.parseInt(request.getParameter("discPer"));
+	        	int extraChargePer = Integer.parseInt(request.getParameter("extraChargePer"));
+	        	int taxPer = Integer.parseInt(request.getParameter("taxPer"));
 	        	 
 	        	 ServDetailAddPart addSparePart = new ServDetailAddPart();
 	        	 addSparePart.setSprId(sprId);
@@ -1447,6 +1438,9 @@ public class LogisticsController {
 	        	 addSparePart.setDisc(discDetail);
 	        	 addSparePart.setExtraCharges(extraChargeDetail);
 	        	 addSparePart.setServType(servTypeDetail); 
+	        	 addSparePart.setDiscPer(discPer);
+	        	 addSparePart.setExtraChargesPer(extraChargePer);
+	        	 addSparePart.setSprTaxAmtPer(taxPer);
 	        	 addSparePartList.add(addSparePart);
 	        	 System.out.println("addSparePartList"+addSparePartList); 
 	        	 
@@ -1484,6 +1478,79 @@ public class LogisticsController {
 		
 
 	}
+	int editindex;
+	@RequestMapping(value = "/editInvoiceSparePart", method = RequestMethod.GET)
+	@ResponseBody
+	public ServDetailAddPart editInvoiceSparePart(HttpServletRequest request, HttpServletResponse response) {
+		 
+		ServDetailAddPart servDetailAddPart = new ServDetailAddPart();
+	        try
+			{ 
+	        	
+	        	editindex = Integer.parseInt(request.getParameter("index")); 
+	        	 System.out.println("index"+editindex); 
+	        	 servDetailAddPart = addSparePartList.get(editindex);
+	        	 System.out.println("servDetailAddPart"+servDetailAddPart); 
+	        	 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return servDetailAddPart;
+		
+
+	}
+	
+	@RequestMapping(value = "/changeQtyOfSparePart", method = RequestMethod.GET)
+	@ResponseBody
+	public List<ServDetailAddPart> changeQtyOfSparePart(HttpServletRequest request, HttpServletResponse response) {
+		 
+		
+        try
+		{ 
+        	
+        	int sprId = Integer.parseInt(request.getParameter("sprId"));
+        	String sprName = request.getParameter("sprName");
+        	int groupId = Integer.parseInt(request.getParameter("groupId"));
+        	String groupName = request.getParameter("groupName");
+        	int vehId = Integer.parseInt(request.getParameter("vehId"));
+        	String vehName = request.getParameter("vehName");
+        	int spareRate = Integer.parseInt(request.getParameter("spareRate"));
+        	int spareQty = Integer.parseInt(request.getParameter("spareQty"));
+        	float taxaleAmtDetail = Float.parseFloat(request.getParameter("taxaleAmtDetail"));
+        	float taxAmtDetail = Float.parseFloat(request.getParameter("taxAmtDetail"));
+        	float totalDetail = Float.parseFloat(request.getParameter("totalDetail"));
+        	float discDetail = Float.parseFloat(request.getParameter("discDetail"));
+        	float extraChargeDetail = Float.parseFloat(request.getParameter("extraChargeDetail"));
+        	int servTypeDetail = Integer.parseInt(request.getParameter("servTypeDetail")); 
+        	
+        	addSparePartList.get(editindex).setSprId(sprId);
+        	addSparePartList.get(editindex).setPartName(sprName);
+        	addSparePartList.get(editindex).setGroupId(groupId);
+        	addSparePartList.get(editindex).setVehId(vehId);
+        	addSparePartList.get(editindex).setVehName(vehName);
+        	addSparePartList.get(editindex).setGroupName(groupName);
+        	addSparePartList.get(editindex).setSprRate(spareRate);
+        	addSparePartList.get(editindex).setSprQty(spareQty);
+        	addSparePartList.get(editindex).setSprTaxableAmt(taxaleAmtDetail);
+        	addSparePartList.get(editindex).setSprTaxAmt(taxAmtDetail);
+        	addSparePartList.get(editindex).setTotal(totalDetail);
+        	addSparePartList.get(editindex).setDisc(discDetail);
+        	addSparePartList.get(editindex).setExtraCharges(extraChargeDetail);
+        	addSparePartList.get(editindex).setServType(servTypeDetail);
+        	 
+	}catch(Exception e)
+	{
+		System.out.println("errorr  "+e.getMessage());
+		e.printStackTrace();
+	}
+         
+	return addSparePartList;
+	
+
+}
 	
 	@RequestMapping(value = "/sparePartByGroupId", method = RequestMethod.GET)
 	@ResponseBody
@@ -1698,6 +1765,384 @@ public class LogisticsController {
 			e.printStackTrace();
 		}
 		return "redirect:/insertSarvicing";
+
+	}
+	
+	List<ServDetailAddPart> addSparePartListInEdit = new ArrayList<ServDetailAddPart>();
+	@RequestMapping(value = "/editServiceBill/{servId}", method = RequestMethod.GET)
+	public ModelAndView editServiceBill(@PathVariable int servId, HttpServletRequest request, HttpServletResponse response) {
+
+		ServHeader viewServicingDetail = new ServHeader(); 
+		ModelAndView model = new ModelAndView("logistics/editServiceBill"); 
+		try
+		{
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+        	map.add("servId", servId); 
+        	viewServicingDetail = restTemplate.postForObject(Constants.url + "getServHeaderAndDetailById",map, ServHeader.class);
+        	 
+        	SparePart[] getAllSparePart = restTemplate.getForObject(Constants.url + "getAllSparePart", SparePart[].class);  
+        	List<Dealer> getAllDealerList = restTemplate.getForObject(Constants.url + "getAllDealerList", List.class);  
+        	List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class);  
+        	
+	       	 map = new LinkedMultiValueMap<String, Object >();
+	       	 map.add("typeId", viewServicingDetail.getTypeId()); 
+	       	SprGroup[] sprGroupList = restTemplate.postForObject(Constants.url + "getSprGroupListByTypeId", map, SprGroup[].class);
+	       	
+			ArrayList<SparePart> sparePartList = new ArrayList<>(Arrays.asList(getAllSparePart));
+			ArrayList<SprGroup> groupList = new ArrayList<>(Arrays.asList(sprGroupList));
+			
+			addSparePartListInEdit = new ArrayList<ServDetailAddPart>();
+			
+			 map = new LinkedMultiValueMap<String, Object >();
+        	 map.add("dealerId", viewServicingDetail.getDealerId()); 
+        	 Dealer dealer = restTemplate.postForObject(Constants.url + "getDealerById", map, Dealer.class); 
+			
+			for(int i=0;i<viewServicingDetail.getServDetail().size();i++)
+			{
+				ServDetailAddPart servDetailAddPart = new ServDetailAddPart();
+				servDetailAddPart.setServDetailId(viewServicingDetail.getServDetail().get(i).getServDetailId());
+				servDetailAddPart.setServId(viewServicingDetail.getServDetail().get(i).getServId());
+				servDetailAddPart.setServDate(viewServicingDetail.getServDetail().get(i).getServDate());
+				servDetailAddPart.setServType(viewServicingDetail.getServDetail().get(i).getServType());  
+				servDetailAddPart.setSprQty(viewServicingDetail.getServDetail().get(i).getSprQty());
+				servDetailAddPart.setSprRate(viewServicingDetail.getServDetail().get(i).getSprRate());
+				servDetailAddPart.setSprTaxAmt(viewServicingDetail.getServDetail().get(i).getSprTaxAmt());
+				servDetailAddPart.setSprTaxableAmt(viewServicingDetail.getServDetail().get(i).getSprTaxableAmt());
+				servDetailAddPart.setDisc(viewServicingDetail.getServDetail().get(i).getDisc());
+				servDetailAddPart.setExtraCharges(viewServicingDetail.getServDetail().get(i).getExtraCharges()); 
+				servDetailAddPart.setVehName(viewServicingDetail.getVehNo());
+				servDetailAddPart.setTotal(viewServicingDetail.getServDetail().get(i).getTotal());  
+				for(int j=0;j<sparePartList.size();j++)
+				{
+					if(viewServicingDetail.getServDetail().get(i).getSprId()==sparePartList.get(j).getSprId())
+					{
+						servDetailAddPart.setSprId(sparePartList.get(j).getSprId());
+						servDetailAddPart.setPartName(sparePartList.get(j).getSprName());  
+			        	 if(dealer.getIsSameState()==1)
+			        	 {
+			        		 sparePartList.get(j).setIgst(0);
+			        	 }
+			        	 else
+			        	 {
+			        		 sparePartList.get(j).setCgst(0);
+			        		 sparePartList.get(j).setSgst(0);
+			        	 }
+			        	 servDetailAddPart.setSprTaxAmtPer(sparePartList.get(j).getCgst()+sparePartList.get(j).getSgst()+sparePartList.get(j).getIgst());
+			        	 servDetailAddPart.setDiscPer(sparePartList.get(j).getDisc());
+			        	 servDetailAddPart.setExtraChargesPer(sparePartList.get(j).getExtraCharges());
+						break;
+					}
+				}
+				
+				for(int j=0;j<groupList.size();j++)
+				{
+					if(viewServicingDetail.getServDetail().get(i).getGroupId()==groupList.get(j).getGroupId())
+					{
+						servDetailAddPart.setGroupId(groupList.get(j).getGroupId());
+						servDetailAddPart.setGroupName(groupList.get(j).getGroupName());
+						break;
+					}
+				}
+				
+				addSparePartListInEdit.add(servDetailAddPart);
+			}
+			System.out.println("addSparePartListInEdit " + addSparePartListInEdit);
+			model.addObject("dealerList",getAllDealerList); 
+			model.addObject("sprGroupList",sprGroupList); 
+			model.addObject("sprPartList",getAllSparePart);
+			model.addObject("vehicleList",vehicleList);
+			 model.addObject("editServicing", viewServicingDetail); 
+			 model.addObject("servDetail", addSparePartListInEdit);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return model; 
+	}
+	
+	@RequestMapping(value = "/addSparePartInEditInvoice", method = RequestMethod.GET)
+	@ResponseBody
+	public List<ServDetailAddPart> addSparePartInEditInvoice(HttpServletRequest request, HttpServletResponse response) {
+		 
+		
+	        try
+			{ 
+	        	
+	        	int sprId = Integer.parseInt(request.getParameter("sprId"));
+	        	String sprName = request.getParameter("sprName");
+	        	int groupId = Integer.parseInt(request.getParameter("groupId"));
+	        	String groupName = request.getParameter("groupName");
+	        	int vehId = Integer.parseInt(request.getParameter("vehId"));
+	        	String vehName = request.getParameter("vehName");
+	        	int spareRate = Integer.parseInt(request.getParameter("spareRate"));
+	        	int spareQty = Integer.parseInt(request.getParameter("spareQty"));
+	        	float taxaleAmtDetail = Float.parseFloat(request.getParameter("taxaleAmtDetail"));
+	        	float taxAmtDetail = Float.parseFloat(request.getParameter("taxAmtDetail"));
+	        	float totalDetail = Float.parseFloat(request.getParameter("totalDetail"));
+	        	float discDetail = Float.parseFloat(request.getParameter("discDetail"));
+	        	float extraChargeDetail = Float.parseFloat(request.getParameter("extraChargeDetail"));
+	        	int servTypeDetail = Integer.parseInt(request.getParameter("servTypeDetail")); 
+	        	float discPer = Float.parseFloat(request.getParameter("discPer"));
+	        	float extraChargePer = Float.parseFloat(request.getParameter("extraChargePer"));
+	        	float taxPer = Float.parseFloat(request.getParameter("taxPer"));
+	        	 
+	        	 ServDetailAddPart addSparePart = new ServDetailAddPart();
+	        	 addSparePart.setSprId(sprId);
+	        	 addSparePart.setPartName(sprName);
+	        	 addSparePart.setGroupId(groupId);
+	        	 addSparePart.setVehId(vehId);
+	        	 addSparePart.setVehName(vehName);
+	        	 addSparePart.setGroupName(groupName);
+	        	 addSparePart.setSprRate(spareRate);
+	        	 addSparePart.setSprQty(spareQty);
+	        	 addSparePart.setSprTaxableAmt(taxaleAmtDetail);
+	        	 addSparePart.setSprTaxAmt(taxAmtDetail);
+	        	 addSparePart.setTotal(totalDetail);
+	        	 addSparePart.setDisc(discDetail);
+	        	 addSparePart.setExtraCharges(extraChargeDetail);
+	        	 addSparePart.setServType(servTypeDetail); 
+	        	 addSparePart.setDiscPer(discPer);
+	        	 addSparePart.setExtraChargesPer(extraChargePer);
+	        	 addSparePart.setSprTaxAmtPer(taxPer);
+	        	 addSparePartListInEdit.add(addSparePart);
+	        	 System.out.println("addSparePartList"+addSparePartListInEdit); 
+	        	 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return addSparePartListInEdit;
+		
+
+	}
+	
+	@RequestMapping(value = "/deleteSparePartInEditInvoice", method = RequestMethod.GET)
+	@ResponseBody
+	public List<ServDetailAddPart> deleteSparePartInEditInvoice(HttpServletRequest request, HttpServletResponse response) {
+		 
+		
+	        try
+			{ 
+	        	
+	        	int index = Integer.parseInt(request.getParameter("index")); 
+	        	 System.out.println("index"+index); 
+	        	 if(addSparePartListInEdit.get(index).getServDetailId()!=0) 
+	        		 addSparePartListInEdit.get(index).setDelStatus(1); 
+	        	 else
+	        		 addSparePartListInEdit.remove(index);
+	        		  
+	        	 System.out.println("addSparePartListInEdit"+addSparePartListInEdit); 
+	        	 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return addSparePartListInEdit;
+		
+
+	}
+	
+	int editViewIndex;
+	@RequestMapping(value = "/editSparePartInEditInvoice", method = RequestMethod.GET)
+	@ResponseBody
+	public ServDetailAddPart editSparePartInEditInvoice(HttpServletRequest request, HttpServletResponse response) {
+		 
+		ServDetailAddPart servDetailAddPart = new ServDetailAddPart();
+	        try
+			{ 
+	        	
+	        	editViewIndex = Integer.parseInt(request.getParameter("index")); 
+	        	 System.out.println("editViewIndex"+editViewIndex); 
+	        	 servDetailAddPart = addSparePartListInEdit.get(editViewIndex);
+	        	 System.out.println("servDetailAddPart"+servDetailAddPart); 
+	        	 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return servDetailAddPart;
+		
+
+	}
+	
+	@RequestMapping(value = "/changeQtyOfSparePartInEditInvoice", method = RequestMethod.GET)
+	@ResponseBody
+	public List<ServDetailAddPart> changeQtyOfSparePartInEditInvoice(HttpServletRequest request, HttpServletResponse response) {
+		 
+		
+        try
+		{ 
+        	
+        	int sprId = Integer.parseInt(request.getParameter("sprId"));
+        	String sprName = request.getParameter("sprName");
+        	int groupId = Integer.parseInt(request.getParameter("groupId"));
+        	String groupName = request.getParameter("groupName");
+        	int vehId = Integer.parseInt(request.getParameter("vehId"));
+        	String vehName = request.getParameter("vehName");
+        	int spareRate = Integer.parseInt(request.getParameter("spareRate"));
+        	int spareQty = Integer.parseInt(request.getParameter("spareQty"));
+        	float taxaleAmtDetail = Float.parseFloat(request.getParameter("taxaleAmtDetail"));
+        	float taxAmtDetail = Float.parseFloat(request.getParameter("taxAmtDetail"));
+        	float totalDetail = Float.parseFloat(request.getParameter("totalDetail"));
+        	float discDetail = Float.parseFloat(request.getParameter("discDetail"));
+        	float extraChargeDetail = Float.parseFloat(request.getParameter("extraChargeDetail"));
+        	int servTypeDetail = Integer.parseInt(request.getParameter("servTypeDetail")); 
+        	System.out.println(spareQty);
+        	addSparePartListInEdit.get(editViewIndex).setSprId(sprId);
+        	addSparePartListInEdit.get(editViewIndex).setPartName(sprName);
+        	addSparePartListInEdit.get(editViewIndex).setGroupId(groupId);
+        	addSparePartListInEdit.get(editViewIndex).setVehId(vehId);
+        	addSparePartListInEdit.get(editViewIndex).setVehName(vehName);
+        	addSparePartListInEdit.get(editViewIndex).setGroupName(groupName);
+        	addSparePartListInEdit.get(editViewIndex).setSprRate(spareRate);
+        	addSparePartListInEdit.get(editViewIndex).setSprQty(spareQty);
+        	addSparePartListInEdit.get(editViewIndex).setSprTaxableAmt(taxaleAmtDetail);
+        	addSparePartListInEdit.get(editViewIndex).setSprTaxAmt(taxAmtDetail);
+        	addSparePartListInEdit.get(editViewIndex).setTotal(totalDetail);
+        	addSparePartListInEdit.get(editViewIndex).setDisc(discDetail);
+        	addSparePartListInEdit.get(editViewIndex).setExtraCharges(extraChargeDetail);
+        	addSparePartListInEdit.get(editViewIndex).setServType(servTypeDetail);
+        	 
+	}catch(Exception e)
+	{
+		System.out.println("errorr  "+e.getMessage());
+		e.printStackTrace();
+	}
+         
+	return addSparePartListInEdit;
+	
+
+}
+	
+	@RequestMapping(value = "/submitEditInvoice", method = RequestMethod.POST)
+	public String  submitEditInvoice(@RequestParam("attachFile") List<MultipartFile> attachFile, HttpServletRequest request, HttpServletResponse response) {
+
+	 
+		try
+		{
+			int servId =Integer.parseInt(request.getParameter("servId"));
+			String billNo = request.getParameter("billNo");
+			String billDate = request.getParameter("billDate"); 
+			int typeId =Integer.parseInt(request.getParameter("typeId"));
+			int servType =Integer.parseInt(request.getParameter("servType")); 
+			String servDate =request.getParameter("servDate"); 
+			int dealerId = Integer.parseInt(request.getParameter("dealerId"));
+			int vehId = Integer.parseInt(request.getParameter("vehId"));
+			String servAdvRem = request.getParameter("servAdvRem");
+			String servDoneRem = request.getParameter("servDoneRem");
+			float totPart = Float.parseFloat(request.getParameter("totPart")); 
+			float labCharge = Float.parseFloat(request.getParameter("labCharge")); 
+			float totDisc = Float.parseFloat(request.getParameter("totDisc"));
+			float totExtraCharge = Float.parseFloat(request.getParameter("totExtraCharge"));
+			float discOnBill = Float.parseFloat(request.getParameter("discOnBill"));
+			float extraOnBill = Float.parseFloat(request.getParameter("extraOnBill"));
+			float taxAmt =Float.parseFloat(request.getParameter("taxAmt"));
+			float taxaleAmt =Float.parseFloat(request.getParameter("taxaleAmt"));
+			float total =Float.parseFloat(request.getParameter("total"));
+			int servDoneKm =Integer.parseInt(request.getParameter("servDoneKm"));
+			int nextDueKm =Integer.parseInt(request.getParameter("nextDueKm"));
+			
+			VpsImageUpload upload = new VpsImageUpload();
+
+			Calendar cal = Calendar.getInstance();
+			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			System.out.println(sdf.format(cal.getTime()));
+
+			String curTimeStamp = sdf.format(cal.getTime());
+			String pdf = null;
+			try {
+				pdf = attachFile.get(0).getOriginalFilename();
+				 
+
+				upload.saveUploadedFiles(attachFile, Constants.LOGIS_BILL_PDF_TYPE,
+						 attachFile.get(0).getOriginalFilename());
+			 
+				System.out.println("upload method called for image Upload " + attachFile.toString());
+
+			} catch (IOException e) {
+
+				System.out.println("Exce in File Upload In GATE ENTRY  Insert " + e.getMessage());
+				e.printStackTrace();
+			}
+
+			ServHeader servHeader = new ServHeader();
+			servHeader.setServId(servId);
+			servHeader.setBillNo(billNo);
+			servHeader.setBillDate(billDate);
+			servHeader.setTypeId(typeId);
+			servHeader.setServType(servType);
+			servHeader.setServDate(servDate);
+			servHeader.setDealerId(dealerId);
+			servHeader.setVehId(vehId);
+			servHeader.setServAdviseRem(servAdvRem);
+			servHeader.setServDoneRem(servDoneRem);
+			servHeader.setSprTot(totPart);
+			servHeader.setLabChrge(labCharge);
+			servHeader.setTotalDisc(totDisc);
+			servHeader.setTotalExtra(totExtraCharge);
+			servHeader.setDiscOnBill(discOnBill);
+			servHeader.setExtraOnBill(extraOnBill);
+			servHeader.setTaxAmt(taxAmt);
+			servHeader.setTaxableAmt(taxaleAmt);
+			servHeader.setServDoneKm(servDoneKm);
+			servHeader.setNextDueKm(nextDueKm);
+			servHeader.setTotal(total);
+			servHeader.setBillFile(pdf);
+			
+			String vehName=null;
+			List<ServDetail> servDetailList = new ArrayList<ServDetail>();
+			for(int i=0;i<addSparePartListInEdit.size();i++)
+			{
+				ServDetail servDetail = new ServDetail();
+				servDetail.setServDetailId(addSparePartListInEdit.get(i).getServDetailId());
+				servDetail.setServDate(servDate);
+				servDetail.setServType(addSparePartListInEdit.get(i).getServType());
+				servDetail.setGroupId(addSparePartListInEdit.get(i).getGroupId());
+				servDetail.setSprId(addSparePartListInEdit.get(i).getSprId());
+				servDetail.setSprQty(addSparePartListInEdit.get(i).getSprQty());
+				servDetail.setSprRate(addSparePartListInEdit.get(i).getSprRate());
+				servDetail.setSprTaxableAmt(addSparePartListInEdit.get(i).getSprTaxableAmt());
+				servDetail.setSprTaxAmt(addSparePartListInEdit.get(i).getSprTaxAmt());
+				servDetail.setTotal(addSparePartListInEdit.get(i).getTotal());
+				servDetail.setDisc(addSparePartListInEdit.get(i).getDisc());
+				servDetail.setExtraCharges(addSparePartListInEdit.get(i).getExtraCharges());
+				servDetail.setDelStatus(addSparePartListInEdit.get(i).getDelStatus());
+				vehName=addSparePartListInEdit.get(i).getVehName();
+				servDetailList.add(servDetail);
+			}
+			servHeader.setVehNo(vehName);
+			servHeader.setServDetail(servDetailList);
+			
+			  System.out.println("before insert "+servHeader);
+			  servHeader = restTemplate.postForObject(Constants.url + "postServHeader",servHeader, ServHeader.class);
+			System.out.println("insertSparePart"+servHeader.toString());
+			
+			if(servHeader!=null)
+			{
+				 
+	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+	        	 map.add("vehicalId", servHeader.getVehId()); 
+	        	 VehicalMaster vehicalMaster = restTemplate.postForObject(Constants.url + "getVehicalById", map, VehicalMaster.class);
+	        	 vehicalMaster.setLastServicingKm(servHeader.getServDoneKm()); 
+	        	 vehicalMaster.setNextServicingKm(servHeader.getNextDueKm());
+	        	 vehicalMaster.setAlertNextServicingKm(vehicalMaster.getNextServicingKm()-100);
+	        	 vehicalMaster = restTemplate.postForObject(Constants.url + "postVehicalMaster",vehicalMaster, VehicalMaster.class);
+	 			System.out.println("update Vehicle"+vehicalMaster.toString());
+				
+			}
+		 
+			 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return "redirect:/showServicingListToDirector";
 
 	}
 	

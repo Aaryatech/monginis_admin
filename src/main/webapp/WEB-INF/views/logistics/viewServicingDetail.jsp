@@ -33,29 +33,19 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Purchase Order Detailed
+					<i class="fa fa-file-o"></i>Invoice Bill Detailed
 				</h1>
 				<!-- <h4>Bill for franchises</h4> -->
 			</div>
 		</div>
 		<!-- END Page Title -->
 
-		<!-- BEGIN Breadcrumb -->
-		<div id="breadcrumbs">
-			<ul class="breadcrumb">
-				<li><i class="fa fa-home"></i> <a
-					href="${pageContext.request.contextPath}/home">Home</a> <span
-					class="divider"><i class="fa fa-angle-right"></i></span></li>
-				<li class="active">Purchase Order</li>
-			</ul>
-		</div>
-		<!-- END Breadcrumb -->
-		
+	 
 		<!-- BEGIN Main Content -->
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>Purchase Order Detailed
+					<i class="fa fa-bars"></i>Invoice Bill Detailed
 				</h3>
 
 			</div>
@@ -306,11 +296,14 @@
 								<c:when test="${(viewServicingDetail.isApproved==0) and (flag==1)}"> 
 									<a href="${pageContext.request.contextPath}/approvedServiceBill/${viewServicingDetail.servId}" ><input type="button" value="Approve" class="btn btn-info">
 									</a>
+									
+									<a href="${pageContext.request.contextPath}/editServiceBill/${viewServicingDetail.servId}" ><input type="button" value="Edit" class="btn btn-info">
+									</a>
 									 
 							</c:when>
 							 
 						</c:choose>
-						<a href="${pageContext.request.contextPath}/viewLogisticsPdf/${viewServicingDetail.billFile}" target="blank" ><input type="button" value="View Pdf" class="btn btn-info">
+						<a href="${pageContext.request.contextPath}/viewLogisticsPdf" target="blank" ><input type="button" value="View Pdf" class="btn btn-info">
 									</a>
 							</div>
 						</div>
