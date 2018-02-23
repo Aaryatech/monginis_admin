@@ -157,7 +157,9 @@
 											<div class="fileupload-new img-thumbnail"
 												style="width: 150px; height: 150px;">
 												<img
-													src="http://www.placehold.it/150x150/EFEFEF/AAAAAA&amp;text=no+image"
+													src="${imageUrl}${vehicleDocument.docPath}"
+													onerror="this.src='http://www.placehold.it/150x150/EFEFEF/AAAAAA&amp;text=no+image"
+													
 													alt="" />
 											</div>
 											<div
@@ -175,15 +177,13 @@
 											</div>
 										</div>
 					<input class="form-control" id="docPath" placeholder="Current Km" value="${vehicleDocument.docPath}" size="16"
-											type="text" name="docPath"   />
+											type="hidden" name="docPath"   />
 									</div>
 									
 									 </div>
 									
-								</div><br><br><br><br><br><br><br><br><br>
-								
-							 
-								
+								</div><br><br><br><br><br><br><br><br><br> 
+							  	
 							<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										<input type="submit" class="btn btn-primary" value="Submit" onclick="validation()" >

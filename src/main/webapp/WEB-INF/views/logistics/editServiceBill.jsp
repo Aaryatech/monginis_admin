@@ -481,6 +481,7 @@
 									<div class="col-md-2" >Select Pdf</div>
 												<div class="col-md-4"> 
 													<input type="file" id="file" name="attachFile" value="${editServicing.billFile}" size="60" data-rule-required="true"/> 
+													<input type="hidden" id="fileName" name="fileName" value="${editServicing.billFile}" size="60"/> 
 												</div>
 							
 							</div><br>
@@ -1275,10 +1276,7 @@ function check()
 	{
 	alert("Select Dealer");
 	}
-	else if(file=="")
-	{
-	alert("Select file");
-	}
+	 
 }
 </script>
 	

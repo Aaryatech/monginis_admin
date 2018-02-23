@@ -2047,6 +2047,7 @@ public class LogisticsController {
 			float total =Float.parseFloat(request.getParameter("total"));
 			int servDoneKm =Integer.parseInt(request.getParameter("servDoneKm"));
 			int nextDueKm =Integer.parseInt(request.getParameter("nextDueKm"));
+			String fileName =request.getParameter("fileName");
 			
 			VpsImageUpload upload = new VpsImageUpload();
 
@@ -2093,7 +2094,11 @@ public class LogisticsController {
 			servHeader.setServDoneKm(servDoneKm);
 			servHeader.setNextDueKm(nextDueKm);
 			servHeader.setTotal(total);
-			servHeader.setBillFile(pdf);
+			if(pdf!=null && pdf.length()>0) 
+				servHeader.setBillFile(pdf); 
+			else
+				servHeader.setBillFile(fileName);
+			
 			
 			String vehName=null;
 			List<ServDetail> servDetailList = new ArrayList<ServDetail>();
@@ -2123,7 +2128,7 @@ public class LogisticsController {
 			  servHeader = restTemplate.postForObject(Constants.url + "postServHeader",servHeader, ServHeader.class);
 			System.out.println("insertSparePart"+servHeader.toString());
 			
-			if(servHeader!=null)
+			if(servHeader!=null || servHeader.getServDetail()!=null)
 			{
 				 
 	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
@@ -2210,7 +2215,7 @@ public class LogisticsController {
 			insert.setDocDate(docDate);
 			insert.setDocExpireDate(expireDate);
 			insert.setDocExpNotificationDate(noficationDate);
-			if(docFile!=null || !docFile.equals("")) 
+			if(docFile!=null && docFile.length()>0) 
 				insert.setDocPath(docFile); 
 			else
 				insert.setDocPath(document);
@@ -2343,9 +2348,7 @@ public class LogisticsController {
                     e.printStackTrace();
                 }
             }
-
-       
-
+ 
 	}
 
 }

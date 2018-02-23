@@ -43,7 +43,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i>Insert Vehicle Document
+								<i class="fa fa-table"></i>View Vehicle Document
 							</h3>
 							
 							<div class="box-tool">
@@ -62,41 +62,32 @@
 							<div class="box-content">
 								<div class="col-md-2">Vehicle No* </div>
 								<div class="col-md-3">
-								  <select name="vehId" id="vehId" class="form-control chosen" tabindex="6" required>
-											<option value="">Select Vehicle</option>
+								   
+											 
 												<c:forEach items="${vehicleList}" var="vehicleList"> 
 													<c:choose>
 														<c:when test="${vehicleList.vehId==vehicleDocument.vehId}">
-														<option value="${vehicleList.vehId}" selected><c:out value="${vehicleList.vehNo}"></c:out> </option>
+														${vehicleList.vehNo}
 														</c:when>
 													</c:choose>
 												
 											 </c:forEach>
-											 <c:forEach items="${vehicleList}" var="vehicleList"> 
-												<option value="${vehicleList.vehId}"><c:out value="${vehicleList.vehNo}"></c:out> </option>
-											 </c:forEach>
+											 
 											
-										</select>
+										 
 								</div>
 								
 							<div class="col-md-2">Select Document* </div> 
-								<div class="col-md-3">
-							 
-                                    <select name="docId" id="docId" class="form-control chosen" tabindex="6" required>
-											<option value="">Select Document</option>
+								<div class="col-md-3"> 
 											<c:forEach items="${documentList}" var="documentList"> 
 													<c:choose>
 														<c:when test="${documentList.docId==vehicleDocument.docId}">
-														<option value="${documentList.docId}" selected><c:out value="${documentList.docName}"></c:out> </option>
+														${documentList.docName}
 														</c:when>
 													</c:choose>
 												
 											 </c:forEach>
-											<c:forEach items="${documentList}" var="documentList"> 
-												<option value="${documentList.docId}"><c:out value="${documentList.docName}"></c:out> </option>
-											 </c:forEach>
-											
-										</select>
+										 
 								</div>
 					
 							</div><br>
@@ -105,15 +96,13 @@
 							
 								<div class="col-md-2">Entry Date </div>
 									<div class="col-md-3">
-									<input class="form-control date-picker" id="entryDate" value="${vehicleDocument.entryDate}" placeholder=" Entry Date" size="16"
-											type="text" name="entryDate"  required />
+									${vehicleDocument.entryDate}
 									</div>
 								
 								<div class="col-md-2">Document Date</div> 
 								<div class="col-md-3">
 							 
-                                    <input class="form-control date-picker" id="docDate" value="${vehicleDocument.docDate}" placeholder="Document Date" size="16"
-											type="text" name="docDate"  required />
+                                  ${vehicleDocument.docDate}
 								</div>
 								
 				 
@@ -124,15 +113,13 @@
 							<div class="col-md-2">Document Expire Date</div> 
 								<div class="col-md-3">
 							 
-                                    <input class="form-control date-picker" id="expireDate" value="${vehicleDocument.docExpireDate}" placeholder="Document Expire Date" size="16"
-											type="text" name="expireDate"  required />
+                                   ${vehicleDocument.docExpireDate}
 								</div>
 								
 								<div class="col-md-2">Expire Notification Date</div> 
 								<div class="col-md-3">
 							 
-                                    <input class="form-control date-picker" id="noficationDate" value="${vehicleDocument.docExpNotificationDate}" placeholder="Expire Notification Date" size="16"
-											type="text" name="noficationDate"  required />
+                                   ${vehicleDocument.docExpNotificationDate}
 								</div>
 								
 							</div><br>
@@ -142,44 +129,12 @@
 									
 									<div class="col-md-2">Current Km*</div>
 									<div class="col-md-3">
-									<input class="form-control" id="currentKm" placeholder="Current Km" value="${vehicleDocument.currentKm}" size="16"
-											type="text" name="currentKm" required />
+									${vehicleDocument.currentKm}
 									</div>
 								
 							</div><br><br>
 							
-							    <div class="box-content">
-									<div class="form-group">
-									<div class="col-md-2">Image</div>
-									<div class="col-md-3">
-										<div class="fileupload fileupload-new"
-											data-provides="fileupload">
-											<div class="fileupload-new img-thumbnail"
-												style="width: 150px; height: 150px;">
-												<img src="${imageUrl}${vehicleDocument.docPath}"
-											onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';"
-											alt="" />
-											</div>
-											<div
-												class="fileupload-preview fileupload-exists img-thumbnail"
-												style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-											<div>
-												<span class="btn btn-default btn-file"><span
-													class="fileupload-new">Select image</span> <span
-													class="fileupload-exists">Change</span> <input type="file"
-													class="file-input" name="documentFile" id="documentFile"
-													 /></span> <a href="#"
-													class="btn btn-default fileupload-exists"
-													data-dismiss="fileupload">Remove</a>
-													
-											</div>
-										</div>
-					 ${imageUrl}${vehicleDocument.docPath}
-									</div>
-									
-									 </div>
-									
-								</div><br><br><br><br><br><br><br><br><br>
+							     
 							 
 								
 							<div class="form-group">
