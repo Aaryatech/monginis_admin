@@ -36,6 +36,9 @@ import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.logistics.Dealer;
 import com.ats.adminpanel.model.logistics.Document;
 import com.ats.adminpanel.model.logistics.DriverMaster;
+import com.ats.adminpanel.model.logistics.LogisAmc;
+import com.ats.adminpanel.model.logistics.MachineMaster;
+import com.ats.adminpanel.model.logistics.MachineOrVehicle;
 import com.ats.adminpanel.model.logistics.Make;
 import com.ats.adminpanel.model.logistics.ServDetail;
 import com.ats.adminpanel.model.logistics.ServDetailAddPart;
@@ -2350,5 +2353,333 @@ public class LogisticsController {
             }
  
 	}
+	
+	//--------------------------------------------------Machine Master ----------------------------------------
 
+	@RequestMapping(value = "/showMachineList", method = RequestMethod.GET)
+	public ModelAndView showMachineList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/showMachineList"); 
+		try
+		{
+			
+			List<MachineMaster> machineList = restTemplate.getForObject(Constants.url + "getAllMachineMaster", List.class);
+			System.out.println("machineList"+machineList.toString());
+			List<Make> makeList = restTemplate.getForObject(Constants.url + "getAllMakeList", List.class);
+			System.out.println("makeList"+makeList.toString());
+			List<Variant> getAllVariantList = restTemplate.getForObject(Constants.url + "getAllVariantList", List.class);
+			System.out.println("getAllVariantList"+getAllVariantList.toString());
+			List<VehicalType> getAllVehicalTypeList = restTemplate.getForObject(Constants.url + "getAllVehicalTypeList", List.class);
+			System.out.println("getAllVehicalTypeList"+getAllVehicalTypeList.toString());
+			List<Dealer> getAllDealerList = restTemplate.getForObject(Constants.url + "getAllDealerList", List.class);
+			System.out.println("getAllDealerList"+getAllDealerList.toString());
+			model.addObject("makeList",makeList);
+			model.addObject("machineList",machineList); 
+			model.addObject("variantList",getAllVariantList); 
+			model.addObject("typeList",getAllVehicalTypeList);
+			model.addObject("dealerList",getAllDealerList);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/insertMachine", method = RequestMethod.POST)
+	public String  insertMachine(HttpServletRequest request, HttpServletResponse response) {
+
+	 
+		try
+		{
+			String machineId = request.getParameter("machineId");
+			String machineName = request.getParameter("machineName");
+			int makeId =Integer.parseInt(request.getParameter("makeId"));
+			int typeId =Integer.parseInt(request.getParameter("typeId"));
+			int dealerId =Integer.parseInt(request.getParameter("dealerId"));
+			int variantId =Integer.parseInt(request.getParameter("variantId"));  
+			String machineNo = request.getParameter("machineNo"); 
+			String color = request.getParameter("color");
+			String variablePart = request.getParameter("variablePart");
+			
+			String purDate = request.getParameter("purDate");
+			String regDate = request.getParameter("regDate"); 
+			int cleaningFrq =Integer.parseInt(request.getParameter("cleaningFrq"));
+			int alertFrq =Integer.parseInt(request.getParameter("alertFrq")); 
+			String lastCleanDate = request.getParameter("lastCleanDate");
+			String nextCleanDate = request.getParameter("nextCleanDate");
+			String nextAlertDate = request.getParameter("nextAlertDate");
+
+			MachineMaster insertMachineMaster = new MachineMaster();
+			if(machineId==null || machineId.equals(""))
+				insertMachineMaster.setMachineId(0);
+			else
+				insertMachineMaster.setMachineId(Integer.parseInt(machineId));  
+			insertMachineMaster.setMachineName(machineName);
+			insertMachineMaster.setMakeId(makeId);
+			insertMachineMaster.setTypeId(typeId);
+			insertMachineMaster.setDealerId(dealerId);
+			insertMachineMaster.setVariantId(variantId);
+			insertMachineMaster.setMachineNo(machineNo);
+			insertMachineMaster.setColor(color);
+			insertMachineMaster.setVariablePart(variablePart);
+			insertMachineMaster.setPurchaseDate(purDate);
+			insertMachineMaster.setRegistrationDate(regDate);
+			insertMachineMaster.setCleaningFrq(cleaningFrq);
+			insertMachineMaster.setAlertFreq(alertFrq);
+			insertMachineMaster.setLastCleaningDate(lastCleanDate);
+			insertMachineMaster.setNextCleaningDate(nextCleanDate);
+			insertMachineMaster.setNextAlertDate(nextAlertDate);
+			  
+			insertMachineMaster = restTemplate.postForObject(Constants.url + "postMachineMaster",insertMachineMaster, MachineMaster.class);
+			System.out.println("insertMachineMaster "+insertMachineMaster.toString());
+		 
+			 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return "redirect:/showMachineList";
+
+	}
+	
+	
+	@RequestMapping(value = "/deleteMachine/{machineId}", method = RequestMethod.GET)
+	public String deleteMachine(@PathVariable int machineId, HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		try
+		{
+			 System.out.println("machineId "+machineId);
+        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+        	 map.add("machineId", machineId);
+        	 Info info = restTemplate.postForObject(Constants.url + "deleteMachineMaster",map, Info.class);
+ 			System.out.println("info"+info.toString()); 
+		 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		 
+		return "redirect:/showMachineList";
+
+	}
+	
+	@RequestMapping(value = "/editMachine", method = RequestMethod.GET)
+	@ResponseBody
+	public MachineMaster editMachine(HttpServletRequest request, HttpServletResponse response) {
+		 
+		MachineMaster editMachine = new MachineMaster();
+	        try
+			{ 
+	        	
+	        	int machineId = Integer.parseInt(request.getParameter("machineId"));
+	        	 System.out.println("machineId "+machineId);
+	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+	        	 map.add("machineId", machineId);
+	        	
+	        	 editMachine = restTemplate.postForObject(Constants.url + "getMachineMasterById", map, MachineMaster.class);
+			 System.out.println("editVehicle " + editMachine); 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return editMachine; 
+	}
+	
+	//----------------------------------------------LogisAmc--------------------------------------------------
+	List<MachineOrVehicle> machineListOrVehicleList = new ArrayList<MachineOrVehicle>();
+	
+	@RequestMapping(value = "/insertAmc", method = RequestMethod.GET)
+	public ModelAndView insertAmc(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/insertAmc"); 
+		try
+		{
+			List<Dealer> getAllDealerList = restTemplate.getForObject(Constants.url + "getAllDealerList", List.class);
+			System.out.println("getAllDealerList"+getAllDealerList.toString()); 
+			model.addObject("dealerList", getAllDealerList);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/machineListOrVehicleList", method = RequestMethod.GET)
+	@ResponseBody
+	public List<MachineOrVehicle> machineListOrVehicleList(HttpServletRequest request, HttpServletResponse response) {
+		 
+		machineListOrVehicleList = new ArrayList<MachineOrVehicle>();
+	        try
+			{ 
+	        	
+	        	int typeId = Integer.parseInt(request.getParameter("typeId")); 
+	        	
+	        	if(typeId==1)
+	        	{
+	        		VehicalMaster[] vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", VehicalMaster[].class);
+	    			System.out.println("vehicleList"+vehicleList.toString());
+	    			
+	    			ArrayList<VehicalMaster> vehicalMasterList = new ArrayList<>(Arrays.asList(vehicleList));
+	    			
+	    			for(int i=0;i<vehicalMasterList.size();i++)
+	    			{
+	    				MachineOrVehicle machineOrVehicle = new MachineOrVehicle();
+	    				machineOrVehicle.setMechId(vehicalMasterList.get(i).getVehId());
+	    				machineOrVehicle.setMechName(vehicalMasterList.get(i).getVehNo());
+	    				machineOrVehicle.setDealerId(vehicalMasterList.get(i).getDealerId());
+	    				machineListOrVehicleList.add(machineOrVehicle);
+	    			}
+	        	}
+	        	else
+	        	{
+	        		MachineMaster[] machineList = restTemplate.getForObject(Constants.url + "getAllMachineMaster", MachineMaster[].class);
+	    			System.out.println("machineList"+machineList.toString());
+	    			
+	    			ArrayList<MachineMaster> machineMasterList = new ArrayList<>(Arrays.asList(machineList));
+	    			for(int i=0;i<machineMasterList.size();i++)
+	    			{
+	    				MachineOrVehicle machineOrVehicle = new MachineOrVehicle();
+	    				machineOrVehicle.setMechId(machineMasterList.get(i).getMachineId());
+	    				machineOrVehicle.setMechName(machineMasterList.get(i).getMachineName());
+	    				machineOrVehicle.setDealerId(machineMasterList.get(i).getDealerId());
+	    				machineListOrVehicleList.add(machineOrVehicle);
+	    			}
+	        	}
+	        	
+	        	 
+			 System.out.println("machineListOrVehicleList " + machineListOrVehicleList); 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return machineListOrVehicleList; 
+	}
+	
+	@RequestMapping(value = "/getDealerIdBymechId", method = RequestMethod.GET)
+	@ResponseBody
+	public int getDealerIdBymechId(HttpServletRequest request, HttpServletResponse response) { 
+		
+		int dealerId=0;
+	        try
+			{ 
+	        	
+	        	int mechId = Integer.parseInt(request.getParameter("mechId")); 
+	        	System.out.println("mechId "+mechId);
+	        	for(int i=0;i<machineListOrVehicleList.size();i++)
+	        	{
+	        		if(mechId==machineListOrVehicleList.get(i).getMechId())
+	        			dealerId=machineListOrVehicleList.get(i).getDealerId();
+	        	}
+	        	
+	         
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return dealerId; 
+	}
+	
+	@RequestMapping(value = "/submitAmc", method = RequestMethod.POST)
+	public String  submitAmc(HttpServletRequest request, HttpServletResponse response) {
+
+	 
+		try
+		{
+			 
+			int typeId =Integer.parseInt(request.getParameter("typeId"));
+			int dealerId =Integer.parseInt(request.getParameter("dealerId"));
+			String mechName = request.getParameter("mechName"); 
+			int mechId =Integer.parseInt(request.getParameter("mechId")); 
+			String dealerName = request.getParameter("dealerName"); 
+			int amcAlertFrq =Integer.parseInt(request.getParameter("amcAlertFrq"));
+			String fromDate = request.getParameter("fromDate"); 
+			String toDate = request.getParameter("toDate");
+			String alertDate = request.getParameter("alertDate"); 
+			String billNo = request.getParameter("billNo");
+			float taxableAmt = Float.parseFloat(request.getParameter("taxableAmt"));  
+			float taxAmt = Float.parseFloat(request.getParameter("taxAmt"));   
+			float total = Float.parseFloat(request.getParameter("total")); 
+
+			LogisAmc insertLogisAmc = new LogisAmc();
+			insertLogisAmc.setTypeId(typeId);
+			insertLogisAmc.setDealerId(dealerId);
+			insertLogisAmc.setDealerName(dealerName);
+			insertLogisAmc.setMechId(mechId);
+			insertLogisAmc.setMechName(mechName);
+			insertLogisAmc.setAmcFromDate(fromDate);
+			insertLogisAmc.setAmcToDate(toDate);
+			insertLogisAmc.setAmcAlertDate(alertDate);
+			insertLogisAmc.setBillNo(billNo);
+			insertLogisAmc.setAmcTaxableAmt(taxableAmt);
+			insertLogisAmc.setAmcTaxAmt(taxAmt);
+			insertLogisAmc.setAmcTotal(total);
+			insertLogisAmc.setAmcAlertFreq(amcAlertFrq);
+			insertLogisAmc = restTemplate.postForObject(Constants.url + "postLogisAmc",insertLogisAmc, LogisAmc.class);
+			System.out.println("insertLogisAmc "+insertLogisAmc.toString());
+		 
+			 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return "redirect:/insertAmc";
+
+	}
+	
+	@RequestMapping(value = "/showAmcList", method = RequestMethod.GET)
+	public ModelAndView showAmcList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/showAmcList");  
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/serchAmcList", method = RequestMethod.GET)
+	@ResponseBody
+	public List<LogisAmc> serchAmcList(HttpServletRequest request, HttpServletResponse response) { 
+		
+		List<LogisAmc> logisAmcList = new ArrayList<LogisAmc>();
+	        try
+			{ 
+	        	int typeId = Integer.parseInt(request.getParameter("typeId"));
+	        	int mechId = Integer.parseInt(request.getParameter("mechId")); 
+	        	System.out.println("mechId "+mechId);
+	        	System.out.println("typeId "+typeId);
+	        	
+	        	 if(mechId==0)
+	        	 {
+	        		 System.out.println("in if mechid 0");
+	        		 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+	        		 map.add("typeId", typeId);
+	        		 logisAmcList = restTemplate.postForObject(Constants.url + "getLogisAmcListByTypeId",map, List.class);
+	        	 }
+	        	 else
+	        	 {
+	        		 System.out.println("in else mechid"+mechId);
+	        		 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+	        		 map.add("typeId", typeId);
+	        		 map.add("mechId", mechId);
+	        		 logisAmcList = restTemplate.postForObject(Constants.url + "getLogisAmcListByTypeIdAndMechId",map, List.class);
+	        	 }
+	        	
+	         System.out.println("logisAmcList " + logisAmcList);
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return logisAmcList; 
+	}
+	
 }
