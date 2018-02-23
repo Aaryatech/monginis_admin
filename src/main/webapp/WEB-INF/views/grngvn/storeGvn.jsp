@@ -48,7 +48,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Search Store GVN
+								<i class="fa fa-bars"></i> Sell GVN <!-- Store GVN  -->
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -69,7 +69,7 @@
 
 
 
-
+<%-- 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">From
 										Date</label>
@@ -93,14 +93,14 @@
 </div>
 
 								</div>
-
+ --%>
 
 							</form>
 
 
 							<form
 								action="${pageContext.request.contextPath}/insertStoreGvnByCheckBoxes"
-								class="form-horizontal" method="get" id="validation-form">
+								class="form-horizontal" method="post" id="validation-form">
 
 
 								<div class="box">
@@ -125,7 +125,7 @@
 													<tr>
 														<th width="30"></th>
 														<th width="50" style="width: 18px" align="left">Sr No</th>
-														<th width="100" align="left">Bill No</th>
+														<th width="100" align="left">Invoice No</th>
 														<th width="120" align="left">Franchise Name</th>
 														<th width="120" align="left">Item Name</th>
 														<th width="100" align="left">GVN Qty</th>
@@ -172,7 +172,7 @@
 															</c:choose>
 															<td><c:out value="${count.index+1}" /></td>
 
-															<td align="left"><c:out value="${gvnList.billNo}" /></td>
+															<td align="left"><c:out value="${gvnList.invoiceNo}" /></td>
 
 															<td align="left"><c:out value="${gvnList.frName}" /></td>
 

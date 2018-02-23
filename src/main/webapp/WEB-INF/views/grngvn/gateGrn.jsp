@@ -49,7 +49,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Search GRN for Gate
+								<i class="fa fa-bars"></i>GRN for Gate
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -64,37 +64,7 @@
 
 
 						<div class="box-content">
-							<form
-								action="${pageContext.request.contextPath}/showGateGrnDetails"
-								class="form-horizontal" method="get" id="validation-form">
-
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">From
-										Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="from_date"
-											size="16" type="text" name="from_date" value="${fromDate}"
-											required onblur="getDate()" />
-									</div>
-								<!-- </div>
-
-
-								<div class="form-group"> -->
-									<label class="col-sm-3 col-lg-2 control-label">To Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="to_date" size="16"
-											type="text" value="${toDate}" name="to_date" required
-											onblur="getDate()" />
-									</div>
 							
-								<div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-									<input type="submit" value="Submit" class="btn btn-primary">
-
-								</div>
-									</div>
-
-							</form>
-
 							<form
 								action="${pageContext.request.contextPath}/insertGateGrnByCheckBoxes"
 								class="form-horizontal" method="post" id="validation-form">
@@ -122,7 +92,7 @@
 													<tr>
 														<th></th>
 														<th>Sr No</th>
-														<th align="center">Bill No</th>
+														<th align="center">Invoice No</th>
 														<th>Franchise Name</th>
 														<th>Item Name</th>
 														<th>TYPE of GRN</th>
@@ -130,8 +100,6 @@
 														<th>Status</th>
 														<th width="160px">Action</th>
 													</tr>
-
-
 
 												</thead>
 												<tbody>
@@ -170,7 +138,7 @@
 															</c:choose>
 															<td align="center"><c:out value="${count.index+1}" /></td>
 
-															<td align="center"><c:out value="${grnList.billNo}" /></td>
+															<td align="center"><c:out value="${grnList.invoiceNo}" /></td>
 
 															<td align="left"><c:out value="${grnList.frName}" /></td>
 
@@ -180,28 +148,17 @@
 															<c:choose>
 																<c:when test="${grnList.grnType==0}">
 																	<td align="left"><c:out value="GRN 1"></c:out></td>
-
 																</c:when>
-
-
 																<c:when test="${grnList.grnType==1}">
 																	<td align="left"><c:out value="GRN 2"></c:out></td>
-
 																</c:when>
-
-
 																<c:when test="${grnList.grnType==2}">
 																	<td align="left"><c:out value="GRN 3"></c:out></td>
-
 																</c:when>
-																
 																<c:when test="${grnList.grnType==4}">
 																	<td align="left"><c:out value="GRN 4"></c:out></td>
-
 																</c:when>
-
 															</c:choose>
-
 
 															<td align="center"><c:out
 																	value="${grnList.grnGvnQty}" /> <input type="hidden"
@@ -340,7 +297,7 @@
 																						
 																						</c:forEach>
 																						</select>
-																						</br> <input class="btn btn-primary" value="Submit"
+																						</br> <input class="btn btn-primary" value="Submit" disabled="disabled"
 																								onclick="insertGrnDisAgree(${grnList.grnGvnId})" />
 																						
 																						
@@ -463,7 +420,7 @@
 
 																			<li>
 																				<div class="col1">
-																					<a class="dropdown-toggle" href="#" 
+																					<a class="dropdown-toggle" href="#" id="disableMe"
 																						data-toggle="dropdown"><i class="fa fa-times"></i></a>
 																					<div class="dropdown-menu">
 																						<div class="form">
@@ -478,7 +435,7 @@
 																						
 																						</c:forEach>
 																						</select>
-																						</br> <input class="btn btn-primary" value="Submit"
+																						</br> <input class="btn btn-primary" value="Submit" disabled
 																								onclick="insertGrnDisAgree(${grnList.grnGvnId})" />
 																						
 																						
@@ -545,7 +502,7 @@
 
 										<div
 											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-5">
-											<input type="submit" value="Submit" class="btn btn-primary">
+											<input type="button" value="Submit ME" onclick="callSubmit()"  class="btn btn-primary">
 
 										</div>
 										<!-- </form> -->
@@ -665,6 +622,22 @@
 	<!-- insertGrnDisAgree -->
 
 
+
+
+
+
+
+
+<script type="text/javascript">
+
+function callSubmit(){
+			alert("HIII");
+			
+		    var form = document.getElementById("validation-form");
+		    form.action ="${pageContext.request.contextPath}/insertGateGrnByCheckBoxes";
+		    form.submit();
+		}
+</script>
 	<script type="text/javascript">
 
 

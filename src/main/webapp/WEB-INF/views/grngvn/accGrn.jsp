@@ -38,7 +38,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>GRN
+						<i class="fa fa-file-o"></i>Acc GRN
 					</h1>
 
 				</div>
@@ -53,7 +53,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Search GRN for Account
+								<i class="fa fa-bars"></i> GRN for Account
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -68,7 +68,7 @@
 
 
 						<div class="box-content">
-							<form
+							<%-- <form
 								action="${pageContext.request.contextPath}/showAccountGrnDetails"
 								class="form-horizontal" method="get" id="validation-form">
 
@@ -102,10 +102,10 @@
 								</div>
 
 							</form>
-
+ --%>
 							<form
 								action="${pageContext.request.contextPath}/insertAccGrnByCheckBoxes"
-								class="form-horizontal" method="get" id="validation-form">
+								class="form-horizontal" method="post" id="validation-form">
 
 
 
@@ -132,10 +132,10 @@
 													<tr>
 														<th ></th>
 														<th>Sr No</th>
-														<th>Bill No</th>
+														<th>Invoice No</th>
 														<th>Franchise Name</th>
 														<th>Item Name</th>
-														<th>TYPE of GRN</th>
+														<th>GRN Type</th>
 														<th>Quantity</th>
 														<th>Status</th>
 														<th>Is Edit</th>
@@ -208,14 +208,14 @@
 
 																	<td><input type="checkbox" name="select_to_agree"
 																		disabled="disabled" id="${grnList.grnGvnId}"
-																		value="${grnList.grnGvnId}"></></td>
+																		value="${grnList.grnGvnId}"/></td>
 
 
 																</c:otherwise>
 															</c:choose>
 															<td><c:out value="${count.index+1}" /></td>
 
-															<td align="left"><c:out value="${grnList.billNo}" /></td>
+															<td align="left"><c:out value="${grnList.invoiceNo}" /></td>
 
 															<td align="left"><c:out value="${grnList.frName}" /></td>
 
@@ -323,9 +323,9 @@
 																									<option value="${remarkList.remark}">${remarkList.remark}</option>
 																								</c:forEach>
 																							</select> 
-																							</br>
+																						
 																							<input class="btn btn-primary"
-																								value="Submit"
+																								value="Submit" class="form-control"
 																								onclick="insertGrnDisAgree(${grnList.grnGvnId})" />
 																						</div>
 																					</div>
@@ -441,7 +441,7 @@
 																									var="remarkList">
 																									<option value="${remarkList.remark}">${remarkList.remark}</option>
 																								</c:forEach>
-																							</select> </br><input class="btn btn-primary"
+																							</select><input class="btn btn-primary"
 																								value="Submit"
 																								onclick="insertGrnDisAgree(${grnList.grnGvnId})" />
 																						</div>
@@ -497,7 +497,7 @@
 																									var="remarkList">
 																									<option value="${remarkList.remark}">${remarkList.remark}</option>
 																								</c:forEach>
-																							</select> </br><input class="btn btn-primary"
+																							</select><input class="btn btn-primary"
 																								value="Submit" disabled="disabled"
 																								onclick="insertGrnDisAgree(${grnList.grnGvnId})" />
 																						</div>
@@ -554,7 +554,7 @@
 																									var="remarkList">
 																									<option value="${remarkList.remark}">${remarkList.remark}</option>
 																								</c:forEach>
-																							</select> </br ><input class="btn btn-primary"
+																							</select><input class="btn btn-primary"
 																								value="Submit" disabled="disabled"
 																								onclick="insertGrnDisAgree(${grnList.grnGvnId})" />
 																						</div>
@@ -604,7 +604,7 @@
 
 										<div
 											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-											<input type="submit" value="Submit" class="btn btn-primary">
+											<input type="button" value="Submit" onclick="callSubmit()" class="btn btn-primary">
 
 										</div>
 										<!-- </form> -->
@@ -724,23 +724,30 @@
 
 	<!-- insertGrnDisAgree -->
 
+<script type="text/javascript">
 
+function callSubmit(){
+			alert("HIII");
+			
+		    var form = document.getElementById("validation-form");
+		    form.action ="${pageContext.request.contextPath}/insertAccGrnByCheckBoxes";
+		    form.submit();
+		}
+</script>
 	<script type="text/javascript">
 
 
+
 function insertGrnDisAgree(grnGvnId){
-//alert("second function called ");
+
 var grnId=grnGvnId;
 var approve_acc_login=$("#approve_acc_login"+grnGvnId).val();
 var acc_remark=$("#acc_remark"+grnGvnId).val();
 
 if($("#acc_remark"+grnGvnId).val() == ''){
 	alert("Please Enter Grn Remark!");
-	
 }
 else{
-	
-	
 	$.getJSON('${insertAccGrnProcessDisAgree}',
 			{
 			
@@ -748,20 +755,11 @@ else{
 			approveAccLogin : approve_acc_login,
 			accRemark : acc_remark,				
 				ajax : 'true',
-			
 
 			}
 );
-
 	
-
-
-
-
 callRefreshDisAgree();
-/* callSecondRefresh();
-callThirdRefresh();
-callfourthRefresh(); */
 }
 }
 
@@ -887,10 +885,8 @@ for (i = 0; i < acc.length; i++) {
 
 function getDate(){
 	
-	
 	var fromDate=$("#from_date").val();
 	var toDate=$("#to_date").val();
-	
 	
 	
 	$.getJSON('${getDateForGrnAcc}',

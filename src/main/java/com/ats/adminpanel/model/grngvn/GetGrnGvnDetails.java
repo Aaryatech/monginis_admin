@@ -6,9 +6,9 @@ public class GetGrnGvnDetails {
 	
 	
 int grnGvnId;
-
+int grnGvnHeaderId;
 	
-	Date grnGvnDate;
+	String grnGvnDate;
 	
 	
 	private int billNo;
@@ -198,13 +198,13 @@ int grnGvnId;
 		this.grnGvnId = grnGvnId;
 	}
 
-	
+	 
 
-	public Date getGrnGvnDate() {
+	public String getGrnGvnDate() {
 		return grnGvnDate;
 	}
 
-	public void setGrnGvnDate(Date grnGvnDate) {
+	public void setGrnGvnDate(String grnGvnDate) {
 		this.grnGvnDate = grnGvnDate;
 	}
 
@@ -504,26 +504,35 @@ int grnGvnId;
 		this.finalAmt = finalAmt;
 	}
 
-	@Override
-	public String toString() {
-		return "GetGrnGvnDetails [grnGvnId=" + grnGvnId + ", grnGvnDate=" + grnGvnDate + ", billNo=" + billNo
-				+ ", frId=" + frId + ", itemId=" + itemId + ", itemRate=" + itemRate + ", itemMrp=" + itemMrp
-				+ ", grnGvnQty=" + grnGvnQty + ", grnGvnAmt=" + grnGvnAmt + ", grnType=" + grnType + ", isGrn=" + isGrn
-				+ ", isGrnEdit=" + isGrnEdit + ", grnGvnEntryDateTime=" + grnGvnEntryDateTime + ", frGrnGvnRemark="
-				+ frGrnGvnRemark + ", gvnPhotoUpload1=" + gvnPhotoUpload1 + ", gvnPhotoUpload2=" + gvnPhotoUpload2
-				+ ", grnGvnStatus=" + grnGvnStatus + ", approvedLoginGate=" + approvedLoginGate
-				+ ", approveimedDateTimeGate=" + approveimedDateTimeGate + ", approvedRemarkGate=" + approvedRemarkGate
-				+ ", approvedLoginStore=" + approvedLoginStore + ", approvedDateTimeStore=" + approvedDateTimeStore
-				+ ", approvedRemarkStore=" + approvedRemarkStore + ", approvedLoginAcc=" + approvedLoginAcc
-				+ ", grnApprovedDateTimeAcc=" + grnApprovedDateTimeAcc + ", approvedRemarkAcc=" + approvedRemarkAcc
-				+ ", delStatus=" + delStatus + ", grnGvnQtyAuto=" + grnGvnQtyAuto + ", itemName=" + itemName
-				+ ", frName=" + frName + ", isTallySync=" + isTallySync + ", baseRate=" + baseRate + ", sgstPer="
-				+ sgstPer + ", cgstPer=" + cgstPer + ", igstPer=" + igstPer + ", taxableAmt=" + taxableAmt
-				+ ", totalTax=" + totalTax + ", roundUpAmt=" + roundUpAmt + ", finalAmt=" + finalAmt + ", isCreditNote="
-				+ isCreditNote + ", menuId=" + menuId + ", catId=" + catId + ", invoiceNo=" + invoiceNo
-				+ ", refInvoiceDate=" + refInvoiceDate + "]";
+	public int getGrnGvnHeaderId() {
+		return grnGvnHeaderId;
 	}
 
+	public void setGrnGvnHeaderId(int grnGvnHeaderId) {
+		this.grnGvnHeaderId = grnGvnHeaderId;
+	}
+
+	@Override
+	public String toString() {
+		return "GetGrnGvnDetails [grnGvnId=" + grnGvnId + ", grnGvnHeaderId=" + grnGvnHeaderId + ", grnGvnDate="
+				+ grnGvnDate + ", billNo=" + billNo + ", frId=" + frId + ", itemId=" + itemId + ", itemRate=" + itemRate
+				+ ", itemMrp=" + itemMrp + ", grnGvnQty=" + grnGvnQty + ", grnGvnAmt=" + grnGvnAmt + ", grnType="
+				+ grnType + ", isGrn=" + isGrn + ", isGrnEdit=" + isGrnEdit + ", grnGvnEntryDateTime="
+				+ grnGvnEntryDateTime + ", frGrnGvnRemark=" + frGrnGvnRemark + ", gvnPhotoUpload1=" + gvnPhotoUpload1
+				+ ", gvnPhotoUpload2=" + gvnPhotoUpload2 + ", grnGvnStatus=" + grnGvnStatus + ", approvedLoginGate="
+				+ approvedLoginGate + ", approveimedDateTimeGate=" + approveimedDateTimeGate + ", approvedRemarkGate="
+				+ approvedRemarkGate + ", approvedLoginStore=" + approvedLoginStore + ", approvedDateTimeStore="
+				+ approvedDateTimeStore + ", approvedRemarkStore=" + approvedRemarkStore + ", approvedLoginAcc="
+				+ approvedLoginAcc + ", grnApprovedDateTimeAcc=" + grnApprovedDateTimeAcc + ", approvedRemarkAcc="
+				+ approvedRemarkAcc + ", delStatus=" + delStatus + ", grnGvnQtyAuto=" + grnGvnQtyAuto + ", itemName="
+				+ itemName + ", frName=" + frName + ", isTallySync=" + isTallySync + ", baseRate=" + baseRate
+				+ ", sgstPer=" + sgstPer + ", cgstPer=" + cgstPer + ", igstPer=" + igstPer + ", taxableAmt="
+				+ taxableAmt + ", totalTax=" + totalTax + ", roundUpAmt=" + roundUpAmt + ", finalAmt=" + finalAmt
+				+ ", isCreditNote=" + isCreditNote + ", menuId=" + menuId + ", catId=" + catId + ", invoiceNo="
+				+ invoiceNo + ", refInvoiceDate=" + refInvoiceDate + "]";
+	}
+
+	
 	
 
 }

@@ -105,8 +105,7 @@
 
 							<form
 								action="${pageContext.request.contextPath}/insertGateGvnByCheckBoxes"
-								class="form-horizontal" method="get" id="validation-form">
-
+								class="form-horizontal" method="post" id="validation-form">
 
 								<div class="box">
 									<div class="box-title">
@@ -143,7 +142,7 @@
 
 														<th></th>
 														<th>Sr No</th>
-														<th>Bill No</th>
+														<th>Invoice No</th>
 														<th>Franchise Name</th>
 														<th>Item Name</th>
 														<th>Gvn Qty</th>
@@ -191,7 +190,7 @@
 															</c:choose>
 															<td><c:out value="${count.index+1}" /></td>
 
-															<td align="left"><c:out value="${gvnList.billNo}" /></td>
+															<td align="left"><c:out value="${gvnList.invoiceNo}" /></td>
 
 															<td align="left"><c:out value="${gvnList.frName}" /></td>
 

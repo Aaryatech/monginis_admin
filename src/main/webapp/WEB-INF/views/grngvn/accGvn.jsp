@@ -30,7 +30,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>GVN
+						<i class="fa fa-file-o"></i>GVN for Acc
 					</h1>
 
 				</div>
@@ -45,7 +45,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Search Account GVN
+								<i class="fa fa-bars"></i> Account GVN List
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -60,7 +60,7 @@
 
 
 						<div class="box-content">
-							<form
+							<%-- <form
 								action="${pageContext.request.contextPath}/showAccountGvnDetails"
 								class="form-horizontal" method="get" id="validation-form">
 
@@ -93,7 +93,7 @@
 								</div>
 
 
-							</form>
+							</form> --%>
 
 
 
