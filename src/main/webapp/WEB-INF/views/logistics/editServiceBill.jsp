@@ -7,7 +7,9 @@
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 	<body>
 	
-	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include> 
+	<c:url var="getTypeList" value="/getTypeList"></c:url>
+	<c:url var="machineListOrVehicleList" value="/machineListOrVehicleList"></c:url>
 <c:url var="groupByTypeId" value="/groupByTypeId"></c:url>
 	<c:url var="addSparePartInEditInvoice" value="/addSparePartInEditInvoice"></c:url>
 	<c:url var="sparePartByGroupId" value="/sparePartByGroupId"></c:url>
@@ -68,6 +70,29 @@
 							<form id="submitMaterialStore" action="${pageContext.request.contextPath}/submitEditInvoice" method="post"
 							enctype="multipart/form-data">
 							<div class="box-content">
+							
+								<div class="col-md-2">Select Vehicle Or Machine*</div>
+									<div class="col-md-3">
+									<c:choose>
+										<c:when test="${editServicing.servType2==1}">
+											<c:set var="typeName" value="Vehicle"></c:set>
+											<c:set var="typeIdValue" value="1"></c:set>
+										</c:when>
+										<c:when test="${editServicing.servType2==2}">
+											<c:set var="typeName" value="Machine"></c:set>
+											<c:set var="typeIdValue" value="2"></c:set>
+										</c:when> 
+									</c:choose>
+									<select name="type" id="type" class="form-control chosen" tabindex="6" onchange="typeList();" required>
+											 <option value="${typeIdValue}">${typeName}</option>
+											  <option value="1">Vehicle</option>
+											   <option value="2">Machine</option>
+										</select>
+									
+									</div> 
+									
+							</div><br>
+							<div class="box-content">
 							<input type="hidden" id="servId" name="servId" value="${editServicing.servId}" placeholder="Service Advice Remainder" class="form-control"  required>
 									
 								<div class="col-md-2">Bill No*</div>
@@ -86,30 +111,19 @@
 							
 								<div class="col-md-2">Type*</div>
 									<div class="col-md-3">
-									<c:choose>
-										<c:when test="${editServicing.typeId==1}">
-											<c:set var="typeName" value="Servicing"></c:set>
-											<c:set var="typeIdValue" value="1"></c:set>
-										</c:when>
-										<c:when test="${editServicing.typeId==2}">
-											<c:set var="typeName" value="Wheel"></c:set>
-											<c:set var="typeIdValue" value="2"></c:set>
-										</c:when>
-										<c:when test="${editServicing.typeId==3}">
-											<c:set var="typeName" value="battery"></c:set>
-											<c:set var="typeIdValue" value="3"></c:set>
-										</c:when>
-										<c:when test="${editServicing.typeId==4}">
-											<c:set var="typeName" value="Ac"></c:set>
-											<c:set var="typeIdValue" value="4"></c:set>
-										</c:when>
-									</c:choose>
+									
 									<select name="typeId" id="typeId" class="form-control chosen" tabindex="6" required>
-											<option value="${typeIdValue}" selected>${typeName}</option>
-											<option value="1">Servicing</option>
-											 <option value="2">Wheel</option>
-											 <option value="3">Battery</option>
-											 <option value="4">AC</option>
+											<c:forEach items="${typeList}" var="typeList"> 
+												<c:choose> 
+														<c:when test="${typeList.typeId==editServicing.typeId}">
+															<option value="${typeList.typeId}" selected><c:out value="${typeList.typeName}"></c:out> </option>
+												 		</c:when> 
+												</c:choose>
+									 		</c:forEach>
+									 
+									<c:forEach items="${typeList}" var="typeList"> 
+										<option value="${typeList.typeId}"><c:out value="${typeList.typeName}"></c:out> </option>
+									 </c:forEach>
 											 
 										</select>
 									
@@ -170,21 +184,39 @@
 							
 							<div class="box-content">
 							
-									<div class="col-md-2">Vehicle*</div>
+									<div class="col-md-2">Vehicle Or Machine*</div>
 									<div class="col-md-3"> 
 									<select name="vehId" id="vehId" class="form-control chosen" tabindex="6" onchange="updateNextServicingDueKm()" required>
-									
-										<c:forEach items="${vehicleList}" var="vehicleList"> 
-											<c:choose> 
-													<c:when test="${vehicleList.vehId==editServicing.vehId}">
-														<option value="${vehicleList.vehId}" selected><c:out value="${vehicleList.vehNo}"></c:out> </option>
-											 		</c:when> 
-											</c:choose>
-									 </c:forEach>
+									<c:choose>
+									<c:when test="${editServicing.servType2==1}">
+												<c:forEach items="${vehicleList}" var="vehicleList"> 
+														<c:choose> 
+																<c:when test="${vehicleList.vehId==editServicing.vehId}">
+																	<option value="${vehicleList.vehId}" selected><c:out value="${vehicleList.vehNo}"></c:out> </option>
+														 		</c:when> 
+														</c:choose>
+												 </c:forEach>
 									 
-									<c:forEach items="${vehicleList}" var="vehicleList"> 
-										<option value="${vehicleList.vehId}"><c:out value="${vehicleList.vehNo}"></c:out> </option>
-											 </c:forEach>
+													<c:forEach items="${vehicleList}" var="vehicleList"> 
+														<option value="${vehicleList.vehId}"><c:out value="${vehicleList.vehNo}"></c:out> </option>
+													 </c:forEach>
+									
+									</c:when> 
+									<c:otherwise>
+											<c:forEach items="${vehicleList}" var="vehicleList"> 
+														<c:choose> 
+																<c:when test="${vehicleList.machineId==editServicing.vehId}">
+																	<option value="${vehicleList.machineId}" selected><c:out value="${vehicleList.machineName}"></c:out> </option>
+														 		</c:when> 
+														</c:choose>
+												 </c:forEach>
+									 
+													<c:forEach items="${vehicleList}" var="vehicleList"> 
+														<option value="${vehicleList.machineId}"><c:out value="${vehicleList.machineName}"></c:out> </option>
+													 </c:forEach> 
+									</c:otherwise>
+									</c:choose>
+													
 									</select>
 								</div>
 									
@@ -426,25 +458,11 @@
 									</div>
 								 
 									
-									<div class="col-md-2">Discount On Bill*</div>
-										<div class="col-md-3"><input type="text" id="discOnBill" value="${editServicing.discOnBill}" onkeyup="calculateHeader()" name="discOnBill" placeholder="Discount On Bill" class="form-control"  required>
-									</div>
-							
-							</div><br>
-							
-							<div class="box-content">
-							
-									<div class="col-md-2">Extra Charges On Bill*</div>
-										<div class="col-md-3">
-										<input type="text" id="extraOnBill" name="extraOnBill" value="${editServicing.extraOnBill}" onkeyup="calculateHeader()" placeholder="Extra Charges On Bill" class="form-control"  required>
-									</div>
-								 
-									
 									<div class="col-md-2">Tax Amt*</div>
 										<div class="col-md-3"><input type="text" id="taxAmt" value="${editServicing.taxAmt}" name="taxAmt" placeholder="Tax Amt" class="form-control"  required>
 									</div>
 							
-							</div><br>
+							</div><br> 
 							
 							<div class="box-content">
 							
@@ -462,8 +480,9 @@
 								 
 							
 							</div><br>
-							
-							<div class="box-content">
+							<c:choose>
+								<c:when test="${editServicing.servType2==1}">
+									<div class="box-content">
 							
 									<div class="col-md-2">Servicing Done Km*</div>
 										<div class="col-md-3">
@@ -476,6 +495,9 @@
 									</div>
 							
 							</div><br>
+								</c:when>
+							</c:choose>
+							
 							<div class="box-content">
 							 
 									<div class="col-md-2" >Select Pdf</div>
@@ -1117,6 +1139,70 @@ return isValid;
 }
 
 $(document).ready(function() { 
+	$('#type').change(
+			function() {
+				//alert("typeId"+$(this).val());
+				var type=$(this).val();
+			    
+				$.getJSON('${getTypeList}', {
+					
+					type : $(this).val(),
+					ajax : 'true'
+				},
+						function(data) {
+					 
+					var html = '<option value="">Select Type</option>';
+					
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].typeId + '">'
+								+ data[i].typeName + '</option>';
+					}
+					html += '</option>';
+					$('#typeId').html(html);
+					$("#typeId").trigger("chosen:updated"); 
+					 		
+						});
+			 
+				 
+		})
+		 		 
+});
+
+$(document).ready(function() { 
+	$('#type').change(
+			function() {
+				//alert("typeId"+$(this).val());
+				var typeId=$(this).val();
+			    
+				$.getJSON('${machineListOrVehicleList}', {
+					
+					typeId : $(this).val(),
+					ajax : 'true'
+				},
+						function(data) {
+					 
+					var html = '<option value="">Select Vehicle Or Machine</option>';
+					
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].mechId + '">'
+								+ data[i].mechName + '</option>';
+					}
+					html += '</option>';
+					$('#vehId').html(html);
+					$("#vehId").trigger("chosen:updated"); 
+					
+					 
+					
+						});
+			 
+				 
+		})
+		 		 
+});
+
+$(document).ready(function() { 
 	$('#typeId').change(
 			function() {
 				//alert("typeId"+$(this).val());
@@ -1278,6 +1364,9 @@ function check()
 	}
 	 
 }
+
+  
+			 
 </script>
 	
 								

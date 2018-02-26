@@ -69,10 +69,9 @@
 							 
                                     <select name="typeId" id="typeId" class="form-control chosen" tabindex="6" required>
 											<option value="">Select Type</option>
-											 <option value="1">Servicing</option>
-											 <option value="2">Wheel</option>
-											 <option value="3">Battery</option>
-											 <option value="4">AC</option>
+											<c:forEach items="${mechTypeList}" var="mechTypeList">
+											<option value="${mechTypeList.typeId}">${mechTypeList.typeName}</option>
+													</c:forEach>
 										</select>
 								</div>
 					
@@ -138,22 +137,15 @@
 														<td align="left" ><c:out value="${sprGroupList.groupName}" /></td> 
 																
 															 
-																<c:choose>
-																	<c:when test="${sprGroupList.typeId==1}">
-																	<c:set var="type" value="Servicing"></c:set>
-																	</c:when>
-																	<c:when test="${sprGroupList.typeId==2}">
-																	<c:set var="type" value="Wheel"></c:set>
-																	</c:when>
-																	<c:when test="${sprGroupList.typeId==3}">
-																	<c:set var="type" value="Battery"></c:set>
-																	</c:when>
-																	<c:when test="${sprGroupList.typeId==4}">
-																	<c:set var="type" value="AC"></c:set>
-																	</c:when>
-																</c:choose> 
+																<c:forEach items="${mechTypeList}" var="mechTypeList">
+																	<c:choose>
+																		<c:when test="${mechTypeList.typeId==sprGroupList.typeId}">
+																		<td align="left" ><c:out value="${mechTypeList.typeName}" /></td>
+																		</c:when>
+																	</c:choose>
+																</c:forEach>
 														 
-														 <td align="left" ><c:out value="${type}" /></td> 
+														  
 														
 													<td> <span class="glyphicon glyphicon-edit"  onclick="edit(${sprGroupList.groupId})"> </span> 
 						<a href="${pageContext.request.contextPath}/deleteSpareGroup/${sprGroupList.groupId}" onClick="return confirm('Are you sure want to delete this record');"   >

@@ -56,39 +56,47 @@
 			<form id="submitPurchaseOrder"
 				action="${pageContext.request.contextPath}/requestPOFinalByDirectore"
 				method="post" enctype="multipart/form-data" onsubmit="return(validate());">
-			<div class="box-content">
-				<div class="col-md-2">Bill No.  </div>
-				<div class="col-md-4"><input type="text" id="po_no" name="po_no" value="${viewServicingDetail.billNo}" class="form-control" readonly>
+				<div class="box-content">
+				<div class="col-md-2">Vehicle Or Machine </div>
+										<c:choose>
+													<c:when test="${viewServicingDetail.servType2==1}">
+													<c:set var = "type" value='Vehicle'/>
+													</c:when>
+													
+													<c:when test="${viewServicingDetail.servType2==2}">
+													  <c:set var = "type" value="Machine"/>
+													
+													</c:when>  
+												</c:choose>
+				<div class="col-md-4"><input type="text" id="po_no" name="po_no" value="${type}" class="form-control" readonly>
 				</div>
-				<div class="col-md-2">Bill Date</div> 
-				<div class="col-md-3">
-				<input type="text" id="po_date" name="po_date" value="${viewServicingDetail.billDate}" class="form-control" readonly> 
+				 
+				</div><br/>
 				
-				</div>
+			<div class="box-content">
+												
+					<div class="col-md-2">Bill No.  </div>
+						<div class="col-md-4"><input type="text" id="po_no" name="po_no" value="${viewServicingDetail.billNo}" class="form-control" readonly>
+					</div>
+					<div class="col-md-2">Bill Date</div> 
+						<div class="col-md-3">
+							<input type="text" id="po_date" name="po_date" value="${viewServicingDetail.billDate}" class="form-control" readonly> 
+					
+					</div>
 				</div><br/>
 				
 				<div class="box-content">
-											<c:choose>
-													<c:when test="${viewServicingDetail.typeId==1}">
-													<c:set var = "type" value='Servicing'/>
-													</c:when>
-													
-													<c:when test="${viewServicingDetail.typeId==2}">
-													  <c:set var = "type" value="Wheel"/>
-													
-													</c:when> 
-													<c:when test="${viewServicingDetail.typeId==3}">
-													<c:set var = "type" value='Battary'/>
-													</c:when>
-													
-													<c:when test="${viewServicingDetail.typeId==4}">
-													  <c:set var = "type" value="AC"/>
-													
-													</c:when> 
-												</c:choose>
+											
 									<div class="col-md-2" >Type</div>
 									<div class="col-md-4"> 
-										<input type="text" id="typeId" name="typeId" value="${type}" class="form-control" readonly> 
+									<c:forEach items="${mechTypeList}" var="mechTypeList" varStatus="count">
+											 	<c:choose>
+											 		<c:when test="${mechTypeList.typeId==viewServicingDetail.typeId}">
+											 			<input type="text" name="typeId" id="typeId" value="${mechTypeList.typeName}" class="form-control" readonly>
+													 </c:when>
+												 </c:choose>
+											</c:forEach> 
+										 
 				 	
 									</div>
 									<div class="col-md-2">Service Type </div>
@@ -115,7 +123,7 @@
 				</div>
 				<div class="col-md-2">Dealer</div>
 				<div class="col-md-3">
-				<c:forEach items="${dealerList}" var="dealerList" varStatus="count">
+							<c:forEach items="${dealerList}" var="dealerList" varStatus="count">
 											 	<c:choose>
 											 		<c:when test="${dealerList.dealerId==viewServicingDetail.dealerId}">
 											 			<input type="text" name="dealerId" id="dealerId" value="${dealerList.dealerName}" class="form-control" readonly>
@@ -139,22 +147,7 @@
 								</div>
 								 
 							</div> <br/>
-							
-						<div class="box-content">
-								<div class="col-md-2" >Service Done Remainder</div>
-									<div class="col-md-4">
-										  
-										<input type="text" name="servDoneRem" id="servDoneRem" class="form-control" 
-											value="${viewServicingDetail.servDoneRem}" readonly>
-										
-									</div>
-								<div class="col-md-2" >Part Total</div>
-									<div class="col-md-3">
-										 <input type="text" name="sprTot" id="sprTot" value="${viewServicingDetail.sprTot}" class="form-control" readonly>
-									</div>
-									
-						</div>	<br/>	
-						
+							 
 						<div class="box-content">
 								<div class="col-md-2" >Labour Charge</div>
 									<div class="col-md-4">
@@ -178,27 +171,14 @@
 											value="${viewServicingDetail.totalExtra}" readonly>
 										
 									</div>
-								<div class="col-md-2" >Discount On Bill</div>
-									<div class="col-md-3">
-										 <input type="text" name="discOnBill" id="discOnBill" value="${viewServicingDetail.discOnBill}" class="form-control" readonly>
-									</div>
-									
-						</div>	<br/>
-						
-						<div class="box-content">
-								<div class="col-md-2" >Extra Charge On Bill</div>
-									<div class="col-md-4">
-										  
-										<input type="text" name="extraOnBill" id="extraOnBill" class="form-control" 
-											value="${viewServicingDetail.extraOnBill}" readonly>
-										
-									</div>
-								<div class="col-md-2" >Tax Amt</div>
+								 <div class="col-md-2" >Tax Amt</div>
 									<div class="col-md-3">
 										 <input type="text" name="taxAmt" id="taxAmt" value="${viewServicingDetail.taxAmt}" class="form-control" readonly>
 									</div>
 									
 						</div>	<br/>
+						
+					 
 						
 						<div class="box-content">
 								<div class="col-md-2" >Taxable Amt</div>
@@ -213,7 +193,27 @@
 										 <input type="text" name="total" id="total" value="${viewServicingDetail.total}" class="form-control" readonly>
 									</div>
 									
-						</div><br/><br>
+						</div><br/>
+						
+						<c:choose>
+							<c:when test="${viewServicingDetail.servType2==1}">
+								<div class="box-content">
+								<div class="col-md-2" >Service Done Remainder</div>
+									<div class="col-md-4">
+										  
+										<input type="text" name="servDoneRem" id="servDoneRem" class="form-control" 
+											value="${viewServicingDetail.servDoneRem}" readonly>
+										
+									</div>
+								<div class="col-md-2" >Part Total</div>
+									<div class="col-md-3">
+										 <input type="text" name="sprTot" id="sprTot" value="${viewServicingDetail.sprTot}" class="form-control" readonly>
+									</div>
+									
+						</div>	<br/>	
+							</c:when>
+						</c:choose>
+						<br>
 							
 							 
 			

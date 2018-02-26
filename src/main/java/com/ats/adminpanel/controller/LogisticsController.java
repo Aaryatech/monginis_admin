@@ -40,6 +40,7 @@ import com.ats.adminpanel.model.logistics.LogisAmc;
 import com.ats.adminpanel.model.logistics.MachineMaster;
 import com.ats.adminpanel.model.logistics.MachineOrVehicle;
 import com.ats.adminpanel.model.logistics.Make;
+import com.ats.adminpanel.model.logistics.MechType;
 import com.ats.adminpanel.model.logistics.ServDetail;
 import com.ats.adminpanel.model.logistics.ServDetailAddPart;
 import com.ats.adminpanel.model.logistics.ServHeader;
@@ -958,8 +959,11 @@ public class LogisticsController {
 			
 			List<SprGroup> sprGroupList = restTemplate.getForObject(Constants.url + "getAllSprGroupList", List.class);
 			System.out.println("sprGroupList"+sprGroupList.toString());
+			List<MechType> mechTypeList = restTemplate.getForObject(Constants.url + "getTypeList", List.class);
+			System.out.println("mechTypeList"+mechTypeList.toString());
 			 
 			model.addObject("sprGroupList",sprGroupList);
+			model.addObject("mechTypeList",mechTypeList);
 		}catch(Exception e)
 		{
 			e.printStackTrace();
@@ -1060,9 +1064,12 @@ public class LogisticsController {
 			System.out.println("makeList"+makeList.toString());
 			List<SprGroup> sprGroupList = restTemplate.getForObject(Constants.url + "getAllSprGroupList", List.class);
 			System.out.println("sprGroupList"+sprGroupList.toString());
+			List<MechType> mechTypeList = restTemplate.getForObject(Constants.url + "getTypeList", List.class);
+			System.out.println("mechTypeList"+mechTypeList.toString());
 			model.addObject("sprGroupList",sprGroupList); 
 			model.addObject("makeList",makeList); 
 			model.addObject("sprPartList",getAllSparePart);
+			model.addObject("mechTypeList",mechTypeList);
 		}catch(Exception e)
 		{
 			e.printStackTrace();
@@ -1218,7 +1225,10 @@ public class LogisticsController {
 		try
 		{
 		 servHeaderList = restTemplate.getForObject(Constants.url + "getServicingListPendingAndCurrentDate", List.class);
+		 List<MechType> mechTypeList = restTemplate.getForObject(Constants.url + "getTypeList", List.class); 
+		 System.out.println("mechTypeList " + mechTypeList);
 		 model.addObject("servHeaderList",servHeaderList);
+		 model.addObject("mechTypeList",mechTypeList);
 		 model.addObject("flag",0);
 		}catch(Exception e)
 		{
@@ -1236,6 +1246,8 @@ public class LogisticsController {
 		try
 		{
 		 servHeaderList = restTemplate.getForObject(Constants.url + "getServicingListPendingAndCurrentDate", List.class);
+		 List<MechType> mechTypeList = restTemplate.getForObject(Constants.url + "getTypeList", List.class); 
+		 model.addObject("mechTypeList",mechTypeList);
 		 model.addObject("servHeaderList",servHeaderList);
 		 model.addObject("flag",1);
 			 
@@ -1305,10 +1317,11 @@ public class LogisticsController {
 	        	
 	        	String fromDate = request.getParameter("from_date");
 	        	String toDate = request.getParameter("to_date");
-	        	
+	        	int type = Integer.parseInt(request.getParameter("type"));
 	        	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 	        	map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 	        	map.add("toDate", DateConvertor.convertToYMD(toDate));
+	        	map.add("type", type);
 	        	getServicingWithDate = restTemplate.postForObject(Constants.url + "getServicingListBetweenDate",map, List.class);
 	        	 
 		}catch(Exception e)
@@ -1338,8 +1351,9 @@ public class LogisticsController {
         	List<SparePart> getAllSparePart = restTemplate.getForObject(Constants.url + "getAllSparePart", List.class);  
         	List<Dealer> getAllDealerList = restTemplate.getForObject(Constants.url + "getAllDealerList", List.class);  
 			List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class);
-			List<SprGroup> sprGroupList = restTemplate.getForObject(Constants.url + "getAllSprGroupList", List.class);
-			
+			List<SprGroup> sprGroupList = restTemplate.getForObject(Constants.url + "getAllSprGroupList", List.class); 
+			List<MechType> mechTypeList = restTemplate.getForObject(Constants.url + "getTypeList", List.class);
+			model.addObject("mechTypeList",mechTypeList);
 			model.addObject("dealerList",getAllDealerList); 
 			model.addObject("sprGroupList",sprGroupList); 
 			model.addObject("sprPartList",getAllSparePart);
@@ -1396,6 +1410,31 @@ public class LogisticsController {
 			e.printStackTrace();
 		}
 		return model;
+
+	}
+	
+	@RequestMapping(value = "/getTypeList", method = RequestMethod.GET)
+	@ResponseBody
+	public List<MechType> getTypeList(HttpServletRequest request, HttpServletResponse response) {
+		 
+		List<MechType> typeList = new ArrayList<MechType>();
+	        try
+			{ 
+	        	
+	        	int type = Integer.parseInt(request.getParameter("type"));
+	        	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+	        	map.add("type", type);
+	        	typeList = restTemplate.postForObject(Constants.url + "getTypeListByType",map, List.class);
+				System.out.println("typeList"+typeList.toString());
+	        	 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return typeList;
+		
 
 	}
 	
@@ -1657,6 +1696,7 @@ public class LogisticsController {
 		{
 			String billNo = request.getParameter("billNo");
 			String billDate = request.getParameter("billDate"); 
+			int type =Integer.parseInt(request.getParameter("type"));
 			int typeId =Integer.parseInt(request.getParameter("typeId"));
 			int servType =Integer.parseInt(request.getParameter("servType")); 
 			String servDate =request.getParameter("servDate"); 
@@ -1667,14 +1707,19 @@ public class LogisticsController {
 			float totPart = Float.parseFloat(request.getParameter("totPart")); 
 			float labCharge = Float.parseFloat(request.getParameter("labCharge")); 
 			float totDisc = Float.parseFloat(request.getParameter("totDisc"));
-			float totExtraCharge = Float.parseFloat(request.getParameter("totExtraCharge"));
-			float discOnBill = Float.parseFloat(request.getParameter("discOnBill"));
-			float extraOnBill = Float.parseFloat(request.getParameter("extraOnBill"));
+			float totExtraCharge = Float.parseFloat(request.getParameter("totExtraCharge")); 
 			float taxAmt =Float.parseFloat(request.getParameter("taxAmt"));
 			float taxaleAmt =Float.parseFloat(request.getParameter("taxaleAmt"));
 			float total =Float.parseFloat(request.getParameter("total"));
-			int servDoneKm =Integer.parseInt(request.getParameter("servDoneKm"));
-			int nextDueKm =Integer.parseInt(request.getParameter("nextDueKm"));
+			int servDoneKm=0;
+			int nextDueKm=0;
+			if(type==1)
+			{
+				servDoneKm =Integer.parseInt(request.getParameter("servDoneKm"));
+				nextDueKm =Integer.parseInt(request.getParameter("nextDueKm"));
+			}
+			 
+			
 			
 			VpsImageUpload upload = new VpsImageUpload();
 
@@ -1702,6 +1747,7 @@ public class LogisticsController {
 			ServHeader servHeader = new ServHeader();
 			servHeader.setBillNo(billNo);
 			servHeader.setBillDate(billDate);
+			servHeader.setServType2(type);
 			servHeader.setTypeId(typeId);
 			servHeader.setServType(servType);
 			servHeader.setServDate(servDate);
@@ -1712,13 +1758,12 @@ public class LogisticsController {
 			servHeader.setSprTot(totPart);
 			servHeader.setLabChrge(labCharge);
 			servHeader.setTotalDisc(totDisc);
-			servHeader.setTotalExtra(totExtraCharge);
-			servHeader.setDiscOnBill(discOnBill);
-			servHeader.setExtraOnBill(extraOnBill);
+			servHeader.setTotalExtra(totExtraCharge); 
 			servHeader.setTaxAmt(taxAmt);
-			servHeader.setTaxableAmt(taxaleAmt);
+			servHeader.setTaxableAmt(taxaleAmt); 
 			servHeader.setServDoneKm(servDoneKm);
 			servHeader.setNextDueKm(nextDueKm);
+			 
 			servHeader.setTotal(total);
 			servHeader.setBillFile(pdf);
 			
@@ -1776,6 +1821,8 @@ public class LogisticsController {
 	public ModelAndView editServiceBill(@PathVariable int servId, HttpServletRequest request, HttpServletResponse response) {
 
 		ServHeader viewServicingDetail = new ServHeader(); 
+		List<VehicalMaster> vehicleList = new ArrayList<VehicalMaster>();
+		List<MachineMaster> machineList = new ArrayList<MachineMaster>();
 		ModelAndView model = new ModelAndView("logistics/editServiceBill"); 
 		try
 		{
@@ -1785,7 +1832,8 @@ public class LogisticsController {
         	 
         	SparePart[] getAllSparePart = restTemplate.getForObject(Constants.url + "getAllSparePart", SparePart[].class);  
         	List<Dealer> getAllDealerList = restTemplate.getForObject(Constants.url + "getAllDealerList", List.class);  
-        	List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class);  
+        	vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class);  
+        	machineList = restTemplate.getForObject(Constants.url + "getAllMachineMaster", List.class);
         	
 	       	 map = new LinkedMultiValueMap<String, Object >();
 	       	 map.add("typeId", viewServicingDetail.getTypeId()); 
@@ -1799,6 +1847,10 @@ public class LogisticsController {
 			 map = new LinkedMultiValueMap<String, Object >();
         	 map.add("dealerId", viewServicingDetail.getDealerId()); 
         	 Dealer dealer = restTemplate.postForObject(Constants.url + "getDealerById", map, Dealer.class); 
+        	  
+	         map = new LinkedMultiValueMap<String, Object>();
+	        	map.add("type", viewServicingDetail.getServType2());
+	        List<MechType> typeList = restTemplate.postForObject(Constants.url + "getTypeListByType",map, List.class);
 			
 			for(int i=0;i<viewServicingDetail.getServDetail().size();i++)
 			{
@@ -1839,8 +1891,10 @@ public class LogisticsController {
 				
 				for(int j=0;j<groupList.size();j++)
 				{
+					 
 					if(viewServicingDetail.getServDetail().get(i).getGroupId()==groupList.get(j).getGroupId())
 					{
+						 
 						servDetailAddPart.setGroupId(groupList.get(j).getGroupId());
 						servDetailAddPart.setGroupName(groupList.get(j).getGroupName());
 						break;
@@ -1849,12 +1903,17 @@ public class LogisticsController {
 				
 				addSparePartListInEdit.add(servDetailAddPart);
 			}
+			System.out.println("header "+viewServicingDetail );
 			System.out.println("addSparePartListInEdit " + addSparePartListInEdit);
 			model.addObject("dealerList",getAllDealerList); 
 			model.addObject("sprGroupList",sprGroupList); 
 			model.addObject("sprPartList",getAllSparePart);
-			model.addObject("vehicleList",vehicleList);
-			 model.addObject("editServicing", viewServicingDetail); 
+			if(viewServicingDetail.getServType2()==1) 
+				model.addObject("vehicleList",vehicleList);
+			else
+				model.addObject("vehicleList",machineList); 
+			 model.addObject("editServicing", viewServicingDetail);
+			 model.addObject("typeList", typeList);
 			 model.addObject("servDetail", addSparePartListInEdit);
 		}catch(Exception e)
 		{
@@ -2032,6 +2091,7 @@ public class LogisticsController {
 			int servId =Integer.parseInt(request.getParameter("servId"));
 			String billNo = request.getParameter("billNo");
 			String billDate = request.getParameter("billDate"); 
+			int type =Integer.parseInt(request.getParameter("type"));
 			int typeId =Integer.parseInt(request.getParameter("typeId"));
 			int servType =Integer.parseInt(request.getParameter("servType")); 
 			String servDate =request.getParameter("servDate"); 
@@ -2042,14 +2102,17 @@ public class LogisticsController {
 			float totPart = Float.parseFloat(request.getParameter("totPart")); 
 			float labCharge = Float.parseFloat(request.getParameter("labCharge")); 
 			float totDisc = Float.parseFloat(request.getParameter("totDisc"));
-			float totExtraCharge = Float.parseFloat(request.getParameter("totExtraCharge"));
-			float discOnBill = Float.parseFloat(request.getParameter("discOnBill"));
-			float extraOnBill = Float.parseFloat(request.getParameter("extraOnBill"));
+			float totExtraCharge = Float.parseFloat(request.getParameter("totExtraCharge")); 
 			float taxAmt =Float.parseFloat(request.getParameter("taxAmt"));
 			float taxaleAmt =Float.parseFloat(request.getParameter("taxaleAmt"));
 			float total =Float.parseFloat(request.getParameter("total"));
-			int servDoneKm =Integer.parseInt(request.getParameter("servDoneKm"));
-			int nextDueKm =Integer.parseInt(request.getParameter("nextDueKm"));
+			int servDoneKm=0;
+			int nextDueKm=0;
+			if(type==1)
+			{
+				servDoneKm =Integer.parseInt(request.getParameter("servDoneKm"));
+				nextDueKm =Integer.parseInt(request.getParameter("nextDueKm"));
+			}
 			String fileName =request.getParameter("fileName");
 			
 			VpsImageUpload upload = new VpsImageUpload();
@@ -2089,14 +2152,13 @@ public class LogisticsController {
 			servHeader.setSprTot(totPart);
 			servHeader.setLabChrge(labCharge);
 			servHeader.setTotalDisc(totDisc);
-			servHeader.setTotalExtra(totExtraCharge);
-			servHeader.setDiscOnBill(discOnBill);
-			servHeader.setExtraOnBill(extraOnBill);
+			servHeader.setTotalExtra(totExtraCharge); 
 			servHeader.setTaxAmt(taxAmt);
 			servHeader.setTaxableAmt(taxaleAmt);
 			servHeader.setServDoneKm(servDoneKm);
 			servHeader.setNextDueKm(nextDueKm);
 			servHeader.setTotal(total);
+			servHeader.setServType2(type);
 			if(pdf!=null && pdf.length()>0) 
 				servHeader.setBillFile(pdf); 
 			else

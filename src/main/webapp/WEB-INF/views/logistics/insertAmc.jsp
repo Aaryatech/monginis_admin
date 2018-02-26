@@ -112,7 +112,7 @@
 						
 									<div class="col-md-2">AMC To Date* </div>
 									<div class="col-md-3">
-									<input class="form-control date-picker" id="toDate" placeholder="AMC To Date" size="16"
+									<input class="form-control date-picker" id="toDate" onchange="nulldays();"  placeholder="AMC To Date" size="16"
 											type="text" name="toDate"  required />
 									</div>
 							
@@ -123,14 +123,14 @@
 							
 									<div class="col-md-2">AMC Alert Frequency(Days)* </div>
 									<div class="col-md-3">
-									<input class="form-control" id="amcAlertFrq" placeholder="AMC Alert Frequency" size="16"
+									<input class="form-control" id="amcAlertFrq" onchange="addDays();" placeholder="AMC Alert Frequency" size="16"
 											type="text" name="amcAlertFrq"  required />
 									</div>
 						
 									<div class="col-md-2">AMC Alert Date* </div>
 									<div class="col-md-3">
-									<input class="form-control date-picker" id="alertDate" placeholder="AMC Alert Date" size="16"
-											type="text" name="alertDate"  required />
+									<input class="form-control" id="alertDate" placeholder="AMC Alert Date" size="16"
+											type="text" name="alertDate"  readonly />
 									</div>
 							
 							</div><br>
@@ -356,6 +356,45 @@
 				 		 
 		});
 		 
+		/* function addDays()
+		{
+			alert("dd");
+			var selectedDate = $("#toDate").val();
+			var days = $("#amcAlertFrq").val();
+			alert(selectedDate);
+			alert(days);
+			var returnDate = new Date(
+					selectedDate.getFullYear(),
+					selectedDate.getMonth(),
+					selectedDate.getDate()-days,
+					selectedDate.getHours(),
+					selectedDate.getMinutes(),
+					selectedDate.getSeconds());
+			alert("returnDate"+returnDate);
+			document.getElementById("alertDate").value=returnDate; 
+		} */
+		
+		function addDays() {
+			/* var d = new Date(); */
+			var selectedDate = $("#toDate").val().split("-");
+			var d = new Date(selectedDate[2],selectedDate[1] - 1, selectedDate[0]);
+			var days = $("#amcAlertFrq").val();
+			var todayTimeStamp1 = +d; // Unix timestamp in milliseconds
+			d.setDate(d.getDate());
+			var todayTimeStamp = +d; // Unix timestamp in milliseconds
+			var oneDayTimeStamp = 1000 * 60 * 60 * 24; // Milliseconds in a day
+			 
+			var diff = todayTimeStamp - (oneDayTimeStamp*days);
+			var yesterdayDate = new Date(diff);  
+
+			var tommarowString =  yesterdayDate.getDate()+ '-' + (yesterdayDate.getMonth() + 1) + '-' +yesterdayDate.getFullYear();
+			document.getElementById("alertDate").value=tommarowString; 
+		}
+		
+		function nulldays() {
+			alert("null");
+			document.getElementById("amcAlertFrq").value=""; 
+		}
 		 
 	</script>
  

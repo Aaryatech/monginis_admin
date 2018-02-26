@@ -8,6 +8,9 @@
 	<body>
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+	
+	<c:url var="machineListOrVehicleList" value="/machineListOrVehicleList"></c:url>
+	<c:url var="getTypeList" value="/getTypeList"></c:url>
 <c:url var="groupByTypeId" value="/groupByTypeId"></c:url>
 	<c:url var="addSparePart" value="/addSparePart"></c:url>
 	<c:url var="sparePartByGroupId" value="/sparePartByGroupId"></c:url>
@@ -61,12 +64,26 @@
 							</div>
 							
 						</div>
-						
+						  
 						
 						<div class="box-content">
 
 							<form id="submitMaterialStore" action="${pageContext.request.contextPath}/submitServicing" method="post"
 							enctype="multipart/form-data">
+							<div class="box-content">
+							
+								<div class="col-md-2">Select Vehicle Or Machine*</div>
+									<div class="col-md-3">
+									
+									<select name="type" id="type" class="form-control chosen" tabindex="6" required>
+											 <option value="">Select Vehicle Or Machine</option>
+											  <option value="1">Vehicle</option>
+											   <option value="2">Machine</option>
+										</select>
+									
+									</div> 
+									
+							</div><br>
 							<div class="box-content">
 								<div class="col-md-2">Bill No*</div>
 								<div class="col-md-3"><input type="text" id="billNo" name="billNo" placeholder="Bill No"  class="form-control" required>
@@ -86,11 +103,7 @@
 									<div class="col-md-3">
 									
 									<select name="typeId" id="typeId" class="form-control chosen" tabindex="6" required>
-											<option value="">Select Type</option>
-											<option value="1">Servicing</option>
-											 <option value="2">Wheel</option>
-											 <option value="3">Battery</option>
-											 <option value="4">AC</option>
+											 
 											 
 										</select>
 									
@@ -134,13 +147,10 @@
 							
 							<div class="box-content">
 							
-									<div class="col-md-2">Vehicle*</div>
+									<div class="col-md-2">Vehicle or Machine*</div>
 									<div class="col-md-3"> 
 									<select name="vehId" id="vehId" class="form-control chosen" tabindex="6" onchange="updateNextServicingDueKm()" required>
-									<option  value="">Select Vehicle</option>
-									<c:forEach items="${vehicleList}" var="vehicleList"> 
-										<option value="${vehicleList.vehId}"><c:out value="${vehicleList.vehNo}"></c:out> </option>
-											 </c:forEach>
+								 
 									</select>
 								</div>
 									
@@ -300,11 +310,11 @@
 										<th>Part Name</th> 
 										<th>Group</th>
 										<th>Spare Qty</th>
-										<th>Spare Rate</th>
-										<th>Tax</th>
+										<th>Spare Rate</th> 
 										<th>Taxable Amt</th>
 										<th>Discount</th>
 										<th>Extra Charges</th>
+										<th>Tax</th>
 										<th>Total</th>
 										<th>Action</th>
 
@@ -355,25 +365,12 @@
 									</div>
 								 
 									
-									<div class="col-md-2">Discount On Bill*</div>
-										<div class="col-md-3"><input type="text" id="discOnBill" onkeyup="calculateHeader()" name="discOnBill" placeholder="Discount On Bill" class="form-control"  required>
-									</div>
-							
-							</div><br>
-							
-							<div class="box-content">
-							
-									<div class="col-md-2">Extra Charges On Bill*</div>
-										<div class="col-md-3">
-										<input type="text" id="extraOnBill" name="extraOnBill" onkeyup="calculateHeader()" placeholder="Extra Charges On Bill" class="form-control"  required>
-									</div>
-								 
-									
 									<div class="col-md-2">Tax Amt*</div>
 										<div class="col-md-3"><input type="text" id="taxAmt" name="taxAmt" placeholder="Tax Amt" class="form-control"  required>
 									</div>
 							
 							</div><br>
+							 
 							
 							<div class="box-content">
 							
@@ -392,7 +389,7 @@
 							
 							</div><br>
 							
-							<div class="box-content">
+							<div id="km" class="box-content">
 							
 									<div class="col-md-2">Servicing Done Km*</div>
 										<div class="col-md-3">
@@ -409,7 +406,7 @@
 							 
 									<div class="col-md-2" >Select Pdf</div>
 												<div class="col-md-4"> 
-													<input type="file" id="file" name="attachFile" size="60" data-rule-required="true"/> 
+													<input type="file" id="file" name="attachFile" size="60" required> 
 												</div>
 							
 							</div><br>
@@ -592,14 +589,14 @@
 														  	tr.append($('<td></td>').html(itemList.groupName));
 														  	tr.append($('<td></td>').html(itemList.sprQty));
 														  	tr.append($('<td></td>').html(itemList.sprRate));
-														  	tr.append($('<td></td>').html(itemList.sprTaxAmt));
-														  	taxAmt=taxAmt+itemList.sprTaxAmt;
 														  	tr.append($('<td></td>').html(itemList.sprTaxableAmt));
 														  	taxaleAmt=taxaleAmt+itemList.sprTaxableAmt;
 														  	tr.append($('<td></td>').html(itemList.disc));
 														  	disc=disc+itemList.disc;
 														  	tr.append($('<td></td>').html(itemList.extraCharges));
 														  	extraCharge=extraCharge+itemList.extraCharges;
+														  	tr.append($('<td></td>').html(itemList.sprTaxAmt));
+														  	taxAmt=taxAmt+itemList.sprTaxAmt;  
 														  	tr.append($('<td></td>').html(itemList.total));
 														  	total=total+itemList.total;
 														  	if(itemList.groupId==2)
@@ -707,14 +704,14 @@
 														  	tr.append($('<td></td>').html(itemList.groupName));
 														  	tr.append($('<td></td>').html(itemList.sprQty));
 														  	tr.append($('<td></td>').html(itemList.sprRate));
-														  	tr.append($('<td></td>').html(itemList.sprTaxAmt));
-														  	taxAmt=taxAmt+itemList.sprTaxAmt;
 														  	tr.append($('<td></td>').html(itemList.sprTaxableAmt));
 														  	taxaleAmt=taxaleAmt+itemList.sprTaxableAmt;
 														  	tr.append($('<td></td>').html(itemList.disc));
 														  	disc=disc+itemList.disc;
 														  	tr.append($('<td></td>').html(itemList.extraCharges));
 														  	extraCharge=extraCharge+itemList.extraCharges;
+														  	tr.append($('<td></td>').html(itemList.sprTaxAmt));
+														  	taxAmt=taxAmt+itemList.sprTaxAmt;  
 														  	tr.append($('<td></td>').html(itemList.total));
 														  	total=total+itemList.total;
 														  	if(itemList.groupId==2)
@@ -886,14 +883,14 @@
 						  	tr.append($('<td></td>').html(itemList.groupName));
 						  	tr.append($('<td></td>').html(itemList.sprQty));
 						  	tr.append($('<td></td>').html(itemList.sprRate));
-						  	tr.append($('<td></td>').html(itemList.sprTaxAmt));
-						  	taxAmt=taxAmt+itemList.sprTaxAmt;
 						  	tr.append($('<td></td>').html(itemList.sprTaxableAmt));
 						  	taxaleAmt=taxaleAmt+itemList.sprTaxableAmt;
 						  	tr.append($('<td></td>').html(itemList.disc));
 						  	disc=disc+itemList.disc;
 						  	tr.append($('<td></td>').html(itemList.extraCharges));
 						  	extraCharge=extraCharge+itemList.extraCharges;
+						  	tr.append($('<td></td>').html(itemList.sprTaxAmt));
+						  	taxAmt=taxAmt+itemList.sprTaxAmt;  
 						  	tr.append($('<td></td>').html(itemList.total));
 						  	total=total+itemList.total;
 						  	if(itemList.groupId==2)
@@ -969,9 +966,15 @@ function validation()
 	var totalDetail = $("#totalDetail").val();
 	var servTypeDetail = $("#servTypeDetail").val(); 
 	var dealerId = $("#dealerId").val(); 
+	var type = $("#type").val(); 
 	
 	var isValid = true;
-	 if(isNaN(typeId) || typeId < 0 || typeId=="")
+	 if(isNaN(type) || type < 0 || type=="")
+		{
+		isValid = false;
+		alert("Please Select Vehicle or Machine Type"); 
+		} 
+	else if(isNaN(typeId) || typeId < 0 || typeId=="")
 		{
 		isValid = false;
 		alert("Please Enter Type"); 
@@ -1066,6 +1069,83 @@ $(document).ready(function() {
 					$('#groupId').html(html);
 					$("#groupId").trigger("chosen:updated");
 											
+						});
+			 
+				 
+		})
+		 		 
+});
+
+$(document).ready(function() { 
+	$('#type').change(
+			function() {
+				//alert("typeId"+$(this).val());
+				var type=$(this).val();
+			    
+				$.getJSON('${getTypeList}', {
+					
+					type : $(this).val(),
+					ajax : 'true'
+				},
+						function(data) {
+					 
+					var html = '<option value="">Select Type</option>';
+					
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].typeId + '">'
+								+ data[i].typeName + '</option>';
+					}
+					html += '</option>';
+					$('#typeId').html(html);
+					$("#typeId").trigger("chosen:updated");
+					if(type==2)
+					{
+						//alert("in if"); 
+					document.getElementById("km").style.visibility="hidden"; 
+					document.getElementById("servDoneKm").required=0; 
+					document.getElementById("nextDueKm").required=0;
+					}
+					else if(type==1)
+					{
+						//alert("in else");
+					document.getElementById("km").style.visibility="visible";  
+					document.getElementById("servDoneKm").required=""; 
+					document.getElementById("nextDueKm").required="";
+					}			
+						});
+			 
+				 
+		})
+		 		 
+});
+
+$(document).ready(function() { 
+	$('#type').change(
+			function() {
+				//alert("typeId"+$(this).val());
+				var typeId=$(this).val();
+			    
+				$.getJSON('${machineListOrVehicleList}', {
+					
+					typeId : $(this).val(),
+					ajax : 'true'
+				},
+						function(data) {
+					 
+					var html = '<option value="">Select Vehicle Or Machine</option>';
+					
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].mechId + '">'
+								+ data[i].mechName + '</option>';
+					}
+					html += '</option>';
+					$('#vehId').html(html);
+					$("#vehId").trigger("chosen:updated"); 
+					
+					 
+					
 						});
 			 
 				 

@@ -153,23 +153,6 @@
 							
 							</div><br>
 							 
-							
-							<div class="box-content">
-							
-									<div class="col-md-2">Cleaning Frequency(Days)* </div>
-									<div class="col-md-3">
-									<input class="form-control" id="cleaningFrq" placeholder="Cleaning Frequency" size="16"
-											type="text" name="cleaningFrq"  required />
-									</div>
-						
-									<div class="col-md-2">Alert Frequency(Days)* </div>
-									<div class="col-md-3">
-									<input class="form-control" id="alertFrq" placeholder="Alert Frequency" size="16"
-											type="text" name="alertFrq"  required />
-									</div>
-							
-							</div><br>
-							
 							<div class="box-content">
 							
 									<div class="col-md-2">Last Cleaning Date* </div>
@@ -180,18 +163,36 @@
 						
 									<div class="col-md-2">Next Cleaning Date* </div>
 									<div class="col-md-3">
-									<input class="form-control date-picker" id="nextCleanDate" placeholder="Next Cleaning Date" size="16"
-											type="text" name="nextCleanDate"  required />
+									<input class="form-control" id="nextCleanDate" placeholder="Next Cleaning Date" size="16"
+											type="text" name="nextCleanDate"  readonly />
 									</div>
 							
 							</div><br>
 							
 							<div class="box-content">
 							
+									<div class="col-md-2">Cleaning Frequency(Days)* </div>
+									<div class="col-md-3">
+									<input class="form-control" id="cleaningFrq" onchange="nextCleaning();" placeholder="Cleaning Frequency" size="16"
+											type="text" name="cleaningFrq"  required />
+									</div>
+						
+									<div class="col-md-2">Alert Frequency(Days)* </div>
+									<div class="col-md-3">
+									<input class="form-control" id="alertFrq" placeholder="Alert Frequency" size="16"
+											type="text" name="alertFrq" onchange="alertDate();" required />
+									</div>
+							
+							</div><br>
+							
+							
+							
+							<div class="box-content">
+							
 									<div class="col-md-2">Next Alert Date* </div>
 									<div class="col-md-3">
-									<input class="form-control date-picker" id="nextAlertDate" placeholder="Next Alert Date" size="16"
-											type="text" name="nextAlertDate"  required />
+									<input class="form-control" id="nextAlertDate" placeholder="Next Alert Date" size="16"
+											type="text" name="nextAlertDate"  readonly />
 									</div>
 						 
 							
@@ -705,6 +706,39 @@
 		});
 		 
 		 
+		function nextCleaning() {
+			/* var d = new Date(); */
+			var selectedDate = $("#lastCleanDate").val().split("-");
+			var d = new Date(selectedDate[2],selectedDate[1] - 1, selectedDate[0]);
+			var days = $("#cleaningFrq").val();
+			var todayTimeStamp1 = +d; // Unix timestamp in milliseconds
+			d.setDate(d.getDate());
+			var todayTimeStamp = +d; // Unix timestamp in milliseconds
+			var oneDayTimeStamp = 1000 * 60 * 60 * 24; // Milliseconds in a day
+			 
+			var diff = todayTimeStamp + (oneDayTimeStamp*days);
+			var yesterdayDate = new Date(diff);  
+
+			var tommarowString =  yesterdayDate.getDate()+ '-' + (yesterdayDate.getMonth() + 1) + '-' +yesterdayDate.getFullYear();
+			document.getElementById("nextCleanDate").value=tommarowString; 
+		}
+		 
+		 function alertDate() {
+			/* var d = new Date(); */
+			var selectedDate = $("#nextCleanDate").val().split("-");
+			var d = new Date(selectedDate[2],selectedDate[1] - 1, selectedDate[0]);
+			var days = $("#alertFrq").val();
+			var todayTimeStamp1 = +d; // Unix timestamp in milliseconds
+			d.setDate(d.getDate());
+			var todayTimeStamp = +d; // Unix timestamp in milliseconds
+			var oneDayTimeStamp = 1000 * 60 * 60 * 24; // Milliseconds in a day
+			 
+			var diff = todayTimeStamp - (oneDayTimeStamp*days);
+			var yesterdayDate = new Date(diff);  
+
+			var tommarowString =  yesterdayDate.getDate()+ '-' + (yesterdayDate.getMonth() + 1) + '-' +yesterdayDate.getFullYear();
+			document.getElementById("nextAlertDate").value=tommarowString; 
+		} 
 	</script>
  
 </body>

@@ -69,7 +69,8 @@
 										
 										<th>Bill No</th>
 										<th>Bill Date</th>
-										<th>Vehicle No.</th>
+										<th>Type</th>
+										<th>Vehicle No. Or Machine Name</th>
 										<th>Type</th>
 										<th>Taxable Amt</th>
 										<th>Tax Amt</th>
@@ -97,23 +98,17 @@
 												</c:choose>
 												
 												<c:choose>
-													<c:when test="${servHeaderList.typeId==1}">
-													<c:set var = "type" value='Servicing'/>
+													<c:when test="${servHeaderList.servType2==1}">
+													<c:set var = "type" value='Vehicle'/>
 													</c:when>
 													
-													<c:when test="${servHeaderList.typeId==2}">
-													  <c:set var = "type" value="Wheel"/>
-													
-													</c:when> 
-													<c:when test="${servHeaderList.typeId==3}">
-													<c:set var = "type" value='Battary'/>
-													</c:when>
-													
-													<c:when test="${servHeaderList.typeId==4}">
-													  <c:set var = "type" value="AC"/>
+													<c:when test="${servHeaderList.servType2==2}">
+													  <c:set var = "type" value="Machine"/>
 													
 													</c:when> 
 												</c:choose>
+												
+												 
 
 													<tr>
 														<td><c:out value="${count.index+1}" /></td>
@@ -121,8 +116,17 @@
 														 
 																<td align="left"><c:out value="${servHeaderList.billNo}" /></td>
 																<td align="left"><c:out value="${servHeaderList.billDate}" /></td>
-																<td align="left"><c:out value="${servHeaderList.vehNo}" /></td>
 																<td align="left"><c:out value="${type}" /></td>
+																<td align="left"><c:out value="${servHeaderList.vehNo}" /></td>
+																<c:forEach items="${mechTypeList}" var="mechTypeList">
+																 
+																	<c:choose>
+																		<c:when test="${mechTypeList.typeId==servHeaderList.typeId}">
+																		<td align="left" ><c:out value="${mechTypeList.typeName}" /></td>
+																		</c:when>
+																		 
+																	</c:choose>
+																</c:forEach>
 																<td align="left"><c:out value="${servHeaderList.taxableAmt}" /></td>
 																<td align="left"><c:out value="${servHeaderList.taxAmt}" /></td>
 																<td align="left"><c:out value="${servHeaderList.total}" /></td>
@@ -179,6 +183,21 @@
 										
 										
 										</div><br>
+										
+										<div class="box-content">
+							
+								<div class="col-md-2">Select Vehicle Or Machine*</div>
+									<div class="col-md-3">
+									
+									<select name="type" id="type" class="form-control chosen" tabindex="6" required>
+											 <option value="0" selected>All</option>
+											  <option value="1">Vehicle</option>
+											   <option value="2">Machine</option>
+										</select>
+									
+									</div> 
+									
+							</div><br>
 						
 								</div>
 								
@@ -227,6 +246,7 @@
 										
 										<th>Bill No</th>
 										<th>Bill Date</th>
+										<th>Type</th>
 										<th>Vehicle No.</th>
 										<th>Type</th>
 										<th>Taxable Amt</th>
@@ -332,7 +352,7 @@
 		function searchbomall() {
 			var from_date = $("#from_date").val();
 			var to_date = $("#to_date").val();
-			var flag = $("#flag").val();
+			var type = $("#type").val();
 			
 			$('#loader').show();
 
@@ -344,6 +364,7 @@
 								 
 								from_date : from_date,
 								to_date : to_date,
+								type : type,
 								ajax : 'true'
 
 							},
@@ -365,6 +386,7 @@
 											 
 												 var stats;
 												 var type;
+												 var type2;
 												 
 												 if(itemList.isApproved==0)
 													 {
@@ -374,6 +396,15 @@
 													 {
 													 stats="Approved";
 													 }
+												 
+												 if(itemList.servType2==1)
+												 {
+													 type2="Vehicle";
+												 }
+											 	else
+												 {
+											 		type2="Machine";
+												 }
 												 
 												 if(itemList.typeId==1)
 												 {
@@ -391,11 +422,16 @@
 												 {
 											 		type="AC";
 												 }
+											 	else if(itemList.typeId==5)
+												 {
+											 		type="Machine Servicing";
+												 }
 												 
 												var tr = $('<tr></tr>');
 											  	tr.append($('<td></td>').html(key+1)); 
 											  	tr.append($('<td></td>').html(itemList.billNo));
 											  	tr.append($('<td></td>').html(itemList.billDate)); 
+											  	tr.append($('<td></td>').html(type2)); 
 											  	tr.append($('<td></td>').html(itemList.vehNo));
 											  	tr.append($('<td></td>').html(type));
 											  	tr.append($('<td></td>').html(itemList.taxableAmt));
