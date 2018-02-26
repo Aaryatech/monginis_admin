@@ -32,6 +32,15 @@ public class PostCreditNoteHeader {
 	private String createdDateTime;
 
 	private int isTallySync;
+	
+	//new field 23 FEB
+	String grnGvnSrNoList;//comma seperated unique;
+	
+	//new field 23 FEB
+	int isDeposited; //default 0 when actually deposited in bank set value
+	
+	
+	
 
 	List<PostCreditNoteDetails> postCreditNoteDetails;
 
@@ -140,17 +149,30 @@ public class PostCreditNoteHeader {
 		this.crnNo = crnNo;
 	}
 
+	public String getGrnGvnSrNoList() {
+		return grnGvnSrNoList;
+	}
+
+	public void setGrnGvnSrNoList(String grnGvnSrNoList) {
+		this.grnGvnSrNoList = grnGvnSrNoList;
+	}
+
+	public int getIsDeposited() {
+		return isDeposited;
+	}
+
+	public void setIsDeposited(int isDeposited) {
+		this.isDeposited = isDeposited;
+	}
+
 	@Override
 	public String toString() {
 		return "PostCreditNoteHeader [crnId=" + crnId + ", crnNo=" + crnNo + ", crnDate=" + crnDate + ", frId=" + frId
 				+ ", crnTaxableAmt=" + crnTaxableAmt + ", crnTotalTax=" + crnTotalTax + ", crnGrandTotal="
 				+ crnGrandTotal + ", crnFinalAmt=" + crnFinalAmt + ", roundOff=" + roundOff + ", userId=" + userId
-				+ ", createdDateTime=" + createdDateTime + ", isTallySync=" + isTallySync + ", postCreditNoteDetails="
-				+ postCreditNoteDetails + "]";
+				+ ", createdDateTime=" + createdDateTime + ", isTallySync=" + isTallySync + ", grnGvnSrNoList="
+				+ grnGvnSrNoList + ", isDeposited=" + isDeposited + ", postCreditNoteDetails=" + postCreditNoteDetails
+				+ "]";
 	}
-
-	
-	
-	
 
 }

@@ -66,6 +66,14 @@ public class PostCreditNoteDetails {
 	private String  refInvoiceNo;
 	
 	
+	//new column 23 FEB
+		private String grngvnSrno;
+		
+		//new column 23 FEB
+		private int grnGvnHeaderId;
+		
+	
+	
 	public int getBillNo() {
 		return billNo;
 	}
@@ -268,6 +276,22 @@ public class PostCreditNoteDetails {
 		this.refInvoiceNo = refInvoiceNo;
 	}
 
+	public String getGrngvnSrno() {
+		return grngvnSrno;
+	}
+
+	public void setGrngvnSrno(String grngvnSrno) {
+		this.grngvnSrno = grngvnSrno;
+	}
+
+	public int getGrnGvnHeaderId() {
+		return grnGvnHeaderId;
+	}
+
+	public void setGrnGvnHeaderId(int grnGvnHeaderId) {
+		this.grnGvnHeaderId = grnGvnHeaderId;
+	}
+
 	@Override
 	public String toString() {
 		return "PostCreditNoteDetails [crndId=" + crndId + ", crnId=" + crnId + ", itemId=" + itemId + ", grnGvnId="
@@ -276,10 +300,9 @@ public class PostCreditNoteDetails {
 				+ ", cgstPer=" + cgstPer + ", sgstPer=" + sgstPer + ", igstPer=" + igstPer + ", cgstRs=" + cgstRs
 				+ ", sgstRs=" + sgstRs + ", igstRs=" + igstRs + ", cessRs=" + cessRs + ", delStatus=" + delStatus
 				+ ", billNo=" + billNo + ", billDate=" + billDate + ", catId=" + catId + ", baseRate=" + baseRate
-				+ ", cessPer=" + cessPer + ", refInvoiceNo=" + refInvoiceNo + "]";
+				+ ", cessPer=" + cessPer + ", refInvoiceNo=" + refInvoiceNo + ", grngvnSrno=" + grngvnSrno
+				+ ", grnGvnHeaderId=" + grnGvnHeaderId + "]";
 	}
 
-	
-	
 
 }

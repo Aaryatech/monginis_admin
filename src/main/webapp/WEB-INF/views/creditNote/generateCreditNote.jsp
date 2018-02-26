@@ -5,14 +5,14 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
-
+<c:url value="/getCreditNoteType" var="getCreditNoteType"/>
 	<div class="container" id="main-container">
 
 		<!-- BEGIN Sidebar -->
@@ -38,8 +38,25 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
+			
+			
+			<div class="form-group">
+									<label class="col-sm-4 col-lg-1 control-label">Type</label>
+									<div class="col-sm-5 col-lg-3 controls">
+										<select class="form-control" name="selectType" id="selectType">
+										<option value="1">GRN Credit Note</option>
+										<option value="0">GVN Credit Note</option>
+										</select>
+									</div>
+									
+									<div
+										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
+										<input type="button" value="Search" onclick="getGrnGvnDetail()" class="btn btn-primary">
 
-			<form action="${pageContext.request.contextPath}/insertCreditNote"
+									</div>
+								</div>
+
+			<form action="${pageContext.request.contextPath}/insertCreNoteProcess"
 				class="form-horizontal" method="post" id="validation-form">
 
 
@@ -74,6 +91,11 @@
 													onClick="selectcreditnote(this)" /> Select All<br /></th>
 												<th width="17" style="width: 18px">Sr No</th>
 												<th width="150" align="left">Grn-Gvn Date</th>
+
+												<th width="150" align="left">Grn-Gvn SrNo</th>
+
+												<th width="150" align="left">Grn-Gvn Id</th>
+
 												<th width="150" align="left">Franchisee Name</th>
 												<th width="100" align="left">Bill No</th>
 												<th width="88" align="left">Type:Grn/Gvn</th>
@@ -84,8 +106,9 @@
 											</tr>
 										</thead>
 										<tbody>
-											
-											<c:forEach items="${creditNoteList}" var="creditNoteList" varStatus="count">
+
+											<c:forEach items="${creditNoteList}" var="creditNoteList"
+												varStatus="count">
 
 
 
@@ -93,12 +116,17 @@
 													<td><input type="checkbox" name="select_to_credit"
 														id="select_to_credit" value="${creditNoteList.grnGvnId}"></td>
 
-													<td><c:out value="${count.index+1}"/></td>
+													<td><c:out value="${count.index+1}" /></td>
 
-												
+
 
 													<td align="left"><c:out
 															value="${creditNoteList.grnGvnDate}" /></td>
+															<td align="left"><c:out
+															value="${creditNoteList.grngvnSrno}" /></td>
+															<td align="left"><c:out
+															value="${creditNoteList.grnGvnHeaderId}" /></td>
+															
 													<td align="left"><c:out
 															value="${creditNoteList.frName}" /></td>
 
@@ -146,7 +174,7 @@
 			</form>
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+				<p>2017 © MONGINIS.</p>
 			</footer>
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -229,6 +257,22 @@
 		}
 		
 	</script>
+	<script>
+	function getGrnGvnDetail(){
+		
+		var selectedType = $("#selectType").val();
+		alert("Hi "+selectedType);
+
+		$.getJSON('${getCreditNoteType}', {
+			selected_type:selectedType,
+			ajax : 'true',
+
+		});
+
+		
+	}
 	
+	</script>
+
 </body>
 </html>

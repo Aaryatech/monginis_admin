@@ -1306,13 +1306,11 @@ public class ProductionController {
 		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
 		String timeStamp=dateFormat.format(cal.getTime());
 		String FILE_PATH=Constants.REPORT_SAVE;
-		File file=new File(FILE_PATH+"Report.pdf");
+		File file=new File(FILE_PATH);
 		
 		PdfWriter writer = null;
 		
-		
 		 FileOutputStream out=new FileOutputStream(FILE_PATH);
-		 
 		
 		   try {
 			    writer=PdfWriter.getInstance(document,out);

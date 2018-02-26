@@ -2,15 +2,15 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body onpageshow="placeValue(${grnAccDetailList})">
+
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<c:url var="insertGateGrnProcessAgree"
 		value="/insertGateGrnProcessAgree" />
-		
+
 	<c:url var="insertAccGrnProcessAgree" value="/insertAccGrnProcessAgree" />
 
 	<c:url var="insertAccGrnProcessDisAgree"
@@ -68,47 +68,10 @@
 
 
 						<div class="box-content">
-							<%-- <form
-								action="${pageContext.request.contextPath}/showAccountGrnDetails"
-								class="form-horizontal" method="get" id="validation-form">
 
-
-
-
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">From
-										Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="from_date"
-											size="16" type="text" name="from_date" value="${fromDate}"
-											required onblur="getDate()" />
-									</div>
-									<!-- </div>
-
-
-								<div class="form-group"> -->
-									<label class="col-sm-3 col-lg-2 control-label">To Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="to_date" size="16"
-											type="text" value="${toDate}" name="to_date" required
-											onblur="getDate()" />
-									</div>
-
-									<div
-										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										<input type="submit" value="Submit" class="btn btn-primary">
-									</div>
-
-								</div>
-
-							</form>
- --%>
 							<form
 								action="${pageContext.request.contextPath}/insertAccGrnByCheckBoxes"
 								class="form-horizontal" method="post" id="validation-form">
-
-
-
 
 								<div class="box">
 									<div class="box-title">
@@ -127,18 +90,21 @@
 										<div class="clearfix"></div>
 										<div class="table-responsive" style="border: 0">
 											<table width="100%"
-												class="table table-advance table-responsive table-position" id="table1">
+												class="table table-advance table-responsive table-position"
+												id="table1">
 												<thead>
 													<tr>
-														<th ></th>
+														<th></th>
 														<th>Sr No</th>
 														<th>Invoice No</th>
 														<th>Franchise Name</th>
 														<th>Item Name</th>
 														<th>GRN Type</th>
 														<th>Quantity</th>
+														<th>Dispatch Qty</th>
+														<th>Acc Edit</th>
 														<th>Status</th>
-														<th>Is Edit</th>
+
 														<th>GRN Amount</th>
 
 														<th>Action</th>
@@ -160,7 +126,8 @@
 																</c:when>
 																<c:when test="${grnList.grnGvnStatus==3}">
 																	<td><input type="checkbox" name="select_to_agree"
-																		id="${grnList.grnGvnId}" value="${grnList.grnGvnId}"></></td>
+																		disabled="disabled" id="${grnList.grnGvnId}"
+																		value="${grnList.grnGvnId}"></></td>
 
 																</c:when>
 
@@ -208,7 +175,7 @@
 
 																	<td><input type="checkbox" name="select_to_agree"
 																		disabled="disabled" id="${grnList.grnGvnId}"
-																		value="${grnList.grnGvnId}"/></td>
+																		value="${grnList.grnGvnId}" /></td>
 
 
 																</c:otherwise>
@@ -239,7 +206,7 @@
 																	<td align="left"><c:out value="GRN 3"></c:out></td>
 
 																</c:when>
-																
+
 																<c:when test="${grnList.grnType==4}">
 																	<td align="left"><c:out value="GRN 4"></c:out></td>
 
@@ -253,6 +220,17 @@
 																name="approve_acc_login${grnList.grnGvnId}"
 																id="approve_acc_login${grnList.grnGvnId}"
 																value="${grnList.approvedLoginAcc}" /></td>
+
+															<td align="left"><c:out
+																	value="${grnList.aprQtyGate}"></c:out></td>
+
+															<td align="center"><input type="text"
+																name="acc_grn_qty${grnList.grnGvnId}"
+																class="form-control" id='acc_grn_qty${grnList.grnGvnId}'
+																value="${grnList.aprQtyGate}"
+																onkeyup="calcGrn(${grnList.grnType},${grnList.baseRate},${grnList.grnGvnId},
+																	${grnList.sgstPer},${grnList.cgstPer})" /></td>
+
 
 
 															<c:choose>
@@ -293,7 +271,8 @@
 
 															</c:choose>
 
-															<td align="left"><c:out value="${grnList.isGrnEdit}"></c:out></td>
+
+
 															<td align="left"><c:out value="${grnList.grnGvnAmt}"></c:out></td>
 
 
@@ -322,10 +301,8 @@
 																									var="remarkList">
 																									<option value="${remarkList.remark}">${remarkList.remark}</option>
 																								</c:forEach>
-																							</select> 
-																						
-																							<input class="btn btn-primary"
-																								value="Submit" class="form-control"
+																							</select> <input class="btn btn-primary" value="Submit"
+																								class="form-control"
 																								onclick="insertGrnDisAgree(${grnList.grnGvnId})" />
 																						</div>
 																					</div>
@@ -337,7 +314,7 @@
 																					<a class="dropdown-toggle" href="#"
 																						data-toggle="dropdown"><i
 																						class="fa fa-info-circle"></i></a>
-																						
+
 																					<div class="dropdown-menu">
 																						<div class="form">
 																							Franchisee Remark
@@ -365,7 +342,8 @@
 																	<td>
 																		<ul class="table-menu">
 
-																			<li><a href="" id="callSubmit" class="disableClick"
+																			<li><a href="" id="callSubmit"
+																				class="disableClick"
 																				onclick="insertGrnCall(${grnList.grnGvnId})"><i
 																					class="fa fa-check"></i></a></li>
 																			<li>
@@ -383,8 +361,9 @@
 																									var="remarkList">
 																									<option value="${remarkList.remark}">${remarkList.remark}</option>
 																								</c:forEach>
-																							</select> </br><input class="btn btn-primary"
-																								value="Submit" disabled="disabled"
+																							</select> </br>
+																							<input class="btn btn-primary" value="Submit"
+																								disabled="disabled"
 																								onclick="insertGrnDisAgree(${grnList.grnGvnId})" />
 																						</div>
 																					</div>
@@ -421,9 +400,10 @@
 																<c:when test="${grnList.grnGvnStatus==6}">
 
 																	<td>
-																	<ul class="table-menu">
+																		<ul class="table-menu">
 
-																			<li><a href="" id="callSubmit" class="disableClick"
+																			<li><a href="" id="callSubmit"
+																				class="disableClick"
 																				onclick="insertGrnCall(${grnList.grnGvnId})"><i
 																					class="fa fa-check"></i></a></li>
 																			<li>
@@ -441,8 +421,7 @@
 																									var="remarkList">
 																									<option value="${remarkList.remark}">${remarkList.remark}</option>
 																								</c:forEach>
-																							</select><input class="btn btn-primary"
-																								value="Submit"
+																							</select><input class="btn btn-primary" value="Submit"
 																								onclick="insertGrnDisAgree(${grnList.grnGvnId})" />
 																						</div>
 																					</div>
@@ -471,15 +450,15 @@
 																				</div>
 																			</li>
 																		</ul>
-																		</td>
+																	</td>
 
 																</c:when>
 																<c:when test="${grnList.grnGvnStatus==7}">
 
 																	<td>
-																	<ul class="table-menu">
+																		<ul class="table-menu">
 
-																			<li><a href="" id="callSubmit" class="disableClick"
+																			<li><a href="" id="callSubmit"
 																				onclick="insertGrnCall(${grnList.grnGvnId})"><i
 																					class="fa fa-check"></i></a></li>
 																			<li>
@@ -497,8 +476,8 @@
 																									var="remarkList">
 																									<option value="${remarkList.remark}">${remarkList.remark}</option>
 																								</c:forEach>
-																							</select><input class="btn btn-primary"
-																								value="Submit" disabled="disabled"
+																							</select><input class="btn btn-primary" value="Submit"
+																								disabled="disabled"
 																								onclick="insertGrnDisAgree(${grnList.grnGvnId})" />
 																						</div>
 																					</div>
@@ -527,7 +506,7 @@
 																				</div>
 																			</li>
 																		</ul>
-																		</td>
+																	</td>
 
 																</c:when>
 
@@ -536,13 +515,14 @@
 
 																	<td><ul class="table-menu">
 
-																			<li><a href="" id="callSubmit" class="disableClick"
+																			<li><a href="" id="callSubmit"
+																				class="disableClick"
 																				onclick="insertGrnCall(${grnList.grnGvnId})"><i
 																					class="fa fa-check"></i></a></li>
 																			<li>
 
 																				<div class="dropdown">
-																					<a class="dropdown-toggle" href="#"  id="disableMe"
+																					<a class="dropdown-toggle" href="#" id="disableMe"
 																						data-toggle="dropdown"><i class="fa fa-times"></i></a>
 																					<div class="dropdown-menu">
 																						<div class="form">
@@ -554,8 +534,8 @@
 																									var="remarkList">
 																									<option value="${remarkList.remark}">${remarkList.remark}</option>
 																								</c:forEach>
-																							</select><input class="btn btn-primary"
-																								value="Submit" disabled="disabled"
+																							</select><input class="btn btn-primary" value="Submit"
+																								disabled="disabled"
 																								onclick="insertGrnDisAgree(${grnList.grnGvnId})" />
 																						</div>
 																					</div>
@@ -583,9 +563,7 @@
 																					</div>
 																				</div>
 																			</li>
-																		</ul>
-																		
-																		</td>
+																		</ul></td>
 																</c:otherwise>
 															</c:choose>
 
@@ -604,7 +582,8 @@
 
 										<div
 											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-											<input type="button" value="Submit" onclick="callSubmit()" class="btn btn-primary">
+											<input type="button" value="Submit" onclick="callSubmit()"
+												class="btn btn-primary">
 
 										</div>
 										<!-- </form> -->
@@ -619,7 +598,7 @@
 			</div>
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+				<p>2017 © MONGINIS.</p>
 			</footer>
 
 
@@ -724,7 +703,7 @@
 
 	<!-- insertGrnDisAgree -->
 
-<script type="text/javascript">
+	<script type="text/javascript">
 
 function callSubmit(){
 			alert("HIII");
@@ -744,6 +723,9 @@ var grnId=grnGvnId;
 var approve_acc_login=$("#approve_acc_login"+grnGvnId).val();
 var acc_remark=$("#acc_remark"+grnGvnId).val();
 
+var acc_grn_qty=$("#acc_grn_qty"+grnGvnId).val();
+
+
 if($("#acc_remark"+grnGvnId).val() == ''){
 	alert("Please Enter Grn Remark!");
 }
@@ -753,7 +735,8 @@ else{
 			
 			grnId : grnId,
 			approveAccLogin : approve_acc_login,
-			accRemark : acc_remark,				
+			accRemark : acc_remark,	
+			acc_grn_qty:acc_grn_qty,
 				ajax : 'true',
 
 			}
@@ -792,6 +775,9 @@ var grnId=grnGvnId;
 var approve_acc_login=$("#approve_acc_login"+grnGvnId).val();
 var acc_remark=$("#acc_remark"+grnGvnId).val();
 
+var acc_grn_qty=$("#acc_grn_qty"+grnGvnId).val();
+
+
 
 /* alert(grnId);
 alert(approve_gate_login); */
@@ -803,6 +789,7 @@ alert(approve_gate_login); */
 							
 							grnId : grnId,
 							approveAccLogin:approve_acc_login,
+							acc_grn_qty:acc_grn_qty,
 								
 								ajax : 'true',
 							
@@ -915,8 +902,39 @@ function getDate(){
 	});
 </script>
 
+	<script>
 
+function calcGrn(grnType,baseRate,grnId,sgstPer,cgstPer){
+	
+	var grandTotal;
+	var aprTotalTax;
+	var grnRate;
+	var aprTaxableAmt;
+	var acc_grn_qty=$("#acc_grn_qty"+grnId).val();
+	
+	alert("acc_grn_qty" +acc_grn_qty);
 
+	if(grnType==0){
+		grnRate=baseRate*75/100;
+	}
+	
+	if(grnType==1){
+		grnRate=baseRate*90/100;
+	}
+	
+	if(grnType==2 || grnType==4){
+		grnRate=baseRate;
+	}
+	aprTaxableAmt = grnRate * acc_grn_qty;
+	aprTotalTax = ((aprTaxableAmt) * (sgstPer + cgstPer))/ 100;
+	grandTotal = aprTaxableAmt + aprTotalTax;
+	
+	alert(grandTotal.toFixed(2));
+	
+}
+	
+
+</script>
 
 </body>
 </html>

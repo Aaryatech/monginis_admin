@@ -2,8 +2,6 @@ package com.ats.adminpanel.model.creditnote;
 
 import java.sql.Date;
 
-
-
 public class GetGrnGvnForCreditNote {
 	
 	
@@ -110,6 +108,16 @@ public class GetGrnGvnForCreditNote {
 	private String invoiceNo;
 	
 	private Date refInvoiceDate;
+	
+	
+	
+	
+	//new column 23 FEB
+	private String grngvnSrno;
+	
+	//new column 23 FEB
+	private int grnGvnHeaderId;
+	
 
 
 
@@ -642,6 +650,28 @@ public class GetGrnGvnForCreditNote {
 
 
 
+	public String getGrngvnSrno() {
+		return grngvnSrno;
+	}
+
+
+
+	public void setGrngvnSrno(String grngvnSrno) {
+		this.grngvnSrno = grngvnSrno;
+	}
+
+
+
+	public int getGrnGvnHeaderId() {
+		return grnGvnHeaderId;
+	}
+
+
+
+	public void setGrnGvnHeaderId(int grnGvnHeaderId) {
+		this.grnGvnHeaderId = grnGvnHeaderId;
+	}
+
 	@Override
 	public String toString() {
 		return "GetGrnGvnForCreditNote [grnGvnId=" + grnGvnId + ", grnGvnDate=" + grnGvnDate + ", billNo=" + billNo
@@ -659,14 +689,7 @@ public class GetGrnGvnForCreditNote {
 				+ ", taxableAmt=" + taxableAmt + ", totalTax=" + totalTax + ", roundUpAmt=" + roundUpAmt + ", finalAmt="
 				+ finalAmt + ", itemName=" + itemName + ", frName=" + frName + ", isCreditNote=" + isCreditNote
 				+ ", menuId=" + menuId + ", catId=" + catId + ", invoiceNo=" + invoiceNo + ", refInvoiceDate="
-				+ refInvoiceDate + "]";
+				+ refInvoiceDate + ", grngvnSrno=" + grngvnSrno + ", grnGvnHeaderId=" + grnGvnHeaderId + "]";
 	}
 
-
-
-	
-
-	
-
-	
 }

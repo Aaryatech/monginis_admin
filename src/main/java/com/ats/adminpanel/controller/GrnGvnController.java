@@ -1,5 +1,6 @@
 package com.ats.adminpanel.controller;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -36,6 +37,7 @@ import com.ats.adminpanel.model.grngvn.GrnGvn;
 import com.ats.adminpanel.model.grngvn.GrnGvnHeader;
 import com.ats.adminpanel.model.grngvn.GrnGvnHeaderList;
 import com.ats.adminpanel.model.grngvn.PostGrnGvnList;
+import com.ats.adminpanel.model.grngvn.TempGrnGvnBeanUp;
 import com.ats.adminpanel.model.login.UserResponse;
 import com.ats.adminpanel.model.remarks.GetAllRemarks;
 import com.ats.adminpanel.model.remarks.GetAllRemarksList;
@@ -43,6 +45,10 @@ import com.ats.adminpanel.model.remarks.GetAllRemarksList;
 @Controller
 @Scope("session")
 public class GrnGvnController {
+
+	public static float roundUp(float d) {
+		return BigDecimal.valueOf(d).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+	}
 
 	GetGrnGvnDetailsList getGrnGvnDetailsList;
 	List<GetGrnGvnDetails> getGrnGvnDetails;
@@ -58,15 +64,12 @@ public class GrnGvnController {
 
 	public String gateGrnHeaderFromDate, gateGrnHeaderToDate;
 
-	
 	// 16 FEB NEW
 	// List<GrnGvnHeader> grnHeaderList;
 
 	List<GrnGvnHeader> grnGateHeaderList, grnAccHeaderList;
 
 	GrnGvnHeaderList headerList = new GrnGvnHeaderList();
-	
-	
 
 	List<GetGrnGvnDetails> grnGateDetailList = new ArrayList<>();
 	List<GetGrnGvnDetails> grnAccDetailList = new ArrayList<>();
@@ -78,7 +81,7 @@ public class GrnGvnController {
 	String frSelectedGateHeader, frSelectedAccHeader;
 	String accGrnHeaderFromDate, accGrnHeaderToDate;
 
-	int globalGateHeaderId,globalAccHeaderId;
+	int globalGateHeaderId, globalAccHeaderId;
 
 	@RequestMapping(value = "/getDateForGateHeader", method = RequestMethod.GET)
 	public String getDateForGateHeader(HttpServletRequest request, HttpServletResponse response) {
@@ -132,7 +135,7 @@ public class GrnGvnController {
 
 				String statusList = new String();
 
-				statusList = "1" ;
+				statusList = "1";
 				// for Sending Current Date
 				java.util.Date date = new java.util.Date();
 
@@ -143,7 +146,6 @@ public class GrnGvnController {
 
 				map = new LinkedMultiValueMap<String, Object>();
 
-			
 				map.add("statusList", statusList);
 				map.add("fromDate", gateGrnHeaderFromDate);// ie current date
 				map.add("toDate", gateGrnHeaderToDate);// ie current date
@@ -174,7 +176,7 @@ public class GrnGvnController {
 					map = new LinkedMultiValueMap<String, Object>();
 
 					map.add("fromDate", gateGrnHeaderFromDate);
-					map.add("toDate", gateGrnHeaderToDate);// 
+					map.add("toDate", gateGrnHeaderToDate);//
 					map.add("isGrn", 1);
 
 					grnGateHeaderList = new ArrayList<>();
@@ -240,10 +242,9 @@ public class GrnGvnController {
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-		
 		// getFrGrnDetail
 		try {
-			
+
 			map.add("grnGvnHeaderId", headerId);
 			GetGrnGvnDetailsList detailList = restTemplate.postForObject(Constants.url + "getFrGrnDetails", map,
 					GetGrnGvnDetailsList.class);
@@ -255,13 +256,13 @@ public class GrnGvnController {
 			System.out.println("GRN Detail   " + grnGateDetailList.toString());
 
 			map = new LinkedMultiValueMap<String, Object>();
-			
+
 			map.add("isFrUsed", 0);
 			map.add("moduleId", 1);
 			map.add("subModuleId", 1);
 			getAllRemarksList = restTemplate.postForObject(Constants.url + "/getAllRemarks", map,
 					GetAllRemarksList.class);
-			
+
 			getAllRemarks = new ArrayList<>();
 			getAllRemarks = getAllRemarksList.getGetAllRemarks();
 
@@ -279,424 +280,467 @@ public class GrnGvnController {
 		return modelAndView;
 
 	}
-	
-	
+
 	// A]: Gate Grn Approve Specific Record
-		@RequestMapping(value = "/insertGateGrnProcessAgree", method = RequestMethod.GET)
-		public String insertGateGrnProcessAgree(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/insertGateGrnProcessAgree", method = RequestMethod.GET)
+	public String insertGateGrnProcessAgree(HttpServletRequest request, HttpServletResponse response) {
 
-			ModelAndView modelAndView = new ModelAndView("grngvn/gateGrn");
+		ModelAndView modelAndView = new ModelAndView("grngvn/gateGrn");
 
-			try {
+		try {
 
-				HttpSession session = request.getSession();
-				UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
-				int gateApproveLogin = userResponse.getUser().getId();
+			HttpSession session = request.getSession();
+			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
+			int gateApproveLogin = userResponse.getUser().getId();
 
-				int grnId = Integer.parseInt(request.getParameter("grnId"));
+			int grnId = Integer.parseInt(request.getParameter("grnId"));
 
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				Calendar cal = Calendar.getInstance();
+			int gateGrnQty = Integer.parseInt(request.getParameter("gate_grn_qty"));
 
-				RestTemplate restTemplate = new RestTemplate();
+			System.out.println("Gate Grn QTY RECEIVED " + gateGrnQty);
 
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Calendar cal = Calendar.getInstance();
 
-				map.add("approvedLoginGate", gateApproveLogin);
+			RestTemplate restTemplate = new RestTemplate();
 
-				map.add("approveimedDateTimeGate", dateFormat.format(cal.getTime()));
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-				map.add("approvedRemarkGate", "Approve BY Dispatch");
+			List<TempGrnGvnBeanUp> dataList = new ArrayList<>();
 
-				map.add("grnGvnStatus", Constants.AP_BY_GATE);
+			TempGrnGvnBeanUp data = new TempGrnGvnBeanUp();
 
-				map.add("grnGvnId", grnId);
+			data.setApproveimedDateTimeGate(dateFormat.format(cal.getTime()));
 
-				Info info = restTemplate.postForObject(Constants.url + "updateGateGrn", map, Info.class);
+			data.setApprovedLoginGate(gateApproveLogin);
 
-				System.out.println("after calling web service of gate grn agree info response as String - " + info);
+			data.setGrnGvnStatus(Constants.AP_BY_GATE);
 
-				if (info.getError() == false) {
+			data.setApprovedRemarkGate("Approve BY Dispatch");
 
-					for (int i = 0; i < grnGateDetailList.size(); i++) {
+			data.setGrnGvnId(grnId);
 
-						if (grnGateDetailList.get(i).getGrnGvnId()==grnId) {
+			data.setAprQtyGate(gateGrnQty);
 
-							grnGateDetailList.get(i).setGrnGvnStatus(Constants.AP_BY_GATE);
-							System.out.println("Record Updated Locally  apr by gate "+grnGateDetailList.get(i));
-							break;
+			dataList.add(data);
 
-						}
-					}
+		
+			Info info = restTemplate.postForObject(Constants.url + "updateGateGrn", dataList, Info.class);
 
-				}
+			System.out.println("after calling web service of gate grn agree info response as String - " + info);
 
-				GrnGvnHeader gateHeader = new GrnGvnHeader();
+			if (info.getError() == false) {
 
-				for (int i = 0; i < grnGateHeaderList.size(); i++) {
+				for (int i = 0; i < grnGateDetailList.size(); i++) {
 
-					if (grnGateHeaderList.get(i).getGrnGvnHeaderId() == globalGateHeaderId) {
+					if (grnGateDetailList.get(i).getGrnGvnId() == grnId) {
 
-						gateHeader = grnGateHeaderList.get(i);
-
+						grnGateDetailList.get(i).setGrnGvnStatus(Constants.AP_BY_GATE);
+						System.out.println("Record Updated Locally  apr by gate " + grnGateDetailList.get(i).toString());
 						break;
 
 					}
 				}
 
-				int rejStatus = 0, aprStatus = 0;
+			}
+
+			GrnGvnHeader gateHeader = new GrnGvnHeader();
+
+			for (int i = 0; i < grnGateHeaderList.size(); i++) {
+
+				if (grnGateHeaderList.get(i).getGrnGvnHeaderId() == globalGateHeaderId) {
+
+					gateHeader = grnGateHeaderList.get(i);
+
+					break;
+
+				}
+			}
+
+			int rejStatus = 0, aprStatus = 0;
+
+			for (int i = 0; i < grnGateDetailList.size(); i++) {
+
+				// setting approve and rejected count
+				if (grnGateDetailList.get(i).getGrnGvnStatus() == 2
+						|| grnGateDetailList.get(i).getGrnGvnStatus() == 6) {
+
+					aprStatus = aprStatus + 1;
+
+				} else {
+
+					rejStatus = rejStatus + 1;
+
+				}
+
+			}
+
+			System.out.println("grnGateDetailList LIST SIZE : " + grnGateDetailList.size());
+
+			System.out.println("aprStatus count = " + aprStatus + " reJStatus count = " + rejStatus);
+
+			// all Rejected
+			if (grnGateDetailList.size() == rejStatus) {
+
+				System.out.println("list Size " + rejStatus);
+
+				gateHeader.setGrngvnStatus(3);
+
+				System.out.println("list size matched to rejCount then : status =3 ");
+			}
+
+			// partially approved
+			if (grnGateDetailList.size() != aprStatus && grnGateDetailList.size() != rejStatus) {
+
+				gateHeader.setGrngvnStatus(8);
+
+				System.out.println(" some approved some dis approved header Status =8  	// partially approved");
+
+			}
+
+			// all Approved
+			if (grnGateDetailList.size() == aprStatus) {
+
+				gateHeader.setGrngvnStatus(2);
+
+				System.out.println("header Status = 2 	// all Approved");
+
+			}
+
+			// Update Grn Gvn Header
+			gateHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
+
+			gateHeader = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", gateHeader,
+					GrnGvnHeader.class);
+
+			System.out.println("GRN HEADER Response after Update  " + gateHeader.toString());
+
+		} catch (Exception e) {
+
+			System.out.println("Error in insert Gate Grn Process Agree " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return "redirect:/getGateGrnDetail";
+
+	}
+
+	// B]: Gate Grn DisApprove Specific Records
+
+	@RequestMapping(value = "/insertGateGrnProcessDisAgree", method = RequestMethod.GET)
+	public String insertGateGrnProcessDisAgree(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("grngvn/gateGrn");
+
+		try {
+
+			int grnId = Integer.parseInt(request.getParameter("grnId"));
+
+			HttpSession session = request.getSession();
+			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
+
+			int gateApproveLogin = userResponse.getUser().getId();
+
+			String gateRemark = request.getParameter("gateRemark");
+
+			int gateGrnQty = Integer.parseInt(request.getParameter("gate_grn_qty"));
+
+			System.out.println("Gate Grn QTY RECEIVED " + gateGrnQty);
+
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Calendar cal = Calendar.getInstance();
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			List<TempGrnGvnBeanUp> dataList = new ArrayList<>();
+
+			TempGrnGvnBeanUp data = new TempGrnGvnBeanUp();
+
+			data.setApproveimedDateTimeGate(dateFormat.format(cal.getTime()));
+
+			data.setApprovedLoginGate(gateApproveLogin);
+
+			data.setGrnGvnStatus(Constants.DIS_BY_GATE);
+
+			data.setApprovedRemarkGate(gateRemark);
+
+			data.setGrnGvnId(grnId);
+
+			data.setAprQtyGate(gateGrnQty);
+
+			dataList.add(data);
+
+			Info updateGateGrn = restTemplate.postForObject(Constants.url + "updateGateGrn", dataList, Info.class);
+
+			System.out.println("after calling web service of disagree" + updateGateGrn.toString());
+
+			if (updateGateGrn.getError() == false) {
 
 				for (int i = 0; i < grnGateDetailList.size(); i++) {
 
-					// setting approve and rejected count
-					if (grnGateDetailList.get(i).getGrnGvnStatus() == 2
-							|| grnGateDetailList.get(i).getGrnGvnStatus() == 6) {
-						
-						aprStatus = aprStatus + 1;
-						
-					} else {
+					if (grnGateDetailList.get(i).getGrnGvnId() == grnId) {
 
-						rejStatus = rejStatus + 1;
-						
-					}
-
-				}
-				
-				
-				System.out.println("grnGateDetailList LIST SIZE : "+grnGateDetailList.size());
-
-				System.out.println("aprStatus count = "+aprStatus +" reJStatus count = "+rejStatus);
-
-				// all Rejected
-				if (grnGateDetailList.size() == rejStatus) {
-					
-					System.out.println("list Size "+rejStatus);
-
-					gateHeader.setGrngvnStatus(3);
-
-					System.out.println("list size matched to rejCount then : status =3 ");
-				}
-
-				// partially approved
-				if (grnGateDetailList.size() != aprStatus && grnGateDetailList.size() != rejStatus) {
-
-					gateHeader.setGrngvnStatus(8);
-
-					System.out.println(" some approved some dis approved header Status =8  	// partially approved");
-
-				}
-
-				// all Approved
-				if (grnGateDetailList.size() == aprStatus) {
-
-					gateHeader.setGrngvnStatus(2);
-
-					System.out.println("header Status = 2 	// all Approved");
-
-				}
-
-				// Update Grn Gvn Header
-				gateHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
-
-				gateHeader = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", gateHeader,
-						GrnGvnHeader.class);
-
-				System.out.println("GRN HEADER Response after Update  " + gateHeader.toString());
-
-			} catch (Exception e) {
-
-				System.out.println("Error in insert Gate Grn Process Agree " + e.getMessage());
-				e.printStackTrace();
-			}
-
-			return "redirect:/getGateGrnDetail";
-
-		}
-
-		// B]: Gate Grn DisApprove Specific Records
-
-		@RequestMapping(value = "/insertGateGrnProcessDisAgree", method = RequestMethod.GET)
-		public String insertGateGrnProcessDisAgree(HttpServletRequest request, HttpServletResponse response) {
-
-			ModelAndView model = new ModelAndView("grngvn/gateGrn");
-			
-			try {
-
-				int grnId = Integer.parseInt(request.getParameter("grnId"));
-
-				HttpSession session = request.getSession();
-				UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
-
-				int gateApproveLogin = userResponse.getUser().getId();
-
-				String gateRemark = request.getParameter("gateRemark");
-
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				Calendar cal = Calendar.getInstance();
-
-				RestTemplate restTemplate = new RestTemplate();
-
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-
-				map.add("approvedLoginGate", gateApproveLogin);
-
-				map.add("approveimedDateTimeGate", dateFormat.format(cal.getTime()));
-
-				map.add("approvedRemarkGate", gateRemark);
-
-				map.add("grnGvnStatus", Constants.DIS_BY_GATE);
-
-				map.add("grnGvnId", grnId);
-
-				Info updateGateGrn = restTemplate.postForObject(Constants.url + "updateGateGrn", map, Info.class);
-
-				System.out.println("after calling web service of disagree" + updateGateGrn.toString());
-
-				if (updateGateGrn.getError() == false) {
-
-					for (int i = 0; i < grnGateDetailList.size(); i++) {
-
-						if (grnGateDetailList.get(i).getGrnGvnId()==grnId) {
-
-							grnGateDetailList.get(i).setGrnGvnStatus(Constants.DIS_BY_GATE);
-							System.out.println("Record Updated Locally Gate Grn  disapp "+grnGateDetailList.get(i).getItemName()+"disApproved");
-							break;
-
-						}
-					}
-
-				}
-
-				GrnGvnHeader gateHeader = new GrnGvnHeader();
-
-				for (int i = 0; i < grnGateHeaderList.size(); i++) {
-
-					if (grnGateHeaderList.get(i).getGrnGvnHeaderId() == globalGateHeaderId) {
-
-						gateHeader = grnGateHeaderList.get(i);
-						
-						System.out.println("Gate Header  "+gateHeader.toString());
-
+						grnGateDetailList.get(i).setGrnGvnStatus(Constants.DIS_BY_GATE);
+						System.out.println("Record Updated Locally Gate Grn  disapp "
+								+ grnGateDetailList.get(i).getItemName() + "disApproved");
 						break;
 
 					}
 				}
 
-				int rejStatus = 0, aprStatus = 0;
-				
-				System.out.println("LIST SIZE : "+grnGateDetailList.size());
-
-				for (int i = 0; i < grnGateDetailList.size(); i++) {
-
-					if (grnGateDetailList.get(i).getGrnGvnStatus() == 2
-							|| grnGateDetailList.get(i).getGrnGvnStatus() == 6) {
-						aprStatus = aprStatus + 1;
-					} else {
-
-						rejStatus = rejStatus + 1;
-					}
-
-				}
-				System.out.println(" grnGateDetailList LIST SIZE : "+grnGateDetailList.size());
-
-				System.out.println("aprStatus count = "+aprStatus +" reJStatus count = "+rejStatus);
-				
-				if (grnGateDetailList.size() == rejStatus) {
-
-					gateHeader.setGrngvnStatus(3);
-					System.out.println("GRN Status =3" + gateHeader.getGrngvnStatus());
-
-				}
-
-				// partially approved
-				if (grnGateDetailList.size() != aprStatus && grnGateDetailList.size() != rejStatus) {
-
-					gateHeader.setGrngvnStatus(8);
-					System.out.println("GRN Status =8" + gateHeader.getGrngvnStatus());
-
-				}
-
-				// all Approved
-				if (grnGateDetailList.size() == aprStatus) {
-
-					gateHeader.setGrngvnStatus(2);
-
-					System.out.println("GRN Status =2" + gateHeader.getGrngvnStatus());
-
-				}
-
-				// update Grn GVN Header
-
-				gateHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
-
-				gateHeader = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", gateHeader,
-						GrnGvnHeader.class);
-
-				System.out.println("GRN HEADER response  " + gateHeader.toString());
-
-			} catch (Exception e) {
-
-				System.out.println("Error in updating grn details " + e.getMessage());
-
-				e.printStackTrace();
 			}
-			System.out.println("INSERT GATE GRN DISAPPROVE : STATUS =3");
 
-			return "redirect:/getGateGrnDetail";
+			GrnGvnHeader gateHeader = new GrnGvnHeader();
 
+			for (int i = 0; i < grnGateHeaderList.size(); i++) {
+
+				if (grnGateHeaderList.get(i).getGrnGvnHeaderId() == globalGateHeaderId) {
+
+					gateHeader = grnGateHeaderList.get(i);
+
+					System.out.println("Gate Header  " + gateHeader.toString());
+
+					break;
+
+				}
+			}
+
+			int rejStatus = 0, aprStatus = 0;
+
+			System.out.println("LIST SIZE : " + grnGateDetailList.size());
+
+			for (int i = 0; i < grnGateDetailList.size(); i++) {
+
+				if (grnGateDetailList.get(i).getGrnGvnStatus() == 2
+						|| grnGateDetailList.get(i).getGrnGvnStatus() == 6) {
+					aprStatus = aprStatus + 1;
+				} else {
+
+					rejStatus = rejStatus + 1;
+				}
+
+			}
+			System.out.println(" grnGateDetailList LIST SIZE : " + grnGateDetailList.size());
+
+			System.out.println("aprStatus count = " + aprStatus + " reJStatus count = " + rejStatus);
+
+			if (grnGateDetailList.size() == rejStatus) {
+
+				gateHeader.setGrngvnStatus(3);
+				System.out.println("GRN Status =3" + gateHeader.getGrngvnStatus());
+
+			}
+
+			// partially approved
+			if (grnGateDetailList.size() != aprStatus && grnGateDetailList.size() != rejStatus) {
+
+				gateHeader.setGrngvnStatus(8);
+				System.out.println("GRN Status =8" + gateHeader.getGrngvnStatus());
+
+			}
+
+			// all Approved
+			if (grnGateDetailList.size() == aprStatus) {
+
+				gateHeader.setGrngvnStatus(2);
+
+				System.out.println("GRN Status =2" + gateHeader.getGrngvnStatus());
+
+			}
+
+			// update Grn GVN Header
+
+			gateHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
+
+			gateHeader = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", gateHeader,
+					GrnGvnHeader.class);
+
+			System.out.println("GRN HEADER response  " + gateHeader.toString());
+
+		} catch (Exception e) {
+
+			System.out.println("Error in updating grn details " + e.getMessage());
+
+			e.printStackTrace();
 		}
+		System.out.println("INSERT GATE GRN DISAPPROVE : STATUS =3");
 
-		// C]: Gate Grn Approve Multiple Records using CheckBox
+		return "redirect:/getGateGrnDetail";
 
-		@RequestMapping(value = "/insertGateGrnByCheckBoxes", method = RequestMethod.POST) // Using checkboxes to insert
-		public String insertGateGrnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
-			System.out.println("in checkboxes ");
+	}
 
-			ModelAndView model = new ModelAndView("grngvn/gateGrn");
+	// C]: Gate Grn Approve Multiple Records using CheckBox
 
-			ModelAndView modelAndView = null;
-			try {
-				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				Calendar cal = Calendar.getInstance();
+	@RequestMapping(value = "/insertGateGrnByCheckBoxes", method = RequestMethod.POST) // Using checkboxes to insert
+	public String insertGateGrnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("in checkboxes ");
 
-				// Integer.parseInt(request.getParameter("approveGateLogin"));
+		try {
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Calendar cal = Calendar.getInstance();
 
-				HttpSession session = request.getSession();
-				UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
+			HttpSession session = request.getSession();
+			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
 
-				int gateApproveLogin = userResponse.getUser().getId();
+			int gateApproveLogin = userResponse.getUser().getId();
 
-				String[] grnIdList = request.getParameterValues("select_to_agree");
+			String[] grnIdList = request.getParameterValues("select_to_agree");
 
-				System.out.println("GRN ID " + grnIdList[0]);
+			System.out.println("first GRN ID " + grnIdList[0]);
 
-				RestTemplate restTemplate = new RestTemplate();
+			RestTemplate restTemplate = new RestTemplate();
 
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-				String gIds = new String();
+			String gIds = new String();
+
+			List<TempGrnGvnBeanUp> dataList = new ArrayList<>();
+
+			for (int i = 0; i < grnIdList.length; i++) {
+
+				int gateGrnQty = Integer.parseInt(request.getParameter("gate_grn_qty" + grnIdList[i]));
+				System.out.println("corresponding gID " + grnIdList[i] + "Gate Qty " + gateGrnQty);
+
+				TempGrnGvnBeanUp data = new TempGrnGvnBeanUp();
+
+				data.setApproveimedDateTimeGate(dateFormat.format(cal.getTime()));
+
+				data.setApprovedLoginGate(gateApproveLogin);
+
+				data.setGrnGvnStatus(Constants.AP_BY_GATE);
+
+				data.setApprovedRemarkGate("Approve By Dispatch");
+
+				data.setGrnGvnId(Integer.parseInt(grnIdList[i]));
+
+				data.setAprQtyGate(gateGrnQty);
+
+				dataList.add(data);
+
+				gIds = gIds + "," + grnIdList[i];
+
+			}
+			gIds = gIds.substring(1);
+
+			// System.out.println("GIDS " + gIds);
+			/*
+			 * map.add("approvedLoginGate", gateApproveLogin);
+			 * 
+			 * map.add("approveimedDateTimeGate", dateFormat.format(cal.getTime()));
+			 * 
+			 * map.add("approvedRemarkGate", "Approve By Dispatch");
+			 * 
+			 * map.add("grnGvnStatus", Constants.AP_BY_GATE);
+			 * 
+			 * map.add("grnGvnId", gIds);
+			 */
+			Info updateGateGrn = restTemplate.postForObject(Constants.url + "updateGateGrn", dataList, Info.class);
+
+			if (updateGateGrn.getError() == false) {
+
+				System.out.println("Inside For Loop/updateGateGrn.getError() == false ");
+
 				for (int i = 0; i < grnIdList.length; i++) {
+					System.out.println(
+							"grnId List 1] " + grnIdList[i] + "gGDL ID " + grnGateDetailList.get(i).getGrnGvnId());
 
-					gIds = gIds + "," + grnIdList[i];
+					if (Integer.parseInt(grnIdList[i]) == grnGateDetailList.get(i).getGrnGvnId()) {
+						System.out.println(
+								"grnId List 1] " + grnIdList[i] + "gGDL ID " + grnGateDetailList.get(i).getGrnGvnId());
 
-				}
-				gIds = gIds.substring(1);
-
-				System.out.println("GIDS " + gIds);
-				map.add("approvedLoginGate", gateApproveLogin);
-
-				map.add("approveimedDateTimeGate", dateFormat.format(cal.getTime()));
-
-				map.add("approvedRemarkGate", "Approve By Dispatch");
-
-				map.add("grnGvnStatus", Constants.AP_BY_GATE);
-
-				map.add("grnGvnId", gIds);
-
-				Info updateGateGrn = restTemplate.postForObject(Constants.url + "updateGateGrn", map, Info.class);
-
-				if (updateGateGrn.getError() == false) {
-					
-					System.out.println("Inside For Loop/updateGateGrn.getError() == false ");
-
-					for (int i = 0; i < grnIdList.length; i++) {
-						System.out.println("grnId List 1] "+grnIdList[i] + "gGDL ID "+grnGateDetailList.get(i).getGrnGvnId());
-
-						if (Integer.parseInt(grnIdList[i]) == grnGateDetailList.get(i).getGrnGvnId()) {
-							System.out.println("grnId List 1] "+grnIdList[i] + "gGDL ID "+grnGateDetailList.get(i).getGrnGvnId());
-
-							grnGateDetailList.get(i).setGrnGvnStatus(Constants.AP_BY_GATE);
-							System.out.println("Record Updated Locally apr chk boxes ");
-							System.out.println("gatGrn Detail List "+grnGateDetailList.toString());
-							
-						}
-						else {
-							
-							System.out.println("No MAtch Found ");
-						}
-					}
-
-				}
-
-				System.out.println("update Grn Using checkBoxes response " + updateGateGrn.toString());
-
-				// update Header :set data and web service call
-
-				GrnGvnHeader gateHeader = new GrnGvnHeader();
-				
-				System.out.println("globalGateHeaderId " +globalGateHeaderId);
-
-				for (int i = 0; i < grnGateHeaderList.size(); i++) {
-
-					if (grnGateHeaderList.get(i).getGrnGvnHeaderId() == globalGateHeaderId) {
-
-						gateHeader = grnGateHeaderList.get(i);
-						
-						System.out.println("Gate Header Received "+gateHeader.toString());
-
-						break;
-
-					}
-				}
-
-				int rejStatus = 0, aprStatus = 0;
-
-				for (int i = 0; i < grnGateDetailList.size(); i++) {
-
-					if (grnGateDetailList.get(i).getGrnGvnStatus() == 2
-							|| grnGateDetailList.get(i).getGrnGvnStatus() == 6) {
-
-						aprStatus = aprStatus + 1;
+						grnGateDetailList.get(i).setGrnGvnStatus(Constants.AP_BY_GATE);
+						System.out.println("Record Updated Locally apr chk boxes ");
+						System.out.println("gatGrn Detail List " + grnGateDetailList.toString());
 
 					} else {
 
-						rejStatus = rejStatus + 1;
-
+						System.out.println("No MAtch Found ");
 					}
-
-				} // End of For Loop
-				
-				System.out.println("grnGateDetailList LIST SIZE : "+grnGateDetailList.size());
-
-				System.out.println("aprStatus count = "+aprStatus +" reJStatus count = "+rejStatus);
-
-				if (grnGateDetailList.size() == rejStatus) {
-
-					gateHeader.setGrngvnStatus(3);
-					System.out.println("header Status =3");
 				}
-
-				// partially approved
-				if (grnGateDetailList.size() != aprStatus && grnGateDetailList.size() != rejStatus) {
-
-					gateHeader.setGrngvnStatus(8);
-					System.out.println("Header Status =8 ");
-				}
-
-				// all Approved
-				if (grnGateDetailList.size() == aprStatus) {
-
-					gateHeader.setGrngvnStatus(2);
-					System.out.println("Header Status = 2");
-				}
-
-				// update Grn Gvn Header
-				gateHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
-
-				gateHeader = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", gateHeader,
-						GrnGvnHeader.class);
-
-				System.out.println("GRN HEADER Response : " + gateHeader.toString());
-
-			} catch (Exception e) {
-
-				System.out.println("Gate Grn Checkbox Error :" + e.getMessage());
-				e.printStackTrace();
 
 			}
 
-			 return "redirect:/getGateGrnDetail/"+globalGateHeaderId;
+			System.out.println("update Grn Using checkBoxes response " + updateGateGrn.toString());
+
+			// update Header :set data and web service call
+
+			GrnGvnHeader gateHeader = new GrnGvnHeader();
+
+			System.out.println("globalGateHeaderId " + globalGateHeaderId);
+
+			for (int i = 0; i < grnGateHeaderList.size(); i++) {
+
+				if (grnGateHeaderList.get(i).getGrnGvnHeaderId() == globalGateHeaderId) {
+
+					gateHeader = grnGateHeaderList.get(i);
+
+					System.out.println("Gate Header Received " + gateHeader.toString());
+
+					break;
+
+				}
+			}
+
+			int rejStatus = 0, aprStatus = 0;
+
+			for (int i = 0; i < grnGateDetailList.size(); i++) {
+
+				if (grnGateDetailList.get(i).getGrnGvnStatus() == 2
+						|| grnGateDetailList.get(i).getGrnGvnStatus() == 6) {
+
+					aprStatus = aprStatus + 1;
+
+				} else {
+
+					rejStatus = rejStatus + 1;
+
+				}
+
+			} // End of For Loop
+
+			System.out.println("grnGateDetailList LIST SIZE : " + grnGateDetailList.size());
+
+			System.out.println("aprStatus count = " + aprStatus + " reJStatus count = " + rejStatus);
+
+			if (grnGateDetailList.size() == rejStatus) {
+
+				gateHeader.setGrngvnStatus(3);
+				System.out.println("header Status =3");
+			}
+
+			// partially approved
+			if (grnGateDetailList.size() != aprStatus && grnGateDetailList.size() != rejStatus) {
+
+				gateHeader.setGrngvnStatus(8);
+				System.out.println("Header Status =8 ");
+			}
+
+			// all Approved
+			if (grnGateDetailList.size() == aprStatus) {
+
+				gateHeader.setGrngvnStatus(2);
+				System.out.println("Header Status = 2");
+			}
+
+			// update Grn Gvn Header
+			gateHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
+
+			gateHeader = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", gateHeader,
+					GrnGvnHeader.class);
+
+			System.out.println("GRN HEADER Response : " + gateHeader.toString());
+
+		} catch (Exception e) {
+
+			System.out.println("Gate Grn Checkbox Error :" + e.getMessage());
+			e.printStackTrace();
+
 		}
+
+		return "redirect:/getGateGrnDetail/" + globalGateHeaderId;
+	}
 	// Acc Grn Started
 
 	@RequestMapping(value = "/getDateForAccHeader", method = RequestMethod.GET)
@@ -763,7 +807,7 @@ public class GrnGvnController {
 
 				String statusList = new String();
 
-				statusList = "4"+","+ "8" ;
+				statusList = "4" + "," + "8";
 				// for Sending Current Date
 				java.util.Date date = new java.util.Date();
 
@@ -785,8 +829,8 @@ public class GrnGvnController {
 
 				headerList = restTemplate.postForObject(Constants.url + "findGrnGvnHeaderOnLoad", map,
 						GrnGvnHeaderList.class);
-				
-				grnAccHeaderList=headerList.getGrnGvnHeader();
+
+				grnAccHeaderList = headerList.getGrnGvnHeader();
 
 				System.out.println("Grn Acc Header List ON load  " + grnAccHeaderList.toString());
 
@@ -795,11 +839,13 @@ public class GrnGvnController {
 			else {
 
 				if (frList.contains("-1")) {
-					/*isAllFrSelected = true;
-
-				}
-
-				if (isAllFrSelected) {*/
+					/*
+					 * isAllFrSelected = true;
+					 * 
+					 * }
+					 * 
+					 * if (isAllFrSelected) {
+					 */
 					// all Fr selected Web Service
 					System.out.println("All Fr Selected =true");
 
@@ -814,8 +860,8 @@ public class GrnGvnController {
 					headerList = restTemplate.postForObject(Constants.url + "getGrnGvnHeaderAllFr", map,
 							GrnGvnHeaderList.class);
 
-					grnAccHeaderList=headerList.getGrnGvnHeader();
-					
+					grnAccHeaderList = headerList.getGrnGvnHeader();
+
 					System.out.println("Grn Acc Header List  All FR" + grnAccHeaderList.toString());
 
 				} else {
@@ -831,10 +877,11 @@ public class GrnGvnController {
 
 					grnAccHeaderList = new ArrayList<>();
 
-					headerList = restTemplate.postForObject(Constants.url + "getGrnGvnHeader", map, GrnGvnHeaderList.class);
+					headerList = restTemplate.postForObject(Constants.url + "getGrnGvnHeader", map,
+							GrnGvnHeaderList.class);
 
-					grnAccHeaderList=headerList.getGrnGvnHeader();
-					
+					grnAccHeaderList = headerList.getGrnGvnHeader();
+
 					System.out.println("Grn Acc Header List  specific FR " + grnAccHeaderList.toString());
 				}
 
@@ -862,8 +909,8 @@ public class GrnGvnController {
 		modelAndView = new ModelAndView("grngvn/accGrn");
 
 		System.out.println("He ader " + headerId);
-		
-		globalAccHeaderId=headerId;
+
+		globalAccHeaderId = headerId;
 
 		RestTemplate restTemplate = new RestTemplate();
 
@@ -882,7 +929,6 @@ public class GrnGvnController {
 
 			System.out.println("GRN Detail   " + grnAccDetailList.toString());
 
-		
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("isFrUsed", 0);
 			map.add("moduleId", 1);
@@ -908,110 +954,192 @@ public class GrnGvnController {
 		return modelAndView;
 	}
 
-	
-	
-	//Acc GRN started
-	
-	
-	//A] --//Acc Grn Process Agree
-	@RequestMapping(value = "/insertAccGrnProcessAgree", method =
-			  RequestMethod.GET) public String insertAccGrnProcessAgree(HttpServletRequest
-			  request, HttpServletResponse response) {
+	// Acc GRN started
+
+	// A] --//Acc Grn Process Agree
+	@RequestMapping(value = "/insertAccGrnProcessAgree", method = RequestMethod.GET)
+	public String insertAccGrnProcessAgree(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("grngvn/accGrn");
-			  
-			  try {
-				  
-				  int grnId = Integer.parseInt(request.getParameter("grnId"));
-			  
-			  HttpSession session = request.getSession(); 
-			  UserResponse userResponse = (UserResponse)session.getAttribute("UserDetail"); 
-			  int accApproveLogin =userResponse.getUser().getId();
-			  
-			  DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); Calendar
-			  cal = Calendar.getInstance(); System.out.println("************* Date Time " +
-			  dateFormat.format(cal.getTime()));
-			  
-			  RestTemplate restTemplate = new RestTemplate();
-			  
-			  MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,
-			  Object>();
-			  
-			  map.add("approvedLoginAcc", accApproveLogin);
-			  
-			  map.add("approvedDateTimeAcc", dateFormat.format(cal.getTime()));
-			  
-			  map.add("approvedRemarkAcc", "Approve By Acc");
-			  
-			  map.add("grnGvnStatus", Constants.AP_BY_ACC);
-			  
-			  map.add("grnGvnId", grnId);
-			  
-			  Info info = restTemplate.postForObject(Constants.url +
-			  "updateAccGrn", map, Info.class);
-			  
-			  //new code
-			  
-			  if (info.getError() == false) {
 
-					for (int i = 0; i < grnAccDetailList.size(); i++) {
+		try {
 
-						if (grnAccDetailList.get(i).getGrnGvnId()==grnId) {
+			int grnId = Integer.parseInt(request.getParameter("grnId"));
 
-							grnAccDetailList.get(i).setGrnGvnStatus(Constants.AP_BY_ACC);
-							System.out.println("Record Updated Locally  apr");
-							break;
+			int accGrnQty = Integer.parseInt(request.getParameter("acc_grn_qty"));
 
-						}
+			System.out.println("Acc GRN QTY " + accGrnQty + "for GRN ID =" + grnId);
+			HttpSession session = request.getSession();
+			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
+			int accApproveLogin = userResponse.getUser().getId();
+
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Calendar cal = Calendar.getInstance();
+			System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			List<TempGrnGvnBeanUp> dataList = new ArrayList<>();
+
+			TempGrnGvnBeanUp data = new TempGrnGvnBeanUp();
+
+			GetGrnGvnDetails detail = new GetGrnGvnDetails();
+
+			for (int i = 0; i < grnAccDetailList.size(); i++) {
+
+				if (grnAccDetailList.get(i).getGrnGvnId() == grnId) {
+
+					System.out.println("GRN ID MAtched " + grnId);
+
+					detail = grnAccDetailList.get(i);
+
+					float grnRate = 0;
+
+					float total = detail.getBaseRate() * accGrnQty;
+
+					float aprAmt = 0;
+					float aprTaxableAmt, aprTotalTax;
+					float sgstRs, cgstRs, igstRs;
+
+					float grandTotal;
+					if (detail.getGrnType() == 0) {
+
+						grnRate = detail.getBaseRate() * 75 / 100;
 					}
 
-				}
+					if (detail.getGrnType() == 1) {
 
-				GrnGvnHeader accHeader = new GrnGvnHeader();
+						grnRate = detail.getBaseRate() * 90 / 100;
+					}
 
-				for (int i = 0; i < grnAccHeaderList.size(); i++) {
+					if (detail.getGrnType() == 2 || detail.getGrnType() == 4) {
 
-					if (grnAccHeaderList.get(i).getGrnGvnHeaderId() == globalAccHeaderId) {
+						grnRate = detail.getBaseRate();
 
-						accHeader = grnAccHeaderList.get(i);
-						
+					}
+
+					aprTaxableAmt = grnRate * accGrnQty;
+
+					System.out.println("apr Taxable Amt = " + aprTaxableAmt);
+
+					System.out.println("Grn RAte " + grnRate);
+					aprTotalTax = ((aprTaxableAmt) * (detail.getSgstPer() + detail.getCgstPer())) / 100;
+					System.out.println("Apr Total Tax " + aprTotalTax);
+
+					if (detail.getIsSameState() == 1) {
+
+						sgstRs = aprTotalTax / 2;
+						cgstRs = aprTotalTax / 2;
+
+						igstRs = 0.0f;
+					} else {
+
+						igstRs = aprTotalTax;
+
+						sgstRs = 0.0f;
+						cgstRs = 0.0f;
+					}
+
+					System.out.println("sgstsRs" + sgstRs + "CGSt Rs " + cgstRs);
+
+					grandTotal = aprTaxableAmt + aprTotalTax;
+
+					System.out.println("GRAND total " + grandTotal);
+
+					data = new TempGrnGvnBeanUp();
+
+					data.setApprovedDateTimeAcc(dateFormat.format(cal.getTime()));
+
+					data.setApprovedLoginAcc(accApproveLogin);
+
+					data.setGrnGvnStatus(Constants.AP_BY_ACC);
+
+					data.setApprovedRemarkAcc("Approved BY Acc");
+
+					data.setGrnGvnId(grnId);
+
+					data.setAprQtyAcc(accGrnQty);
+
+					data.setAprCgstRs(roundUp(cgstRs));
+					data.setAprIgstRs(roundUp(igstRs));
+					data.setAprSgstRs(roundUp(sgstRs));
+
+					data.setAprTaxableAmt(roundUp(aprTaxableAmt));
+					data.setAprTotalTax(roundUp(aprTotalTax));
+					data.setGrnGvnId(grnId);
+
+					data.setAprGrandTotal(roundUp(grandTotal));
+
+					dataList.add(data);
+
+					break;
+
+				} // end of matching grnId
+			} // end of for Loop
+
+			Info info = restTemplate.postForObject(Constants.url + "updateAccGrn", dataList, Info.class);
+
+			System.out.println("Response UPDATE " + info.toString());
+			// new code
+
+			if (info.getError() == false) {
+
+				for (int i = 0; i < grnAccDetailList.size(); i++) {
+
+					if (grnAccDetailList.get(i).getGrnGvnId() == grnId) {
+
+						grnAccDetailList.get(i).setGrnGvnStatus(Constants.AP_BY_ACC);
+						System.out.println("Record Updated Locally  apr");
 						break;
+
 					}
 				}
 
-				
-				if(accHeader.getGrngvnStatus()==2||accHeader.getGrngvnStatus()==6||accHeader.getGrngvnStatus()==7) {
-					
-					int rejStatus = 0, aprStatus = 0;
+			}
 
+			GrnGvnHeader accHeader = new GrnGvnHeader();
+
+			for (int i = 0; i < grnAccHeaderList.size(); i++) {
+
+				if (grnAccHeaderList.get(i).getGrnGvnHeaderId() == globalAccHeaderId) {
+
+					accHeader = grnAccHeaderList.get(i);
+
+					break;
+				}
+			}
+
+			if (accHeader.getGrngvnStatus() == 2 || accHeader.getGrngvnStatus() == 6
+					|| accHeader.getGrngvnStatus() == 7) {
+
+				int rejStatus = 0, aprStatus = 0;
 
 				for (int i = 0; i < grnAccDetailList.size(); i++) {
 
 					// setting approve and rejected count
 					if (grnAccDetailList.get(i).getGrnGvnStatus() == 6) {
-						
+
 						aprStatus = aprStatus + 1;
-						
-					} else if(grnAccDetailList.get(i).getGrnGvnStatus()==7) {
+
+					} else if (grnAccDetailList.get(i).getGrnGvnStatus() == 7) {
 
 						rejStatus = rejStatus + 1;
 					}
 
 				}
-				
 
 				// all Rejected
 				if (grnAccDetailList.size() == rejStatus) {
-					
-					System.out.println("rejStatus count "+rejStatus);
+
+					System.out.println("rejStatus count " + rejStatus);
 
 					accHeader.setGrngvnStatus(7);
 
 					System.out.println("Heade status =7 ");
 				}
 
-				
-				
 				else if (grnAccDetailList.size() == aprStatus) {
 
 					accHeader.setGrngvnStatus(6);
@@ -1019,10 +1147,9 @@ public class GrnGvnController {
 					System.out.println("header Status = 6");
 
 				}
-				
-				
+
 				// partially approved
-				else  {
+				else {
 
 					accHeader.setGrngvnStatus(8);
 
@@ -1031,289 +1158,403 @@ public class GrnGvnController {
 				}
 
 				// all Approved
-				
-				}//If grnStatus =2
-				
-				//if Status=3||7
-				else if(accHeader.getGrngvnStatus()==8) {
-					
-					int rejStatus = 0, aprStatus = 0;
 
-					
-					for (int i = 0; i < grnAccDetailList.size(); i++) {
+			} // If grnStatus =2
 
-						// setting approve and rejected count
-						if (grnAccDetailList.get(i).getGrnGvnStatus() == 3
-								|| grnAccDetailList.get(i).getGrnGvnStatus() == 7) {
-							
-							rejStatus = rejStatus + 1;
+			// if Status=3||7
+			else if (accHeader.getGrngvnStatus() == 8) {
 
-						} else if(grnAccDetailList.get(i).getGrnGvnStatus()==6) {
+				int rejStatus = 0, aprStatus = 0;
 
-							
-							aprStatus = aprStatus + 1;
-						}
-
-					}//enf of for
-					
-					if(rejStatus==grnAccDetailList.size()) {
-						
-						accHeader.setGrngvnStatus(7);
-					} else if(aprStatus==grnAccDetailList.size()) {
-						
-						accHeader.setGrngvnStatus(6);
-						
-					}
-					else {
-						
-						accHeader.setGrngvnStatus(8);
-						
-					}
-					
-				}
-				
-				// Update Grn Gvn Header
-				
-				
 				for (int i = 0; i < grnAccDetailList.size(); i++) {
-						
+
+					// setting approve and rejected count
+					if (grnAccDetailList.get(i).getGrnGvnStatus() == 3
+							|| grnAccDetailList.get(i).getGrnGvnStatus() == 7) {
+
+						rejStatus = rejStatus + 1;
+
+					} else if (grnAccDetailList.get(i).getGrnGvnStatus() == 6) {
+
+						aprStatus = aprStatus + 1;
+					}
+
+				} // enf of for
+
+				if (rejStatus == grnAccDetailList.size()) {
+
+					accHeader.setGrngvnStatus(7);
+				} else if (aprStatus == grnAccDetailList.size()) {
+
+					accHeader.setGrngvnStatus(6);
+
+				} else {
+
+					accHeader.setGrngvnStatus(8);
+
+				}
+
+			}
+
+			// Update Grn Gvn Header
+			
+			accHeader.setAprTaxableAmt(0);
+			accHeader.setAprTotalTax(0);
+			accHeader.setAprGrandTotal(0);
+			accHeader.setAprCgstRs(0);
+			accHeader.setAprSgstRs(0);
+			accHeader.setAprIgstRs(0);
+			accHeader.setAprROff(0);
+			accHeader.setApporvedAmt(0);
+
+
+			for (int i = 0; i < grnAccDetailList.size(); i++) {
+
+				if (grnAccDetailList.get(i).getGrnGvnStatus() == 6) {
+
+					accHeader.setApporvedAmt(accHeader.getApporvedAmt() + grnAccDetailList.get(i).getGrnGvnAmt());
 					
-					if(grnAccDetailList.get(i).getGrnGvnStatus()==6) {
-						
-						accHeader.setApporvedAmt(0);
-						accHeader.setApporvedAmt(accHeader.getApporvedAmt()+grnAccDetailList.get(i).getGrnGvnAmt());
-					}
+					accHeader.setAprTaxableAmt(accHeader.getAprTaxableAmt()+grnAccDetailList.get(i).getAprTaxableAmt());
+					accHeader.setAprTotalTax(accHeader.getAprTotalTax()+grnAccDetailList.get(i).getAprTotalTax());
+					accHeader.setAprGrandTotal(accHeader.getAprGrandTotal()+grnAccDetailList.get(i).getAprGrandTotal());
+					accHeader.setAprCgstRs(accHeader.getAprCgstRs()+grnAccDetailList.get(i).getAprCgstRs());
+					accHeader.setAprSgstRs(accHeader.getAprSgstRs()+grnAccDetailList.get(i).getAprSgstRs());
+					accHeader.setAprIgstRs(accHeader.getAprIgstRs()+grnAccDetailList.get(i).getAprIgstRs());
+					accHeader.setAprROff(accHeader.getAprROff()+grnAccDetailList.get(i).getAprROff());
+					
+					//accHeader.setApporvedAmt(0);
+					
 				}
-				
-				accHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
-				
-				
-				System.out.println("LIST SIZE ACC GRN : "+grnAccDetailList.size());
+			}
 
+			accHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
 
-				accHeader = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", accHeader,
-						GrnGvnHeader.class);
+			System.out.println("LIST SIZE ACC GRN : " + grnAccDetailList.size());
 
-				System.out.println("GRN HEADER rESPONSE " + accHeader.toString());
+			accHeader = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", accHeader, GrnGvnHeader.class);
 
-			  //
-			  
-			  
-			  } catch (Exception e) {
-			  
-			  System.out.println("Error in update Acc Grn Agree " + e.getMessage());
-			  
-			  e.printStackTrace();
-			  
-			  }
-			  
-			  return "redirect:/getAccGrnDetail";
-			  
-			  }
-	
-	//B] --//insertAccGrnProcessDisAgree
-	
-	
-	
-	@RequestMapping(value = "/insertAccGrnProcessDisAgree", method =
-			  RequestMethod.GET) public String insertAccGrnProcessDisAgree(HttpServletRequest
-			  request, HttpServletResponse response) {
-			 
-			 System.out.println("using a href to call insert account dis agree ");
-			  
-			 ModelAndView model = new ModelAndView("grngvn/accGrn");
-			  
-			  try {
-				  
-				  int grnId = Integer.parseInt(request.getParameter("grnId"));
-			  
-			  // int accApproveLogin = //
-			  Integer.parseInt(request.getParameter("approveAccLogin"));
-			  HttpSession session = request.getSession(); 
-			  UserResponse userResponse = (UserResponse)session.getAttribute("UserDetail"); 
-			  int accApproveLogin =userResponse.getUser().getId();
-			  
-			  DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"); Calendar
-			  cal = Calendar.getInstance(); System.out.println("************* Date Time " +
-			  dateFormat.format(cal.getTime()));
-			  
-			  RestTemplate restTemplate = new RestTemplate();
-			  
-			  MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,
-			  Object>();
-			  
-			  map.add("approvedLoginAcc", accApproveLogin);
-			  
-			  map.add("approvedDateTimeAcc", dateFormat.format(cal.getTime()));
-			  
-			  map.add("approvedRemarkAcc", "Approve By Acc");
-			  
-			  map.add("grnGvnStatus", Constants.DIS_BY_ACC);
-			  
-			  map.add("grnGvnId", grnId);
-			  
-			  Info info = restTemplate.postForObject(Constants.url +
-			  "updateAccGrn", map, Info.class);
-			  
-			  //new code
-			  
-			  if (info.getError() == false) {
+			System.out.println("GRN HEADER rESPONSE " + accHeader.toString());
 
-					for (int i = 0; i < grnAccDetailList.size(); i++) {
+			//
 
-						if (grnId == grnAccDetailList.get(i).getGrnGvnId()) {
+		} catch (Exception e) {
 
-							grnAccDetailList.get(i).setGrnGvnStatus(Constants.DIS_BY_ACC);
-							System.out.println("Record Updated Locally  apr");
-							break;
+			System.out.println("Error in update Acc Grn Agree " + e.getMessage());
 
-						}
+			e.printStackTrace();
+
+		}
+
+		return "redirect:/getAccGrnDetail";
+
+	}
+
+	// B] --//insertAccGrnProcessDisAgree
+
+	@RequestMapping(value = "/insertAccGrnProcessDisAgree", method = RequestMethod.GET)
+	public String insertAccGrnProcessDisAgree(HttpServletRequest request, HttpServletResponse response) {
+
+		System.out.println("using a href to call insert account dis agree ");
+
+		ModelAndView model = new ModelAndView("grngvn/accGrn");
+
+		try {
+
+			int grnId = Integer.parseInt(request.getParameter("grnId"));
+
+			int accGrnQty = Integer.parseInt(request.getParameter("acc_grn_qty"));
+			System.out.println("Acc GRN QTY " + accGrnQty + "for GRN ID =" + grnId);
+
+			String accRemark = request.getParameter("accRemark");
+
+			// int accApproveLogin = //
+			Integer.parseInt(request.getParameter("approveAccLogin"));
+			HttpSession session = request.getSession();
+			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
+			int accApproveLogin = userResponse.getUser().getId();
+
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Calendar cal = Calendar.getInstance();
+			System.out.println("************* Date Time " + dateFormat.format(cal.getTime()));
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			List<TempGrnGvnBeanUp> dataList = new ArrayList<>();
+
+			TempGrnGvnBeanUp data = new TempGrnGvnBeanUp();
+
+			GetGrnGvnDetails detail = new GetGrnGvnDetails();
+			for (int i = 0; i < grnAccDetailList.size(); i++) {
+
+				if (grnAccDetailList.get(i).getGrnGvnId() == grnId) {
+
+					System.out.println("GRN ID MAtched " + grnId);
+
+					detail = grnAccDetailList.get(i);
+
+					float grnRate = 0;
+
+					float total = detail.getBaseRate() * accGrnQty;
+
+					float aprAmt = 0;
+					float aprTaxableAmt, aprTotalTax, aprGrandTotal;
+					float sgstRs, cgstRs, igstRs;
+
+					float grandTotal;
+					if (detail.getGrnType() == 0) {
+
+						grnRate = detail.getBaseRate() * 75 / 100;
 					}
 
-				}
+					if (detail.getGrnType() == 1) {
 
-			  GrnGvnHeader accHeader = new GrnGvnHeader();
+						grnRate = detail.getBaseRate() * 90 / 100;
+					}
 
-				for (int i = 0; i < grnAccHeaderList.size(); i++) {
+					if (detail.getGrnType() == 2 || detail.getGrnType() == 4) {
 
-					if (grnAccHeaderList.get(i).getGrnGvnHeaderId() == globalAccHeaderId) {
+						grnRate = detail.getBaseRate();
 
-						accHeader = grnAccHeaderList.get(i);
+					}
 
+					aprTaxableAmt = grnRate * accGrnQty;
+
+					System.out.println("apr Taxable Amt = " + aprTaxableAmt);
+
+					System.out.println("Grn RAte " + grnRate);
+					aprTotalTax = ((aprTaxableAmt) * (detail.getSgstPer() + detail.getCgstPer())) / 100;
+					System.out.println("Apr Total Tax " + aprTotalTax);
+
+					if (detail.getIsSameState() == 1) {
+
+						sgstRs = aprTotalTax / 2;
+						cgstRs = aprTotalTax / 2;
+
+						igstRs = 0.0f;
+					} else {
+
+						igstRs = aprTotalTax;
+
+						sgstRs = 0.0f;
+						cgstRs = 0.0f;
+					}
+
+					System.out.println("sgstsRs" + sgstRs + "CGSt Rs " + cgstRs);
+
+					grandTotal = aprTaxableAmt + aprTotalTax;
+
+					System.out.println("GRAND total " + grandTotal);
+
+					data = new TempGrnGvnBeanUp();
+
+					data.setApprovedDateTimeAcc(dateFormat.format(cal.getTime()));
+
+					data.setApprovedLoginAcc(accApproveLogin);
+
+					data.setGrnGvnStatus(Constants.DIS_BY_ACC);
+
+					data.setApprovedRemarkAcc(accRemark);
+
+					data.setGrnGvnId(grnId);
+
+					data.setAprQtyAcc(accGrnQty);
+
+					data.setAprCgstRs(roundUp(cgstRs));
+					data.setAprIgstRs(roundUp(igstRs));
+					data.setAprSgstRs(roundUp(sgstRs));
+
+					data.setAprTaxableAmt(roundUp(aprTaxableAmt));
+					data.setAprTotalTax(roundUp(aprTotalTax));
+					data.setGrnGvnId(grnId);
+
+					data.setAprGrandTotal(roundUp(grandTotal));
+
+					dataList.add(data);
+
+					break;
+
+				} // end of matching grnId
+			} // end of for Loop
+
+			Info info = restTemplate.postForObject(Constants.url + "updateAccGrn", dataList, Info.class);
+
+			// new code
+
+			if (info.getError() == false) {
+
+				for (int i = 0; i < grnAccDetailList.size(); i++) {
+
+					if (grnId == grnAccDetailList.get(i).getGrnGvnId()) {
+
+						grnAccDetailList.get(i).setGrnGvnStatus(Constants.DIS_BY_ACC);
+						System.out.println("Record Updated Locally  apr");
 						break;
 
 					}
 				}
 
-				
-				if(accHeader.getGrngvnStatus()==2||accHeader.getGrngvnStatus()==6||accHeader.getGrngvnStatus()==7) {
-					
-					int rejStatus = 0, aprStatus = 0;
+			}
 
+			GrnGvnHeader accHeader = new GrnGvnHeader();
 
-					for (int i = 0; i < grnAccDetailList.size(); i++) {
+			for (int i = 0; i < grnAccHeaderList.size(); i++) {
 
-						// setting approve and rejected count
-						if (grnAccDetailList.get(i).getGrnGvnStatus() == 6) {
-							
-							aprStatus = aprStatus + 1;
-							
-						} else if(grnAccDetailList.get(i).getGrnGvnStatus()==7) {
+				if (grnAccHeaderList.get(i).getGrnGvnHeaderId() == globalAccHeaderId) {
 
-							rejStatus = rejStatus + 1;
-						}
+					accHeader = grnAccHeaderList.get(i);
 
-					}
-					
+					break;
 
-					// all Rejected
-					if (grnAccDetailList.size() == rejStatus) {
-						
-						System.out.println("rejStatus count "+rejStatus);
+				}
+			}
 
-						accHeader.setGrngvnStatus(7);
+			if (accHeader.getGrngvnStatus() == 2 || accHeader.getGrngvnStatus() == 6
+					|| accHeader.getGrngvnStatus() == 7) {
 
-						System.out.println("Heade status =7 ");
-					}
+				int rejStatus = 0, aprStatus = 0;
 
-					
-					
-					else if (grnAccDetailList.size() == aprStatus) {
+				for (int i = 0; i < grnAccDetailList.size(); i++) {
 
-						accHeader.setGrngvnStatus(6);
+					// setting approve and rejected count
+					if (grnAccDetailList.get(i).getGrnGvnStatus() == 6) {
 
-						System.out.println("header Status = 6");
+						aprStatus = aprStatus + 1;
 
-					}
-					
-					
-					// partially approved
-					else  {
+					} else if (grnAccDetailList.get(i).getGrnGvnStatus() == 7) {
 
-						accHeader.setGrngvnStatus(8);
-
-						System.out.println("header Status =8 ");
-
+						rejStatus = rejStatus + 1;
 					}
 
-					// all Approved
-					
-					}//If grnStatus =2
-					
-					//if Status=3||7
-					else if(accHeader.getGrngvnStatus()==8) {
-						int rejStatus = 0, aprStatus = 0;
+				}
 
-						
-						
-						for (int i = 0; i < grnAccDetailList.size(); i++) {
+				// all Rejected
+				if (grnAccDetailList.size() == rejStatus) {
 
-							// setting approve and rejected count
-							if (grnAccDetailList.get(i).getGrnGvnStatus() == 3
-									|| grnAccDetailList.get(i).getGrnGvnStatus() == 7) {
-								
-								rejStatus = rejStatus + 1;
+					System.out.println("rejStatus count " + rejStatus);
 
-							} else if(grnAccDetailList.get(i).getGrnGvnStatus()==6) {
+					accHeader.setGrngvnStatus(7);
 
-								
-								aprStatus = aprStatus + 1;
-							}
+					System.out.println("Heade status =7 ");
+				}
 
-						}//enf of for
-						
-						if(rejStatus==grnAccDetailList.size()) {
-							
-							accHeader.setGrngvnStatus(7);
-						} else if(aprStatus==grnAccDetailList.size()) {
-							
-							accHeader.setGrngvnStatus(6);
-							
-						}
-						else {
-							
-							accHeader.setGrngvnStatus(8);
-							
-						}
-						
+				else if (grnAccDetailList.size() == aprStatus) {
+
+					accHeader.setGrngvnStatus(6);
+
+					System.out.println("header Status = 6");
+
+				}
+
+				// partially approved
+				else {
+
+					accHeader.setGrngvnStatus(8);
+
+					System.out.println("header Status =8 ");
+
+				}
+
+				// all Approved
+
+			} // If grnStatus =2
+
+			// if Status=3||7
+			else if (accHeader.getGrngvnStatus() == 8) {
+				int rejStatus = 0, aprStatus = 0;
+
+				for (int i = 0; i < grnAccDetailList.size(); i++) {
+
+					// setting approve and rejected count
+					if (grnAccDetailList.get(i).getGrnGvnStatus() == 3
+							|| grnAccDetailList.get(i).getGrnGvnStatus() == 7) {
+
+						rejStatus = rejStatus + 1;
+
+					} else if (grnAccDetailList.get(i).getGrnGvnStatus() == 6) {
+
+						aprStatus = aprStatus + 1;
 					}
 
-				// Update Grn Gvn Header
-				accHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
+				} // enf of for
 
-				accHeader = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", accHeader,
-						GrnGvnHeader.class);
+				if (rejStatus == grnAccDetailList.size()) {
 
-				System.out.println("GRN HEADER rESPONSE " + accHeader.toString());
+					accHeader.setGrngvnStatus(7);
+				} else if (aprStatus == grnAccDetailList.size()) {
 
-				
-				
-				System.out.println("LIST SIZE ACC GRN : "+grnAccDetailList.size());
+					accHeader.setGrngvnStatus(6);
+
+				} else {
+
+					accHeader.setGrngvnStatus(8);
+
+				}
+
+			}
+			
+			
+			
+			accHeader.setAprTaxableAmt(0);
+			accHeader.setAprTotalTax(0);
+			accHeader.setAprGrandTotal(0);
+			accHeader.setAprCgstRs(0);
+			accHeader.setAprSgstRs(0);
+			accHeader.setAprIgstRs(0);
+			accHeader.setAprROff(0);
+			accHeader.setApporvedAmt(0);
 
 
-			  //
-			  
-			  } catch (Exception e) {
-			  
-			  System.out.println("Error in update Acc Grn Agree " + e.getMessage());
-			  
-			  e.printStackTrace();
-			  
-			  }
-			  
-			  return "redirect:/getAccGrnDetail";
-			  
-			  }
-	
+			for (int i = 0; i < grnAccDetailList.size(); i++) {
+
+				if (grnAccDetailList.get(i).getGrnGvnStatus() == 6) {
+
+					accHeader.setApporvedAmt(accHeader.getApporvedAmt() + grnAccDetailList.get(i).getGrnGvnAmt());
+					
+					accHeader.setAprTaxableAmt(accHeader.getAprTaxableAmt()+grnAccDetailList.get(i).getAprTaxableAmt());
+					accHeader.setAprTotalTax(accHeader.getAprTotalTax()+grnAccDetailList.get(i).getAprTotalTax());
+					accHeader.setAprGrandTotal(accHeader.getAprGrandTotal()+grnAccDetailList.get(i).getAprGrandTotal());
+					accHeader.setAprCgstRs(accHeader.getAprCgstRs()+grnAccDetailList.get(i).getAprCgstRs());
+					accHeader.setAprSgstRs(accHeader.getAprSgstRs()+grnAccDetailList.get(i).getAprSgstRs());
+					accHeader.setAprIgstRs(accHeader.getAprIgstRs()+grnAccDetailList.get(i).getAprIgstRs());
+					accHeader.setAprROff(accHeader.getAprROff()+grnAccDetailList.get(i).getAprROff());
+					
+					//accHeader.setApporvedAmt(0);
+					
+				}
+			}
+
+			// Update Grn Gvn Header
+			accHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
+
+			accHeader = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", accHeader, GrnGvnHeader.class);
+
+			System.out.println("GRN HEADER rESPONSE " + accHeader.toString());
+
+			System.out.println("LIST SIZE ACC GRN : " + grnAccDetailList.size());
+
+			//
+
+		} catch (Exception e) {
+
+			System.out.println("Error in update Acc Grn Agree " + e.getMessage());
+
+			e.printStackTrace();
+
+		}
+
+		return "redirect:/getAccGrnDetail";
+
+	}
+
 	// C] -- //insertAccGrnByCheckBoxes
-	
+
 	@RequestMapping(value = "/insertAccGrnByCheckBoxes", method = RequestMethod.POST) // Using checkboxes to insert
 	public String insertAccGrnByCheckBoxes(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("in checkboxes ");
 
-		//ModelAndView model = new ModelAndView("grngvn/accGrn");
+		// ModelAndView model = new ModelAndView("grngvn/accGrn");
 
-	//	ModelAndView modelAndView = null;
+		// ModelAndView modelAndView = null;
 		try {
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
@@ -1342,18 +1583,120 @@ public class GrnGvnController {
 			gIds = gIds.substring(1);
 
 			System.out.println("GIDS " + gIds);
-			 map.add("approvedLoginAcc", accApproveLogin);
-			  
-			  map.add("approvedDateTimeAcc", dateFormat.format(cal.getTime()));
-			  
-			  map.add("approvedRemarkAcc", "Approve By Acc");
-			  
-			  map.add("grnGvnStatus", Constants.AP_BY_ACC);
-			  
-			  map.add("grnGvnId", gIds);
-			  
 
-			Info updateAccGrn = restTemplate.postForObject(Constants.url + "updateAccGrn", map, Info.class);
+			// new code
+
+			List<TempGrnGvnBeanUp> dataList = new ArrayList<>();
+
+			TempGrnGvnBeanUp data = new TempGrnGvnBeanUp();
+
+			GetGrnGvnDetails detail = new GetGrnGvnDetails();
+
+			for (int j = 0; j < grnIdList.length; j++) {
+				
+				
+				int accGrnQty=Integer.parseInt(request.getParameter("acc_grn_qty"+grnIdList[j]));
+				
+				for (int i = 0; i < grnAccDetailList.size(); i++) {
+
+					if (grnAccDetailList.get(i).getGrnGvnId() == Integer.parseInt(grnIdList[j])) {
+
+						System.out.println("GRN ID MAtched " + grnIdList[j]);
+						
+						detail = new GetGrnGvnDetails();
+						data = new TempGrnGvnBeanUp();
+						detail = grnAccDetailList.get(i);
+						float grnRate = 0;
+						float total = detail.getBaseRate() * accGrnQty;
+						float aprAmt = 0;
+						float aprTaxableAmt, aprTotalTax, aprGrandTotal;
+						float sgstRs, cgstRs, igstRs;
+						float grandTotal;
+						if (detail.getGrnType() == 0) {
+
+							grnRate = detail.getBaseRate() * 75 / 100;
+						}
+
+						if (detail.getGrnType() == 1) {
+
+							grnRate = detail.getBaseRate() * 90 / 100;
+						}
+
+						if (detail.getGrnType() == 2 || detail.getGrnType() == 4) {
+
+							grnRate = detail.getBaseRate();
+
+						}
+
+						aprTaxableAmt = grnRate * accGrnQty;
+
+						System.out.println("apr Taxable Amt = " + aprTaxableAmt);
+
+						System.out.println("Grn RAte " + grnRate);
+						aprTotalTax = ((aprTaxableAmt) * (detail.getSgstPer() + detail.getCgstPer())) / 100;
+						System.out.println("Apr Total Tax " + aprTotalTax);
+
+						if (detail.getIsSameState() == 1) {
+
+							sgstRs = aprTotalTax / 2;
+							cgstRs = aprTotalTax / 2;
+
+							igstRs = 0.0f;
+						} else {
+
+							igstRs = aprTotalTax;
+
+							sgstRs = 0.0f;
+							cgstRs = 0.0f;
+						}
+
+						System.out.println("sgstsRs" + sgstRs + "CGSt Rs " + cgstRs);
+
+						grandTotal = aprTaxableAmt + aprTotalTax;
+
+						System.out.println("GRAND total " + grandTotal);
+
+						data = new TempGrnGvnBeanUp();
+
+						data.setApprovedDateTimeAcc(dateFormat.format(cal.getTime()));
+
+						data.setApprovedLoginAcc(accApproveLogin);
+
+						data.setGrnGvnStatus(Constants.AP_BY_ACC);
+
+						data.setApprovedRemarkAcc("");
+
+						data.setGrnGvnId(Integer.parseInt(grnIdList[j]));
+
+						data.setAprQtyAcc(accGrnQty);
+
+						data.setAprCgstRs(roundUp(cgstRs));
+						data.setAprIgstRs(roundUp(igstRs));
+						data.setAprSgstRs(roundUp(sgstRs));
+
+						data.setAprTaxableAmt(roundUp(aprTaxableAmt));
+						data.setAprTotalTax(roundUp(aprTotalTax));
+						
+						data.setAprGrandTotal(roundUp(grandTotal));
+
+
+					} // end of matching grnId
+					
+					
+					
+				} // end of for Loop
+				dataList.add(data);
+
+			} // end of ids for loop
+
+			// new code
+
+			System.out.println("Data List " +dataList.toString());
+			
+			
+			
+			
+			Info updateAccGrn = restTemplate.postForObject(Constants.url + "updateAccGrn", dataList, Info.class);
 
 			if (updateAccGrn.getError() == false) {
 
@@ -1363,7 +1706,7 @@ public class GrnGvnController {
 
 						grnAccDetailList.get(i).setGrnGvnStatus(Constants.AP_BY_ACC);
 						System.out.println("Record Updated Locally  apr");
-						
+
 					}
 				}
 
@@ -1382,37 +1725,34 @@ public class GrnGvnController {
 				}
 			}
 
-		
-			if(accHeader.getGrngvnStatus()==2||accHeader.getGrngvnStatus()==6||accHeader.getGrngvnStatus()==7) {
+			if (accHeader.getGrngvnStatus() == 2 || accHeader.getGrngvnStatus() == 6
+					|| accHeader.getGrngvnStatus() == 7) {
 				int rejStatus = 0, aprStatus = 0;
-				
+
 				for (int i = 0; i < grnAccDetailList.size(); i++) {
 
 					// setting approve and rejected count
 					if (grnAccDetailList.get(i).getGrnGvnStatus() == 6) {
-						
+
 						aprStatus = aprStatus + 1;
-						
-					} else if(grnAccDetailList.get(i).getGrnGvnStatus()==7) {
+
+					} else if (grnAccDetailList.get(i).getGrnGvnStatus() == 7) {
 
 						rejStatus = rejStatus + 1;
 					}
 
 				}
-				
 
 				// all Rejected
 				if (grnAccDetailList.size() == rejStatus) {
-					
-					System.out.println("rejStatus count "+rejStatus);
+
+					System.out.println("rejStatus count " + rejStatus);
 
 					accHeader.setGrngvnStatus(7);
 
 					System.out.println("Heade status =7 ");
 				}
 
-				
-				
 				else if (grnAccDetailList.size() == aprStatus) {
 
 					accHeader.setGrngvnStatus(6);
@@ -1420,10 +1760,9 @@ public class GrnGvnController {
 					System.out.println("header Status = 6");
 
 				}
-				
-				
+
 				// partially approved
-				else  {
+				else {
 
 					accHeader.setGrngvnStatus(8);
 
@@ -1432,84 +1771,92 @@ public class GrnGvnController {
 				}
 
 				// all Approved
-				
-				}//If grnStatus =2
-				
-				//if Status=3||7
-				else if(accHeader.getGrngvnStatus()==8) {
-					
-					int rejStatus = 0, aprStatus = 0;
-					
-					
-					for (int i = 0; i < grnAccDetailList.size(); i++) {
 
-						// setting approve and rejected count
-						if (grnAccDetailList.get(i).getGrnGvnStatus() == 3
-								|| grnAccDetailList.get(i).getGrnGvnStatus() == 7) {
-							
-							rejStatus = rejStatus + 1;
+			} // If grnStatus =2
 
-						} else if(grnAccDetailList.get(i).getGrnGvnStatus()==6) {
+			// if Status=3||7
+			else if (accHeader.getGrngvnStatus() == 8) {
 
-							
-							aprStatus = aprStatus + 1;
-						}
+				int rejStatus = 0, aprStatus = 0;
 
-					}//enf of for
-					
-					if(rejStatus==grnAccDetailList.size()) {
-						
-						accHeader.setGrngvnStatus(7);
-					} else if(aprStatus==grnAccDetailList.size()) {
-						
-						accHeader.setGrngvnStatus(6);
-						
+				for (int i = 0; i < grnAccDetailList.size(); i++) {
+
+					// setting approve and rejected count
+					if (grnAccDetailList.get(i).getGrnGvnStatus() == 3
+							|| grnAccDetailList.get(i).getGrnGvnStatus() == 7) {
+
+						rejStatus = rejStatus + 1;
+
+					} else if (grnAccDetailList.get(i).getGrnGvnStatus() == 6) {
+
+						aprStatus = aprStatus + 1;
 					}
-					else {
-						
-						accHeader.setGrngvnStatus(8);
-						
-					}
-					
+
+				} // enf of for
+
+				if (rejStatus == grnAccDetailList.size()) {
+
+					accHeader.setGrngvnStatus(7);
+				} else if (aprStatus == grnAccDetailList.size()) {
+
+					accHeader.setGrngvnStatus(6);
+
+				} else {
+
+					accHeader.setGrngvnStatus(8);
+
 				}
 
-			// Update Grn Gvn Header
-			
-			
+			}
+
+			accHeader.setAprTaxableAmt(0);
+			accHeader.setAprTotalTax(0);
+			accHeader.setAprGrandTotal(0);
+			accHeader.setAprCgstRs(0);
+			accHeader.setAprSgstRs(0);
+			accHeader.setAprIgstRs(0);
+			accHeader.setAprROff(0);
+			accHeader.setApporvedAmt(0);
+
+
 			for (int i = 0; i < grnAccDetailList.size(); i++) {
 
-				// setting approve and rejected count
 				if (grnAccDetailList.get(i).getGrnGvnStatus() == 6) {
-					
-					accHeader.setApporvedAmt(0);
-					accHeader.setApporvedAmt(accHeader.getApporvedAmt()+grnAccDetailList.get(i).getGrnGvnAmt());
-				}
-					
-			}
-			
-			System.out.println("LIST SIZE ACC GRN : "+grnAccDetailList.size());
 
+					accHeader.setApporvedAmt(accHeader.getApporvedAmt() + grnAccDetailList.get(i).getGrnGvnAmt());
+					
+					accHeader.setAprTaxableAmt(accHeader.getAprTaxableAmt()+grnAccDetailList.get(i).getAprTaxableAmt());
+					accHeader.setAprTotalTax(accHeader.getAprTotalTax()+grnAccDetailList.get(i).getAprTotalTax());
+					accHeader.setAprGrandTotal(accHeader.getAprGrandTotal()+grnAccDetailList.get(i).getAprGrandTotal());
+					accHeader.setAprCgstRs(accHeader.getAprCgstRs()+grnAccDetailList.get(i).getAprCgstRs());
+					accHeader.setAprSgstRs(accHeader.getAprSgstRs()+grnAccDetailList.get(i).getAprSgstRs());
+					accHeader.setAprIgstRs(accHeader.getAprIgstRs()+grnAccDetailList.get(i).getAprIgstRs());
+					accHeader.setAprROff(accHeader.getAprROff()+grnAccDetailList.get(i).getAprROff());
+					
+					//accHeader.setApporvedAmt(0);
+					
+				}
+			}
+
+			System.out.println("LIST SIZE ACC GRN : " + grnAccDetailList.size());
 
 			accHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
 
-			accHeader = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", accHeader,
-					GrnGvnHeader.class);
+			accHeader = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", accHeader, GrnGvnHeader.class);
 
 			System.out.println("GRN HEADER rESPONSE " + accHeader.toString());
 
-		  //
-		  
-		  
-		  } catch (Exception e) {
-		  
-		  System.out.println("Error in update Acc Grn Agree " + e.getMessage());
-		  
-		  e.printStackTrace();
-		  
-		  }
-		  
-		  return "redirect:/getAccGrnDetail/"+globalAccHeaderId;
+			//
+
+		} catch (Exception e) {
+
+			System.out.println("Error in update Acc Grn Agree " + e.getMessage());
+
+			e.printStackTrace();
+
+		}
+
+		return "redirect:/getAccGrnDetail/" + globalAccHeaderId;
 	}
-	
-	
+
 }

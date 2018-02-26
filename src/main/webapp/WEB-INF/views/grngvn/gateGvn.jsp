@@ -64,7 +64,7 @@
 
 
 						<div class="box-content">
-							<form
+			<%-- 				<form
 								action="${pageContext.request.contextPath}/showGateGvnDetails"
 								class="form-horizontal" method="get" id="validation-form">
 
@@ -101,7 +101,7 @@
 									</div>
 								</div>
 
-							</form>
+							</form> --%>
 
 							<form
 								action="${pageContext.request.contextPath}/insertGateGvnByCheckBoxes"

@@ -140,6 +140,12 @@
 										<input disabled type="text" name="status" id="status"
 											value="${sts}" class="form-control"/>
 									</div>
+									
+									
+									<div class="col-sm-5 col-lg-3 controls">
+									
+					<input type="button" value="PDF" class="btn btn-primary" onclick="genPdf()"/> 
+								</div>
 								</div>
 								<div class="clearfix"></div>
 <div id="table-scroll" class="table-scroll">
@@ -302,9 +308,12 @@
 										</tbody>
 									</table>
 								</div>
-
+							
+<br>
 								<div class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
+									
+								
+									<div class="col-sm-1 col-sm-offset-1 col-lg-8 col-lg-offset-1">
 									<c:choose>
 									  <c:when test = "${planHeader.isBom==0}">
                                    <a href="${pageContext.request.contextPath}/showBom/${planHeader.productionHeaderId}/1/${planHeader.productionDate}/${planHeader.isPlanned}/${planHeader.catId}">   <button type="button" class="btn btn-primary">
@@ -404,11 +413,10 @@
                                    	 </c:when>
 										 </c:choose>
 									</div>
+									
+									
 								</div>
-								
-								<div style="text-align: center;">
-								<a href="${pageContext.request.contextPath}/showProdByOrderPdf"
-								target="_blank">PDF</a></div>
+							
 						</div>	</form>
 						</div>
 					</div>
@@ -492,9 +500,13 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
+<script type="text/javascript">
 
+function genPdf(){
+	window.open('${pageContext.request.contextPath}/showProdByOrderPdf/');
+}
 
-
+</script>
 
 <script type="text/javascript">
 

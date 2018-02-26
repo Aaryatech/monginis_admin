@@ -63,10 +63,10 @@
 
 
 						<div class="box-content">
-							<form
+							<%-- <form
 								action="${pageContext.request.contextPath}/showStoreGvnDetails"
 								class="form-horizontal" method="get" id="validation-form">
-
+ --%>
 
 
 <%-- 
@@ -94,9 +94,9 @@
 
 								</div>
  --%>
-
+<!-- 
 							</form>
-
+ -->
 
 							<form
 								action="${pageContext.request.contextPath}/insertStoreGvnByCheckBoxes"
