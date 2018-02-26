@@ -6,10 +6,12 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URLConnection;
+import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -32,6 +34,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.commons.VpsImageUpload;
+import com.ats.adminpanel.model.BmsStockDetailed;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.logistics.Dealer;
 import com.ats.adminpanel.model.logistics.Document;
@@ -39,6 +42,7 @@ import com.ats.adminpanel.model.logistics.DriverMaster;
 import com.ats.adminpanel.model.logistics.LogisAmc;
 import com.ats.adminpanel.model.logistics.MachineMaster;
 import com.ats.adminpanel.model.logistics.MachineOrVehicle;
+import com.ats.adminpanel.model.logistics.MachineServicing;
 import com.ats.adminpanel.model.logistics.Make;
 import com.ats.adminpanel.model.logistics.MechType;
 import com.ats.adminpanel.model.logistics.ServDetail;
@@ -49,7 +53,8 @@ import com.ats.adminpanel.model.logistics.SprGroup;
 import com.ats.adminpanel.model.logistics.Variant;
 import com.ats.adminpanel.model.logistics.VehicalMaster;
 import com.ats.adminpanel.model.logistics.VehicalType;
-import com.ats.adminpanel.model.logistics.VehicleDcoument; 
+import com.ats.adminpanel.model.logistics.VehicleDcoument;
+import com.ats.adminpanel.model.productionplan.BillOfMaterialDetailed; 
 
 @Controller
 @Scope("session")
@@ -2744,4 +2749,168 @@ public class LogisticsController {
 		return logisAmcList; 
 	}
 	
+	//--------------------------------------------MachineServicing---------------------------------------------
+	
+	List<MachineServicing> getAllMachineServicingForApprove;
+	
+	@RequestMapping(value = "/insertMachineServicing", method = RequestMethod.GET)
+	public ModelAndView insertMachineServicing(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/insertMachineServicing"); 
+		try
+		{
+			List<Dealer> getAllDealerList = restTemplate.getForObject(Constants.url + "getAllDealerList", List.class);
+			System.out.println("getAllDealerList"+getAllDealerList.toString()); 
+		  	List<MachineMaster> machineList = restTemplate.getForObject(Constants.url + "getAllMachineMaster", List.class);
+		  	
+		  	Date date = new Date(); 
+			Format formatter = new SimpleDateFormat("dd-MM-yyyy");
+			String today = formatter.format(date);
+
+			model.addObject("today", today);
+			model.addObject("dealerList", getAllDealerList);
+			model.addObject("machineList", machineList);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/getNextServDate", method = RequestMethod.GET)
+	@ResponseBody
+	public MachineMaster getNextServDate(HttpServletRequest request, HttpServletResponse response) { 
+		
+		MachineMaster machineMaster = new MachineMaster();
+	        try
+			{ 
+	        	
+	        	int machineId = Integer.parseInt(request.getParameter("mechId"));
+	        	 System.out.println("machineId "+machineId);
+	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+	        	 map.add("machineId", machineId); 
+	        	 machineMaster = restTemplate.postForObject(Constants.url + "getMachineMasterById", map, MachineMaster.class);
+	        	
+	         
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return machineMaster; 
+	}
+	
+	@RequestMapping(value = "/submitMachineServicing", method = RequestMethod.POST)
+	public String  submitMachineServicing(HttpServletRequest request, HttpServletResponse response) {
+
+	 
+		try
+		{
+			 
+			 
+			int dealerId =Integer.parseInt(request.getParameter("dealerId"));
+			String mechName = request.getParameter("mechName"); 
+			int machineId =Integer.parseInt(request.getParameter("machineId")); 
+			String dealerName = request.getParameter("dealerName");  
+			String persnName = request.getParameter("persnName"); 
+			String date = request.getParameter("date");
+			String nextServDate = request.getParameter("nextServDate"); 
+			String alertServDate = request.getParameter("alertServDate");
+			int servType =Integer.parseInt(request.getParameter("servType"));
+			int alertRequired =Integer.parseInt(request.getParameter("alertRequired")); 
+			int paidType =Integer.parseInt(request.getParameter("paidType")); 
+
+			MachineServicing insertMachineServicing = new MachineServicing();
+			insertMachineServicing.setDealerId(dealerId);
+			insertMachineServicing.setDealerName(dealerName);
+			insertMachineServicing.setMachineId(machineId);
+			insertMachineServicing.setMachineName(mechName);
+			insertMachineServicing.setPrsnName(persnName);
+			insertMachineServicing.setDate(date);
+			insertMachineServicing.setNextServDate(nextServDate);
+			insertMachineServicing.setAlertServDate(alertServDate);
+			insertMachineServicing.setServType(servType);
+			insertMachineServicing.setIsAlertRequired(alertRequired);
+			insertMachineServicing.setPaidType(paidType);
+			insertMachineServicing = restTemplate.postForObject(Constants.url + "postMachineServicing",insertMachineServicing, MachineServicing.class);
+			System.out.println("insertMachineServicing "+insertMachineServicing.toString());
+		 
+			 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return "redirect:/insertMachineServicing";
+
+	}
+	
+	@RequestMapping(value = "/showMachineServicingList", method = RequestMethod.GET)
+	public ModelAndView showMachineServicingList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/showMachineServicingList"); 
+		try
+		{
+			List<MachineServicing> getAllMachineServicing = restTemplate.getForObject(Constants.url + "getAllMachineServicing", List.class); 
+			model.addObject("getMachineServicingList", getAllMachineServicing);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/showMachineServicingListForApproved", method = RequestMethod.GET)
+	public ModelAndView showMachineServicingListForApproved(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/showMachineServicingListForApproved"); 
+		try
+		{
+			getAllMachineServicingForApprove = new ArrayList<>();
+			MachineServicing[] machineServicingList = restTemplate.getForObject(Constants.url + "getAllMachineServicing", MachineServicing[].class); 
+			getAllMachineServicingForApprove = new ArrayList<>(Arrays.asList(machineServicingList));
+			
+			model.addObject("getMachineServicingList", getAllMachineServicingForApprove);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/approvedMachineServicing", method = RequestMethod.POST)
+	public String  approvedMachineServicing(HttpServletRequest request, HttpServletResponse response) {
+
+	 
+		try
+		{
+			 
+			 
+			String []checkbox=request.getParameterValues("select_to_approve");
+			for (int i = 0; i < getAllMachineServicingForApprove.size(); i++) 
+			{
+				for(int j=0;j<checkbox.length;j++) 
+				{
+					if(Integer.parseInt(checkbox[j])==getAllMachineServicingForApprove.get(i).getMechServId())  
+						getAllMachineServicingForApprove.get(i).setIsApproved(1);
+				}
+			}
+			 
+			
+			Info info = restTemplate.postForObject(Constants.url + "approveMachineServicing",getAllMachineServicingForApprove, Info.class);
+			System.out.println("getAllMachineServicingForApprove "+getAllMachineServicingForApprove.toString());
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return "redirect:/showMachineServicingListForApproved";
+
+	}
 }
