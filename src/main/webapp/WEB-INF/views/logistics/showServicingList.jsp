@@ -172,7 +172,7 @@
 											 type="text" name="from_date" required />
 									
 										</div>
-										
+										<div class="col-md-1"></div> 
 										<label class="col-sm-3 col-lg-2 control-label">To Date:</label>
 									<div class="col-sm-5 col-lg-3 controls">
 										<input class="form-control date-picker" id="to_date" size="16"
@@ -190,9 +190,24 @@
 									<div class="col-md-3">
 									
 									<select name="type" id="type" class="form-control chosen" tabindex="6" required>
-											 <option value="0" selected>All</option>
+									 	<option value="">Select Vehicle Or Machine</option>
+											 <option value="0"  >All</option>
 											  <option value="1">Vehicle</option>
 											   <option value="2">Machine</option>
+										</select>
+									
+									</div> 
+									
+									<div class="col-md-1">Or</div> 
+									
+								<div class="col-md-2">Select Type*</div>
+									<div class="col-md-3">
+									
+									<select name="typeId" id="typeId" class="form-control chosen" tabindex="6" required>
+											 <option value="" >Select Type</option>
+											<c:forEach items="${mechTypeList}" var="mechTypeList"> 
+													<option value="${mechTypeList.typeId}">${mechTypeList.typeName}</option>				 
+											</c:forEach>
 										</select>
 									
 									</div> 
@@ -212,9 +227,9 @@
 									<div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
 										
 				
-										<input class="btn btn-primary" value="View All" id="searchmixall"
+										<input type="button" class="btn btn-primary" value="View All" id="searchmixall"
 											onclick="searchbomall()">
-
+								<input type="button" class="btn btn-primary" value="Pdf" onclick="getPdf()" >
 									</div><br>
 									
 									<div align="center" id="loader" style="display: none">
@@ -247,7 +262,7 @@
 										<th>Bill No</th>
 										<th>Bill Date</th>
 										<th>Type</th>
-										<th>Vehicle No.</th>
+										<th>Vehicle/Machine</th>
 										<th>Type</th>
 										<th>Taxable Amt</th>
 										<th>Tax Amt</th>
@@ -353,7 +368,26 @@
 			var from_date = $("#from_date").val();
 			var to_date = $("#to_date").val();
 			var type = $("#type").val();
-			
+			var typeId = $("#typeId").val();
+			valid=0;
+			if(from_date=="")
+				{
+				alert("Enter From Date");
+				valid=1;
+				} 
+			else if(to_date=="")
+				{
+				 alert("Enter To Date");
+				 valid=1;
+				}
+			else if(type=="" && typeId=="")
+				{
+				alert("Select Machine/Vehicle Or Type");
+				valid=1;
+				}
+				
+			if(valid==0)
+				{
 			$('#loader').show();
 
 			$
@@ -365,6 +399,7 @@
 								from_date : from_date,
 								to_date : to_date,
 								type : type,
+								typeId : typeId,
 								ajax : 'true'
 
 							},
@@ -434,9 +469,9 @@
 											  	tr.append($('<td></td>').html(type2)); 
 											  	tr.append($('<td></td>').html(itemList.vehNo));
 											  	tr.append($('<td></td>').html(type));
-											  	tr.append($('<td></td>').html(itemList.taxableAmt));
-											  	tr.append($('<td></td>').html(itemList.taxAmt));
-											  	tr.append($('<td></td>').html(itemList.total));
+											  	tr.append($('<td style="text-align:right"></td>').html((itemList.taxableAmt).toFixed(2)));
+											  	tr.append($('<td style="text-align:right"></td>').html((itemList.taxAmt).toFixed(2)));
+											  	tr.append($('<td style="text-align:right"></td>').html((itemList.total).toFixed(2)));
 											  	tr.append($('<td></td>').html(stats));
 											  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/viewServicingDetail/"+itemList.servId+"/"+flag+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
 												
@@ -444,7 +479,7 @@
 											 
 											})  
 							});
-
+				}
 		 
 	}
 	</script>
@@ -468,6 +503,47 @@
 	 
 }
 		
+	function getPdf()
+	{
+	    var from_date = $("#from_date").val();
+	    
+	    var to_date = $("#to_date").val();
+	    var type=$("#type").val();
+	    var typeId=$("#typeId").val();
+		var valid=0;
+		
+			if(from_date=="")
+				{
+				alert("Enter Valid From Date");
+				valid=1;
+				
+				}
+			else if(to_date=="")
+				{
+				alert("Enter Valid To Date");
+				valid=1;
+				}
+			else if(type=="" && typeId=="")
+			{
+				alert("Select Machine/Vehicle Or Type");
+				valid=1;
+			}
+			else if(type=="" && typeId!="")
+			{
+				type=-1;
+				valid=0;
+			}
+			else if(type!="" && typeId=="")
+			{
+				typeId=-1;
+				valid=0;
+			}
+		
+			if(valid==0)
+			{
+		    	window.open('${pageContext.request.contextPath}/Logistics?url=pdf/vehOrMachInvoiceBill/'+from_date+'/'+to_date+'/'+type+'/'+typeId+'/');
+			}
+	    }
 	</script>
 </body>
 </html>

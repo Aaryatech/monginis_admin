@@ -1,10 +1,13 @@
 package com.ats.adminpanel.controller; 
+import java.awt.Dimension;
+import java.awt.Insets;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URLConnection;
 import java.text.Format;
 import java.text.SimpleDateFormat;
@@ -14,6 +17,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,11 +34,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.zefer.pd4ml.PD4Constants;
+import org.zefer.pd4ml.PD4ML;
+import org.zefer.pd4ml.PD4PageMark;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
-import com.ats.adminpanel.commons.VpsImageUpload;
-import com.ats.adminpanel.model.BmsStockDetailed;
+import com.ats.adminpanel.commons.VpsImageUpload; 
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.logistics.Dealer;
 import com.ats.adminpanel.model.logistics.Document;
@@ -53,8 +59,7 @@ import com.ats.adminpanel.model.logistics.SprGroup;
 import com.ats.adminpanel.model.logistics.Variant;
 import com.ats.adminpanel.model.logistics.VehicalMaster;
 import com.ats.adminpanel.model.logistics.VehicalType;
-import com.ats.adminpanel.model.logistics.VehicleDcoument;
-import com.ats.adminpanel.model.productionplan.BillOfMaterialDetailed; 
+import com.ats.adminpanel.model.logistics.VehicleDcoument; 
 
 @Controller
 @Scope("session")
@@ -1322,12 +1327,25 @@ public class LogisticsController {
 	        	
 	        	String fromDate = request.getParameter("from_date");
 	        	String toDate = request.getParameter("to_date");
-	        	int type = Integer.parseInt(request.getParameter("type"));
+	        	String type =request.getParameter("type");
+	        	String typeId =request.getParameter("typeId");
+	        	System.out.println("type " + type);
 	        	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-	        	map.add("fromDate", DateConvertor.convertToYMD(fromDate));
-	        	map.add("toDate", DateConvertor.convertToYMD(toDate));
-	        	map.add("type", type);
-	        	getServicingWithDate = restTemplate.postForObject(Constants.url + "getServicingListBetweenDate",map, List.class);
+	        	if(type.equals(""))
+	        	{
+	        		map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+		        	map.add("toDate", DateConvertor.convertToYMD(toDate));
+		        	map.add("typeId", Integer.parseInt(typeId));
+		        	getServicingWithDate = restTemplate.postForObject(Constants.url + "getServicingListBetweenDateByTypeId",map, List.class);
+	        	}
+	        	else
+	        	{
+	        		map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+		        	map.add("toDate", DateConvertor.convertToYMD(toDate));
+		        	map.add("type", Integer.parseInt(type));
+		        	getServicingWithDate = restTemplate.postForObject(Constants.url + "getServicingListBetweenDate",map, List.class);
+	        	}
+	        	
 	        	 
 		}catch(Exception e)
 		{
@@ -1337,6 +1355,40 @@ public class LogisticsController {
 	         
 		return getServicingWithDate;
 		
+
+	}
+	
+	@RequestMapping(value = "pdf/vehOrMachInvoiceBill/{from_date}/{to_date}/{type}/{typeId}", method = RequestMethod.GET)
+	public ModelAndView vehOrMachInvoiceBill(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String type,@PathVariable String typeId,HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/reportPdf/vehOrMachInvoiceBill");
+		try {
+			List<ServHeader> vehOrMachInvoiceBill = new ArrayList<ServHeader>(); 
+        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+        	 if(Integer.parseInt(type)==-1)
+	        	{
+	        		map.add("fromDate", DateConvertor.convertToYMD(from_date));
+		        	map.add("toDate", DateConvertor.convertToYMD(to_date));
+		        	map.add("typeId", Integer.parseInt(typeId));
+		        	vehOrMachInvoiceBill = restTemplate.postForObject(Constants.url + "getServicingListBetweenDateByTypeId",map, List.class);
+	        	}
+	        	else
+	        	{
+	        		map.add("fromDate", DateConvertor.convertToYMD(from_date));
+		        	map.add("toDate", DateConvertor.convertToYMD(to_date));
+		        	map.add("type", Integer.parseInt(type));
+		        	vehOrMachInvoiceBill = restTemplate.postForObject(Constants.url + "getServicingListBetweenDate",map, List.class);
+	        	}
+	   		 List<MechType> mechTypeList = restTemplate.getForObject(Constants.url + "getTypeList", List.class);  
+	   		 model.addObject("mechTypeList",mechTypeList); 
+			model.addObject("staticlist", vehOrMachInvoiceBill);
+			model.addObject("fromDate", from_date);
+			model.addObject("toDate", to_date); 
+			System.out.println("vehOrMachInvoiceBill" + vehOrMachInvoiceBill);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return model;
 
 	}
 	
@@ -2855,6 +2907,11 @@ public class LogisticsController {
 		{
 			List<MachineServicing> getAllMachineServicing = restTemplate.getForObject(Constants.url + "getAllMachineServicing", List.class); 
 			model.addObject("getMachineServicingList", getAllMachineServicing);
+			MachineMaster[] machineList = restTemplate.getForObject(Constants.url + "getAllMachineMaster", MachineMaster[].class);
+			System.out.println("machineList"+machineList.toString());
+			
+			ArrayList<MachineMaster> machineMasterList = new ArrayList<>(Arrays.asList(machineList));
+			model.addObject("machineMasterList", machineMasterList);
 		}catch(Exception e)
 		{
 			e.printStackTrace();
@@ -2874,12 +2931,70 @@ public class LogisticsController {
 			MachineServicing[] machineServicingList = restTemplate.getForObject(Constants.url + "getAllMachineServicing", MachineServicing[].class); 
 			getAllMachineServicingForApprove = new ArrayList<>(Arrays.asList(machineServicingList));
 			
+			MachineMaster[] machineList = restTemplate.getForObject(Constants.url + "getAllMachineMaster", MachineMaster[].class);
+			System.out.println("machineList"+machineList.toString());
+			
+			ArrayList<MachineMaster> machineMasterList = new ArrayList<>(Arrays.asList(machineList));
+			
 			model.addObject("getMachineServicingList", getAllMachineServicingForApprove);
+			model.addObject("machineMasterList", machineMasterList);
 		}catch(Exception e)
 		{
 			e.printStackTrace();
 		}
 		
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/getMachineServicingWithDate", method = RequestMethod.GET)
+	@ResponseBody
+	public List<MachineServicing> getMachineServicingWithDate(HttpServletRequest request, HttpServletResponse response) { 
+		
+		List<MachineServicing> getMachineServicingWithDate = new ArrayList<MachineServicing>();
+	        try
+			{ 
+	        	
+	        	int machineId = Integer.parseInt(request.getParameter("machineId"));
+	        	String fromDate = request.getParameter("from_date");  
+				String toDate = request.getParameter("to_date"); 
+	        	 System.out.println("machineId "+machineId);
+	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+	        	 map.add("machineId", machineId); 
+	        	 map.add("fromDate", DateConvertor.convertToYMD(fromDate)); 
+	        	 map.add("toDate", DateConvertor.convertToYMD(toDate)); 
+	        	 getMachineServicingWithDate = restTemplate.postForObject(Constants.url + "getMachineServicingWithDate", map, List.class);
+	        	
+	         
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return getMachineServicingWithDate; 
+	}
+	
+	@RequestMapping(value = "pdf/machineServicingPdf/{from_date}/{to_date}/{machineId}", method = RequestMethod.GET)
+	public ModelAndView machineServicingPdf(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String machineId,HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/reportPdf/machineServicingPdf");
+		try {
+			List<MachineServicing> getMachineServicingWithDate = new ArrayList<MachineServicing>();  
+        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+        	 map.add("machineId", machineId); 
+        	 map.add("fromDate", DateConvertor.convertToYMD(from_date)); 
+        	 map.add("toDate", DateConvertor.convertToYMD(to_date)); 
+        	 getMachineServicingWithDate = restTemplate.postForObject(Constants.url + "getMachineServicingWithDate", map, List.class);
+			 
+			 
+			model.addObject("staticlist", getMachineServicingWithDate);
+			model.addObject("fromDate", from_date);
+			model.addObject("toDate", to_date); 
+			System.out.println("getMachineServicingWithDate" + getMachineServicingWithDate);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return model;
 
 	}
@@ -2912,5 +3027,129 @@ public class LogisticsController {
 		}
 		return "redirect:/showMachineServicingListForApproved";
 
+	}
+	
+	
+	private Dimension format = PD4Constants.A2;
+	private boolean landscapeValue = false;
+	private int topValue = 8;
+	private int leftValue = 0;
+	private int rightValue = 0;
+	private int bottomValue =8;
+	private String unitsValue = "m";
+	private String proxyHost = "";
+	private int proxyPort = 0;
+
+	private int userSpaceWidth = 750;
+	private static int BUFFER_SIZE = 1024;
+
+	@RequestMapping(value = "/Logistics", method = RequestMethod.GET)
+	public void showPDF(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("Inside PDf For Report URL ");
+		String url = request.getParameter("url");
+		System.out.println("URL " + url);
+		
+		//File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/Inward.pdf");
+		File f = new File("C:/pdf/ordermemo221.pdf");
+
+		try {
+			runConverter(Constants.ReportURL + url, f,request,response);
+			//runConverter("www.google.com", f,request,response);
+
+		} catch (IOException e) {
+
+			System.out.println("Pdf conversion exception " + e.getMessage());
+		}
+
+		// get absolute path of the application
+		ServletContext context = request.getSession().getServletContext();
+		String appPath = context.getRealPath("");
+		 String filePath = "C:/pdf/ordermemo221.pdf";
+
+		//String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/Inward.pdf";
+
+		// construct the complete absolute path of the file
+		String fullPath = appPath + filePath;
+		File downloadFile = new File(filePath);
+		FileInputStream inputStream = null;
+		try {
+			inputStream = new FileInputStream(downloadFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			// get MIME type of the file
+			String mimeType = context.getMimeType(fullPath);
+			if (mimeType == null) {
+				// set to binary type if MIME mapping not found
+				mimeType = "application/pdf";
+			}
+			System.out.println("MIME type: " + mimeType);
+
+			String headerKey = "Content-Disposition";
+
+			// response.addHeader("Content-Disposition", "attachment;filename=report.pdf");
+			response.setContentType("application/pdf");
+
+			OutputStream outStream;
+
+			outStream = response.getOutputStream();
+
+			byte[] buffer = new byte[BUFFER_SIZE];
+			int bytesRead = -1;
+
+
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outStream.write(buffer, 0, bytesRead);
+			}
+
+			inputStream.close();
+			outStream.close();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void runConverter(String urlstring, File output, HttpServletRequest request, HttpServletResponse response ) throws IOException {
+
+		if (urlstring.length() > 0) {
+			if (!urlstring.startsWith("http://") && !urlstring.startsWith("file:")) {
+				urlstring = "http://" + urlstring;
+			}
+			System.out.println("PDF URL " + urlstring);
+			java.io.FileOutputStream fos = new java.io.FileOutputStream(output);
+
+			PD4ML pd4ml = new PD4ML();
+		
+			try {
+
+				Dimension landscapeA4 = pd4ml.changePageOrientation(PD4Constants.A4);
+				pd4ml.setPageSize(landscapeA4);
+			
+				PD4PageMark footer = new PD4PageMark();  
+				
+	            footer.setPageNumberTemplate("Page $[page] of $[total]");  
+	            footer.setPageNumberAlignment(PD4PageMark.RIGHT_ALIGN);  
+	            footer.setFontSize(10);  
+	            footer.setAreaHeight(20);     
+	            
+	            pd4ml.setPageFooter(footer); 
+				
+			} catch (Exception e) {
+				System.out.println("Pdf conversion method excep " + e.getMessage());
+			}
+
+			if (unitsValue.equals("mm")) {
+				pd4ml.setPageInsetsMM(new Insets(topValue, leftValue, bottomValue, rightValue));
+			} else {
+				pd4ml.setPageInsets(new Insets(topValue, leftValue, bottomValue, rightValue));
+			}
+
+			pd4ml.setHtmlWidth(userSpaceWidth);
+
+			pd4ml.render(urlstring, fos);
+		}
 	}
 }

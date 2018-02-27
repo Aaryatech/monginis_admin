@@ -9,7 +9,7 @@
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
-	<c:url var="getBomListWithDate" value="/getBomListWithDate"></c:url>
+	<c:url var="getMachineServicingWithDate" value="/getMachineServicingWithDate"></c:url>
 	<c:url var="getBomAllListWithDate" value="/getBomAllListWithDate"></c:url>
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -34,7 +34,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Search Bill Of Material List
+						<i class="fa fa-file-o"></i> Machine Servicing List
 					</h1>
 					
 				</div>
@@ -48,7 +48,7 @@
 					<div class="box" id="todayslist">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i> Search Bill Of Material List
+								<i class="fa fa-table"></i> Machine Servicing List
 							</h3>
 							<div class="box-tool">
 								<a  onclick="showdatewisetable()">Show Datewise Record</a> <a data-action="collapse" href="#"><i
@@ -111,7 +111,7 @@
 					
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-table"></i> Search Bill of Material List Date Wise
+								<i class="fa fa-table"></i> Search Machine Servicing Date Wise
 							</h3>
 							<div class="box-tool">
 								<a  onclick="showdatewisetable()">Pending List</a>  <a data-action="collapse" href="#"><i
@@ -140,7 +140,21 @@
 						
 								</div>
 								
-								
+								<div class=" box-content">
+						<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Select Machine:</label>
+									<div class="col-sm-5 col-lg-3 controls">
+										 <select name="machineId" id="machineId" class="form-control chosen" tabindex="6" required>
+                                    <option value="0">All</option>
+                                    <c:forEach items="${machineMasterList}" var="machineMasterList">
+                                    	<option value="${machineMasterList.machineId}">${machineMasterList.machineName}</option> 
+                                    </c:forEach>
+											 
+										</select>
+										</div> 
+										</div><br>
+						
+								</div>
 								
 								
 								
@@ -181,13 +195,14 @@
 								style="width: 100%" id="table_grid">
 								<thead>
 									<tr>
-										<th>Sr.No.</th>
-										
-										<th>Department Name</th>
-										<th>Request Date</th>
-										
+											<th>Sr.No.</th> 
+										<th>Machine Name</th>
+										<th>Dealer Name</th> 
+										<th>Person Name</th>
+										<th>Servicing Date</th>
+										<th>Next Date Date</th> 
+										<th>Alert Date Date</th>
 										<th>Status</th>
-										<th>Action</th>
 										
 									</tr>
 								</thead>
@@ -286,18 +301,19 @@
 		function searchbomall() {
 			var from_date = $("#from_date").val();
 			var to_date = $("#to_date").val();
-			
+			var machineId = $("#machineId").val();
 			
 			$('#loader').show();
 
 			$
 					.getJSON(
-							'${getBomAllListWithDate}',
+							'${getMachineServicingWithDate}',
 
 							{
 								 
 								from_date : from_date,
 								to_date : to_date,
+								machineId : machineId,
 								ajax : 'true'
 
 							},
@@ -315,93 +331,22 @@
 							  $.each(
 											data,
 											function(key, itemList) {
-												
-												var bgcolor;
-												var deptname;
-												if(itemList.fromDeptName=='PROD')
-													{
-														deptname="Production";
-													}
-												else if(itemList.fromDeptName=='MIX')
-													{
-														deptname="Mixing";
-													}
-												
-												
-											 if(itemList.status==0)
-												{ 
-												 var stats="Pending";
-												var tr = $('<tr></tr>');
-											  	tr.append($('<td></td>').html(key+1));
-
-											  	tr.append($('<td></td>').html(deptname));
-											  	
-
-											  	tr.append($('<td></td>').html(itemList.reqDate));
-											  
-											  	tr.append($('<td></td>').html(stats));
-											  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
-												
-												$('#table_grid tbody').append(tr);
-												
-												} 
-											else if(itemList.status==1)
-												{
-												var stats="Approved";
-												var tr = $('<tr></tr>');
-											  	tr.append($('<td style="color:blue"></td>').html(key+1));
-
-											  	tr.append($('<td style="color:blue"></td>').html(deptname));
-											  	
-
-											  	tr.append($('<td style="color:blue"></td>').html(itemList.reqDate));
-											  
-											  	tr.append($('<td style="color:blue"></td>').html(stats));
-											  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
-												
-												$('#table_grid tbody').append(tr);
-												}
-											else if(itemList.status==2)
-											{
-												 var stats="Rejected";
+												var approve;
+												 if(itemList.isApproved==0) 
+													 approve="Pending";
+												 else
+													 approve="Approved";
 											var tr = $('<tr></tr>');
-										  	tr.append($('<td style="color:red"></td>').html(key+1));
-
-										  	tr.append($('<td style="color:red"></td>').html(deptname));
-										  	
-
-										  	tr.append($('<td style="color:red"></td>').html(itemList.reqDate));
-										  
-										  	tr.append($('<td style="color:red"></td>').html(stats));
-										  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
-											
-											$('#table_grid tbody').append(tr);
-											} 
+										  	tr.append($('<td></td>').html(key+1)); 
+										  	tr.append($('<td></td>').html(itemList.machineName)); 
+										  	tr.append($('<td></td>').html(itemList.dealerName)); 
+										  	tr.append($('<td></td>').html(itemList.prsnName));
+										  	tr.append($('<td></td>').html(itemList.date));
+										  	tr.append($('<td></td>').html(itemList.nextServDate));
+										  	tr.append($('<td></td>').html(itemList.alertServDate));
+										  	tr.append($('<td></td>').html(approve));
+										  	 $('#table_grid tbody').append(tr);
 											 
-											else 
-											{
-												var stats;
-												if(itemList.status==3)
-													{
-													 stats="Approved Rejected";
-													}
-												else{
-													stats="Closed";
-												}
-												 
-											var tr = $('<tr></tr>');
-										  	tr.append($('<td style="color:green"></td>').html(key+1));
-
-										  	tr.append($('<td style="color:green"></td>').html(deptname));
-										  	
-
-										  	tr.append($('<td style="color:green"></td>').html(itemList.reqDate));
-										  
-										  	tr.append($('<td style="color:green"></td>').html(stats));
-										  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/viewDetailBOMRequest?reqId="+itemList.reqId+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
-											
-											$('#table_grid tbody').append(tr);
-											} 
 											
 
 											})  
