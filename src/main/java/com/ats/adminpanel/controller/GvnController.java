@@ -28,6 +28,7 @@ import com.ats.adminpanel.model.grngvn.GetGrnGvnDetails;
 import com.ats.adminpanel.model.grngvn.GetGrnGvnDetailsList;
 import com.ats.adminpanel.model.grngvn.GrnGvnHeader;
 import com.ats.adminpanel.model.grngvn.GrnGvnHeaderList;
+import com.ats.adminpanel.model.grngvn.TempGrnGvnBeanUp;
 import com.ats.adminpanel.model.login.UserResponse;
 import com.ats.adminpanel.model.remarks.GetAllRemarks;
 import com.ats.adminpanel.model.remarks.GetAllRemarksList;
@@ -296,6 +297,9 @@ public class GvnController {
 			HttpSession session = request.getSession();
 			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
 			int gateApproveLogin = userResponse.getUser().getId();
+			
+			int gateGvnQty = Integer.parseInt(request.getParameter("gate_gvn_qty"));
+
 
 			int grnId = Integer.parseInt(request.getParameter("grnId"));
 
@@ -307,17 +311,27 @@ public class GvnController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-			map.add("approvedLoginGate", gateApproveLogin);
 
-			map.add("approveimedDateTimeGate", dateFormat.format(cal.getTime()));
+			List<TempGrnGvnBeanUp> dataList = new ArrayList<>();
 
-			map.add("approvedRemarkGate", "Approve BY Dispatch");
+			TempGrnGvnBeanUp data = new TempGrnGvnBeanUp();
 
-			map.add("grnGvnStatus", Constants.AP_BY_GATE);
+			data.setApproveimedDateTimeGate(dateFormat.format(cal.getTime()));
 
-			map.add("grnGvnId", grnId);
+			data.setApprovedLoginGate(gateApproveLogin);
 
-			Info info = restTemplate.postForObject(Constants.url + "updateGateGrn", map, Info.class);
+			data.setGrnGvnStatus(Constants.AP_BY_GATE);
+
+			data.setApprovedRemarkGate("Approve BY Dispatch");
+
+			data.setGrnGvnId(grnId);
+
+			data.setAprQtyGate(gateGvnQty);
+
+			dataList.add(data);
+
+		
+			Info info = restTemplate.postForObject(Constants.url + "updateGateGrn", dataList, Info.class);
 
 			System.out.println("after calling web service of gate grn agree info response as String - " + info);
 
@@ -425,7 +439,7 @@ public class GvnController {
 			int grnId = Integer.parseInt(request.getParameter("grnId"));
 
 			// Integer.parseInt(request.getParameter("approveGateLogin"));
-
+			int gateGvnQty = Integer.parseInt(request.getParameter("gate_gvn_qty"));
 			String gateRemark = request.getParameter("gateRemark");
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -435,17 +449,26 @@ public class GvnController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-			map.add("approvedLoginGate", gateApproveLogin);
+			List<TempGrnGvnBeanUp> dataList = new ArrayList<>();
 
-			map.add("approveimedDateTimeGate", dateFormat.format(cal.getTime()));
+			TempGrnGvnBeanUp data = new TempGrnGvnBeanUp();
 
-			map.add("approvedRemarkGate", gateRemark);
+			data.setApproveimedDateTimeGate(dateFormat.format(cal.getTime()));
 
-			map.add("grnGvnStatus", Constants.DIS_BY_GATE);
+			data.setApprovedLoginGate(gateApproveLogin);
 
-			map.add("grnGvnId", grnId);
+			data.setGrnGvnStatus(Constants.DIS_BY_GATE);
 
-			Info info = restTemplate.postForObject(Constants.url + "updateGateGrn", map, Info.class);
+			data.setApprovedRemarkGate(gateRemark);
+
+			data.setGrnGvnId(grnId);
+
+			data.setAprQtyGate(gateGvnQty);
+
+			dataList.add(data);
+
+		
+			Info info = restTemplate.postForObject(Constants.url + "updateGateGrn", dataList, Info.class);
 
 			System.out.println("after calling web service of gate grn agree info response as String - " + info);
 
@@ -574,18 +597,38 @@ public class GvnController {
 			}
 			gIds = gIds.substring(1);
 
+			
+			
+			List<TempGrnGvnBeanUp> dataList = new ArrayList<>();
+
+			for (int i = 0; i < grnIdList.length; i++) {
+
+				int gateGvnQty = Integer.parseInt(request.getParameter("gate_gvn_qty" + grnIdList[i]));
+				System.out.println("corresponding gID " + grnIdList[i] + "Gate Qty " + gateGvnQty);
+
+				TempGrnGvnBeanUp data = new TempGrnGvnBeanUp();
+
+				data.setApproveimedDateTimeGate(dateFormat.format(cal.getTime()));
+
+				data.setApprovedLoginGate(gateApproveLogin);
+
+				data.setGrnGvnStatus(Constants.AP_BY_GATE);
+
+				data.setApprovedRemarkGate("Approve By Dispatch");
+
+				data.setGrnGvnId(Integer.parseInt(grnIdList[i]));
+
+				data.setAprQtyGate(gateGvnQty);
+
+				dataList.add(data);
+
+				gIds = gIds + "," + grnIdList[i];
+
+			}
 			System.out.println("GIDS " + gIds);
-			map.add("approvedLoginGate", gateApproveLogin);
+			
 
-			map.add("approveimedDateTimeGate", dateFormat.format(cal.getTime()));
-
-			map.add("approvedRemarkGate", "Approve By Dispatch");
-
-			map.add("grnGvnStatus", Constants.AP_BY_GATE);
-
-			map.add("grnGvnId", gIds);
-
-			Info updateGateGrn = restTemplate.postForObject(Constants.url + "updateGateGrn", map, Info.class);
+			Info updateGateGrn = restTemplate.postForObject(Constants.url + "updateGateGrn", dataList, Info.class);
 
 			if (updateGateGrn.getError() == false) {
 

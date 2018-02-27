@@ -5,7 +5,7 @@
 
 
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-<body onpageshow="placeValue(${grnAccDetailList})">
+<body onload="placeValue()">
 
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<c:url var="insertGateGrnProcessAgree"
@@ -136,7 +136,6 @@
 																		disabled="disabled" id="${grnList.grnGvnId}"
 																		value="${grnList.grnGvnId}"></></td>
 
-
 																</c:when>
 
 
@@ -144,7 +143,6 @@
 																	<td><input type="checkbox" name="select_to_agree"
 																		disabled="disabled" id="${grnList.grnGvnId}"
 																		value="${grnList.grnGvnId}"></></td>
-
 
 																</c:when>
 
@@ -227,9 +225,9 @@
 															<td align="center"><input type="text"
 																name="acc_grn_qty${grnList.grnGvnId}"
 																class="form-control" id='acc_grn_qty${grnList.grnGvnId}'
-																value="${grnList.aprQtyGate}"
+																value="${grnList.aprQtyGate}" 
 																onkeyup="calcGrn(${grnList.grnType},${grnList.baseRate},${grnList.grnGvnId},
-																	${grnList.sgstPer},${grnList.cgstPer})" /></td>
+																	${grnList.sgstPer},${grnList.cgstPer})"  /></td>
 
 
 
@@ -271,11 +269,7 @@
 
 															</c:choose>
 
-
-
-															<td align="left"><c:out value="${grnList.grnGvnAmt}"></c:out></td>
-
-
+															<td id='grnAmt${grnList.grnGvnId}'  align="left"><c:out value="${grnList.grnGvnAmt}"></c:out></td>
 
 															<c:choose>
 																<c:when test="${grnList.grnGvnStatus==2}">
@@ -912,7 +906,7 @@ function calcGrn(grnType,baseRate,grnId,sgstPer,cgstPer){
 	var aprTaxableAmt;
 	var acc_grn_qty=$("#acc_grn_qty"+grnId).val();
 	
-	alert("acc_grn_qty" +acc_grn_qty);
+//	alert("acc_grn_qty" +acc_grn_qty);
 
 	if(grnType==0){
 		grnRate=baseRate*75/100;
@@ -925,15 +919,57 @@ function calcGrn(grnType,baseRate,grnId,sgstPer,cgstPer){
 	if(grnType==2 || grnType==4){
 		grnRate=baseRate;
 	}
+	//grnRate=grnRate.toFixed(2);
+	//alert(grnRate.toFixed(2));
 	aprTaxableAmt = grnRate * acc_grn_qty;
 	aprTotalTax = ((aprTaxableAmt) * (sgstPer + cgstPer))/ 100;
 	grandTotal = aprTaxableAmt + aprTotalTax;
-	
-	alert(grandTotal.toFixed(2));
+	//alert(grandTotal.toFixed(2));
+	//$("#grnAmt"+grnId).value=grandTotal;
+	document.getElementById('grnAmt'+grnId).innerText=grandTotal.toFixed(2);
 	
 }
+	/* function placeValue(){
+		
+		callMe(1,2,3,4,5,6);
+		//alert("HIII");
+		
+		
+	} */
+	function callMe(grnType,baseRate,grnId,sgstPer,cgstPer,status){
+		
+	alert("flkdjskf");
 	
+	alert("status = "+status);
+if(parseInt(status)==1){
+			alert("status==1")
+		}
+if(parseInt(status)==2){
+	alert("status==2")
+}
+if(parseInt(status)==3){
+	alert("status==3")
+}
+if(parseInt(status)==4){
+	alert("status==4")
+}
+if(parseInt(status)==5){
+	alert("status==5")
+}
 
+if(parseInt(status)==6){
+	alert("status==6")
+}
+
+if(parseInt(status)==7){
+	alert("status==7")
+}
+
+
+		
+		
+	}
+	
 </script>
 
 </body>

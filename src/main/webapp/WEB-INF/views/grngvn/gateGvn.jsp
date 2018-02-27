@@ -64,44 +64,7 @@
 
 
 						<div class="box-content">
-			<%-- 				<form
-								action="${pageContext.request.contextPath}/showGateGvnDetails"
-								class="form-horizontal" method="get" id="validation-form">
-
-
-
-
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">From
-										Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="from_date"
-											size="16" type="text" name="from_date" value="${fromDate}"
-											required onblur="getDate()" />
-									</div>
-									<!-- </div>
-
-
-								<div class="form-group"> -->
-									<label class="col-sm-3 col-lg-2 control-label">To Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="to_date" size="16"
-											type="text" value="${toDate}" name="to_date" required
-											onblur="getDate()" />
-									</div>
-									<!-- 	</div> -->
-
-
-									<div
-										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										<input type="submit" value="Submit" class="btn btn-primary" />
-
-
-
-									</div>
-								</div>
-
-							</form> --%>
+			
 
 							<form
 								action="${pageContext.request.contextPath}/insertGateGvnByCheckBoxes"
@@ -146,6 +109,7 @@
 														<th>Franchise Name</th>
 														<th>Item Name</th>
 														<th>Gvn Qty</th>
+														<th>Edited Qty</th>
 														<th>PHOTO 1</th>
 														<th>PHOTO 2</th>
 														<th>Status</th>
@@ -203,6 +167,11 @@
 																name="approve_gate_login${gvnList.grnGvnId}"
 																id="approve_gate_login${gvnList.grnGvnId}"
 																value="${gvnList.approvedLoginGate}" /></td>
+																
+																
+																<td align="center"><input type="text" name="gate_gvn_qty${gvnList.grnGvnId}" style="width: 50px" class="form-control"
+															id='gate_gvn_qty${gvnList.grnGvnId}' value="${gvnList.grnGvnQty}"/></td>
+																
 
 															<td><a href="${url}${gvnList.gvnPhotoUpload1}"
 																data-lightbox="image-1">Image 1</a></td>
@@ -760,6 +729,7 @@ function insertGrnDisAgree(grnGvnId){
 var grnId=grnGvnId;
 var approve_gate_login=$("#approve_gate_login"+grnGvnId).val();
 var gate_remark=$("#gate_remark"+grnId).val();
+var gate_gvn_qty=$("#gate_gvn_qty"+grnGvnId).val();
 
 if($("#gate_remark"+grnGvnId).val() == ''){
 	alert("Please Enter Grn Remark!");
@@ -773,7 +743,8 @@ else{
 			
 			grnId : grnId,
 			approveGateLogin : approve_gate_login,
-			gateRemark : gate_remark,				
+			gateRemark : gate_remark,		
+			gate_gvn_qty : gate_gvn_qty,
 				ajax : 'true',
 			
 
@@ -821,6 +792,7 @@ function insertGrnCall(grnGvnId){
 var grnId=grnGvnId;
 var approve_gate_login=$("#approve_gate_login"+grnGvnId).val();
 var gate_remark=$("#gate_remark"+grnGvnId).val();
+var gate_gvn_qty=$("#gate_gvn_qty"+grnGvnId).val();
 
 
 /* alert(grnId);
@@ -833,7 +805,7 @@ alert(approve_gate_login); */
 							
 							grnId : grnId,
 							approveGateLogin:approve_gate_login,
-								
+							gate_gvn_qty:gate_gvn_qty,	
 								ajax : 'true',
 							
 	 complete: function() {
@@ -921,8 +893,8 @@ function showGateGvnDetails(){
 	
 		var toDate=$("#to_date").val();
 		
-		alert(fromDate);
-		alert(toDate);
+		//alert(fromDate);
+		//alert(toDate);
 		
 		$.getJSON('${showGateGvnDetails}',
 				{
