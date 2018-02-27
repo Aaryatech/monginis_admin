@@ -42,6 +42,7 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.commons.VpsImageUpload; 
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.logistics.AlertAmcRecord;
 import com.ats.adminpanel.model.logistics.Dealer;
 import com.ats.adminpanel.model.logistics.Document;
 import com.ats.adminpanel.model.logistics.DriverMaster;
@@ -66,6 +67,35 @@ import com.ats.adminpanel.model.logistics.VehicleDcoument;
 public class LogisticsController {
 	
 	RestTemplate restTemplate = new RestTemplate();
+	
+	
+	
+	@RequestMapping(value = "/logisticsDashBoard", method = RequestMethod.GET)
+	public ModelAndView logisticsDashBoard(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/logisticsDashbord"); 
+		try
+		{
+			 
+			List<AlertAmcRecord> alertAmcRecordList = restTemplate.getForObject(Constants.url + "getAlertAmcRecord", List.class); 
+			List<DriverMaster> alertDriverMasterList = restTemplate.getForObject(Constants.url + "getAlertDriverRecord", List.class);
+			List<VehicleDcoument> getAlertDocumentList = restTemplate.getForObject(Constants.url + "getAlertDocumentRecord", List.class);
+			List<Document> getAllDocumentList = restTemplate.getForObject(Constants.url + "getAllDocumentList", List.class);
+			List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class);
+			 System.out.println("alertAmcRecordList"+alertAmcRecordList.toString());
+			 model.addObject("getAllDocumentList", getAllDocumentList);
+			 model.addObject("vehicleList", vehicleList);
+			 model.addObject("alertDocumentList", getAlertDocumentList);
+			 model.addObject("alertDriverMasterList", alertDriverMasterList);
+			model.addObject("amcRecordList", alertAmcRecordList);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return model;
+
+	}
 	
 	//-------------------------------------------DRIVER-------------------------------------------------------
 	

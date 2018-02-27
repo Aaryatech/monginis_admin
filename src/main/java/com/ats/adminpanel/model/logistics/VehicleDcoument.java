@@ -15,6 +15,7 @@ public class VehicleDcoument {
 	private String docPath;  
 	private int currentKm; 
 	private int delStatus;
+	private int remainingDay;
 	public int getVehDocId() {
 		return vehDocId;
 	}
@@ -79,12 +80,19 @@ public class VehicleDcoument {
 	public void setDelStatus(int delStatus) {
 		this.delStatus = delStatus;
 	}
+
+	public int getRemainingDay() {
+		return remainingDay;
+	}
+	public void setRemainingDay(int remainingDay) {
+		this.remainingDay = remainingDay;
+	}
 	@Override
 	public String toString() {
 		return "VehicleDcoument [vehDocId=" + vehDocId + ", vehId=" + vehId + ", docId=" + docId + ", entryDate="
 				+ entryDate + ", docDate=" + docDate + ", docExpireDate=" + docExpireDate + ", docExpNotificationDate="
 				+ docExpNotificationDate + ", docPath=" + docPath + ", currentKm=" + currentKm + ", delStatus="
-				+ delStatus + "]";
+				+ delStatus + ", remainingDay=" + remainingDay + "]";
 	}
 	
 	

@@ -53,8 +53,8 @@
 							<div class="box-tool">
 							<a href="${pageContext.request.contextPath}/insertVehicleDocument">Insert Vehicle Document</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
-								<a  onclick="showdatewisetable()">Show Datewise Record</a> <a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a>
+								<!-- <a  onclick="showdatewisetable()">Show Datewise Record</a> <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a> -->
 							</div>
 						</div>
 						
