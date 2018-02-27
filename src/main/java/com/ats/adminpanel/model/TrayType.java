@@ -7,7 +7,18 @@ public class TrayType {
 	
 	private String typeName;
 	
+	private float trayPrice;
+	
 	private int delStatus;
+
+	
+	public float getTrayPrice() {
+		return trayPrice;
+	}
+
+	public void setTrayPrice(float trayPrice) {
+		this.trayPrice = trayPrice;
+	}
 
 	public int getTypeId() {
 		return typeId;

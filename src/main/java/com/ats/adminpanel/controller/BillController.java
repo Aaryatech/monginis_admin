@@ -1170,12 +1170,16 @@ public class BillController {
 			
 			FrBillPrint billPrint;
 			for(int i=0;i<billHeadersListForPrint.size();i++) {
+				System.out.println("Inside outer for "+i);
 				  billPrint=new FrBillPrint();
 				 List<GetBillDetailPrint> billDetails=new ArrayList<>();
 
 				  for(int j=0;j<billDetailsListForPrint.size();j++) {
-
-					  if(billHeadersListForPrint.get(i).getBillNo()==billDetailsListForPrint.get(j).getBillNo()) {
+					  System.out.println("Inside inner for "+j);
+					  System.out.println("Header bill no  "+billHeadersListForPrint.get(i).getBillNo());
+					  System.out.println("detail bill no "+billDetailsListForPrint.get(j).getBillNo());
+					  
+					  if(billHeadersListForPrint.get(i).getBillNo().equals(billDetailsListForPrint.get(j).getBillNo())) {
 						  
 							System.out.println("Inside If  Bill no  = "+billHeadersListForPrint.get(i).getBillNo());
 
