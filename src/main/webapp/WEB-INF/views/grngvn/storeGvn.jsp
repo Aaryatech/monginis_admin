@@ -129,6 +129,7 @@
 														<th width="120" align="left">Franchise Name</th>
 														<th width="120" align="left">Item Name</th>
 														<th width="100" align="left">GVN Qty</th>
+														<th>Edited Qty</th>
 														<th width="100" align="left">PHOTO 1</th>
 														<th width="100" align="left">PHOTO 2</th>
 														<th width="100" align="left">Status</th>
@@ -185,6 +186,29 @@
 																name="approve_store_login${gvnList.grnGvnId}"
 																id="approve_store_login${gvnList.grnGvnId}"
 																value="${gvnList.approvedLoginStore}" /></td>
+																
+																
+																<c:set var="qty" value="0"></c:set>
+
+															<c:choose>
+
+																<c:when
+																	test="${gvnList.grnGvnStatus==1 or gvnList.grnGvnStatus==2 or gvnList.grnGvnStatus==3}">
+																	<c:set var="qty" value="${gvnList.aprQtyGate}" />
+																</c:when>
+
+																<c:otherwise>
+																	
+																	<c:set var="qty" value="${gvnList.aprQtyStore}" />
+																</c:otherwise>
+
+																
+															</c:choose>
+																
+																
+																<td align="center"><input type="text" name="store_gvn_qty${gvnList.grnGvnId}" style="width: 50px" class="form-control"
+															id='store_gvn_qty${gvnList.grnGvnId}' value="${qty}"/></td>
+																
 
 															<td><a href="${url}${gvnList.gvnPhotoUpload1}"data-lightbox="image-1" >Image 1</a>
 																							</td>
@@ -846,6 +870,7 @@ function insertGrnDisAgree(grnGvnId){
 var grnId=grnGvnId;
 var approve_store_login=$("#approve_store_login"+grnGvnId).val();
 var store_remark=$("#store_remark"+grnId).val();
+var store_gvn_qty=$("#store_gvn_qty"+grnGvnId).val();
 
 if($("#store_remark"+grnGvnId).val() == ''){
 	alert("Please Enter Grn Remark!");
@@ -859,7 +884,9 @@ else{
 			
 			grnId : grnId,
 			approveStoreLogin : approve_store_login,
-			storeRemark : store_remark,				
+			storeRemark : store_remark,	
+			store_gvn_qty : store_gvn_qty,
+
 				ajax : 'true',
 			
 
@@ -907,6 +934,7 @@ function insertGrnCall(grnGvnId){
 var grnId=grnGvnId;
 var approve_store_login=$("#approve_store_login"+grnGvnId).val();
 var gate_remark=$("#gate_remark"+grnGvnId).val();
+var store_gvn_qty=$("#store_gvn_qty"+grnGvnId).val();
 
 
 /* alert(grnId);
@@ -919,6 +947,8 @@ alert(approve_gate_login); */
 							
 							grnId : grnId,
 							approveStoreLogin:approve_store_login,
+							store_gvn_qty : store_gvn_qty,
+
 								
 								ajax : 'true',
 							

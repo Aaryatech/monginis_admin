@@ -172,8 +172,27 @@
 																id="approve_gate_login${grnList.grnGvnId}"
 																value="${grnList.approvedLoginGate}" /></td>
 
-															<td align="center"><input type="text" name="gate_grn_qty${grnList.grnGvnId}" class="form-control"
-															id='gate_grn_qty${grnList.grnGvnId}' value="${grnList.grnGvnQty}"/></td>
+
+															<c:choose>
+
+																<c:when test="${grnList.grnGvnStatus==1}">
+																	<td align="center"><input type="text"
+																		name="gate_grn_qty${grnList.grnGvnId}"
+																		class="form-control" style="width: 50px"
+																		id='gate_grn_qty${grnList.grnGvnId}'
+																		value="${grnList.grnGvnQty}" /></td>
+																</c:when>
+
+																<c:otherwise>
+																	<td align="center"><input type="text"
+																		name="gate_grn_qty${grnList.grnGvnId}"
+																		class="form-control" style="width: 50px"
+																		id='gate_grn_qty${grnList.grnGvnId}'
+																		value="${grnList.aprQtyGate}" /></td>
+																</c:otherwise>
+
+															</c:choose>
+
 
 															<c:choose>
 																<c:when test="${grnList.grnGvnStatus==1}">
@@ -520,7 +539,7 @@
 
 										<div
 											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-5">
-											<input type="button" value="Submit ME" onclick="callSubmit()"
+											<input type="button" value="Submit" onclick="callSubmit()"
 												class="btn btn-primary">
 
 										</div>
@@ -610,7 +629,7 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-	
+
 
 
 	<!-- insertGrnDisAgree -->

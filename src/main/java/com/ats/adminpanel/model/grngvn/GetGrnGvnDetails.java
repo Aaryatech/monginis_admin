@@ -1,6 +1,6 @@
 package com.ats.adminpanel.model.grngvn;
 
-import java.sql.Date;
+import java.util.Date;
 
 public class GetGrnGvnDetails {
 	
@@ -140,7 +140,7 @@ int grnGvnHeaderId;
 		private String invoiceNo;
 		
 
-		private Date refInvoiceDate;
+		private String refInvoiceDate;
 		
 		
 		//23 FEB new Fields to handle qty variation between entry(insert) and dispatch
@@ -166,17 +166,19 @@ int grnGvnHeaderId;
 		
 						
 
-	public Date getRefInvoiceDate() {
-			return refInvoiceDate;
-		}
-
-		public void setRefInvoiceDate(Date refInvoiceDate) {
-			this.refInvoiceDate = refInvoiceDate;
-		}
+	
 
 	public int getIsCreditNote() {
 			return isCreditNote;
 		}
+
+		public String getRefInvoiceDate() {
+		return refInvoiceDate;
+	}
+
+	public void setRefInvoiceDate(String refInvoiceDate) {
+		this.refInvoiceDate = refInvoiceDate;
+	}
 
 		public void setIsCreditNote(int isCreditNote) {
 			this.isCreditNote = isCreditNote;

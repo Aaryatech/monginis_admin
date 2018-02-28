@@ -76,7 +76,7 @@
 								<div class="box">
 									<div class="box-title">
 										<h3>
-											<i class="fa fa-table"></i> GRN List
+											<i class="fa fa-table"></i> GRN List ${grnDate}
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i
@@ -221,13 +221,28 @@
 
 															<td align="left"><c:out
 																	value="${grnList.aprQtyGate}"></c:out></td>
+																	
+																	<c:set var ="qty" value="0" ></c:set>
+															<c:choose>
+																<c:when test="${grnList.grnGvnStatus==1 or grnList.grnGvnStatus==2 or grnList.grnGvnStatus==3}">
+																<c:set var ="qty" value="${grnList.aprQtyGate}" />
+																
+																</c:when>
+																<c:otherwise>
+																
+																<c:set var ="qty" value="${grnList.aprQtyAcc}" ></c:set>
+																
+																</c:otherwise>
+
+															</c:choose>
+
 
 															<td align="center"><input type="text"
 																name="acc_grn_qty${grnList.grnGvnId}"
 																class="form-control" id='acc_grn_qty${grnList.grnGvnId}'
-																value="${grnList.aprQtyGate}" 
+																value="${qty}"
 																onkeyup="calcGrn(${grnList.grnType},${grnList.baseRate},${grnList.grnGvnId},
-																	${grnList.sgstPer},${grnList.cgstPer})"  /></td>
+																	${grnList.sgstPer},${grnList.cgstPer})" /></td>
 
 
 
@@ -269,7 +284,8 @@
 
 															</c:choose>
 
-															<td id='grnAmt${grnList.grnGvnId}'  align="left"><c:out value="${grnList.grnGvnAmt}"></c:out></td>
+															<td id='grnAmt${grnList.grnGvnId}' align="left"><c:out
+																	value="${grnList.grnGvnAmt}"></c:out></td>
 
 															<c:choose>
 																<c:when test="${grnList.grnGvnStatus==2}">
@@ -355,8 +371,7 @@
 																									var="remarkList">
 																									<option value="${remarkList.remark}">${remarkList.remark}</option>
 																								</c:forEach>
-																							</select> </br>
-																							<input class="btn btn-primary" value="Submit"
+																							</select> </br> <input class="btn btn-primary" value="Submit"
 																								disabled="disabled"
 																								onclick="insertGrnDisAgree(${grnList.grnGvnId})" />
 																						</div>
