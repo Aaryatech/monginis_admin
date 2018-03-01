@@ -315,6 +315,8 @@
 													    	  var qty=0;
 													    	  if(itemname.getOrderDataForPushOrder!=null)
 												    	 		 {
+													    		  
+													    		  alert("Push Order Data not null");
 													    		
 												    	  $.each(itemname.getOrderDataForPushOrder, function(key, frData){
 												    			if (frData.frId == id && itemname.itemId==frData.itemId){
