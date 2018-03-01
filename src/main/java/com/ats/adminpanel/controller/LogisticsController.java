@@ -42,7 +42,10 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.commons.VpsImageUpload; 
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.logistics.AlertAmcRecord;
+import com.ats.adminpanel.model.logistics.AlertMachineServicingRecord;
+import com.ats.adminpanel.model.logistics.AlertVeihcleServicing;
 import com.ats.adminpanel.model.logistics.Dealer;
 import com.ats.adminpanel.model.logistics.Document;
 import com.ats.adminpanel.model.logistics.DriverMaster;
@@ -77,17 +80,23 @@ public class LogisticsController {
 		try
 		{
 			 
-			List<AlertAmcRecord> alertAmcRecordList = restTemplate.getForObject(Constants.url + "getAlertAmcRecord", List.class); 
+			List<AlertAmcRecord> alertMachineAmcRecordList = restTemplate.getForObject(Constants.url + "getAlertMachineAmcRecord", List.class); 
+			List<AlertAmcRecord> alertVehicleAmcRecordList = restTemplate.getForObject(Constants.url + "getAlertvehicleAmcRecord", List.class);
 			List<DriverMaster> alertDriverMasterList = restTemplate.getForObject(Constants.url + "getAlertDriverRecord", List.class);
+			List<AlertMachineServicingRecord> alertMachineServicingRecordList = restTemplate.getForObject(Constants.url + "getAlertMachineServicingRecord", List.class);
 			List<VehicleDcoument> getAlertDocumentList = restTemplate.getForObject(Constants.url + "getAlertDocumentRecord", List.class);
 			List<Document> getAllDocumentList = restTemplate.getForObject(Constants.url + "getAllDocumentList", List.class);
-			List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class);
-			 System.out.println("alertAmcRecordList"+alertAmcRecordList.toString());
+			List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class); 
+			List<AlertVeihcleServicing> getAlertVeihcleServicingRecord = restTemplate.getForObject(Constants.url + "getAlertVeihcleServicingRecord", List.class);
+			System.out.println("alertMachineServicingRecordList " +alertMachineServicingRecordList);
 			 model.addObject("getAllDocumentList", getAllDocumentList);
 			 model.addObject("vehicleList", vehicleList);
 			 model.addObject("alertDocumentList", getAlertDocumentList);
 			 model.addObject("alertDriverMasterList", alertDriverMasterList);
-			model.addObject("amcRecordList", alertAmcRecordList);
+			model.addObject("amcRecordList", alertMachineAmcRecordList);
+			model.addObject("alertVehicleAmcList", alertVehicleAmcRecordList);
+			model.addObject("alertMachineServicingList", alertMachineServicingRecordList);
+			model.addObject("alertVeihcleServicingRecord", getAlertVeihcleServicingRecord);
 		}catch(Exception e)
 		{
 			e.printStackTrace();
@@ -215,13 +224,10 @@ public class LogisticsController {
 	@RequestMapping(value = "/deleteDriver/{driverId}", method = RequestMethod.GET) 
 	public String deleteDriver(@PathVariable int driverId, HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("logistics/insertDriver"); 
-		List<DriverMaster> driverList = new ArrayList<DriverMaster>();
-		
-
+		List<DriverMaster> driverList = new ArrayList<DriverMaster>(); 
 		try
 			{ 
-				 
-	        	 
+				  
 	        	 System.out.println("driverId"+driverId);
 	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
 	        	 map.add("driverId", driverId);
@@ -901,6 +907,9 @@ public class LogisticsController {
 			int lastServicingKm =Integer.parseInt(request.getParameter("lastServicingKm"));
 			int nextServicingKm =Integer.parseInt(request.getParameter("nextServicingKm"));
 			int alertNextServicingKm =Integer.parseInt(request.getParameter("alertNextServicingKm"));
+			String lastAmcDate = request.getParameter("lastAmcDate");
+			String nextAmcDate = request.getParameter("nextAmcDate");
+			String alertAmcDate = request.getParameter("alertAmcDate");
 
 			VehicalMaster insertVehicalMaster = new VehicalMaster();
 			if(vehId==null || vehId.equals(""))
@@ -929,7 +938,10 @@ public class LogisticsController {
 			insertVehicalMaster.setLastServicingKm(lastServicingKm);
 			insertVehicalMaster.setNextServicingKm(nextServicingKm);
 			insertVehicalMaster.setAlertNextServicingKm(alertNextServicingKm);
-			  
+			insertVehicalMaster.setLastAmcDate(lastAmcDate);
+			insertVehicalMaster.setNextAmcDate(nextAmcDate);
+			insertVehicalMaster.setAlertAmcDate(alertAmcDate);
+			
 			insertVehicalMaster = restTemplate.postForObject(Constants.url + "postVehicalMaster",insertVehicalMaster, VehicalMaster.class);
 			System.out.println("insertVariant"+insertVehicalMaster.toString());
 		 
@@ -1358,14 +1370,15 @@ public class LogisticsController {
 	        	String fromDate = request.getParameter("from_date");
 	        	String toDate = request.getParameter("to_date");
 	        	String type =request.getParameter("type");
+	        	String vehId =request.getParameter("vehId");
 	        	String typeId =request.getParameter("typeId");
 	        	System.out.println("type " + type);
 	        	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 	        	if(type.equals(""))
 	        	{
 	        		map.add("fromDate", DateConvertor.convertToYMD(fromDate));
-		        	map.add("toDate", DateConvertor.convertToYMD(toDate));
-		        	map.add("typeId", Integer.parseInt(typeId));
+		        	map.add("toDate", DateConvertor.convertToYMD(toDate)); 
+		        	map.add("typeId", typeId); 
 		        	getServicingWithDate = restTemplate.postForObject(Constants.url + "getServicingListBetweenDateByTypeId",map, List.class);
 	        	}
 	        	else
@@ -1373,6 +1386,7 @@ public class LogisticsController {
 	        		map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 		        	map.add("toDate", DateConvertor.convertToYMD(toDate));
 		        	map.add("type", Integer.parseInt(type));
+		        	map.add("vehId", Integer.parseInt(vehId));
 		        	getServicingWithDate = restTemplate.postForObject(Constants.url + "getServicingListBetweenDate",map, List.class);
 	        	}
 	        	
@@ -1388,8 +1402,9 @@ public class LogisticsController {
 
 	}
 	
-	@RequestMapping(value = "pdf/vehOrMachInvoiceBill/{from_date}/{to_date}/{type}/{typeId}", method = RequestMethod.GET)
-	public ModelAndView vehOrMachInvoiceBill(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String type,@PathVariable String typeId,HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "pdf/vehOrMachInvoiceBill/{from_date}/{to_date}/{type}/{typeId}/{vehId}", method = RequestMethod.GET)
+	public ModelAndView vehOrMachInvoiceBill(@PathVariable String from_date,@PathVariable String to_date,@PathVariable String type,@PathVariable String typeId,
+			@PathVariable String vehId,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("logistics/reportPdf/vehOrMachInvoiceBill");
 		try {
@@ -1397,9 +1412,9 @@ public class LogisticsController {
         	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
         	 if(Integer.parseInt(type)==-1)
 	        	{
-	        		map.add("fromDate", DateConvertor.convertToYMD(from_date));
-		        	map.add("toDate", DateConvertor.convertToYMD(to_date));
-		        	map.add("typeId", Integer.parseInt(typeId));
+        			map.add("fromDate", DateConvertor.convertToYMD(from_date));
+		        	map.add("toDate", DateConvertor.convertToYMD(to_date)); 
+		        	map.add("typeId", typeId); 
 		        	vehOrMachInvoiceBill = restTemplate.postForObject(Constants.url + "getServicingListBetweenDateByTypeId",map, List.class);
 	        	}
 	        	else
@@ -1407,6 +1422,7 @@ public class LogisticsController {
 	        		map.add("fromDate", DateConvertor.convertToYMD(from_date));
 		        	map.add("toDate", DateConvertor.convertToYMD(to_date));
 		        	map.add("type", Integer.parseInt(type));
+		        	map.add("vehId", Integer.parseInt(vehId));
 		        	vehOrMachInvoiceBill = restTemplate.postForObject(Constants.url + "getServicingListBetweenDate",map, List.class);
 	        	}
 	   		 List<MechType> mechTypeList = restTemplate.getForObject(Constants.url + "getTypeList", List.class);  
@@ -1488,10 +1504,20 @@ public class LogisticsController {
 			List<Dealer> getAllDealerList = restTemplate.getForObject(Constants.url + "getAllDealerList", List.class);
 			System.out.println("getAllDealerList"+getAllDealerList.toString());
 			List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class);
-			System.out.println("vehicleList"+vehicleList.toString());
+			System.out.println("vehicleList"+vehicleList.toString()); 
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			String settingKey =  "m_logis_labour_group"; 
+			map.add("settingKeyList", settingKey);
+			FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			int labourGroupId = settingList.getFrItemStockConfigure().get(0).getSettingValue();
+			System.out.println("labourGroupId"+labourGroupId);
+			
 			model.addObject("dealerList",getAllDealerList); 
 			model.addObject("sprPartList",getAllSparePart);
 			model.addObject("vehicleList",vehicleList);
+			model.addObject("labourGroupId",labourGroupId);
 		}catch(Exception e)
 		{
 			e.printStackTrace();
@@ -1512,6 +1538,28 @@ public class LogisticsController {
 	        	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 	        	map.add("type", type);
 	        	typeList = restTemplate.postForObject(Constants.url + "getTypeListByType",map, List.class);
+				System.out.println("typeList"+typeList.toString());
+	        	 
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return typeList;
+		
+
+	}
+	
+	@RequestMapping(value = "/getAllTypeList", method = RequestMethod.GET)
+	@ResponseBody
+	public List<MechType> getAllTypeList(HttpServletRequest request, HttpServletResponse response) {
+		 
+		List<MechType> typeList = new ArrayList<MechType>();
+	        try
+			{ 
+	        	 
+	        	typeList = restTemplate.getForObject(Constants.url + "getTypeList", List.class);
 				System.out.println("typeList"+typeList.toString());
 	        	 
 		}catch(Exception e)
@@ -1798,6 +1846,7 @@ public class LogisticsController {
 			float taxAmt =Float.parseFloat(request.getParameter("taxAmt"));
 			float taxaleAmt =Float.parseFloat(request.getParameter("taxaleAmt"));
 			float total =Float.parseFloat(request.getParameter("total"));
+			String typeName = request.getParameter("typeName");
 			int servDoneKm=0;
 			int nextDueKm=0;
 			if(type==1)
@@ -1877,21 +1926,49 @@ public class LogisticsController {
 			servHeader.setServDetail(servDetailList);
 			
 			  System.out.println("before insert "+servHeader);
-			  servHeader = restTemplate.postForObject(Constants.url + "postServHeader",servHeader, ServHeader.class);
-			System.out.println("insertSparePart"+servHeader.toString());
+			  ServHeader  res = restTemplate.postForObject(Constants.url + "postServHeader",servHeader, ServHeader.class);
+			System.out.println("res "+res.toString());
 			
-			if(servHeader!=null)
+			if(res!=null)
 			{
-				 
-	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
-	        	 map.add("vehicalId", servHeader.getVehId()); 
-	        	 VehicalMaster vehicalMaster = restTemplate.postForObject(Constants.url + "getVehicalById", map, VehicalMaster.class);
-	        	 vehicalMaster.setLastServicingKm(servHeader.getServDoneKm()); 
-	        	 vehicalMaster.setNextServicingKm(servHeader.getNextDueKm());
-	        	 vehicalMaster.setAlertNextServicingKm(vehicalMaster.getNextServicingKm()-100);
-	        	 vehicalMaster = restTemplate.postForObject(Constants.url + "postVehicalMaster",vehicalMaster, VehicalMaster.class);
-	 			System.out.println("update Vehicle"+vehicalMaster.toString());
-				
+				 if(res.getServType2()==1)
+				 {
+					 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+		        	 map.add("vehicalId", servHeader.getVehId()); 
+		        	 VehicalMaster vehicalMaster = restTemplate.postForObject(Constants.url + "getVehicalById", map, VehicalMaster.class);
+		        	 vehicalMaster.setLastServicingKm(res.getServDoneKm()); 
+		        	 vehicalMaster.setNextServicingKm(res.getNextDueKm());
+		        	 vehicalMaster.setAlertNextServicingKm(vehicalMaster.getNextServicingKm()-100);
+		        	 vehicalMaster = restTemplate.postForObject(Constants.url + "postVehicalMaster",vehicalMaster, VehicalMaster.class);
+		 			System.out.println("update Vehicle"+vehicalMaster.toString());
+		 			
+		 			map = new LinkedMultiValueMap<String, Object >();
+		 			map.add("vehId", res.getVehId());
+		 			map.add("typeId", res.getTypeId());
+		 			AlertVeihcleServicing alertVeihcleServicing = restTemplate.postForObject(Constants.url + "getAlertVeihcleServicingByVehIdAndType", map, AlertVeihcleServicing.class);
+		 			
+		 			if(alertVeihcleServicing.getAlertId()!=0)
+		 			{
+		 				alertVeihcleServicing.setLastServKm(res.getServDoneKm());
+		 				alertVeihcleServicing.setNextServKm(res.getNextDueKm());
+		 				alertVeihcleServicing.setAlertServKm(alertVeihcleServicing.getNextServKm()-100);
+		 				AlertVeihcleServicing update = restTemplate.postForObject(Constants.url + "postAlertVeihcleServicing", alertVeihcleServicing, AlertVeihcleServicing.class);
+		 				System.out.println("update alert Vehicle " + update);
+		 			}
+		 			else
+		 			{
+		 				alertVeihcleServicing.setVehId(res.getVehId());
+		 				alertVeihcleServicing.setVehNo(res.getVehNo());
+		 				alertVeihcleServicing.setTypeId(res.getTypeId());
+		 				alertVeihcleServicing.setTypeName(typeName);
+		 				alertVeihcleServicing.setLastServKm(res.getServDoneKm());
+		 				alertVeihcleServicing.setNextServKm(res.getNextDueKm());
+		 				alertVeihcleServicing.setAlertServKm(alertVeihcleServicing.getNextServKm()-100);
+		 				AlertVeihcleServicing insert = restTemplate.postForObject(Constants.url + "postAlertVeihcleServicing", alertVeihcleServicing, AlertVeihcleServicing.class);
+		 				System.out.println("insert alert Vehicle " + insert);
+		 			}
+				 }
+	        	 
 			}
 		 
 			 
@@ -2277,20 +2354,23 @@ public class LogisticsController {
 			servHeader.setServDetail(servDetailList);
 			
 			  System.out.println("before insert "+servHeader);
-			  servHeader = restTemplate.postForObject(Constants.url + "postServHeader",servHeader, ServHeader.class);
+			  ServHeader  res = restTemplate.postForObject(Constants.url + "postServHeader",servHeader, ServHeader.class);
 			System.out.println("insertSparePart"+servHeader.toString());
 			
-			if(servHeader!=null || servHeader.getServDetail()!=null)
+			if(res!=null)
 			{
-				 
-	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
-	        	 map.add("vehicalId", servHeader.getVehId()); 
-	        	 VehicalMaster vehicalMaster = restTemplate.postForObject(Constants.url + "getVehicalById", map, VehicalMaster.class);
-	        	 vehicalMaster.setLastServicingKm(servHeader.getServDoneKm()); 
-	        	 vehicalMaster.setNextServicingKm(servHeader.getNextDueKm());
-	        	 vehicalMaster.setAlertNextServicingKm(vehicalMaster.getNextServicingKm()-100);
-	        	 vehicalMaster = restTemplate.postForObject(Constants.url + "postVehicalMaster",vehicalMaster, VehicalMaster.class);
-	 			System.out.println("update Vehicle"+vehicalMaster.toString());
+				if(res.getServType2()==1)
+				 {
+					 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+		        	 map.add("vehicalId", servHeader.getVehId()); 
+		        	 VehicalMaster vehicalMaster = restTemplate.postForObject(Constants.url + "getVehicalById", map, VehicalMaster.class);
+		        	 vehicalMaster.setLastServicingKm(servHeader.getServDoneKm()); 
+		        	 vehicalMaster.setNextServicingKm(servHeader.getNextDueKm());
+		        	 vehicalMaster.setAlertNextServicingKm(vehicalMaster.getNextServicingKm()-100);
+		        	 vehicalMaster = restTemplate.postForObject(Constants.url + "postVehicalMaster",vehicalMaster, VehicalMaster.class);
+		 			System.out.println("update Vehicle"+vehicalMaster.toString());
+				 }
+	        	
 				
 			}
 		 
@@ -2558,6 +2638,9 @@ public class LogisticsController {
 			String lastCleanDate = request.getParameter("lastCleanDate");
 			String nextCleanDate = request.getParameter("nextCleanDate");
 			String nextAlertDate = request.getParameter("nextAlertDate");
+			String lastAmcDate = request.getParameter("lastAmcDate");
+			String nextAmcDate = request.getParameter("nextAmcDate");
+			String alertAmcDate = request.getParameter("alertAmcDate");
 
 			MachineMaster insertMachineMaster = new MachineMaster();
 			if(machineId==null || machineId.equals(""))
@@ -2579,6 +2662,9 @@ public class LogisticsController {
 			insertMachineMaster.setLastCleaningDate(lastCleanDate);
 			insertMachineMaster.setNextCleaningDate(nextCleanDate);
 			insertMachineMaster.setNextAlertDate(nextAlertDate);
+			insertMachineMaster.setLastAmcDate(lastAmcDate);
+			insertMachineMaster.setNextAmcDate(nextAmcDate);
+			insertMachineMaster.setAlertAmcDate(alertAmcDate);
 			  
 			insertMachineMaster = restTemplate.postForObject(Constants.url + "postMachineMaster",insertMachineMaster, MachineMaster.class);
 			System.out.println("insertMachineMaster "+insertMachineMaster.toString());
@@ -2773,8 +2859,35 @@ public class LogisticsController {
 			insertLogisAmc.setAmcTaxAmt(taxAmt);
 			insertLogisAmc.setAmcTotal(total);
 			insertLogisAmc.setAmcAlertFreq(amcAlertFrq);
-			insertLogisAmc = restTemplate.postForObject(Constants.url + "postLogisAmc",insertLogisAmc, LogisAmc.class);
-			System.out.println("insertLogisAmc "+insertLogisAmc.toString());
+			LogisAmc res = restTemplate.postForObject(Constants.url + "postLogisAmc",insertLogisAmc, LogisAmc.class);
+			System.out.println("res "+res.toString());
+			if(res!=null)
+			{
+				if(res.getTypeId()==1)
+				{
+					 
+		        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+		        	 map.add("vehicalId", res.getMechId()); 
+		        	 VehicalMaster vehicalMaster = restTemplate.postForObject(Constants.url + "getVehicalById", map, VehicalMaster.class);
+		        	 vehicalMaster.setLastAmcDate(res.getAmcFromDate());
+		        	 vehicalMaster.setNextAmcDate(res.getAmcToDate());
+		        	 vehicalMaster.setAlertAmcDate(res.getAmcAlertDate());
+		        	 VehicalMaster update = restTemplate.postForObject(Constants.url + "postVehicalMaster",vehicalMaster, VehicalMaster.class);
+		 			System.out.println("update"+update.toString());
+				}
+				else if(res.getTypeId()==2)
+				{
+					 
+		        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >(); 
+		        	 map.add("machineId", res.getMechId()); 
+		        	 MachineMaster machineMaster = restTemplate.postForObject(Constants.url + "getMachineMasterById", map, MachineMaster.class);
+		        	 machineMaster.setLastAmcDate(res.getAmcFromDate());
+		        	 machineMaster.setNextAmcDate(res.getAmcToDate());
+		        	 machineMaster.setAlertAmcDate(res.getAmcAlertDate());
+		        	 MachineMaster update = restTemplate.postForObject(Constants.url + "postMachineMaster",machineMaster, MachineMaster.class);
+		 			System.out.println("update"+update.toString());
+				}
+			}
 		 
 			 
 		}catch(Exception e)
@@ -2917,8 +3030,20 @@ public class LogisticsController {
 			insertMachineServicing.setServType(servType);
 			insertMachineServicing.setIsAlertRequired(alertRequired);
 			insertMachineServicing.setPaidType(paidType);
-			insertMachineServicing = restTemplate.postForObject(Constants.url + "postMachineServicing",insertMachineServicing, MachineServicing.class);
+			MachineServicing res = restTemplate.postForObject(Constants.url + "postMachineServicing",insertMachineServicing, MachineServicing.class);
 			System.out.println("insertMachineServicing "+insertMachineServicing.toString());
+			
+			if(res!=null)
+			{
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+	        	 map.add("machineId", machineId); 
+	        	 MachineMaster machineMaster = restTemplate.postForObject(Constants.url + "getMachineMasterById", map, MachineMaster.class);
+	        	 machineMaster.setLastCleaningDate(res.getDate());
+	        	 machineMaster.setNextCleaningDate(res.getNextServDate());
+	        	 machineMaster.setNextAlertDate(res.getAlertServDate());
+	        	 MachineMaster update = restTemplate.postForObject(Constants.url + "postMachineMaster",machineMaster, MachineMaster.class);
+	 			System.out.println("update "+update.toString());
+			}
 		 
 			 
 		}catch(Exception e)

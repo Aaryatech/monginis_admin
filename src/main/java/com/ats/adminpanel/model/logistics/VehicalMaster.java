@@ -1,7 +1,8 @@
 package com.ats.adminpanel.model.logistics;
 
  
- 
+  
+
 import com.fasterxml.jackson.annotation.JsonFormat; 
 public class VehicalMaster {
 	
@@ -29,7 +30,10 @@ public class VehicalMaster {
 	private int currentRunningKm; 
 	private int lastServicingKm; 
 	private int nextServicingKm; 
-	private int alertNextServicingKm;
+	private int alertNextServicingKm; 
+	private String lastAmcDate; 
+	private String nextAmcDate; 
+	private String alertAmcDate;
 	
 	public int getVehId() {
 		return vehId;
@@ -182,6 +186,27 @@ public class VehicalMaster {
 	public void setAlertNextServicingKm(int alertNextServicingKm) {
 		this.alertNextServicingKm = alertNextServicingKm;
 	}
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+	public String getLastAmcDate() {
+		return lastAmcDate;
+	}
+	public void setLastAmcDate(String lastAmcDate) {
+		this.lastAmcDate = lastAmcDate;
+	}
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+	public String getNextAmcDate() {
+		return nextAmcDate;
+	}
+	public void setNextAmcDate(String nextAmcDate) {
+		this.nextAmcDate = nextAmcDate;
+	}
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+	public String getAlertAmcDate() {
+		return alertAmcDate;
+	}
+	public void setAlertAmcDate(String alertAmcDate) {
+		this.alertAmcDate = alertAmcDate;
+	}
 	@Override
 	public String toString() {
 		return "VehicalMaster [vehId=" + vehId + ", vehNo=" + vehNo + ", makeId=" + makeId + ", vehEngNo=" + vehEngNo
@@ -192,7 +217,8 @@ public class VehicalMaster {
 				+ ", wheelChangeFreq=" + wheelChangeFreq + ", battaryChangeFreq=" + battaryChangeFreq
 				+ ", acChangeFreq=" + acChangeFreq + ", currentRunningKm=" + currentRunningKm + ", lastServicingKm="
 				+ lastServicingKm + ", nextServicingKm=" + nextServicingKm + ", alertNextServicingKm="
-				+ alertNextServicingKm + "]";
+				+ alertNextServicingKm + ", lastAmcDate=" + lastAmcDate + ", nextAmcDate=" + nextAmcDate
+				+ ", alertAmcDate=" + alertAmcDate + "]";
 	}
 	
 	

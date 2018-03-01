@@ -82,6 +82,10 @@
 										</select>
 									
 									</div> 
+									<input class="form-control" id="typeName" size="16"
+											type="hidden" name="typeName"  required />
+											<input class="form-control" id="labourGroupId" value="${labourGroupId}" size="16"
+											type="hidden" name="labourGroupId"    />
 									
 							</div><br>
 							<div class="box-content">
@@ -102,16 +106,17 @@
 								<div class="col-md-2">Type*</div>
 									<div class="col-md-3">
 									
-									<select name="typeId" id="typeId" class="form-control chosen" tabindex="6" required>
+									<select name="typeId" id="typeId" class="form-control chosen" tabindex="6" onchange="updateNextServicingDueKm()" required>
 											 
 											 
 										</select>
-									
+									<input class="form-control" id="typeName" size="16"
+											type="hidden" name="typeName"  required />
 									</div>
 								<div class="col-md-2">Servicing Type*</div>
 									<div class="col-md-3">
 									
-									<select name="servType" id="servType" class="form-control chosen" tabindex="6" required>
+									<select name="servType" id="servType" class="form-control chosen" tabindex="6"  required>
 											<option value="">Select Servicing Type</option>
 											<option value="1">Regular</option>
 											 <option value="2">Break Down</option>  
@@ -527,6 +532,7 @@
 				var discPer = $("#discPer").val();
 				var extraChargePer = $("#extraChargePer").val(); 
 				var taxPer = $("#taxPer").val(); 
+				var labourGroupId = $("#labourGroupId").val();
 				
 				if(validation()==true){	
 				
@@ -599,7 +605,7 @@
 														  	taxAmt=taxAmt+itemList.sprTaxAmt;  
 														  	tr.append($('<td></td>').html(itemList.total));
 														  	total=total+itemList.total;
-														  	if(itemList.groupId==2)
+														  	if(itemList.groupId==labourGroupId)
 													  		{
 													  		 
 													  		labourCharge=labourCharge+itemList.total;
@@ -714,7 +720,7 @@
 														  	taxAmt=taxAmt+itemList.sprTaxAmt;  
 														  	tr.append($('<td></td>').html(itemList.total));
 														  	total=total+itemList.total;
-														  	if(itemList.groupId==2)
+														  	if(itemList.groupId==labourGroupId)
 													  		{
 													  		 
 													  		labourCharge=labourCharge+itemList.total;
@@ -843,7 +849,7 @@
 		 
 		function del(key)
 		{
-			
+			var labourGroupId = $("#labourGroupId").val();
 			var key=key;
 			$('#loader').show();
 			$
@@ -893,7 +899,7 @@
 						  	taxAmt=taxAmt+itemList.sprTaxAmt;  
 						  	tr.append($('<td></td>').html(itemList.total));
 						  	total=total+itemList.total;
-						  	if(itemList.groupId==2)
+						  	if(itemList.groupId==labourGroupId)
 						  		{
 						  		 
 						  		labourCharge=labourCharge+itemList.total;
@@ -901,7 +907,7 @@
 						  	else
 						  		{
 						  		 
-						  		totSparePart=totSparePart+1;
+						  		totSparePart=totSparePart+itemList.total;
 						  		}
 						  	
 						  	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
@@ -929,7 +935,8 @@
 		{
 			
 			var vehId = $("#vehId").val();
-			
+			var typeId = $("#typeId").val();
+			var typeName = $("#typeId option:selected").text();
 			var servDoneKm = parseFloat($("#servDoneKm").val()); 
 			$
 			.getJSON(
@@ -942,8 +949,17 @@
 
 					},
 					function(data) { 
-			document.getElementById("nextDueKm").value=data.freqKm+servDoneKm; 
+						if(typeId==1)
+							document.getElementById("nextDueKm").value=data.freqKm+servDoneKm; 
+						else if(typeId==6)
+							document.getElementById("nextDueKm").value=data.battaryChangeFreq+servDoneKm; 
+						else if(typeId==7)
+							document.getElementById("nextDueKm").value=data.acChangeFreq+servDoneKm;
+						else 
+							document.getElementById("nextDueKm").value=data.wheelChangeFreq+servDoneKm;
 						
+						document.getElementById("typeName").value=typeName;
+			 
 					});
 			
 			

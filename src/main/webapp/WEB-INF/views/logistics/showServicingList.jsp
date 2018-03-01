@@ -10,7 +10,8 @@
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 	<c:url var="getServicingWithDate" value="/getServicingWithDate"></c:url>
-	<c:url var="getBomAllListWithDate" value="/getBomAllListWithDate"></c:url>
+	<c:url var="getAllTypeList" value="/getAllTypeList"></c:url>
+	<c:url var="machineListOrVehicleList" value="/machineListOrVehicleList"></c:url>
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
 
@@ -190,16 +191,29 @@
 									<div class="col-md-3">
 									
 									<select name="type" id="type" class="form-control chosen" tabindex="6" required>
-									 	<option value="">Select Vehicle Or Machine</option>
-											 <option value="0"  >All</option>
+									 	<option value="">Select Vehicle Or Machine</option> 
 											  <option value="1">Vehicle</option>
 											   <option value="2">Machine</option>
 										</select>
 									
 									</div> 
 									
-									<div class="col-md-1">Or</div> 
+									<div class="col-md-1"></div> 
 									
+								<div class="col-md-2">Select Name or No*</div>
+									<div class="col-md-3">
+									
+									<select name="vehId" id="vehId" class="form-control chosen" tabindex="6" required>
+									 	 
+										</select>
+									
+									</div> 
+									
+							</div><br>
+							
+							<div class="box-content">
+							
+								 
 								<div class="col-md-2">Select Type*</div>
 									<div class="col-md-3">
 									
@@ -363,13 +377,47 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 		
 		<script type="text/javascript">
+		
+		$(document).ready(function() { 
+			$('#type').change(
+					function() {
+						//alert("typeId"+$(this).val());
+						var typeId=$(this).val();
+					    
+						$.getJSON('${machineListOrVehicleList}', {
+							
+							typeId : $(this).val(),
+							ajax : 'true'
+						},
+								function(data) {
+							 
+							var html = '<option value="0">All</option>';
+							
+							var len = data.length;
+							for ( var i = 0; i < len; i++) {
+								html += '<option value="' + data[i].mechId + '">'
+										+ data[i].mechName + '</option>';
+							}
+							html += '</option>';
+							$('#vehId').html(html);
+							$("#vehId").trigger("chosen:updated"); 
+							
+							 
+							
+								});
+					 
+						 
+				})
+				 		 
+		});
 	
 		function searchbomall() {
 			var from_date = $("#from_date").val();
 			var to_date = $("#to_date").val();
 			var type = $("#type").val();
+			var vehId = $("#vehId").val();
 			var typeId = $("#typeId").val();
-			valid=0;
+			 valid=0;
 			if(from_date=="")
 				{
 				alert("Enter From Date");
@@ -382,12 +430,17 @@
 				}
 			else if(type=="" && typeId=="")
 				{
-				alert("Select Machine/Vehicle Or Type");
-				valid=1;
+					alert("Select Machine/Vehicle Or Type");
+					valid=1;
 				}
+			else if(type!=="" && vehId=="")
+			{
+				alert("Select Name or No");
+				valid=1;
+			}
 				
 			if(valid==0)
-				{
+				{ 
 			$('#loader').show();
 
 			$
@@ -399,6 +452,7 @@
 								from_date : from_date,
 								to_date : to_date,
 								type : type,
+								vehId : vehId,
 								typeId : typeId,
 								ajax : 'true'
 
@@ -412,13 +466,20 @@
 									alert("No records found !!");
 
 								}
+								
+								 $.getJSON('${getAllTypeList}', {
+										 
+										ajax : 'true'
+									},
+											function(data1) {
+										 
+										var len = data1.length;
+											
 							 
  
 							  $.each( data,
 											function(key, itemList) {
-												
 												 
-											 
 												 var stats;
 												 var type;
 												 var type2;
@@ -441,26 +502,7 @@
 											 		type2="Machine";
 												 }
 												 
-												 if(itemList.typeId==1)
-												 {
-													 type="Servicing";
-												 }
-											 	else if(itemList.typeId==2)
-												 {
-											 		type="Wheel";
-												 }
-											 	else if(itemList.typeId==3)
-												 {
-											 		type="Battary";
-												 }
-											 	else if(itemList.typeId==4)
-												 {
-											 		type="AC";
-												 }
-											 	else if(itemList.typeId==5)
-												 {
-											 		type="Machine Servicing";
-												 }
+												
 												 
 												var tr = $('<tr></tr>');
 											  	tr.append($('<td></td>').html(key+1)); 
@@ -468,7 +510,15 @@
 											  	tr.append($('<td></td>').html(itemList.billDate)); 
 											  	tr.append($('<td></td>').html(type2)); 
 											  	tr.append($('<td></td>').html(itemList.vehNo));
-											  	tr.append($('<td></td>').html(type));
+											  	for ( var i = 0; i < len; i++) {
+													if(data1[i].typeId==itemList.typeId)
+														{
+														tr.append($('<td></td>').html(data1[i].typeName));
+														break;
+														}
+														
+												}
+											  	
 											  	tr.append($('<td style="text-align:right"></td>').html((itemList.taxableAmt).toFixed(2)));
 											  	tr.append($('<td style="text-align:right"></td>').html((itemList.taxAmt).toFixed(2)));
 											  	tr.append($('<td style="text-align:right"></td>').html((itemList.total).toFixed(2)));
@@ -477,9 +527,10 @@
 												
 												$('#table_grid tbody').append(tr); 
 											 
-											})  
+											}) 
+									});
 							});
-				}
+				 } 
 		 
 	}
 	</script>
@@ -510,6 +561,7 @@
 	    var to_date = $("#to_date").val();
 	    var type=$("#type").val();
 	    var typeId=$("#typeId").val();
+	    var vehId = $("#vehId").val();
 		var valid=0;
 		
 			if(from_date=="")
@@ -531,6 +583,7 @@
 			else if(type=="" && typeId!="")
 			{
 				type=-1;
+				vehId=0;
 				valid=0;
 			}
 			else if(type!="" && typeId=="")
@@ -541,7 +594,7 @@
 		
 			if(valid==0)
 			{
-		    	window.open('${pageContext.request.contextPath}/Logistics?url=pdf/vehOrMachInvoiceBill/'+from_date+'/'+to_date+'/'+type+'/'+typeId+'/');
+		    	window.open('${pageContext.request.contextPath}/Logistics?url=pdf/vehOrMachInvoiceBill/'+from_date+'/'+to_date+'/'+type+'/'+typeId+'/'+vehId+'/');
 			}
 	    }
 	</script>

@@ -45,11 +45,19 @@
 			<div class="row">
 				<div class="col-md-12">
 
+				<c:choose>
+					<c:when test="${alertVehicleAmcList.size()>0}">
+					 
 					<div class="box" id="todayslist">
 						<div class="box-title">
 							<h3>
 								<i class="fa fa-table"></i> AMC List
 							</h3>
+							
+							<div class="box-tool">
+								<a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
 							 
 						</div>
 						
@@ -63,11 +71,11 @@
 								<thead>
 									<tr>
 										<th>Sr.No.</th>
-										<th>Vehicle/Machine</th> 
-										<th>Dealer Name</th>
 										<th>Type</th>
-										<th>From Date</th>
-										<th>To Date</th>
+										<th>Vehicle/Machine</th> 
+										<th>Dealer Name</th> 
+										<th>Last Date</th>
+										<th>Next Date</th>
 										<th>Alert Date</th>
 										<th>Remaining Day</th> 
 
@@ -75,6 +83,36 @@
 								</thead>
 								<tbody>
 								<c:set var = "srNo" value="0"/>
+								<!-- vehicle List -->
+										<c:forEach items="${alertVehicleAmcList}" var="alertVehicleAmcList"
+													varStatus="count">
+													
+													<c:choose>
+														<c:when test="${alertVehicleAmcList.remainingDay<0}">
+														<c:set var="days" value="0"></c:set>
+														<c:set var = "color" value="red"/>
+														</c:when>
+														<c:otherwise>
+														<c:set var="days" value="${alertVehicleAmcList.remainingDay}"></c:set>
+														<c:set var = "color" value="black"/>
+														</c:otherwise>
+													</c:choose> 
+													 
+													<tr>
+														<td style="color: <c:out value = "${color}"/>"><c:out value="${srNo+1}" /></td>
+ 														<c:set var = "srNo" value="${srNo+1}"/> 
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertVehicleAmcList.name}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="Vehicle" /></td>  
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertVehicleAmcList.dealerName}" /></td> 
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertVehicleAmcList.lastAmcDate}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertVehicleAmcList.nextAmcDate}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertVehicleAmcList.alertAmcDate}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${days}" /></td>
+														 
+													 
+												</tr>
+										</c:forEach>
+										<!-- Machine List -->
 									<c:forEach items="${amcRecordList}" var="amcRecordList"
 													varStatus="count">
 													
@@ -87,26 +125,17 @@
 														<c:set var="days" value="${amcRecordList.remainingDay}"></c:set>
 														<c:set var = "color" value="black"/>
 														</c:otherwise>
-													</c:choose>
-													
-													<c:choose>
-														<c:when test="${amcRecordList.typeId==1}">
-														<c:set var="type" value="Vehicle"></c:set>
-														</c:when>
-														<c:otherwise>
-														<c:set var="type" value="Machine"></c:set>
-														</c:otherwise>
-													</c:choose>
+													</c:choose> 
 													 
 													<tr>
-														<td style="color: <c:out value = "${color}"/>"><c:out value="${count.index+1}" /></td>
- 														<c:set var = "srNo" value="${count.index}"/> 
-														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${amcRecordList.mechName}" /></td> 
+														<td style="color: <c:out value = "${color}"/>"><c:out value="${srNo+1}" /></td>
+ 														<c:set var = "srNo" value="${srNo+1}"/> 
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${amcRecordList.name}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="Machine" /></td>  
 														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${amcRecordList.dealerName}" /></td> 
-														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${type}" /></td>
-														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${amcRecordList.amcFromDate}" /></td>
-														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${amcRecordList.amcToDate}" /></td>
-														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${amcRecordList.amcAlertDate}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${amcRecordList.lastAmcDate}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${amcRecordList.nextAmcDate}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${amcRecordList.alertAmcDate}" /></td>
 														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${days}" /></td>
 														 
 													 
@@ -120,12 +149,22 @@
 
 		</div>
 					</div>
-						
+					
+					</c:when>
+				</c:choose>
+				
+					<c:choose>
+					<c:when test="${alertDriverMasterList.size()>0}">
+					 
 						<div class="box" id="todayslist">
 						<div class="box-title">
 							<h3>
 								<i class="fa fa-table"></i> Driver License Expired Record
 							</h3>
+								<div class="box-tool">
+								<a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
 							 
 						</div>
 						
@@ -177,11 +216,21 @@
 
 		</div>
 					</div>
+					</c:when> 
+					</c:choose>
+					
+					<c:choose>
+					<c:when test="${alertDocumentList.size()>0}">
+					
 						<div class="box" id="todayslist">
 						<div class="box-title">
 							<h3>
 								<i class="fa fa-table"></i> Vehicle Document List
 							</h3>
+								<div class="box-tool">
+								<a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
 							 
 						</div>
 						
@@ -260,7 +309,158 @@
 
 		</div>
 					</div>
+					</c:when>
+					</c:choose>
+					
+					
+					<c:choose>
+					<c:when test="${alertMachineServicingList.size()>0}">
+					
+					<div class="box" id="todayslist">
+						<div class="box-title">
+							<h3>
+								<i class="fa fa-table"></i> Machine Servicing List
+							</h3>
+							
+							<div class="box-tool">
+								<a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
+							 
+						</div>
 						
+						<div class=" box-content">
+					<div class="row">
+					
+					
+						<div class="col-md-12 table-responsive">
+							<table class="table table-bordered table-striped fill-head "
+								style="width: 100%" id="table_grid">
+								<thead>
+									<tr>
+										<th>Sr.No.</th> 
+										<th>Machine Name</th> 
+										<th>Dealer Name</th> 
+										<th>Last Cleaning Date</th>
+										<th>Next Cleaning Date</th>
+										<th>Alert Date</th>
+										<th>Remaining Day</th> 
+
+									</tr>
+								</thead>
+								<tbody>
+								<c:set var = "srNo" value="0"/> 
+										<c:forEach items="${alertMachineServicingList}" var="alertMachineServicingList"
+													varStatus="count">
+													
+													<c:choose>
+														<c:when test="${alertMachineServicingList.remainingDay<0}">
+														<c:set var="days" value="0"></c:set>
+														<c:set var = "color" value="red"/>
+														</c:when>
+														<c:otherwise>
+														<c:set var="days" value="${alertMachineServicingList.remainingDay}"></c:set>
+														<c:set var = "color" value="black"/>
+														</c:otherwise>
+													</c:choose> 
+													 
+													<tr>
+														<td style="color: <c:out value = "${color}"/>"><c:out value="${srNo+1}" /></td>
+ 														<c:set var = "srNo" value="${srNo+1}"/> 
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertMachineServicingList.machineName}" /></td> 
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertMachineServicingList.dealerName}" /></td> 
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertMachineServicingList.lastCleaningDate}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertMachineServicingList.nextCleaningDate}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertMachineServicingList.nextAlertDate}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${days}" /></td>
+														  
+												</tr>
+										</c:forEach>
+									 
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+		</div>
+					</div>
+					</c:when>
+					</c:choose>
+					
+					<c:choose>
+					<c:when test="${alertVeihcleServicingRecord.size()>0}">
+					
+					<div class="box" id="todayslist">
+						<div class="box-title">
+							<h3>
+								<i class="fa fa-table"></i> Vehicle Servicing List
+							</h3>
+							
+							<div class="box-tool">
+								<a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
+							 
+						</div>
+						
+						<div class=" box-content">
+					<div class="row">
+					
+					
+						<div class="col-md-12 table-responsive">
+							<table class="table table-bordered table-striped fill-head "
+								style="width: 100%" id="table_grid">
+								<thead>
+									<tr>
+										<th>Sr.No.</th> 
+										<th>Vehicle No</th> 
+										<th>Type</th> 
+										<th>Last Serv Km</th>
+										<th>Next Serv Km</th>
+										<th>Alert Serv Km</th>
+										<th>Current Km</th>
+										<th>Remaining Day</th> 
+
+									</tr>
+								</thead>
+								<tbody>
+								<c:set var = "srNo" value="0"/> 
+										<c:forEach items="${alertVeihcleServicingRecord}" var="alertVeihcleServicingRecord"
+													varStatus="count">
+													 <c:choose>
+														<c:when test="${(alertVeihcleServicingRecord.nextServKm-alertVeihcleServicingRecord.typeId)<0}">
+														<c:set var="currentRunningKm" value="0"></c:set>
+														<c:set var = "color" value="red"/>
+														</c:when>
+														<c:otherwise>
+														<c:set var="currentRunningKm" value="${(alertVeihcleServicingRecord.nextServKm-alertVeihcleServicingRecord.typeId)}"></c:set>
+														<c:set var = "color" value="black"/>
+														</c:otherwise>
+													</c:choose> 
+													 
+													<tr>
+														<td style="color: <c:out value = "${color}"/>"><c:out value="${srNo+1}" /></td>
+ 														<c:set var = "srNo" value="${srNo+1}"/> 
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertVeihcleServicingRecord.vehNo}" /></td> 
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertVeihcleServicingRecord.typeName}" /></td> 
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertVeihcleServicingRecord.lastServKm}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertVeihcleServicingRecord.nextServKm}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertVeihcleServicingRecord.alertServKm}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${alertVeihcleServicingRecord.typeId}" /></td>
+														<td align="left" style="color: <c:out value = "${color}"/>"><c:out value="${currentRunningKm}" /></td>
+														  
+												</tr>
+										</c:forEach>
+									 
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+		</div>
+					</div>
+						</c:when>
+						</c:choose>
 					 
 				</div>
 			</div>

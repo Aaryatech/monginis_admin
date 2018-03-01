@@ -194,15 +194,36 @@
 									<input class="form-control" id="nextAlertDate" placeholder="Next Alert Date" size="16"
 											type="text" name="nextAlertDate"  readonly />
 									</div>
+									
+									<div class="col-md-2">Last AMC Date* </div>
+									<div class="col-md-3">
+									<input class="form-control date-picker" id="lastAmcDate" placeholder="Last AMC Date" size="16"
+											type="text" name="lastAmcDate"  required />
+									</div>
 						 
 							
-							</div><br> <br>
+							</div><br>
+							<div class="box-content">
 							
+									
+						
+									<div class="col-md-2">Next AMC Date* </div>
+									<div class="col-md-3">
+									<input class="form-control date-picker" id="nextAmcDate" placeholder="Next AMC Date" size="16"
+											type="text" name="nextAmcDate"  required />
+									</div>
+									<div class="col-md-2">Alert AMC Date* </div>
+									<div class="col-md-3">
+									<input class="form-control date-picker" id="alertAmcDate" placeholder="Alert AMC Date" size="16"
+											type="text" name="alertAmcDate"  required />
+									</div>
 							
+							</div><br>
+							  
 								
 							<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-										<input type="submit" class="btn btn-primary" value="Add New Vehicle" onclick="validation()" >
+										<input type="submit" class="btn btn-primary" value="Add New Machine" onclick="validation()" >
 										<input type="button" class="btn btn-primary" value="Cancel" id="cancel" onclick="cancel1()" disabled>
 <!-- 										<button type="button" class="btn">Cancel</button>
  -->									</div>
@@ -438,7 +459,9 @@
 								document.getElementById("lastCleanDate").value=data.lastCleaningDate;
 								document.getElementById("nextCleanDate").value=data.nextCleaningDate;
 								document.getElementById("nextAlertDate").value=data.nextAlertDate; 
-								
+								document.getElementById("lastAmcDate").value=data.lastAmcDate;
+								document.getElementById("nextAmcDate").value=data.nextAmcDate;
+								document.getElementById("alertAmcDate").value=data.alertAmcDate;
 								   
 								$.getJSON('${typeByMakeId}', {
 									
@@ -596,6 +619,9 @@
 								document.getElementById("lastCleanDate").value=""; 
 								document.getElementById("nextCleanDate").value="";
 								document.getElementById("nextAlertDate").value=""; 
+								document.getElementById("lastAmcDate").value="";
+								document.getElementById("nextAmcDate").value="";
+								document.getElementById("alertAmcDate").value="";
 		var html = '<option value="">Select Type</option>';
 		$('#typeId').html(html);
 		$('#typeId').trigger("chosen:updated");

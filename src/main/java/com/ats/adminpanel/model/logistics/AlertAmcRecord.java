@@ -1,38 +1,28 @@
 package com.ats.adminpanel.model.logistics;
- 
 
 import com.fasterxml.jackson.annotation.JsonFormat;
- 
 
 public class AlertAmcRecord {
-	
-	private int amcId; 
-	private int mechId; 
-	private String mechName; 
+	 
+	private int id; 
+	private String name; 
 	private int dealerId; 
 	private String dealerName; 
-	private int typeId; 
-	private String amcFromDate; 
-	private String amcToDate; 
-	private String amcAlertDate; 
+	private String lastAmcDate; 
+	private String nextAmcDate; 
+	private String alertAmcDate; 
 	private int remainingDay;
-	public int getAmcId() {
-		return amcId;
+	public int getId() {
+		return id;
 	}
-	public void setAmcId(int amcId) {
-		this.amcId = amcId;
+	public void setId(int id) {
+		this.id = id;
 	}
-	public int getMechId() {
-		return mechId;
+	public String getName() {
+		return name;
 	}
-	public void setMechId(int mechId) {
-		this.mechId = mechId;
-	}
-	public String getMechName() {
-		return mechName;
-	}
-	public void setMechName(String mechName) {
-		this.mechName = mechName;
+	public void setName(String name) {
+		this.name = name;
 	}
 	public int getDealerId() {
 		return dealerId;
@@ -46,32 +36,26 @@ public class AlertAmcRecord {
 	public void setDealerName(String dealerName) {
 		this.dealerName = dealerName;
 	}
-	public int getTypeId() {
-		return typeId;
+	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
+	public String getLastAmcDate() {
+		return lastAmcDate;
 	}
-	public void setTypeId(int typeId) {
-		this.typeId = typeId;
+	public void setLastAmcDate(String lastAmcDate) {
+		this.lastAmcDate = lastAmcDate;
 	}
 	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
-	public String getAmcFromDate() {
-		return amcFromDate;
+	public String getNextAmcDate() {
+		return nextAmcDate;
 	}
-	public void setAmcFromDate(String amcFromDate) {
-		this.amcFromDate = amcFromDate;
-	}
-	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
-	public String getAmcToDate() {
-		return amcToDate;
-	}
-	public void setAmcToDate(String amcToDate) {
-		this.amcToDate = amcToDate;
+	public void setNextAmcDate(String nextAmcDate) {
+		this.nextAmcDate = nextAmcDate;
 	}
 	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
-	public String getAmcAlertDate() {
-		return amcAlertDate;
+	public String getAlertAmcDate() {
+		return alertAmcDate;
 	}
-	public void setAmcAlertDate(String amcAlertDate) {
-		this.amcAlertDate = amcAlertDate;
+	public void setAlertAmcDate(String alertAmcDate) {
+		this.alertAmcDate = alertAmcDate;
 	}
 	public int getRemainingDay() {
 		return remainingDay;
@@ -81,12 +65,11 @@ public class AlertAmcRecord {
 	}
 	@Override
 	public String toString() {
-		return "AlertAmcRecord [amcId=" + amcId + ", mechId=" + mechId + ", mechName=" + mechName + ", dealerId="
-				+ dealerId + ", dealerName=" + dealerName + ", typeId=" + typeId + ", amcFromDate=" + amcFromDate
-				+ ", amcToDate=" + amcToDate + ", amcAlertDate=" + amcAlertDate + ", remainingDay=" + remainingDay
-				+ "]";
+		return "AlertAmcRecord [id=" + id + ", name=" + name + ", dealerId=" + dealerId + ", dealerName=" + dealerName
+				+ ", lastAmcDate=" + lastAmcDate + ", nextAmcDate=" + nextAmcDate + ", alertAmcDate=" + alertAmcDate
+				+ ", remainingDay=" + remainingDay + "]";
 	}
-	
+	 
 	
 	 
 }

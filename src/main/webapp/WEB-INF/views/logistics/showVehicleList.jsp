@@ -250,6 +250,31 @@
 											type="text" name="alertNextServicingKm"  required />
 									</div>
 							
+							</div><br>
+							<div class="box-content">
+							
+									<div class="col-md-2">Last AMC Date* </div>
+									<div class="col-md-3">
+									<input class="form-control date-picker" id="lastAmcDate" placeholder="Last AMC Date" size="16"
+											type="text" name="lastAmcDate"  required />
+									</div>
+						
+									<div class="col-md-2">Next AMC Date* </div>
+									<div class="col-md-3">
+									<input class="form-control date-picker" id="nextAmcDate" placeholder="Next AMC Date" size="16"
+											type="text" name="nextAmcDate"  required />
+									</div>
+							
+							</div><br>
+							<div class="box-content">
+							
+									<div class="col-md-2">Alert AMC Date* </div>
+									<div class="col-md-3">
+									<input class="form-control date-picker" id="alertAmcDate" placeholder="Alert AMC Date" size="16"
+											type="text" name="alertAmcDate"  required />
+									</div>
+						 
+							
 							</div><br><br>
 							
 							
@@ -515,6 +540,9 @@
 								document.getElementById("lastServicingKm").value=data.lastServicingKm;
 								document.getElementById("nextServicingKm").value=data.nextServicingKm;
 								document.getElementById("alertNextServicingKm").value=data.alertNextServicingKm;
+								document.getElementById("lastAmcDate").value=data.lastAmcDate;
+								document.getElementById("nextAmcDate").value=data.nextAmcDate;
+								document.getElementById("alertAmcDate").value=data.alertAmcDate;
 								
 								   
 								$.getJSON('${typeByMakeId}', {
@@ -681,6 +709,9 @@
 								document.getElementById("lastServicingKm").value="";
 								document.getElementById("nextServicingKm").value="";
 								document.getElementById("alertNextServicingKm").value="";
+								document.getElementById("lastAmcDate").value="";
+								document.getElementById("nextAmcDate").value="";
+								document.getElementById("alertAmcDate").value="";
 		var html = '<option value="">Select Type</option>';
 		$('#typeId').html(html);
 		$('#typeId').trigger("chosen:updated");

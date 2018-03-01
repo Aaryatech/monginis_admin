@@ -21,6 +21,9 @@ public class MachineMaster {
 	private String nextAlertDate; 
 	private int alertFreq; 
 	private int delStatus;
+	private String lastAmcDate; 
+	private String nextAmcDate; 
+	private String alertAmcDate;
 	public int getMachineId() {
 		return machineId;
 	}
@@ -128,6 +131,25 @@ public class MachineMaster {
 	public void setDelStatus(int delStatus) {
 		this.delStatus = delStatus;
 	}
+	
+	public String getLastAmcDate() {
+		return lastAmcDate;
+	}
+	public void setLastAmcDate(String lastAmcDate) {
+		this.lastAmcDate = lastAmcDate;
+	}
+	public String getNextAmcDate() {
+		return nextAmcDate;
+	}
+	public void setNextAmcDate(String nextAmcDate) {
+		this.nextAmcDate = nextAmcDate;
+	}
+	public String getAlertAmcDate() {
+		return alertAmcDate;
+	}
+	public void setAlertAmcDate(String alertAmcDate) {
+		this.alertAmcDate = alertAmcDate;
+	}
 	@Override
 	public String toString() {
 		return "MachineMaster [machineId=" + machineId + ", machineName=" + machineName + ", makeId=" + makeId
@@ -135,7 +157,8 @@ public class MachineMaster {
 				+ machineNo + ", color=" + color + ", variablePart=" + variablePart + ", purchaseDate=" + purchaseDate
 				+ ", registrationDate=" + registrationDate + ", cleaningFrq=" + cleaningFrq + ", lastCleaningDate="
 				+ lastCleaningDate + ", nextCleaningDate=" + nextCleaningDate + ", nextAlertDate=" + nextAlertDate
-				+ ", alertFreq=" + alertFreq + ", delStatus=" + delStatus + "]";
+				+ ", alertFreq=" + alertFreq + ", delStatus=" + delStatus + ", lastAmcDate=" + lastAmcDate
+				+ ", nextAmcDate=" + nextAmcDate + ", alertAmcDate=" + alertAmcDate + "]";
 	}
 	
 	
