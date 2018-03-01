@@ -198,23 +198,8 @@
 									
 									</div> 
 									
-									<div class="col-md-1"></div> 
-									
-								<div class="col-md-2">Select Name or No*</div>
-									<div class="col-md-3">
-									
-									<select name="vehId" id="vehId" class="form-control chosen" tabindex="6" required>
-									 	 
-										</select>
-									
-									</div> 
-									
-							</div><br>
-							
-							<div class="box-content">
-							
-								 
-								<div class="col-md-2">Select Type*</div>
+									<div class="col-md-1">Or</div> 
+									<div class="col-md-2">Select Type*</div>
 									<div class="col-md-3">
 									
 									<select name="typeId" id="typeId" class="form-control chosen" tabindex="6" required>
@@ -225,6 +210,21 @@
 										</select>
 									
 									</div> 
+									 
+									
+							</div><br>
+							
+							<div class="box-content">
+							
+								 <div class="col-md-2">Select Name or No*</div>
+									<div class="col-md-3">
+									
+									<select name="vehId" id="vehId" class="form-control chosen" tabindex="6" required>
+									 	 
+										</select>
+									
+									</div> 
+								
 									
 							</div><br>
 						
@@ -417,6 +417,7 @@
 			var type = $("#type").val();
 			var vehId = $("#vehId").val();
 			var typeId = $("#typeId").val();
+			var abc = $("#flag").val();
 			 valid=0;
 			if(from_date=="")
 				{
@@ -523,7 +524,7 @@
 											  	tr.append($('<td style="text-align:right"></td>').html((itemList.taxAmt).toFixed(2)));
 											  	tr.append($('<td style="text-align:right"></td>').html((itemList.total).toFixed(2)));
 											  	tr.append($('<td></td>').html(stats));
-											  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/viewServicingDetail/"+itemList.servId+"/"+flag+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
+											  	tr.append($('<td ></td>').html("<a href='${pageContext.request.contextPath}/viewServicingDetail/"+itemList.servId+"/"+abc+"' class='action_btn'> <abbr title='detailed'> <i class='fa fa-list' ></i></abbr> "));
 												
 												$('#table_grid tbody').append(tr); 
 											 

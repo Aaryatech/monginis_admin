@@ -49,7 +49,7 @@
 							</h3>
 							
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showAmcList">Insert AMC</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAmcList">Show AMC List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							

@@ -47,6 +47,10 @@
 				<h3>
 					<i class="fa fa-bars"></i>AMC List
 				</h3>
+				<div class="box-tool">
+								<a href="${pageContext.request.contextPath}/insertAmc">Insert AMC</a> <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
 				<!-- <div class="box-tool">
 				<a  onclick="showdatewisetable()">Show Datewise All Record</a> 
 				</div> -->
