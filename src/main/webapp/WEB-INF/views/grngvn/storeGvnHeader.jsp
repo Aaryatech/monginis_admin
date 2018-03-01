@@ -207,6 +207,11 @@
 																	<td class="col-md-1"><c:out
 																			value="Reject By Store"></c:out></td>
 																</c:when>
+																
+																<c:when test="${grnList.grngvnStatus==4}">
+																	<td class="col-md-1"><c:out
+																			value="Approved By Store"></c:out></td>
+																</c:when>
 																<c:when test="${grnList.grngvnStatus==6}">
 																	<td class="col-md-1"><c:out value="Approved"></c:out></td>
 																</c:when>

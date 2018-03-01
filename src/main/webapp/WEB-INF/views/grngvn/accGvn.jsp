@@ -58,7 +58,7 @@
 						<div class="box-content">
 							<form
 								action="${pageContext.request.contextPath}/insertAccGvnByCheckBoxes"
-								class="form-horizontal" method="get" id="validation-form">
+								class="form-horizontal" method="post" id="validation-form">
 
 
 
@@ -372,7 +372,6 @@
 																				</li>
 
 																			</ul>
-taxableAmt
 																		</td>
 
 																	</c:when>
@@ -566,27 +565,7 @@ taxableAmt
 
 																		</c:choose>
 
-																		<%-- <td><input class="btn btn-primary" value="Approve"
-																		id="callSubmit" disabled="disabled"
-																		onclick="insertGrnCall(${gvnList.grnGvnId})" /> <input
-																		class="accordion btn btn-primary" value="DisApprove"
-																		disabled="disabled" />
-																		<div class="panel" align="left">
-																			Enter Remark
-																			<textarea name="acc_remark${gvnList.grnGvnId}"
-																				id="acc_remark${gvnList.grnGvnId}"></textarea>
-																			<input class="btn btn-primary" value="Submit"
-																				onclick="insertGrnDisAgree(${gvnList.grnGvnId})" />
-
-																		</div> <input class="accordion btn btn-primary" value="Show" />
-																		<div class="panel" align="left">
-																			Franchisee Remark
-																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${gvnList.frGrnGvnRemark}</textarea>
-																			Factory remark
-																			<textarea name="t1" readonly="readonly"
-																				class="form-control">${gvnList.approvedRemarkGate}</textarea>
-																		</div></td> --%>
+																	
 																	</c:otherwise>
 																</c:choose>
 														</tr>

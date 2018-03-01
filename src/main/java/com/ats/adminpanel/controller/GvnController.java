@@ -37,7 +37,7 @@ import com.ats.adminpanel.model.remarks.GetAllRemarksList;
 @Controller
 @Scope("session")
 public class GvnController {
- 
+
 	// GVN HEADER LIST
 	List<GrnGvnHeader> gvnGateHeaderList, gvnStoreHeaderList, gvnAccHeaderList;
 	// GVN HEADER LIST
@@ -298,9 +298,8 @@ public class GvnController {
 			HttpSession session = request.getSession();
 			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
 			int gateApproveLogin = userResponse.getUser().getId();
-			
-			int gateGvnQty = Integer.parseInt(request.getParameter("gate_gvn_qty"));
 
+			int gateGvnQty = Integer.parseInt(request.getParameter("gate_gvn_qty"));
 
 			int grnId = Integer.parseInt(request.getParameter("grnId"));
 
@@ -311,7 +310,6 @@ public class GvnController {
 			RestTemplate restTemplate = new RestTemplate();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-
 
 			List<TempGrnGvnBeanUp> dataList = new ArrayList<>();
 
@@ -331,7 +329,6 @@ public class GvnController {
 
 			dataList.add(data);
 
-		
 			Info info = restTemplate.postForObject(Constants.url + "updateGateGrn", dataList, Info.class);
 
 			System.out.println("after calling web service of gate grn agree info response as String - " + info);
@@ -468,7 +465,6 @@ public class GvnController {
 
 			dataList.add(data);
 
-		
 			Info info = restTemplate.postForObject(Constants.url + "updateGateGrn", dataList, Info.class);
 
 			System.out.println("after calling web service of gate grn agree info response as String - " + info);
@@ -598,8 +594,6 @@ public class GvnController {
 			}
 			gIds = gIds.substring(1);
 
-			
-			
 			List<TempGrnGvnBeanUp> dataList = new ArrayList<>();
 
 			for (int i = 0; i < grnIdList.length; i++) {
@@ -627,7 +621,6 @@ public class GvnController {
 
 			}
 			System.out.println("GIDS " + gIds);
-			
 
 			Info updateGateGrn = restTemplate.postForObject(Constants.url + "updateGateGrn", dataList, Info.class);
 
@@ -635,14 +628,16 @@ public class GvnController {
 
 				for (int i = 0; i < grnIdList.length; i++) {
 
-					if (Integer.parseInt(grnIdList[i]) == gvnGateDetailList.get(i).getGrnGvnId()) {
+					for (int j = 0; j < gvnGateDetailList.size(); j++) {
 
-						gvnGateDetailList.get(i).setGrnGvnStatus(Constants.AP_BY_GATE);
-						System.out.println("Record Updated Locally apr chk boxes ");
+						if (Integer.parseInt(grnIdList[i]) == gvnGateDetailList.get(j).getGrnGvnId()) {
 
+							gvnGateDetailList.get(j).setGrnGvnStatus(Constants.AP_BY_GATE);
+							System.out.println("Record Updated Locally apr chk boxes ");
+
+						}
 					}
 				}
-
 			}
 
 			System.out.println("update Grn chk response " + updateGateGrn.toString());
@@ -783,7 +778,7 @@ public class GvnController {
 
 				String statusList = new String();
 
-				statusList =  "2" + "," + "8";
+				statusList = "2" + "," + "8";
 				// for Sending Current Date
 				java.util.Date date = new java.util.Date();
 
@@ -899,11 +894,11 @@ public class GvnController {
 			GetGrnGvnDetailsList detailList = restTemplate.postForObject(Constants.url + "getFrGvnDetails", map,
 					GetGrnGvnDetailsList.class);
 
-			gvnGateDetailList = new ArrayList<>();
+			gvnStoreDetailList = new ArrayList<>();
 
-			gvnGateDetailList = detailList.getGrnGvnDetails();
+			gvnStoreDetailList = detailList.getGrnGvnDetails();
 
-			System.out.println("GRN Detail   " + gvnGateDetailList.toString());
+			System.out.println("GRN Detail   " + gvnStoreDetailList.toString());
 
 			// Ganesh Remrk
 			map = new LinkedMultiValueMap<String, Object>();
@@ -925,8 +920,8 @@ public class GvnController {
 
 		}
 
-		String grnDate = gvnGateDetailList.get(0).getGrnGvnDate();
-		modelAndView.addObject("gvnList", gvnGateDetailList);
+		String grnDate = gvnStoreDetailList.get(0).getGrnGvnDate();
+		modelAndView.addObject("gvnList", gvnStoreDetailList);
 		modelAndView.addObject("grnDate", grnDate);
 
 		return modelAndView;
@@ -954,9 +949,7 @@ public class GvnController {
 			RestTemplate restTemplate = new RestTemplate();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			
-			
-			
+
 			List<TempGrnGvnBeanUp> dataList = new ArrayList<>();
 
 			TempGrnGvnBeanUp data = new TempGrnGvnBeanUp();
@@ -974,8 +967,6 @@ public class GvnController {
 			data.setAprQtyStore(storeGvnQty);
 
 			dataList.add(data);
-			
-
 
 			Info info = restTemplate.postForObject(Constants.url + "updateStoreGvn", dataList, Info.class);
 
@@ -1009,6 +1000,9 @@ public class GvnController {
 				}
 			}
 
+			
+			System.out.println("Data ==***"+gvnStoreDetailList.toString());
+
 			if (gateHeader.getGrngvnStatus() == 2 || gateHeader.getGrngvnStatus() == 4
 					|| gateHeader.getGrngvnStatus() == 5) {
 
@@ -1032,6 +1026,8 @@ public class GvnController {
 
 					gateHeader.setGrngvnStatus(4);// app by store
 
+				}else {
+					gateHeader.setGrngvnStatus(8);
 				}
 			} // end of if header Status==2,4,5
 
@@ -1160,6 +1156,9 @@ public class GvnController {
 				}
 			}
 
+			
+			System.out.println("Data ==***"+gvnStoreDetailList.toString());
+
 			if (gateHeader.getGrngvnStatus() == 2 || gateHeader.getGrngvnStatus() == 4
 					|| gateHeader.getGrngvnStatus() == 5) {
 
@@ -1183,6 +1182,8 @@ public class GvnController {
 
 					gateHeader.setGrngvnStatus(4);// app by store
 
+				}else {
+					gateHeader.setGrngvnStatus(8);
 				}
 			} // end of if header Status==2,4,5
 
@@ -1290,7 +1291,6 @@ public class GvnController {
 				data.setAprQtyStore(storeGvnQty);
 
 				dataList.add(data);
-				
 
 				gIds = gIds + "," + grnIdList[i];
 
@@ -1298,7 +1298,7 @@ public class GvnController {
 			gIds = gIds.substring(1);
 
 			System.out.println("GIDS " + gIds);
-			
+
 			Info updateStoreGvn = restTemplate.postForObject(Constants.url + "updateStoreGvn", dataList, Info.class);
 
 			if (updateStoreGvn.getError() == false) {
@@ -1307,16 +1307,18 @@ public class GvnController {
 
 				for (int i = 0; i < grnIdList.length; i++) {
 
-					System.out.println("GRN ID LIST IN if update Success:" + grnIdList[i]);
+					for (int j = 0; j < gvnStoreDetailList.size(); j++) {
 
-					if (Integer.parseInt(grnIdList[i]) == gvnStoreDetailList.get(i).getGrnGvnId()) {
+						System.out.println("GRN ID LIST IN if update Success:" + grnIdList[i]);
 
-						gvnStoreDetailList.get(i).setGrnGvnStatus(Constants.AP_BY_STORE);
-						System.out.println("Record Updated Locally apr chk boxes ");
+						if (Integer.parseInt(grnIdList[i]) == gvnStoreDetailList.get(j).getGrnGvnId()) {
 
+							gvnStoreDetailList.get(j).setGrnGvnStatus(Constants.AP_BY_STORE);
+							System.out.println("Record Updated Locally apr chk boxes ");
+
+						}
 					}
 				}
-
 			}
 
 			System.out.println("update Grn chk response " + updateStoreGvn.toString());
@@ -1336,6 +1338,8 @@ public class GvnController {
 				}
 			}
 
+			
+			System.out.println("Data ==***"+gvnStoreDetailList.toString());
 			if (gateHeader.getGrngvnStatus() == 2 || gateHeader.getGrngvnStatus() == 4
 					|| gateHeader.getGrngvnStatus() == 5) {
 
@@ -1359,6 +1363,9 @@ public class GvnController {
 
 					gateHeader.setGrngvnStatus(4);// app by store
 
+				}
+				else {
+					gateHeader.setGrngvnStatus(8);
 				}
 			} // end of if header Status==2,4,5
 
@@ -1478,7 +1485,7 @@ public class GvnController {
 
 				String statusList = new String();
 
-				statusList = "4" + "," + "8" ;
+				statusList = "4" + "," + "8";
 				// for Sending Current Date
 				java.util.Date date = new java.util.Date();
 
@@ -1611,46 +1618,44 @@ public class GvnController {
 			getAllRemarks = getAllRemarksList.getGetAllRemarks();
 
 			System.out.println("remark list " + getAllRemarks.toString());
-			
-			
+
 			GetGrnGvnDetails detail;
-			
-			for(int i=0;i<gvnAccDetailList.size();i++) {
-				
-				detail=new GetGrnGvnDetails();
-				detail=gvnAccDetailList.get(i);
+
+			for (int i = 0; i < gvnAccDetailList.size(); i++) {
+
+				detail = new GetGrnGvnDetails();
+				detail = gvnAccDetailList.get(i);
 				int qty = 0;
-				
-				if(detail.getGrnGvnStatus()==1 || detail.getGrnGvnStatus()==2 || detail.getGrnGvnStatus()==3) {
+
+				if (detail.getGrnGvnStatus() == 1 || detail.getGrnGvnStatus() == 2 || detail.getGrnGvnStatus() == 3) {
 					System.out.println("a] fr Grn Qty ");
-					qty=detail.getAprQtyGate();
-					
+					qty = detail.getAprQtyGate();
+
 				}
-				
-				if(detail.getGrnGvnStatus()==4 || detail.getGrnGvnStatus()==5) {
+
+				if (detail.getGrnGvnStatus() == 4 || detail.getGrnGvnStatus() == 5) {
 					System.out.println("b] Gate Grn Qty ");
 
-					qty=detail.getAprQtyStore();
-					
+					qty = detail.getAprQtyStore();
+
 				}
-				
-				if(detail.getGrnGvnStatus()==6 || detail.getGrnGvnStatus()==7) {
+
+				if (detail.getGrnGvnStatus() == 6 || detail.getGrnGvnStatus() == 7) {
 					System.out.println("c] Acc Grn Qty ");
-					qty=detail.getAprQtyAcc();
-					
+					qty = detail.getAprQtyAcc();
+
 				}
-				
-				
+
 				float grnRate = 0;
 
 				float total = detail.getBaseRate() * qty;
 
 				float aprAmt = 0;
-				float  aprTotalTax;
+				float aprTotalTax;
 				float sgstRs, cgstRs, igstRs;
 
 				float grandTotal;
-			
+
 				float baseRate = detail.getBaseRate();
 				float gvnAmt = qty * baseRate;
 
@@ -1658,7 +1663,7 @@ public class GvnController {
 
 				aprTotalTax = (aprTaxableAmt * (detail.getSgstPer() + detail.getCgstPer())) / 100;
 
-				 grandTotal = aprTaxableAmt + aprTotalTax;
+				grandTotal = aprTaxableAmt + aprTotalTax;
 
 				float finalAmt = detail.getItemRate() * qty;
 
@@ -1667,9 +1672,9 @@ public class GvnController {
 				gvnAmt = roundUp(gvnAmt);
 
 				//
-				
+
 				aprTotalTax = ((aprTaxableAmt) * (detail.getSgstPer() + detail.getCgstPer())) / 100;
-			
+
 				if (detail.getIsSameState() == 1) {
 
 					sgstRs = aprTotalTax / 2;
@@ -1687,12 +1692,9 @@ public class GvnController {
 				System.out.println("sgstsRs" + sgstRs + "CGSt Rs " + cgstRs);
 
 				grandTotal = aprTaxableAmt + aprTotalTax;
-detail.setGrnGvnAmt(roundUp(grandTotal));
-				
-			}//end of for Loop
-			
-			
-			
+				detail.setGrnGvnAmt(roundUp(grandTotal));
+
+			} // end of for Loop
 
 			modelAndView.addObject("remarkList", getAllRemarks);
 
@@ -1755,15 +1757,13 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 					float total = detail.getBaseRate() * accGvnQty;
 
 					float aprAmt = 0;
-					float  aprTotalTax;
+					float aprTotalTax;
 					float sgstRs, cgstRs, igstRs;
 
 					float grandTotal;
-					
-					
-					
+
 					//
-					
+
 					float baseRate = detail.getBaseRate();
 					float gvnAmt = accGvnQty * baseRate;
 
@@ -1771,7 +1771,7 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 
 					aprTotalTax = (aprTaxableAmt * (detail.getSgstPer() + detail.getCgstPer())) / 100;
 
-					 grandTotal = aprTaxableAmt + aprTotalTax;
+					grandTotal = aprTaxableAmt + aprTotalTax;
 
 					float finalAmt = detail.getItemRate() * accGvnQty;
 
@@ -1780,9 +1780,9 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 					gvnAmt = roundUp(gvnAmt);
 
 					//
-					
+
 					aprTotalTax = ((aprTaxableAmt) * (detail.getSgstPer() + detail.getCgstPer())) / 100;
-				
+
 					if (detail.getIsSameState() == 1) {
 
 						sgstRs = aprTotalTax / 2;
@@ -1828,6 +1828,18 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 					data.setAprGrandTotal(roundUp(grandTotal));
 
 					dataList.add(data);
+					
+					detail.setAprGrandTotal(data.getAprGrandTotal());
+					detail.setAprTaxableAmt(data.getAprTaxableAmt());
+					detail.setAprTotalTax(data.getAprTotalTax());
+					
+					detail.setAprCgstRs(data.getAprCgstRs());
+					detail.setAprSgstRs(data.getAprSgstRs());
+					detail.setAprIgstRs(data.getAprIgstRs());
+					
+					detail.setAprROff(data.getAprROff());
+					
+					gvnAccDetailList.set(i, detail);
 
 					break;
 
@@ -1844,6 +1856,8 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 					if (grnId == gvnAccDetailList.get(i).getGrnGvnId()) {
 
 						gvnAccDetailList.get(i).setGrnGvnStatus(Constants.AP_BY_ACC);
+						
+						
 						System.out.println("Record Updated Locally  apr");
 						break;
 
@@ -1925,14 +1939,14 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 				else if (aprStatus == gvnAccDetailList.size()) {
 
 					accHeader.setGrngvnStatus(6);
-					
+
 				} else {
 
 					accHeader.setGrngvnStatus(8);
 
 				}
-			} //End of Else header status==8
-			// Update Grn Gvn Header
+			} // End of Else header status==8
+				// Update Grn Gvn Header
 
 			accHeader.setAprTaxableAmt(0);
 			accHeader.setAprTotalTax(0);
@@ -1943,23 +1957,26 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 			accHeader.setAprROff(0);
 			accHeader.setApporvedAmt(0);
 
-
 			for (int i = 0; i < gvnAccDetailList.size(); i++) {
 
 				if (gvnAccDetailList.get(i).getGrnGvnStatus() == 6) {
+					
+					System.out.println("Status 6 found  and its total :::"+gvnAccDetailList.get(i).getAprGrandTotal());
 
-					accHeader.setApporvedAmt(accHeader.getApporvedAmt() + gvnAccDetailList.get(i).getGrnGvnAmt());
-					
-					accHeader.setAprTaxableAmt(accHeader.getAprTaxableAmt()+gvnAccDetailList.get(i).getAprTaxableAmt());
-					accHeader.setAprTotalTax(accHeader.getAprTotalTax()+gvnAccDetailList.get(i).getAprTotalTax());
-					accHeader.setAprGrandTotal(accHeader.getAprGrandTotal()+gvnAccDetailList.get(i).getAprGrandTotal());
-					accHeader.setAprCgstRs(accHeader.getAprCgstRs()+gvnAccDetailList.get(i).getAprCgstRs());
-					accHeader.setAprSgstRs(accHeader.getAprSgstRs()+gvnAccDetailList.get(i).getAprSgstRs());
-					accHeader.setAprIgstRs(accHeader.getAprIgstRs()+gvnAccDetailList.get(i).getAprIgstRs());
-					accHeader.setAprROff(accHeader.getAprROff()+gvnAccDetailList.get(i).getAprROff());
-					
-					//accHeader.setApporvedAmt(0);
-					
+					accHeader.setApporvedAmt(accHeader.getApporvedAmt() + gvnAccDetailList.get(i).getAprGrandTotal());
+
+					accHeader.setAprTaxableAmt(
+							accHeader.getAprTaxableAmt() + gvnAccDetailList.get(i).getAprTaxableAmt());
+					accHeader.setAprTotalTax(accHeader.getAprTotalTax() + gvnAccDetailList.get(i).getAprTotalTax());
+					accHeader.setAprGrandTotal(
+							accHeader.getAprGrandTotal() + gvnAccDetailList.get(i).getAprGrandTotal());
+					accHeader.setAprCgstRs(accHeader.getAprCgstRs() + gvnAccDetailList.get(i).getAprCgstRs());
+					accHeader.setAprSgstRs(accHeader.getAprSgstRs() + gvnAccDetailList.get(i).getAprSgstRs());
+					accHeader.setAprIgstRs(accHeader.getAprIgstRs() + gvnAccDetailList.get(i).getAprIgstRs());
+					accHeader.setAprROff(accHeader.getAprROff() + gvnAccDetailList.get(i).getAprROff());
+
+					// accHeader.setApporvedAmt(0);
+
 				}
 			}
 
@@ -2001,7 +2018,7 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 			HttpSession session = request.getSession();
 			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
 			int accApproveLogin = userResponse.getUser().getId();
-			int accGvnQty=Integer.parseInt(request.getParameter("acc_gvn_qty"));
+			int accGvnQty = Integer.parseInt(request.getParameter("acc_gvn_qty"));
 			String accRemark = request.getParameter("accRemark");
 
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -2031,15 +2048,13 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 					float total = detail.getBaseRate() * accGvnQty;
 
 					float aprAmt = 0;
-					float  aprTotalTax;
+					float aprTotalTax;
 					float sgstRs, cgstRs, igstRs;
 
 					float grandTotal;
-					
-					
-					
+
 					//
-					
+
 					float baseRate = detail.getBaseRate();
 					float gvnAmt = accGvnQty * baseRate;
 
@@ -2047,7 +2062,7 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 
 					aprTotalTax = (aprTaxableAmt * (detail.getSgstPer() + detail.getCgstPer())) / 100;
 
-					 grandTotal = aprTaxableAmt + aprTotalTax;
+					grandTotal = aprTaxableAmt + aprTotalTax;
 
 					float finalAmt = detail.getItemRate() * accGvnQty;
 
@@ -2056,9 +2071,9 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 					gvnAmt = roundUp(gvnAmt);
 
 					//
-					
+
 					aprTotalTax = ((aprTaxableAmt) * (detail.getSgstPer() + detail.getCgstPer())) / 100;
-				
+
 					if (detail.getIsSameState() == 1) {
 
 						sgstRs = aprTotalTax / 2;
@@ -2099,11 +2114,24 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 
 					data.setAprTaxableAmt(roundUp(aprTaxableAmt));
 					data.setAprTotalTax(roundUp(aprTotalTax));
-					data.setGrnGvnId(grnId);
+					//data.setGrnGvnId(grnId);
 
 					data.setAprGrandTotal(roundUp(grandTotal));
 
 					dataList.add(data);
+					
+					
+					detail.setAprGrandTotal(data.getAprGrandTotal());
+					detail.setAprTaxableAmt(data.getAprTaxableAmt());
+					detail.setAprTotalTax(data.getAprTotalTax());
+					
+					detail.setAprCgstRs(data.getAprCgstRs());
+					detail.setAprSgstRs(data.getAprSgstRs());
+					detail.setAprIgstRs(data.getAprIgstRs());
+					
+					detail.setAprROff(data.getAprROff());
+					
+					gvnAccDetailList.set(i, detail);
 
 					break;
 
@@ -2201,18 +2229,17 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 				else if (aprStatus == gvnAccDetailList.size()) {
 
 					accHeader.setGrngvnStatus(6);
-					
+
 				} else {
 
 					accHeader.setGrngvnStatus(8);
 
 				}
-			} //End of Else header status==8
-			
-			// Update Grn Gvn Header
-			
+			} // End of Else header status==8
 
-			/*accHeader.setAprTaxableAmt(0);
+			// Update Grn Gvn Header
+
+			accHeader.setAprTaxableAmt(0);
 			accHeader.setAprTotalTax(0);
 			accHeader.setAprGrandTotal(0);
 			accHeader.setAprCgstRs(0);
@@ -2221,25 +2248,27 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 			accHeader.setAprROff(0);
 			accHeader.setApporvedAmt(0);
 
-
 			for (int i = 0; i < gvnAccDetailList.size(); i++) {
 
 				if (gvnAccDetailList.get(i).getGrnGvnStatus() == 6) {
+					
+					System.out.println("Status 6 found  and its total :::"+gvnAccDetailList.get(i).getAprGrandTotal());
 
-					accHeader.setApporvedAmt(accHeader.getApporvedAmt() + gvnAccDetailList.get(i).getGrnGvnAmt());
-					
-					accHeader.setAprTaxableAmt(accHeader.getAprTaxableAmt()+gvnAccDetailList.get(i).getAprTaxableAmt());
-					accHeader.setAprTotalTax(accHeader.getAprTotalTax()+gvnAccDetailList.get(i).getAprTotalTax());
-					accHeader.setAprGrandTotal(accHeader.getAprGrandTotal()+gvnAccDetailList.get(i).getAprGrandTotal());
-					accHeader.setAprCgstRs(accHeader.getAprCgstRs()+gvnAccDetailList.get(i).getAprCgstRs());
-					accHeader.setAprSgstRs(accHeader.getAprSgstRs()+gvnAccDetailList.get(i).getAprSgstRs());
-					accHeader.setAprIgstRs(accHeader.getAprIgstRs()+gvnAccDetailList.get(i).getAprIgstRs());
-					accHeader.setAprROff(accHeader.getAprROff()+gvnAccDetailList.get(i).getAprROff());
-					
-					//accHeader.setApporvedAmt(0);
-					
+
+					accHeader.setApporvedAmt(accHeader.getApporvedAmt() + gvnAccDetailList.get(i).getAprGrandTotal());
+
+					accHeader.setAprTaxableAmt(
+							accHeader.getAprTaxableAmt() + gvnAccDetailList.get(i).getAprTaxableAmt());
+					accHeader.setAprTotalTax(accHeader.getAprTotalTax() + gvnAccDetailList.get(i).getAprTotalTax());
+					accHeader.setAprGrandTotal(
+							accHeader.getAprGrandTotal() + gvnAccDetailList.get(i).getAprGrandTotal());
+					accHeader.setAprCgstRs(accHeader.getAprCgstRs() + gvnAccDetailList.get(i).getAprCgstRs());
+					accHeader.setAprSgstRs(accHeader.getAprSgstRs() + gvnAccDetailList.get(i).getAprSgstRs());
+					accHeader.setAprIgstRs(accHeader.getAprIgstRs() + gvnAccDetailList.get(i).getAprIgstRs());
+					accHeader.setAprROff(accHeader.getAprROff() + gvnAccDetailList.get(i).getAprROff());
+
 				}
-			}*/
+			}
 			accHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
 
 			accHeader = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", accHeader, GrnGvnHeader.class);
@@ -2281,8 +2310,6 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 			int accApproveLogin = userResponse.getUser().getId();
 
 			String[] grnIdList = request.getParameterValues("select_to_agree");
-			
-
 
 			System.out.println("GRN ID " + grnIdList[0]);
 
@@ -2297,9 +2324,7 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 
 			}
 			gIds = gIds.substring(1);
-			
-			
-			
+
 			List<TempGrnGvnBeanUp> dataList = new ArrayList<>();
 
 			TempGrnGvnBeanUp data = new TempGrnGvnBeanUp();
@@ -2308,123 +2333,126 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 
 			for (int j = 0; j < grnIdList.length; j++) {
 
-					int accGvnQty=Integer.parseInt(request.getParameter("acc_gvn_qty"+grnIdList[j]));
+				int accGvnQty = Integer.parseInt(request.getParameter("acc_gvn_qty" + grnIdList[j]));
 
-					for (int i = 0; i < gvnAccDetailList.size(); i++) {
-						if (gvnAccDetailList.get(i).getGrnGvnId() == Integer.parseInt(grnIdList[j])) {
+				for (int i = 0; i < gvnAccDetailList.size(); i++) {
 
+					if (gvnAccDetailList.get(i).getGrnGvnId() == Integer.parseInt(grnIdList[j])) {
 
-					System.out.println("GRN ID MAtched " + grnIdList[i]);
+						//System.out.println("GRN ID MAtched " + grnIdList[i]);
 
-					detail = gvnAccDetailList.get(i);
+						detail = gvnAccDetailList.get(i);
 
-					float grnRate = 0;
+						float grnRate = 0;
 
-					float total = detail.getBaseRate() * accGvnQty;
+						float total = detail.getBaseRate() * accGvnQty;
 
-					float aprAmt = 0;
-					float  aprTotalTax;
-					float sgstRs, cgstRs, igstRs;
+						float aprAmt = 0;
+						float aprTotalTax;
+						float sgstRs, cgstRs, igstRs;
 
-					float grandTotal;
-					
-					
-					
-					//
-					
-					float baseRate = detail.getBaseRate();
-					float gvnAmt = accGvnQty * baseRate;
+						float grandTotal;
 
-					float aprTaxableAmt = baseRate * accGvnQty;
+						//
 
-					aprTotalTax = (aprTaxableAmt * (detail.getSgstPer() + detail.getCgstPer())) / 100;
+						float baseRate = detail.getBaseRate();
+						float gvnAmt = accGvnQty * baseRate;
 
-					 grandTotal = aprTaxableAmt + aprTotalTax;
+						float aprTaxableAmt = baseRate * accGvnQty;
 
-					float finalAmt = detail.getItemRate() * accGvnQty;
+						aprTotalTax = (aprTaxableAmt * (detail.getSgstPer() + detail.getCgstPer())) / 100;
 
-					float roundUpAmt = finalAmt - grandTotal;
+						grandTotal = aprTaxableAmt + aprTotalTax;
 
-					gvnAmt = roundUp(gvnAmt);
+						float finalAmt = detail.getItemRate() * accGvnQty;
 
-					//
-					
-					aprTotalTax = ((aprTaxableAmt) * (detail.getSgstPer() + detail.getCgstPer())) / 100;
-				
-					if (detail.getIsSameState() == 1) {
+						float roundUpAmt = finalAmt - grandTotal;
 
-						sgstRs = aprTotalTax / 2;
-						cgstRs = aprTotalTax / 2;
+						gvnAmt = roundUp(gvnAmt);
 
-						igstRs = 0.0f;
-					} else {
+						//
 
-						igstRs = aprTotalTax;
+						aprTotalTax = ((aprTaxableAmt) * (detail.getSgstPer() + detail.getCgstPer())) / 100;
 
-						sgstRs = 0.0f;
-						cgstRs = 0.0f;
-					}
+						if (detail.getIsSameState() == 1) {
 
-					System.out.println("sgstsRs" + sgstRs + "CGSt Rs " + cgstRs);
+							sgstRs = aprTotalTax / 2;
+							cgstRs = aprTotalTax / 2;
 
-					grandTotal = aprTaxableAmt + aprTotalTax;
+							igstRs = 0.0f;
+						} else {
 
-					System.out.println("GRAND total " + grandTotal);
+							igstRs = aprTotalTax;
 
-					data = new TempGrnGvnBeanUp();
+							sgstRs = 0.0f;
+							cgstRs = 0.0f;
+						}
 
-					data.setApprovedDateTimeAcc(dateFormat.format(cal.getTime()));
+						System.out.println("sgstsRs" + sgstRs + "CGSt Rs " + cgstRs);
 
-					data.setApprovedLoginAcc(accApproveLogin);
+						grandTotal = aprTaxableAmt + aprTotalTax;
 
-					data.setGrnGvnStatus(Constants.AP_BY_ACC);
+						System.out.println("GRAND total " + grandTotal);
 
-					data.setApprovedRemarkAcc("Approved BY Acc");
+						data = new TempGrnGvnBeanUp();
 
-					data.setGrnGvnId(Integer.parseInt(grnIdList[j]));
+						data.setApprovedDateTimeAcc(dateFormat.format(cal.getTime()));
 
-					data.setAprQtyAcc(accGvnQty);
+						data.setApprovedLoginAcc(accApproveLogin);
 
-					data.setAprCgstRs(roundUp(cgstRs));
-					data.setAprIgstRs(roundUp(igstRs));
-					data.setAprSgstRs(roundUp(sgstRs));
+						data.setGrnGvnStatus(Constants.AP_BY_ACC);
 
-					data.setAprTaxableAmt(roundUp(aprTaxableAmt));
-					data.setAprTotalTax(roundUp(aprTotalTax));
-					
-					data.setAprGrandTotal(roundUp(grandTotal));
+						data.setApprovedRemarkAcc("Approved BY Acc");
 
-					dataList.add(data);
+						data.setGrnGvnId(Integer.parseInt(grnIdList[j]));
 
+						data.setAprQtyAcc(accGvnQty);
 
-				} // end of matching grnId
-			} // end of for Loop
+						data.setAprCgstRs(roundUp(cgstRs));
+						data.setAprIgstRs(roundUp(igstRs));
+						data.setAprSgstRs(roundUp(sgstRs));
+
+						data.setAprTaxableAmt(roundUp(aprTaxableAmt));
+						data.setAprTotalTax(roundUp(aprTotalTax));
+
+						data.setAprGrandTotal(roundUp(grandTotal));
+						
+						
+						detail.setAprGrandTotal(data.getAprGrandTotal());
+						detail.setAprTaxableAmt(data.getAprTaxableAmt());
+						detail.setAprTotalTax(data.getAprTotalTax());
+						
+						detail.setAprCgstRs(data.getAprCgstRs());
+						detail.setAprSgstRs(data.getAprSgstRs());
+						detail.setAprIgstRs(data.getAprIgstRs());
+						
+						detail.setAprROff(data.getAprROff());
+						
+						gvnAccDetailList.set(i, detail);
+
+						dataList.add(data);
+
+					} // end of matching grnId
+				} // end of for Loop
 			}
 			System.out.println("GIDS " + gIds);
-			map.add("approvedLoginAcc", accApproveLogin);
-
-			map.add("approvedDateTimeAcc", dateFormat.format(cal.getTime()));
-
-			map.add("approvedRemarkAcc", "Approve By Acc");
-
-			map.add("grnGvnStatus", Constants.AP_BY_ACC);
-
-			map.add("grnGvnId", gIds);
-
+			
 			Info updateAccGrn = restTemplate.postForObject(Constants.url + "updateAccGrn", dataList, Info.class);
 
 			if (updateAccGrn.getError() == false) {
 
 				for (int i = 0; i < grnIdList.length; i++) {
 
-					if (Integer.parseInt(grnIdList[i]) == gvnAccDetailList.get(i).getGrnGvnId()) {
+					for (int j = 0; j < gvnAccDetailList.size(); j++) {
 
-						gvnAccDetailList.get(i).setGrnGvnStatus(Constants.AP_BY_ACC);
-						System.out.println("Record Updated Locally  apr");
+						if (Integer.parseInt(grnIdList[i]) == gvnAccDetailList.get(j).getGrnGvnId()) {
 
+							gvnAccDetailList.get(j).setGrnGvnStatus(Constants.AP_BY_ACC);
+							System.out.println("Record Updated Locally  apr");
+
+						}
 					}
 				}
-
 			}
 
 			GrnGvnHeader accHeader = new GrnGvnHeader();
@@ -2500,15 +2528,14 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 				else if (aprStatus == gvnAccDetailList.size()) {
 
 					accHeader.setGrngvnStatus(6);
-					
+
 				} else {
 
 					accHeader.setGrngvnStatus(8);
 
 				}
-			} //End of Else header status==8
-			
-			
+			} // End of Else header status==8
+
 			// Update Grn Gvn Header
 
 			accHeader.setAprTaxableAmt(0);
@@ -2519,31 +2546,38 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 			accHeader.setAprIgstRs(0);
 			accHeader.setAprROff(0);
 			accHeader.setApporvedAmt(0);
-
+			
+			
+			
 
 			for (int i = 0; i < gvnAccDetailList.size(); i++) {
 
 				if (gvnAccDetailList.get(i).getGrnGvnStatus() == 6) {
+					
+					System.out.println("Status 6 found  and its total :::"+gvnAccDetailList.get(i).getAprGrandTotal());
 
-					accHeader.setApporvedAmt(accHeader.getApporvedAmt() + gvnAccDetailList.get(i).getGrnGvnAmt());
-					
-					accHeader.setAprTaxableAmt(accHeader.getAprTaxableAmt()+gvnAccDetailList.get(i).getAprTaxableAmt());
-					accHeader.setAprTotalTax(accHeader.getAprTotalTax()+gvnAccDetailList.get(i).getAprTotalTax());
-					accHeader.setAprGrandTotal(accHeader.getAprGrandTotal()+gvnAccDetailList.get(i).getAprGrandTotal());
-					accHeader.setAprCgstRs(accHeader.getAprCgstRs()+gvnAccDetailList.get(i).getAprCgstRs());
-					accHeader.setAprSgstRs(accHeader.getAprSgstRs()+gvnAccDetailList.get(i).getAprSgstRs());
-					accHeader.setAprIgstRs(accHeader.getAprIgstRs()+gvnAccDetailList.get(i).getAprIgstRs());
-					accHeader.setAprROff(accHeader.getAprROff()+gvnAccDetailList.get(i).getAprROff());
-					
-					//accHeader.setApporvedAmt(0);
-					
+
+					accHeader.setApporvedAmt(accHeader.getAprGrandTotal() + gvnAccDetailList.get(i).getAprGrandTotal());
+
+					accHeader.setAprTaxableAmt(
+							accHeader.getAprTaxableAmt() + gvnAccDetailList.get(i).getAprTaxableAmt());
+					accHeader.setAprTotalTax(accHeader.getAprTotalTax() + gvnAccDetailList.get(i).getAprTotalTax());
+					accHeader.setAprGrandTotal(
+							accHeader.getAprGrandTotal() + gvnAccDetailList.get(i).getAprGrandTotal());
+					accHeader.setAprCgstRs(accHeader.getAprCgstRs() + gvnAccDetailList.get(i).getAprCgstRs());
+					accHeader.setAprSgstRs(accHeader.getAprSgstRs() + gvnAccDetailList.get(i).getAprSgstRs());
+					accHeader.setAprIgstRs(accHeader.getAprIgstRs() + gvnAccDetailList.get(i).getAprIgstRs());
+					accHeader.setAprROff(accHeader.getAprROff() + gvnAccDetailList.get(i).getAprROff());
+
 				}
 			}
 			accHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
+			
+			System.out.println("Approved Grand Total setted " + accHeader.getAprGrandTotal());
 
-			accHeader = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", accHeader, GrnGvnHeader.class);
+		GrnGvnHeader	accHeaderRes = restTemplate.postForObject(Constants.url + "updateGrnGvnHeader", accHeader, GrnGvnHeader.class);
 
-			System.out.println("GRN HEADER rESPONSE " + accHeader.toString());
+			System.out.println("GRN HEADER rESPONSE " + accHeaderRes.toString());
 
 			//
 
@@ -2557,6 +2591,7 @@ detail.setGrnGvnAmt(roundUp(grandTotal));
 
 		return "redirect:/getAccGvnDetail/" + globalGvnAccHeaderId;
 	}
+
 	public static float roundUp(float d) {
 		return BigDecimal.valueOf(d).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
 	}

@@ -54,49 +54,12 @@
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
-							<!-- <div class="box-tool">
-								<a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a> <a data-action="close" href="#"><i
-									class="fa fa-times"></i></a>
-							</div> -->
+							
 						</div>
 
 
 						<div class="box-content">
-							<%-- <form
-								action="${pageContext.request.contextPath}/showStoreGvnDetails"
-								class="form-horizontal" method="get" id="validation-form">
- --%>
-
-
-<%-- 
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">From
-										Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="from_date" size="16"
-											type="text" name="from_date" value="${fromDate}" required 
-											onblur="getDate()"/>
-									</div>
-								
-									<label class="col-sm-3 col-lg-2 control-label">To Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="to_date" size="16"
-											type="text" value="${toDate}" name="to_date" required 
-											onblur="getDate()" />
-									</div>
-								
-
-								<div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-									<input type="submit" value="Submit" class="btn btn-primary"/>
-
-</div>
-
-								</div>
- --%>
-<!-- 
-							</form>
- -->
+							
 
 							<form
 								action="${pageContext.request.contextPath}/insertStoreGvnByCheckBoxes"
@@ -129,6 +92,7 @@
 														<th width="120" align="left">Franchise Name</th>
 														<th width="120" align="left">Item Name</th>
 														<th width="100" align="left">GVN Qty</th>
+														
 														<th>Edited Qty</th>
 														<th width="100" align="left">PHOTO 1</th>
 														<th width="100" align="left">PHOTO 2</th>
@@ -186,7 +150,6 @@
 																name="approve_store_login${gvnList.grnGvnId}"
 																id="approve_store_login${gvnList.grnGvnId}"
 																value="${gvnList.approvedLoginStore}" /></td>
-																
 																
 																<c:set var="qty" value="0"></c:set>
 

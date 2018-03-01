@@ -324,7 +324,6 @@ public class GrnGvnController {
 
 			dataList.add(data);
 
-		
 			Info info = restTemplate.postForObject(Constants.url + "updateGateGrn", dataList, Info.class);
 
 			System.out.println("after calling web service of gate grn agree info response as String - " + info);
@@ -336,7 +335,8 @@ public class GrnGvnController {
 					if (grnGateDetailList.get(i).getGrnGvnId() == grnId) {
 
 						grnGateDetailList.get(i).setGrnGvnStatus(Constants.AP_BY_GATE);
-						System.out.println("Record Updated Locally  apr by gate " + grnGateDetailList.get(i).toString());
+						System.out
+								.println("Record Updated Locally  apr by gate " + grnGateDetailList.get(i).toString());
 						break;
 
 					}
@@ -624,18 +624,6 @@ public class GrnGvnController {
 			}
 			gIds = gIds.substring(1);
 
-			// System.out.println("GIDS " + gIds);
-			/*
-			 * map.add("approvedLoginGate", gateApproveLogin);
-			 * 
-			 * map.add("approveimedDateTimeGate", dateFormat.format(cal.getTime()));
-			 * 
-			 * map.add("approvedRemarkGate", "Approve By Dispatch");
-			 * 
-			 * map.add("grnGvnStatus", Constants.AP_BY_GATE);
-			 * 
-			 * map.add("grnGvnId", gIds);
-			 */
 			Info updateGateGrn = restTemplate.postForObject(Constants.url + "updateGateGrn", dataList, Info.class);
 
 			if (updateGateGrn.getError() == false) {
@@ -643,23 +631,19 @@ public class GrnGvnController {
 				System.out.println("Inside For Loop/updateGateGrn.getError() == false ");
 
 				for (int i = 0; i < grnIdList.length; i++) {
-					System.out.println(
-							"grnId List 1] " + grnIdList[i] + "gGDL ID " + grnGateDetailList.get(i).getGrnGvnId());
 
-					if (Integer.parseInt(grnIdList[i]) == grnGateDetailList.get(i).getGrnGvnId()) {
-						System.out.println(
-								"grnId List 1] " + grnIdList[i] + "gGDL ID " + grnGateDetailList.get(i).getGrnGvnId());
+					for (int j = 0; j < grnGateDetailList.size(); j++) {
 
-						grnGateDetailList.get(i).setGrnGvnStatus(Constants.AP_BY_GATE);
-						System.out.println("Record Updated Locally apr chk boxes ");
-						System.out.println("gatGrn Detail List " + grnGateDetailList.toString());
+						if (Integer.parseInt(grnIdList[i]) == grnGateDetailList.get(j).getGrnGvnId()) {
 
-					} else {
+							grnGateDetailList.get(j).setGrnGvnStatus(Constants.AP_BY_GATE);
 
-						System.out.println("No MAtch Found ");
+						} else {
+
+							System.out.println("No MAtch Found ");
+						}
 					}
 				}
-
 			}
 
 			System.out.println("update Grn Using checkBoxes response " + updateGateGrn.toString());
@@ -947,32 +931,32 @@ public class GrnGvnController {
 		}
 
 		GetGrnGvnDetails detail;
-		
-		for(int i=0;i<grnAccDetailList.size();i++) {
-			
-			detail=new GetGrnGvnDetails();
-			detail=grnAccDetailList.get(i);
+
+		for (int i = 0; i < grnAccDetailList.size(); i++) {
+
+			detail = new GetGrnGvnDetails();
+			detail = grnAccDetailList.get(i);
 			int qty = 0;
-			
-			if(detail.getGrnGvnStatus()==1) {
+
+			if (detail.getGrnGvnStatus() == 1) {
 				System.out.println("a] fr Grn Qty ");
-				qty=detail.getAprQtyGate();
-				
+				qty = detail.getAprQtyGate();
+
 			}
-			
-			if(detail.getGrnGvnStatus()==2 || detail.getGrnGvnStatus()==3) {
+
+			if (detail.getGrnGvnStatus() == 2 || detail.getGrnGvnStatus() == 3) {
 				System.out.println("b] Gate Grn Qty ");
 
-				qty=detail.getAprQtyGate();
-				
+				qty = detail.getAprQtyGate();
+
 			}
-			
-			if(detail.getGrnGvnStatus()==6 || detail.getGrnGvnStatus()==7) {
+
+			if (detail.getGrnGvnStatus() == 6 || detail.getGrnGvnStatus() == 7) {
 				System.out.println("c] Acc Grn Qty ");
-				qty=detail.getAprQtyAcc();
-				
+				qty = detail.getAprQtyAcc();
+
 			}
-			
+
 			float grnRate = 0;
 
 			float total = detail.getBaseRate() * qty;
@@ -1024,11 +1008,10 @@ public class GrnGvnController {
 
 			grandTotal = aprTaxableAmt + aprTotalTax;
 			detail.setGrnGvnAmt(roundUp(grandTotal));
-		}//end of for loop
-		
-		
-		String grnDate =grnAccDetailList.get(0).getGrnGvnDate();
-		
+		} // end of for loop
+
+		String grnDate = grnAccDetailList.get(0).getGrnGvnDate();
+
 		modelAndView.addObject("grnList", grnAccDetailList);
 		modelAndView.addObject("grnDate", grnDate);
 		modelAndView.addObject("remarkList", getAllRemarks);
@@ -1155,6 +1138,20 @@ public class GrnGvnController {
 					data.setAprGrandTotal(roundUp(grandTotal));
 
 					dataList.add(data);
+					
+					
+					detail.setAprGrandTotal(data.getAprGrandTotal());
+					detail.setAprTaxableAmt(data.getAprTaxableAmt());
+					detail.setAprTotalTax(data.getAprTotalTax());
+					
+					detail.setAprCgstRs(data.getAprCgstRs());
+					detail.setAprSgstRs(data.getAprSgstRs());
+					detail.setAprIgstRs(data.getAprIgstRs());
+					
+					detail.setAprROff(data.getAprROff());
+					
+					grnAccDetailList.set(i, detail);
+
 
 					break;
 
@@ -1279,7 +1276,7 @@ public class GrnGvnController {
 			}
 
 			// Update Grn Gvn Header
-			
+
 			accHeader.setAprTaxableAmt(0);
 			accHeader.setAprTotalTax(0);
 			accHeader.setAprGrandTotal(0);
@@ -1289,29 +1286,30 @@ public class GrnGvnController {
 			accHeader.setAprROff(0);
 			accHeader.setApporvedAmt(0);
 
-
 			for (int i = 0; i < grnAccDetailList.size(); i++) {
 
 				if (grnAccDetailList.get(i).getGrnGvnStatus() == 6) {
-					
+
 					System.out.println("Status 6 found ");
 
-					accHeader.setApporvedAmt(accHeader.getApporvedAmt() + grnAccDetailList.get(i).getGrnGvnAmt());
-					
-					accHeader.setAprTaxableAmt(accHeader.getAprTaxableAmt()+grnAccDetailList.get(i).getAprTaxableAmt());
-					accHeader.setAprTotalTax(accHeader.getAprTotalTax()+grnAccDetailList.get(i).getAprTotalTax());
-					accHeader.setAprGrandTotal(accHeader.getAprGrandTotal()+grnAccDetailList.get(i).getAprGrandTotal());
-					accHeader.setAprCgstRs(accHeader.getAprCgstRs()+grnAccDetailList.get(i).getAprCgstRs());
-					accHeader.setAprSgstRs(accHeader.getAprSgstRs()+grnAccDetailList.get(i).getAprSgstRs());
-					accHeader.setAprIgstRs(accHeader.getAprIgstRs()+grnAccDetailList.get(i).getAprIgstRs());
-					accHeader.setAprROff(accHeader.getAprROff()+grnAccDetailList.get(i).getAprROff());
-					
-					//accHeader.setApporvedAmt(0);
-					
+					accHeader.setApporvedAmt(accHeader.getAprGrandTotal() + grnAccDetailList.get(i).getAprGrandTotal());
+
+					accHeader.setAprTaxableAmt(
+							accHeader.getAprTaxableAmt() + grnAccDetailList.get(i).getAprTaxableAmt());
+					accHeader.setAprTotalTax(accHeader.getAprTotalTax() + grnAccDetailList.get(i).getAprTotalTax());
+					accHeader.setAprGrandTotal(
+							accHeader.getAprGrandTotal() + grnAccDetailList.get(i).getAprGrandTotal());
+					accHeader.setAprCgstRs(accHeader.getAprCgstRs() + grnAccDetailList.get(i).getAprCgstRs());
+					accHeader.setAprSgstRs(accHeader.getAprSgstRs() + grnAccDetailList.get(i).getAprSgstRs());
+					accHeader.setAprIgstRs(accHeader.getAprIgstRs() + grnAccDetailList.get(i).getAprIgstRs());
+					accHeader.setAprROff(accHeader.getAprROff() + grnAccDetailList.get(i).getAprROff());
+
+					// accHeader.setApporvedAmt(0);
+
 				}
 			}
 
-			System.out.println("acc Header total amt "+accHeader.getApporvedAmt());
+			System.out.println("acc Header total amt " + accHeader.getApporvedAmt());
 			accHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
 
 			System.out.println("LIST SIZE ACC GRN : " + grnAccDetailList.size());
@@ -1455,6 +1453,20 @@ public class GrnGvnController {
 					data.setAprGrandTotal(roundUp(grandTotal));
 
 					dataList.add(data);
+					
+					
+					detail.setAprGrandTotal(data.getAprGrandTotal());
+					detail.setAprTaxableAmt(data.getAprTaxableAmt());
+					detail.setAprTotalTax(data.getAprTotalTax());
+					
+					detail.setAprCgstRs(data.getAprCgstRs());
+					detail.setAprSgstRs(data.getAprSgstRs());
+					detail.setAprIgstRs(data.getAprIgstRs());
+					
+					detail.setAprROff(data.getAprROff());
+					
+					grnAccDetailList.set(i, detail);
+
 
 					break;
 
@@ -1576,10 +1588,8 @@ public class GrnGvnController {
 				}
 
 			}
-			
-			
-			
-			/*accHeader.setAprTaxableAmt(0);
+
+			accHeader.setAprTaxableAmt(0);
 			accHeader.setAprTotalTax(0);
 			accHeader.setAprGrandTotal(0);
 			accHeader.setAprCgstRs(0);
@@ -1588,26 +1598,27 @@ public class GrnGvnController {
 			accHeader.setAprROff(0);
 			accHeader.setApporvedAmt(0);
 
-
 			for (int i = 0; i < grnAccDetailList.size(); i++) {
 
 				if (grnAccDetailList.get(i).getGrnGvnStatus() == 6) {
 
-					accHeader.setApporvedAmt(accHeader.getApporvedAmt() + grnAccDetailList.get(i).getGrnGvnAmt());
-					
-					accHeader.setAprTaxableAmt(accHeader.getAprTaxableAmt()+grnAccDetailList.get(i).getAprTaxableAmt());
-					accHeader.setAprTotalTax(accHeader.getAprTotalTax()+grnAccDetailList.get(i).getAprTotalTax());
-					accHeader.setAprGrandTotal(accHeader.getAprGrandTotal()+grnAccDetailList.get(i).getAprGrandTotal());
-					accHeader.setAprCgstRs(accHeader.getAprCgstRs()+grnAccDetailList.get(i).getAprCgstRs());
-					accHeader.setAprSgstRs(accHeader.getAprSgstRs()+grnAccDetailList.get(i).getAprSgstRs());
-					accHeader.setAprIgstRs(accHeader.getAprIgstRs()+grnAccDetailList.get(i).getAprIgstRs());
-					accHeader.setAprROff(accHeader.getAprROff()+grnAccDetailList.get(i).getAprROff());
-					
-					//accHeader.setApporvedAmt(0);
-					
+					accHeader.setApporvedAmt(accHeader.getAprGrandTotal() + grnAccDetailList.get(i).getAprGrandTotal());
+
+					accHeader.setAprTaxableAmt(
+							accHeader.getAprTaxableAmt() + grnAccDetailList.get(i).getAprTaxableAmt());
+					accHeader.setAprTotalTax(accHeader.getAprTotalTax() + grnAccDetailList.get(i).getAprTotalTax());
+					accHeader.setAprGrandTotal(
+							accHeader.getAprGrandTotal() + grnAccDetailList.get(i).getAprGrandTotal());
+					accHeader.setAprCgstRs(accHeader.getAprCgstRs() + grnAccDetailList.get(i).getAprCgstRs());
+					accHeader.setAprSgstRs(accHeader.getAprSgstRs() + grnAccDetailList.get(i).getAprSgstRs());
+					accHeader.setAprIgstRs(accHeader.getAprIgstRs() + grnAccDetailList.get(i).getAprIgstRs());
+					accHeader.setAprROff(accHeader.getAprROff() + grnAccDetailList.get(i).getAprROff());
+
+					// accHeader.setApporvedAmt(0);
+
 				}
 			}
-*/
+
 			// Update Grn Gvn Header
 			accHeader.setApprovedDatetime(dateFormat.format(cal.getTime()));
 
@@ -1678,16 +1689,15 @@ public class GrnGvnController {
 			GetGrnGvnDetails detail = new GetGrnGvnDetails();
 
 			for (int j = 0; j < grnIdList.length; j++) {
-				
-				
-				int accGrnQty=Integer.parseInt(request.getParameter("acc_grn_qty"+grnIdList[j]));
-				
+
+				int accGrnQty = Integer.parseInt(request.getParameter("acc_grn_qty" + grnIdList[j]));
+
 				for (int i = 0; i < grnAccDetailList.size(); i++) {
 
 					if (grnAccDetailList.get(i).getGrnGvnId() == Integer.parseInt(grnIdList[j])) {
 
-						System.out.println("GRN ID MAtched " + grnIdList[j]);
-						
+						//System.out.println("GRN ID MAtched " + grnIdList[j]);
+
 						detail = new GetGrnGvnDetails();
 						data = new TempGrnGvnBeanUp();
 						detail = grnAccDetailList.get(i);
@@ -1761,14 +1771,26 @@ public class GrnGvnController {
 
 						data.setAprTaxableAmt(roundUp(aprTaxableAmt));
 						data.setAprTotalTax(roundUp(aprTotalTax));
-						
-						data.setAprGrandTotal(roundUp(grandTotal));
 
+						data.setAprGrandTotal(roundUp(grandTotal));
+						
+						
+						
+
+						detail.setAprGrandTotal(data.getAprGrandTotal());
+						detail.setAprTaxableAmt(data.getAprTaxableAmt());
+						detail.setAprTotalTax(data.getAprTotalTax());
+						
+						detail.setAprCgstRs(data.getAprCgstRs());
+						detail.setAprSgstRs(data.getAprSgstRs());
+						detail.setAprIgstRs(data.getAprIgstRs());
+						
+						detail.setAprROff(data.getAprROff());
+						
+						grnAccDetailList.set(i, detail);
 
 					} // end of matching grnId
-					
-					
-					
+
 				} // end of for Loop
 				dataList.add(data);
 
@@ -1776,25 +1798,24 @@ public class GrnGvnController {
 
 			// new code
 
-			System.out.println("Data List " +dataList.toString());
-			
-			
-			
-			
+			System.out.println("Data List " + dataList.toString());
+
 			Info updateAccGrn = restTemplate.postForObject(Constants.url + "updateAccGrn", dataList, Info.class);
 
 			if (updateAccGrn.getError() == false) {
 
 				for (int i = 0; i < grnIdList.length; i++) {
 
-					if (Integer.parseInt(grnIdList[i]) == grnAccDetailList.get(i).getGrnGvnId()) {
+					for (int j = 0; j < grnAccDetailList.size(); j++) {
 
-						grnAccDetailList.get(i).setGrnGvnStatus(Constants.AP_BY_ACC);
-						System.out.println("Record Updated Locally  apr");
+						if (Integer.parseInt(grnIdList[i]) == grnAccDetailList.get(j).getGrnGvnId()) {
 
+							grnAccDetailList.get(j).setGrnGvnStatus(Constants.AP_BY_ACC);
+							System.out.println("Record Updated Locally  apr");
+
+						}
 					}
 				}
-
 			}
 
 			GrnGvnHeader accHeader = new GrnGvnHeader();
@@ -1903,28 +1924,26 @@ public class GrnGvnController {
 			accHeader.setAprROff(0);
 			accHeader.setApporvedAmt(0);
 
-
 			for (int i = 0; i < grnAccDetailList.size(); i++) {
 
 				if (grnAccDetailList.get(i).getGrnGvnStatus() == 6) {
-					
+
 					System.out.println("Status 6 found at C]");
 
-					accHeader.setApporvedAmt(accHeader.getApporvedAmt() + grnAccDetailList.get(i).getGrnGvnAmt());
-					
-					accHeader.setAprTaxableAmt(accHeader.getAprTaxableAmt()+grnAccDetailList.get(i).getAprTaxableAmt());
-					accHeader.setAprTotalTax(accHeader.getAprTotalTax()+grnAccDetailList.get(i).getAprTotalTax());
-					accHeader.setAprGrandTotal(accHeader.getAprGrandTotal()+grnAccDetailList.get(i).getAprGrandTotal());
-					accHeader.setAprCgstRs(accHeader.getAprCgstRs()+grnAccDetailList.get(i).getAprCgstRs());
-					accHeader.setAprSgstRs(accHeader.getAprSgstRs()+grnAccDetailList.get(i).getAprSgstRs());
-					accHeader.setAprIgstRs(accHeader.getAprIgstRs()+grnAccDetailList.get(i).getAprIgstRs());
-					accHeader.setAprROff(accHeader.getAprROff()+grnAccDetailList.get(i).getAprROff());
-					
-					//accHeader.setApporvedAmt(0);
-					
+					accHeader.setApporvedAmt(accHeader.getAprGrandTotal() + grnAccDetailList.get(i).getAprGrandTotal());
+
+					accHeader.setAprTaxableAmt(
+							accHeader.getAprTaxableAmt() + grnAccDetailList.get(i).getAprTaxableAmt());
+					accHeader.setAprTotalTax(accHeader.getAprTotalTax() + grnAccDetailList.get(i).getAprTotalTax());
+					accHeader.setAprGrandTotal(accHeader.getAprGrandTotal() + grnAccDetailList.get(i).getAprGrandTotal());
+					accHeader.setAprCgstRs(accHeader.getAprCgstRs() + grnAccDetailList.get(i).getAprCgstRs());
+					accHeader.setAprSgstRs(accHeader.getAprSgstRs() + grnAccDetailList.get(i).getAprSgstRs());
+					accHeader.setAprIgstRs(accHeader.getAprIgstRs() + grnAccDetailList.get(i).getAprIgstRs());
+					accHeader.setAprROff(accHeader.getAprROff() + grnAccDetailList.get(i).getAprROff());
+
 				}
 			}
-			System.out.println("acc Header total amt ***"+accHeader.getApporvedAmt());
+			System.out.println("acc Header total amt ***" + accHeader.getApporvedAmt());
 
 			System.out.println("LIST SIZE ACC GRN : " + grnAccDetailList.size());
 

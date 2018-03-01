@@ -169,9 +169,29 @@
 																value="${gvnList.approvedLoginGate}" /></td>
 																
 																
-																<td align="center"><input type="text" name="gate_gvn_qty${gvnList.grnGvnId}" style="width: 50px" class="form-control"
+																
+																
+																
+																
+																<c:choose>
+
+																<c:when test="${grnList.grnGvnStatus==1}">
+																	<td align="center"><input type="text" name="gate_gvn_qty${gvnList.grnGvnId}" style="width: 50px" class="form-control"
 															id='gate_gvn_qty${gvnList.grnGvnId}' value="${gvnList.grnGvnQty}"/></td>
 																
+																</c:when>
+
+																<c:otherwise>
+																	<td align="center"><input type="text" name="gate_gvn_qty${gvnList.grnGvnId}" style="width: 50px" class="form-control"
+															id='gate_gvn_qty${gvnList.grnGvnId}' value="${gvnList.aprQtyGate}"/></td>
+																
+																</c:otherwise>
+
+															</c:choose>
+																<%-- 
+																<td align="center"><input type="text" name="gate_gvn_qty${gvnList.grnGvnId}" style="width: 50px" class="form-control"
+															id='gate_gvn_qty${gvnList.grnGvnId}' value="${gvnList.grnGvnQty}"/></td>
+																 --%>
 
 															<td><a href="${url}${gvnList.gvnPhotoUpload1}"
 																data-lightbox="image-1">Image 1</a></td>
