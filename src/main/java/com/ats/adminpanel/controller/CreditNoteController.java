@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -18,18 +19,25 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+import org.zefer.cache.f;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.creditnote.GetCreditNoteHeaders;
+import com.ats.adminpanel.model.creditnote.GetCrnDetails;
 import com.ats.adminpanel.model.creditnote.GetGrnGvnForCreditNote;
 import com.ats.adminpanel.model.creditnote.GetGrnGvnForCreditNoteList;
 import com.ats.adminpanel.model.creditnote.PostCreditNoteDetails;
 import com.ats.adminpanel.model.creditnote.PostCreditNoteHeader;
 import com.ats.adminpanel.model.creditnote.PostCreditNoteHeaderList;
+import com.ats.adminpanel.model.grngvn.GrnGvnHeaderList;
 import com.ats.adminpanel.model.login.UserResponse;
 
 @Controller
@@ -74,8 +82,11 @@ System.out.println("in Side ");
 		return "redirect:/insertCreNoteProcess";
 	}
 
-	@RequestMapping(value = "/insertCreNoteProcess", method = RequestMethod.GET)
-	public ModelAndView showInsertCreditNote(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/insertCreNoteProcess", method = RequestMethod.POST)
+	public ModelAndView showInsertCreditNote(HttpServletRequest request, HttpServletResponse response
+			) {
+		
+		System.out.println("HIIIIIIII");
 
 		//Constants.mainAct = 11;
 		//Constants.subAct = 72;
@@ -83,11 +94,12 @@ System.out.println("in Side ");
 		ModelAndView model = new ModelAndView("creditNote/generateCreditNote");
 
 		try {
+			String type = request.getParameter("selectType");
 
 			RestTemplate restTemplate = new RestTemplate();
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-			if (isGrn == 1) {
+			if (type.equals("1")) {
 
 				map.add("isGrn", 1);
 
@@ -204,30 +216,30 @@ System.out.println("in Side ");
 						creditNoteDetail.setCessRs(00);
 
 						creditNoteDetail.setCgstPer(creditNote.getCgstPer());
-						float cgstRs = (creditNote.getCgstPer() * creditNote.getTaxableAmt()) / 100;
+						float cgstRs = (creditNote.getCgstPer() * creditNote.getAprTaxableAmt()) / 100;
 						creditNoteDetail.setCgstRs(roundUp(cgstRs));
 
 						creditNoteDetail.setSgstPer(creditNote.getSgstPer());
-						float sgstRs = (creditNote.getSgstPer() * creditNote.getTaxableAmt()) / 100;
+						float sgstRs = (creditNote.getSgstPer() * creditNote.getAprTaxableAmt()) / 100;
 						creditNoteDetail.setSgstRs(roundUp(sgstRs));
 
 						creditNoteDetail.setIgstPer(creditNote.getIgstPer());
-						float igstRs = (creditNote.getIgstPer() * creditNote.getTaxableAmt()) / 100;
+						float igstRs = (creditNote.getIgstPer() * creditNote.getAprTaxableAmt()) / 100;
 						creditNoteDetail.setIgstRs(roundUp(igstRs));
 
 						creditNoteDetail.setDelStatus(0);
-						creditNoteDetail.setGrnGvnAmt(creditNote.getGrnGvnAmt());
+						creditNoteDetail.setGrnGvnAmt(creditNote.getAprGrandTotal());
 						creditNoteDetail.setGrnGvnDate(grnGvnDate);
 						creditNoteDetail.setGrnGvnId(creditNote.getGrnGvnId());
-						creditNoteDetail.setGrnGvnQty(creditNote.getGrnGvnQty());
+						creditNoteDetail.setGrnGvnQty(creditNote.getAprQtyAcc());
 
 						creditNoteDetail.setGrnType(creditNote.getGrnType());
 
 						creditNoteDetail.setIsGrn(creditNote.getIsGrn());
 						creditNoteDetail.setItemId(creditNote.getItemId());
 
-						creditNoteDetail.setTaxableAmt(creditNote.getTaxableAmt());
-						creditNoteDetail.setTotalTax(creditNote.getTotalTax());
+						creditNoteDetail.setTaxableAmt(creditNote.getAprTaxableAmt());
+						creditNoteDetail.setTotalTax(creditNote.getAprTotalTax());
 
 						creditNoteDetail.setBillDate(creditNote.getRefInvoiceDate());
 
@@ -245,9 +257,9 @@ System.out.println("in Side ");
 
 						creditHeader.setPostCreditNoteDetails(postCreditNoteDetailsListMatched);
 
-						creditHeader.setCrnTaxableAmt(creditHeader.getCrnTaxableAmt() + creditNote.getTaxableAmt());
+						creditHeader.setCrnTaxableAmt(creditHeader.getCrnTaxableAmt() + creditNote.getAprTaxableAmt());
 
-						creditHeader.setCrnTotalTax(creditHeader.getCrnTotalTax() + creditNote.getTotalTax());
+						creditHeader.setCrnTotalTax(creditHeader.getCrnTotalTax() + creditNote.getAprTotalTax());
 
 						if (creditHeader.getGrnGvnSrNoList() == null) {
 
@@ -293,13 +305,13 @@ System.out.println("in Side ");
 
 					postCreditHeader.setCreatedDateTime(dateFormat.format(cal.getTime()));
 					postCreditHeader.setCrnDate(creditNoteDate);
-					postCreditHeader.setCrnFinalAmt(creditNote.getFinalAmt());
-					postCreditHeader.setCrnGrandTotal(creditNote.getGrnGvnAmt());
-					postCreditHeader.setCrnTaxableAmt(creditNote.getTaxableAmt());
-					postCreditHeader.setCrnTotalTax(creditNote.getTotalTax());
+					postCreditHeader.setCrnFinalAmt(creditNote.getAprGrandTotal());
+					postCreditHeader.setCrnGrandTotal(creditNote.getAprGrandTotal());
+					postCreditHeader.setCrnTaxableAmt(creditNote.getAprTaxableAmt());
+					postCreditHeader.setCrnTotalTax(creditNote.getAprTotalTax());
 					postCreditHeader.setFrId(creditNote.getFrId());
 					postCreditHeader.setIsTallySync(creditNote.getIsTallySync());
-					postCreditHeader.setRoundOff(creditNote.getRoundUpAmt());
+					postCreditHeader.setRoundOff(creditNote.getAprROff());
 					postCreditHeader.setUserId(userId);
 					postCreditHeader.setCrnNo("gfpl :default");
 
@@ -332,24 +344,24 @@ System.out.println("in Side ");
 					creditNoteDetail.setBillNo(creditNote.getBillNo());
 					creditNoteDetail.setCessRs(00);
 					creditNoteDetail.setCgstPer(creditNote.getCgstPer());
-					float cgstRs = (creditNote.getCgstPer() * creditNote.getTaxableAmt()) / 100;
+					float cgstRs = (creditNote.getCgstPer() * creditNote.getAprTaxableAmt()) / 100;
 					creditNoteDetail.setCgstRs(cgstRs);
 					creditNoteDetail.setSgstPer(creditNote.getSgstPer());
-					float sgstRs = (creditNote.getSgstPer() * creditNote.getTaxableAmt()) / 100;
+					float sgstRs = (creditNote.getSgstPer() * creditNote.getAprTaxableAmt()) / 100;
 					creditNoteDetail.setSgstRs(sgstRs);
 					creditNoteDetail.setIgstPer(creditNote.getIgstPer());
-					float igstRs = (creditNote.getIgstPer() * creditNote.getTaxableAmt()) / 100;
+					float igstRs = (creditNote.getIgstPer() * creditNote.getAprTaxableAmt()) / 100;
 					creditNoteDetail.setIgstRs(igstRs);
 					creditNoteDetail.setDelStatus(0);
-					creditNoteDetail.setGrnGvnAmt(creditNote.getGrnGvnAmt());
+					creditNoteDetail.setGrnGvnAmt(creditNote.getAprGrandTotal());
 					creditNoteDetail.setGrnGvnDate(grnGvnDate);
 					creditNoteDetail.setGrnGvnId(creditNote.getGrnGvnId());
-					creditNoteDetail.setGrnGvnQty(creditNote.getGrnGvnQty());
+					creditNoteDetail.setGrnGvnQty(creditNote.getAprQtyAcc());
 					creditNoteDetail.setGrnType(creditNote.getGrnType());
 					creditNoteDetail.setIsGrn(creditNote.getIsGrn());
 					creditNoteDetail.setItemId(creditNote.getItemId());
-					creditNoteDetail.setTaxableAmt(creditNote.getTaxableAmt());
-					creditNoteDetail.setTotalTax(creditNote.getTotalTax());
+					creditNoteDetail.setTaxableAmt(creditNote.getAprTaxableAmt());
+					creditNoteDetail.setTotalTax(creditNote.getAprTotalTax());
 
 					// newly added
 
@@ -398,5 +410,172 @@ System.out.println("in Side ");
 		return model;
 
 	}
+	
+	
+	
+	String fromDate,toDate,crnFr;
+	@RequestMapping(value = "/getInputForCreditNoteHeader", method = RequestMethod.GET)
+	public String getInputForCreditNoteHeader(HttpServletRequest request, HttpServletResponse response) {
 
+		fromDate = request.getParameter("fromDate");
+		toDate = request.getParameter("toDate");
+
+		String selectedFr = request.getParameter("fr_id_list");
+
+		System.out.println(
+				"From Date " + fromDate + "toDate " + toDate + "fr ID List " + selectedFr);
+		selectedFr = selectedFr.substring(1, selectedFr.length() - 1);
+		selectedFr = selectedFr.replaceAll("\"", "");
+
+		crnFr = selectedFr;
+
+		frList = Arrays.asList(selectedFr);
+
+		System.out.println("Fr List Final " + frList);
+
+		return "";
+
+	}
+	
+	public AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
+	public List<String> frList = new ArrayList<String>();
+	List<GetCreditNoteHeaders> creditHeaderList=new ArrayList<>();
+	List<GetCrnDetails> crnDetailList=new ArrayList<>();
+	@RequestMapping(value = "/showCreditNotes", method = RequestMethod.POST)
+	public ModelAndView viewCreditNotes(HttpServletRequest request, HttpServletResponse response) {
+
+		// Constants.mainAct = 8;
+		// Constants.subAct = 85;
+
+		
+		System.out.println("inside viewCreditNote");
+
+		
+		ModelAndView model = new ModelAndView("creditNote/creditNoteHeaders");
+
+		
+			boolean isAllFrSelected = false;
+
+			try {
+
+				RestTemplate restTemplate = new RestTemplate();
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+				allFrIdNameList = new AllFrIdNameList();
+				try {
+
+					allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+
+				} catch (Exception e) {
+					System.out.println("Exception in getAllFrIdName" + e.getMessage());
+					e.printStackTrace();
+
+				}
+				model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
+		}catch (Exception e) {
+			System.err.println("Exce in viewving credit note page");
+		}
+		
+		return model;
+	}
+	
+	
+	@RequestMapping(value = "/getHeaders", method = RequestMethod.GET)
+	public @ResponseBody List<GetCreditNoteHeaders> getHeaders(HttpServletRequest request, HttpServletResponse response) {
+
+		System.out.println("inside Ajax Call");
+		
+		ModelAndView model = new ModelAndView("creditNote/creditNoteHeaders");
+
+			boolean isAllFrSelected = false;
+
+			try {
+
+				RestTemplate restTemplate = new RestTemplate();
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+				try {
+
+					fromDate = request.getParameter("fromDate");
+					toDate = request.getParameter("toDate");
+
+					String selectedFr = request.getParameter("fr_id_list");
+
+					System.out.println(
+							"From Date " + fromDate + "toDate " + toDate + "fr ID List " + selectedFr);
+					selectedFr = selectedFr.substring(1, selectedFr.length() - 1);
+					selectedFr = selectedFr.replaceAll("\"", "");
+
+					crnFr = selectedFr;
+
+					frList = Arrays.asList(selectedFr);
+
+					System.out.println("Fr List Final " + frList);
+					
+					
+					map.add("fromDate", fromDate);
+					
+					map.add("toDate", toDate);
+					if (frList.contains("-1")) {
+						isAllFrSelected = true;
+
+					}
+
+					if (isAllFrSelected) {
+						
+							map.add("frIdList", 0);
+						
+					}
+					else {
+						
+						map.add("frIdList", selectedFr);
+						
+					}
+					
+					creditHeaderList = restTemplate.postForObject(Constants.url + "getCreditNoteHeaders", map,
+							List.class);
+					
+					System.err.println("CH List " +creditHeaderList.toString());
+
+				} catch (Exception e) {
+					System.out.println("Exception in getAllFrIdName" + e.getMessage());
+					e.printStackTrace();
+				}
+				
+				
+		}catch (Exception e) {
+			System.err.println("Exce in viewving credit note page");
+		}
+		
+		return creditHeaderList;
+	}
+
+	
+	
+	
+	
+	
+	@RequestMapping(value = "/getCrnDetailList/{crnId}", method = RequestMethod.GET)
+	public ModelAndView getGrnDetailList(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("crnId") int crnId) {
+		ModelAndView model = new ModelAndView("creditNote/crnDetails");
+		System.out.println("In detail Page");
+		
+		RestTemplate restTemplate = new RestTemplate();
+
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+		map.add("crnId", crnId);
+		crnDetailList = restTemplate.postForObject(Constants.url + "getCrnDetails", map,
+				List.class);
+		
+		System.out.println("crn Detail List******** "+crnDetailList);
+		
+		model.addObject("crnDetailList",crnDetailList);
+		
+		return model;
+	}
+	
 }

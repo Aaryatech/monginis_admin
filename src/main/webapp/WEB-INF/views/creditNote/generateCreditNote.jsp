@@ -12,7 +12,7 @@
 
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
-<c:url value="/getCreditNoteType" var="getCreditNoteType"/>
+	<c:url value="/getCreditNoteType" var="getCreditNoteType" />
 	<div class="container" id="main-container">
 
 		<!-- BEGIN Sidebar -->
@@ -38,25 +38,31 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
-			
-			
-			<div class="form-group">
-									<label class="col-sm-4 col-lg-1 control-label">Type</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<select class="form-control" name="selectType" id="selectType">
-										<option value="1">GRN Credit Note</option>
-										<option value="0">GVN Credit Note</option>
-										</select>
-									</div>
-									
-									<div
-										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										<input type="button" value="Search" onclick="getGrnGvnDetail()" class="btn btn-primary">
 
-									</div>
-								</div>
+			<form action="/insertCreNoteProcess" class="form-horizontal"
+				method="post" id="validation">
 
-			<form action="${pageContext.request.contextPath}/insertCreNoteProcess"
+				<div class="form-group">
+					<label class="col-sm-4 col-lg-1 control-label">Type</label>
+					<div class="col-sm-5 col-lg-3 controls">
+						<select class="form-control" name="selectType" id="selectType">
+							<option value="1">GRN Credit Note</option>
+							<option value="0">GVN Credit Note</option>
+						</select>
+					</div>
+					<section>
+						<div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
+							<input type="button" value="Search" onclick="getGrnGvnDetail()"
+								class="btn btn-primary">&nbsp;&nbsp; <input
+								type="button" value="View Credit Notes"
+								onclick="viewCreditNotes()" class="btn btn-primary">
+						</div>
+					</section>
+
+					<div class="col-sm-5 col-lg-3 controls"></div>
+				</div>
+			</form>
+			<form action="${pageContext.request.contextPath}/insertCreditNote"
 				class="form-horizontal" method="post" id="validation-form">
 
 
@@ -97,7 +103,7 @@
 												<th width="150" align="left">Grn-Gvn Id</th>
 
 												<th width="150" align="left">Franchisee Name</th>
-												<th width="100" align="left">Bill No</th>
+												<th width="100" align="left">Invoice No</th>
 												<th width="88" align="left">Type:Grn/Gvn</th>
 
 												<th width="102" align="left">Item Name</th>
@@ -122,16 +128,16 @@
 
 													<td align="left"><c:out
 															value="${creditNoteList.grnGvnDate}" /></td>
-															<td align="left"><c:out
+													<td align="left"><c:out
 															value="${creditNoteList.grngvnSrno}" /></td>
-															<td align="left"><c:out
+													<td align="left"><c:out
 															value="${creditNoteList.grnGvnHeaderId}" /></td>
-															
+
 													<td align="left"><c:out
 															value="${creditNoteList.frName}" /></td>
 
 													<td align="left"><c:out
-															value="${creditNoteList.billNo}" /></td>
+															value="${creditNoteList.invoiceNo}" /></td>
 
 													<c:choose>
 														<c:when test="${creditNoteList.isGrn==1}">
@@ -152,11 +158,11 @@
 
 
 													<td align="left"><c:out
-															value="${creditNoteList.grnGvnQty}" /></td>
+															value="${creditNoteList.aprQtyAcc}" /></td>
 
 
 													<td align="left"><c:out
-															value="${creditNoteList.grnGvnAmt}" /></td>
+															value="${creditNoteList.aprGrandTotal}" /></td>
 
 
 												</tr>
@@ -164,8 +170,12 @@
 
 										</tbody>
 									</table>
-									<input type="submit" value="Generate Credit Note" />
 
+									<div
+										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
+										<input type="submit" class="btn btn-primary"
+											value="Generate Credit Note" />
+									</div>
 								</div>
 							</div>
 						</div>
@@ -261,15 +271,24 @@
 	function getGrnGvnDetail(){
 		
 		var selectedType = $("#selectType").val();
-		alert("Hi "+selectedType);
+		//alert("Hi "+selectedType);
+	        var form = document.getElementById("validation");
+	        form.action ="${pageContext.request.contextPath}/insertCreNoteProcess";
+	        form.submit();
+	        $("#selectType").value=selectedType;
 
-		$.getJSON('${getCreditNoteType}', {
-			selected_type:selectedType,
-			ajax : 'true',
 
-		});
-
+	}
+	
+function viewCreditNotes(){
 		
+		
+		//alert("Hi "+selectedType);
+	        var form = document.getElementById("validation");
+	        form.action ="${pageContext.request.contextPath}/showCreditNotes";
+	        form.submit();
+	       
+
 	}
 	
 	</script>
