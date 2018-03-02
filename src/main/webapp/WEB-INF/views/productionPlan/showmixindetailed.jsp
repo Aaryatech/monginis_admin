@@ -156,19 +156,19 @@
 															<td><c:out value="${count.index+1}" /></td>
 															<c:set var="srNo" value="${srNo+1}" />
 															<td><c:out value="${mixwithdetaild.sfName}" /></td>
-															<td><c:out value="${mixwithdetaild.originalQty}" /></td>
-															<td><c:out value="${mixwithdetaild.autoOrderQty}" /></td>
+															<td style="text-align:right;"><c:out value="${mixwithdetaild.originalQty}" /></td>
+															<td style="text-align:right;">  <c:out value="${mixwithdetaild.autoOrderQty}" /></td>
 
-															<td><c:out value="${mixwithdetaild.receivedQty}" /></td>
+															<td style="text-align:right;"><c:out value="${mixwithdetaild.receivedQty}" /></td>
 
 															<c:choose>
 																<c:when test="${(mixheader.status!=2) and (deptId==15)}">
-																	<td><input type="text"
+																	<td style="text-align:right;"><input type="text"
 																		name='production_Qty<c:out
 																		value="${mixwithdetaild.mixing_detailId}" />'
 																		class="form-control"
-																		value=<c:out value="${mixwithdetaild.productionQty}" /> pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
-																<td><input type="text"
+																		value=<c:out value="${mixwithdetaild.receivedQty}" /> pattern="[+-]?([0-9]*[.])?[0-9]+" required></td>
+																<td style="text-align:right;"><input type="text" 
 																		name='rejected_Qty<c:out  
 																		value="${mixwithdetaild.mixing_detailId}" />'
 																		class="form-control"
@@ -176,12 +176,12 @@
 																
 																</c:when>
 																<c:otherwise>
-																	<td><c:out value="${mixwithdetaild.productionQty}" /></td>
-																	<td><c:out value="${mixwithdetaild.rejectedQty}" /></td>
+																	<td style="text-align:right;"><c:out value="${mixwithdetaild.productionQty}" /></td>
+																	<td style="text-align:right;"><c:out value="${mixwithdetaild.rejectedQty}" /></td>
 																</c:otherwise>
 															</c:choose>
 															 
-															<td><fmt:formatDate pattern = "dd-MM-yyyy" value = "${mixwithdetaild.mixingDate}" /></td>
+															<td style="text-align:right;"><fmt:formatDate pattern = "dd-MM-yyyy" value = "${mixwithdetaild.mixingDate}" /></td>
 
 
 														</tr>
@@ -198,12 +198,7 @@
 								<div class="form-group">
 									<div align="center" class="form-group">
 										<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-											<c:choose>
-												<c:when test="${(mixheader.status!=2) and (deptId==15)}">
-										 			<input type="submit" class="btn btn-primary"
-													value="complet Production">
-											    </c:when>
-											</c:choose>
+											
 								
 						
 											<c:choose>
@@ -227,15 +222,17 @@
 										 
 												</c:when> 
 											</c:choose>
+											
+											<c:choose>
+												<c:when test="${(mixheader.status!=2) and (deptId==15)}">
+										 			<input type="submit" class="btn btn-primary"
+													value="Complete Production">
+											    </c:when>
+											</c:choose>
 										</div>
 								</div>
 							</div>
 						</div>
-
-								<div class="box-content"></div>
-								<br>
-								<br>
-								<br>
 
 <input type="hidden" name="mixId" value="${mixheader.mixId}">
 <input type="hidden" name="isMixing" value="1">
@@ -243,7 +240,7 @@
 
 	<div style="text-align: center;">
 								<a href="${pageContext.request.contextPath}/showMixReqPdf"
-								target="_blank">PDF</a>
+								target="_blank"><input type="button" value="PDF" class="btn btn-primary"/></a>
 								</div>
 
 							</form>

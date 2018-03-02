@@ -375,7 +375,7 @@ public class PushOrderController {
 								order.setDeliveryDate(deliveryDate);
 								order.setMenuId(0);
 								order.setGrnType(4);
-								order.setIsEdit(1);
+								order.setIsEdit(0);
 								order.setMenuId(menuId);
 								order.setOrderType(selectedMainCatId);
 

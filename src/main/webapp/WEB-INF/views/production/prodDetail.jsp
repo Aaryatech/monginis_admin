@@ -203,7 +203,7 @@
 											</tr>
 										</thead> -->
 										<tbody>
-
+<br/>
 											<c:forEach items="${planDetail}" var="planDetail" varStatus="count">
 												<input type="hidden" name="item${count.index}" id="item${planDetail.productionDetailId}" value="${planDetail.itemId}"/>
 												<tr>
@@ -313,7 +313,7 @@
 								<div class="form-group">
 									
 								
-									<div class="col-sm-1 col-sm-offset-1 col-lg-8 col-lg-offset-1">
+									<div class="col-sm-1 col-sm-offset-1 col-lg-9 col-lg-offset-1">
 									<c:choose>
 									  <c:when test = "${planHeader.isBom==0}">
                                    <a href="${pageContext.request.contextPath}/showBom/${planHeader.productionHeaderId}/1/${planHeader.productionDate}/${planHeader.isPlanned}/${planHeader.catId}">   <button type="button" class="btn btn-primary">
@@ -329,7 +329,7 @@
                                    <c:otherwise>
                                    </c:otherwise>
                                    </c:choose>
-									&nbsp;&nbsp;&nbsp;&nbsp;
+									&nbsp;&nbsp;
 									<c:choose>
 									
 									  <c:when test = "${planHeader.isMixing==0 && planHeader.productionStatus==1 or planHeader.productionStatus==2 or planHeader.productionStatus==3}">
@@ -357,7 +357,7 @@
                                    </c:otherwise>
                                    </c:choose>
 										<input type="hidden" name="productionStatus" id="productionStatus" value="${planHeader.productionStatus}"/>
-									&nbsp;&nbsp;&nbsp;&nbsp;
+									&nbsp;&nbsp;
 									  <c:choose>
          
                                     <c:when test = "${planHeader.productionStatus==1}">
@@ -377,7 +377,7 @@
                                  
                                    </c:otherwise>
                                    </c:choose>
-                                   &nbsp;&nbsp;&nbsp;&nbsp;
+                                   &nbsp;&nbsp;
 									 <c:choose>
          
                                     <c:when test = "${planHeader.productionStatus==4}">

@@ -245,11 +245,11 @@
 										</tbody>
 									</table>
 								</div>
-
+                                 <center>
 								<input type="button" class="btn btn-info" value="Submit List"
 									onclick="insertItemDetail()"> <input type="hidden"
 									id="prodHeaderId" value="${prodHeaderId}"> <input
-									type="hidden" id="prodDate" value="${prodDate}">
+									type="hidden" id="prodDate" value="${prodDate}"></center>
 
 							</form>
 						</div>
@@ -393,7 +393,15 @@ function submitItem() {
 
 					});
 
-				
+				 document.getElementById("material_type").value="0";
+				 document.getElementById("uom").value="";
+				 document.getElementById("rm_req_qty").value="";
+				 document.getElementById("rm_material_name").selectedIndex = "-1"; 
+					var html = '<option value="-1" selected >Select Material</option>';
+					html += '</option>';
+					$('#rm_material_name').html(html);
+				 document.getElementById("from_dept").selectedIndex = "0"; 
+				 document.getElementById("to_dept").selectedIndex = "0"; 
 				}
 				
 				function deleteBomDetail(key){

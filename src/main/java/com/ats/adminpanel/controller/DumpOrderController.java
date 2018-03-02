@@ -344,7 +344,7 @@ public class DumpOrderController {
 					order.setDeliveryDate(deliveryDate);
 					//order.setMenuId(0);
 					order.setGrnType(3);
-					order.setIsEdit(1);
+					order.setIsEdit(0);
 					order.setMenuId(menuId);
 					order.setOrderType(selectedMainCatId);
 					

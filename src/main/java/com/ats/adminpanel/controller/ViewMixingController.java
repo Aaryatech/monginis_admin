@@ -305,7 +305,7 @@ public class ViewMixingController {
 	     
 	    
 	     
-	     hcell = new PdfPCell(new Phrase("Add Weight", headFont1));
+	     hcell = new PdfPCell(new Phrase("Multiplication Factor", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	     table.addCell(hcell);
 	     

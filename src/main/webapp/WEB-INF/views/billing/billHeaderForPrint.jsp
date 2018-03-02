@@ -220,9 +220,9 @@
 
 														<tr>
 														
-															<td class="col-sm-1"><input type="checkbox" name="select_to_print"
+															<td class="col-sm-1"><input type="hidden" name="select_to_print"
 																id="${billHeadersList.billNo}"
-																value="${billHeadersList.billNo}" /></td>
+																value="${billHeadersList.billNo}" disabled/></td>
 
 															<td class="col-sm-1"><c:out value="${count.index+1}" /></td>
 
@@ -441,7 +441,7 @@ form.submit();
 															.append($(
 																	'<td class="col-sm-1"></td>')
 																	.html(
-																			"<input type='checkbox' name='select_to_print' value="+bill.billNo+">"));
+																			"<input type='hidden' name='select_to_print' value="+bill.billNo+" disabled>"));
 
 													tr.append($('<td class="col-sm-1"></td>')
 															.html(key + 1));

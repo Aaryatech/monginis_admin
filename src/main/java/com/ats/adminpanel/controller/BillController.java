@@ -79,6 +79,7 @@ import com.ats.adminpanel.model.billing.GetBillHeaderResponse;
 import com.ats.adminpanel.model.billing.PostBillDataCommon;
 import com.ats.adminpanel.model.billing.PostBillDetail;
 import com.ats.adminpanel.model.billing.PostBillHeader;
+import com.ats.adminpanel.model.billing.SlabwiseBillList;
 import com.ats.adminpanel.model.franchisee.AllMenuResponse;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
@@ -1256,7 +1257,7 @@ System.out.println("IN Show bill PDF Method :/showBillPdf");
    			
    			map.add("billNoList", billList);
    			
-   			
+   				
    			 ParameterizedTypeReference<List<GetBillDetailPrint>> typeRef = new ParameterizedTypeReference<List<GetBillDetailPrint>>() {
    			};
    			ResponseEntity<List<GetBillDetailPrint>> responseEntity = restTemplate.exchange(Constants.url + "getBillDetailsForPrint",
@@ -1265,6 +1266,23 @@ System.out.println("IN Show bill PDF Method :/showBillPdf");
    			
    			List<GetBillDetailPrint>	billDetailsResponse = responseEntity.getBody();
    			
+   			List<String> billnos = Arrays.asList(billList.split("\\s*,\\s*"));
+			List<SlabwiseBillList> slabwiseBillList=new ArrayList<>();     
+
+   			for(String billno:billnos)
+   			{
+   				map = new LinkedMultiValueMap<String, Object>();
+   	   			
+   	   			map.add("billNoList", billno);
+   		      ParameterizedTypeReference<List<SlabwiseBillList>> typeRef1 = new ParameterizedTypeReference<List<SlabwiseBillList>>() {
+			  };
+			  ResponseEntity<List<SlabwiseBillList>> responseEntity1 = restTemplate.exchange(Constants.url + "getSlabwiseBillData",
+					HttpMethod.POST, new HttpEntity<>(map), typeRef1);
+   			
+			
+			slabwiseBillList.addAll(responseEntity1.getBody());
+   			}
+			System.out.println("slabwiseBillList"+slabwiseBillList.toString());
    			System.out.println("bill No in Header "+billHeadersListForPrint.toString());
    			
    			System.out.println("selected bills for Printing "+billList);
@@ -1394,6 +1412,7 @@ System.out.println("IN Show bill PDF Method :/showBillPdf");
 
 			System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
 			model.addObject("billDetails",billPrintList);
+			model.addObject("slabwiseBillList",slabwiseBillList);
 			model.addObject("vehicleNo", vehicleNo);
 			model.addObject("transportMode", transportMode);
 			model.addObject("dateTime", dateFormat.format(cal.getTime()));
@@ -1915,7 +1934,7 @@ System.out.println("IN Show bill Method");
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo221.pdf";
 		String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/bill.pdf";
-
+		//String filePath = "/home/ats-12/pdf/report.pdf";
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;
 		File downloadFile = new File(filePath);
