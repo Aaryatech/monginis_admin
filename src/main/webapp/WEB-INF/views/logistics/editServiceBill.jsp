@@ -63,8 +63,10 @@
 							</div>
 							
 						</div>
-						
-						
+						<input class="form-control" id="typeIdName" size="16"
+											type="hidden" name="typeIdName"  required />
+						<input class="form-control" id="labourGroupId" value="${labourGroupId}" size="16"
+											type="hidden" name="labourGroupId"    />
 						<div class="box-content">
 
 							<form id="submitMaterialStore" action="${pageContext.request.contextPath}/submitEditInvoice" method="post"
@@ -112,7 +114,7 @@
 								<div class="col-md-2">Type*</div>
 									<div class="col-md-3">
 									
-									<select name="typeId" id="typeId" class="form-control chosen" tabindex="6" required>
+									<select name="typeId" id="typeId" class="form-control chosen" onchange="updateNextServicingDueKm()" tabindex="6" required>
 											<c:forEach items="${typeList}" var="typeList"> 
 												<c:choose> 
 														<c:when test="${typeList.typeId==editServicing.typeId}">
@@ -624,7 +626,7 @@
 				var discPer = $("#discPer").val();
 				var extraChargePer = $("#extraChargePer").val(); 
 				var taxPer = $("#taxPer").val(); 
-				
+				var labourGroupId = $("#labourGroupId").val();
 				if(validation()==true){	
 				
 					if(editItem==0)
@@ -697,7 +699,7 @@
 															  	extraCharge=extraCharge+itemList.extraCharges;
 															  	tr.append($('<td></td>').html(itemList.total));
 															  	total=total+itemList.total;
-															  	if(itemList.groupId==2)
+															  	if(itemList.groupId==labourGroupId)
 														  		{
 														  		 
 														  		labourCharge=labourCharge+itemList.total;
@@ -744,7 +746,7 @@
 						}
 					else
 						{
-						alert("in else");
+						//alert("in else");
 						$('#loader').show();
 
 						$ .getJSON(
@@ -813,7 +815,7 @@
 															  	extraCharge=extraCharge+itemList.extraCharges;
 															  	tr.append($('<td></td>').html(itemList.total));
 															  	total=total+itemList.total;
-															  	if(itemList.groupId==2)
+															  	if(itemList.groupId==labourGroupId)
 														  		{
 														  		 
 														  		labourCharge=labourCharge+itemList.total;
@@ -941,7 +943,7 @@
 		 
 		function del(key)
 		{
-			
+			var labourGroupId = $("#labourGroupId").val();
 			var key=key;
 			$('#loader').show();
 			$
@@ -992,7 +994,7 @@
 							  	extraCharge=extraCharge+itemList.extraCharges;
 							  	tr.append($('<td></td>').html(itemList.total));
 							  	total=total+itemList.total;
-							  	if(itemList.groupId==2)
+							  	if(itemList.groupId==labourGroupId)
 							  		{
 							  		 
 							  		labourCharge=labourCharge+itemList.total;
@@ -1000,7 +1002,7 @@
 							  	else
 							  		{
 							  		 
-							  		totSparePart=totSparePart+1;
+							  		totSparePart=totSparePart+itemList.total;
 							  		}
 							  	
 							  	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
@@ -1028,7 +1030,8 @@
 		{
 			
 			var vehId = $("#vehId").val();
-			
+			var typeId = $("#typeId").val();
+			var typeIdName = $("#typeId option:selected").text();
 			var servDoneKm = parseFloat($("#servDoneKm").val()); 
 			$
 			.getJSON(
@@ -1041,7 +1044,16 @@
 
 					},
 					function(data) { 
-			document.getElementById("nextDueKm").value=data.freqKm+servDoneKm; 
+						if(typeId==1)
+							document.getElementById("nextDueKm").value=data.freqKm+servDoneKm; 
+						else if(typeId==6)
+							document.getElementById("nextDueKm").value=data.battaryChangeFreq+servDoneKm; 
+						else if(typeId==7)
+							document.getElementById("nextDueKm").value=data.acChangeFreq+servDoneKm;
+						else 
+							document.getElementById("nextDueKm").value=data.wheelChangeFreq+servDoneKm;
+						 
+						document.getElementById("typeIdName").value=typeIdName;
 						
 					});
 			

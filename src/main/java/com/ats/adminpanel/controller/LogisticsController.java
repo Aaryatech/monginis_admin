@@ -1991,6 +1991,13 @@ public class LogisticsController {
 		try
 		{
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			String settingKey =  "m_logis_labour_group"; 
+			map.add("settingKeyList", settingKey);
+			FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			int labourGroupId = settingList.getFrItemStockConfigure().get(0).getSettingValue();
+			
+			map = new LinkedMultiValueMap<String, Object>();
         	map.add("servId", servId); 
         	viewServicingDetail = restTemplate.postForObject(Constants.url + "getServHeaderAndDetailById",map, ServHeader.class);
         	 
@@ -2079,6 +2086,7 @@ public class LogisticsController {
 			 model.addObject("editServicing", viewServicingDetail);
 			 model.addObject("typeList", typeList);
 			 model.addObject("servDetail", addSparePartListInEdit);
+			 model.addObject("labourGroupId", labourGroupId);
 		}catch(Exception e)
 		{
 			e.printStackTrace();
@@ -2270,6 +2278,7 @@ public class LogisticsController {
 			float taxAmt =Float.parseFloat(request.getParameter("taxAmt"));
 			float taxaleAmt =Float.parseFloat(request.getParameter("taxaleAmt"));
 			float total =Float.parseFloat(request.getParameter("total"));
+			String typeName = request.getParameter("typeName");
 			int servDoneKm=0;
 			int nextDueKm=0;
 			if(type==1)
@@ -2369,6 +2378,32 @@ public class LogisticsController {
 		        	 vehicalMaster.setAlertNextServicingKm(vehicalMaster.getNextServicingKm()-100);
 		        	 vehicalMaster = restTemplate.postForObject(Constants.url + "postVehicalMaster",vehicalMaster, VehicalMaster.class);
 		 			System.out.println("update Vehicle"+vehicalMaster.toString());
+		 			
+		 			map = new LinkedMultiValueMap<String, Object >();
+		 			map.add("vehId", res.getVehId());
+		 			map.add("typeId", res.getTypeId());
+		 			AlertVeihcleServicing alertVeihcleServicing = restTemplate.postForObject(Constants.url + "getAlertVeihcleServicingByVehIdAndType", map, AlertVeihcleServicing.class);
+		 			
+		 			if(alertVeihcleServicing.getAlertId()!=0)
+		 			{
+		 				alertVeihcleServicing.setLastServKm(res.getServDoneKm());
+		 				alertVeihcleServicing.setNextServKm(res.getNextDueKm());
+		 				alertVeihcleServicing.setAlertServKm(alertVeihcleServicing.getNextServKm()-100);
+		 				AlertVeihcleServicing update = restTemplate.postForObject(Constants.url + "postAlertVeihcleServicing", alertVeihcleServicing, AlertVeihcleServicing.class);
+		 				System.out.println("update alert Vehicle " + update);
+		 			}
+		 			else
+		 			{
+		 				alertVeihcleServicing.setVehId(res.getVehId());
+		 				alertVeihcleServicing.setVehNo(res.getVehNo());
+		 				alertVeihcleServicing.setTypeId(res.getTypeId());
+		 				alertVeihcleServicing.setTypeName(typeName);
+		 				alertVeihcleServicing.setLastServKm(res.getServDoneKm());
+		 				alertVeihcleServicing.setNextServKm(res.getNextDueKm());
+		 				alertVeihcleServicing.setAlertServKm(alertVeihcleServicing.getNextServKm()-100);
+		 				AlertVeihcleServicing insert = restTemplate.postForObject(Constants.url + "postAlertVeihcleServicing", alertVeihcleServicing, AlertVeihcleServicing.class);
+		 				System.out.println("insert alert Vehicle " + insert);
+		 			}
 				 }
 	        	
 				
