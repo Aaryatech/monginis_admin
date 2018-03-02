@@ -1,6 +1,5 @@
 package com.ats.adminpanel.model.franchisee;
 
-import java.io.Serializable;
 
 public class FrTotalSale {
 	
@@ -8,7 +7,16 @@ public class FrTotalSale {
 
 	private int frId;
 	
+	private float targetAmt;
 	private float totalSale;
+
+	public float getTargetAmt() {
+		return targetAmt;
+	}
+
+	public void setTargetAmt(float targetAmt) {
+		this.targetAmt = targetAmt;
+	}
 
 	public int getMonth() {
 		return month;
@@ -36,8 +44,8 @@ public class FrTotalSale {
 
 	@Override
 	public String toString() {
-		return "FrTotalSale [month=" + month + ", frId=" + frId + ", totalSale=" + totalSale + "]";
+		return "FrTotalSale [month=" + month + ", frId=" + frId + ", targetAmt=" + targetAmt + ", totalSale="
+				+ totalSale + "]";
 	}
-	
-	
+    
 }
