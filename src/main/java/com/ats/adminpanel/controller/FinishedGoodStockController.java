@@ -68,7 +68,7 @@ public class FinishedGoodStockController {
 		try {
 			Constants.mainAct = 4;
 			Constants.subAct = 40;
-
+			String sDate="";
 			RestTemplate restTemplate = new RestTemplate();
 
 			CategoryListResponse allCategoryResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
@@ -117,7 +117,7 @@ public class FinishedGoodStockController {
 			if (stockHeader != null) {
 				showFinStockDetail = new ArrayList<FinishedGoodStockDetail>();
 				showStockHeader = stockHeader;
-				String sDate = dfYmd.format(stockHeader.getFinGoodStockDate());
+				 sDate = dfYmd.format(stockHeader.getFinGoodStockDate());
 
 				System.out.println("s Date ===" + sDate);
 				map = new LinkedMultiValueMap<String, Object>();
@@ -149,7 +149,8 @@ public class FinishedGoodStockController {
 			// model.addObject("itemsList", itemsList);
 
 			model.addObject("itemsList", showFinStockDetail);
-			
+			model.addObject("sDate", sDate);//mahesh code (3 march)
+
 			globalItemList=new ArrayList<>();
 			globalItemList = itemsList;
 		} catch (Exception e) {

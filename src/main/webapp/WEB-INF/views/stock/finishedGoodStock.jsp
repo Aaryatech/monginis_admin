@@ -112,7 +112,8 @@
 									</div>
 
 									<div class="box-content">
-<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
+									<div style="text-align: left;color:grey; "><b>Date:</b> ${sDate}</div>
+                          <jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
 										<div class="clearfix"></div>
 										<div id="table-scroll" class="table-scroll">

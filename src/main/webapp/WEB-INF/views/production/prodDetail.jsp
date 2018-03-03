@@ -408,7 +408,7 @@
                                    </c:choose>
 										 <c:choose>
 									   <c:when test = "${planHeader.isMixing==1}">
-									    <a href="${pageContext.request.contextPath}/manualMixing/${planHeader.productionHeaderId}/${planHeader.productionDate}/${planHeader.timeSlot}"><input type="button" class="btn btn-primary" id="man_bom_button"  value="Manual Mixing" >
+									    <a href="${pageContext.request.contextPath}/manualMixing/${planHeader.productionHeaderId}/${planHeader.productionDate}/${planHeader.timeSlot}"><input type="button" class="btn btn-primary" id="man_bom_button"  value="Spot Mixing" >
 										 </a>
                                    	 </c:when>
 										 </c:choose>
