@@ -94,6 +94,8 @@
 												id="table1">
 												<thead>
 													<tr>
+													<th><input type="checkbox"
+													onClick="selectedGrn(this)" />Select All<br/></th>
 														<th></th>
 														<th>Sr No</th>
 														<th>Invoice No</th>
@@ -242,7 +244,7 @@
 																class="form-control" id='acc_grn_qty${grnList.grnGvnId}'
 																value="${qty}"
 																onkeyup="calcGrn(${grnList.grnType},${grnList.baseRate},${grnList.grnGvnId},
-																	${grnList.sgstPer},${grnList.cgstPer})" /></td>
+																	${grnList.sgstPer},${grnList.cgstPer},${grnList.grnGvnQty},${qty})"/></td>
 
 
 
@@ -682,40 +684,12 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
-	<!-- <script type="text/javascript">
-		/* $(document).ready(function() { */
-			/* $('#callSubmit').submit(function() { */
-				function callSubmitGrn(){
-					//var selectedGrn = $("#selectFr").val();
-					
-					
-					
-					
-				
-			
-			//alert("hello"),
-				 $.ajax({
-					type : "get",
-					
-					
-					
-					url : "insertGateGrnProcess" //this is my servlet
-				/*  data: "input=" +$('#ip').val()+"&output="+$('#op').val(), */
-
-				});
-			
- 
-		};
-	</script>
- -->
-
-
 	<!-- insertGrnDisAgree -->
 
 	<script type="text/javascript">
 
 function callSubmit(){
-			alert("HIII");
+		//	alert("HIII");
 			
 		    var form = document.getElementById("validation-form");
 		    form.action ="${pageContext.request.contextPath}/insertAccGrnByCheckBoxes";
@@ -913,14 +887,15 @@ function getDate(){
 
 	<script>
 
-function calcGrn(grnType,baseRate,grnId,sgstPer,cgstPer){
+function calcGrn(grnType,baseRate,grnId,sgstPer,cgstPer,grnQty,curQty){
 	
 	var grandTotal;
 	var aprTotalTax;
 	var grnRate;
 	var aprTaxableAmt;
-	var acc_grn_qty=$("#acc_grn_qty"+grnId).val();
 	
+	checkQty(grnId,grnQty,curQty);//Calling another function 
+	var acc_grn_qty=$("#acc_grn_qty"+grnId).val();
 //	alert("acc_grn_qty" +acc_grn_qty);
 
 	if(grnType==0){
@@ -944,48 +919,35 @@ function calcGrn(grnType,baseRate,grnId,sgstPer,cgstPer){
 	document.getElementById('grnAmt'+grnId).innerText=grandTotal.toFixed(2);
 	
 }
-	/* function placeValue(){
-		
-		callMe(1,2,3,4,5,6);
-		//alert("HIII");
-		
-		
-	} */
-	function callMe(grnType,baseRate,grnId,sgstPer,cgstPer,status){
-		
-	alert("flkdjskf");
-	
-	alert("status = "+status);
-if(parseInt(status)==1){
-			alert("status==1")
-		}
-if(parseInt(status)==2){
-	alert("status==2")
-}
-if(parseInt(status)==3){
-	alert("status==3")
-}
-if(parseInt(status)==4){
-	alert("status==4")
-}
-if(parseInt(status)==5){
-	alert("status==5")
-}
 
-if(parseInt(status)==6){
-	alert("status==6")
-}
-
-if(parseInt(status)==7){
-	alert("status==7")
-}
-
-
-		
-		
-	}
-	
 </script>
+<script type="text/javascript">
+function checkQty(grnId,grnQty,qty){
+	//alert("JJJ");
+	var entered=$("#acc_grn_qty"+grnId).val();
+	//alert("received = " +entered);
+	if(entered>grnQty){
+		alert("Can not Enter Qty Greater than Grn Qty ");
+		document.getElementById("acc_grn_qty"+grnId).value=qty;
+	}
+}
+</script>
+
+
+<script>
+	
+		function selectedGrn(source) {
+			checkboxes = document.getElementsByName('select_to_agree');
+			
+			for (var i = 0, n = checkboxes.length; i < n; i++) {
+				checkboxes[i].checked = source.checked;
+			}
+			
+		}
+		
+	</script>
+
+
 
 </body>
 </html>

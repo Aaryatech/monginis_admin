@@ -2,8 +2,29 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
+	<style> 
+.message {
+  
+    
+    
+    padding:6px;
+    margin: auto;
+    width: 60%;
+   
+   
+list-style: none;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+}
 
+.messagesErr {
+    border: 1px solid #e3c1c5;
+    color: #e32139;
+    background: #ffeff1;
+}
+
+</style>
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
 	<body>
@@ -36,6 +57,9 @@
 					<h1>
 						<i class="fa fa-file-o"></i>Production Detail
 					</h1>
+					
+					
+				
 
 				</div>
 			</div>
@@ -45,6 +69,13 @@
 
 			<!-- BEGIN Main Content -->
 			<div class="row">
+			<c:choose>
+			<c:when test="${not empty msg}">
+					<!-- here would be a message with a result of processing -->
+					<div  class="message messagesErr">${msg}</div>
+				</c:when>
+				
+			<c:otherwise>
 				<div class="col-md-12">
 					<div class="box">
 						<div class="box-title">
@@ -55,6 +86,10 @@
 								<a href="${pageContext.request.contextPath}/showProdHeader">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
+							
+							
+							
+				
 							
 						</div>
 
@@ -310,6 +345,9 @@
 								</div>
 							
 <br>
+
+
+
 								<div class="form-group">
 									
 								
@@ -414,7 +452,30 @@
 										 </c:choose>
 									</div>
 									
-									
+									<!-- 
+							<select name="prodUnit" id="prodUnit">
+							<option value="1">Shendra</option>
+							<option value="2">Chikalthana</option>
+							</select> -->
+							
+									<div class="form-group">
+									<label class="col-sm-3 col-lg-3 control-label">Select Unit</label>
+<br></br>
+									<div class="col-sm-5 col-lg-3 controls">
+
+										<select data-placeholder="Choose Franchisee"
+											class="form-control chosen"  tabindex="6"
+											id="prodUnit" name="prodUnit" >
+										<option value="1">Shendra</option>
+							<option value="2">Chikalthana</option>
+
+										</select>
+									</div>
+
+
+
+								</div>
+						
 								</div>
 							
 						</div>	</form>
@@ -422,8 +483,10 @@
 					</div>
 
 				</div>
-
+	</c:otherwise>
+	</c:choose>
 			</div>
+		
 			<!-- END Main Content -->
 			<footer>
 			<p>2017 © MONGINIS.</p>
@@ -545,8 +608,12 @@ function changeQty(id)
 <script type="text/javascript">
 
 $('#complete_prod').click(function(){
+	document.getElementById("prodUnit").style.display="block";
+	var prodUnit=document.getElementById("prodUnit").value;
+	alert(prodUnit);
+	
     var form = document.getElementById("validation_form")
-    form.action ="${pageContext.request.contextPath}/completeProd";
+   form.action ="${pageContext.request.contextPath}/completeProd";
     form.submit();
 });
 </script>

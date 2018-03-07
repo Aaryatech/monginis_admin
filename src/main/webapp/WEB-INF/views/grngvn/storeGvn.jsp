@@ -56,15 +56,10 @@
 							</div>
 							
 						</div>
-
-
 						<div class="box-content">
-							
-
 							<form
 								action="${pageContext.request.contextPath}/insertStoreGvnByCheckBoxes"
 								class="form-horizontal" method="post" id="validation-form">
-
 
 								<div class="box">
 									<div class="box-title">
@@ -153,6 +148,8 @@
 																
 																<c:set var="qty" value="0"></c:set>
 
+
+																
 															<c:choose>
 
 																<c:when
@@ -161,16 +158,14 @@
 																</c:when>
 
 																<c:otherwise>
-																	
 																	<c:set var="qty" value="${gvnList.aprQtyStore}" />
 																</c:otherwise>
 
 																
 															</c:choose>
 																
-																
 																<td align="center"><input type="text" name="store_gvn_qty${gvnList.grnGvnId}" style="width: 50px" class="form-control"
-															id='store_gvn_qty${gvnList.grnGvnId}' value="${qty}"/></td>
+															id='store_gvn_qty${gvnList.grnGvnId}' value="${qty}" onkeyup="checkQty(${gvnList.grnGvnId},${gvnList.grnGvnQty},${gvnList.aprQtyStore},${qty})"/></td>
 																
 
 															<td><a href="${url}${gvnList.gvnPhotoUpload1}"data-lightbox="image-1" >Image 1</a>
@@ -1043,9 +1038,20 @@ function getDate(){
 
 	
 }
+<script type="text/javascript">
 
+function checkQty(grnId,grnQty,aprQty,qty){
+	alert("JJJ");
+	 var entered=$("#store_gvn_qty"+grnId).val();
+	alert("received = " +entered);
+	if(entered>grnQty){
+		alert("Can not Enter Qty Greater than auto Qty ");
+		document.getElementById("store_gvn_qty"+grnId).value=qty;
+	} 
+}
 
 </script>
+
 
 <script>
 	$(document).ready(function(){
