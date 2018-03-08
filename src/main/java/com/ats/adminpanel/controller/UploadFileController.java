@@ -53,6 +53,8 @@ public class UploadFileController {
 	String document3;
 	String document4;
 	
+	
+	
 	@RequestMapping(value = "/uploadRuleFile", method = RequestMethod.GET)
 	public ModelAndView bmsstock(HttpServletRequest request, HttpServletResponse response) { 
 		
