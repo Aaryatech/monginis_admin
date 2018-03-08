@@ -205,11 +205,11 @@
 																	<c:set var="status" value="Pending" />
 																</c:when>
 																<c:when test="${grnList.grngvnStatus==6}">
-																	<c:set var="status" value="Approved By Acc" />
+																	<c:set var="status" value="Approved By Account" />
 
 																</c:when>
 																<c:when test="${grnList.grngvnStatus==7}">
-																	<c:set var="status" value="Rejected By Acc" />
+																	<c:set var="status" value="Reject By Account" />
 																</c:when>
 															</c:choose>
 

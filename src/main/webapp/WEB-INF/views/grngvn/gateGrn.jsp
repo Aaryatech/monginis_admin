@@ -223,32 +223,32 @@
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==2}">
-																	<td align="left"><c:out value="approvedByGate"></c:out></td>
+																	<td align="left"><c:out value="Approved From Dispatch"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==3}">
-																	<td align="left"><c:out value="rejectByGate"></c:out></td>
+																	<td align="left"><c:out value="Reject From Dispatch"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==4}">
-																	<td align="left"><c:out value="approvedBystore"></c:out></td>
+																	<td align="left"><c:out value="Approved From Store"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==5}">
-																	<td align="left"><c:out value="rejectByStore"></c:out></td>
+																	<td align="left"><c:out value="Reject From Store"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==6}">
-																	<td align="left"><c:out value="approvedByAcc"></c:out></td>
+																	<td align="left"><c:out value="Approved From Account"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==7}">
-																	<td align="left"><c:out value="rejectByAcc"></c:out></td>
+																	<td align="left"><c:out value="Reject From Account"></c:out></td>
 
 																</c:when>
 

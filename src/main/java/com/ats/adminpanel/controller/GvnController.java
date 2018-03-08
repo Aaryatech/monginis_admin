@@ -19,6 +19,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -1577,7 +1578,7 @@ public class GvnController {
 		return model;
 	}
 	// Get GVN Acc detail
-
+	List<Integer> statuses;
 	@RequestMapping(value = "/getAccGvnDetail/{headerId}", method = RequestMethod.GET)
 	public ModelAndView getAccGvnDetail(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("headerId") int headerId) {
@@ -1695,6 +1696,19 @@ public class GvnController {
 				detail.setGrnGvnAmt(roundUp(grandTotal));
 
 			} // end of for Loop
+			
+			
+			statuses=new ArrayList<Integer>();
+			for(int i=0;i<gvnAccDetailList.size();i++) {
+				
+				
+				System.err.println("In For ");
+				if(gvnAccDetailList.get(i).getGrnGvnStatus()==7 ||gvnAccDetailList.get(i).getGrnGvnStatus()==4) {
+					System.err.println("In If ");
+
+				statuses.add(i);
+				}
+			}
 
 			modelAndView.addObject("remarkList", getAllRemarks);
 
@@ -1713,6 +1727,14 @@ public class GvnController {
 
 	}
 
+	
+	@RequestMapping(value = "/getGvnStatus", method = RequestMethod.GET)
+	public @ResponseBody List<Integer> getStatus(HttpServletRequest request, HttpServletResponse response) {
+
+		return statuses;
+		
+	}
+	
 	// A] --//Acc Gvn Process Agree
 
 	@RequestMapping(value = "/insertAccGvnProcessAgree", method = RequestMethod.GET)

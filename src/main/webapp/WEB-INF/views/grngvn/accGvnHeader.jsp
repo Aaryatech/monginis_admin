@@ -30,7 +30,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>GVN Header Acc
+						<i class="fa fa-file-o"></i>GVN Header Account
 					</h1>
 
 				</div>
@@ -43,7 +43,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Search GVN Header for Acc
+								<i class="fa fa-bars"></i>Search GVN Header for Account
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -134,7 +134,7 @@
 								<div class="box">
 									<div class="box-title">
 										<h3>
-											<i class="fa fa-table"></i> GRN List
+											<i class="fa fa-table"></i> GVN List
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i
@@ -192,11 +192,16 @@
 																	<td class="col-md-1"><c:out value="Pending"></c:out></td>
 																</c:when>
 																<c:when test="${grnList.grngvnStatus==2}">
-																	<td class="col-md-1"><c:out value="Approved By Dispatch"></c:out></td>
+																	<td class="col-md-1"><c:out value="Approved From Dispatch"></c:out></td>
 																</c:when>
 																<c:when test="${grnList.grngvnStatus==3}">
 																	<td class="col-md-1"><c:out
-																			value="Reject By Dispatch"></c:out></td>
+																			value="Reject From Dispatch"></c:out></td>
+																</c:when>
+																
+																<c:when test="${grnList.grngvnStatus==4}">
+																	<td class="col-md-1"><c:out
+																			value="Approved From Sell"></c:out></td>
 																</c:when>
 
 																<c:when test="${grnList.grngvnStatus==8}">
@@ -205,13 +210,13 @@
 
 																<c:when test="${grnList.grngvnStatus==5}">
 																	<td class="col-md-1"><c:out
-																			value="Reject By Store"></c:out></td>
+																			value="Reject From Sell"></c:out></td>
 																</c:when>
 																<c:when test="${grnList.grngvnStatus==6}">
-																	<td class="col-md-1"><c:out value="Approved"></c:out></td>
+																	<td class="col-md-1"><c:out value="Approved From Account"></c:out></td>
 																</c:when>
 																<c:when test="${grnList.grngvnStatus==7}">
-																	<td class="col-md-1"><c:out value="Reject By Acc"></c:out></td>
+																	<td class="col-md-1"><c:out value="Reject From Account"></c:out></td>
 																</c:when>
 
 															</c:choose>

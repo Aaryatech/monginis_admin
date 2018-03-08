@@ -10,6 +10,11 @@
 	<c:url var="insertAccGvnProcessDisAgree"
 		value="/insertAccGvnProcessDisAgree" />
 	<c:url var="getDateForGvnAcc" value="/getDateForGvnAcc" />
+	
+	
+	<c:url var="getGvnStatus"
+		value="/getGvnStatus" />
+		
 	<div class="container" id="main-container">
 
 		<!-- BEGIN Sidebar -->
@@ -59,10 +64,6 @@
 							<form
 								action="${pageContext.request.contextPath}/insertAccGvnByCheckBoxes"
 								class="form-horizontal" method="post" id="validation-form">
-
-
-
-
 								<div class="box">
 									<div class="box-title">
 										<h3>
@@ -105,7 +106,20 @@
 													<c:forEach items="${gvnList}" var="gvnList"
 														varStatus="count">
 
-														<tr>
+														<c:choose>
+															<c:when
+																test="${gvnList.grnGvnQtyAuto!=gvnList.grnGvnQty}">
+
+																<c:set var="color" value="red"></c:set>
+															</c:when>
+															<c:otherwise>
+																<c:set var="color" value=""></c:set>
+															</c:otherwise>
+														</c:choose>
+
+														<tr bgcolor="${color}">
+														
+														<td></td>
 														
 															<c:choose>
 																<c:when test="${gvnList.grnGvnStatus==4}">
@@ -166,39 +180,41 @@
 																data-lightbox="image-1">Image 1</a></td>
 
 															<td><a href="${url}${gvnList.gvnPhotoUpload2}"
-																data-lightbox="image-1">Image 2</a> <c:choose>
+																data-lightbox="image-1">Image 2</a> </td>
+																
+																<c:choose>
 																	<c:when test="${gvnList.grnGvnStatus==1}">
 																		<td align="left"><c:out value="Pending"></c:out></td>
 
 																	</c:when>
 
 																	<c:when test="${gvnList.grnGvnStatus==2}">
-																		<td align="left"><c:out value="approvedByGate"></c:out></td>
+																		<td align="left"><c:out value="Approved From Dispatch"></c:out></td>
 
 																	</c:when>
 
 																	<c:when test="${gvnList.grnGvnStatus==3}">
-																		<td align="left"><c:out value="rejectByGate"></c:out></td>
+																		<td align="left"><c:out value="Reject From Dispatch"></c:out></td>
 
 																	</c:when>
 
 																	<c:when test="${gvnList.grnGvnStatus==4}">
-																		<td align="left"><c:out value="approvedBystore"></c:out></td>
+																		<td align="left"><c:out value="Approved From Sell"></c:out></td>
 
 																	</c:when>
 
 																	<c:when test="${gvnList.grnGvnStatus==5}">
-																		<td align="left"><c:out value="rejectByStore"></c:out></td>
+																		<td align="left"><c:out value="Reject From Sell"></c:out></td>
 
 																	</c:when>
 
 																	<c:when test="${gvnList.grnGvnStatus==6}">
-																		<td align="left"><c:out value="approvedByAcc"></c:out></td>
+																		<td align="left"><c:out value="Approved From Account"></c:out></td>
 
 																	</c:when>
 
 																	<c:when test="${gvnList.grnGvnStatus==7}">
-																		<td align="left"><c:out value="rejectByAcc"></c:out></td>
+																		<td align="left"><c:out value="Reject From Account"></c:out></td>
 
 																	</c:when>
 
@@ -924,10 +940,26 @@ function checkQty(grnId,gvnQty,qty){
 	
 		function selectedGvn(source) {
 			checkboxes = document.getElementsByName('select_to_agree');
+			$.getJSON('${getGvnStatus}', {
+				
+				ajax : 'true'
+			}, function(data) {
+				alert(data);
+			
+				for(var i=0;i<data.length;i++){
+					checkboxes[data[i]].checked = source.checked;
+				}
+			
+				
+			});	
+				
+		/* checkboxes = document.getElementsByName('select_to_agree');
 			
 			for (var i = 0, n = checkboxes.length; i < n; i++) {
 				checkboxes[i].checked = source.checked;
-			}
+				
+			} */
+			
 			
 		}
 		

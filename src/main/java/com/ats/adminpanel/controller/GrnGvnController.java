@@ -23,6 +23,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -41,6 +42,7 @@ import com.ats.adminpanel.model.grngvn.TempGrnGvnBeanUp;
 import com.ats.adminpanel.model.login.UserResponse;
 import com.ats.adminpanel.model.remarks.GetAllRemarks;
 import com.ats.adminpanel.model.remarks.GetAllRemarksList;
+import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
 
 @Controller
 @Scope("session")
@@ -791,7 +793,7 @@ public class GrnGvnController {
 
 				String statusList = new String();
 
-				statusList = "4" + "," + "8";
+				statusList = "2" + "," + "8";
 				// for Sending Current Date
 				java.util.Date date = new java.util.Date();
 
@@ -884,6 +886,9 @@ public class GrnGvnController {
 
 		return model;
 	}
+	
+	
+	List<Integer> statuses;
 
 	@RequestMapping(value = "/getAccGrnDetail/{headerId}", method = RequestMethod.GET)
 	public ModelAndView getAccGrnDetail(HttpServletRequest request, HttpServletResponse response,
@@ -912,6 +917,17 @@ public class GrnGvnController {
 			grnAccDetailList = detailList.getGrnGvnDetails();
 
 			System.out.println("GRN Detail   " + grnAccDetailList.toString());
+			statuses=new ArrayList<Integer>();
+			for(int i=0;i<grnAccDetailList.size();i++) {
+				
+				
+				System.err.println("In For ");
+				if(grnAccDetailList.get(i).getGrnGvnStatus()==7 ||grnAccDetailList.get(i).getGrnGvnStatus()==2) {
+					System.err.println("In If ");
+
+				statuses.add(i);
+				}
+			}
 
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("isFrUsed", 0);
@@ -1019,6 +1035,18 @@ public class GrnGvnController {
 		return modelAndView;
 	}
 
+	
+	
+	
+	
+	@RequestMapping(value = "/getStatus", method = RequestMethod.GET)
+	public @ResponseBody List<Integer> getStatus(HttpServletRequest request, HttpServletResponse response) {
+
+		return statuses;
+		
+	}
+	
+	
 	// Acc GRN started
 
 	// A] --//Acc Grn Process Agree

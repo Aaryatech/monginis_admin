@@ -2,7 +2,11 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-
+<style>
+.re-order {
+    background: #f4353f !important;
+}
+</style>
 
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body onload="placeValue()">
@@ -15,6 +19,11 @@
 
 	<c:url var="insertAccGrnProcessDisAgree"
 		value="/insertAccGrnProcessDisAgree" />
+		
+		
+		<c:url var="getStatus"
+		value="/getStatus" />
+		
 
 	<c:url var="getDateForGrnAcc" value="/getDateForGrnAcc" />
 
@@ -119,7 +128,26 @@
 													<c:forEach items="${grnList}" var="grnList"
 														varStatus="count">
 
-														<tr>
+														<c:choose>
+															<c:when
+																test="${grnList.grnGvnQtyAuto!=grnList.grnGvnQty}">
+
+																<c:set var="color" value="red"></c:set>
+															</c:when>
+															
+															<c:when
+																test="${grnList.grnGvnQty!=grnList.aprQtyGate}">
+
+																<c:set var="color" value="blue"></c:set>
+															</c:when>
+															
+															<c:otherwise>
+																<c:set var="color" value=""></c:set>
+															</c:otherwise>
+														</c:choose>
+
+														<tr bgcolor="${color}">
+														<td></td>
 															<c:choose>
 																<c:when test="${grnList.grnGvnStatus==2}">
 																	<td><input type="checkbox" name="select_to_agree"
@@ -255,32 +283,32 @@
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==2}">
-																	<td align="left"><c:out value="approvedByGate"></c:out></td>
+																	<td align="left"><c:out value="Approved From Dispatch"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==3}">
-																	<td align="left"><c:out value="rejectByGate"></c:out></td>
+																	<td align="left"><c:out value="Reject From Dispatch"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==4}">
-																	<td align="left"><c:out value="approvedBystore"></c:out></td>
+																	<td align="left"><c:out value="Approved From Sell"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==5}">
-																	<td align="left"><c:out value="rejectByStore"></c:out></td>
+																	<td align="left"><c:out value="Reject From Sell"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==6}">
-																	<td align="left"><c:out value="approvedByAcc"></c:out></td>
+																	<td align="left"><c:out value="Approved From Account"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==7}">
-																	<td align="left"><c:out value="rejectByAcc"></c:out></td>
+																	<td align="left"><c:out value="Reject From Account"></c:out></td>
 
 																</c:when>
 
@@ -490,7 +518,7 @@
 																							</select><input class="btn btn-primary" value="Submit"
 																								disabled="disabled"
 																								onclick="insertGrnDisAgree(${grnList.grnGvnId})" />
-																						</div>
+											List											</div>
 																					</div>
 																				</div>
 																			</li>
@@ -757,15 +785,7 @@ function insertGrnCall(grnGvnId){
 var grnId=grnGvnId;
 var approve_acc_login=$("#approve_acc_login"+grnGvnId).val();
 var acc_remark=$("#acc_remark"+grnGvnId).val();
-
 var acc_grn_qty=$("#acc_grn_qty"+grnGvnId).val();
-
-
-
-/* alert(grnId);
-alert(approve_gate_login); */
-
-	
 
 	$.getJSON('${insertAccGrnProcessAgree}',
 							{
@@ -784,9 +804,7 @@ alert(approve_gate_login); */
 );
 
 callRefresh();
-/* callSecondRefresh();
-callThirdRefresh();
-callfourthRefresh(); */
+
 }
 
 
@@ -796,7 +814,6 @@ callfourthRefresh(); */
 function callRefresh(){
 	alert("Approved Successfully");
 		window.location.reload();
-	//document.getElementById("validation-form").reload();
 	}
 
 </script>
@@ -806,33 +823,25 @@ function callRefresh(){
 function callSecondRefresh(){
 
 	window.location.reload();
-
-	
 }
 
 
 </script>
 
 	<script type="text/javascript">
-
 function callThirdRefresh(){
 	window.location.reload();
-
 }
-
 </script>
 
 	<script type="text/javascript">
 
 function callfourthRefresh(){
 	window.reload();
-
-
 }
 
 </script>
 	<!-- insertGrnAgree -->
-
 
 	<script>
 var acc = document.getElementsByClassName("accordion");
@@ -857,8 +866,6 @@ function getDate(){
 	
 	var fromDate=$("#from_date").val();
 	var toDate=$("#to_date").val();
-	
-	
 	$.getJSON('${getDateForGrnAcc}',
 			{
 			
@@ -866,14 +873,9 @@ function getDate(){
 			toDate:toDate,
 				
 				ajax : 'true',
-			
-
 }
 );
-
-	
 }
-
 
 </script>
 	<script>
@@ -886,7 +888,6 @@ function getDate(){
 </script>
 
 	<script>
-
 function calcGrn(grnType,baseRate,grnId,sgstPer,cgstPer,grnQty,curQty){
 	
 	var grandTotal;
@@ -896,7 +897,6 @@ function calcGrn(grnType,baseRate,grnId,sgstPer,cgstPer,grnQty,curQty){
 	
 	checkQty(grnId,grnQty,curQty);//Calling another function 
 	var acc_grn_qty=$("#acc_grn_qty"+grnId).val();
-//	alert("acc_grn_qty" +acc_grn_qty);
 
 	if(grnType==0){
 		grnRate=baseRate*75/100;
@@ -909,23 +909,17 @@ function calcGrn(grnType,baseRate,grnId,sgstPer,cgstPer,grnQty,curQty){
 	if(grnType==2 || grnType==4){
 		grnRate=baseRate;
 	}
-	//grnRate=grnRate.toFixed(2);
-	//alert(grnRate.toFixed(2));
+	
 	aprTaxableAmt = grnRate * acc_grn_qty;
 	aprTotalTax = ((aprTaxableAmt) * (sgstPer + cgstPer))/ 100;
 	grandTotal = aprTaxableAmt + aprTotalTax;
-	//alert(grandTotal.toFixed(2));
-	//$("#grnAmt"+grnId).value=grandTotal;
 	document.getElementById('grnAmt'+grnId).innerText=grandTotal.toFixed(2);
-	
 }
 
 </script>
 <script type="text/javascript">
 function checkQty(grnId,grnQty,qty){
-	//alert("JJJ");
 	var entered=$("#acc_grn_qty"+grnId).val();
-	//alert("received = " +entered);
 	if(entered>grnQty){
 		alert("Can not Enter Qty Greater than Grn Qty ");
 		document.getElementById("acc_grn_qty"+grnId).value=qty;
@@ -938,10 +932,25 @@ function checkQty(grnId,grnQty,qty){
 	
 		function selectedGrn(source) {
 			checkboxes = document.getElementsByName('select_to_agree');
+			$.getJSON('${getStatus}', {
+				
+				ajax : 'true'
+			}, function(data) {
+				alert(data);
+				//alert(data[0]);
+				for(var i=0;i<data.length;i++){
+					checkboxes[data[i]].checked = source.checked;
+				}
+				
+			});	
+				
+		/* checkboxes = document.getElementsByName('select_to_agree');
 			
 			for (var i = 0, n = checkboxes.length; i < n; i++) {
 				checkboxes[i].checked = source.checked;
-			}
+				
+			} */
+			
 			
 		}
 		

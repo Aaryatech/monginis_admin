@@ -2,11 +2,11 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+
 	<c:url var="insertGateGvnProcessAgree"
 		value="/insertGateGvnProcessAgree" />
 
@@ -64,7 +64,7 @@
 
 
 						<div class="box-content">
-			
+
 
 							<form
 								action="${pageContext.request.contextPath}/insertGateGvnByCheckBoxes"
@@ -124,8 +124,18 @@
 												<tbody>
 													<c:forEach items="${gvnList}" var="gvnList"
 														varStatus="count">
+														<c:choose>
+															<c:when
+																test="${gvnList.grnGvnQtyAuto!=gvnList.grnGvnQty}">
 
-														<tr>
+																<c:set var="color" value="red"></c:set>
+															</c:when>
+															<c:otherwise>
+																<c:set var="color" value=""></c:set>
+															</c:otherwise>
+														</c:choose>
+
+														<tr bgcolor="${color}">
 															<c:choose>
 
 
@@ -167,27 +177,30 @@
 																name="approve_gate_login${gvnList.grnGvnId}"
 																id="approve_gate_login${gvnList.grnGvnId}"
 																value="${gvnList.approvedLoginGate}" /></td>
-																
-																
-																
-																
-																<c:set var ="qty" value="0"></c:set>
-																
-																<c:choose>
+
+
+
+
+															<c:set var="qty" value="0"></c:set>
+
+															<c:choose>
 																<c:when test="${gvnList.grnGvnStatus==1}">
-																	<c:set var ="qty" value="${gvnList.grnGvnQty}"></c:set>
+																	<c:set var="qty" value="${gvnList.grnGvnQty}"></c:set>
 																</c:when>
 																<c:otherwise>
-																	<c:set var ="qty" value="${gvnList.aprQtyGate}"></c:set>
+																	<c:set var="qty" value="${gvnList.aprQtyGate}"></c:set>
 																</c:otherwise>
 															</c:choose>
-															
-															
-															
-																<td align="center"><input type="text" name="gate_gvn_qty${gvnList.grnGvnId}" style="width: 50px" class="form-control"
-															id='gate_gvn_qty${gvnList.grnGvnId}' value="${qty}" onkeyup="checkQty(${gvnList.grnGvnId},${gvnList.grnGvnQty},${gvnList.aprQtyGate},${qty})"/></td>
-															
-																<%-- 
+
+
+
+															<td align="center"><input type="text"
+																name="gate_gvn_qty${gvnList.grnGvnId}"
+																style="width: 50px" class="form-control"
+																id='gate_gvn_qty${gvnList.grnGvnId}' value="${qty}"
+																onkeyup="checkQty(${gvnList.grnGvnId},${gvnList.grnGvnQty},${gvnList.aprQtyGate},${qty})" /></td>
+
+															<%-- 
 																<td align="center"><input type="text" name="gate_gvn_qty${gvnList.grnGvnId}" style="width: 50px" class="form-control"
 															id='gate_gvn_qty${gvnList.grnGvnId}' value="${gvnList.grnGvnQty}"/></td>
 																 --%>
@@ -204,32 +217,36 @@
 																</c:when>
 
 																<c:when test="${gvnList.grnGvnStatus==2}">
-																	<td align="left"><c:out value="approvedByGate"></c:out></td>
+																	<td align="left"><c:out
+																			value="Approved From Dispatch"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${gvnList.grnGvnStatus==3}">
-																	<td align="left"><c:out value="rejectByGate"></c:out></td>
+																	<td align="left"><c:out
+																			value="Reject From Dispatch"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${gvnList.grnGvnStatus==4}">
-																	<td align="left"><c:out value="approvedBystore"></c:out></td>
+																	<td align="left"><c:out value="Approved From Sell"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${gvnList.grnGvnStatus==5}">
-																	<td align="left"><c:out value="rejectByStore"></c:out></td>
+																	<td align="left"><c:out value="Reject From Sell"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${gvnList.grnGvnStatus==6}">
-																	<td align="left"><c:out value="approvedByAcc"></c:out></td>
+																	<td align="left"><c:out
+																			value="Approved From Account"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${gvnList.grnGvnStatus==7}">
-																	<td align="left"><c:out value="rejectByAcc"></c:out></td>
+																	<td align="left"><c:out
+																			value="Reject From Account"></c:out></td>
 
 																</c:when>
 
@@ -295,7 +312,8 @@
 
 																		<ul class="table-menu">
 
-																			<li><a href="" id="callSubmit" class="disableClick"
+																			<li><a href="" id="callSubmit"
+																				class="disableClick"
 																				onclick="insertGrnCall(${gvnList.grnGvnId})"> <i
 																					class="fa fa-check"></i></a></li>
 
@@ -348,7 +366,7 @@
 
 																		<ul class="table-menu">
 
-																			<li><a href="" id="callSubmit" 
+																			<li><a href="" id="callSubmit"
 																				onclick="insertGrnCall(${gvnList.grnGvnId})"> <i
 																					class="fa fa-check"></i></a></li>
 
@@ -425,7 +443,7 @@
 
 																			<td><ul class="table-menu">
 
-																					<li><a href="" id="callSubmit" 
+																					<li><a href="" id="callSubmit"
 																						class="disableClick"
 																						onclick="insertGrnCall(${gvnList.grnGvnId})">
 																							<i class="fa fa-check"></i>
@@ -433,8 +451,8 @@
 
 																					<li>
 																						<div class="dropdown">
-																							<a class="dropdown-toggle" href="#" id="disableMe"
-																								data-toggle="dropdown"><i
+																							<a class="dropdown-toggle" href="#"
+																								id="disableMe" data-toggle="dropdown"><i
 																								class="fa fa-times"></i></a>
 																							<div class="dropdown-menu">
 																								<div class="form">
@@ -481,7 +499,7 @@
 																			<td>
 																				<ul class="table-menu">
 
-																					<li><a href="" id="callSubmit" 
+																					<li><a href="" id="callSubmit"
 																						class="disableClick"
 																						onclick="insertGrnCall(${gvnList.grnGvnId})">
 																							<i class="fa fa-check"></i>
@@ -489,8 +507,8 @@
 
 																					<li>
 																						<div class="dropdown">
-																							<a class="dropdown-toggle" href="#" id="disableMe"
-																								data-toggle="dropdown"><i
+																							<a class="dropdown-toggle" href="#"
+																								id="disableMe" data-toggle="dropdown"><i
 																								class="fa fa-times"></i></a>
 																							<div class="dropdown-menu">
 																								<div class="form">
@@ -550,7 +568,7 @@
 
 																				<ul class="table-menu">
 
-																					<li><a href="" id="callSubmit" 
+																					<li><a href="" id="callSubmit"
 																						class="disableClick"
 																						onclick="insertGrnCall(${gvnList.grnGvnId})">
 																							<i class="fa fa-check"></i>
@@ -558,8 +576,8 @@
 
 																					<li>
 																						<div class="dropdown">
-																							<a class="dropdown-toggle" href="#" id="disableMe"
-																								data-toggle="dropdown"><i
+																							<a class="dropdown-toggle" href="#"
+																								id="disableMe" data-toggle="dropdown"><i
 																								class="fa fa-times"></i></a>
 																							<div class="dropdown-menu">
 																								<div class="form">
@@ -632,7 +650,7 @@
 			</div>
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+				<p>2017 © MONGINIS.</p>
 			</footer>
 
 
@@ -969,7 +987,7 @@ function getDate(){
 	});
 </script>
 
-<script type="text/javascript">
+	<script type="text/javascript">
 
 function checkQty(grnId,grnQty,aprQty,qty){
 	//alert("JJJ");
