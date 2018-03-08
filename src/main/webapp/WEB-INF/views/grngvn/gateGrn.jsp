@@ -168,7 +168,7 @@
 																	<td align="left"><c:out value="GRN 3"></c:out></td>
 																</c:when>
 																<c:when test="${grnList.grnType==4}">
-																	<td align="left"><c:out value="GRN 4"></c:out></td>
+																	<td align="left"><c:out value="GRN 3"></c:out></td>
 																</c:when>
 															</c:choose>
 

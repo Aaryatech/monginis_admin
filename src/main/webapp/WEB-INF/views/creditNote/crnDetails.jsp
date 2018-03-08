@@ -53,7 +53,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> GRN for Account
+								<i class="fa fa-bars"></i> Credit Note
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -76,7 +76,7 @@
 								<div class="box">
 									<div class="box-title">
 										<h3>
-											<i class="fa fa-table"></i> Credit Note Details List
+											<i class="fa fa-table"></i> Credit Note Details List for Credit Note Id : ${crnId}
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i
@@ -150,11 +150,11 @@
 																		</c:when>
 
 																		<c:when test="${crnDetail.grnType==2}">
-																			<c:set var="type" value="GRN -(2)"></c:set>
+																			<c:set var="type" value="GRN -(3)"></c:set>
 																		</c:when>
 
 																		<c:when test="${crnDetail.grnType==4}">
-																			<c:set var="type" value="GRN -(4)"></c:set>
+																			<c:set var="type" value="GRN -(3)"></c:set>
 																		</c:when>
 
 																	</c:choose>

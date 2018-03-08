@@ -564,7 +564,9 @@ System.out.println("in Side ");
 		System.out.println("In detail Page");
 		
 		RestTemplate restTemplate = new RestTemplate();
-
+		
+		
+		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 		map.add("crnId", crnId);
@@ -574,6 +576,8 @@ System.out.println("in Side ");
 		System.out.println("crn Detail List******** "+crnDetailList);
 		
 		model.addObject("crnDetailList",crnDetailList);
+		model.addObject("crnId",crnId);
+
 		
 		return model;
 	}

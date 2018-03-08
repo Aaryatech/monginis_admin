@@ -149,74 +149,19 @@
 													<tr>
 														<th class="col-md-1">Sr No</th>
 														<th class="col-md-1">Date</th>
+														<th class="col-md-2">Crn Id</th>
 														<th class="col-md-2">Franchise Name</th>
-
 														<th class="col-md-2">Taxable Amt</th>
 														<th class="col-md-2">Tax Amt</th>
 														<th class="col-md-2">Amount</th>
-														
-														<th class="col-md-2">Status</th>
 														<th class="col-md-2">Action</th>
 
 													</tr>
 
 												</thead>
 												<tbody>
-													<%-- <c:forEach items="${grnList}" var="grnList"
-														varStatus="count">
-
-														<tr>
-														<tr>
-															<td class="col-md-1"><c:out
-																	value="${grnList.grngvnSrno}" /> <input type="hidden"
-																name="headerId" id="headerId"
-																value="${grnList.grnGvnHeaderId}"></td>
-															<td class="col-md-1"><c:out
-																	value="${grnList.grngvnDate}" /></td>
-															<td class="col-md-1"><c:out
-																	value="${grnList.taxableAmt}" /></td>
-															<td class="col-md-1"><c:out
-																	value="${grnList.taxAmt}" /></td>
-															<td class="col-md-1"><c:out
-																	value="${grnList.totalAmt}" /></td>
-
-															<td class="col-md-1"><fmt:formatNumber type="number"
-																	minFractionDigits="2" maxFractionDigits="2"
-																	value="${grnList.apporvedAmt}" /> <c:out value="${grnList.taxableAmt}" /></td>
-															<c:set var="status" value="" />
-
-															<c:choose>
-																<c:when test="${grnList.grngvnStatus==1}">
-																	<c:set var="status" value="Pending" />
-																</c:when>
-																<c:when test="${grnList.grngvnStatus==2}">
-																	<c:set var="status" value="Approved By Dispatch" />
-																</c:when>
-																<c:when test="${grnList.grngvnStatus==3}">
-																	<c:set var="status" value="Reject By Dispatch" />
-																</c:when>
-																<c:when test="${grnList.grngvnStatus==8}">
-																	<c:set var="status" value="Partially Approved" />
-																</c:when>
-																<c:when test="${grnList.grngvnStatus==5}">
-																	<c:set var="status" value="Pending" />
-																</c:when>
-																<c:when test="${grnList.grngvnStatus==6}">
-																	<c:set var="status" value="Approved By Acc" />
-
-																</c:when>
-																<c:when test="${grnList.grngvnStatus==7}">
-																	<c:set var="status" value="Rejected By Acc" />
-																</c:when>
-															</c:choose>
-
-															<td class="col-md-1"><c:out value="${status}"></c:out></td>
-															<td class="col-md-1"><a
-																href="${pageContext.request.contextPath}/getAccGrnDetail/${grnList.grnGvnHeaderId}"
-																class="btn bnt-primary"> <i class="fa fa-list"></i></a></td>
-														</tr>
-													</c:forEach> --%>
-												</tbody>
+										
+												
 											</table>
 										</div>
 										<div
@@ -320,10 +265,8 @@
 
 			},
 			 function(data) {
-			
 			//alert(data);
 				var len = data.length;
-
 
 				$('#table1 td').remove();
 
@@ -334,6 +277,9 @@
 			  	tr.append($('<td></td>').html(key+1));
 
 			  	tr.append($('<td></td>').html(headers.crnDate));
+			  	
+			  	tr.append($('<td</td>').html(headers.crnId));
+
 
 			  	tr.append($('<td></td>').html(headers.frName));
 
@@ -343,19 +289,13 @@
 
 			  	tr.append($('<td></td>').html(headers.crnGrandTotal));
 
-			  	tr.append($('<td></td>').html("Status"));
-			  	
-			  	
 				tr.append($('<td ><a href="#" class="action_btn" onclick="getCrnDetail('+headers.crnId+')"><abbr title="Detail"><i class="fa fa-list"></i></abbr></a></td>'));
-
-			 	tr.append($('<td></td>').html("action"));
 			  
 				$('#table1 tbody').append(tr);
 
 			})
 
 			});
-
 
 		}
 	</script>
