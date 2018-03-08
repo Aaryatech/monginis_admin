@@ -49,7 +49,7 @@
 <tr>
 <td>Photo 1 :<img src="${imgUrl}${spCakeOrder.cusChoicePhoto}" height="8%" width="10%" style="border:medium;" alt=""></td>
 <td> </td><td> </td>&nbsp;&nbsp;&nbsp;
-<td>Photo 2 :<img src="${imgUrl2}${spCakeOrder.orderPhoto}" height="8%" width="10%" alt=""></td>
+<td>Photo 2 :<img src="${imgUrl2}${spCakeOrder.orderPhoto}" height="8%" width="10%" alt="${spCakeOrder.orderPhoto}"></td>
 </tr>
 </c:forEach>
 </body>

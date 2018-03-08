@@ -683,6 +683,7 @@ public class ProductionController {
 
 				System.out.println("item  Id " + getOrderItemQtyList.get(i).getItemId());
 			}
+			
 			RestTemplate restTemplate = new RestTemplate();
 
 			PostProductionHeader postProductionHeader = new PostProductionHeader();

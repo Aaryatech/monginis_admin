@@ -41,6 +41,7 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.RawMaterial.ItemDetailList;
+import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.itextpdf.FooterTable;
 import com.ats.adminpanel.model.production.GetOrderItemQty;
 import com.ats.adminpanel.model.production.GetProdPlanDetail;
@@ -182,20 +183,18 @@ public class ViewProdController {
 		try {
 			globalHeaderId = productionHeaderId;
 			System.out.println("After model ");
-
 			RestTemplate restTemplate = new RestTemplate();
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-			map.add("planHeaderId", productionHeaderId);
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("stockStatus", 0);
 
-			GetProdPlanDetailList prodDetail = restTemplate.postForObject(Constants.url + "getProdPlanDetail", map,
-					GetProdPlanDetailList.class);
+			FinishedGoodStock sHeader = restTemplate.postForObject(Constants.url + "getFinGoodStockHeader", map,
+					FinishedGoodStock.class);
 
-			prodPlanDetailList = new ArrayList<>();
+			System.out.println("stock Header " + sHeader.toString());
 
-			prodPlanDetailList = prodDetail.getProdPlanDetail();
-
-			System.out.println("Porduction Details Received " + prodPlanDetailList.toString());
+			Date stockHeaderDate = sHeader.getFinGoodStockDate();
 
 			GetProdPlanHeader planHeader = new GetProdPlanHeader();
 
@@ -214,256 +213,282 @@ public class ViewProdController {
 			pdfPlanHeader = planHeader;
 			globalProdDate = planHeader.getProductionDate();
 
-			globalProductionBatch = planHeader.getProductionBatch();
-			globalTimeSlot = planHeader.getTimeSlot();
-			productionId = planHeader.getProductionHeaderId();
-			isMixing = planHeader.getIsMixing();
-			for (int j = 0; j < prodPlanDetailList.size(); j++) {
-				PostProductionPlanDetail postProductionPlanDetail = new PostProductionPlanDetail();
-				postProductionPlanDetail.setProductionDetailId(prodPlanDetailList.get(j).getProductionDetailId());
-				postProductionPlanDetail.setItemId(prodPlanDetailList.get(j).getItemId());
-				postProductionPlanDetail.setOpeningQty(prodPlanDetailList.get(j).getOpeningQty());
-				postProductionPlanDetail.setPlanQty(prodPlanDetailList.get(j).getPlanQty());
-				postProductionPlanDetail.setProductionBatch(prodPlanDetailList.get(j).getProductionBatch());
-				postProductionPlanDetail.setProductionDate(prodPlanDetailList.get(j).getProductionDate());
-				postProductionPlanDetail.setProductionHeaderId(prodPlanDetailList.get(j).getProductionHeaderId());
-				postProductionPlanDetail.setProductionQty(prodPlanDetailList.get(j).getProductionQty());
-				postProductionPlanDetail.setOrderQty(prodPlanDetailList.get(j).getOrderQty());
-				postProductionPlanDetail.setRejectedQty(prodPlanDetailList.get(j).getRejectedQty());
-				postProdPlanDetailList.add(postProductionPlanDetail);
+			String prompt;
+			if (stockHeaderDate.before(new SimpleDateFormat("yyyy-MM-dd").parse(globalProdDate))) {
+
+				System.err.println("prod Date is Afrer Stock Date");
+				System.out.println("Alert");
+
+				prompt = "Please Close your Production First";
+
+				model.addObject("msg", prompt);
 			}
 
-			// new Code
-			updateStockDetailList = new ArrayList<>();
+			else {
 
-			try {
+				map.add("planHeaderId", productionHeaderId);
 
-				map = new LinkedMultiValueMap<String, Object>();
-				map.add("stockDate", globalProdDate);
-				System.out.println("global Prod Date for prod Detail " + globalProdDate);
+				GetProdPlanDetailList prodDetail = restTemplate.postForObject(Constants.url + "getProdPlanDetail", map,
+						GetProdPlanDetailList.class);
 
-				FinishedGoodStock stockHeader = restTemplate
-						.postForObject(Constants.url + "getFinGoodStockHeaderByDate", map, FinishedGoodStock.class);
-				DateFormat dfYmd = new SimpleDateFormat("yyyy-MM-dd");
+				prodPlanDetailList = new ArrayList<>();
 
-				/*
-				 * FinishedGoodStock stockHeader = restTemplate.postForObject(Constants.url +
-				 * "getFinGoodStockHeader", map, FinishedGoodStock.class);
-				 */
-				System.out.println("stock Header " + stockHeader.toString());
-				if (stockHeader.getFinGoodStockStatus() == 0) {
+				prodPlanDetailList = prodDetail.getProdPlanDetail();
 
-					Date stockDate = stockHeader.getFinGoodStockDate();
+				System.out.println("Porduction Details Received " + prodPlanDetailList.toString());
 
-					List<GetCurProdAndBillQty> getCurProdAndBillQty = new ArrayList<>();
+				globalProductionBatch = planHeader.getProductionBatch();
+				globalTimeSlot = planHeader.getTimeSlot();
+				productionId = planHeader.getProductionHeaderId();
+				isMixing = planHeader.getIsMixing();
+				for (int j = 0; j < prodPlanDetailList.size(); j++) {
+					PostProductionPlanDetail postProductionPlanDetail = new PostProductionPlanDetail();
+					postProductionPlanDetail.setProductionDetailId(prodPlanDetailList.get(j).getProductionDetailId());
+					postProductionPlanDetail.setItemId(prodPlanDetailList.get(j).getItemId());
+					postProductionPlanDetail.setOpeningQty(prodPlanDetailList.get(j).getOpeningQty());
+					postProductionPlanDetail.setPlanQty(prodPlanDetailList.get(j).getPlanQty());
+					postProductionPlanDetail.setProductionBatch(prodPlanDetailList.get(j).getProductionBatch());
+					postProductionPlanDetail.setProductionDate(prodPlanDetailList.get(j).getProductionDate());
+					postProductionPlanDetail.setProductionHeaderId(prodPlanDetailList.get(j).getProductionHeaderId());
+					postProductionPlanDetail.setProductionQty(prodPlanDetailList.get(j).getProductionQty());
+					postProductionPlanDetail.setOrderQty(prodPlanDetailList.get(j).getOrderQty());
+					postProductionPlanDetail.setRejectedQty(prodPlanDetailList.get(j).getRejectedQty());
+					postProdPlanDetailList.add(postProductionPlanDetail);
+				}
+
+				// new Code
+				updateStockDetailList = new ArrayList<>();
+
+				try {
+
 					map = new LinkedMultiValueMap<String, Object>();
+					map.add("stockDate", globalProdDate);
+					System.out.println("global Prod Date for prod Detail " + globalProdDate);
 
-					System.out.println("stock date " + stockDate);
-					String stkDate = dfYmd.format(stockDate);
-					// int selCate=Integer.parseInt(selectedCat);
-					System.out.println("stk Date for get Cur Prod and Bill Qty " + stkDate);
+					FinishedGoodStock stockHeader = restTemplate
+							.postForObject(Constants.url + "getFinGoodStockHeaderByDate", map, FinishedGoodStock.class);
+					DateFormat dfYmd = new SimpleDateFormat("yyyy-MM-dd");
 
-					System.out.println("stk CatId for get Cur Prod and Bill Qty " + planHeader.getCatId());
+					/*
+					 * FinishedGoodStock stockHeader = restTemplate.postForObject(Constants.url +
+					 * "getFinGoodStockHeader", map, FinishedGoodStock.class);
+					 */
+					System.out.println("stock Header " + stockHeader.toString());
+					if (stockHeader.getFinGoodStockStatus() == 0) {
 
-					map.add("prodDate", stkDate);
-					map.add("catId", planHeader.getCatId());
-					map.add("delStatus", 0);
+						Date stockDate = stockHeader.getFinGoodStockDate();
 
-					map.add("timestamp", stockHeader.getTimestamp());
+						List<GetCurProdAndBillQty> getCurProdAndBillQty = new ArrayList<>();
+						map = new LinkedMultiValueMap<String, Object>();
 
-					DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					Calendar cal = Calendar.getInstance();
+						System.out.println("stock date " + stockDate);
+						String stkDate = dfYmd.format(stockDate);
+						// int selCate=Integer.parseInt(selectedCat);
+						System.out.println("stk Date for get Cur Prod and Bill Qty " + stkDate);
 
-					map.add("curTimeStamp", dateFormat.format(cal.getTime()));
+						System.out.println("stk CatId for get Cur Prod and Bill Qty " + planHeader.getCatId());
 
-					getCurProdAndBillQtyList = restTemplate.postForObject(Constants.url + "getCurrentProdAndBillQty",
-							map, GetCurProdAndBillQtyList.class);
+						map.add("prodDate", stkDate);
+						map.add("catId", planHeader.getCatId());
+						map.add("delStatus", 0);
 
-					getCurProdAndBillQty = getCurProdAndBillQtyList.getGetCurProdAndBillQty();
+						map.add("timestamp", stockHeader.getTimestamp());
 
-					System.out.println("Cur Prod And Bill Qty Listy " + getCurProdAndBillQty.toString());
-					DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						Calendar cal = Calendar.getInstance();
 
-					String stockkDate = df.format(stockDate);
-					map = new LinkedMultiValueMap<String, Object>();
-					map.add("stockDate", stockkDate);
-					map.add("catId", planHeader.getCatId());
-					ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
-					};
-					ResponseEntity<List<FinishedGoodStockDetail>> responseEntity = restTemplate.exchange(
-							Constants.url + "getFinGoodStockDetail", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+						map.add("curTimeStamp", dateFormat.format(cal.getTime()));
 
-					List<FinishedGoodStockDetail> finGoodDetail = responseEntity.getBody();
+						getCurProdAndBillQtyList = restTemplate.postForObject(
+								Constants.url + "getCurrentProdAndBillQty", map, GetCurProdAndBillQtyList.class);
 
-					System.out.println("Finished Good Stock Detail " + finGoodDetail.toString());
+						getCurProdAndBillQty = getCurProdAndBillQtyList.getGetCurProdAndBillQty();
 
-					FinishedGoodStockDetail stockDetail = new FinishedGoodStockDetail();
-					GetCurProdAndBillQty curProdBilQty = new GetCurProdAndBillQty();
+						System.out.println("Cur Prod And Bill Qty Listy " + getCurProdAndBillQty.toString());
+						DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
 
-					for (int i = 0; i < getCurProdAndBillQty.size(); i++) {
+						String stockkDate = df.format(stockDate);
+						map = new LinkedMultiValueMap<String, Object>();
+						map.add("stockDate", stockkDate);
+						map.add("catId", planHeader.getCatId());
+						ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
+						};
+						ResponseEntity<List<FinishedGoodStockDetail>> responseEntity = restTemplate.exchange(
+								Constants.url + "getFinGoodStockDetail", HttpMethod.POST, new HttpEntity<>(map),
+								typeRef);
 
-						curProdBilQty = getCurProdAndBillQty.get(i);
+						List<FinishedGoodStockDetail> finGoodDetail = responseEntity.getBody();
 
-						for (int j = 0; j < finGoodDetail.size(); j++) {
+						System.out.println("Finished Good Stock Detail " + finGoodDetail.toString());
 
-							stockDetail = finGoodDetail.get(j);
+						FinishedGoodStockDetail stockDetail = new FinishedGoodStockDetail();
+						GetCurProdAndBillQty curProdBilQty = new GetCurProdAndBillQty();
 
-							if (curProdBilQty.getId() == stockDetail.getItemId()) {
+						for (int i = 0; i < getCurProdAndBillQty.size(); i++) {
 
-								System.out.println(
-										"item Id Matched " + curProdBilQty.getId() + "and " + stockDetail.getItemId());
+							curProdBilQty = getCurProdAndBillQty.get(i);
 
-								float a = 0, b = 0, c = 0;
+							for (int j = 0; j < finGoodDetail.size(); j++) {
 
-								float cloT1 = 0;
-								float cloT2 = 0;
-								float cloT3 = 0;
+								stockDetail = finGoodDetail.get(j);
 
-								float curClosing = 0;
+								if (curProdBilQty.getId() == stockDetail.getItemId()) {
 
-								float totalClosing = 0;
+									System.out.println("item Id Matched " + curProdBilQty.getId() + "and "
+											+ stockDetail.getItemId());
 
-								int billQty = curProdBilQty.getBillQty() + curProdBilQty.getDamagedQty();
-								int prodQty = curProdBilQty.getProdQty();
-								int rejQty = curProdBilQty.getRejectedQty();
+									float a = 0, b = 0, c = 0;
 
-								float t1 = stockDetail.getOpT1();
-								float t2 = stockDetail.getOpT2();
-								float t3 = stockDetail.getOpT3();
+									float cloT1 = 0;
+									float cloT2 = 0;
+									float cloT3 = 0;
 
-								System.out.println("t1 : " + t1 + " t2: " + t2 + " t3: " + t3);
+									float curClosing = 0;
 
-								if (t3 > 0) {
+									float totalClosing = 0;
 
-									if (billQty < t3) {
-										c = billQty;
-									} else {
-										c = t3;
-									}
+									int billQty = curProdBilQty.getBillQty() + curProdBilQty.getDamagedQty();
+									int prodQty = curProdBilQty.getProdQty();
+									int rejQty = curProdBilQty.getRejectedQty();
 
-								} // end of t3>0
+									float t1 = stockDetail.getOpT1();
+									float t2 = stockDetail.getOpT2();
+									float t3 = stockDetail.getOpT3();
 
-								if (t2 > 0) {
+									System.out.println("t1 : " + t1 + " t2: " + t2 + " t3: " + t3);
 
-									if ((billQty - c) < t2) {
-										b = (billQty - c);
-									} else {
+									if (t3 > 0) {
 
-										b = t2;
-									}
+										if (billQty < t3) {
+											c = billQty;
+										} else {
+											c = t3;
+										}
 
-								} // end of t2>0
+									} // end of t3>0
 
-								if (t1 > 0) {
+									if (t2 > 0) {
 
-									if ((billQty - c - b) < t1) {
+										if ((billQty - c) < t2) {
+											b = (billQty - c);
+										} else {
 
-										a = (billQty - b - c);
+											b = t2;
+										}
 
-									} else {
+									} // end of t2>0
 
-										a = t1;
-									}
-								} // end of if t1>0
+									if (t1 > 0) {
 
-								System.out.println("---------");
-								System.out.println("bill Qty = " + curProdBilQty.getBillQty());
-								System.out.println(" for Item Id " + curProdBilQty.getId());
-								System.out.println("a =" + a + "b = " + b + "c= " + c);
-								float damagedQty = curProdBilQty.getDamagedQty();
+										if ((billQty - c - b) < t1) {
 
-								float curIssue = billQty - (a + b + c);
+											a = (billQty - b - c);
 
-								System.out.println("cur Issue qty =" + curIssue);
+										} else {
 
-								cloT1 = t1 - a;
-								cloT2 = t2 - b;
-								cloT3 = t3 - c;
+											a = t1;
+										}
+									} // end of if t1>0
 
-								curClosing = prodQty - rejQty - curIssue;
+									System.out.println("---------");
+									System.out.println("bill Qty = " + curProdBilQty.getBillQty());
+									System.out.println(" for Item Id " + curProdBilQty.getId());
+									System.out.println("a =" + a + "b = " + b + "c= " + c);
+									float damagedQty = curProdBilQty.getDamagedQty();
 
-								totalClosing = ((t1 + t2 + t3) + (prodQty - rejQty)) - billQty;
-								stockDetail.setCloCurrent(curClosing);
-								stockDetail.setCloT1(cloT1);
-								stockDetail.setCloT2(cloT2);
-								stockDetail.setCloT3(cloT3);
-								stockDetail.setFrSaleQty(billQty);
-								stockDetail.setGateSaleQty(damagedQty);
-								stockDetail.setProdQty(prodQty);
-								stockDetail.setRejQty(rejQty);
-								stockDetail.setTotalCloStk(totalClosing);
+									float curIssue = billQty - (a + b + c);
 
-								updateStockDetailList.add(stockDetail);
+									System.out.println("cur Issue qty =" + curIssue);
 
-								System.out.println("closing Qty  : t1 " + cloT1 + " t2 " + cloT2 + " t3 " + cloT3);
+									cloT1 = t1 - a;
+									cloT2 = t2 - b;
+									cloT3 = t3 - c;
 
-								System.out.println("cur Closing " + curClosing);
-								System.out.println("total closing " + totalClosing);
+									curClosing = prodQty - rejQty - curIssue;
 
-								System.out.println("---------");
+									totalClosing = ((t1 + t2 + t3) + (prodQty - rejQty)) - billQty;
+									stockDetail.setCloCurrent(curClosing);
+									stockDetail.setCloT1(cloT1);
+									stockDetail.setCloT2(cloT2);
+									stockDetail.setCloT3(cloT3);
+									stockDetail.setFrSaleQty(billQty);
+									stockDetail.setGateSaleQty(damagedQty);
+									stockDetail.setProdQty(prodQty);
+									stockDetail.setRejQty(rejQty);
+									stockDetail.setTotalCloStk(totalClosing);
 
-							} // end of if isSameItem =true
-						} // end of Inner For Loop
-					} // End of outer For loop
+									updateStockDetailList.add(stockDetail);
 
-				} // end of if stockStatus ==0
+									System.out.println("closing Qty  : t1 " + cloT1 + " t2 " + cloT2 + " t3 " + cloT3);
 
-				else {
-					System.out.println("Else Calc Stock Bet Date ");
+									System.out.println("cur Closing " + curClosing);
+									System.out.println("total closing " + totalClosing);
 
-					// calc Stock Between Date
-					Date stockDate = stockHeader.getFinGoodStockDate();
-					
-					System.out.println("stock date " + stockDate);
-					String stkDate = dfYmd.format(stockDate);
-					
-					map = new LinkedMultiValueMap<String, Object>();
+									System.out.println("---------");
 
-					map.add("catId", planHeader.getCatId());
-					map.add("fromDate", stkDate);
-					map.add("toDate",  stkDate);
-					ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
-					};
-					ResponseEntity<List<FinishedGoodStockDetail>> responseEntity = restTemplate.exchange(
-							Constants.url + "getFinGoodStockBetTwoDateByCat", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+								} // end of if isSameItem =true
+							} // end of Inner For Loop
+						} // End of outer For loop
 
-					updateStockDetailList = responseEntity.getBody();
-					
+					} // end of if stockStatus ==0
+
+					else {
+						System.out.println("Else Calc Stock Bet Date ");
+
+						// calc Stock Between Date
+						Date stockDate = stockHeader.getFinGoodStockDate();
+
+						System.out.println("stock date " + stockDate);
+						String stkDate = dfYmd.format(stockDate);
+
+						map = new LinkedMultiValueMap<String, Object>();
+
+						map.add("catId", planHeader.getCatId());
+						map.add("fromDate", stkDate);
+						map.add("toDate", stkDate);
+						ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
+						};
+						ResponseEntity<List<FinishedGoodStockDetail>> responseEntity = restTemplate.exchange(
+								Constants.url + "getFinGoodStockBetTwoDateByCat", HttpMethod.POST,
+								new HttpEntity<>(map), typeRef);
+
+						updateStockDetailList = responseEntity.getBody();
+
+					}
+				} catch (Exception e) {
+					System.out.println("Excein Prod Controller get Current Fin good Stock " + e.getMessage());
+					e.printStackTrace();
 
 				}
-			} catch (Exception e) {
-				System.out.println("Excein Prod Controller get Current Fin good Stock " + e.getMessage());
-				e.printStackTrace();
 
-			}
+				int status = Integer.valueOf(planHeader.getProductionStatus());
+				System.out.println("status" + status);
+				for (int i = 0; i < prodPlanDetailList.size(); i++) {
 
-			int status = Integer.valueOf(planHeader.getProductionStatus());
-			System.out.println("status" + status);
-			for (int i = 0; i < prodPlanDetailList.size(); i++) {
+					for (int j = 0; j < updateStockDetailList.size(); j++) {
 
-				for (int j = 0; j < updateStockDetailList.size(); j++) {
+						if (prodPlanDetailList.get(i).getItemId() == updateStockDetailList.get(j).getItemId()) {
 
-					if (prodPlanDetailList.get(i).getItemId() == updateStockDetailList.get(j).getItemId()) {
+							prodPlanDetailList.get(i).setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
 
-						prodPlanDetailList.get(i).setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
+							prodPlanDetailList.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk());
 
-						prodPlanDetailList.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk());
+							if (status < 4) {
+								prodPlanDetailList.get(i)
+										.setOpeningQty((int) updateStockDetailList.get(j).getOpTotal());
+							}
 
-						if (status < 4) {
-							prodPlanDetailList.get(i).setOpeningQty((int) updateStockDetailList.get(j).getOpTotal());
 						}
 
 					}
 
 				}
 
-			}
+				// end of new Code
+				model.addObject("planDetail", prodPlanDetailList);
 
-			// end of new Code
-			model.addObject("planDetail", prodPlanDetailList);
-
-			model.addObject("planHeader", planHeader);
-
+				model.addObject("planHeader", planHeader);
+			} // End of ELse
 		} catch (Exception e) {
 
 			System.out.println("in catch model show Prod Detail  ");
@@ -600,7 +625,7 @@ public class ViewProdController {
 			System.out.println("Page no " + totalPages);
 
 			document.close();
-//Atul Sir code to open a Pdf File 
+			// Atul Sir code to open a Pdf File
 			if (file != null) {
 
 				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
@@ -698,10 +723,98 @@ public class ViewProdController {
 			int productionId = Integer.parseInt(request.getParameter("production_id"));
 			int isPlan = Integer.parseInt(request.getParameter("is_plan"));
 			prodId = productionId;
+			int prodUnit = Integer.parseInt(request.getParameter("prodUnit"));
 
+			System.err.println("Prod Unit = " + prodUnit);
+
+			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+			Date date = new Date();
+			System.out.println(dateFormat.format(date));
+
+			Calendar cal = Calendar.getInstance();
+			cal.setTime(date);
+
+			// Integer dayOfMonth = cal.get(Calendar.DATE);
+			String prodBatch = new String();
+			prodBatch = prodBatch.concat("GF" + "-");
+
+			if (prodUnit == 1) {
+				System.err.println("Prod Unit = " +"Shendra");
+				
+				prodBatch = prodBatch.concat("S");
+			} else {
+				System.err.println("Prod Unit = " +"Chikhalthana");
+				prodBatch = prodBatch.concat("C");
+			}
+			
+			//int serial=1;
+			
+			int calCurrentMonth = cal.get(Calendar.MONTH) + 1;
+			System.out.println("Current Cal Month " + calCurrentMonth);
+
+			if (calCurrentMonth == 1) {
+				prodBatch = prodBatch.concat("A");
+			} else if (calCurrentMonth == 2) {
+				prodBatch = prodBatch.concat("B");
+			} else if (calCurrentMonth == 3) {
+				prodBatch = prodBatch.concat("C");
+			} else if (calCurrentMonth == 4) {
+				prodBatch = prodBatch.concat("D");
+			} else if (calCurrentMonth == 5) {
+				prodBatch = prodBatch.concat("E");
+			} else if (calCurrentMonth == 6) {
+				prodBatch = prodBatch.concat("F");
+			} else if (calCurrentMonth == 7) {
+				prodBatch = prodBatch.concat("G");
+			} else if (calCurrentMonth == 8) {
+				prodBatch = prodBatch.concat("H");
+			} else if (calCurrentMonth == 9) {
+				prodBatch = prodBatch.concat("I");
+			} else if (calCurrentMonth == 10) {
+				prodBatch = prodBatch.concat("J");
+			} else if (calCurrentMonth == 11) {
+				prodBatch = prodBatch.concat("K");
+			} else if (calCurrentMonth == 12) {
+				prodBatch = prodBatch.concat("L");
+			}
+
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			String settingKey1 = new String();
+			settingKey1 = "prod_month"+","+"prod_batch_srno";
+			map.add("settingKeyList", settingKey1);
+			FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			int serial=settingList1.getFrItemStockConfigure().get(1).getSettingValue();
+			int month=settingList1.getFrItemStockConfigure().get(0).getSettingValue();
+			
+			System.out.println("prod sr No  ="+serial + "month Name = " +month);
+			
+			if(calCurrentMonth!=month) {
+				map = new LinkedMultiValueMap<String, Object>();
+				System.err.println("Month not matched  Reset counter of srno ");
+				
+				map.add("settingValue", 1);
+
+				map.add("settingKey", "prod_batch_srno");
+
+				Info updateSetting = restTemplate.postForObject(Constants.url + "updateSeetingForPB", map,
+						Info.class);
+				System.err.println("Month not matched call for Update prod_month value in setting table ");
+				
+			}
+			
 			System.out.println("completeProd prodStatus" + prodStatus);
 
 			for (int i = 0; i < postProdPlanDetailList.size(); i++) {
+				
+				System.err.println("Batch =="+prodBatch.concat("-"+serial));
+				//prodBatch=prodBatch.concat("-"+serial);
+				//int prodQty = 0,opTotal = 0, rejQty = 0;
 				int prodQty = Integer.parseInt(
 						request.getParameter("act_prod_qty" + postProdPlanDetailList.get(i).getProductionDetailId()));
 				float opTotal = Float.parseFloat(
@@ -714,59 +827,60 @@ public class ViewProdController {
 				postProdPlanDetailList.get(i).setProductionQty(prodQty);
 				postProdPlanDetailList.get(i).setOpeningQty((int) opTotal);
 				postProdPlanDetailList.get(i).setRejectedQty((int) rejQty);
-
+				
+				postProdPlanDetailList.get(i).setProductionBatch(prodBatch+"-"+serial);
+				serial=serial+1;
+				
 			}
+			map.add("settingValue", serial);
 
+			map.add("settingKey", "prod_batch_srno");
+
+			Info updateSetting = restTemplate.postForObject(Constants.url + "updateSeetingForPB", map,
+					Info.class);
 			System.out.println("ItemDetail List:" + postProdPlanDetailList.toString());
 
-			RestTemplate restTemplate = new RestTemplate();
+			//RestTemplate restTemplate = new RestTemplate();
 
-			Info info = restTemplate.postForObject(Constants.url + "updateProdQty", postProdPlanDetailList, Info.class);
-
-			if (info.getError() == false) {
-
-				RestTemplate rest = new RestTemplate();
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				map.add("productionId", productionId);
-				if (isPlan == 1) {
-					map.add("prodStatus", 4);
-
-				} else {
-					map.add("prodStatus", 5);
-
-				}
-
-				int isUpdated = rest.postForObject(Constants.url + "updateProductionStatus", map, Integer.class);
-
-				System.out.println("isProdUpdated:" + isUpdated);
-
-				if (isUpdated == 1) {
-
-					map = new LinkedMultiValueMap<String, Object>();
-					map.add("prodId", productionId);
-					map.add("isProduction", 1);
-					System.out.println("map" + map);
-
-					info = rest.postForObject(Constants.url + "/updateStatusWhileCompletProd", map, Info.class);
-					System.out.println("info" + info);
-				}
-
-				try {
-					map = new LinkedMultiValueMap<String, Object>();
-					map.add("fromDate", fromDate);
-					map.add("toDate", toDate);
-
-					GetProdPlanHeaderList prodHeader = restTemplate.postForObject(Constants.url + "getProdPlanHeader",
-							map, GetProdPlanHeaderList.class);
-
-					prodPlanHeaderList = new ArrayList<>();
-
-					prodPlanHeaderList = prodHeader.getProdPlanHeader();
-				} catch (Exception e) {
-					System.out.println("Exception In Complete Production:" + e.getMessage());
-				}
-			}
-			System.out.println("Info" + info.toString());
+			
+			 Info info = restTemplate.postForObject(Constants.url + "updateProdQty",
+			 postProdPlanDetailList, Info.class);
+			 
+			 if (info.getError() == false) {
+			 
+			  map =
+			 new LinkedMultiValueMap<String, Object>(); map.add("productionId",
+			  productionId); if (isPlan == 1) { map.add("prodStatus", 4);
+			 
+			 } else { map.add("prodStatus", 5);
+			 
+			  }
+			  
+			  int isUpdated = restTemplate.postForObject(Constants.url + "updateProductionStatus",
+			  map, Integer.class);
+			  
+			  System.out.println("isProdUpdated:" + isUpdated);
+			  
+			  if (isUpdated == 1) {
+			  
+			  map = new LinkedMultiValueMap<String, Object>(); map.add("prodId",
+			  productionId); map.add("isProduction", 1); System.out.println("map" + map);
+			  
+			  info = restTemplate.postForObject(Constants.url + "/updateStatusWhileCompletProd",
+			  map, Info.class); System.out.println("info" + info); }
+			  
+			  try { map = new LinkedMultiValueMap<String, Object>(); map.add("fromDate",
+			  fromDate); map.add("toDate", toDate);
+			  
+			  GetProdPlanHeaderList prodHeader = restTemplate.postForObject(Constants.url +
+			  "getProdPlanHeader", map, GetProdPlanHeaderList.class);
+			  
+			  prodPlanHeaderList = new ArrayList<>();
+			  
+			  prodPlanHeaderList = prodHeader.getProdPlanHeader(); } catch (Exception e) {
+			  System.out.println("Exception In Complete Production:" + e.getMessage()); } }
+			  System.out.println("Info" + info.toString());
+			 
 		} catch (Exception e) {
 			System.out.println("Exception In complete Production");
 			e.printStackTrace();
@@ -805,16 +919,15 @@ public class ViewProdController {
 			// getSFPlanDetailForMixingList.getSfPlanDetailForMixing();
 			mav.addObject("mixingList", prodMixingReqP1);
 			System.out.println("sf Plan Detail For Mixing  " + sfPlanDetailForMixing.toString());
-			//ceil fun 6 feb
-			for(int i=0;i<prodMixingReqP1.size();i++) {
-				
-				System.out.println("total === "+prodMixingReqP1.get(i).getTotal());
-				
-				prodMixingReqP1.get(i).setTotal((int)Math.ceil(prodMixingReqP1.get(i).getTotal()));
-				
-				System.out.println("total seiled new  "+prodMixingReqP1.get(i).getTotal());
-				
-				
+			// ceil fun 6 feb
+			for (int i = 0; i < prodMixingReqP1.size(); i++) {
+
+				System.out.println("total === " + prodMixingReqP1.get(i).getTotal());
+
+				prodMixingReqP1.get(i).setTotal((int) Math.ceil(prodMixingReqP1.get(i).getTotal()));
+
+				System.out.println("total seiled new  " + prodMixingReqP1.get(i).getTotal());
+
 			}
 
 			TempMixing tempMx = null;
@@ -968,15 +1081,15 @@ public class ViewProdController {
 
 		System.out.println("calc Started ");
 		boolean isSameItem = false;
-		ProdMixingReqP1 newItem =new ProdMixingReqP1();
-		ProdMixingReqP1 planMixingP1=new ProdMixingReqP1();
-		
-		GetTempMixItemDetail tempMixItem=new GetTempMixItemDetail();
-		for (int j = 0; j < tempMixItemDetail.size(); j++) {
-			
-			tempMixItem=new GetTempMixItemDetail();
+		ProdMixingReqP1 newItem = new ProdMixingReqP1();
+		ProdMixingReqP1 planMixingP1 = new ProdMixingReqP1();
 
-			 tempMixItem = tempMixItemDetail.get(j);
+		GetTempMixItemDetail tempMixItem = new GetTempMixItemDetail();
+		for (int j = 0; j < tempMixItemDetail.size(); j++) {
+
+			tempMixItem = new GetTempMixItemDetail();
+
+			tempMixItem = tempMixItemDetail.get(j);
 
 			for (int i = 0; i < prodMixingReqP1.size(); i++) {
 				planMixingP1 = new ProdMixingReqP1();
@@ -997,7 +1110,7 @@ public class ViewProdController {
 				newItem.setRmName(tempMixItem.getRmName());
 				newItem.setRmType(tempMixItem.getRmType());
 				newItem.setRmId(tempMixItem.getRmId());
-				newItem.setTotal((int) Math.ceil(tempMixItem.getTotal()));//do not multiply mulFact
+				newItem.setTotal((int) Math.ceil(tempMixItem.getTotal()));// do not multiply mulFact
 				newItem.setUom(tempMixItem.getUom());
 				newItem.setMulFactor(tempMixItem.getMulFactor());
 				newItem.setPrevTotal(tempMixItem.getTotal());
@@ -1048,7 +1161,8 @@ public class ViewProdController {
 			mixingDetailed.setUom(prodMixingReqP1.get(i).getUom());
 			mixingDetailed.setMixingDate(date);
 			mixingDetailed.setExBool1(0);
-			mixingDetailed.setExInt2((int)prodMixingReqP1.get(i).getMulFactor());//temp it is typecasted  to insert mulfactor
+			mixingDetailed.setExInt2((int) prodMixingReqP1.get(i).getMulFactor());// temp it is typecasted to insert
+																					// mulfactor
 			mixingDetailed.setExInt1(0);
 			mixingDetailed.setExInt3(0);
 			mixingDetailed.setExVarchar1("");
@@ -1081,11 +1195,12 @@ public class ViewProdController {
 		map = new LinkedMultiValueMap<String, Object>();
 		map.add("productionId", prodId);
 		map.add("flag", 0);
-		int updateisMixing = rest.postForObject(Constants.url + "updateisMixingandBom", map, Integer.class);
-
+		if (mixingHeaderin != null) {
+			int updateisMixing = rest.postForObject(Constants.url + "updateisMixingandBom", map, Integer.class);
+		}
 		System.out.println(mixingHeaderin.toString());
 
-		return "redirect:/getMixingList";
+		return "redirect:/getMixingListByProduction";
 
 	}
 

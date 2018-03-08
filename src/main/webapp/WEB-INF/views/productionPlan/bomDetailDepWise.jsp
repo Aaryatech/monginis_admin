@@ -264,7 +264,7 @@
 
 	<div style="text-align: center;">
 								<a href="${pageContext.request.contextPath}/showProdBOMPdf"
-								target="_blank">PDF</a>
+								target="_blank"><input type="button" value="PDF" class="btn btn-primary"/></a>
 								</div>
 
 								<div class="box-content"></div>

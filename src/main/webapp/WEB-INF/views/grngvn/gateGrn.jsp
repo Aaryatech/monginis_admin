@@ -106,9 +106,18 @@
 												</thead>
 												<tbody>
 													<c:forEach items="${grnList}" var="grnList"
-														varStatus="count">
+														varStatus="count"> 
+														 <c:choose> 
+														<c:when test="${grnList.grnGvnQtyAuto!=grnList.grnGvnQty}">
+														
+														<c:set var="color" value="red"></c:set> 
+														</c:when>
+														<c:otherwise>
+														<c:set var="color" value=""></c:set>
+														</c:otherwise>
+														</c:choose> 
 
-														<tr>
+														<tr bgcolor="${color}">
 															<c:choose>
 																<c:when test="${grnList.grnGvnStatus==2}">
 																	<td><input type="checkbox" name="select_to_agree"
@@ -159,7 +168,7 @@
 																	<td align="left"><c:out value="GRN 3"></c:out></td>
 																</c:when>
 																<c:when test="${grnList.grnType==4}">
-																	<td align="left"><c:out value="GRN 4"></c:out></td>
+																	<td align="left"><c:out value="GRN 3"></c:out></td>
 																</c:when>
 															</c:choose>
 
@@ -171,27 +180,40 @@
 																name="approve_gate_login${grnList.grnGvnId}"
 																id="approve_gate_login${grnList.grnGvnId}"
 																value="${grnList.approvedLoginGate}" /></td>
-
+															
+															<c:set var="qty" value="0"></c:set>
 
 															<c:choose>
 
 																<c:when test="${grnList.grnGvnStatus==1}">
-																	<td align="center"><input type="text"
+
+
+																	<c:set var="qty" value="${grnList.grnGvnQty}"></c:set>
+
+																	<%-- <td align="center"><input type="text"
 																		name="gate_grn_qty${grnList.grnGvnId}"
 																		class="form-control" style="width: 50px"
 																		id='gate_grn_qty${grnList.grnGvnId}'
-																		value="${grnList.grnGvnQty}" /></td>
+																		value="${grnList.grnGvnQty}" /></td> --%>
 																</c:when>
 
 																<c:otherwise>
-																	<td align="center"><input type="text"
+
+																	<c:set var="qty" value="${grnList.aprQtyGate}"></c:set>
+																	<%-- <td align="center"><input type="text"
 																		name="gate_grn_qty${grnList.grnGvnId}"
 																		class="form-control" style="width: 50px"
 																		id='gate_grn_qty${grnList.grnGvnId}'
-																		value="${grnList.aprQtyGate}" /></td>
+																		value="${grnList.aprQtyGate}" /></td> --%>
 																</c:otherwise>
 
 															</c:choose>
+
+															<td align="center"><input type="text"
+																name="gate_grn_qty${grnList.grnGvnId}"
+																class="form-control" style="width: 50px"
+																id='gate_grn_qty${grnList.grnGvnId}' onkeyup="checkQty(${grnList.grnGvnId},${grnList.grnGvnQty},${grnList.aprQtyGate},${qty})"
+																value="${qty}" /></td>
 
 
 															<c:choose>
@@ -848,6 +870,21 @@ function getDate(){
 	        e.stopPropagation();
 	    });
 	});
+	
+	
+</script>
+<script type="text/javascript">
+
+function checkQty(grnId,grnQty,aprQty,qty){
+	//alert("JJJ");
+	var entered=$("#gate_grn_qty"+grnId).val();
+	alert("received = " +entered);
+	if(entered>grnQty){
+		alert("Can not Enter Qty Greater than auto Qty ");
+		document.getElementById("gate_grn_qty"+grnId).value=qty;
+	}
+}
+
 </script>
 
 

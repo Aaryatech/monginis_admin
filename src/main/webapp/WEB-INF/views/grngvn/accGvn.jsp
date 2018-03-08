@@ -84,6 +84,8 @@
 												id="table1">
 												<thead>
 													<tr>
+													<th><input type="checkbox"
+													onClick="selectedGvn(this)" />Select All<br/></th>
 														<th width="30"></th>
 														<th width="50" style="width: 18px" align="left">Sr No</th>
 														<th width="100" align="left">Bill No</th>
@@ -97,14 +99,14 @@
 														<th width="100" align="left">Status</th>
 														<th width="100" align="left">Action</th>
 													</tr>
-
-
 												</thead>
 												<tbody>
+												
 													<c:forEach items="${gvnList}" var="gvnList"
 														varStatus="count">
 
 														<tr>
+														
 															<c:choose>
 																<c:when test="${gvnList.grnGvnStatus==4}">
 																	<td><input type="checkbox" name="select_to_agree"
@@ -117,36 +119,25 @@
 
 																</c:when>
 
-
 																<c:otherwise>
-
 																	<td><input type="checkbox" name="select_to_agree"
 																		disabled="disabled" id="${gvnList.grnGvnId}"
 																		value="${gvnList.grnGvnId}" /></td>
-
-
 																</c:otherwise>
 															</c:choose>
 															<td><c:out value="${count.index+1}" /></td>
-
 															<td align="left"><c:out value="${gvnList.billNo}" /></td>
-
 															<td align="left"><c:out value="${gvnList.frName}" /></td>
-
-
 															<td align="left"><c:out value="${gvnList.itemName}" /></td>
-
-
 															<td align="left"><c:out value="${gvnList.grnGvnQty}" />
 																<input type="hidden"
 																name="approve_acc_login${gvnList.grnGvnId}"
 																id="approve_acc_login${gvnList.grnGvnId}"
 																value="${gvnList.approvedLoginAcc}" /></td>
-
+														
 															<c:set var="qty" value="0"></c:set>
 
 															<c:choose>
-
 																<c:when
 																	test="${gvnList.grnGvnStatus==1 or gvnList.grnGvnStatus==2 or gvnList.grnGvnStatus==3}">
 																	<c:set var="qty" value="${gvnList.aprQtyGate}" />
@@ -156,23 +147,20 @@
 																	test="${gvnList.grnGvnStatus==4 or gvnList.grnGvnStatus==5}">
 																	<c:set var="qty" value="${gvnList.aprQtyStore}" />
 																</c:when>
-
+																
 																<c:otherwise>
 																	<c:set var="qty" value="${gvnList.aprQtyAcc}"></c:set>
 																</c:otherwise>
-
 															</c:choose>
-
 
 															<td align="center"><input type="text"
 																name="acc_gvn_qty${gvnList.grnGvnId}"
 																style="width: 50px" class="form-control" 	onkeyup="calcGvn(${gvnList.baseRate},${gvnList.grnGvnId},
-																	${gvnList.sgstPer},${gvnList.cgstPer})"
+																	${gvnList.sgstPer},${gvnList.cgstPer},${gvnList.grnGvnQty},${qty})"
 																id='acc_gvn_qty${gvnList.grnGvnId}' value="${qty}" /></td>
 
 															<td id='gvnAmt${gvnList.grnGvnId}' align="left"><c:out
 																	value="${gvnList.grnGvnAmt}"></c:out></td>
-
 
 															<td><a href="${url}${gvnList.gvnPhotoUpload1}"
 																data-lightbox="image-1">Image 1</a></td>
@@ -681,15 +669,19 @@
 	<!-- insertGrnDisAgree -->
 	<script type="text/javascript">
 
-function calcGvn(baseRate,grnId,sgstPer,cgstPer){
+function calcGvn(baseRate,grnId,sgstPer,cgstPer,gvnQty,curQty){
 	
 	
-alert("HII");
+//alert("HII");
 	
 	var grandTotal;
 	var aprTotalTax;
 	
 	var aprTaxableAmt;
+	
+	checkQty(grnId,gvnQty,curQty);//Calling another function 
+
+	
 	var gvnQty=$("#acc_gvn_qty"+grnId).val();
 	alert(gvnQty);
 	
@@ -897,7 +889,6 @@ function getDate(){
 			toDate:toDate,
 				
 				ajax : 'true',
-			
 
 }
 );
@@ -916,5 +907,31 @@ function getDate(){
 	    });
 	});
 </script>
+
+<script type="text/javascript">
+function checkQty(grnId,gvnQty,qty){
+	//alert("JJJ");
+	var entered=$("#acc_gvn_qty"+grnId).val();
+	//alert("received = " +entered);
+	if(entered>gvnQty){
+		alert("Can not Enter Qty Greater than Gvn Qty ");
+		document.getElementById("acc_gvn_qty"+grnId).value=qty;
+	}
+}
+</script>
+
+<script>
+	
+		function selectedGvn(source) {
+			checkboxes = document.getElementsByName('select_to_agree');
+			
+			for (var i = 0, n = checkboxes.length; i < n; i++) {
+				checkboxes[i].checked = source.checked;
+			}
+			
+		}
+		
+	</script>
+
 </body>
 </html>

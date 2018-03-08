@@ -171,23 +171,22 @@
 																
 																
 																
-																
+																<c:set var ="qty" value="0"></c:set>
 																
 																<c:choose>
-
-																<c:when test="${grnList.grnGvnStatus==1}">
-																	<td align="center"><input type="text" name="gate_gvn_qty${gvnList.grnGvnId}" style="width: 50px" class="form-control"
-															id='gate_gvn_qty${gvnList.grnGvnId}' value="${gvnList.grnGvnQty}"/></td>
-																
+																<c:when test="${gvnList.grnGvnStatus==1}">
+																	<c:set var ="qty" value="${gvnList.grnGvnQty}"></c:set>
 																</c:when>
-
 																<c:otherwise>
-																	<td align="center"><input type="text" name="gate_gvn_qty${gvnList.grnGvnId}" style="width: 50px" class="form-control"
-															id='gate_gvn_qty${gvnList.grnGvnId}' value="${gvnList.aprQtyGate}"/></td>
-																
+																	<c:set var ="qty" value="${gvnList.aprQtyGate}"></c:set>
 																</c:otherwise>
-
 															</c:choose>
+															
+															
+															
+																<td align="center"><input type="text" name="gate_gvn_qty${gvnList.grnGvnId}" style="width: 50px" class="form-control"
+															id='gate_gvn_qty${gvnList.grnGvnId}' value="${qty}" onkeyup="checkQty(${gvnList.grnGvnId},${gvnList.grnGvnQty},${gvnList.aprQtyGate},${qty})"/></td>
+															
 																<%-- 
 																<td align="center"><input type="text" name="gate_gvn_qty${gvnList.grnGvnId}" style="width: 50px" class="form-control"
 															id='gate_gvn_qty${gvnList.grnGvnId}' value="${gvnList.grnGvnQty}"/></td>
@@ -969,5 +968,22 @@ function getDate(){
 	    });
 	});
 </script>
+
+<script type="text/javascript">
+
+function checkQty(grnId,grnQty,aprQty,qty){
+	//alert("JJJ");
+	var entered=$("#gate_gvn_qty"+grnId).val();
+	//alert("received = " +entered);
+	if(entered>grnQty){
+		alert("Can not Enter Qty Greater than auto Qty ");
+		document.getElementById("gate_gvn_qty"+grnId).value=qty;
+	}
+}
+
+</script>
+
+
+
 </body>
 </html>

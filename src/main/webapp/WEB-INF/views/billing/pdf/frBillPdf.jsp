@@ -81,6 +81,11 @@ duplicate for tranpoter</p>
     <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:10px;">Rate%</td>
     <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:10px;">Amount</td>
   </tr>
+ 
+  <c:set var = "totalQty" value = "0"/>
+   <c:set var = "totalAmt" value = "0"/>
+    <c:set var = "totalCgst" value = "0"/>
+      <c:set var = "totalSgst" value = "0"/>
         <c:forEach items="${frDetails.billDetailsList}" var="billDetails" varStatus="count">
   
   <tr>
@@ -89,23 +94,96 @@ duplicate for tranpoter</p>
     <td align="left" style="border-left:1px solid #313131;  padding:3px 5px;color:#000; font-size:10px;">${billDetails.itemHsncd}</td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000;font-size:10px;"><fmt:formatNumber type="number"
 								maxFractionDigits="2" minFractionDigits="2" value="${billDetails.billQty}"/></td>
+			  <c:set var = "totalQty" value = "${totalQty+billDetails.billQty}"/>					
     <td align="center" style="border-left:1px solid #313131; padding:3px 5px;color:#000; font-size:10px;">${billDetails.itemUom}</td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 4px;color:#000; font-size:10px;"><fmt:formatNumber type="number"
 								maxFractionDigits="2" minFractionDigits="2" value="${billDetails.baseRate}"/></td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 4px;color:#000;font-size:10px;"><fmt:formatNumber type="number"
 								maxFractionDigits="2" minFractionDigits="2" value="${billDetails.taxableAmt}"/></td>
+								   <c:set var = "totalAmt" value = "${totalAmt+billDetails.taxableAmt}"/>
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000; font-size:10px;"><fmt:formatNumber type="number"
 								maxFractionDigits="2" minFractionDigits="2" value="${billDetails.cgstPer}"/></td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000; font-size:10px;"><fmt:formatNumber type="number"
 								maxFractionDigits="2" minFractionDigits="2" value="${billDetails.cgstRs}"/></td>
+								  <c:set var = "totalCgst" value = "${totalCgst+billDetails.cgstRs}"/>
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000;font-size:10px;"><fmt:formatNumber type="number"
 								maxFractionDigits="2" minFractionDigits="2" value="${billDetails.sgstPer}"/></td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000;font-size:10px;"><fmt:formatNumber type="number"
 								maxFractionDigits="2" minFractionDigits="2" value="${billDetails.sgstRs}"/></td>
+								  <c:set var = "totalSgst" value = "${totalSgst+billDetails.sgstRs}"/>
   </tr>
   </c:forEach>
-  
+   <tr>
+    <td  align="left" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:0px;">-</td>
+    <td align="left" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:12px;"><b>Total</b></td>
+    <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:0px;">-</td>
+    <td align="right" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:12px;"><b><fmt:formatNumber type="number"
+								maxFractionDigits="2" minFractionDigits="2" value="${totalQty}"/></b></td>
+    <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:0px;">-</td>
+    <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:0px;">-</td>
+    <td align="right" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:12px;"><b><fmt:formatNumber type="number"
+								maxFractionDigits="2" minFractionDigits="2" value="${totalAmt}"/></b></td>
+    <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:0px;">-</td>
+    <td align="right" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:12px;"><b><fmt:formatNumber type="number"
+								maxFractionDigits="2" minFractionDigits="2" value="${totalCgst}"/></b></td>
+    <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:0px;">-</td>
+    <td align="right" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:12px;"><b><fmt:formatNumber type="number"
+								maxFractionDigits="2" minFractionDigits="2" value="${totalSgst}"/></b></td>
+  </tr>
+   <tr>
+   
+    <td align="right" style="border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:0px;">-</td>
+        <td align="right" style="border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:0px;">-</td>
+    <td style="border-bottom:1px solid #313131; font-size:0px;">-</td><td style="border-bottom:1px solid #313131; font-size:0px;">-</td><td style="border-bottom:1px solid #313131;font-size:0px;">-</td><td style="border-bottom:1px solid #313131;padding:4px;color:#000; font-size:0px;">-</td><td style="border-bottom:1px solid #313131;font-size:0px;">-</td><td style="border-bottom:1px solid #313131;padding:4px;color:#000; font-size:0px;">-</td><td style="border-bottom:1px solid #313131;font-size:0px;">-</td><td style="border-bottom:1px solid #313131;font-size:12px;"><b>Total:</b></td>
+    <td align="right" style="border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:12px;"><b><fmt:formatNumber type="number"
+								maxFractionDigits="2" minFractionDigits="2" value="${totalAmt+totalCgst+totalSgst}"/></b></td>
+  </tr>
 </table>
+
+      <table width="56%" border="0"  cellpadding="0" cellspacing="0" style="border-right:1px solid #313131">
+  <tr>
+    <td align="center" width="9%" colspan="2" style="border-left:1px solid #313131; padding:2px;color:#000; font-size:10px;text-align:center;">Tax(%)</td>
+   <td align="center" width="9%" colspan="2" style="border-left:1px solid #313131; padding:2px;color:#000; font-size:10px;text-align:center;">Taxable Amount</td>
+ 
+    <td align="center" width="9%" colspan="2" style="border-left:1px solid #313131; padding:2px;color:#000; font-size:10px;text-align:center;">CGST Amount</td>
+    <td align="center" width="9%" colspan="2" style="border-left:1px solid #313131; padding:2px;color:#000; font-size:10px;text-align:center;">SGST Amount</td>
+    <td align="center" width="9%" colspan="2" style="border-left:1px solid #313131; padding:2px;color:#000; font-size:10px;text-align:center;">Total Tax</td>
+    <td align="center" width="9%" colspan="2" style="border-left:1px solid #313131; padding:2px;color:#000; font-size:10px;text-align:center;">Total Amount</td>
+
+  </tr>
+<c:forEach items="${slabwiseBillList}" var="slabwiseBills" varStatus="count">
+
+  <c:choose>
+<c:when test="${slabwiseBills.billNo==frDetails.billNo}">
+  
+  <c:forEach items="${slabwiseBills.slabwiseBill}" var="slabwiseBill" varStatus="count">
+   <tr>
+     <td align="right" width="9%" colspan="2" style="border-top:1px solid #313131;border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;text-align: right">${slabwiseBill.taxPer}</td>
+   <td align="right" width="9%" colspan="2" style="border-top:1px solid #313131;  border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;text-align: right"><fmt:formatNumber type="number"
+								maxFractionDigits="2" minFractionDigits="2" value="${slabwiseBill.taxableAmt}"/></td>
+ 
+    <td align="right" width="9%" colspan="2" style=" border-top:1px solid #313131; border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;text-align: right"><fmt:formatNumber type="number"
+								maxFractionDigits="2" minFractionDigits="2" value="${slabwiseBill.cgstAmt}"/></td>
+    <td align="right" width="9%" colspan="2" style="border-top:1px solid #313131;  border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;text-align: right"><fmt:formatNumber type="number"
+								maxFractionDigits="2" minFractionDigits="2" value="${slabwiseBill.sgstAmt}"/></td>
+    <td align="right" width="9%" colspan="2" style="border-top:1px solid #313131; border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;text-align: right"><fmt:formatNumber type="number"
+								maxFractionDigits="2" minFractionDigits="2" value="${slabwiseBill.totalTax}"/></td>
+    <td align="right" width="9%" colspan="2" style="border-top:1px solid #313131;  border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;text-align: right"><fmt:formatNumber type="number"
+								maxFractionDigits="2" minFractionDigits="2" value="${slabwiseBill.grandTotal}"/></td>
+
+ </tr> 
+  
+  </c:forEach>
+
+  </c:when>
+
+</c:choose>
+</c:forEach>
+  </table>
+
+
+
+
   <table width="100%" border="0"  cellpadding="0" cellspacing="0" style="border-top:1px solid #313131;border-right:1px solid #313131;">
   
  
@@ -138,6 +216,7 @@ duplicate for tranpoter</p>
   </tr>
   
 </table>
+
 <div style="page-break-after: always;"></div>
   </c:forEach>
 
