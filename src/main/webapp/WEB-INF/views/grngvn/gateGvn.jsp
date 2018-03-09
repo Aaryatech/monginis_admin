@@ -124,7 +124,7 @@
 												<tbody>
 													<c:forEach items="${gvnList}" var="gvnList"
 														varStatus="count">
-														<c:choose>
+														<%-- <c:choose>
 															<c:when
 																test="${gvnList.grnGvnQtyAuto!=gvnList.grnGvnQty}">
 
@@ -133,9 +133,9 @@
 															<c:otherwise>
 																<c:set var="color" value=""></c:set>
 															</c:otherwise>
-														</c:choose>
+														</c:choose> --%>
 
-														<tr bgcolor="${color}">
+														<tr>
 															<c:choose>
 
 

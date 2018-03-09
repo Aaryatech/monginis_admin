@@ -28,6 +28,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.Firebase;
 import com.ats.adminpanel.model.AllFrIdName;
 import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.Info;
@@ -43,6 +44,7 @@ import com.ats.adminpanel.model.login.UserResponse;
 import com.ats.adminpanel.model.remarks.GetAllRemarks;
 import com.ats.adminpanel.model.remarks.GetAllRemarksList;
 import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
+
 
 @Controller
 @Scope("session")
@@ -1347,6 +1349,24 @@ public class GrnGvnController {
 			System.out.println("GRN HEADER rESPONSE " + accHeader.toString());
 
 			//
+			
+			//-----------------------For Notification-----------------
+			String frToken="";
+		
+			try {
+				map = new LinkedMultiValueMap<String, Object>();
+				  map.add("frId",accHeader.getFrId());
+				   
+                 frToken= restTemplate.postForObject(Constants.url+"getFrToken", map, String.class);
+		         Firebase.sendPushNotifForCommunication(frToken,"","GRN no"+accHeader.getGrngvnSrno()+"punched by you has been cleared by Accounts"+accHeader.getAprGrandTotal() + " Thank You..Team Monginis","inbox");
+		   	
+		        }
+		        catch(Exception e2)
+		        {
+			      e2.printStackTrace();
+		        }
+			
+			//-----------------------------------------------------
 
 		} catch (Exception e) {
 
@@ -1370,6 +1390,7 @@ public class GrnGvnController {
 		ModelAndView model = new ModelAndView("grngvn/accGrn");
 
 		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 			int grnId = Integer.parseInt(request.getParameter("grnId"));
 
@@ -1655,8 +1676,27 @@ public class GrnGvnController {
 			System.out.println("GRN HEADER rESPONSE " + accHeader.toString());
 
 			System.out.println("LIST SIZE ACC GRN : " + grnAccDetailList.size());
-
+			
 			//
+			
+			
+			//-----------------------For Notification-----------------
+			String frToken="";
+		
+			try {
+				map = new LinkedMultiValueMap<String, Object>();
+				  map.add("frId",accHeader.getFrId());
+				   
+                 frToken= restTemplate.postForObject(Constants.url+"getFrToken", map, String.class);
+		         Firebase.sendPushNotifForCommunication(frToken,"","GRN no"+accHeader.getGrngvnSrno()+"punched by you has been rejected by Accounts" + " Thank You..Team Monginis","inbox");
+		   	
+		        }
+		        catch(Exception e2)
+		        {
+			      e2.printStackTrace();
+		        }
+			
+			//-----------------------------------------------------
 
 		} catch (Exception e) {
 
@@ -1982,6 +2022,26 @@ public class GrnGvnController {
 			System.out.println("GRN HEADER rESPONSE " + accHeader.toString());
 
 			//
+			
+			
+			//-----------------------For Notification-----------------
+			String frToken="";
+		
+			try {
+				map = new LinkedMultiValueMap<String, Object>();
+				  map.add("frId",accHeader.getFrId());
+				   
+                 frToken= restTemplate.postForObject(Constants.url+"getFrToken", map, String.class);
+		         Firebase.sendPushNotifForCommunication(frToken,"","GRN no"+accHeader.getGrngvnSrno()+"punched by you has been cleared by Accounts"+accHeader.getAprGrandTotal() + " Thank You..Team Monginis","inbox");
+		   	
+		        }
+		        catch(Exception e2)
+		        {
+			      e2.printStackTrace();
+		        }
+			
+			//-----------------------------------------------------
+
 
 		} catch (Exception e) {
 

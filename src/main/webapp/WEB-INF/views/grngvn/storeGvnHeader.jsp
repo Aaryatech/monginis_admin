@@ -83,7 +83,7 @@
 
 									<div
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										<input type="submit" value="Submit" class="btn btn-primary">
+										<input type="button" value="Submit" onclick="getDetails()" class="btn btn-primary">
 
 									</div>
 								</div>
@@ -92,12 +92,13 @@
 									<label class="col-sm-3 col-lg-2 control-label">Franchise</label>
 
 									<div class="col-sm-5 col-lg-3 controls">
+<input type="text" style="display: none;" name="typeValue" id='typeValue' value="${type}">
+${type}
 
 										<select data-placeholder="Choose Franchisee"
 											class="form-control chosen" multiple="multiple" tabindex="6"
 											id="selectFr" name="selectFr" onchange="getDate()">
 											<option value="-1"><c:out value="All"/></option>
-
 
 
 											<c:forEach items="${unSelectedFrList}" var="fr"
@@ -343,6 +344,17 @@ function getDate(){
 
 }
 
+</script>
+
+<script type="text/javascript">
+function getDetails() {
+	 var form = document.getElementById("validation-form");
+	 var type = document.getElementById("typeValue").value;
+alert("type = "+type);
+	    form.action ='${pageContext.request.contextPath}/getGvnHeaderForStore'+ '/'+type;
+	    form.submit();
+	
+}
 </script>
 
 </body>

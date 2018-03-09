@@ -108,12 +108,12 @@
 
 														<c:choose>
 															<c:when
-																test="${gvnList.grnGvnQtyAuto!=gvnList.grnGvnQty}">
+																test="${gvnList.aprQtyGate!=gvnList.grnGvnQty or gvnList.aprQtyStore!=gvnList.aprQtyGate}">
 
-																<c:set var="color" value="red"></c:set>
+																<c:set var="color" value="blue"></c:set>
 															</c:when>
 															<c:otherwise>
-																<c:set var="color" value=""></c:set>
+																<c:set var="color" value="white"></c:set>
 															</c:otherwise>
 														</c:choose>
 

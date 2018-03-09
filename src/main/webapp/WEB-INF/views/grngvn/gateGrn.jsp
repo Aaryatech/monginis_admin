@@ -107,18 +107,18 @@
 												<tbody>
 													<c:forEach items="${grnList}" var="grnList"
 														varStatus="count"> 
+														
 														 <c:choose> 
 														<c:when test="${grnList.grnGvnQtyAuto!=grnList.grnGvnQty}">
-														
 														<c:set var="color" value="red"></c:set> 
 														</c:when>
 														<c:otherwise>
-														<c:set var="color" value=""></c:set>
+														<c:set var="color" value="white"></c:set>
 														</c:otherwise>
 														</c:choose> 
 
-														<tr bgcolor="${color}">
-															<c:choose>
+													<tr bgcolor="${color}">
+ 															<c:choose>
 																<c:when test="${grnList.grnGvnStatus==2}">
 																	<td><input type="checkbox" name="select_to_agree"
 																		disabled="disabled" id="${grnList.grnGvnId}"

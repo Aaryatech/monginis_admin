@@ -582,4 +582,24 @@ System.out.println("in Side ");
 		return model;
 	}
 	
+	
+	@RequestMapping(value = "/getCrnCheckedHeaders" , method = RequestMethod.POST)
+	public ModelAndView getCrnCheckedHeaders(HttpServletRequest request, HttpServletResponse response
+			) {
+		ModelAndView model = new ModelAndView("creditNote/crnDetails");
+		System.out.println("In detail Page");
+		
+		
+		String[] checked=request.getParameterValues("select_to_agree");
+		
+		for(int i=0;i<checked.length;i++) {
+			System.err.println("Value checked  " + checked[i]);
+		}
+		
+		RestTemplate restTemplate = new RestTemplate();
+		
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		return model;
+
+	}
 }

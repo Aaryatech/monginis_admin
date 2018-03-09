@@ -130,7 +130,7 @@
 
 														<c:choose>
 															<c:when
-																test="${grnList.grnGvnQtyAuto!=grnList.grnGvnQty}">
+																test="${grnList.grnGvnQty!=grnList.grnGvnQtyAuto}">
 
 																<c:set var="color" value="red"></c:set>
 															</c:when>
@@ -142,7 +142,7 @@
 															</c:when>
 															
 															<c:otherwise>
-																<c:set var="color" value=""></c:set>
+																<c:set var="color" value="white"></c:set>
 															</c:otherwise>
 														</c:choose>
 

@@ -123,13 +123,13 @@
 
 							</form>
 
-							<form action="" class="form-horizontal" method="post"
+							<form action="getCrnCheckedHeaders" class="form-horizontal" method="post"
 								id="validation-form">
 
 								<div class="box">
 									<div class="box-title">
 										<h3>
-											<i class="fa fa-table"></i> GRN List
+											<i class="fa fa-table"></i> Crn List
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i
@@ -147,6 +147,7 @@
 												id="table1">
 												<thead>
 													<tr>
+													<th></th>
 														<th class="col-md-1">Sr No</th>
 														<th class="col-md-1">Date</th>
 														<th class="col-md-2">Crn Id</th>
@@ -273,8 +274,12 @@
 				$.each(data,function(key, headers) {
 					
 				var tr = $('<tr></tr>');
+				
+				tr.append($('<td></td>').html(key+1));
+				
+				
 
-			  	tr.append($('<td></td>').html(key+1));
+			  	tr.append($('<td><input type=checkbox name="select_to_agree"  value='+headers.crnId+'></td>'));
 
 			  	tr.append($('<td></td>').html(headers.crnDate));
 			  	
