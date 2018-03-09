@@ -7,6 +7,8 @@ public class FinGoodBean {
 	 List<FinishedGoodStockDetail> stockDetail;
 	 
 	int isDayEndEnable;
+	
+	String stockDate;
 
 	public List<FinishedGoodStockDetail> getStockDetail() {
 		return stockDetail;
@@ -24,11 +26,19 @@ public class FinGoodBean {
 		this.isDayEndEnable = isDayEndEnable;
 	}
 
-	@Override
-	public String toString() {
-		return "FinGoodBean [stockDetail=" + stockDetail + ", isDayEndEnable=" + isDayEndEnable + "]";
+	public String getStockDate() {
+		return stockDate;
 	}
 
-	
+	public void setStockDate(String stockDate) {
+		this.stockDate = stockDate;
+	}
+
+	@Override
+	public String toString() {
+		return "FinGoodBean [stockDetail=" + stockDetail + ", isDayEndEnable=" + isDayEndEnable + ", stockDate="
+				+ stockDate + "]";
+	}
+
 
 }

@@ -2,19 +2,19 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-<%@ page import = "java.util.Date" %>
+<%@ page import="java.util.Date"%>
 
-	 
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
- 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<c:url var="getFinGoodStock" value="/getFinGoodStock"></c:url>
 
 
 
 	<c:url var="finishedGoodDayEnd" value="/finishedGoodDayEnd"></c:url>
- 
+
 
 	<div class="container" id="main-container">
 
@@ -65,16 +65,17 @@
 						</div>
 
 						<div class="box-content">
-							<form class="form-horizontal"  id="validation-form1">
+							<form class="form-horizontal" id="validation-form1">
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Category</label>
 
 									<div class="col-sm-9 col-lg-10 controls">
-										<select class="form-control chosen" name="catId" id="catId" onclick="DayEndEnable()">
+										<select class="form-control chosen" name="catId" id="catId"
+											onclick="DayEndEnable()">
 
 
-											<option value="-1" >All</option>
+											<option value="-1">All</option>
 
 											<c:forEach items="${catList}" var="catList">
 
@@ -97,7 +98,7 @@
 											required>
 
 											<option value="1" id="currentStock">Get Current Stock</option>
-											<option value="2" id="monthStock">Get Stock Between Month</option>
+											<!-- <option value="2" id="monthStock">Get Stock Between Month</option> -->
 											<option value="3" id="dateStock">Get Stock Between Dates</option>
 										</select>
 									</div>
@@ -131,7 +132,7 @@
 										</div>
 
 										<div class="colOuter" style="display: none" id=select_date>
-											<div class="col-md-2">
+											<div class="col-md-1">
 												<div class="col1title">From Date:</div>
 											</div>
 											<div class="col-md-2" align="left">
@@ -144,7 +145,7 @@
 
 											<div class="col3"></div>
 
-											<div class="col-md-2">
+											<div class="col-md-1">
 												<div class="col1title">To Date:</div>
 											</div>
 											<div class="col-md-2" align="left">
@@ -164,16 +165,28 @@
 
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-					
+
 										<input type="button" class="btn btn-info" name="submit"
 											value="Get Stock " onclick="searchItemsByCategory()" />
+											
+											
 									</div>
+									
+									<div align="center" id="loader" style="display: none">
+
+									<span>
+										<h3>
+											<font color="#343690">Loading</font>
+										</h3>
+									</span> <span class="l-1"></span> <span class="l-2"></span> <span
+										class="l-3"></span> <span class="l-4"></span> <span
+										class="l-5"></span> <span class="l-6"></span>
+								</div>
 								</div>
 								<input type="hidden" id="selectedCatId" name="selectedCatId" />
 
 							</form>
-							<form  method="post"
-								id="validation-form">
+							<form method="post" id="validation-form">
 
 								<div class="box">
 									<div class="box-title">
@@ -185,14 +198,15 @@
 												class="fa fa-chevron-up"></i></a>
 											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 										</div>
-									</div><br>
-	<div
-										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-10">
+									</div>
+									<br>
+									<div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-4">
 										<!-- 										<input type="submit" class="btn btn-primary" value="Submit">
  -->
- 
-											<input type="button" class="btn btn-danger"
-											value="Day End Process" id="dayEndButton" disabled="disabled"/>
+<input type="text" readonly    style="width: 134px; font: bold; height: 35px; color: maroon; size: 20px;"
+											value="" id="setDate" />
+										<input type="button" class="btn btn-danger"
+											value="Day End Process" id="dayEndButton" disabled="disabled" />
 
 									</div>
 
@@ -200,7 +214,7 @@
 
 										<div class="clearfix"></div>
 										<div class="table-responsive" style="border: 0">
-											<table width="100%" class="table table-advance" id="table1">
+											<table  class="table table-advance" id="table1">
 												<thead>
 													<tr>
 														<th width="30" align="left">Sr No</th>
@@ -237,22 +251,13 @@
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
 										<!-- 										<input type="submit" class="btn btn-primary" value="Submit">
  -->
- 
- 
- 
+
+
+
 									</div>
 
 								</div>
-								<div align="center" id="loader" style="display: none">
 
-									<span>
-										<h4>
-											<font color="#343690">Loading</font>
-										</h4>
-									</span> <span class="l-1"></span> <span class="l-2"></span> <span
-										class="l-3"></span> <span class="l-4"></span> <span
-										class="l-5"></span> <span class="l-6"></span>
-								</div>
 							</form>
 						</div>
 
@@ -266,7 +271,7 @@
 
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+				<p>2017 © MONGINIS.</p>
 			</footer>
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -337,10 +342,12 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-	
+
 
 	<script type="text/javascript">
 		function searchItemsByCategory() {
+			
+			
 			
 			var catId = $("#catId").val();
 			document.getElementById("selectedCatId").value = catId;
@@ -372,8 +379,8 @@
 								$('#table1 td').remove();
 
 								$('#loader').hide();
-								
-								
+								//alert("Day End " +data.isDayEndEnable);
+								document.getElementById("setDate").value =data.stockDate;
 								if(data.isDayEndEnable==1){
 									if(option==1 && catId==-1){
 										
@@ -382,9 +389,9 @@
 										 document.getElementById("dayEndButton").disabled = false; 
 
 									}
-									else{
+									else if(data.isDayEndEnable==0){
 										//alert("in else disable true");
-										$("#dayEndButton").disabled=true;
+										document.getElementById("dayEndButton").disabled=true;
 									}
 								}
 
@@ -493,27 +500,14 @@
 												})
 
 							});
-			if(stock.isDayEndEnable==1){
+			/* if(stock.isDayEndEnable==1){
 			$('#dayEndButton').removeAttr('disabled');
-			}
-		
-		}
-		
-	/* function 	decideDayEnd(){
-		alert("inside decide Day End ");
-		
-		if(2==2){
-		//$('#dayEndButton').removeAttr('enabled');
-			alert("2==2")
-			 document.getElementById("dayEndButton").disabled = true; 
-			//document.getElementById('dayEndButton').style = "display:none";
-		}
-		else{
-			alert("Else");
-			 document.getElementById("dayEndButton").disabled = false; 		
-			 }
-	} */
+			} */
+			document.getElementById("dayEndButton").disabled=true;
 
+		}
+		
+	
 	</script>
 
 	<script type="text/javascript">
@@ -528,6 +522,7 @@
 			// alert(form);
 			  	  form.action ="${pageContext.request.contextPath}/finishedGoodDayEnd";
 			    form.submit();
+			    
 				}
 			    
 			}
