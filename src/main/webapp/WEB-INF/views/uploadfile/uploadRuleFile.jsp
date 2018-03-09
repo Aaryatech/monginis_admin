@@ -71,7 +71,7 @@
 												</div>
 												<div class="col-md-6"> 
 												Last Upload Date: ${date1}
-													<a href="${pageContext.request.contextPath}/viewRuleDocumentFile/${1}" target="blank" ><input type="button" value="View Document File" class="btn btn-info">
+													<a href="${url}${document1}" target="blank" ><input type="button" value="View Document File" class="btn btn-info">
 										</a>
 												</div>
 									</div><br>	<br>
@@ -84,7 +84,7 @@
 												</div>
 												<div class="col-md-6"> 
 													 Last Upload Date: ${date2}
-													<a href="${pageContext.request.contextPath}/viewRuleDocumentFile/${2}" target="blank" ><input type="button" value="View Document File" class="btn btn-info">
+													<a href="${url}${document2}" target="blank" ><input type="button" value="View Document File" class="btn btn-info">
 										</a><br>
 												</div>
 							

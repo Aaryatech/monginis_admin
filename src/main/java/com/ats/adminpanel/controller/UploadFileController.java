@@ -72,6 +72,7 @@ public class UploadFileController {
 			model.addObject("document2", document2);
 			model.addObject("document3", document3);
 			model.addObject("document4", document4);
+			model.addObject("url", Constants.LOGIS_BILL_URL);
 			model.addObject("date1", fileList.get(0).getDate());
 			model.addObject("date2", fileList.get(1).getDate());
 			model.addObject("date3", fileList.get(2).getDate());
@@ -86,86 +87,44 @@ public class UploadFileController {
 		return model;
 
 	}
-	
-	@RequestMapping(value = "/viewRuleDocumentFile/{flag}", method = RequestMethod.GET)
-	public void viewDocumentFile(@PathVariable int flag,HttpServletRequest request, HttpServletResponse response) {
-
-		File file = null;
-		 if(flag==1)
-		 {
-			 file = new File(Constants.LOGIS_BILL_URL+document1);
-		 }
-		 else if(flag==2)
-		 {
-			file = new File(Constants.LOGIS_BILL_URL+document2);
-		 }
-		  
-			System.out.println("file"+file);
-			if(file != null) {
-
-                String mimeType = URLConnection.guessContentTypeFromName(file.getName());
-
-                if (mimeType == null) {
-
-                    mimeType = "application/pdf";
-
-                }
-
-                response.setContentType(mimeType);
-
-                response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
- 
-
-                response.setContentLength((int) file.length());
-
-                InputStream inputStream = null;
-				try {
-					inputStream = new BufferedInputStream(new FileInputStream(file));
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-                try {
-                    FileCopyUtils.copy(inputStream, response.getOutputStream());
-                } catch (IOException e) {
-                    System.out.println("Excep in Opening a Pdf File");
-                    e.printStackTrace();
-                }
-            }
- 
-	}
-	
+	 
 	 @RequestMapping("/download/{flag}")
 	    public void downloadPDFResource(@PathVariable int flag, HttpServletRequest request,
 	                                     HttpServletResponse response)
 	    {
-	         
-	        Path file = null;
-	        String fileName = null;
-	        if(flag==3)
-	        {
-	        	 file = Paths.get(Constants.LOGIS_BILL_URL, document3);
-	        	 fileName=document3;
-	        }
-	        else if(flag==4)
-	        {
-	        	file = Paths.get(Constants.LOGIS_BILL_URL, document4);
-	        	fileName=document4;
-	        }
-	        if (Files.exists(file))
-	        {
-	            response.setContentType("application/pdf");
-	            response.addHeader("Content-Disposition", "attachment; filename="+fileName);
-	            try
-	            {
-	                Files.copy(file, response.getOutputStream());
-	                response.getOutputStream().flush();
-	            }
-	            catch (IOException ex) {
-	                ex.printStackTrace();
-	            }
-	        }
+	         try
+	         {
+	        	 Path file = null;
+	 	        String fileName = null;
+	 	        if(flag==3)
+	 	        {
+	 	        	 file = Paths.get(Constants.LOGIS_BILL_URL+document3);
+	 	        	 fileName=document3;
+	 	        }
+	 	        else if(flag==4)
+	 	        {
+	 	        	file = Paths.get(Constants.LOGIS_BILL_URL+document4);
+	 	        	fileName=document4;
+	 	        }
+	 	        System.out.println("file"+file);
+	 	        if (Files.exists(file))
+	 	        {
+	 	            response.setContentType("application/pdf");
+	 	            response.addHeader("Content-Disposition", "attachment; filename="+fileName);
+	 	            try
+	 	            {
+	 	                Files.copy(file, response.getOutputStream());
+	 	                response.getOutputStream().flush();
+	 	            }
+	 	            catch (IOException ex) {
+	 	                ex.printStackTrace();
+	 	            }
+	 	        }
+	         }catch(Exception e)
+	         {
+	        	 e.printStackTrace();
+	         }
+	        
 	    }
 	 
 	
