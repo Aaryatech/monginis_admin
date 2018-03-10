@@ -201,7 +201,7 @@
 																
 																<c:when test="${grnList.grngvnStatus==4}">
 																	<td class="col-md-1"><c:out
-																			value="Approved From Sell"></c:out></td>
+																			value="Approved From Sales"></c:out></td>
 																</c:when>
 
 																<c:when test="${grnList.grngvnStatus==8}">
@@ -210,7 +210,7 @@
 
 																<c:when test="${grnList.grngvnStatus==5}">
 																	<td class="col-md-1"><c:out
-																			value="Reject From Sell"></c:out></td>
+																			value="Reject From Sales"></c:out></td>
 																</c:when>
 																<c:when test="${grnList.grngvnStatus==6}">
 																	<td class="col-md-1"><c:out value="Approved From Account"></c:out></td>

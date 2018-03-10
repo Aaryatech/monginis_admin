@@ -72,6 +72,8 @@ private int crndId;
 		
 		
 		private String itemName;
+		
+		private String itemHsncd;
 
 
 		public int getCrndId() {
@@ -356,6 +358,16 @@ private int crndId;
 		}
 
 
+		public String getItemHsncd() {
+			return itemHsncd;
+		}
+
+
+		public void setItemHsncd(String itemHsncd) {
+			this.itemHsncd = itemHsncd;
+		}
+
+
 		@Override
 		public String toString() {
 			return "GetCrnDetails [crndId=" + crndId + ", crnId=" + crnId + ", itemId=" + itemId + ", grnGvnId="
@@ -366,7 +378,8 @@ private int crndId;
 					+ cessRs + ", delStatus=" + delStatus + ", billNo=" + billNo + ", billDate=" + billDate + ", catId="
 					+ catId + ", baseRate=" + baseRate + ", cessPer=" + cessPer + ", refInvoiceNo=" + refInvoiceNo
 					+ ", grngvnSrno=" + grngvnSrno + ", grnGvnHeaderId=" + grnGvnHeaderId + ", itemName=" + itemName
-					+ "]";
+					+ ", itemHsncd=" + itemHsncd + "]";
 		}
+
 
 }

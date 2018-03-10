@@ -293,12 +293,12 @@
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==4}">
-																	<td align="left"><c:out value="Approved From Sell"></c:out></td>
+																	<td align="left"><c:out value="Approved From Sales"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${grnList.grnGvnStatus==5}">
-																	<td align="left"><c:out value="Reject From Sell"></c:out></td>
+																	<td align="left"><c:out value="Reject From Sales"></c:out></td>
 
 																</c:when>
 

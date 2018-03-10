@@ -13,7 +13,7 @@ contentType="text/html; charset=ISO8859_1"%>
 
 </head>
 <body>
-  	<c:forEach items="${billDetails}" var="frDetails" varStatus="count">
+  	<c:forEach items="${crnPrint.headers}" var="headers" varStatus="count">
 						<h6 align="center">Credit Note</h6>
 <table width="100%" border="0"  cellpadding="0" cellspacing="0" style="border-left:1px solid #313131;border-right:1px solid #313131;border-top:1px solid #313131;">
   
@@ -26,29 +26,31 @@ Phone:0240-2466217, Email: aurangabad@monginis.net</p>
  
   <tr>
     <td width="54.8%" colspan="4" style="border-top:1px solid #313131;padding:8px;color:#FFF; font-size:14px;">
-       <p style="color:#000; font-size:13px; text-align:left;margin:0px;">To, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>${frDetails.invoiceNo}</b></p>
+       <p style="color:#000; font-size:13px; text-align:left;margin:0px;">To, &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>${headers.frName}</b></p>
         <p style="color:#000; font-size:13px; text-align:;left;margin:0px;">GSTIIN: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>27AHIPJ7279D1Z3</b>&nbsp;&nbsp;&nbsp;&nbsp;<span> State:&nbsp;27 Maharashtra </span> </p>
 
        
     </td>
 
     <td width="50%" colspan="5" style="border-top:1px solid #313131;border-left:1px solid #313131; padding:8px;color:#FFF; font-size:15px;">
-        <p style="color:#000; font-size:13px; text-align:;left;margin:0px;"> Credit Note No. : &nbsp;&nbsp;&nbsp;&nbsp;<b>${transportMode}</b></p>
-        <p style="color:#000; font-size:13px; text-align:left;margin:0px;">Date :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>${vehicleNo}</b></p>
+        <p style="color:#000; font-size:13px; text-align:;left;margin:0px;"> Credit Note No. : &nbsp;&nbsp;&nbsp;&nbsp;<b>${headers.crnId}</b></p>
+        <p style="color:#000; font-size:13px; text-align:left;margin:0px;">Date :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>${headers.crnDate}</b></p>
        
     </td>
   </tr>
   <tr>
     <td width="58.9%" colspan="4" style="border-top:1px solid #313131;border-right:1px solid #313131;padding:7px;color:#FFF; font-size:15px;">
-        <p style="color:#000; font-size:13px; text-align:;left;margin:0px;"><b> Being the amount Credited to your Account towards GRN as&nbsp; &nbsp; ${frDetails.frName}</b></p>
-
+        <p style="color:#000; font-size:13px; text-align:;left;margin:0px;"><b> Being the amount Credited to your Account towards GRN as&nbsp; &nbsp;</b></p>
         
     </td>
     
       </tr>
       </table>
       
+      
+      
       <table width="100%" border="0"  cellpadding="0" cellspacing="0" style="border-top:1px solid #313131;border-right:1px solid #313131">
+      
   <tr>
     <td rowspan="2"  width="2%"  style="border-bottom:1px solid #313131; border-bottom:1px solid #313131;border-left:1px solid #313131; padding:5px;color:#000; font-size:10px;">No.</td>
     <td align="left" width="23%" rowspan="2" style="border-bottom:1px solid #313131; border-left:1px solid #313131; padding:15px;color:#000; font-size:10px;text-align: left">Item Decription</td>
@@ -73,31 +75,30 @@ Phone:0240-2466217, Email: aurangabad@monginis.net</p>
    <c:set var = "totalAmt" value = "0"/>
     <c:set var = "totalCgst" value = "0"/>
       <c:set var = "totalSgst" value = "0"/>
-        <c:forEach items="${frDetails.billDetailsList}" var="billDetails" varStatus="count">
-  
+        <c:forEach items="${crnPrint.details}" var="crnDetail" varStatus="count">
   <tr>
     <td  style="border-left:1px solid #313131; padding:3px 5px;color:#000; font-size:10px;">${count.index+1}</td>
-    <td style="border-left:1px solid #313131;  padding:3px 5px;color:#000; font-size:10px;">${billDetails.itemName}</td>
-    <td align="left" style="border-left:1px solid #313131;  padding:3px 5px;color:#000; font-size:10px;">${billDetails.itemHsncd}</td>
+    <td style="border-left:1px solid #313131;  padding:3px 5px;color:#000; font-size:10px;">${crnDetail.itemName}</td>
+    <td align="left" style="border-left:1px solid #313131;  padding:3px 5px;color:#000; font-size:10px;">${crnDetail.itemHsncd}</td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000;font-size:10px;"><fmt:formatNumber type="number"
-								maxFractionDigits="2" minFractionDigits="2" value="${billDetails.billQty}"/></td>
+								maxFractionDigits="2" minFractionDigits="2" value="${crnDetail.billQty}"/></td>
 			  <c:set var = "totalQty" value = "${totalQty+billDetails.billQty}"/>					
-    <td align="center" style="border-left:1px solid #313131; padding:3px 5px;color:#000; font-size:10px;">${billDetails.itemUom}</td>
+    <td align="center" style="border-left:1px solid #313131; padding:3px 5px;color:#000; font-size:10px;">${crnDetail.itemUom}</td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 4px;color:#000; font-size:10px;"><fmt:formatNumber type="number"
-								maxFractionDigits="2" minFractionDigits="2" value="${billDetails.baseRate}"/></td>
+								maxFractionDigits="2" minFractionDigits="2" value="${crnDetail.baseRate}"/></td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 4px;color:#000;font-size:10px;"><fmt:formatNumber type="number"
-								maxFractionDigits="2" minFractionDigits="2" value="${billDetails.taxableAmt}"/></td>
-								   <c:set var = "totalAmt" value = "${totalAmt+billDetails.taxableAmt}"/>
+								maxFractionDigits="2" minFractionDigits="2" value="${crnDetail.taxableAmt}"/></td>
+								   <c:set var = "totalAmt" value = "${totalAmt+crnDetail.taxableAmt}"/>
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000; font-size:10px;"><fmt:formatNumber type="number"
-								maxFractionDigits="2" minFractionDigits="2" value="${billDetails.cgstPer}"/></td>
+								maxFractionDigits="2" minFractionDigits="2" value="${crnDetail.cgstPer}"/></td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000; font-size:10px;"><fmt:formatNumber type="number"
-								maxFractionDigits="2" minFractionDigits="2" value="${billDetails.cgstRs}"/></td>
-								  <c:set var = "totalCgst" value = "${totalCgst+billDetails.cgstRs}"/>
+								maxFractionDigits="2" minFractionDigits="2" value="${crnDetail.cgstRs}"/></td>
+								  <c:set var = "totalCgst" value = "${totalCgst+crnDetail.cgstRs}"/>
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000;font-size:10px;"><fmt:formatNumber type="number"
-								maxFractionDigits="2" minFractionDigits="2" value="${billDetails.sgstPer}"/></td>
+								maxFractionDigits="2" minFractionDigits="2" value="${crnDetail.sgstPer}"/></td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000;font-size:10px;"><fmt:formatNumber type="number"
-								maxFractionDigits="2" minFractionDigits="2" value="${billDetails.sgstRs}"/></td>
-								  <c:set var = "totalSgst" value = "${totalSgst+billDetails.sgstRs}"/>
+								maxFractionDigits="2" minFractionDigits="2" value="${crnDetail.sgstRs}"/></td>
+								  <c:set var = "totalSgst" value = "${totalSgst+crnDetail.sgstRs}"/>
   </tr>
   </c:forEach>
    <tr>

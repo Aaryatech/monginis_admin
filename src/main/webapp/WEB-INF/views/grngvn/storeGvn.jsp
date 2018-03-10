@@ -48,7 +48,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> Sell GVN <!-- Store GVN  -->
+								<i class="fa fa-bars"></i> Sale GVN<!-- Store GVN  -->
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -88,7 +88,7 @@
 														<th width="120" align="left">Item Name</th>
 														<th width="100" align="left">GVN Qty</th>
 														
-														<th>Edited Qty</th>
+														<th width="100">Edited Qty</th>
 														<th width="100" align="left">PHOTO 1</th>
 														<th width="100" align="left">PHOTO 2</th>
 														<th width="100" align="left">Status</th>
@@ -175,8 +175,12 @@
 																
 															</c:choose>
 																
-																<td align="center"><input type="text" name="store_gvn_qty${gvnList.grnGvnId}" style="width: 50px" class="form-control"
-															id='store_gvn_qty${gvnList.grnGvnId}' value="${qty}" onkeyup="checkQty(${gvnList.grnGvnId},${gvnList.grnGvnQty},${gvnList.aprQtyStore},${qty})"/></td>
+																<%-- <td><input type="text" name="store_gvn_qty${gvnList.grnGvnId}" style="width: 50px;" class="form-control"
+															id='store_gvn_qty${gvnList.grnGvnId}' value="${qty}" onkeypress="checkQty(${gvnList.grnGvnId},${gvnList.grnGvnQty},${gvnList.aprQtyStore},${qty})"/></td>
+																 --%>
+																 
+																 <td><input type="text" name="store_gvn_qty${gvnList.grnGvnId}" style="width: 50px;" class="form-control"
+															id='store_gvn_qty${gvnList.grnGvnId}' value="${qty}" onkeypress="checkQty(10)"/></td>
 																
 
 															<td><a href="${url}${gvnList.gvnPhotoUpload1}"data-lightbox="image-1" >Image 1</a>
@@ -201,12 +205,12 @@
 																</c:when>
 
 																<c:when test="${gvnList.grnGvnStatus==4}">
-																	<td align="left"><c:out value="Approved From Sell"></c:out></td>
+																	<td align="left"><c:out value="Approved From Sales"></c:out></td>
 
 																</c:when>
 
 																<c:when test="${gvnList.grnGvnStatus==5}">
-																	<td align="left"><c:out value="Reject From Sell"></c:out></td>
+																	<td align="left"><c:out value="Reject From Sales"></c:out></td>
 
 																</c:when>
 
@@ -1046,22 +1050,27 @@ function getDate(){
 
 }
 );
-
+	function checkQty(grnId){
+		alert("Hi ");
+	}
 	
 }
-<script type="text/javascript">
 
-function checkQty(grnId,grnQty,aprQty,qty){
+
+
+<!-- <script type="text/javascript">
+
+function checkQty(grnId){
 	alert("JJJ");
-	 var entered=$("#store_gvn_qty"+grnId).val();
+	/*  var entered=$("#store_gvn_qty"+grnId).val();
 	alert("received = " +entered);
 	if(entered>grnQty){
 		alert("Can not Enter Qty Greater than auto Qty ");
 		document.getElementById("store_gvn_qty"+grnId).value=qty;
-	} 
+	}  */
 }
 
-</script>
+</script> -->
 
 
 <script>

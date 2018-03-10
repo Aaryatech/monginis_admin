@@ -263,7 +263,7 @@ public class GrnGvnController {
 
 			map.add("isFrUsed", 0);
 			map.add("moduleId", 1);
-			map.add("subModuleId", 1);
+			map.add("subModuleId", 3);
 			getAllRemarksList = restTemplate.postForObject(Constants.url + "/getAllRemarks", map,
 					GetAllRemarksList.class);
 
@@ -934,7 +934,7 @@ public class GrnGvnController {
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("isFrUsed", 0);
 			map.add("moduleId", 1);
-			map.add("subModuleId", 1);
+			map.add("subModuleId", 6);
 			getAllRemarksList = restTemplate.postForObject(Constants.url + "/getAllRemarks", map,
 					GetAllRemarksList.class);
 

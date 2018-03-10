@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.json.CDL;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
@@ -30,8 +31,11 @@ import org.zefer.cache.f;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.creditnote.CreditPrintBean;
 import com.ats.adminpanel.model.creditnote.GetCreditNoteHeaders;
+import com.ats.adminpanel.model.creditnote.GetCreditNoteHeadersList;
 import com.ats.adminpanel.model.creditnote.GetCrnDetails;
+import com.ats.adminpanel.model.creditnote.GetCrnDetailsList;
 import com.ats.adminpanel.model.creditnote.GetGrnGvnForCreditNote;
 import com.ats.adminpanel.model.creditnote.GetGrnGvnForCreditNoteList;
 import com.ats.adminpanel.model.creditnote.PostCreditNoteDetails;
@@ -39,6 +43,7 @@ import com.ats.adminpanel.model.creditnote.PostCreditNoteHeader;
 import com.ats.adminpanel.model.creditnote.PostCreditNoteHeaderList;
 import com.ats.adminpanel.model.grngvn.GrnGvnHeaderList;
 import com.ats.adminpanel.model.login.UserResponse;
+import com.sun.corba.se.impl.interceptors.CDREncapsCodec;
 
 @Controller
 @Scope("session")
@@ -65,8 +70,8 @@ public class CreditNoteController {
 	@RequestMapping(value = "/getCreditNoteType", method = RequestMethod.GET)
 	public String getType(HttpServletRequest request, HttpServletResponse response) {
 
-	//	ModelAndView model = new ModelAndView("creditNote/generateCreditNote");
-System.out.println("in Side ");
+		// ModelAndView model = new ModelAndView("creditNote/generateCreditNote");
+		System.out.println("in Side ");
 		String type = request.getParameter("selected_type");
 
 		int typeInt = Integer.parseInt(type);
@@ -83,13 +88,12 @@ System.out.println("in Side ");
 	}
 
 	@RequestMapping(value = "/insertCreNoteProcess", method = RequestMethod.POST)
-	public ModelAndView showInsertCreditNote(HttpServletRequest request, HttpServletResponse response
-			) {
-		
+	public ModelAndView showInsertCreditNote(HttpServletRequest request, HttpServletResponse response) {
+
 		System.out.println("HIIIIIIII");
 
-		//Constants.mainAct = 11;
-		//Constants.subAct = 72;
+		// Constants.mainAct = 11;
+		// Constants.subAct = 72;
 
 		ModelAndView model = new ModelAndView("creditNote/generateCreditNote");
 
@@ -105,8 +109,8 @@ System.out.println("in Side ");
 
 				// get /grnGvnDetailForCreditNote for GRN
 
-				getGrnGvnForCreditNoteList = restTemplate.postForObject(Constants.url + "grnGvnDetailForCreditNote",map,
-						GetGrnGvnForCreditNoteList.class);
+				getGrnGvnForCreditNoteList = restTemplate.postForObject(Constants.url + "grnGvnDetailForCreditNote",
+						map, GetGrnGvnForCreditNoteList.class);
 
 			} else {
 
@@ -115,8 +119,8 @@ System.out.println("in Side ");
 
 				// get /grnGvnDetailForCreditNote for GRN
 
-				getGrnGvnForCreditNoteList = restTemplate.postForObject(Constants.url + "grnGvnDetailForCreditNote", map,
-						GetGrnGvnForCreditNoteList.class);
+				getGrnGvnForCreditNoteList = restTemplate.postForObject(Constants.url + "grnGvnDetailForCreditNote",
+						map, GetGrnGvnForCreditNoteList.class);
 
 			}
 
@@ -410,10 +414,9 @@ System.out.println("in Side ");
 		return model;
 
 	}
-	
-	
-	
-	String fromDate,toDate,crnFr;
+
+	String fromDate, toDate, crnFr;
+
 	@RequestMapping(value = "/getInputForCreditNoteHeader", method = RequestMethod.GET)
 	public String getInputForCreditNoteHeader(HttpServletRequest request, HttpServletResponse response) {
 
@@ -422,8 +425,7 @@ System.out.println("in Side ");
 
 		String selectedFr = request.getParameter("fr_id_list");
 
-		System.out.println(
-				"From Date " + fromDate + "toDate " + toDate + "fr ID List " + selectedFr);
+		System.out.println("From Date " + fromDate + "toDate " + toDate + "fr ID List " + selectedFr);
 		selectedFr = selectedFr.substring(1, selectedFr.length() - 1);
 		selectedFr = selectedFr.replaceAll("\"", "");
 
@@ -436,169 +438,245 @@ System.out.println("in Side ");
 		return "";
 
 	}
-	
+
 	public AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
 	public List<String> frList = new ArrayList<String>();
-	List<GetCreditNoteHeaders> creditHeaderList=new ArrayList<>();
-	List<GetCrnDetails> crnDetailList=new ArrayList<>();
+	List<GetCreditNoteHeaders> creditHeaderList = new ArrayList<GetCreditNoteHeaders>();
+
+	GetCreditNoteHeadersList headerResponse = new GetCreditNoteHeadersList();
+	GetCrnDetailsList crnDetailResponse = new GetCrnDetailsList();
+
+	List<GetCrnDetails> crnDetailList = new ArrayList<GetCrnDetails>();
+
 	@RequestMapping(value = "/showCreditNotes", method = RequestMethod.POST)
 	public ModelAndView viewCreditNotes(HttpServletRequest request, HttpServletResponse response) {
 
 		// Constants.mainAct = 8;
 		// Constants.subAct = 85;
 
-		
 		System.out.println("inside viewCreditNote");
 
-		
 		ModelAndView model = new ModelAndView("creditNote/creditNoteHeaders");
 
-		
-			boolean isAllFrSelected = false;
+		boolean isAllFrSelected = false;
 
+		try {
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			allFrIdNameList = new AllFrIdNameList();
 			try {
 
-				RestTemplate restTemplate = new RestTemplate();
+				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
 
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			} catch (Exception e) {
+				System.out.println("Exception in getAllFrIdName" + e.getMessage());
+				e.printStackTrace();
 
-				allFrIdNameList = new AllFrIdNameList();
-				try {
-
-					allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
-
-				} catch (Exception e) {
-					System.out.println("Exception in getAllFrIdName" + e.getMessage());
-					e.printStackTrace();
-
-				}
-				model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
-		}catch (Exception e) {
+			}
+			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
+		} catch (Exception e) {
 			System.err.println("Exce in viewving credit note page");
 		}
-		
+
 		return model;
 	}
-	
-	
+
 	@RequestMapping(value = "/getHeaders", method = RequestMethod.GET)
-	public @ResponseBody List<GetCreditNoteHeaders> getHeaders(HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody List<GetCreditNoteHeaders> getHeaders(HttpServletRequest request,
+			HttpServletResponse response) {
 
 		System.out.println("inside Ajax Call");
-		
+
 		ModelAndView model = new ModelAndView("creditNote/creditNoteHeaders");
 
-			boolean isAllFrSelected = false;
+		boolean isAllFrSelected = false;
+
+		try {
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 			try {
 
-				RestTemplate restTemplate = new RestTemplate();
+				fromDate = request.getParameter("fromDate");
+				toDate = request.getParameter("toDate");
 
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				String selectedFr = request.getParameter("fr_id_list");
 
-				try {
+				System.out.println("From Date " + fromDate + "toDate " + toDate + "fr ID List " + selectedFr);
+				selectedFr = selectedFr.substring(1, selectedFr.length() - 1);
+				selectedFr = selectedFr.replaceAll("\"", "");
 
-					fromDate = request.getParameter("fromDate");
-					toDate = request.getParameter("toDate");
+				crnFr = selectedFr;
 
-					String selectedFr = request.getParameter("fr_id_list");
+				frList = Arrays.asList(selectedFr);
 
-					System.out.println(
-							"From Date " + fromDate + "toDate " + toDate + "fr ID List " + selectedFr);
-					selectedFr = selectedFr.substring(1, selectedFr.length() - 1);
-					selectedFr = selectedFr.replaceAll("\"", "");
+				System.out.println("Fr List Final " + frList);
 
-					crnFr = selectedFr;
+				map.add("fromDate", fromDate);
 
-					frList = Arrays.asList(selectedFr);
+				map.add("toDate", toDate);
+				if (frList.contains("-1")) {
+					isAllFrSelected = true;
 
-					System.out.println("Fr List Final " + frList);
-					
-					
-					map.add("fromDate", fromDate);
-					
-					map.add("toDate", toDate);
-					if (frList.contains("-1")) {
-						isAllFrSelected = true;
-
-					}
-
-					if (isAllFrSelected) {
-						
-							map.add("frIdList", 0);
-						
-					}
-					else {
-						
-						map.add("frIdList", selectedFr);
-						
-					}
-					
-					creditHeaderList = restTemplate.postForObject(Constants.url + "getCreditNoteHeaders", map,
-							List.class);
-					
-					System.err.println("CH List " +creditHeaderList.toString());
-
-				} catch (Exception e) {
-					System.out.println("Exception in getAllFrIdName" + e.getMessage());
-					e.printStackTrace();
 				}
-				
-				
-		}catch (Exception e) {
+
+				if (isAllFrSelected) {
+
+					map.add("frIdList", 0);
+
+				} else {
+
+					map.add("frIdList", selectedFr);
+
+				}
+
+				headerResponse = restTemplate.postForObject(Constants.url + "getCreditNoteHeaders", map,
+						GetCreditNoteHeadersList.class);
+
+				creditHeaderList = headerResponse.getCreditNoteHeaders();
+
+				System.err.println("CH List " + creditHeaderList.toString());
+
+			} catch (Exception e) {
+				System.out.println("Exception in getAllFrIdName" + e.getMessage());
+				e.printStackTrace();
+			}
+
+		} catch (Exception e) {
 			System.err.println("Exce in viewving credit note page");
 		}
-		
+
 		return creditHeaderList;
 	}
 
-	
-	
-	
-	
-	
 	@RequestMapping(value = "/getCrnDetailList/{crnId}", method = RequestMethod.GET)
 	public ModelAndView getGrnDetailList(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("crnId") int crnId) {
 		ModelAndView model = new ModelAndView("creditNote/crnDetails");
 		System.out.println("In detail Page");
-		
+
 		RestTemplate restTemplate = new RestTemplate();
-		
-		
-		
+
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 		map.add("crnId", crnId);
-		crnDetailList = restTemplate.postForObject(Constants.url + "getCrnDetails", map,
-				List.class);
-		
-		System.out.println("crn Detail List******** "+crnDetailList);
-		
-		model.addObject("crnDetailList",crnDetailList);
-		model.addObject("crnId",crnId);
+		crnDetailResponse = restTemplate.postForObject(Constants.url + "getCrnDetails", map, GetCrnDetailsList.class);
 
-		
+		crnDetailList = crnDetailResponse.getCrnDetails();
+
+		System.out.println("crn Detail List******** " + crnDetailList);
+
+		model.addObject("crnDetailList", crnDetailList);
+		model.addObject("crnId", crnId);
+
 		return model;
 	}
-	
-	
-	@RequestMapping(value = "/getCrnCheckedHeaders" , method = RequestMethod.POST)
-	public ModelAndView getCrnCheckedHeaders(HttpServletRequest request, HttpServletResponse response
-			) {
-		ModelAndView model = new ModelAndView("creditNote/crnDetails");
-		System.out.println("In detail Page");
+
+	@RequestMapping(value = "/getCrnCheckedHeaders", method = RequestMethod.POST)
+	public ModelAndView getCrnCheckedHeaders(HttpServletRequest request, HttpServletResponse response) {
 		
-		
-		String[] checked=request.getParameterValues("select_to_agree");
-		
-		for(int i=0;i<checked.length;i++) {
-			System.err.println("Value checked  " + checked[i]);
+		ModelAndView model = new ModelAndView("creditNote/pdf/creditnotePdf");
+
+		try {
+			System.out.println("In detail Page");
+
+			String[] checked = request.getParameterValues("select_to_agree");
+			String crnIdList = new String();
+			for (int i = 0; i < checked.length; i++) {
+
+				System.err.println("Value checked  " + checked[i]);
+				// crnIdList = checked[i] + "," + crnIdList;
+
+				crnIdList = crnIdList + "," + checked[i];
+
+			}
+
+			System.err.println("Crn Id List " + crnIdList);
+			crnIdList = crnIdList.substring(1, crnIdList.length());
+			System.err.println("Crn Id List on removing last comma " + crnIdList);
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			map.add("crnId", crnIdList);
+			crnDetailResponse = restTemplate.postForObject(Constants.url + "getCrnDetails", map,
+					GetCrnDetailsList.class);
+			crnDetailList = new ArrayList<>();
+
+			crnDetailList = crnDetailResponse.getCrnDetails();
+
+			GetCrnDetails crnPrintDetail = new GetCrnDetails();
+			
+			List<GetCreditNoteHeaders> tempHeaderList = creditHeaderList;
+			
+			creditHeaderList=new ArrayList<>();
+			
+			for(int i=0;i<checked.length;i++) {
+				
+				for(int j=0;j<tempHeaderList.size();j++) {
+					
+					if(Integer.parseInt(checked[i])==tempHeaderList.get(j).getCrnId()) {
+						
+						System.err.println("crn Id added " +checked[i]);
+						creditHeaderList.add(tempHeaderList.get(j));
+					
+					}
+				}
+				
+			}
+
+			// List<GetCrnDetails> crnPrintDetailList=new ArrayList<>()
+			List<CreditPrintBean> printList = new ArrayList<>();
+			
+			System.err.println("header data " + creditHeaderList.toString());
+			System.err.println(
+					"Size of Header = " + creditHeaderList.size() + "Size of Detail =  " + crnDetailList.toString());
+			CreditPrintBean cb;
+			for (int i = 0; i < creditHeaderList.size(); i++) {
+				 cb = new CreditPrintBean();
+
+				System.err.println("I = " + i);
+
+				cb.setHeaders(creditHeaderList.get(i));
+
+				List<GetCrnDetails> crnPrintDetailList = new ArrayList<>();
+
+				for (int j = 0; j < crnDetailList.size(); j++) {
+
+					System.err.println("J = " + j);
+
+					if (creditHeaderList.get(i).getCrnId() == crnDetailList.get(j).getCrnId()) {
+
+						System.err.println("Match found = " + j);
+
+						crnPrintDetailList.add(crnDetailList.get(j));
+						
+					} // end of if
+
+				} // end of Inner for
+
+				cb.setDetails(crnPrintDetailList);
+				printList.add(cb);
+			} // end of outer for
+
+			System.err.println("printList = " + printList.toString());
+
+			model.addObject("crnPrint",printList);
+			
+			System.out.println("crn Detail List******** " + crnDetailList);
+		} catch (Exception e) {
+			System.err.println("Exce Occured ");
+			System.err.println(e.getMessage());
+
+			e.printStackTrace();
 		}
-		
-		RestTemplate restTemplate = new RestTemplate();
-		
-		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+	
 		return model;
 
 	}

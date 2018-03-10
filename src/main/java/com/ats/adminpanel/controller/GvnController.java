@@ -263,9 +263,9 @@ public class GvnController {
 
 			// Ganesh Remrk
 			map = new LinkedMultiValueMap<String, Object>();
-			map.add("isFrUsed", 1);
+			map.add("isFrUsed", 0);
 			map.add("moduleId", 1);
-			map.add("subModuleId", 2);
+			map.add("subModuleId", 3);
 			getAllRemarksList = restTemplate.postForObject(Constants.url + "/getAllRemarks", map,
 					GetAllRemarksList.class);
 
@@ -924,9 +924,9 @@ public class GvnController {
 
 			// Ganesh Remrk
 			map = new LinkedMultiValueMap<String, Object>();
-			map.add("isFrUsed", 1);
+			map.add("isFrUsed", 0);
 			map.add("moduleId", 1);
-			map.add("subModuleId", 2);
+			map.add("subModuleId", 4);//4 for QC and 5 for Store/Sales
 			getAllRemarksList = restTemplate.postForObject(Constants.url + "/getAllRemarks", map,
 					GetAllRemarksList.class);
 
@@ -1519,7 +1519,7 @@ public class GvnController {
 				map.add("statusList", statusList);
 				map.add("fromDate", accGvnHeaderFromDate);// ie current date
 				map.add("toDate", accGvnHeaderToDate);// ie current date
-				map.add("isGrn", 0);
+				map.add("isGrn", "0" + "," + "2");
 
 				gvnAccHeaderList = new ArrayList<>();
 
@@ -1547,7 +1547,7 @@ public class GvnController {
 
 					map.add("fromDate", accGvnHeaderFromDate);// ie current date
 					map.add("toDate", accGvnHeaderToDate);// ie current date
-					map.add("isGrn", 0);
+					map.add("isGrn", "0" + "," + "2");
 
 					gvnAccHeaderList = new ArrayList<>();
 
@@ -1567,7 +1567,7 @@ public class GvnController {
 					map.add("frIdList", frSelectedAccGvnHeader);
 					map.add("fromDate", accGvnHeaderFromDate);
 					map.add("toDate", accGvnHeaderToDate);
-					map.add("isGrn", 0);
+					map.add("isGrn", "0" + "," + "2");
 
 					gvnAccHeaderList = new ArrayList<>();
 
@@ -1628,9 +1628,9 @@ public class GvnController {
 
 			// Ganesh Remrk
 			map = new LinkedMultiValueMap<String, Object>();
-			map.add("isFrUsed", 1);
+			map.add("isFrUsed", 0);
 			map.add("moduleId", 1);
-			map.add("subModuleId", 2);
+			map.add("subModuleId", 6);
 			getAllRemarksList = restTemplate.postForObject(Constants.url + "/getAllRemarks", map,
 					GetAllRemarksList.class);
 
