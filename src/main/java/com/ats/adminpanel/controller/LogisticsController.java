@@ -1313,51 +1313,7 @@ public class LogisticsController {
 	
 	String pdfName;
 	
-	@RequestMapping(value = "/viewLogisticsPdf", method = RequestMethod.GET)
-	public void viewLogisticsPdf(HttpServletRequest request, HttpServletResponse response) {
-
-		 
-		 System.out.println("billFile "+pdfName);
-			File file = new File(Constants.LOGIS_BILL_URL+pdfName);
-			System.out.println("file"+file);
-			if(file != null) {
-
-                String mimeType = URLConnection.guessContentTypeFromName(file.getName());
-
-                if (mimeType == null) {
-
-                    mimeType = "application/pdf";
-
-                }
-
-                response.setContentType(mimeType);
-
-                response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
-
-                // response.setHeader("Content-Disposition", String.format("attachment;
-                // filename=\"%s\"", file.getName()));
-
-                response.setContentLength((int) file.length());
-
-                InputStream inputStream = null;
-				try {
-					inputStream = new BufferedInputStream(new FileInputStream(file));
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-                try {
-                    FileCopyUtils.copy(inputStream, response.getOutputStream());
-                } catch (IOException e) {
-                    System.out.println("Excep in Opening a Pdf File");
-                    e.printStackTrace();
-                }
-            }
-
-       
-
-	}
+ 
 	
 	@RequestMapping(value = "/getServicingWithDate", method = RequestMethod.GET)
 	@ResponseBody
@@ -1461,6 +1417,7 @@ public class LogisticsController {
 			model.addObject("sprGroupList",sprGroupList); 
 			model.addObject("sprPartList",getAllSparePart);
 			model.addObject("vehicleList",vehicleList);
+			model.addObject("url",Constants.LOGIS_BILL_URL);
 			 model.addObject("viewServicingDetail", viewServicingDetail);
 			 model.addObject("flag", flag);
 		}catch(Exception e)
@@ -2574,49 +2531,7 @@ public class LogisticsController {
 
 	}
 	
-	@RequestMapping(value = "/viewDocumentFile/{docPath}", method = RequestMethod.GET)
-	public void viewDocumentFile(@PathVariable String docPath,HttpServletRequest request, HttpServletResponse response) {
-
-		 
-		 System.out.println("documentFile "+documentFile);
-			File file = new File(Constants.LOGIS_BILL_URL+documentFile);
-			System.out.println("file"+file);
-			if(file != null) {
-
-                String mimeType = URLConnection.guessContentTypeFromName(file.getName());
-
-                if (mimeType == null) {
-
-                    mimeType = "application/pdf";
-
-                }
-
-                response.setContentType(mimeType);
-
-                response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
-
-                // response.setHeader("Content-Disposition", String.format("attachment;
-                // filename=\"%s\"", file.getName()));
-
-                response.setContentLength((int) file.length());
-
-                InputStream inputStream = null;
-				try {
-					inputStream = new BufferedInputStream(new FileInputStream(file));
-				} catch (FileNotFoundException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-				}
-
-                try {
-                    FileCopyUtils.copy(inputStream, response.getOutputStream());
-                } catch (IOException e) {
-                    System.out.println("Excep in Opening a Pdf File");
-                    e.printStackTrace();
-                }
-            }
- 
-	}
+	 
 	
 	//--------------------------------------------------Machine Master ----------------------------------------
 
@@ -3239,8 +3154,8 @@ public class LogisticsController {
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 		
-		//File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/Inward.pdf");
-		File f = new File("C:/pdf/ordermemo221.pdf");
+		File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/Inward.pdf");
+		//File f = new File("C:/pdf/ordermemo221.pdf");
 
 		try {
 			runConverter(Constants.ReportURL + url, f,request,response);
@@ -3254,9 +3169,9 @@ public class LogisticsController {
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		 String filePath = "C:/pdf/ordermemo221.pdf";
+		 //String filePath = "C:/pdf/ordermemo221.pdf";
 
-		//String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/Inward.pdf";
+		String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/Inward.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;

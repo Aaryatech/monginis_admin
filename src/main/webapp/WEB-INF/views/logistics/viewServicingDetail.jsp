@@ -303,7 +303,7 @@
 							</c:when>
 							 
 						</c:choose>
-						<a href="${pageContext.request.contextPath}/viewLogisticsPdf" target="blank" ><input type="button" value="View Pdf" class="btn btn-info">
+						<a href="${url}${viewServicingDetail.billFile}" target="blank" ><input type="button" value="View Pdf" class="btn btn-info">
 									</a>
 							</div>
 						</div>

@@ -140,7 +140,7 @@
 							<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 								<!-- 		<input type="submit" class="btn btn-primary" value="Submit" onclick="validation()" > -->
-										<a href="${pageContext.request.contextPath}/viewDocumentFile/${vehicleDocument.docPath}" target="blank" ><input type="button" value="View Document File" class="btn btn-info">
+										<a href="${imageUrl}${vehicleDocument.docPath}" target="blank" ><input type="button" value="View Document File" class="btn btn-info">
 										</a>
 										 </div>
 								</div><br><br>
