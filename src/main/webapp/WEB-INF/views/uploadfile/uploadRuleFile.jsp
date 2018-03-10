@@ -101,7 +101,7 @@
 											 
 												<div class="col-md-4"> 
 													 Last Upload Date: ${date3}
-													<a href="${pageContext.request.contextPath}/download/${3}" target="blank" ><input type="button" value="Download File" class="btn btn-info">
+													<a href="${url}${document3}" target="blank" ><input type="button" value="Download File" class="btn btn-info">
 										</a>
 												</div>
 										</div><br>	<br>
@@ -115,7 +115,7 @@
 												
 												<div class="col-md-4"> 
 													 Last Upload Date: ${date4}
-													<a href="${pageContext.request.contextPath}/download/${4}" target="blank" ><input type="button" value="Download File" class="btn btn-info">
+													<a href="${url}${document4}" target="blank" ><input type="button" value="Download File" class="btn btn-info">
 										</a>
 												</div>
 							
