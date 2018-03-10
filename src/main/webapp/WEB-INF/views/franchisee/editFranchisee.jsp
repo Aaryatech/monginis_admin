@@ -388,7 +388,7 @@
                                                            
                                                                       </c:when>
                                                                       
-                                                                       <c:when test="${franchiseeList.frGstType=='7500000'}">
+                                                                       <c:when test="${franchiseeList.frGstType=='10000000'}">
                                                                          <option value="0" >Non Registered</option>
                                                                        
                                                                         <option value="2000000" >Composite</option>

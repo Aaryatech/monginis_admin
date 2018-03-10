@@ -1345,8 +1345,8 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 		
-		//File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/Inward.pdf");
-		File f = new File("C:/pdf/ordermemo221.pdf");
+		File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/Inward.pdf");
+		//File f = new File("C:/pdf/ordermemo221.pdf");
 
 		try {
 			runConverter(Constants.ReportURL + url, f,request,response);
@@ -1360,9 +1360,9 @@ List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		 String filePath = "C:/pdf/ordermemo221.pdf";
+		// String filePath = "C:/pdf/ordermemo221.pdf";
 
-		//String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/Inward.pdf";
+		String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/Inward.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;

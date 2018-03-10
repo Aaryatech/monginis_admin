@@ -2103,4 +2103,24 @@ public class FranchiseeController {
 		}
 		return frTargetList.getFrTargetList();
 	}
+	
+	@RequestMapping(value = "/findFranchiseeData", method = RequestMethod.GET)
+	public @ResponseBody FranchiseeList findFranchiseeData(@RequestParam(value = "fr_id", required = true) int frId) {
+
+		FranchiseeList franchiseeList = null;
+		try {
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+		map.add("frId", frId);
+		RestTemplate restTemplate = new RestTemplate();
+
+		 franchiseeList = restTemplate.getForObject(Constants.url + "getFranchisee?frId={frId}",
+				FranchiseeList.class, frId);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return franchiseeList;
+	}
+	// ----------------------------------------END--------------------------------------------
 }

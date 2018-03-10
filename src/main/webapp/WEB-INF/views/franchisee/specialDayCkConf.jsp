@@ -117,7 +117,26 @@
 	src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
+<script>
+	$(function() {
 
+		
+		$("#from_order_date").datepicker({
+			dateFormat : 'dd-mm-yy',
+		});
+		$("#to_order_date").datepicker({
+			dateFormat : 'dd-mm-yy',
+		});
+		$("#from_delivery_date").datepicker({
+			dateFormat : 'dd-mm-yy',
+		});
+		$("#to_delivery_date").datepicker({
+			dateFormat : 'dd-mm-yy',
+		});
+		
+		
+	});
+</script>
 <style type="text/css">
 select {
     width: 180px;
@@ -228,7 +247,7 @@ select {
 													class="form-control chosen" tabindex="-1" id="items" multiple="multiple"
 													data-rule-required="true">
                                                       <option value=""> </option>
-													<optgroup label="All FItems">
+													<optgroup label="All Items">
 														<option value=""></option>
 														<c:forEach
 															items="${itemList}"
@@ -402,13 +421,76 @@ select {
 			<footer>
 				<p>2017 © MONGINIS.</p>
 			</footer>
-
+<script
+	src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script> 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 				class="fa fa-chevron-up"></i></a>
 		</div>
 		<!-- END Content -->
 	</div>
 	<!-- END Container -->
+	<!-- END Container -->
+
+	<!--basic scripts-->
+	<script
+		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script>
+		window.jQuery
+				|| document
+						.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
+	</script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
+
+	<!--page specific plugin scripts-->
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
+
+
+	<!--page specific plugin scripts-->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
+
+	<!--flaty scripts-->
+	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
+	<!--page specific plugin scripts-->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/clockface/js/clockface.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+
 
 
 </body>

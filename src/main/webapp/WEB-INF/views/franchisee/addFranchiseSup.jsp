@@ -9,6 +9,7 @@
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
+	<c:url var="findFranchiseeData" value="/findFranchiseeData" />
 
 
 	<div class="container" id="main-container">
@@ -115,7 +116,7 @@
 									<div class="col-sm-9 col-lg-3 controls">
 										<input type="text" name="pass1" id="pass1"
 											placeholder="User1 Password" class="form-control"
-											data-rule-required="true" value="${frSup.pass1}"/>
+											data-rule-required="true" value="${frSup.pass1}" readonly/>
 									</div>
 							  </div>
 							    <div class="form-group">
@@ -436,7 +437,22 @@ function disableFranchise(isEdit) {
 		}
 
 }
-</script><!-- 
+</script>
+<script type="text/javascript">
+$(document).ready(function() { 
+	$('#fr_id').change(
+			function() {
+				$.getJSON('${findFranchiseeData}', {
+					fr_id : $(this).val(),
+					ajax : 'true'
+				}, function(data) {
+					var len = data.length;
+					document.getElementById("pass1").value=data.frPassword;
+				});
+			});
+});
+</script>
+<!-- 
 <script type="text/javascript">
 $(document).ready(function () {
     $('#pest_control_date').datepicker();
