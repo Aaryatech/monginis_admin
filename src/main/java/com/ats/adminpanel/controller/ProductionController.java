@@ -4,14 +4,17 @@ import java.awt.Desktop;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.Writer;
 import java.net.URLConnection;
 import java.nio.file.Files;
 import java.text.DateFormat;
@@ -71,6 +74,7 @@ import com.ats.adminpanel.model.production.PostProdPlanHeader;
 import com.ats.adminpanel.model.production.PostProductionDetail;
 import com.ats.adminpanel.model.production.PostProductionHeader;
 import com.ats.adminpanel.model.production.PostProductionPlanDetail;
+import com.ats.adminpanel.model.production.ProductionBarcode;
 import com.ats.adminpanel.model.production.UpdateOrderStatus;
 import com.ats.adminpanel.model.productionplan.MixingDetailed;
 import com.ats.adminpanel.model.salesreport.OrderFromProdPdfView;
@@ -111,9 +115,9 @@ public class ProductionController {
 	public List<GetRegSpCakeOrderQty> getRegSpCakeOrderQtyList;
 	public List<GetOrderItemQty> getOrderItemQtyList;
 	public int[] timeSlot;
-	
+	List<ProductionBarcode> barcodeList;
 	int selCate;
-	
+
 	GetCurProdAndBillQtyList getCurProdAndBillQtyList = new GetCurProdAndBillQtyList();
 
 	@RequestMapping(value = "/showproduction", method = RequestMethod.GET)
@@ -152,15 +156,148 @@ public class ProductionController {
 		return model;
 	}
 
+	@RequestMapping(value = "/prodBarcodePrinting", method = RequestMethod.GET)
+	public ModelAndView prodBarcodePrinting(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("production/prodBarcode");
+		Constants.mainAct = 4;
+		Constants.subAct = 32;
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
+				CategoryListResponse.class);
+
+		categoryList = categoryListResponse.getmCategoryList();
+		// allFrIdNameList = new AllFrIdNameList();
+		System.out.println("Category list  " + categoryList);
+
+		model.addObject("unSelectedCatList", categoryList);
+
+		return model;
+	}
+
+	@RequestMapping(value = "/getProductionOrderBarcode", method = RequestMethod.GET)
+	public @ResponseBody List<ProductionBarcode> getProductionOrderBarcode(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		String date = request.getParameter("productionDate");
+		int cat = Integer.parseInt(request.getParameter("selectedCat"));
+
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy");
+		String ds2 = null;
+		try {
+			ds2 = sdf1.format(sdf2.parse(date));
+		} catch (ParseException e) {
+			
+			e.printStackTrace();
+		}
+		System.out.println(ds2);
+
+		barcodeList = new ArrayList<ProductionBarcode>();
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		RestTemplate rest = new RestTemplate();
+		map.add("catId", cat);
+		map.add("date", ds2);
+
+		System.out.println("map " + map.toString());
+		ParameterizedTypeReference<List<ProductionBarcode>> typeRef = new ParameterizedTypeReference<List<ProductionBarcode>>() {
+		};
+		ResponseEntity<List<ProductionBarcode>> responseEntity = rest.exchange(Constants.url + "getItemForBarcode",
+				HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+		barcodeList = responseEntity.getBody();
+
+		System.out.println("barcode data " + barcodeList.toString());
+		return barcodeList;
+	}
+
+	@RequestMapping(value = "/submitProductionBarcode", method = RequestMethod.POST)
+	public void submitProductionBarcode(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+
+		 File file = new File("prod.txt");
+
+	        try (Writer writer = new BufferedWriter(new FileWriter(file))) {
+	        	
+	        	for(ProductionBarcode prod : barcodeList) {
+	        		
+	        		int q=prod.getProductionQty();
+	        		
+	        		for(int i=1; i<=q; i++) {
+	        		        		
+	        String generalSetting = "SIZE 47.5 mm, 24.5 mm" +   
+	        						System.getProperty("line.separator") +"SPEED 3" +
+	        						System.getProperty("line.separator") + "DENSITY 17" +
+	        						System.getProperty("line.separator") + "SET RIBBON ON" +
+	        						System.getProperty("line.separator") + "DIRECTION 0,0" +
+	        						System.getProperty("line.separator") + "REFERENCE 0,0" +
+	        						System.getProperty("line.separator") + "OFFSET 0 mm" +
+	        						System.getProperty("line.separator") + "SET PEEL OFF" +
+	        						System.getProperty("line.separator") + "SET TEAR ON" +
+	        						System.getProperty("line.separator") + "CLS" +
+	        						System.getProperty("line.separator") + "CODEPAGE 850" ;
+	        		
+	            String barcode = generalSetting + System.getProperty("line.separator")
+	            			     + "BARCODE 347,100,\"128M\",54,0,180,2,4,\"" + prod.getItemCode() + "\"";
+	            
+	            String text = barcode + System.getProperty("line.separator") + "TEXT 347,40,\"ROMAN.TTF\",180,1,10,\"" + prod.getItemName()+"\"";
+
+	            String contents = text + System.getProperty("line.separator") + "PRINT 1,1" + System.getProperty("line.separator") + System.getProperty("line.separator");
+	            
+	            writer.write(contents);
+	        	
+	        		}
+	        	}
+	            
+	            
+	        } catch (IOException e) {
+	            e.printStackTrace();
+	        }	
+	        
+	        System.out.println("file "+file.getAbsolutePath());
+	                
+	        String mimeType= URLConnection.guessContentTypeFromName(file.getName());
+	     
+	        if(mimeType==null){
+	        
+	        	System.out.println("mimetype is not detectable");
+	            mimeType = "application/octet-stream";
+	        
+	        }
+	         
+	        System.out.println("mimetype : "+mimeType);
+	         
+	        response.setContentType(mimeType);
+	         
+	        response.setHeader("Content-Disposition", String.format("attachment; filename=\"" + file.getName() +"\""));
+	 	         
+	        //response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getName()));
+	         
+	        response.setContentLength((int)file.length());
+	 
+	        InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+	 
+	    
+	        try {
+				FileCopyUtils.copy(inputStream, response.getOutputStream());
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        
+		
+	}
+
 	@RequestMapping(value = "/getMenu", method = RequestMethod.GET)
 	public @ResponseBody List<Menu> getMenu(HttpServletRequest request, HttpServletResponse response) {
 
 		selectedCat = request.getParameter("selectedCat");
-		selCate=Integer.parseInt(request.getParameter("selectedCat"));
-		
-		//selCate=Integer.parseInt(request.getParameter("selectedCat"));
-		
-		System.out.println("Inside getMenu seleCatId VAlue "+selCate);
+		selCate = Integer.parseInt(request.getParameter("selectedCat"));
+
+		// selCate=Integer.parseInt(request.getParameter("selectedCat"));
+
+		System.out.println("Inside getMenu seleCatId VAlue " + selCate);
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		RestTemplate rest = new RestTemplate();
@@ -192,23 +329,21 @@ public class ProductionController {
 
 		productionDate = request.getParameter("productionDate");
 		String selectedMenuList = request.getParameter("selectedMenu_list");
-		System.out.println("selectedMenuList"+selectedMenuList.toString());
-		if(selectedMenuList.contains("-1"))
-		{		System.out.println("selectedMenuList"+selectedMenuList.toString());
+		System.out.println("selectedMenuList" + selectedMenuList.toString());
+		if (selectedMenuList.contains("-1")) {
+			System.out.println("selectedMenuList" + selectedMenuList.toString());
 
 			List<String> ids = new ArrayList<>();
-			for(int i=0;i<menuList.size();i++)
-			{
+			for (int i = 0; i < menuList.size(); i++) {
 				ids.add(String.valueOf(menuList.get(i).getMenuId()));
 			}
 			String idList = ids.toString();
 			selectedMenuList = idList.substring(1, idList.length() - 1);
 			selectedMenuList = selectedMenuList.replaceAll("\"", "");
-			System.out.println("selectedMenuList"+selectedMenuList.toString());
-		}else
-		{
-		selectedMenuList = selectedMenuList.substring(1, selectedMenuList.length() - 1);
-		selectedMenuList = selectedMenuList.replaceAll("\"", "");
+			System.out.println("selectedMenuList" + selectedMenuList.toString());
+		} else {
+			selectedMenuList = selectedMenuList.substring(1, selectedMenuList.length() - 1);
+			selectedMenuList = selectedMenuList.replaceAll("\"", "");
 		}
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
@@ -226,10 +361,8 @@ public class ProductionController {
 
 			// getOrderItemQtyList=rest.postForObject(Constants.url + "getOrderAllItemQty",
 			// map, List.class);
-			
-			
-			
-			//new code for getting current stock
+
+			// new code for getting current stock
 			RestTemplate restTemplate = new RestTemplate();
 
 			DateFormat dfYmd = new SimpleDateFormat("yyyy-MM-dd");
@@ -253,11 +386,10 @@ public class ProductionController {
 			map.add("catId", selCate);
 			map.add("delStatus", 0);
 			map.add("timestamp", stockHeader.getTimestamp());
-			
-			
+
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 			Calendar cal = Calendar.getInstance();
-			 
+
 			map.add("curTimeStamp", dateFormat.format(cal.getTime()));
 
 			getCurProdAndBillQtyList = restTemplate.postForObject(Constants.url + "getCurrentProdAndBillQty", map,
@@ -271,25 +403,24 @@ public class ProductionController {
 			String stkDate = df.format(stockDate);
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("stockDate", stkDate);
-			
+
 			map.add("catId", selectedCat);
-			//RestTemplate restTemplate = new RestTemplate();
+			// RestTemplate restTemplate = new RestTemplate();
 
 			ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef1 = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
 			};
-			ResponseEntity<List<FinishedGoodStockDetail>> responseEntity1 = restTemplate
-					.exchange(Constants.url + "getFinGoodStockDetail", HttpMethod.POST, new HttpEntity<>(map), typeRef1);
+			ResponseEntity<List<FinishedGoodStockDetail>> responseEntity1 = restTemplate.exchange(
+					Constants.url + "getFinGoodStockDetail", HttpMethod.POST, new HttpEntity<>(map), typeRef1);
 
 			List<FinishedGoodStockDetail> finGoodDetail = responseEntity1.getBody();
 
 			System.out.println("Finished Good Stock Detail " + finGoodDetail.toString());
 
 			// new code
-			List<FinishedGoodStockDetail> updateStockDetailList=new ArrayList<>();
+			List<FinishedGoodStockDetail> updateStockDetailList = new ArrayList<>();
 
 			FinishedGoodStockDetail stockDetail = new FinishedGoodStockDetail();
 			GetCurProdAndBillQty curProdBilQty = new GetCurProdAndBillQty();
-			
 
 			for (int i = 0; i < getCurProdAndBillQty.size(); i++) {
 
@@ -361,7 +492,7 @@ public class ProductionController {
 						System.out.println("bill Qty = " + curProdBilQty.getBillQty());
 						System.out.println(" for Item Id " + curProdBilQty.getId());
 						System.out.println("a =" + a + "b = " + b + "c= " + c);
-						float damagedQty=curProdBilQty.getDamagedQty();
+						float damagedQty = curProdBilQty.getDamagedQty();
 
 						float curIssue = billQty - (a + b + c);
 
@@ -382,9 +513,9 @@ public class ProductionController {
 						stockDetail.setProdQty(prodQty);
 						stockDetail.setRejQty(rejQty);
 						stockDetail.setTotalCloStk(totalClosing);
-						
+
 						updateStockDetailList.add(stockDetail);
-						
+
 						System.out.println("closing Qty  : t1 " + cloT1 + " t2 " + cloT2 + " t3 " + cloT3);
 
 						System.out.println("cur Closing " + curClosing);
@@ -395,222 +526,193 @@ public class ProductionController {
 					} // end of if isSameItem =true
 				} // end of Inner For Loop
 			} // End of outer For loop
-			
-			for(int i=0;i<getOrderItemQtyList.size();i++) {
-				
-				for(int j=0;j<updateStockDetailList.size();j++) {
-					if(Integer.parseInt(getOrderItemQtyList.get(i).getItemId())==updateStockDetailList.get(j).getItemId()) {
-						
+
+			for (int i = 0; i < getOrderItemQtyList.size(); i++) {
+
+				for (int j = 0; j < updateStockDetailList.size(); j++) {
+					if (Integer.parseInt(getOrderItemQtyList.get(i).getItemId()) == updateStockDetailList.get(j)
+							.getItemId()) {
+
 						getOrderItemQtyList.get(i).setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
 						getOrderItemQtyList.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk());
 					}
 				}
 			}
-			
-			//end of new Code 
+
+			// end of new Code
 
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
- 
 
 		return getOrderItemQtyList;
 
 	}
-	
-	//Pdf for Prod From Order 
-	/*@RequestMapping(value = "/showProdByOrderPdf", method = RequestMethod.GET)
-	public @ResponseBody ByteArrayInputStream showProdByOrderPdf(HttpServletRequest request, HttpServletResponse response) {
 
-		List<GetOrderItemQty> moneyOutList = getOrderItemQtyList;
-		
-		ByteArrayInputStream bis = OrderFromProdPdfView.moneyOutReport(moneyOutList);
-		
-	        HttpHeaders headers = new HttpHeaders();
-	        headers.add("Content-Disposition", "filename=MoneyOutReport.pdf");
+	// Pdf for Prod From Order
+	/*
+	 * @RequestMapping(value = "/showProdByOrderPdf", method = RequestMethod.GET)
+	 * public @ResponseBody ByteArrayInputStream
+	 * showProdByOrderPdf(HttpServletRequest request, HttpServletResponse response)
+	 * {
+	 * 
+	 * List<GetOrderItemQty> moneyOutList = getOrderItemQtyList;
+	 * 
+	 * ByteArrayInputStream bis = OrderFromProdPdfView.moneyOutReport(moneyOutList);
+	 * 
+	 * HttpHeaders headers = new HttpHeaders(); headers.add("Content-Disposition",
+	 * "filename=MoneyOutReport.pdf");
+	 * 
+	 * return ResponseEntity .ok() .headers(headers)
+	 * .contentType(MediaType.APPLICATION_PDF) .body(new InputStreamResource(bis));
+	 * 
+	 * ModelAndView model = new ModelAndView("production/pdf/productionPdf");
+	 * model.addObject("prodFromOrderReport",getOrderItemQtyList); return model;
+	 * return bis; }doc,new FileOutputStream("report.pdf")); doc.open(); doc.add(new
+	 * Para
+	 */
 
-	        return ResponseEntity
-	                .ok()
-	                .headers(headers)
-	                .contentType(MediaType.APPLICATION_PDF)
-	                .body(new InputStreamResource(bis));
-		
-		ModelAndView model = new ModelAndView("production/pdf/productionPdf");
-		model.addObject("prodFromOrderReport",getOrderItemQtyList);
-		return model;
-	        return bis;
-	}doc,new FileOutputStream("report.pdf"));
-				doc.open();
-				doc.add(new Para
-*/	
-	
-	/*@RequestMapping(value = "/showProdByOrderPdf", method = RequestMethod.GET)
-	public void  showProdByOrderPdf(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
-		  BufferedOutputStream outStream = null;
-		System.out.println("Inside Pdf prod From Order");
-		Document doc=new Document();
-			
-		
-		List<GetOrderItemQty> moneyOutList = getOrderItemQtyList;
-		
-		moneyOutList = getOrderItemQtyList;
-		Document document = new Document(PageSize.A4);
-		//  ByteArrayOutputStream out = new ByteArrayOutputStream();
-		 
-		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-		Calendar cal = Calendar.getInstance();
+	/*
+	 * @RequestMapping(value = "/showProdByOrderPdf", method = RequestMethod.GET)
+	 * public void showProdByOrderPdf(HttpServletRequest request,
+	 * HttpServletResponse response) throws FileNotFoundException {
+	 * BufferedOutputStream outStream = null;
+	 * System.out.println("Inside Pdf prod From Order"); Document doc=new
+	 * Document();
+	 * 
+	 * 
+	 * List<GetOrderItemQty> moneyOutList = getOrderItemQtyList;
+	 * 
+	 * moneyOutList = getOrderItemQtyList; Document document = new
+	 * Document(PageSize.A4); // ByteArrayOutputStream out = new
+	 * ByteArrayOutputStream();
+	 * 
+	 * DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss"); Calendar
+	 * cal = Calendar.getInstance();
+	 * 
+	 * System.out.println("time in Gen Bill PDF ==" +
+	 * dateFormat.format(cal.getTime())); String
+	 * timeStamp=dateFormat.format(cal.getTime()); String
+	 * FILE_PATH="/home/ats-11/REPORT.pdf"; File file=new File(FILE_PATH);
+	 * 
+	 * PdfWriter writer = null;
+	 * 
+	 * 
+	 * FileOutputStream out=new FileOutputStream(FILE_PATH); try {
+	 * writer=PdfWriter.getInstance(document,out); } catch (DocumentException e) {
+	 * 
+	 * e.printStackTrace(); }
+	 * 
+	 * PdfPTable table = new PdfPTable(6); try {
+	 * System.out.println("Inside PDF Table try"); table.setWidthPercentage(100);
+	 * table.setWidths(new float[]{0.9f, 1.6f, 1.4f,1.4f,1.4f,1.4f}); Font headFont
+	 * = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK); Font
+	 * headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
+	 * Font f=new Font(FontFamily.TIMES_ROMAN,12.0f,Font.UNDERLINE,BaseColor.BLUE);
+	 * 
+	 * PdfPCell hcell; hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
+	 * hcell.setHorizontalAlignment(Element.ALIGN_CENTER); table.addCell(hcell);
+	 * 
+	 * hcell = new PdfPCell(new Phrase("Item ID", headFont1));
+	 * hcell.setHorizontalAlignment(Element.ALIGN_CENTER); table.addCell(hcell);
+	 * 
+	 * hcell = new PdfPCell(new Phrase("Item Name", headFont1));
+	 * hcell.setHorizontalAlignment(Element.ALIGN_CENTER); table.addCell(hcell);
+	 * 
+	 * hcell = new PdfPCell(new Phrase("Cur Closing", headFont1));
+	 * hcell.setHorizontalAlignment(Element.ALIGN_CENTER); table.addCell(hcell);
+	 * 
+	 * hcell = new PdfPCell(new Phrase("Cur Opening", headFont1));
+	 * hcell.setHorizontalAlignment(Element.ALIGN_CENTER); table.addCell(hcell);
+	 * 
+	 * hcell = new PdfPCell(new Phrase("Order Quantity", headFont1));
+	 * hcell.setHorizontalAlignment(Element.ALIGN_CENTER); table.addCell(hcell);
+	 * 
+	 * int index=0; for (GetOrderItemQty getMoneyOut : moneyOutList) { index++;
+	 * PdfPCell cell;
+	 * 
+	 * cell = new PdfPCell(new Phrase(String.valueOf(index),headFont));
+	 * cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	 * cell.setHorizontalAlignment(Element.ALIGN_CENTER); table.addCell(cell);
+	 * 
+	 * cell = new PdfPCell(new Phrase(getMoneyOut.getItemId(),headFont));
+	 * cell.setPaddingLeft(5); cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	 * cell.setHorizontalAlignment(Element.ALIGN_CENTER); table.addCell(cell);
+	 * 
+	 * cell = new PdfPCell(new Phrase(getMoneyOut.getItemName(),headFont));
+	 * cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	 * cell.setHorizontalAlignment(Element.ALIGN_CENTER); cell.setPaddingRight(5);
+	 * table.addCell(cell);
+	 * 
+	 * cell = new PdfPCell(new
+	 * Phrase(String.valueOf(getMoneyOut.getCurClosingQty()),headFont));
+	 * cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	 * cell.setHorizontalAlignment(Element.ALIGN_RIGHT); cell.setPaddingRight(5);
+	 * table.addCell(cell);
+	 * 
+	 * cell = new PdfPCell(new
+	 * Phrase(String.valueOf(getMoneyOut.getCurOpeQty()),headFont));
+	 * cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	 * cell.setHorizontalAlignment(Element.ALIGN_RIGHT); cell.setPaddingRight(5);
+	 * table.addCell(cell);
+	 * 
+	 * cell = new PdfPCell(new
+	 * Phrase(String.valueOf(getMoneyOut.getQty()),headFont));
+	 * cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	 * cell.setHorizontalAlignment(Element.ALIGN_RIGHT); cell.setPaddingRight(5);
+	 * table.addCell(cell);
+	 * 
+	 * FooterTable footerEvent = new FooterTable(table);
+	 * writer.setPageEvent(footerEvent); }
+	 * 
+	 * document.open(); Paragraph company = new Paragraph("G F P L",f);
+	 * company.setAlignment(Element.ALIGN_CENTER); document.add(company);
+	 * document.add(new Paragraph(" "));
+	 * 
+	 * Paragraph heading = new Paragraph("Report");
+	 * heading.setAlignment(Element.ALIGN_CENTER); document.add(heading);
+	 * 
+	 * document.add(new Paragraph(" ")); document.add(table); int
+	 * totalPages=writer.getPageNumber(); com.ats.adminpanel.model.itextpdf.Header
+	 * event; // = new com.ats.adminpanel.model.itextpdf.Header(); for(int
+	 * i=1;i<totalPages;i++) { event = new
+	 * com.ats.adminpanel.model.itextpdf.Header(); event.setHeader(new
+	 * Phrase(String.format("page %s", i)));
+	 * 
+	 * writer.setPageEvent(event); }
+	 * 
+	 * 
+	 * FooterTable footerEvent = new FooterTable(table);
+	 * 
+	 * 
+	 * // document.add(new
+	 * Paragraph(""+document.setPageCount(document.getPageNumber()));
+	 * 
+	 * System.out.println("Page no "+totalPages);
+	 * 
+	 * // document.addHeader("Page" ,String.valueOf(totalPages)); //
+	 * writer.setPageEvent((PdfPageEvent) new Phrase());
+	 * 
+	 * document.close();
+	 * 
+	 * Desktop d=Desktop.getDesktop();
+	 * 
+	 * if(file.exists()) { try { d.open(file); } catch (IOException e) { // TODO
+	 * Auto-generated catch block e.printStackTrace(); } }
+	 * 
+	 * } catch (DocumentException ex) {
+	 * 
+	 * System.out.println("Pdf Generation Error: Prod From Orders");
+	 * 
+	 * }
+	 * 
+	 * ModelAndView model = new ModelAndView("production/pdf/productionPdf");
+	 * model.addObject("prodFromOrderReport",getOrderItemQtyList);
+	 * 
+	 * 
+	 * }
+	 */
 
-		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
-		String timeStamp=dateFormat.format(cal.getTime());
-		String FILE_PATH="/home/ats-11/REPORT.pdf";
-		File file=new File(FILE_PATH);
-		
-		PdfWriter writer = null;
-		
-		
-		 FileOutputStream out=new FileOutputStream(FILE_PATH);
-		   try {
-			    writer=PdfWriter.getInstance(document,out);
-		} catch (DocumentException e) {
-			
-			e.printStackTrace();
-		}
-		
-		 PdfPTable table = new PdfPTable(6);
-		 try {
-		 System.out.println("Inside PDF Table try");
-		 table.setWidthPercentage(100);
-	     table.setWidths(new float[]{0.9f, 1.6f, 1.4f,1.4f,1.4f,1.4f});
-	     Font headFont = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK);
-	     Font headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
-	     Font f=new Font(FontFamily.TIMES_ROMAN,12.0f,Font.UNDERLINE,BaseColor.BLUE);
-	     
-	     PdfPCell hcell;
-	     hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
-
-	     hcell = new PdfPCell(new Phrase("Item ID", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
-
-	     hcell = new PdfPCell(new Phrase("Item Name", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
-	     
-	     hcell = new PdfPCell(new Phrase("Cur Closing", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
-	     
-	     hcell = new PdfPCell(new Phrase("Cur Opening", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
-	    
-	     hcell = new PdfPCell(new Phrase("Order Quantity", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
-	 
-	     int index=0;
-	     for (GetOrderItemQty getMoneyOut : moneyOutList) {
-	       index++;
-	         PdfPCell cell;
-
-	        cell = new PdfPCell(new Phrase(String.valueOf(index),headFont));
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	         table.addCell(cell);
-
-	         cell = new PdfPCell(new Phrase(getMoneyOut.getItemId(),headFont));
-	         cell.setPaddingLeft(5);
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	         table.addCell(cell);
-
-	         cell = new PdfPCell(new Phrase(getMoneyOut.getItemName(),headFont));
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	         cell.setPaddingRight(5);
-	         table.addCell(cell);
-	         
-	         cell = new PdfPCell(new Phrase(String.valueOf(getMoneyOut.getCurClosingQty()),headFont));
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	         cell.setPaddingRight(5);
-	         table.addCell(cell);
-	         
-	         cell = new PdfPCell(new Phrase(String.valueOf(getMoneyOut.getCurOpeQty()),headFont));
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	         cell.setPaddingRight(5);
-	         table.addCell(cell);
-	         
-	         cell = new PdfPCell(new Phrase(String.valueOf(getMoneyOut.getQty()),headFont));
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-	         cell.setPaddingRight(5);
-	         table.addCell(cell);
-	         
-	         FooterTable footerEvent = new FooterTable(table);
-	         writer.setPageEvent(footerEvent);
-	     }
-
-	     document.open();
-	     Paragraph company = new Paragraph("G F P L",f);
-	     company.setAlignment(Element.ALIGN_CENTER);
-	     document.add(company);
-	     document.add(new Paragraph(" "));
-
-	     Paragraph heading = new Paragraph("Report");
-	     heading.setAlignment(Element.ALIGN_CENTER);
-	     document.add(heading);
-
-	     document.add(new Paragraph(" "));
-	     document.add(table);
-	 	 int totalPages=writer.getPageNumber();
-	 	com.ats.adminpanel.model.itextpdf.Header event; // = new com.ats.adminpanel.model.itextpdf.Header();
-	 	for(int i=1;i<totalPages;i++) {
-	 	 event = new com.ats.adminpanel.model.itextpdf.Header();
-	 	event.setHeader(new Phrase(String.format("page %s", i)));
-	 	
-	 	writer.setPageEvent(event);
-	 	}
-	 	
-	 	
-	 	 FooterTable footerEvent = new FooterTable(table);
-	 	 
-	 	 
-	 //	 document.add(new Paragraph(""+document.setPageCount(document.getPageNumber()));
-	     
-	 	 System.out.println("Page no "+totalPages);
-	     
-	    // document.addHeader("Page" ,String.valueOf(totalPages));
-	    // writer.setPageEvent((PdfPageEvent) new Phrase());
-	    
-	     document.close();
-	     
-	     Desktop d=Desktop.getDesktop();
-	     
-	     if(file.exists()) {
-	    	 try {
-				d.open(file);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-	     }
-	     
-	 } catch (DocumentException ex) {
-	 
-		 System.out.println("Pdf Generation Error: Prod From Orders");
-	   
-	 }
-
-		ModelAndView model = new ModelAndView("production/pdf/productionPdf");
-		model.addObject("prodFromOrderReport",getOrderItemQtyList);
-
-	
-	}*/
-	
 	@RequestMapping(value = "/getProductionRegSpCakeOrder", method = RequestMethod.GET)
 	public @ResponseBody List<GetRegSpCakeOrderQty> generateRegSpCakeOrderList(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -683,7 +785,7 @@ public class ProductionController {
 
 				System.out.println("item  Id " + getOrderItemQtyList.get(i).getItemId());
 			}
-			
+
 			RestTemplate restTemplate = new RestTemplate();
 
 			PostProductionHeader postProductionHeader = new PostProductionHeader();
@@ -713,7 +815,7 @@ public class ProductionController {
 				postProductionDetail.setItemId(Integer.parseInt(a));
 
 				postProductionDetail.setOrderQty(getOrderItemQtyList.get(i).getQty());
-				postProductionDetail.setProductionDate(convertedDate); 
+				postProductionDetail.setProductionDate(convertedDate);
 				postProductionDetail.setProductionQty(0);
 				postProductionDetail.setProductionBatch("");
 				postProductionDetail.setRejectedQty(0);
@@ -858,7 +960,7 @@ public class ProductionController {
 	List<Route> routeList = new ArrayList<Route>();
 	AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
 	List<Variance> getVarianceorderlistforsort = new ArrayList<Variance>();
-	
+
 	@RequestMapping(value = "/listForVariation", method = RequestMethod.GET)
 	public ModelAndView listForVariation(HttpServletRequest request, HttpServletResponse response) {
 
@@ -885,11 +987,11 @@ public class ProductionController {
 
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/varianceDetailed", method = RequestMethod.GET)
 	public ModelAndView varianceDetailed(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("production/variancelistdetailed"); 
+		ModelAndView model = new ModelAndView("production/variancelistdetailed");
 		int productionHeaderId = Integer.parseInt(request.getParameter("productionHeaderId"));
 		System.out.println("productionHeaderId" + productionHeaderId);
 		try {
@@ -899,30 +1001,30 @@ public class ProductionController {
 
 			postProdPlanHeader = restTemplate.postForObject(Constants.url + "PostProdPlanHeaderwithDetailed", map,
 					PostProdPlanHeader.class);
-			
-			AllItemsListResponse allItemsListResponse = restTemplate.getForObject(Constants.url + "getAllItemsBySorting",
-					AllItemsListResponse.class);
-			List<Item> itemsList = allItemsListResponse.getItems(); 
-			
+
+			AllItemsListResponse allItemsListResponse = restTemplate
+					.getForObject(Constants.url + "getAllItemsBySorting", AllItemsListResponse.class);
+			List<Item> itemsList = allItemsListResponse.getItems();
+
 			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
 					AllRoutesListResponse.class);
 
-			  routeList = new ArrayList<Route>();
+			routeList = new ArrayList<Route>();
 
 			routeList = allRouteListResponse.getRoute();
 
 			// end get Routes
 
-			 allFrIdNameList = new AllFrIdNameList();
-			 
-				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
-				System.out.println("allFrIdNameList"+allFrIdNameList);
-				System.out.println("routeList"+routeList);
-			 
+			allFrIdNameList = new AllFrIdNameList();
+
+			allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+			System.out.println("allFrIdNameList" + allFrIdNameList);
+			System.out.println("routeList" + routeList);
+
 			model.addObject("itemsList", itemsList);
 			model.addObject("allFrIdNameList", allFrIdNameList.getFrIdNamesList());
-			model.addObject("routeList", routeList); 
-			model.addObject("postProdPlanHeader", postProdPlanHeader); 
+			model.addObject("routeList", routeList);
+			model.addObject("postProdPlanHeader", postProdPlanHeader);
 			model.addObject("categoryList", categoryListComp.getmCategoryList());
 			model.addObject("postProdPlanHeaderDetailed", postProdPlanHeader.getPostProductionPlanDetail());
 
@@ -936,63 +1038,56 @@ public class ProductionController {
 	@RequestMapping(value = "/varianceDetailedCalculation", method = RequestMethod.POST)
 	public ModelAndView varianceDetailedCalculation(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("production/calculateVariance"); 
+		ModelAndView model = new ModelAndView("production/calculateVariance");
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			String sbForRouteFrId = new String();
-			int all=0;
+			int all = 0;
 			String[] frId = request.getParameterValues("fr_id[]");
-			String[] rtid = request.getParameterValues("rtid[]"); 
-			System.out.println("rtid "+rtid);
-			System.out.println("frId "+frId);
-			int flag=0;
-			
-			if(frId!=null)
-			{
-				if(frId[0].equals("0"))
-				{
-					all=1;
+			String[] rtid = request.getParameterValues("rtid[]");
+			System.out.println("rtid " + rtid);
+			System.out.println("frId " + frId);
+			int flag = 0;
+
+			if (frId != null) {
+				if (frId[0].equals("0")) {
+					all = 1;
 				}
-				for(int i=0;i<frId.length;i++)
-				{
-					sbForRouteFrId = sbForRouteFrId.concat(frId[i]+",");
-							 
+				for (int i = 0; i < frId.length; i++) {
+					sbForRouteFrId = sbForRouteFrId.concat(frId[i] + ",");
+
 				}
-				System.out.println("sbForRouteFrId"+sbForRouteFrId);
-				flag=0;
-			}
-			else
-			{
-				 for(int j=0;j<rtid.length;j++)
-				 {
-					 map = new LinkedMultiValueMap<String, Object>(); 
-						map.add("routeId", rtid[j]);
+				System.out.println("sbForRouteFrId" + sbForRouteFrId);
+				flag = 0;
+			} else {
+				for (int j = 0; j < rtid.length; j++) {
+					map = new LinkedMultiValueMap<String, Object>();
+					map.add("routeId", rtid[j]);
 
-						FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
-								map, FrNameIdByRouteIdResponse.class);
+					FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(
+							Constants.url + "getFrNameIdByRouteId", map, FrNameIdByRouteIdResponse.class);
 
-						List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+					List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
 
-						System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+					System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
 
-						
-						for (int i = 0; i < frNameIdByRouteIdList.size(); i++) { 
-							
-							sbForRouteFrId=sbForRouteFrId.concat(String.valueOf(frNameIdByRouteIdList.get(i).getFrId())+",");
-						}
-						flag=1;
-				 }
-				 
- 
+					for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
+
+						sbForRouteFrId = sbForRouteFrId
+								.concat(String.valueOf(frNameIdByRouteIdList.get(i).getFrId()) + ",");
+					}
+					flag = 1;
+				}
+
 				System.out.println("fr Id Route WISE = " + sbForRouteFrId);
 			}
-			model.addObject("flag",flag);
-			model.addObject("frId",frId);
-			model.addObject("rtid",rtid);
-			model.addObject("routeList",routeList);
-			model.addObject("allFrIdNameList",allFrIdNameList.getFrIdNamesList());
-			
+			model.addObject("flag", flag);
+			model.addObject("frId", frId);
+			model.addObject("rtid", rtid);
+			model.addObject("routeList", routeList);
+			model.addObject("allFrIdNameList", allFrIdNameList.getFrIdNamesList());
+
 			int groupType = postProdPlanHeader.getItemGrp1();
 			String prodDate = postProdPlanHeader.getProductionDate();
 			System.out.println(prodDate);
@@ -1003,7 +1098,7 @@ public class ProductionController {
 			map.add("groupType", groupType);
 			map.add("frId", sbForRouteFrId);
 			map.add("all", all);
-			System.out.println("map"+map);
+			System.out.println("map" + map);
 			VarianceList getQtyforVariance = restTemplate.postForObject(Constants.url + "getQtyforVariance", map,
 					VarianceList.class);
 
@@ -1015,9 +1110,6 @@ public class ProductionController {
 
 			model.addObject("getQtyforVariance", getQtyforVariance.getVarianceorderlist());
 			System.out.println("unsort size " + getQtyforVariance.getVarianceorderlist().size());
-
-			
-			
 
 			// new Code
 			List<FinishedGoodStockDetail> updateStockDetailList = new ArrayList<>();
@@ -1040,22 +1132,21 @@ public class ProductionController {
 
 				System.out.println("stock date " + stockDate);
 				String stkDate = dfYmd.format(stockDate);
-				//int selCate=Integer.parseInt(selectedCat);
-				System.out.println("stk Date for get Cur Prod and Bill Qty "+stkDate);
-				
-				System.out.println("stk CatId for get Cur Prod and Bill Qty "+groupType);
+				// int selCate=Integer.parseInt(selectedCat);
+				System.out.println("stk Date for get Cur Prod and Bill Qty " + stkDate);
+
+				System.out.println("stk CatId for get Cur Prod and Bill Qty " + groupType);
 
 				map.add("prodDate", stkDate);
 				map.add("catId", groupType);
 				map.add("delStatus", 0);
-				
+
 				map.add("timestamp", stockHeader.getTimestamp());
-				
+
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Calendar cal = Calendar.getInstance();
-				 
-				map.add("curTimeStamp", dateFormat.format(cal.getTime()));
 
+				map.add("curTimeStamp", dateFormat.format(cal.getTime()));
 
 				getCurProdAndBillQtyList = restTemplate.postForObject(Constants.url + "getCurrentProdAndBillQty", map,
 						GetCurProdAndBillQtyList.class);
@@ -1187,51 +1278,51 @@ public class ProductionController {
 					} // end of Inner For Loop
 				} // End of outer For loop
 
-			
+				for (int i = 0; i < postProductionPlanDetaillist.size(); i++) {
 
-			for (int i = 0; i < postProductionPlanDetaillist.size(); i++) {
+					for (int j = 0; j < updateStockDetailList.size(); j++) {
 
-				for (int j = 0; j < updateStockDetailList.size(); j++) {
+						if (postProductionPlanDetaillist.get(i).getItemId() == updateStockDetailList.get(j)
+								.getItemId()) {
 
-					if (postProductionPlanDetaillist.get(i).getItemId() == updateStockDetailList.get(j).getItemId()) {
+							postProductionPlanDetaillist.get(i)
+									.setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
 
-						postProductionPlanDetaillist.get(i)
-								.setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
+							postProductionPlanDetaillist.get(i)
+									.setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk()); // current stock
+						}
 
-						postProductionPlanDetaillist.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk()); //current stock
 					}
 
 				}
 
-			}
-
-			System.out.println("Fianl Post Prod Detail  List "+postProductionPlanDetaillist.toString());
-			// end of new Code
+				System.out.println("Fianl Post Prod Detail  List " + postProductionPlanDetaillist.toString());
+				// end of new Code
 
 			} catch (Exception e) {
 				System.out.println("Excein Prod Controller get Current Fin good Stock " + e.getMessage());
 				e.printStackTrace();
 
 			}
-			
-			
+
 			getVarianceorderlistforsort = getQtyforVariance.getVarianceorderlist();
-			
+
 			for (int i = 0; i < getVarianceorderlistforsort.size(); i++) {
 
 				for (int j = 0; j < updateStockDetailList.size(); j++) {
 
 					if (getVarianceorderlistforsort.get(i).getId() == updateStockDetailList.get(j).getItemId()) {
-							 
+
 						getVarianceorderlistforsort.get(i)
 								.setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
 
 						getVarianceorderlistforsort.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk());
-						float remainingProQty = (getVarianceorderlistforsort.get(i).getOrderQty()+getVarianceorderlistforsort.get(i).getSpCakeQty())-getVarianceorderlistforsort.get(i).getCurOpeQty();
+						float remainingProQty = (getVarianceorderlistforsort.get(i).getOrderQty()
+								+ getVarianceorderlistforsort.get(i).getSpCakeQty())
+								- getVarianceorderlistforsort.get(i).getCurOpeQty();
 
-						
 						if (remainingProQty > 0) {
-							getVarianceorderlistforsort.get(i).setRemainingQty((int)remainingProQty);
+							getVarianceorderlistforsort.get(i).setRemainingQty((int) remainingProQty);
 						} else {
 							getVarianceorderlistforsort.get(i).setRemainingQty(0);
 						}
@@ -1248,12 +1339,14 @@ public class ProductionController {
 					int varianceItemId = getVarianceorderlistforsort.get(j).getId();
 
 					if (planItemid == varianceItemId) {
- 
-						postProductionPlanDetaillist.get(i).setOrderQty(getVarianceorderlistforsort.get(j).getOrderQty()+getVarianceorderlistforsort.get(j).getSpCakeQty());
-						 float remainingProQty = postProductionPlanDetaillist.get(i).getOrderQty()-postProductionPlanDetaillist.get(i).getCurOpeQty();
+
+						postProductionPlanDetaillist.get(i).setOrderQty(getVarianceorderlistforsort.get(j).getOrderQty()
+								+ getVarianceorderlistforsort.get(j).getSpCakeQty());
+						float remainingProQty = postProductionPlanDetaillist.get(i).getOrderQty()
+								- postProductionPlanDetaillist.get(i).getCurOpeQty();
 
 						if (remainingProQty > 0) {
-							postProductionPlanDetaillist.get(i).setInt4((int)remainingProQty);
+							postProductionPlanDetaillist.get(i).setInt4((int) remainingProQty);
 						} else {
 							postProductionPlanDetaillist.get(i).setInt4(0);
 						}
@@ -1266,13 +1359,11 @@ public class ProductionController {
 			AllItemsListResponse allItemsListResponse = restTemplate.getForObject(Constants.url + "getAllItems",
 					AllItemsListResponse.class);
 			List<Item> itemsList = allItemsListResponse.getItems();
-			pdfItemList=allItemsListResponse.getItems();
+			pdfItemList = allItemsListResponse.getItems();
 			System.out.println("getVarianceorderlistforsort size " + getVarianceorderlistforsort.size());
 			System.out.println("unsort size " + getQtyforVariance.getVarianceorderlist().size());
 			System.out.println(postProductionPlanDetaillist.toString());
-			
-			
-			
+
 			model.addObject("postProdPlanHeader", postProdPlanHeader);
 			model.addObject("getVarianceorderlistforsort", getVarianceorderlistforsort);
 			model.addObject("itemsList", itemsList);
@@ -1285,210 +1376,205 @@ public class ProductionController {
 		return model;
 	}
 
-	
-	
-	//postProductionPlanDetaillist
+	// postProductionPlanDetaillist
 	@RequestMapping(value = "/showVariencePdf", method = RequestMethod.GET)
-	public void  showProdByOrderPdf(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
-		  BufferedOutputStream outStream = null;
+	public void showProdByOrderPdf(HttpServletRequest request, HttpServletResponse response)
+			throws FileNotFoundException {
+		BufferedOutputStream outStream = null;
 		System.out.println("Inside show Prod BOM Pdf ");
-		Document doc=new Document();
-			
-		 File openFile = null;
+		Document doc = new Document();
+
+		File openFile = null;
 		List<PostProductionPlanDetail> postProdDetailList = postProductionPlanDetaillist;
-		
+
 		postProdDetailList = postProductionPlanDetaillist;
 		Document document = new Document(PageSize.A4);
-		//  ByteArrayOutputStream out = new ByteArrayOutputStream();
-		 
+		// ByteArrayOutputStream out = new ByteArrayOutputStream();
+
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
 		Calendar cal = Calendar.getInstance();
 
 		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
-		String timeStamp=dateFormat.format(cal.getTime());
-		String FILE_PATH=Constants.REPORT_SAVE;
-		File file=new File(FILE_PATH);
-		
+		String timeStamp = dateFormat.format(cal.getTime());
+		String FILE_PATH = Constants.REPORT_SAVE;
+		File file = new File(FILE_PATH);
+
 		PdfWriter writer = null;
-		
-		 FileOutputStream out=new FileOutputStream(FILE_PATH);
-		
-		   try {
-			    writer=PdfWriter.getInstance(document,out);
+
+		FileOutputStream out = new FileOutputStream(FILE_PATH);
+
+		try {
+			writer = PdfWriter.getInstance(document, out);
 		} catch (DocumentException e) {
-			
+
 			e.printStackTrace();
 		}
-		
-		 PdfPTable table = new PdfPTable(9);
-		 try {
-		 System.out.println("Inside PDF Table try");
-		 table.setWidthPercentage(100);
-	     table.setWidths(new float[]{0.9f, 2.9f,1.4f,0.9f, 1.4f,1.4f,0.9f, 1.4f,1.4f});
-	     Font headFont = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK);
-	     Font headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
-	     Font f=new Font(FontFamily.TIMES_ROMAN,12.0f,Font.UNDERLINE,BaseColor.BLUE);
-	     
-	     PdfPCell hcell;
-	     hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
 
-	     hcell = new PdfPCell(new Phrase("Item Description", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
-	     
+		PdfPTable table = new PdfPTable(9);
+		try {
+			System.out.println("Inside PDF Table try");
+			table.setWidthPercentage(100);
+			table.setWidths(new float[] { 0.9f, 2.9f, 1.4f, 0.9f, 1.4f, 1.4f, 0.9f, 1.4f, 1.4f });
+			Font headFont = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
+			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
 
-	     hcell = new PdfPCell(new Phrase("OP BAL", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
-	     
-	     hcell = new PdfPCell(new Phrase("PLAN", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
-	     
-	     hcell = new PdfPCell(new Phrase("PROD", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
-	     
-	     hcell = new PdfPCell(new Phrase("TOTAL", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
+			PdfPCell hcell;
+			hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
 
-	     hcell = new PdfPCell(new Phrase("Order", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
-	     
+			hcell = new PdfPCell(new Phrase("Item Description", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
 
-	     hcell = new PdfPCell(new Phrase("VARI", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
-	     
-	     hcell = new PdfPCell(new Phrase("CLBAL", headFont1));
-	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	     table.addCell(hcell);
-	     
-	     
-	 
-	     int index=0;
-	     for(int j=0;j<pdfItemList.size();j++) {
-	     
-	     for (PostProductionPlanDetail planDetail : postProdDetailList) {
-	      
+			hcell = new PdfPCell(new Phrase("OP BAL", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
 
-	        if(pdfItemList.get(j).getId()==planDetail.getItemId()) {
-	        	
-	        	 index++;
-		         PdfPCell cell;
+			hcell = new PdfPCell(new Phrase("PLAN", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
 
-		        cell = new PdfPCell(new Phrase(String.valueOf(index),headFont));
-		         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-		         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-		         table.addCell(cell);
-	        
-		       System.out.println("Inside Item Matched ");
-	         cell = new PdfPCell(new Phrase(pdfItemList.get(j).getItemName(),headFont));
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-	         cell.setPaddingRight(8);
-	         table.addCell(cell);
-	        
-	         cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getCurOpeQty()),headFont));
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	         cell.setPaddingRight(8);
-	         table.addCell(cell);
-	         
-	         cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getPlanQty()),headFont));
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	         cell.setPaddingRight(8);
-	         table.addCell(cell);
-	         
-	         cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getProductionQty()),headFont));
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	         cell.setPaddingRight(8);
-	         table.addCell(cell);
-	         
-	         cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getCurOpeQty()+planDetail.getProductionQty()),headFont));
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	         cell.setPaddingRight(8);
-	         table.addCell(cell);
-	         
-	         cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getOrderQty()),headFont));
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	         cell.setPaddingRight(8);
-	         table.addCell(cell);
-	         
-	         
-	         cell = new PdfPCell(new Phrase(String.valueOf((planDetail.getCurOpeQty()+planDetail.getProductionQty())-planDetail.getOrderQty()),headFont));
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	         cell.setPaddingRight(8);
-	         table.addCell(cell);
-	         
-	         cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getOrderQty()),headFont));
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	         cell.setPaddingRight(8);
-	         table.addCell(cell);
-	         
-	        
-	         break;
-	        }
-	         //FooterTable footerEvent = new FooterTable(table);
-	        // writer.setPageEvent(footerEvent);
-	     }
-	     }
-	     document.open();
-	     Paragraph company = new Paragraph("Galdhar Foods Pvt.Ltd\n" + 
-					"Factory Add: A-32 Shendra, MIDC, Auraangabad-4331667" + 
-					"Phone:0240-2466217, Email: aurangabad@monginis.net", f);	     company.setAlignment(Element.ALIGN_CENTER);
-	     document.add(company);
-	     document.add(new Paragraph(" "));
+			hcell = new PdfPCell(new Phrase("PROD", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
 
-	     Paragraph heading = new Paragraph("Report-Production Planning Form");
-	     heading.setAlignment(Element.ALIGN_CENTER);
-	     document.add(heading);
+			hcell = new PdfPCell(new Phrase("TOTAL", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
 
-	     
-	     DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			hcell = new PdfPCell(new Phrase("Order", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("VARI", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("CLBAL", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+			int index = 0;
+			for (int j = 0; j < pdfItemList.size(); j++) {
+
+				for (PostProductionPlanDetail planDetail : postProdDetailList) {
+
+					if (pdfItemList.get(j).getId() == planDetail.getItemId()) {
+
+						index++;
+						PdfPCell cell;
+
+						cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						table.addCell(cell);
+
+						System.out.println("Inside Item Matched ");
+						cell = new PdfPCell(new Phrase(pdfItemList.get(j).getItemName(), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+
+						cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getCurOpeQty()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+
+						cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getPlanQty()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+
+						cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getProductionQty()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+
+						cell = new PdfPCell(new Phrase(
+								String.valueOf(planDetail.getCurOpeQty() + planDetail.getProductionQty()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+
+						cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getOrderQty()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+
+						cell = new PdfPCell(new Phrase(String.valueOf(
+								(planDetail.getCurOpeQty() + planDetail.getProductionQty()) - planDetail.getOrderQty()),
+								headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+
+						cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getOrderQty()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+
+						break;
+					}
+					// FooterTable footerEvent = new FooterTable(table);
+					// writer.setPageEvent(footerEvent);
+				}
+			}
+			document.open();
+			Paragraph company = new Paragraph(
+					"Galdhar Foods Pvt.Ltd\n" + "Factory Add: A-32 Shendra, MIDC, Auraangabad-4331667"
+							+ "Phone:0240-2466217, Email: aurangabad@monginis.net",
+					f);
+			company.setAlignment(Element.ALIGN_CENTER);
+			document.add(company);
+			document.add(new Paragraph(" "));
+
+			Paragraph heading = new Paragraph("Report-Production Planning Form");
+			heading.setAlignment(Element.ALIGN_CENTER);
+			document.add(heading);
+
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
 			String reportDate = DF.format(new Date());
-			
-			document.add(new Paragraph(""+ reportDate));
+
+			document.add(new Paragraph("" + reportDate));
 			document.add(new Paragraph("\n"));
-			
-	     document.add(new Paragraph(" "));
-	     document.add(table);
-	 	 int totalPages=writer.getPageNumber();
-	 	 
-	 	 
-	 	 document.close();
-	 	 
-	 	 
-	 	/*com.ats.adminpanel.model.itextpdf.Header event; // = new com.ats.adminpanel.model.itextpdf.Header();
-	 	for(int i=1;i<totalPages;i++) {
-	 	 event = new com.ats.adminpanel.model.itextpdf.Header();
-	 	event.setHeader(new Phrase(String.format("page %s", i)));
-	 	
-	 	writer.setPageEvent(event);
-	 	}
-	 	
-	 	
-	 	 FooterTable footerEvent = new FooterTable(table);
-	 	 */
-	 	 
-	 //	 document.add(new Paragraph(""+document.setPageCount(document.getPageNumber()));
-	     
-	 	 System.out.println("Page no "+totalPages);
-	     
-	    // document.addHeader("Page" ,String.valueOf(totalPages));
-	    // writer.setPageEvent((PdfPageEvent) new Phrase());
-	    
-	 	//Atul Sir code to open a Pdf File 
+
+			document.add(new Paragraph(" "));
+			document.add(table);
+			int totalPages = writer.getPageNumber();
+
+			document.close();
+
+			/*
+			 * com.ats.adminpanel.model.itextpdf.Header event; // = new
+			 * com.ats.adminpanel.model.itextpdf.Header(); for(int i=1;i<totalPages;i++) {
+			 * event = new com.ats.adminpanel.model.itextpdf.Header(); event.setHeader(new
+			 * Phrase(String.format("page %s", i)));
+			 * 
+			 * writer.setPageEvent(event); }
+			 * 
+			 * 
+			 * FooterTable footerEvent = new FooterTable(table);
+			 */
+
+			// document.add(new
+			// Paragraph(""+document.setPageCount(document.getPageNumber()));
+
+			System.out.println("Page no " + totalPages);
+
+			// document.addHeader("Page" ,String.valueOf(totalPages));
+			// writer.setPageEvent((PdfPageEvent) new Phrase());
+
+			// Atul Sir code to open a Pdf File
 			if (file != null) {
 
 				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
@@ -1517,22 +1603,21 @@ public class ProductionController {
 					e.printStackTrace();
 				}
 			}
-	      
-	     
-	 } catch (DocumentException ex) {
-	 
-		 System.out.println("Pdf Generation Error: Prod From Orders"+ex.getMessage());
-		 
-		 ex.printStackTrace();
-	   
-	 }
+
+		} catch (DocumentException ex) {
+
+			System.out.println("Pdf Generation Error: Prod From Orders" + ex.getMessage());
+
+			ex.printStackTrace();
+
+		}
 
 		ModelAndView model = new ModelAndView("production/pdf/productionPdf");
-		//model.addObject("prodFromOrderReport",updateStockDetailList);
-//return openFile;
-	
+		// model.addObject("prodFromOrderReport",updateStockDetailList);
+		// return openFile;
+
 	}
-	
+
 	@RequestMapping(value = "/updateOrderQtyinPlan", method = RequestMethod.POST)
 	public String updateOrderQtyinPlan(HttpServletRequest request, HttpServletResponse response) {
 
@@ -1560,18 +1645,17 @@ public class ProductionController {
 					postProductionPlanDetailnew.setProductionQty(0);
 					postProductionPlanDetailnew.setRejectedQty(0);
 					postProductionPlanDetailnew.setPlanQty(0);
-					postProductionPlanDetailnew.setInt4(0); 
-					postProductionPlanDetailnew.setProductionDate(postProductionPlanDetaillist.get(i).getProductionDate());
+					postProductionPlanDetailnew.setInt4(0);
+					postProductionPlanDetailnew
+							.setProductionDate(postProductionPlanDetaillist.get(i).getProductionDate());
 					postProductionPlanDetailnew.setProductionBatch("");
 					postProductionPlanDetailnewplan.add(postProductionPlanDetailnew);
 
 				}
-				
+
 			}
-			for (int i = 0; i < getVarianceorderlistforsort.size(); i++) 
-			{
-				if (getVarianceorderlistforsort.get(i).getRemainingQty() > 0) 
-				{
+			for (int i = 0; i < getVarianceorderlistforsort.size(); i++) {
+				if (getVarianceorderlistforsort.get(i).getRemainingQty() > 0) {
 					postProductionPlanDetailnew = new PostProductionPlanDetail();
 					postProductionPlanDetailnew.setItemId(getVarianceorderlistforsort.get(i).getId());
 					postProductionPlanDetailnew.setOpeningQty(0);
@@ -1579,7 +1663,7 @@ public class ProductionController {
 					postProductionPlanDetailnew.setProductionQty(0);
 					postProductionPlanDetailnew.setRejectedQty(0);
 					postProductionPlanDetailnew.setPlanQty(0);
-					postProductionPlanDetailnew.setInt4(0); 
+					postProductionPlanDetailnew.setInt4(0);
 					postProductionPlanDetailnew.setProductionDate(postProdPlanHeader.getProductionDate());
 					postProductionPlanDetailnew.setProductionBatch("");
 					postProductionPlanDetailnewplan.add(postProductionPlanDetailnew);
@@ -1593,7 +1677,7 @@ public class ProductionController {
 					postProdPlanHeader, Info.class);
 			System.out.println("updateOrderQtyinPlan " + updateOrderQtyinPlan);
 			System.out.println("postProductionPlanDetailnewplan " + postProductionPlanDetailnewplan.size());
-			if (updateOrderQtyinPlan.getError() == false && postProductionPlanDetailnewplan.size()!=0) {
+			if (updateOrderQtyinPlan.getError() == false && postProductionPlanDetailnewplan.size() != 0) {
 				System.out.println("in if insert new plan");
 				postProdPlanHeadernewplan.setPostProductionPlanDetail(postProductionPlanDetailnewplan);
 				Info insertNewinPlan = restTemplate.postForObject(Constants.url + "postProductionPlan",
@@ -1606,7 +1690,7 @@ public class ProductionController {
 		}
 		return "redirect:/listForVariation";
 	}
-	
+
 	@RequestMapping(value = "/insertProductionPlanWithoutCompletProd", method = RequestMethod.GET)
 	public String insertProductionPlanWithoutCompletProd(HttpServletRequest request, HttpServletResponse response) {
 
@@ -1634,18 +1718,17 @@ public class ProductionController {
 					postProductionPlanDetailnew.setProductionQty(0);
 					postProductionPlanDetailnew.setRejectedQty(0);
 					postProductionPlanDetailnew.setPlanQty(0);
-					postProductionPlanDetailnew.setInt4(0); 
-					postProductionPlanDetailnew.setProductionDate(postProductionPlanDetaillist.get(i).getProductionDate());
+					postProductionPlanDetailnew.setInt4(0);
+					postProductionPlanDetailnew
+							.setProductionDate(postProductionPlanDetaillist.get(i).getProductionDate());
 					postProductionPlanDetailnew.setProductionBatch("");
 					postProductionPlanDetailnewplan.add(postProductionPlanDetailnew);
 
 				}
 			}
-			
-			for (int i = 0; i < getVarianceorderlistforsort.size(); i++) 
-			{
-				if (getVarianceorderlistforsort.get(i).getRemainingQty() > 0) 
-				{
+
+			for (int i = 0; i < getVarianceorderlistforsort.size(); i++) {
+				if (getVarianceorderlistforsort.get(i).getRemainingQty() > 0) {
 					postProductionPlanDetailnew = new PostProductionPlanDetail();
 					postProductionPlanDetailnew.setItemId(getVarianceorderlistforsort.get(i).getId());
 					postProductionPlanDetailnew.setOpeningQty(0);
@@ -1653,7 +1736,7 @@ public class ProductionController {
 					postProductionPlanDetailnew.setProductionQty(0);
 					postProductionPlanDetailnew.setRejectedQty(0);
 					postProductionPlanDetailnew.setPlanQty(0);
-					postProductionPlanDetailnew.setInt4(0); 
+					postProductionPlanDetailnew.setInt4(0);
 					postProductionPlanDetailnew.setProductionDate(postProdPlanHeader.getProductionDate());
 					postProductionPlanDetailnew.setProductionBatch("");
 					postProductionPlanDetailnewplan.add(postProductionPlanDetailnew);
@@ -1661,13 +1744,13 @@ public class ProductionController {
 				}
 			}
 
-			//postProdPlanHeader.setProductionStatus(5);
+			// postProdPlanHeader.setProductionStatus(5);
 			postProdPlanHeader.setPostProductionPlanDetail(postProductionPlanDetaillist);
 			Info updateOrderQtyinPlan = restTemplate.postForObject(Constants.url + "postProductionPlan",
 					postProdPlanHeader, Info.class);
 			System.out.println("updateOrderQtyinPlan " + updateOrderQtyinPlan);
 			System.out.println("postProductionPlanDetailnewplan " + postProductionPlanDetailnewplan.size());
-			if (updateOrderQtyinPlan.getError() == false && postProductionPlanDetailnewplan.size()!=0) {
+			if (updateOrderQtyinPlan.getError() == false && postProductionPlanDetailnewplan.size() != 0) {
 				System.out.println("in if insert new plan");
 				postProdPlanHeadernewplan.setPostProductionPlanDetail(postProductionPlanDetailnewplan);
 				Info insertNewinPlan = restTemplate.postForObject(Constants.url + "postProductionPlan",
