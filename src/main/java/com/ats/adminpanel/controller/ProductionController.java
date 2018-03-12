@@ -21,6 +21,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -115,10 +116,12 @@ public class ProductionController {
 	public List<GetRegSpCakeOrderQty> getRegSpCakeOrderQtyList;
 	public List<GetOrderItemQty> getOrderItemQtyList;
 	public int[] timeSlot;
-	List<ProductionBarcode> barcodeList;
+	List<ProductionBarcode> barcodeList = new ArrayList<ProductionBarcode>();;
 	int selCate;
-
+	ArrayList<Item> itemList =new ArrayList<>();
 	GetCurProdAndBillQtyList getCurProdAndBillQtyList = new GetCurProdAndBillQtyList();
+	String date;
+	
 
 	@RequestMapping(value = "/showproduction", method = RequestMethod.GET)
 	public ModelAndView showProdForcasting(HttpServletRequest request, HttpServletResponse response) {
@@ -126,7 +129,9 @@ public class ProductionController {
 		ModelAndView model = new ModelAndView("production/production");
 		Constants.mainAct = 4;
 		Constants.subAct = 32;
-
+		
+		barcodeList = new ArrayList<ProductionBarcode>();
+		
 		RestTemplate restTemplate = new RestTemplate();
 
 		CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
@@ -209,6 +214,71 @@ public class ProductionController {
 
 		barcodeList = responseEntity.getBody();
 
+		System.out.println("barcode data " + barcodeList.toString());
+		return barcodeList;
+	}
+	
+	@RequestMapping(value = "/getItemByCatId", method = RequestMethod.GET)
+	public @ResponseBody ArrayList<Item>  getItemsByCatId(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		String date = request.getParameter("productionDate");
+		int cat = Integer.parseInt(request.getParameter("selectedCat"));
+
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy");
+		String ds2 = null;
+		try {
+			ds2 = sdf1.format(sdf2.parse(date));
+		} catch (ParseException e) {
+			
+			e.printStackTrace();
+		}
+		System.out.println(ds2);
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("itemGrp1", cat);
+
+		Item[] item = restTemplate.postForObject(Constants.url + "getItemsByCatIdAndSortId", map, Item[].class);
+		itemList.clear();
+		
+		itemList = new ArrayList<Item>(Arrays.asList(item));
+		System.out.println("Filter Item List " + itemList.toString());
+		
+		return itemList;
+	}
+	
+	
+	
+	@RequestMapping(value = "/addNewItemToList", method = RequestMethod.GET)
+	public @ResponseBody List<ProductionBarcode> addNewItemToList(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		 date = request.getParameter("productionDate");
+		int cat = Integer.parseInt(request.getParameter("selectedCat"));
+		int id = Integer.parseInt(request.getParameter("selectedItem"));
+		int qty = Integer.parseInt(request.getParameter("qty"));
+
+		
+	
+		for(Item item :itemList) {
+			
+			if(id == item.getId()) {
+				
+				ProductionBarcode barcode=new ProductionBarcode();
+				barcode.setItemCode(item.getItemId());
+				barcode.setItemId(item.getId());
+				barcode.setItemName(item.getItemName());
+				barcode.setProductionQty(qty);
+				
+				barcodeList.add(barcode);
+			}
+			
+		}
+		
 		System.out.println("barcode data " + barcodeList.toString());
 		return barcodeList;
 	}

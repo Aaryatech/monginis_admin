@@ -15,8 +15,8 @@
 		});
 	</script>
 	<c:url var="getProductionOrder" value="/getProductionOrderBarcode" />
-	<c:url var="getMenu" value="/getMenu" />
-
+	<c:url var="findItemsByCatId" value="/getItemByCatId" />
+	<c:url var="addNewItem" value="/addNewItemToList" />
 
 
 
@@ -108,18 +108,57 @@
 							</div>
 
 
-
-
-
 						</div>
 					</div>
 					<div class="row" align="center">
 						<div class="col-md-12">
-							<input type="button" class="btn btn-info" value="Search"
-								id="callsearch" onclick="searchOrder()">
+							<input type="button" class="btn btn-info"
+								value="Search Production" id="callsearch"
+								onclick="searchOrder()"> <font color="#343690">
+								OR </font> <input type="button" class="btn btn-info"
+								value="Search Item" id="manualSearch"
+								onclick="findItemsByCatId()">
 
 						</div>
 					</div>
+
+
+					<br> <br>
+					<div class="row" align="center">
+
+
+						<div class="form-group col-md-11" align="left">
+							<label class=" col-md-2 control-label menu_label">Select
+								Item </label>
+							<div class="col-md-4 controls">
+
+								<select class="form-control chosen"
+									data-placeholder="Choose Item" name="selectItem"
+									id="selectItem" tabindex="-1" data-rule-required="true">
+
+
+
+								</select>
+							</div>
+
+							<label class=" col-md-1 control-label menu_label"> Qty </label>
+							<div class="col-md-4 controls">
+								<input id="qty" size="16" type="number" name="qty" /> <input
+									type="button" class="btn btn-info" value="Add" id="addItem"
+									onclick="addItem()">
+
+							</div>
+
+
+						</div>
+
+
+						<br />
+
+					</div>
+
+
+
 					<div align="center" id="loader" style="display: none">
 
 						<span>
@@ -180,10 +219,9 @@
 						<div class="row" align="center">
 							<div class="col-md-12">
 								<input type="submit" class="btn btn-primary"
-									value="Download File" disabled id="callSubmit">
-									 <input
-									type="button" class="btn btn-primary" value="Print"  disabled id="callPrint"
-									onclick="print()">
+									value="Download File" disabled id="callSubmit"> <input
+									type="button" class="btn btn-primary" value="Print" disabled
+									id="callPrint" onclick="print()">
 							</div>
 						</div>
 
@@ -213,12 +251,6 @@
 	<!-- END Container -->
 
 	<!--basic scripts-->
-
-
-
-
-
-
 
 
 	<script
@@ -365,9 +397,144 @@
 		</script>
 
 	<script type="text/javascript">
-		function searchOrder() {
+		function findItemsByCatId() {
+
+			
+			
+			$('#table1 td').remove();
+
+			var autoindex = 0;
+			var isValid = validate();
+
+			if (isValid) {
+
+				document.getElementById("callsearch").disabled = true;
+				var productionDate = document.getElementById("datepicker").value;
+				var selectedCat = $("#selectCategory").val();
+				$('#loader').show();
+
+				$.getJSON('${findItemsByCatId}', {
+
+					selectedCat : selectedCat,
+					productionDate : productionDate,
+					ajax : 'true',
+
+				}, function(data) {
+
+					document.getElementById("callsearch").disabled = false;
+					$('#loader').hide();
+
+					if (data == "") {
+					
+						document.getElementById("callSubmit").disabled = true;
+						document.getElementById("callPrint").disabled = false;
+
+					}else {
+						document.getElementById("callSubmit").disabled = false;
+						document.getElementById("callPrint").disabled = false;
+
+						var len = data.length;
+						$('#selectItem')
+								.find('option')
+								.remove()
+								.end()
+				
+
+						for (var i = 0; i < len; i++) {
+
+							html += '<option value="' +data[i].id+ '">'
+									+ data[i].itemName
+									+ '</option>';
+
+						}
+						html += '</option>';
+						$(
+								"#selectItem")
+								.html(
+										html);
+
+						$(
+								"#selectItem")
+								.trigger(
+										"chosen:updated");
+					}
+
+				});
+
+			
+			}
+		}
+	</script>
+
+
+	<script type="text/javascript">
+		function addItem() {
 
 			$('#table1 td').remove();
+
+			var autoindex = 0;
+			var isValid = validate();
+
+			if (isValid) {
+
+				document.getElementById("callsearch").disabled = true;
+				var productionDate = document.getElementById("datepicker").value;
+				var selectedCat = $("#selectCategory").val();
+				var qty = document.getElementById("qty").value;
+
+				var selectedItem = $("#selectItem").val();
+
+				$('#loader').show();
+
+				$.getJSON('${addNewItem}', {
+
+					selectedCat : selectedCat,
+					productionDate : productionDate,
+					selectedItem : selectedItem,
+					qty: qty,
+					ajax : 'true',
+
+				}, function(data) {
+
+					document.getElementById("callsearch").disabled = false;
+					$('#loader').hide();
+
+					if (data == "") {
+					
+						document.getElementById("callSubmit").disabled = true;
+						document.getElementById("callPrint").disabled = false;
+
+					}else {
+						document.getElementById("callSubmit").disabled = false;
+						document.getElementById("callPrint").disabled = false;
+
+						$.each(data, function(key, order) {
+							
+							var tr = $('<tr></tr>');
+
+							tr.append($('<td></td>').html(key + 1));
+							tr.append($('<td></td>').html(order.itemCode));
+							tr.append($('<td></td>').html(order.itemName));
+							tr.append($('<td></td>').html(order.productionQty));
+
+							$('#table1 tbody').append(tr);
+
+						})
+					}
+
+				});
+
+			
+			}
+		}
+	</script>
+
+
+
+	<script type="text/javascript">
+		function searchOrder() {
+
+			
 
 			var autoindex = 0;
 			var isValid = validate();
@@ -419,6 +586,13 @@
 			}
 		}
 	</script>
+
+
+
+
+
+
+
 	<script type="text/javascript">
 		function validate() {
 			var selectCategory = $("#selectCategory").val();
