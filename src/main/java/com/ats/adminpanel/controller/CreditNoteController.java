@@ -7,10 +7,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -20,17 +17,19 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
-import org.zefer.cache.f;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.creditnote.CreditNoteHeaderPrint;
+import com.ats.adminpanel.model.creditnote.CreditNoteHeaderPrintList;
 import com.ats.adminpanel.model.creditnote.CreditPrintBean;
 import com.ats.adminpanel.model.creditnote.GetCreditNoteHeaders;
 import com.ats.adminpanel.model.creditnote.GetCreditNoteHeadersList;
@@ -41,9 +40,7 @@ import com.ats.adminpanel.model.creditnote.GetGrnGvnForCreditNoteList;
 import com.ats.adminpanel.model.creditnote.PostCreditNoteDetails;
 import com.ats.adminpanel.model.creditnote.PostCreditNoteHeader;
 import com.ats.adminpanel.model.creditnote.PostCreditNoteHeaderList;
-import com.ats.adminpanel.model.grngvn.GrnGvnHeaderList;
 import com.ats.adminpanel.model.login.UserResponse;
-import com.sun.corba.se.impl.interceptors.CDREncapsCodec;
 
 @Controller
 @Scope("session")
@@ -577,33 +574,44 @@ public class CreditNoteController {
 		return model;
 	}
 
-	@RequestMapping(value = "/getCrnCheckedHeaders", method = RequestMethod.POST)
-	public ModelAndView getCrnCheckedHeaders(HttpServletRequest request, HttpServletResponse response) {
-		
+	@RequestMapping(value = "/getCrnCheckedHeaders/{checked}", method = RequestMethod.GET)
+	public ModelAndView getCrnCheckedHeaders(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("checked") String[] checked) {
+
 		ModelAndView model = new ModelAndView("creditNote/pdf/creditnotePdf");
 
 		try {
-			System.out.println("In detail Page");
-
-			String[] checked = request.getParameterValues("select_to_agree");
-			String crnIdList = new String();
-			for (int i = 0; i < checked.length; i++) {
-
-				System.err.println("Value checked  " + checked[i]);
-				// crnIdList = checked[i] + "," + crnIdList;
-
-				crnIdList = crnIdList + "," + checked[i];
-
-			}
-
-			System.err.println("Crn Id List " + crnIdList);
-			crnIdList = crnIdList.substring(1, crnIdList.length());
-			System.err.println("Crn Id List on removing last comma " + crnIdList);
-
 			RestTemplate restTemplate = new RestTemplate();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
+			System.out.println("In detail Page");
+
+			// String[] checked = request.getParameterValues("select_to_agree");
+			String crnIdList = new String();
+			System.out.println("checked of zero " + checked[0]);
+
+			for (int i = 0; i < checked.length; i++) {
+				System.err.println("Value checked  " + checked[i]);
+				crnIdList = crnIdList + "," + checked[i];
+			}
+
+			// Getting crn Headers
+
+			map.add("crnIdList", crnIdList);
+			headerResponse = restTemplate.postForObject(Constants.url + "getCreditNoteHeadersByCrnIds", map,
+					GetCreditNoteHeadersList.class);
+
+			creditHeaderList = headerResponse.getCreditNoteHeaders();
+			System.err.println("Crn Id List " + crnIdList);
+
+			System.out.println("Headers = " + creditHeaderList.toString());
+			crnIdList = crnIdList.substring(1, crnIdList.length());
+			System.err.println("Crn Id List on removing First comma " + crnIdList);
+
+			// Getting crn Details
+
+			map = new LinkedMultiValueMap<String, Object>();
 			map.add("crnId", crnIdList);
 			crnDetailResponse = restTemplate.postForObject(Constants.url + "getCrnDetails", map,
 					GetCrnDetailsList.class);
@@ -611,42 +619,62 @@ public class CreditNoteController {
 
 			crnDetailList = crnDetailResponse.getCrnDetails();
 
-			GetCrnDetails crnPrintDetail = new GetCrnDetails();
-			
-			List<GetCreditNoteHeaders> tempHeaderList = creditHeaderList;
-			
-			creditHeaderList=new ArrayList<>();
-			
-			for(int i=0;i<checked.length;i++) {
-				
-				for(int j=0;j<tempHeaderList.size();j++) {
-					
-					if(Integer.parseInt(checked[i])==tempHeaderList.get(j).getCrnId()) {
-						
-						System.err.println("crn Id added " +checked[i]);
-						creditHeaderList.add(tempHeaderList.get(j));
-					
-					}
-				}
-				
-			}
+			/*
+			 * GetCrnDetails crnPrintDetail = new GetCrnDetails();
+			 * 
+			 * List<GetCreditNoteHeaders> tempHeaderList = creditHeaderList;
+			 * 
+			 * creditHeaderList=new ArrayList<>();
+			 * 
+			 * 
+			 * 
+			 * 
+			 * for(int i=0;i<checked.length;i++) {
+			 * 
+			 * for(int j=0;j<tempHeaderList.size();j++) {
+			 * 
+			 * if(Integer.parseInt(checked[i])==tempHeaderList.get(j).getCrnId()) {
+			 * 
+			 * System.err.println("crn Id added " +checked[i]);
+			 * creditHeaderList.add(tempHeaderList.get(j));
+			 * 
+			 * } }
+			 * 
+			 * }
+			 */
 
 			// List<GetCrnDetails> crnPrintDetailList=new ArrayList<>()
-			List<CreditPrintBean> printList = new ArrayList<>();
 			
+			List<String> srNoList=new ArrayList<String>();
+
+			DateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
+
+			List<CreditPrintBean> printList = new ArrayList<>();
+
 			System.err.println("header data " + creditHeaderList.toString());
 			System.err.println(
 					"Size of Header = " + creditHeaderList.size() + "Size of Detail =  " + crnDetailList.toString());
-			CreditPrintBean cb;
-			for (int i = 0; i < creditHeaderList.size(); i++) {
-				 cb = new CreditPrintBean();
+			CreditPrintBean printBean = new CreditPrintBean();
 
+			for (int i = 0; i < creditHeaderList.size(); i++) {
+				printBean = new CreditPrintBean();
+
+				
 				System.err.println("I = " + i);
 
-				cb.setHeaders(creditHeaderList.get(i));
+				CreditNoteHeaderPrint cNoteHeaderPrint = new CreditNoteHeaderPrint();
+
+				cNoteHeaderPrint.setFrAddress(creditHeaderList.get(i).getFrAddress());
+				cNoteHeaderPrint.setFrId(creditHeaderList.get(i).getFrId());
+
+				cNoteHeaderPrint.setFrName(creditHeaderList.get(i).getFrName());
+				cNoteHeaderPrint.setCrnId(creditHeaderList.get(i).getCrnId());
+				cNoteHeaderPrint.setCrnDate(creditHeaderList.get(i).getCrnDate());
 
 				List<GetCrnDetails> crnPrintDetailList = new ArrayList<>();
-
+				
+				String fDate = null, tDate = null;
+				
 				for (int j = 0; j < crnDetailList.size(); j++) {
 
 					System.err.println("J = " + j);
@@ -656,28 +684,55 @@ public class CreditNoteController {
 						System.err.println("Match found = " + j);
 
 						crnPrintDetailList.add(crnDetailList.get(j));
+
+						Date initDateFrom = fmt.parse(crnDetailList.get(0).getGrnGvnDate());
+						Date toLastDate = fmt.parse(crnDetailList.get(0).getGrnGvnDate());
 						
+						if(!srNoList.contains(crnDetailList.get(j).getGrngvnSrno())) {
+							srNoList.add(crnDetailList.get(j).getGrngvnSrno());
+						}
+					
+						if (initDateFrom.before(fmt.parse(crnDetailList.get(j).getGrnGvnDate()))) {
+
+						} else {
+							initDateFrom = fmt.parse(crnDetailList.get(j).getGrnGvnDate());
+						}
+						
+
+						if (toLastDate.after(fmt.parse(crnDetailList.get(j).getGrnGvnDate()))) {
+
+						} else {
+							toLastDate = fmt.parse(crnDetailList.get(j).getGrnGvnDate());
+						}
+						fDate = fmt.format(initDateFrom);
+						tDate = fmt.format(toLastDate);
 					} // end of if
 
 				} // end of Inner for
-
-				cb.setDetails(crnPrintDetailList);
-				printList.add(cb);
+				
+				cNoteHeaderPrint.setFromDate(fDate);
+				cNoteHeaderPrint.setToDate(tDate);
+				
+				cNoteHeaderPrint.setCrnDetails(crnPrintDetailList);
+				printBean.setCreditHeader(cNoteHeaderPrint);
+				
+				printList.add(printBean);
+				
 			} // end of outer for
 
 			System.err.println("printList = " + printList.toString());
 
-			model.addObject("crnPrint",printList);
-			
+			model.addObject("crnPrint", printList);
+model.addObject("srList",srNoList);
+
+System.out.println("Sr No List  " +srNoList);
 			System.out.println("crn Detail List******** " + crnDetailList);
 		} catch (Exception e) {
 			System.err.println("Exce Occured ");
 			System.err.println(e.getMessage());
-
 			e.printStackTrace();
 		}
-	
-		return model;
 
+		return model;
 	}
 }
