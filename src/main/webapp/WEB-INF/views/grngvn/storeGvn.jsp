@@ -180,7 +180,7 @@
 																 --%>
 																 
 																 <td><input type="text" name="store_gvn_qty${gvnList.grnGvnId}" style="width: 50px;" class="form-control"
-															id='store_gvn_qty${gvnList.grnGvnId}' value="${qty}" onkeypress="checkQty(10)"/></td>
+															id='store_gvn_qty${gvnList.grnGvnId}' value="${qty}" onkeyup="return validateQty(${gvnList.grnGvnId},${gvnList.grnGvnQty},${gvnList.aprQtyStore},${qty})"/></td>
 																
 
 															<td><a href="${url}${gvnList.gvnPhotoUpload1}"data-lightbox="image-1" >Image 1</a>
@@ -1026,6 +1026,17 @@ function showGateGvnDetails(){
 
 }
 
+
+function validateQty(grnId,grnQty,aprQty,qty){
+	
+	alert("JJJ");
+	var entered=$("#store_gvn_qty"+grnId).val();
+	//alert("received = " +entered);
+	if(entered>grnQty){
+		alert("Can not Enter Qty Greater than auto Qty ");
+		document.getElementById("store_gvn_qty"+grnId).value=qty;
+	}
+
 </script>
 
 <script type="text/javascript">
@@ -1050,28 +1061,13 @@ function getDate(){
 
 }
 );
-	function checkQty(grnId){
-		alert("Hi ");
-	}
+	
 	
 }
+</script>
+<script type="text/javascript">
 
-
-
-<!-- <script type="text/javascript">
-
-function checkQty(grnId){
-	alert("JJJ");
-	/*  var entered=$("#store_gvn_qty"+grnId).val();
-	alert("received = " +entered);
-	if(entered>grnQty){
-		alert("Can not Enter Qty Greater than auto Qty ");
-		document.getElementById("store_gvn_qty"+grnId).value=qty;
-	}  */
-}
-
-</script> -->
-
+</script>
 
 <script>
 	$(document).ready(function(){

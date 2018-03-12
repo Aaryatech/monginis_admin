@@ -63,7 +63,7 @@
 									<div class="col-sm-5 col-lg-3 controls">
 										<input class="form-control date-picker" id="from_date"
 											size="16" type="text" name="from_date" value="${fromDate}"
-											required s />
+											required />
 									</div>
 									<!-- </div>
 
@@ -123,8 +123,8 @@
 
 							</form>
 
-							<form action="getCrnCheckedHeaders" class="form-horizontal" method="post"
-								id="validation-form">
+							<form action="getCrnCheckedHeaders" class="form-horizontal"
+								method="post" id="validation-form">
 
 								<div class="box">
 									<div class="box-title">
@@ -147,7 +147,7 @@
 												id="table1">
 												<thead>
 													<tr>
-													<th></th>
+														<th></th>
 														<th class="col-md-1">Sr No</th>
 														<th class="col-md-1">Date</th>
 														<th class="col-md-2">Crn Id</th>
@@ -161,13 +161,12 @@
 
 												</thead>
 												<tbody>
-										
-												
 											</table>
 										</div>
 										<div
 											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-5">
-											<input type="submit" value="Submit" class="btn btn-primary">
+											<input type="button" value="Submit" onclick="genPdf()"
+												class="btn btn-primary">
 										</div>
 										<!-- </form> -->
 									</div>
@@ -279,7 +278,7 @@
 				
 				
 
-			  	tr.append($('<td><input type=checkbox name="select_to_agree"  value='+headers.crnId+'></td>'));
+			  	tr.append($('<td><input type=checkbox name="select_to_agree" id="select_to_agree'+key+'"  value='+headers.crnId+'></td>'));
 
 			  	tr.append($('<td></td>').html(headers.crnDate));
 			  	
@@ -304,7 +303,7 @@
 
 		}
 	</script>
-	
+
 	<script type="text/javascript">
 
 function getCrnDetail(crnId){
@@ -317,7 +316,40 @@ function getCrnDetail(crnId){
 		    form.submit();
 		}
 </script>
-	
+	<script>
+
+function genPdf() {
+		//alert("Inside Gen Pdf ");
+		checkboxes = document.getElementsByName('select_to_agree');
+		
+		var selArray;
+		
+		for(var x=0;x<checkboxes.length;x++){
+			if(document.getElementById("select_to_agree"+x).checked==true){
+				if(x==0){
+			selArray=document.getElementById("select_to_agree"+x).value;
+				}
+				else
+					{
+					selArray=selArray+","+document.getElementById("select_to_agree"+x).value;
+					}
+			}
+			
+		}
+		
+					    //var check = document.getElementById("select_to_agree").value;
+					    
+					    alert(selArray);
+					   /*  var str =selArray;
+
+					    str = str.replace(/^,|,$|,(?=,)/g, '');
+					    alert(str); */
+window.open('${pageContext.request.contextPath}/pdf?url=/getCrnCheckedHeaders/'+selArray);
+		    
+		    // window.open('${pageContext.request.contextPath}/getGrnPdf/'+fromDate+'/'+'/'+toDate+'/'+headerId+'/'+1);
+			
+	}
+	</script>
 
 </body>
 </html>
