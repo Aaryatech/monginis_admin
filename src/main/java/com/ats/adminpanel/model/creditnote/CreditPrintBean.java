@@ -4,10 +4,28 @@ import java.util.List;
 
 public class CreditPrintBean {
 	
-	GetCreditNoteHeaders headers;
+	
+	CreditNoteHeaderPrint creditHeader;
+
+	public CreditNoteHeaderPrint getCreditHeader() {
+		return creditHeader;
+	}
+
+	public void setCreditHeader(CreditNoteHeaderPrint creditHeader) {
+		this.creditHeader = creditHeader;
+	}
+
+	@Override
+	public String toString() {
+		return "CreditPrintBean [creditHeader=" + creditHeader + "]";
+	}
 	
 	
-	List<GetCrnDetails> details;
+	/*GetCreditNoteHeaders headers;
+	
+	
+	List<GetCrnDetails> crnDetails;
+	
 
 
 	public GetCreditNoteHeaders getHeaders() {
@@ -20,19 +38,21 @@ public class CreditPrintBean {
 	}
 
 
-	public List<GetCrnDetails> getDetails() {
-		return details;
+	public List<GetCrnDetails> getCrnDetails() {
+		return crnDetails;
 	}
 
 
-	public void setDetails(List<GetCrnDetails> details) {
-		this.details = details;
+	public void setCrnDetails(List<GetCrnDetails> crnDetails) {
+		this.crnDetails = crnDetails;
 	}
 
 
 	@Override
 	public String toString() {
-		return "CreditPrintBean [headers=" + headers + ", details=" + details + "]";
+		return "CreditPrintBean [headers=" + headers + ", crnDetails=" + crnDetails + "]";
 	}
+*/
 
+	
 }

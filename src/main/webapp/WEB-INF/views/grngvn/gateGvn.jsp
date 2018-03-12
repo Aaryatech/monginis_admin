@@ -194,7 +194,7 @@
 
 
 
-															<td align="center"><input type="text"
+															<td><input type="text"
 																name="gate_gvn_qty${gvnList.grnGvnId}"
 																style="width: 50px" class="form-control"
 																id='gate_gvn_qty${gvnList.grnGvnId}' value="${qty}"
