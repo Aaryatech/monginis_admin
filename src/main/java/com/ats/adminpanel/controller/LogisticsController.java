@@ -40,8 +40,10 @@ import org.zefer.pd4ml.PD4PageMark;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
-import com.ats.adminpanel.commons.VpsImageUpload; 
+import com.ats.adminpanel.commons.VpsImageUpload;
+import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.logistics.AlertAmcRecord;
 import com.ats.adminpanel.model.logistics.AlertMachineServicingRecord;
@@ -60,6 +62,7 @@ import com.ats.adminpanel.model.logistics.ServDetailAddPart;
 import com.ats.adminpanel.model.logistics.ServHeader;
 import com.ats.adminpanel.model.logistics.SparePart;
 import com.ats.adminpanel.model.logistics.SprGroup;
+import com.ats.adminpanel.model.logistics.TrayManagementReport;
 import com.ats.adminpanel.model.logistics.Variant;
 import com.ats.adminpanel.model.logistics.VehicalMaster;
 import com.ats.adminpanel.model.logistics.VehicalType;
@@ -3135,6 +3138,85 @@ public class LogisticsController {
 	}
 	
 	
+	//-------------------------------------------------------Tray Management Report----------------------------------------------------
+	
+	
+	@RequestMapping(value = "/showTrayManagementReport", method = RequestMethod.GET)
+	public ModelAndView showTrayManagementReport(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("trayBill/showTrayManagementReport"); 
+		try
+		{
+			List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class);
+			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
+					AllRoutesListResponse.class);  
+			  
+			 List<Route> routeList = allRouteListResponse.getRoute();
+			
+			model.addObject("vehicleList", vehicleList);
+			model.addObject("routeList", routeList);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/getTrayManagementReport", method = RequestMethod.GET)
+	@ResponseBody
+	public List<TrayManagementReport> getTrayManagementReport(HttpServletRequest request, HttpServletResponse response) {
+		
+		List<TrayManagementReport> getTrayManagementReport = new ArrayList<TrayManagementReport>();
+		try
+		{
+			int vehId = Integer.parseInt(request.getParameter("vehId"));
+			int routeId = Integer.parseInt(request.getParameter("routeId"));
+        	String fromDate = request.getParameter("fromDate");  
+			String toDate = request.getParameter("toDate"); 
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+			map.add("vehId", vehId); 
+	       	map.add("routeId", routeId); 
+	       	map.add("fromDate", DateConvertor.convertToYMD(fromDate)); 
+	       	map.add("toDate", DateConvertor.convertToYMD(toDate)); 
+	       	getTrayManagementReport = restTemplate.postForObject(Constants.url + "getTrayManagementReport", map, List.class);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		
+		return getTrayManagementReport;
+
+	}
+	
+	@RequestMapping(value = "pdf/trayManagementPdf/{fromDate}/{toDate}/{routeId}/{vehId}", method = RequestMethod.GET)
+	public ModelAndView trayManagementPdf(@PathVariable String fromDate,@PathVariable String toDate,@PathVariable int routeId
+			,@PathVariable int vehId,HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("trayBill/trayManagementReportPdf");
+		try {
+			List<TrayManagementReport> getTrayManagementReport = new ArrayList<TrayManagementReport>();  
+        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >(); 
+ 			map.add("vehId", vehId); 
+ 	       	map.add("routeId", routeId); 
+ 	       	map.add("fromDate", DateConvertor.convertToYMD(fromDate)); 
+ 	       	map.add("toDate", DateConvertor.convertToYMD(toDate)); 
+ 	       	getTrayManagementReport = restTemplate.postForObject(Constants.url + "getTrayManagementReport", map, List.class);
+			 
+			 
+			model.addObject("staticlist", getTrayManagementReport);
+			model.addObject("fromDate", fromDate);
+			model.addObject("toDate", toDate); 
+			System.out.println("getTrayManagementReport" + getTrayManagementReport);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+	
+	
 	private Dimension format = PD4Constants.A2;
 	private boolean landscapeValue = false;
 	private int topValue = 8;
@@ -3154,8 +3236,8 @@ public class LogisticsController {
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 		
-		File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/Inward.pdf");
-		//File f = new File("C:/pdf/ordermemo221.pdf");
+		//File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/Inward.pdf");
+		File f = new File("C:/pdf/ordermemo221.pdf");
 
 		try {
 			runConverter(Constants.ReportURL + url, f,request,response);
@@ -3169,9 +3251,9 @@ public class LogisticsController {
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		 //String filePath = "C:/pdf/ordermemo221.pdf";
+		 String filePath = "C:/pdf/ordermemo221.pdf";
 
-		String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/Inward.pdf";
+		//String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/Inward.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;
