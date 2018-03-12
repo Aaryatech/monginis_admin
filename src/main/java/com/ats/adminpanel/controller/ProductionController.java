@@ -122,6 +122,7 @@ public class ProductionController {
 	GetCurProdAndBillQtyList getCurProdAndBillQtyList = new GetCurProdAndBillQtyList();
 	String date;
 	
+	
 
 	@RequestMapping(value = "/showproduction", method = RequestMethod.GET)
 	public ModelAndView showProdForcasting(HttpServletRequest request, HttpServletResponse response) {
