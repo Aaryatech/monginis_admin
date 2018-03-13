@@ -35,7 +35,7 @@ public class MaterialRecieptAcc {
 	private float igstAmt;
 	private float cessAmt;
 	private float varifiedRate;
-	
+	private float grandTotal;
 	
 	
 	public float getVarifiedRate() {
@@ -237,6 +237,13 @@ public class MaterialRecieptAcc {
 	public void setCessAmt(float cessAmt) {
 		this.cessAmt = cessAmt;
 	}
+	
+	public float getGrandTotal() {
+		return grandTotal;
+	}
+	public void setGrandTotal(float grandTotal) {
+		this.grandTotal = grandTotal;
+	}
 	@Override
 	public String toString() {
 		return "MaterialRecieptAcc [mrnDetailedId=" + mrnDetailedId + ", item=" + item + ", rmId=" + rmId
@@ -247,7 +254,7 @@ public class MaterialRecieptAcc {
 				+ other2 + ", other3=" + other3 + ", other4=" + other4 + ", taxId=" + taxId + ", gst=" + gst + ", cgst="
 				+ cgst + ", sgst=" + sgst + ", igst=" + igst + ", cess=" + cess + ", taxableAmt=" + taxableAmt
 				+ ", cgstAmt=" + cgstAmt + ", sgstAmt=" + sgstAmt + ", igstAmt=" + igstAmt + ", cessAmt=" + cessAmt
-				+ ", varifiedRate=" + varifiedRate + "]";
+				+ ", varifiedRate=" + varifiedRate + ", grandTotal=" + grandTotal + "]";
 	}
 	
 	

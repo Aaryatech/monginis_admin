@@ -143,13 +143,36 @@
 							</div>
 
 
-						</div>
+						</div><br> 
 						
 				</c:when>
 				</c:choose>
 
 						
-					<br>  <br>
+					 <div class="box-content">
+
+							<div class="col-md-2">Item Group</div>
+							<div class="col-md-3">
+								<select name="mrntype" id="mrntype" class="form-control chosen" tabindex="-1" required>
+													<c:forEach items="${rmItemGroupList}" var="mrntype">
+														<c:choose>
+														<c:when test="${mrntype.grpId==materialRecNote.mrnType}">
+														<option selected value="${mrntype.grpId}"><c:out value="${mrntype.grpName}"></c:out></option>
+														</c:when>
+														</c:choose>
+													
+													</c:forEach>
+												 
+													<c:forEach items="${rmItemGroupList}" var="mrntype"> 
+													<option value="${mrntype.grpId}"><c:out value="${mrntype.grpName}"></c:out> </option> 
+													</c:forEach> 
+													</select>
+							</div>
+						 
+							 
+							 
+
+						</div><br> 
 				
 
 						<div class=" box-content">
@@ -179,7 +202,7 @@
 												<th>Division factor</th>
 												<th>Insurance Amt <i class="fa fa-inr" style="font-size:13px"></i></th>
 												<th>Freight Amt <i class="fa fa-inr" style="font-size:13px"></i></th>
-												<th style="width:200%;">Other1(Discount) <i class="fa fa-inr" style="font-size:13px"></i></th>
+												 
 												<th style="width:200%;">Other2(Discount) <i class="fa fa-inr" style="font-size:13px"></i></th>
 												<th style="width:200%;">Other3(Extra Charges) <i class="fa fa-inr" style="font-size:13px"></i></th>
 												<th style="width:200%;">Other4(Extra Charges) <i class="fa fa-inr" style="font-size:13px"></i></th>
@@ -194,7 +217,7 @@
 												<th>SGST<i class="fa fa-inr" style="font-size:13px"></i></th>
 												<th>IGST<i class="fa fa-inr" style="font-size:13px"></i></th>
 												<th>CESS<i class="fa fa-inr" style="font-size:13px"></i></th>
-												
+												<th>Total<i class="fa fa-inr" style="font-size:13px"></i></th>
 
 											</tr>
 										</thead>
@@ -270,14 +293,10 @@
 													<td style="text-align:right;"><c:out value="${materialRecieptAccList.insuAmt}" />
 													</td>
 													<td style="text-align:right;"><c:out value="${materialRecieptAccList.freightAmt}" />
-													</td>
-													<td><input style="text-align:right; width:100px" onchange="changeRate(${count.index})" type="text" name="other1${count.index}" id="other1${count.index}"
-									value="${materialRecieptAccList.other1}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
-													</td>
+													 
 													<td style="text-align:right;"><c:out value="${materialRecieptAccList.other2}" />  
 													</td>
-													<td><input style="text-align:right; width:100px" onchange="changeRate(${count.index})" type="text" name="other3${count.index}" id="other3${count.index}"
-									value="${materialRecieptAccList.other3}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.other3}" /> 
 													</td>
 													<td style="text-align:right;"><c:out value="${materialRecieptAccList.other4}" /> 
 													</td>
@@ -302,6 +321,8 @@
 													</td>
 													<td><input style="text-align:right; width:100px" onchange="changeRate(${count.index})" type="text" name="cessAmt${count.index}" id="cessAmt${count.index}"
 									value="${materialRecieptAccList.cessAmt}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
+													</td>
+														<td style="text-align:right;"><c:out value="${materialRecieptAccList.grandTotal}" />
 													</td>
 													
 													<%-- <td>
@@ -370,34 +391,27 @@
 									readonly>
 									 
 							</div>
-							 </div><br>
-						  <div class="box-content">
-								 
-									<div class="col-md-2">Other1(Discount) <i class="fa fa-inr" style="font-size:13px"></i></div>
+							 <div class="col-md-2">Other3(Extra) <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-2">
-										<input style="text-align:right; width:150px" type="text" name="Other1" id="other1" class="form-control"
-									value="${materialRecNoteHeader.other1}" readonly>
+										<input style="text-align:right; width:150px" type="text" name="Other3" id="other3" onchange="changeFreightAmt();" class="form-control"
+									value="${materialRecNoteHeader.other3}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
 									</div>
-									<div class="col-md-2">Other3(Extra) <i class="fa fa-inr" style="font-size:13px"></i></div>
-									<div class="col-md-2">
-										<input style="text-align:right; width:150px" type="text" name="Other3" id="other3" class="form-control"
-									value="${materialRecNoteHeader.other3}" readonly>
-									</div>
+									
 									<div class="col-md-2">IGST <i class="fa fa-inr" style="font-size:13px"></i></div>
 									<div class="col-md-2">
 										<input style="text-align:right; width:150px" type="text" name="igst" id="igst" class="form-control"
 									value="${materialRecNoteHeader.igst}" readonly>
 									</div>
-							
-							</div><br>
-							<div class="box-content">
+							 </div><br>
+						  <div class="box-content">
 								 
 									<div class="col-md-2">Other2 (Discount) <i class="fa fa-inr" style="font-size:13px"></i></div>
 										<div class="col-md-2">
 											<input style="text-align:right; width:150px" type="text" name="other2" onchange="changeFreightAmt();" id="other2" class="form-control"
 										value="${materialRecNoteHeader.other2}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
 										</div>
-									<div class="col-md-2">Other4(Extra) <i class="fa fa-inr" style="font-size:13px"></i></div>
+										
+										<div class="col-md-2">Other4(Extra) <i class="fa fa-inr" style="font-size:13px"></i></div>
 										<div class="col-md-2">
 											<input style="text-align:right; width:150px" type="text" name="other4" onchange="changeFreightAmt();" id="other4" class="form-control"
 										value="${materialRecNoteHeader.other4}" pattern="[+-]?([0-9]*[.])?[0-9]+" required>
@@ -407,10 +421,10 @@
 											<input style="text-align:right; width:150px" type="text" name="cess" id="cess" class="form-control"
 										value="${materialRecNoteHeader.cess}" readonly>
 										</div>
+									
 							
 							</div><br>
-						
-					 
+							  
 							<div class="box-content">
 								 	<div class="col-md-2"> </div>
 										<div class="col-md-2"> </div>
@@ -537,11 +551,10 @@
 		var recQty = $("#recQty"+key+"").val(); 
 		var discPer = $("#discPer"+key+"").val(); 
 		var cessAmt = $("#cessAmt"+key+"").val(); 
-		var other1 = $("#other1"+key+"").val(); 
-		var other3 = $("#other3"+key+"").val();  
 		var freightAmt = $("#freightAmt").val(); 
 		var insuranceAmt = $("#insuranceAmt").val();
 		var other2 = $("#other2").val(); 
+		var other3 = $("#other3").val();
 		var other4 = $("#other4").val(); 
 		
 		if (recQty=="" || isNaN(recQty)) {
@@ -576,13 +589,7 @@
 			cessAmt=0;
 
 		}
-		if (other1=="" || isNaN(other1)) { 
-			
-			alert("Please Enter Valid Other1 Amt Of Item "+(key+1));
-			document.getElementById("other1"+key+"").value="0";
-			other1=0;
-
-		}
+		 
 		if (other3=="" || isNaN(other3)) {
 
 			 
@@ -604,8 +611,7 @@
 					recQty : recQty,
 					discPer : discPer,
 					cessAmt : cessAmt,
-					other3 : other3,
-					other1 : other1,
+					other3 : other3, 
 					freightAmt : freightAmt,
 					insuranceAmt : insuranceAmt,
 					other4 : other4,
@@ -661,10 +667,9 @@
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cdAmt).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.divFactor).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.insuAmt).toFixed(2)));
-								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.freightAmt).toFixed(2)));
-								  	tr.append($('<td></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="other1'+key+'" value="'+itemList.other1+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.freightAmt).toFixed(2))); 
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other2).toFixed(2)));
-								  	tr.append($('<td></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="other3'+key+'" value="'+itemList.other3+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other3).toFixed(2))); 
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other4).toFixed(2))); 
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.gst).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cgst).toFixed(2)));
@@ -676,7 +681,7 @@
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.sgstAmt).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.igstAmt).toFixed(2))); 
 								  	tr.append($('<td ></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.grandTotal).toFixed(2)));
 								   
 									$('#table_grid tbody').append(tr);
 								
@@ -697,8 +702,7 @@
 										document.getElementById("basicValue").value=data.basicValue;
 										document.getElementById("billAmount").value=data.billAmount;
 										document.getElementById("discAmt2").value=data.discAmt2;
-										document.getElementById("discAmt").value=data.discAmt;
-										document.getElementById("other1").value=data.other1;
+										document.getElementById("discAmt").value=data.discAmt; 
 										document.getElementById("other2").value=data.other2;
 										document.getElementById("other3").value=data.other3;
 										document.getElementById("other4").value=data.other4;
@@ -725,7 +729,7 @@
 		var insuranceAmt = $("#insuranceAmt").val();
 		var other2 = $("#other2").val(); 
 		var other4 = $("#other4").val(); 
-		 
+		var other3 = $("#other3").val();  
 
 		if (discPer=="" || isNaN(discPer)) {
 
@@ -767,6 +771,14 @@
 			other4=0;
 
 		}
+		if (other3=="" || isNaN(other3)) {
+
+			isValid = false;
+			alert("Please Enter Valid Other3 Amt");
+			document.getElementById("other3").value="0";
+			other3=0;
+
+		}
 		 
 		
 	 
@@ -781,6 +793,7 @@
 					freightAmt : freightAmt,
 					insuranceAmt : insuranceAmt,
 					other4 : other4,
+					other3 : other3,
 					other2 : other2,
 					ajax : 'true',
 
@@ -833,10 +846,8 @@
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.divFactor).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.insuAmt).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.freightAmt).toFixed(2)));
-								  	
-								  	tr.append($('<td></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="other1'+key+'" value="'+itemList.other1+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other2).toFixed(2)));
-								  	tr.append($('<td></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="other3'+key+'" value="'+itemList.other3+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other2).toFixed(2))); 
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other3).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other4).toFixed(2)));
 								  	/* tr.append($('<td></td>').html(itemList.other1));
 								  	tr.append($('<td></td>').html(itemList.other2)); */
@@ -851,7 +862,7 @@
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.sgstAmt).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.igstAmt).toFixed(2))); 
 								  	tr.append($('<td ></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
-
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.grandTotal).toFixed(2)));
 								   
 									$('#table_grid tbody').append(tr);
 								
@@ -872,8 +883,7 @@
 										document.getElementById("basicValue").value=data.basicValue;
 										document.getElementById("billAmount").value=data.billAmount;
 										document.getElementById("discAmt2").value=data.discAmt2;
-										document.getElementById("discAmt").value=data.discAmt;
-										document.getElementById("other1").value=data.other1;
+										document.getElementById("discAmt").value=data.discAmt; 
 										document.getElementById("other2").value=data.other2;
 										document.getElementById("other3").value=data.other3;
 										document.getElementById("other4").value=data.other4;
