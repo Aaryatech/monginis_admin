@@ -8,18 +8,12 @@ public class GetCrnDetails {
 	
 private int crndId;
 	
-	
 	private int crnId;
-	
 	
 	private int itemId;
 	
-	
 	private int grnGvnId;
-	
-	
 	private int isGrn;
-	
 	
 	private int grnType;
 	

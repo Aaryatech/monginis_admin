@@ -105,7 +105,7 @@
 													<tr>
 													<th><input type="checkbox"
 													onClick="selectedGrn(this)" />Select All<br/></th>
-														<th></th>
+														
 														<th>Sr No</th>
 														<th>Invoice No</th>
 														<th>Franchise Name</th>
@@ -147,7 +147,7 @@
 														</c:choose>
 
 														<tr bgcolor="${color}">
-														<td></td>
+														
 															<c:choose>
 																<c:when test="${grnList.grnGvnStatus==2}">
 																	<td><input type="checkbox" name="select_to_agree"
@@ -518,7 +518,7 @@
 																							</select><input class="btn btn-primary" value="Submit"
 																								disabled="disabled"
 																								onclick="insertGrnDisAgree(${grnList.grnGvnId})" />
-											List											</div>
+																						</div>
 																					</div>
 																				</div>
 																			</li>
@@ -927,7 +927,6 @@ function checkQty(grnId,grnQty,qty){
 }
 </script>
 
-
 <script>
 	
 		function selectedGrn(source) {
@@ -936,8 +935,9 @@ function checkQty(grnId,grnQty,qty){
 				
 				ajax : 'true'
 			}, function(data) {
-				alert(data);
+				//alert(data);
 				//alert(data[0]);
+				
 				for(var i=0;i<data.length;i++){
 					checkboxes[data[i]].checked = source.checked;
 				}

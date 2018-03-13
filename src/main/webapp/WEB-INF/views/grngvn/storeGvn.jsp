@@ -87,6 +87,7 @@
 														<th width="120" align="left">Franchise Name</th>
 														<th width="120" align="left">Item Name</th>
 														<th width="100" align="left">GVN Qty</th>
+														<th width="100" align="left">Apr Qty Dispatch</th>
 														
 														<th width="100">Edited Qty</th>
 														<th width="100" align="left">PHOTO 1</th>
@@ -152,6 +153,8 @@
 
 
 															<td align="left"><c:out value="${gvnList.grnGvnQty}" />
+															
+																<td align="left"><c:out value="${gvnList.aprQtyGate}" />
 																<input type="hidden"
 																name="approve_store_login${gvnList.grnGvnId}"
 																id="approve_store_login${gvnList.grnGvnId}"

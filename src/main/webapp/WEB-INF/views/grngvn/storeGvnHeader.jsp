@@ -93,7 +93,7 @@
 
 									<div class="col-sm-5 col-lg-3 controls">
 <input type="text" style="display: none;" name="typeValue" id='typeValue' value="${type}">
-${type}
+
 
 										<select data-placeholder="Choose Franchisee"
 											class="form-control chosen" multiple="multiple" tabindex="6"
@@ -350,7 +350,7 @@ function getDate(){
 function getDetails() {
 	 var form = document.getElementById("validation-form");
 	 var type = document.getElementById("typeValue").value;
-alert("type = "+type);
+//alert("type = "+type);
 	    form.action ='${pageContext.request.contextPath}/getGvnHeaderForStore'+ '/'+type;
 	    form.submit();
 	

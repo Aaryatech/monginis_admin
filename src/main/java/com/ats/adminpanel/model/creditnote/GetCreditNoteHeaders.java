@@ -32,6 +32,14 @@ public class GetCreditNoteHeaders {
 
 	private String frName;
 	private String frAddress;
+	
+	
+	private String frGstNo;
+
+	private int isSameState;
+	
+	private int isGrn;
+	
 
 	public int getCrnId() {
 		return crnId;
@@ -139,15 +147,38 @@ public class GetCreditNoteHeaders {
 		this.frAddress = frAddress;
 	}
 
+	public String getFrGstNo() {
+		return frGstNo;
+	}
+
+	public void setFrGstNo(String frGstNo) {
+		this.frGstNo = frGstNo;
+	}
+
+	public int getIsSameState() {
+		return isSameState;
+	}
+
+	public void setIsSameState(int isSameState) {
+		this.isSameState = isSameState;
+	}
+
+	public int getIsGrn() {
+		return isGrn;
+	}
+
+	public void setIsGrn(int isGrn) {
+		this.isGrn = isGrn;
+	}
+
 	@Override
 	public String toString() {
 		return "GetCreditNoteHeaders [crnId=" + crnId + ", crnNo=" + crnNo + ", crnDate=" + crnDate + ", frId=" + frId
 				+ ", crnTaxableAmt=" + crnTaxableAmt + ", crnTotalTax=" + crnTotalTax + ", crnGrandTotal="
 				+ crnGrandTotal + ", roundOff=" + roundOff + ", createdDateTime=" + createdDateTime + ", isTallySync="
 				+ isTallySync + ", isDeposited=" + isDeposited + ", frName=" + frName + ", frAddress=" + frAddress
-				+ "]";
+				+ ", frGstNo=" + frGstNo + ", isSameState=" + isSameState + ", isGrn=" + isGrn + "]";
 	}
-
 
 
 }

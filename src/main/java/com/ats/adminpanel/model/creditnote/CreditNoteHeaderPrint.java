@@ -38,9 +38,18 @@ public class CreditNoteHeaderPrint {
 	private String toDate;
 	
 	
+private String frGstNo;
 
+private int isSameState;
+
+private int isGrn;
 	
 	List<GetCrnDetails> crnDetails;
+	
+	List<String> srNoList;
+	
+	List<CrnSrNoDateBean> srNoDateList;
+	
 
 
 	public int getCrnId() {
@@ -203,13 +212,65 @@ public class CreditNoteHeaderPrint {
 	}
 
 
+	public String getFrGstNo() {
+		return frGstNo;
+	}
+
+
+	public void setFrGstNo(String frGstNo) {
+		this.frGstNo = frGstNo;
+	}
+
+
+	public int getIsSameState() {
+		return isSameState;
+	}
+
+
+	public void setIsSameState(int isSameState) {
+		this.isSameState = isSameState;
+	}
+
+
+	public List<String> getSrNoList() {
+		return srNoList;
+	}
+
+
+	public void setSrNoList(List<String> srNoList) {
+		this.srNoList = srNoList;
+	}
+
+
+	public int getIsGrn() {
+		return isGrn;
+	}
+
+
+	public void setIsGrn(int isGrn) {
+		this.isGrn = isGrn;
+	}
+
+
+	public List<CrnSrNoDateBean> getSrNoDateList() {
+		return srNoDateList;
+	}
+
+
+	public void setSrNoDateList(List<CrnSrNoDateBean> srNoDateList) {
+		this.srNoDateList = srNoDateList;
+	}
+
+
 	@Override
 	public String toString() {
 		return "CreditNoteHeaderPrint [crnId=" + crnId + ", crnNo=" + crnNo + ", crnDate=" + crnDate + ", frId=" + frId
 				+ ", crnTaxableAmt=" + crnTaxableAmt + ", crnTotalTax=" + crnTotalTax + ", crnGrandTotal="
 				+ crnGrandTotal + ", roundOff=" + roundOff + ", createdDateTime=" + createdDateTime + ", isTallySync="
 				+ isTallySync + ", isDeposited=" + isDeposited + ", frName=" + frName + ", frAddress=" + frAddress
-				+ ", fromDate=" + fromDate + ", toDate=" + toDate + ", crnDetails=" + crnDetails + "]";
+				+ ", fromDate=" + fromDate + ", toDate=" + toDate + ", frGstNo=" + frGstNo + ", isSameState="
+				+ isSameState + ", isGrn=" + isGrn + ", crnDetails=" + crnDetails + ", srNoList=" + srNoList
+				+ ", srNoDateList=" + srNoDateList + "]";
 	}
 
 	

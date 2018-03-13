@@ -31,6 +31,7 @@ import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.creditnote.CreditNoteHeaderPrint;
 import com.ats.adminpanel.model.creditnote.CreditNoteHeaderPrintList;
 import com.ats.adminpanel.model.creditnote.CreditPrintBean;
+import com.ats.adminpanel.model.creditnote.CrnSrNoDateBean;
 import com.ats.adminpanel.model.creditnote.GetCreditNoteHeaders;
 import com.ats.adminpanel.model.creditnote.GetCreditNoteHeadersList;
 import com.ats.adminpanel.model.creditnote.GetCrnDetails;
@@ -103,14 +104,14 @@ public class CreditNoteController {
 			if (type.equals("1")) {
 
 				map.add("isGrn", 1);
-
+				isGrn = 1;
 				// get /grnGvnDetailForCreditNote for GRN
 
 				getGrnGvnForCreditNoteList = restTemplate.postForObject(Constants.url + "grnGvnDetailForCreditNote",
 						map, GetGrnGvnForCreditNoteList.class);
 
 			} else {
-
+				isGrn = 0;
 				// get /grnGvnDetailForCreditNote for GVN
 				map.add("isGrn", 0);
 
@@ -298,6 +299,15 @@ public class CreditNoteController {
 
 					grnGvnDate = Df.parse(grnGvnDate.toString());
 
+					if (isGrn == 1) {
+
+						System.err.println("Value of isGrn ==1");
+						postCreditHeader.setIsGrn(1);
+					} else {
+						System.err.println("Value of isGrn ==0");
+						postCreditHeader.setIsGrn(0);
+					}
+
 					// System.out.println("grnGvnDate= "+grnGvnDate);
 
 					DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -388,10 +398,6 @@ public class CreditNoteController {
 				}
 
 			} // End of for Selected Credit note List
-
-			System.out.println("header List srno at 0 " + creditHeaderList.get(0).getGrnGvnSrNoList());
-
-			System.out.println("header List srno at 1 " + creditHeaderList.get(1).getGrnGvnSrNoList());
 
 			PostCreditNoteHeaderList postCreditNoteHeaderList = new PostCreditNoteHeaderList();
 
@@ -644,8 +650,6 @@ public class CreditNoteController {
 			 */
 
 			// List<GetCrnDetails> crnPrintDetailList=new ArrayList<>()
-			
-			List<String> srNoList=new ArrayList<String>();
 
 			DateFormat fmt = new SimpleDateFormat("dd-MM-yyyy");
 
@@ -659,8 +663,7 @@ public class CreditNoteController {
 			for (int i = 0; i < creditHeaderList.size(); i++) {
 				printBean = new CreditPrintBean();
 
-				
-				System.err.println("I = " + i);
+				// System.err.println("I = " + i);
 
 				CreditNoteHeaderPrint cNoteHeaderPrint = new CreditNoteHeaderPrint();
 
@@ -671,33 +674,50 @@ public class CreditNoteController {
 				cNoteHeaderPrint.setCrnId(creditHeaderList.get(i).getCrnId());
 				cNoteHeaderPrint.setCrnDate(creditHeaderList.get(i).getCrnDate());
 
+				cNoteHeaderPrint.setFrGstNo(creditHeaderList.get(i).getFrGstNo());
+				cNoteHeaderPrint.setIsGrn(creditHeaderList.get(i).getIsGrn());
+
 				List<GetCrnDetails> crnPrintDetailList = new ArrayList<>();
-				
+
+				List<String> srNoList = new ArrayList<String>();
+				List<CrnSrNoDateBean> srNoDateList = new ArrayList<CrnSrNoDateBean>();
+
 				String fDate = null, tDate = null;
-				
+
 				for (int j = 0; j < crnDetailList.size(); j++) {
 
-					System.err.println("J = " + j);
+					// System.err.println("J = " + j);
 
 					if (creditHeaderList.get(i).getCrnId() == crnDetailList.get(j).getCrnId()) {
 
-						System.err.println("Match found = " + j);
+						// System.err.println("Match found = " + j);
 
 						crnPrintDetailList.add(crnDetailList.get(j));
 
 						Date initDateFrom = fmt.parse(crnDetailList.get(0).getGrnGvnDate());
 						Date toLastDate = fmt.parse(crnDetailList.get(0).getGrnGvnDate());
-						
-						if(!srNoList.contains(crnDetailList.get(j).getGrngvnSrno())) {
+
+						if (!srNoList.contains(crnDetailList.get(j).getGrngvnSrno())) {
 							srNoList.add(crnDetailList.get(j).getGrngvnSrno());
 						}
-					
+						
+						if(!srNoDateList.contains(crnDetailList.get(j).getGrngvnSrno())) {
+							
+							CrnSrNoDateBean bean=new CrnSrNoDateBean();
+							bean.setGrnGvnDate(crnDetailList.get(j).getGrnGvnDate());
+							bean.setSrNo(crnDetailList.get(j).getGrngvnSrno());
+							
+							//srNoDateList.get(j).setGrnGvnDate(crnDetailList.get(j).getGrnGvnDate());
+							//srNoDateList.get(j).setSrNo(crnDetailList.get(j).getGrngvnSrno());
+							srNoDateList.add(bean);
+
+						}
+
 						if (initDateFrom.before(fmt.parse(crnDetailList.get(j).getGrnGvnDate()))) {
 
 						} else {
 							initDateFrom = fmt.parse(crnDetailList.get(j).getGrnGvnDate());
 						}
-						
 
 						if (toLastDate.after(fmt.parse(crnDetailList.get(j).getGrnGvnDate()))) {
 
@@ -709,24 +729,25 @@ public class CreditNoteController {
 					} // end of if
 
 				} // end of Inner for
-				
+
 				cNoteHeaderPrint.setFromDate(fDate);
 				cNoteHeaderPrint.setToDate(tDate);
-				
+
 				cNoteHeaderPrint.setCrnDetails(crnPrintDetailList);
+				
+				cNoteHeaderPrint.setSrNoDateList(srNoDateList);
+				cNoteHeaderPrint.setSrNoList(srNoList);
 				printBean.setCreditHeader(cNoteHeaderPrint);
-				
+
 				printList.add(printBean);
-				
+
 			} // end of outer for
 
 			System.err.println("printList = " + printList.toString());
-
 			model.addObject("crnPrint", printList);
-model.addObject("srList",srNoList);
 
-System.out.println("Sr No List  " +srNoList);
 			System.out.println("crn Detail List******** " + crnDetailList);
+
 		} catch (Exception e) {
 			System.err.println("Exce Occured ");
 			System.err.println(e.getMessage());

@@ -1576,7 +1576,7 @@ public class GvnController {
 
 					gvnAccHeaderList = headerList.getGrnGvnHeader();
 
-					System.out.println("Grn Gate Header List  specific FR " + gvnAccHeaderList.toString());
+					System.out.println("Grn Acc Header List  specific FR " + gvnAccHeaderList.toString());
 				}
 
 			} // End of else
@@ -1596,7 +1596,7 @@ public class GvnController {
 	}
 
 	// Get GVN Acc detail
-	List<Integer> statuses;
+	List<Integer> statusIndexList;
 
 	@RequestMapping(value = "/getAccGvnDetail/{headerId}", method = RequestMethod.GET)
 	public ModelAndView getAccGvnDetail(HttpServletRequest request, HttpServletResponse response,
@@ -1716,14 +1716,14 @@ public class GvnController {
 
 			} // end of for Loop
 
-			statuses = new ArrayList<Integer>();
+			statusIndexList = new ArrayList<Integer>();
 			for (int i = 0; i < gvnAccDetailList.size(); i++) {
 
 				System.err.println("In For ");
 				if (gvnAccDetailList.get(i).getGrnGvnStatus() == 7 || gvnAccDetailList.get(i).getGrnGvnStatus() == 4) {
 					System.err.println("In If ");
 
-					statuses.add(i);
+					statusIndexList.add(i);
 
 				}
 			}
@@ -1746,9 +1746,9 @@ public class GvnController {
 	}
 
 	@RequestMapping(value = "/getGvnStatus", method = RequestMethod.GET)
-	public @ResponseBody List<Integer> getStatus(HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody List<Integer> getGvnStatus(HttpServletRequest request, HttpServletResponse response) {
 
-		return statuses;
+		return statusIndexList;
 
 	}
 
@@ -2390,8 +2390,7 @@ public class GvnController {
 
 			String[] grnIdList = request.getParameterValues("select_to_agree");
 
-			System.out.println("GRN ID " + grnIdList[0]);
-
+		
 			RestTemplate restTemplate = new RestTemplate();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();

@@ -39,6 +39,10 @@ public class PostCreditNoteHeader {
 	//new field 23 FEB
 	int isDeposited; //default 0 when actually deposited in bank set value
 	
+	int isGrn;
+	
+	
+	
 	
 	
 
@@ -165,14 +169,22 @@ public class PostCreditNoteHeader {
 		this.isDeposited = isDeposited;
 	}
 
+	public int getIsGrn() {
+		return isGrn;
+	}
+
+	public void setIsGrn(int isGrn) {
+		this.isGrn = isGrn;
+	}
+
 	@Override
 	public String toString() {
 		return "PostCreditNoteHeader [crnId=" + crnId + ", crnNo=" + crnNo + ", crnDate=" + crnDate + ", frId=" + frId
 				+ ", crnTaxableAmt=" + crnTaxableAmt + ", crnTotalTax=" + crnTotalTax + ", crnGrandTotal="
 				+ crnGrandTotal + ", crnFinalAmt=" + crnFinalAmt + ", roundOff=" + roundOff + ", userId=" + userId
 				+ ", createdDateTime=" + createdDateTime + ", isTallySync=" + isTallySync + ", grnGvnSrNoList="
-				+ grnGvnSrNoList + ", isDeposited=" + isDeposited + ", postCreditNoteDetails=" + postCreditNoteDetails
-				+ "]";
+				+ grnGvnSrNoList + ", isDeposited=" + isDeposited + ", isGrn=" + isGrn + ", postCreditNoteDetails="
+				+ postCreditNoteDetails + "]";
 	}
 
 }

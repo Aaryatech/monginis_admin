@@ -922,9 +922,8 @@ public class GrnGvnController {
 			statuses=new ArrayList<Integer>();
 			for(int i=0;i<grnAccDetailList.size();i++) {
 				
-				
 				System.err.println("In For ");
-				if(grnAccDetailList.get(i).getGrnGvnStatus()==7 ||grnAccDetailList.get(i).getGrnGvnStatus()==2) {
+				if(grnAccDetailList.get(i).getGrnGvnStatus()==7 || grnAccDetailList.get(i).getGrnGvnStatus()==2) {
 					System.err.println("In If ");
 
 				statuses.add(i);
