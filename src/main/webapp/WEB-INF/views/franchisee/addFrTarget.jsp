@@ -221,7 +221,7 @@
 								</div>
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-										<input type="submit" class="btn btn-primary" value="Submit" onclick="return validation()">
+										<input type="submit" class="btn btn-primary" value="Submit" onclick="return validation()" id="targetSave" disabled>
 <!-- 										<button type="button" class="btn">Cancel</button>
  -->									</div>
 								</div>
@@ -322,7 +322,8 @@
 				}, function(data) {
 					var len = data.length;
 					$('#loader').hide();
-				
+					document.getElementById("targetSave").disabled = false;
+
 					$.each(data,function(key, frTarget) {
 						
 					status=1;
