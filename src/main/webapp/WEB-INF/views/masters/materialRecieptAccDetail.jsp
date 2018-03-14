@@ -204,18 +204,19 @@
 												<th>Freight Amt <i class="fa fa-inr" style="font-size:13px"></i></th>
 												 
 												<th style="width:200%;">Other2(Discount) <i class="fa fa-inr" style="font-size:13px"></i></th>
-												<th style="width:200%;">Other3(Extra Charges) <i class="fa fa-inr" style="font-size:13px"></i></th>
-												<th style="width:200%;">Other4(Extra Charges) <i class="fa fa-inr" style="font-size:13px"></i></th>
+												
 												<th>GST%</th>
 												<th>CGST%</th>
 												<th>SGST%</th>
-												<th>IGST%</th>
+												<th>IGST%</th> 
 												<th>CESS%</th>
 												<th>Taxable<i class="fa fa-inr" style="font-size:13px"></i></th>
 												
 												<th>CGST<i class="fa fa-inr" style="font-size:13px"></i></th>
 												<th>SGST<i class="fa fa-inr" style="font-size:13px"></i></th>
 												<th>IGST<i class="fa fa-inr" style="font-size:13px"></i></th>
+												<th style="width:200%;">Other3(Extra Charges) <i class="fa fa-inr" style="font-size:13px"></i></th>
+												<th style="width:200%;">Other4(Extra Charges) <i class="fa fa-inr" style="font-size:13px"></i></th>
 												<th>CESS<i class="fa fa-inr" style="font-size:13px"></i></th>
 												<th>Total<i class="fa fa-inr" style="font-size:13px"></i></th>
 
@@ -296,10 +297,7 @@
 													 
 													<td style="text-align:right;"><c:out value="${materialRecieptAccList.other2}" />  
 													</td>
-													<td style="text-align:right;"><c:out value="${materialRecieptAccList.other3}" /> 
-													</td>
-													<td style="text-align:right;"><c:out value="${materialRecieptAccList.other4}" /> 
-													</td>
+													
 													<td style="text-align:right;"><c:out value="${materialRecieptAccList.gst}" />
 													</td>
 													<td style="text-align:right"><c:out value="${materialRecieptAccList.cgst}" />
@@ -318,6 +316,10 @@
 													<td style="text-align:right;"><c:out value="${materialRecieptAccList.sgstAmt}" />
 													</td>
 													<td style="text-align:right;"><c:out value="${materialRecieptAccList.igstAmt}" />
+													</td>
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.other3}" /> 
+													</td>
+													<td style="text-align:right;"><c:out value="${materialRecieptAccList.other4}" /> 
 													</td>
 													<td><input style="text-align:right; width:100px" onchange="changeRate(${count.index})" type="text" name="cessAmt${count.index}" id="cessAmt${count.index}"
 									value="${materialRecieptAccList.cessAmt}" class="form-control" pattern="[+-]?([0-9]*[.])?[0-9]+" required> 
@@ -668,9 +670,7 @@
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.divFactor).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.insuAmt).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.freightAmt).toFixed(2))); 
-								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other2).toFixed(2)));
-								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other3).toFixed(2))); 
-								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other4).toFixed(2))); 
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other2).toFixed(2))); 
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.gst).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cgst).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.sgst).toFixed(2)));
@@ -680,6 +680,8 @@
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cgstAmt).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.sgstAmt).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.igstAmt).toFixed(2))); 
+									tr.append($('<td style="text-align:right;"></td>').html((itemList.other3).toFixed(2))); 
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other4).toFixed(2))); 
 								  	tr.append($('<td ></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.grandTotal).toFixed(2)));
 								   
@@ -847,8 +849,7 @@
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.insuAmt).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.freightAmt).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other2).toFixed(2))); 
-								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other3).toFixed(2)));
-								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other4).toFixed(2)));
+								  
 								  	/* tr.append($('<td></td>').html(itemList.other1));
 								  	tr.append($('<td></td>').html(itemList.other2)); */
 								
@@ -861,6 +862,8 @@
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.cgstAmt).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.sgstAmt).toFixed(2)));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.igstAmt).toFixed(2))); 
+									tr.append($('<td style="text-align:right;"></td>').html((itemList.other3).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.other4).toFixed(2)));
 								  	tr.append($('<td ></td>').html('<input style="text-align:right; width:100px" type="text" onchange="changeRate('+key+')" id="cessAmt'+key+'" value="'+itemList.cessAmt+'"  class="form-control"  pattern="[+-]?([0-9]*[.])?[0-9]+" required>'));
 								  	tr.append($('<td style="text-align:right;"></td>').html((itemList.grandTotal).toFixed(2)));
 								   

@@ -1992,7 +1992,8 @@ public class MaterialReceiptNoteController {
 						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setIgstRs(materialRecieptAccList.get(j).getIgstAmt());
 						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setCessPer(materialRecieptAccList.get(j).getCess());
 						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setCessRs(materialRecieptAccList.get(j).getCessAmt());
-						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setAmount(materialRecieptAccList.get(j).getTaxableAmt()); 
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setAmount(materialRecieptAccList.get(j).getTaxableAmt());
+						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther1(materialRecieptAccList.get(j).getCdAmt());
 						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther2(materialRecieptAccList.get(j).getOther2()); 
 						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther3(materialRecieptAccList.get(j).getOther3()); 
 						materialRecNoteHeaderAcc.getMaterialRecNoteDetails().get(i).setOther4(materialRecieptAccList.get(j).getOther4());

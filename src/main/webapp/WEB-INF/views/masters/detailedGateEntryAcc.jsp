@@ -234,55 +234,88 @@
 									</div>
 								
 				 
-							
+							<c:set var="freightAmt"><fmt:formatNumber type = "number"  minFractionDigits ="0" maxFractionDigits = "0" value = "${materialRecNote.freightAmt}"/></c:set>
 									<div class="col-md-2" >Freight Amt</div>
-									<div class="col-md-3"><input type="text" id="freightAmt" name="freightAmt" value="${materialRecNote.freightAmt}" class="form-control" readonly>
+									<div class="col-md-3"><input type="text" id="freightAmt" name="freightAmt" value="${freightAmt}" class="form-control" readonly>
 									</div>
 									
 									 
 							
 							</div><br> 
 							<div class="box-content">
+							<c:set var="insuranceAmt"><fmt:formatNumber type = "number"  minFractionDigits ="0" maxFractionDigits = "0" value = "${materialRecNote.insuranceAmt}"/></c:set>
 									<div class="col-md-2">Insurance Amt</div>
 									<div class="col-md-3">
 									<input class="form-control" id="insuranceAmt" size="16"
-											type="text" name="insuranceAmt" value="${materialRecNote.insuranceAmt}"  readonly />
+											type="text" name="insuranceAmt" value="${insuranceAmt}"  readonly />
 									</div>
 								
 				 
+							<div class="col-md-2">Other Discount</div>
+									<div class="col-md-3">
+									<c:set var="other2"><fmt:formatNumber type = "number"  minFractionDigits ="0" maxFractionDigits = "0" value = "${materialRecNote.other2}"/></c:set>
+									<input class="form-control" id="other2" size="16"
+											type="text" name="other2" value="${other2}"  readonly />
+									</div>
+									  
 							
+							</div><br> 
+							<div class="box-content">
+									<div class="col-md-2">Other Extra</div>
+									<div class="col-md-3">
+								<c:set var="other3"><fmt:formatNumber type = "number"  minFractionDigits ="0" maxFractionDigits = "0" value = "${materialRecNote.other3}"/></c:set>
+									 <input class="form-control" id="other3" size="16" 
+											type="text" name="other3" value="${other3}"  readonly />
+									</div>
+								
+				 
+							<div class="col-md-2">Other Extra 2</div>
+									<div class="col-md-3">
+									<c:set var="other4"><fmt:formatNumber type = "number"  minFractionDigits ="0" maxFractionDigits = "0" value = "${materialRecNote.other4}"/></c:set>
+									<input class="form-control" id="other4" size="16"
+											type="text" name="other4" value="${other4}"  readonly />
+									</div>
+									  
+							
+							</div><br> 
+							<div class="box-content">
+									 
+				  
 									<div class="col-md-2" >CGST Amt</div>
 									<div class="col-md-3"><input type="text" id="cgst" name="cgst" value="${materialRecNote.cgst}" class="form-control" readonly>
 									</div>
 									
-									 
-							
-							</div><br> 
-							<div class="box-content">
 									<div class="col-md-2">SGST Amt</div>
 									<div class="col-md-3">
 									<input class="form-control" id="sgst" size="16"
 											type="text" name="sgst" value="${materialRecNote.sgst}"  readonly />
 									</div>
-								
-				 
+									 
 							
+							</div><br> 
+							<div class="box-content">
+									 
 									<div class="col-md-2" >IGST Amt</div>
 									<div class="col-md-3"><input type="text" id="cgst" name="cgst" value="${materialRecNote.igst}" class="form-control" readonly>
 									</div>
 									
-									 
-							
-							</div><br>
-							<div class="box-content">
 									<div class="col-md-2">Cess Amt</div>
 									<div class="col-md-3">
 									<input class="form-control" id="cess" size="16"
 											type="text" name="cess" value="${materialRecNote.cess}"  readonly />
 									</div>
+									 
+							
+							</div><br>
+							<div class="box-content">
+									
 								 
 									<div class="col-md-2" >Bill Amt</div>
 									<div class="col-md-3"><input type="text" id="billAmount" name="billAmount" value="${materialRecNote.billAmount}" class="form-control" readonly>
+									</div>
+									
+									<div class="col-md-2" >Round Off</div>
+									<div class="col-md-3"><input type="text" id="roundOff" name="roundOff" value="${materialRecNote.roundOff}" class="form-control" readonly>
 									</div>
 									 
 							</div><br> 
@@ -335,20 +368,21 @@
 									<tr>
 												<th>Sr.No.</th>
 												<th>Item</th>
-												<th>PO Rate</th>
+												<th>Verified Rate</th>
 												<th>Received Quantity</th> 
 												<th>Value</th>
 												<th>Disc Per</th>
 												<th>Disc Amt</th>
 												<th>Insurance Amt</th>
 												<th>Freight Amt</th>
-												<th>other(Discount)</th>
-												<th>other(Extra)</th> 
+												<th>other(Discount)</th> 
 												<th>Taxable Amt</th> 
 												<th>CGST Amt</th>
 												<th>SGST Amt</th>
 												<th>IGST Amt</th>
+												<th>Other(Extra)</th> 
 												<th>CESS Amt</th>
+											 
 									  
 
 									</tr>
@@ -364,7 +398,7 @@
  														<c:set var = "srNo" value="${srNo+1}"/>
 														<td><c:out
 																value="${materialRecNoteDetail.rmName}" /></td> 
-														<td><c:out value="${materialRecNoteDetail.poRate}" /></td>
+														<td><c:out value="${materialRecNoteDetail.varifiedRate}" /></td>
 														<td><c:out value="${materialRecNoteDetail.recdQty}" /></td>
 															
 														<td><c:out value="${materialRecNoteDetail.value}" /></td>
@@ -372,15 +406,18 @@
 														<td><c:out value="${materialRecNoteDetail.discAmt}" /></td> 
 														<td><c:out value="${materialRecNoteDetail.insurance_amt}" /></td>
 														<td><c:out value="${materialRecNoteDetail.freightAmt}" /></td>
-														<td><c:out value="${materialRecNoteDetail.other1 + materialRecNoteDetail.other2}" /></td>
-														<td><c:out value="${materialRecNoteDetail.other3 + materialRecNoteDetail.other4}" /></td> 
+														<c:set var="disc"><fmt:formatNumber type = "number"  minFractionDigits ="2" maxFractionDigits = "2" value = "${materialRecNoteDetail.other1 + materialRecNoteDetail.other2}"/></c:set>
+														<td><c:out value="${disc}" /></td> 
 														<td><c:out value="${materialRecNoteDetail.amount}" /></td>
 														<td><c:out value="${materialRecNoteDetail.cgstRs}" /></td>
 														<td><c:out value="${materialRecNoteDetail.sgstRs}" /></td>
 														<td><c:out value="${materialRecNoteDetail.igstRs}" /></td>
+														<c:set var="extra"><fmt:formatNumber type = "number"  minFractionDigits ="2" maxFractionDigits = "2" value = "${materialRecNoteDetail.other3 + materialRecNoteDetail.other4}"/></c:set>
+														<td><c:out value="${extra}" /></td> 
 														<td><c:out value="${materialRecNoteDetail.cessRs}" /></td> 
-														  
- 												 
+														<%-- <c:set var="total"><fmt:formatNumber type = "number"  minFractionDigits ="2" maxFractionDigits = "2" value = "${materialRecNoteDetail.amount+materialRecNoteDetail.cgstRs+materialRecNoteDetail.sgstRs
+ 												 +materialRecNoteDetail.igstRs+materialRecNoteDetail.cessRs+extra}"/></c:set>  
+ 												 <td><c:out value="${total}" /></td>  --%>
 											
 												</tr>
 												</c:forEach>

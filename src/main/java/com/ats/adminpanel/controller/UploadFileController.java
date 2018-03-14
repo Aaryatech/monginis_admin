@@ -52,6 +52,8 @@ public class UploadFileController {
 	String document2;
 	String document3;
 	String document4;
+	String document5;
+	String document6;
 	 
 	@RequestMapping(value = "/uploadRuleFile", method = RequestMethod.GET)
 	public ModelAndView bmsstock(HttpServletRequest request, HttpServletResponse response) { 
@@ -67,16 +69,22 @@ public class UploadFileController {
 			document2=fileList.get(1).getFileName();
 			document3=fileList.get(2).getFileName();
 			document4=fileList.get(3).getFileName();
+			document5=fileList.get(4).getFileName();
+			document6=fileList.get(5).getFileName();
 			 
 			model.addObject("document1", document1);
 			model.addObject("document2", document2);
 			model.addObject("document3", document3);
 			model.addObject("document4", document4);
+			model.addObject("document5", document5);
+			model.addObject("document6", document6);
 			model.addObject("url", Constants.LOGIS_BILL_URL);
 			model.addObject("date1", fileList.get(0).getDate());
 			model.addObject("date2", fileList.get(1).getDate());
 			model.addObject("date3", fileList.get(2).getDate());
 			model.addObject("date4", fileList.get(3).getDate());
+			model.addObject("date5", fileList.get(4).getDate());
+			model.addObject("date6", fileList.get(5).getDate());
 			
 		}catch(Exception e)
 		{
@@ -131,6 +139,7 @@ public class UploadFileController {
 	@RequestMapping(value = "/submitUploadFile", method = RequestMethod.POST)
 	public String submitUploadFile(@RequestParam("attachFile1") List<MultipartFile> attachFile1,@RequestParam("attachFile2") List<MultipartFile> attachFile2,
 			@RequestParam("attachFile3") List<MultipartFile> attachFile3,@RequestParam("attachFile4") List<MultipartFile> attachFile4,
+			@RequestParam("attachFile5") List<MultipartFile> attachFile5,@RequestParam("attachFile6") List<MultipartFile> attachFile6,
 			HttpServletRequest request, HttpServletResponse response) { 
 		try
 		{
@@ -139,17 +148,23 @@ public class UploadFileController {
 			String document2 = request.getParameter("document2");
 			String document3 = request.getParameter("document3");
 			String document4 = request.getParameter("document4");
+			String document5 = request.getParameter("document5");
+			String document6 = request.getParameter("document6");
 			SimpleDateFormat formate = new SimpleDateFormat("dd-MM-yyyy");
 			VpsImageUpload upload = new VpsImageUpload();
 			String docFile1 = null;
 			String docFile2 = null;
 			String docFile3 = null;
 			String docFile4 = null;
+			String docFile5 = null;
+			String docFile6 = null;
 			try {
 				docFile1 = attachFile1.get(0).getOriginalFilename();
 				docFile2 = attachFile2.get(0).getOriginalFilename();
 				docFile3 = attachFile3.get(0).getOriginalFilename();
-				docFile4 = attachFile4.get(0).getOriginalFilename(); 
+				docFile4 = attachFile4.get(0).getOriginalFilename();
+				docFile5 = attachFile5.get(0).getOriginalFilename();
+				docFile6 = attachFile6.get(0).getOriginalFilename();
 				
 				upload.saveUploadedFiles(attachFile1, Constants.LOGIS_BILL_PDF_TYPE,
 						attachFile1.get(0).getOriginalFilename());
@@ -158,7 +173,11 @@ public class UploadFileController {
 				upload.saveUploadedFiles(attachFile3, Constants.LOGIS_BILL_PDF_TYPE,
 						attachFile3.get(0).getOriginalFilename());
 				upload.saveUploadedFiles(attachFile4, Constants.LOGIS_BILL_PDF_TYPE,
-						attachFile4.get(0).getOriginalFilename()); 
+						attachFile4.get(0).getOriginalFilename());
+				upload.saveUploadedFiles(attachFile5, Constants.LOGIS_BILL_PDF_TYPE,
+						attachFile5.get(0).getOriginalFilename());
+				upload.saveUploadedFiles(attachFile6, Constants.LOGIS_BILL_PDF_TYPE,
+						attachFile6.get(0).getOriginalFilename()); 
 				if(fileList.size()>0)
 				{
 					 
@@ -193,6 +212,20 @@ public class UploadFileController {
 						 }
 						 else
 							 fileList.get(3).setFileName(document4);
+						 if(docFile5!=null && docFile5.length()>0)
+						 {
+							 fileList.get(4).setFileName(docFile5);
+							 fileList.get(4).setDate(formate.format(new Date()));
+						 }
+						 else
+							 fileList.get(4).setFileName(document5);
+						 if(docFile6!=null && docFile6.length()>0)
+						 {
+							 fileList.get(5).setFileName(docFile6);
+							 fileList.get(5).setDate(formate.format(new Date()));
+						 }
+						 else
+							 fileList.get(5).setFileName(document6);
 						 System.out.println("update " + fileList);
 						 fileList = rest.postForObject(Constants.url + "postRuleFile",fileList,
 									List.class);

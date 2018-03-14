@@ -90,6 +90,21 @@
 							
 							</div><br><br>
 							
+							<div class="box-content">				
+													<div class="col-md-2" >Select PDF SpCake Undertaking </div>
+									<div class="col-md-4"> 
+													<input type="file" id="attachFile5" name="attachFile5" size="60"  > 
+													<input type="hidden" value="${document5}" id="document5" name="document5" size="60" >
+													 
+												</div>
+												<div class="col-md-6"> 
+													 Last Upload Date: ${date5}
+													<a href="${url}${document5}" target="blank" ><input type="button" value="View Document File" class="btn btn-info">
+										</a><br>
+												</div>
+							
+							</div><br><br>
+							
 							<div class="box-content">
 							 
 									<div class="col-md-2" >Select Word File Rules And Regulation </div>
@@ -116,6 +131,22 @@
 												<div class="col-md-4"> 
 													 Last Upload Date: ${date4}
 													<a href="${url}${document4}" target="blank" ><input type="button" value="Download File" class="btn btn-info">
+										</a>
+												</div>
+							
+							</div><br><br>
+							
+							<div class="box-content">				
+													<div class="col-md-2" >Select Word File SpCake UnderTaking </div>
+									<div class="col-md-4"> 
+													<input type="file" id="attachFile6" name="attachFile6" size="60"  > 
+													<input type="hidden" value="${document6}" id="document6" name="document6" size="60"  >
+													 
+												</div>
+												
+												<div class="col-md-4"> 
+													 Last Upload Date: ${date6}
+													<a href="${url}${document6}" target="blank" ><input type="button" value="Download File" class="btn btn-info">
 										</a>
 												</div>
 							
