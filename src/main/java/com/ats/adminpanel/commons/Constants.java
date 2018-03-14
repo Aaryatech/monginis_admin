@@ -3,6 +3,7 @@ package com.ats.adminpanel.commons;
 import java.io.File;
 
 public class Constants {
+	
 	public static final String url="http://132.148.151.41:8080/webapi/";
 	//public static final String url = "http://132.148.143.124:8080/webapi/";
 	//public static final String url="http://localhost:8098/";
