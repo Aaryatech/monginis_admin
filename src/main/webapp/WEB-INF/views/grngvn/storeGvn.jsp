@@ -1013,8 +1013,8 @@ function showGateGvnDetails(){
 	
 		var toDate=$("#to_date").val();
 		
-		alert(fromDate);
-		alert(toDate);
+		//alert(fromDate);
+		//alert(toDate);
 		
 		$.getJSON('${showGateGvnDetails}',
 				{
@@ -1032,7 +1032,7 @@ function showGateGvnDetails(){
 
 function validateQty(grnId,grnQty,aprQty,qty){
 	
-	alert("JJJ");
+	//alert("JJJ");
 	var entered=$("#store_gvn_qty"+grnId).val();
 	//alert("received = " +entered);
 	if(entered>grnQty){

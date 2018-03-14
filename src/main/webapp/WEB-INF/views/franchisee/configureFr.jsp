@@ -252,7 +252,7 @@ select {
 											<div class="col-sm-9 col-lg-10 controls">
 											<select class="form-control chosen" name="date[]" id="date" multiple="multiple">
 													<option value="0">Select Date</option>
-													 <c:forEach var = "i" begin = "1" end = "31">
+													 <c:forEach var = "i" begin = "1" end = "32">
        													<option value="${i}">${i}</option>
                                                      </c:forEach>
 												</select>

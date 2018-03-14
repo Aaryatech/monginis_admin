@@ -286,6 +286,8 @@ public class GvnController {
 		String grnDate = gvnGateDetailList.get(0).getGrnGvnDate();
 		modelAndView.addObject("gvnList", gvnGateDetailList);
 		modelAndView.addObject("grnDate", grnDate);
+		
+		modelAndView.addObject("url",Constants.GVN_IMAGE_URL);
 
 		return modelAndView;
 
@@ -945,6 +947,7 @@ public class GvnController {
 		String grnDate = gvnStoreDetailList.get(0).getGrnGvnDate();
 		modelAndView.addObject("gvnList", gvnStoreDetailList);
 		modelAndView.addObject("grnDate", grnDate);
+		modelAndView.addObject("url",Constants.GVN_IMAGE_URL);
 
 		return modelAndView;
 
@@ -1740,6 +1743,7 @@ public class GvnController {
 		String grnDate = gvnAccDetailList.get(0).getGrnGvnDate();
 		modelAndView.addObject("gvnList", gvnAccDetailList);
 		modelAndView.addObject("grnDate", grnDate);
+		modelAndView.addObject("url",Constants.GVN_IMAGE_URL);
 
 		return modelAndView;
 

@@ -702,7 +702,7 @@ function calcGvn(baseRate,grnId,sgstPer,cgstPer,gvnQty,curQty){
 
 	
 	var gvnQty=$("#acc_gvn_qty"+grnId).val();
-	alert(gvnQty);
+	//alert(gvnQty);
 	
 	//var gvnAmt=parseFloat(acc_gvn_qty)*parseFloat(baseRate);
 	//alert(gvnAmt);

@@ -864,7 +864,7 @@ public class FranchiseeController {
         List<String> dates=new ArrayList<>();
        
     
-        for(int i=1;i<=31;i++)
+        for(int i=1;i<=32;i++)
         {
         	dates.add(""+i);
         		
