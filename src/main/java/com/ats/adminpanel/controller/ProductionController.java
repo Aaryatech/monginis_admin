@@ -53,6 +53,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+import org.zefer.html.doc.q;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
@@ -280,6 +281,26 @@ public class ProductionController {
 		return barcodeList;
 	}
 
+	
+	
+	
+	@RequestMapping(value = "/getEditedList", method = RequestMethod.GET)
+	public @ResponseBody List<ProductionBarcode> getEditedList(HttpServletRequest request,
+			HttpServletResponse response) {
+		System.err.println("Inside get Edited List ");
+		int key = Integer.parseInt(request.getParameter("key"));
+		int qty = Integer.parseInt(request.getParameter("qty"));
+		
+		System.err.println("key = " +key + "Qty = " +qty);
+		barcodeList.get(key).setProductionQty(qty);
+		
+				return barcodeList;
+
+	}
+	
+	
+	
+	
 	@RequestMapping(value = "/submitProductionBarcode", method = RequestMethod.POST)
 	public void submitProductionBarcode(HttpServletRequest request, HttpServletResponse response)
 			throws FileNotFoundException {

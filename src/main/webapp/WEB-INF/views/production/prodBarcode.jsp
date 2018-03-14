@@ -18,7 +18,7 @@
 	<c:url var="findItemsByCatId" value="/getItemByCatId" />
 	<c:url var="addNewItem" value="/addNewItemToList" />
 
-
+	<c:url var="getEditedList" value="/getEditedList" />
 
 	<div class="container" id="main-container">
 
@@ -515,7 +515,8 @@
 							tr.append($('<td></td>').html(key + 1));
 							tr.append($('<td></td>').html(order.itemCode));
 							tr.append($('<td></td>').html(order.itemName));
-							tr.append($('<td></td>').html(order.productionQty));
+							//tr.append($('<td></td>').html(order.productionQty));
+							tr.append($('<td ><input type="text" value='+order.productionQty+' id=prodQty'+order.itemId+' onchange="editQty('+key+','+order.itemId+')"></td>'));
 
 							$('#table1 tbody').append(tr);
 
@@ -533,8 +534,6 @@
 
 	<script type="text/javascript">
 		function searchOrder() {
-
-			
 
 			var autoindex = 0;
 			var isValid = validate();
@@ -573,7 +572,8 @@
 							tr.append($('<td></td>').html(key + 1));
 							tr.append($('<td></td>').html(order.itemCode));
 							tr.append($('<td></td>').html(order.itemName));
-							tr.append($('<td></td>').html(order.productionQty));
+							//tr.append($('<td></td>').html(order.productionQty));
+					tr.append($('<td ><input type="text" value='+order.productionQty+' id=prodQty'+order.itemId+' onchange="editQty('+key+','+order.itemId+')"></td>'));
 
 							$('#table1 tbody').append(tr);
 
@@ -585,13 +585,56 @@
 			
 			}
 		}
+		
+		
+		function editQty(key,itemId){
+			//alert(a);
+			
+			var qty = $("#prodQty"+itemId).val();
+			//alert(qty);
+			
+
+			$.getJSON('${getEditedList}', {
+
+				key : key,
+				qty : qty,
+				ajax : 'true',
+
+			}, function(data) {
+				$('#table1 td').remove();
+
+				document.getElementById("callsearch").disabled = false;
+				$('#loader').hide();
+//alert(data);
+				if (data == "") {
+				
+					document.getElementById("callSubmit").disabled = true;
+					document.getElementById("callPrint").disabled = false;
+
+				}else {
+					document.getElementById("callSubmit").disabled = false;
+					document.getElementById("callPrint").disabled = false;
+
+					$.each(data, function(key, order) {
+						
+						var tr = $('<tr></tr>');
+
+						tr.append($('<td></td>').html(key + 1));
+						tr.append($('<td></td>').html(order.itemCode));
+						tr.append($('<td></td>').html(order.itemName));
+						//tr.append($('<td></td>').html(order.productionQty));
+						
+					tr.append($('<td ><input type="text" value='+order.productionQty+' id=prodQty'+order.itemId+' onchange="editQty('+key+','+order.itemId+')"></td>'));
+
+						$('#table1 tbody').append(tr);
+
+					})
+				}
+
+			});
+			
+		}
 	</script>
-
-
-
-
-
-
 
 	<script type="text/javascript">
 		function validate() {
