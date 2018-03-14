@@ -24,6 +24,7 @@
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/style.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/flaty.css">
 <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/lightbox.css">
+
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/loader.css">
 
@@ -54,6 +55,7 @@
 															.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
 										</script>
 
+	
 	<script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
 <!--page specific css styles-->
