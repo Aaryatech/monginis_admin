@@ -381,10 +381,10 @@
 	
 	try{
 	
-		Set objShell = CreateObject("WScript.Shell")
-		comspec = objShell.ExpandEnvironmentStrings("%comspec%")
+	//	Set objShell = CreateObject("WScript.Shell")
+	//	comspec = objShell.ExpandEnvironmentStrings("%comspec%")
 		 
-		Set objExec = objShell.Exec(comspec & "D:\\barcode\\apprvlbl.txt")
+	//	Set objExec = objShell.Exec(comspec & "D:\\barcode\\apprvlbl.txt")
 		    
 	}catch (e) {
 		alert(e);

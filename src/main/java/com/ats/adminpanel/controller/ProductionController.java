@@ -20,6 +20,8 @@ import java.nio.file.Files;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
@@ -118,11 +120,9 @@ public class ProductionController {
 	public int[] timeSlot;
 	List<ProductionBarcode> barcodeList = new ArrayList<ProductionBarcode>();;
 	int selCate;
-	ArrayList<Item> itemList =new ArrayList<>();
+	ArrayList<Item> itemList = new ArrayList<>();
 	GetCurProdAndBillQtyList getCurProdAndBillQtyList = new GetCurProdAndBillQtyList();
 	String date;
-	
-	
 
 	@RequestMapping(value = "/showproduction", method = RequestMethod.GET)
 	public ModelAndView showProdForcasting(HttpServletRequest request, HttpServletResponse response) {
@@ -130,9 +130,9 @@ public class ProductionController {
 		ModelAndView model = new ModelAndView("production/production");
 		Constants.mainAct = 4;
 		Constants.subAct = 32;
-		
+
 		barcodeList = new ArrayList<ProductionBarcode>();
-		
+
 		RestTemplate restTemplate = new RestTemplate();
 
 		CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
@@ -187,7 +187,7 @@ public class ProductionController {
 	public @ResponseBody List<ProductionBarcode> getProductionOrderBarcode(HttpServletRequest request,
 			HttpServletResponse response) {
 
-		String date = request.getParameter("productionDate");
+		date = request.getParameter("productionDate");
 		int cat = Integer.parseInt(request.getParameter("selectedCat"));
 
 		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
@@ -196,7 +196,7 @@ public class ProductionController {
 		try {
 			ds2 = sdf1.format(sdf2.parse(date));
 		} catch (ParseException e) {
-			
+
 			e.printStackTrace();
 		}
 		System.out.println(ds2);
@@ -218,10 +218,9 @@ public class ProductionController {
 		System.out.println("barcode data " + barcodeList.toString());
 		return barcodeList;
 	}
-	
+
 	@RequestMapping(value = "/getItemByCatId", method = RequestMethod.GET)
-	public @ResponseBody ArrayList<Item>  getItemsByCatId(HttpServletRequest request,
-			HttpServletResponse response) {
+	public @ResponseBody ArrayList<Item> getItemsByCatId(HttpServletRequest request, HttpServletResponse response) {
 
 		String date = request.getParameter("productionDate");
 		int cat = Integer.parseInt(request.getParameter("selectedCat"));
@@ -232,132 +231,196 @@ public class ProductionController {
 		try {
 			ds2 = sdf1.format(sdf2.parse(date));
 		} catch (ParseException e) {
-			
+
 			e.printStackTrace();
 		}
 		System.out.println(ds2);
 
 		RestTemplate restTemplate = new RestTemplate();
 
-		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("itemGrp1", cat);
 
 		Item[] item = restTemplate.postForObject(Constants.url + "getItemsByCatIdAndSortId", map, Item[].class);
 		itemList.clear();
-		
+
 		itemList = new ArrayList<Item>(Arrays.asList(item));
 		System.out.println("Filter Item List " + itemList.toString());
-		
+
 		return itemList;
 	}
-	
-	
-	
+
 	@RequestMapping(value = "/addNewItemToList", method = RequestMethod.GET)
 	public @ResponseBody List<ProductionBarcode> addNewItemToList(HttpServletRequest request,
 			HttpServletResponse response) {
 
-		 date = request.getParameter("productionDate");
+		date = request.getParameter("productionDate");
 		int cat = Integer.parseInt(request.getParameter("selectedCat"));
 		int id = Integer.parseInt(request.getParameter("selectedItem"));
 		int qty = Integer.parseInt(request.getParameter("qty"));
 
-		
-	
-		for(Item item :itemList) {
-			
-			if(id == item.getId()) {
-				
-				ProductionBarcode barcode=new ProductionBarcode();
+		for (Item item : itemList) {
+
+			if (id == item.getId()) {
+
+				ProductionBarcode barcode = new ProductionBarcode();
 				barcode.setItemCode(item.getItemId());
 				barcode.setItemId(item.getId());
 				barcode.setItemName(item.getItemName());
 				barcode.setProductionQty(qty);
-				
+
 				barcodeList.add(barcode);
 			}
-			
+
 		}
-		
+
 		System.out.println("barcode data " + barcodeList.toString());
 		return barcodeList;
 	}
 
 	@RequestMapping(value = "/submitProductionBarcode", method = RequestMethod.POST)
-	public void submitProductionBarcode(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+	public void submitProductionBarcode(HttpServletRequest request, HttpServletResponse response)
+			throws FileNotFoundException {
 
-		 File file = new File("prod.txt");
+		File file = new File("prod.txt");
 
-	        try (Writer writer = new BufferedWriter(new FileWriter(file))) {
-	        	
-	        	for(ProductionBarcode prod : barcodeList) {
-	        		
-	        		int q=prod.getProductionQty();
-	        		
-	        		for(int i=1; i<=q; i++) {
-	        		        		
-	        String generalSetting = "SIZE 47.5 mm, 24.5 mm" +   
-	        						System.getProperty("line.separator") +"SPEED 3" +
-	        						System.getProperty("line.separator") + "DENSITY 17" +
-	        						System.getProperty("line.separator") + "SET RIBBON ON" +
-	        						System.getProperty("line.separator") + "DIRECTION 0,0" +
-	        						System.getProperty("line.separator") + "REFERENCE 0,0" +
-	        						System.getProperty("line.separator") + "OFFSET 0 mm" +
-	        						System.getProperty("line.separator") + "SET PEEL OFF" +
-	        						System.getProperty("line.separator") + "SET TEAR ON" +
-	        						System.getProperty("line.separator") + "CLS" +
-	        						System.getProperty("line.separator") + "CODEPAGE 850" ;
-	        		
-	            String barcode = generalSetting + System.getProperty("line.separator")
-	            			     + "BARCODE 347,100,\"128M\",54,0,180,2,4,\"" + prod.getItemCode() + "\"";
-	            
-	            String text = barcode + System.getProperty("line.separator") + "TEXT 347,40,\"ROMAN.TTF\",180,1,10,\"" + prod.getItemName()+"\"";
+		try (Writer writer = new BufferedWriter(new FileWriter(file))) {
 
-	            String contents = text + System.getProperty("line.separator") + "PRINT 1,1" + System.getProperty("line.separator") + System.getProperty("line.separator");
-	            
-	            writer.write(contents);
-	        	
-	        		}
-	        	}
-	            
-	            
-	        } catch (IOException e) {
-	            e.printStackTrace();
-	        }	
-	        
-	        System.out.println("file "+file.getAbsolutePath());
-	                
-	        String mimeType= URLConnection.guessContentTypeFromName(file.getName());
-	     
-	        if(mimeType==null){
-	        
-	        	System.out.println("mimetype is not detectable");
-	            mimeType = "application/octet-stream";
-	        
-	        }
-	         
-	        System.out.println("mimetype : "+mimeType);
-	         
-	        response.setContentType(mimeType);
-	         
-	        response.setHeader("Content-Disposition", String.format("attachment; filename=\"" + file.getName() +"\""));
-	 	         
-	        //response.setHeader("Content-Disposition", String.format("attachment; filename=\"%s\"", file.getName()));
-	         
-	        response.setContentLength((int)file.length());
-	 
-	        InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
-	 
-	    
-	        try {
-				FileCopyUtils.copy(inputStream, response.getOutputStream());
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			for (ProductionBarcode prod : barcodeList) {
+
+				int q = prod.getProductionQty();
+
+				for (int i = 1; i <= q; i++) {
+
+					/*
+					 * SIZE 47.5 mm, 24.5 mm SPEED 3 DENSITY 17 SET RIBBON ON DIRECTION 0,0
+					 * REFERENCE 0,0 OFFSET 0 mm SET PEEL OFF SET CUTTER OFF SET TEAR ON CLS
+					 * CODEPAGE 850 TEXT 347,135,"ROMAN.TTF",180,1,10,"Item Code" TEXT
+					 * 235,145,"ROMAN.TTF",180,1,16,<item_code> BARCODE
+					 * 347,100,"128M",54,0,180,2,4,<item_code> TEXT
+					 * 347,40,"ROMAN.TTF",180,1,10,<item_name> TEXT 39,50,"ROMAN.TTF",90,1,8,<date>
+					 * PRINT 1,1
+					 * 
+					 */
+
+					// FRUITCAKES
+
+					DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+					LocalDate localDate = LocalDate.parse(date, formatter);
+					int dayOfMonth = localDate.getDayOfMonth();
+
+					String number = String.valueOf(dayOfMonth);
+
+					String encryptDate = "";
+
+					for (int d = 0; d < number.length(); d++) {
+						int j = Character.digit(number.charAt(d), 10);
+						System.out.println("digit: " + j);
+
+						switch (j) {
+						case 0:
+							encryptDate = encryptDate + "F";
+							break;
+
+						case 1:
+							encryptDate = encryptDate + "R";
+							break;
+						case 2:
+							encryptDate = encryptDate + "U";
+							break;
+						case 3:
+							encryptDate = encryptDate + "I";
+							break;
+						case 4:
+							encryptDate = encryptDate + "T";
+							break;
+						case 5:
+							encryptDate = encryptDate + "C";
+							break;
+						case 6:
+							encryptDate = encryptDate + "A";
+							break;
+						case 7:
+							encryptDate = encryptDate + "K";
+							break;
+						case 8:
+							encryptDate = encryptDate + "E";
+							break;
+						case 9:
+							encryptDate = encryptDate + "S";
+							break;
+
+						}
+
+					}
+
+					System.out.println("encryptedDate " + encryptDate);
+
+					String generalSetting = "SIZE 47.5 mm, 24.5 mm" + System.getProperty("line.separator") + "SPEED 3"
+							+ System.getProperty("line.separator") + "DENSITY 17" + System.getProperty("line.separator")
+							+ "SET RIBBON ON" + System.getProperty("line.separator") + "DIRECTION 0,0"
+							+ System.getProperty("line.separator") + "REFERENCE 0,0"
+							+ System.getProperty("line.separator") + "OFFSET 0 mm"
+							+ System.getProperty("line.separator") + "SET PEEL OFF"
+							+ System.getProperty("line.separator") + "SET TEAR ON"
+							+ System.getProperty("line.separator") + "CLS" + System.getProperty("line.separator")
+							+ "CODEPAGE 850" + System.getProperty("line.separator")
+							+ "TEXT 347,135,\"ROMAN.TTF\",180,1,10,\"Item Code\"";
+
+					String barcode = generalSetting + System.getProperty("line.separator")
+							+ "TEXT 235,145,\"ROMAN.TTF\",180,1,16,\"" + prod.getItemCode() + "\"" 
+							+ System.getProperty("line.separator") + "BARCODE 347,100,\"128M\",54,0,180,2,4,\""
+							+ prod.getItemCode() + "\"";
+
+					String text = barcode + System.getProperty("line.separator")
+							+ "TEXT 347,40,\"ROMAN.TTF\",180,1,10,\"" + prod.getItemName() + "\"";
+
+					String date = text + System.getProperty("line.separator") + "TEXT 39,50,\"ROMAN.TTF\",90,1,8,\""
+							+ encryptDate + "\"";
+
+					String contents = date + System.getProperty("line.separator") + "PRINT 1,1"
+							+ System.getProperty("line.separator");
+
+					writer.write(contents);
+
+				}
 			}
-	        
-		
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		System.out.println("file " + file.getAbsolutePath());
+
+		String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+		if (mimeType == null) {
+
+			System.out.println("mimetype is not detectable");
+			mimeType = "application/octet-stream";
+
+		}
+
+		System.out.println("mimetype : " + mimeType);
+
+		response.setContentType(mimeType);
+
+		response.setHeader("Content-Disposition", String.format("attachment; filename=\"" + file.getName() + "\""));
+
+		// response.setHeader("Content-Disposition", String.format("attachment;
+		// filename=\"%s\"", file.getName()));
+
+		response.setContentLength((int) file.length());
+
+		InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+		try {
+			FileCopyUtils.copy(inputStream, response.getOutputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 
 	@RequestMapping(value = "/getMenu", method = RequestMethod.GET)
