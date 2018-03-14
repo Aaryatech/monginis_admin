@@ -282,8 +282,6 @@ public class ProductionController {
 	}
 
 	
-	
-	
 	@RequestMapping(value = "/getEditedList", method = RequestMethod.GET)
 	public @ResponseBody List<ProductionBarcode> getEditedList(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -292,8 +290,11 @@ public class ProductionController {
 		int qty = Integer.parseInt(request.getParameter("qty"));
 		
 		System.err.println("key = " +key + "Qty = " +qty);
-		barcodeList.get(key).setProductionQty(qty);
 		
+		if(qty>0)
+		barcodeList.get(key).setProductionQty(qty);
+		else		barcodeList.remove(key);
+
 				return barcodeList;
 
 	}

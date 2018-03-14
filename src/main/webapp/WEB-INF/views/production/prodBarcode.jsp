@@ -102,8 +102,8 @@
 							<label class=" col-md-3 control-label menu_label">Production
 								Date</label>
 							<div class="col-md-6 controls">
-								<input value="${todayDate}" class="form-control date-picker"
-									id="datepicker" size="16" type="text" name="production_date"
+								<input value="${todayDate}"
+									id="datepicker" type="text" name="production_date"
 									required />
 							</div>
 
@@ -516,7 +516,7 @@
 							tr.append($('<td></td>').html(order.itemCode));
 							tr.append($('<td></td>').html(order.itemName));
 							//tr.append($('<td></td>').html(order.productionQty));
-							tr.append($('<td ><input type="text" value='+order.productionQty+' id=prodQty'+order.itemId+' onchange="editQty('+key+','+order.itemId+')"></td>'));
+							tr.append($('<td ><input type="text" class="form-control"  value='+order.productionQty+' id=prodQty'+order.itemId+' onchange="editQty('+key+','+order.itemId+')"></td>'));
 
 							$('#table1 tbody').append(tr);
 
@@ -573,7 +573,7 @@
 							tr.append($('<td></td>').html(order.itemCode));
 							tr.append($('<td></td>').html(order.itemName));
 							//tr.append($('<td></td>').html(order.productionQty));
-					tr.append($('<td ><input type="text" value='+order.productionQty+' id=prodQty'+order.itemId+' onchange="editQty('+key+','+order.itemId+')"></td>'));
+					tr.append($('<td ><input type="text" class="form-control" value='+order.productionQty+' id=prodQty'+order.itemId+' onchange="editQty('+key+','+order.itemId+')"></td>'));
 
 							$('#table1 tbody').append(tr);
 
@@ -624,7 +624,7 @@
 						tr.append($('<td></td>').html(order.itemName));
 						//tr.append($('<td></td>').html(order.productionQty));
 						
-					tr.append($('<td ><input type="text" value='+order.productionQty+' id=prodQty'+order.itemId+' onchange="editQty('+key+','+order.itemId+')"></td>'));
+					tr.append($('<td ><input type="text" class="form-control" value='+order.productionQty+' id=prodQty'+order.itemId+' onchange="editQty('+key+','+order.itemId+')"></td>'));
 
 						$('#table1 tbody').append(tr);
 
