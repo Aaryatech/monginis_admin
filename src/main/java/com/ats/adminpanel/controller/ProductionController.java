@@ -131,7 +131,7 @@ public class ProductionController {
 		Constants.mainAct = 4;
 		Constants.subAct = 32;
 
-		barcodeList = new ArrayList<ProductionBarcode>();
+	
 
 		RestTemplate restTemplate = new RestTemplate();
 
@@ -169,6 +169,8 @@ public class ProductionController {
 		Constants.mainAct = 4;
 		Constants.subAct = 32;
 
+		barcodeList = new ArrayList<ProductionBarcode>();
+		
 		RestTemplate restTemplate = new RestTemplate();
 
 		CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
@@ -321,7 +323,6 @@ public class ProductionController {
 						case 0:
 							encryptDate = encryptDate + "F";
 							break;
-
 						case 1:
 							encryptDate = encryptDate + "R";
 							break;
@@ -355,6 +356,17 @@ public class ProductionController {
 					}
 
 					System.out.println("encryptedDate " + encryptDate);
+					
+					String prodItemName= prod.getItemName();
+					
+					int l=prodItemName.length();
+					
+					String itemName="";
+					if(l>8) {
+					 itemName=prodItemName.substring(0, 7);
+					}else {
+						itemName=prodItemName;
+					}
 
 					String generalSetting = "SIZE 47.5 mm, 24.5 mm" + System.getProperty("line.separator") + "SPEED 3"
 							+ System.getProperty("line.separator") + "DENSITY 17" + System.getProperty("line.separator")
@@ -373,7 +385,7 @@ public class ProductionController {
 							+ prod.getItemCode() + "\"";
 
 					String text = barcode + System.getProperty("line.separator")
-							+ "TEXT 347,40,\"ROMAN.TTF\",180,1,10,\"" + prod.getItemName() + "\"";
+							+ "TEXT 347,40,\"ROMAN.TTF\",180,1,10,\"" + itemName + "\"";
 
 					String date = text + System.getProperty("line.separator") + "TEXT 39,50,\"ROMAN.TTF\",90,1,8,\""
 							+ encryptDate + "\"";
