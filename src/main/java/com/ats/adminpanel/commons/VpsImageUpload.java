@@ -12,18 +12,18 @@ import org.springframework.web.multipart.MultipartFile;
 
 public class VpsImageUpload {
 
-	public static final String FR_FOLDER = "/opt/tomcat-latest/webapps/webapi/uploads/FR/";
-	public static final String ITEM_FOLDER = "/opt/tomcat-latest/webapps/webapi/uploads/ITEM/";
+	public static final String FR_FOLDER = "/opt/tomcat-latest/webapps/uploads/FR/";
+	public static final String ITEM_FOLDER = "/opt/tomcat-latest/webapps/uploads/ITEM/";
 
-	public static final String MSG_FOLDER = "/opt/tomcat-latest/webapps/webapi/uploads/MSG/";
+	public static final String MSG_FOLDER = "/opt/tomcat-latest/webapps/uploads/MSG/";
 	
-	public static final String M_SP_CAKE_FOLDER = "/opt/tomcat-latest/webapps/webapi/uploads/MSPCAKE/";
+	public static final String M_SP_CAKE_FOLDER = "/opt/tomcat-latest/webapps/uploads/MSPCAKE/";
 	
-	public static final String RAW_MAT_IMAGE_FOLDER = "/opt/tomcat-latest/webapps/webapi/uploads/RAWMAT/";
+	public static final String RAW_MAT_IMAGE_FOLDER = "/opt/tomcat-latest/webapps/uploads/RAWMAT/";
 
-	public static final String GATE_ENTRY_IMAGE_FOLDER = "/opt/tomcat-latest/webapps/webapi/uploads/GATEENTRY/";
+	public static final String GATE_ENTRY_IMAGE_FOLDER = "/opt/tomcat-latest/webapps/uploads/GATEENTRY/";
 	
-
+	public static final String LOGIS_BILL_FILE= "/opt/tomcat-latest/webapps/uploads/MSPCAKE/";
 
 	private static final String FIELDMAP_FOLDER = null;
 	private static final String KYC_FOLDER = null;
@@ -75,7 +75,11 @@ public class VpsImageUpload {
 				path = Paths.get(GATE_ENTRY_IMAGE_FOLDER + imageName);
 
 			}
+			else if (imageType == 8) {
 
+				path = Paths.get(LOGIS_BILL_FILE + imageName);
+
+			}
 
 			Files.write(path, bytes);
 
