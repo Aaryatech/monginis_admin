@@ -3632,7 +3632,7 @@ public class SalesReportController {
 		System.out.println("URL " + url);
 		
 		//File f = new File("/home/ats-12/pdf/report.pdf");
-		File f = new File("/opt/tomcat-latest/webapps/webapi/uploads/report.pdf");
+		File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
 
 		try {
 			runConverter(Constants.ReportURL + url, f,request,response);
@@ -3648,7 +3648,7 @@ public class SalesReportController {
 		String appPath = context.getRealPath("");
 		//String filePath = "/home/ats-12/pdf/report.pdf";
 
-		String filePath = "/opt/tomcat-latest/webapps/webapi/uploads/report.pdf";
+		String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;
