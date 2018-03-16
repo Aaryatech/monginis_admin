@@ -182,7 +182,10 @@ public class ProductionController {
 		System.out.println("Category list  " + categoryList);
 
 		model.addObject("unSelectedCatList", categoryList);
+Date  todayDate=new Date();
 
+DateFormat df=new SimpleDateFormat("dd-MM-yyyy");
+model.addObject("todayDate",df.format(todayDate));
 		return model;
 	}
 
@@ -249,7 +252,7 @@ public class ProductionController {
 
 		itemList = new ArrayList<Item>(Arrays.asList(item));
 		System.out.println("Filter Item List " + itemList.toString());
-
+		
 		return itemList;
 	}
 
@@ -285,15 +288,20 @@ public class ProductionController {
 	@RequestMapping(value = "/getEditedList", method = RequestMethod.GET)
 	public @ResponseBody List<ProductionBarcode> getEditedList(HttpServletRequest request,
 			HttpServletResponse response) {
-		System.err.println("Inside get Edited List ");
+		
 		int key = Integer.parseInt(request.getParameter("key"));
 		int qty = Integer.parseInt(request.getParameter("qty"));
 		
 		System.err.println("key = " +key + "Qty = " +qty);
 		
-		if(qty>0)
+		if(qty>0) {
 		barcodeList.get(key).setProductionQty(qty);
-		else		barcodeList.remove(key);
+		System.err.println("Item Qty Changed ");
+		}
+		else	{	
+			barcodeList.remove(key);
+		System.err.println("Item removed ");
+		}
 
 				return barcodeList;
 

@@ -9,7 +9,7 @@
 <body>
 	<script>
 		$(function() {
-			$("#datepicker").datepicker({
+			$("#prodDate2").prodDate({
 				dateFormat : 'dd-mm-yy'
 			});
 		});
@@ -92,9 +92,7 @@
 								</select>
 							</div>
 
-
 						</div>
-
 
 						<br />
 						<div class="form-group col-md-8" align="left">
@@ -102,11 +100,9 @@
 							<label class=" col-md-3 control-label menu_label">Production
 								Date</label>
 							<div class="col-md-6 controls">
-								<input value="${todayDate}"
-									id="datepicker" type="text" name="production_date"
-									required />
+								<input value="${todayDate}" id="prodDate" type="text"
+									name="prodDate" /><strong style="color: red">*</strong>dd-MM-yyyy
 							</div>
-
 
 						</div>
 					</div>
@@ -132,32 +128,24 @@
 								Item </label>
 							<div class="col-md-4 controls">
 
-								<select class="form-control chosen"
-									data-placeholder="Choose Item" name="selectItem"
+								<select class="form-control chosen" name="selectItem"
 									id="selectItem" tabindex="-1" data-rule-required="true">
-
-
-
 								</select>
 							</div>
 
 							<label class=" col-md-1 control-label menu_label"> Qty </label>
 							<div class="col-md-4 controls">
-								<input id="qty" size="16" type="number" name="qty" /> <input
-									type="button" class="btn btn-info" value="Add" id="addItem"
-									onclick="addItem()">
+								<input id="qty" size="16" type="number" name="qty" value="1" />
+								<input type="button" class="btn btn-info" value="Add"
+									id="addItem" onclick="addItem()">
 
 							</div>
 
-
 						</div>
-
 
 						<br />
 
 					</div>
-
-
 
 					<div align="center" id="loader" style="display: none">
 
@@ -185,12 +173,16 @@
 				</div>
 
 
-				<form action="submitProductionBarcode" method="post">
-
-
+				<form action="${pageContext.request.contextPath}/submitProductionBarcode" method="post">
 					<div class="box-content">
 						<div id="table-scroll" class="table-scroll">
-
+							<div class="col-md-9"></div>
+							<label for="search" class="col-md-3" id="search"> <i
+								class="fa fa-search" style="font-size: 20px"></i> <input
+								type="text" style="height: 30px;" id="myInput"
+								onkeyup="myFunction()" placeholder="Search items by name.."
+								title="Type in a name">
+							</label>
 							<div class="table-wrap">
 
 								<table id="table1" class="table table-advance">
@@ -310,7 +302,7 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
 	<script type="text/javascript"
-		src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-prodDate/js/bootstrap-prodDate.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
@@ -375,32 +367,29 @@
 
 	<script type="text/javascript">
 		function print() {
-		
-		var oShell = new ActiveXObject("WScript.Shell");
-		oShell.Run('D:\\barcode\\print.BAT', 1);
-	
-	try{
-	
-	//	Set objShell = CreateObject("WScript.Shell")
-	//	comspec = objShell.ExpandEnvironmentStrings("%comspec%")
-		 
-	//	Set objExec = objShell.Exec(comspec & "D:\\barcode\\apprvlbl.txt")
-		    
-	}catch (e) {
-		alert(e);
-	}
-	
 
-	return true;
-		
+			var oShell = new ActiveXObject("WScript.Shell");
+			oShell.Run('D:\\barcode\\print.BAT', 1);
+
+			try {
+
+				//	Set objShell = CreateObject("WScript.Shell")
+				//	comspec = objShell.ExpandEnvironmentStrings("%comspec%")
+
+				//	Set objExec = objShell.Exec(comspec & "D:\\barcode\\apprvlbl.txt")
+
+			} catch (e) {
+				alert(e);
+			}
+
+			return true;
+
 		}
-		</script>
+	</script>
 
 	<script type="text/javascript">
 		function findItemsByCatId() {
 
-			
-			
 			$('#table1 td').remove();
 
 			var autoindex = 0;
@@ -409,10 +398,9 @@
 			if (isValid) {
 
 				document.getElementById("callsearch").disabled = true;
-				var productionDate = document.getElementById("datepicker").value;
+				var productionDate = document.getElementById("prodDate").value;
 				var selectedCat = $("#selectCategory").val();
 				$('#loader').show();
-
 				$.getJSON('${findItemsByCatId}', {
 
 					selectedCat : selectedCat,
@@ -420,48 +408,39 @@
 					ajax : 'true',
 
 				}, function(data) {
-
 					document.getElementById("callsearch").disabled = false;
 					$('#loader').hide();
 
 					if (data == "") {
-					
+
 						document.getElementById("callSubmit").disabled = true;
 						document.getElementById("callPrint").disabled = false;
 
-					}else {
+					} else {
+						//alert(data[1].itemName)
 						document.getElementById("callSubmit").disabled = false;
 						document.getElementById("callPrint").disabled = false;
 
 						var len = data.length;
-						$('#selectItem')
-								.find('option')
-								.remove()
-								.end()
-				
+						$('#selectItem').find('option').remove().end()
+
+						var html = "<option>";
 
 						for (var i = 0; i < len; i++) {
 
 							html += '<option value="' +data[i].id+ '">'
-									+ data[i].itemName
-									+ '</option>';
+									+ data[i].itemName + '</option>';
 
 						}
 						html += '</option>';
-						$(
-								"#selectItem")
-								.html(
-										html);
 
-						$(
-								"#selectItem")
-								.trigger(
-										"chosen:updated");
+						$("#selectItem").html(html);
+
+						$("#selectItem").trigger("chosen:updated");
 					}
 
 				});
 
-			
 			}
 		}
 	</script>
@@ -474,58 +453,87 @@
 
 			var autoindex = 0;
 			var isValid = validate();
- 
+
 			if (isValid) {
 
 				document.getElementById("callsearch").disabled = true;
-				var productionDate = document.getElementById("datepicker").value;
+				var productionDate = document.getElementById("prodDate").value;
 				var selectedCat = $("#selectCategory").val();
 				var qty = document.getElementById("qty").value;
+				//alert(productionDate);
 
 				var selectedItem = $("#selectItem").val();
 
 				$('#loader').show();
 
-				$.getJSON('${addNewItem}', {
+				$
+						.getJSON(
+								'${addNewItem}',
+								{
 
-					selectedCat : selectedCat,
-					productionDate : productionDate,
-					selectedItem : selectedItem,
-					qty: qty,
-					ajax : 'true',
+									selectedCat : selectedCat,
+									productionDate : productionDate,
+									selectedItem : selectedItem,
+									qty : qty,
+									ajax : 'true',
 
-				}, function(data) {
+								},
+								function(data) {
 
-					document.getElementById("callsearch").disabled = false;
-					$('#loader').hide();
+									document.getElementById("callsearch").disabled = false;
+									$('#loader').hide();
 
-					if (data == "") {
-					
-						document.getElementById("callSubmit").disabled = true;
-						document.getElementById("callPrint").disabled = false;
+									if (data == "") {
 
-					}else {
-						document.getElementById("callSubmit").disabled = false;
-						document.getElementById("callPrint").disabled = false;
+										document.getElementById("callSubmit").disabled = true;
+										document.getElementById("callPrint").disabled = false;
 
-						$.each(data, function(key, order) {
-							
-							var tr = $('<tr></tr>');
+									} else {
+										document.getElementById("callSubmit").disabled = false;
+										document.getElementById("callPrint").disabled = false;
 
-							tr.append($('<td></td>').html(key + 1));
-							tr.append($('<td></td>').html(order.itemCode));
-							tr.append($('<td></td>').html(order.itemName));
-							//tr.append($('<td></td>').html(order.productionQty));
-							tr.append($('<td ><input type="text" class="form-control"  value='+order.productionQty+' id=prodQty'+order.itemId+' onchange="editQty('+key+','+order.itemId+')"></td>'));
+										$
+												.each(
+														data,
+														function(key, order) {
 
-							$('#table1 tbody').append(tr);
+															var tr = $('<tr></tr>');
 
-						})
-					}
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					key + 1));
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					order.itemCode));
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					order.itemName));
+															//tr.append($('<td></td>').html(order.productionQty));
+															tr
+																	.append($('<td ><input type="text" class="form-control"  value='
+																			+ order.productionQty
+																			+ ' id=prodQty'
+																			+ order.itemId
+																			+ ' onchange="editQty('
+																			+ key
+																			+ ','
+																			+ order.itemId
+																			+ ')"></td>'));
 
-				});
+															$('#table1 tbody')
+																	.append(tr);
 
-			
+														})
+									}
+
+								});
+
 			}
 		}
 	</script>
@@ -541,98 +549,151 @@
 			if (isValid) {
 
 				document.getElementById("callsearch").disabled = true;
-				var productionDate = document.getElementById("datepicker").value;
+				var productionDate = document.getElementById("prodDate").value;
 				var selectedCat = $("#selectCategory").val();
 				$('#loader').show();
 
-				$.getJSON('${getProductionOrder}', {
+				$
+						.getJSON(
+								'${getProductionOrder}',
+								{
 
-					selectedCat : selectedCat,
-					productionDate : productionDate,
-					ajax : 'true',
+									selectedCat : selectedCat,
+									productionDate : productionDate,
+									ajax : 'true',
 
-				}, function(data) {
+								},
+								function(data) {
+									$('#table1 td').remove();
+									document.getElementById("callsearch").disabled = false;
+									$('#loader').hide();
 
-					document.getElementById("callsearch").disabled = false;
-					$('#loader').hide();
+									if (data == "") {
 
-					if (data == "") {
-					
-						document.getElementById("callSubmit").disabled = true;
-						document.getElementById("callPrint").disabled = false;
+										document.getElementById("callSubmit").disabled = true;
+										document.getElementById("callPrint").disabled = false;
 
-					}else {
-						document.getElementById("callSubmit").disabled = false;
-						document.getElementById("callPrint").disabled = false;
+									} else {
+										document.getElementById("callSubmit").disabled = false;
+										document.getElementById("callPrint").disabled = false;
 
-						$.each(data, function(key, order) {
-							
-							var tr = $('<tr></tr>');
+										$
+												.each(
+														data,
+														function(key, order) {
 
-							tr.append($('<td></td>').html(key + 1));
-							tr.append($('<td></td>').html(order.itemCode));
-							tr.append($('<td></td>').html(order.itemName));
-							//tr.append($('<td></td>').html(order.productionQty));
-					tr.append($('<td ><input type="text" class="form-control" value='+order.productionQty+' id=prodQty'+order.itemId+' onchange="editQty('+key+','+order.itemId+')"></td>'));
+															var tr = $('<tr></tr>');
 
-							$('#table1 tbody').append(tr);
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					key + 1));
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					order.itemCode));
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					order.itemName));
+															//tr.append($('<td></td>').html(order.productionQty));
+															tr
+																	.append($('<td ><input type="text" class="form-control" value='
+																			+ order.productionQty
+																			+ ' id=prodQty'
+																			+ order.itemId
+																			+ ' onchange="editQty('
+																			+ key
+																			+ ','
+																			+ order.itemId
+																			+ ')"></td>'));
 
-						})
-					}
+															$('#table1 tbody')
+																	.append(tr);
 
-				});
+														})
+									}
 
-			
+								});
+
 			}
 		}
-		
-		
-		function editQty(key,itemId){
-			//alert(a);
-			
-			var qty = $("#prodQty"+itemId).val();
-			//alert(qty);
-			
 
-			$.getJSON('${getEditedList}', {
+		function editQty(key, itemId) {
 
-				key : key,
-				qty : qty,
-				ajax : 'true',
+			var qty = $("#prodQty" + itemId).val();
 
-			}, function(data) {
-				$('#table1 td').remove();
+			$
+					.getJSON(
+							'${getEditedList}',
+							{
 
-				document.getElementById("callsearch").disabled = false;
-				$('#loader').hide();
-//alert(data);
-				if (data == "") {
-				
-					document.getElementById("callSubmit").disabled = true;
-					document.getElementById("callPrint").disabled = false;
+								key : key,
+								qty : qty,
+								ajax : 'true',
 
-				}else {
-					document.getElementById("callSubmit").disabled = false;
-					document.getElementById("callPrint").disabled = false;
+							},
+							function(data) {
+								$('#table1 td').remove();
 
-					$.each(data, function(key, order) {
-						
-						var tr = $('<tr></tr>');
+								document.getElementById("callsearch").disabled = false;
+								$('#loader').hide();
 
-						tr.append($('<td></td>').html(key + 1));
-						tr.append($('<td></td>').html(order.itemCode));
-						tr.append($('<td></td>').html(order.itemName));
-						//tr.append($('<td></td>').html(order.productionQty));
-						
-					tr.append($('<td ><input type="text" class="form-control" value='+order.productionQty+' id=prodQty'+order.itemId+' onchange="editQty('+key+','+order.itemId+')"></td>'));
+								if (data == "") {
 
-						$('#table1 tbody').append(tr);
+									document.getElementById("callSubmit").disabled = true;
+									document.getElementById("callPrint").disabled = false;
 
-					})
-				}
+								} else {
+									document.getElementById("callSubmit").disabled = false;
+									document.getElementById("callPrint").disabled = false;
+									alert("Qty Changed");
+									$
+											.each(
+													data,
+													function(key, order) {
 
-			});
-			
+														var tr = $('<tr></tr>');
+
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				key + 1));
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				order.itemCode));
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				order.itemName));
+														//tr.append($('<td></td>').html(order.productionQty));
+
+														tr
+																.append($('<td ><input type="text" class="form-control" value='
+																		+ order.productionQty
+																		+ ' id=prodQty'
+																		+ order.itemId
+																		+ ' onchange="editQty('
+																		+ key
+																		+ ','
+																		+ order.itemId
+																		+ ')"></td>'));
+
+														$('#table1 tbody')
+																.append(tr);
+
+													})
+								}
+
+							});
+
 		}
 	</script>
 
@@ -640,8 +701,7 @@
 		function validate() {
 			var selectCategory = $("#selectCategory").val();
 
-			var selectOrderDate = $("#datepicker").val();
-
+			var selectOrderDate = $("#prodDate").val();
 			var isValid = true;
 
 			if (selectCategory == "" || selectCategory == null) {
@@ -654,7 +714,7 @@
 				isValid = false;
 				alert("Please Select Production Date");
 			}
-			
+
 			return isValid;
 
 		}
@@ -667,6 +727,26 @@
 					.indexOf(keyCode) != -1);
 
 			return ret;
+		}
+	</script>
+
+	<script>
+		function myFunction() {
+			var input, filter, table, tr, td, i;
+			input = document.getElementById("myInput");
+			filter = input.value.toUpperCase();
+			table = document.getElementById("table1");
+			tr = table.getElementsByTagName("tr");
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[2];
+				if (td) {
+					if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+			}
 		}
 	</script>
 
