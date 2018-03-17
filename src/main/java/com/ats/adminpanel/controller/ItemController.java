@@ -951,8 +951,8 @@ public class ItemController {
 
 				int isAllowBday= Integer.parseInt(request.getParameter("is_allow_bday"));
 				int cutSection= Integer.parseInt(request.getParameter("cut_section"));
-
-				
+				String shortName=request.getParameter("short_name");
+				System.err.println("Short Name " +shortName);
 				ItemSup itemSup=new ItemSup();
 				itemSup.setId(id);
 				itemSup.setItemId(itemId);
@@ -970,6 +970,7 @@ public class ItemController {
 				itemSup.setDelStatus(0);
 				itemSup.setIsTallySync(0);
 				itemSup.setCutSection(cutSection);
+				itemSup.setShortName(shortName);
 				
 				RestTemplate restTemplate = new RestTemplate();
 

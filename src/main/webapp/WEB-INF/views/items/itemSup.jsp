@@ -310,7 +310,18 @@
 												</c:choose>
 									</div>
 							  </div>
+							  
+							  
 							    <div class="col2">
+							    
+							     <div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Short Name</label>
+									<div class="col-sm-9 col-lg-3 controls">
+										<input type="text" name="short_name" id="short_name"
+											placeholder="Short Name" class="form-control"
+											data-rule-required="true"  value="${itemSupp.shortName}"/>
+									</div>
+							  </div> 
 									<label class="col-sm-3 col-lg-2 control-label">Allowed For Employee Birthday?</label>
 									<div class="col-sm-9 col-lg-3 controls">
 												<c:choose>
@@ -345,6 +356,8 @@
 												</c:choose>
 									</div>
 							  </div>
+							  
+							 
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										<input type="submit" class="btn btn-primary" value="Submit">

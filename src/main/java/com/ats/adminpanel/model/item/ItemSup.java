@@ -38,6 +38,8 @@ public class ItemSup {
 	
 	private int cutSection;
 	
+	private String shortName;
+	
 	
 	public int getCutSection() {
 		return cutSection;
@@ -183,6 +185,14 @@ public class ItemSup {
 		this.delStatus = delStatus;
 	}
 
+	public String getShortName() {
+		return shortName;
+	}
+
+	public void setShortName(String shortName) {
+		this.shortName = shortName;
+	}
+
 	@Override
 	public String toString() {
 		return "ItemSup [error=" + error + ", message=" + message + ", id=" + id + ", itemId=" + itemId + ", itemHsncd="
@@ -190,7 +200,7 @@ public class ItemSup {
 				+ ", noOfItemPerTray=" + noOfItemPerTray + ", actualWeight=" + actualWeight + ", baseWeight="
 				+ baseWeight + ", inputPerQty=" + inputPerQty + ", isGateSale=" + isGateSale + ", isGateSaleDisc="
 				+ isGateSaleDisc + ", isAllowBday=" + isAllowBday + ", delStatus=" + delStatus + ", isTallySync="
-				+ isTallySync + ", cutSection=" + cutSection + "]";
+				+ isTallySync + ", cutSection=" + cutSection + ", shortName=" + shortName + "]";
 	}
 
 	
