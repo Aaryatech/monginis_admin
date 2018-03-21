@@ -134,7 +134,7 @@
 <div class="col-md-9" ></div> 
 					<label for="search" class="col-md-3" id="search">
     <i class="fa fa-search" style="font-size:20px"></i>
-									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search items by name.." title="Type in a name">
+									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search items by Name or Code" title="Type in a name">
 										</label>  
 
 							<div class="clearfix"></div>
@@ -288,21 +288,27 @@
  
 <script>
 function myFunction() {
-  var input, filter, table, tr, td, i;
+  var input, filter, table, tr, td,td1, i;
   input = document.getElementById("myInput");
   filter = input.value.toUpperCase();
   table = document.getElementById("table1");
   tr = table.getElementsByTagName("tr");
   for (i = 0; i < tr.length; i++) {
     td = tr[i].getElementsByTagName("td")[2];
-    if (td) {
+    td1 = tr[i].getElementsByTagName("td")[1];
+    if (td || td1) {
       if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
         tr[i].style.display = "";
-      } else {
+      }else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      }  else {
         tr[i].style.display = "none";
       }
     }       
-  }
+  }//end of for
+  
+ 
+  
 }
 </script>
 
