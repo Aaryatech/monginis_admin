@@ -662,9 +662,9 @@ public class FinishedGoodStockController {
 
 	@RequestMapping(value = "/finishedGoodDayEnd", method = RequestMethod.POST)
 
-	public String finishedGoodDayEnd(HttpServletRequest request, HttpServletResponse response) {
+	public ModelAndView finishedGoodDayEnd(HttpServletRequest request, HttpServletResponse response) {
 
-		ModelAndView model = new ModelAndView("stock/finishedGoodStock");
+		ModelAndView model = new ModelAndView("stock/showFinGoodStock");
 
 		System.out.println("Inside Finished Good Day End ");
 
@@ -888,7 +888,7 @@ public class FinishedGoodStockController {
 			e.printStackTrace();
 		}
 
-		return "redirect :/showFinishedGoodStock";
+		return model;
 
 	}
 

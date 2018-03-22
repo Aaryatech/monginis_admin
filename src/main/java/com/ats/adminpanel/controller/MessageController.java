@@ -14,7 +14,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.tomcat.util.bcel.Const;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
@@ -106,12 +105,16 @@ public class MessageController {
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
 		System.out.println(sdf.format(cal.getTime()));
+		long lo=cal.getTimeInMillis();
+		System.out.println(sdf.format(cal.getTime()));
 
-		String curTimeStamp = sdf.format(cal.getTime());
+		// msgImage = String.valueOf(lo);
+
+		String curTimeStamp = String.valueOf(lo);
 
 		try {
 			
-			upload.saveUploadedFiles(file, Constants.MESSAGE_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+			upload.saveUploadedFiles(file, Constants.MESSAGE_IMAGE_TYPE, curTimeStamp+"-"+file.get(0).getOriginalFilename().replace(' ', '_'));
 			System.out.println("upload method called " + file.toString());
 			
 		} catch (IOException e) {
@@ -124,7 +127,7 @@ public class MessageController {
 	        MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 	        map.add("msgFrdt",msgFrdt);         
 	        map.add("msgTodt",msgTodt);
-	        map.add("msgImage",curTimeStamp+"-"+file.get(0).getOriginalFilename());
+	        map.add("msgImage",curTimeStamp+"-"+file.get(0).getOriginalFilename().replace(' ', '_'));
 	        map.add("msgHeader",msgHeader);
 	        map.add("msgDetails",msgDetails);
 	        map.add("isActive",isActive);
@@ -236,13 +239,16 @@ public class MessageController {
 
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
+			
+			long lo=cal.getTimeInMillis();
 			System.out.println(sdf.format(cal.getTime()));
 
-			String curTimeStamp = sdf.format(cal.getTime());
+			 msgImage = String.valueOf(lo);
+
 
 			try {
 				
-				upload.saveUploadedFiles(file, Constants.MESSAGE_IMAGE_TYPE, curTimeStamp + "-" + file.get(0).getOriginalFilename());
+				upload.saveUploadedFiles(file, Constants.MESSAGE_IMAGE_TYPE, msgImage+"-"+file.get(0).getOriginalFilename().replace(' ', '_'));
 				System.out.println("upload method called " + file.toString());
 				
 			} catch (IOException e) {
@@ -258,7 +264,7 @@ public class MessageController {
 	        MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 	        map.add("msgFrdt",msgFrdt);
 	        map.add("msgTodt",msgTodt);
-	        map.add("msgImage",msgImage);
+	        map.add("msgImage",msgImage+"-"+file.get(0).getOriginalFilename().replace(' ', '_'));
 	        map.add("msgHeader",msgHeader);
 	        map.add("msgDetails",msgDetails);
 	        map.add("isActive",isActive);

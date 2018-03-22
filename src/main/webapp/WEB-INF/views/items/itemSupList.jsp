@@ -75,11 +75,11 @@
 										<thead>
 											<tr class="bgpink">
 												<th width="17" style="width: 18px">#</th>
-												<th width="160" align="left">Item Id</th>
+												<th width="160" align="left">Item Code</th>
 												<th width="300" align="left">Item Name</th>
 
 												<th width="240" align="center">HSN Code</th>
-												<th width="240" align="center">Item Code</th>
+											
 
 												<th width="200" align="left">Unit Of Measure</th>
 												<th width="193" align="left">Actual Weight</th>
@@ -101,12 +101,11 @@
 										<thead>
 											<tr class="bgpink">
 												<th width="17" style="width: 18px">#</th>
-												<th width="160" align="left">Item Id</th>
+												<th width="160" align="left">Item Code</th>
 												<th width="300" align="left">Item Name</th>
 
 												<th width="240" align="center">HSN Code</th>
-												<th width="240" align="center">Item Code</th>
-
+											
 												<th width="200" align="left">Unit Of Measure</th>
 												<th width="193" align="left">Weight</th>
 												<th width="167" align="left">Weight</th>
@@ -123,11 +122,10 @@
 												varStatus="count">
 												<tr>
 													<td><c:out value="${count.index+1}" /></td>
-													<td align="left"><c:out value="${itemsList.itemId}" /></td>
+													<td align="left"><c:out value="${itemsList.itemCode}" /></td>
 													<td align="left"><c:out value="${itemsList.itemName}" /></td>
 
 													<td align="left"><c:out value="${itemsList.itemHsncd}" /></td>
-																										<td align="left"><c:out value="${itemsList.itemCode}" /></td>
 													
 													<td align="left"><c:out value="${itemsList.itemUom}" /></td>
 
