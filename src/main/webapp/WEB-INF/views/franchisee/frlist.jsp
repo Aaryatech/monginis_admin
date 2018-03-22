@@ -81,7 +81,7 @@
 																<th width="364" align="left">Franchisee Name</th>
 																<th width="282" align="left">Menu Title</th>
 																<th width="218" align="left">Category Name</th>
-																<!-- <th width="106" align="left">Items</th> -->
+																<th width="106" align="left">Time</th>
 																<th width="66" align="left">Type</th>
 																<th width="66" align="left">Action</th>
 												</tr>
@@ -98,7 +98,7 @@
 																<th width="364" align="left">Franchisee Name</th>
 																<th width="282" align="left">Menu Title</th>
 																<th width="218" align="left">Category Name</th>
-																<!-- <th width="106" align="left">Items</th> -->
+																<th width="106" align="left">Time</th>
 																<th width="66" align="left">Type</th>
 																<th width="66" align="left">Action</th>
 												</tr>
@@ -121,10 +121,9 @@
 																			value="${configureFrList.itemShow}"></c:out></td>
  --%>
 
-																
+																<td align="left"><c:out
+																			value="${configureFrList.fromTime} To ${configureFrList.toTime}"></c:out></td>
 																	
-
-
 																	<c:choose>
 																		<c:when test="${configureFrList.settingType==1}">
 																			<td align="left"><c:out value="Daily"></c:out></td>

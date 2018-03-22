@@ -2,15 +2,16 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 	<div class="container" id="main-container">
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
+		<link rel="stylesheet"
+			href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
 
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
@@ -47,83 +48,96 @@
 								<i class="fa fa-table"></i>Item Supplement Ledger
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showAddItemSup">Add New Item Supplement</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAddItemSup">Add
+									New Item Supplement</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 						</div>
-                          <div class="box-content">
-<div class="col-md-9" ></div> 
-					<label for="search" class="col-md-3" id="search">
-    <i class="fa fa-search" style="font-size:20px"></i>
-									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search items.." title="Type in a name">
-										</label>  
+						<div class="box-content">
+							<div class="col-md-9"></div>
+							<label for="search" class="col-md-3" id="search"> <i
+								class="fa fa-search" style="font-size: 20px"></i> <input
+								type="text" id="myInput" onkeyup="myFunction()"
+								placeholder="Search items.." title="Type in a name">
+							</label>
 
 
 							<div class="clearfix"></div>
-							
-							
-							
-							
-							
-								<div id="table-scroll" class="table-scroll">
-							 
-									<div id="faux-table" class="faux-table" aria="hidden">
+
+
+
+
+
+							<div id="table-scroll" class="table-scroll">
+
+								<div id="faux-table" class="faux-table" aria="hidden">
 									<table id="table2" class="main-table">
-											<thead>
-												<tr class="bgpink">
-														<th width="17" style="width: 18px">#</th>
-											<th width="160" align="left">Item Id</th>
-											<th width="300" align="left">Item Name</th>
-											
-											<th width="240" align="center">HSN Code</th>
-											<th width="200" align="left">Unit Of Measure</th>
-											<th width="193" align="left">Actual Weight</th>
-											<th width="167" align="left">Base Weight</th>
-											<th width="200" align="left">Input Per Unit</th>
-									   <!--     <th width="200" align="left">Gate Sale Allowed?</th>
+										<thead>
+											<tr class="bgpink">
+												<th width="17" style="width: 18px">#</th>
+												<th width="160" align="left">Item Id</th>
+												<th width="300" align="left">Item Name</th>
+
+												<th width="240" align="center">HSN Code</th>
+												<th width="240" align="center">Item Code</th>
+
+												<th width="200" align="left">Unit Of Measure</th>
+												<th width="193" align="left">Actual Weight</th>
+												<th width="167" align="left">Base Weight</th>
+												<th width="200" align="left">Input Per Unit</th>
+												<!--     <th width="200" align="left">Gate Sale Allowed?</th>
 							               <th width="200" align="left">Gate Sale Disc Allowed?</th>
 							               <th width="200" align="left">Allowed For Emp Birthday?</th> -->
 
-											<th width="150" align="left">Action</th>
-												</tr>
-												</thead>
-												</table>
-									
-									</div>
-									<div class="table-wrap">
-									
-										<table id="table1" class="table table-advance">
-											<thead>
-												<tr class="bgpink">
+												<th width="150" align="left">Action</th>
+											</tr>
+										</thead>
+									</table>
+
+								</div>
+								<div class="table-wrap">
+
+									<table id="table1" class="table table-advance">
+										<thead>
+											<tr class="bgpink">
 												<th width="17" style="width: 18px">#</th>
-											<th width="160" align="left">Item Id</th>
-											<th width="300" align="left">Item Name</th>
-											
-											<th width="240" align="center">HSN Code</th>
-											<th width="200" align="left">Unit Of Measure</th>
-											<th width="193" align="left"> Weight</th>
-											<th width="167" align="left"> Weight</th>
-											<th width="200" align="left">Unit</th>
-									    <!--    <th width="200" align="left">Allowed?</th>
+												<th width="160" align="left">Item Id</th>
+												<th width="300" align="left">Item Name</th>
+
+												<th width="240" align="center">HSN Code</th>
+												<th width="240" align="center">Item Code</th>
+
+												<th width="200" align="left">Unit Of Measure</th>
+												<th width="193" align="left">Weight</th>
+												<th width="167" align="left">Weight</th>
+												<th width="200" align="left">Unit</th>
+												<!--    <th width="200" align="left">Allowed?</th>
 							               <th width="200" align="left">Allowed?</th>
 							               <th width="200" align="left">Birthday?</th>
  -->
-											<th width="150" align="left">Action</th>
-												</tr>
-												</thead>
-												<tbody>
-			 <c:forEach items="${itemsList}" var="itemsList" varStatus="count">
-											<tr>
-												<td><c:out value="${count.index+1}" /></td>
-												<td align="left"><c:out value="${itemsList.itemId}" /></td>
-												<td align="left"><c:out value="${itemsList.itemName}" /></td>
-												
-												<td align="left"><c:out value="${itemsList.itemHsncd}" /></td>
-												<td align="left"><c:out value="${itemsList.itemUom}" /></td>
-										        <td align="left"><c:out value="${itemsList.actualWeight}" /></td>
-												<td align="left"><c:out value="${itemsList.baseWeight}" /></td>
-											    <td align="left"><c:out value="${itemsList.inputPerQty}" /></td>
-											<%-- 	<c:choose><c:when test="${itemsList.isGateSale==0}">
+												<th width="150" align="left">Action</th>
+											</tr>
+										</thead>
+										<tbody>
+											<c:forEach items="${itemsList}" var="itemsList"
+												varStatus="count">
+												<tr>
+													<td><c:out value="${count.index+1}" /></td>
+													<td align="left"><c:out value="${itemsList.itemId}" /></td>
+													<td align="left"><c:out value="${itemsList.itemName}" /></td>
+
+													<td align="left"><c:out value="${itemsList.itemHsncd}" /></td>
+																										<td align="left"><c:out value="${itemsList.itemCode}" /></td>
+													
+													<td align="left"><c:out value="${itemsList.itemUom}" /></td>
+
+													<td align="left"><c:out
+															value="${itemsList.actualWeight}" /></td>
+													<td align="left"><c:out
+															value="${itemsList.baseWeight}" /></td>
+													<td align="left"><c:out
+															value="${itemsList.inputPerQty}" /></td>
+													<%-- 	<c:choose><c:when test="${itemsList.isGateSale==0}">
 												<td align="left"><c:out value="NO" /></td>
 												</c:when>
 												<c:when test="${itemsList.isGateSale==1}">
@@ -146,21 +160,21 @@
 												<td align="left"><c:out value="YES" /></td>
 												</c:when>
 												</c:choose> --%>
-												<td align="left"><a href="updateItemSup/${itemsList.id}"><span
-														class="glyphicon glyphicon-edit"></span></a>
-                                             </td>
-											</tr>
+													<td align="left"><a
+														href="updateItemSup/${itemsList.id}"><span
+															class="glyphicon glyphicon-edit"></span></a></td>
+												</tr>
 
-										</c:forEach>
+											</c:forEach>
 
 
 
-							</tbody>
+										</tbody>
 
-						</table>
-					</div>
-				</div>
-				
+									</table>
+								</div>
+							</div>
+
 						</div>
 
 
@@ -240,7 +254,7 @@
 
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+				<p>2017 © MONGINIS.</p>
 			</footer>
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
