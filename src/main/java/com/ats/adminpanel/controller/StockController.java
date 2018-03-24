@@ -1,6 +1,5 @@
 package com.ats.adminpanel.controller;
 
-
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -51,7 +50,8 @@ public class StockController {
 	List<FrMenu> filterFrMenus = new ArrayList<FrMenu>();
 	List<Item> itemList;
 	String frId;
-	String menuId="0";
+	String menuId = "0";
+	List<PostFrItemStockDetail> detailList = new ArrayList<PostFrItemStockDetail>();
 
 	@RequestMapping(value = "/showFrOpeningStock")
 	public ModelAndView showFrOpeningStock(HttpServletRequest request, HttpServletResponse response) {
@@ -59,8 +59,8 @@ public class StockController {
 		logger.info("/showFrOpeningStock request mapping.");
 
 		ModelAndView model = new ModelAndView("stock/fropeningstock");
-		Constants.mainAct =2;
-		Constants.subAct =18;
+		Constants.mainAct = 2;
+		Constants.subAct = 18;
 
 		RestTemplate restTemplate = new RestTemplate();
 
@@ -110,31 +110,33 @@ public class StockController {
 			}
 
 		}
-		
-		
-		
+
 		return filterFrMenus;
 	}
 
 	// AJAX Call for Items
 	@RequestMapping(value = "/getItemListById", method = RequestMethod.GET)
-	public @ResponseBody List<Item> getItems(HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody List<PostFrItemStockDetail> getItems(HttpServletRequest request,
+			HttpServletResponse response) {
 
 		logger.info("/getItemListById AJAX Call mapping.");
 
-		 menuId = request.getParameter("menu_id");
+		menuId = request.getParameter("menu_id");
 
 		System.out.println("req param menuId " + menuId);
 
 		RestTemplate restTemplate = new RestTemplate();
 
 		String itemShow = null;
+		int catId = 0;
 
 		for (int i = 0; i < filterFrMenus.size(); i++) {
 
 			if (filterFrMenus.get(i).getMenuId() == Integer.parseInt(menuId)) {
 
+				catId = filterFrMenus.get(i).getCatId();
 				itemShow = filterFrMenus.get(i).getItemShow();
+
 				System.out.println("Item Show List is: " + itemShow);
 
 				break;
@@ -143,20 +145,19 @@ public class StockController {
 		}
 
 		MultiValueMap<String, Object> menuMap = new LinkedMultiValueMap<String, Object>();
-		menuMap.add("itemList", itemShow);
+		menuMap.add("itemIdList", itemShow);
+		menuMap.add("frId", frId);
+		menuMap.add("catId", catId);
 
-		// itemList = restTemplate.postForObject(Constants.url + "getItemsByItemId",
-		// menuMap, List.class);
-
-		ParameterizedTypeReference<List<Item>> typeRef = new ParameterizedTypeReference<List<Item>>() {
+		ParameterizedTypeReference<List<PostFrItemStockDetail>> typeRef = new ParameterizedTypeReference<List<PostFrItemStockDetail>>() {
 		};
-		ResponseEntity<List<Item>> responseEntity = restTemplate.exchange(Constants.url + "getItemsByItemId",
-				HttpMethod.POST, new HttpEntity<>(menuMap), typeRef);
-		itemList = responseEntity.getBody();
+		ResponseEntity<List<PostFrItemStockDetail>> responseEntity = restTemplate
+				.exchange(Constants.url + "getCurrentOpStock", HttpMethod.POST, new HttpEntity<>(menuMap), typeRef);
+		detailList = responseEntity.getBody();
 
-		System.out.println("Item List " + itemList.toString());
+		System.out.println("Item List " + detailList.toString());
 
-		return itemList;
+		return detailList;
 	}
 
 	// Save item opening stock
@@ -167,37 +168,43 @@ public class StockController {
 		logger.info("/showFrOpeningStock request mapping.");
 
 		ModelAndView model = new ModelAndView("stock/fropeningstock");
-		
 
 		// stockQty
 		Date date = new Date();
 		ZoneId z = ZoneId.of("Asia/Calcutta");
 		LocalDate localDate = date.toInstant().atZone(z).toLocalDate();
-		int year  = localDate.getYear();
+		int year = localDate.getYear();
 		int month = localDate.getMonthValue();
-		
-	
-		System.out.println("Month "+month+" year "+year);
-		//date = df.parse(date);
+
+		System.out.println("Month " + month + " year " + year);
+		// date = df.parse(date);
 
 		PostFrItemStockHeader postFrItemStockHeader = new PostFrItemStockHeader();
 
 		List<PostFrItemStockDetail> postFrItemStockDetailList = new ArrayList<>();
 
-		for (int i = 0; i < itemList.size(); i++) {
+		for (int i = 0; i < detailList.size(); i++) {
 
-			Item item = itemList.get(i);
+			PostFrItemStockDetail item = detailList.get(i);
 			System.out.println("Current Item " + item.toString());
 
-			String stockQty = request.getParameter("stockQty" + item.getId());
+			String stockQty = request.getParameter("stockQty" + item.getItemId());
 
 			System.out.println("new qty " + stockQty);
 			PostFrItemStockDetail itemStockDetail = new PostFrItemStockDetail();
 
-			itemStockDetail.setItemId(item.getId());
+			itemStockDetail.setItemId(item.getItemId());
 			itemStockDetail.setRegOpeningStock(Integer.parseInt(stockQty));
 			itemStockDetail.setSpOpeningStock(0);
 
+			for (int j = 0; j < detailList.size(); j++) {
+
+				if (item.getItemId() == detailList.get(j).getItemId()) {
+					itemStockDetail.setOpeningStockDetailId(detailList.get(j).getOpeningStockDetailId());
+					itemStockDetail.setOpeningStockHeaderId(detailList.get(j).getOpeningStockHeaderId());
+				}
+
+			}
 			postFrItemStockDetailList.add(itemStockDetail);
 
 		}
@@ -207,51 +214,44 @@ public class StockController {
 		postFrItemStockHeader.setMonth(month);
 		postFrItemStockHeader.setPostFrItemStockDetailList(postFrItemStockDetailList);
 		postFrItemStockHeader.setYear(year);
-		
-		 /*
-		 
-		 *menuid=catid
-		 *26=1
-		 *31=2
-		 *33=3
-		 *34=4
-		 *49=6
-		 
+
+		/*
+		 * 
+		 * menuid=catid 26=1 31=2 33=3 34=4 49=6
+		 * 
 		 */
-		
-		
-		if(menuId.equals("26")) {
-			
+
+		if (menuId.equals("26")) {
+
 			postFrItemStockHeader.setCatId(1);
-		
-		}else if(menuId.equals("31")) {
-			
+
+		} else if (menuId.equals("31")) {
+
 			postFrItemStockHeader.setCatId(2);
 
-		}else if(menuId.equals("33")) {
+		} else if (menuId.equals("33")) {
 
 			postFrItemStockHeader.setCatId(3);
-			
-		}else if(menuId.equals("34")){
-			
+
+		} else if (menuId.equals("34")) {
+
 			postFrItemStockHeader.setCatId(4);
 
-		}else if(menuId.equals("49")) {
-			
+		} else if (menuId.equals("49")) {
+
 			postFrItemStockHeader.setCatId(6);
 
-		}		
-		
-		
-		System.out.println("post fr item stock "+postFrItemStockHeader.toString());
+		}
+
+		System.out.println("post fr item stock " + postFrItemStockHeader.toString());
 
 		RestTemplate restTemplate = new RestTemplate();
 
-		//postFrOpStock
+		// postFrOpStock
 		Info info = restTemplate.postForObject(Constants.url + "postFrOpStock", postFrItemStockHeader, Info.class);
-		
-		System.out.println("Post Fr Op Stock response "+info.toString() );
-		
+
+		System.out.println("Post Fr Op Stock response " + info.toString());
+
 		AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
 		try {
 

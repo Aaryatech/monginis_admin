@@ -31,8 +31,9 @@ public class PostFrItemStockDetail {
 	
 	private String remark;
 
+	private String itemName;
 	
-	
+	private String itemCode;
 	
 	public int getOpeningStockDetailId() {
 		return openingStockDetailId;
@@ -139,6 +140,22 @@ public class PostFrItemStockDetail {
 		this.remark = remark;
 	}
 
+	public String getItemName() {
+		return itemName;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
+	public String getItemCode() {
+		return itemCode;
+	}
+
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
+
 	@Override
 	public String toString() {
 		return "PostFrItemStockDetail [openingStockDetailId=" + openingStockDetailId + ", openingStockHeaderId="
@@ -146,9 +163,10 @@ public class PostFrItemStockDetail {
 				+ ", spOpeningStock=" + spOpeningStock + ", physicalStock=" + physicalStock + ", stockDifference="
 				+ stockDifference + ", regTotalPurchase=" + regTotalPurchase + ", spTotalPurchase=" + spTotalPurchase
 				+ ", regTotalGrnGvn=" + regTotalGrnGvn + ", regTotalSell=" + regTotalSell + ", spTotalSell="
-				+ spTotalSell + ", remark=" + remark + "]";
+				+ spTotalSell + ", remark=" + remark + ", itemName=" + itemName + ", itemCode=" + itemCode + "]";
 	}
-	
+
 	
 
+	
 }

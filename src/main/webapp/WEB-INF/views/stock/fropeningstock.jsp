@@ -226,6 +226,8 @@
 					}, function(data) {
 						
 						var len = data.length;
+					
+						
 						$('#table_grid td').remove();
 						$('#loader').hide();
 						
@@ -243,8 +245,8 @@
 									+ index
 									+ "</td>";
 
-							var itemId = "<td>&nbsp;&nbsp;&nbsp;"
-									+ item.itemId
+							var itemCode = "<td>&nbsp;&nbsp;&nbsp;"
+									+ item.itemCode
 									+ "</td>";
 
 							var itemName = "<td>&nbsp;&nbsp;&nbsp;"
@@ -254,11 +256,11 @@
 						
 
 							var itemStockQty = "<td align=center><input type=number min=0 max=500 class=form-control   id= stockQty"
-									+ item.id
+									+ item.itemId
 									+ " name=stockQty"
-									+ item.id
+									+ item.itemId
 									+ " value = "
-									+ 0
+									+ item.regOpeningStock
 									+ "></td>";
 
 
@@ -268,7 +270,7 @@
 							$('#table_grid tbody').append(tr);
 							$('#table_grid tbody').append(index);
 							
-							$('#table_grid tbody').append(itemId);
+							$('#table_grid tbody').append(itemCode);
 							$('#table_grid tbody').append(itemName);
 							$('#table_grid tbody').append(itemStockQty);
 							
