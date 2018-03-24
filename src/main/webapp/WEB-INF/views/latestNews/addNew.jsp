@@ -2,7 +2,38 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+	 <!---------------Script For Translate Special Instructions------->   
+    <script type="text/javascript">
+      // Load the Google Transliterate API
+      google.load("elements", "1", {
+            packages: "transliteration"
+          });
+
+      function onLoad() {
+        var options = {
+            sourceLanguage:
+                google.elements.transliteration.LanguageCode.ENGLISH,
+            destinationLanguage:
+                [google.elements.transliteration.LanguageCode.MARATHI],
+            shortcutKey: 'ctrl+g',
+            transliterationEnabled: true
+        };
+
+        // Create an instance on TransliterationControl with the required
+        // options.
+        var control =
+            new google.elements.transliteration.TransliterationControl(options);
+
+        // Enable transliteration in the textbox with id
+        // 'transliterateTextarea'.
+        control.makeTransliteratable(['transliterateTextarea']);
+        control.makeTransliteratable(['transliterateTextarea1']);
+      }
+      google.setOnLoadCallback(onLoad);
+    </script>
+ <!--------------------------------END------------------------------------>   
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 	<body>
@@ -97,14 +128,14 @@
 										Name</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="sch_occasion_name"
-											id="sch_occasion_name" placeholder="Occasion Name"
+											id="transliterateTextarea" placeholder="Occasion Name"
 											class="form-control" required />
 									</div>
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Message</label>
 									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="sch_message" id="sch_message"
+										<input type="text" name="sch_message" id="transliterateTextarea1"
 											placeholder="Message" class="form-control" required />
 									</div>
 								</div>
