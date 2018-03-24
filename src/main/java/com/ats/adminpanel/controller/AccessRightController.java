@@ -22,7 +22,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.amazonaws.services.identitymanagement.model.UserDetail;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.DepartmentList;
 import com.ats.adminpanel.model.GetUserDetail;
@@ -36,10 +35,8 @@ import com.ats.adminpanel.model.accessright.AssignRoleDetailList;
 import com.ats.adminpanel.model.accessright.CreatedRoleList;
 import com.ats.adminpanel.model.accessright.ModuleJson;
 import com.ats.adminpanel.model.accessright.SubModuleJson;
-import com.ats.adminpanel.model.franchisee.AllMenuResponse;
 import com.ats.adminpanel.model.login.User;
 import com.ats.adminpanel.model.login.UserResponse;
-import com.ats.adminpanel.model.spprod.EmployeeList;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
