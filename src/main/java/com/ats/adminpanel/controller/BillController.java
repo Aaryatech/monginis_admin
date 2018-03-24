@@ -56,6 +56,7 @@ import org.springframework.web.servlet.ModelAndView;
 import org.zefer.pd4ml.PD4Constants;
 import org.zefer.pd4ml.PD4ML;
 import org.zefer.pd4ml.PD4PageMark;
+import org.zefer.pd4ml.tools.PD4Browser.PD4Panel;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllFrIdName;
@@ -1363,7 +1364,13 @@ System.out.println("IN Show bill PDF Method :/showBillPdf");
    				}
    			}
    			}*/
-   			
+
+			CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
+					CategoryListResponse.class);
+			List<MCategoryList> categoryList ;
+			categoryList = categoryListResponse.getmCategoryList();
+			
+			//List<MCategoryList> filteredCatList=new ArrayList<MCategoryList>();
    			
    			billDetailsListForPrint = new ArrayList<GetBillDetailPrint>();
    			billDetailsListForPrint = billDetailsResponse;
@@ -1376,12 +1383,14 @@ System.out.println("IN Show bill PDF Method :/showBillPdf");
    				  billPrint=new FrBillPrint();
    				 List<GetBillDetailPrint> billDetails=new ArrayList<>();
 
+   				 
+   				List<MCategoryList> filteredCatList=new ArrayList<MCategoryList>();
    				  for(int j=0;j<billDetailsListForPrint.size();j++) {
 
    					  if(billHeadersListForPrint.get(i).getBillNo()==billDetailsListForPrint.get(j).getBillNo()) {
    						  
    							System.out.println("Inside If  Bill no  = "+billHeadersListForPrint.get(i).getBillNo());
-
+   							billPrint.setAmtInWords(Currency.convertToIndianCurrency(String.valueOf(billHeadersListForPrint.get(i).getGrandTotal())));
    						 billPrint.setBillNo(billHeadersListForPrint.get(i).getBillNo());
    						 billPrint.setFrAddress(billHeadersListForPrint.get(i).getFrAddress());
    						 billPrint.setFrId(billHeadersListForPrint.get(i).getFrId());
@@ -1392,6 +1401,25 @@ System.out.println("IN Show bill PDF Method :/showBillPdf");
 
    						 billDetails.add(billDetailsListForPrint.get(j));
    						 
+   						for(int a=0;a<categoryList.size();a++) {
+   							
+   							for(int b=0;b<billDetails.size();b++) {
+   								
+   								
+   									
+   									if(billDetails.get(b).getCatId()==categoryList.get(a).getCatId()) {
+   										
+   										if(filteredCatList.isEmpty())
+   										filteredCatList.add(categoryList.get(a));
+   										else if(!filteredCatList.contains(categoryList.get(a))) {
+   											filteredCatList.add(categoryList.get(a));
+   										}
+   									}
+   									
+   								}
+   								
+   							}
+   						 
    						// FrBillTax billTax=new FrBillTax(); not used 
    						
    					  }//end of if 
@@ -1399,7 +1427,7 @@ System.out.println("IN Show bill PDF Method :/showBillPdf");
    				  }
    				  billPrint.setBillDetailsList(billDetails);
    				 //billPrintList=new ArrayList<>();
-   				  
+   				  billPrint.setCatList(filteredCatList);
    				  if(billPrint!=null)
    				  billPrintList.add(billPrint);
 
@@ -1416,6 +1444,14 @@ System.out.println("IN Show bill PDF Method :/showBillPdf");
 			model.addObject("vehicleNo", vehicleNo);
 			model.addObject("transportMode", transportMode);
 			model.addObject("dateTime", dateFormat.format(cal.getTime()));
+			
+			
+			
+
+			
+			//allFrIdNameList = new AllFrIdNameList();
+			
+			//model.addObject("catList",filteredCatList);
 	
 			System.out.println("after Data ");
 		
@@ -1918,7 +1954,8 @@ System.out.println("IN Show bill Method");
 		String url = request.getParameter("url");
 		 System.out.println("URL "+url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
-		File f = new File("/opt/tomcat-latest/webapps/uploads/bill.pdf");
+		//File f = new File("/opt/tomcat-latest/webapps/uploads/bill.pdf");
+		 File f = new File("/home/ats-11/pdf/ordermemo221.pdf");
            System.out.println("I am here "+f.toString());
 		try {
 			runConverter(Constants.ReportURL + url, f,request,response);
@@ -1933,8 +1970,8 @@ System.out.println("IN Show bill Method");
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo221.pdf";
-		String filePath = "/opt/tomcat-latest/webapps/uploads/bill.pdf";
-		//String filePath = "/home/ats-12/pdf/report.pdf";
+		//String filePath = "/opt/tomcat-latest/webapps/uploads/bill.pdf";
+		String filePath = "/home/ats-11/pdf/ordermemo221.pdf";
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;
 		File downloadFile = new File(filePath);
@@ -1992,7 +2029,26 @@ System.out.println("IN Show bill Method");
 			java.io.FileOutputStream fos = new java.io.FileOutputStream(output);
 
 			PD4ML pd4ml = new PD4ML();
-		
+			try {
+
+				Dimension landscapeA4 = pd4ml.changePageOrientation(PD4Constants.A4);
+				pd4ml.setPageSize(landscapeA4);
+			
+				PD4PageMark footer = new PD4PageMark();  
+	            footer.setPageNumberTemplate("Page $[page] of $[total]");  
+	            footer.setPageNumberAlignment(PD4PageMark.CENTER_ALIGN);  
+	            footer.setFontSize(8);  
+	            footer.setAreaHeight(15);     
+	            pd4ml.setPageFooter(footer);
+	            
+	           /* PD4PageMark footer2 = new PD4PageMark();
+	            footer2.setHtmlTemplate("This Is A Computer Generated Invoice Does Not Require Signature");
+	            pd4ml.setPageFooter(footer2);
+	            */
+				
+			} catch (Exception e) {
+				System.out.println("Pdf conversion method excep " + e.getMessage());
+			}
 			try {
 				pd4ml.setPageSize(landscapeValue ? pd4ml.changePageOrientation(format) : format);
 			} catch (Exception e) {

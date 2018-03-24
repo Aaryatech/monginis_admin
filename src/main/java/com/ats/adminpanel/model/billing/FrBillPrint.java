@@ -2,6 +2,9 @@ package com.ats.adminpanel.model.billing;
 
 import java.util.List;
 
+import com.ats.adminpanel.model.MCategory;
+import com.ats.adminpanel.model.item.MCategoryList;
+
 public class FrBillPrint {
 	
 	public List<GetBillDetailPrint> billDetailsList;
@@ -13,6 +16,10 @@ public class FrBillPrint {
 	String invoiceNo;
 	int isSameState;
 	String billDate;
+	
+	String amtInWords;
+	
+	public List<MCategoryList> catList;
 	
 	public String getInvoiceNo() {
 		return invoiceNo;
@@ -62,12 +69,25 @@ public class FrBillPrint {
 	public void setBillDate(String billDate) {
 		this.billDate = billDate;
 	}
+	public List<MCategoryList> getCatList() {
+		return catList;
+	}
+	public void setCatList(List<MCategoryList> catList) {
+		this.catList = catList;
+	}
 	
+	public String getAmtInWords() {
+		return amtInWords;
+	}
+	public void setAmtInWords(String amtInWords) {
+		this.amtInWords = amtInWords;
+	}
 	@Override
 	public String toString() {
 		return "FrBillPrint [billDetailsList=" + billDetailsList + ", frId=" + frId + ", billNo=" + billNo + ", frName="
 				+ frName + ", frAddress=" + frAddress + ", invoiceNo=" + invoiceNo + ", isSameState=" + isSameState
-				+ ", billDate=" + billDate + "]";
+				+ ", billDate=" + billDate + ", amtInWords=" + amtInWords + ", catList=" + catList + "]";
 	}
+	
 
 }

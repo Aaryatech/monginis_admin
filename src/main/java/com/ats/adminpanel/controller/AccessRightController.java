@@ -228,11 +228,12 @@ public class AccessRightController {
 
 	@RequestMapping(value = "/showPasswordChange", method = RequestMethod.GET)
 	public ModelAndView showPasswordChange(HttpServletRequest request, HttpServletResponse response) {
-
+		Constants.mainAct=11;
+		Constants.subAct=112;
 		ModelAndView model = new ModelAndView("accessRight/changePass");
 		HttpSession session = request.getSession();
 		UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
-
+	
 		String uname = userResponse.getUser().getUsername();
 
 		String curPass = userResponse.getUser().getPassword();

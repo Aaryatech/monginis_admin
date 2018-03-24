@@ -152,8 +152,23 @@
 							<li>
 						</c:otherwise>
 					</c:choose>
-					<a href="resoucres/index.php/dashboard/logout">Logout</a>
+				<a href="${pageContext.request.contextPath}/logout">Logout</a>
 					</li>
+						
+					<c:choose>
+						<c:when test="${Constants.subAct==112}">
+							<li class="active">
+							
+						</c:when>
+						<c:otherwise>
+							<li>
+						</c:otherwise>
+					</c:choose>
+					
+												<a href="${pageContext.request.contextPath}/showPasswordChange">Change Password</a>
+							</li>
+					</ul>
+
 
 
 
