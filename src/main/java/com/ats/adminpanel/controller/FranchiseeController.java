@@ -147,6 +147,102 @@ public class FranchiseeController {
 	}
 	// ----------------------------------------END-------------------------------------------
 
+	//23 March -updateFrMenuTime
+	@RequestMapping(value = "/showUpdateFrMenuTime")
+	public ModelAndView updateFrMenuTime(HttpServletRequest request, HttpServletResponse response) {
+
+		logger.info("/updateFrMenuTime request mapping.");
+
+		ModelAndView mav = new ModelAndView("franchisee/confFrMenuTime");
+		Constants.mainAct =2;
+		Constants.subAct =14;
+
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			franchiseeAndMenuList = restTemplate.getForObject(Constants.url + "getFranchiseeAndMenu",
+					FranchiseeAndMenuList.class);
+
+			System.out.println("Franchisee Response " + franchiseeAndMenuList.getAllFranchisee());
+
+			mav.addObject("allFranchiseeAndMenuList", franchiseeAndMenuList);
+			mav.addObject("menuList",franchiseeAndMenuList.getAllMenu());
+
+		} catch (Exception e) {
+			System.out.println("Franchisee Controller Exception " + e.getMessage());
+		}
+
+		return mav;
+	}
+	
+	////23 March updateFrMenuTime
+	@RequestMapping(value = "/updateFrMenuTime")
+	public String updateFrMenuTimeProcess(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView("franchisee/confFrMenuTime");
+	String fromTime = request.getParameter("frm_time");
+
+	System.out.println(fromTime);
+	String toTime = request.getParameter("to_time");
+
+	System.out.println(toTime);
+
+	SimpleDateFormat format = new SimpleDateFormat("hh:mm a"); // if 24 hour format
+
+	java.util.Date d1 = null;
+	try {
+		d1 = (java.util.Date) format.parse(fromTime);
+	} catch (ParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	java.util.Date d2 = null;
+	try {
+		d2 = (java.util.Date) format.parse(toTime);
+	} catch (ParseException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+
+	java.sql.Time sqlFromTime = new java.sql.Time(d1.getTime());
+	java.sql.Time sqlToTime = new java.sql.Time(d2.getTime());
+
+	System.out.println("Converted From Time: " + sqlFromTime.toString() + " To time: " + sqlToTime.toString());
+	String frId=new String();
+	String[] frIdList =request.getParameterValues("fr_id");
+	
+	if(frIdList[0].equalsIgnoreCase("-1")) {
+		System.err.println("fr id contains -1");
+		frId=frId+","+"0";
+	}
+
+	else {
+	for(int i=0;i<frIdList.length;i++) {
+		
+		System.out.println("fr Id " + frIdList[i]);
+		frId=frId+","+frIdList[i];
+		System.err.println("Fr Id s "+frId.toString() );
+	}
+	}
+	System.out.println("FRID" + frIdList.toString());
+	System.err.println("Fr Id s "+frId.toString() );
+frId=frId.substring(1);
+	int menuId = Integer.parseInt(request.getParameter("menu"));
+	System.out.println("menuId" + menuId);
+	
+	RestTemplate rest = new RestTemplate();
+	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+	map.add("fromTime", sqlFromTime.toString());
+	map.add("toTime", sqlToTime.toString());
+	map.add("frIdList", frId);
+	map.add("menuId", menuId);
+	
+Info errorMessage = rest.postForObject(Constants.url + "updateFrConfMenuTime", map,
+			Info.class);
+
+System.err.println("Update Response " + errorMessage.toString());
+	return "redirect:/showUpdateFrMenuTime";
+	
+	}
+	
 	// -------------------------CONFIGURE FRANCHISEE FORM
 	// SHOW-------------------------------
 	@RequestMapping(value = "/configureFranchisee")

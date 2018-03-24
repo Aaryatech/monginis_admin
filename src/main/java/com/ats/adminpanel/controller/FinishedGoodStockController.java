@@ -129,6 +129,34 @@ public class FinishedGoodStockController {
 						Constants.url + "getFinGoodStockDetailAllCat", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 				showFinStockDetail = responseEntity.getBody();
+				List<Integer> idList=new ArrayList<Integer>();
+				
+				
+for(int i=0;i<showFinStockDetail.size();i++) {
+					
+					idList.add(showFinStockDetail.get(i).getItemId());
+					
+					
+}
+			
+					
+					
+					
+					for(int j=0;j<itemsList.size();  j++) {
+						
+						if(!idList.contains(itemsList.get(j).getId())) {
+							
+							FinishedGoodStockDetail d=new FinishedGoodStockDetail();
+							d.setCatId(itemsList.get(j).getItemGrp1());
+							d.setItemId(itemsList.get(j).getId());
+							d.setItemName(itemsList.get(j).getItemName());
+							
+							System.err.println("New Item Found and added " +d.getItemName());
+							showFinStockDetail.add(d);
+						}
+						
+					}
+			
 
 			} else {
 				System.out.println("showFinStockDetail" + showFinStockDetail.toString());

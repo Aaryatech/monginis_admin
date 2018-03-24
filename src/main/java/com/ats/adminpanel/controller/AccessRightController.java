@@ -15,13 +15,19 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.amazonaws.services.identitymanagement.model.UserDetail;
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.model.DepartmentList;
+import com.ats.adminpanel.model.GetUserDetail;
+import com.ats.adminpanel.model.GetUserDetailList;
+import com.ats.adminpanel.model.GetUserTypeList;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.accessright.AccessRightModule;
 import com.ats.adminpanel.model.accessright.AccessRightModuleList;
@@ -256,9 +262,128 @@ public class AccessRightController {
 		Info info = rest.postForObject(Constants.url + "changeAdminUserPass", user, Info.class);
 
 		System.err.println("Response of password change = " + info.toString());
-		
-	return "redirect:/sessionTimeOut";
 
+		return "redirect:/sessionTimeOut";
+
+	}
+
+	List<GetUserDetail> getUserDetail;
+
+	GetUserDetail user;
+
+	@RequestMapping(value = "/showManageUser", method = RequestMethod.GET)
+	public ModelAndView showManageUser(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("user/userList");
+		try {
+			GetUserDetailList getUserDetailList = rest.getForObject(Constants.url + "getUserDetail",
+					GetUserDetailList.class);
+
+			getUserDetail = getUserDetailList.getUserDetail();
+			model.addObject("userList", getUserDetail);
+
+			RestTemplate restTemplate = new RestTemplate();
+			GetUserTypeList getUserTypeList = restTemplate.getForObject(Constants.url + "getAllUserType",
+					GetUserTypeList.class);
+			DepartmentList departmentList = restTemplate.getForObject(Constants.url + "getAllDept",
+					DepartmentList.class);
+			model.addObject("getUserTypeList", getUserTypeList.getGetUserTypeList());
+			model.addObject("departmentList", departmentList.getDepartmentList());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return model;
+	}
+
+	@RequestMapping(value = "/editUser/{userId}", method = RequestMethod.GET)
+	public ModelAndView editUser(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("userId") long userId) {
+
+		ModelAndView model = new ModelAndView("user/userList");
+
+		System.err.println("User Id received " + userId);
+
+		for (int i = 0; i < getUserDetail.size(); i++) {
+
+			if (getUserDetail.get(i).getId() == userId) {
+
+				user = new GetUserDetail();
+
+				user = getUserDetail.get(i);
+				break;
+			}
+		}
+		System.out.println("User Object Received for Edit " + user.toString());
+		model.addObject("userList", getUserDetail);
+
+		model.addObject("user", user);
+		model.addObject("submit", 1);
+
+		RestTemplate restTemplate = new RestTemplate();
+		GetUserTypeList getUserTypeList = restTemplate.getForObject(Constants.url + "getAllUserType",
+				GetUserTypeList.class);
+		DepartmentList departmentList = restTemplate.getForObject(Constants.url + "getAllDept", DepartmentList.class);
+		model.addObject("getUserTypeList", getUserTypeList.getGetUserTypeList());
+		model.addObject("departmentList", departmentList.getDepartmentList());
+		return model;
+
+	}
+
+	@RequestMapping(value = "/editUserProcess", method = RequestMethod.POST)
+	public String editUserProcess(HttpServletRequest request, HttpServletResponse response) {
+
+		// ModelAndView model = new ModelAndView("user/userList");
+		try {
+			String upass = request.getParameter("upass");
+
+			int deptId = Integer.parseInt(request.getParameter("dept_id"));
+			int userType = Integer.parseInt(request.getParameter("user_type"));
+			User editUser = new User();
+			user.setDeptId(deptId);
+			user.setUsertype(userType);
+			user.setPassword(upass);
+
+			editUser.setDeptId(deptId);
+			editUser.setUsertype(userType);
+			editUser.setPassword(upass);
+			editUser.setId(user.getId());
+			Info info = rest.postForObject(Constants.url + "updateUser", editUser, Info.class);
+			System.err.println("Update User Response  " + info.toString());
+			System.err.println("Param for update " + upass + "dept Id " + deptId + "userType  " + userType);
+		} catch (Exception e) {
+			System.out.println("Ex in editUserProcess " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return "redirect:/showManageUser";
+	}
+
+	@RequestMapping(value = "/deleteUser/{userId}", method = RequestMethod.GET)
+	public String deleteUser(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("userId") int userId) {
+
+		System.err.println("User Id received for Delete " + userId);
+
+		for (int i = 0; i < getUserDetail.size(); i++) {
+
+			if (getUserDetail.get(i).getId() == userId) {
+
+				user = new GetUserDetail();
+
+				user = getUserDetail.get(i);
+				break;
+			}
+		}
+		User editUser = new User();
+
+		editUser.setId(user.getId());
+		editUser.setDelStatus(1);
+
+		Info info = rest.postForObject(Constants.url + "updateUser", editUser, Info.class);
+
+		System.err.println("Update/delete User Response  " + info.toString());
+
+		return "redirect:/showManageUser";
 	}
 
 }
