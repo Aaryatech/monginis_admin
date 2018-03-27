@@ -29,6 +29,8 @@ public class GetSpCkSupplement {
 	private int delStatus;
 
 	private int uomId;
+	
+	private String spCode;
 
 	
 	
@@ -128,12 +130,22 @@ public class GetSpCkSupplement {
 		this.delStatus = delStatus;
 	}
 
-	@Override
-	public String toString() {
-		return "GetSpCkSupplement [id=" + id + ", spId=" + spId + ", spName=" + spName + ", spHsncd=" + spHsncd
-				+ ", spUom=" + spUom + ", uomId=" + uomId + ", spCess=" + spCess + ", cutSection=" + cutSection
-				+ ", isTallySync=" + isTallySync + ", delStatus=" + delStatus + "]";
+	public String getSpCode() {
+		return spCode;
 	}
 
+	public void setSpCode(String spCode) {
+		this.spCode = spCode;
+	}
+
+	@Override
+	public String toString() {
+		return "GetSpCkSupplement [error=" + error + ", message=" + message + ", id=" + id + ", spId=" + spId
+				+ ", spName=" + spName + ", spHsncd=" + spHsncd + ", spUom=" + spUom + ", spCess=" + spCess
+				+ ", cutSection=" + cutSection + ", isTallySync=" + isTallySync + ", delStatus=" + delStatus
+				+ ", uomId=" + uomId + ", spCode=" + spCode + "]";
+	}
+
+	
     
 }

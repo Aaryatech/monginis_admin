@@ -185,6 +185,7 @@
 											<thead>
 												<tr class="bgpink">
 												<th width="45" style="width: 18px">Sr.No.</th>
+													<th width="100" align="left">SP Code</th>
 														<th width="100" align="left">Special Cake</th>
 														<th width="100" align="left">HSN Code</th>
 														<th width="100" align="left">CESS(%)</th>
@@ -201,6 +202,8 @@
 											<thead>
 												<tr class="bgpink">
 													<th width="45" style="width: 18px">Sr.No.</th>
+																										<th width="100" align="left">SP Code</th>
+													
 														<th width="100" align="left">Special Cake</th>
 														<th width="100" align="left">HSN Code</th>
 														<th width="100" align="left">CESS(%)</th>
@@ -214,6 +217,10 @@
 														<tr>
 														
 															<td><c:out value="${count.index+1}"/></td>
+															
+																<td align="left"><c:out
+																	value="${spSuppList.spCode}"></c:out></td>
+															
 															<td align="left"><c:out
 																	value="${spSuppList.spName}"></c:out></td>
 															
@@ -330,5 +337,30 @@
 				document.getElementById('sp_uom_name').value=$('#spck_uom option:selected').text();
 				
 			}
+</script>
+
+
+<script>
+function myFunction() {
+  var input, filter, table, tr, td,td1, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table1");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[2];
+    td1 = tr[i].getElementsByTagName("td")[1];
+
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      }else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      }  else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
 </script>
 </html>
