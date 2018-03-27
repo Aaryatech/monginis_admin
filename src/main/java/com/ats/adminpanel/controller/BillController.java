@@ -1862,7 +1862,7 @@ public class BillController {
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		int sellBillNo = Integer.parseInt(sellBill_no);
-		map.add("sellBillNo", sellBillNo);
+		map.add("sellBillNo", sellBillNo); 
 
 		
 		try {
