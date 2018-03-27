@@ -1864,6 +1864,7 @@ public class BillController {
 		int sellBillNo = Integer.parseInt(sellBill_no);
 		map.add("sellBillNo", sellBillNo);
 
+		
 		try {
 
 			ParameterizedTypeReference<List<GetSellBillDetail>> typeRef = new ParameterizedTypeReference<List<GetSellBillDetail>>() {
