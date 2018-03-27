@@ -44,12 +44,12 @@ import com.ats.adminpanel.model.login.UserResponse;
 import com.ats.adminpanel.model.remarks.GetAllRemarks;
 import com.ats.adminpanel.model.remarks.GetAllRemarksList;
 import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
-
+   
 
 @Controller
 @Scope("session")
 public class GrnGvnController {
-
+ 
 	public static float roundUp(float d) {
 		return BigDecimal.valueOf(d).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
 	}
