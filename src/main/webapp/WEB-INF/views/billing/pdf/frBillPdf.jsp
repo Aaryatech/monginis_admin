@@ -361,7 +361,7 @@
 					</p>
 					<p
 						style="color: #000; font-size: 11px; text-align:; left; margin: 0px;">${frDetails.frAddress}</p>
- 
+  
 				</td>
 				<td width="50%" colspan="5"
 					style="border-top: 1px solid #313131; border-left: 1px solid #313131; padding: 7px; color: #FFF; font-size: 15px;">
