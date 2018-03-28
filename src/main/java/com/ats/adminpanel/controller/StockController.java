@@ -214,6 +214,7 @@ public class StockController {
 		postFrItemStockHeader.setMonth(month);
 		postFrItemStockHeader.setPostFrItemStockDetailList(postFrItemStockDetailList);
 		postFrItemStockHeader.setYear(year);
+		postFrItemStockHeader.setOpeningStockHeaderId(detailList.get(0).getOpeningStockHeaderId());
 
 		/*
 		 * 
