@@ -2,26 +2,27 @@ package com.ats.adminpanel.model.grngvn;
 
 import java.util.List;
 
-public class PostGrnGvnList {
-	List<GrnGvn> grnGvn;
-	
 
-	public List<GrnGvn> getGrnGvn() {
-		return grnGvn;
+public class PostGrnGvnList {
+	
+	
+	
+	GrnGvnHeader grnGvnHeader;
+
+	public GrnGvnHeader getGrnGvnHeader() {
+		return grnGvnHeader;
 	}
 
-	public void setGrnGvn(List<GrnGvn> grnGvn) {
-		this.grnGvn = grnGvn;
+	public void setGrnGvnHeader(GrnGvnHeader grnGvnHeader) {
+		this.grnGvnHeader = grnGvnHeader;
 	}
 
 	@Override
 	public String toString() {
-		return "PostGrnGvnList [grnGvn=" + grnGvn + "]";
+		return "PostGrnGvnList [grnGvnHeader=" + grnGvnHeader + "]";
 	}
 	
 	
-	
-
 	
 
 

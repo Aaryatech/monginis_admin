@@ -278,7 +278,8 @@
 			<!-- 	<td> &nbsp; </td>
 											</tr><tr>  -->
 										 <c:set var="index" value="${index+1 }" />
-												<td><c:out value="${index}" /> </td>
+												<td><c:out value="${index}" />    <input type="checkbox" id="aa${allModuleList.moduleId}" class="select_all1" value="${allModuleList.moduleId}"
+																  onClick="selectAll(this, ${allModuleList.moduleId})"/></td>
 
 										<td><b><c:out value="${allModuleList.moduleName}" /></b></td>
 
@@ -297,7 +298,7 @@
 														<c:when test="${allSubModuleList.view==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"
+																id="select_to_assign"   class="check1${allModuleList.moduleId}"
 																value="view" 
 																 ></td>
 														</c:when>
@@ -313,7 +314,7 @@
 														<c:when test="${allSubModuleList.addApproveConfig==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"
+																id="select_to_assign"  class="check1${allModuleList.moduleId}"
 																value="add" 
 																 ></td>
 														</c:when>
@@ -329,7 +330,7 @@
 														<c:when test="${allSubModuleList.editReject==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"
+																id="select_to_assign"  class="check1${allModuleList.moduleId}"
 																value="edit" 
 																 ></td>
 														</c:when>
@@ -342,7 +343,7 @@
 														<c:when test="${allSubModuleList.deleteRejectApprove==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"
+																id="select_to_assign"  class="check1${allModuleList.moduleId}"
 																value="delete" 
 																 ></td>
 														</c:when>
@@ -401,8 +402,8 @@
 			<!-- 	<td> &nbsp; </td>
 											</tr><tr>  -->
 										 <c:set var="index" value="${index+1 }" />
-												<td><c:out value="${index}" /> </td>
-
+												<td><c:out value="${index}" />    <input type="checkbox" id="aa${allModuleList.moduleId}" class="select_all2" value="${allModuleList.moduleId}"
+																  onClick="selectAll(this, ${allModuleList.moduleId})"/></td>
 										<td><b><c:out value="${allModuleList.moduleName}" /></b></td>
 
 									</tr>
@@ -420,7 +421,7 @@
 														<c:when test="${allSubModuleList.view==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"
+																id="select_to_assign"  class="check2${allModuleList.moduleId}"
 																value="view" 
 																 ></td>
 														</c:when>
@@ -436,7 +437,7 @@
 														<c:when test="${allSubModuleList.addApproveConfig==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"
+																id="select_to_assign"  class="check2${allModuleList.moduleId}"
 																value="add" 
 																 ></td>
 														</c:when>
@@ -452,7 +453,7 @@
 														<c:when test="${allSubModuleList.editReject==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"
+																id="select_to_assign"   class="check2${allModuleList.moduleId}"
 																value="edit" 
 																 ></td>
 														</c:when>
@@ -465,7 +466,7 @@
 														<c:when test="${allSubModuleList.deleteRejectApprove==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"
+																id="select_to_assign"  class="check2${allModuleList.moduleId}"
 																value="delete" 
 																 ></td>
 														</c:when>
@@ -524,8 +525,8 @@
 			<!-- 	<td> &nbsp; </td>
 											</tr><tr>  -->
 									 <c:set var="index" value="${index+1 }" />
-												<td><c:out value="${index}" /> </td>
-
+												<td><c:out value="${index}" />    <input type="checkbox" id="aa${allModuleList.moduleId}" class="select_all3" value="${allModuleList.moduleId}"
+																  onClick="selectAll(this, ${allModuleList.moduleId})"/></td>
 										<td><b><c:out value="${allModuleList.moduleName}" /></b></td>
 
 									</tr>
@@ -543,7 +544,7 @@
 														<c:when test="${allSubModuleList.view==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"
+																id="select_to_assign"  class="check3${allModuleList.moduleId}"
 																value="view" 
 																 ></td>
 														</c:when>
@@ -559,7 +560,7 @@
 														<c:when test="${allSubModuleList.addApproveConfig==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"
+																id="select_to_assign"  class="check3${allModuleList.moduleId}"
 																value="add" 
 																 ></td>
 														</c:when>
@@ -710,7 +711,7 @@
 		<script>
 	  
 		/* function selectAll(source, id) {
-			
+			alert("fkdsjf");
 			//alert(source);
 			alert(id);  
 			
@@ -718,13 +719,14 @@
 				 $(".check"+id).attr('checked', false);
 			else
 			 $(".check"+id).attr('checked', true);
-			 */
 			 
+			  */
 			
 			 $(document).ready(function() {
 				  $('.select_all').click(function(){
 					  
 					  var id = $(this).val();
+					 // alert("Id = " +id)
 					 /*  var y= $(this).checked;
 					  alert(y);
 					  var x=document.getElementById("aa"+id).checked;
@@ -741,7 +743,60 @@
 			
 			
 			
-	 	/* }  */
+	 	/* }  */ $(document).ready(function() {
+			  $('.select_all1').click(function(){
+				  
+				  var id = $(this).val();
+				 // alert("Id = " +id)
+				 /*  var y= $(this).checked;
+				  alert(y);
+				  var x=document.getElementById("aa"+id).checked;
+				 if(x){
+					  $(".check"+id).attr('checked', false);
+				  }
+				 else{ */
+					  $(".check1"+id).attr('checked',true);
+				 /*  } */
+			    
+			  }); 
+			   
+			  });  
+	 	$(document).ready(function() {
+			  $('.select_all2').click(function(){
+				  
+				  var id = $(this).val();
+				 // alert("Id = " +id)
+				 /*  var y= $(this).checked;
+				  alert(y);
+				  var x=document.getElementById("aa"+id).checked;
+				 if(x){
+					  $(".check"+id).attr('checked', false);
+				  }
+				 else{ */
+					  $(".check2"+id).attr('checked',true);
+				 /*  } */
+			    
+			  }); 
+			   
+			  });  
+	 	$(document).ready(function() {
+			  $('.select_all3').click(function(){
+				  
+				  var id = $(this).val();
+				 // alert("Id = " +id)
+				 /*  var y= $(this).checked;
+				  alert(y);
+				  var x=document.getElementById("aa"+id).checked;
+				 if(x){
+					  $(".check"+id).attr('checked', false);
+				  }
+				 else{ */
+					  $(".check3"+id).attr('checked',true);
+				 /*  } */
+			    
+			  }); 
+			   
+			  });  
 		</script>
 
 

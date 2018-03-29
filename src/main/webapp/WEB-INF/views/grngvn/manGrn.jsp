@@ -133,18 +133,15 @@
 								style="width: 100%" id="table_grid" align="left">
 								<thead>
 									<tr>
-																			<th width="50">SELECT</th>
-									
+										<th width="50">SELECT</th>
 										<th width="50">Invoice</th>
 										<th width="40">Item Name</th>
 										<th width="40">Type</th>
 										<th width="50">Pur Quantity</th>
-
 										<th width="10">Rate</th>
 										<th width="40">Grn Qty</th>
 										<th width="50">Tax %</th>
 										<th width="50">Taxable Amt</th>
-
 										<th width="40">Tax Amt</th>
 										<th width="40">Amount</th>
 										<th width="50">Remark</th>
@@ -160,11 +157,11 @@
 
 					<div class="row">
 						<div class="form-group">
-												<div class="col-sm-9 col-sm-offset-3 col-lg-11 col-lg-offset-3">
-										
-													<input type="submit" class="btn btn-primary" value="Submit">
-												</div>
-									</div>
+							<div class="col-sm-9 col-sm-offset-3 col-lg-11 col-lg-offset-3">
+
+								<input type="submit" class="btn btn-primary" value="Submit">
+							</div>
+						</div>
 					</div>
 				</div>
 			</form>
@@ -218,7 +215,7 @@
 			</script>
 
 
-	 <script type="text/javascript">
+	<script type="text/javascript">
 				function getItems() {
 //alert("Hi");
 					var bill = $("#selectMenu").val();
@@ -294,8 +291,8 @@
 			</script>
 
 
- 
- 
+
+
 
 	<script type="text/javascript">
 	
@@ -333,7 +330,7 @@
 					alert("d No  " +dNo); */
 					
 				    var grnQty =document.getElementById(""+dNo).value;
-					alert("qty " +grnQty);
+					//alert("qty " +grnQty);
 					var baseRate=rate;
 					
 					var grnBaseRate;
@@ -370,9 +367,9 @@
 						var taxableAmt=grnBaseRate*grnQty;
 						var totalTax=taxableAmt*(cgstPer+sgstPer)/100;
 						var grandTotal=taxableAmt+totalTax;
-						alert("taxable " +taxableAmt);
-						alert("totalTax " +totalTax);
-						alert("grandTotal " +grandTotal);
+						//alert("taxable " +taxableAmt);
+						//alert("totalTax " +totalTax);
+						//alert("grandTotal " +grandTotal);
 					$("#grn_amt"+dNo).html(grandTotal.toFixed(2));
 					$("#tax_per"+dNo).html(totTaxPer.toFixed(2));
 					$("#taxable_amt"+dNo).html(taxableAmt.toFixed(2));

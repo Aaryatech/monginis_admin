@@ -123,7 +123,6 @@ select {
 	<c:url var="setAllItemSelected" value="/setAllItemSelected" />
 
 	<c:url var="findItemsByCatId" value="/getCommonByMenuId" />
-	<c:url var="findAllMenus" value="/getAllMenus" />
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
 
@@ -365,8 +364,7 @@ $('#select_all').click(function() {
 </script>
 
 
-
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 $(document).ready(function() { 
 	$('#fr_id').change(
 			function() {
@@ -398,7 +396,7 @@ $(document).ready(function() {
 				});
 			});
 });
-</script>
+</script> -->
 
 <script>
 $( "#date" ).datepicker({ 
