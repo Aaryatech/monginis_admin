@@ -212,6 +212,8 @@
 				document.getElementById("chart_div").style = "display:none";
 
 				var routeId = $("#selectRoute").val();
+				
+				var routeName = $("#selectRoute option:selected").text();
 				document.getElementById("routeName").innerText="Route: "+$("#selectRoute option:selected").text();
 				document.getElementById("routeName").style.fontWeight="900";
 				var isGraph = 0;
@@ -229,6 +231,7 @@
 									bill_date : billDate,
 									route_id : routeId,
 									cat_id_list : JSON.stringify(selectedCat),
+									routeName : routeName,
 									ajax : 'true'
 
 								},

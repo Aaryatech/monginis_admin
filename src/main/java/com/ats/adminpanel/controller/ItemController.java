@@ -39,6 +39,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.VpsImageUpload;
+import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.TrayType;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialUom;
@@ -59,6 +60,8 @@ import com.ats.adminpanel.model.item.ItemSupList;
 import com.ats.adminpanel.model.item.MCategoryList;
 import com.ats.adminpanel.model.item.StockDetail;
 import com.ats.adminpanel.model.item.SubCategory;
+import com.ats.adminpanel.model.mastexcel.ItemList;
+import com.ats.adminpanel.model.mastexcel.TallyItem;
 import com.ats.adminpanel.model.modules.ErrorMessage;
 
 @Controller
@@ -566,6 +569,61 @@ public class ItemController {
 			mav.addObject("mCategoryList", mCategoryList);
 			mav.addObject("itemsList", itemsList);
 			mav.addObject("url", Constants.ITEM_IMAGE_URL);
+			
+			//exportToExcel
+			
+			
+			ItemList itemResponse = restTemplate.getForObject(Constants.url + "tally/getAllExcelItems", ItemList.class);
+
+			List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+				
+				ExportToExcel expoExcel=new ExportToExcel();
+				List<String> rowData=new ArrayList<String>();
+				 
+				
+				rowData.add("Sr. No.");
+				 rowData.add("Id");
+				rowData.add("Item Name");
+				rowData.add("Category");
+				rowData.add("Group1");
+				rowData.add("Group2");
+				rowData.add("HsnCode");
+				rowData.add("UOM");
+				rowData.add("Sgst %");
+				rowData.add("Cgst %");
+				rowData.add("Igst %");
+				rowData.add("Cess %");
+			
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				List<TallyItem> excelItems=itemResponse.getItemList();
+				for(int i=0;i<excelItems.size();i++)
+				{
+					  expoExcel=new ExportToExcel();
+					 rowData=new ArrayList<String>();
+						rowData.add(""+(i+1));
+					rowData.add(""+excelItems.get(i).getId());
+					rowData.add(excelItems.get(i).getItemName());
+					rowData.add(excelItems.get(i).getItemGroup());
+					rowData.add(excelItems.get(i).getSubGroup());
+					rowData.add(excelItems.get(i).getSubSubGroup());
+					rowData.add(excelItems.get(i).getHsnCode());
+					
+					rowData.add(excelItems.get(i).getUom());
+					rowData.add(""+excelItems.get(i).getSgstPer());
+					rowData.add(""+excelItems.get(i).getCgstPer());
+					rowData.add(""+excelItems.get(i).getIgstPer());
+					rowData.add(""+excelItems.get(i).getCessPer());
+					
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					
+				}
+			
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "itemsList");
 		} catch (Exception e) {
 			System.out.println("exce in listing filtered group itme" + e.getMessage());
 		}

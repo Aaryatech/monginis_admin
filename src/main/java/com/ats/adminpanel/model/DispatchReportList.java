@@ -12,7 +12,7 @@ public class DispatchReportList {
 	private List<Item> itemList;
 	private List<FrNameIdByRouteId>  frList;
 	private List<SubCategory>  subCatList;
-	
+
 	public List<SubCategory> getSubCatList() {
 		return subCatList;
 	}
@@ -44,6 +44,13 @@ public class DispatchReportList {
 	public void setFrList(List<FrNameIdByRouteId> frList) {
 		this.frList = frList;
 	}
-    
+
+	@Override
+	public String toString() {
+		return "DispatchReportList [dispatchReportList=" + dispatchReportList + ", itemList=" + itemList + ", frList="
+				+ frList + ", subCatList=" + subCatList + "]";
+	}
+
 	
+
 }

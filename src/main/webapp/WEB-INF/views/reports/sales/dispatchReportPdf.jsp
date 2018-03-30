@@ -11,7 +11,7 @@
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Sales Report Royalty</title>
+<title>Dispatch Report Pdf</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -50,7 +50,9 @@ th {
 <body onload="myFunction()">
 <h4 align="center">Galdhar Foods Pvt Ltd</h4>
 <p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
-<div align="center"> <h5>Dispatch Sheet &nbsp;&nbsp;&nbsp;&nbsp; Date &nbsp; ${billDate}</h5></div>
+<div align="center"> <h5>Dispatch Sheet &nbsp;&nbsp;&nbsp;&nbsp; Date &nbsp; ${billDate} Route ${routeName}</h5></div>
+
+
 <table  align="center" border="1" cellspacing="0" cellpadding="1" 
 		id="table_grid" class="table table-bordered">
 		<thead>
@@ -69,6 +71,10 @@ th {
 
 				<c:set var="allTotal" value="0" />
 
+
+	 
+
+
 			<c:forEach items="${subCatList}" var="subCat" varStatus="count">
 				<tr>
                     <td bgcolor="lightgray"><c:out value="" /></td>
@@ -81,7 +87,7 @@ th {
 				<c:set var="srNo" value="1"></c:set>
 				<c:forEach items="${itemList}" var="item" varStatus="count">
 				<c:set var="total" value="0" />
-
+<c:set var="frTotal" value="0" />
 					<c:choose>
 						<c:when test="${item.itemGrp2==subCat.subCatId}">
 
@@ -105,8 +111,10 @@ th {
 								</c:when>
 								
 								</c:choose>
+								<c:set var="frTotal" value="${report.billQty+frTotal}" />
 								</c:forEach>
 									<td width="40px" align="right">${billQty}</td>
+									
 								</c:forEach>
 								
 								

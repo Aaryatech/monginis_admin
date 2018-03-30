@@ -169,6 +169,15 @@
 				</div>
 				
 						</div>
+						
+						<div class="form-group"  id="range">
+								 
+											 
+											 
+											<div class="col-sm-3  controls">
+											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();">
+											</div>
+											</div>
 
 											<%-- <div class="box-content">
 
@@ -349,6 +358,14 @@ function myFunction() {
       }
     }       
   }
+}
+</script>
+
+<script type="text/javascript">
+function exportToExcel()
+{
+	window.open("${pageContext.request.contextPath}/exportToExcel");
+			document.getElementById("expExcel").disabled=true;
 }
 </script>
 </html>

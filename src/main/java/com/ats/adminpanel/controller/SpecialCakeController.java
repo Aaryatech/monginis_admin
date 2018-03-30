@@ -13,6 +13,7 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -36,6 +37,7 @@ import com.ats.adminpanel.model.SpecialCake;
 import com.ats.adminpanel.model.TrayType;
 import com.ats.adminpanel.model.Event;
 import com.ats.adminpanel.model.EventNameId;
+import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.InsertSpCakeResponse;
 import com.ats.adminpanel.model.Login;
@@ -51,6 +53,9 @@ import com.ats.adminpanel.model.item.ItemSupList;
 import com.ats.adminpanel.model.masters.AllRatesResponse;
 import com.ats.adminpanel.model.masters.GetSpCkSupplement;
 import com.ats.adminpanel.model.masters.Rate;
+import com.ats.adminpanel.model.mastexcel.ItemList;
+import com.ats.adminpanel.model.mastexcel.SpCakeList;
+import com.ats.adminpanel.model.mastexcel.TallyItem;
 import com.ats.adminpanel.model.ViewSpCakeListResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -120,6 +125,63 @@ public class SpecialCakeController {
 			model.addObject("specialCakeList", specialCakeList);// 1 object to be used in jsp 2 actual object
 			model.addObject("url",Constants.SPCAKE_IMAGE_URL);
 			
+			
+			
+			
+//exportToExcel
+			
+			
+			SpCakeList spResponse = restTemplate.getForObject(Constants.url + "tally/getAllExcelSpCake", SpCakeList.class);
+
+			List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+				
+				ExportToExcel expoExcel=new ExportToExcel();
+				List<String> rowData=new ArrayList<String>();
+				 
+				
+				rowData.add("Sr. No.");
+				 rowData.add("Id");
+				rowData.add("Sp Name");
+				rowData.add("Category");
+				rowData.add("Group1");
+				rowData.add("Group2");
+				rowData.add("HsnCode");
+				rowData.add("UOM");
+				rowData.add("Sgst %");
+				rowData.add("Cgst %");
+				rowData.add("Igst %");
+				rowData.add("Cess %");
+			
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				List<com.ats.adminpanel.model.mastexcel.SpecialCake> excelSpCake=spResponse.getSpecialCakeList();
+				for(int i=0;i<excelSpCake.size();i++)
+				{
+					  expoExcel=new ExportToExcel();
+					 rowData=new ArrayList<String>();
+						rowData.add(""+(i+1));
+					rowData.add(""+excelSpCake.get(i).getId());
+					rowData.add(excelSpCake.get(i).getItemName());
+					rowData.add(excelSpCake.get(i).getItemGroup());
+					rowData.add(excelSpCake.get(i).getSubGroup());
+					rowData.add(excelSpCake.get(i).getSubSubGroup());
+					rowData.add(excelSpCake.get(i).getHsnCode());
+					
+					rowData.add(excelSpCake.get(i).getUom());
+					rowData.add(""+excelSpCake.get(i).getSgstPer());
+					rowData.add(""+excelSpCake.get(i).getCgstPer());
+					rowData.add(""+excelSpCake.get(i).getIgstPer());
+					rowData.add(""+excelSpCake.get(i).getCessPer());
+					
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					
+				}
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "spCakeList");
+				
 			
 
 		} catch (Exception e) {
