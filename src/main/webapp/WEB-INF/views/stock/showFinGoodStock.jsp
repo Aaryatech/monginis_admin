@@ -213,10 +213,36 @@
 									<div class="box-content">
 
 										<div class="clearfix"></div>
-										<div class="table-responsive" style="border: 0">
+									<div id="table-scroll" class="table-scroll"> 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table  class="table table-advance" id="table">
+												<thead>
+													<tr class="bgpink">
+														<th width="30" align="left">Sr No</th>
+														<th width="160" align="left">Item Name</th>
+														<th width="50">T</th>
+														<th width="50">T-1</th>
+														<th width="50">T-2</th>
+														<th width="50">Op Total</th>
+
+														<th width="50">Prod Qty</th>
+														<th width="50">Rej Qty</th>
+														<th width="50">Bill Qty</th>
+														<th width="50">Dummy Qty</th>
+														<th width="50">Current Closing</th>
+														<th width="50">Clo T</th>
+														<th width="50">Clo T-1</th>
+														<th width="50">Clo T-2</th>
+														<th width="70">Total Closing</th>
+													</tr>
+												</thead>
+												 
+											</table>
+									</div>
+									<div class="table-wrap">
 											<table  class="table table-advance" id="table1">
 												<thead>
-													<tr>
+													<tr class="bgpink">
 														<th width="30" align="left">Sr No</th>
 														<th width="120" align="left">Item Name</th>
 														<th width="50">T</th>
@@ -251,7 +277,7 @@
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
 										<!-- 										<input type="submit" class="btn btn-primary" value="Submit">
  -->
-
+<input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled>
 
 
 									</div>
@@ -405,7 +431,7 @@
 												data.stockDetail,
 												function(key, stock) {
 													
-													
+													document.getElementById("expExcel").disabled=false;	
 													var index = key + 1;
 
 													var tr = "<tr>";
@@ -550,6 +576,12 @@
 
 			}
 
+		}
+		function exportToExcel()
+		{
+			 
+			window.open("${pageContext.request.contextPath}/exportToExcel");
+					document.getElementById("expExcel").disabled=true;
 		}
 	</script>
 </body>

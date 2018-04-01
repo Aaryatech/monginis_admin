@@ -1608,10 +1608,11 @@ model.addObject("todayDate",df.format(todayDate));
 				List<String> rowData=new ArrayList<String>();
 				 
 				rowData.add("Sr.No."); 
-				rowData.add("Item Name");  
-				rowData.add("current Stock ");
+				rowData.add("Item Name"); 
+				rowData.add("Opening Qty ");
 				rowData.add("Plan Qty");
 				rowData.add("Production Qty"); 
+				rowData.add("current Stock "); 
 				rowData.add("Order Qty"); 
 				rowData.add("Rejected Qty"); 
 				rowData.add("Remaining Production"); 
@@ -1637,9 +1638,10 @@ model.addObject("todayDate",df.format(todayDate));
 						 }
 						 
 					 }  
-					rowData.add(""+postProductionPlanDetaillist.get(i).getCurOpeQty());
+					rowData.add(""+postProductionPlanDetaillist.get(i).getCurClosingQty()); 
 					rowData.add(""+postProductionPlanDetaillist.get(i).getPlanQty());
 					rowData.add(""+postProductionPlanDetaillist.get(i).getProductionQty()); 
+					rowData.add(""+postProductionPlanDetaillist.get(i).getCurOpeQty());
 					rowData.add(""+postProductionPlanDetaillist.get(i).getOrderQty()); 
 					rowData.add(""+postProductionPlanDetaillist.get(i).getRejectedQty());
 					rowData.add(""+postProductionPlanDetaillist.get(i).getInt4()); 

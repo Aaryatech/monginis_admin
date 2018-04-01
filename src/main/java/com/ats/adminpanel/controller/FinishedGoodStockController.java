@@ -13,6 +13,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -29,6 +30,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
+import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.CategoryListResponse;
@@ -41,6 +43,7 @@ import com.ats.adminpanel.model.stock.FinishedGoodStockDetail;
 import com.ats.adminpanel.model.stock.GetCurProdAndBillQty;
 import com.ats.adminpanel.model.stock.GetCurProdAndBillQtyList;
 import com.itextpdf.text.log.SysoCounter;
+import com.itextpdf.text.log.SysoLogger;
 
 @Controller
 public class FinishedGoodStockController {
@@ -684,6 +687,75 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 		bean.setStockDetail(updateStockDetailList);
 		
 		System.out.println("Final Bean Fin Good Stock : "+bean.toString());
+		
+		try
+		{
+			
+			List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+			
+			ExportToExcel expoExcel=new ExportToExcel();
+			List<String> rowData=new ArrayList<String>();
+			 
+			rowData.add("Sr.No."); 
+			rowData.add("Item Name");  
+			rowData.add("T");
+			rowData.add("T-1");
+			rowData.add("T-2"); 
+			rowData.add("Op Total"); 
+			rowData.add("Prod Qty"); 
+			rowData.add("Rej Qty"); 
+			
+			rowData.add("Bill Qty"); 
+			rowData.add("Dummy Qty");  
+			rowData.add("Current Closing ");
+			rowData.add("Close T");
+			rowData.add("Close T1");
+			rowData.add("Close T2"); 
+			rowData.add("Total Closing"); 
+		 
+				
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel); 
+			for(int i=0;i<bean.getStockDetail().size();i++)
+			{
+				  expoExcel=new ExportToExcel();
+				 rowData=new ArrayList<String>();
+				 
+			 
+				 
+				 rowData.add(""+(i+1));  
+				rowData.add(""+bean.getStockDetail().get(i).getItemName()); 
+				rowData.add(""+bean.getStockDetail().get(i).getOpT1());
+				rowData.add(""+bean.getStockDetail().get(i).getOpT2());
+				rowData.add(""+bean.getStockDetail().get(i).getOpT3()); 
+				rowData.add(""+bean.getStockDetail().get(i).getOpTotal()); 
+				rowData.add(""+bean.getStockDetail().get(i).getProdQty());
+				rowData.add(""+bean.getStockDetail().get(i).getRejQty()); 
+				
+				rowData.add(""+bean.getStockDetail().get(i).getFrSaleQty()); 
+				rowData.add(""+bean.getStockDetail().get(i).getGateSaleQty()); 
+				rowData.add(""+bean.getStockDetail().get(i).getCloCurrent()); 
+				rowData.add(""+bean.getStockDetail().get(i).getCloT1()); 
+				rowData.add(""+bean.getStockDetail().get(i).getCloT2()); 
+				rowData.add(""+bean.getStockDetail().get(i).getCloT3());  
+				rowData.add(""+bean.getStockDetail().get(i).getTotalCloStk()); 
+				
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				 
+			}
+			
+			 
+			
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "currentStock");
+			
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Exception in generate excel ");
+		}
 		return bean;
 
 	}
