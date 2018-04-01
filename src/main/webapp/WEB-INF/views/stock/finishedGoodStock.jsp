@@ -180,7 +180,8 @@
 									<div
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
 										<input type="submit" class="btn btn-primary" value="Submit">
-
+<input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();"  >
+<input type="button" class="btn btn-primary" value="Pdf"  onclick="getPdf()"></a>
 										<!-- <input type="button" class="btn btn-danger"
 											value="Day End Process" id="dayEndButton"> -->
 
@@ -275,7 +276,7 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
-	<script type="text/javascript">
+	<!-- <script type="text/javascript">
 		function searchItemsByCategory() {
 			
 			/* var catId = $("#catId").val();
@@ -363,10 +364,10 @@
 			
 		}
 
-</script>
+</script> -->
 
 
-
+<!-- 
 	<script type="text/javascript">
 
 $('#dayEndButton').click(function(){
@@ -389,10 +390,10 @@ if(option==1){
 
 }else{alert("Please Select Current Stock")}});
 
-</script>
+</script> -->
 
 	<script>
-		function showDiv(elem) {
+		/* function showDiv(elem) {
 			if (elem.value == 1) {
 				document.getElementById('select_month_year').style = "display:none";
 				document.getElementById('select_date').style = "display:none";
@@ -406,8 +407,22 @@ if(option==1){
 				
 			}
 			
+		} */
+		
+		function exportToExcel()
+		{
+			 
+			window.open("${pageContext.request.contextPath}/exportToExcel");
+					document.getElementById("expExcel").disabled=true;
 		}
-	</script>
+		function getPdf()
+		{
+		    
+			    	window.open('${pageContext.request.contextPath}/finishedGoodStockPdfFnction?url=pdf/finishedGoodStockPdf');
+			 
+		   
+		    }
+	</script> 
 </body>
 
 </html>

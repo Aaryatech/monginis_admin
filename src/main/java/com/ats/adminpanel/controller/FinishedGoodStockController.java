@@ -1,5 +1,12 @@
 package com.ats.adminpanel.controller;
 
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -11,6 +18,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -22,11 +30,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
+import org.zefer.pd4ml.PD4Constants;
+import org.zefer.pd4ml.PD4ML;
+import org.zefer.pd4ml.PD4PageMark;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
@@ -36,7 +48,7 @@ import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.CategoryListResponse;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.item.MCategoryList;
-import com.ats.adminpanel.model.item.StockDetail;
+import com.ats.adminpanel.model.item.StockDetail; 
 import com.ats.adminpanel.model.stock.FinGoodBean;
 import com.ats.adminpanel.model.stock.FinishedGoodStock;
 import com.ats.adminpanel.model.stock.FinishedGoodStockDetail;
@@ -181,9 +193,183 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 
 			model.addObject("itemsList", showFinStockDetail);
 			model.addObject("sDate", sDate);//mahesh code (3 march)
+			
+			try
+			{
+				
+				List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+				
+				ExportToExcel expoExcel=new ExportToExcel();
+				List<String> rowData=new ArrayList<String>();
+				 
+				rowData.add("Sr.No."); 
+				rowData.add("Item Name");  
+				rowData.add("T1");
+				rowData.add("T2");
+				rowData.add("T3");  
+			 
+					
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel); 
+				for(int i=0;i<showFinStockDetail.size();i++)
+				{
+					  expoExcel=new ExportToExcel();
+					 rowData=new ArrayList<String>();
+					 
+				 
+					 
+					 rowData.add(""+(i+1));  
+					rowData.add(""+showFinStockDetail.get(i).getItemName()); 
+					rowData.add(""+showFinStockDetail.get(i).getOpT1());
+					rowData.add(""+showFinStockDetail.get(i).getOpT2());
+					rowData.add(""+showFinStockDetail.get(i).getOpT3());  
+					
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					 
+				}
+				
+				 
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "finishGoodStock");
+				
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+				System.out.println("Exception in generate excel ");
+			}
 
 			globalItemList=new ArrayList<>();
 			globalItemList = itemsList;
+		} catch (Exception e) {
+
+			System.out.println("Exe in showing add Fin good Stock Page " + e.getMessage());
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+	
+	@RequestMapping(value = "pdf/finishedGoodStockPdf", method = RequestMethod.GET)
+	public ModelAndView billWisePdf(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("stock/pdf/finishedGoodStockPdf");
+		try {
+			Constants.mainAct = 4;
+			Constants.subAct = 40;
+			String sDate="";
+			RestTemplate restTemplate = new RestTemplate();
+
+			CategoryListResponse allCategoryResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
+					CategoryListResponse.class);
+
+			List<MCategoryList> catList = allCategoryResponse.getmCategoryList();
+
+			List<MCategoryList> filteredCatList = new ArrayList<MCategoryList>();
+			System.out.println("catList :" + catList.toString());
+
+			for (MCategoryList mCategory : catList) {
+				if (mCategory.getCatId() != 5 && mCategory.getCatId() != 3) {
+					filteredCatList.add(mCategory);
+
+				}
+			}
+
+			model.addObject("catList", filteredCatList);
+			List<Item> itemsList = new ArrayList<>();
+
+			AllItemsListResponse allItemsListResponse = restTemplate.getForObject(Constants.url + "getAllItems", AllItemsListResponse.class);
+
+			itemsList = new ArrayList<Item>();
+			itemsList = allItemsListResponse.getItems();
+			System.out.println("LIst of items" + itemsList.toString());
+			List<Item> tempItemList = itemsList;
+
+			for (int i = 0; i < tempItemList.size(); i++) {
+
+				if (tempItemList.get(i).getItemGrp1() == 3) {
+					System.out.println("item removed " + itemsList.get(i).getItemName());
+
+					itemsList.remove(i);
+
+				}
+
+			}
+			List<FinishedGoodStockDetail> showFinStockDetail = new ArrayList<FinishedGoodStockDetail>();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("stockStatus", 0);
+
+			FinishedGoodStock stockHeader = restTemplate.postForObject(Constants.url + "getFinGoodStockHeader", map,
+					FinishedGoodStock.class);
+			DateFormat dfYmd = new SimpleDateFormat("dd-MM-yyyy");
+
+			if (stockHeader != null) {
+				showFinStockDetail = new ArrayList<FinishedGoodStockDetail>(); 
+				 sDate = dfYmd.format(stockHeader.getFinGoodStockDate());
+
+				System.out.println("s Date ===" + sDate);
+				map = new LinkedMultiValueMap<String, Object>();
+				map.add("stockDate", sDate);
+
+				ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
+				};
+				ResponseEntity<List<FinishedGoodStockDetail>> responseEntity = restTemplate.exchange(
+						Constants.url + "getFinGoodStockDetailAllCat", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+				showFinStockDetail = responseEntity.getBody();
+				List<Integer> idList=new ArrayList<Integer>();
+				
+				
+for(int i=0;i<showFinStockDetail.size();i++) {
+					
+					idList.add(showFinStockDetail.get(i).getItemId());
+					
+					
+}
+			
+					
+					
+					
+					for(int j=0;j<itemsList.size();  j++) {
+						
+						if(!idList.contains(itemsList.get(j).getId())) {
+							
+							FinishedGoodStockDetail d=new FinishedGoodStockDetail();
+							d.setCatId(itemsList.get(j).getItemGrp1());
+							d.setItemId(itemsList.get(j).getId());
+							d.setItemName(itemsList.get(j).getItemName());
+							
+							System.err.println("New Item Found and added " +d.getItemName());
+							showFinStockDetail.add(d);
+						}
+						
+					}
+			
+
+			} else {
+				System.out.println("showFinStockDetail" + showFinStockDetail.toString());
+				showFinStockDetail = new ArrayList<FinishedGoodStockDetail>();
+				for (int i = 0; i < itemsList.size(); i++) {
+					FinishedGoodStockDetail detail = new FinishedGoodStockDetail();
+					detail.setItemName(itemsList.get(i).getItemName());
+					detail.setCatId(itemsList.get(i).getItemGrp1());
+					detail.setItemId(itemsList.get(i).getId());
+
+					showFinStockDetail.add(detail);
+				}
+
+				// assign name to detail Object ;
+			 
+			}
+
+			// model.addObject("itemsList", itemsList);
+
+			model.addObject("staticlist", showFinStockDetail);
+			model.addObject("sDate", sDate);//mahesh code (3 march)
+			 
+			 
 		} catch (Exception e) {
 
 			System.out.println("Exe in showing add Fin good Stock Page " + e.getMessage());
@@ -990,6 +1176,129 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 
 		return model;
 
+	}
+	
+	private Dimension format = PD4Constants.A2;
+	private boolean landscapeValue = false;
+	private int topValue = 8;
+	private int leftValue = 0;
+	private int rightValue = 0;
+	private int bottomValue =8;
+	private String unitsValue = "m";
+	private String proxyHost = "";
+	private int proxyPort = 0;
+
+	private int userSpaceWidth = 750;
+	private static int BUFFER_SIZE = 1024;
+
+	@RequestMapping(value = "/finishedGoodStockPdfFnction", method = RequestMethod.GET)
+	public void showPDF(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("Inside PDf For Report URL ");
+		String url = request.getParameter("url");
+		System.out.println("URL " + url);
+		
+		//File f = new File("/opt/tomcat-latest/webapps/uploads/Inward.pdf");
+		File f = new File("C:/pdf/ordermemo221.pdf");
+
+		try {
+			runConverter(Constants.ReportURL + url, f,request,response);
+			//runConverter("www.google.com", f,request,response);
+
+		} catch (IOException e) {
+
+			System.out.println("Pdf conversion exception " + e.getMessage());
+		}
+
+		// get absolute path of the application
+		ServletContext context = request.getSession().getServletContext();
+		String appPath = context.getRealPath("");
+		 String filePath = "C:/pdf/ordermemo221.pdf";
+
+		//String filePath = "/opt/tomcat-latest/webapps/uploads/Inward.pdf";
+
+		// construct the complete absolute path of the file
+		String fullPath = appPath + filePath;
+		File downloadFile = new File(filePath);
+		FileInputStream inputStream = null;
+		try {
+			inputStream = new FileInputStream(downloadFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			// get MIME type of the file
+			String mimeType = context.getMimeType(fullPath);
+			if (mimeType == null) {
+				// set to binary type if MIME mapping not found
+				mimeType = "application/pdf";
+			}
+			System.out.println("MIME type: " + mimeType);
+
+			String headerKey = "Content-Disposition";
+
+			// response.addHeader("Content-Disposition", "attachment;filename=report.pdf");
+			response.setContentType("application/pdf");
+
+			OutputStream outStream;
+
+			outStream = response.getOutputStream();
+
+			byte[] buffer = new byte[BUFFER_SIZE];
+			int bytesRead = -1;
+
+
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outStream.write(buffer, 0, bytesRead);
+			}
+
+			inputStream.close();
+			outStream.close();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void runConverter(String urlstring, File output, HttpServletRequest request, HttpServletResponse response ) throws IOException {
+
+		if (urlstring.length() > 0) {
+			if (!urlstring.startsWith("http://") && !urlstring.startsWith("file:")) {
+				urlstring = "http://" + urlstring;
+			}
+			System.out.println("PDF URL " + urlstring);
+			java.io.FileOutputStream fos = new java.io.FileOutputStream(output);
+
+			PD4ML pd4ml = new PD4ML();
+		
+			try {
+
+				Dimension landscapeA4 = pd4ml.changePageOrientation(PD4Constants.A4);
+				pd4ml.setPageSize(landscapeA4);
+			
+				PD4PageMark footer = new PD4PageMark();  
+				
+	            footer.setPageNumberTemplate("Page $[page] of $[total]");  
+	            footer.setPageNumberAlignment(PD4PageMark.RIGHT_ALIGN);  
+	            footer.setFontSize(10);  
+	            footer.setAreaHeight(20);     
+	            
+	            pd4ml.setPageFooter(footer); 
+				
+			} catch (Exception e) {
+				System.out.println("Pdf conversion method excep " + e.getMessage());
+			}
+
+			if (unitsValue.equals("mm")) {
+				pd4ml.setPageInsetsMM(new Insets(topValue, leftValue, bottomValue, rightValue));
+			} else {
+				pd4ml.setPageInsets(new Insets(topValue, leftValue, bottomValue, rightValue));
+			}
+
+			pd4ml.setHtmlWidth(userSpaceWidth);
+
+			pd4ml.render(urlstring, fos);
+		}
 	}
 
 }
