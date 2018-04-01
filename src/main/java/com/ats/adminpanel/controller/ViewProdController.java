@@ -531,16 +531,18 @@ public class ViewProdController {
 			e.printStackTrace();
 		}
 
-		PdfPTable table = new PdfPTable(3);
+		PdfPTable table = new PdfPTable(4);
 		try {
 			System.out.println("Inside PDF Table try");
 			table.setWidthPercentage(100);
-			table.setWidths(new float[] { 0.4f, 1.0f, 0.4f });
-			Font headFont = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK);
-			Font headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
+			table.setWidths(new float[] { 0.4f, 1.7f, 0.9f,1.0f});
+			Font headFont = new Font(FontFamily.TIMES_ROMAN, 18, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 16, Font.BOLD, BaseColor.BLACK);
 			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
 
-			PdfPCell hcell;
+			PdfPCell hcell=new PdfPCell();
+			hcell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			hcell.setPadding(4);
 			hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(hcell);
@@ -561,6 +563,10 @@ public class ViewProdController {
 				table.addCell(hcell);
 
 			}
+			hcell = new PdfPCell(new Phrase("Production Quantity", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+			
 			int index = 0;
 			for (GetProdPlanDetail getMoneyOut : moneyOutList) {
 				index++;
@@ -569,12 +575,14 @@ public class ViewProdController {
 				cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				  cell.setPadding(4);
 				table.addCell(cell);
 
 				cell = new PdfPCell(new Phrase(getMoneyOut.getItemName(), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 				cell.setPaddingRight(2);
+				  cell.setPadding(4);
 				table.addCell(cell);
 
 				if (pdfPlanHeader.getIsPlanned() == 0) {
@@ -582,23 +590,29 @@ public class ViewProdController {
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setPaddingRight(2);
+					  cell.setPadding(4);
 					table.addCell(cell);
 				} else {
-					cell = new PdfPCell(new Phrase(String.valueOf(getMoneyOut.getProductionQty()), headFont));
+					cell = new PdfPCell(new Phrase(String.valueOf(getMoneyOut.getPlanQty()), headFont));
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 					cell.setPaddingRight(2);
+					  cell.setPadding(4);
 					table.addCell(cell);
 				}
-
+				cell = new PdfPCell(new Phrase("", headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
 				// FooterTable footerEvent = new FooterTable(table);
 				// writer.setPageEvent(footerEvent);
 			}
 
 			document.open();
 			Paragraph company = new Paragraph(
-					"Galdhar Foods Pvt.Ltd\n" + "Factory Add: A-32 Shendra, MIDC, Auraangabad-4331667"
-							+ "Phone:0240-2466217, Email: aurangabad@monginis.net",
+					"Galdhar Foods Pvt.Ltd\n",
 					f);
 			company.setAlignment(Element.ALIGN_CENTER);
 			document.add(company);
@@ -610,14 +624,14 @@ public class ViewProdController {
 				document.add(heading);
 			}
 			if (pdfPlanHeader.getIsPlanned() == 0) {
-				Paragraph heading = new Paragraph("Report Job Card " + pdfPlanHeader.getCatName());
+				Paragraph heading = new Paragraph(pdfPlanHeader.getCatName()+" Report Job Card ");
 				heading.setAlignment(Element.ALIGN_CENTER);
 				document.add(heading);
 			}
 			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
 			String reportDate = DF.format(new Date());
 
-			document.add(new Paragraph("" + reportDate));
+			document.add(new Paragraph("Production Date: " + reportDate));
 			document.add(new Paragraph("\n"));
 			document.add(table);
 			int totalPages = writer.getPageNumber();
