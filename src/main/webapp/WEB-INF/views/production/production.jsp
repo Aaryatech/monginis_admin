@@ -448,12 +448,16 @@ $(document).ready(function() {
 								  if (data == "") {
 									//alert("No records found !!");
 									document.getElementById("callSubmit").disabled=true;
-								}  
+								} 
+								  
 								//alert(data);
 								else{
-									document.getElementById("callSubmit").disabled=false;
+									
 								
 								$.each(data,function(key, order) {
+									if(order.qty>0){
+										document.getElementById("callSubmit").disabled=false;
+									}
 /* 
 									autoindex = autoindex +1 ;
 
@@ -522,15 +526,20 @@ $(document).ready(function() {
 				
 				
 				$('#loader').hide();
-				/* if (data == "") {
+				 if (data == "") {
 					alert("No records found !!");
+					document.getElementById("callSubmit").disabled=true;
 
-				} */
+				} 
 				//alert(data);
-
+				else{
 				
 				$.each(data,function(key, order) {
 					document.getElementById("callSubmit").disabled=false;
+					
+					if(order.qty>0){
+						document.getElementById("callSubmit").disabled=false;
+					}
 					autoindex =  autoindex +1;
 
 								/* 	var tr = "<tr>";
@@ -570,6 +579,7 @@ $(document).ready(function() {
 									
 									$('#table1 tbody').append(tr);
 								})
+				}
 									
 
 			});

@@ -342,6 +342,7 @@
 								$('#loader').hide();
 								if (data == "") {
 									alert("No records found !!");
+									document.getElementById("callSubmit").disabled=true;
 
 								}
 
