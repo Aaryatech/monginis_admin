@@ -41,6 +41,7 @@ import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.stock.PostFrItemStockCommon;
 import com.ats.adminpanel.model.stock.PostFrItemStockDetail;
 import com.ats.adminpanel.model.stock.PostFrItemStockHeader;
+import com.sun.org.apache.bcel.internal.generic.FMUL;
 
 @Controller
 @Scope("session")
@@ -85,7 +86,7 @@ public class StockController {
 	public @ResponseBody List<FrMenu> getMenuListByFr(HttpServletRequest request, HttpServletResponse response) {
 
 		logger.info("/getMenuListByFr AJAX Call mapping.");
-
+try {
 		frId = request.getParameter("fr_id");
 
 		RestTemplate restTemplate = new RestTemplate();
@@ -110,7 +111,12 @@ public class StockController {
 			}
 
 		}
-
+System.err.println("Menus " +filterFrMenus);
+}catch (Exception e) {
+	System.err.println("Exc in ");
+	System.err.println("dvld");
+	e.printStackTrace();
+}
 		return filterFrMenus;
 	}
 

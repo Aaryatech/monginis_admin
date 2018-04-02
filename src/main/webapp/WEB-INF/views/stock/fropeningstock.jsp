@@ -170,13 +170,13 @@
 		<script type="text/javascript">
 				function getMenu() {
 					var selectedFr = $("#selectFr").val();
-				
+				//alert(selectedFr);
 					
 					$.getJSON('${getMenuForFr}', {
 						fr_id: selectedFr,
 						ajax : 'true'
 					}, function(data) {
-						
+						//alert(data);
 						var len = data.length;
 						
 						$('#selectMenu')

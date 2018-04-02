@@ -441,7 +441,12 @@ public class BillController {
 				Date d = new Date();
 				sdf.setTimeZone(istTimeZone);
 				String strtime = sdf.format(d);
+				
+				
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Calendar cal = Calendar.getInstance();
 
+				header.setRemark(dateFormat.format(cal.getTime()));
 				// System.out.println("time ==" + strtime);
 				header.setTime(strtime);
 				postBillHeaderList.add(header);
@@ -1737,6 +1742,7 @@ public class BillController {
 						postBillHeader.setTaxableAmt(sumTaxableAmt);
 						postBillHeader.setTaxApplicable(billHeadersList.get(j).getTaxApplicable());
 						postBillHeader.setTotalTax(sumTotalTax);
+						postBillHeader.setRemark(billHeadersList.get(j).getRemark());
 						break;
 					} // end of if
 
@@ -1931,8 +1937,8 @@ public class BillController {
 		System.out.println("URL " + url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
 		// File f = new File("/opt/tomcat-latest/webapps/uploads/bill.pdf");
-		// File f = new File("/home/ats-11/pdf/ordermemo221.pdf");
-		File f = new File("/Users/MIRACLEINFOTAINMENT/ATS/uplaods/reports/ordermemo221.pdf");
+		File f = new File("/home/ats-11/pdf/ordermemo221.pdf");
+		//File f = new File("/Users/MIRACLEINFOTAINMENT/ATS/uplaods/reports/ordermemo221.pdf");
 
 		System.out.println("I am here " + f.toString());
 		try {
@@ -1950,8 +1956,8 @@ public class BillController {
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo221.pdf";
 		// String filePath = "/opt/tomcat-latest/webapps/uploads/bill.pdf";
-		// String filePath = "/home/ats-11/pdf/ordermemo221.pdf";
-		String filePath = "/Users/MIRACLEINFOTAINMENT/ATS/uplaods/reports/ordermemo221.pdf";
+		String filePath = "/home/ats-11/pdf/ordermemo221.pdf";
+		//String filePath = "/Users/MIRACLEINFOTAINMENT/ATS/uplaods/reports/ordermemo221.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;

@@ -83,7 +83,7 @@ public class ManualGrnController {
 		Calendar cale = Calendar.getInstance();
 		cale.setTime(date);
 		int month = cale.get(Calendar.MONTH);
-
+month=month+1;
 		if (month <= 3) {
 
 			curStrYear = preMarchStrYear + curStrYear;
@@ -102,19 +102,19 @@ public class ManualGrnController {
 
 		if (length == 1)
 
-			invoiceNo = curStrYear + "-" + "000" + settingValue;
+			invoiceNo = curStrYear + "-" + frCode+"-"+"000" + settingValue;
 		if (length == 2)
 
-			invoiceNo = curStrYear + "-" + "00" + settingValue;
+			invoiceNo = curStrYear + "-" + frCode+"-"+"00" + settingValue;
 
 		if (length == 3)
 
-			invoiceNo = curStrYear + "-" + "0" + settingValue;
+			invoiceNo = curStrYear + "-" +frCode+"-"+ "0" + settingValue;
 
 		
 		
-		invoiceNo=frCode+invoiceNo;
-		System.out.println("*** settingValue= " + settingValue);
+		
+		System.out.println("*** invoiceNo= " + invoiceNo);
 		return invoiceNo;
 
 	}

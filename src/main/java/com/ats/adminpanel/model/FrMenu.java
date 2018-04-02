@@ -22,7 +22,7 @@ public class FrMenu implements Serializable {
     private String time;
     private Integer isSameDayApplicable;
 	private int day;
-	private Date date;
+	private String date;
 
     
     public Integer getIsSameDayApplicable() {
@@ -147,11 +147,12 @@ public class FrMenu implements Serializable {
 		this.day = day;
 	}
 
-	public Date getDate() {
+
+	public String getDate() {
 		return date;
 	}
 
-	public void setDate(Date date) {
+	public void setDate(String date) {
 		this.date = date;
 	}
 
@@ -164,6 +165,5 @@ public class FrMenu implements Serializable {
 				+ isSameDayApplicable + ", day=" + day + ", date=" + date + "]";
 	}
 
-	    
 
 }

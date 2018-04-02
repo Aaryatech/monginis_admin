@@ -426,42 +426,42 @@
 							<c:set var="totalRowCount" value="${totalRowCount+1}" />
 							<tr>
 								<td
-									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 10px;">${count.index+1}</td>
+									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${count.index+1}</td>
 								<td
-									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 10px;">${billDetails.itemName}</td>
+									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${billDetails.itemName}</td>
 								<td align="left"
-									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 10px;">${billDetails.itemHsncd}</td>
+									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${billDetails.itemHsncd}</td>
 								<td align="right"
-									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 10px;"><fmt:formatNumber
+									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;"><fmt:formatNumber
 										type="number" maxFractionDigits="2" minFractionDigits="2"
 										value="${billDetails.billQty}" /></td>
 								<c:set var="totalQty" value="${totalQty+billDetails.billQty}" />
 								<td align="center"
-									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 10px;">${billDetails.itemUom}</td>
+									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${billDetails.itemUom}</td>
 								<td align="right"
-									style="border-left: 1px solid #313131; padding: 3px 4px; color: #000; font-size: 10px;"><fmt:formatNumber
+									style="border-left: 1px solid #313131; padding: 3px 4px; color: #000; font-size: 12px;"><fmt:formatNumber
 										type="number" maxFractionDigits="2" minFractionDigits="2"
 										value="${billDetails.baseRate}" /></td>
 								<td align="right"
-									style="border-left: 1px solid #313131; padding: 3px 4px; color: #000; font-size: 10px;"><fmt:formatNumber
+									style="border-left: 1px solid #313131; padding: 3px 4px; color: #000; font-size: 12px;"><fmt:formatNumber
 										type="number" maxFractionDigits="2" minFractionDigits="2"
 										value="${billDetails.taxableAmt}" /></td>
 								<c:set var="totalAmt" value="${totalAmt+billDetails.taxableAmt}" />
 								<td align="right"
-									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 10px;"><fmt:formatNumber
+									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;"><fmt:formatNumber
 										type="number" maxFractionDigits="2" minFractionDigits="2"
 										value="${billDetails.cgstPer}" /></td>
 								<td align="right"
-									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 10px;"><fmt:formatNumber
+									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;"><fmt:formatNumber
 										type="number" maxFractionDigits="2" minFractionDigits="2"
 										value="${billDetails.cgstRs}" /></td>
 								<c:set var="totalCgst" value="${totalCgst+billDetails.cgstRs}" />
 								<td align="right"
-									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 10px;"><fmt:formatNumber
+									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;"><fmt:formatNumber
 										type="number" maxFractionDigits="2" minFractionDigits="2"
 										value="${billDetails.sgstPer}" /></td>
 								<td align="right"
-									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 10px;"><fmt:formatNumber
+									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;"><fmt:formatNumber
 										type="number" maxFractionDigits="2" minFractionDigits="2"
 										value="${billDetails.sgstRs}" /></td>
 								<c:set var="totalSgst" value="${totalSgst+billDetails.sgstRs}" />
