@@ -138,15 +138,16 @@
 <!-- 														<th width="30" align="left">Cur Closing</th>
  -->														<th width="90" align="left">Cur Opening</th>
 														
-														<th width="90" align="left">
+														<%-- <th width="90" align="left">
 										 					<div>
  									                     	<input class="form-control date-picker" id="datepicker1" size="16" type="text" name="datepicker1" value="" placeholder="Date1"  disabled/>
- <%-- 								                     	  <a href="${pageContext.request.contextPath}/"> <span class="	glyphicon glyphicon-circle-arrow-right"></span></a>
- --%>								                     	  
+ 								                     	  <a href="${pageContext.request.contextPath}/"> <span class="	glyphicon glyphicon-circle-arrow-right"></span></a>
+								                     	  
                                                               </div>
 														</th>
                                                        <th width="5" align="left"><i class="glyphicon glyphicon-circle-arrow-right  fa-2x" onclick=" return getProdQty(1,5)"></i>
-														 </th>
+														 </th> --%>
+														 
                                                       	<th width="100" align="left">
 															<div>
 									                     	<input class="form-control date-picker" id="datepicker2" size="16" type="text" name="datepicker2" value="" placeholder="Order Date"  onblur=" return getProdQty(2,2)" />
@@ -162,13 +163,15 @@
 														</th>
 													 <th width="5" align="left"> <i class="	glyphicon glyphicon-circle-arrow-right  fa-2x" onclick=" return getProdQty(3,5)"></i>
 														 </th>
-														<th width="100" align="left">
+														 
+														<!-- <th width="100" align="left">
 															<div>
 									                     	<input class="form-control date-picker" id="datepicker4" size="16" type="text" name="datepicker4" value="" placeholder="Date4"  onblur=" return getProdQty(4,4)"/>
 								                     	    </div>
 														</th> 
 													 <th width="5" align="left">  <i class="	glyphicon glyphicon-circle-arrow-right  fa-2x" onclick=" return getProdQty(4,5)"></i>
-														 </th>
+														 </th> -->
+														 
 													<!-- 	<th width="120" align="left">
 															<div>
 									                     	<input class="form-control date-picker" id="datepicker5" size="16" type="text" name="datepicker5" value="" placeholder="Date5"  onblur=" return getProdQty(5)"/>
@@ -367,15 +370,15 @@
 													var curOpening = "<td align=center colspan='1'><input type=text  class=form-control  id= curOpe"+ item.id+ " name=curOpe"+item.id+" value ="+item.curOpeQty+" disabled></td>"; 
 
 
-													var qty1 = "<td align=center colspan='2'><input type=text  class=form-control  id= qty1"+ item.id+ " name=qty1"+item.id+" value = "+item.qty+ " disabled></td>"; 
-													
+													/* var qty1 = "<td align=center colspan='2'><input type=text  class=form-control  id= qty1"+ item.id+ " name=qty1"+item.id+" value = "+item.qty+ " disabled></td>"; 
+													 */
 											
 													var qty2 = "<td align=center colspan='2'><input type=text  class=form-control  id= qty2"+ item.id+ " name=qty2"+item.id+" value = "+0+ " disabled></td>";
 
 													var qty3 = "<td align=center colspan='2'><input type=text  class=form-control  id= qty3"+ item.id+ " name=qty3"+item.id+" value = "+0+ " disabled></td>";
 
- 													 var qty4 = "<td align=center colspan='2'><input type=text  class=form-control  id= qty4"+ item.id+ " name=qty4"+item.id+" value = "+0+ " disabled></td>";
-
+ 													/*  var qty4 = "<td align=center colspan='2'><input type=text  class=form-control  id= qty4"+ item.id+ " name=qty4"+item.id+" value = "+0+ " disabled></td>";
+ */
 /* 													var qty5 = "<td align=center><input type=text min=0 max=500 class=form-control  id= qty5"+ item.id+ " name=qty5"+item.id+" value = "+0+ " disabled></td>";
  */
 													var qty5 = "<td align=center colspan='2'><input type=number  class=form-control  id= qty5"+ item.id+ " name=qty5"+item.id+" value = "+0+ "></td>";
@@ -393,9 +396,9 @@
 													$('#table1 tbody')
 													.append(curOpening);
 													
-													$('#table1 tbody')
+													/* $('#table1 tbody')
 															.append(
-																	qty1);
+																	qty1); */
 											
 													$('#table1 tbody')
 															.append(qty2);
@@ -403,8 +406,8 @@
 													$('#table1 tbody')
 															.append(
 																	qty3);
-													  $('#table1 tbody')
-															.append(qty4); 
+													 /*  $('#table1 tbody')
+															.append(qty4);  */
 													$('#table1 tbody')
 															.append(
 																	qty5);

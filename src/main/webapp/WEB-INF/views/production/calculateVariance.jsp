@@ -149,17 +149,40 @@
 									
 									 
 								<div class=" box-content">
-									<div class="row">
-										<div class="col-md-12 table-responsive">
-											<table class="table table-bordered table-striped fill-head "
-												style="width: 100%" id="table_grid">
+									<div class="clearfix"></div> 
+									<div id="table-scroll" class="table-scroll"> 
+									<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table_grid" class="main-table">
+								 
 												<thead>
-													<tr>
+													<tr class="bgpink">
 														<th>Sr.No.</th>
-														<th>Item Name</th> 
-														<th>Current Stock</th>
+														<th class="col-md-3">Item Name</th> 
+														<th >Opening Qty</th> 
 														<th>plan Qty</th>
 														<th>production Qty</th>
+														<th>Current Stock</th> 
+														<th>Order Qty</th>
+														<th>Rejected Qty</th>
+														<th>Remaining Production</th>
+														
+
+
+													</tr>
+												</thead>
+												</table>
+									</div>
+									<div class="table-wrap">
+									<table id="table1" class="table table-advance">
+										 
+												<thead>
+													<tr class="bgpink">
+														<th>Sr.No.</th>
+														<th>Item Name</th> 
+														<th>Opening Qty</th> 
+														<th>plan Qty</th>
+														<th>production Qty</th>
+														<th>Current Stock</th> 
 														<th>Order Qty</th>
 														<th>Rejected Qty</th>
 														<th>Remaining Production</th>
@@ -185,10 +208,10 @@
 																	 
 																</c:choose>
 															</c:forEach>
-															 
-															<td><c:out value="${postProdPlanHeaderDetailed.curOpeQty}" /></td>
-															<td><c:out value="${postProdPlanHeaderDetailed.planQty}" /></td>
+															 <td><c:out value="${postProdPlanHeaderDetailed.curClosingQty}" /></td>
+															 <td><c:out value="${postProdPlanHeaderDetailed.planQty}" /></td>
 															<td><c:out value="${postProdPlanHeaderDetailed.productionQty}" /></td>
+															<td><c:out value="${postProdPlanHeaderDetailed.curOpeQty}" /></td> 
 															<td><c:out value="${postProdPlanHeaderDetailed.orderQty}" /></td>
 															<td><c:out value="${postProdPlanHeaderDetailed.rejectedQty}" /></td>
 															<td><c:out value="${postProdPlanHeaderDetailed.int4}" /></td>
@@ -207,10 +230,10 @@
 															<td><c:out value="${srNo+1}" /></td>
 															<c:set var="srNo" value="${srNo+1}" />
 															<td><c:out value="${getVarianceorderlistforsort.itemName}" /></td>
-															<td><c:out value="${getVarianceorderlistforsort.curOpeQty}" /></td>
+															<td><c:out value="${getVarianceorderlistforsort.curClosingQty}" /></td>
 															<td><c:out value="${0}" /></td>
 															<td><c:out value="${0}" /></td>
-															 
+															<td><c:out value="${getVarianceorderlistforsort.curOpeQty}" /></td> 
 															<td><c:out value="${getVarianceorderlistforsort.orderQty}" /></td>
 															<td><c:out value="${0}" /></td>
 															<td><c:out value="${getVarianceorderlistforsort.remainingQty}" /></td>
@@ -227,7 +250,7 @@
 
 												</tbody>
 											</table>
-										</div>
+										 </div>
 									</div>
 								</div>
 
