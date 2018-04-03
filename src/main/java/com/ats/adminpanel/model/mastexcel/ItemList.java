@@ -6,7 +6,7 @@ import com.ats.adminpanel.model.ErrorMessage;
 
 
 public class ItemList {
-	
+	 
 	
 	List<TallyItem> itemList;
 	ErrorMessage errorMessage;

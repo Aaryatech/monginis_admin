@@ -5,7 +5,7 @@ import java.util.List;
 import com.ats.adminpanel.model.ErrorMessage;
 
 public class FranchiseeList {
-
+ 
 	List<Franchisee> franchiseeList;
 	
 	ErrorMessage errorMessage;
