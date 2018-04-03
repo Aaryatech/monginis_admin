@@ -546,6 +546,7 @@
 																id="man_bom_button" value="Spot Mixing"> </a>
 														</c:when>
 													</c:choose>
+													 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" >
 												</div>
 
 												<!-- 
@@ -713,6 +714,13 @@ $('#complete_prod').click(function(){
    form.action ="${pageContext.request.contextPath}/completeProd";
     form.submit();
 });
+
+function exportToExcel()
+{
+	 
+	window.open("${pageContext.request.contextPath}/exportToExcel");
+			document.getElementById("expExcel").disabled=true;
+}
 </script>
 </body>
 </html>

@@ -31,6 +31,7 @@ import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.IOUtils;
 import org.springframework.context.annotation.Scope;
@@ -59,6 +60,7 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.AllRoutesListResponse;
+import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.Variance;
@@ -85,7 +87,7 @@ import com.ats.adminpanel.model.salesreport.OrderFromProdPdfView;
 import com.ats.adminpanel.model.stock.FinishedGoodStock;
 import com.ats.adminpanel.model.stock.FinishedGoodStockDetail;
 import com.ats.adminpanel.model.stock.GetCurProdAndBillQty;
-import com.ats.adminpanel.model.stock.GetCurProdAndBillQtyList;
+import com.ats.adminpanel.model.stock.GetCurProdAndBillQtyList; 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -714,6 +716,56 @@ model.addObject("todayDate",df.format(todayDate));
 					}
 				}
 			}
+			
+			try
+			{
+				 
+					List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+					
+					ExportToExcel expoExcel=new ExportToExcel();
+					List<String> rowData=new ArrayList<String>();
+					 
+					rowData.add("Sr.No."); 
+					rowData.add("Item Id");  
+					rowData.add("Item Name");
+					rowData.add("Current Stock");
+					rowData.add("Order Qty");  
+					
+					
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					for(int i=0;i<getOrderItemQtyList.size();i++)
+					{
+						  expoExcel=new ExportToExcel();
+						 rowData=new ArrayList<String>();
+						 
+					 
+						 
+						 rowData.add(""+(i+1)); 
+						rowData.add(""+getOrderItemQtyList.get(i).getItemId());  
+						rowData.add(""+getOrderItemQtyList.get(i).getItemName());
+						rowData.add(""+getOrderItemQtyList.get(i).getCurOpeQty());
+						rowData.add(""+getOrderItemQtyList.get(i).getQty());  
+						
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
+						 
+					}
+					 
+					
+					
+					HttpSession session = request.getSession();
+					session.setAttribute("exportExcelList", exportToExcelList);
+					session.setAttribute("excelName", "savariousProductionList");
+
+					 
+				 
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+				System.out.println("exception to generate excel ");
+			}
+			
 
 			// end of new Code
 
@@ -1545,6 +1597,92 @@ model.addObject("todayDate",df.format(todayDate));
 			model.addObject("itemsList", itemsList);
 			model.addObject("categoryList", categoryListComp.getmCategoryList());
 			model.addObject("postProdPlanHeaderDetailed", postProductionPlanDetaillist);
+			
+			try
+			{
+				
+				List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+				
+				ExportToExcel expoExcel=new ExportToExcel();
+				List<String> rowData=new ArrayList<String>();
+				 
+				rowData.add("Sr.No."); 
+				rowData.add("Item Name");  
+				rowData.add("current Stock ");
+				rowData.add("Plan Qty");
+				rowData.add("Production Qty"); 
+				rowData.add("Order Qty"); 
+				rowData.add("Rejected Qty"); 
+				rowData.add("Remaining Production"); 
+			 
+					
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				int srNo=1;
+				for(int i=0;i<postProductionPlanDetaillist.size();i++)
+				{
+					  expoExcel=new ExportToExcel();
+					 rowData=new ArrayList<String>();
+					 
+				 
+					 
+					 rowData.add(""+srNo); 
+					 for(int j=0;j<itemsList.size();j++)
+					 {
+						 if(itemsList.get(j).getId()==postProductionPlanDetaillist.get(i).getItemId())
+						 {
+							 rowData.add(""+itemsList.get(j).getItemName());
+							 break;
+						 }
+						 
+					 }  
+					rowData.add(""+postProductionPlanDetaillist.get(i).getCurOpeQty());
+					rowData.add(""+postProductionPlanDetaillist.get(i).getPlanQty());
+					rowData.add(""+postProductionPlanDetaillist.get(i).getProductionQty()); 
+					rowData.add(""+postProductionPlanDetaillist.get(i).getOrderQty()); 
+					rowData.add(""+postProductionPlanDetaillist.get(i).getRejectedQty());
+					rowData.add(""+postProductionPlanDetaillist.get(i).getInt4()); 
+					srNo=srNo+1;
+					
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					 
+				}
+				
+				for(int i=0;i<getVarianceorderlistforsort.size();i++)
+				{
+					  expoExcel=new ExportToExcel();
+					 rowData=new ArrayList<String>();
+					 
+				 
+					 
+					 rowData.add(""+srNo); 
+					 
+					rowData.add(""+getVarianceorderlistforsort.get(i).getItemName());
+					rowData.add(""+getVarianceorderlistforsort.get(i).getCurOpeQty());
+					rowData.add(""+0); 
+					rowData.add(""+0); 
+					rowData.add(""+getVarianceorderlistforsort.get(i).getOrderQty()); 
+					rowData.add(""+0); 
+					rowData.add(""+getVarianceorderlistforsort.get(i).getRemainingQty()); 
+					srNo=srNo+1;
+					
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					 
+				}
+				 
+				
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "varianceList");
+				
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+				System.out.println("Exception in generate excel ");
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

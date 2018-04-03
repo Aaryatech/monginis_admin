@@ -261,6 +261,7 @@
 										class="col-md-12">
 								<input type="submit" class="btn btn-primary"
 								  value="Submit" disabled id="callSubmit">
+								   <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
 						 </div>
 </div>
 
@@ -488,7 +489,7 @@ $(document).ready(function() {
 
 												})
 													 */
-												
+													 document.getElementById("expExcel").disabled=false;		
 												var tr = $('<tr></tr>');
 
 							  	tr.append($('<td></td>').html(key+1));			  	
@@ -611,6 +612,13 @@ $(document).ready(function() {
             var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1);
             
             return ret;
+        }
+        
+        function exportToExcel()
+        {
+        	 
+        	window.open("${pageContext.request.contextPath}/exportToExcel");
+        			document.getElementById("expExcel").disabled=true;
         }
 	</script>
 

@@ -20,6 +20,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.poi.util.SystemOutLogger;
 import org.springframework.context.annotation.Scope;
@@ -39,6 +40,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllFrIdNameList;
+import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.RawMaterial.ItemDetailList;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
@@ -62,7 +64,7 @@ import com.ats.adminpanel.model.productionplan.MixingHeader;
 import com.ats.adminpanel.model.stock.FinishedGoodStock;
 import com.ats.adminpanel.model.stock.FinishedGoodStockDetail;
 import com.ats.adminpanel.model.stock.GetCurProdAndBillQty;
-import com.ats.adminpanel.model.stock.GetCurProdAndBillQtyList;
+import com.ats.adminpanel.model.stock.GetCurProdAndBillQtyList; 
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -488,6 +490,59 @@ public class ViewProdController {
 				model.addObject("planDetail", prodPlanDetailList);
 
 				model.addObject("planHeader", planHeader);
+				
+				try
+				{
+					List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+					
+					ExportToExcel expoExcel=new ExportToExcel();
+					List<String> rowData=new ArrayList<String>();
+					 
+					rowData.add("Sr.No.");
+					rowData.add("Item Name"); 
+					rowData.add("Current Stock ");  
+					rowData.add("Opening Qty ");
+					rowData.add("Plan Qty ");
+					rowData.add("Order Qty"); 
+					rowData.add("Actual Production "); 
+					rowData.add("Rejected Qty"); 
+					rowData.add("Total Qty "); 
+				 
+						
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					for(int i=0;i<prodPlanDetailList.size();i++)
+					{
+						  expoExcel=new ExportToExcel();
+						 rowData=new ArrayList<String>();
+						 
+					 
+						 
+						 rowData.add(""+(i+1)); 
+						 rowData.add(""+prodPlanDetailList.get(i).getItemName());
+						rowData.add(""+prodPlanDetailList.get(i).getCurOpeQty());  
+						rowData.add(""+prodPlanDetailList.get(i).getOpeningQty());
+						rowData.add(""+prodPlanDetailList.get(i).getPlanQty());
+						rowData.add(""+prodPlanDetailList.get(i).getOrderQty()); 
+						rowData.add(""+prodPlanDetailList.get(i).getProductionQty()); 
+						rowData.add(""+prodPlanDetailList.get(i).getRejectedQty());
+						rowData.add(""+prodPlanDetailList.get(i).getOpeningQty()+prodPlanDetailList.get(i).getPlanQty()); 
+						
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
+						 
+					}
+					 
+					
+					
+					HttpSession session = request.getSession();
+					session.setAttribute("exportExcelList", exportToExcelList);
+					session.setAttribute("excelName", "productionList");
+				}catch(Exception e)
+				{
+					e.printStackTrace();
+					System.out.println("Exception to generate Excel ");
+				}
 			} // End of ELse
 		} catch (Exception e) {
 

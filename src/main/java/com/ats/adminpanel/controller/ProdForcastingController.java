@@ -463,33 +463,63 @@ map.add("timestamp", stockHeader.getTimestamp());
 		int catId = Integer.parseInt(request.getParameter("catId"));
 		System.out.println("catId" + catId);
 
+		int id = Integer.parseInt(request.getParameter("id"));
 		RestTemplate rest = new RestTemplate();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 		map.add("productionDate", productionDate);
 		map.add("catId", selectedCat);
-		try {
-			
-			GetProductionItemQty[] responseEntity = rest.postForObject(Constants.url + "getProduItemQty",map,GetProductionItemQty[].class);
+		if(id==2)
+		{
+			try {
+				
+				GetProductionItemQty[] responseEntity = rest.postForObject(Constants.url + "getOrderuItemQty",map,GetProductionItemQty[].class);
 
-			
-			//PostProdPlanHeader postProductionHeader= rest.postForObject(Constants.url + "getProductionTimeSlot", map,PostProdPlanHeader.class);
+				
+				//PostProdPlanHeader postProductionHeader= rest.postForObject(Constants.url + "getProductionTimeSlot", map,PostProdPlanHeader.class);
 
-			//maxTimeSlot=postProductionHeader.getTimeSlot();
-			ArrayList<GetProductionItemQty> getProdItemQtyList = new ArrayList<GetProductionItemQty>(Arrays.asList(responseEntity));
-			System.out.println("Filter Item List " + getProdItemQtyList.toString());
-			
-			
-			planQtyAjaxResponse.setGetProductionItemQtyList(getProdItemQtyList);
-			planQtyAjaxResponse.setItemList(globalItemList);
-			System.out.println("planQtyAjaxResponse"+planQtyAjaxResponse.toString());
-			// getOrderItemQtyList=rest.postForObject(Constants.url + "getOrderAllItemQty",
-			// map, List.class);
+				//maxTimeSlot=postProductionHeader.getTimeSlot();
+				ArrayList<GetProductionItemQty> getProdItemQtyList = new ArrayList<GetProductionItemQty>(Arrays.asList(responseEntity));
+				System.out.println("Filter Item List " + getProdItemQtyList.toString());
+				
+				
+				planQtyAjaxResponse.setGetProductionItemQtyList(getProdItemQtyList);
+				planQtyAjaxResponse.setItemList(globalItemList);
+				System.out.println("planQtyAjaxResponse"+planQtyAjaxResponse.toString());
+				// getOrderItemQtyList=rest.postForObject(Constants.url + "getOrderAllItemQty",
+				// map, List.class);
 
-		} catch (Exception e) {
-			e.printStackTrace();
-			
+			} catch (Exception e) {
+				e.printStackTrace();
+				
+			}
 		}
+		else
+		{
+			try {
+				
+				GetProductionItemQty[] responseEntity = rest.postForObject(Constants.url + "getProduItemQty",map,GetProductionItemQty[].class);
+
+				
+				//PostProdPlanHeader postProductionHeader= rest.postForObject(Constants.url + "getProductionTimeSlot", map,PostProdPlanHeader.class);
+
+				//maxTimeSlot=postProductionHeader.getTimeSlot();
+				ArrayList<GetProductionItemQty> getProdItemQtyList = new ArrayList<GetProductionItemQty>(Arrays.asList(responseEntity));
+				System.out.println("Filter Item List " + getProdItemQtyList.toString());
+				
+				
+				planQtyAjaxResponse.setGetProductionItemQtyList(getProdItemQtyList);
+				planQtyAjaxResponse.setItemList(globalItemList);
+				System.out.println("planQtyAjaxResponse"+planQtyAjaxResponse.toString());
+				// getOrderItemQtyList=rest.postForObject(Constants.url + "getOrderAllItemQty",
+				// map, List.class);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				
+			}
+		}
+		
 
 		System.out.println("List of Orders : " + getProdItemQtyList.toString());
 

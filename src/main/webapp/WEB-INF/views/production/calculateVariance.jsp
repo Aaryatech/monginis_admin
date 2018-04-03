@@ -244,6 +244,7 @@
 													<input type="button" class="btn btn-primary" value="P 2 Production"></a>
 													<a href="${pageContext.request.contextPath}/showVariencePdf"
 													target="_blank"><input type="button" class="btn btn-primary" value="PDF"></a> 
+													 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" >
 									</div>
 									</div>
 													
@@ -338,6 +339,14 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
  
-		 
+		 <script type="text/javascript">
+ 
+function exportToExcel()
+{
+	 
+	window.open("${pageContext.request.contextPath}/exportToExcel");
+			document.getElementById("expExcel").disabled=true;
+}
+</script>
 </body>
 </html>
