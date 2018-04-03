@@ -19,6 +19,8 @@ public class FrBillPrint {
 	
 	String amtInWords;
 	
+	float grandTotal;
+	
 	public List<MCategoryList> catList;
 	
 	public String getInvoiceNo() {
@@ -82,12 +84,21 @@ public class FrBillPrint {
 	public void setAmtInWords(String amtInWords) {
 		this.amtInWords = amtInWords;
 	}
+	public float getGrandTotal() {
+		return grandTotal;
+	}
+	public void setGrandTotal(float grandTotal) {
+		this.grandTotal = grandTotal;
+	}
 	@Override
 	public String toString() {
 		return "FrBillPrint [billDetailsList=" + billDetailsList + ", frId=" + frId + ", billNo=" + billNo + ", frName="
 				+ frName + ", frAddress=" + frAddress + ", invoiceNo=" + invoiceNo + ", isSameState=" + isSameState
-				+ ", billDate=" + billDate + ", amtInWords=" + amtInWords + ", catList=" + catList + "]";
+				+ ", billDate=" + billDate + ", amtInWords=" + amtInWords + ", grandTotal=" + grandTotal + ", catList="
+				+ catList + "]";
 	}
+	
+	
 	
 
 }

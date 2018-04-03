@@ -3542,8 +3542,8 @@ public class SalesReportController {
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 
-		File f = new File("/home/ats-11/pdf/report.pdf");
-		// File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
+		//	File f = new File("/home/ats-12/pdf/report.pdf");
+		 File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
 
 		try {
 			runConverter(Constants.ReportURL + url, f, request, response);
@@ -3557,9 +3557,9 @@ public class SalesReportController {
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		String filePath = "/home/ats-11/pdf/report.pdf";
+		//  String filePath = "/home/ats-12/pdf/report.pdf";
 
-		// String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
+	 String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;
@@ -3620,7 +3620,7 @@ public class SalesReportController {
 
 				Dimension landscapeA4 = pd4ml.changePageOrientation(PD4Constants.A4);
 				pd4ml.setPageSize(landscapeA4);
-
+				
 				PD4PageMark footer = new PD4PageMark();
 
 				footer.setPageNumberTemplate("Page $[page] of $[total]");
@@ -3645,5 +3645,117 @@ public class SalesReportController {
 			pd4ml.render(urlstring, fos);
 		}
 	}
+	@RequestMapping(value = "/pdfForDisReport", method = RequestMethod.GET)
+	public void showPDF1(HttpServletRequest request, HttpServletResponse response) {
+		System.out.println("Inside PDf For Report URL ");
+		String url = request.getParameter("url");
+		System.out.println("URL " + url);
 
+		//File f = new File("/home/ats-12/pdf/report.pdf");
+		 File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
+
+		try {
+			runConverter1(Constants.ReportURL + url, f, request, response);
+			// runConverter("www.google.com", f,request,response);
+
+		} catch (IOException e) {
+
+			System.out.println("Pdf conversion exception " + e.getMessage());
+		}
+
+		// get absolute path of the application
+		ServletContext context = request.getSession().getServletContext();
+		String appPath = context.getRealPath("");
+		//String filePath = "/home/ats-12/pdf/report.pdf";
+
+	 String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
+
+		// construct the complete absolute path of the file
+		String fullPath = appPath + filePath;
+		File downloadFile = new File(filePath);
+		FileInputStream inputStream = null;
+		try {
+			inputStream = new FileInputStream(downloadFile);
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+		try {
+			// get MIME type of the file
+			String mimeType = context.getMimeType(fullPath);
+			if (mimeType == null) {
+				// set to binary type if MIME mapping not found
+				mimeType = "application/pdf";
+			}
+			System.out.println("MIME type: " + mimeType);
+
+			String headerKey = "Content-Disposition";
+
+			// response.addHeader("Content-Disposition", "attachment;filename=report.pdf");
+			response.setContentType("application/pdf");
+
+			OutputStream outStream;
+
+			outStream = response.getOutputStream();
+
+			byte[] buffer = new byte[BUFFER_SIZE];
+			int bytesRead = -1;
+
+			while ((bytesRead = inputStream.read(buffer)) != -1) {
+				outStream.write(buffer, 0, bytesRead);
+			}
+
+			inputStream.close();
+			outStream.close();
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	private void runConverter1(String urlstring, File output, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
+
+		if (urlstring.length() > 0) {
+			if (!urlstring.startsWith("http://") && !urlstring.startsWith("file:")) {
+				urlstring = "http://" + urlstring;
+			}
+			System.out.println("PDF URL " + urlstring);
+			java.io.FileOutputStream fos = new java.io.FileOutputStream(output);
+
+			PD4ML pd4ml = new PD4ML();
+
+			try {
+
+				  try {                                                              
+                      pd4ml.setPageSize( landscapeValue ? pd4ml.changePageOrientation( format ): format );
+                   } catch (Exception e) {
+                      e.printStackTrace();
+                   }
+                     
+				PD4PageMark footer = new PD4PageMark();
+
+				footer.setPageNumberTemplate("Page $[page] of $[total]");
+				footer.setPageNumberAlignment(PD4PageMark.RIGHT_ALIGN);
+				footer.setFontSize(10);
+				footer.setAreaHeight(20);
+
+				pd4ml.setPageFooter(footer);
+
+			} catch (Exception e) {
+				System.out.println("Pdf conversion method excep " + e.getMessage());
+			}
+
+			if (unitsValue.equals("mm")) {
+				pd4ml.setPageInsetsMM(new Insets(topValue, leftValue, bottomValue, rightValue));
+			} else {
+				pd4ml.setPageInsets(new Insets(topValue, leftValue, bottomValue, rightValue));
+			}
+
+			pd4ml.setHtmlWidth(userSpaceWidth);
+
+			pd4ml.render(urlstring, fos);
+		}
+	}
+	
 }

@@ -31,7 +31,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Bill Details PDF
+						<i class="fa fa-file-o"></i> Bill Details PDF Test
 					</h1>
 
 				</div>

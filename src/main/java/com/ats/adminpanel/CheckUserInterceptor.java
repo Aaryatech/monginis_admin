@@ -21,8 +21,7 @@ public class CheckUserInterceptor extends HandlerInterceptorAdapter {
             Object handler) throws IOException {
 
     	System.out.println("Intercept handler..");
-    	
-    	
+    	    	
     	HttpSession session = request.getSession();
 
         String path = request.getRequestURI().substring(request.getContextPath().length());

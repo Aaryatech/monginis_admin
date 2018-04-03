@@ -55,7 +55,7 @@
 					<p
 						style="color: #000; font-size: 13px; text-align:; left; margin: 0px;">
 						GSTIN:
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>27AHIPJ7279D1Z3</b>&nbsp;&nbsp;&nbsp;&nbsp;<span>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>27AAECG5545R1ZX</b>&nbsp;&nbsp;&nbsp;&nbsp;<span>
 							State:&nbsp;27 Maharashtra </span>
 					</p> <!--         <p style="color:#000; font-size:13px; text-align:left;margin:0px;"></p>
  -->

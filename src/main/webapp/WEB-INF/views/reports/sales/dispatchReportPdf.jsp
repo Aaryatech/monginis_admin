@@ -22,7 +22,7 @@
 <style type="text/css">
  table {
 	border-collapse: collapse;
-	font-size: 10;
+	font-size: 16;
 	width:100%;
 
 } 
@@ -132,7 +132,7 @@ th {
 
 
 				</c:forEach>
-
+	       
 
 			</c:forEach>
 			<tr>

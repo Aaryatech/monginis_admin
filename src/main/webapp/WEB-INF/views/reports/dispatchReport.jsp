@@ -323,7 +323,7 @@
 													//	var srNo = 0;
 														 $.each(data.dispatchReportList,
 																		function(key,report) {
-
+                                                                
 													         document.getElementById('itemQty'+report.frId+''+report.itemId).value = report.billQty;
 
 															       
@@ -639,7 +639,7 @@
 				var routeId = $("#selectRoute").val();
 				var selectedCat = $("#selectCat").val();
 				
-				window.open('pdfForReport?url=pdf/getDispatchReportPdf/'
+				window.open('pdfForDisReport?url=pdf/getDispatchReportPdf/'
 						+ billDate + '/'+routeId+'/'+selectedCat);
 
 			}
