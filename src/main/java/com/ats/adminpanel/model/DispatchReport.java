@@ -11,6 +11,8 @@ public class DispatchReport {
 	
 	private int catId;
 	
+	private int subCatId;
+	
 	private String catName;
 	
 	private int frId;
@@ -26,6 +28,14 @@ public class DispatchReport {
 	private int billQty;
 
 	
+	public int getSubCatId() {
+		return subCatId;
+	}
+
+	public void setSubCatId(int subCatId) {
+		this.subCatId = subCatId;
+	}
+
 	public String getItemName() {
 		return itemName;
 	}
@@ -108,9 +118,11 @@ public class DispatchReport {
 
 	@Override
 	public String toString() {
-		return "DispatchReport [billDetailNo=" + billDetailNo + ", billNo=" + billNo + ", catId=" + catId + ", catName="
-				+ catName + ", frId=" + frId + ", frName=" + frName + ", itemId=" + itemId + ", orderQty=" + orderQty
-				+ ", billQty=" + billQty + "]";
+		return "DispatchReport [billDetailNo=" + billDetailNo + ", billNo=" + billNo + ", catId=" + catId
+				+ ", subCatId=" + subCatId + ", catName=" + catName + ", frId=" + frId + ", frName=" + frName
+				+ ", itemId=" + itemId + ", itemName=" + itemName + ", orderQty=" + orderQty + ", billQty=" + billQty
+				+ "]";
 	}
-	
+
+    
 }

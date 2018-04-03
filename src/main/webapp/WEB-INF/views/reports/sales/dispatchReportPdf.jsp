@@ -87,7 +87,7 @@ th {
 				<c:set var="srNo" value="1"></c:set>
 				<c:forEach items="${itemList}" var="item" varStatus="count">
 				<c:set var="total" value="0" />
-<c:set var="frTotal" value="0" />
+                <c:set var="frTotal" value="0" />
 					<c:choose>
 						<c:when test="${item.itemGrp2==subCat.subCatId}">
 
@@ -104,7 +104,7 @@ th {
 								<c:choose>
 								<c:when test="${report.frId==fr.frId}">
 							
-									<c:set var="billQty" value="${report.billQty}"></c:set>
+								<c:set var="billQty" value="${report.billQty}"></c:set>
 								<c:set var="total" value="${report.billQty+total}"></c:set>
 								</c:when>
 								</c:choose>
@@ -117,13 +117,6 @@ th {
 									
 								</c:forEach>
 								
-								
-								<%-- <td width="100" align="right"><fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2"
-										value="${royalty.tBillQty}" /></td>
-								
-										
-										<c:set var="sumSaleQty" value="${royalty.tBillQty+sumSaleQty}"></c:set>
-							 --%>
 							 	<td width="40px" align="right">${total}</td>		
 							 	<c:set var="allTotal" value="${total+allTotal}"></c:set>
 							</tr>
@@ -135,13 +128,52 @@ th {
 	       
 
 			</c:forEach>
+		
+			<c:forEach items="${subCatList}" var="subCat" varStatus="count">
+				<tr>
+                    <td bgcolor="#fc67ca"><c:out value="" /></td>
+					<td bgcolor="#fc67ca"><b>${subCat.subCatName}</b></td>
+					  <c:set var="totalItems" value="0" />
+				<c:forEach items="${frList}" var="fr" varStatus="count">
+				  <c:set var="itemTotal" value="0" />
+				<c:forEach items="${dispatchReportList}" var="report" varStatus="count">
+					<c:choose>
+								<c:when test="${report.subCatId==subCat.subCatId}">
+				<c:choose>
+								<c:when test="${report.frId==fr.frId}">
+										<c:set var="itemTotal" value="${report.billQty+itemTotal}" />
+								</c:when>
+				</c:choose>
+			     </c:when>
+			     </c:choose>
+			    </c:forEach>
+			    	  <c:set var="totalItems" value="${itemTotal+totalItems}" />
+			            <td align="right" bgcolor="#fc67ca"><fmt:formatNumber type="number"
+							maxFractionDigits="2" value="${itemTotal}" /></td>
+			     </c:forEach>
+				<td  align="right" bgcolor="#fc67ca"><b><fmt:formatNumber type="number"
+							maxFractionDigits="2" value="${totalItems}" /></b></td>
+			</tr>
+			</c:forEach>
+			
 			<tr>
 
 				<td colspan='2'><b>Total</b></td>
-				<%-- <td width="100" align="right"><b><fmt:formatNumber type="number"
-							maxFractionDigits="2" minFractionDigits="2" value="${sumSaleQty}" /></b></td> --%>
+			
+				
 				<c:forEach items="${frList}" var="fr" varStatus="count">
-			        <td><c:out value="" /></td>
+				  <c:set var="itemTotal" value="0" />
+				<c:forEach items="${dispatchReportList}" var="report" varStatus="count">
+				
+				<c:choose>
+								<c:when test="${report.frId==fr.frId}">
+										<c:set var="itemTotal" value="${report.billQty+itemTotal}" />
+								</c:when>
+				</c:choose>
+			     
+			         </c:forEach>
+			            <td align="right"><b><fmt:formatNumber type="number"
+							maxFractionDigits="2" value="${itemTotal}" /></b></td>
 			         </c:forEach>
 				<td  align="right"><b><fmt:formatNumber type="number"
 							maxFractionDigits="2" value="${allTotal}" /></b></td>

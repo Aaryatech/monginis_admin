@@ -2830,14 +2830,18 @@ public class SalesReportController {
 				StringBuilder cateList = new StringBuilder();
 
 				for (MCategoryList mCategoryList : categoryList) {
-					// cateList.add(mCategoryList.getCatId());
+					 //cateList.add(mCategoryList.getCatId());
 					cateList = cateList.append(mCategoryList.getCatId().toString() + ",");
 				}
-				System.out.println("cateList" + cateList.toString());
+				
+				String catlist = cateList.toString();
+				selectedCat = catlist.substring(0, catlist.length() - 1);
+				System.out.println("cateList" + selectedCat.toString());
 				System.out.println("selectedFr" + selectedFr.toString());
 				System.out.println("billDate" + billDate.toString());
+				
 
-				map.add("categories", cateList);
+				map.add("categories", selectedCat);
 				map.add("billDate", billDate);
 				map.add("frId", selectedFr);
 
@@ -2851,7 +2855,7 @@ public class SalesReportController {
 				System.out.println("dispatchReportList = " + dispatchReportList.toString());
 
 				map = new LinkedMultiValueMap<String, Object>();
-				map.add("catIdList", "1,2,3,4,5,6");
+				map.add("catIdList", selectedCat);
 				ParameterizedTypeReference<List<Item>> typeRef1 = new ParameterizedTypeReference<List<Item>>() {
 				};
 
@@ -2862,7 +2866,7 @@ public class SalesReportController {
 						SubCategory[].class);
 
 				ArrayList<SubCategory> subCatAList = new ArrayList<SubCategory>(Arrays.asList(subCatList));
-
+				System.out.println("subCatAList:" + subCatAList.toString());
 				dispatchReports.setDispatchReportList(dispatchReportList);
 				dispatchReports.setFrList(frNameIdByRouteIdList);
 				dispatchReports.setItemList(responseEntity1.getBody());
@@ -3004,11 +3008,17 @@ public class SalesReportController {
 				CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
 						CategoryListResponse.class);
 				List<MCategoryList> categoryList = categoryListResponse.getmCategoryList();
-				List<String> cateList = new ArrayList<>();
+				
+				StringBuilder cateList = new StringBuilder();
+				//List<String> cateList = new ArrayList<>();
 				for (MCategoryList mCategoryList : categoryList) {
-					cateList.add("" + mCategoryList.getCatId());
+					cateList = cateList.append(mCategoryList.getCatId().toString() + ",");
+					//cateList.add("" + mCategoryList.getCatId());
 				}
-				map.add("categories", "1,2,3,4,5,6");
+				System.err.println(cateList);
+				String catlist = cateList.toString();
+				selectedCat = catlist.substring(0, catlist.length() - 1);
+				map.add("categories",selectedCat);
 				map.add("billDate", billDate);
 				map.add("frId", selectedFr);
 
@@ -3022,7 +3032,7 @@ public class SalesReportController {
 				System.out.println("dispatchReportList = " + dispatchReportList.toString());
 
 				map = new LinkedMultiValueMap<String, Object>();
-				map.add("catIdList", "1,2,3,4,5,6");
+				map.add("catIdList", selectedCat);
 				ParameterizedTypeReference<List<Item>> typeRef1 = new ParameterizedTypeReference<List<Item>>() {
 				};
 
@@ -3652,7 +3662,7 @@ public class SalesReportController {
 		System.out.println("URL " + url);
 
 		//File f = new File("/home/ats-12/pdf/report.pdf");
-		 File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
+		File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
 
 		try {
 			runConverter1(Constants.ReportURL + url, f, request, response);
