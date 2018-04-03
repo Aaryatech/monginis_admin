@@ -46,6 +46,8 @@ import com.ats.adminpanel.model.RawMaterial.ItemDetailList;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.itextpdf.FooterTable;
 import com.ats.adminpanel.model.production.GetOrderItemQty;
+import com.ats.adminpanel.model.production.GetProdDetailBySubCat;
+import com.ats.adminpanel.model.production.GetProdDetailBySubCatList;
 import com.ats.adminpanel.model.production.GetProdPlanDetail;
 import com.ats.adminpanel.model.production.GetProdPlanDetailList;
 import com.ats.adminpanel.model.production.GetProdPlanHeader;
@@ -665,6 +667,59 @@ public class ViewProdController {
 				// writer.setPageEvent(footerEvent);
 			}
 
+			PdfPTable subCatTable = new PdfPTable(3);
+
+			System.out.println("Inside PDF Table try");
+						subCatTable.setWidthPercentage(100);
+						subCatTable.setWidths(new float[] { 0.4f, 1.7f, 1.7f});
+						
+						 hcell=new PdfPCell();
+						hcell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+						hcell.setPadding(2);
+						hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
+						hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						subCatTable.addCell(hcell);
+
+						hcell = new PdfPCell(new Phrase("Sub Category Name", headFont1));
+						hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						subCatTable.addCell(hcell);
+
+
+						hcell = new PdfPCell(new Phrase("Total Quantity", headFont1));
+						hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						subCatTable.addCell(hcell);
+						RestTemplate restTemplate = new RestTemplate();
+						MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+						map.add("prodHeaderId", globalHeaderId);
+						GetProdDetailBySubCatList subList=restTemplate.postForObject(Constants.url+ "getProdDetailBySubCat",map, GetProdDetailBySubCatList.class);
+						index=0;
+						for (GetProdDetailBySubCat getMoneyOut : subList.getProdDetailBySubCat()) {
+							index++;
+							PdfPCell cell;
+
+							cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							  cell.setPadding(2);
+							subCatTable.addCell(cell);
+
+							cell = new PdfPCell(new Phrase(getMoneyOut.getSubCateName(), headFont));
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+							cell.setPaddingRight(2);
+							  cell.setPadding(2);
+							subCatTable.addCell(cell);
+
+
+							cell = new PdfPCell(new Phrase(String.valueOf(getMoneyOut.getTotalQty()), headFont));
+								cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+								cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+								cell.setPaddingRight(2);
+								  cell.setPadding(2);
+								subCatTable.addCell(cell);
+
+			}
+
 			document.open();
 			Paragraph company = new Paragraph(
 					"Galdhar Foods Pvt.Ltd\n",
@@ -689,6 +744,8 @@ public class ViewProdController {
 			document.add(new Paragraph("Production Date: " + reportDate));
 			document.add(new Paragraph("\n"));
 			document.add(table);
+			document.add(new Paragraph("\n"));
+			document.add(subCatTable);
 			int totalPages = writer.getPageNumber();
 
 			System.out.println("Page no " + totalPages);

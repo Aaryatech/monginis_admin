@@ -238,7 +238,7 @@ public class BillController {
 
 					// String invNo = getInvoiceNo();
 
-					if (frIdInvoiceMap.containsKey(frId)) {
+					/*if (frIdInvoiceMap.containsKey(frId)) {
 
 						System.out.println("prev id found " + frId);
 
@@ -275,7 +275,7 @@ public class BillController {
 						Info updateSetting = restTemplate.postForObject(Constants.url + "updateSeetingForPB", map,
 								Info.class);
 					}
-
+*/
 					GenerateBill gBill = tempGenerateBillList.get(j);
 
 					System.out.println("Inner For frId " + gBill.getFrId());
@@ -427,8 +427,13 @@ public class BillController {
 				// header.setCgstSum(sumT2);
 				// header.setIgstSum(sumT3);
 				header.setTaxableAmt(sumTaxableAmt);
-				header.setGrandTotal(sumGrandTotal);
+				header.setGrandTotal(Math.round(sumGrandTotal));
+				
+				System.err.println("sumof grand total beofre "+sumGrandTotal);
+				
+				System.err.println("Math round up Sum " +header.getGrandTotal());
 				header.setTotalTax(sumTotalTax);
+				
 				header.setStatus(1);
 				header.setPostBillDetailsList(postBillDetailsList);
 
@@ -457,7 +462,7 @@ public class BillController {
 
 			System.out.println("Test data : " + postBillDataCommon.toString());
 
-			Info info = restTemplate.postForObject(Constants.url + "insertBillData", postBillDataCommon, Info.class);
+		Info info = restTemplate.postForObject(Constants.url + "insertBillData", postBillDataCommon, Info.class);
 
 			System.out.println("Info Data " + info.toString());
 
@@ -1936,8 +1941,8 @@ public class BillController {
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
-		 File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
-		//File f = new File("/home/ats-11/pdf/ordermemo221.pdf");
+		 //File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
+		File f = new File("/home/ats-11/pdf/ordermemo221.pdf");
 		//File f = new File("/Users/MIRACLEINFOTAINMENT/ATS/uplaods/reports/ordermemo221.pdf");
 
 		System.out.println("I am here " + f.toString());
@@ -1955,8 +1960,8 @@ public class BillController {
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo221.pdf";
-		 String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
-		//String filePath = "/home/ats-11/pdf/ordermemo221.pdf";
+		// String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
+		String filePath = "/home/ats-11/pdf/ordermemo221.pdf";
 		//String filePath = "/Users/MIRACLEINFOTAINMENT/ATS/uplaods/reports/ordermemo221.pdf";
 
 		// construct the complete absolute path of the file

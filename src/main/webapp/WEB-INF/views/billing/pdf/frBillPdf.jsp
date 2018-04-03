@@ -427,8 +427,22 @@
 							<tr>
 								<td
 									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${count.index+1}</td>
-								<td
+									
+									<c:choose>
+									<c:when test="${billDetails.grnType==3}">
+									<td
+									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${billDetails.itemName} [No Grn]</td>
+									
+									</c:when>
+									<c:otherwise>
+									
+									<td
 									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${billDetails.itemName}</td>
+									
+									</c:otherwise>
+									
+									</c:choose>
+								
 								<td align="left"
 									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${billDetails.itemHsncd}</td>
 								<td align="right"
