@@ -893,8 +893,8 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 				FinishedGoodStockDetail prevDetail = updateStockDetailList.get(i);
 
 				finStkDetail.setOpT1(prevDetail.getCloCurrent());
-				finStkDetail.setOpT2(prevDetail.getOpT1());
-				finStkDetail.setOpT3(prevDetail.getOpT2());
+				finStkDetail.setOpT2(prevDetail.getCloT1());
+				finStkDetail.setOpT3(prevDetail.getCloT2());
 				finStkDetail.setOpTotal(finStkDetail.getOpT1() + finStkDetail.getOpT2() + finStkDetail.getOpT3());
 				finStkDetail.setItemId(prevDetail.getItemId());
 				finStkDetail.setItemName(prevDetail.getItemName());
