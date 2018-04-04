@@ -36,6 +36,11 @@ public class GetBillDetailPrint {
 		
 	    private String itemHsncd;
 		private String itemUom;
+		
+		
+		private int  subCatId;
+		
+		
 		public Integer getBillDetailNo() {
 			return billDetailNo;
 		}
@@ -222,6 +227,12 @@ public class GetBillDetailPrint {
 		public void setItemUom(String itemUom) {
 			this.itemUom = itemUom;
 		}
+		public int getSubCatId() {
+			return subCatId;
+		}
+		public void setSubCatId(int subCatId) {
+			this.subCatId = subCatId;
+		}
 		@Override
 		public String toString() {
 			return "GetBillDetailPrint [billDetailNo=" + billDetailNo + ", billNo=" + billNo + ", menuId=" + menuId
@@ -232,8 +243,11 @@ public class GetBillDetailPrint {
 					+ taxableAmt + ", remark=" + remark + ", delStatus=" + delStatus + ", itemName=" + itemName
 					+ ", catName=" + catName + ", billDate=" + billDate + ", baseRate=" + baseRate + ", totalTax="
 					+ totalTax + ", grnType=" + grnType + ", expiryDate=" + expiryDate + ", isGrngvnApplied="
-					+ isGrngvnApplied + ", itemHsncd=" + itemHsncd + ", itemUom=" + itemUom + "]";
+					+ isGrngvnApplied + ", itemHsncd=" + itemHsncd + ", itemUom=" + itemUom + ", subCatId=" + subCatId
+					+ "]";
 		}
+		
+		
 		
 		
 }

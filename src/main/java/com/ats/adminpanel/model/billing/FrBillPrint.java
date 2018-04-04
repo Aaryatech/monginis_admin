@@ -3,6 +3,7 @@ package com.ats.adminpanel.model.billing;
 import java.util.List;
 
 import com.ats.adminpanel.model.MCategory;
+import com.ats.adminpanel.model.franchisee.SubCategory;
 import com.ats.adminpanel.model.item.MCategoryList;
 
 public class FrBillPrint {
@@ -21,7 +22,8 @@ public class FrBillPrint {
 	
 	float grandTotal;
 	
-	public List<MCategoryList> catList;
+	public List<SubCategory> subCatList;
+	
 	
 	public String getInvoiceNo() {
 		return invoiceNo;
@@ -71,13 +73,14 @@ public class FrBillPrint {
 	public void setBillDate(String billDate) {
 		this.billDate = billDate;
 	}
-	public List<MCategoryList> getCatList() {
-		return catList;
-	}
-	public void setCatList(List<MCategoryList> catList) {
-		this.catList = catList;
-	}
 	
+	
+	public List<SubCategory> getSubCatList() {
+		return subCatList;
+	}
+	public void setSubCatList(List<SubCategory> subCatList) {
+		this.subCatList = subCatList;
+	}
 	public String getAmtInWords() {
 		return amtInWords;
 	}
@@ -94,10 +97,9 @@ public class FrBillPrint {
 	public String toString() {
 		return "FrBillPrint [billDetailsList=" + billDetailsList + ", frId=" + frId + ", billNo=" + billNo + ", frName="
 				+ frName + ", frAddress=" + frAddress + ", invoiceNo=" + invoiceNo + ", isSameState=" + isSameState
-				+ ", billDate=" + billDate + ", amtInWords=" + amtInWords + ", grandTotal=" + grandTotal + ", catList="
-				+ catList + "]";
+				+ ", billDate=" + billDate + ", amtInWords=" + amtInWords + ", grandTotal=" + grandTotal
+				+ ", subCatList=" + subCatList + "]";
 	}
-	
 	
 	
 

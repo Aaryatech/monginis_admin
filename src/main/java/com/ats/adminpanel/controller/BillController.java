@@ -85,6 +85,7 @@ import com.ats.adminpanel.model.franchisee.AllMenuResponse;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
 import com.ats.adminpanel.model.franchisee.Menu;
+import com.ats.adminpanel.model.franchisee.SubCategory;
 import com.ats.adminpanel.model.item.CategoryListResponse;
 import com.ats.adminpanel.model.item.FrItemStockConfiResponse;
 import com.ats.adminpanel.model.item.FrItemStockConfigure;
@@ -1365,6 +1366,15 @@ public class BillController {
 					CategoryListResponse.class);
 			List<MCategoryList> categoryList;
 			categoryList = categoryListResponse.getmCategoryList();
+			
+			
+			
+			SubCategory[] subCatList = restTemplate.getForObject(Constants.url + "getAllSubCatList",
+					SubCategory[].class);
+
+			ArrayList<SubCategory> subCatAList = new ArrayList<SubCategory>(Arrays.asList(subCatList));
+			System.out.println("subCatAList:" + subCatAList.toString());
+		
 
 			// List<MCategoryList> filteredCatList=new ArrayList<MCategoryList>();
 
@@ -1374,12 +1384,12 @@ public class BillController {
 
 			System.out.println("Size Here Now  " + billHeadersListForPrint.size());
 
-			FrBillPrint billPrint;
+			FrBillPrint billPrint = null;
 			for (int i = 0; i < billHeadersListForPrint.size(); i++) {
 				billPrint = new FrBillPrint();
 				List<GetBillDetailPrint> billDetails = new ArrayList<>();
 
-				List<MCategoryList> filteredCatList = new ArrayList<MCategoryList>();
+				List<SubCategory> filteredSubCat = new ArrayList<SubCategory>();
 				for (int j = 0; j < billDetailsListForPrint.size(); j++) {
 
 					if (billHeadersListForPrint.get(i).getBillNo().equals(billDetailsListForPrint.get(j).getBillNo())) {
@@ -1397,16 +1407,16 @@ public class BillController {
 						billPrint.setGrandTotal(billHeadersListForPrint.get(i).getGrandTotal());
 						billDetails.add(billDetailsListForPrint.get(j));
 
-						for (int a = 0; a < categoryList.size(); a++) {
+						for (int a = 0; a < subCatAList.size(); a++) {
 
 							for (int b = 0; b < billDetails.size(); b++) {
 
-								if (billDetails.get(b).getCatId().equals(categoryList.get(a).getCatId())) {
+								if (billDetails.get(b).getSubCatId()==subCatAList.get(a).getSubCatId()) {
 
-									if (filteredCatList.isEmpty())
-										filteredCatList.add(categoryList.get(a));
-									else if (!filteredCatList.contains(categoryList.get(a))) {
-										filteredCatList.add(categoryList.get(a));
+									if (filteredSubCat.isEmpty())
+										filteredSubCat.add(subCatAList.get(a));
+									else if (!filteredSubCat.contains(subCatAList.get(a))) {
+										filteredSubCat.add(subCatAList.get(a));
 									}
 								}
 
@@ -1421,12 +1431,12 @@ public class BillController {
 				}
 				billPrint.setBillDetailsList(billDetails);
 				// billPrintList=new ArrayList<>();
-				billPrint.setCatList(filteredCatList);
+				billPrint.setSubCatList(filteredSubCat);
 				if (billPrint != null)
 					billPrintList.add(billPrint);
 
 			}
-
+			System.err.println("sub Cat List  " +billPrint.getSubCatList().toString());
 			System.out.println(" after adding detail List : bill Print List " + billPrintList.toString());
 
 			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");

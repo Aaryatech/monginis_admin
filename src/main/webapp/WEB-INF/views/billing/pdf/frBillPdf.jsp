@@ -15,7 +15,7 @@
 <body>
 	<c:forEach items="${billDetails}" var="frDetails" varStatus="count">
 	
-	
+	<c:set var="srCnt" value="0" />
 		<c:set var="totalRowCount" value="0" />
 						<c:set var="maxRowCount" value="20" />
 			
@@ -159,17 +159,16 @@
 			<c:set var="totalAmt" value="0" />
 			<c:set var="totalCgst" value="0" />
 			<c:set var="totalSgst" value="0" />
-			
 		
 			
-			<c:forEach items="${frDetails.catList}" var="category">
+			<c:forEach items="${frDetails.subCatList}" var="category">
 	<c:set var="totalRowCount" value="${totalRowCount+1}" />
 
 				<tr>
 					<td
 						style="border-left: 1px solid #313131; padding: 3px 5px; color: white; font-size: 10px;">-</td>
 					<td
-						style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 10px;"><u><b>${category.catName}</b></u></td>
+						style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 10px;"><u><b>${category.subCatName}</b></u></td>
 					<td
 						style="border-left: 1px solid #313131; padding: 3px 5px; color: white; font-size: 10px;">-</td>
 					<td
@@ -193,10 +192,9 @@
 				</tr>
 				<c:forEach items="${frDetails.billDetailsList}" var="billDetails"
 					varStatus="count">
-					
 						
 					<c:choose>
-						<c:when test="${category.catId eq billDetails.catId}">
+						<c:when test="${category.subCatId eq billDetails.subCatId}">
 						
 						
 					<c:choose>
@@ -422,11 +420,11 @@
 							
 							</c:when>
 						</c:choose>
-						
+						<c:set var="srCnt" value="${srCnt+1}" />
 							<c:set var="totalRowCount" value="${totalRowCount+1}" />
 							<tr>
 								<td
-									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${count.index+1}</td>
+									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${srCnt}</td>
 									
 									<c:choose>
 									<c:when test="${billDetails.grnType==3}">
