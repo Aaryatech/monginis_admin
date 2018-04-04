@@ -1951,8 +1951,8 @@ public class BillController {
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
-		 //File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
-		File f = new File("/home/ats-11/pdf/ordermemo221.pdf");
+		 File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
+		//File f = new File("/home/ats-12/pdf/ordermemo221.pdf");
 		//File f = new File("/Users/MIRACLEINFOTAINMENT/ATS/uplaods/reports/ordermemo221.pdf");
 
 		System.out.println("I am here " + f.toString());
@@ -1970,8 +1970,8 @@ public class BillController {
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo221.pdf";
-		// String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
-		String filePath = "/home/ats-11/pdf/ordermemo221.pdf";
+		 String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
+		//String filePath = "/home/ats-12/pdf/ordermemo221.pdf";
 		//String filePath = "/Users/MIRACLEINFOTAINMENT/ATS/uplaods/reports/ordermemo221.pdf";
 
 		// construct the complete absolute path of the file
@@ -2059,32 +2059,9 @@ public class BillController {
 			} else {
 				pd4ml.setPageInsets(new Insets(topValue, leftValue, bottomValue, rightValue));
 			}
-
 			pd4ml.setHtmlWidth(userSpaceWidth);
-
-			
-			
-
 			pd4ml.render(urlstring, fos);
-//			
-//if(!isTwice) {
-//	isTwice=true;
-//			try {
-//				Long no = (Long) pd4ml.getLastRenderInfo(PD4Constants.PD4ML_TOTAL_PAGES);
-//				System.out.println("####### Total Pages " + no);
-//
-//				footer.setHtmlTemplate(
-//						"<table width=\"100%\" border=\"0\"  cellpadding=\"0\" cellspacing=\"0\" style=\"border-top:1px solid #313131;border-right:1px solid #313131;\"><tr><td colspan=\"6\" width=\"50%\" style=\"border-left:1px solid #313131; padding:8px;color:#000; font-size:12px;\"><p style=\"color:#000; font-size:12px; text-align:left;margin:0px;\">After PDF Render: We hereby certify that food mentioned in the Tax Invoice is warranted to be of the nature and quality which it purpose to be. FDA Lic. No: 11515044000208</p></td><td colspan=\"5\" width=\"38%\" rowspan=\"2\" style=\"border-left:1px solid #313131; padding:8px;color:#000;font-size:15px;\">&nbsp;</td></tr><tr><td colspan=\"6\"width=\"50%\"style=\"border-top:1px solid #313131;border-left:1px solid #313131; padding:8px;color:#000; font-size:12px;\"><p>Certified that the particulars given above are true and correct.</p>&nbsp;</td></tr><tr><td colspan=\"6\" width=\"50%\"  style=\"border-top:1px solid #313131;border-left:1px solid #313131; padding:8px;color:#000; font-size:12px;\"><p><b>Invoice Value in Rs.</b><br></br> ${frDetails.amtInWords}</p>&nbsp;</td><td colspan=\"5\" width=\"38%\" style=\"border-top:1px solid #313131;border-left:1px solid #313131; padding:8px;color:#000;font-size:15px;\"><p style=\"color:#000; font-size:11px; text-align:left;margin:0px;\">Continue...</p></td></tr><tr><td colspan=\"6\"  width=\"50%\" style=\"border-bottom:1px solid #313131;border-top:1px solid #313131;border-left:1px solid #313131; padding:10px;color:#000; font-size:11px;\"><p style=\"color:#000; font-size:11px; text-align:left;margin:0px;\">Subject to Aurangabad Jurisdiction &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Receiver's Signature</p>"
-//								+ "</td><td  align=\"center\" colspan=\"5\" width=\"38%\" style=\"border-bottom:1px solid #313131;border-top:1px solid #313131;border-left:1px solid #313131; padding:10px;color:#000;font-size:11px;\">Authorised Signature</td></tr></table>");
-//				pd4ml.setPageFooter(footer);
-//				fos = new java.io.FileOutputStream(output);
-//runConverter(urlstring, output, request, response);				
-//
-//			} catch (Exception e) {
-//				// TODO: handle exception
-//				e.printStackTrace();
-//			}
-//}
+
 
 		}
 	}

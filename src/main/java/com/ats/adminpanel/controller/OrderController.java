@@ -31,6 +31,7 @@ import com.ats.adminpanel.model.GetOrder;
 import com.ats.adminpanel.model.GetOrderListResponse;
 import com.ats.adminpanel.model.GetRegSpCakeOrders;
 import com.ats.adminpanel.model.GetSpCakeOrders;
+import com.ats.adminpanel.model.GetSpCkOrder;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.Order;
 import com.ats.adminpanel.model.RegularSpCkOrder;
@@ -895,7 +896,7 @@ public class OrderController {
 		RestTemplate restTemp = new RestTemplate();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("spOrderNo", spOrderNo);
-		List<GetSpCakeOrders> orderListResponse = restTemp.postForObject(Constants.url + "getSpCakeOrderBySpOrderNo", map, List.class);
+		GetSpCkOrder orderListResponse = restTemp.postForObject(Constants.url + "getSpCKOrderBySpOrderNo", map, GetSpCkOrder.class);
 		
 		System.out.println("SpOrder"+orderListResponse.toString());
 		model.addObject("spCakeOrder",orderListResponse );

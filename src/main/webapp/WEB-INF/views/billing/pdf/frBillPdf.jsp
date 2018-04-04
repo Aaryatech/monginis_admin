@@ -429,8 +429,12 @@
 									<c:choose>
 									<c:when test="${billDetails.grnType==3}">
 									<td
-									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${billDetails.itemName} [No Grn]</td>
+								style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${billDetails.itemName} [NR]</td>
 									
+									</c:when>
+									<c:when test="${billDetails.grnType==4}">
+									<td
+									style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${billDetails.itemName} [R]</td>
 									</c:when>
 									<c:otherwise>
 									

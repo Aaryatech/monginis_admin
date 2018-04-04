@@ -9,8 +9,8 @@
 </head>
 <body>
 
-	<c:forEach items="${spCakeOrder}" var="spCakeOrder"
-														varStatus="count">
+<%-- 	<c:forEach items="${spCakeOrder}" var="spCakeOrder"
+														varStatus="count"> --%>
 														
 <table width="100%" style="font-family:arial; font-size:12px; border:1px solid #000000; margin-bottom:40px;">
   <tr >
@@ -19,20 +19,22 @@
   <tr >
   
     <td width="15%"  style="border-bottom:1px solid #000000; padding:8px 20px; ">${from}</td>
-    <td width="45%"  style="font-family:arial; font-size:16px; border-left: 1px solid  #000000;border-bottom:1px solid #000000; padding:8px 20px;font-weight:bold;" align="center";>${spCakeOrder.frName}</td>
+    <td width="45%"  style="font-family:arial; font-size:16px; border-left: 1px solid  #000000;border-bottom:1px solid #000000; padding:8px 20px;font-weight:bold;" align="center">${spCakeOrder.frName}</td>
     <td width="40%"  style="border-bottom:1px solid #000000; padding:8px; border-left: 1px solid  #000000;">${spCakeOrder.orderDate}</td>
   </tr>
   <tr>
-    <td width="15%" style="font-size:12px; border-bottom:1px solid #000000; padding:1px 7px;">Sp,Cake Code / Name</td>
-    <td colspan="2" width="50%" style="font-family:arial; font-size:18px;border-left: 1px solid  #000000; border-bottom:1px solid #000000;padding:1px 7px; font-weight:bold;">${spCakeOrder.spName} </td>
+    <td width="15%" style="font-size:12px; border-bottom:1px solid #000000; padding:1px 7px;font-weight:bold;">Sp,Cake Code / Name</td>
+    <td style="font-family:arial; font-size:18px;border-left: 1px solid  #000000; border-bottom:1px solid #000000;padding:1px 7px; font-weight:bold;">${spCakeOrder.spName}--${spCakeOrder.itemId} </td>
+      <td style="font-size:14px; border-bottom:1px solid #000000; padding:5px 7px;border-left: 1px solid  #000000; font-weight:bold;">Message-- ${spCakeOrder.spEvents} ${spCakeOrder.spEventsName}</td>
+  
   </tr>
   <tr>
-    <td style="border-bottom:1px solid #000000; padding:5px 7px;">Weight</td>
+    <td style="border-bottom:1px solid #000000; padding:5px 7px;font-weight:bold;">Weight</td>
     <td style="font-size:14px; border-bottom:1px solid #000000;border-left: 1px solid  #000000; padding:5px 7px;font-weight:bold;">${spCakeOrder.spSelectedWeight} kg</td>
-    <td style="font-size:14px; border-bottom:1px solid #000000; padding:5px 7px;border-left: 1px solid  #000000; font-weight:bold;">${spCakeOrder.spfName}</td>
+    <td style="font-size:14px; border-bottom:1px solid #000000; padding:5px 7px;border-left: 1px solid  #000000; font-weight:bold;">Flavour-- ${spCakeOrder.spfName}</td>
   </tr>
   <tr>
-    <td style="font-size:12px; border-bottom:1px solid #000000; padding:10px 7px;">Special Instructions</td>
+    <td style="font-size:12px; border-bottom:1px solid #000000; padding:10px 7px;font-weight:bold;">Special Instructions</td>
     <td colspan="2" style="font-family:arial; font-size:16px; border-left: 1px solid  #000000;border-bottom:1px solid #000000; padding:5px 7px;font-weight:bold;">${spCakeOrder.spInstructions}</td>
   </tr>
  <!--  <tr>
@@ -40,9 +42,9 @@
     <td colspan="2" style=" font-size:18px; border-bottom:1px solid #000000;border-left: 1px solid  #000000; padding:5px 7px;font-weight:bold;" >Happy Birthday Anushka</td>
   </tr> -->
   <tr>
-    <td  style=" font-size:14px;padding:5px 7px;font-weight:bold;">Date of Delivery </td>
-    <td style=" font-size:18px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">${spCakeOrder.spDeliveryDate}</td>
-    <td  style=" font-size:18px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">Place of Delivery-- ${spCakeOrder.spDeliveryPlace}</td>
+    <td  style=" font-size:12px;padding:5px 7px;font-weight:bold;">Date of Delivery </td>
+    <td style=" font-size:16px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">${spCakeOrder.spDeliveryDate}</td>
+    <td  style=" font-size:16px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">Place of Delivery-- ${spCakeOrder.spDeliveryPlace}</td>
   </tr>
 </table>
 <c:set var="from" value="${from+1}"/>
@@ -51,6 +53,6 @@
 <td> </td><td> </td>&nbsp;&nbsp;&nbsp;
 <td>Photo 2 :<img src="${imgUrl}${spCakeOrder.cusChoicePhoto}" height="8%" width="10%" alt="${imgUrl2}${spCakeOrder.orderPhoto}"></td>
 </tr>
-</c:forEach>
+<%-- </c:forEach> --%>
 </body>
 </html>
