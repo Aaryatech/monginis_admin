@@ -1652,6 +1652,8 @@ public class BillController {
 	@RequestMapping(value = "/updateBillDetailsProcess", method = RequestMethod.POST)
 	public String updateBillDetailsProcess(HttpServletRequest request, HttpServletResponse response) {
 		// ModelAndView model = new ModelAndView("billing/editBillDetails");
+		 
+		DecimalFormat df = new DecimalFormat("#.00");
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -1660,7 +1662,7 @@ public class BillController {
 
 			List<PostBillDetail> postBillDetailsList = new ArrayList<>();
 
-			float sumTaxableAmt = 0, sumTotalTax = 0, sumGrandTotal = 0;
+			float sumTaxableAmt = 0, sumTotalTax = 0, sumGrandTotal = 0, sumTotalCgst = 0,sumTotalSgst = 0;
 
 			PostBillDetail postBillDetail = new PostBillDetail();
 			PostBillHeader postBillHeader = new PostBillHeader();
@@ -1668,48 +1670,60 @@ public class BillController {
 
 				Integer newBillQty = Integer
 						.parseInt(request.getParameter("billQty" + billDetailsList.get(i).getBillDetailNo()));
+				float newBillRate = Float
+						.parseFloat(request.getParameter("billRate" + billDetailsList.get(i).getBillDetailNo()));
+				float newSgstPer =  Float
+						.parseFloat(request.getParameter("sgstPer" + billDetailsList.get(i).getBillDetailNo()));
+				float newCgstPer =  Float
+						.parseFloat(request.getParameter("cgstPer" + billDetailsList.get(i).getBillDetailNo()));
 
 				System.out.println("new bill qty = " + newBillQty);
+				System.out.println("new BillRate = " + newBillRate);
+				System.out.println("new  SgstPer = " + newSgstPer);
+				System.out.println("new  CgstPer = " + newCgstPer);
 
 				GetBillDetail getBillDetail = billDetailsList.get(i);
 
-				if (getBillDetail.getBillQty() != newBillQty) {
-
+				 
 					postBillDetail = new PostBillDetail();
-
-					postBillDetail.setBaseRate(getBillDetail.getBaseRate());
-					postBillDetail.setBillDetailNo(getBillDetail.getBillDetailNo());
-
+					postBillDetail.setBillDetailNo(getBillDetail.getBillDetailNo()); 
 					postBillDetail.setBillNo(getBillDetail.getBillNo());
+					postBillDetail.setRate(newBillRate);
+					postBillDetail.setBillQty(newBillQty);
+					float newBaserate=Float.valueOf(df.format((newBillRate*100)/(100+newSgstPer+newCgstPer)));
+					postBillDetail.setBaseRate(newBaserate); 
 					postBillDetail.setCatId(getBillDetail.getCatId());
-					postBillDetail.setSgstPer(getBillDetail.getSgstPer());
-					postBillDetail.setIgstPer(getBillDetail.getIgstPer());
-					postBillDetail.setDelStatus(0);
-					postBillDetail.setCgstPer(getBillDetail.getCgstPer());
+					postBillDetail.setSgstPer(newSgstPer);
+					postBillDetail.setCgstPer(newCgstPer);
+					postBillDetail.setIgstPer(newSgstPer+newCgstPer);
+					postBillDetail.setDelStatus(0); 
 					postBillDetail.setItemId(getBillDetail.getItemId());
 					postBillDetail.setMenuId(getBillDetail.getMenuId());
 					postBillDetail.setMrp(getBillDetail.getMrp());
 					postBillDetail.setOrderId(getBillDetail.getOrderId());
 					postBillDetail.setOrderQty(getBillDetail.getOrderQty());
-					postBillDetail.setRate(getBillDetail.getRate());
+					
 					postBillDetail.setRateType(getBillDetail.getRateType());
 					postBillDetail.setRemark(getBillDetail.getRemark());
 					postBillDetail.setGrnType(getBillDetail.getGrnType());
 					postBillDetail.setExpiryDate(getBillDetail.getExpiryDate());
 					postBillDetail.setIsGrngvnApplied(getBillDetail.getIsGrngvnApplied());
 
-					float baseRate = getBillDetail.getBaseRate();
+					float baseRate = postBillDetail.getBaseRate();
 
 					float taxableAmt = baseRate * newBillQty;
 					taxableAmt = roundUp(taxableAmt);
 
-					float sgstRs = (taxableAmt * getBillDetail.getSgstPer()) / 100;
-					float cgstRs = (taxableAmt * getBillDetail.getCgstPer()) / 100;
+					float sgstRs = (taxableAmt * postBillDetail.getSgstPer()) / 100;
+					float cgstRs = (taxableAmt * postBillDetail.getCgstPer()) / 100;
 					float igstRs = (taxableAmt * getBillDetail.getIgstPer()) / 100;
 
 					sgstRs = roundUp(sgstRs);
 					cgstRs = roundUp(cgstRs);
-					igstRs = roundUp(igstRs);
+					igstRs = 0;
+					
+					sumTotalSgst = sumTotalSgst + sgstRs;
+					sumTotalCgst = sumTotalCgst + cgstRs;
 
 					float totalTax = sgstRs + cgstRs;
 					totalTax = roundUp(totalTax);
@@ -1720,56 +1734,68 @@ public class BillController {
 					sumTaxableAmt = sumTaxableAmt + taxableAmt;
 					sumTotalTax = sumTotalTax + totalTax;
 					sumGrandTotal = sumGrandTotal + grandTotal;
-					postBillDetail.setBillQty(newBillQty);
-					postBillDetail.setSgstRs(sgstRs);
-					postBillDetail.setCgstRs(cgstRs);
+					
+					postBillDetail.setSgstRs(Float.valueOf(df.format(sgstRs)));
+					postBillDetail.setCgstRs(Float.valueOf(df.format(cgstRs)));
 					postBillDetail.setIgstRs(igstRs);
-					postBillDetail.setTaxableAmt(taxableAmt);
-					postBillDetail.setTotalTax(totalTax);
-					postBillDetail.setGrandTotal(grandTotal);
-
-				} // end of if
-
+					postBillDetail.setTaxableAmt(Float.valueOf(df.format(taxableAmt)));
+					postBillDetail.setTotalTax(Float.valueOf(df.format(totalTax)));
+					postBillDetail.setGrandTotal(Float.valueOf(df.format(grandTotal)));
+					System.out.println("base rate " + baseRate);
+					System.out.println("set rate " + postBillDetail.getRate() + "new rate " + newBillRate);
+					System.out.println("set getTaxableAmt " + postBillDetail.getTaxableAmt()+ "new taxableAmt " + taxableAmt);
+					System.out.println("set sgst " + postBillDetail.getSgstPer() + "new newSgstPer " + newSgstPer);
+					System.out.println("set cgst " + postBillDetail.getCgstPer() + "new newCgstPer " + newCgstPer);
+					System.out.println("set grandTotal " + grandTotal);
+				 
 				postBillDetailsList.add(postBillDetail);
 
-				for (int j = 0; j < billHeadersList.size(); j++) {
-
-					if (billHeadersList.get(j).getBillNo() == postBillDetailsList.get(0).getBillNo()) {
-
-						DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-						Date billDate = null;
-						try {
-							billDate = formatter.parse(billHeadersList.get(j).getBillDate());
-						} catch (ParseException e) {
-							System.out.println("exc in formatting bill Date " + e.getMessage());
-							e.printStackTrace();
-						}
-						postBillHeader.setBillDate(billDate);
-
-						postBillHeader.setBillNo(billHeadersList.get(j).getBillNo());
-						postBillHeader.setDelStatus(0);
-						postBillHeader.setFrCode(billHeadersList.get(j).getFrCode());
-						postBillHeader.setFrId(billHeadersList.get(j).getFrId());
-						postBillHeader.setGrandTotal(sumGrandTotal);
-						postBillHeader.setInvoiceNo(billHeadersList.get(j).getInvoiceNo());
-						postBillHeader.setRemark(billHeadersList.get(j).getRemark());
-						postBillHeader.setStatus(billHeadersList.get(j).getStatus());
-						postBillHeader.setTaxableAmt(sumTaxableAmt);
-						postBillHeader.setTaxApplicable(billHeadersList.get(j).getTaxApplicable());
-						postBillHeader.setTotalTax(sumTotalTax);
-						postBillHeader.setRemark(billHeadersList.get(j).getRemark());
-						break;
-					} // end of if
-
-				} // end of for
+				
 
 			} // End of for
+			
+			
+			for (int j = 0; j < billHeadersList.size(); j++) {
+
+				if (billHeadersList.get(j).getBillNo() == postBillDetailsList.get(0).getBillNo()) {
+
+					DateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+					Date billDate = null;
+					try {
+						billDate = formatter.parse(billHeadersList.get(j).getBillDate());
+					} catch (ParseException e) {
+						System.out.println("exc in formatting bill Date " + e.getMessage());
+						e.printStackTrace();
+					}
+					postBillHeader.setBillDate(billDate);
+
+					postBillHeader.setBillNo(billHeadersList.get(j).getBillNo());
+					postBillHeader.setDelStatus(0);
+					postBillHeader.setFrCode(billHeadersList.get(j).getFrCode());
+					postBillHeader.setFrId(billHeadersList.get(j).getFrId());
+					postBillHeader.setGrandTotal(Float.valueOf(df.format(sumGrandTotal)));
+					postBillHeader.setInvoiceNo(billHeadersList.get(j).getInvoiceNo());
+					postBillHeader.setRemark(billHeadersList.get(j).getRemark());
+					postBillHeader.setStatus(billHeadersList.get(j).getStatus());
+					postBillHeader.setTaxableAmt(Float.valueOf(df.format(sumTaxableAmt)));
+					postBillHeader.setTaxApplicable(billHeadersList.get(j).getTaxApplicable());
+					postBillHeader.setTotalTax(Float.valueOf(df.format(sumTotalTax)));
+					postBillHeader.setRemark(billHeadersList.get(j).getRemark());
+					postBillHeader.setSgstSum(sumTotalSgst);
+					postBillHeader.setCgstSum(sumTotalCgst);
+					postBillHeader.setTime(billHeadersList.get(j).getTime());
+					break;
+				} // end of if
+
+			} // end of for
 
 			postBillHeader.setPostBillDetailsList(postBillDetailsList);
 			postBillHeadersList.add(postBillHeader);
 			postBillDataCommon.setPostBillHeadersList(postBillHeadersList);
-
-			Info info = restTemplate.postForObject(Constants.url + "updateBillData", postBillDataCommon, Info.class);
+			 
+				Info info = restTemplate.postForObject(Constants.url + "updateBillData", postBillDataCommon, Info.class);
+			 
+			
 
 		} catch (Exception e) {
 
@@ -1952,7 +1978,7 @@ public class BillController {
 		System.out.println("URL " + url);
 		// http://monginis.ap-south-1.elasticbeanstalk.com
 		 File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
-		//File f = new File("/home/ats-12/pdf/ordermemo221.pdf");
+		//File f = new File("/home/ats-11/pdf/ordermemo221.pdf");
 		//File f = new File("/Users/MIRACLEINFOTAINMENT/ATS/uplaods/reports/ordermemo221.pdf");
 
 		System.out.println("I am here " + f.toString());
@@ -1971,7 +1997,7 @@ public class BillController {
 		String appPath = context.getRealPath("");
 		String filename = "ordermemo221.pdf";
 		 String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
-		//String filePath = "/home/ats-12/pdf/ordermemo221.pdf";
+		//String filePath = "/home/ats-11/pdf/ordermemo221.pdf";
 		//String filePath = "/Users/MIRACLEINFOTAINMENT/ATS/uplaods/reports/ordermemo221.pdf";
 
 		// construct the complete absolute path of the file
@@ -2059,9 +2085,32 @@ public class BillController {
 			} else {
 				pd4ml.setPageInsets(new Insets(topValue, leftValue, bottomValue, rightValue));
 			}
-			pd4ml.setHtmlWidth(userSpaceWidth);
-			pd4ml.render(urlstring, fos);
 
+			pd4ml.setHtmlWidth(userSpaceWidth);
+
+			
+			
+
+			pd4ml.render(urlstring, fos);
+//			
+//if(!isTwice) {
+//	isTwice=true;
+//			try {
+//				Long no = (Long) pd4ml.getLastRenderInfo(PD4Constants.PD4ML_TOTAL_PAGES);
+//				System.out.println("####### Total Pages " + no);
+//
+//				footer.setHtmlTemplate(
+//						"<table width=\"100%\" border=\"0\"  cellpadding=\"0\" cellspacing=\"0\" style=\"border-top:1px solid #313131;border-right:1px solid #313131;\"><tr><td colspan=\"6\" width=\"50%\" style=\"border-left:1px solid #313131; padding:8px;color:#000; font-size:12px;\"><p style=\"color:#000; font-size:12px; text-align:left;margin:0px;\">After PDF Render: We hereby certify that food mentioned in the Tax Invoice is warranted to be of the nature and quality which it purpose to be. FDA Lic. No: 11515044000208</p></td><td colspan=\"5\" width=\"38%\" rowspan=\"2\" style=\"border-left:1px solid #313131; padding:8px;color:#000;font-size:15px;\">&nbsp;</td></tr><tr><td colspan=\"6\"width=\"50%\"style=\"border-top:1px solid #313131;border-left:1px solid #313131; padding:8px;color:#000; font-size:12px;\"><p>Certified that the particulars given above are true and correct.</p>&nbsp;</td></tr><tr><td colspan=\"6\" width=\"50%\"  style=\"border-top:1px solid #313131;border-left:1px solid #313131; padding:8px;color:#000; font-size:12px;\"><p><b>Invoice Value in Rs.</b><br></br> ${frDetails.amtInWords}</p>&nbsp;</td><td colspan=\"5\" width=\"38%\" style=\"border-top:1px solid #313131;border-left:1px solid #313131; padding:8px;color:#000;font-size:15px;\"><p style=\"color:#000; font-size:11px; text-align:left;margin:0px;\">Continue...</p></td></tr><tr><td colspan=\"6\"  width=\"50%\" style=\"border-bottom:1px solid #313131;border-top:1px solid #313131;border-left:1px solid #313131; padding:10px;color:#000; font-size:11px;\"><p style=\"color:#000; font-size:11px; text-align:left;margin:0px;\">Subject to Aurangabad Jurisdiction &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Receiver's Signature</p>"
+//								+ "</td><td  align=\"center\" colspan=\"5\" width=\"38%\" style=\"border-bottom:1px solid #313131;border-top:1px solid #313131;border-left:1px solid #313131; padding:10px;color:#000;font-size:11px;\">Authorised Signature</td></tr></table>");
+//				pd4ml.setPageFooter(footer);
+//				fos = new java.io.FileOutputStream(output);
+//runConverter(urlstring, output, request, response);				
+//
+//			} catch (Exception e) {
+//				// TODO: handle exception
+//				e.printStackTrace();
+//			}
+//}
 
 		}
 	}

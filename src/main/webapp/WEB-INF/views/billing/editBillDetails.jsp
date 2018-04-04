@@ -118,9 +118,10 @@
 													<th width="100" align="left">Rate</th>
 													<th width="105" align="left">SGST %</th>
 													<th width="105" align="left">CGST %</th>
-													<th width="105" align="left">Grand Total</th>
-													<th width="130" align="left">Tax Amount</th>
 													<th width="130" align="left">Taxable Amount</th>
+													<th width="130" align="left">Tax Amount</th>
+													<th width="105" align="left">Grand Total</th>
+													 
 													<th width="159" align="left">Remark</th>
 
 												</tr>
@@ -148,27 +149,42 @@
 															data-rule-number="true"
 															name="billQty${billDetails.billDetailNo}"
 															id="billQty${billDetails.billDetailNo}" style="width: 60px"
-															value="${billDetails.billQty}" onkeyup="changeValues(${billDetails.baseRate},${billDetails.billDetailNo})"/></td>
+															value="${billDetails.billQty}" onkeyup="changeValues(${billDetails.billDetailNo})"/></td>
 
 														<td align="left"><c:out value="${billDetails.mrp}"/></td>
 
-														<td align="left"><c:out value="${billDetails.rate}"/></td>
+														<td align="left"><input type="text"class="form-control"
+															data-rule-number="true"
+															name="billRate${billDetails.billDetailNo}"
+															id="billRate${billDetails.billDetailNo}" style="width: 60px"
+															value="${billDetails.rate}" onkeyup="changeValues(${billDetails.billDetailNo})"/></td>
 
 													
 
-														<td align="left" id="sgstPer${billDetails.billDetailNo}"><c:out value="${billDetails.sgstPer}"/></td>
-														<td align="left" id="cgstPer${billDetails.billDetailNo}"><c:out value="${billDetails.cgstPer}"/></td>
+														<td align="left" >
+														<input type="text"class="form-control"
+															data-rule-number="true"
+															name="sgstPer${billDetails.billDetailNo}"
+															id="sgstPer${billDetails.billDetailNo}" style="width: 60px"
+															value="${billDetails.sgstPer}" onkeyup="changeValues(${billDetails.billDetailNo})"/></td>
+													 		
+														<td align="left" > 
+														<input type="text"class="form-control"
+															data-rule-number="true"
+															name="cgstPer${billDetails.billDetailNo}"
+															id="cgstPer${billDetails.billDetailNo}" style="width: 60px"
+															value="${billDetails.cgstPer}" onkeyup="changeValues(${billDetails.billDetailNo})"/></td>
 
 														<c:set var="billQty" value="${billDetails.billQty}"/>
 														<c:set var="rate" value="${billDetails.rate}"/>
-
-														<td align="left" id="grandTotal${billDetails.billDetailNo}"><c:out value="${billDetails.grandTotal}"/></td>
-
+ 
+														 <td align="center" id="taxableAmt${billDetails.billDetailNo}"  >
+															<c:out value="${billDetails.taxableAmt}"/></td> 
+																
 														<td align="left" id="totalTax${billDetails.billDetailNo}"  ><c:out
 																value="${billDetails.totalTax}"/></td>
-
-														<td align="center" id="taxableAmt${billDetails.billDetailNo}"  ><c:out
-																value="${billDetails.taxableAmt}"/></td>
+																
+														<td align="left" id="grandTotal${billDetails.billDetailNo}"><c:out value="${billDetails.grandTotal}"/></td>
 
 														<td align="left"><c:out value="${billDetails.remark}" /></td>
 
@@ -275,25 +291,21 @@
 
 
 	<script>
-		function changeValues(baseRate,detailNo) {
+		function changeValues(detailNo) { 
 			
-			var billQty=$("#billQty"+detailNo).val();
-			
-			var sgstPer=$("#sgstPer"+detailNo).text();
-			var cgstPer=$("#cgstPer"+detailNo).text();
-			
-			var taxableAmt=parseFloat(billQty)*parseFloat(baseRate);
-			
-			var sgstRs=parseFloat(taxableAmt)*parseFloat(sgstPer)/100;
-			var cgstRs=parseFloat(taxableAmt)*parseFloat(cgstPer)/100;
-			
-			var totalTax=parseFloat(sgstRs)+parseFloat(cgstRs);
-			
-			var grandTotal=parseFloat(totalTax)+parseFloat(taxableAmt);
-			
-			$("#taxableAmt"+detailNo).html(taxableAmt.toFixed(2));
-			$("#totalTax"+detailNo).html(totalTax.toFixed(2));
-			$("#grandTotal"+detailNo).html(grandTotal.toFixed(2));
+			var billQty=parseFloat($("#billQty"+detailNo).val()); 
+			var billRate=parseFloat($("#billRate"+detailNo).val()); 
+			var sgstPer=parseFloat($("#sgstPer"+detailNo).val()); 
+			var cgstPer=parseFloat($("#cgstPer"+detailNo).val());  
+			var baseRate=((billRate*100)/(100+sgstPer+cgstPer)).toFixed(2); 
+			var taxableAmt=(billQty*baseRate).toFixed(2); 
+			var sgstRs=((taxableAmt*sgstPer)/100).toFixed(2); 
+			var cgstRs=((taxableAmt*cgstPer)/100).toFixed(2); 
+			var totalTax=parseFloat(sgstRs)+parseFloat(cgstRs); 
+			var grandTotal=parseFloat(totalTax)+parseFloat(taxableAmt); 
+			$("#taxableAmt"+detailNo).html(taxableAmt);
+			$("#totalTax"+detailNo).html(totalTax.toFixed(2)); 
+			$("#grandTotal"+detailNo).html(grandTotal.toFixed(2));   
 		}
 	</script>
 

@@ -6,6 +6,7 @@ public class GetBillHeader {
 
     private Integer billNo;
     private String frName;
+    private String time;
     private Integer taxApplicable;
     private String invoiceNo;
     private String billDate;
@@ -125,12 +126,20 @@ public class GetBillHeader {
         this.delStatus = delStatus;
     }
 
+	public String getTime() {
+		return time;
+	}
+
+	public void setTime(String time) {
+		this.time = time;
+	}
+
 	@Override
 	public String toString() {
-		return "GetBillHeader [billNo=" + billNo + ", frName=" + frName + ", taxApplicable=" + taxApplicable
-				+ ", invoiceNo=" + invoiceNo + ", billDate=" + billDate + ", frId=" + frId + ", frCode=" + frCode
-				+ ", grandTotal=" + grandTotal + ", taxableAmt=" + taxableAmt + ", totalTax=" + totalTax + ", status="
-				+ status + ", remark=" + remark + ", delStatus=" + delStatus + "]";
+		return "GetBillHeader [billNo=" + billNo + ", frName=" + frName + ", time=" + time + ", taxApplicable="
+				+ taxApplicable + ", invoiceNo=" + invoiceNo + ", billDate=" + billDate + ", frId=" + frId + ", frCode="
+				+ frCode + ", grandTotal=" + grandTotal + ", taxableAmt=" + taxableAmt + ", totalTax=" + totalTax
+				+ ", status=" + status + ", remark=" + remark + ", delStatus=" + delStatus + "]";
 	}
 
 
