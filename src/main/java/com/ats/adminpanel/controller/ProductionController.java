@@ -1307,7 +1307,7 @@ model.addObject("todayDate",df.format(todayDate));
 					}
 					flag = 1;
 				}
-
+			
 				System.out.println("fr Id Route WISE = " + sbForRouteFrId);
 			}
 			model.addObject("flag", flag);
@@ -1430,7 +1430,7 @@ model.addObject("todayDate",df.format(todayDate));
 							float t1 = stockDetail.getOpT1();
 							float t2 = stockDetail.getOpT2();
 							float t3 = stockDetail.getOpT3();
-
+							
 							System.out.println("t1 : " + t1 + " t2: " + t2 + " t3: " + t3);
 
 							if (t3 > 0) {
@@ -1483,7 +1483,8 @@ model.addObject("todayDate",df.format(todayDate));
 							curClosing = prodQty - rejQty - curIssue;
 
 							totalClosing = ((t1 + t2 + t3) + (prodQty - rejQty)) - billQty;
-							stockDetail.setCloCurrent(curClosing);
+							stockDetail.setCloCurrent(stockDetail.getOpTotal());
+
 							stockDetail.setCloT1(cloT1);
 							stockDetail.setCloT2(cloT2);
 							stockDetail.setCloT3(cloT3);
