@@ -415,7 +415,7 @@ model.addObject("todayDate",df.format(todayDate));
 							+ "TEXT 235,145,\"ROMAN.TTF\",180,1,16,\"" + prod.getItemCode() + "\"" 
 							+ System.getProperty("line.separator") + "BARCODE 347,100,\"128M\",54,0,180,2,4,\""
 							+ prod.getItemCode() + "\"";
-
+ 
 					String text = barcode + System.getProperty("line.separator")
 							+ "TEXT 347,40,\"ROMAN.TTF\",180,1,10,\"" + itemName + "\"";
 
