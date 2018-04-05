@@ -62,12 +62,14 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllFrIdName;
 import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.AllRoutesListResponse;
+import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.GenerateBill;
 import com.ats.adminpanel.model.GenerateBillList;
 import com.ats.adminpanel.model.GetSellBillDetail;
 import com.ats.adminpanel.model.GetSellBillHeader;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.Route;
+import com.ats.adminpanel.model.SalesVoucherList;
 import com.ats.adminpanel.model.RawMaterial.GetItemSfHeader;
 import com.ats.adminpanel.model.billing.FrBillHeaderForPrint;
 import com.ats.adminpanel.model.billing.FrBillPrint;
@@ -907,6 +909,128 @@ public class BillController {
 		}
 
 		return model;
+
+	}
+	
+	@RequestMapping(value = "/excelForFrBill", method = RequestMethod.GET)
+	@ResponseBody
+	public SalesVoucherList excelForFrBill(HttpServletRequest request, HttpServletResponse response) {
+
+		SalesVoucherList salesVoucherList = new SalesVoucherList();
+		try {
+			System.out.println("ala " );
+			RestTemplate restTemplate = new RestTemplate();
+			String checkboxes = request.getParameter("checkboxes");
+			System.out.println("checkboxes " + checkboxes);
+			/*StringBuilder sb = new StringBuilder();
+			String string = new String();
+			
+			for (int i = 0; i < checkboxes.length; i++) {
+				sb = sb.append(checkboxes[i] + ",");
+
+			}
+
+			string = sb.toString();*/
+			checkboxes = checkboxes.substring(0, checkboxes.length() - 1);
+			System.out.println("string " + checkboxes);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("billNo", checkboxes);
+			salesVoucherList = restTemplate.postForObject(Constants.url + "/tally/getSalesVouchersByBillNo",map, SalesVoucherList.class);
+			System.out.println("salesVoucherList " + salesVoucherList.getSalesVoucherList());
+			
+			try
+			{
+				List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+				
+				ExportToExcel expoExcel=new ExportToExcel();
+				List<String> rowData=new ArrayList<String>();
+				 
+				rowData.add("Sr no");
+				rowData.add("Invoice No");
+				rowData.add("Date");
+				rowData.add("Type");
+				rowData.add("Party Name"); 
+				rowData.add("Gst No");
+				rowData.add("State");
+				rowData.add("Item Name");
+				rowData.add("Hsn Code");
+				rowData.add("Qty"); 
+				rowData.add("Uom");
+				rowData.add("Rate");
+				rowData.add("Amount");
+				rowData.add("Sgst Per");
+				rowData.add("Sgst Rs");
+				rowData.add("Cgst Per");
+				rowData.add("Cgst Rs");
+				rowData.add("Igst Per");
+				rowData.add("Igst Rs");
+				rowData.add("Cess Per");
+				rowData.add("Item Discount Per");
+				rowData.add("Total Discount");
+				rowData.add("Rount Off"); 
+				rowData.add("Total Amt");
+				rowData.add("Bill Total");
+				rowData.add("Remark");
+			 
+					
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				for(int i=0;i<salesVoucherList.getSalesVoucherList().size();i++)
+				{
+					  expoExcel=new ExportToExcel();
+					 rowData=new ArrayList<String>();
+					 
+				 
+					 rowData.add(""+(i+1));
+					 rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getvNo());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getDate());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getvType()); 
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getPartyName());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getGstin());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getState());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getItemName());  
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getHsnCode());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getQty());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getUom());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getRate()); 
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getAmount());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getSgstPer());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getSgstRs());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getCgstPer());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getCgstRs());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getIgstPer());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getIgstRs());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getCessPer()); 
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getCessRs());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getItemDiscPer());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getTotalDisc()); 
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getRoundOff()); 
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getTotalAmt());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getBillTotal());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getRemark());
+					
+					
+					
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					 
+				}
+				 
+				
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "billExcel");
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+				System.out.println("Exception to genrate excel ");
+			}
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return salesVoucherList;
 
 	}
 

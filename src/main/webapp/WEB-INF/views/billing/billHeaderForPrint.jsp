@@ -9,6 +9,7 @@
 
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
+<c:url var="excelForFrBill" value="/excelForFrBill" />
 	<c:url var="callGetBillListProcess" value="/getBillListProcessForPrint" />
 
 	<div class="container" id="main-container">
@@ -270,6 +271,8 @@
 										<input type="button" margin-right: 5px;" id="btn_submit"
 											class="btn btn-primary" onclick="submitBill()"
 											value="BillDetail" />
+											<input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="createExel();" >
+											 
 									</div>
 								</div>
 							</form>
@@ -572,6 +575,44 @@ form.submit();
 
 							});
 
+		}
+	</script>
+	
+	<script type="text/javascript">
+	 
+		function createExel() {
+ 
+			 
+			  var select_to_print = document.forms[0];
+    	var txt = "";
+    	var i;
+    	for (i = 0; i < select_to_print.length; i++) {
+        if (select_to_print[i].checked) {
+            txt = txt + select_to_print[i].value + ",";
+        }
+    }
+			  
+			  
+			$
+					.getJSON(
+							'${excelForFrBill}',
+							{
+								checkboxes : txt , 
+								ajax : 'true'
+							},
+							function(data) {
+								
+							 
+							 exportToExcel();
+							});
+
+		}
+		
+		function exportToExcel()
+		{
+			 
+			window.open("${pageContext.request.contextPath}/exportToExcel");
+					document.getElementById("expExcel").disabled=true;
 		}
 	</script>
 
