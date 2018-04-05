@@ -9,8 +9,8 @@
 </head>
 <body>
 
-<%-- 	<c:forEach items="${spCakeOrder}" var="spCakeOrder"
-														varStatus="count"> --%>
+ 	<c:forEach items="${spCakeOrder}" var="spCakeOrder"
+														varStatus="count"> 
 														
 <table width="100%" style="font-family:arial; font-size:12px; border:1px solid #000000; margin-bottom:40px;">
   <tr >
@@ -53,6 +53,6 @@
 <td> </td><td> </td>&nbsp;&nbsp;&nbsp;
 <td>Photo 2 :<img src="${imgUrl}${spCakeOrder.cusChoicePhoto}" height="8%" width="10%" alt="${imgUrl2}${spCakeOrder.orderPhoto}"></td>
 </tr>
-<%-- </c:forEach> --%>
+ </c:forEach>
 </body>
 </html>

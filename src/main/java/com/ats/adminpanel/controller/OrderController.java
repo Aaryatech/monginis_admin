@@ -46,6 +46,7 @@ import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
 import com.ats.adminpanel.model.franchisee.FranchiseeList;
 import com.ats.adminpanel.model.franchisee.Menu;
 import com.fasterxml.jackson.annotation.JsonFormat.Value;
+import com.sun.org.apache.bcel.internal.generic.ALOAD;
 
 
 @Controller
@@ -889,15 +890,16 @@ public class OrderController {
 	return model;	
 	}
 	
-	@RequestMapping(value = "/showSpcakeOrderPdf/{spOrderNo}", method = RequestMethod.GET)
-	public ModelAndView showSpcakeOrderPdf(@PathVariable("spOrderNo")int spOrderNo, HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/showSpcakeOrderPdf/{spOrderNo}/{key}", method = RequestMethod.GET)
+	public ModelAndView showSpcakeOrderPdf(@PathVariable("spOrderNo")int spOrderNo,@PathVariable("key")int key, HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model=new ModelAndView("orders/spCakeOrderPdf");
 		
 		RestTemplate restTemp = new RestTemplate();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("spOrderNo", spOrderNo);
-		GetSpCkOrder orderListResponse = restTemp.postForObject(Constants.url + "getSpCKOrderBySpOrderNo", map, GetSpCkOrder.class);
+		List<GetSpCkOrder> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKOrderBySpOrderNo", map, List.class);
 		
+		model.addObject("from",key);
 		System.out.println("SpOrder"+orderListResponse.toString());
 		model.addObject("spCakeOrder",orderListResponse );
 		model.addObject("imgUrl", Constants.SP_CAKE_FOLDER);
@@ -916,17 +918,14 @@ public class OrderController {
 		RestTemplate restTemp = new RestTemplate();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		StringBuffer orderId=new StringBuffer("0,");
-		 
-		for(int i=from-1;i<to && i<orderListResponse.getSpCakeOrdersBean().size();i++)
+		for(int i=from-1;i<to && i<spCakeOrderList.size();i++)
 		{
-			orderId.append(Integer.toString(orderListResponse.getSpCakeOrdersBean().get(i).getSpOrderNo())+",");
+			orderId.append(Integer.toString(spCakeOrderList.get(i).getSpOrderNo())+",");
 		}
 		
-		 
-
 		orderId.setLength(orderId.length() - 1);
 		map.add("spOrderNo", orderId);
-		List<GetSpCakeOrders> orderListResponse = restTemp.postForObject(Constants.url + "getSpCakeOrderBySpOrderNo", map, List.class);
+		List<GetSpCkOrder> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKOrderBySpOrderNo", map, List.class);
 		
 		System.out.println("SpOrder"+orderListResponse.toString());
 		model.addObject("spCakeOrder",orderListResponse );
