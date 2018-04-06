@@ -9,7 +9,7 @@ import java.sql.Date;
 public class Orders {
 
 
-	
+	private String itemName;
 	private int orderId;
 
 	
@@ -77,6 +77,14 @@ public class Orders {
 	private int menuId;
 
 	
+	public String getItemName() {
+		return itemName;
+	}
+
+	public void setItemName(String itemName) {
+		this.itemName = itemName;
+	}
+
 	public int getOrderId() {
 		return orderId;
 	}
