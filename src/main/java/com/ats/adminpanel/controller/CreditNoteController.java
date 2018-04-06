@@ -27,7 +27,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllFrIdNameList;
+import com.ats.adminpanel.model.CreditNoteList;
+import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.SalesVoucherList;
 import com.ats.adminpanel.model.creditnote.CreditNoteHeaderPrint;
 import com.ats.adminpanel.model.creditnote.CreditNoteHeaderPrintList;
 import com.ats.adminpanel.model.creditnote.CreditPrintBean;
@@ -485,6 +488,128 @@ public class CreditNoteController {
 		}
 
 		return model;
+	}
+	
+	@RequestMapping(value = "/excelForCreaditNote", method = RequestMethod.GET)
+	@ResponseBody
+	public CreditNoteList excelForCreaditNote(HttpServletRequest request, HttpServletResponse response) {
+
+		CreditNoteList creditNoteList = new CreditNoteList();
+		try {
+			System.out.println("ala " );
+			RestTemplate restTemplate = new RestTemplate();
+			String checkboxes = request.getParameter("checkboxes");
+			System.out.println("checkboxes " + checkboxes);
+			 
+			 
+			System.out.println("string " + checkboxes);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("crnId", checkboxes);
+			creditNoteList = restTemplate.postForObject(Constants.url + "/tally/getCreditNotesByCrnId",map, CreditNoteList.class);
+			System.out.println("creditNoteList " + creditNoteList.getCreditNoteList());
+			
+			try
+			{
+				List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+				
+				ExportToExcel expoExcel=new ExportToExcel();
+				List<String> rowData=new ArrayList<String>();
+				 
+				rowData.add("Sr no");
+				rowData.add("Crn Id");
+				rowData.add("Date");
+				rowData.add("Type");
+				rowData.add("Party Name"); 
+				rowData.add("Gst No");
+				rowData.add("State");
+				rowData.add("Item Name");
+				rowData.add("Hsn Code");
+				rowData.add("Uom");
+				rowData.add("Qty");  
+				rowData.add("Rate");
+				rowData.add("Amount");  
+				rowData.add("Sgst Per"); 
+				rowData.add("Cgst Per"); 
+				rowData.add("Igst Per");
+				rowData.add("Cess Per");
+				rowData.add("Sgst Rs");
+				rowData.add("Cgst Rs");
+				rowData.add("Igst Rs");
+				rowData.add("Cess Rs");
+				rowData.add("Item Discount Per");
+				rowData.add("Total Discount");
+				rowData.add("Rount Off"); 
+				rowData.add("Total Amt");
+				rowData.add("Bill Total");
+				rowData.add("Ref Bill No");
+				rowData.add("Ref Bill Date");
+				rowData.add("Grn Gvn Sr No");
+				rowData.add("Cr Db No ");
+				rowData.add("Cr Db Date ");
+				
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				for(int i=0;i<creditNoteList.getCreditNoteList().size();i++)
+				{
+					  expoExcel=new ExportToExcel();
+					 rowData=new ArrayList<String>();
+					 
+				 
+					 rowData.add(""+(i+1));
+					 rowData.add(""+creditNoteList.getCreditNoteList().get(i).getvNo());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getDate());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getvType()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getPartyName());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getGstin());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getState());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getItemName());  
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getHsnCode());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getQty());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getUom());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getRate()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getAmount());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getSgstPer()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCgstPer()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getIgstPer());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getSgstRs());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCgstRs());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getIgstRs());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCessPer()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCessRs());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getItemDiscPer());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getTotalDisc()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getRoundOff()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getTotalAmt());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getBillTotal()); 
+					
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getRefBillNo()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getRefBillDate()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getGrngvnSrno()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrDbNo());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrDbDate()); 
+					
+					
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					 
+				}
+				 
+				
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "creaditNote");
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+				System.out.println("Exception to genrate excel ");
+			}
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return creditNoteList;
+
 	}
 
 	@RequestMapping(value = "/getHeaders", method = RequestMethod.GET)

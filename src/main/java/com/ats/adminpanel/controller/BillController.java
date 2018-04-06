@@ -965,6 +965,7 @@ public class BillController {
 				rowData.add("Igst Per");
 				rowData.add("Igst Rs");
 				rowData.add("Cess Per");
+				rowData.add("Cess Rs");
 				rowData.add("Item Discount Per");
 				rowData.add("Total Discount");
 				rowData.add("Rount Off"); 

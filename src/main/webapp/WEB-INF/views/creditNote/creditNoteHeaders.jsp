@@ -9,6 +9,7 @@
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 	<c:url var="getHeaders" value="/getHeaders" />
+	<c:url var="excelForCreaditNote" value="/excelForCreaditNote" />
 
 	<div class="container" id="main-container">
 
@@ -148,7 +149,8 @@
 												<thead>
 													<tr>
 														<th></th>
-														<th class="col-md-1">Sr No</th>
+														<th > Sr No <input type="checkbox"
+													onClick="selectBillNo(this)" /></th>
 														<th class="col-md-1">Date</th>
 														<th class="col-md-2">Crn Id</th>
 														<th class="col-md-2">Franchise Name</th>
@@ -167,6 +169,7 @@
 											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-5">
 											<input type="button" value="Submit" onclick="genPdf()"
 												class="btn btn-primary">
+												<input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="createExel();" >
 										</div>
 										<!-- </form> -->
 									</div>
@@ -282,7 +285,7 @@
 
 			  	tr.append($('<td></td>').html(headers.crnDate));
 			  	
-			  	tr.append($('<td</td>').html(headers.crnId));
+			  	tr.append($('<td></td>').html(headers.crnId));
 
 
 			  	tr.append($('<td></td>').html(headers.frName));
@@ -349,6 +352,63 @@ window.open('${pageContext.request.contextPath}/pdf?url=/getCrnCheckedHeaders/'+
 		    // window.open('${pageContext.request.contextPath}/getGrnPdf/'+fromDate+'/'+'/'+toDate+'/'+headerId+'/'+1);
 			
 	}
+	
+function selectBillNo(source) {
+	checkboxes = document.getElementsByName('select_to_agree');
+	
+	for (var i = 0, n = checkboxes.length; i < n; i++) {
+		checkboxes[i].checked = source.checked;
+	}
+	
+}
+function createExel() {
+	 
+	checkboxes = document.getElementsByName('select_to_agree');
+	 
+var flag=0;
+var selArray="";
+
+for(var x=0;x<checkboxes.length;x++){
+	 
+	if(document.getElementById("select_to_agree"+x).checked==true){
+		flag=1;
+		 if(selArray=="")
+			 selArray=document.getElementById("select_to_agree"+x).value;
+		 else
+			selArray=selArray+","+document.getElementById("select_to_agree"+x).value;
+			 
+	}
+	
+}
+ 
+	 if(flag==1)
+		 {
+	$
+			.getJSON(
+					'${excelForCreaditNote}',
+					{
+						checkboxes : selArray , 
+						ajax : 'true'
+					},
+					function(data) {
+						
+					 
+						 exportToExcel();
+					 
+					});
+		 }
+	 else
+		 {
+		 alert("Select Minimum 1  ");
+		 }
+
+}
+
+function exportToExcel()
+{
+	 
+	window.open("${pageContext.request.contextPath}/exportToExcel"); 
+}
 	</script>
 
 </body>
