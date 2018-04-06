@@ -586,13 +586,16 @@ form.submit();
 			  var select_to_print = document.forms[0];
     	var txt = "";
     	var i;
+    	var flag=0;
     	for (i = 0; i < select_to_print.length; i++) {
-        if (select_to_print[i].checked) {
+        if (select_to_print[i].checked  && select_to_print[i].value!="on") {
             txt = txt + select_to_print[i].value + ",";
+            flag=1;
         }
     }
-			  
-			  
+			 
+			 if(flag==1)
+				 {
 			$
 					.getJSON(
 							'${excelForFrBill}',
@@ -603,16 +606,21 @@ form.submit();
 							function(data) {
 								
 							 
-							 exportToExcel();
+								 exportToExcel();
+							 
 							});
+				 }
+			 else
+				 {
+				 alert("Select Minimum 1 Bill ");
+				 }
 
 		}
 		
 		function exportToExcel()
 		{
 			 
-			window.open("${pageContext.request.contextPath}/exportToExcel");
-					document.getElementById("expExcel").disabled=true;
+			window.open("${pageContext.request.contextPath}/exportToExcel"); 
 		}
 	</script>
 
