@@ -126,8 +126,7 @@
 
 
 
-													<td align="left"><c:out
-															value="${creditNoteList.grnGvnDate}" /></td>
+													<td align="left"><fmt:formatDate pattern = "dd-MM-yyyy" value = "${creditNoteList.grnGvnDate}" /></td>
 													<td align="left"><c:out
 															value="${creditNoteList.grngvnSrno}" /></td>
 													<td align="left"><c:out
