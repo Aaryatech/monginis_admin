@@ -76,7 +76,7 @@
 								<div class="box">
 									<div class="box-title">
 										<h3>
-											<i class="fa fa-table"></i> Credit Note Details List for Credit Note Id : ${crnId}
+											<i class="fa fa-table"></i> Credit Note Details List for Credit Note Id : ${creditNoteHeaders.crnId}
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i
@@ -90,8 +90,13 @@
 					<label for="search" class="col-md-3" id="search">
     <i class="fa fa-search" style="font-size:20px"></i>
 									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search items by name.." title="Type in a name">
-										</label>  
-
+										</label> <br>
+										<h5> Credit Note No : ${creditNoteHeaders.crnId} </h5>
+										<h5> Franchisee Name : ${creditNoteHeaders.frName} </h5> 
+										<h5> Date : ${creditNoteHeaders.crnDate} </h5> 
+										<h5> Taxable Amount : ${creditNoteHeaders.crnTaxableAmt} </h5> 
+										<h5> Tax Amount : ${creditNoteHeaders.crnTotalTax} </h5> 
+										<h5> Total : ${creditNoteHeaders.crnGrandTotal} </h5> 
 										<div class="clearfix"></div>
 										<div class="table-responsive" style="border: 0">
 											<table width="100%"

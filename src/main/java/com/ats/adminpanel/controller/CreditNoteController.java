@@ -687,7 +687,7 @@ public class CreditNoteController {
 			@PathVariable("crnId") int crnId) {
 		ModelAndView model = new ModelAndView("creditNote/crnDetails");
 		System.out.println("In detail Page");
-
+		GetCreditNoteHeaders creditNoteHeaders = new GetCreditNoteHeaders();
 		RestTemplate restTemplate = new RestTemplate();
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -698,9 +698,17 @@ public class CreditNoteController {
 		crnDetailList = crnDetailResponse.getCrnDetails();
 
 		System.out.println("crn Detail List******** " + crnDetailList);
+		for(int i = 0;i<creditHeaderList.size();i++)
+		{
+			if(crnId==creditHeaderList.get(i).getCrnId())
+			{
+				creditNoteHeaders =creditHeaderList.get(i);
+				break;
+			}
+		}
 
 		model.addObject("crnDetailList", crnDetailList);
-		model.addObject("crnId", crnId);
+		model.addObject("creditNoteHeaders", creditNoteHeaders);
 
 		return model;
 	}
