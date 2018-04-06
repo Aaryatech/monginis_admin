@@ -429,7 +429,14 @@
 									<c:choose>
 									<c:when test="${billDetails.grnType==3}">
 									<td
-								style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${billDetails.itemName} [NR]</td>
+								style="border-left: 1px solid #313131; padding: 3px 5px; color: #000; font-size: 12px;">${billDetails.itemName} [NR]
+								<c:choose>
+									<c:when test="${billDetails.remark ne '0'}">
+								------ ${billDetails.remark} Kg
+								</c:when>
+								</c:choose>
+								
+								</td>
 									
 									</c:when>
 									<c:when test="${billDetails.grnType==4}">
@@ -727,7 +734,42 @@ duplicate for tranpoter</p>
 <!--         <p style="color:#000; font-size:13px; text-align:left;margin:0px;"></p>
  -->        <p style="color:#000; font-size:13px; text-align:left;margin:0px;">Invoice No: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>${frDetails.invoiceNo}</b></p>
         <p style="color:#000; font-size:13px; text-align:left;margin:0px;">Invoice Date: &nbsp;&nbsp;&nbsp;<b>${frDetails.billDate}</b></p>
-        <p style="color:#000; font-size:13px; text-align:left;margin:0px;">Tax is payble on reverse charges(Yes/no):No</p>
+        <p style="color:#000; font-size:13px; text-alignSELECT t_bill_detail.* , \n" + 
+			"			    CASE  \n" + 
+			"			 WHEN t_bill_detail.cat_id=5 THEN (SELECT CONCAT(m_sp_cake.sp_name, '-' ,m_sp_cake.sp_code)  FROM  m_sp_cake\n" + 
+			"			WHERE m_sp_cake.sp_id= t_bill_detail.item_id) \n" + 
+			"			            ELSE (SELECT  m_item.item_name FROM m_item WHERE t_bill_detail.item_id=m_item.id)\n" + 
+			"			      END AS item_name,\n" + 
+			"			       m_category.cat_name,\n" + 
+			"			        t_bill_header.bill_date,\n" + 
+			"			CASE \n" + 
+			"			            WHEN t_bill_detail.cat_id=5 THEN (SELECT m_spcake_sup.sp_hsncd   \n" + 
+			"			           FROM m_spcake_sup WHERE  m_spcake_sup.sp_id=t_bill_detail.item_id) ELSE (SELECT m_item_sup.item_hsncd  \n" + 
+			"			FROM m_item_sup WHERE  m_item_sup.item_id=t_bill_detail.item_id) \n" + 
+			"			        END AS item_hsncd,\n" + 
+			"			 \n" + 
+			"			CASE \n" + 
+			"			            WHEN t_bill_detail.cat_id=5 THEN (SELECT m_spcake_sup.sp_uom  FROM m_spcake_sup \n" + 
+			"			WHERE  m_spcake_sup.sp_id=t_bill_detail.item_id)\n" + 
+			"			            ELSE (SELECT m_item_sup.item_uom FROM m_item_sup \n" + 
+			"			 WHERE  m_item_sup.item_id=t_bill_detail.item_id) \n" + 
+			"			        END AS item_uom,\n" + 
+			"\n" + 
+			"CASE  WHEN t_bill_detail.cat_id=5 THEN (0)\n" + 
+			"			            ELSE (SELECT m_item.item_grp2 FROM m_item\n" + 
+			"			 WHERE  m_item.id=t_bill_detail.item_id) \n" + 
+			"			        END AS sub_cat_id\n" + 
+			"			 \n" + 
+			"			 FROM\n" + 
+			"			        t_bill_detail,\n" + 
+			"			        m_category,\n" + 
+			"			        t_bill_header\n" + 
+			"			 \n" + 
+			"			    WHERE\n" + 
+			"			        t_bill_detail.bill_no IN (:billNoList)  \n" + 
+			"			 \n" + 
+			"			        AND m_category.cat_id=t_bill_detail.cat_id \n" + 
+			"			        AND t_bill_detail.bill_no=t_bill_header.bill_no:left;margin:0px;">Tax is payble on reverse charges(Yes/no):No</p>
     </td>
 
     <td width="50%" colspan="5" style="border-top:1px solid #313131;border-left:1px solid #313131; padding:8px;color:#FFF; font-size:15px;">
