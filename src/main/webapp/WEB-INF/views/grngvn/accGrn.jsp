@@ -93,6 +93,14 @@
 											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 										</div>
 									</div>
+									<c:set var="sts" value="${0}"></c:set>
+									<c:forEach items="${grnList}" var="grnList">
+												<c:choose>
+														<c:when test="${(grnList.grnGvnStatus==1) or (grnList.grnGvnStatus==3) or (grnList.grnGvnStatus==6) }">
+														<c:set var="sts" value="${1}"></c:set>
+														</c:when>
+												</c:choose>
+									</c:forEach>
 
 									<div class="box-content">
 
@@ -103,8 +111,16 @@
 												id="table1">
 												<thead>
 													<tr>
-													<th><input type="checkbox"
+													<c:choose>
+														<c:when test="${sts==1}">
+														 <th><input type="checkbox" onClick="selectedGrn(this)" disabled/>Select All<br/></th>
+														</c:when>
+														<c:otherwise>
+														<th><input type="checkbox"
 													onClick="selectedGrn(this)" />Select All<br/></th>
+														</c:otherwise>
+												</c:choose>
+													
 														
 														<th>Sr No</th>
 														<th>Invoice No</th>

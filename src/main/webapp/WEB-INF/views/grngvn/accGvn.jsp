@@ -74,6 +74,14 @@
 											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 										</div>
 									</div>
+									<c:set var="sts" value="${0}"></c:set>
+									<c:forEach items="${gvnList}" var="gvnList">
+												<c:choose>
+														<c:when test="${(gvnList.grnGvnStatus==1) or (gvnList.grnGvnStatus==2) or (gvnList.grnGvnStatus==3) or (gvnList.grnGvnStatus==5) or (gvnList.grnGvnStatus==6)}">
+														<c:set var="sts" value="${1}"></c:set>
+														</c:when>
+												</c:choose>
+									</c:forEach>
 
 									<div class="box-content">
 
@@ -84,8 +92,15 @@
 												id="table1">
 												<thead>
 													<tr>
-														<th><input type="checkbox"
-															onClick="selectedGvn(this)" />Select All</th>
+													<c:choose>
+														<c:when test="${sts==1}">
+														 <th><input type="checkbox" onClick="selectedGvn(this)" disabled/>Select All<br/></th>
+														</c:when>
+														<c:otherwise>
+														<th><input type="checkbox" onClick="selectedGvn(this)" />Select All</th>
+														</c:otherwise>
+												</c:choose>
+														
 														
 														<th style="width: 18px" align="left">Sr No</th>
 														<th >Bill No</th>
