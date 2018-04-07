@@ -1,4 +1,5 @@
 package com.ats.adminpanel.model.mastexcel;
+ 
 
 public class TallyItem {
 
@@ -24,7 +25,10 @@ public class TallyItem {
 
 	private float cessPer;
 
-	private int delStatus;
+	private int delStatus; 
+	private float itemRate1; 
+	private float itemRate2; 
+	private float itemRate3;
 
 	public int getId() {
 		return id;
@@ -122,12 +126,36 @@ public class TallyItem {
 		this.delStatus = delStatus;
 	}
 
+	public float getItemRate1() {
+		return itemRate1;
+	}
+
+	public void setItemRate1(float itemRate1) {
+		this.itemRate1 = itemRate1;
+	}
+
+	public float getItemRate2() {
+		return itemRate2;
+	}
+
+	public void setItemRate2(float itemRate2) {
+		this.itemRate2 = itemRate2;
+	}
+
+	public float getItemRate3() {
+		return itemRate3;
+	}
+
+	public void setItemRate3(float itemRate3) {
+		this.itemRate3 = itemRate3;
+	}
+
 	@Override
 	public String toString() {
 		return "TallyItem [id=" + id + ", itemName=" + itemName + ", itemGroup=" + itemGroup + ", subGroup=" + subGroup
 				+ ", subSubGroup=" + subSubGroup + ", hsnCode=" + hsnCode + ", uom=" + uom + ", sgstPer=" + sgstPer
 				+ ", cgstPer=" + cgstPer + ", igstPer=" + igstPer + ", cessPer=" + cessPer + ", delStatus=" + delStatus
-				+ "]";
+				+ ", itemRate1=" + itemRate1 + ", itemRate2=" + itemRate2 + ", itemRate3=" + itemRate3 + "]";
 	}
 	
 	

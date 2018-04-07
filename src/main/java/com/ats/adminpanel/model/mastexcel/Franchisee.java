@@ -12,6 +12,7 @@ private int customerId;
 	
 	private String address2;
 	
+	private int frRateCat;
 	
 	private String city;
 
@@ -105,11 +106,19 @@ private int customerId;
 		this.country = country;
 	}
 
+	public int getFrRateCat() {
+		return frRateCat;
+	}
+
+	public void setFrRateCat(int frRateCat) {
+		this.frRateCat = frRateCat;
+	}
+
 	@Override
 	public String toString() {
 		return "Franchisee [customerId=" + customerId + ", customerName=" + customerName + ", address1=" + address1
-				+ ", address2=" + address2 + ", city=" + city + ", state=" + state + ", GSTIN=" + GSTIN + ", type="
-				+ type + ", frCode=" + frCode + ", country=" + country + "]";
+				+ ", address2=" + address2 + ", frRateCat=" + frRateCat + ", city=" + city + ", state=" + state
+				+ ", GSTIN=" + GSTIN + ", type=" + type + ", frCode=" + frCode + ", country=" + country + "]";
 	}
 
 }

@@ -949,9 +949,12 @@ public class BillController {
 				rowData.add("Invoice No");
 				rowData.add("Date");
 				rowData.add("Type");
+				rowData.add("Fr Id ");
 				rowData.add("Party Name"); 
 				rowData.add("Gst No");
 				rowData.add("State");
+				rowData.add("Cat Id");
+				rowData.add("Item Id");
 				rowData.add("Item Name");
 				rowData.add("Hsn Code");
 				rowData.add("Qty"); 
@@ -969,7 +972,12 @@ public class BillController {
 				rowData.add("Item Discount Per");
 				rowData.add("Total Discount");
 				rowData.add("Rount Off"); 
-				rowData.add("Total Amt");
+				rowData.add("Total Amt"); 
+				rowData.add("Total Taxable Amt");
+				rowData.add("Cgst sum");
+				rowData.add("Sgst sum");
+				rowData.add("Igst sum"); 
+				rowData.add("Tax Amt ");
 				rowData.add("Bill Total");
 				rowData.add("Remark");
 			 
@@ -986,9 +994,12 @@ public class BillController {
 					 rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getvNo());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getDate());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getvType()); 
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getFrId());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getPartyName());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getGstin());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getState());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getCatId()); 
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getItemId()); 
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getItemName());  
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getHsnCode());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getQty());
@@ -1007,6 +1018,12 @@ public class BillController {
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getTotalDisc()); 
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getRoundOff()); 
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getTotalAmt());
+					
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getTotalTaxableAmt());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getCgstSum());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getSgstSum());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getIgstSum());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getTotalTax());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getBillTotal());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getRemark());
 					

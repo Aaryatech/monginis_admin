@@ -589,6 +589,9 @@ public class ItemController {
 				rowData.add("Group2");
 				rowData.add("HsnCode");
 				rowData.add("UOM");
+				rowData.add("Rate1");
+				rowData.add("Rate2");
+				rowData.add("Rate3");
 				rowData.add("Sgst %");
 				rowData.add("Cgst %");
 				rowData.add("Igst %");
@@ -610,6 +613,9 @@ public class ItemController {
 					rowData.add(excelItems.get(i).getHsnCode());
 					
 					rowData.add(excelItems.get(i).getUom());
+					rowData.add(""+excelItems.get(i).getItemRate1());
+					rowData.add(""+excelItems.get(i).getItemRate2());
+					rowData.add(""+excelItems.get(i).getItemRate3());
 					rowData.add(""+excelItems.get(i).getSgstPer());
 					rowData.add(""+excelItems.get(i).getCgstPer());
 					rowData.add(""+excelItems.get(i).getIgstPer());

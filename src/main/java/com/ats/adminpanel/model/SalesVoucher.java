@@ -1,5 +1,5 @@
 package com.ats.adminpanel.model;
-
+ 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class SalesVoucher {
@@ -30,7 +30,15 @@ public class SalesVoucher {
 	private float totalDisc; 
 	private float roundOff; 
 	private float totalAmt; 
-	private float billTotal; 
+	private float billTotal;  
+	private float totalTaxableAmt; 
+	private float sgstSum; 
+	private float cgstSum; 
+	private float igstSum; 
+	private float totalTax; 
+	private int frId; 
+	private int itemId; 
+	private int catId;
 	private String remark;
   
 
@@ -259,6 +267,70 @@ public class SalesVoucher {
 		this.remark = remark;
 	}
 
+	public float getTotalTaxableAmt() {
+		return totalTaxableAmt;
+	}
+
+	public void setTotalTaxableAmt(float totalTaxableAmt) {
+		this.totalTaxableAmt = totalTaxableAmt;
+	}
+
+	public float getSgstSum() {
+		return sgstSum;
+	}
+
+	public void setSgstSum(float sgstSum) {
+		this.sgstSum = sgstSum;
+	}
+
+	public float getCgstSum() {
+		return cgstSum;
+	}
+
+	public void setCgstSum(float cgstSum) {
+		this.cgstSum = cgstSum;
+	}
+
+	public float getIgstSum() {
+		return igstSum;
+	}
+
+	public void setIgstSum(float igstSum) {
+		this.igstSum = igstSum;
+	}
+
+	public float getTotalTax() {
+		return totalTax;
+	}
+
+	public void setTotalTax(float totalTax) {
+		this.totalTax = totalTax;
+	}
+
+	public int getFrId() {
+		return frId;
+	}
+
+	public void setFrId(int frId) {
+		this.frId = frId;
+	}
+
+	public int getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(int itemId) {
+		this.itemId = itemId;
+	}
+
+	public int getCatId() {
+		return catId;
+	}
+
+	public void setCatId(int catId) {
+		this.catId = catId;
+	}
+
 	@Override
 	public String toString() {
 		return "SalesVoucher [billDetailNo=" + billDetailNo + ", billNo=" + billNo + ", vNo=" + vNo + ", date=" + date
@@ -267,7 +339,10 @@ public class SalesVoucher {
 				+ ", amount=" + amount + ", sgstPer=" + sgstPer + ", sgstRs=" + sgstRs + ", cgstPer=" + cgstPer
 				+ ", cgstRs=" + cgstRs + ", igstPer=" + igstPer + ", igstRs=" + igstRs + ", cessPer=" + cessPer
 				+ ", cessRs=" + cessRs + ", itemDiscPer=" + itemDiscPer + ", totalDisc=" + totalDisc + ", roundOff="
-				+ roundOff + ", totalAmt=" + totalAmt + ", billTotal=" + billTotal + ", remark=" + remark + "]";
+				+ roundOff + ", totalAmt=" + totalAmt + ", billTotal=" + billTotal + ", totalTaxableAmt="
+				+ totalTaxableAmt + ", sgstSum=" + sgstSum + ", cgstSum=" + cgstSum + ", igstSum=" + igstSum
+				+ ", totalTax=" + totalTax + ", frId=" + frId + ", itemId=" + itemId + ", catId=" + catId + ", remark="
+				+ remark + "]";
 	}
 	
 	

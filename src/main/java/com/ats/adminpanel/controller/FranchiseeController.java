@@ -1031,6 +1031,7 @@ public class FranchiseeController {
 		rowData.add("Fr Id");
 		rowData.add("Franchisee Code");
 		rowData.add("Franchisee Name");
+		rowData.add("Rate Cat");
 		rowData.add("City");
 		rowData.add("Address 1");
 		rowData.add("Address 2");
@@ -1050,6 +1051,7 @@ public class FranchiseeController {
 			rowData.add("" + franchisee.get(i).getCustomerId());
 			rowData.add(franchisee.get(i).getFrCode());
 			rowData.add(franchisee.get(i).getCustomerName());
+			rowData.add(""+franchisee.get(i).getFrRateCat());
 			rowData.add(franchisee.get(i).getCity());
 			rowData.add(franchisee.get(i).getAddress1());
 
