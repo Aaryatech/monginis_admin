@@ -281,9 +281,9 @@ public class CreditNoteController {
 
 						float grandTotal = creditHeader.getCrnTotalTax() + creditHeader.getCrnTaxableAmt();
 
-						creditHeader.setCrnGrandTotal(grandTotal);
+						creditHeader.setCrnGrandTotal(Math.round(grandTotal));
 
-						creditHeader.setCrnFinalAmt(roundUp(grandTotal));
+						creditHeader.setCrnFinalAmt(Math.round((grandTotal)));
 
 						float roundOff = grandTotal - roundUp(grandTotal);
 
@@ -319,8 +319,8 @@ public class CreditNoteController {
 
 					postCreditHeader.setCreatedDateTime(dateFormat.format(cal.getTime()));
 					postCreditHeader.setCrnDate(creditNoteDate);
-					postCreditHeader.setCrnFinalAmt(creditNote.getAprGrandTotal());
-					postCreditHeader.setCrnGrandTotal(creditNote.getAprGrandTotal());
+					postCreditHeader.setCrnFinalAmt(Math.round(creditNote.getAprGrandTotal()));
+					postCreditHeader.setCrnGrandTotal(Math.round(creditNote.getAprGrandTotal()));
 					postCreditHeader.setCrnTaxableAmt(creditNote.getAprTaxableAmt());
 					postCreditHeader.setCrnTotalTax(creditNote.getAprTotalTax());
 					postCreditHeader.setFrId(creditNote.getFrId());
@@ -519,13 +519,9 @@ public class CreditNoteController {
 				rowData.add("Crn Id");
 				rowData.add("Date");
 				rowData.add("Type");
-				rowData.add("Fr Id");
-				rowData.add("Fr Code");
 				rowData.add("Party Name"); 
 				rowData.add("Gst No");
 				rowData.add("State");
-				rowData.add("Item Id");
-				rowData.add("Cat Id"); 
 				rowData.add("Item Name");
 				rowData.add("Hsn Code");
 				rowData.add("Uom");
@@ -550,9 +546,6 @@ public class CreditNoteController {
 				rowData.add("Grn Gvn Sr No");
 				rowData.add("Cr Db No ");
 				rowData.add("Cr Db Date ");
-				rowData.add("Taxable Amt");
-				rowData.add("Total Tax");
-				rowData.add("Grand Total");
 				
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
@@ -566,13 +559,9 @@ public class CreditNoteController {
 					 rowData.add(""+creditNoteList.getCreditNoteList().get(i).getvNo());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getDate());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getvType()); 
-					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getFrId()); 
-					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getFrCode());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getPartyName());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getGstin());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getState());
-					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getItemId());
-					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCatId());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getItemName());  
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getHsnCode());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getQty());
@@ -598,9 +587,7 @@ public class CreditNoteController {
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getGrngvnSrno()); 
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrDbNo());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrDbDate()); 
-					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrnTaxableAmt()); 
-					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrnTotalTax()); 
-					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrnGrandTotal()); 
+					
 					
 					expoExcel.setRowData(rowData);
 					exportToExcelList.add(expoExcel);
@@ -726,7 +713,7 @@ public class CreditNoteController {
 		return model;
 	}
 
-	@RequestMapping(value = "/getCrnCheckedHeaders/{checked}", method = RequestMethod.GET)
+	@RequestMapping(value = "pdf/getCrnCheckedHeaders/{checked}", method = RequestMethod.GET)
 	public ModelAndView getCrnCheckedHeaders(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("checked") String[] checked) {
 
@@ -809,7 +796,7 @@ public class CreditNoteController {
 			for (int i = 0; i < creditHeaderList.size(); i++) {
 				printBean = new CreditPrintBean();
 
-				// System.err.println("I = " + i);
+				 System.err.println( creditHeaderList.size()+"I = " + i);
 
 				CreditNoteHeaderPrint cNoteHeaderPrint = new CreditNoteHeaderPrint();
 
@@ -843,10 +830,32 @@ public class CreditNoteController {
 						Date initDateFrom = fmt.parse(crnDetailList.get(0).getGrnGvnDate());
 						Date toLastDate = fmt.parse(crnDetailList.get(0).getGrnGvnDate());
 
-						if (!srNoList.contains(crnDetailList.get(j).getGrngvnSrno())) {
+						/*if (!srNoList.contains(crnDetailList.get(j).getGrngvnSrno())) {
 							srNoList.add(crnDetailList.get(j).getGrngvnSrno());
 						}
+						*/
 						
+						boolean isPrev=false;
+						for(CrnSrNoDateBean bean: srNoDateList) {
+							
+								if(bean.getSrNo().equalsIgnoreCase(crnDetailList.get(j).getGrngvnSrno())) {
+									isPrev=true;
+								}
+							
+						}
+						
+						if(!isPrev) {
+							
+							CrnSrNoDateBean bean=new CrnSrNoDateBean();
+							bean.setGrnGvnDate(crnDetailList.get(j).getGrnGvnDate());
+							bean.setSrNo(crnDetailList.get(j).getGrngvnSrno());
+							
+							//srNoDateList.get(j).setGrnGvnDate(crnDetailList.get(j).getGrnGvnDate());
+							//srNoDateList.get(j).setSrNo(crnDetailList.get(j).getGrngvnSrno());
+							srNoDateList.add(bean);
+							
+						}
+				/*		
 						if(!srNoDateList.contains(crnDetailList.get(j).getGrngvnSrno())) {
 							
 							CrnSrNoDateBean bean=new CrnSrNoDateBean();
@@ -857,7 +866,10 @@ public class CreditNoteController {
 							//srNoDateList.get(j).setSrNo(crnDetailList.get(j).getGrngvnSrno());
 							srNoDateList.add(bean);
 
-						}
+						}*/
+						
+						
+						
 
 						if (initDateFrom.before(fmt.parse(crnDetailList.get(j).getGrnGvnDate()))) {
 
@@ -886,7 +898,7 @@ public class CreditNoteController {
 				printBean.setCreditHeader(cNoteHeaderPrint);
 
 				printList.add(printBean);
-
+				System.err.println("printList = " + printList.toString());
 			} // end of outer for
 
 			System.err.println("printList = " + printList.toString());

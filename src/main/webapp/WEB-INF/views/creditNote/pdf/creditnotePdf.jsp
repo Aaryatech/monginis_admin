@@ -3,7 +3,7 @@ contentType="text/html; charset=ISO8859_1"%>
  <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
  <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
  
-
+<%@ page import="java.lang.Math"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -172,7 +172,7 @@ Phone:0240-2466217, Email: aurangabad@monginis.net</p>
         <td align="right" style="border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:white; font-size:10px;">-</td>
     <td style="border-bottom:1px solid #313131; font-size:0px;">-</td><td style="border-bottom:1px solid #313131; font-size:10px;">-</td><td style="border-bottom:1px solid #313131;font-size:0px;">-</td><td style="border-bottom:1px solid #313131;padding:4px;color:#000; font-size:0px;">-</td><td style="border-bottom:1px solid #313131;font-size:0px;">-</td><td style="border-bottom:1px solid #313131;padding:4px;color:#000; font-size:0px;">-</td><td style="border-bottom:1px solid #313131;font-size:0px;">-</td><td style="border-bottom:1px solid #313131;font-size:12px;"><b>Grand Total:</b></td>
     <td align="right" style="border-left:1px solid #313131;border-bottom:0px solid #313131; padding:4px;color:#000; font-size:12px;"><b><fmt:formatNumber type="number"
-								maxFractionDigits="2" minFractionDigits="2" value="${totalAmt+totalCgst+totalSgst}"/></b></td>
+								maxFractionDigits="0" value="${totalAmt+totalCgst+totalSgst}"/></b></td>
   </tr>
 </table>
 
@@ -180,7 +180,7 @@ Phone:0240-2466217, Email: aurangabad@monginis.net</p>
   
   <tr>
     <td colspan="6" width="50%" style="border-left:1px solid #313131; padding:8px;color:#000; font-size:12px;">
-     <p style="color:#000; font-size:12px; text-align:left;margin:0px;">Narration<br>Being ${type} For the period of the dated ${headerH.creditHeader.fromDate} to ${headerH.creditHeader.toDate}</p>
+     <p style="color:#000; font-size:12px; text-align:left;margin:0px;">Narration<br>Being ${type} For the period of the dated <%-- ${headerH.creditHeader.fromDate} to ${headerH.creditHeader.toDate} --%></p>
 </td>
     <td colspan="5" width="38%" rowspan="2" style="border-left:1px solid #313131; padding:8px;color:#000;font-size:15px;">&nbsp;</td>
   </tr>
