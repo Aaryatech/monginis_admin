@@ -1,5 +1,5 @@
 package com.ats.adminpanel.model;
-
+ 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class CreditNote {
@@ -38,7 +38,16 @@ public class CreditNote {
 	private int isDeposited; 
 	private String grngvnSrno; 
 	private String crDbNo; 
-	private String crDbDate;
+	private String crDbDate; 
+	private int frId; 
+	private String frCode; 
+	private int itemId; 
+	private int catId; 
+	private float crnTaxableAmt; 
+	private float crnTotalTax; 
+	private float crnGrandTotal; 
+	
+	
 	public int getCrndId() {
 		return crndId;
 	}
@@ -246,6 +255,49 @@ public class CreditNote {
 	public void setCrDbDate(String crDbDate) {
 		this.crDbDate = crDbDate;
 	}
+	
+	public int getFrId() {
+		return frId;
+	}
+	public void setFrId(int frId) {
+		this.frId = frId;
+	}
+	public String getFrCode() {
+		return frCode;
+	}
+	public void setFrCode(String frCode) {
+		this.frCode = frCode;
+	}
+	public int getItemId() {
+		return itemId;
+	}
+	public void setItemId(int itemId) {
+		this.itemId = itemId;
+	}
+	public int getCatId() {
+		return catId;
+	}
+	public void setCatId(int catId) {
+		this.catId = catId;
+	}
+	public float getCrnTaxableAmt() {
+		return crnTaxableAmt;
+	}
+	public void setCrnTaxableAmt(float crnTaxableAmt) {
+		this.crnTaxableAmt = crnTaxableAmt;
+	}
+	public float getCrnTotalTax() {
+		return crnTotalTax;
+	}
+	public void setCrnTotalTax(float crnTotalTax) {
+		this.crnTotalTax = crnTotalTax;
+	}
+	public float getCrnGrandTotal() {
+		return crnGrandTotal;
+	}
+	public void setCrnGrandTotal(float crnGrandTotal) {
+		this.crnGrandTotal = crnGrandTotal;
+	}
 	@Override
 	public String toString() {
 		return "CreditNote [crndId=" + crndId + ", crnNo=" + crnNo + ", vNo=" + vNo + ", date=" + date + ", vType="
@@ -256,10 +308,12 @@ public class CreditNote {
 				+ ", itemDiscPer=" + itemDiscPer + ", totalDisc=" + totalDisc + ", roundOff=" + roundOff + ", totalAmt="
 				+ totalAmt + ", billTotal=" + billTotal + ", refBillNo=" + refBillNo + ", refBillDate=" + refBillDate
 				+ ", grnGvnHeaderId=" + grnGvnHeaderId + ", isDeposited=" + isDeposited + ", grngvnSrno=" + grngvnSrno
-				+ ", crDbNo=" + crDbNo + ", crDbDate=" + crDbDate + "]";
+				+ ", crDbNo=" + crDbNo + ", crDbDate=" + crDbDate + ", frId=" + frId + ", frCode=" + frCode
+				+ ", itemId=" + itemId + ", catId=" + catId + ", crnTaxableAmt=" + crnTaxableAmt + ", crnTotalTax="
+				+ crnTotalTax + ", crnGrandTotal=" + crnGrandTotal + "]";
 	}
-	
-	
+ 
+ 
 	
 
 }
