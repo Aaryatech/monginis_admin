@@ -583,6 +583,7 @@ public class ItemController {
 				
 				rowData.add("Sr. No.");
 				 rowData.add("Id");
+				 rowData.add("Item Code");
 				rowData.add("Item Name");
 				rowData.add("Category");
 				rowData.add("Group1");
@@ -592,6 +593,9 @@ public class ItemController {
 				rowData.add("Rate1");
 				rowData.add("Rate2");
 				rowData.add("Rate3");
+				rowData.add("Mrp1");
+				rowData.add("Mrp2");
+				rowData.add("Mrp3");
 				rowData.add("Sgst %");
 				rowData.add("Cgst %");
 				rowData.add("Igst %");
@@ -606,6 +610,7 @@ public class ItemController {
 					 rowData=new ArrayList<String>();
 						rowData.add(""+(i+1));
 					rowData.add(""+excelItems.get(i).getId());
+					rowData.add(excelItems.get(i).getItemCode());
 					rowData.add(excelItems.get(i).getItemName());
 					rowData.add(excelItems.get(i).getItemGroup());
 					rowData.add(excelItems.get(i).getSubGroup());
@@ -613,6 +618,9 @@ public class ItemController {
 					rowData.add(excelItems.get(i).getHsnCode());
 					
 					rowData.add(excelItems.get(i).getUom());
+					rowData.add(""+excelItems.get(i).getItemRate1());
+					rowData.add(""+excelItems.get(i).getItemRate2());
+					rowData.add(""+excelItems.get(i).getItemRate3());
 					rowData.add(""+excelItems.get(i).getItemRate1());
 					rowData.add(""+excelItems.get(i).getItemRate2());
 					rowData.add(""+excelItems.get(i).getItemRate3());

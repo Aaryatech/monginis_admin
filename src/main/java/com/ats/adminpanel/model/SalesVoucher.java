@@ -1,5 +1,6 @@
 package com.ats.adminpanel.model;
- 
+  
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class SalesVoucher {
@@ -38,7 +39,9 @@ public class SalesVoucher {
 	private float totalTax; 
 	private int frId; 
 	private int itemId; 
-	private int catId;
+	private int catId; 
+	private String itemCode; 
+	private String frCode;
 	private String remark;
   
 
@@ -331,6 +334,22 @@ public class SalesVoucher {
 		this.catId = catId;
 	}
 
+	public String getItemCode() {
+		return itemCode;
+	}
+
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
+
+	public String getFrCode() {
+		return frCode;
+	}
+
+	public void setFrCode(String frCode) {
+		this.frCode = frCode;
+	}
+
 	@Override
 	public String toString() {
 		return "SalesVoucher [billDetailNo=" + billDetailNo + ", billNo=" + billNo + ", vNo=" + vNo + ", date=" + date
@@ -341,8 +360,8 @@ public class SalesVoucher {
 				+ ", cessRs=" + cessRs + ", itemDiscPer=" + itemDiscPer + ", totalDisc=" + totalDisc + ", roundOff="
 				+ roundOff + ", totalAmt=" + totalAmt + ", billTotal=" + billTotal + ", totalTaxableAmt="
 				+ totalTaxableAmt + ", sgstSum=" + sgstSum + ", cgstSum=" + cgstSum + ", igstSum=" + igstSum
-				+ ", totalTax=" + totalTax + ", frId=" + frId + ", itemId=" + itemId + ", catId=" + catId + ", remark="
-				+ remark + "]";
+				+ ", totalTax=" + totalTax + ", frId=" + frId + ", itemId=" + itemId + ", catId=" + catId
+				+ ", itemCode=" + itemCode + ", frCode=" + frCode + ", remark=" + remark + "]";
 	}
 	
 	

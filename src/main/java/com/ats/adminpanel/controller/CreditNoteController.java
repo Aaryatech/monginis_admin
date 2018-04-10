@@ -519,33 +519,42 @@ public class CreditNoteController {
 				rowData.add("Crn Id");
 				rowData.add("Date");
 				rowData.add("Type");
+				rowData.add("Fr Id");
+				rowData.add("Fr Code");
 				rowData.add("Party Name"); 
 				rowData.add("Gst No");
 				rowData.add("State");
+				rowData.add("Cat Id"); 
+				rowData.add("Item Id");
+				rowData.add("Item Code");
 				rowData.add("Item Name");
 				rowData.add("Hsn Code");
-				rowData.add("Uom");
-				rowData.add("Qty");  
+				rowData.add("Qty"); 
+				rowData.add("Uom"); 
 				rowData.add("Rate");
 				rowData.add("Amount");  
 				rowData.add("Sgst Per"); 
-				rowData.add("Cgst Per"); 
-				rowData.add("Igst Per");
-				rowData.add("Cess Per");
 				rowData.add("Sgst Rs");
+				rowData.add("Cgst Per"); 
 				rowData.add("Cgst Rs");
+				rowData.add("Igst Per");
 				rowData.add("Igst Rs");
+				rowData.add("Cess Per"); 
 				rowData.add("Cess Rs");
 				rowData.add("Item Discount Per");
 				rowData.add("Total Discount");
 				rowData.add("Rount Off"); 
 				rowData.add("Total Amt");
 				rowData.add("Bill Total");
+				rowData.add("Taxable Amt");
+				rowData.add("Total Tax");
+				rowData.add("Grand Total");
 				rowData.add("Ref Bill No");
 				rowData.add("Ref Bill Date");
 				rowData.add("Grn Gvn Sr No");
 				rowData.add("Cr Db No ");
 				rowData.add("Cr Db Date ");
+				rowData.add("Is Grn");
 				
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
@@ -559,9 +568,14 @@ public class CreditNoteController {
 					 rowData.add(""+creditNoteList.getCreditNoteList().get(i).getvNo());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getDate());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getvType()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getFrId()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getFrCode());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getPartyName());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getGstin());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getState());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCatId());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getItemcode());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getItemId());  
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getItemName());  
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getHsnCode());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getQty());
@@ -569,10 +583,10 @@ public class CreditNoteController {
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getRate()); 
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getAmount());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getSgstPer()); 
-					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCgstPer()); 
-					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getIgstPer());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getSgstRs());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCgstPer()); 
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCgstRs());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getIgstPer()); 
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getIgstRs());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCessPer()); 
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCessRs());
@@ -581,13 +595,16 @@ public class CreditNoteController {
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getRoundOff()); 
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getTotalAmt());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getBillTotal()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrnTaxableAmt()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrnTotalTax()); 
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrnGrandTotal());
 					
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getRefBillNo()); 
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getRefBillDate()); 
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getGrngvnSrno()); 
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrDbNo());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrDbDate()); 
-					
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getIsGrn());
 					
 					expoExcel.setRowData(rowData);
 					exportToExcelList.add(expoExcel);
@@ -611,6 +628,7 @@ public class CreditNoteController {
 		return creditNoteList;
 
 	}
+
 
 	@RequestMapping(value = "/getHeaders", method = RequestMethod.GET)
 	public @ResponseBody List<GetCreditNoteHeaders> getHeaders(HttpServletRequest request,

@@ -141,12 +141,19 @@ public class SpecialCakeController {
 				
 				rowData.add("Sr. No.");
 				 rowData.add("Id");
+				 rowData.add("Sp Code");
 				rowData.add("Sp Name");
 				rowData.add("Category");
 				rowData.add("Group1");
 				rowData.add("Group2");
 				rowData.add("HsnCode");
 				rowData.add("UOM");
+				rowData.add("Rate1");
+				rowData.add("Rate2");
+				rowData.add("Rate3");
+				rowData.add("Mrp1");
+				rowData.add("Mrp2");
+				rowData.add("Mrp3");
 				rowData.add("Sgst %");
 				rowData.add("Cgst %");
 				rowData.add("Igst %");
@@ -161,6 +168,7 @@ public class SpecialCakeController {
 					 rowData=new ArrayList<String>();
 						rowData.add(""+(i+1));
 					rowData.add(""+excelSpCake.get(i).getId());
+					rowData.add(excelSpCake.get(i).getSpCode());
 					rowData.add(excelSpCake.get(i).getItemName());
 					rowData.add(excelSpCake.get(i).getItemGroup());
 					rowData.add(excelSpCake.get(i).getSubGroup());
@@ -168,6 +176,12 @@ public class SpecialCakeController {
 					rowData.add(excelSpCake.get(i).getHsnCode());
 					
 					rowData.add(excelSpCake.get(i).getUom());
+					rowData.add(""+excelSpCake.get(i).getSpRate1());
+					rowData.add(""+excelSpCake.get(i).getSpRate2());
+					rowData.add(""+excelSpCake.get(i).getSpRate3());
+					rowData.add(""+excelSpCake.get(i).getMrpRate1());
+					rowData.add(""+excelSpCake.get(i).getMrpRate2());
+					rowData.add(""+excelSpCake.get(i).getMrpRate3());
 					rowData.add(""+excelSpCake.get(i).getSgstPer());
 					rowData.add(""+excelSpCake.get(i).getCgstPer());
 					rowData.add(""+excelSpCake.get(i).getIgstPer());

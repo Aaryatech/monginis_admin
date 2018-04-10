@@ -28,7 +28,11 @@ public class TallyItem {
 	private int delStatus; 
 	private float itemRate1; 
 	private float itemRate2; 
-	private float itemRate3;
+	private float itemRate3; 
+	private float itemMrp1; 
+	private float itemMrp2; 
+	private float itemMrp3; 
+	private String itemCode;
 
 	public int getId() {
 		return id;
@@ -150,12 +154,45 @@ public class TallyItem {
 		this.itemRate3 = itemRate3;
 	}
 
+	public float getItemMrp1() {
+		return itemMrp1;
+	}
+
+	public void setItemMrp1(float itemMrp1) {
+		this.itemMrp1 = itemMrp1;
+	}
+
+	public float getItemMrp2() {
+		return itemMrp2;
+	}
+
+	public void setItemMrp2(float itemMrp2) {
+		this.itemMrp2 = itemMrp2;
+	}
+
+	public float getItemMrp3() {
+		return itemMrp3;
+	}
+
+	public void setItemMrp3(float itemMrp3) {
+		this.itemMrp3 = itemMrp3;
+	}
+
+	public String getItemCode() {
+		return itemCode;
+	}
+
+	public void setItemCode(String itemCode) {
+		this.itemCode = itemCode;
+	}
+
 	@Override
 	public String toString() {
 		return "TallyItem [id=" + id + ", itemName=" + itemName + ", itemGroup=" + itemGroup + ", subGroup=" + subGroup
 				+ ", subSubGroup=" + subSubGroup + ", hsnCode=" + hsnCode + ", uom=" + uom + ", sgstPer=" + sgstPer
 				+ ", cgstPer=" + cgstPer + ", igstPer=" + igstPer + ", cessPer=" + cessPer + ", delStatus=" + delStatus
-				+ ", itemRate1=" + itemRate1 + ", itemRate2=" + itemRate2 + ", itemRate3=" + itemRate3 + "]";
+				+ ", itemRate1=" + itemRate1 + ", itemRate2=" + itemRate2 + ", itemRate3=" + itemRate3 + ", itemMrp1="
+				+ itemMrp1 + ", itemMrp2=" + itemMrp2 + ", itemMrp3=" + itemMrp3 + ", itemCode=" + itemCode + "]";
 	}
 	
 	

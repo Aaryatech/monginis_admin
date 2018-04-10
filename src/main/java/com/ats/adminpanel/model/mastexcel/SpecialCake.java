@@ -1,7 +1,5 @@
 package com.ats.adminpanel.model.mastexcel;
-
-
-
+ 
 //used by tally then for sp cale mas export to excel mspcake insert bean is different
 public class SpecialCake {
 	
@@ -26,6 +24,14 @@ public class SpecialCake {
 	private float igstPer;
 
 	private float cessPer;
+	
+	private String spCode; 
+	private float spRate1; 
+	private float spRate2; 
+	private float spRate3; 
+	private float mrpRate1; 
+	private float mrpRate2; 
+	private float mrpRate3;
 
 	public int getId() {
 		return id;
@@ -115,11 +121,69 @@ public class SpecialCake {
 		this.cessPer = cessPer;
 	}
 
+	public String getSpCode() {
+		return spCode;
+	}
+
+	public void setSpCode(String spCode) {
+		this.spCode = spCode;
+	}
+
+	public float getSpRate1() {
+		return spRate1;
+	}
+
+	public void setSpRate1(float spRate1) {
+		this.spRate1 = spRate1;
+	}
+
+	public float getSpRate2() {
+		return spRate2;
+	}
+
+	public void setSpRate2(float spRate2) {
+		this.spRate2 = spRate2;
+	}
+
+	public float getSpRate3() {
+		return spRate3;
+	}
+
+	public void setSpRate3(float spRate3) {
+		this.spRate3 = spRate3;
+	}
+
+	public float getMrpRate1() {
+		return mrpRate1;
+	}
+
+	public void setMrpRate1(float mrpRate1) {
+		this.mrpRate1 = mrpRate1;
+	}
+
+	public float getMrpRate2() {
+		return mrpRate2;
+	}
+
+	public void setMrpRate2(float mrpRate2) {
+		this.mrpRate2 = mrpRate2;
+	}
+
+	public float getMrpRate3() {
+		return mrpRate3;
+	}
+
+	public void setMrpRate3(float mrpRate3) {
+		this.mrpRate3 = mrpRate3;
+	}
+
 	@Override
 	public String toString() {
 		return "SpecialCake [id=" + id + ", ItemName=" + ItemName + ", itemGroup=" + itemGroup + ", subGroup="
 				+ subGroup + ", subSubGroup=" + subSubGroup + ", hsnCode=" + hsnCode + ", uom=" + uom + ", sgstPer="
-				+ sgstPer + ", cgstPer=" + cgstPer + ", igstPer=" + igstPer + ", cessPer=" + cessPer + "]";
+				+ sgstPer + ", cgstPer=" + cgstPer + ", igstPer=" + igstPer + ", cessPer=" + cessPer + ", spCode="
+				+ spCode + ", spRate1=" + spRate1 + ", spRate2=" + spRate2 + ", spRate3=" + spRate3 + ", mrpRate1="
+				+ mrpRate1 + ", mrpRate2=" + mrpRate2 + ", mrpRate3=" + mrpRate3 + "]";
 	}
 	
 }

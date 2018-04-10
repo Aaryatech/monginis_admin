@@ -46,7 +46,8 @@ public class CreditNote {
 	private float crnTaxableAmt; 
 	private float crnTotalTax; 
 	private float crnGrandTotal; 
-	
+	private String itemcode;
+	private int isGrn;
 	
 	public int getCrndId() {
 		return crndId;
@@ -298,6 +299,20 @@ public class CreditNote {
 	public void setCrnGrandTotal(float crnGrandTotal) {
 		this.crnGrandTotal = crnGrandTotal;
 	}
+	
+	public String getItemcode() {
+		return itemcode;
+	}
+	public void setItemcode(String itemcode) {
+		this.itemcode = itemcode;
+	}
+	
+	public int getIsGrn() {
+		return isGrn;
+	}
+	public void setIsGrn(int isGrn) {
+		this.isGrn = isGrn;
+	}
 	@Override
 	public String toString() {
 		return "CreditNote [crndId=" + crndId + ", crnNo=" + crnNo + ", vNo=" + vNo + ", date=" + date + ", vType="
@@ -310,7 +325,8 @@ public class CreditNote {
 				+ ", grnGvnHeaderId=" + grnGvnHeaderId + ", isDeposited=" + isDeposited + ", grngvnSrno=" + grngvnSrno
 				+ ", crDbNo=" + crDbNo + ", crDbDate=" + crDbDate + ", frId=" + frId + ", frCode=" + frCode
 				+ ", itemId=" + itemId + ", catId=" + catId + ", crnTaxableAmt=" + crnTaxableAmt + ", crnTotalTax="
-				+ crnTotalTax + ", crnGrandTotal=" + crnGrandTotal + "]";
+				+ crnTotalTax + ", crnGrandTotal=" + crnGrandTotal + ", itemcode=" + itemcode + ", isGrn=" + isGrn
+				+ "]";
 	}
  
  
