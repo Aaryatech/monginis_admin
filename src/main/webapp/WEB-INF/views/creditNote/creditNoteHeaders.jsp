@@ -167,7 +167,7 @@
 										</div>
 										<div
 											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-5">
-											<input type="button" value="Submit" onclick="genPdf()"
+											<input type="button" value="Generate PDF" onclick="genPdf()"
 												class="btn btn-primary">
 												<input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="createExel();" >
 										</div>
