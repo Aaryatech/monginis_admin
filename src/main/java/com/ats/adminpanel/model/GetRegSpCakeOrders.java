@@ -28,14 +28,22 @@ private int rspId;
 	private float rspRemainingAmt; 
 	private String rspDeliveryDt;
 	
-/*	
-	 
-	private String rspDeliveryPlace;*/
+	private String rspPlace;
 	  
 	private String rspCustName;
 	
 	 
 	private String rspCustMobileNo;
+
+
+	public String getRspPlace() {
+		return rspPlace;
+	}
+
+
+	public void setRspPlace(String rspPlace) {
+		this.rspPlace = rspPlace;
+	}
 
 
 	public int getRspId() {

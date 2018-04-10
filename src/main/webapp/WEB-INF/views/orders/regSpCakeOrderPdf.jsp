@@ -19,15 +19,15 @@
   <tr >
   
     <td width="15%"  style="border-bottom:1px solid #000000; padding:8px 20px; ">${from}</td>
-    <td width="45%"  style="font-family:arial; font-size:16px; border-left: 1px solid  #000000;border-bottom:1px solid #000000; padding:8px 20px;font-weight:bold;" align="center";>${regularSpCkOrders.frName}</td>
+    <td width="45%"  style="font-family:arial; font-size:16px; border-left: 1px solid  #000000;border-bottom:1px solid #000000; padding:8px 20px;font-weight:bold; align=center;">${regularSpCkOrders.frName}</td>
     <td width="40%"  style="border-bottom:1px solid #000000; padding:8px; border-left: 1px solid  #000000;">${regularSpCkOrders.orderDate}</td>
   </tr>
   <tr>
-    <td width="15%" style="font-size:12px; border-bottom:1px solid #000000; padding:1px 7px;">Sp,Cake Code / Name</td>
+    <td width="15%" style="font-size:12px; border-bottom:1px solid #000000; padding:1px 7px;font-weight:bold;">Sp,Cake Code / Name</td>
     <td colspan="2" width="50%" style="font-family:arial; font-size:18px;border-left: 1px solid  #000000; border-bottom:1px solid #000000;padding:1px 7px; font-weight:bold;">${regularSpCkOrders.itemName} </td>
   </tr>
   <tr>
-    <td style="border-bottom:1px solid #000000; padding:5px 7px;">Quantity</td>
+    <td style="border-bottom:1px solid #000000; padding:5px 7px;font-weight:bold;">Quantity</td>
     <td style="font-size:14px; border-bottom:1px solid #000000;border-left: 1px solid  #000000; padding:5px 7px;font-weight:bold;">${regularSpCkOrders.qty}</td>
     <td style="font-size:14px; border-bottom:1px solid #000000; padding:5px 7px;border-left: 1px solid  #000000; font-weight:bold;"></td>  
   </tr>
@@ -42,7 +42,7 @@
   <tr>
     <td  style=" font-size:14px;padding:5px 7px;font-weight:bold;">Date of Delivery </td>
     <td style=" font-size:18px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">${regularSpCkOrders.rspDeliveryDt}</td>
-    <%-- <td  style=" font-size:18px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">Place of Delivery-- ${regularSpCkOrders.spDeliveryPlace}</td> --%>
+    <td  style=" font-size:18px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">Place of Delivery-- ${regularSpCkOrders.rspPlace}</td>
   </tr>
 </table>
 <c:set var="from" value="${from+1}"/>
