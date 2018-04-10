@@ -1,13 +1,37 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+    
+    
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Dashboard - MONGINIS Admin</title>
-</head>
-<body>
+
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>
+    </title>
+    <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/1.12.0/semantic.min.css" />
+  </head>
+  <body>
+    <!-- code goes here -->
+
+    <!-- scripts -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js">
+    </script>
+    <script type="text/javascript" src="//cdn.rawgit.com/MrRio/jsPDF/master/dist/jspdf.min.js">
+    </script>
+    <script type="text/javascript" src="//cdn.rawgit.com/niklasvh/html2canvas/0.5.0-alpha2/dist/html2canvas.min.js">
+    </script>
+    
+<script type="text/javascript" src="<c:url value='/resources/js/app.js'/>"></script>
+
+<script type="text/javascript"
+	src="${pageContext.request.contextPath}/resources/js/jquery-1.10.2.min.js"></script>
+
 
  	<c:forEach items="${spCakeOrder}" var="spCakeOrder"
 														varStatus="count"> 
@@ -54,5 +78,10 @@
 <td>Photo 2 :<img src="${imgUrl}${spCakeOrder.cusChoicePhoto}" height="8%" width="10%" alt="${imgUrl2}${spCakeOrder.orderPhoto}"></td>
 </tr>
  </c:forEach>
+ 	<!-- scripts -->
+	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+	<script type="text/javascript" src="//cdn.rawgit.com/niklasvh/html2canvas/0.5.0-alpha2/dist/html2canvas.min.js"></script>
+	<script type="text/javascript" src="//cdn.rawgit.com/MrRio/jsPDF/master/dist/jspdf.min.js"></script>
+	<script type="text/javascript" src="app.js"></script>
 </body>
 </html>

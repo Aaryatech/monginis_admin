@@ -342,12 +342,12 @@ function genPdf() {
 		
 					    //var check = document.getElementById("select_to_agree").value;
 					    
-					    alert(selArray);
+					  
 					   /*  var str =selArray;
 
 					    str = str.replace(/^,|,$|,(?=,)/g, '');
 					    alert(str); */
-window.open('${pageContext.request.contextPath}/pdf?url=/getCrnCheckedHeaders/'+selArray);
+window.open('${pageContext.request.contextPath}/pdf?url=pdf/getCrnCheckedHeaders/'+selArray);
 		    
 		    // window.open('${pageContext.request.contextPath}/getGrnPdf/'+fromDate+'/'+'/'+toDate+'/'+headerId+'/'+1);
 			

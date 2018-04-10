@@ -85,7 +85,7 @@
 								<div class="box">
 									<div class="box-title">
 										<h3>
-											<i class="fa fa-table"></i> GRN List ${grnDate}
+											<i class="fa fa-table"></i> GRN List  Date-${grnDate} SrNo- ${srNo}
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i

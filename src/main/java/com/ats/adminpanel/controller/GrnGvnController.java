@@ -269,6 +269,23 @@ public class GrnGvnController {
 
 			getAllRemarks = new ArrayList<>();
 			getAllRemarks = getAllRemarksList.getGetAllRemarks();
+			
+			
+			
+			GrnGvnHeader gateHeader = new GrnGvnHeader();
+
+			for (int i = 0; i < grnGateHeaderList.size(); i++) {
+
+				if (grnGateHeaderList.get(i).getGrnGvnHeaderId() == globalGateHeaderId) {
+
+					gateHeader = grnGateHeaderList.get(i);
+
+					break;
+
+				}
+			}
+			modelAndView.addObject("srNo", gateHeader.getGrngvnSrno());
+
 
 		} catch (Exception e) {
 
@@ -279,6 +296,9 @@ public class GrnGvnController {
 		String grnDate = grnGateDetailList.get(0).getGrnGvnDate();
 		modelAndView.addObject("grnList", grnGateDetailList);
 		modelAndView.addObject("grnDate", grnDate);
+
+
+		
 		modelAndView.addObject("remarkList", getAllRemarks);
 
 		return modelAndView;
@@ -939,6 +959,22 @@ public class GrnGvnController {
 
 			getAllRemarks = new ArrayList<>();
 			getAllRemarks = getAllRemarksList.getGetAllRemarks();
+			
+			
+			GrnGvnHeader gateHeader = new GrnGvnHeader();
+
+			for (int i = 0; i < grnAccHeaderList.size(); i++) {
+
+				if (grnAccHeaderList.get(i).getGrnGvnHeaderId() == globalAccHeaderId) {
+
+					gateHeader = grnAccHeaderList.get(i);
+
+					break;
+
+				}
+			}
+			modelAndView.addObject("srNo", gateHeader.getGrngvnSrno());
+
 
 		} catch (Exception e) {
 

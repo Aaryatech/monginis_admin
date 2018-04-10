@@ -357,17 +357,17 @@ public class DumpOrderController {
 							   {
 						   			if(franchaseeList.get(k).getFrRateCat()==1)
 						   			{
-						   				order.setOrderRate(items.get(j).getItemRate1()*qty);
+						   				order.setOrderRate(items.get(j).getItemRate1());
 						   				order.setOrderMrp(items.get(j).getItemMrp1());
 						   			}
 						   			else if(franchaseeList.get(k).getFrRateCat()==2)
 						   			{
-						   				order.setOrderRate(items.get(j).getItemRate2()*qty);
+						   				order.setOrderRate(items.get(j).getItemRate2());
 						   				order.setOrderMrp(items.get(j).getItemMrp2());
 						   			}
 						   			else if(franchaseeList.get(k).getFrRateCat()==3)
 						   			{
-						   				order.setOrderRate(items.get(j).getItemRate3()*qty);
+						   				order.setOrderRate(items.get(j).getItemRate3());
 						   				order.setOrderMrp(items.get(j).getItemMrp3());
 						   			}
 						   			

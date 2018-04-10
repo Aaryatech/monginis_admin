@@ -275,6 +275,24 @@ public class GvnController {
 			System.out.println("remark list " + getAllRemarks.toString());
 
 			modelAndView.addObject("remarkList", getAllRemarks);
+			
+			GrnGvnHeader gateHeader = new GrnGvnHeader();
+			
+			String grnDate =null;
+
+			for (int i = 0; i < gvnGateHeaderList.size(); i++) {
+
+				if (gvnGateHeaderList.get(i).getGrnGvnHeaderId() == globalGvnGateHeaderId) {
+
+					gateHeader = gvnGateHeaderList.get(i);
+
+					break;
+
+				}
+			}
+			modelAndView.addObject("srNo", gateHeader.getGrngvnSrno());
+
+			modelAndView.addObject("grnDate", gateHeader.getGrngvnDate());
 
 		} catch (Exception e) {
 
@@ -283,9 +301,8 @@ public class GvnController {
 
 		}
 
-		String grnDate = gvnGateDetailList.get(0).getGrnGvnDate();
+		
 		modelAndView.addObject("gvnList", gvnGateDetailList);
-		modelAndView.addObject("grnDate", grnDate);
 		
 		modelAndView.addObject("url",Constants.GVN_IMAGE_URL);
 
@@ -936,6 +953,23 @@ public class GvnController {
 			getAllRemarks = getAllRemarksList.getGetAllRemarks();
 
 			modelAndView.addObject("remarkList", getAllRemarks);
+			
+			
+			
+			GrnGvnHeader gateHeader = new GrnGvnHeader();
+
+			for (int i = 0; i < gvnStoreHeaderList.size(); i++) {
+
+				if (gvnStoreHeaderList.get(i).getGrnGvnHeaderId() == globalGvnStoreHeaderId) {
+
+					gateHeader = gvnStoreHeaderList.get(i);
+
+					break;
+
+				}
+			}
+			modelAndView.addObject("srNo", gateHeader.getGrngvnSrno());
+
 
 		} catch (Exception e) {
 
@@ -1732,6 +1766,22 @@ public class GvnController {
 			}
 
 			modelAndView.addObject("remarkList", getAllRemarks);
+			
+			GrnGvnHeader gateHeader = new GrnGvnHeader();
+
+			for (int i = 0; i < gvnAccHeaderList.size(); i++) {
+
+				if (gvnAccHeaderList.get(i).getGrnGvnHeaderId() == globalGvnAccHeaderId) {
+
+					gateHeader = gvnAccHeaderList.get(i);
+
+					break;
+
+				}
+			}
+			modelAndView.addObject("srNo", gateHeader.getGrngvnSrno());
+
+		
 
 		} catch (Exception e) {
 

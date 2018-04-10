@@ -49,7 +49,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Search GVN for Gate
+								<i class="fa fa-bars"></i> GVN for Gate
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -73,7 +73,7 @@
 								<div class="box">
 									<div class="box-title">
 										<h3>
-											<i class="fa fa-table"></i> GVN List
+											<i class="fa fa-table"></i> GVN List GVN List Date-${grnDate} srNo-${srNo}
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i

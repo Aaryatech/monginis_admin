@@ -160,6 +160,8 @@ month=month+1;
 
 		map.add("frId", frId);
 		java.util.Date cDate = new java.util.Date();
+		
+		System.err.println("fr Id " +frId);
 
 		String curDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);
 
@@ -193,7 +195,7 @@ month=month+1;
 
 			String billNo = request.getParameter("bill_no");
 
-			System.out.println("req param billNo " + billNo);
+			System.out.println("req param billNo " + billNo +"fr Id " +frId);
 
 			RestTemplate restTemplate = new RestTemplate();
 
