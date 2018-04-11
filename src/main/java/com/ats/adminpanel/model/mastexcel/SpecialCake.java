@@ -32,7 +32,8 @@ public class SpecialCake {
 	private float mrpRate1; 
 	private float mrpRate2; 
 	private float mrpRate3;
-
+	private String erpLinkCode;
+	
 	public int getId() {
 		return id;
 	}
@@ -177,13 +178,21 @@ public class SpecialCake {
 		this.mrpRate3 = mrpRate3;
 	}
 
+	public String getErpLinkCode() {
+		return erpLinkCode;
+	}
+
+	public void setErpLinkCode(String erpLinkCode) {
+		this.erpLinkCode = erpLinkCode;
+	}
+
 	@Override
 	public String toString() {
 		return "SpecialCake [id=" + id + ", ItemName=" + ItemName + ", itemGroup=" + itemGroup + ", subGroup="
 				+ subGroup + ", subSubGroup=" + subSubGroup + ", hsnCode=" + hsnCode + ", uom=" + uom + ", sgstPer="
 				+ sgstPer + ", cgstPer=" + cgstPer + ", igstPer=" + igstPer + ", cessPer=" + cessPer + ", spCode="
 				+ spCode + ", spRate1=" + spRate1 + ", spRate2=" + spRate2 + ", spRate3=" + spRate3 + ", mrpRate1="
-				+ mrpRate1 + ", mrpRate2=" + mrpRate2 + ", mrpRate3=" + mrpRate3 + "]";
+				+ mrpRate1 + ", mrpRate2=" + mrpRate2 + ", mrpRate3=" + mrpRate3 + ", erpLinkCode=" + erpLinkCode + "]";
 	}
 	
 }

@@ -148,6 +148,7 @@ public class SpecialCakeController {
 				rowData.add("Group2");
 				rowData.add("HsnCode");
 				rowData.add("UOM");
+				rowData.add("ErpLink");
 				rowData.add("Rate1");
 				rowData.add("Rate2");
 				rowData.add("Rate3");
@@ -176,6 +177,7 @@ public class SpecialCakeController {
 					rowData.add(excelSpCake.get(i).getHsnCode());
 					
 					rowData.add(excelSpCake.get(i).getUom());
+					rowData.add(excelSpCake.get(i).getErpLinkCode());
 					rowData.add(""+excelSpCake.get(i).getSpRate1());
 					rowData.add(""+excelSpCake.get(i).getSpRate2());
 					rowData.add(""+excelSpCake.get(i).getSpRate3());

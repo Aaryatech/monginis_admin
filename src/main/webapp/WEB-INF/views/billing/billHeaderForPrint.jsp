@@ -582,30 +582,36 @@ form.submit();
 	 
 		function createExel() {
  
-			 
+			var fromDate = document.getElementById("dp1").value;
+			var toDate = document.getElementById("dp2").value;
 			  var select_to_print = document.forms[0];
+			 // alert(JSON.stringify(select_to_print));
     	var txt = "";
     	var i;
     	var flag=0;
-    	for (i = 0; i < select_to_print.length; i++) {
+    	var all=0;
+    	 for (i = 0; i < select_to_print.length; i++) {
         if (select_to_print[i].checked  && select_to_print[i].value!="on") {
             txt = txt + select_to_print[i].value + ",";
             flag=1;
         }
-    }
-			 
+    } 
+			 alert(txt);
 			 if(flag==1)
 				 {
 			$
 					.getJSON(
 							'${excelForFrBill}',
 							{
-								checkboxes : txt , 
+								checkboxes : txt ,
+								all : all,
+								fromDate : fromDate,
+								toDate : toDate,
 								ajax : 'true'
 							},
 							function(data) {
 								
-							 
+							 alert("excel ready");
 								 exportToExcel();
 							 
 							});
@@ -619,7 +625,7 @@ form.submit();
 		
 		function exportToExcel()
 		{
-			 
+			alert("export excel");
 			window.open("${pageContext.request.contextPath}/exportToExcel"); 
 		}
 	</script>
