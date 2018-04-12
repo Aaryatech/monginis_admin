@@ -48,7 +48,7 @@ public class CreditNote {
 	private float crnGrandTotal; 
 	private String itemcode;
 	private int isGrn;
-	
+	private String erpLink;
 	public int getCrndId() {
 		return crndId;
 	}
@@ -313,6 +313,14 @@ public class CreditNote {
 	public void setIsGrn(int isGrn) {
 		this.isGrn = isGrn;
 	}
+	
+	
+	public String getErpLink() {
+		return erpLink;
+	}
+	public void setErpLink(String erpLink) {
+		this.erpLink = erpLink;
+	}
 	@Override
 	public String toString() {
 		return "CreditNote [crndId=" + crndId + ", crnNo=" + crnNo + ", vNo=" + vNo + ", date=" + date + ", vType="
@@ -326,7 +334,7 @@ public class CreditNote {
 				+ ", crDbNo=" + crDbNo + ", crDbDate=" + crDbDate + ", frId=" + frId + ", frCode=" + frCode
 				+ ", itemId=" + itemId + ", catId=" + catId + ", crnTaxableAmt=" + crnTaxableAmt + ", crnTotalTax="
 				+ crnTotalTax + ", crnGrandTotal=" + crnGrandTotal + ", itemcode=" + itemcode + ", isGrn=" + isGrn
-				+ "]";
+				+ ", erpLink=" + erpLink + "]";
 	}
  
  

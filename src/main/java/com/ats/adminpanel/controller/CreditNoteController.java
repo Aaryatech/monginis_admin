@@ -555,6 +555,7 @@ public class CreditNoteController {
 				rowData.add("Cr Db No ");
 				rowData.add("Cr Db Date ");
 				rowData.add("Is Grn");
+				rowData.add("Erp Link");
 				
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
@@ -574,7 +575,7 @@ public class CreditNoteController {
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getGstin());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getState());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCatId());
-					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getItemcode());
+					rowData.add(creditNoteList.getCreditNoteList().get(i).getItemcode());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getItemId());  
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getItemName());  
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getHsnCode());
@@ -605,7 +606,7 @@ public class CreditNoteController {
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrDbNo());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrDbDate()); 
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getIsGrn());
-					
+					rowData.add(creditNoteList.getCreditNoteList().get(i).getErpLink());
 					expoExcel.setRowData(rowData);
 					exportToExcelList.add(expoExcel);
 					 

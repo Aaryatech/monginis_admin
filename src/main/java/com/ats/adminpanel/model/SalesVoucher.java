@@ -43,6 +43,7 @@ public class SalesVoucher {
 	private String itemCode; 
 	private String frCode;
 	private String remark;
+	private String erpLink;
   
 
 	public int getBillDetailNo() {
@@ -350,6 +351,14 @@ public class SalesVoucher {
 		this.frCode = frCode;
 	}
 
+	public String getErpLink() {
+		return erpLink;
+	}
+
+	public void setErpLink(String erpLink) {
+		this.erpLink = erpLink;
+	}
+
 	@Override
 	public String toString() {
 		return "SalesVoucher [billDetailNo=" + billDetailNo + ", billNo=" + billNo + ", vNo=" + vNo + ", date=" + date
@@ -361,7 +370,7 @@ public class SalesVoucher {
 				+ roundOff + ", totalAmt=" + totalAmt + ", billTotal=" + billTotal + ", totalTaxableAmt="
 				+ totalTaxableAmt + ", sgstSum=" + sgstSum + ", cgstSum=" + cgstSum + ", igstSum=" + igstSum
 				+ ", totalTax=" + totalTax + ", frId=" + frId + ", itemId=" + itemId + ", catId=" + catId
-				+ ", itemCode=" + itemCode + ", frCode=" + frCode + ", remark=" + remark + "]";
+				+ ", itemCode=" + itemCode + ", frCode=" + frCode + ", remark=" + remark + ", erpLink=" + erpLink + "]";
 	}
 	
 	
