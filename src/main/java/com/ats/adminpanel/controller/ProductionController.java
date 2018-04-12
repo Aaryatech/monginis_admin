@@ -69,18 +69,22 @@ import com.ats.adminpanel.model.franchisee.AllMenuResponse;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
 import com.ats.adminpanel.model.franchisee.Menu;
+import com.ats.adminpanel.model.franchisee.SubCategory;
 import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.CategoryListResponse;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.item.MCategoryList;
 import com.ats.adminpanel.model.itextpdf.FooterTable;
 import com.ats.adminpanel.model.production.GetOrderItemQty;
+import com.ats.adminpanel.model.production.GetProdDetailBySubCat;
+import com.ats.adminpanel.model.production.GetProdDetailBySubCatList;
 import com.ats.adminpanel.model.production.GetRegSpCakeOrderQty;
 import com.ats.adminpanel.model.production.PostProdPlanHeader;
 import com.ats.adminpanel.model.production.PostProductionDetail;
 import com.ats.adminpanel.model.production.PostProductionHeader;
 import com.ats.adminpanel.model.production.PostProductionPlanDetail;
 import com.ats.adminpanel.model.production.ProductionBarcode;
+import com.ats.adminpanel.model.production.SubCatwiseVariancePdf;
 import com.ats.adminpanel.model.production.UpdateOrderStatus;
 import com.ats.adminpanel.model.productionplan.MixingDetailed;
 import com.ats.adminpanel.model.salesreport.OrderFromProdPdfView;
@@ -1715,6 +1719,29 @@ model.addObject("todayDate",df.format(todayDate));
 		String timeStamp = dateFormat.format(cal.getTime());
 		String FILE_PATH = Constants.REPORT_SAVE;
 		File file = new File(FILE_PATH);
+		
+		RestTemplate restTemplate = new RestTemplate();
+
+		SubCategory[] subCatList = restTemplate.getForObject(Constants.url + "getAllSubCatList",
+				SubCategory[].class);
+
+		ArrayList<SubCategory> subCatAList = new ArrayList<SubCategory>(Arrays.asList(subCatList));
+		System.err.println("Sub Cat List /getAllSubCatList " +subCatList.toString());
+		
+		
+		List<SubCategory> filteredSubCat = new ArrayList<SubCategory>();
+		
+		
+		
+		
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+		/*
+		Item[] itemList = restTemplate.postForObject(Constants.url + "getItemsBySubCatId",map,
+				Item[].class);
+
+		ArrayList<Item> items = new ArrayList<Item>(Arrays.asList(itemList));
+*/
 
 		PdfWriter writer = null;
 
@@ -1726,6 +1753,8 @@ model.addObject("todayDate",df.format(todayDate));
 
 			e.printStackTrace();
 		}
+		
+		
 
 		PdfPTable table = new PdfPTable(9);
 		try {
@@ -1795,7 +1824,7 @@ model.addObject("todayDate",df.format(todayDate));
 						cell.setPaddingRight(8);
 						table.addCell(cell);
 
-						cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getCurOpeQty()), headFont));
+						cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getCurClosingQty()), headFont));
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setPaddingRight(8);
@@ -1813,32 +1842,67 @@ model.addObject("todayDate",df.format(todayDate));
 						cell.setPaddingRight(8);
 						table.addCell(cell);
 
-						cell = new PdfPCell(new Phrase(
+						/*cell = new PdfPCell(new Phrase(
 								String.valueOf(planDetail.getCurOpeQty() + planDetail.getProductionQty()), headFont));
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setPaddingRight(8);
+						table.addCell(cell);*/
+						
+						cell = new PdfPCell(new Phrase(
+								String.valueOf(planDetail.getCurOpeQty()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
 						table.addCell(cell);
+
 
 						cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getOrderQty()), headFont));
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setPaddingRight(8);
 						table.addCell(cell);
+						
+						float variance= (planDetail.getOrderQty()-planDetail.getCurOpeQty());
+						String var=new String();
+						if(variance<0) {
+							var="-";
+						}else {
+							var=""+variance;
+						}
 
-						cell = new PdfPCell(new Phrase(String.valueOf(
-								(planDetail.getCurOpeQty() + planDetail.getProductionQty()) - planDetail.getOrderQty()),
+						cell = new PdfPCell(new Phrase(String.valueOf(var),
 								headFont));
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setPaddingRight(8);
 						table.addCell(cell);
+						
+						
+						float clBal= (planDetail.getCurOpeQty()-planDetail.getOrderQty());
 
-						cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getOrderQty()), headFont));
+						cell = new PdfPCell(new Phrase(String.valueOf(clBal), headFont));
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setPaddingRight(8);
 						table.addCell(cell);
+						
+						for(int a=0;a<subCatAList.size();a++) {
+							
+							if(pdfItemList.get(j).getItemGrp2()==subCatAList.get(a).getSubCatId()) {
+								
+								System.err.println(" Sub Cat Found "+subCatAList.get(a).getSubCatName());
+								
+								
+								if (filteredSubCat.isEmpty())
+									filteredSubCat.add(subCatAList.get(a));
+								else if (!filteredSubCat.contains(subCatAList.get(a))) {
+									filteredSubCat.add(subCatAList.get(a));
+								}
+								
+							}
+							
+						}
 
 						break;
 					}
@@ -1846,6 +1910,172 @@ model.addObject("todayDate",df.format(todayDate));
 					// writer.setPageEvent(footerEvent);
 				}
 			}
+			
+			
+			SubCatwiseVariancePdf subVar=null;
+			
+			List<SubCatwiseVariancePdf> varBySubcatList=new ArrayList<SubCatwiseVariancePdf>();
+			
+			for(int a=0;a<filteredSubCat.size();a++) {
+				
+				 subVar=new SubCatwiseVariancePdf();
+				 subVar.setSubCatName(filteredSubCat.get(a).getSubCatName());
+				
+				map = new LinkedMultiValueMap<String, Object>();
+				
+				map.add("subCatId", filteredSubCat.get(a).getSubCatId());
+
+				Item[] itemList = restTemplate.postForObject(Constants.url + "getItemsBySubCatId",map,
+						Item[].class);
+
+				ArrayList<Item> items = new ArrayList<Item>(Arrays.asList(itemList));
+				
+				for(int b=0;b<items.size();b++) {
+					
+					for (PostProductionPlanDetail planDetail : postProdDetailList) {
+						
+						if(planDetail.getItemId()==items.get(b).getId()) {
+							
+							subVar.setOpBalance(subVar.getOpBalance()+planDetail.getCurClosingQty());
+							subVar.setPlanQty(subVar.getPlanQty()+planDetail.getPlanQty());
+							subVar.setProdQty(subVar.getProdQty()+planDetail.getProductionQty());
+							subVar.setTotal(subVar.getTotal()+planDetail.getCurOpeQty());
+							subVar.setOrderQty(subVar.getOrderQty()+planDetail.getOrderQty());
+							
+							float variance= (planDetail.getOrderQty()-planDetail.getCurOpeQty());
+							if(variance>0) {
+								subVar.setVariance(subVar.getVariance()+variance);
+							}
+							float clBal= (planDetail.getCurOpeQty()-planDetail.getOrderQty());
+							subVar.setClBal(subVar.getClBal()+clBal);
+						}
+					}
+				}
+				varBySubcatList.add(subVar);
+	
+				}
+			System.err.println("Sub Cat List And Data " +				varBySubcatList.toString());
+			
+			System.err.println("Filterd Sub  Cat " +filteredSubCat.toString() + "size " +filteredSubCat.size());
+			
+			
+			PdfPTable subCatTable = new PdfPTable(9);
+
+			System.out.println("Inside PDF Table try");
+			subCatTable.setWidthPercentage(100);
+			subCatTable.setWidths(new float[] { 0.9f, 2.9f, 1.4f, 0.9f, 1.4f, 1.4f, 0.9f, 1.4f, 1.4f });
+			 headFont = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK);
+			 headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
+			 f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
+
+			
+			hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			subCatTable.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Item Description", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			subCatTable.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("OP BAL", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			subCatTable.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("PLAN", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			subCatTable.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("PROD", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			subCatTable.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("TOTAL", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			subCatTable.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Order", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			subCatTable.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("VARI", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			subCatTable.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("CLBAL", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			subCatTable.addCell(hcell);
+						index=0;
+						for (int j=0;j<varBySubcatList.size();j++) {
+							index++;
+							PdfPCell cell;
+							
+							SubCatwiseVariancePdf planDetail=varBySubcatList.get(j);
+							
+							cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							subCatTable.addCell(cell);
+
+							System.out.println("Inside Item Matched ");
+							cell = new PdfPCell(new Phrase(varBySubcatList.get(j).getSubCatName(), headFont));
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+							cell.setPaddingRight(8);
+							subCatTable.addCell(cell);
+
+							cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getOpBalance()), headFont));
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setPaddingRight(8);
+							subCatTable.addCell(cell);
+
+							cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getPlanQty()), headFont));
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setPaddingRight(8);
+							subCatTable.addCell(cell);
+
+							cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getProdQty()), headFont));
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setPaddingRight(8);
+							subCatTable.addCell(cell);
+
+							
+							
+							cell = new PdfPCell(new Phrase(
+									String.valueOf(planDetail.getTotal()), headFont));
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setPaddingRight(8);
+							subCatTable.addCell(cell);
+
+
+							cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getOrderQty()), headFont));
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setPaddingRight(8);
+							subCatTable.addCell(cell);
+							
+
+							cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getVariance()),
+									headFont));
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setPaddingRight(8);
+							subCatTable.addCell(cell);
+							
+							
+						
+							cell = new PdfPCell(new Phrase(String.valueOf(planDetail.getClBal()), headFont));
+							cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+							cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+							cell.setPaddingRight(8);
+							table.addCell(cell);
+								subCatTable.addCell(cell);
+
+			}
+
 			document.open();
 			Paragraph company = new Paragraph(
 					"Galdhar Foods Pvt.Ltd\n" + "Factory Add: A-32 Shendra, MIDC, Auraangabad-4331667"
@@ -1855,21 +2085,31 @@ model.addObject("todayDate",df.format(todayDate));
 			document.add(company);
 			document.add(new Paragraph(" "));
 
-			Paragraph heading = new Paragraph("Report-Production Planning Form");
+			Paragraph heading = new Paragraph("Report-For Production Varience");
 			heading.setAlignment(Element.ALIGN_CENTER);
 			document.add(heading);
 
 			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
 			String reportDate = DF.format(new Date());
 
-			document.add(new Paragraph("" + reportDate));
+			document.add(new Paragraph("" + postProdPlanHeader.getProductionDate()));
 			document.add(new Paragraph("\n"));
 
 			document.add(new Paragraph(" "));
 			document.add(table);
-			int totalPages = writer.getPageNumber();
+			document.add(new Paragraph("\n"));
+			document.add(new Paragraph("Summary By SubCategories: "));
+			document.add(new Paragraph("\n"));
 
+			document.add(subCatTable);
+			int totalPages = writer.getPageNumber();
+			
+			System.err.println("total Pages " +totalPages);
+			
 			document.close();
+			
+		
+				
 
 			/*
 			 * com.ats.adminpanel.model.itextpdf.Header event; // = new

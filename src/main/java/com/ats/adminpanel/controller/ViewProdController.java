@@ -766,9 +766,6 @@ public class ViewProdController {
 
 				response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
 
-				// response.setHeader("Content-Disposition", String.format("attachment;
-				// filename=\"%s\"", file.getName()));
-
 				response.setContentLength((int) file.length());
 
 				InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
