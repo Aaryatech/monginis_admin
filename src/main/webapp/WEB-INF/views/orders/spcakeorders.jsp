@@ -189,6 +189,8 @@
 												<thead>
 													<tr>
 														<th width="130" align="left">Sr No</th>
+																											<th width="87" align="left">Action</th>
+														
 														<th width="208" align="left">Franchisee</th>
 														<th width="203" align="left">Delivery Date</th>
 														<th width="159" align="left"><span
@@ -203,7 +205,6 @@
 														<th width="91" align="left">Total</th>
 													  <th width="87" align="left">View</th>  
 														<th width="87" align="left">PDF</th>
-													<th width="87" align="left">Action</th>
 														
 													</tr>
 												</thead>
@@ -394,6 +395,8 @@
 									var tr = $('<tr></tr>');
 
 								  	tr.append($('<td></td>').html(key+1));
+								  	  tr.append($('<td></td>').html('<a href=# class=action_btn onclick=deleteSpOrder('+spCakeOrder.spOrderNo+');><abbr title=Delete><i class="glyphicon glyphicon-remove"></i></abbr></a>')); 
+
 
 								  	tr.append($('<td></td>').html(spCakeOrder.frName));
 								 	tr.append($('<td></td>').html(spCakeOrder.spDeliveryDate));
@@ -410,7 +413,6 @@
 								  	tr.append($('<td></td>').html('<a href="${pageContext.request.contextPath}/showHtmlViewSpcakeOrder/'+spCakeOrder.spOrderNo+'" target="blank"><i class="fa fa-file-text-o" style="font-size:24px;"></i></a>'));  
 								  	
 								  	  tr.append($('<td></td>').html('<a href="${pageContext.request.contextPath}/showSpcakeOrderPdf/'+spCakeOrder.spOrderNo+'/'+(key+1)+'" target="blank"><i class="fa fa-file-pdf-o" style="font-size:24px;"></i></a>'));  
-								  	  tr.append($('<td></td>').html('<a href=# class=action_btn onclick=deleteSpOrder('+spCakeOrder.spOrderNo+');><abbr title=Delete><i class="glyphicon glyphicon-remove"></i></abbr></a>')); 
 
 								
 									$('#table1 tbody').append(tr);
