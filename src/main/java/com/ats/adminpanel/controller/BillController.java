@@ -59,6 +59,7 @@ import org.zefer.pd4ml.PD4PageMark;
 import org.zefer.pd4ml.tools.PD4Browser.PD4Panel;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.AllFrIdName;
 import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.AllRoutesListResponse;
@@ -921,6 +922,9 @@ public class BillController {
 			System.out.println("ala " );
 			RestTemplate restTemplate = new RestTemplate();
 			String checkboxes = request.getParameter("checkboxes");
+			int all = Integer.parseInt(request.getParameter("all"));
+			String fromDate = request.getParameter("fromDate");
+			String toDate = request.getParameter("toDate");
 			System.out.println("checkboxes " + checkboxes);
 			/*StringBuilder sb = new StringBuilder();
 			String string = new String();
@@ -931,10 +935,15 @@ public class BillController {
 			}
 
 			string = sb.toString();*/
-			checkboxes = checkboxes.substring(0, checkboxes.length() - 1);
+			if(all==0)
+				checkboxes = checkboxes.substring(0, checkboxes.length() - 1);
 			System.out.println("string " + checkboxes);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("billNo", checkboxes);
+			map.add("all", all);
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate",  DateConvertor.convertToYMD(toDate));
+			System.out.println("map " + map);
 			salesVoucherList = restTemplate.postForObject(Constants.url + "/tally/getSalesVouchersByBillNo",map, SalesVoucherList.class);
 			System.out.println("salesVoucherList " + salesVoucherList.getSalesVoucherList());
 			
@@ -950,11 +959,13 @@ public class BillController {
 				rowData.add("Date");
 				rowData.add("Type");
 				rowData.add("Fr Id ");
+				rowData.add("Fr code ");
 				rowData.add("Party Name"); 
 				rowData.add("Gst No");
 				rowData.add("State");
 				rowData.add("Cat Id");
 				rowData.add("Item Id");
+				rowData.add("Item Code");
 				rowData.add("Item Name");
 				rowData.add("Hsn Code");
 				rowData.add("Qty"); 
@@ -980,6 +991,7 @@ public class BillController {
 				rowData.add("Tax Amt ");
 				rowData.add("Bill Total");
 				rowData.add("Remark");
+				rowData.add("Erp Link");
 			 
 					
 				expoExcel.setRowData(rowData);
@@ -995,12 +1007,14 @@ public class BillController {
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getDate());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getvType()); 
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getFrId());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getFrCode());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getPartyName());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getGstin());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getState());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getCatId()); 
-					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getItemId()); 
-					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getItemName());  
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getItemId());
+					rowData.add(salesVoucherList.getSalesVoucherList().get(i).getItemCode()); 
+					rowData.add(salesVoucherList.getSalesVoucherList().get(i).getItemName());  
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getHsnCode());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getQty());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getUom());
@@ -1025,8 +1039,8 @@ public class BillController {
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getIgstSum());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getTotalTax());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getBillTotal());
-					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getRemark());
-					
+					rowData.add(salesVoucherList.getSalesVoucherList().get(i).getRemark());
+					rowData.add(salesVoucherList.getSalesVoucherList().get(i).getErpLink());
 					
 					
 					expoExcel.setRowData(rowData);
@@ -1051,6 +1065,7 @@ public class BillController {
 		return salesVoucherList;
 
 	}
+
 
 	// Search Bill Header for PDF providing fromDate,toDate,route/frIds...
 	@RequestMapping(value = "/getBillListProcessForPrint", method = RequestMethod.GET)
