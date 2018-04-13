@@ -469,7 +469,8 @@
 							var tr = $('<tr></tr>');
 
 						  	tr.append($('<td></td>').html(key+1));
-
+						  	
+						  	  tr.append($('<td></td>').html('<a href=# class=action_btn onclick=deleteSpOrder('+spCakeOrder.spOrderNo+');><abbr title=Delete><i class="glyphicon glyphicon-remove"></i></abbr></a>')); 
 
 						  	tr.append($('<td></td>').html(spCakeOrder.frName));
 						 	tr.append($('<td></td>').html(spCakeOrder.spDeliveryDate));
@@ -489,7 +490,6 @@
 						  	
 
 						  	  tr.append($('<td></td>').html('<a href="${pageContext.request.contextPath}/showSpcakeOrderPdf/'+spCakeOrder.spOrderNo+'" target="blank"><i class="fa fa-file-pdf-o" style="font-size:24px;"></i></a>'));  
-						  	  tr.append($('<td></td>').html('<a href=# class=action_btn onclick=deleteSpOrder('+spCakeOrder.spOrderNo+');><abbr title=Delete><i class="glyphicon glyphicon-remove"></i></abbr></a>')); 
 
 						
 							$('#table1 tbody').append(tr);
