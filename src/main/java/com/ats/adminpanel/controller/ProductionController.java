@@ -1550,8 +1550,7 @@ model.addObject("todayDate",df.format(todayDate));
 								.setCurClosingQty(updateStockDetailList.get(j).getCloCurrent());
 
 						getVarianceorderlistforsort.get(i).setCurOpeQty(updateStockDetailList.get(j).getTotalCloStk());
-						float remainingProQty = (getVarianceorderlistforsort.get(i).getOrderQty()
-								+ getVarianceorderlistforsort.get(i).getSpCakeQty())
+						float remainingProQty = getVarianceorderlistforsort.get(i).getOrderQty() 
 								- getVarianceorderlistforsort.get(i).getCurOpeQty();
 
 						if (remainingProQty > 0) {
@@ -1573,8 +1572,7 @@ model.addObject("todayDate",df.format(todayDate));
 
 					if (planItemid == varianceItemId) {
 
-						postProductionPlanDetaillist.get(i).setOrderQty(getVarianceorderlistforsort.get(j).getOrderQty()
-								+ getVarianceorderlistforsort.get(j).getSpCakeQty());
+						postProductionPlanDetaillist.get(i).setOrderQty(getVarianceorderlistforsort.get(j).getOrderQty() );
 						float remainingProQty = postProductionPlanDetaillist.get(i).getOrderQty()
 								- postProductionPlanDetaillist.get(i).getCurOpeQty();
 
