@@ -50,14 +50,14 @@ th {
 <h3 align="center">Galdhar Foods Pvt Ltd</h3>
 <p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
 
-<div align="center"> <h5> GRN GVN Report (Franchise Wise)  &nbsp;&nbsp;&nbsp;&nbsp; From &nbsp; ${fromDate}  &nbsp;To &nbsp; ${toDate}</h5></div>
+<div align="center"> <h5> GRN GVN Report (Month Wise)  &nbsp;&nbsp;&nbsp;&nbsp; From &nbsp; ${fromDate}  &nbsp;To &nbsp; ${toDate}</h5></div>
 	<table  align="center" border="1" cellspacing="0" cellpadding="1" 
 		id="table_grid" class="table table-bordered">
 		<thead>
 			<tr class="bgpink">
 				<th >Sr. No.</th>
+				<th >Month</th>
 				<th >Type</th>
-				<th >Party Name</th>
 				<th >Req Qty</th>
 				<th  >Req Value</th>
 				<th >Apr Qty</th>
@@ -80,8 +80,9 @@ th {
 													<c:set var="type" value="GRN" />
 					</c:when>
 					</c:choose>
+										<td width="120"><c:out value="${report.month}" /></td>
+					
 					<td width="100" align="center"><c:out value="${type}" /></td>
-					<td width="120"><c:out value="${report.frName}" /></td>
 					<td width="100" align="center"><c:out value="${report.reqQty}" /></td>
 					<td width="100" align="right"><c:out value="${report.totalAmt}" /></td>
 										<td align="center" width="100"><c:out value="${report.aprQty}" /></td>
@@ -112,7 +113,6 @@ th {
 		</tbody>
 	</table>
 	
-
 	<!-- END Main Content -->
 
 </body>

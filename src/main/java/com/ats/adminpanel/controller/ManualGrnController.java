@@ -165,11 +165,11 @@ month=month+1;
 
 		String curDate = new SimpleDateFormat("dd-MM-yyyy").format(cDate);
 
-		map.add("curDate", curDate);
+		//map.add("curDate", curDate);
 
 		billsForFr = new GetBillsForFrList();
 
-		billsForFr = restTemplate.postForObject(Constants.url + "getBillsForFr", map, GetBillsForFrList.class);
+		billsForFr = restTemplate.postForObject(Constants.url + "getBillsForManGrnBackEndFr", map, GetBillsForFrList.class);
 		frBillList = new ArrayList<>();
 		frBillList = billsForFr.getGetBillsForFr();
 		

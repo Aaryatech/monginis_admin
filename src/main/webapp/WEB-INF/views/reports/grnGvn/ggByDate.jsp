@@ -2,12 +2,13 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	
-	 <script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
-	<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-	
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
+
+<script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+<script type="text/javascript"
+	src="https://www.gstatic.com/charts/loader.js"></script>
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<c:url var="getGrnGvnByDatewise" value="/getGrnGvnByDatewise"></c:url>
 
@@ -126,33 +127,28 @@
 
 				<br>
 				<div class="row">
-			<div class="from-group">
-			<div class="col-md-4">
-			
-				<select class="form-control"   name="isGrn" id="isGrn">
-								<option selected value="-1">Select View Option</option>
-				
-				<option value="1">GRN</option>
-				<option value="0">GVN</option>
-				<option value="2">ALL</option>
-				 </select>
-				 </div>
-				
-				
-					<div class="col-md-8" style="text-align: center;">
-						<button class="btn btn-info" onclick="searchReport()">Search
-							Billwise Report</button>
-									    <button class="btn search_btn" style="display: none" onclick="showChart()" >Graph</button>
-							
-							
-												<button class="btn btn-primary" value="PDF" id="PDFButton" onclick="genPdf()">PDF</button>
-							
-							<%-- <a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseByFrPdf"
-								target="_blank">PDF</a> --%>
+					<label class="col-sm-3 col-lg-2 control-label"> View Option</label>
+					<div class="col-md-2">
 
+						<select class="form-control" name="isGrn" id="isGrn">
+							<option selected value="-1">Select View Option</option>
+
+							<option value="1">GRN</option>
+							<option value="0">GVN</option>
+							<option value="2">ALL</option>
+						</select>
+					</div>
+
+					<div class="col-md-3" style="text-align: center;">
+						<button class="btn btn-info" onclick="searchReport()">Search
+							Report</button>
+						<button class="btn search_btn" style="display: none"
+							onclick="showChart()">Graph</button>
+
+						<button class="btn btn-primary" value="PDF" id="PDFButton"
+							onclick="genPdf()">PDF</button>
 					</div>
 				</div>
-
 
 				<div align="center" id="loader" style="display: none">
 
@@ -166,9 +162,7 @@
 				</div>
 
 			</div>
-			 </div>
 		</div>
-
 
 		<div class="box">
 			<div class="box-title">
@@ -178,43 +172,41 @@
 
 			</div>
 
-			<form id="submitBillForm"
-				
-				method="post">
-				
-						<div class="col-md-12 table-responsive">
-							<table class="table table-bordered table-striped fill-head "
-								style="width: 100%" id="table_grid">
-								<thead>
-									<tr>
-										<th>Sr.No.</th>
-										<th>Type</th>
-										<th>GrnGvn SrNo</th>
-										<th>Fr Name</th>
-										<th>Req Qty</th>
-										<th>Req Value</th>
-										<th>Apr Qty</th>
-										<th>Apr Value</th>
-										
-									</tr>
-								</thead>
-								<tbody>
+			<form id="submitBillForm" method="post">
 
-								</tbody>
-							</table>
-							<div class="form-group" style="display: none;" id="range">
-								 
-											 
-											 
-											<div class="col-sm-3  controls">
-											 <input style="display: none" type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
-											</div>
-											</div>
-								<div align="center" id="showchart" style="display: none">
+				<div class="col-md-12 table-responsive">
+					<table class="table table-bordered table-striped fill-head "
+						style="width: 100%" id="table_grid">
+						<thead>
+							<tr>
+								<th>Sr.No.</th>
+								<th>Date</th>
+																<th>Type</th>
+								
+																<th>GrnGvnSrNo</th>
+								
+								<th>Fr Name</th>
+								<th>Req Qty</th>
+								<th>Req Value</th>
+								<th>Apr Qty</th>
+								<th>Apr Value</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+					<div class="form-group" style="display: none;" id="range">
+
+						<div class="col-sm-3  controls">
+							<input style="display: none" type="button" id="expExcel"
+								class="btn btn-primary" value="EXPORT TO Excel"
+								onclick="exportToExcel();" disabled="disabled">
 						</div>
 					</div>
+					<div align="center" id="showchart" style="display: none"></div>
+				</div>
 
-<!-- 				</div>
+				<!-- 				</div>
 				
 				<div id="chart" style="display: none"><br><br><br>
 	<hr><div  >
@@ -226,34 +218,36 @@
 			
 				 
 				</div> -->
-				
-				
-				<div id="chart"  "> <br><br> <br>
-	<hr>
-        
-    <!-- <table class="columns">
+
+
+				<div id="chart"">
+					<br>
+					<br> <br>
+					<hr>
+
+					<!-- <table class="columns">
       <tr>
         <td><div id="chart_div" style="width: 50%" ></div></td>
         <td><div id="PieChart_div" style="width: 50%"></div></td>
       </tr>
     </table> -->
-   
-    <div id="chart_div" style="width: 100%; height: 700px;"></div>
-    
-    
-     <div id="PieChart_div" style="width: 100%; height: 700px;"></div>
-			 
-				 
+
+					<div id="chart_div" style="width: 100%; height: 700px;"></div>
+
+
+					<div id="PieChart_div" style="width: 100%; height: 700px;"></div>
+
+
 				</div>
 			</form>
 		</div>
 	</div>
 	<!-- END Main Content -->
-	
+
 	<footer>
-	<p>2017 © Monginis.</p>
+		<p>2017 © Monginis.</p>
 	</footer>
-	
+
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
@@ -261,7 +255,7 @@
 	<script type="text/javascript">
 		function searchReport() {
 		//	var isValid = validate();
-	document.getElementById('chart').style.display ="display:none";
+			document.getElementById('chart').style.display ="display:none";
 		   document.getElementById("table_grid").style= "block";
 			var isGrn = $("#isGrn").val();
 			//alert("isGrn " +isGrn);
@@ -272,6 +266,7 @@
 				
 				var from_date = $("#fromDate").val();
 				var to_date = $("#toDate").val();
+				
 
 				$('#loader').show();
 
@@ -310,35 +305,21 @@
 														//var tr = "<tr>";
 														var tr = $('<tr></tr>');
 													  	tr.append($('<td></td>').html(key+1));
-													  	tr.append($('<td></td>').html(report.frName));
-													  	tr.append($('<td></td>').html(report.frCity));
-													  	tr.append($('<td></td>').html(report.frGstNo));
-													  	tr.append($('<td></td>').html(report.taxableAmt));
 													  	
-														if(report.isSameState==1){
-														  	tr.append($('<td></td>').html(report.cgstSum));
-														  	tr.append($('<td></td>').html(report.sgstSum));
-														  	tr.append($('<td></td>').html(0));
-														}
-														else{
-															tr.append($('<td></td>').html(0));
-														  	tr.append($('<td></td>').html(0));
-														  	tr.append($('<td></td>').html(report.igstSum));
-														}
-													  	//tr.append($('<td></td>').html(report.igstSum));
-														tr.append($('<td></td>').html(report.roundOff));
-														var total;
-														
-														if(report.isSameState==1){
-															 total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum);
-														}
-														else{
-															
-															 total=report.taxableAmt+report.igstSum;
-														}
-
-													  	tr.append($('<td></td>').html(total));
-
+													  	if(report.isGrn==1){
+													  		var type="GRN"
+													  	}else{
+													  		var type="GVN"
+													  	}
+													  	tr.append($('<td></td>').html(report.grngvnDate));
+													  	tr.append($('<td></td>').html(type));
+													  	tr.append($('<td></td>').html(report.grngvnSrno));
+													  	tr.append($('<td></td>').html(report.frName));
+													  	tr.append($('<td></td>').html(report.reqQty));
+													  	tr.append($('<td></td>').html(report.totalAmt));
+													  	tr.append($('<td></td>').html(report.aprQty));
+													  	tr.append($('<td></td>').html(report.aprGrandTotal));
+													  	
 														$('#table_grid tbody')
 																.append(
 																		tr);
@@ -381,12 +362,12 @@
 		}
 	</script>
 
-	
 
-	
 
-	
-<script type="text/javascript">
+
+
+
+	<script type="text/javascript">
 function showChart(){
 	$("#PieChart_div").empty();
 	$("#chart_div").empty();

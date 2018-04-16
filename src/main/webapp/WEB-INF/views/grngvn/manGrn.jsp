@@ -227,7 +227,7 @@
 						bill_no: bill,
 						ajax : 'true'
 					}, function(data) {
-						alert(data);
+						//alert(data);
 						var len = data.length;
 						
 						$('#table_grid td').remove();

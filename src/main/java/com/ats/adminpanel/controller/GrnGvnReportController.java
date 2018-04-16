@@ -549,7 +549,7 @@ public class GrnGvnReportController {
 				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 				map.add("toDate", DateConvertor.convertToYMD(toDate));
 				map.add("isGrn", isGrn);
-				
+				map.add("frIdList", 0);
 				
 					ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
 					};
@@ -570,6 +570,101 @@ public class GrnGvnReportController {
 		
 		}
 		
+		//showGGreportGrpByDate r3 PDF
+		
+		@RequestMapping(value = "pdf/showGGreportGrpByDate/{fDate}/{tDate}/{selectedFr}/{routeId}/{isGrn}", method = RequestMethod.GET)
+		public ModelAndView showGGreportGrpByDatePdf(@PathVariable String fDate, @PathVariable String tDate,
+				@PathVariable String selectedFr, @PathVariable String routeId,@PathVariable int isGrn, HttpServletRequest request,
+				HttpServletResponse response) {
+
+			ModelAndView model = new ModelAndView("reports/grnGvn/pdf/r3");
+
+			List<GGReportGrpByMonthDate> grnGvnGrpByDateList= new ArrayList<>();
+			
+			System.err.println("Inside PDF mapping");
+			
+			boolean isAllFrSelected = false;
+			
+			try {
+
+				if (!routeId.equalsIgnoreCase("0")) {
+
+					MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+					RestTemplate restTemplate = new RestTemplate();
+
+					map.add("routeId", routeId);
+
+					FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
+							map, FrNameIdByRouteIdResponse.class);
+
+					List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+
+					System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+
+					StringBuilder sbForRouteFrId = new StringBuilder();
+					for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
+
+						sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
+
+					}
+
+					String strFrIdRouteWise = sbForRouteFrId.toString();
+					selectedFr = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+					System.out.println("fr Id Route WISE = " + selectedFr);
+
+				} // end of if
+
+				if (selectedFr.equalsIgnoreCase("-1")) {
+					isAllFrSelected = true;
+				}
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				RestTemplate restTemplate = new RestTemplate();
+
+				if (isAllFrSelected) {
+
+					System.out.println("Inside If all fr Selected ");
+					map.add("frIdList", 0);
+					
+				} else {
+					System.out.println("Inside else Few fr Selected ");
+
+					map.add("frIdList", selectedFr);
+					
+					
+				}
+				
+					map.add("fromDate", DateConvertor.convertToYMD(fDate));
+					map.add("toDate", DateConvertor.convertToYMD(tDate));
+					map.add("isGrn", isGrn);
+					map.add("frIdList", 0);
+
+					ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
+					};
+					ResponseEntity<List<GGReportGrpByMonthDate>> responseEntity = restTemplate.exchange(
+							Constants.url + "getGGReportGrpByDate", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+					
+					grnGvnGrpByDateList = responseEntity.getBody();
+					
+					System.err.println("List---- " +grnGvnGrpByDateList.toString());
+
+				
+			} catch (Exception e) {
+				System.err.println("Exc in GRN PDF report 2");
+				e.printStackTrace();
+			}
+
+			model.addObject("fromDate", fDate);
+
+			model.addObject("toDate", tDate);
+
+			model.addObject("report", grnGvnGrpByDateList);
+
+			return model;
+		}
+
+		//r4
 		
 		@RequestMapping(value = "/showGGReportGrpByMonth", method = RequestMethod.GET)
 		public ModelAndView showGGReportGrpByMonth(HttpServletRequest request, HttpServletResponse response) {
@@ -600,13 +695,14 @@ public class GrnGvnReportController {
 			return model;
 		}
 		
+		//r4 consume web service
 		
 		@RequestMapping(value = "/getGrnGvnByGrpByMonth", method = RequestMethod.GET)
 		@ResponseBody
 		public  List<GGReportGrpByMonthDate> getGrnGvnByGrpByMonth(HttpServletRequest request, HttpServletResponse response) {
 			
 			List<GGReportGrpByMonthDate> grnGvnGrpByMonthList= new ArrayList<>();
-
+			
 			try {
 
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -683,6 +779,7 @@ public class GrnGvnReportController {
 				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 				map.add("toDate", DateConvertor.convertToYMD(toDate));
 				map.add("isGrn", isGrn);
+				map.add("frIdList", 0);
 				
 					ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
 					};
@@ -703,5 +800,101 @@ public class GrnGvnReportController {
 			return grnGvnGrpByMonthList;
 			
 		}
+		
+		
+		//showGGreportGrpByDate r3 PDF
+		
+				@RequestMapping(value = "pdf/showGGreportGrpByMonth/{fDate}/{tDate}/{selectedFr}/{routeId}/{isGrn}", method = RequestMethod.GET)
+				public ModelAndView showGGreportGrpByMonthPdf(@PathVariable String fDate, @PathVariable String tDate,
+						@PathVariable String selectedFr, @PathVariable String routeId,@PathVariable int isGrn, HttpServletRequest request,
+						HttpServletResponse response) {
+
+					ModelAndView model = new ModelAndView("reports/grnGvn/pdf/r4");
+
+					List<GGReportGrpByMonthDate> grnGvnGrpByDateList= new ArrayList<>();
+					
+					System.err.println("Inside PDF mapping");
+					
+					boolean isAllFrSelected = false;
+					
+					try {
+
+						if (!routeId.equalsIgnoreCase("0")) {
+
+							MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+							RestTemplate restTemplate = new RestTemplate();
+
+							map.add("routeId", routeId);
+
+							FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
+									map, FrNameIdByRouteIdResponse.class);
+
+							List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+
+							System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+
+							StringBuilder sbForRouteFrId = new StringBuilder();
+							for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
+
+								sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
+
+							}
+
+							String strFrIdRouteWise = sbForRouteFrId.toString();
+							selectedFr = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+							System.out.println("fr Id Route WISE = " + selectedFr);
+
+						} // end of if
+
+						if (selectedFr.equalsIgnoreCase("-1")) {
+							isAllFrSelected = true;
+						}
+
+						MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+						RestTemplate restTemplate = new RestTemplate();
+
+						if (isAllFrSelected) {
+
+							System.out.println("Inside If all fr Selected ");
+							map.add("frIdList", 0);
+							
+						} else {
+							System.out.println("Inside else Few fr Selected ");
+
+							map.add("frIdList", selectedFr);
+							
+							
+						}
+						
+							map.add("fromDate", DateConvertor.convertToYMD(fDate));
+							map.add("toDate", DateConvertor.convertToYMD(tDate));
+							map.add("isGrn", isGrn);
+							map.add("frIdList", 0);
+
+							ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
+							};
+							ResponseEntity<List<GGReportGrpByMonthDate>> responseEntity = restTemplate.exchange(
+									Constants.url + "getGGReportGrpByMonth", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+							
+							grnGvnGrpByDateList = responseEntity.getBody();
+							
+							System.err.println("List---- " +grnGvnGrpByDateList.toString());
+
+						
+					} catch (Exception e) {
+						System.err.println("Exc in GRN PDF report 2");
+						e.printStackTrace();
+					}
+
+					model.addObject("fromDate", fDate);
+
+					model.addObject("toDate", tDate);
+
+					model.addObject("report", grnGvnGrpByDateList);
+
+					return model;
+				}
+
 		
 }

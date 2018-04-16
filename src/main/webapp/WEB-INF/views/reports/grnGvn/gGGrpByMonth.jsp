@@ -10,7 +10,7 @@
 	<body>
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	
-	<c:url var="getGrnGvnByGrpByDate" value="/getGrnGvnByGrpByDate"></c:url>
+	<c:url var="getGrnGvnByGrpByMonth" value="/getGrnGvnByGrpByMonth"></c:url>
 
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
@@ -88,7 +88,7 @@
 
 				<!-- <div class="col-sm-9 col-lg-5 controls">
  -->
-				<div class="row">
+				<div class="row" style="display: none;">
 					<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">Select
 							Route</label>
@@ -125,10 +125,10 @@
 					</div>
 				</div>
 
-				<br>
 				<div class="row">
-			<div class="from-group">
-			<div class="col-md-4">
+			<label class="col-sm-3 col-lg-2 control-label">
+							View Option</label>
+			<div class="col-md-2">
 			
 				<select class="form-control"   name="isGrn" id="isGrn">
 								<option selected value="-1">Select View Option</option>
@@ -140,21 +140,19 @@
 				 </div>
 				
 				
-					<div class="col-md-8" style="text-align: center;">
+					<div class="col-md-3" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
 							Fr Wise Report</button>
 									    <button class="btn search_btn" style="display: none" onclick="showChart()" >Graph</button>
 							
-							
 												<button class="btn btn-primary" value="PDF" id="PDFButton" onclick="genPdf()">PDF</button>
 							
-							<%-- <a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseByFrPdf"
-								target="_blank">PDF</a> --%>
+							
 
 					</div>
-				</div>
+			
 
-
+</div>
 				<div align="center" id="loader" style="display: none">
 
 					<span>
@@ -166,7 +164,7 @@
 					<span class="l-6"></span>
 				</div>
 
-			</div>
+			
 			 </div>
 		</div>
 
@@ -189,8 +187,8 @@
 								<thead>
 									<tr>
 										<th>Sr.No.</th>
-										<th>Type</th>
 										<th>Month</th>
+										<th>Type</th>
 										<th>Req Qty</th>
 										<th>Req Value</th>
 										<th>Apr Qty</th>
@@ -276,7 +274,7 @@
 
 				$
 						.getJSON(
-								'${getGrnGvnByGrpByDate}',
+								'${getGrnGvnByGrpByMonth}',
 
 								{
 									fr_id_list : JSON.stringify(selectedFr),
@@ -318,8 +316,9 @@
 														
 														var tr = $('<tr></tr>');
 													  	tr.append($('<td></td>').html(key+1));
-														tr.append($('<td></td>').html(type));
 													  	tr.append($('<td></td>').html(report.month));
+														tr.append($('<td></td>').html(type));
+
 													  	tr.append($('<td></td>').html(report.reqQty));
 													  	tr.append($('<td></td>').html(report.totalAmt));
 													  	tr.append($('<td></td>').html(report.aprQty));
@@ -542,8 +541,9 @@ function genPdf()
 
 	var selectedFr = $("#selectFr").val();
 	var routeId=$("#selectRoute").val();
-	window.open('${pageContext.request.contextPath}/pdfForReport?url=pdf/showSaleBillwiseByFrPdf/'+from_date+'/'+to_date+'/'+selectedFr+'/'+routeId+'/');
-	
+	var isGrn = $("#isGrn").val();
+	window.open('${pageContext.request.contextPath}/pdfForReport?url=pdf/showGGreportGrpByMonth/'+from_date+'/'+to_date+'/'+selectedFr+'/'+routeId+'/'+isGrn+'/');
+		
 	}
 function exportToExcel()
 {

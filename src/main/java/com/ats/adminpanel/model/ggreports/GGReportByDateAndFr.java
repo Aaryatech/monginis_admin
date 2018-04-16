@@ -23,6 +23,8 @@ public class GGReportByDateAndFr {
 	private int aprQty;
 	
 	private float aprGrandTotal;
+	
+	int isGrn;
 
 	public int getGrnGvnHeaderId() {
 		return grnGvnHeaderId;
@@ -96,11 +98,21 @@ public class GGReportByDateAndFr {
 		this.aprGrandTotal = aprGrandTotal;
 	}
 
+	public int getIsGrn() {
+		return isGrn;
+	}
+
+	public void setIsGrn(int isGrn) {
+		this.isGrn = isGrn;
+	}
+
 	@Override
 	public String toString() {
 		return "GGReportByDateAndFr [grnGvnHeaderId=" + grnGvnHeaderId + ", grngvnSrno=" + grngvnSrno + ", grngvnDate="
 				+ grngvnDate + ", frId=" + frId + ", frName=" + frName + ", reqQty=" + reqQty + ", totalAmt=" + totalAmt
-				+ ", aprQty=" + aprQty + ", aprGrandTotal=" + aprGrandTotal + "]";
+				+ ", aprQty=" + aprQty + ", aprGrandTotal=" + aprGrandTotal + ", isGrn=" + isGrn + "]";
 	}
+
+	
 	
 }

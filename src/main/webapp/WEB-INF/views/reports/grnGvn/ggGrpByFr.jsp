@@ -126,8 +126,9 @@
 
 				<br>
 				<div class="row">
-			<div class="from-group">
-			<div class="col-md-4">
+			<label class="col-sm-3 col-lg-2 control-label">
+							View Option</label>
+			<div class="col-md-2">
 			
 				<select class="form-control"   name="isGrn" id="isGrn">
 								<option selected value="-1">Select View Option</option>
@@ -139,17 +140,17 @@
 				 </div>
 				
 				
-					<div class="col-md-8" style="text-align: center;">
+					<div class="col-md-3" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
 							Fr Wise Report</button>
 									    <button class="btn search_btn" style="display: none" onclick="showChart()" >Graph</button>
 							
 												<button class="btn btn-primary" value="PDF" id="PDFButton" onclick="genPdf()">PDF</button>
-							
-							
-					</div>
-				</div>
 
+					</div>
+			
+
+</div>
 
 				<div align="center" id="loader" style="display: none">
 
@@ -163,7 +164,7 @@
 				</div>
 
 			</div>
-			 </div>
+			
 		</div>
 
 
