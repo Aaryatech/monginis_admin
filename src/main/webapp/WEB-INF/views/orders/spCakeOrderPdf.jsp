@@ -37,7 +37,7 @@
 														varStatus="count"> 
 														
 <table width="100%" style="font-family:arial; font-size:12px; border:1px solid #000000; margin-bottom:40px;">
-  <tr >
+  <tr bgcolor=lightgrey >
     <td colspan="3" style="font-size:20px; border-bottom:1px solid #000000; padding:8px 7px;" align="center" >AURANGABAD MONGINIS</td>
   </tr>
   <tr >
@@ -66,17 +66,19 @@
     <td colspan="2" style=" font-size:18px; border-bottom:1px solid #000000;border-left: 1px solid  #000000; padding:5px 7px;font-weight:bold;" >Happy Birthday Anushka</td>
   </tr> -->
   <tr>
-    <td  style=" font-size:12px;padding:5px 7px;font-weight:bold;">Date of Delivery </td>
-    <td style=" font-size:16px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">${spCakeOrder.spDeliveryDate}</td>
-    <td  style=" font-size:16px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">Place of Delivery-- ${spCakeOrder.spDeliveryPlace}</td>
+    <td  style=" font-size:12px;padding:5px 7px;font-weight:bold;border-bottom:1px solid #000000;">Date of Delivery </td>
+    <td style=" font-size:16px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;">${spCakeOrder.spDeliveryDate}</td>
+    <td  style=" font-size:16px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;">Place of Delivery-- ${spCakeOrder.spDeliveryPlace}</td>
   </tr>
-</table>
+
 <c:set var="from" value="${from+1}"/>
-<tr>
-<td>Photo 1 :<img src="${imgUrl2}${spCakeOrder.orderPhoto}" height="8%" width="10%" style="border:medium;" alt="${imgUrl}${spCakeOrder.cusChoicePhoto}"></td>
-<td> </td><td> </td>&nbsp;&nbsp;&nbsp;
-<td>Photo 2 :<img src="${imgUrl}${spCakeOrder.cusChoicePhoto}" height="8%" width="10%" alt="${imgUrl2}${spCakeOrder.orderPhoto}"></td>
-</tr>
+<tr >
+<td style=" font-size:12px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;">Photo</td>
+<td style="text-align:left; font-size:16px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;">Photo 1 :<img src="${imgUrl2}${spCakeOrder.orderPhoto}" height="60" width="60" style="border:medium;" alt="${imgUrl}${spCakeOrder.orderPhoto}"></td>
+
+<td  style=" text-align:left;font-size:16px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;">Photo 2 :<img src="${imgUrl}${spCakeOrder.cusChoicePhoto}" height="60" width="60" alt="${imgUrl2}${spCakeOrder.cusChoicePhoto}"></td>
+</tr></table>
+
  </c:forEach>
  	<!-- scripts -->
 	<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
