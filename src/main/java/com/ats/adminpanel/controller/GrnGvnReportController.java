@@ -99,7 +99,7 @@ public class GrnGvnReportController {
 	
 	@RequestMapping(value = "/getGrnGvnByDatewise", method = RequestMethod.GET)
 	@ResponseBody
-	public  List<GGReportByDateAndFr> excelForFrBill(HttpServletRequest request, HttpServletResponse response) {
+	public  List<GGReportByDateAndFr> getGrnGvnByDatewise(HttpServletRequest request, HttpServletResponse response) {
 		
 		List<GGReportByDateAndFr> grnGvnByDateList= new ArrayList<>();
 
@@ -120,7 +120,19 @@ public class GrnGvnReportController {
 			routeId = request.getParameter("route_id");
 			
 			String isGrn=request.getParameter("is_grn");
+			String grnType;
+if(isGrn.equalsIgnoreCase("2")) {
+	
+	System.err.println("Is Grn =2");
+	grnType="1"+","+ "0";
+	
+	map.add("isGrn", grnType);
+}else {
+	System.err.println("Is Grn not =2");
+	grnType=isGrn;
+	map.add("isGrn", isGrn);
 
+}
 			
 
 			System.out.println("fromDate= " + fromDate);
@@ -181,7 +193,7 @@ public class GrnGvnReportController {
 
 			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 			map.add("toDate", DateConvertor.convertToYMD(toDate));
-			map.add("isGrn", isGrn);
+			map.add("isGrn", grnType);
 			
 			
 				ParameterizedTypeReference<List<GGReportByDateAndFr>> typeRef = new ParameterizedTypeReference<List<GGReportByDateAndFr>>() {
@@ -202,6 +214,114 @@ public class GrnGvnReportController {
 		return grnGvnByDateList;
 	
 	}
+	//showGGreportByDate PDF
+	
+	@RequestMapping(value = "pdf/showGGreportByDate/{fDate}/{tDate}/{selectedFr}/{routeId}/{isGrn}", method = RequestMethod.GET)
+	public ModelAndView showGGreportByDatePdf(@PathVariable String fDate, @PathVariable String tDate,
+			@PathVariable String selectedFr, @PathVariable String routeId,@PathVariable int isGrn, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/grnGvn/pdf/r1");
+
+		List<GGReportByDateAndFr> grnGvnByDateList= new ArrayList<>();
+		
+		System.err.println("Inside PDF mapping");
+		
+		boolean isAllFrSelected = false;
+		
+		try {
+
+			if (!routeId.equalsIgnoreCase("0")) {
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+				RestTemplate restTemplate = new RestTemplate();
+
+				map.add("routeId", routeId);
+
+				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
+						map, FrNameIdByRouteIdResponse.class);
+
+				List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+
+				System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+
+				StringBuilder sbForRouteFrId = new StringBuilder();
+				for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
+
+					sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
+
+				}
+
+				String strFrIdRouteWise = sbForRouteFrId.toString();
+				selectedFr = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+				System.out.println("fr Id Route WISE = " + selectedFr);
+
+			} // end of if
+
+			if (selectedFr.equalsIgnoreCase("-1")) {
+				isAllFrSelected = true;
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+
+			if (isAllFrSelected) {
+
+				System.out.println("Inside If all fr Selected ");
+				map.add("frIdList", 0);
+				
+			} else {
+				System.out.println("Inside else Few fr Selected ");
+
+				map.add("frIdList", selectedFr);
+				
+				
+			}
+			
+			if(isGrn==2) {
+				System.err.println("Is Grn ==2");
+				
+				map.add("isGrn", "1"+","+"0");
+			}
+			else {
+				System.err.println("Is Grn  not Eq 2");
+
+				map.add("isGrn", isGrn);
+
+			}
+			
+				map.add("fromDate", DateConvertor.convertToYMD(fDate));
+				map.add("toDate", DateConvertor.convertToYMD(tDate));
+				//map.add("isGrn", isGrn);
+
+				ParameterizedTypeReference<List<GGReportByDateAndFr>> typeRef = new ParameterizedTypeReference<List<GGReportByDateAndFr>>() {
+				};
+				ResponseEntity<List<GGReportByDateAndFr>> responseEntity = restTemplate.exchange(
+						Constants.url + "getgGReportByDate", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+				
+				grnGvnByDateList = responseEntity.getBody();
+				
+				System.err.println("List---- " +grnGvnByDateList.toString());
+
+			
+		} catch (Exception e) {
+			System.err.println("Exc in GRN PDF report 2");
+			e.printStackTrace();
+		}
+
+		model.addObject("fromDate", fDate);
+
+		model.addObject("toDate", tDate);
+
+		model.addObject("report", grnGvnByDateList);
+
+		return model;
+	}
+
+
+	
+	
 	
 	
 	//r2
@@ -257,6 +377,20 @@ public class GrnGvnReportController {
 				routeId = request.getParameter("route_id");
 				String isGrn=request.getParameter("is_grn");
 
+				String grnType;
+				if(isGrn.equalsIgnoreCase("2")) {
+					
+					System.err.println("Is Grn =2");
+					grnType="1"+","+ "0";
+					
+					map.add("isGrn", grnType);
+				}else {
+					System.err.println("Is Grn not =2");
+					grnType=isGrn;
+					map.add("isGrn", isGrn);
+
+				}
+							
 				System.out.println("fromDate= " + fromDate);
 
 				boolean isAllFrSelected = false;
@@ -312,10 +446,12 @@ public class GrnGvnReportController {
 					map.add("frIdList", frIdString);
 					
 				}
+				
+				
 
 				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 				map.add("toDate", DateConvertor.convertToYMD(toDate));
-				map.add("isGrn", isGrn);
+				map.add("isGrn", grnType);
 				
 				
 					ParameterizedTypeReference<List<GGReportGrpByFrId>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByFrId>>() {
@@ -402,9 +538,21 @@ public class GrnGvnReportController {
 					
 				}
 				
+				if(isGrn==2) {
+					System.err.println("Is Grn ==2");
+					
+					map.add("isGrn", "1"+","+"0");
+				}
+				else {
+					System.err.println("Is Grn  not Eq 2");
+
+					map.add("isGrn", isGrn);
+
+				}
+				
 					map.add("fromDate", DateConvertor.convertToYMD(fDate));
 					map.add("toDate", DateConvertor.convertToYMD(tDate));
-					map.add("isGrn", isGrn);
+					//map.add("isGrn", isGrn);
 
 					ParameterizedTypeReference<List<GGReportGrpByFrId>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByFrId>>() {
 					};
@@ -489,6 +637,22 @@ public class GrnGvnReportController {
 				String toDate = request.getParameter("to_date");
 				routeId = request.getParameter("route_id");
 				String isGrn=request.getParameter("is_grn");
+				
+				
+				String grnType;
+				if(isGrn.equalsIgnoreCase("2")) {
+					
+					System.err.println("Is Grn =2");
+					grnType="1"+","+ "0";
+					
+					map.add("isGrn", grnType);
+				}else {
+					System.err.println("Is Grn not =2");
+					grnType=isGrn;
+					map.add("isGrn", isGrn);
+
+				}
+							
 
 				System.out.println("fromDate= " + fromDate);
 
@@ -548,7 +712,7 @@ public class GrnGvnReportController {
 
 				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 				map.add("toDate", DateConvertor.convertToYMD(toDate));
-				map.add("isGrn", isGrn);
+				map.add("isGrn", grnType);
 				map.add("frIdList", 0);
 				
 					ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
@@ -635,9 +799,22 @@ public class GrnGvnReportController {
 					
 				}
 				
+				
+				if(isGrn==2) {
+					System.err.println("Is Grn ==2");
+					
+					map.add("isGrn", "1"+","+"0");
+				}
+				else {
+					System.err.println("Is Grn  not Eq 2");
+
+					map.add("isGrn", isGrn);
+
+				}
+				
 					map.add("fromDate", DateConvertor.convertToYMD(fDate));
 					map.add("toDate", DateConvertor.convertToYMD(tDate));
-					map.add("isGrn", isGrn);
+					//map.add("isGrn", isGrn);
 					map.add("frIdList", 0);
 
 					ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
@@ -720,6 +897,21 @@ public class GrnGvnReportController {
 				routeId = request.getParameter("route_id");
 				String isGrn=request.getParameter("is_grn");
 
+				
+				String grnType;
+				if(isGrn.equalsIgnoreCase("2")) {
+					
+					System.err.println("Is Grn =2");
+					grnType="1"+","+ "0";
+					
+					map.add("isGrn", grnType);
+				}else {
+					System.err.println("Is Grn not =2");
+					grnType=isGrn;
+					map.add("isGrn", isGrn);
+
+				}
+				
 				System.out.println("fromDate= " + fromDate);
 
 				boolean isAllFrSelected = false;
@@ -778,7 +970,7 @@ public class GrnGvnReportController {
 
 				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 				map.add("toDate", DateConvertor.convertToYMD(toDate));
-				map.add("isGrn", isGrn);
+				map.add("isGrn", grnType);
 				map.add("frIdList", 0);
 				
 					ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
@@ -802,7 +994,7 @@ public class GrnGvnReportController {
 		}
 		
 		
-		//showGGreportGrpByDate r3 PDF
+		//showGGreportGrpByMonth r4 PDF
 		
 				@RequestMapping(value = "pdf/showGGreportGrpByMonth/{fDate}/{tDate}/{selectedFr}/{routeId}/{isGrn}", method = RequestMethod.GET)
 				public ModelAndView showGGreportGrpByMonthPdf(@PathVariable String fDate, @PathVariable String tDate,
@@ -869,7 +1061,20 @@ public class GrnGvnReportController {
 						
 							map.add("fromDate", DateConvertor.convertToYMD(fDate));
 							map.add("toDate", DateConvertor.convertToYMD(tDate));
-							map.add("isGrn", isGrn);
+							
+							
+							if(isGrn==2) {
+								System.err.println("Is Grn ==2");
+								
+								map.add("isGrn", "1"+","+"0");
+							}
+							else {
+								System.err.println("Is Grn  not Eq 2");
+
+								map.add("isGrn", isGrn);
+
+							}
+							//map.add("isGrn", isGrn);
 							map.add("frIdList", 0);
 
 							ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {

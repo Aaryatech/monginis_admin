@@ -57,7 +57,6 @@ th {
 			<tr class="bgpink">
 				<th >Sr. No.</th>
 				<th >Month</th>
-				<th >Type</th>
 				<th >Req Qty</th>
 				<th  >Req Value</th>
 				<th >Apr Qty</th>
@@ -82,7 +81,6 @@ th {
 					</c:choose>
 										<td width="120"><c:out value="${report.month}" /></td>
 					
-					<td width="100" align="center"><c:out value="${type}" /></td>
 					<td width="100" align="center"><c:out value="${report.reqQty}" /></td>
 					<td width="100" align="right"><c:out value="${report.totalAmt}" /></td>
 										<td align="center" width="100"><c:out value="${report.aprQty}" /></td>
@@ -99,7 +97,7 @@ th {
 			</c:forEach>
 				<tr>
 				
-					<td width="100"colspan='3' align="right"><b>Total</b></td>
+					<td width="100"colspan='2' align="right"><b>Total</b></td>
 					<td width="100"align="right"><b><fmt:formatNumber type="number"
 								maxFractionDigits="0"  minFractionDigits="0"  value="${reqQtySum}" /></b></td>
 					<td width="100" align="right"><b><fmt:formatNumber type="number"

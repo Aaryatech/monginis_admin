@@ -188,7 +188,6 @@
 									<tr>
 										<th>Sr.No.</th>
 										<th>Month</th>
-										<th>Type</th>
 										<th>Req Qty</th>
 										<th>Req Value</th>
 										<th>Apr Qty</th>
@@ -308,16 +307,14 @@
 														//var tr = "<tr>";
 														
 														var type=null;
-														if(report.isGrn==0)
-															type="GVN";
-														else if(report.isGrn==1)
+														if(report.isGrn==1)
 															type="GRN";
-														else type="Cust Complaint";
+														else
+															type="GVN";
 														
 														var tr = $('<tr></tr>');
 													  	tr.append($('<td></td>').html(key+1));
 													  	tr.append($('<td></td>').html(report.month));
-														tr.append($('<td></td>').html(type));
 
 													  	tr.append($('<td></td>').html(report.reqQty));
 													  	tr.append($('<td></td>').html(report.totalAmt));

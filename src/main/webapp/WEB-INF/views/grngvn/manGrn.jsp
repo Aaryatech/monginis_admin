@@ -229,6 +229,10 @@
 					}, function(data) {
 						//alert(data);
 						var len = data.length;
+						if(data==null){
+							alert("No Record Found ")
+							$('#loader').hide();
+						}
 						
 						$('#table_grid td').remove();
 						$('#loader').hide();
