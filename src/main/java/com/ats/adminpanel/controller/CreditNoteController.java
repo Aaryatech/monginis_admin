@@ -575,8 +575,8 @@ public class CreditNoteController {
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getGstin());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getState());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCatId());
-					rowData.add(creditNoteList.getCreditNoteList().get(i).getItemcode());
-					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getItemId());  
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getItemId()); 
+					rowData.add(creditNoteList.getCreditNoteList().get(i).getItemcode()); 
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getItemName());  
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getHsnCode());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getQty());
