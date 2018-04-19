@@ -1705,7 +1705,9 @@ model.addObject("todayDate",df.format(todayDate));
 
 		File openFile = null;
 		List<PostProductionPlanDetail> postProdDetailList = postProductionPlanDetaillist;
-
+		List<Variance> varianceListForPdf = getVarianceorderlistforsort;
+		
+		
 		postProdDetailList = postProductionPlanDetaillist;
 		Document document = new Document(PageSize.A4);
 		// ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -1908,6 +1910,123 @@ model.addObject("todayDate",df.format(todayDate));
 					// writer.setPageEvent(footerEvent);
 				}
 			}
+			
+			/////akshay code    
+			 
+			for (int j = 0; j < pdfItemList.size(); j++) {
+
+				for (Variance variance : getVarianceorderlistforsort) {
+
+					if (pdfItemList.get(j).getId() == variance.getId()) {
+
+						index++;
+						PdfPCell cell;
+
+						cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						table.addCell(cell);
+
+						System.out.println("Inside Item Matched ");
+						cell = new PdfPCell(new Phrase(pdfItemList.get(j).getItemName(), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+
+						cell = new PdfPCell(new Phrase(String.valueOf(variance.getCurClosingQty()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+
+						cell = new PdfPCell(new Phrase(String.valueOf(0), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+
+						cell = new PdfPCell(new Phrase(String.valueOf(0), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+
+						/*cell = new PdfPCell(new Phrase(
+								String.valueOf(planDetail.getCurOpeQty() + planDetail.getProductionQty()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);*/
+						
+						cell = new PdfPCell(new Phrase(
+								String.valueOf(variance.getCurOpeQty()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+
+
+						cell = new PdfPCell(new Phrase(String.valueOf(variance.getOrderQty()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+						
+						float varianc = ( variance.getOrderQty()-variance.getCurOpeQty());
+						String var=new String();
+						if(varianc<0) {
+							var="-";
+						}else {
+							var=""+varianc;
+						}
+
+						cell = new PdfPCell(new Phrase(String.valueOf(var),
+								headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+						
+						
+						float clBal= (variance.getCurOpeQty()-variance.getOrderQty());
+
+						cell = new PdfPCell(new Phrase(String.valueOf(clBal), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+						cell.setPaddingRight(8);
+						table.addCell(cell);
+						
+						for(int a=0;a<subCatAList.size();a++) {
+							
+							if(pdfItemList.get(j).getItemGrp2()==subCatAList.get(a).getSubCatId()) {
+								
+								System.err.println(" Sub Cat Found "+subCatAList.get(a).getSubCatName());
+								
+								
+								if (filteredSubCat.isEmpty())
+									filteredSubCat.add(subCatAList.get(a));
+								else if (!filteredSubCat.contains(subCatAList.get(a))) {
+									filteredSubCat.add(subCatAList.get(a));
+								}
+								
+							}
+							
+						}
+
+						break;
+					}
+					// FooterTable footerEvent = new FooterTable(table);
+					// writer.setPageEvent(footerEvent);
+				}
+			}
+			
+			
+			
+			
+			//end
+			
+			
 			
 			
 			SubCatwiseVariancePdf subVar=null;
