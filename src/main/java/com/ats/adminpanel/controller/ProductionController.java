@@ -85,6 +85,7 @@ import com.ats.adminpanel.model.production.PostProductionHeader;
 import com.ats.adminpanel.model.production.PostProductionPlanDetail;
 import com.ats.adminpanel.model.production.ProductionBarcode;
 import com.ats.adminpanel.model.production.SubCatwiseVariancePdf;
+import com.ats.adminpanel.model.production.TempProdPlanDetail;
 import com.ats.adminpanel.model.production.UpdateOrderStatus;
 import com.ats.adminpanel.model.productionplan.MixingDetailed;
 import com.ats.adminpanel.model.salesreport.OrderFromProdPdfView;
@@ -1682,6 +1683,8 @@ model.addObject("todayDate",df.format(todayDate));
 				HttpSession session = request.getSession();
 				session.setAttribute("exportExcelList", exportToExcelList);
 				session.setAttribute("excelName", "varianceList");
+				System.err.println("planList original *** " +postProductionPlanDetaillist.size() );
+				System.err.println("getVarianceorderlistforsort *** " +getVarianceorderlistforsort.size() );
 				
 			}catch(Exception e)
 			{
@@ -1704,11 +1707,37 @@ model.addObject("todayDate",df.format(todayDate));
 		Document doc = new Document();
 
 		File openFile = null;
-		List<PostProductionPlanDetail> postProdDetailList = postProductionPlanDetaillist;
-		List<Variance> varianceListForPdf = getVarianceorderlistforsort;
+		
+		List<TempProdPlanDetail> tempProdPlanDetailList= new ArrayList<>();
+		
+		for(int i = 0;i<getVarianceorderlistforsort.size();i++)
+		{
+			TempProdPlanDetail TempProdPlanDetail = new TempProdPlanDetail();
+			TempProdPlanDetail.setItemId(getVarianceorderlistforsort.get(i).getId());
+			TempProdPlanDetail.setOrderQty(getVarianceorderlistforsort.get(i).getOrderQty());
+			TempProdPlanDetail.setCurClosingQty(getVarianceorderlistforsort.get(i).getCurClosingQty());
+			TempProdPlanDetail.setCurOpeQty(getVarianceorderlistforsort.get(i).getCurOpeQty());
+			TempProdPlanDetail.setInt4(getVarianceorderlistforsort.get(i).getRemainingQty());
+			tempProdPlanDetailList.add(TempProdPlanDetail);
+			
+		}
+		
+		for(int i = 0;i<postProductionPlanDetaillist.size();i++)
+		{
+			TempProdPlanDetail TempProdPlanDetail = new TempProdPlanDetail();
+			TempProdPlanDetail.setItemId(postProductionPlanDetaillist.get(i).getItemId());
+			TempProdPlanDetail.setOrderQty(postProductionPlanDetaillist.get(i).getOrderQty());
+			TempProdPlanDetail.setCurClosingQty(postProductionPlanDetaillist.get(i).getCurClosingQty());
+			TempProdPlanDetail.setCurOpeQty(postProductionPlanDetaillist.get(i).getCurOpeQty());
+			TempProdPlanDetail.setInt4(postProductionPlanDetaillist.get(i).getInt4());
+			tempProdPlanDetailList.add(TempProdPlanDetail);
+			
+		}
+		
+		 
 		
 		
-		postProdDetailList = postProductionPlanDetaillist;
+		//postProdDetailList = postProductionPlanDetaillist;
 		Document document = new Document(PageSize.A4);
 		// ByteArrayOutputStream out = new ByteArrayOutputStream();
 
@@ -1755,6 +1784,11 @@ model.addObject("todayDate",df.format(todayDate));
 		}
 		
 		
+		
+		
+System.err.println("Pdf Item List " +pdfItemList.toString());
+System.err.println("Plan Detail  List " +tempProdPlanDetailList.toString());
+System.err.println("getVarianceorderlistforsort Item List " +getVarianceorderlistforsort.toString());
 
 		PdfPTable table = new PdfPTable(9);
 		try {
@@ -1805,7 +1839,7 @@ model.addObject("todayDate",df.format(todayDate));
 			int index = 0;
 			for (int j = 0; j < pdfItemList.size(); j++) {
 
-				for (PostProductionPlanDetail planDetail : postProdDetailList) {
+				for (TempProdPlanDetail planDetail : tempProdPlanDetailList) {
 
 					if (pdfItemList.get(j).getId() == planDetail.getItemId()) {
 
@@ -1913,9 +1947,9 @@ model.addObject("todayDate",df.format(todayDate));
 			
 			/////akshay code    
 			 
-			for (int j = 0; j < pdfItemList.size(); j++) {
+			/*for (int j = 0; j < pdfItemList.size(); j++) {
 
-				for (Variance variance : getVarianceorderlistforsort) {
+				for (Variance variance : varianceListForPdf) {
 
 					if (pdfItemList.get(j).getId() == variance.getId()) {
 
@@ -1952,12 +1986,12 @@ model.addObject("todayDate",df.format(todayDate));
 						cell.setPaddingRight(8);
 						table.addCell(cell);
 
-						/*cell = new PdfPCell(new Phrase(
+						cell = new PdfPCell(new Phrase(
 								String.valueOf(planDetail.getCurOpeQty() + planDetail.getProductionQty()), headFont));
 						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 						cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 						cell.setPaddingRight(8);
-						table.addCell(cell);*/
+						table.addCell(cell);
 						
 						cell = new PdfPCell(new Phrase(
 								String.valueOf(variance.getCurOpeQty()), headFont));
@@ -2019,7 +2053,7 @@ model.addObject("todayDate",df.format(todayDate));
 					// FooterTable footerEvent = new FooterTable(table);
 					// writer.setPageEvent(footerEvent);
 				}
-			}
+			}*/
 			
 			
 			
@@ -2049,7 +2083,7 @@ model.addObject("todayDate",df.format(todayDate));
 				
 				for(int b=0;b<items.size();b++) {
 					
-					for (PostProductionPlanDetail planDetail : postProdDetailList) {
+					for (TempProdPlanDetail planDetail : tempProdPlanDetailList) {
 						
 						if(planDetail.getItemId()==items.get(b).getId()) {
 							
@@ -2287,6 +2321,10 @@ model.addObject("todayDate",df.format(todayDate));
 		}
 
 		ModelAndView model = new ModelAndView("production/pdf/productionPdf");
+		
+		System.err.println("Orig List size " +postProductionPlanDetaillist.size());
+		
+		System.err.println("assigned list size  " +tempProdPlanDetailList.size());
 		// model.addObject("prodFromOrderReport",updateStockDetailList);
 		// return openFile;
 
