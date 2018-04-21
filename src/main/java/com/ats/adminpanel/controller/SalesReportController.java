@@ -54,6 +54,7 @@ import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
 import com.ats.adminpanel.model.franchisee.Menu;
 import com.ats.adminpanel.model.franchisee.SubCategory;
 import com.ats.adminpanel.model.item.CategoryListResponse;
+import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.item.MCategoryList;
 import com.ats.adminpanel.model.salesreport.RoyaltyListBean;
@@ -82,6 +83,28 @@ public class SalesReportController {
 	List<SalesReportItemwise> staticSaleListItemWise;
 
 	RoyaltyListBean staticRoyaltyBean = new RoyaltyListBean();
+	
+	
+	float getRoyPer() {
+		
+		
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+		RestTemplate restTemplate = new RestTemplate();
+		
+		String settingKey = new String();
+
+		settingKey = "roy_percentage";
+
+		map.add("settingKeyList", settingKey);
+
+		FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+				FrItemStockConfigureList.class);
+
+		float royPer = settingList.getFrItemStockConfigure().get(0).getSettingValue();
+		
+		return royPer;
+	}
 
 	@RequestMapping(value = "/showSaleReports", method = RequestMethod.GET)
 	public ModelAndView showSaleReporPage(HttpServletRequest request, HttpServletResponse response) {
@@ -1395,7 +1418,11 @@ public class SalesReportController {
 			todaysDate = date.format(formatters);
 
 			RestTemplate restTemplate = new RestTemplate();
+			
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
+			
 			// get Routes
 
 			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
@@ -1426,6 +1453,7 @@ public class SalesReportController {
 			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
 
 			model.addObject("routeList", routeList);
+			model.addObject("royPer",getRoyPer());
 
 		} catch (Exception e) {
 
@@ -1596,7 +1624,7 @@ public class SalesReportController {
 
 				float netValue = royaltyList.get(i).gettBillTaxableAmt()
 						- (royaltyList.get(i).gettGrnTaxableAmt() + royaltyList.get(i).gettGvnTaxableAmt());
-				float royPer = 3.0f;
+				float royPer = getRoyPer();
 				float rAmt = netValue * royPer / 100;
 
 				rowData.add("" + roundUp(netQty));
@@ -1634,12 +1662,17 @@ public class SalesReportController {
 		boolean isAllFrSelected = false;
 
 		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			RestTemplate restTemplate = new RestTemplate();
+			
+			
+			float royPer=getRoyPer();
+			
 			if (!routeId.equalsIgnoreCase("0")) {
 
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-
-				RestTemplate restTemplate = new RestTemplate();
-
+		
+				map = new LinkedMultiValueMap<String, Object>();
 				map.add("routeId", routeId);
 
 				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
@@ -1666,9 +1699,8 @@ public class SalesReportController {
 				isAllFrSelected = true;
 			}
 
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			RestTemplate restTemplate = new RestTemplate();
-
+			 map = new LinkedMultiValueMap<String, Object>();
+		
 			if (isAllFrSelected) {
 
 				System.out.println("Inside If all fr Selected ");
@@ -1716,6 +1748,7 @@ public class SalesReportController {
 				royaltyBean.setCategoryList(categoryList);
 				royaltyBean.setSalesReportRoyalty(royaltyList);
 				staticRoyaltyBean = royaltyBean;
+				model.addObject("royPer",royPer);
 			
 		} catch (Exception e) {
 			System.out.println("get sale Report royaltyList by cat " + e.getMessage());
@@ -1776,7 +1809,7 @@ public class SalesReportController {
 			List<Menu> selectedMenuList = new ArrayList<Menu>();
 
 			System.out.println(" Fr " + allFrIdNameList.getFrIdNamesList());
-
+model.addObject("royPer",getRoyPer());
 			model.addObject("todaysDate", todaysDate);
 			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
 
@@ -2034,11 +2067,15 @@ public class SalesReportController {
 			e.printStackTrace();
 
 		}
+		model.addObject("royPer",getRoyPer());
+
 		model.addObject("fromDate", fromDate);
 
 		model.addObject("toDate", toDate);
 
 		model.addObject("report", staticRoyaltyFrList);
+		
+		
 
 		return model;
 	}
@@ -2695,6 +2732,8 @@ public class SalesReportController {
 			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
 
 			model.addObject("routeList", routeList);
+			model.addObject("royPer",getRoyPer());
+
 
 		} catch (Exception e) {
 
@@ -3247,16 +3286,17 @@ public class SalesReportController {
 					};
 
 					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
-							Constants.url + "getSaleReportRoyConsoByCat", HttpMethod.POST, new HttpEntity<>(map),
+							Constants.url + "getSaleReportRoyConsoByCatAllFr", HttpMethod.POST, new HttpEntity<>(map),
 							typeRef);
 
+					
 					royaltyList = responseEntity.getBody();
 					royaltyListForPdf = new ArrayList<>();
 
 					royaltyListForPdf = royaltyList;
 				}
 
-				if (isGraph == 1) {
+				/*if (isGraph == 1) {
 					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
 					};
 
@@ -3269,7 +3309,7 @@ public class SalesReportController {
 
 					royaltyListForPdf = royaltyList;
 				}
-
+*/
 				
 
 				}//end of if all fr Selected 
@@ -3302,7 +3342,7 @@ public class SalesReportController {
 					royaltyListForPdf = royaltyList;
 				}
 
-				if (isGraph == 1) {
+				/*if (isGraph == 1) {
 					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
 					};
 
@@ -3315,7 +3355,7 @@ public class SalesReportController {
 
 					royaltyListForPdf = royaltyList;
 				}
-
+*/
 				
 			}//end of else
 			
@@ -3474,7 +3514,8 @@ public class SalesReportController {
 
 				float netValue = royaltyList.get(i).gettBillTaxableAmt()
 						- (royaltyList.get(i).gettGrnTaxableAmt() + royaltyList.get(i).gettGvnTaxableAmt());
-				float royPer = 3.0f;
+				float royPer=getRoyPer();
+
 				float rAmt = netValue * royPer / 100;
 
 				rowData.add("" + roundUp(netQty));
@@ -3580,7 +3621,7 @@ public class SalesReportController {
 					};
 
 					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
-							Constants.url + "getSaleReportRoyConsoByCat", HttpMethod.POST, new HttpEntity<>(map),
+							Constants.url + "getSaleReportRoyConsoByCatAllFr", HttpMethod.POST, new HttpEntity<>(map),
 							typeRef);
 
 					royaltyList = responseEntity.getBody();
@@ -3666,6 +3707,9 @@ public class SalesReportController {
 				model.addObject("royaltyList", royaltyBean);
 				model.addObject("fromDate", fromDate);
 				model.addObject("toDate", toDate);
+				
+				model.addObject("royPer",getRoyPer());
+
 
 			}
 		} catch (Exception e) {

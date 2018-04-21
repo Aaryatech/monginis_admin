@@ -142,7 +142,7 @@
 					<div class="col-md-3" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
 							Report</button>
-						<button class="btn search_btn" style="display: none"
+						<button class="btn search_btn"
 							onclick="showChart()">Graph</button>
 
 						<button class="btn btn-primary" value="PDF" id="PDFButton"
@@ -198,7 +198,7 @@
 					<div class="form-group" style="display: none;" id="range">
 
 						<div class="col-sm-3  controls">
-							<input style="display: none" type="button" id="expExcel"
+							<input  type="button" id="expExcel"
 								class="btn btn-primary" value="EXPORT TO Excel"
 								onclick="exportToExcel();" disabled="disabled">
 						</div>
@@ -225,17 +225,11 @@
 					<br> <br>
 					<hr>
 
-					<!-- <table class="columns">
-      <tr>
-        <td><div id="chart_div" style="width: 50%" ></div></td>
-        <td><div id="PieChart_div" style="width: 50%"></div></td>
-      </tr>
-    </table> -->
 
-					<div id="chart_div" style="width: 100%; height: 700px;"></div>
+					<div id="chart_div" style="width: 100%; height: 100%;"></div>
 
 
-					<div id="PieChart_div" style="width: 100%; height: 700px;"></div>
+					<div id="PieChart_div" style="width: 100%; height: 100%;"></div>
 
 
 				</div>
@@ -374,33 +368,45 @@ function showChart(){
 		document.getElementById('chart').style.display = "block";
 		   document.getElementById("table_grid").style="display:none";
 		 
-		   var selectedFr = $("#selectFr").val();
-			var routeId=$("#selectRoute").val();
-			
-			var from_date = $("#fromDate").val();
-			var to_date = $("#toDate").val();
-			
-			
-				  //document.getElementById('btn_pdf').style.display = "block";
-			$.getJSON(
-					'${getBillList}',
+		   document.getElementById('chart').style.display ="display:none";
+		   document.getElementById("table_grid").style= "block";
+			var isGrn = $("#isGrn").val();
+			//alert("isGrn " +isGrn);
 
-					{
-						fr_id_list : JSON.stringify(selectedFr),
-						fromDate : from_date,
-						toDate : to_date,
-						route_id:routeId,
-						ajax : 'true'
+		 //report 1
+				var selectedFr = $("#selectFr").val();
+				var routeId=$("#selectRoute").val();
+				
+				var from_date = $("#fromDate").val();
+				var to_date = $("#toDate").val();
+				
 
-					},
-					function(data) {
+				$('#loader').show();
+
+				$
+						.getJSON(
+								'${getGrnGvnByDatewise}',
+
+								{
+									fr_id_list : JSON.stringify(selectedFr),
+									from_date : from_date,
+									to_date : to_date,
+									route_id:routeId,
+									is_grn:isGrn,
+									ajax : 'true'
+
+								},
+								function(data) {
 
 								alert(data);
 							 if (data == "") {
 									alert("No records found !!");
+									$('#loader').hide();
 
 								}
 							 var i=0;
+							 $('#loader').hide();
+
 							 
 							 google.charts.load('current', {'packages':['corechart', 'bar']});
 							 google.charts.setOnLoadCallback(drawStuff);
@@ -418,31 +424,23 @@ function showChart(){
 							   
 							   
 						       var dataTable = new google.visualization.DataTable();
-						       dataTable.addColumn('string', 'Franchisee Name'); // Implicit domain column.
-						       dataTable.addColumn('number', 'Base Value'); // Implicit data column.
-						       dataTable.addColumn('number', 'Total');
+						       dataTable.addColumn('string', 'Date'); // Implicit domain column.
+						       dataTable.addColumn('number', 'Requested Value'); // Implicit data column.
+						       dataTable.addColumn('number', 'Approved Value');
 						       
 						       var piedataTable = new google.visualization.DataTable();
-						       piedataTable.addColumn('string', 'Franchisee Name'); // Implicit domain column.
-						       piedataTable.addColumn('number', 'Total');
+						       piedataTable.addColumn('string', 'Date'); // Implicit domain column.
+						       piedataTable.addColumn('number', 'Approved Value');
 						       
 						       
 						       $.each(data,function(key, report) {
 
 						    	   
 						    	  // alert("In Data")
-						    	   var baseValue=report.taxableAmt;
+						    	   var reqValue=report.totalAmt;
+						    	  var aprValue=report.aprGrandTotal;
 									
 						    	  
-						    	   var total;
-									
-									if(report.isSameState==1){
-										 total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum);
-									}
-									else{
-										
-										 total=report.taxableAmt+report.igstSum;
-									}
 						    	  
 						    	  
 						    	  
@@ -450,20 +448,15 @@ function showChart(){
 									//alert("total ==="+total);
 									//alert("base Value "+baseValue);
 									
-									var frName=report.frName;
+									var date=report.grngvnDate;
 									//alert("frNAme "+frName);
 									//var date= item.billDate+'\nTax : ' + item.tax_per + '%';
 									
 								   dataTable.addRows([
 									 
 									   
-									   [frName, baseValue,total],
+									   [date, reqValue,aprValue],
 									   
-								            // ["Sai", 12,14],
-								             //["Sai", 12,16],
-								            // ["Sai", 12,18],
-								            // ["Sai", 12,19],
-								             
 								           ]);
 								   
 								   
@@ -471,7 +464,7 @@ function showChart(){
 								   piedataTable.addRows([
 									 
 									   
-									   [frName, total],
+									   [date, aprValue],
 									   
 								          
 								           ]);
@@ -483,8 +476,8 @@ function showChart(){
 						    	
           width: 500,
           chart: {
-            title: 'Date wise Tax Graph',
-            subtitle: 'Total tax & Taxable Amount per day',
+            title: 'Date wise Grn Gvn Report',
+            subtitle: 'Requested and Approved Value',
            
 
           },
@@ -494,8 +487,8 @@ function showChart(){
           },
           axes: {
             y: {
-              distance: {label: 'Total Tax'}, // Left y-axis.
-              brightness: {side: 'right', label: 'Taxable Amount'} // Right y-axis.
+              distance: {label: 'Req Value'}, // Left y-axis.
+              brightness: {side: 'right', label: 'Apr  Value'} // Right y-axis.
             }
           }
         };
@@ -515,11 +508,11 @@ function showChart(){
 						        var Piechart = new google.visualization.PieChart(
 						                document.getElementById('PieChart_div'));
 						       chart.draw(dataTable,
-						          {width: 600, height: 600, title: 'Sales Summary Group By Fr'});
+						          {title: 'Date wise Grn Gvn Report'});
 						       
 						       
 						       Piechart.draw(piedataTable,
-								          {width: 600, height: 600, title: 'Sales Summary Group By Fr',is3D:true});
+								          {title: 'Date wise Grn Gvn Report',is3D:true});
 						      // drawMaterialChart();
 							 };
 							 

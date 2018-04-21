@@ -150,7 +150,7 @@
 
 						<button class="btn btn-info" onclick="searchReport()">Search
 							Report</button>
-						<button class="btn search_btn" onclick="showChart()">Graph</button>
+						<!-- <button class="btn search_btn"  onclick="showChart()">Graph</button> -->
 
 
 						<button class="btn btn-primary" value="PDF" id="PDFButton"

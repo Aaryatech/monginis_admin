@@ -31,7 +31,7 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Billwise Report Grp By Date
+					<i class="fa fa-file-o"></i>Billwise Report Grp By Month
 				</h1>
 				<h4></h4>
 			</div>
@@ -203,8 +203,8 @@
 
 				</div>
 
-				<div id="chart_div" style="width: 100%; height: 700px;"></div>
-				<div id="PieChart_div" style="width: 100%; height: 700px;"></div>
+				<div id="chart_div" style="width: 100%; height: 100%;"></div>
+				<div id="PieChart_div" style="width: 100%; height: 100%;"></div>
 
 			</form>
 		</div>
@@ -367,7 +367,7 @@ function disableRoute(){
 <script type="text/javascript">
 function showChart(){
 	
-	alert("Hi");
+	//alert("Hi");
 		
 	$("#PieChart_div").empty();
 	$("#chart_div").empty();
@@ -398,7 +398,7 @@ function showChart(){
 					},
 					function(data) {
 
-								alert(data);
+								//alert(data);
 							 if (data == "") {
 									alert("No records found !!");
 
@@ -509,11 +509,11 @@ function showChart(){
 						        var Piechart = new google.visualization.PieChart(
 						                document.getElementById('PieChart_div'));
 						       chart.draw(dataTable,
-						          {width: 1000, height: 600, title: 'Sales Summary Group By Month'});
+						          {title: 'Sales Summary Group By Month'});
 						       
 						       
 						       Piechart.draw(piedataTable,
-								          {width: 1000, height: 600, title: 'Sales Summary Group By Month',is3D:true});
+								          {title: 'Sales Summary Group By Month',is3D:true});
 						      // drawMaterialChart();
 							 };
 							 

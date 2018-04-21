@@ -85,8 +85,7 @@
 
 				<br>
 
-				<!-- <div class="col-sm-9 col-lg-5 controls">
- -->
+				
 				<div class="row">
 					<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">Select
@@ -128,7 +127,7 @@
 				<div class="row">
 					<div class="col-md-12" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
-							Billwise Report</button>
+							 Report</button>
 							
 							
 							<button class="btn btn-primary" value="PDF" id="PDFButton"
@@ -245,6 +244,9 @@
 
 									$('#table_grid td').remove();
 									$('#loader').hide();
+									
+									var royPer=${royPer};
+									//alert(royPer);
 
 									if (data == "") {
 										alert("No records found !!");
@@ -308,7 +310,7 @@
 														
 													  	tr.append($('<td></td>').html(netQty));
 													  	tr.append($('<td></td>').html(netValue));
-													  	var royPer=3;
+													  	
 													  	tr.append($('<td></td>').html(royPer));
 													  	
 													  	rAmt=netValue*royPer/100;

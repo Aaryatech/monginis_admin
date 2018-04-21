@@ -162,8 +162,8 @@ th {
 
 								<%-- 								<td><c:out value="${netValue}" /></td>
  --%>
-								<td align="right"><c:out value="${3}" /></td>
-								<c:set var="rAmt" value="${(netValue*3)/100}"></c:set>
+								<td align="right"><c:out value="${royPer}" /></td>
+								<c:set var="rAmt" value="${(netValue*royPer)/100}"></c:set>
 
 								<td width="100" align="right"><fmt:formatNumber
 										type="number" maxFractionDigits="2" minFractionDigits="2"

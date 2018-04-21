@@ -142,8 +142,8 @@
 				
 					<div class="col-md-3" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
-							Fr Wise Report</button>
-									    <button class="btn search_btn" style="display: none" onclick="showChart()" >Graph</button>
+							 Report</button>
+									    <button class="btn search_btn"  onclick="showChart()" >Graph</button>
 							
 												<button class="btn btn-primary" value="PDF" id="PDFButton" onclick="genPdf()">PDF</button>
 							
@@ -198,12 +198,10 @@
 
 								</tbody>
 							</table>
-							<div class="form-group" style="display: none;" id="range">
-								 
-											 
+							<div class="form-group"  id="range">
 											 
 											<div class="col-sm-3  controls">
-											 <input style="display: none" type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
+											 <input  type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
 											</div>
 											</div>
 								<div align="center" id="showchart" style="display: none">
@@ -234,10 +232,10 @@
       </tr>
     </table> -->
    
-    <div id="chart_div" style="width: 100%; height: 700px;"></div>
+    <div id="chart_div" style="width: 100%; height: 100%;"></div>
     
     
-     <div id="PieChart_div" style="width: 100%; height: 700px;"></div>
+     <div id="PieChart_div" style="width: 100%; height: 100%;"></div>
 			 
 				 
 				</div>
@@ -300,8 +298,8 @@
 													data,
 													function(key, report) {
 														
-														  //document.getElementById("expExcel").disabled=false;
-															//document.getElementById('range').style.display = 'block';
+														  document.getElementById("expExcel").disabled=false;
+															document.getElementById('range').style.display = 'block';
 															
 														var index = key + 1;
 														//var tr = "<tr>";
@@ -375,26 +373,32 @@ function showChart(){
 		document.getElementById('chart').style.display = "block";
 		   document.getElementById("table_grid").style="display:none";
 		 
-		   var selectedFr = $("#selectFr").val();
-			var routeId=$("#selectRoute").val();
-			
-			var from_date = $("#fromDate").val();
-			var to_date = $("#toDate").val();
-			
-			
-				  //document.getElementById('btn_pdf').style.display = "block";
-			$.getJSON(
-					'${getBillList}',
+		   var isGrn = $("#isGrn").val();
+			//alert("isGrn " +isGrn);
 
-					{
-						fr_id_list : JSON.stringify(selectedFr),
-						fromDate : from_date,
-						toDate : to_date,
-						route_id:routeId,
-						ajax : 'true'
+		 //report 2
+				var selectedFr = $("#selectFr").val();
+				var routeId=$("#selectRoute").val();
+				
+				var from_date = $("#fromDate").val();
+				var to_date = $("#toDate").val();
 
-					},
-					function(data) {
+				$('#loader').show();
+
+				$
+						.getJSON(
+								'${getGrnGvnByGrpByMonth}',
+
+								{
+									fr_id_list : JSON.stringify(selectedFr),
+									from_date : from_date,
+									to_date : to_date,
+									route_id:routeId,
+									is_grn:isGrn,
+									ajax : 'true'
+
+								},
+								function(data) {
 
 								alert(data);
 							 if (data == "") {
@@ -408,62 +412,31 @@ function showChart(){
 
 							 function drawStuff() {
 								 
-								// alert("Inside DrawStuff");
  
 							   var chartDiv = document.getElementById('chart_div');
 							   document.getElementById("chart_div").style.border = "thin dotted red";
 							   
-							   
 							   var PiechartDiv = document.getElementById('PieChart_div');
 							   document.getElementById("PieChart_div").style.border = "thin dotted red";
 							   
-							   
 						       var dataTable = new google.visualization.DataTable();
-						       dataTable.addColumn('string', 'Franchisee Name'); // Implicit domain column.
-						       dataTable.addColumn('number', 'Base Value'); // Implicit data column.
-						       dataTable.addColumn('number', 'Total');
+						       dataTable.addColumn('string', 'Month'); // Implicit domain column.
+						       dataTable.addColumn('number', 'Requested Value'); // Implicit data column.
+						       dataTable.addColumn('number', 'Approved Value');
 						       
 						       var piedataTable = new google.visualization.DataTable();
-						       piedataTable.addColumn('string', 'Franchisee Name'); // Implicit domain column.
-						       piedataTable.addColumn('number', 'Total');
-						       
+						       piedataTable.addColumn('string', 'Month'); // Implicit domain column.
+						       piedataTable.addColumn('number', 'Approved Value');
 						       
 						       $.each(data,function(key, report) {
-
-						    	   
-						    	  // alert("In Data")
-						    	   var baseValue=report.taxableAmt;
-									
+						    	  var reqValue=report.totalAmt;
+						    	  var aprValue=report.aprGrandTotal;
 						    	  
-						    	   var total;
-									
-									if(report.isSameState==1){
-										 total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum);
-									}
-									else{
-										
-										 total=report.taxableAmt+report.igstSum;
-									}
-						    	  
-						    	  
-						    	  
-						    	  //var total=report.taxableAmt+report.sgstSum+report.cgstSum;
-									//alert("total ==="+total);
-									//alert("base Value "+baseValue);
-									
-									var frName=report.frName;
-									//alert("frNAme "+frName);
-									//var date= item.billDate+'\nTax : ' + item.tax_per + '%';
+									var month=report.month;
 									
 								   dataTable.addRows([
 									 
-									   
-									   [frName, baseValue,total],
-									   
-								            // ["Sai", 12,14],
-								             //["Sai", 12,16],
-								            // ["Sai", 12,18],
-								            // ["Sai", 12,19],
+									   [month, reqValue,aprValue],
 								             
 								           ]);
 								   
@@ -472,7 +445,7 @@ function showChart(){
 								   piedataTable.addRows([
 									 
 									   
-									   [frName, total],
+									   [month, aprValue],
 									   
 								          
 								           ]);
@@ -484,8 +457,8 @@ function showChart(){
 						    	
           width: 500,
           chart: {
-            title: 'Date wise Tax Graph',
-            subtitle: 'Total tax & Taxable Amount per day',
+            title: 'Grn Gvn Report Monthly',
+            subtitle: 'Requested Value And Approved Value',
            
 
           },
@@ -495,8 +468,8 @@ function showChart(){
           },
           axes: {
             y: {
-              distance: {label: 'Total Tax'}, // Left y-axis.
-              brightness: {side: 'right', label: 'Taxable Amount'} // Right y-axis.
+              distance: {label: 'Req Value'}, // Left y-axis.
+              brightness: {side: 'right', label: 'Approved Value'} // Right y-axis.
             }
           }
         };
@@ -516,11 +489,11 @@ function showChart(){
 						        var Piechart = new google.visualization.PieChart(
 						                document.getElementById('PieChart_div'));
 						       chart.draw(dataTable,
-						          {width: 600, height: 600, title: 'Sales Summary Group By Fr'});
+						          {title: 'Grn Gvn Group By Month'});
 						       
 						       
 						       Piechart.draw(piedataTable,
-								          {width: 600, height: 600, title: 'Sales Summary Group By Fr',is3D:true});
+								          {title: 'Grn Gvn Group By Month',is3D:true});
 						      // drawMaterialChart();
 							 };
 							 

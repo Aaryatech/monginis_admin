@@ -135,11 +135,6 @@
 							<button class="btn btn-primary" value="PDF" id="PDFButton"
 							onclick="genPdf()">PDF</button>
 							
-							
-
-						<%-- 	<a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleRoyaltyByCatPdf"
-								target="_blank">PDF</a>
- --%>
 					</div>
 				</div>
 
@@ -195,8 +190,6 @@
 						</div>
 						<div class="form-group" style="display: none;" id="range">
 								 
-											 
-											 
 											<div class="col-sm-3  controls">
 											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
 											</div>
@@ -205,16 +198,9 @@
 				</div>
 
 
-
-				<!--  <table class="columns">
-      <tr>
-        <td><div id="chart_div" style="width: 100%" ></div></td>
-        <td><div id="PieChart_div" style="width: 100%"></div></td>
-      </tr>
-    </table>
-      -->
-				<div id="chart_div" style="width: 100%"></div>
-				<div id="PieChart_div" style="width: 100%"></div>
+				
+				<div id="chart_div" style="width: 100%; height: 100%" ></div>
+				<div id="PieChart_div" style="width: 100%; height:100% "></div>
 			</form>
 		</div>
 	</div>
@@ -263,7 +249,9 @@
 
 									}
 
-							
+									var royPer=${royPer};
+									//alert(royPer);
+
 									$
 									.each(
 											data,
@@ -280,7 +268,7 @@
 													  	tr.append($('<td></td>').html(report.frCity));
 													  	tr.append($('<td></td>').html(report.tBillTaxableAmt));
 														tr.append($('<td></td>').html(report.tGrnTaxableAmt));
-														var royPer=3;
+														
 													  	tr.append($('<td></td>').html(royPer));
 													  	tr.append($('<td></td>').html(report.tGvnTaxableAmt));
 
@@ -355,12 +343,7 @@
 	<script>
 $('.datepicker').datepicker({
     format: {
-        /*
-         * Say our UI should display a week ahead,
-         * but textbox should store the actual date.
-         * This is useful if we need UI to select local dates,
-         * but store in UTC
-         */
+       
     	 format: 'mm/dd/yyyy',
     	    startDate: '-3d'
     }
@@ -397,8 +380,6 @@ function disableRoute(){
 	<script type="text/javascript">
 function showChart(){
 	
-	//alert("Hi");
-		
 	$("#PieChart_div").empty();
 	$("#chart_div").empty();
 		document.getElementById('chart_div').style.display = "block";
@@ -412,13 +393,6 @@ function showChart(){
 			var from_date = $("#fromDate").val();
 			var to_date = $("#toDate").val();
 			
-			//alert("fr "+selectedFr);
-
-			//alert(from_date);
-			//alert(to_date);
-			//alert(routeId);
-			
-				  //document.getElementById('btn_pdf').style.display = "block";
 			$.getJSON(
 					'${getBillList}',
 
@@ -437,7 +411,8 @@ function showChart(){
 
 								}
 							 var i=0;
-							 
+							 var royPer=${royPer};
+							 //alert(royPer);
 							 google.charts.load('current', {'packages':['corechart', 'bar']});
 							 google.charts.setOnLoadCallback(drawStuff);
 
@@ -463,7 +438,7 @@ function showChart(){
 						       
 						       $.each(data,function(key, report) {
 
-						    	   var royPer=3;											  	
+						    	  								  	
 									var netValue=report.tBillTaxableAmt-(report.tGrnTaxableAmt+report.tGvnTaxableAmt);
 									//netValue=netValue.toFixed();
 									
@@ -489,7 +464,7 @@ function showChart(){
 								             
 								           ]);
 								   
-								   alert("g1");
+								   //alert("g1");
 								   
 								   piedataTable.addRows([
 									 
@@ -538,11 +513,11 @@ function showChart(){
 						        var Piechart = new google.visualization.PieChart(
 						                document.getElementById('PieChart_div'));
 						       chart.draw(dataTable,
-						          {width: 1100, height: 600, title: 'Sales Royalty Group By Fr'});
+						          {title: 'Sales Royalty Group By Fr'});
 						       
 						       
 						       Piechart.draw(piedataTable,
-								          {width: 1100, height: 600, title: 'Sales royalty Group By Fr',is3D:true});
+								          {title: 'Sales royalty Group By Fr',is3D:true});
 						      // drawMaterialChart();
 							 };
 							 

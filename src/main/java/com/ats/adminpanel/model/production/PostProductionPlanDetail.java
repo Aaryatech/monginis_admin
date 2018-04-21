@@ -2,8 +2,8 @@ package com.ats.adminpanel.model.production;
 
 import java.util.Date;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class PostProductionPlanDetail {
 

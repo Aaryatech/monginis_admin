@@ -9,6 +9,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
@@ -29,6 +30,7 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.AllRoutesListResponse;
+import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.SalesVoucherList;
 import com.ats.adminpanel.model.billing.FrBillHeaderForPrint;
@@ -37,6 +39,7 @@ import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
 import com.ats.adminpanel.model.ggreports.GGReportByDateAndFr;
 import com.ats.adminpanel.model.ggreports.GGReportGrpByFrId;
 import com.ats.adminpanel.model.ggreports.GGReportGrpByMonthDate;
+import com.ats.adminpanel.model.mastexcel.TallyItem;
 import com.ats.adminpanel.model.salesreport.SalesReportBillwise;
 
 @Controller
@@ -204,6 +207,61 @@ if(isGrn.equalsIgnoreCase("2")) {
 				grnGvnByDateList = responseEntity.getBody();
 				
 				System.err.println("List " +grnGvnByDateList.toString());
+				
+				
+				
+				
+		List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+				
+				ExportToExcel expoExcel=new ExportToExcel();
+				List<String> rowData=new ArrayList<String>();
+				 
+				
+				rowData.add("Sr. No.");
+				 rowData.add("Date");
+				rowData.add("Type");
+				rowData.add("GrnGvn SrNo");
+				rowData.add("Franchise Name");
+				rowData.add("Req Qty");
+				rowData.add("Req Value");
+				rowData.add("Apr Qty");
+				rowData.add("Apr Value");
+			
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				List<GGReportByDateAndFr>  excelItems= grnGvnByDateList;
+				for(int i=0;i<excelItems.size();i++)
+				{
+					  expoExcel=new ExportToExcel();
+					 rowData=new ArrayList<String>();
+						rowData.add(""+(i+1));
+					rowData.add(""+excelItems.get(i).getGrngvnDate());
+					
+					String type;
+					if(excelItems.get(i).getIsGrn()==1) {
+						type="GRN";
+						
+					}else {
+						type="GVN";
+					}
+					rowData.add(type);
+					rowData.add(excelItems.get(i).getGrngvnSrno());
+					rowData.add(excelItems.get(i).getFrName());
+					rowData.add(""+excelItems.get(i).getReqQty());
+					rowData.add(""+excelItems.get(i).getTotalAmt());
+					rowData.add(""+excelItems.get(i).getAprQty());
+					
+					rowData.add(""+excelItems.get(i).getAprGrandTotal());
+					
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					
+				}
+			
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "grnGvnReport");
 
 		} catch (Exception e) {
 
@@ -462,6 +520,57 @@ if(isGrn.equalsIgnoreCase("2")) {
 					grnGvnGrpByFrList = responseEntity.getBody();
 					
 					System.err.println("List " +grnGvnGrpByFrList.toString());
+					
+					
+					
+					
+					List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+					
+					ExportToExcel expoExcel=new ExportToExcel();
+					List<String> rowData=new ArrayList<String>();
+					 
+					
+					rowData.add("Sr. No.");
+					rowData.add("Type");
+					rowData.add("Franchise Name");
+					rowData.add("Req Qty");
+					rowData.add("Req Value");
+					rowData.add("Apr Qty");
+					rowData.add("Apr Value");
+				
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					List<GGReportGrpByFrId>   excelItems= grnGvnGrpByFrList;
+					for(int i=0;i<excelItems.size();i++)
+					{
+						  expoExcel=new ExportToExcel();
+						 rowData=new ArrayList<String>();
+							rowData.add(""+(i+1));
+						
+						String type;
+						if(excelItems.get(i).getIsGrn()==1) {
+							type="GRN";
+							
+						}else {
+							type="GVN";
+						}
+						rowData.add(type);
+						rowData.add(excelItems.get(i).getFrName());
+						rowData.add(""+excelItems.get(i).getReqQty());
+						rowData.add(""+excelItems.get(i).getTotalAmt());
+						rowData.add(""+excelItems.get(i).getAprQty());
+						
+						rowData.add(""+excelItems.get(i).getAprGrandTotal());
+						
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
+						
+					}
+				
+					
+					HttpSession session = request.getSession();
+					session.setAttribute("exportExcelList", exportToExcelList);
+					session.setAttribute("excelName", "grnGvnReport");
 
 			} catch (Exception e) {
 
@@ -723,6 +832,58 @@ if(isGrn.equalsIgnoreCase("2")) {
 					grnGvnGrpByDateList = responseEntity.getBody();
 					
 					System.err.println("List " +grnGvnGrpByDateList.toString());
+					
+					
+					List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+					
+					ExportToExcel expoExcel=new ExportToExcel();
+					List<String> rowData=new ArrayList<String>();
+					 
+					
+					rowData.add("Sr. No.");
+					rowData.add("Date");
+
+					rowData.add("Type");
+					rowData.add("Req Qty");
+					rowData.add("Req Value");
+					rowData.add("Apr Qty");
+					rowData.add("Apr Value");
+				
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					List<GGReportGrpByMonthDate>    excelItems= grnGvnGrpByDateList;
+					for(int i=0;i<excelItems.size();i++)
+					{
+						  expoExcel=new ExportToExcel();
+						 rowData=new ArrayList<String>();
+							rowData.add(""+(i+1));
+						
+						String type;
+						if(excelItems.get(i).getIsGrn()==1) {
+							type="GRN";
+							
+						}else {
+							type="GVN";
+						}
+						rowData.add(excelItems.get(i).getGrnGvnDate());
+						rowData.add(type);
+						rowData.add(""+excelItems.get(i).getReqQty());
+						rowData.add(""+excelItems.get(i).getTotalAmt());
+						rowData.add(""+excelItems.get(i).getAprQty());
+						
+						rowData.add(""+excelItems.get(i).getAprGrandTotal());
+						
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
+						
+					}
+				
+					
+					HttpSession session = request.getSession();
+					session.setAttribute("exportExcelList", exportToExcelList);
+					session.setAttribute("excelName", "grnGvnReport");
+					
+					
 
 			} catch (Exception e) {
 
@@ -982,6 +1143,48 @@ if(isGrn.equalsIgnoreCase("2")) {
 					
 					
 					System.err.println("List " +grnGvnGrpByMonthList.toString());
+					
+					
+					
+List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+					
+					ExportToExcel expoExcel=new ExportToExcel();
+					List<String> rowData=new ArrayList<String>();
+					 
+					
+					rowData.add("Sr. No.");
+					rowData.add("Month");
+
+					rowData.add("Req Qty");
+					rowData.add("Req Value");
+					rowData.add("Apr Qty");
+					rowData.add("Apr Value");
+				
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					List<GGReportGrpByMonthDate>    excelItems= grnGvnGrpByMonthList;
+					for(int i=0;i<excelItems.size();i++)
+					{
+						  expoExcel=new ExportToExcel();
+						 rowData=new ArrayList<String>();
+							rowData.add(""+(i+1));
+						
+						
+						rowData.add(excelItems.get(i).getMonth());
+						rowData.add(""+excelItems.get(i).getReqQty());
+						rowData.add(""+excelItems.get(i).getTotalAmt());
+						rowData.add(""+excelItems.get(i).getAprQty());
+						
+						rowData.add(""+excelItems.get(i).getAprGrandTotal());
+						
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
+						
+					}
+				
+					HttpSession session = request.getSession();
+					session.setAttribute("exportExcelList", exportToExcelList);
+					session.setAttribute("excelName", "grnGvnReport");
 
 			} catch (Exception e) {
 

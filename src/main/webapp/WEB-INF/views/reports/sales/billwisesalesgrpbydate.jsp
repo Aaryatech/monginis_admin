@@ -364,7 +364,7 @@ function disableRoute(){
 	<script type="text/javascript">
 function showChart(){
 	
-	alert("Hi");
+	//alert("Hi");
 		
 	$("#PieChart_div").empty();
 	$("#chart_div").empty();
@@ -395,7 +395,7 @@ function showChart(){
 					},
 					function(data) {
 
-								alert(data);
+								//alert(data);
 							 if (data == "") {
 									alert("No records found !!");
 

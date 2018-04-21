@@ -223,7 +223,7 @@
 	<script type="text/javascript">
 		function searchReport() {
 		//	var isValid = validate();
-              alert("HI ");
+              //alert("HI ");
 				//var selectedFr = $("#selectFr").val();
 				//var routeId=$("#selectRoute").val();
 				

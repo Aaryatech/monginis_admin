@@ -225,10 +225,10 @@
       </tr>
     </table> -->
    
-    <div id="chart_div" style="width: 100%; height: 700px;"></div>
+    <div id="chart_div" style="width: 100%; height: 100%;"></div>
     
     
-     <div id="PieChart_div" style="width: 100%; height: 700px;"></div>
+     <div id="PieChart_div" style="width: 100%; height: 100%;"></div>
 			 
 				 
 				</div>
@@ -439,7 +439,7 @@ function showChart(){
 					},
 					function(data) {
 
-								alert(data);
+								//alert(data);
 							 if (data == "") {
 									alert("No records found !!");
 
@@ -559,11 +559,11 @@ function showChart(){
 						        var Piechart = new google.visualization.PieChart(
 						                document.getElementById('PieChart_div'));
 						       chart.draw(dataTable,
-						          {width: 600, height: 600, title: 'Sales Summary Group By Fr'});
+						          { title: 'Sales Summary Group By Fr'});
 						       
 						       
 						       Piechart.draw(piedataTable,
-								          {width: 600, height: 600, title: 'Sales Summary Group By Fr',is3D:true});
+								          {title: 'Sales Summary Group By Fr',is3D:true});
 						      // drawMaterialChart();
 							 };
 							 

@@ -98,7 +98,7 @@ th {
 					<td  width="100" align="right">
 					<fmt:formatNumber type="number"
 								maxFractionDigits="2" value="${report.tGvnTaxableAmt}" /></td>
-					<td  width="100" align="right"><c:out value="3" /></td>
+					<td  width="100" align="right"><c:out value="${royPer}" /></td>
 					
 					<c:set var="netValue" value="${report.tBillTaxableAmt -(report.tGrnTaxableAmt + report.tGvnTaxableAmt)}" />
 					
@@ -114,7 +114,7 @@ th {
 								maxFractionDigits="2" value="${netValue}" /></td>
 								
 					<c:set var="rAmt"
-						value="${netValue*3/100}" />
+						value="${netValue*royPer/100}" />
 							<c:set var="taxPer"
 						value="${taxPer + 3}" />
 							<c:set var="FinalNetValue"
