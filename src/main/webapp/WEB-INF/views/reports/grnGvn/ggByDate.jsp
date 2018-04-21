@@ -398,7 +398,7 @@ function showChart(){
 								},
 								function(data) {
 
-								alert(data);
+								//alert(data);
 							 if (data == "") {
 									alert("No records found !!");
 									$('#loader').hide();
@@ -406,8 +406,6 @@ function showChart(){
 								}
 							 var i=0;
 							 $('#loader').hide();
-
-							 
 							 google.charts.load('current', {'packages':['corechart', 'bar']});
 							 google.charts.setOnLoadCallback(drawStuff);
 
