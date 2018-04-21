@@ -64,15 +64,22 @@ th {
 				<th>Gvn Value</th>
 				<th>%</th>
 				<th>Net Value</th>
+				<th>Amount</th>
 		<!-- 		<th>Royalty Amt</th> -->
 			</tr>
 		</thead>
 		<tbody>
+		
 			<c:set var="grandNetValue" value="${0 }" />
+						<c:set var="granBillTaxableValue" value="${0 }" />
+			
 			<c:set var="grandGrnValue" value="${0 }" />
 			<c:set var="grandGvnValue" value="${0 }" />
 			<c:set var="FinalNetValue" value="${0 }" />
 				<c:set var="taxPer" value="${0}" />
+				
+								<c:set var="rAmtSum" value="${0}" />
+				
 			<c:forEach items="${report}" var="report" varStatus="count">
 				<tr>
 					<td><c:out value="${count.index+1}" /></td>
@@ -80,6 +87,10 @@ th {
 					<td width="100"><c:out value="${report.frCity}" /></td>
 					<td  width="100" align="right"><fmt:formatNumber type="number"
 								maxFractionDigits="2" value="${report.tBillTaxableAmt}" /></td>
+								
+								
+														<c:set var="granBillTaxableValue" value="${granBillTaxableValue+report.tBillTaxableAmt}" />
+								
 					
 					<td  width="100" align="right">
 					<fmt:formatNumber type="number"
@@ -101,30 +112,44 @@ th {
 					<td  width="100" align="right">
 					<fmt:formatNumber type="number"
 								maxFractionDigits="2" value="${netValue}" /></td>
+								
 					<c:set var="rAmt"
 						value="${netValue*3/100}" />
 							<c:set var="taxPer"
 						value="${taxPer + 3}" />
 							<c:set var="FinalNetValue"
 						value="${FinalNetValue + netValue}" />
-			<%-- 			
+						
 					<td  width="100" align="right"><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${rAmt}" /></td> --%>
+								maxFractionDigits="2" value="${rAmt}" /></td>
+								
+																<c:set var="rAmtSum" value="${rAmtSum+rAmt}" />
+								
 				</tr>
 
 			</c:forEach>
 				<tr>
 					<td colspan='3'><b>Total</b></td>
 					<td  width="100" align="right"><b><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${grandNetValue}" /></b></td>
+								maxFractionDigits="2" value="${granBillTaxableValue}" /></b></td>
 					<td  width="100" align="right"><b><fmt:formatNumber type="number"
 								maxFractionDigits="2" value="${grandGrnValue}" /></b></td>
 					<td  width="100" align="right"><b><fmt:formatNumber type="number"
 								maxFractionDigits="2" value="${grandGvnValue}" /></b></td>
-				  <td  width="100" align="right"><b><fmt:formatNumber type="number"
-								maxFractionDigits="2" value="${taxPer}" /></b></td>
+								<td></td>
+				 <%--  <td  width="100" align="right"><b><fmt:formatNumber type="number"
+								maxFractionDigits="2" value="${taxPer}" /></b></td> --%>
 					<td  width="100" align="right"><b><fmt:formatNumber type="number"
 								maxFractionDigits="2" value="${FinalNetValue}" /></b></td>
+								
+								
+								<td  width="100" align="right"><b><fmt:formatNumber type="number"
+								maxFractionDigits="2" value="${rAmtSum}" /></b></td>
+								
+								
+								
+								
+								
 					<td></td>
 					
 				</tr>

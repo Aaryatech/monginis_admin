@@ -85,8 +85,8 @@
 
 				<!-- <div class="col-sm-9 col-lg-5 controls">
  -->
-				<div class="row">
-					<div class="form-group">
+				<div class="row" style="display: none">
+									<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">Select
 							Route</label>
 						<div class="col-sm-6 col-lg-4 controls">
@@ -126,7 +126,7 @@
 				<div class="row">
 					<div class="col-md-12" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
-							Billwise Report</button>
+							 Report</button>
 							
 							
 																			<button class="btn btn-primary" value="PDF" id="PDFButton" onclick="genPdf()">PDF</button>

@@ -1741,6 +1741,8 @@ model.addObject("todayDate",df.format(todayDate));
 		
 		 System.err.println("Temp Prod Detail new " +tempProdPlanDetailList.toString());
 		
+		 
+		 
 		
 		//postProdDetailList = postProductionPlanDetaillist;
 		Document document = new Document(PageSize.A4);
@@ -1800,8 +1802,8 @@ System.err.println("getVarianceorderlistforsort Item List " +getVarianceorderlis
 			System.out.println("Inside PDF Table try");
 			table.setWidthPercentage(100);
 			table.setWidths(new float[] { 0.9f, 2.9f, 1.4f, 0.9f, 1.4f, 1.4f, 0.9f, 1.4f, 1.4f });
-			Font headFont = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK);
-			Font headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
+			Font headFont = new Font(FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
 			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
 
 			PdfPCell hcell;
@@ -2120,8 +2122,8 @@ System.err.println("getVarianceorderlistforsort Item List " +getVarianceorderlis
 			System.out.println("Inside PDF Table try");
 			subCatTable.setWidthPercentage(100);
 			subCatTable.setWidths(new float[] { 0.9f, 2.9f, 1.4f, 0.9f, 1.4f, 1.4f, 0.9f, 1.4f, 1.4f });
-			 headFont = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK);
-			 headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
+			 headFont = new Font(FontFamily.HELVETICA, 12, Font.NORMAL, BaseColor.BLACK);
+			 headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
 			 f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
 
 			

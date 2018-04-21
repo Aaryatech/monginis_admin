@@ -1501,6 +1501,15 @@ public class SalesReportController {
 
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
+				
+				
+				ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
+				};
+				ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
+						Constants.url + "getSalesReportRoyaltyAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+				royaltyList = responseEntity.getBody();
+				royaltyListForPdf = new ArrayList<>();
 
 			} else {
 				System.out.println("Inside else Few fr Selected ");
@@ -1516,6 +1525,7 @@ public class SalesReportController {
 
 				royaltyList = responseEntity.getBody();
 				royaltyListForPdf = new ArrayList<>();
+			}
 
 				royaltyListForPdf = royaltyList;
 
@@ -1531,7 +1541,7 @@ public class SalesReportController {
 				royaltyBean.setCategoryList(categoryList);
 				royaltyBean.setSalesReportRoyalty(royaltyList);
 				staticRoyaltyBean = royaltyBean;
-			}
+			
 		} catch (Exception e) {
 			System.out.println("get sale Report royaltyList by cat " + e.getMessage());
 			e.printStackTrace();
@@ -1665,6 +1675,15 @@ public class SalesReportController {
 				// getSalesReportRoyaltyAllFr
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
+				
+				
+				ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
+				};
+				ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
+						Constants.url + "getSalesReportRoyaltyAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+				royaltyList = responseEntity.getBody();
+				
 
 			} else {
 				System.out.println("Inside else Few fr Selected ");
@@ -1679,6 +1698,8 @@ public class SalesReportController {
 						Constants.url + "getSalesReportRoyalty", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 				royaltyList = responseEntity.getBody();
+				
+			}
 				royaltyListForPdf = new ArrayList<>();
 
 				royaltyListForPdf = royaltyList;
@@ -1695,7 +1716,7 @@ public class SalesReportController {
 				royaltyBean.setCategoryList(categoryList);
 				royaltyBean.setSalesReportRoyalty(royaltyList);
 				staticRoyaltyBean = royaltyBean;
-			}
+			
 		} catch (Exception e) {
 			System.out.println("get sale Report royaltyList by cat " + e.getMessage());
 			e.printStackTrace();
@@ -1826,13 +1847,21 @@ public class SalesReportController {
 
 			if (isAllFrSelected) {
 
-				System.out.println("Inside If all fr Selected ");
+				System.out.println("Inside If all fr Selected /getSaleRoyaltyByFr :getSalesReportRoyaltyFrAllFr");
 				// Web Service :getSalesReportRoyaltyFrAllFr
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
+				
+				ParameterizedTypeReference<List<SalesReportRoyaltyFr>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyaltyFr>>() {
+				};
+				ResponseEntity<List<SalesReportRoyaltyFr>> responseEntity = restTemplate.exchange(
+						Constants.url + "getSalesReportRoyaltyFrAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+				royaltyFrList = new ArrayList<>();
+				royaltyFrList = responseEntity.getBody();
 
 			} else {
-				System.out.println("Inside else Few fr Selected ");
+				System.out.println("Inside else Few fr Selected /getSaleRoyaltyByFr :getSalesReportRoyaltyFr");
 
 				map.add("frIdList", selectedFr);
 				map.add("fromDate", fromDate);
@@ -1845,6 +1874,7 @@ public class SalesReportController {
 
 				royaltyFrList = new ArrayList<>();
 				royaltyFrList = responseEntity.getBody();
+			}
 				// royaltyListForPdf=new ArrayList<>();
 
 				// royaltyListForPdf=royaltyList;
@@ -1855,7 +1885,7 @@ public class SalesReportController {
 
 				// allFrIdNameList = new AllFrIdNameList();
 
-			}
+			
 		} catch (Exception e) {
 			System.out.println("get sale Report royaltyList by cat " + e.getMessage());
 			e.printStackTrace();
@@ -1961,6 +1991,16 @@ public class SalesReportController {
 
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
+				
+				ParameterizedTypeReference<List<SalesReportRoyaltyFr>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyaltyFr>>() {
+				};
+				ResponseEntity<List<SalesReportRoyaltyFr>> responseEntity = restTemplate.exchange(
+						Constants.url + "getSalesReportRoyaltyFrAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+				royaltyFrList = new ArrayList<>();
+				royaltyFrList = responseEntity.getBody();
+				
+				//getSalesReportRoyaltyFrAllFr
 
 			} else {
 				System.out.println("Inside else Few fr Selected ");
@@ -1976,6 +2016,8 @@ public class SalesReportController {
 
 				royaltyFrList = new ArrayList<>();
 				royaltyFrList = responseEntity.getBody();
+				
+			}
 				// royaltyListForPdf=new ArrayList<>();
 
 				// royaltyListForPdf=royaltyList;
@@ -1986,7 +2028,7 @@ public class SalesReportController {
 
 				// allFrIdNameList = new AllFrIdNameList();
 
-			}
+			
 		} catch (Exception e) {
 			System.out.println("get sale Report royaltyList by Fr " + e.getMessage());
 			e.printStackTrace();
@@ -2415,20 +2457,7 @@ public class SalesReportController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
-			if (1 == 4) {
-			}
-			/*
-			 * if (isAllFrSelected) {
-			 * 
-			 * System.out.println("Inside If all fr Selected ");
-			 * 
-			 * map.add("fromDate", fromDate); map.add("toDate", toDate);
-			 * 
-			 * }
-			 */ else {
-				System.out.println("Inside else Few fr Selected ");
-
-				// map.add("frIdList", selectedFr);
+			
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
 
@@ -2444,7 +2473,7 @@ public class SalesReportController {
 
 				System.out.println("sales List Bill Wise all fr  " + saleList.toString());
 
-			}
+			
 		} catch (Exception e) {
 			System.out.println("get sale Report Bill Wise all Fr " + e.getMessage());
 			e.printStackTrace();
@@ -2578,17 +2607,7 @@ public class SalesReportController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
-			if (1 == 4) {
-			}
-			/*
-			 * if (isAllFrSelected) {
-			 * 
-			 * System.out.println("Inside If all fr Selected ");
-			 * 
-			 * map.add("fromDate", fromDate); map.add("toDate", toDate);
-			 * 
-			 * }
-			 */ else {
+			
 				System.out.println("Inside else Few fr Selected ");
 
 				// map.add("frIdList", selectedFr);
@@ -2607,7 +2626,7 @@ public class SalesReportController {
 
 				System.out.println("sales List Bill Wise all fr  " + saleList.toString());
 
-			}
+			
 		} catch (Exception e) {
 			System.out.println("get sale Report Bill Wise all Fr " + e.getMessage());
 			e.printStackTrace();
@@ -3205,10 +3224,112 @@ public class SalesReportController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
-
-			if (isAllCatSelected) {
+			
+			
+			
+			// new code
+			
+			if (isAllFrSelected) {
 
 				System.out.println("Inside If all fr Selected ");
+				if(isAllCatSelected) {
+					map.add("catIdList", 0);
+				}else {
+					map.add("catIdList",selectedCat);
+				}
+				
+				map.add("fromDate", fromDate);
+				map.add("toDate", toDate);
+				
+				
+				if (isGraph == 0) {
+					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
+					};
+
+					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
+							Constants.url + "getSaleReportRoyConsoByCat", HttpMethod.POST, new HttpEntity<>(map),
+							typeRef);
+
+					royaltyList = responseEntity.getBody();
+					royaltyListForPdf = new ArrayList<>();
+
+					royaltyListForPdf = royaltyList;
+				}
+
+				if (isGraph == 1) {
+					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
+					};
+
+					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
+							Constants.url + "getSaleReportRoyConsoByCatForGraph", HttpMethod.POST,
+							new HttpEntity<>(map), typeRef);
+
+					royaltyList = responseEntity.getBody();
+					royaltyListForPdf = new ArrayList<>();
+
+					royaltyListForPdf = royaltyList;
+				}
+
+				
+
+				}//end of if all fr Selected 
+			else {
+				
+				//few fr Selected 
+				
+				if(isAllCatSelected) {
+					map.add("catIdList", 0);
+				}else {
+					map.add("catIdList",selectedCat);
+				}
+				
+				map.add("fromDate", fromDate);
+				map.add("toDate", toDate);
+				
+				map.add("frIdList", selectedFr);
+				
+				if (isGraph == 0) {
+					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
+					};
+
+					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
+							Constants.url + "getSaleReportRoyConsoByCat", HttpMethod.POST, new HttpEntity<>(map),
+							typeRef);
+
+					royaltyList = responseEntity.getBody();
+					royaltyListForPdf = new ArrayList<>();
+
+					royaltyListForPdf = royaltyList;
+				}
+
+				if (isGraph == 1) {
+					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
+					};
+
+					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
+							Constants.url + "getSaleReportRoyConsoByCatForGraph", HttpMethod.POST,
+							new HttpEntity<>(map), typeRef);
+
+					royaltyList = responseEntity.getBody();
+					royaltyListForPdf = new ArrayList<>();
+
+					royaltyListForPdf = royaltyList;
+				}
+
+				
+			}//end of else
+			
+			
+			
+			
+			
+			//new code
+
+			/*if (isAllCatSelected) {
+
+				System.out.println("Inside If all fr Selected ");
+				
+				map.add("catIdList", 0);
 
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
@@ -3261,7 +3382,7 @@ public class SalesReportController {
 					royaltyListForPdf = new ArrayList<>();
 
 					royaltyListForPdf = royaltyList;
-				}
+				}*/
 
 				System.out.println("royaltyList List Bill Wise " + royaltyList.toString());
 
@@ -3293,7 +3414,7 @@ public class SalesReportController {
 
 					}
 
-				}
+				
 
 				System.out.println("temp list " + tempList.toString() + "size of t List " + tempList.size());
 				royaltyBean.setCategoryList(tempList);
@@ -3441,45 +3562,71 @@ public class SalesReportController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
 
-			if (isAllCatSelected) {
-
-				System.out.println("Inside If all fr Selected ");
-
-				map.add("fromDate", fromDate);
-				map.add("toDate", toDate);
-
-			} else {
-
-				map.add("catIdList", selectedCat);
-				map.add("fromDate", fromDate);
-				map.add("toDate", toDate);
-
-			}
-
 			if (isAllFrSelected) {
 
 				System.out.println("Inside If all fr Selected ");
-
+				if(isAllCatSelected) {
+					map.add("catIdList", 0);
+				}else {
+					map.add("catIdList",selectedCat);
+				}
+				
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
+				
+				
+			
+					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
+					};
 
-			} else {
-				System.out.println("Inside else Few fr Selected ");
-				// map.add("catIdList", selectedCat);
+					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
+							Constants.url + "getSaleReportRoyConsoByCat", HttpMethod.POST, new HttpEntity<>(map),
+							typeRef);
+
+					royaltyList = responseEntity.getBody();
+					royaltyListForPdf = new ArrayList<>();
+
+					royaltyListForPdf = royaltyList;
+			
+
+				
+
+				
+
+				}//end of if all fr Selected 
+			else {
+				
+				//few fr Selected 
+				
+				if(isAllCatSelected) {
+					map.add("catIdList", 0);
+				}else {
+					map.add("catIdList",selectedCat);
+				}
+				
+				map.add("fromDate", fromDate);
+				map.add("toDate", toDate);
+				
 				map.add("frIdList", selectedFr);
-				map.add("fromDate", fromDate);
-				map.add("toDate", toDate);
+				
+			
+					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
+					};
 
-				ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
-				};
+					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
+							Constants.url + "getSaleReportRoyConsoByCat", HttpMethod.POST, new HttpEntity<>(map),
+							typeRef);
 
-				ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
-						Constants.url + "getSaleReportRoyConsoByCat", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+					royaltyList = responseEntity.getBody();
+					royaltyListForPdf = new ArrayList<>();
 
-				royaltyList = responseEntity.getBody();
-				royaltyListForPdf = new ArrayList<>();
+					royaltyListForPdf = royaltyList;
+			
+					
+				
 
-				royaltyListForPdf = royaltyList;
+				
+			}//end of else
 
 				System.out.println("royaltyList List Bill Wise " + royaltyList.toString());
 
@@ -3511,7 +3658,7 @@ public class SalesReportController {
 
 					}
 
-				}
+				//}
 
 				System.out.println("temp list " + tempList.toString() + "size of t List " + tempList.size());
 				royaltyBean.setCategoryList(tempList);
@@ -3552,8 +3699,8 @@ public class SalesReportController {
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 
-		//	File f = new File("/home/ats-12/pdf/report.pdf");
-		 File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
+			File f = new File("/home/ats-11/pdf/report.pdf");
+		// File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
 
 		try {
 			runConverter(Constants.ReportURL + url, f, request, response);
@@ -3567,9 +3714,9 @@ public class SalesReportController {
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		//  String filePath = "/home/ats-12/pdf/report.pdf";
+		 String filePath = "/home/ats-11/pdf/report.pdf";
 
-	 String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
+	// String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;
@@ -3661,8 +3808,8 @@ public class SalesReportController {
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 
-		//File f = new File("/home/ats-12/pdf/report.pdf");
-		File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
+		File f = new File("/home/ats-11/pdf/report.pdf");
+		//File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
 
 		try {
 			runConverter1(Constants.ReportURL + url, f, request, response);
@@ -3676,9 +3823,9 @@ public class SalesReportController {
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		//String filePath = "/home/ats-12/pdf/report.pdf";
+		String filePath = "/home/ats-11/pdf/report.pdf";
 
-	 String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
+	// String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;
