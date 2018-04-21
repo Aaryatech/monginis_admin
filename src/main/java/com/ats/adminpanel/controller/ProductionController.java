@@ -1715,6 +1715,8 @@ model.addObject("todayDate",df.format(todayDate));
 			TempProdPlanDetail TempProdPlanDetail = new TempProdPlanDetail();
 			TempProdPlanDetail.setItemId(getVarianceorderlistforsort.get(i).getId());
 			TempProdPlanDetail.setOrderQty(getVarianceorderlistforsort.get(i).getOrderQty());
+			
+			
 			TempProdPlanDetail.setCurClosingQty(getVarianceorderlistforsort.get(i).getCurClosingQty());
 			TempProdPlanDetail.setCurOpeQty(getVarianceorderlistforsort.get(i).getCurOpeQty());
 			TempProdPlanDetail.setInt4(getVarianceorderlistforsort.get(i).getRemainingQty());
@@ -1727,6 +1729,9 @@ model.addObject("todayDate",df.format(todayDate));
 			TempProdPlanDetail TempProdPlanDetail = new TempProdPlanDetail();
 			TempProdPlanDetail.setItemId(postProductionPlanDetaillist.get(i).getItemId());
 			TempProdPlanDetail.setOrderQty(postProductionPlanDetaillist.get(i).getOrderQty());
+			
+			TempProdPlanDetail.setPlanQty(postProductionPlanDetaillist.get(i).getPlanQty());
+			TempProdPlanDetail.setProductionQty(postProductionPlanDetaillist.get(i).getProductionQty());
 			TempProdPlanDetail.setCurClosingQty(postProductionPlanDetaillist.get(i).getCurClosingQty());
 			TempProdPlanDetail.setCurOpeQty(postProductionPlanDetaillist.get(i).getCurOpeQty());
 			TempProdPlanDetail.setInt4(postProductionPlanDetaillist.get(i).getInt4());
@@ -1734,7 +1739,7 @@ model.addObject("todayDate",df.format(todayDate));
 			
 		}
 		
-		 
+		 System.err.println("Temp Prod Detail new " +tempProdPlanDetailList.toString());
 		
 		
 		//postProdDetailList = postProductionPlanDetaillist;
