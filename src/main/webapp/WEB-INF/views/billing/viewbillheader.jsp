@@ -2,11 +2,11 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<c:url var="callGetBillListProcess" value="/getBillListProcess" />
 
@@ -37,7 +37,61 @@
 			</div>
 			<!-- END Page Title -->
 
+			<c:set var="isEdit" value="0">
+			</c:set>
+			<c:set var="isView" value="0">
+			</c:set>
+			<c:set var="isDelete" value="0">
+			</c:set>
+			
+			<input type="hidden" id="modList" value="${sessionScope.newModuleList}">
 
+			<c:forEach items="${sessionScope.newModuleList}" var="modules">
+				<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+
+					<c:choose>
+						<c:when test="${subModule.subModuleMapping eq 'showBillList'}">
+
+							<c:choose>
+								<c:when test="${subModule.editReject=='visible'}">
+									<c:set var="isEdit" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isEdit" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+							<c:choose>
+								<c:when test="${subModule.view=='visible'}">
+									<c:set var="isView" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isView" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+
+							<c:choose>
+								<c:when test="${subModule.deleteRejectApprove=='visible'}">
+									<c:set var="isDelete" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isDelete" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+						</c:when>
+					</c:choose>
+				</c:forEach>
+			</c:forEach>
+			
+			<input type="hidden" id="isDelete" value="${isDelete}">
+						<input type="hidden" id="isEdit" value="${isEdit}">
+			
 
 			<!-- BEGIN Main Content -->
 			<div class="row">
@@ -178,43 +232,43 @@
 
 										<div class="clearfix"></div>
 										<div id="table-scroll" class="table-scroll">
-							 
-									<div id="faux-table" class="faux-table" aria="hidden">
-									<table id="table2" class="main-table">
-											<thead>
-												<tr class="bgpink">
-														<th class="col-sm-1" align="left">Sr No</th>
-														<th class="col-md-2" align="left">Invoice No</th>
-														<th class="col-md-2" align="left">Date</th>
-														<th class="col-md-2" align="left">Franchise Name</th>
-														<th class="col-md-1" align="left">Taxable Amt</th>
-														<th class="col-md-1" align="left">Total tax</th>
-														<th class="col-md-1" align="left">Total</th>
-														<th class="col-md-1" align="left">Status</th>
-														<th class="col-md-2" align="left">Action</th>
-												</tr>
-												</thead>
+
+											<div id="faux-table" class="faux-table" aria="hidden">
+												<table id="table2" class="main-table">
+													<thead>
+														<tr class="bgpink">
+															<th class="col-sm-1" align="left">Sr No</th>
+															<th class="col-md-2" align="left">Invoice No</th>
+															<th class="col-md-2" align="left">Date</th>
+															<th class="col-md-2" align="left">Franchise Name</th>
+															<th class="col-md-1" align="left">Taxable Amt</th>
+															<th class="col-md-1" align="left">Total tax</th>
+															<th class="col-md-1" align="left">Total</th>
+															<th class="col-md-1" align="left">Status</th>
+															<th class="col-md-2" align="left">Action</th>
+														</tr>
+													</thead>
 												</table>
-									
-									</div>
-									<div class="table-wrap">
-									
-										<table id="table1" class="table table-advance">
-											<thead>
-												<tr class="bgpink">
-														<th class="col-sm-1" align="left">Sr No</th>
-														<th class="col-md-2" align="left">Invoice No</th>
-														<th class="col-md-2" align="left">Date</th>
-														<th class="col-md-2" align="left">Franchise Name</th>
-														<th class="col-md-1" align="left">Taxable Amt</th>
-														<th class="col-md-1" align="left">Total tax</th>
-														<th class="col-md-1" align="left">Total</th>
-														<th class="col-md-1" align="left">Status</th>
-														<th class="col-md-1" align="left">Action</th>
-												</tr>
-												</thead>
-												<tbody>
-										<!-- <div class="table-responsive" style="border: 0">
+
+											</div>
+											<div class="table-wrap">
+
+												<table id="table1" class="table table-advance">
+													<thead>
+														<tr class="bgpink">
+															<th class="col-sm-1" align="left">Sr No</th>
+															<th class="col-md-2" align="left">Invoice No</th>
+															<th class="col-md-2" align="left">Date</th>
+															<th class="col-md-2" align="left">Franchise Name</th>
+															<th class="col-md-1" align="left">Taxable Amt</th>
+															<th class="col-md-1" align="left">Total tax</th>
+															<th class="col-md-1" align="left">Total</th>
+															<th class="col-md-1" align="left">Status</th>
+															<th class="col-md-1" align="left">Action</th>
+														</tr>
+													</thead>
+													<tbody>
+														<!-- <div class="table-responsive" style="border: 0">
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
@@ -230,61 +284,125 @@
 													</tr>
 												</thead>
 												<tbody> -->
-													<c:forEach items="${billHeadersList}" var="billHeadersList"
-														varStatus="count">
+														<c:forEach items="${billHeadersList}"
+															var="billHeadersList" varStatus="count">
 
-														<tr>
-															<td class="col-sm-1"><c:out value="${count.index+1}" /></td>
-															<td class="col-md-1" align="left"><c:out
-																	value="${billHeadersList.invoiceNo}" /></td>
+															<tr>
+																<td class="col-sm-1"><c:out
+																		value="${count.index+1}" /></td>
+																<td class="col-md-1" align="left"><c:out
+																		value="${billHeadersList.invoiceNo}" /></td>
 
-															<td class="col-md-1" align="left"><c:out
-																	value="${billHeadersList.billDate}" /></td>
+																<td class="col-md-1" align="left"><c:out
+																		value="${billHeadersList.billDate}" /></td>
 
-															<td class="col-md-2" align="left"><c:out
-																	value="${billHeadersList.frName}" /></td>
-															<td class="col-md-1" align="left"><c:out
-																	value="${billHeadersList.taxableAmt}" /></td>
-															<td class="col-md-1" align="left"><c:out
-																	value="${billHeadersList.totalTax}" /></td>
-															<td align="left"><c:out
-																	value="${billHeadersList.grandTotal}" /></td>
-															<td align="left"><c:out
-																	value="${billHeadersList.status}" /></td>
+																<td class="col-md-2" align="left"><c:out
+																		value="${billHeadersList.frName}" /></td>
+																<td class="col-md-1" align="left"><c:out
+																		value="${billHeadersList.taxableAmt}" /></td>
+																<td class="col-md-1" align="left"><c:out
+																		value="${billHeadersList.totalTax}" /></td>
+																<td align="left"><c:out
+																		value="${billHeadersList.grandTotal}" /></td>
+																<td align="left"><c:out
+																		value="${billHeadersList.status}" /></td>
 
-															<td align="left">
-															<a href="${pageContext.request.contextPath}/updateBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr title='Update Bill'></abbr>
-																<i class='fa fa-edit  fa-lg'></i></a>&nbsp;
-																<a
-																href="${pageContext.request.contextPath}/viewBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
-																	title='View Bill'></abbr> <i class='fa fa-info  fa-lg'></i></a>&nbsp;
 
-																<a
-																href="${pageContext.request.contextPath}/deleteBill/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
-																	title='Delete Bill'></abbr> <i
-																	class='fa fa-trash-o  fa-lg'></i></a></td>
-										
-															<!-- <td rowspan="1" align="left"> <input
+																<c:choose>
+																	<c:when test="${isEdit==1 and isDelete==1}">
+																		<td align="left"><a
+																			href="${pageContext.request.contextPath}/updateBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
+																				title='Update Bill'></abbr> <i
+																				class='fa fa-edit  fa-lg'></i></a>&nbsp; <a
+																			href="${pageContext.request.contextPath}/viewBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
+																				title='View Bill'></abbr> <i
+																				class='fa fa-info  fa-lg'></i></a>&nbsp; <a
+																			href="${pageContext.request.contextPath}/deleteBill/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
+																				title='Delete Bill'></abbr> <i
+																				class='fa fa-trash-o  fa-lg'></i></a></td>
+
+																	</c:when>
+
+																	<c:when test="${isEdit==1 and isDelete==0}">
+																		<td align="left"><a
+																			href="${pageContext.request.contextPath}/updateBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
+																				title='Update Bill'></abbr> <i
+																				class='fa fa-edit  fa-lg'></i></a>&nbsp; <a
+																			href="${pageContext.request.contextPath}/viewBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
+																				title='View Bill'></abbr> <i
+																				class='fa fa-info  fa-lg'></i></a>&nbsp; <a
+																			href="${pageContext.request.contextPath}/deleteBill/${billHeadersList.billNo}/${billHeadersList.frName}" class="disableClick"><abbr
+																				title='Delete Bill'></abbr> <i
+																				class='fa fa-trash-o  fa-lg'></i></a></td>
+
+																	</c:when>
+
+																	<c:when test="${isEdit==0 and isDelete==1}">
+																		<td align="left"><a
+																			href="${pageContext.request.contextPath}/updateBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}" class="disableClick"><abbr
+																				title='Update Bill'></abbr> <i
+																				class='fa fa-edit  fa-lg'></i></a>&nbsp; <a
+																			href="${pageContext.request.contextPath}/viewBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
+																				title='View Bill'></abbr> <i
+																				class='fa fa-info  fa-lg'></i></a>&nbsp; <a
+																			href="${pageContext.request.contextPath}/deleteBill/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
+																				title='Delete Bill'></abbr> <i
+																				class='fa fa-trash-o  fa-lg'></i></a></td>
+
+																	</c:when>
+
+																	<c:otherwise>
+
+																		<td align="left"><a
+																			href="${pageContext.request.contextPath}/updateBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}" class="disableClick"><abbr
+																				title='Update Bill'></abbr> <i
+																				class='fa fa-edit  fa-lg'></i></a>&nbsp; <a
+																			href="${pageContext.request.contextPath}/viewBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
+																				title='View Bill'></abbr> <i
+																				class='fa fa-info  fa-lg'></i></a>&nbsp; <a
+																			href="${pageContext.request.contextPath}/deleteBill/${billHeadersList.billNo}/${billHeadersList.frName}" class="disableClick"><abbr
+																				title='Delete Bill'></abbr> <i
+																				class='fa fa-trash-o  fa-lg'></i></a></td>
+
+																	</c:otherwise>
+																</c:choose>
+
+
+
+<%-- 
+																<td align="left"><a
+																	href="${pageContext.request.contextPath}/updateBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
+																		title='Update Bill'></abbr> <i
+																		class='fa fa-edit  fa-lg'></i></a>&nbsp; <a
+																	href="${pageContext.request.contextPath}/viewBillDetails/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
+																		title='View Bill'></abbr> <i class='fa fa-info  fa-lg'></i></a>&nbsp;
+
+																	<a
+																	href="${pageContext.request.contextPath}/deleteBill/${billHeadersList.billNo}/${billHeadersList.frName}"><abbr
+																		title='Delete Bill'></abbr> <i
+																		class='fa fa-trash-o  fa-lg'></i></a></td> --%>
+
+																<!-- <td rowspan="1" align="left"> <input
 																type="button" value="View"> <input type="button"
 																value="Edit"> <input type="button"
 																value="Cancel"></td>
  -->
 
 
-															<!-- <td align="left"><label><input type="submit"
+																<!-- <td align="left"><label><input type="submit"
 																	name="submit_button" id="submit_button"></label></td>  -->
 
 
-														</tr>
-													</c:forEach>
+															</tr>
+														</c:forEach>
 
-												</tbody>
-											</table>
+													</tbody>
+												</table>
+											</div>
 										</div>
+
+
 									</div>
-
-
-								</div>
 							</form>
 						</div>
 					</div>
@@ -292,7 +410,7 @@
 			</div>
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+				<p>2017 © MONGINIS.</p>
 			</footer>
 
 
@@ -397,6 +515,21 @@
 
 	<script type="text/javascript">
 		function callSearch() {
+			
+			var isDelete=document.getElementById("isDelete").value;
+			var isEdit=document.getElementById("isEdit").value;
+			
+			//alert("isDelete =" +isDelete);
+			//alert("isEdit =" +isEdit);
+
+			/* var abc =${sessionScope.newModuleList[0].subModuleJsonList};
+			
+			$.each(abc,function(index,value){
+				alert(index +": " +value);
+			}); */
+			 //alert("abc " +abc);
+			//var ar[]= document.getElementById("modList").value;
+			//alert(ar);
 
 			//var frId = document.getElementById("fr_id").value;
 			var array = [];
@@ -429,6 +562,7 @@
 										.each(
 												data,
 												function(key, bill) {
+													
 
 													var tr = $('<tr></tr>');
 
@@ -522,7 +656,10 @@
 													/* 												  	tr.append($('<td></td>').html(bill.remark));
 													 */
 
-													tr
+													 
+												 if(isDelete==1 && isEdit==1){
+														// alert("in first");
+														 tr
 															.append($(
 																	'<td class="col-md-1"></td>')
 																	.html(
@@ -540,6 +677,98 @@
 																					+ bill.frName
 																					+ "'<abbr title='Delete Bill'></abbr><i class='fa fa-trash-o  fa-lg'></i></a>"));
 
+														 
+													 }else if(isDelete==1 && isEdit==0){
+														 //alert("in second");
+														 tr
+															.append($(
+																	'<td class="col-md-1"></td>')
+																	.html(
+																			"<a href=''javascript: void(0)'/"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "class='disableClick''<abbr title='Update Bill'></abbr><i class='fa fa-edit  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/viewBillDetails/"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "'<abbr title='View Bill'></abbr><i class='fa fa-info  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/deleteBill/"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "'<abbr title='Delete Bill'></abbr><i class='fa fa-trash-o  fa-lg'></i></a>"));
+
+														 
+													 }else if(isDelete==0 && isEdit==1){
+														// alert("in third");
+														 tr
+															.append($(
+																	'<td class="col-md-1"></td>')
+																	.html(
+																			"<a href='${pageContext.request.contextPath}/updateBillDetails/"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "'<abbr title='Update Bill'></abbr><i class='fa fa-edit  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/viewBillDetails/"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "'<abbr title='View Bill'></abbr><i class='fa fa-info  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href=''javascript: void(0)'"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "class='disableClick''<abbr title='Delete Bill'></abbr><i class='fa fa-trash-o  fa-lg'></i></a>"));
+
+														 
+													 }else{
+														// alert("in fourth");
+														 
+														 tr
+															.append($(
+																	'<td class="col-md-1"></td>')
+																	.html(
+																			"<a href='javascript: void(0)/"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "class='disableClick''<abbr title='Update Bill'></abbr><i class='fa fa-edit  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript: void(0)'"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "'<abbr title='View Bill'></abbr><i class='fa fa-info  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript: void(0)'"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "class='disableClick''<abbr title='Delete Bill'></abbr><i class='fa fa-trash-o  fa-lg'></i></a>"));
+														 
+														 
+														 /* tr
+															.append($(
+																	'<td class="col-md-1"></td>')
+																	.html(
+																			"<a href='javascript: void(0)' class='disableClick''<abbr title='Update Bill'></abbr><i class='fa fa-edit  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript: void(0)'></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='javascript. void(0)'
+																					'<abbr title='Delete Bill'></abbr><i class='fa fa-trash-o  fa-lg'></i></a>")); */
+													 }  
+													 
+													 
+													/*  tr
+															.append($(
+																	'<td class="col-md-1"></td>')
+																	.html(
+																			"<a href='${pageContext.request.contextPath}/updateBillDetails/"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "class='disableClick''<abbr title='Update Bill'></abbr><i class='fa fa-edit  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/viewBillDetails/"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "'<abbr title='View Bill'></abbr><i class='fa fa-info  fa-lg'></i></a>&nbsp;&nbsp;&nbsp;&nbsp;<a href='${pageContext.request.contextPath}/deleteBill/"
+																					+ bill.billNo
+																					+ "/"
+																					+ bill.frName
+																					+ "class='disableClick''<abbr title='Delete Bill'></abbr><i class='fa fa-trash-o  fa-lg'></i></a>"));
+ */
 													//tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/updateBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='update' value='Update'/></a><a href='${pageContext.request.contextPath}/viewBillDetails/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='view' value='View'/></a><a href='${pageContext.request.contextPath}/deleteBill/"+bill.billNo+"/"+bill.frName+"'><input type='button' name='deleteBill' value='Delete'/></a>"));
 
 													//tr.append($('<td></td>').html("<input type=button id=edit onClick=editQty("+orders.orderId+"); Value=Edit> <input type=button id=delete"+orders.orderId+" onClick=deleteOrder("+orders.orderId+"); Value=Delete>"));

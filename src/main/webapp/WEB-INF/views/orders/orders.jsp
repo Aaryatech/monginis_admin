@@ -2,39 +2,38 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
- 
- 
- <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-<style>
 
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<style>
 table {
-  overflow: hidden;
+	overflow: hidden;
 }
 
 tr:hover {
-  background-color: #ffa;
+	background-color: #ffa;
 }
 
 td, th {
-  position: relative;
+	position: relative;
 }
-td:hover::after,
-th:hover::after {
-  content: "";
-  position: absolute;
-  background-color: #ffa;
-  left: 0;
-  top: -5000px;
-  height: 10000px;
-  width: 100%;
-  z-index: -1;
+
+td:hover::after, th:hover::after {
+	content: "";
+	position: absolute;
+	background-color: #ffa;
+	left: 0;
+	top: -5000px;
+	height: 10000px;
+	width: 100%;
+	z-index: -1;
 }
 </style>
 
- 
+
 <body>
 
-<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 
 	<c:url var="callSearchOrdersProcess" value="/searchOrdersProcess" />
@@ -42,7 +41,7 @@ th:hover::after {
 	<c:url var="callDeleteOrder" value="/callDeleteOrder" />
 
 
-	 
+
 
 
 	<div class="container" id="main-container">
@@ -71,6 +70,66 @@ th:hover::after {
 				</div>
 			</div>
 			<!-- END Page Title -->
+
+
+			<c:set var="isEdit" value="0">
+			</c:set>
+			<c:set var="isView" value="0">
+			</c:set>
+			<c:set var="isDelete" value="0">
+			</c:set>
+
+			<input type="hidden" id="modList"
+				value="${sessionScope.newModuleList}">
+
+			<c:forEach items="${sessionScope.newModuleList}" var="modules">
+				<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+
+					<c:choose>
+						<c:when test="${subModule.subModuleMapping eq 'showOrders'}">
+
+							<c:choose>
+								<c:when test="${subModule.editReject=='visible'}">
+									<c:set var="isEdit" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isEdit" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+							<c:choose>
+								<c:when test="${subModule.view=='visible'}">
+									<c:set var="isView" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isView" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+
+							<c:choose>
+								<c:when test="${subModule.deleteRejectApprove=='visible'}">
+									<c:set var="isDelete" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isDelete" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+						</c:when>
+					</c:choose>
+				</c:forEach>
+			</c:forEach>
+
+			<input type="hidden" id="isDelete" value="${isDelete}"> <input
+				type="hidden" id="isEdit" value="${isEdit}">
+
+
 
 
 
@@ -118,26 +177,26 @@ th:hover::after {
 											</c:forEach>
 
 										</select>
-										
+
 									</div>
-							<!-- 	</div>
+									<!-- 	</div>
 							
                         <div class="form-group"> -->
-						<label class="col-sm-1 col-lg-1 control-label">
-							<b>OR</b></label><label class="col-sm-1 col-lg-1 control-label">Route</label>
-						<div class="col-sm-1 col-lg-4 controls">
-							<select data-placeholder="Select Route"
-								class="form-control chosen" name="selectRoute" id="selectRoute"
-								onchange="disableFr()">
-								<option value="0">Select Route</option>
-								<c:forEach items="${routeList}" var="route" varStatus="count">
-									<option value="${route.routeId}"><c:out value="${route.routeName}"/> </option>
+									<label class="col-sm-1 col-lg-1 control-label"> <b>OR</b></label><label
+										class="col-sm-1 col-lg-1 control-label">Route</label>
+									<div class="col-sm-1 col-lg-4 controls">
+										<select data-placeholder="Select Route"
+											class="form-control chosen" name="selectRoute"
+											id="selectRoute" onchange="disableFr()">
+											<option value="0">Select Route</option>
+											<c:forEach items="${routeList}" var="route" varStatus="count">
+												<option value="${route.routeId}"><c:out value="${route.routeName}"/> </option>
 
-								</c:forEach>
-							</select>
-							
-						</div>
-						</div>
+											</c:forEach>
+										</select>
+
+									</div>
+								</div>
 
 								<div class="form-group">
 									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Menu</label>
@@ -166,8 +225,8 @@ th:hover::after {
 								<div align="center" class="form-group">
 									<div
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										<input type="button" class="btn btn-primary" value="Submit" id="callSubmit"
-											onclick="callSearch()">
+										<input type="button" class="btn btn-primary" value="Submit"
+											id="callSubmit" onclick="callSearch()">
 
 
 									</div>
@@ -187,7 +246,7 @@ th:hover::after {
 
 
 
-<c:set var="dis" value="none"/>
+								<c:set var="dis" value="none" />
 
 
 								<div class="box">
@@ -206,38 +265,36 @@ th:hover::after {
 
 										<div class="clearfix"></div>
 										<div id="table-scroll" class="table-scroll">
-							 
-									<div id="faux-table" class="faux-table" aria="hidden">
-									<table id="table2" class="main-table">
-											<thead>
-												<tr class="bgpink">
-                                             <th width="148" style="width: 18px" align="left">
-															No</th>
-														<th width="198" align="left">Franchisee Name</th>
-														<th width="190" align="left">Item Name</th>
-														<th width="199" align="left">Category</th>
-														<th width="199" align="left">Quantity</th>
-														<th width="100" align="right">Action</th>
-												</tr>
-												</thead>
+
+											<div id="faux-table" class="faux-table" aria="hidden">
+												<table id="table2" class="main-table">
+													<thead>
+														<tr class="bgpink">
+															<th width="148" style="width: 18px" align="left">No</th>
+															<th width="198" align="left">Franchisee Name</th>
+															<th width="190" align="left">Item Name</th>
+															<th width="199" align="left">Category</th>
+															<th width="199" align="left">Quantity</th>
+															<th width="100" align="right">Action</th>
+														</tr>
+													</thead>
 												</table>
-									
-									</div>
-									<div class="table-wrap">
-									
-										<table id="table1" class="table table-advance">
-											<thead>
-												<tr class="bgpink">
-										<th width="148" style="width: 18px" align="left">
-															No</th>
-														<th width="198" align="left">Franchisee Name</th>
-														<th width="190" align="left">Item Name</th>
-														<th width="199" align="left">Category</th>
-														<th width="199" align="left">Quantity</th>
-														<th width="100" align="right">Action</th>
-												</tr>
-												</thead>
-									<!-- 	<div class="table-responsive" style="border: 0">
+
+											</div>
+											<div class="table-wrap">
+
+												<table id="table1" class="table table-advance">
+													<thead>
+														<tr class="bgpink">
+															<th width="148" style="width: 18px" align="left">No</th>
+															<th width="198" align="left">Franchisee Name</th>
+															<th width="190" align="left">Item Name</th>
+															<th width="199" align="left">Category</th>
+															<th width="199" align="left">Quantity</th>
+															<th width="100" align="right">Action</th>
+														</tr>
+													</thead>
+													<!-- 	<div class="table-responsive" style="border: 0">
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
@@ -249,40 +306,41 @@ th:hover::after {
 														<th width="159" align="left">Quantity</th>
 														<th width="100" align="left">Action</th> -->
 
-														<!-- <th width="91" align="left">Quantity</th> -->
-														<!-- 	<th width="105" align="left">MRP</th> -->
-														<!-- <th width="423" align="left">isEdit</th>
+													<!-- <th width="91" align="left">Quantity</th> -->
+													<!-- 	<th width="105" align="left">MRP</th> -->
+													<!-- <th width="423" align="left">isEdit</th>
 														<th width="88" align="left">edit Quantity</th>
 														<th width="423" align="left">is Positive</th> -->
-														<!-- <th width="70" align="left">Total</th> -->
-														<!-- <th width="70" align="left">Remarks</th>
+													<!-- <th width="70" align="left">Total</th> -->
+													<!-- <th width="70" align="left">Remarks</th>
 														<th width="70" align="left">Action</th> -->
 
 													<!-- </tr>
 												</thead> -->
-												<tbody>
-													<c:forEach items="${orderList}" var="orderList"
-														varStatus="count">
-							<c:set var="dis" value="block"/>
-														<tr>
-															<td><c:out value="${count.index+1}" /></td>
+													<tbody>
+														<c:forEach items="${orderList}" var="orderList"
+															varStatus="count">
+															<c:set var="dis" value="block" />
+															<tr>
+																<td><c:out value="${count.index+1}" /></td>
 
-															<td align="left"><c:out value="${orderList.frName}" /></td>
+																<td align="left"><c:out value="${orderList.frName}" /></td>
 
-															<td align="left"><c:out
-																	value="${orderList.itemName}" /></td>
-
-
-															<td align="left"><c:out value="${orderList.catName}" /></td>
+																<td align="left"><c:out
+																		value="${orderList.itemName}" /></td>
 
 
-															<td align="left"><c:out value="${orderList.id}" /></td>
+																<td align="left"><c:out
+																		value="${orderList.catName}" /></td>
 
-															<%-- <td align="left"><c:out
+
+																<td align="left"><c:out value="${orderList.id}" /></td>
+
+																<%-- <td align="left"><c:out
 																	value="${orderList.orderQty}" /></td>
 															<td align="left"><c:out value="" /></td> --%>
 
-															<%-- 
+																<%-- 
 															<td align="left"><label><input type="radio"
 																	name="is_edit${orderList.orderId}"
 																	id="is_edit${orderList.orderId}" value="1" checked>
@@ -301,35 +359,38 @@ th:hover::after {
 																	name="is_positive${orderList.orderId}"
 																	id="is_positive${orderList.orderId}" value="0">true</label></td>
  --%>
-															<!-- <td align="left"><label><input type="text"
+																<!-- <td align="left"><label><input type="text"
 																	style="width: 60px; padding: 2px" name="total"maxlength="10" size="10"
 																	id="total" value="total amt" readonly="readonly"></label></td> -->
 
-															<!-- <td align="left"><label><input type="text"
+																<!-- <td align="left"><label><input type="text"
 																	style="width: 60px; padding: 2px" name="remarks"
 																	id="remarks" value="ramarks"></label></td>
 															<td align="left"><label><input type="submit"
 																	name="submit_button" id="submit_button"></label></td>
  -->
 
-														</tr>
-													</c:forEach>
+															</tr>
+														</c:forEach>
 
-												</tbody>
-											</table>
+													</tbody>
+												</table>
+											</div>
+										</div>
+
+
+									</div>
+									<div class="form-group"
+										style="display: <c:out value="${dis}" />;" id="range">
+
+
+
+										<div class="col-sm-3  controls">
+											<input type="button" id="expExcel" class="btn btn-primary"
+												value="EXPORT TO Excel" onclick="exportToExcel();"
+												disabled="disabled">
 										</div>
 									</div>
-
-
-								</div>
-								<div class="form-group" style="display: <c:out value="${dis}" />;" id="range">
-								 
-											 
-											 
-											<div class="col-sm-3  controls">
-											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
-											</div>
-											</div>
 							</form>
 						</div>
 					</div>
@@ -337,7 +398,7 @@ th:hover::after {
 			</div>
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+				<p>2017 © MONGINIS.</p>
 			</footer>
 
 
@@ -422,6 +483,13 @@ th:hover::after {
 function callSearch() {
 
 	
+	var isDelete=document.getElementById("isDelete").value;
+	var isEdit=document.getElementById("isEdit").value;
+	
+//	alert("isDelete" +isDelete);
+	//alert("isEdit" +isEdit);
+
+	
 	var itemIds=$("#item_id").val();
 	
 	var array=[];
@@ -463,10 +531,27 @@ $.getJSON('${callSearchOrdersProcess}', {
   	tr.append($('<td></td>').html(orders.itemName));
 
   	tr.append($('<td></td>').html(orders.catName));
+  	
+	if(isEdit==1){
+	 	tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
+  		
+  	}else{
+	 	tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' disabled ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
+  		
+  	}
 
- 	tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
+  	
+if(isDelete==1){
+tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
+
+}else{
+	 	tr.append($('<td></td>').html(' <a>  <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=('+orders.orderId+');> </span></a>'));
+  	}
+
+
+ 	//tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
   
- 	tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
+ //tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
   		
  
 	$('#table1 tbody').append(tr);
@@ -523,9 +608,13 @@ $.getJSON('${callSearchOrdersProcess}', {
         
         
 		</script>
-	 <script type="text/javascript">
+	<script type="text/javascript">
 		function deleteOrder(orderId)
 		{
+			var isDelete=document.getElementById("isDelete").value;
+			var isEdit=document.getElementById("isEdit").value;
+			
+			
 			
 		    if (confirm("Do you want to Delete this order?") == true) {
 		    	$.getJSON('${callDeleteOrder}',
@@ -554,11 +643,31 @@ $.getJSON('${callSearchOrdersProcess}', {
 						  	tr.append($('<td></td>').html(orders.itemName));
 
 						  	tr.append($('<td></td>').html(orders.catName));
+						  	
+						  	if(isEdit==1){
+							 	tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
 
-						 	tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
+						  		
+						  	}else{
+							 	tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' disabled ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
+
+						  		
+						  	}
+
+						  	
+ 				if(isDelete==1){
+	 			tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
+		
+				}else{
+							 	tr.append($('<td></td>').html(' <a>  <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=('+orders.orderId+');> </span></a>'));
+						  	}
+
+ 	
+ 	
+						 	/* tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
 						  
 						 	tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
-						  		
+						  		 */
 						 
 							$('#table1 tbody').append(tr);
 
@@ -575,7 +684,7 @@ $.getJSON('${callSearchOrdersProcess}', {
 		
 		</script>
 
-<script>
+	<script>
 	function exportToExcel()
 		{
 			 
@@ -583,7 +692,7 @@ $.getJSON('${callSearchOrdersProcess}', {
 					document.getElementById("expExcel").disabled=true;
 		}
 			</script>
-<script type="text/javascript">
+	<script type="text/javascript">
 
 function disableFr(){
 

@@ -2,13 +2,14 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
- 
- <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
-	<body>
-	
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
+<body>
+
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 
@@ -43,6 +44,74 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
+
+
+			<c:set var="isAdd" value="0">
+			</c:set>
+			<c:set var="isEdit" value="0">
+			</c:set>
+			<c:set var="isView" value="0">
+			</c:set>
+			<c:set var="isDelete" value="0">
+			</c:set>
+
+			<c:forEach items="${sessionScope.newModuleList}" var="modules">
+				<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+
+					<c:choose>
+						<c:when test="${subModule.subModuleMapping eq 'showItemSf'}">
+
+							<c:choose>
+								<c:when test="${subModule.editReject=='visible'}">
+									<c:set var="isEdit" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isEdit" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+							<c:choose>
+								<c:when test="${subModule.view=='visible'}">
+									<c:set var="isView" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isView" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+
+							<c:choose>
+								<c:when test="${subModule.deleteRejectApprove=='visible'}">
+									<c:set var="isDelete" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isDelete" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+							<c:choose>
+								<c:when test="${subModule.addApproveConfig=='visible'}">
+									<c:set var="isAdd" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isAdd" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+
+						</c:when>
+					</c:choose>
+				</c:forEach>
+			</c:forEach>
+
+
 
 
 
@@ -110,7 +179,7 @@
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_item_weight" id="sf_item_weight"
 											class="form-control" placeholder="SF Weight "
-											data-rule-required="true"  data-rule-number="true"/>
+											data-rule-required="true" data-rule-number="true" />
 									</div>
 								</div>
 
@@ -160,7 +229,7 @@
 								</div>
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Multiplication
-										 Factor </label>
+										Factor </label>
 
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="mul_factor" id="mul_factor"
@@ -168,57 +237,72 @@
 											data-rule-required="true" data-rule-number="true"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
-									</div>
+								</div>
 
 								<div class="row">
 									<div class="col-md-12" style="text-align: center">
-										<input type="button" onclick="validateQty()" class="btn btn-info" value="Submit">
 
+										<c:choose>
+											<c:when test="${isAdd eq '1'}">
+												<input type="button" onclick="validateQty()"
+													class="btn btn-info" value="Submit">
+
+											</c:when>
+											<c:otherwise>
+												<input type="button" onclick="validateQty()"
+													class="btn btn-info" value="Submit" disabled="disabled">
+
+
+											</c:otherwise>
+										</c:choose>
+										<!-- 										<input type="button" onclick="validateQty()" class="btn btn-info" value="Submit">
+ -->
 									</div>
 								</div>
-	<div class="col-md-9" ></div> 
-					<label for="search" class="col-md-3" id="search">
-    <i class="fa fa-search" style="font-size:20px"></i>
-									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search.." title="Type in a name">
-										</label>  
+								<div class="col-md-9"></div>
+								<label for="search" class="col-md-3" id="search"> <i
+									class="fa fa-search" style="font-size: 20px"></i> <input
+									type="text" id="myInput" onkeyup="myFunction()"
+									placeholder="Search.." title="Type in a name">
+								</label>
 								<div class="clearfix"></div>
-									<div id="table-scroll" class="table-scroll">
-							 
+								<div id="table-scroll" class="table-scroll">
+
 									<div id="faux-table" class="faux-table" aria="hidden">
-									<table id="table2" class="main-table">
+										<table id="table2" class="main-table">
 											<thead>
 												<tr class="bgpink">
-											<th width="140" style="width: 30px" align="left">Sr No</th>
-												<th width="138" align="left">SF Name</th>
-												<th width="120" align="left">SF Type</th>
-												<th width="60" align="left">SF Weight</th>
+													<th width="140" style="width: 30px" align="left">Sr No</th>
+													<th width="138" align="left">SF Name</th>
+													<th width="120" align="left">SF Type</th>
+													<th width="60" align="left">SF Weight</th>
 
-												<th width="80" align="left">Min Level Qty</th>
-												<th width="100" align="left">Reorder Level Qty</th>
+													<th width="80" align="left">Min Level Qty</th>
+													<th width="100" align="left">Reorder Level Qty</th>
 
-												<th width="120" align="left">Action</th>
+													<th width="120" align="left">Action</th>
 												</tr>
-												</thead>
-												</table>
-									
+											</thead>
+										</table>
+
 									</div>
 									<div class="table-wrap">
-									
+
 										<table id="table1" class="table table-advance">
 											<thead>
 												<tr class="bgpink">
-											<th width="140" style="width: 30px" align="left">No</th>
-												<th width="138" align="left">SF Name</th>
-												<th width="120" align="left">SF Type</th>
-												<th width="60" align="left">SF Weight</th>
+													<th width="140" style="width: 30px" align="left">No</th>
+													<th width="138" align="left">SF Name</th>
+													<th width="120" align="left">SF Type</th>
+													<th width="60" align="left">SF Weight</th>
 
-												<th width="80" align="left">Min Level Qty</th>
-												<th width="100" align="left">Reorder Level Qty</th>
+													<th width="80" align="left">Min Level Qty</th>
+													<th width="100" align="left">Reorder Level Qty</th>
 
-												<th width="120" align="left">Action</th>
+													<th width="120" align="left">Action</th>
 												</tr>
-												</thead>
-								<!-- 
+											</thead>
+											<!-- 
 								<div class="table-responsive" style="border: 0">
 									<table width="100%" class="table table-advance" id="table1">
 										<thead>
@@ -239,51 +323,112 @@
 
 										</thead> -->
 
-										<tbody>
+											<tbody>
 
-											<c:forEach items="${itemHeaderList}" var="itemHeaderList"
-												varStatus="count">
+												<c:forEach items="${itemHeaderList}" var="itemHeaderList"
+													varStatus="count">
 
-												<tr>
-													<td><c:out value="${count.index+1}" /></td>
+													<tr>
+														<td><c:out value="${count.index+1}" /></td>
 
-													<td align="left"><c:out
-															value="${itemHeaderList.sfName}" /></td>
+														<td align="left"><c:out
+																value="${itemHeaderList.sfName}" /></td>
 
 
-													<td align="left"><c:out
-															value="${itemHeaderList.sfTypeName}" /></td>
+														<td align="left"><c:out
+																value="${itemHeaderList.sfTypeName}" /></td>
 
-													<td align="center"><c:out
-															value="${itemHeaderList.sfWeight}" /></td>
+														<td align="center"><c:out
+																value="${itemHeaderList.sfWeight}" /></td>
 
-													<td align="center"><c:out
-															value="${itemHeaderList.minLevelQty}" /></td>
+														<td align="center"><c:out
+																value="${itemHeaderList.minLevelQty}" /></td>
 
-													<td align="center"><c:out
-															value="${itemHeaderList.reorderLevelQty}" /></td>
-
-													<td><a
-href="${pageContext.request.contextPath}/showAddSfItemDetail/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
-														class="btn bnt-primary"> <i
-																class="fa fa-list"></i></a>
+														<td align="center"><c:out
+																value="${itemHeaderList.reorderLevelQty}" /></td>
 																
-																<a
-href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
-														class="btn btn-primary"><i
-																class="fa fa-edit"></i></a>
 																
-												<a href="${pageContext.request.contextPath}/deleteItemSf/${itemHeaderList.sfId}"
-														class="btn bnt-primary" onClick="return confirm('Are you sure want to delete this record');"><span class="glyphicon glyphicon-trash"></span></a>
 																
-																</td>
+																
+																
+																	
+												<c:choose>
+																	<c:when test="${isEdit==1 and isDelete==1}">
+																		
+														<td><a
+															href="${pageContext.request.contextPath}/showAddSfItemDetail/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
+															class="btn bnt-primary"> <i class="fa fa-list"></i></a> <a
+															href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
+															class="btn btn-primary"><i class="fa fa-edit"></i></a> <a
+															href="${pageContext.request.contextPath}/deleteItemSf/${itemHeaderList.sfId}"
+															class="btn bnt-primary"
+															onClick="return confirm('Are you sure want to delete this record');"><span
+																class="glyphicon glyphicon-trash"></span></a></td>
+														
+																	</c:when>
 
-												</tr>
-											</c:forEach>
+																	<c:when test="${isEdit==1 and isDelete==0}">
+																		
+														<td><a
+															href="${pageContext.request.contextPath}/showAddSfItemDetail/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
+															class="btn bnt-primary"> <i class="fa fa-list"></i></a> <a
+															href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
+															class="btn btn-primary"><i class="fa fa-edit"></i></a> <a
+															href="${pageContext.request.contextPath}/deleteItemSf/${itemHeaderList.sfId}"
+															 class="disableClick"
+															onClick="return confirm('Are you sure want to delete this record');"><span
+																class="glyphicon glyphicon-trash"></span></a></td>
+														
+																	</c:when>
 
-										</tbody>
-									</table>
-								</div>
+																	<c:when test="${isEdit==0 and isDelete==1}">
+																		
+														<td><a
+															href="${pageContext.request.contextPath}/showAddSfItemDetail/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
+															 class="disableClick"> <i class="fa fa-list"></i></a> <a
+															href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
+															class="btn btn-primary"><i class="fa fa-edit"></i></a> <a
+															href="${pageContext.request.contextPath}/deleteItemSf/${itemHeaderList.sfId}"
+															class="btn bnt-primary"
+															onClick="return confirm('Are you sure want to delete this record');"><span
+																class="glyphicon glyphicon-trash"></span></a></td>
+																	</c:when>
+
+																	<c:otherwise>
+
+																		
+														<td><a
+															href="${pageContext.request.contextPath}/showAddSfItemDetail/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
+															 class="disableClick"> <i class="fa fa-list"></i></a> <a
+															href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
+															class="btn btn-primary"><i class="fa fa-edit"></i></a> <a
+															href="${pageContext.request.contextPath}/deleteItemSf/${itemHeaderList.sfId}"
+															 class="disableClick"
+															onClick="return confirm('Are you sure want to delete this record');"><span
+																class="glyphicon glyphicon-trash"></span></a></td>
+																	</c:otherwise>
+																</c:choose>
+												
+																
+																
+																
+<%-- 
+														<td><a
+															href="${pageContext.request.contextPath}/showAddSfItemDetail/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
+															class="btn bnt-primary"> <i class="fa fa-list"></i></a> <a
+															href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}/${itemHeaderList.sfName}/${itemHeaderList.sfTypeName}"
+															class="btn btn-primary"><i class="fa fa-edit"></i></a> <a
+															href="${pageContext.request.contextPath}/deleteItemSf/${itemHeaderList.sfId}"
+															class="btn bnt-primary"
+															onClick="return confirm('Are you sure want to delete this record');"><span
+																class="glyphicon glyphicon-trash"></span></a></td> --%>
+
+													</tr>
+												</c:forEach>
+
+											</tbody>
+										</table>
+									</div>
 								</div>
 
 							</form>
@@ -296,7 +441,7 @@ href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}
 		</div>
 		<!-- END Main Content -->
 		<footer>
-		<p>2017 © MONGINIS.</p>
+			<p>2017 © MONGINIS.</p>
 		</footer>
 
 
@@ -464,7 +609,7 @@ href="${pageContext.request.contextPath}/editSfItemHeader/${itemHeaderList.sfId}
 		
 	}
 	</script>
-<script>
+	<script>
 function myFunction() {
   var input, filter, table, tr, td, i;
   input = document.getElementById("myInput");

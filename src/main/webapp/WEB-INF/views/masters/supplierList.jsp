@@ -35,6 +35,62 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
+				<c:set var="isAdd" value="0">
+					</c:set>
+				
+			
+			<c:set var="isEdit" value="0">
+					</c:set>
+				
+					<c:set var="isDelete" value="0">
+					</c:set>
+
+					<c:forEach items="${sessionScope.newModuleList}" var="modules">
+						<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+
+							<c:choose>
+								<c:when test="${subModule.subModuleMapping eq 'showSupplierList'}">
+
+									<c:choose>
+										<c:when test="${subModule.editReject=='visible'}">
+											<c:set var="isEdit" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isEdit" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+
+									<c:choose>
+										<c:when test="${subModule.deleteRejectApprove=='visible'}">
+											<c:set var="isDelete" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isDelete" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+									
+									<c:choose>
+										<c:when test="${subModule.addApproveConfig=='visible'}">
+											<c:set var="isAdd" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isAdd" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+									
+								</c:when>
+							</c:choose>
+						</c:forEach>
+					</c:forEach>
+			
+			
+			
 
 			<div class="row">
 				<div class="col-md-12">
@@ -45,8 +101,18 @@
 								<i class="fa fa-table"></i>Supplier  List
 							</h3>
 								<div class="box-tool">
+								<c:choose>
+								<c:when test="${isAdd==1}">
 								<a href="${pageContext.request.contextPath}/showAddSupplier">Add Supplier</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
+								</c:when>
+								<c:otherwise>
+								<a href="${pageContext.request.contextPath}/showAddSupplier"  class="disableClick">Add Supplier</a> <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+								</c:otherwise>
+								
+								</c:choose>
+								
 							</div>
 						</div>
 
@@ -87,14 +153,64 @@
 														value="${supplierList.suppCity}" /></td>		
 										
 												<td align="left"><c:out
-														value="${supplierList.suppCreditDays}" /></td>						
-												<td align="left"><a
+														value="${supplierList.suppCreditDays}" /></td>	
+														
+														
+															<c:choose>
+																	<c:when test="${isEdit==1 and isDelete==1}">
+																		<td align="left"><a
 													href="${pageContext.request.contextPath}/showSupplierDetails/${supplierList.suppId}"><span
 														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
 												
 												<a href="${pageContext.request.contextPath}/deleteSupplier/${supplierList.suppId}"
 													onClick="return confirm('Are you sure want to delete this record');"><span
 														class="glyphicon glyphicon-remove"></span></a></td>
+														
+																	</c:when>
+
+																	<c:when test="${isEdit==1 and isDelete==0}">
+																		<td align="left"><a
+													href="${pageContext.request.contextPath}/showSupplierDetails/${supplierList.suppId}"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+												
+												<a href="${pageContext.request.contextPath}/deleteSupplier/${supplierList.suppId}" class="disableClick"
+													onClick="return confirm('Are you sure want to delete this record');"><span
+														class="glyphicon glyphicon-remove"></span></a></td>
+														
+																	</c:when>
+
+																	<c:when test="${isEdit==0 and isDelete==1}">
+																		<td align="left"><a
+													href="${pageContext.request.contextPath}/showSupplierDetails/${supplierList.suppId}" class="disableClick"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+												
+												<a href="${pageContext.request.contextPath}/deleteSupplier/${supplierList.suppId}"
+													onClick="return confirm('Are you sure want to delete this record');"><span
+														class="glyphicon glyphicon-remove"></span></a></td>
+																	</c:when>
+
+																	<c:otherwise>
+
+																		<td align="left"><a
+													href="${pageContext.request.contextPath}/showSupplierDetails/${supplierList.suppId}" class="disableClick"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+												
+												<a href="${pageContext.request.contextPath}/deleteSupplier/${supplierList.suppId}" class="disableClick"
+													onClick="return confirm('Are you sure want to delete this record');"><span
+														class="glyphicon glyphicon-remove"></span></a></td>
+														
+
+																	</c:otherwise>
+																</c:choose>	
+														
+																		
+												<%-- <td align="left"><a
+													href="${pageContext.request.contextPath}/showSupplierDetails/${supplierList.suppId}"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+												
+												<a href="${pageContext.request.contextPath}/deleteSupplier/${supplierList.suppId}"
+													onClick="return confirm('Are you sure want to delete this record');"><span
+														class="glyphicon glyphicon-remove"></span></a></td> --%>
 											</tr>
 										</c:forEach>
 

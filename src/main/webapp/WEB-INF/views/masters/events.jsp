@@ -2,11 +2,11 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 	<div class="container" id="main-container">
@@ -93,62 +93,149 @@
 										</div>
 									</div>
 
-<div class="box-content">
- 
-<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
+									<div class="box-content">
 
-							<div class="clearfix"></div>
-							
-							
-							
-							
-							
-								<div id="table-scroll" class="table-scroll">
-							 
-									<div id="faux-table" class="faux-table" aria="hidden">
-									<table id="table2" class="main-table">
-											<thead>
-												<tr class="bgpink">
-											            <th width="18" style="width: 18px">#</th>
-														<th width="917" align="left">Name</th>
-														<th width="130" align="left">Action</th>
-												</tr>
-												</thead>
-												</table>
-									
-									</div>
-									<div class="table-wrap">
-									
-										<table id="table1" class="table table-advance">
-											<thead>
-												<tr class="bgpink">
-											            <th width="18" style="width: 18px">#</th>
-														<th width="917" align="left">Name</th>
-														<th width="130" align="left">Action</th>
-												</tr>
-												</thead>
-												<tbody>
-						<c:forEach items="${eventsList}" var="eventsList" varStatus="count">
-														<tr>
-															<td><c:out value="${count.index+1}"/></td>
-															<td><c:out value="${eventsList.speName}" /></td>
-															<td><a href="updateEvent/${eventsList.speId}"><span
-																	class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+										<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
-																<a href="deleteEvent/${eventsList.speId}"
-																onClick="return confirm('Are you sure want to delete this record');"><span
-																	class="glyphicon glyphicon-remove"></span></a></td>
+										<div class="clearfix"></div>
+										<div id="table-scroll" class="table-scroll">
+
+											<c:set var="isEdit" value="0">
+											</c:set>
+
+											<c:set var="isDelete" value="0">
+											</c:set>
+
+											<c:forEach items="${sessionScope.newModuleList}"
+												var="modules">
+												<c:forEach items="${modules.subModuleJsonList}"
+													var="subModule">
+													<c:choose>
+														<c:when
+															test="${subModule.subModuleMapping eq 'addAndShowEvents'}">
+													
+													<c:choose>
+																<c:when test="${subModule.editReject=='visible'}">
+																	<c:set var="isEdit" value="1">
+																	</c:set>
+																</c:when>
+																<c:otherwise>
+																	<c:set var="isEdit" value="0">
+																	</c:set>
+																</c:otherwise>
+															</c:choose>
+															<c:choose>
+																<c:when
+																	test="${subModule.deleteRejectApprove=='visible'}">
+																	<c:set var="isDelete" value="1">
+																	</c:set>
+																</c:when>
+																<c:otherwise>
+																	<c:set var="isDelete" value="0">
+																	</c:set>
+																</c:otherwise>
+															</c:choose>
+														</c:when>
+													</c:choose>
+
+												</c:forEach>
+											</c:forEach>
+
+
+
+
+											<div id="faux-table" class="faux-table" aria="hidden">
+												<table id="table2" class="main-table">
+													<thead>
+														<tr class="bgpink">
+															<th width="18" style="width: 18px">#</th>
+															<th width="917" align="left">Name</th>
+															<th width="130" align="left">Action</th>
 														</tr>
-													</c:forEach>
+													</thead>
+												</table>
 
+											</div>
+											<div class="table-wrap">
 
-							</tbody>
+												<table id="table1" class="table table-advance">
+													<thead>
+														<tr class="bgpink">
+															<th width="18" style="width: 18px">#</th>
+															<th width="917" align="left">Name</th>
+															<th width="130" align="left">Action</th>
+														</tr>
+													</thead>
+													<tbody>
 
-						</table>
-					</div>
-				</div>
-				
-						</div>
+														<c:forEach items="${eventsList}" var="eventsList"
+															varStatus="count">
+															<tr>
+
+																<td><c:out value="${count.index+1}" /></td>
+																<td><c:out value="${eventsList.speName}" /></td>
+
+																<c:choose>
+																	<c:when test="${isEdit==1 and isDelete==1}">
+																		<td><a href="updateEvent/${eventsList.speId}"><span
+																				class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+																			<a href="deleteEvent/${eventsList.speId}"
+																			onClick="return confirm('Are you sure want to delete this record');"><span
+																				class="glyphicon glyphicon-remove"></span></a></td>
+																	</c:when>
+
+																	<c:when test="${isEdit==1 and isDelete==0}">
+																		<td><a href="updateEvent/${eventsList.speId}"><span
+																				class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+																			<a href="deleteEvent/${eventsList.speId}"
+																			class="disableClick"
+																			onClick="return confirm('Are you sure want to delete this record');"><span
+																				class="glyphicon glyphicon-remove"></span></a></td>
+																	</c:when>
+
+																	<c:when test="${isEdit==0 and isDelete==1}">
+																		<td><a href="updateEvent/${eventsList.speId}"
+																			class="disableClick"><span
+																				class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+																			<a href="deleteEvent/${eventsList.speId}"
+																			onClick="return confirm('Are you sure want to delete this record');"><span
+																				class="glyphicon glyphicon-remove"></span></a></td>
+																	</c:when>
+
+																	<c:otherwise>
+
+																		<td><a href="updateEvent/${eventsList.speId}"
+																			class="disableClick"><span
+																				class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+
+																			<a href="deleteEvent/${eventsList.speId}"
+																			class="disableClick"
+																			onClick="return confirm('Are you sure want to delete this record');"><span
+																				class="glyphicon glyphicon-remove"></span></a></td>
+
+																	</c:otherwise>
+																</c:choose>
+
+																<%-- <c:otherwise>
+
+																<td><a href="updateEvent/${eventsList.speId}"><span
+																		class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+
+																	<a href="deleteEvent/${eventsList.speId}"
+																	onClick="return confirm('Are you sure want to delete this record');"><span
+																		class="glyphicon glyphicon-remove"></span></a></td>
+																		
+																		</c:otherwise> --%>
+															</tr>
+														</c:forEach>
+
+													</tbody>
+
+												</table>
+											</div>
+										</div>
+
+									</div>
 
 
 
@@ -186,7 +273,7 @@
 										</div>
 									</div> --%>
 								</div>
-								</form>
+							</form>
 						</div>
 					</div>
 				</div>
@@ -195,7 +282,7 @@
 
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+				<p>2017 © MONGINIS.</p>
 			</footer>
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i

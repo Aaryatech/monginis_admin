@@ -35,6 +35,58 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
+			
+			
+			<c:set var="isEdit" value="0">
+					</c:set>
+					<c:set var="isView" value="0">
+					</c:set>
+					<c:set var="isDelete" value="0">
+					</c:set>
+
+					<c:forEach items="${sessionScope.newModuleList}" var="modules">
+						<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+
+							<c:choose>
+								<c:when test="${subModule.subModuleMapping eq 'itemList'}">
+
+									<c:choose>
+										<c:when test="${subModule.editReject=='visible'}">
+											<c:set var="isEdit" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isEdit" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+									<c:choose>
+										<c:when test="${subModule.view=='visible'}">
+											<c:set var="isView" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isView" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+
+
+									<c:choose>
+										<c:when test="${subModule.deleteRejectApprove=='visible'}">
+											<c:set var="isDelete" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isDelete" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+								</c:when>
+							</c:choose>
+						</c:forEach>
+					</c:forEach>
+			
 
 			<div class="row hidden-xs">
 				<div class="col-md-12">
@@ -187,13 +239,78 @@
 												</td> --%>
 												<td align="left"><c:out value="${itemsList.itemRate1}" /></td>
 												<td align="left"><c:out value="${itemsList.itemMrp1}" /></td>
-												<td align="left"><a href="updateItem/${itemsList.id}"><span
+												
+												
+												
+												
+												
+												
+												<c:choose>
+																	<c:when test="${isEdit==1 and isDelete==1}">
+																		<td align="left"><a href="updateItem/${itemsList.id}"><span
 														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
                                              <a href="showItemDetail/${itemsList.id}"><span
 														class="glyphicon glyphicon-list"></span></a>
-													&nbsp;&nbsp;<a href="deleteItem/${itemsList.id}"
+													&nbsp;&nbsp;
+													<a href="deleteItem/${itemsList.id}"
 													onClick="return confirm('Are you sure want to delete this record');"><span
 														class="glyphicon glyphicon-remove"></span></a></td>
+														
+																	</c:when>
+
+																	<c:when test="${isEdit==1 and isDelete==0}">
+																		<td align="left"><a href="updateItem/${itemsList.id}"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
+                                             <a href="showItemDetail/${itemsList.id}"><span
+														class="glyphicon glyphicon-list"></span></a>
+													&nbsp;&nbsp;
+													<a href="deleteItem/${itemsList.id}" class="disableClick"
+													onClick="return confirm('Are you sure want to delete this record');"><span
+														class="glyphicon glyphicon-remove"></span></a></td>
+														
+																	</c:when>
+
+																	<c:when test="${isEdit==0 and isDelete==1}">
+																		<td align="left"><a href="updateItem/${itemsList.id}" class="disableClick"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
+                                             <a href="showItemDetail/${itemsList.id}"><span
+														class="glyphicon glyphicon-list"></span></a>
+													&nbsp;&nbsp;
+													<a href="deleteItem/${itemsList.id}"
+													onClick="return confirm('Are you sure want to delete this record');"><span
+														class="glyphicon glyphicon-remove"></span></a></td>
+														
+																	</c:when>
+
+																	<c:otherwise>
+
+																		<td align="left"><a href="updateItem/${itemsList.id}" class="disableClick"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
+                                             <a href="showItemDetail/${itemsList.id}"><span
+														class="glyphicon glyphicon-list"></span></a>
+													&nbsp;&nbsp;
+													<a href="deleteItem/${itemsList.id}" 
+													onClick="return confirm('Are you sure want to delete this record');"><span
+														class="glyphicon glyphicon-remove"></span></a></td>
+														
+
+																	</c:otherwise>
+																</c:choose>
+												
+												
+												
+												
+												
+												<%-- <td align="left"><a href="updateItem/${itemsList.id}"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
+                                             <a href="showItemDetail/${itemsList.id}"><span
+														class="glyphicon glyphicon-list"></span></a>
+													&nbsp;&nbsp;
+													<a href="deleteItem/${itemsList.id}" class="disableClick"
+													onClick="return confirm('Are you sure want to delete this record');"><span
+														class="glyphicon glyphicon-remove"></span></a></td>
+														 --%>
+														
 											</tr>
 
 										</c:forEach>

@@ -55,7 +55,6 @@
 							</div> -->
 						</div>
 
-
 						<div class="box-content">
 							<form action="updateEventProcess" class="form-horizontal"
 								id="validation-form" method="post">

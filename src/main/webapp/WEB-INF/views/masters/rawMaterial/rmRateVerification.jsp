@@ -2,11 +2,11 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 
@@ -44,6 +44,49 @@
 			<!-- END Page Title -->
 
 
+			<c:set var="isView" value="0">
+			</c:set>
+			<c:set var="isAdd" value="0">
+			</c:set>
+
+			<c:forEach items="${sessionScope.newModuleList}" var="modules">
+				<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+
+					<c:choose>
+						<c:when
+							test="${subModule.subModuleMapping eq 'showRmRateVerification'}">
+							<c:choose>
+								<c:when test="${subModule.view=='visible'}">
+									<c:set var="isView" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isView" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+
+							<c:choose>
+								<c:when test="${subModule.addApproveConfig=='visible'}">
+									<c:set var="isAdd" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isAdd" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+
+						</c:when>
+					</c:choose>
+				</c:forEach>
+			</c:forEach>
+
+
+
+
 
 			<!-- BEGIN Main Content -->
 			<div class="row">
@@ -75,7 +118,8 @@
 									<label class="col-sm-3 col-lg-2 control-label">Select
 										Supplier</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<select name="supp_id" id="supp_id" class="form-control chosen">
+										<select name="supp_id" id="supp_id"
+											class="form-control chosen">
 											<option value="-1">Select Supplier</option>
 											<c:forEach items="${supplierList}" var="supplierList"
 												varStatus="count">
@@ -113,8 +157,7 @@
 									</div>
 
 								</div>
-								<br> <br>
-								<br>
+								<br> <br> <br>
 								<div class="row">
 									<div class="col-md-12" style="text-align: center">
 										<input type="button" id="search" class="btn btn-info"
@@ -184,15 +227,15 @@
 									</label> <input type="hidden" name="rate_date" id="rate_date">
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="rate_tax_extra" id="rate_tax_extra"
-											class="form-control" disabled="disabled" />
-											<input type="hidden" name="tax_extra" id="tax_extra">
+											class="form-control" disabled="disabled" /> <input
+											type="hidden" name="tax_extra" id="tax_extra">
 									</div>
 
 									<!-- <label class="col-sm-3 col-lg-2 control-label"> </label> -->
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="rate_tax_incl" id="rate_tax_incl"
-											class="form-control" disabled="disabled" />
-											<input type="hidden" name="tax_incl" id="tax_incl">
+											class="form-control" disabled="disabled" /> <input
+											type="hidden" name="tax_incl" id="tax_incl">
 									</div>
 
 								</div>
@@ -202,15 +245,15 @@
 									</label> <input type="hidden" name="rate_date1" id="rate_date1">
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="rate_tax_extra1" id="rate_tax_extra1"
-											class="form-control" disabled="disabled" />
-											<input type="hidden" name="tax_extra1" id="tax_extra1">
+											class="form-control" disabled="disabled" /> <input
+											type="hidden" name="tax_extra1" id="tax_extra1">
 									</div>
 
 									<!-- <label class="col-sm-3 col-lg-2 control-label">Last Date 1 Tax Rate Extra</label> -->
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="rate_tax_incl1" id="rate_tax_incl1"
-											class="form-control" disabled="disabled" />
-											<input type="hidden" name="tax_incl1" id="tax_incl1">
+											class="form-control" disabled="disabled" /> <input
+											type="hidden" name="tax_incl1" id="tax_incl1">
 									</div>
 								</div>
 
@@ -234,7 +277,21 @@
 
 								<div class="row">
 									<div class="col-md-12" style="text-align: center">
-										<input type="submit" class="btn btn-primary" id="submit" value="Submit" disabled>
+
+
+										<c:choose>
+
+											<c:when test="${isAdd==1}">
+												<input type="submit" class="btn btn-primary" id="submit"
+													value="Submit" >
+
+											</c:when>
+											<c:otherwise>
+												<input type="submit" class="btn btn-primary" id="submit"
+													value="Submit" disabled>
+
+											</c:otherwise>
+										</c:choose>
 										<!-- <input type="button" id="search" class="btn btn-info"
 											value="Edit" onclick="onEdit()" /> -->
 
@@ -252,7 +309,7 @@
 			</div>
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+				<p>2017 © MONGINIS.</p>
 			</footer>
 
 

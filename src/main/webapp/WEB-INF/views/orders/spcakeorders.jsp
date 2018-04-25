@@ -45,6 +45,63 @@
 
 
 
+<c:set var="isEdit" value="0">
+			</c:set>
+			<c:set var="isView" value="0">
+			</c:set>
+			<c:set var="isDelete" value="0">
+			</c:set>
+
+			<input type="hidden" id="modList"
+				value="${sessionScope.newModuleList}">
+
+			<c:forEach items="${sessionScope.newModuleList}" var="modules">
+				<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+
+					<c:choose>
+						<c:when test="${subModule.subModuleMapping eq 'spCakeOrders'}">
+
+							<c:choose>
+								<c:when test="${subModule.editReject=='visible'}">
+									<c:set var="isEdit" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isEdit" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+							<c:choose>
+								<c:when test="${subModule.view=='visible'}">
+									<c:set var="isView" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isView" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+
+							<c:choose>
+								<c:when test="${subModule.deleteRejectApprove=='visible'}">
+									<c:set var="isDelete" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isDelete" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+						</c:when>
+					</c:choose>
+				</c:forEach>
+			</c:forEach>
+
+			<input type="hidden" id="isDelete" value="${isDelete}"> 
+			<input type="hidden" id="isEdit" value="${isEdit}">
+
 			<!-- BEGIN Main Content -->
 			<div class="row">
 				<div class="col-md-12">
@@ -197,7 +254,7 @@
 															style="width: 130px;">Name</span></th>	
 														<th width="159" align="left"><span
 															style="width: 130px;">Sp Code</span></th>
-													<th width="105" align="left">Weight</th>
+														<th width="105" align="left">Weight</th>
 														<th width="168" align="left">Flavour</th>
 														<th width="140" align="left">Event</th>
 														<th width="105" align="left">Rate</th>
@@ -365,6 +422,12 @@
 
 	<script type="text/javascript">
 		function callSearch() {
+			
+			
+			var isDelete=document.getElementById("isDelete").value;
+			var isEdit=document.getElementById("isEdit").value;
+			
+			
 
 			var frIds=$("#fr_id").val();
 			var array=[];
@@ -409,6 +472,9 @@
 								  	tr.append($('<td></td>').html(spCakeOrder.spTotalAddRate));
 									var totalValue=parseFloat(spCakeOrder.spTotalAddRate) + parseFloat(spCakeOrder.spPrice);
 								  	tr.append($('<td></td>').html(totalValue));
+								  	
+								  	
+								  	
 								  	
 								  	tr.append($('<td></td>').html('<a href="${pageContext.request.contextPath}/showHtmlViewSpcakeOrder/'+spCakeOrder.spOrderNo+'" target="blank"><i class="fa fa-file-text-o" style="font-size:24px;"></i></a>'));  
 								  	

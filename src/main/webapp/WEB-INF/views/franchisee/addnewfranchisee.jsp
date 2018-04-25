@@ -2,11 +2,11 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 
@@ -39,6 +39,45 @@
 			<!-- END Page Title -->
 
 
+			<c:set var="isAdd" value="0">
+			</c:set>
+
+			<c:set var="isDelete" value="0">
+			</c:set>
+
+			<c:forEach items="${sessionScope.newModuleList}" var="modules">
+				<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+					<c:choose>
+						<c:when
+							test="${subModule.subModuleMapping eq 'showAddNewFranchisee'}">
+
+							<c:choose>
+								<c:when test="${subModule.addApproveConfig=='visible'}">
+									<c:set var="isAdd" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isAdd" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+							<c:choose>
+								<c:when test="${subModule.deleteRejectApprove=='visible'}">
+									<c:set var="isDelete" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isDelete" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+						</c:when>
+					</c:choose>
+
+				</c:forEach>
+			</c:forEach>
+
+
 			<!-- BEGIN Main Content -->
 			<div class="row">
 				<div class="col-md-12">
@@ -50,22 +89,22 @@
 										<i class="fa fa-bars"></i> Add Franchisee
 									</h3>
 									<div class="box-tool">
-										<a href="${pageContext.request.contextPath}/listAllFranchisee">Back to
-											List</a> <a data-action="collapse" href="#"><i
+										<a href="${pageContext.request.contextPath}/listAllFranchisee">Back
+											to List</a> <a data-action="collapse" href="#"><i
 											class="fa fa-chevron-up"></i></a>
 									</div>
 								</div>
 
 								<div class="box-content">
-									<form action="addNewFrProcess" class="form-horizontal" id=
-									"validation-form"
-										enctype="multipart/form-data" method="post">
+									<form action="addNewFrProcess" class="form-horizontal"
+										id="validation-form" enctype="multipart/form-data"
+										method="post">
 
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label" for="fr_code">Code</label>
 											<div class="col-sm-6 col-lg-4 controls">
 												<input type="text" name="fr_code" id="fr_code"
-													class="form-control" value="${frCode}"  required/>
+													class="form-control" value="${frCode}" required />
 											</div>
 										</div>
 
@@ -73,9 +112,9 @@
 											<label class="col-sm-3 col-lg-2 control-label">Opening
 												Date</label>
 											<div class="col-sm-5 col-lg-4 controls">
-												<input class="form-control date-picker" id="fr_opening_date" size="16"
-													type="text" name="fr_opening_date"
-													required placeholder="Opening Date"/>
+												<input class="form-control date-picker" id="fr_opening_date"
+													size="16" type="text" name="fr_opening_date" required
+													placeholder="Opening Date" />
 											</div>
 										</div>
 
@@ -84,27 +123,33 @@
 											<label class="col-sm-3 col-lg-2 control-label" for="fr_name">Franchisee
 												Name</label>
 											<div class="col-sm-6 col-lg-4 controls">
-												<input type="text" name="fr_name" id="fr_name" data-rule-required="true"
-													class="form-control" placeholder="Name"required/>
+												<input type="text" name="fr_name" id="fr_name"
+													data-rule-required="true" class="form-control"
+													placeholder="Name" required />
 											</div>
 										</div>
 
-                                    <div class="form-group">
-	                             	<label class="col-sm-3 col-lg-2 control-label" for="fr_name">Franchisee
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label" for="fr_name">Franchisee
 												Address</label>
-	                                 <div class="col-sm-6 col-lg-4 controls"><textarea rows="4" cols="25" name="fr_addr" id="fr_addr" placeholder="Address"	class="form-control" form="validation-form"required></textarea></div>
-	                                 </div>
-	                                 
-		                             <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Target Per Year</label>
-											<div class="col-sm-9 col-lg-4 controls">
-												<input type="text" name="fr_target" id="fr_target" placeholder="Target Per Year"
-													class="form-control" data-rule-required="true"
-													data-rule-number="true"
-													onKeyPress="return isNumberCommaDot(event)"/>
+											<div class="col-sm-6 col-lg-4 controls">
+												<textarea rows="4" cols="25" name="fr_addr" id="fr_addr"
+													placeholder="Address" class="form-control"
+													form="validation-form" required></textarea>
 											</div>
 										</div>
-										
+
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Target
+												Per Year</label>
+											<div class="col-sm-9 col-lg-4 controls">
+												<input type="text" name="fr_target" id="fr_target"
+													placeholder="Target Per Year" class="form-control"
+													data-rule-required="true" data-rule-number="true"
+													onKeyPress="return isNumberCommaDot(event)" />
+											</div>
+										</div>
+
 
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Image</label>
@@ -140,18 +185,19 @@
 												<select class="form-control input-sm" name="fr_route_id"
 													id="fr_route_id" data-rule-required="true">
 
-								<c:forEach items="${routeList}" var ="routeList">
-								<option value="${routeList.routeId}"><c:out value="${routeList.routeName}"/></option>
-								
-								
-								</c:forEach>
-									
-													
+													<c:forEach items="${routeList}" var="routeList">
+														<option value="${routeList.routeId}"><c:out value="${routeList.routeName}"/></option>
+
+
+													</c:forEach>
+
+
 												</select>
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Rate Type</label>
+											<label class="col-sm-3 col-lg-2 control-label">Rate
+												Type</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<select class="form-control input-sm" name="fr_rate_cat"
 													id="fr_rate_cat" data-rule-required="true">
@@ -200,18 +246,19 @@
 											<label class="col-sm-3 col-lg-2 control-label">Pastries</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="kg_1" id="kg_1" placeholder="Qty"
-													class="form-control" data-rule-required="true" data-rule-number="true"
+													class="form-control" data-rule-required="true"
+													data-rule-number="true"
 													onKeyPress="return isNumberCommaDot(event)" />
 											</div>
 										</div>
 
-                                             <div class="form-group">
+										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">1/2 Kg
 												Cake</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="kg_2" id="kg_2" placeholder="Qty"
-													value="" class="form-control"
-													data-rule-required="true" data-rule-number="true"
+													value="" class="form-control" data-rule-required="true"
+													data-rule-number="true"
 													onKeyPress="return isNumberCommaDot(event)" />
 											</div>
 										</div>
@@ -221,7 +268,8 @@
 												Cake</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="kg_3" id="kg_3" placeholder="Qty"
-													class="form-control" data-rule-required="true" data-rule-number="true"
+													class="form-control" data-rule-required="true"
+													data-rule-number="true"
 													onKeyPress="return isNumberCommaDot(event)" />
 											</div>
 										</div>
@@ -244,7 +292,7 @@
 											<div class="col-sm-6 col-lg-4 controls">
 												<input type="password" name="fr_password" id="fr_password"
 													class="form-control" data-rule-required="true"
-													data-rule-minlength="6" placeholder="Password"/>
+													data-rule-minlength="6" placeholder="Password" />
 											</div>
 										</div>
 
@@ -255,7 +303,8 @@
 												<input type="password" name="fr_confirm_password"
 													id="fr_confirm_password" class="form-control"
 													data-rule-required="true" data-rule-minlength="6"
-													data-rule-equalTo="#fr_password" placeholder="Confirm Password"/>
+													data-rule-equalTo="#fr_password"
+													placeholder="Confirm Password" />
 											</div>
 										</div>
 
@@ -265,7 +314,7 @@
 											<div class="col-sm-6 col-lg-4 controls">
 												<input type="email" name="fr_email" id="fr_email"
 													class="form-control" data-rule-required="true"
-													data-rule-email="true" placeholder="Enter Email Id"/>
+													data-rule-email="true" placeholder="Enter Email Id" />
 											</div>
 										</div>
 
@@ -291,75 +340,86 @@
 													data-rule-required="true" />
 											</div>
 										</div>
-	                                    <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Owner's Birthdate</label>
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Owner's
+												Birthdate</label>
 											<div class="col-sm-5 col-lg-4 controls">
-												<input class="form-control date-picker" id="fr_birth_date" size="16"
-													type="text" name="fr_birth_date"
-													required placeholder="Birthdate"/>
-											</div>
-										</div>
-                                          <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">FDA License Date</label>
-											<div class="col-sm-5 col-lg-4 controls">
-												<input class="form-control date-picker" id="fba_license_date" size="16"
-													type="text" name="fba_license_date"
-													required placeholder="FDA License Date"/>
-											</div>
-										</div>
-										 <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Agreement Date</label>
-											<div class="col-sm-5 col-lg-4 controls">
-												<input class="form-control date-picker" id="fr_agreement_date" size="16"
-													type="text" name="fr_agreement_date"
-													required placeholder="Agreement Date"/>
+												<input class="form-control date-picker" id="fr_birth_date"
+													size="16" type="text" name="fr_birth_date" required
+													placeholder="Birthdate" />
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">GST Type</label>
+											<label class="col-sm-3 col-lg-2 control-label">FDA
+												License Date</label>
+											<div class="col-sm-5 col-lg-4 controls">
+												<input class="form-control date-picker"
+													id="fba_license_date" size="16" type="text"
+													name="fba_license_date" required
+													placeholder="FDA License Date" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Agreement
+												Date</label>
+											<div class="col-sm-5 col-lg-4 controls">
+												<input class="form-control date-picker"
+													id="fr_agreement_date" size="16" type="text"
+													name="fr_agreement_date" required
+													placeholder="Agreement Date" />
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">GST
+												Type</label>
 											<div class="col-sm-9 col-lg-4 controls">
 												<select class="form-control input-sm" name="fr_gst_type"
-													id="fr_gst_type" data-rule-required="true" onChange="changetextbox();">
-												   <option value="">Select GST Type</option>	
-						                                                   
-                                           <c:forEach items="${frItemStockConfigures}" var="frItemStockConfigures">
-                                       
-                                               <option value="${frItemStockConfigures.settingValue}"><c:out value="${frItemStockConfigures.settingKey}" /></option>
-                                            </c:forEach>
-                                          
+													id="fr_gst_type" data-rule-required="true"
+													onChange="changetextbox();">
+													<option value="">Select GST Type</option>
+
+													<c:forEach items="${frItemStockConfigures}"
+														var="frItemStockConfigures">
+
+														<option value="${frItemStockConfigures.settingValue}"><c:out value="${frItemStockConfigures.settingKey}" /></option>
+													</c:forEach>
+
 												</select>
 											</div>
 										</div>
-										
+
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">GST NO.</label>
+											<label class="col-sm-3 col-lg-2 control-label">GST
+												NO.</label>
 											<div class="col-sm-9 col-lg-4 controls">
-												<input type="text" name="fr_gst_no" id="fr_gst_no" placeholder="GST Number"
-													class="form-control" data-rule-required="true"
-													
-													onKeyPress="return isNumberCommaDot(event)"/>
+												<input type="text" name="fr_gst_no" id="fr_gst_no"
+													placeholder="GST Number" class="form-control"
+													data-rule-required="true"
+													onKeyPress="return isNumberCommaDot(event)" />
 											</div>
 										</div>
-										
-										
+
+
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Stock Type</label>
+											<label class="col-sm-3 col-lg-2 control-label">Stock
+												Type</label>
 											<div class="col-sm-9 col-lg-4 controls">
 												<select class="form-control input-sm" name="stock_type"
 													id="stock_type" data-rule-required="true">
-															 <c:forEach var = "i" begin = "1" end = "${settingValue}">
-                                                          <option value="${i}">    Type <c:out value = "${i}"/></option>
-                                                             </c:forEach>
+													<c:forEach var="i" begin="1" end="${settingValue}">
+														<option value="${i}">    Type <c:out value = "${i}"/></option>
+													</c:forEach>
 												</select>
 											</div>
 										</div>
-											<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Is Same State?</label>
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Is
+												Same State?</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												 <label class="radio-inline"> <input type="radio"
-													name="is_same_state" id="optionsRadios1" value="1" checked/> YES
-												</label>
 												<label class="radio-inline"> <input type="radio"
+													name="is_same_state" id="optionsRadios1" value="1" checked />
+													YES
+												</label> <label class="radio-inline"> <input type="radio"
 													name="is_same_state" id="optionsRadios1" value="0">
 													NO
 												</label>
@@ -369,17 +429,17 @@
 											<label class="col-sm-3 col-lg-2 control-label">GRN 2
 												Applicable ?</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												 <label class="radio-inline"> <input type="radio"
-													name="grn_two" id="optionsRadios1" value="1" checked/> Applicable
-												</label>
 												<label class="radio-inline"> <input type="radio"
-													name="grn_two" id="optionsRadios1" value="0">
-													Not Applicable
+													name="grn_two" id="optionsRadios1" value="1" checked />
+													Applicable
+												</label> <label class="radio-inline"> <input type="radio"
+													name="grn_two" id="optionsRadios1" value="0"> Not
+													Applicable
 												</label>
 											</div>
 										</div>
-										
-										
+
+
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Status</label>
 											<div class="col-sm-9 col-lg-10 controls">
@@ -397,81 +457,103 @@
 										<div class="form-group">
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-												<input type="submit" class="btn btn-primary" value="Submit">
+												<c:choose>
+													<c:when test="${isAdd==1}">
+														<input type="submit" class="btn btn-primary"
+															value="Submit">
+													</c:when>
+													<c:otherwise>
+														<input type="submit" class="btn btn-primary"
+															disabled="disabled" value="Submit">
+													</c:otherwise>
+												</c:choose>
+
 												<!-- <button type="button" class="btn">Cancel</button> -->
 											</div>
 										</div>
-										
-										
-										
+
+
+
 									</form>
 								</div>
 							</div>
 						</div>
-					</div></div></div>
-					<!-- END Main Content -->
-
-					<footer>
-						<p>2017 © MONGINIS.</p>
-					</footer>
-
-					<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-						class="fa fa-chevron-up"></i></a>
+					</div>
 				</div>
-				<!-- END Content -->
 			</div>
-			<!-- END Container -->
+			<!-- END Main Content -->
 
-			<!--basic scripts-->
-			
-			<script
-				src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-			<script>
+			<footer>
+				<p>2017 © MONGINIS.</p>
+			</footer>
+
+			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+				class="fa fa-chevron-up"></i></a>
+		</div>
+		<!-- END Content -->
+	</div>
+	<!-- END Container -->
+
+	<!--basic scripts-->
+
+	<script
+		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script>
 				window.jQuery
 						|| document
 								.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
 			</script>
-			<script src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
-			<script
-				src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-			<script src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
 
-			<!--page specific plugin scripts-->
-			<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
-			<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
-			<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
-			<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
-			<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
-			<script src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
-			<script src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
+	<!--page specific plugin scripts-->
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
 
-			<!--flaty scripts-->
-			<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
-			<script src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
-			<!--page specific plugin scripts-->
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/clockface/js/clockface.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<!--flaty scripts-->
+	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
+	<!--page specific plugin scripts-->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/clockface/js/clockface.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
-				
-<script type="text/javascript">
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
+
+	<script type="text/javascript">
 function changetextbox()
 {
     if (document.getElementById("fr_gst_type").value === "0") {
@@ -485,6 +567,6 @@ function changetextbox()
     	}
 }
 </script>
-				
+
 </body>
 </html>
