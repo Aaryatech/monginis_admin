@@ -281,11 +281,12 @@
 	
 function viewCreditNotes(){
 		
-		
+	window.open('${pageContext.request.contextPath}/showCreditNotes');
+
 		//alert("Hi "+selectedType);
-	        var form = document.getElementById("validation");
-	        form.action ="${pageContext.request.contextPath}/showCreditNotes";
-	        form.submit();
+	       // var form = document.getElementById("validation");
+	        //form.action ="${pageContext.request.contextPath}/showCreditNotes";
+	       // form.submit();
 	       
 
 	}

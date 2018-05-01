@@ -1,6 +1,15 @@
 package com.ats.adminpanel.controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -15,6 +24,7 @@ import javax.servlet.http.HttpSession;
 import org.json.CDL;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.validation.BindingResult;
@@ -37,6 +47,8 @@ import com.ats.adminpanel.model.creditnote.CreditPrintBean;
 import com.ats.adminpanel.model.creditnote.CrnSrNoDateBean;
 import com.ats.adminpanel.model.creditnote.GetCreditNoteHeaders;
 import com.ats.adminpanel.model.creditnote.GetCreditNoteHeadersList;
+import com.ats.adminpanel.model.creditnote.GetCreditNoteReport;
+import com.ats.adminpanel.model.creditnote.GetCreditNoteReportList;
 import com.ats.adminpanel.model.creditnote.GetCrnDetails;
 import com.ats.adminpanel.model.creditnote.GetCrnDetailsList;
 import com.ats.adminpanel.model.creditnote.GetGrnGvnForCreditNote;
@@ -45,6 +57,21 @@ import com.ats.adminpanel.model.creditnote.PostCreditNoteDetails;
 import com.ats.adminpanel.model.creditnote.PostCreditNoteHeader;
 import com.ats.adminpanel.model.creditnote.PostCreditNoteHeaderList;
 import com.ats.adminpanel.model.login.UserResponse;
+import com.ats.adminpanel.model.production.GetProdDetailBySubCat;
+import com.ats.adminpanel.model.production.GetProdDetailBySubCatList;
+import com.ats.adminpanel.model.production.GetProdPlanDetail;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 @Controller
 @Scope("session")
@@ -348,6 +375,8 @@ public class CreditNoteController {
 
 					}
 
+					
+					
 					// postCreditHeader.setGrnGvnSrNoList(srNoMap.get(creditNote.getGrngvnSrno()));
 					postCreditHeader.setIsDeposited(0);
 
@@ -454,7 +483,7 @@ public class CreditNoteController {
 
 	List<GetCrnDetails> crnDetailList = new ArrayList<GetCrnDetails>();
 
-	@RequestMapping(value = "/showCreditNotes", method = RequestMethod.POST)
+	@RequestMapping(value = "/showCreditNotes", method = RequestMethod.GET)
 	public ModelAndView viewCreditNotes(HttpServletRequest request, HttpServletResponse response) {
 
 		// Constants.mainAct = 8;
@@ -630,6 +659,112 @@ public class CreditNoteController {
 
 	}
 
+	
+	//excelForCreaditNoteReport new excel report
+	
+	//exportToExcelReport
+	
+	@RequestMapping(value = "/exportToExcelReport", method = RequestMethod.GET)
+	@ResponseBody
+	public GetCreditNoteReportList excelForCreaditNoteReport(HttpServletRequest request, HttpServletResponse response) {
+
+		GetCreditNoteReportList creditNoteList = new GetCreditNoteReportList();
+		try {
+			System.out.println("ala " );
+			RestTemplate restTemplate = new RestTemplate();
+			String checkboxes = request.getParameter("checkboxes");
+			System.out.println("checkboxes " + checkboxes);
+			 
+			 
+			System.out.println("string " + checkboxes);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("crnIdList", checkboxes);
+			creditNoteList = restTemplate.postForObject(Constants.url + "/getCreditNoteReport",map, GetCreditNoteReportList.class);
+			System.out.println("creditNoteList getCreditNoteReport " + creditNoteList.getCreditNoteReport());
+			
+			try
+			{
+				List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+				
+				ExportToExcel expoExcel=new ExportToExcel();
+				List<String> rowData=new ArrayList<String>();
+				 
+				rowData.add("Sr no");
+				rowData.add("Crn Id");
+				rowData.add("Date");
+				rowData.add("Type");
+				rowData.add("Party Name"); 
+				rowData.add("Gst No");
+				rowData.add("Taxable Amt");
+				rowData.add("Sgst Rs");
+				rowData.add("Cgst Rs");
+				rowData.add("Igst Rs");
+				rowData.add("Total Tax");
+				rowData.add("Grand Total");
+			
+				
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				for(int i=0;i<creditNoteList.getCreditNoteReport().size();i++)
+				{
+					
+					GetCreditNoteReport report=creditNoteList.getCreditNoteReport().get(i);
+					  expoExcel=new ExportToExcel();
+					 rowData=new ArrayList<String>();
+					 
+				 
+					 rowData.add(""+(i+1));
+					 rowData.add(""+report.getCrnId());
+					 rowData.add(""+report.getCrnDate());
+					 if(report.getIsGrn()==1) {
+						 rowData.add("GRN");
+					 }else {
+						 rowData.add("GVN");
+					 }
+					 rowData.add(""+report.getFrName());
+					 rowData.add(""+report.getFrGstNo());
+					 rowData.add(""+report.getCrnTaxableAmt());
+					 if(report.getIsSameState()==1) {
+					 rowData.add(""+report.getSgstSum());
+					 rowData.add(""+report.getCgstSum());
+					 rowData.add(""+0);
+					 
+					 }else {
+						 
+						 rowData.add(""+0);
+						 rowData.add(""+0);
+						 rowData.add(""+report.getIgstSum());
+						 
+					 }
+					 rowData.add(""+report.getCrnTotalTax());
+					 rowData.add(""+report.getCrnGrandTotal());
+					
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					 
+				}
+				 
+				
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "creaditNote");
+			}catch(Exception e)
+			{
+				e.printStackTrace();
+				System.out.println("Exception to genrate excel ");
+			}
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return creditNoteList;
+
+	}
+
+	
+	
+	
 
 	@RequestMapping(value = "/getHeaders", method = RequestMethod.GET)
 	public @ResponseBody List<GetCreditNoteHeaders> getHeaders(HttpServletRequest request,
@@ -731,7 +866,298 @@ public class CreditNoteController {
 
 		return model;
 	}
+	
+	
+	@RequestMapping(value = "genCrnReport/{checked}/{fromDate}/{toDate}", method = RequestMethod.GET)
+	public void genCrnReportPdf(HttpServletRequest request, HttpServletResponse response,
+			@PathVariable("checked") String[] checked,
+			@PathVariable("fromDate") String fromDate,
+			@PathVariable("toDate") String toDate) throws FileNotFoundException {
+		
+		
+		GetCreditNoteReportList creditNoteList = new GetCreditNoteReportList();
 
+		
+		RestTemplate restTemplate = new RestTemplate();
+	
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		String crnIdList = new String();
+		System.out.println("checked of zero " + checked[0]);
+
+		for (int i = 0; i < checked.length; i++) {
+			System.err.println("Value checked  " + checked[i]);
+			crnIdList = crnIdList + "," + checked[i];
+		}
+
+		// Getting crn Headers
+
+		map.add("crnIdList", crnIdList);
+		creditNoteList = restTemplate.postForObject(Constants.url + "/getCreditNoteReport",map, GetCreditNoteReportList.class);
+		System.out.println("creditNoteList getCreditNoteReport " + creditNoteList.getCreditNoteReport());
+		
+		
+		
+		BufferedOutputStream outStream = null;
+		System.out.println("Inside Pdf prod From Order Or Plan");
+
+		//List<GetProdPlanDetail> moneyOutList = prodPlanDetailList;
+
+		// moneyOutList = prodPlanDetailList;
+		Document document = new Document(PageSize.A4);
+		// ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+
+		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
+		String timeStamp = dateFormat.format(cal.getTime());
+		String FILE_PATH = Constants.REPORT_SAVE;
+		File file = new File(FILE_PATH);
+
+		PdfWriter writer = null;
+
+		FileOutputStream out = new FileOutputStream(FILE_PATH);
+		try {
+			writer = PdfWriter.getInstance(document, out);
+		} catch (DocumentException e) {
+
+			e.printStackTrace();
+		}
+
+		PdfPTable table = new PdfPTable(10);
+		try {
+			System.out.println("Inside PDF Table try");
+			table.setWidthPercentage(100);
+			table.setWidths(new float[] { 0.4f, 1.0f, 0.9f,1.7f,1.1f,1.1f,1.1f,0.8f,1.1f,1.0f});
+			Font headFont = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
+
+			PdfPCell hcell=new PdfPCell();
+			hcell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			hcell.setPadding(4);
+			hcell = new PdfPCell(new Phrase("Sr.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Crn No", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Date", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+
+			
+			hcell = new PdfPCell(new Phrase("Party Name", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+			
+			
+		/*	hcell = new PdfPCell(new Phrase("GSTIN No", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+			
+			*/
+			hcell = new PdfPCell(new Phrase("Taxable Amt", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+			
+			
+			hcell = new PdfPCell(new Phrase("SGST", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+			
+			
+			hcell = new PdfPCell(new Phrase("CGST", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+			
+			
+			hcell = new PdfPCell(new Phrase("IGST", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+			
+			
+			hcell = new PdfPCell(new Phrase("Tax Amt", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Total", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+			
+			
+			int index = 0;
+			for (GetCreditNoteReport report : creditNoteList.getCreditNoteReport()) {
+				
+				if(report.getIsSameState()==1) {
+					report.setIgstSum(0);
+				}else {
+					report.setSgstSum(0);
+					report.setCgstSum(0);
+				}
+				
+				index++;
+				PdfPCell cell;
+
+				cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				  cell.setPadding(4);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(""+report.getCrnId(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
+
+				
+				cell = new PdfPCell(new Phrase(report.getCrnDate(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
+				
+				
+				cell = new PdfPCell(new Phrase(report.getFrName(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
+
+				
+				
+			/*	cell = new PdfPCell(new Phrase(report.getFrGstNo(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
+*/
+				cell = new PdfPCell(new Phrase(""+report.getCrnTaxableAmt(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(""+report.getSgstSum(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(""+report.getCgstSum(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(""+report.getIgstSum(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(""+report.getCrnTotalTax(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
+
+				
+				cell = new PdfPCell(new Phrase(""+report.getCrnGrandTotal(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
+
+				
+				
+				
+				// FooterTable footerEvent = new FooterTable(table);
+				// writer.setPageEvent(footerEvent);
+			}
+
+			
+			document.open();
+			Paragraph company = new Paragraph(
+					"Galdhar Foods Pvt.Ltd\n",
+					f);
+			company.setAlignment(Element.ALIGN_CENTER);
+			document.add(company);
+			document.add(new Paragraph(" "));
+			
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+
+			document.add(new Paragraph("Credit note Report : " + fromDate + " To "  +toDate));
+			document.add(new Paragraph("\n"));
+			document.add(table);
+			document.add(new Paragraph("\n"));
+			
+			int totalPages = writer.getPageNumber();
+
+			System.out.println("Page no " + totalPages);
+
+			document.close();
+			// Atul Sir code to open a Pdf File
+			if (file != null) {
+
+				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+				if (mimeType == null) {
+
+					mimeType = "application/pdf";
+
+				}
+
+				response.setContentType(mimeType);
+
+				response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+				response.setContentLength((int) file.length());
+
+				InputStream inputStream = null;
+				try {
+					inputStream = new BufferedInputStream(new FileInputStream(file));
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				try {
+					FileCopyUtils.copy(inputStream, response.getOutputStream());
+				} catch (IOException e) {
+					System.out.println("Excep in Opening a Pdf File");
+					e.printStackTrace();
+				}
+			}
+
+		} catch (DocumentException ex) {
+
+			System.out.println("Pdf Generation Error: BOm Prod  View Prod" + ex.getMessage());
+
+			ex.printStackTrace();
+
+		}
+		
+	}
+	
+	
+	
+	
 	@RequestMapping(value = "pdf/getCrnCheckedHeaders/{checked}", method = RequestMethod.GET)
 	public ModelAndView getCrnCheckedHeaders(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable("checked") String[] checked) {

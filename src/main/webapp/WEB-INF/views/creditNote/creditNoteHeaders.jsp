@@ -11,6 +11,9 @@
 	<c:url var="getHeaders" value="/getHeaders" />
 	<c:url var="excelForCreaditNote" value="/excelForCreaditNote" />
 
+	<c:url var="excelForCreaditNoteReport" value="/exportToExcelReport" />
+
+
 	<div class="container" id="main-container">
 
 		<!-- BEGIN Sidebar -->
@@ -76,12 +79,12 @@
 											type="text" value="${toDate}" name="to_date" required />
 									</div>
 
-									<div
+									<!-- <div
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
 										<input type="button" value="Submit" onclick="getHeader()"
 											class="btn btn-primary">
 
-									</div>
+									</div> -->
 								</div>
 
 								<div class="form-group">
@@ -94,30 +97,20 @@
 											id="selectFr" name="selectFr" onchange="getDate()">
 											<option value="-1"><c:out value="All"/></option>
 
-
-
 											<c:forEach items="${unSelectedFrList}" var="fr"
 												varStatus="count2">
-
-												<%--	<c:forEach items="${selectedFr}" var="selFr"
-													varStatus="count2">
-													 <c:choose>
-														<c:when test="${selFr==fr.frId}">
-															<option selected value="${fr.frId}"><c:out value="${fr.frName}"/></option>
-														</c:when>
-														<c:otherwise> --%>
 												<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
-
-
-												<%-- </c:otherwise>
-														</c:choose>
-												</c:forEach>
- --%>
 											</c:forEach>
 
 										</select>
 									</div>
 
+									<div
+										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
+										<input type="button" value="Submit" onclick="getHeader()"
+											class="btn btn-primary">
+
+									</div>
 
 
 								</div>
@@ -149,8 +142,8 @@
 												<thead>
 													<tr>
 														<th></th>
-														<th > Sr No <input type="checkbox"
-													onClick="selectBillNo(this)" /></th>
+														<th>Sr No <input type="checkbox"
+															onClick="selectBillNo(this)" /></th>
 														<th class="col-md-1">Date</th>
 														<th class="col-md-2">Crn Id</th>
 														<th class="col-md-2">Franchise Name</th>
@@ -165,12 +158,53 @@
 												<tbody>
 											</table>
 										</div>
+
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label"> </label>
+											<div class="col-sm-2 col-lg-2 controls">
+												<input type="button" value="PDF Report "
+													onclick="genPdfReport()" class="btn btn-primary">
+											</div>
+
+											<div class="col-sm-5 col-lg-1 controls">
+												<input type="button" id="expExcel" class="btn btn-primary"
+													value="Excel Report" onclick="createExelReport();">
+											</div>
+
+											<label class="col-sm-3 col-lg-2 control-label"></label>
+											<div class="col-sm-2 col-lg-3 controls">
+												<input type="button" value="Generate PDF For Franchise"
+													onclick="genPdf()" class="btn btn-primary">
+											</div>
+
+
+											<div class="col-sm-5 col-lg-1 controls">
+												<input type="button" id="expExcel" class="btn btn-primary"
+													value="EXPORT TO Excel For ERP" onclick="createExel();">
+
+											</div>
+
+										</div>
+
+
+										<!-- <div class="form-group">
+										
 										<div
 											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-5">
-											<input type="button" value="Generate PDF" onclick="genPdf()"
+											<input type="button" value="Generate PDF Franchise" onclick="genPdf()"
 												class="btn btn-primary">
-												<input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="createExel();" >
+												<input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel Franchise" onclick="createExel();" >
 										</div>
+										
+										
+										<div
+											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-5">
+											<input type="button" value="Generate Report PDF" onclick="genPdfReport()"
+												class="btn btn-primary">
+												<input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel Report" onclick="createExelReport();" >
+										</div>
+										</div> -->
+
 										<!-- </form> -->
 									</div>
 								</div>
@@ -353,6 +387,40 @@ window.open('${pageContext.request.contextPath}/pdf?url=pdf/getCrnCheckedHeaders
 			
 	}
 	
+	
+function genPdfReport() {
+	//alert("Inside Gen Pdf ");
+	checkboxes = document.getElementsByName('select_to_agree');
+	var fromDate = $("#from_date").val();
+	var toDate = $("#to_date").val();
+	var selArray;
+	
+	for(var x=0;x<checkboxes.length;x++){
+		if(document.getElementById("select_to_agree"+x).checked==true){
+			if(x==0){
+		selArray=document.getElementById("select_to_agree"+x).value;
+			}
+			else
+				{
+				selArray=selArray+","+document.getElementById("select_to_agree"+x).value;
+				}
+		}
+		
+	}
+	
+				    //var check = document.getElementById("select_to_agree").value;
+				    
+				  
+				   /*  var str =selArray;
+
+				    str = str.replace(/^,|,$|,(?=,)/g, '');
+				    alert(str); */
+window.open('${pageContext.request.contextPath}/genCrnReport/'+selArray+'/'+fromDate+'/'+toDate);
+	    
+	    // window.open('${pageContext.request.contextPath}/getGrnPdf/'+fromDate+'/'+'/'+toDate+'/'+headerId+'/'+1);
+		
+}
+
 function selectBillNo(source) {
 	checkboxes = document.getElementsByName('select_to_agree');
 	
@@ -409,6 +477,65 @@ function exportToExcel()
 	 
 	window.open("${pageContext.request.contextPath}/exportToExcel"); 
 }
+
+
+
+
+//new code excel Report
+
+function createExelReport() {
+	 
+	checkboxes = document.getElementsByName('select_to_agree');
+	
+	 
+var flag=0;
+var selArray="";
+
+for(var x=0;x<checkboxes.length;x++){
+	 
+	if(document.getElementById("select_to_agree"+x).checked==true){
+		flag=1;
+		 if(selArray=="")
+			 selArray=document.getElementById("select_to_agree"+x).value;
+		 else
+			selArray=selArray+","+document.getElementById("select_to_agree"+x).value;
+			 
+	}
+	
+	
+}
+	 if(flag==1)
+		 {
+	$
+			.getJSON(
+					'${excelForCreaditNoteReport}',
+					{
+						checkboxes : selArray , 
+						ajax : 'true'
+					},
+					function(data) {
+						
+					 
+						exportToExcel();
+					 
+					});
+		 }
+	 else
+		 {
+		 alert("Select Minimum 1  ");
+		 }
+
+}
+
+/* function exportToExcel()
+{
+	 
+	window.open("${pageContext.request.contextPath}/exportToExcel"); 
+} */
+
+
+
+
 	</script>
 
 </body>

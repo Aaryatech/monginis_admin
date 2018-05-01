@@ -204,7 +204,7 @@ public class HomeController {
 					
 					 List<ModuleJson> newModuleList = responseEntity.getBody();
 					
-					 
+					 System.err.println("new Module List " +newModuleList.toString());
 					 
 						session.setAttribute("newModuleList", newModuleList);
 						session.setAttribute("sessionModuleId", 0);
