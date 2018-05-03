@@ -70,6 +70,112 @@ public class AccessRightController {
 		List<AccessRightModule> accessRightModule = accessRightModuleList.getAccessRightModuleList();
 		// List<AccessRightModule> newModuleList=new ArrayList<>();
 		List<ModuleJson> moduleJsonList = new ArrayList<>();
+		
+		for (int i = 0; i < accessRightModule.size(); i++) {
+			List<SubModuleJson> subModuleJsonList = new ArrayList<>();
+
+			boolean isPresent = false;
+			List<AccessRightSubModule> accessRightSubModuleList = accessRightModule.get(i)
+					.getAccessRightSubModuleList();
+			String[] subModuleId=null;
+			for (int j = 0; j < accessRightSubModuleList.size(); j++) {
+				
+				 subModuleId = request.getParameterValues(
+						accessRightSubModuleList.get(j).getSubModuleId()+""+accessRightModule.get(i).getModuleId());
+			//	
+				String view = "hidden";
+				String add = "hidden";
+				String edit = "hidden";
+				String delete = "hidden";
+				if (subModuleId != null) {
+					
+					
+					System.err.println("Length = " +subModuleId.length);
+
+					for(int p=0;p<subModuleId.length;p++) {
+					System.err.println("Sub Mod Id Checked for Module Id : "+accessRightModule.get(i).getModuleName()+"" +subModuleId[p]);
+					
+					}
+					AccessRightSubModule accessRightSubModule = accessRightSubModuleList.get(j);
+
+					SubModuleJson subModuleJson = new SubModuleJson();
+
+					subModuleJson.setModuleId(accessRightSubModule.getModuleId());
+					subModuleJson.setSubModuleId(accessRightSubModule.getSubModuleId());
+					subModuleJson.setSubModuleDesc(accessRightSubModule.getSubModuleDesc());
+					subModuleJson.setSubModuleMapping(accessRightSubModule.getSubModuleMapping());
+					subModuleJson.setSubModulName(accessRightSubModule.getSubModulName());
+					subModuleJson.setType(accessRightSubModule.getType());
+					
+					for (int k = 0; k < subModuleId.length; k++) {
+						if (subModuleId[k].equalsIgnoreCase("view")) {
+							view = new String("visible");
+						} else if (subModuleId[k].equalsIgnoreCase("add")) {
+							add = new String("visible");
+						} else if (subModuleId[k].equalsIgnoreCase("edit")) {
+							edit = new String("visible");
+						} else if (subModuleId[k].equalsIgnoreCase("delete")) {
+							delete = new String("visible");
+						}
+					}
+					isPresent = true;
+					subModuleJson.setView(view);
+					subModuleJson.setEditReject(edit);
+					subModuleJson.setAddApproveConfig(add);
+					subModuleJson.setDeleteRejectApprove(delete);
+					subModuleJsonList.add(subModuleJson);
+				}
+			}
+			if (isPresent) {
+
+				AccessRightModule module = accessRightModule.get(i);
+				ModuleJson moduleJson = new ModuleJson();
+
+				moduleJson.setModuleId(module.getModuleId());
+				moduleJson.setModuleDesc(module.getModuleDesc());
+				moduleJson.setModuleName(module.getModuleName());
+				moduleJson.setSubModuleJsonList(subModuleJsonList);
+
+				moduleJsonList.add(moduleJson);
+
+			}
+		}
+
+		if (moduleJsonList != null && !moduleJsonList.isEmpty()) {
+			String roleName = request.getParameter("roleName");
+			AssignRoleDetailList assignRoleDetailList = new AssignRoleDetailList();
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				String newsLetterJSON = mapper.writeValueAsString(moduleJsonList);
+
+				System.out.println("JSON  " + newsLetterJSON);
+				assignRoleDetailList.setRoleJson(newsLetterJSON);
+
+			} catch (JsonProcessingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			// assignRoleDetailList.setAccessRightModuleList(newModuleList);
+			assignRoleDetailList.setRoleName(roleName);
+			assignRoleDetailList.setDelStatus(0);
+			System.out.println("accessRightModule List " + assignRoleDetailList.toString());
+			System.out.println("heare");
+
+			Info info = rest.postForObject(Constants.url + "saveAssignRole", assignRoleDetailList, Info.class);
+		}
+		return "redirect:/showCreateRole";
+	}
+
+	
+	
+	
+	
+	/*@RequestMapping(value = "/submitCreateRole", method = RequestMethod.POST)
+	public String submitAssignRole(HttpServletRequest request, HttpServletResponse response) {
+
+		List<AccessRightModule> accessRightModule = accessRightModuleList.getAccessRightModuleList();
+		// List<AccessRightModule> newModuleList=new ArrayList<>();
+		List<ModuleJson> moduleJsonList = new ArrayList<>();
 		for (int i = 0; i < accessRightModule.size(); i++) {
 			List<SubModuleJson> subModuleJsonList = new ArrayList<>();
 
@@ -79,6 +185,9 @@ public class AccessRightController {
 			for (int j = 0; j < accessRightSubModuleList.size(); j++) {
 				String[] subModuleId = request.getParameterValues(
 						accessRightSubModuleList.get(j).getSubModuleId() + "" + accessRightModule.get(i).getModuleId());
+				for(int p=0;p<subModuleId.length;p++) {
+				System.err.println("Sub Mod Id Checked " +subModuleId[p]);
+				}
 				String view = "hidden";
 				String add = "hidden";
 				String edit = "hidden";
@@ -153,7 +262,7 @@ public class AccessRightController {
 		}
 		return "redirect:/showCreateRole";
 	}
-
+*/
 	@RequestMapping(value = "/showAssignRole", method = RequestMethod.GET)
 	public ModelAndView showAssignRloe(HttpServletRequest request, HttpServletResponse response) {
 
