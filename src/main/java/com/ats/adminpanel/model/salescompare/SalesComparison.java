@@ -6,7 +6,7 @@ public class SalesComparison {
 
 	List<SalesComparisonReport> billTotalList;
 
-	List<SalesComparisonReport> grnGvnTotalList;
+	List<SalesCompareGrnTot> grnGvnTotalList;
 
 	int frId;
 	String frName;
@@ -30,11 +30,12 @@ public class SalesComparison {
 		this.billTotalList = billTotalList;
 	}
 
-	public List<SalesComparisonReport> getGrnGvnTotalList() {
+
+	public List<SalesCompareGrnTot> getGrnGvnTotalList() {
 		return grnGvnTotalList;
 	}
 
-	public void setGrnGvnTotalList(List<SalesComparisonReport> grnGvnTotalList) {
+	public void setGrnGvnTotalList(List<SalesCompareGrnTot> grnGvnTotalList) {
 		this.grnGvnTotalList = grnGvnTotalList;
 	}
 

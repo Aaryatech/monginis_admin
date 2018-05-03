@@ -1,9 +1,9 @@
 package com.ats.adminpanel.model.salescompare;
 
-
-public class SalesComparisonReport {
-
-	private int frId;
+public class SalesCompareGrnTot {
+	
+	
+private int frId;
 	
 	private	int month;
 	
@@ -79,5 +79,5 @@ public class SalesComparisonReport {
 		return "SalesConsumeReport [frId=" + frId + ", month=" + month + ", monthName=" + monthName + ", routeName="
 				+ routeName + ", frName=" + frName + ", frRouteId=" + frRouteId + ", billTotal=" + billTotal + "]";
 	}
-	
+
 }
