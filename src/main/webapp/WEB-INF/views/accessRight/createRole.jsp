@@ -298,7 +298,7 @@
 														<c:when test="${allSubModuleList.view==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"   class="check1${allModuleList.moduleId}"
+																id="select_to_assign"   class="check${allModuleList.moduleId}"
 																value="view" 
 																 ></td>
 														</c:when>
@@ -314,7 +314,7 @@
 														<c:when test="${allSubModuleList.addApproveConfig==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"  class="check1${allModuleList.moduleId}"
+																id="select_to_assign"  class="check${allModuleList.moduleId}"
 																value="add" 
 																 ></td>
 														</c:when>
@@ -330,7 +330,7 @@
 														<c:when test="${allSubModuleList.editReject==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"  class="check1${allModuleList.moduleId}"
+																id="select_to_assign"  class="check${allModuleList.moduleId}"
 																value="edit" 
 																 ></td>
 														</c:when>
@@ -343,7 +343,7 @@
 														<c:when test="${allSubModuleList.deleteRejectApprove==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"  class="check1${allModuleList.moduleId}"
+																id="select_to_assign"  class="check${allModuleList.moduleId}"
 																value="delete" 
 																 ></td>
 														</c:when>
@@ -421,7 +421,7 @@
 														<c:when test="${allSubModuleList.view==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"  class="check2${allModuleList.moduleId}"
+																id="select_to_assign"  class="check${allModuleList.moduleId}"
 																value="view" 
 																 ></td>
 														</c:when>
@@ -437,7 +437,7 @@
 														<c:when test="${allSubModuleList.addApproveConfig==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"  class="check2${allModuleList.moduleId}"
+																id="select_to_assign"  class="check${allModuleList.moduleId}"
 																value="add" 
 																 ></td>
 														</c:when>
@@ -453,7 +453,7 @@
 														<c:when test="${allSubModuleList.editReject==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"   class="check2${allModuleList.moduleId}"
+																id="select_to_assign"   class="check${allModuleList.moduleId}"
 																value="edit" 
 																 ></td>
 														</c:when>
@@ -466,7 +466,7 @@
 														<c:when test="${allSubModuleList.deleteRejectApprove==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"  class="check2${allModuleList.moduleId}"
+																id="select_to_assign"  class="check${allModuleList.moduleId}"
 																value="delete" 
 																 ></td>
 														</c:when>
@@ -544,7 +544,7 @@
 														<c:when test="${allSubModuleList.view==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"  class="check3${allModuleList.moduleId}"
+																id="select_to_assign"  class="check${allModuleList.moduleId}"
 																value="view" 
 																 ></td>
 														</c:when>
@@ -560,7 +560,7 @@
 														<c:when test="${allSubModuleList.addApproveConfig==1}">
 
 															<td><input type="checkbox" name="${allSubModuleList.subModuleId}${allSubModuleList.moduleId}"
-																id="select_to_assign"  class="check3${allModuleList.moduleId}"
+																id="select_to_assign"  class="check${allModuleList.moduleId}"
 																value="add" 
 																 ></td>
 														</c:when>
@@ -755,7 +755,7 @@
 					  $(".check"+id).attr('checked', false);
 				  }
 				 else{ */
-					  $(".check1"+id).attr('checked',true);
+					  $(".check"+id).attr('checked',true);
 				 /*  } */
 			    
 			  }); 
@@ -773,7 +773,7 @@
 					  $(".check"+id).attr('checked', false);
 				  }
 				 else{ */
-					  $(".check2"+id).attr('checked',true);
+					  $(".check"+id).attr('checked',true);
 				 /*  } */
 			    
 			  }); 
@@ -791,7 +791,7 @@
 					  $(".check"+id).attr('checked', false);
 				  }
 				 else{ */
-					  $(".check3"+id).attr('checked',true);
+					  $(".check"+id).attr('checked',true);
 				 /*  } */
 			    
 			  }); 
