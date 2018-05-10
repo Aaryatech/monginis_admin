@@ -3743,7 +3743,7 @@ model.addObject("royPer",getRoyPer());
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 
-			File f = new File("/home/ats-11/pdf/report.pdf");
+			File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
 		// File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
 
 		try {
@@ -3758,7 +3758,7 @@ model.addObject("royPer",getRoyPer());
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		 String filePath = "/home/ats-11/pdf/report.pdf";
+		 String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
 
 	// String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
 
@@ -3852,7 +3852,7 @@ model.addObject("royPer",getRoyPer());
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 
-		File f = new File("/home/ats-11/pdf/report.pdf");
+		File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
 		//File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
 
 		try {
@@ -3867,7 +3867,7 @@ model.addObject("royPer",getRoyPer());
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		String filePath = "/home/ats-11/pdf/report.pdf";
+		String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
 
 	// String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
 

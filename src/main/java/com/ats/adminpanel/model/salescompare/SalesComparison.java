@@ -2,12 +2,15 @@ package com.ats.adminpanel.model.salescompare;
 
 import java.util.List;
 
+import com.ats.adminpanel.model.Route;
+
 public class SalesComparison {
 
 	List<SalesComparisonReport> billTotalList;
 
 	List<SalesCompareGrnTot> grnGvnTotalList;
-
+   
+	
 	int frId;
 	String frName;
 	float perMonthSale;
@@ -17,9 +20,6 @@ public class SalesComparison {
 	int routeId;
 	
 	float monthDiffInPer;
-	
-	
-	
 	
 
 	public List<SalesComparisonReport> getBillTotalList() {
@@ -105,12 +105,10 @@ public class SalesComparison {
 
 	@Override
 	public String toString() {
-		return "SalesComparison [billTotalList=" + billTotalList + ", grnGvnTotalList=" + grnGvnTotalList + ", frId="
-				+ frId + ", frName=" + frName + ", perMonthSale=" + perMonthSale + ", prevMonthSale=" + prevMonthSale
-				+ ", lastMonthDiff=" + lastMonthDiff + ", routeName=" + routeName + ", routeId=" + routeId
-				+ ", monthDiffInPer=" + monthDiffInPer + "]";
+		return "SalesComparison [billTotalList=" + billTotalList + ", grnGvnTotalList=" + grnGvnTotalList
+				+ ", frId=" + frId + ", frName=" + frName + ", perMonthSale="
+				+ perMonthSale + ", prevMonthSale=" + prevMonthSale + ", lastMonthDiff=" + lastMonthDiff
+				+ ", routeName=" + routeName + ", routeId=" + routeId + ", monthDiffInPer=" + monthDiffInPer + "]";
 	}
-
-	
-
+    
 }

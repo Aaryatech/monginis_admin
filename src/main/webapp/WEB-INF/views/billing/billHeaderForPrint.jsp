@@ -199,16 +199,17 @@
 												<thead>
 													<tr>
 													<th class="col-sm-1"><input type="checkbox"
-													onClick="selectBillNo(this)" /> Select All<br /></th>
+													onClick="selectBillNo(this)" />All<br /></th>
 														<th class="col-sm-1">Sr
 															No</th>
 														<th class="col-md-1">Invoice No</th>
 														<th class="col-md-1">Date</th>
+														<th class="col-md-1">Time</th>
 														<th class="col-md-2">Franchise Name</th>
-														<th class="col-md-2">Taxable Amt</th>
+														<th class="col-md-1">Taxable Amt</th>
 														<th class="col-sm-1">Total tax</th>
 														<th class="col-md-1">Total</th>
-														<th class="col-md-1">Action</th>
+														<th class="col-md-2">Action</th>
 														
 
 														<!-- 	<th width="300" align="center">Action</th> -->
@@ -230,12 +231,22 @@
 															<td class="col-md-1"><c:out
 																	value="${billHeadersList.invoiceNo}" /></td>
 
-															<td class="col-md-1"><c:out
-																	value="${billHeadersList.billDate}" /></td>
-
+															<td class="col-md-1"><%-- <c:out
+																	value="${billHeadersList.billDate}" /> --%>
+																	
+                                                       <c:set var="string1" value="${billHeadersList.remark}" />
+                        
+                                        <fmt:parseDate value="${string1}" var="dateObject"
+                                              pattern="yyyy-MM-dd HH:mm:ss" />
+                                        <fmt:formatDate value="${dateObject}" pattern="dd/MM/yyyy" />
+                          																
+																	</td>
+                                                             <td class="col-md-1">
+                                                              <fmt:formatDate value="${dateObject}" pattern="hh:mm a" />
+																	</td>
 															<td class="col-md-2"><c:out
 																	value="${billHeadersList.frName}" /></td>
-															<td class="col-md-2" align="center"><c:out
+															<td class="col-md-1" align="center"><c:out
 																	value="${billHeadersList.taxableAmt}" /></td>
 															<td class="col-sm-1" align="center"><c:out
 																	value="${billHeadersList.totalTax}" /></td>
@@ -244,7 +255,7 @@
 															
 															<fmt:formatNumber type="number" maxFractionDigits="2" value="${billHeadersList.taxableAmt + billHeadersList.totalTax}" /></td>
 															
-															<td class="col-md-1" align="center">
+															<td class="col-md-2" align="center">
 															<div class="form-group">
 															<input type="checkbox" name="select_to_print"
 																id="${billHeadersList.billNo}"
@@ -596,7 +607,7 @@ form.submit();
             flag=1;
         }
     } 
-			 alert(txt);
+			
 			 if(flag==1)
 				 {
 			$
@@ -611,7 +622,7 @@ form.submit();
 							},
 							function(data) {
 								
-							 alert("excel ready");
+							 alert("Excel Ready");
 								 exportToExcel();
 							 
 							});
@@ -625,7 +636,7 @@ form.submit();
 		
 		function exportToExcel()
 		{
-			alert("export excel");
+			alert("Export Excel");
 			window.open("${pageContext.request.contextPath}/exportToExcel"); 
 		}
 	</script>

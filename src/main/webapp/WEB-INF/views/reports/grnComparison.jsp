@@ -7,7 +7,7 @@
 
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body>
-	<c:url var="getGrnGvnByDatewise" value="/getSalesReportComparion"></c:url>
+	<c:url var="getGrnGvnByDatewise" value="/getGrnReportComparison"></c:url>
 
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
@@ -29,7 +29,7 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Sales Comparison Report
+					<i class="fa fa-file-o"></i>Grn  Report
 				</h1>
 				<h4></h4>
 			</div>
@@ -42,7 +42,7 @@
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
-				<li class="active">Sales Compare Report</li>
+				<li class="active">Grn  Report</li>
 			</ul>
 		</div>
 		<!-- END Breadcrumb -->
@@ -51,7 +51,7 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>View Sales Comparison Report
+					<i class="fa fa-bars"></i>View Grn  Report
 				</h3>
 
 			</div>
@@ -85,7 +85,7 @@
 						<div class="col-sm-6 col-lg-4 controls date_select">
 							<button class="btn btn-info" onclick="searchReport()">Search
 								Report</button>
-									<button class="btn btn-primary" value="PDF" id="PDFButton"
+								<button class="btn btn-primary" value="PDF" id="PDFButton"
 							onclick="genPdf()" disabled="disabled">PDF</button>
 						</div>
 					</div>
@@ -118,50 +118,17 @@
 					<table class="table table-bordered table-striped fill-head "
 						style="width: 100%" id="table_grid">
 						<thead>
-						<tr>
-							
-								<th rowspan="1"></th>
-								<th colspan="2"></th>
-								<th colspan="2" ></th>
-								<th colspan="2"></th>
-								<th rowspan="1"></th>
-								<th rowspan="1"></th>
-								<th rowspan="1" ></th>
-								<th rowspan="1">11.11%</th>
-								<th rowspan="1">14.9%</th>
-								<th rowspan="1">17.6%</th>
-							</tr>
+						
 							<tr>
 							
-								<th rowspan="1"></th>
-								<th colspan="2"></th>
-								<th colspan="2" ></th>
-								<th colspan="2"></th>
-								<th rowspan="1"></th>
-								<th rowspan="1"></th>
-								<th rowspan="1" ></th>
-								<th colspan="3" style="text-align:center;" id="actualMonth"></th>
-								
+								<th>Franchisee Name</th>
+								<th>Sale</th>
+								<th>GRN Amount</th>
+								<th>GRN %</th>
+								<th>Per Day Amt</th>
+						
 							</tr>
-							<tr>
 							
-								<th rowspan="2">Party Name</th>
-								<th colspan="2">Prev Month Sale Value</th>
-								<th colspan="2" >Current Month</th>
-								<th colspan="2">Last Month</th>
-								<th rowspan="2">Percent(%)</th>
-								<th rowspan="2">Route</th>
-								<th rowspan="2">Avg Per Day Sale</th>
-								<th colspan="3">Franchise Margin On Billing Not On Mrp</th>
-							</tr>
-							<tr>
-							<th colspan="2" align="center" id="prevMonth"></th>
-							<th colspan="2" align="center" id="currMonth"></th>
-							<th colspan="2" align="left" id="diff"></th>
-							<th rowspan="1">10%</th>
-								<th rowspan="1">13%</th>
-								<th rowspan="1">15%</th>
-							</tr>
 						</thead>
 						<tbody>
 						</tbody>
@@ -241,6 +208,7 @@
 									$('#table_grid td').remove();
 									$('#loader').hide();
 									document.getElementById("PDFButton").disabled = false;
+
 									if (data == "") {
 										alert("No records found !!");
 										  document.getElementById("expExcel").disabled=true;
@@ -248,16 +216,11 @@
 
 									}
 									
-
-									 document.getElementById('prevMonth').innerHTML=data.prevMonth;
-									 document.getElementById('currMonth').innerHTML=data.currMonth;
-									 document.getElementById('diff').innerHTML=data.prevMonth+" "+data.currMonth+"  diff";
-									 document.getElementById('actualMonth').innerHTML=data.currMonth;
-									 $.each(data.routeList,function(key, route) {
-								    var prevMonthRouteSale=0;
-								    var currMonthRouteSale=0;
-									$.each(data.saleCompFinal,function(key, report) {
-												if(route.routeId==report.routeId){		
+								var saleValue=0;
+								var grnValue=0;
+								var grnPer=0;
+								var perDayAmt=0;
+									$.each(data,function(key, report) {
 														//  document.getElementById("expExcel").disabled=false;
 														//	document.getElementById('range').style.display = 'block';
 														
@@ -267,36 +230,26 @@
 													  	//tr.append($('<td></td>').html(key+1));
 													  
 													  	tr.append($('<td style="text-align:left;"></td>').html(report.frName));
-													  	tr.append($('<td colspan="2" style="text-align:right;"></td>').html((report.prevMonthSale).toFixed(2)));
-													  	tr.append($('<td colspan="2" style="text-align:right;"></td>').html((report.perMonthSale).toFixed(2)));
-													  	tr.append($('<td colspan="2" style="text-align:right;"></td>').html((report.lastMonthDiff).toFixed(2)));
-													  	tr.append($('<td style="text-align:right;"></td>').html((report.monthDiffInPer).toFixed(2)));
-													  	tr.append($('<td style="text-align:left;"></td>').html(report.routeName));
-														tr.append($('<td style="text-align:right;"></td>').html((report.perMonthSale/30).toFixed(2)));
-													  	tr.append($('<td style="text-align:right;"></td>').html((report.perMonthSale*11.11/100).toFixed(2)));
-													  	tr.append($('<td style="text-align:right;"></td>').html((report.perMonthSale*14.9/100).toFixed(2)));
-													  	tr.append($('<td style="text-align:right;"></td>').html((report.perMonthSale*17.6/100).toFixed(2)));
+													  
+														tr.append($('<td style="text-align:right;"></td>').html((report.billTotal).toFixed(2)));
+													 	tr.append($('<td style="text-align:right;"></td>').html((report.grnAmt).toFixed(2)));
+													 	tr.append($('<td style="text-align:right;"></td>').html((report.grnAmt/(report.billTotal/100)).toFixed(2)));
+														tr.append($('<td style="text-align:right;"></td>').html((report.grnAmt/30).toFixed(2)));
 														$('#table_grid tbody').append(tr);
-														prevMonthRouteSale=prevMonthRouteSale+report.prevMonthSale;
-														currMonthRouteSale=currMonthRouteSale+report.perMonthSale;
-												}		
-													
+														saleValue=saleValue+(report.billTotal);
+														grnValue=grnValue+(report.grnAmt);
+														grnPer=grnPer+(report.grnAmt/(report.billTotal/100));
+														perDayAmt=perDayAmt+(report.grnAmt/30);
 											})
-											var tr = $('<tr "></tr>');
-								  
-								  	tr.append($('<td style="text-align:left; color:blue;"></td>').html("Route Total"));
-								  	tr.append($('<td colspan="2" style="text-align:right; color:blue;" ></td>').html((prevMonthRouteSale).toFixed(2)));
-								  	tr.append($('<td colspan="2" style="text-align:right; color:blue;"></td>').html((currMonthRouteSale).toFixed(2)));
-								  	tr.append($('<td colspan="2"></td>').html(""));
-
-								  	tr.append($('<td ></td>').html(""));
-								  	tr.append($('<td></td>').html(""));
-									tr.append($('<td></td>').html(""));
-								  	tr.append($('<td></td>').html(""));
-								  	tr.append($('<td></td>').html(""));
-								  	tr.append($('<td></td>').html(""));
+											var tr = $('<tr></tr>');
+											tr.append($('<td style="text-align:left;"></td>').html("Total"));
+									  
+									tr.append($('<td style="text-align:right;"></td>').html((saleValue).toFixed(2)));
+								  	tr.append($('<td style="text-align:right;"></td>').html((grnValue).toFixed(2)));
+								 	tr.append($('<td style="text-align:right;"></td>').html((grnValue/(saleValue/100)).toFixed(2)));
+								 	tr.append($('<td style="text-align:right;"></td>').html((perDayAmt).toFixed(2)));
 									$('#table_grid tbody').append(tr);
-									});
+											
 								});
 
 			
@@ -499,10 +452,10 @@ function showChart(){
 					
 function genPdf()
 {
-	
-	window.open('${pageContext.request.contextPath}/showSalesComparePdf/');
+
+	window.open('${pageContext.request.contextPath}/showGrnCompareReport/');
 		
-	}
+}
 function exportToExcel()
 {
 	 

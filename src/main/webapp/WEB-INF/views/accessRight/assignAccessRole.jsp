@@ -66,8 +66,12 @@
 				<h3>
 					<i class="fa fa-bars"></i>Assign Access Role
 				</h3>
-
+				<div class="box-tool" style="text-align: right;">
+					<h3>	<a href="${pageContext.request.contextPath}/showRoleList">Role List</a></h3><a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+              </div>							
 			</div>
+			
 			<div class=" box-content">
 				<form id="validation-form" action="submitAssignedRole" method="post">
 

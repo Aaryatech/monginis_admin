@@ -1,27 +1,63 @@
 package com.ats.adminpanel.controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.net.URLConnection;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.Year;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.model.AllRoutesListResponse;
+import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.salescompare.SalesCompareGrnTot;
+import com.ats.adminpanel.model.salescompare.SalesCompareList;
 import com.ats.adminpanel.model.salescompare.SalesComparison;
 import com.ats.adminpanel.model.salescompare.SalesComparisonReport;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 @Controller
 @Scope("session")
 public class SaleCompareReportController {
+
+    SalesCompareList salesCompareList=new SalesCompareList();
+	SalesComparison reportList=new SalesComparison();
 
 	@RequestMapping(value = "/showSalescomparison", method = RequestMethod.GET)
 	public ModelAndView showSalescomparison(HttpServletRequest request, HttpServletResponse response) {
@@ -40,7 +76,23 @@ public class SaleCompareReportController {
 
 		return modelAndView;
 	}
+	@RequestMapping(value = "/showGrncomparison", method = RequestMethod.GET)
+	public ModelAndView showGrncomparison(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView modelAndView = null;
+		try {
+			modelAndView = new ModelAndView("reports/grnComparison");
 
+			int year = Year.now().getValue();
+
+			modelAndView.addObject("year", year);
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+		return modelAndView;
+	}
 	/*
 	 * @RequestMapping(value = "/getSalesReportComparion", method =
 	 * RequestMethod.GET) public @ResponseBody List<SalesComparison>
@@ -178,21 +230,24 @@ public class SaleCompareReportController {
 	 */
 
 	@RequestMapping(value = "/getSalesReportComparion", method = RequestMethod.GET)
-	public @ResponseBody List<SalesComparison> getSalesReportComparion(HttpServletRequest request,
+	public @ResponseBody SalesCompareList getSalesReportComparion(HttpServletRequest request,
 			HttpServletResponse response) {
 		// ModelAndView modelAndView = new ModelAndView("grngvn/displaygrn");
-
 		System.out.println("in method");
 		String month = request.getParameter("month");
 
 		RestTemplate restTemplate = new RestTemplate();
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-
+		int year = Year.now().getValue();
 		map.add("monthNumber", month);
+		map.add("year", year);
 		SalesComparison reportList = restTemplate.postForObject(Constants.url + "getSalesReportComparion", map,
 				SalesComparison.class);
+		AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
+				AllRoutesListResponse.class);
 
+		List<Route> routeList=allRouteListResponse.getRoute();
 		List<SalesComparisonReport> billTotalList = reportList.getBillTotalList();
 
 		List<SalesCompareGrnTot> grnGvnTotalList = reportList.getGrnGvnTotalList();
@@ -204,6 +259,10 @@ public class SaleCompareReportController {
 		for (int j = 0; j < billTotalList.size(); j++) {
 			float total = billTotalList.get(j).getBillTotal();
 			firstList = new SalesComparison();
+			firstList.setFrId(billTotalList.get(j).getFrId());
+
+			firstList.setPerMonthSale(total);
+
 			for (int i = 0; i < grnGvnTotalList.size(); i++) {
 
 				if (grnGvnTotalList.get(i).getFrId() == billTotalList.get(j).getFrId()) {
@@ -214,15 +273,16 @@ public class SaleCompareReportController {
 							billTotalList.get(j).getBillTotal() - grnGvnTotalList.get(i).getBillTotal());
 
 					// saleCompListFirst.add(firstList);
-				} else {
+				} /*else {
 
 					firstList.setFrId(billTotalList.get(j).getFrId());
 
 					firstList.setPerMonthSale(total);
 
-				}
+				}*/
 
 			}
+			System.out.println(firstList);
 
 			firstList.setFrName(billTotalList.get(j).getFrName());
 			firstList.setRouteId(billTotalList.get(j).getFrRouteId());
@@ -246,6 +306,7 @@ public class SaleCompareReportController {
 		intMonth = intMonth - 1;
 
 		map.add("monthNumber", intMonth);
+		map.add("year", year);
 		SalesComparison prevMonthReport = restTemplate.postForObject(Constants.url + "getSalesReportComparion", map,
 				SalesComparison.class);
 
@@ -267,7 +328,9 @@ public class SaleCompareReportController {
 
 			float total = billTotalListPrev.get(j).getBillTotal();
 			prevList = new SalesComparison();
+			prevList.setFrId(billTotalListPrev.get(j).getFrId());
 
+			prevList.setPrevMonthSale(total);
 			for (int i = 0; i < grnGvnTotalListPrevMonth.size(); i++) {
 
 				if (grnGvnTotalListPrevMonth.get(i).getFrId() == billTotalListPrev.get(j).getFrId()) {
@@ -287,12 +350,12 @@ public class SaleCompareReportController {
 					prevList.setPrevMonthSale(
 							(billTotalListPrev.get(j).getBillTotal() - grnGvnTotalListPrevMonth.get(i).getBillTotal()));
 					// saleCompListPrev.add(prevList);
-				} else {
+				}/* else {
 					prevList.setFrId(billTotalListPrev.get(j).getFrId());
 
 					prevList.setPrevMonthSale(total);
 					// saleCompListPrev.add(prevList);
-				}
+				}*/
 
 			}
 
@@ -353,7 +416,6 @@ public class SaleCompareReportController {
 					sales.setRouteId(saleCompListPrev.get(j).getRouteId());
 
 					sales.setRouteName(saleCompListPrev.get(j).getRouteName());
-
 					saleCompFinal.add(sales);
 					break;
 				}
@@ -365,8 +427,557 @@ public class SaleCompareReportController {
 
 		for (int i = 0; i < saleCompFinal.size(); i++)
 			System.out.println("sale comparison final ele " + i + "" + saleCompFinal.get(i).toString());
-		return saleCompFinal;
+		salesCompareList.setRouteList(routeList);
+		salesCompareList.setSaleCompFinal(saleCompFinal);
+		List<String> months = Arrays.asList("","January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
+		salesCompareList.setPrevMonth(months.get(intMonth)+"-"+year);
+		salesCompareList.setCurrMonth(months.get(Integer.parseInt(month))+"-"+year);
+		return salesCompareList;
+
+	}
+	@RequestMapping(value = "/getGrnReportComparison", method = RequestMethod.GET)
+	public @ResponseBody List<SalesComparisonReport> getGrnReportComparion(HttpServletRequest request,
+			HttpServletResponse response) {
+		try {
+		System.out.println("in method");
+		String month = request.getParameter("month");
+
+		RestTemplate restTemplate = new RestTemplate();
+
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		int year = Year.now().getValue();
+		map.add("monthNumber", month);
+		map.add("year", year);
+		reportList = restTemplate.postForObject(Constants.url + "getSalesReportComparion", map,
+				SalesComparison.class);
+		
+		for(int i=0;i<reportList.getBillTotalList().size();i++)
+		{
+			for(int j=0;j<reportList.getGrnGvnTotalList().size();j++)
+			{
+				if(reportList.getGrnGvnTotalList().get(j).getFrId()==reportList.getBillTotalList().get(i).getFrId())
+				{
+				reportList.getBillTotalList().get(i).setGrnAmt(reportList.getGrnGvnTotalList().get(j).getBillTotal());
+				}
+			}
+			
+		}
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		return reportList.getBillTotalList();
+	}
+	
+	@RequestMapping(value = "/showSalesComparePdf", method = RequestMethod.GET)
+	public void showSalesComparePdf( HttpServletRequest request, HttpServletResponse response)
+			throws FileNotFoundException {
+		
+		BufferedOutputStream outStream = null;
+		System.out.println("Inside Pdf showSalesComparePdf");
+	
+		// moneyOutList = prodPlanDetailList;
+		// ByteArrayOutputStream out = new ByteArrayOutputStream();
+		//Rectangle envelope = new Rectangle(700, 252);
+		Document document = new Document(PageSize.A3);
+
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+
+		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
+		String FILE_PATH = Constants.REPORT_SAVE;
+		File file = new File(FILE_PATH);
+
+		PdfWriter writer = null;
+
+		FileOutputStream out = new FileOutputStream(FILE_PATH);
+		try {
+			writer = PdfWriter.getInstance(document, out);
+			
+		} catch (DocumentException e) {
+
+			e.printStackTrace();
+		}
+
+		PdfPTable table = new PdfPTable(10);
+		try {
+			System.out.println("Inside PDF Table try");
+			table.setWidthPercentage(100);
+			table.setWidths(new float[] {  7f, 5.3f,  5.3f,  5.3f, 5.2f, 5.9f,5f,5f, 5f,5f});
+			Font headFont = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+			headFont1.setColor(BaseColor.WHITE);
+			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.NORMAL, BaseColor.BLUE);
+
+			PdfPCell hcell = new PdfPCell();
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+
+			hcell = new PdfPCell(new Phrase("Party Name", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Prev Month Sale Value("+salesCompareList.getPrevMonth()+")", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Current Month Sale Value("+salesCompareList.getCurrMonth()+")", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Last Month Diff("+salesCompareList.getPrevMonth()+"--"+salesCompareList.getCurrMonth()+")", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+			
+			hcell = new PdfPCell(new Phrase("%", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Route", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+			
+			hcell = new PdfPCell(new Phrase("Average Per Day Sale", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+			
+			hcell = new PdfPCell(new Phrase("11.11% ("+salesCompareList.getCurrMonth()+")", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+			
+			hcell = new PdfPCell(new Phrase("14.9% ("+salesCompareList.getCurrMonth()+")", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+			
+			hcell = new PdfPCell(new Phrase("17.6% ("+salesCompareList.getCurrMonth()+")", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+			for (Route route : salesCompareList.getRouteList()) {
+
+				double currRouteTotal=0;
+				double prevMonthRouteTotal=0;
+			for (SalesComparison salesComparison : salesCompareList.getSaleCompFinal()) {
+
+				
+					
+				if(route.getRouteId()==salesComparison.getRouteId())
+				{
+					PdfPCell cell;
+				cell = new PdfPCell(new Phrase("" + salesComparison.getFrName(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(""+salesComparison.getPrevMonthSale(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+				
+				cell = new PdfPCell(new Phrase(""+salesComparison.getPerMonthSale(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+				currRouteTotal=currRouteTotal+salesComparison.getPerMonthSale();
+				prevMonthRouteTotal=prevMonthRouteTotal+salesComparison.getPrevMonthSale();
+				float perDaySaleAvg=roundUp(salesComparison.getPerMonthSale()/30);
+				double per1=salesComparison.getPerMonthSale()*0.1111;
+				double per2=salesComparison.getPerMonthSale()*0.149;
+				double per3=salesComparison.getPerMonthSale()*0.176;
+
+				cell = new PdfPCell(new Phrase(""+salesComparison.getLastMonthDiff(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+ 
+				cell = new PdfPCell(new Phrase(roundUp(salesComparison.getMonthDiffInPer())+"", headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(""+salesComparison.getRouteName(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+				
+				cell = new PdfPCell(new Phrase(""+perDaySaleAvg, headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+				
+				cell = new PdfPCell(new Phrase(roundUp(per1)+"", headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+				
+				cell = new PdfPCell(new Phrase(roundUp(per2)+"", headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+				
+				cell = new PdfPCell(new Phrase(roundUp(per3)+"", headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+			}
+			}
+			PdfPCell cell;
+			cell = new PdfPCell(new Phrase("Route Total", f));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setPaddingRight(2);
+			cell.setPadding(3);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase(roundUp(prevMonthRouteTotal)+"", f));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(2);
+			cell.setPadding(3);
+			table.addCell(cell);
+			
+			cell = new PdfPCell(new Phrase(roundUp(currRouteTotal)+"", f));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(2);
+			cell.setPadding(3);
+			table.addCell(cell);
+			
+		
+
+			cell = new PdfPCell(new Phrase("", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(2);
+			cell.setPadding(3);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(2);
+			cell.setPadding(3);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setPaddingRight(2);
+			cell.setPadding(3);
+			table.addCell(cell);
+			
+			cell = new PdfPCell(new Phrase("", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(2);
+			cell.setPadding(3);
+			table.addCell(cell);
+			
+			cell = new PdfPCell(new Phrase("", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(2);
+			cell.setPadding(3);
+			table.addCell(cell);
+			
+			cell = new PdfPCell(new Phrase("", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(2);
+			cell.setPadding(3);
+			table.addCell(cell);
+			
+			cell = new PdfPCell(new Phrase("", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(2);
+			cell.setPadding(3);
+			table.addCell(cell);
+			}
+			
+			
+			document.open();
+			Paragraph name = new Paragraph("GFPL\n", f);
+			name.setAlignment(Element.ALIGN_CENTER);
+			document.add(name);
+			document.add(new Paragraph(" "));
+			Paragraph company = new Paragraph("Sales Comparison Report\n", f);
+			company.setAlignment(Element.ALIGN_CENTER);
+			document.add(company);
+			document.add(new Paragraph(" "));
+
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+		
+			document.add(new Paragraph("\n"));
+			document.add(table); 
+
+			int totalPages = writer.getPageNumber();
+
+			System.out.println("Page no " + totalPages);
+
+			document.close();
+			// Atul Sir code to open a Pdf File
+			if (file != null) {
+
+				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+				if (mimeType == null) {
+
+					mimeType = "application/pdf";
+
+				}
+
+				response.setContentType(mimeType);
+
+				response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+				response.setContentLength((int) file.length());
+
+				InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+				try {
+					FileCopyUtils.copy(inputStream, response.getOutputStream());
+				} catch (IOException e) {
+					System.out.println("Excep in Opening a Pdf File");
+					e.printStackTrace();
+				}
+			}
+
+		} catch (DocumentException ex) {
+
+			System.out.println("Pdf Generation Error: " + ex.getMessage());
+
+			ex.printStackTrace();
+
+		}
+
+	}
+	
+	
+	@RequestMapping(value = "/showGrnCompareReport", method = RequestMethod.GET)
+	public void showGrnCompareReport( HttpServletRequest request, HttpServletResponse response)
+			throws FileNotFoundException {
+		
+		BufferedOutputStream outStream = null;
+		System.out.println("Inside Pdf showGrnCompareReport");
+	
+		// moneyOutList = prodPlanDetailList;
+		// ByteArrayOutputStream out = new ByteArrayOutputStream();
+		//Rectangle envelope = new Rectangle(700, 252);
+		Document document = new Document(PageSize.A3);
+
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+
+		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
+		String FILE_PATH = Constants.REPORT_SAVE;
+		File file = new File(FILE_PATH);
+
+		PdfWriter writer = null;
+
+		FileOutputStream out = new FileOutputStream(FILE_PATH);
+		try {
+			writer = PdfWriter.getInstance(document, out);
+			
+		} catch (DocumentException e) {
+
+			e.printStackTrace();
+		}
+
+		PdfPTable table = new PdfPTable(5);
+		try {
+			System.out.println("Inside PDF Table try");
+			table.setWidthPercentage(100);
+			table.setWidths(new float[] {  7f, 5.3f,  5.3f,  5.3f, 5.2f});
+			Font headFont = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+			headFont1.setColor(BaseColor.WHITE);
+			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.NORMAL, BaseColor.BLUE);
+
+			PdfPCell hcell = new PdfPCell();
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+
+			hcell = new PdfPCell(new Phrase("Franchisee Name", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Sale", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("GRN Amount", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("GRN %", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+			
+			hcell = new PdfPCell(new Phrase("Per Day Amount", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+		
+			for (SalesComparisonReport salesComparison : reportList.getBillTotalList()) {
+
+				
+			
+					PdfPCell cell;
+				cell = new PdfPCell(new Phrase("" + salesComparison.getFrName(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(roundUp(salesComparison.getBillTotal())+"", headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+				
+				cell = new PdfPCell(new Phrase(roundUp(salesComparison.getGrnAmt())+"", headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+				
+                double grnPer=(salesComparison.getGrnAmt()/(salesComparison.getBillTotal()/100));
+                
+                double perDayGrnAvg=(salesComparison.getGrnAmt()/30);
+
+				cell = new PdfPCell(new Phrase(roundUp(grnPer)+"", headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+				
+				cell = new PdfPCell(new Phrase(roundUp(perDayGrnAvg)+"", headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+			}
+			
+			
+			
+			document.open();
+			Paragraph name = new Paragraph("GFPL\n", f);
+			name.setAlignment(Element.ALIGN_CENTER);
+			document.add(name);
+			document.add(new Paragraph(" "));
+			Paragraph company = new Paragraph("GRN Comparison Report\n", f);
+			company.setAlignment(Element.ALIGN_CENTER);
+			document.add(company);
+			document.add(new Paragraph(" "));
+
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+		
+			document.add(new Paragraph("\n"));
+			document.add(table); 
+
+			int totalPages = writer.getPageNumber();
+
+			System.out.println("Page no " + totalPages);
+
+			document.close();
+			// Atul Sir code to open a Pdf File
+			if (file != null) {
+
+				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+				if (mimeType == null) {
+
+					mimeType = "application/pdf";
+
+				}
+
+				response.setContentType(mimeType);
+
+				response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+				response.setContentLength((int) file.length());
+
+				InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+				try {
+					FileCopyUtils.copy(inputStream, response.getOutputStream());
+				} catch (IOException e) {
+					System.out.println("Excep in Opening a Pdf File");
+					e.printStackTrace();
+				}
+			}
+
+		} catch (DocumentException ex) {
+
+			System.out.println("Pdf Generation Error: " + ex.getMessage());
+
+			ex.printStackTrace();
+
+		}
+
+	}
+	public static float roundUp(double d) {
+		return BigDecimal.valueOf(d).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
 	}
 
 }

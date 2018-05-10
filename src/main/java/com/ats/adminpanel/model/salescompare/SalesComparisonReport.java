@@ -16,6 +16,18 @@ public class SalesComparisonReport {
 	private	int frRouteId;
 	
 	private	float billTotal;
+	
+	private	float grnAmt;
+	
+	
+
+	public float getGrnAmt() {
+		return grnAmt;
+	}
+
+	public void setGrnAmt(float grnAmt) {
+		this.grnAmt = grnAmt;
+	}
 
 	public int getFrId() {
 		return frId;
