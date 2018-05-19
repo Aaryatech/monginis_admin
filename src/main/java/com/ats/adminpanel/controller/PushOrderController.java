@@ -372,7 +372,7 @@ public class PushOrderController {
 								order.setOrderQty(qty);
 								order.setProductionDate(date);
 								order.setOrderDate(date);
-								order.setDeliveryDate(deliveryDate);
+								order.setDeliveryDate(date);
 								order.setMenuId(0);
 								order.setGrnType(4);
 								order.setIsEdit(0);
@@ -443,7 +443,7 @@ public class PushOrderController {
 						order.setOrderQty(qty);
 						order.setProductionDate(date);
 						order.setOrderDate(date);
-						order.setDeliveryDate(deliveryDate);
+						order.setDeliveryDate(date);
 						order.setMenuId(0);
 						order.setGrnType(4);
 						order.setIsEdit(0);

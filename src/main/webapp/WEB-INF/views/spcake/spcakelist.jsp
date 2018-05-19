@@ -1,15 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-	<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
-	
-	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include> 
-<link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<body>
+
+	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+	<link rel="stylesheet"
+		href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
 
 
 	<div class="container" id="main-container">
@@ -38,59 +39,59 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
-			
-			
-			
-			<c:set var="isEdit" value="0">
-					</c:set>
-					<c:set var="isView" value="0">
-					</c:set>
-					<c:set var="isDelete" value="0">
-					</c:set>
 
-					<c:forEach items="${sessionScope.newModuleList}" var="modules">
-						<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+
+
+			<c:set var="isEdit" value="0">
+			</c:set>
+			<c:set var="isView" value="0">
+			</c:set>
+			<c:set var="isDelete" value="0">
+			</c:set>
+
+			<c:forEach items="${sessionScope.newModuleList}" var="modules">
+				<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+
+					<c:choose>
+						<c:when test="${subModule.subModuleMapping eq 'showSpecialCake'}">
 
 							<c:choose>
-								<c:when test="${subModule.subModuleMapping eq 'showSpecialCake'}">
-
-									<c:choose>
-										<c:when test="${subModule.editReject=='visible'}">
-											<c:set var="isEdit" value="1">
-											</c:set>
-										</c:when>
-										<c:otherwise>
-											<c:set var="isEdit" value="0">
-											</c:set>
-										</c:otherwise>
-									</c:choose>
-									<c:choose>
-										<c:when test="${subModule.view=='visible'}">
-											<c:set var="isView" value="1">
-											</c:set>
-										</c:when>
-										<c:otherwise>
-											<c:set var="isView" value="0">
-											</c:set>
-										</c:otherwise>
-									</c:choose>
-
-
-									<c:choose>
-										<c:when test="${subModule.deleteRejectApprove=='visible'}">
-											<c:set var="isDelete" value="1">
-											</c:set>
-										</c:when>
-										<c:otherwise>
-											<c:set var="isDelete" value="0">
-											</c:set>
-										</c:otherwise>
-									</c:choose>
+								<c:when test="${subModule.editReject=='visible'}">
+									<c:set var="isEdit" value="1">
+									</c:set>
 								</c:when>
+								<c:otherwise>
+									<c:set var="isEdit" value="0">
+									</c:set>
+								</c:otherwise>
 							</c:choose>
-						</c:forEach>
-					</c:forEach>
-			
+							<c:choose>
+								<c:when test="${subModule.view=='visible'}">
+									<c:set var="isView" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isView" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+
+							<c:choose>
+								<c:when test="${subModule.deleteRejectApprove=='visible'}">
+									<c:set var="isDelete" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isDelete" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+						</c:when>
+					</c:choose>
+				</c:forEach>
+			</c:forEach>
+
 
 
 			<!-- BEGIN Main Content -->
@@ -116,148 +117,170 @@
 												</div>
 											</div>
 											`
-											
-						<div class="box-content">
-<div class="col-md-9" ></div> 
-					<label for="search" class="col-md-3" id="search">
-    <i class="fa fa-search" style="font-size:20px"></i>
-									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search by code.." title="Type in a name">
-										</label>  
 
-							<div class="clearfix"></div>
-							
-							
-							
-							
-							
-								<div id="table-scroll" class="table-scroll">
-							 
-									<div id="faux-table" class="faux-table" aria="hidden">
-									<table id="table2" class="main-table">
-											<thead>
-												<tr class="bgpink">
-														<th width="138" style="width: 18px" align="left">No</th>
-																<th width="364" align="left">Image</th>
-																<th width="230" align="center">Code</th>
-																<th width="230" align="center">Name</th>
-																<th width="106" align="left">Type</th>
-																<th width="206" align="left">Min Weight</th>
-																<th width="206" align="left">Max Weight</th>
-																<th width="206" align="left">Book Before</th>
-																<th width="90" align="left">Action</th>
-												</tr>
-												</thead>
-												</table>
-									
-									</div>
-									<div class="table-wrap">
-									
-										<table id="table1" class="table table-advance">
-											<thead>
-												<tr class="bgpink">
-													<th width="138" style="width: 18px" align="left">No</th>
-																<th width="364" align="left">Image</th>
-																<th width="230" align="center">Code</th>
-																<th width="230" align="center">Name</th>
-																<th width="106" align="left">Type</th>
-																<th width="206" align="left">Weight</th>
-																<th width="206" align="left">Weight</th>
-																<th width="206" align="left">Before</th>
-																<th width="90" align="left">Action</th>
-												</tr>
-												</thead>
-												<tbody>
-					<c:forEach items="${specialCakeList}" var="specialCake" varStatus="count">
+											<div class="box-content">
+												<div class="col-md-9"></div>
+												<label for="search" class="col-md-3" id="search"> <i
+													class="fa fa-search" style="font-size: 20px"></i> <input
+													type="text" id="myInput" onkeyup="myFunction()"
+													placeholder="Search by code.." title="Type in a name">
+												</label>
+
+												<div class="clearfix"></div>
 
 
-																<tr>
-																	<td><c:out value="${count.index+1}"/></td>
-																	<td align="left">
-																			 <img src="${url}${specialCake.spImage}" width="120" height="100" 	
-																			 onerror="this.src='resources/img/No_Image_Available.jpg';"/> 
-																	</td>
-																	<td align="left"><c:out
-																			value="${specialCake.spCode}  "></c:out></td>
-																	<td align="left"><c:out
-																			value="${specialCake.spName}  "></c:out></td>
-																	<c:choose>
-																			<c:when test="${specialCake.spType==1}">
-																			<td align="left"><c:out value="Chocolate"></c:out></td>
+
+
+
+												<div id="table-scroll" class="table-scroll">
+
+													<div id="faux-table" class="faux-table" aria="hidden">
+														<table id="table2" class="main-table">
+															<thead>
+																<tr class="bgpink">
+																	<th width="138" style="width: 18px" align="left">No</th>
+																	<th width="364" align="left">Image</th>
+																	<th width="230" align="center">Code</th>
+																	<th width="230" align="right">ERP Code</th>
+
+																	<th width="230" align="center">Name</th>
+																	<th width="106" align="left">Type</th>
+																	<th width="206" align="left">Min Weight</th>
+																	<th width="206" align="left">Max Weight</th>
+																	<th width="206" align="left">Book Before</th>
+																	<th width="90" align="left">Action</th>
+																</tr>
+															</thead>
+														</table>
+
+													</div>
+													<div class="table-wrap">
+
+														<table id="table1" class="table table-advance">
+															<thead>
+																<tr class="bgpink">
+																	<th width="138" style="width: 18px" align="left">No</th>
+																	<th width="364" align="left">Image</th>
+																	<th width="230" align="center">Code</th>
+																	<th width="230" align="right">Erp Code</th>
+
+																	<th width="230" align="center">Name</th>
+																	<th width="106" align="left">Type</th>
+																	<th width="206" align="left">Weight</th>
+																	<th width="206" align="left">Weight</th>
+																	<th width="206" align="left">Before</th>
+																	<th width="90" align="left">Action</th>
+																</tr>
+															</thead>
+															<tbody>
+																<c:forEach items="${specialCakeList}" var="specialCake"
+																	varStatus="count">
+
+
+																	<tr>
+																		<td><c:out value="${count.index+1}" /></td>
+																		<td align="left"><img
+																			src="${url}${specialCake.spImage}" width="120"
+																			height="100"
+																			onerror="this.src='resources/img/No_Image_Available.jpg';" />
+																		</td>
+																		<td align="left"><c:out
+																				value="${specialCake.spCode}  "></c:out></td>
 																				
+																				
+																				<td align="left"><c:out
+																				value="${specialCake.erpLinkcode}  "></c:out></td>
+																				
+																				
+																				
+																		<td align="left"><c:out
+																				value="${specialCake.spName}  "></c:out></td>
+																		<c:choose>
+																			<c:when test="${specialCake.spType==1}">
+																				<td align="left"><c:out value="Chocolate"></c:out></td>
+
 																			</c:when>
 																			<c:when test="${specialCake.spType==2}">
-																			<td align="left"><c:out value="FC"></c:out></td>
-																				
+																				<td align="left"><c:out value="FC"></c:out></td>
+
 																			</c:when>
-																			
-																			
+
+
 																			<c:otherwise>
 																				<td align="left"><c:out value="ALL"></c:out></td>
-																				
+
 																			</c:otherwise>
 																		</c:choose>
-																			<td align="left"><c:out
-																			value="${specialCake.spMinwt}  "></c:out></td>
-																				<td align="left"><c:out
-																			value="${specialCake.spMaxwt}  "></c:out></td>
-																				<td align="left"><c:out
-																			value="${specialCake.spBookb4}  "></c:out></td>
-																			
-																			
-																			
-																			<c:choose>
-																	<c:when test="${isEdit==1 and isDelete==1}">
-																		<td align="left"><a
-																		href="updateSpCake/${specialCake.spId}"><span
-																			class="glyphicon glyphicon-edit"></span></a>
-																			<a href="viewSpCakeDetailed/${specialCake.spId}" class="action_btn" >
-					                                                  	<abbr title="Detailed"><i class="fa fa-list"></i></abbr></a>
-                                                                         <a href="deleteSpecialCake/${specialCake.spId}"
-																		onClick="return confirm('Are you sure want to delete this record');"><span
-																			class="glyphicon glyphicon-remove"></span></a></td>
-														
-																	</c:when>
+																		<td align="left"><c:out
+																				value="${specialCake.spMinwt}  "></c:out></td>
+																		<td align="left"><c:out
+																				value="${specialCake.spMaxwt}  "></c:out></td>
+																		<td align="left"><c:out
+																				value="${specialCake.spBookb4}  "></c:out></td>
 
-																	<c:when test="${isEdit==1 and isDelete==0}">
-																		<td align="left"><a
-																		href="updateSpCake/${specialCake.spId}"><span
-																			class="glyphicon glyphicon-edit"></span></a>
-																			<a href="viewSpCakeDetailed/${specialCake.spId}" class="action_btn" >
-					                                                  	<abbr title="Detailed"><i class="fa fa-list"></i></abbr></a>
-                                                                         <a href="deleteSpecialCake/${specialCake.spId}"  class="disableClick"
-																		onClick="return confirm('Are you sure want to delete this record');"><span
-																			class="glyphicon glyphicon-remove"></span></a></td>
-																	</c:when>
 
-																	<c:when test="${isEdit==0 and isDelete==1}">
-																		<td align="left"><a
-																		href="updateSpCake/${specialCake.spId}"  class="disableClick"><span
-																			class="glyphicon glyphicon-edit"></span></a>
-																			<a href="viewSpCakeDetailed/${specialCake.spId}" class="action_btn" >
-					                                                  	<abbr title="Detailed"><i class="fa fa-list"></i></abbr></a>
-                                                                         <a href="deleteSpecialCake/${specialCake.spId}"
-																		onClick="return confirm('Are you sure want to delete this record');"><span
-																			class="glyphicon glyphicon-remove"></span></a></td>
-																	</c:when>
 
-																	<c:otherwise>
+																		<c:choose>
+																			<c:when test="${isEdit==1 and isDelete==1}">
+																				<td align="left"><a
+																					href="updateSpCake/${specialCake.spId}"><span
+																						class="glyphicon glyphicon-edit"></span></a> <a
+																					href="viewSpCakeDetailed/${specialCake.spId}"
+																					class="action_btn"> <abbr title="Detailed"><i
+																							class="fa fa-list"></i></abbr></a> <a
+																					href="deleteSpecialCake/${specialCake.spId}"
+																					onClick="return confirm('Are you sure want to delete this record');"><span
+																						class="glyphicon glyphicon-remove"></span></a></td>
 
-																	<td align="left"><a
-																		href="updateSpCake/${specialCake.spId}"  class="disableClick"><span
-																			class="glyphicon glyphicon-edit"></span></a>
-																			<a href="viewSpCakeDetailed/${specialCake.spId}" class="action_btn" >
-					                                                  	<abbr title="Detailed"><i class="fa fa-list"></i></abbr></a>
-                                                                         <a href="deleteSpecialCake/${specialCake.spId}"  class="disableClick"
-																		onClick="return confirm('Are you sure want to delete this record');"><span
-																			class="glyphicon glyphicon-remove"></span></a></td>
-														
+																			</c:when>
 
-																	</c:otherwise>
-																</c:choose>
-																			
-																			
-																			
-																<%-- 			
+																			<c:when test="${isEdit==1 and isDelete==0}">
+																				<td align="left"><a
+																					href="updateSpCake/${specialCake.spId}"><span
+																						class="glyphicon glyphicon-edit"></span></a> <a
+																					href="viewSpCakeDetailed/${specialCake.spId}"
+																					class="action_btn"> <abbr title="Detailed"><i
+																							class="fa fa-list"></i></abbr></a> <a
+																					href="deleteSpecialCake/${specialCake.spId}"
+																					class="disableClick"
+																					onClick="return confirm('Are you sure want to delete this record');"><span
+																						class="glyphicon glyphicon-remove"></span></a></td>
+																			</c:when>
+
+																			<c:when test="${isEdit==0 and isDelete==1}">
+																				<td align="left"><a
+																					href="updateSpCake/${specialCake.spId}"
+																					class="disableClick"><span
+																						class="glyphicon glyphicon-edit"></span></a> <a
+																					href="viewSpCakeDetailed/${specialCake.spId}"
+																					class="action_btn"> <abbr title="Detailed"><i
+																							class="fa fa-list"></i></abbr></a> <a
+																					href="deleteSpecialCake/${specialCake.spId}"
+																					onClick="return confirm('Are you sure want to delete this record');"><span
+																						class="glyphicon glyphicon-remove"></span></a></td>
+																			</c:when>
+
+																			<c:otherwise>
+
+																				<td align="left"><a
+																					href="updateSpCake/${specialCake.spId}"
+																					class="disableClick"><span
+																						class="glyphicon glyphicon-edit"></span></a> <a
+																					href="viewSpCakeDetailed/${specialCake.spId}"
+																					class="action_btn"> <abbr title="Detailed"><i
+																							class="fa fa-list"></i></abbr></a> <a
+																					href="deleteSpecialCake/${specialCake.spId}"
+																					class="disableClick"
+																					onClick="return confirm('Are you sure want to delete this record');"><span
+																						class="glyphicon glyphicon-remove"></span></a></td>
+
+
+																			</c:otherwise>
+																		</c:choose>
+
+
+
+																		<%-- 			
 																	<td align="left"><a
 																		href="updateSpCake/${specialCake.spId}"><span
 																			class="glyphicon glyphicon-edit"></span></a>
@@ -266,25 +289,26 @@
                                                                          <a href="deleteSpecialCake/${specialCake.spId}"
 																		onClick="return confirm('Are you sure want to delete this record');"><span
 																			class="glyphicon glyphicon-remove"></span></a></td> --%>
-																</tr>
-															</c:forEach>
+																	</tr>
+																</c:forEach>
 
 
-							</tbody>
+															</tbody>
 
-						</table>
-					</div>
-				</div>
-				
-						</div>
-						
-						<div class="form-group"  id="range">
-								 
-											 
-											 
-											<div class="col-sm-3  controls">
-											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();">
+														</table>
+													</div>
+												</div>
+
 											</div>
+
+											<div class="form-group" id="range">
+
+
+
+												<div class="col-sm-3  controls">
+													<input type="button" id="expExcel" class="btn btn-primary"
+														value="EXPORT TO Excel" onclick="exportToExcel();">
+												</div>
 											</div>
 
 											<%-- <div class="box-content">
@@ -375,7 +399,7 @@
 			</div>
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+				<p>2017 © MONGINIS.</p>
 			</footer>
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i

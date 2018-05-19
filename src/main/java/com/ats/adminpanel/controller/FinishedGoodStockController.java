@@ -715,10 +715,15 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 
 							float totalClosing = 0;
 
-							int billQty = curProdBilQty.getBillQty() + curProdBilQty.getDamagedQty();
+							int billQty = (curProdBilQty.getBillQty() + curProdBilQty.getDamagedQty());
 							int prodQty = curProdBilQty.getProdQty();
 							int rejQty = curProdBilQty.getRejectedQty();
+							System.out.println("Item Name  " +curProdBilQty.getItemName());
+							System.err.println("Damaged Qty " +curProdBilQty.getDamagedQty());
+							
+							System.err.println("Damaged Qty " +curProdBilQty.getBillQty());
 
+							System.err.println("Bill Qty " +billQty+ "prodQty " +prodQty + "Rej Qty  " +rejQty);
 							float t1 = stockDetail.getOpT1();
 							float t2 = stockDetail.getOpT2();
 							float t3 = stockDetail.getOpT3();
@@ -780,7 +785,7 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 							stockDetail.setCloT1(cloT1);
 							stockDetail.setCloT2(cloT2);
 							stockDetail.setCloT3(cloT3);
-							stockDetail.setFrSaleQty(billQty);
+							stockDetail.setFrSaleQty(curProdBilQty.getBillQty());
 							stockDetail.setGateSaleQty(damagedQty);
 							stockDetail.setProdQty(prodQty);
 							stockDetail.setRejQty(rejQty);
@@ -1101,7 +1106,7 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 						stockDetail.setCloT1(cloT1);
 						stockDetail.setCloT2(cloT2);
 						stockDetail.setCloT3(cloT3);
-						stockDetail.setFrSaleQty(billQty);
+						stockDetail.setFrSaleQty(curProdBilQty.getBillQty());
 						stockDetail.setGateSaleQty(damagedQty);
 						stockDetail.setProdQty(prodQty);
 						stockDetail.setRejQty(rejQty);
