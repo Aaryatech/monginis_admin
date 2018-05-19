@@ -133,14 +133,14 @@
 						<tbody>
 						</tbody>
 					</table>
-					<!-- <div class="form-group" style="display: none;" id="range">
+					 <div class="form-group" style="display: none;" id="range">
 
 						<div class="col-sm-3  controls">
 							<input type="button" id="expExcel" class="btn btn-primary"
 								value="EXPORT TO Excel" onclick="exportToExcel();"
 								disabled="disabled">
 						</div>
-					</div> -->
+					</div>
 					<div align="center" id="showchart" style="display: none"></div>
 				</div>
             </div>
@@ -208,7 +208,9 @@
 									$('#table_grid td').remove();
 									$('#loader').hide();
 									document.getElementById("PDFButton").disabled = false;
-
+									  document
+										.getElementById('range').style.display = 'block';
+									  document.getElementById("expExcel").disabled=false;
 									if (data == "") {
 										alert("No records found !!");
 										  document.getElementById("expExcel").disabled=true;

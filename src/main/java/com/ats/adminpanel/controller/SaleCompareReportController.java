@@ -20,6 +20,8 @@ import java.util.Date;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.FileCopyUtils;
@@ -33,6 +35,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllRoutesListResponse;
+import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.salescompare.SalesCompareGrnTot;
 import com.ats.adminpanel.model.salescompare.SalesCompareList;
@@ -232,8 +235,8 @@ public class SaleCompareReportController {
 	@RequestMapping(value = "/getSalesReportComparion", method = RequestMethod.GET)
 	public @ResponseBody SalesCompareList getSalesReportComparion(HttpServletRequest request,
 			HttpServletResponse response) {
-		// ModelAndView modelAndView = new ModelAndView("grngvn/displaygrn");
-		System.out.println("in method");
+	
+		try {
 		String month = request.getParameter("month");
 
 		RestTemplate restTemplate = new RestTemplate();
@@ -272,14 +275,8 @@ public class SaleCompareReportController {
 					firstList.setPerMonthSale(
 							billTotalList.get(j).getBillTotal() - grnGvnTotalList.get(i).getBillTotal());
 
-					// saleCompListFirst.add(firstList);
-				} /*else {
-
-					firstList.setFrId(billTotalList.get(j).getFrId());
-
-					firstList.setPerMonthSale(total);
-
-				}*/
+					
+				} 
 
 			}
 			System.out.println(firstList);
@@ -316,9 +313,7 @@ public class SaleCompareReportController {
 		List<SalesCompareGrnTot> grnGvnTotalListPrevMonth=new ArrayList<SalesCompareGrnTot>();
 		grnGvnTotalListPrevMonth= prevMonthReport.getGrnGvnTotalList();
 
-		// System.err.println("billTotalListPrev " +billTotalListPrev.toString());
-		// System.err.println("grnGvnTotalListPrevMonth "
-		// +grnGvnTotalListPrevMonth.toString());
+		
 
 		List<SalesComparison> saleCompListPrev = new ArrayList<SalesComparison>();
 
@@ -349,13 +344,8 @@ public class SaleCompareReportController {
 
 					prevList.setPrevMonthSale(
 							(billTotalListPrev.get(j).getBillTotal() - grnGvnTotalListPrevMonth.get(i).getBillTotal()));
-					// saleCompListPrev.add(prevList);
-				}/* else {
-					prevList.setFrId(billTotalListPrev.get(j).getFrId());
-
-					prevList.setPrevMonthSale(total);
-					// saleCompListPrev.add(prevList);
-				}*/
+					
+				}
 
 			}
 
@@ -375,10 +365,7 @@ public class SaleCompareReportController {
 			
 		}
 		}
-			
-		// System.err.println("saleCompListPrev " +saleCompListPrev.toString());
-
-		// sachin
+		
 
 		List<SalesComparison> saleCompFinal = new ArrayList<SalesComparison>();
 		SalesComparison sales;
@@ -423,16 +410,111 @@ public class SaleCompareReportController {
 			}
 
 		}
-		System.out.println("sale comparison final Size " + saleCompFinal.size());
 
-		for (int i = 0; i < saleCompFinal.size(); i++)
-			System.out.println("sale comparison final ele " + i + "" + saleCompFinal.get(i).toString());
+		/*for (int i = 0; i < saleCompFinal.size(); i++)
+			System.out.println("sale comparison final ele " + i + "" + saleCompFinal.get(i).toString());*/
 		salesCompareList.setRouteList(routeList);
 		salesCompareList.setSaleCompFinal(saleCompFinal);
 		List<String> months = Arrays.asList("","January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
 		salesCompareList.setPrevMonth(months.get(intMonth)+"-"+year);
 		salesCompareList.setCurrMonth(months.get(Integer.parseInt(month))+"-"+year);
+		
+		
+		            // export to excel
+
+					List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+					ExportToExcel expoExcel = new ExportToExcel();
+					List<String> rowData = new ArrayList<String>();
+
+					rowData.add("Party Name");
+					rowData.add("Prev Month Sale Value("+salesCompareList.getPrevMonth()+")");
+					rowData.add("Current Month Sale Value("+salesCompareList.getCurrMonth()+")");
+					rowData.add("Last Month Diff("+salesCompareList.getPrevMonth()+"--"+salesCompareList.getCurrMonth()+")");
+					rowData.add("%");
+					rowData.add("Route");
+					rowData.add("Average Per Day Sale");
+					rowData.add("11.11% ("+salesCompareList.getCurrMonth()+")");
+					rowData.add("14.9% ("+salesCompareList.getCurrMonth()+")");
+					rowData.add("17.6% ("+salesCompareList.getCurrMonth()+")");
+					
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					for (Route route : salesCompareList.getRouteList()) {
+						
+						double currRouteTotal=0;
+						double prevMonthRouteTotal=0;
+					for (int i = 0; i <salesCompareList.getSaleCompFinal().size(); i++) {
+						
+						if(route.getRouteId()==salesCompareList.getSaleCompFinal().get(i).getRouteId())
+						{	
+					
+						expoExcel = new ExportToExcel();
+						rowData = new ArrayList<String>();
+						float perDaySaleAvg=roundUp(salesCompareList.getSaleCompFinal().get(i).getPerMonthSale()/30);
+						double per1=salesCompareList.getSaleCompFinal().get(i).getPerMonthSale()*0.1111;
+						double per2=salesCompareList.getSaleCompFinal().get(i).getPerMonthSale()*0.149;
+						double per3=salesCompareList.getSaleCompFinal().get(i).getPerMonthSale()*0.176;
+						currRouteTotal=currRouteTotal+salesCompareList.getSaleCompFinal().get(i).getPerMonthSale();
+						prevMonthRouteTotal=prevMonthRouteTotal+salesCompareList.getSaleCompFinal().get(i).getPrevMonthSale();
+						
+						rowData.add("" + salesCompareList.getSaleCompFinal().get(i).getFrName());
+						rowData.add("" + salesCompareList.getSaleCompFinal().get(i).getPrevMonthSale());
+						rowData.add("" + salesCompareList.getSaleCompFinal().get(i).getPerMonthSale());
+						rowData.add("" + salesCompareList.getSaleCompFinal().get(i).getLastMonthDiff());
+						rowData.add(roundUp(salesCompareList.getSaleCompFinal().get(i).getMonthDiffInPer())+"");
+						rowData.add("" + salesCompareList.getSaleCompFinal().get(i).getRouteName());
+						rowData.add("" +perDaySaleAvg);
+						rowData.add(roundUp(per1)+"");
+						rowData.add(roundUp(per2)+"");
+						rowData.add(roundUp(per3)+"");
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
+
+					    }
+					}
+					expoExcel = new ExportToExcel();
+					rowData = new ArrayList<String>();
+
+					rowData.add("Route Total");
+					rowData.add(roundUp(prevMonthRouteTotal)+"");
+					rowData.add(roundUp(currRouteTotal)+"");
+					rowData.add("");
+					rowData.add("");
+					rowData.add("");
+					rowData.add("");
+					rowData.add("");
+					rowData.add("");
+					rowData.add("");
+					
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					
+					expoExcel = new ExportToExcel();
+					rowData = new ArrayList<String>();
+					rowData.add("");
+					rowData.add("");
+					rowData.add("");
+					rowData.add("");
+					rowData.add("");
+					rowData.add("");
+					rowData.add("");
+					rowData.add("");
+					rowData.add("");
+					rowData.add("");
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					}
+
+					HttpSession session = request.getSession();
+					session.setAttribute("exportExcelList", exportToExcelList);
+					session.setAttribute("excelName", "SalesCompareList");
+		
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 		return salesCompareList;
 
 	}
@@ -463,6 +545,41 @@ public class SaleCompareReportController {
 			}
 			
 		}
+		
+		 // export to excel
+
+		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+		ExportToExcel expoExcel = new ExportToExcel();
+		List<String> rowData = new ArrayList<String>();
+
+		rowData.add("Franchisee Name");
+		rowData.add("Sale");
+		rowData.add("GRN Amount");
+		rowData.add("Grn %");
+		rowData.add("Average Per Day Sale");
+		
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+		for (SalesComparisonReport salesComparison : reportList.getBillTotalList()) {
+		
+			expoExcel = new ExportToExcel();
+			rowData = new ArrayList<String>();
+			
+			rowData.add("" + salesComparison.getFrName());
+			rowData.add("" + salesComparison.getBillTotal());
+			rowData.add("" + salesComparison.getGrnAmt());
+			double grnPer=(salesComparison.getGrnAmt()/(salesComparison.getBillTotal()/100));
+            double perDayGrnAvg=(salesComparison.getGrnAmt()/30);
+			rowData.add(roundUp(grnPer)+"");
+			rowData.add(roundUp(perDayGrnAvg)+"");
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+		}
+
+		HttpSession session = request.getSession();
+		session.setAttribute("exportExcelList", exportToExcelList);
+		session.setAttribute("excelName", "GrnCompareList");
 		}
 		catch (Exception e) {
 			e.printStackTrace();

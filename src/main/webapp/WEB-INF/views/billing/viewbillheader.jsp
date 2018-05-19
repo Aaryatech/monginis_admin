@@ -48,7 +48,7 @@
 
 			<c:forEach items="${sessionScope.newModuleList}" var="modules">
 				<c:forEach items="${modules.subModuleJsonList}" var="subModule">
-
+              
 					<c:choose>
 						<c:when test="${subModule.subModuleMapping eq 'showBillList'}">
 
@@ -227,7 +227,7 @@
 											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 										</div>
 									</div>
-
+${isEdit} ${isDelete}
 									<div class="box-content">
 
 										<div class="clearfix"></div>
