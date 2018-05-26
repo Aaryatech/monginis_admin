@@ -1,10 +1,23 @@
 package com.ats.adminpanel.controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,6 +30,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,8 +53,25 @@ import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
 import com.ats.adminpanel.model.ggreports.GGReportByDateAndFr;
 import com.ats.adminpanel.model.ggreports.GGReportGrpByFrId;
 import com.ats.adminpanel.model.ggreports.GGReportGrpByMonthDate;
+import com.ats.adminpanel.model.ggreports.GrnGvnReportByGrnType;
 import com.ats.adminpanel.model.mastexcel.TallyItem;
+import com.ats.adminpanel.model.production.GetProdDetailBySubCat;
+import com.ats.adminpanel.model.production.GetProdDetailBySubCatList;
+import com.ats.adminpanel.model.production.GetProdPlanDetail;
 import com.ats.adminpanel.model.salesreport.SalesReportBillwise;
+import com.ats.adminpanel.util.ItextPageEvent;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 @Controller
 @Scope("session")
@@ -66,6 +97,439 @@ public class GrnGvnReportController {
 				AllRoutesListResponse.class);
 		
 	}
+	//25-05-2018
+	
+	@RequestMapping(value = "/showGGvnReportByGrnType", method = RequestMethod.GET)
+	public ModelAndView showGGvnReportByGrnType(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/grnGvn/ggreportbytype");
+		
+		try {
+
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			String todaysDate = date.format(formatters);
+
+			allFrIdNameList = getFrNameId();
+
+			allRouteListResponse = getAllRoute();
+			
+			model.addObject("routeList", allRouteListResponse.getRoute());
+			model.addObject("todaysDate", todaysDate);
+			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
+
+		} catch (Exception e) {
+			System.out.println("Exce showGGvnReportByGrnType " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	List<GrnGvnReportByGrnType> grnGvnByTypeList=new ArrayList<>();
+	
+	List<GrnGvnReportByGrnType> pdfTypeList=new ArrayList<>();
+	@RequestMapping(value = "/getGGvnReportByGrnType", method = RequestMethod.GET)
+	@ResponseBody
+	public  List<GrnGvnReportByGrnType> getGGvnReportByGrnType(HttpServletRequest request, HttpServletResponse response) {
+		System.err.println("Inside Ajax call /getGGvnReportByGrnType");
+		List<GrnGvnReportByGrnType> grnGvnByTypeList= new ArrayList<>();
+
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			String routeId = "0";
+			String frIdString = "";
+
+			System.out.println("inside getGrnGvnByDatewise ajax call");
+
+			frIdString = request.getParameter("fr_id_list");
+			String fromDate = request.getParameter("from_date");
+			String toDate = request.getParameter("to_date");
+			routeId = request.getParameter("route_id");
+
+			System.out.println("fromDate= " + fromDate);
+
+			boolean isAllFrSelected = false;
+
+			frIdString = frIdString.substring(1, frIdString.length() - 1);
+			frIdString = frIdString.replaceAll("\"", "");
+
+			List<String> franchIds = new ArrayList();
+			franchIds = Arrays.asList(frIdString);
+
+			System.out.println("fr Id ArrayList " + franchIds.toString());
+
+			if (franchIds.contains("-1")) {
+				isAllFrSelected = true;
+
+			}
+
+			if (!routeId.equalsIgnoreCase("0")) {
+				 map = new LinkedMultiValueMap<String, Object>();
+				map.add("routeId", routeId);
+
+				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
+						map, FrNameIdByRouteIdResponse.class);
+
+				List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+
+				System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+
+				StringBuilder sbForRouteFrId = new StringBuilder();
+				for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
+
+					sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
+
+				}
+
+				String strFrIdRouteWise = sbForRouteFrId.toString();
+				frIdString = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+				System.out.println("fr Id Route WISE = " + frIdString);
+
+			} // end of if
+
+			map = new LinkedMultiValueMap<String, Object>();
+			if (isAllFrSelected) {
+
+								System.out.println("Inside IF  is All fr Selected " + isAllFrSelected);
+
+				map.add("frIdList", 0);
+				// model.addObject("billHeadersList",billHeadersListForPrint);
+
+			} else { // few franchisee selected
+
+				System.out.println("Inside Else: Few Fr Selected ");
+				map.add("frIdList", frIdString);
+				
+			}
+
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+			
+			
+				ParameterizedTypeReference<List<GrnGvnReportByGrnType>> typeRef = new ParameterizedTypeReference<List<GrnGvnReportByGrnType>>() {
+				};
+				ResponseEntity<List<GrnGvnReportByGrnType>> responseEntity = restTemplate.exchange(
+						Constants.url + "getGrnGvnReportByGrnType", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+				
+				grnGvnByTypeList = responseEntity.getBody();
+				pdfTypeList=grnGvnByTypeList;
+				System.err.println("List getGrnGvnReportByGrnType " +grnGvnByTypeList.toString());
+				
+				
+		List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+				
+				ExportToExcel expoExcel=new ExportToExcel();
+				List<String> rowData=new ArrayList<String>();
+				 
+				
+				rowData.add("Sr. No.");
+				
+				rowData.add("Franchise Name");
+				rowData.add("GRN 1");
+				rowData.add("GRN 2");
+				rowData.add("GRN 3");
+				rowData.add("GVN");
+				rowData.add("Total");
+			
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				List<GrnGvnReportByGrnType>  excelItems= grnGvnByTypeList;
+				for(int i=0;i<excelItems.size();i++)
+				{
+					  expoExcel=new ExportToExcel();
+					 rowData=new ArrayList<String>();
+						rowData.add(""+(i+1));
+					rowData.add(""+excelItems.get(i).getFrName());
+					
+					float total=excelItems.get(i).getAprAmtGrn1()+excelItems.get(i).getAprAmtGrn2()+excelItems.get(i).getAprAmtGrn3()+
+							+excelItems.get(i).getAprAmtGvn();
+					rowData.add(""+excelItems.get(i).getAprAmtGrn1());
+					rowData.add(""+excelItems.get(i).getAprAmtGrn2());
+					rowData.add(""+excelItems.get(i).getAprAmtGrn3());
+					
+					rowData.add(""+excelItems.get(i).getAprAmtGvn());
+					rowData.add(""+total);
+					
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					
+				}
+			
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "grnGvnByTypeReport");
+
+		} catch (Exception e) {
+
+			System.out.println("Ex in getting /getgGReportByDate List  Ajax call" + e.getMessage());
+			e.printStackTrace();
+		}
+		
+		return grnGvnByTypeList;
+	
+	}
+	
+	
+	
+	
+	
+	@RequestMapping(value = "/getGGreportByTypePdf", method = RequestMethod.GET)
+	public void getGGreportByTypePdf(HttpServletRequest request, HttpServletResponse response) {
+
+		BufferedOutputStream outStream = null;
+		System.out.println("Inside Pdf prod From Order Or Plan");
+
+		
+
+		grnGvnByTypeList = pdfTypeList;
+		Document document = new Document(PageSize.A4,20,20,150,30);
+		// ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+
+		System.out.println("time in getGGreportByTypePdf PDF ==" + dateFormat.format(cal.getTime()));
+		String timeStamp = dateFormat.format(cal.getTime());
+		String FILE_PATH = Constants.REPORT_SAVE;
+		File file = new File(FILE_PATH);
+
+		PdfWriter writer = null;
+
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(FILE_PATH);
+		} catch (FileNotFoundException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		try {
+			
+			String header=
+					" Galdhar Foods Pvt.Ltd\n" + "Factory Add: A-32 Shendra, MIDC, Auraangabad-4331667"
+							+ "\nPhone:0240-2466217, Email: aurangabad@monginis.net";
+		
+
+			String title="Report-For GRN GVN BY GRN TYPE";
+
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+			
+			writer = PdfWriter.getInstance(document, out);
+			
+			ItextPageEvent event=new ItextPageEvent(header,title, reportDate);
+			
+			writer.setPageEvent(event);
+			
+		} catch (DocumentException e) {
+
+			e.printStackTrace();
+		}
+
+		PdfPTable table = new PdfPTable(7);
+		try {
+			System.out.println("Inside PDF Table try");
+			table.setWidthPercentage(100);
+			table.setWidths(new float[] { 0.4f, 1.7f, 0.9f,1.0f,0.9f,0.9f,0.9f});
+			Font headFont = new Font(FontFamily.TIMES_ROMAN, 18, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 16, Font.BOLD, BaseColor.BLACK);
+			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
+
+			PdfPCell hcell=new PdfPCell();
+			hcell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			hcell.setPadding(4);
+			hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Franchise Name", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+
+			
+			hcell = new PdfPCell(new Phrase("GRN 1", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+			
+			
+			hcell = new PdfPCell(new Phrase("GRN 2", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+			
+			
+			
+			hcell = new PdfPCell(new Phrase("GRN 3", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+			
+			hcell = new PdfPCell(new Phrase("GVN", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+			
+			
+			hcell = new PdfPCell(new Phrase("Total", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(hcell);
+			
+			
+			int index = 0;
+			for (GrnGvnReportByGrnType grnGByType : grnGvnByTypeList) {
+				index++;
+				PdfPCell cell;
+
+				cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				  cell.setPadding(4);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(grnGByType.getFrName(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
+
+				
+					cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGrn1()), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setPaddingRight(2);
+					  cell.setPadding(4);
+					table.addCell(cell);
+			
+					cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGrn2()), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setPaddingRight(2);
+					  cell.setPadding(4);
+					table.addCell(cell);
+					
+					
+					cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGrn3()), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setPaddingRight(2);
+					  cell.setPadding(4);
+					table.addCell(cell);
+					
+					
+					cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGvn()), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setPaddingRight(2);
+					  cell.setPadding(4);
+					  
+					  table.addCell(cell);
+				
+					
+				float total=grnGByType.getAprAmtGrn3()+grnGByType.getAprAmtGrn2()+grnGByType.getAprAmtGrn1();
+				
+				cell = new PdfPCell(new Phrase(""+total, headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
+				// FooterTable footerEvent = new FooterTable(table);
+				// writer.setPageEvent(footerEvent);
+			}
+			document.open();
+			document.add(table);
+			document.close();
+			
+			/*document.open();
+			Paragraph company = new Paragraph(
+					"Galdhar Foods Pvt.Ltd\n",
+					f);
+			company.setAlignment(Element.ALIGN_CENTER);
+			document.add(company);
+			document.add(new Paragraph(" "));
+			
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+
+			document.add(new Paragraph("Report Date: " + reportDate));
+			document.add(new Paragraph("\n"));
+			
+			document.add(new Paragraph("Grn Gvn Report By Grn Type "));
+
+			document.add(new Paragraph("\n"));
+			document.add(table);
+			document.add(new Paragraph("\n"));
+		
+			int totalPages = writer.getPageNumber();
+*/
+//			System.out.println("Page no " + totalPages);
+
+		//	document.close();
+			// Atul Sir code to open a Pdf File
+			if (file != null) {
+
+				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+				if (mimeType == null) {
+
+					mimeType = "application/pdf";
+
+				}
+
+				response.setContentType(mimeType);
+
+				response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+				response.setContentLength((int) file.length());
+
+				InputStream inputStream = null;
+				try {
+					inputStream = new BufferedInputStream(new FileInputStream(file));
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				try {
+					FileCopyUtils.copy(inputStream, response.getOutputStream());
+				} catch (IOException e) {
+					System.out.println("Excep in Opening a Pdf File");
+					e.printStackTrace();
+				}
+			}
+
+		} catch (DocumentException ex) {
+
+			System.out.println("Pdf Generation Error: BOm Prod  View Prod" + ex.getMessage());
+
+			ex.printStackTrace();
+
+		}
+
+		
+		
+		
+		
+		
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	//25-05-2018
+	
+	
+	
+	
 	//r1
 	@RequestMapping(value = "/showGGReportDateWise", method = RequestMethod.GET)
 	public ModelAndView showGGReportDateWise(HttpServletRequest request, HttpServletResponse response) {
