@@ -35,6 +35,7 @@ import com.ats.adminpanel.model.accessright.AssignRoleDetailList;
 import com.ats.adminpanel.model.accessright.CreatedRoleList;
 import com.ats.adminpanel.model.accessright.ModuleJson;
 import com.ats.adminpanel.model.accessright.SubModuleJson;
+import com.ats.adminpanel.model.item.ErrorMessage;
 import com.ats.adminpanel.model.login.User;
 import com.ats.adminpanel.model.login.UserResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -63,7 +64,43 @@ public class AccessRightController {
 		}
 		return model;
 	}
+	@RequestMapping(value = "/showRoleList", method = RequestMethod.GET)
+	public ModelAndView showRoleList(HttpServletRequest request, HttpServletResponse response) {
 
+		ModelAndView model = new ModelAndView("accessRight/roleList");
+	
+		try {
+
+			CreatedRoleList createdRoleList = rest.getForObject(Constants.url + "getAllAccessRole",
+					CreatedRoleList.class);
+			System.out.println("Access List " + createdRoleList.toString());
+			model.addObject("createdRoleList", createdRoleList.getAssignRoleDetailList());
+
+		} catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return model;
+	}
+	@RequestMapping(value="/deleteRole/{roleId}",method=RequestMethod.GET)
+	public String deleteFlavour(@PathVariable int roleId) {
+		
+		  ModelAndView mav = new ModelAndView("accessRight/roleList");
+		
+			RestTemplate restTemplate = new RestTemplate();
+	      MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+	      map.add("roleId",roleId);
+	   
+		   ErrorMessage errorResponse = restTemplate.postForObject(Constants.url+"deleteRole", map,ErrorMessage.class);
+	     System.out.println(errorResponse.toString());
+
+	    if(errorResponse.getError()) {
+		  return "redirect:/showRoleList";
+		 
+	     }else {
+	    	 return "redirect:/showRoleList";
+
+	     }
+	}
 	@RequestMapping(value = "/submitCreateRole", method = RequestMethod.POST)
 	public String submitAssignRole(HttpServletRequest request, HttpServletResponse response) {
 

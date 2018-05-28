@@ -26,10 +26,13 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.model.GetSubCategory;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.MCategory;
+import com.ats.adminpanel.model.PlanDetails;
 import com.ats.adminpanel.model.franchisee.CommonConf;
 import com.ats.adminpanel.model.franchisee.Menu;
+import com.ats.adminpanel.model.franchisee.SubCategory;
 import com.ats.adminpanel.model.item.CategoryListResponse;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.item.MCategoryList;
@@ -657,5 +660,33 @@ System.out.println("converted date"+convertedDate);
 		}
 		return "redirect:/showProdForcast";
 	}
+	// ----------------------------------------------------------------------------------------------
+		@RequestMapping(value = "/getItemsForPlan", method = RequestMethod.GET)
+		public @ResponseBody PlanDetails getItemsForPlan(HttpServletRequest request, HttpServletResponse response) {
+
+			PlanDetails planDetails=new PlanDetails();
+			RestTemplate restTemplate = new RestTemplate();
+            try {
+			int catId = Integer.parseInt(request.getParameter("catId"));
+			/*selectedCat = catId;*/
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("itemGrp1", catId);
+
+			Item[] item = restTemplate.postForObject(Constants.url + "getItemsByCatIdAndSortId", map, Item[].class);
+			ArrayList<Item> itemList = new ArrayList<Item>(Arrays.asList(item));
+			System.out.println("Filter Item List " + itemList.toString());
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("catId", catId);
+			List<GetSubCategory> subCatList=restTemplate.postForObject(Constants.url + "getSubCatListByCatId",map,List.class);
+		
+			planDetails.setCatList(subCatList);
+			planDetails.setItemList(itemList);
+            }
+            catch (Exception e) {
+				e.printStackTrace();
+			}
+			return planDetails;
+		}
 
 }

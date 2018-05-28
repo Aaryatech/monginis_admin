@@ -384,8 +384,7 @@ public class SaleCompareReportController {
 
 					sales.setPrevMonthSale(saleCompListPrev.get(j).getPrevMonthSale());
 
-					sales.setLastMonthDiff((
-							saleCompListPrev.get(j).getPrevMonthSale() - saleCompListFirst.get(i).getPerMonthSale()));
+					sales.setLastMonthDiff((saleCompListFirst.get(i).getPerMonthSale()-saleCompListPrev.get(j).getPrevMonthSale()));
 					float onePer = 0;
 					if (saleCompListPrev.get(j).getPrevMonthSale() > 0) {
 						onePer = (saleCompListPrev.get(j).getPrevMonthSale() / 100);
@@ -393,8 +392,7 @@ public class SaleCompareReportController {
 						onePer = 1;
 					}
 
-					float diff = saleCompListPrev.get(j).getPrevMonthSale()
-							- saleCompListFirst.get(i).getPerMonthSale();
+					float diff = saleCompListFirst.get(i).getPerMonthSale()-saleCompListPrev.get(j).getPrevMonthSale();
 					
 					float per = (diff / onePer);
 
