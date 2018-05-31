@@ -3,14 +3,49 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
- 
+<head><style type="text/css">
+.buttonload {
+    background-color: #59b4da08; /* Green background */
+    border: none; /* Remove borders */
+    color: #444242; /* White text */
+    padding: 12px 24px; /* Some padding */
+    font-size: 16px; /* Set a font-size */
+}
+.alert1 {
+    padding: 5px;
+    background-color: #ee578f;
+    color: white;
+    opacity: 1;
+    transition: opacity 0.6s;
+    margin-bottom: 12px;
+}
+
+.alert.success {background-color: #4CAF50;}
+.alert1.info {background-color: #ee578f;}
+.alert.warning {background-color: #ff9800;}
+
+.closebtn {
+    margin-left:32px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
+</style></head> 
  <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body>
  <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 <c:url var="findItemsByCategory" value="/getItemsByCategory"></c:url>
 <c:url var="getItemsProdQty" value="/getItemsProdQty"></c:url>
-
+<c:url var="getItemsForPlan" value="/getItemsForPlan"></c:url>
 	 
 
 
@@ -36,6 +71,11 @@
 					<h1>
 						<i class="fa fa-file-o"></i>Plan Production
 					</h1>
+
+<div class="alert1 info" >
+  <span class="closebtn">&times;</span>  
+  <strong><p style="text-align: center;" id="planData" ></p></strong> 
+</div>
 
 				</div>
 			</div>
@@ -89,12 +129,18 @@
 
 
 								<div class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
+									<div class="col-sm-9 col-sm-offset-3 col-lg-5 col-lg-offset-2">
 									
                          <input type="button" class="btn btn-info" name="submit" value="submit" onclick="searchItemsByCategory()"/>
-									</div>
-								</div>
-					<input type="hidden" id="selectedCatId" name="selectedCatId"/>			
+									
+								
+								
+								
+<button class="buttonload" id="loader" style="display: none;">
+  <i class="fa fa-spinner fa-spin"></i>Loading
+</button>
+								</div></div>
+					<input type="hidden" id="selectedCatId" name="selectedCatId"/>		
 
 </form>
 					<form action="${pageContext.request.contextPath}/submitProductionPlan" method ="post">
@@ -211,8 +257,11 @@
 										
 										</select>
 										</div>
+									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+                                     <input type="button" class="btn btn-info" name="plandetail" id="plandetail" value="PLAN DETAILS" onclick="searchPlanDetails()"/>
+									<!-- </div>
 									<div
-										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
+										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0"> -->
 										<input type="submit" class="btn btn-primary" value="Submit" id="callSubmit">
 
 
@@ -338,12 +387,13 @@
 							function(data) {
 
 								$('#table1 td').remove();
-								
+								document.getElementById("plandetail").disabled=false;
+
 								$('#loader').hide();
 								if (data == "") {
 									alert("No records found !!");
 									document.getElementById("callSubmit").disabled=true;
-
+									document.getElementById("plandetail").disabled=true;
 								}
 
 								
@@ -427,7 +477,46 @@
 		}
 
 </script>
+<script>
+function searchPlanDetails()
+{
+	var catId = $("#selectedCatId").val();
+	
+	$
+	.getJSON(
+			'${getItemsForPlan}',
+			{
+				
+				catId : catId,
+				ajax : 'true'
 
+			},
+			function(data) {
+				var a = [];
+               var total=0;
+				$.each(data.catList,function(key, subCat) {
+				var qty=0;
+				$.each(data.itemList,function(key, item) {
+					if(item.itemGrp2==subCat.subCatId)
+						{
+					var actQty = parseInt($("#qty5"+item.id).val());
+					qty=qty+actQty;
+					total=total+actQty;
+						}
+					
+						});
+				a.push(subCat.subCatName+":[ "+qty+"  ]   ");
+
+				
+				});
+		
+
+			document.getElementById("planData").innerHTML=a+"|| TOTAL:- "+total;
+                
+			});
+	
+}
+</script>
 <script type="text/javascript">
 		function getProdQty(token,id) {
 			
@@ -489,6 +578,19 @@
 		     
 			
 		}
+</script>
+
+<script>
+var close = document.getElementsByClassName("closebtn");
+var i;
+
+for (i = 0; i < close.length; i++) {
+    close[i].onclick = function(){
+        var div = this.parentElement;
+        div.style.opacity = "0";
+        setTimeout(function(){ div.style.display = "none"; }, 600);
+    }
+}
 </script>
 </body>
 

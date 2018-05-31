@@ -98,7 +98,9 @@
 								onchange="disableFr()">
 								<option value="0">Select Route</option>
 								<c:forEach items="${routeList}" var="route" varStatus="count">
-									<option value="${route.routeId}"><c:out value="${route.routeName}"/> </option>
+									<option value="${route.routeId}"><c:out
+											value="${route.routeName}" />
+									</option>
 
 								</c:forEach>
 							</select>
@@ -113,11 +115,11 @@
 								class="form-control chosen" multiple="multiple" tabindex="6"
 								id="selectFr" name="selectFr" onchange="disableRoute()">
 
-								<option value="-1"><c:out value="All"/></option>
+								<option value="-1"><c:out value="All" /></option>
 
 								<c:forEach items="${unSelectedFrList}" var="fr"
 									varStatus="count">
-									<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
+									<option value="${fr.frId}"><c:out value="${fr.frName}" /></option>
 								</c:forEach>
 							</select>
 
@@ -127,18 +129,7 @@
 					<div class="form-group">
 
 
-						<div class="col-md-6 table-responsive">
-
-							<div class="form-group" style="display: none;" id="range">
-
-								<div class="col-sm-3  controls">
-									<input type="button" id="expExcel" class="btn btn-primary"
-										value="EXPORT TO Excel" onclick="exportToExcel();"
-										disabled="disabled">
-								</div>
-							</div>
-							<div align="center" id="showchart" style="display: none"></div>
-						</div>
+						<div class="col-md-6 table-responsive"></div>
 
 
 					</div>
@@ -148,300 +139,295 @@
 				</div>
 
 
-				<div class="row">
+				<div class="row" style="text-align: center;">
 
 
 					<div class="form-group" align="center">
-						<div class="col-md-3" style="text-align: center;">
-							<button class="btn btn-primary" onclick="searchReport()">Search
-								Report</button>
+						<button class="btn btn-primary" onclick="searchReport()">Search
+							Report</button>
 
-							<button class="btn btn-primary" value="PDF" id="PDFButton"
-								onclick="genPdf()">PDF</button>
-						</div>
-						<br>
+						<button class="btn btn-primary" value="PDF" id="PDFButton"
+							onclick="genPdf()">PDF</button>
 
-						<div class="col-md-12 table-responsive">
-							<table class="table table-bordered table-striped fill-head "
-								style="width: 100%" id="table_grid">
-								<thead>
-									<tr>
-										<th>Sr.No.</th>
-										<th>Franchise Name</th>
-										<th>GRN 1</th>
-										<th>GRN 2</th>
-										<th>GRN 3</th>
-										
-											<th>GVN</th>
-										<th>Total</th>
-									</tr>
-								</thead>
-								<tbody>
-								</tbody>
-							</table>
 
-						</div>
-
-						<div align="center" id="loader" style="display: none">
-
-							<span>
-								<h4>
-									<font color="#343690">Loading</font>
-								</h4>
-							</span> <span class="l-1"></span> <span class="l-2"></span> <span
-								class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
-							<span class="l-6"></span>
-						</div>
 
 					</div>
 				</div>
+				<br>
 
+				<div class="col-md-12 table-responsive">
+					<table class="table table-bordered table-striped fill-head "
+						style="width: 100%" id="table_grid">
+						<thead>
+							<tr>
+								<th>Sr.No.</th>
+								<th>Franchise Name</th>
+								<th>GRN 1</th>
+								<th>GRN 2</th>
+								<th>GRN 3</th>
+
+								<th>GVN</th>
+								<th>Total</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+
+				</div>
+
+				<div align="center" id="loader" style="display: none">
+
+					<span>
+						<h4>
+							<font color="#343690">Loading</font>
+						</h4>
+					</span> <span class="l-1"></span> <span class="l-2"></span> <span
+						class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
+					<span class="l-6"></span>
+				</div>
+				<div class="col-sm-3  controls" style="display: none;" id="range">
+					<input type="button" id="expExcel" class="btn btn-primary"
+						value="EXPORT TO Excel" onclick="exportToExcel();"
+						disabled="disabled">
+				</div>
+				<div align="center" id="showchart" style="display: none"></div>
 			</div>
-			<!-- END Main Content -->
-			<footer>
-				<p>2017 © Monginis.</p>
-			</footer>
+		</div>
 
-			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-				class="fa fa-chevron-up"></i></a>
+	</div>
+	<!-- END Main Content -->
+	<footer>
+		<p>2018 © Monginis.</p>
+	</footer>
 
-			<script type="text/javascript">
-				function searchReport() {
-					//alert("In call");
-					//	var isValid = validate();
-					//document.getElementById('chart').style.display = "display:none";
-				
-					document.getElementById("table_grid").style = "block";
-					
-					//alert("isGrn " +isGrn);
+	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+		class="fa fa-chevron-up"></i></a>
 
-					//report 1
-					var selectedFr = $("#selectFr").val();
-					var routeId = $("#selectRoute").val();
+	<script type="text/javascript">
+		function searchReport() {
+			//alert("In call");
+			//	var isValid = validate();
+			//document.getElementById('chart').style.display = "display:none";
 
-					var from_date = $("#fromDate").val();
-					var to_date = $("#toDate").val();
-				
+			document.getElementById("table_grid").style = "block";
 
-					$('#loader').show();
+			//alert("isGrn " +isGrn);
 
-					$
-							.getJSON(
-									'${getGGvnReportByGrnType}',
+			//report 1
+			var selectedFr = $("#selectFr").val();
+			var routeId = $("#selectRoute").val();
 
-									{
-										fr_id_list : JSON.stringify(selectedFr),
-										from_date : from_date,
-										to_date : to_date,
-										route_id : routeId,
-									
-										ajax : 'true'
+			var from_date = $("#fromDate").val();
+			var to_date = $("#toDate").val();
 
-									},
-									
-									function(data) {
-										//alert("Data " +data)
+			$('#loader').show();
 
-										$('#table_grid td').remove();
-										$('#loader').hide();
+			$.getJSON('${getGGvnReportByGrnType}',
 
-										if (data == "") {
-											alert("No records found !!");
-											document.getElementById("expExcel").disabled = true;
-										}
+			{
+				fr_id_list : JSON.stringify(selectedFr),
+				from_date : from_date,
+				to_date : to_date,
+				route_id : routeId,
 
-										$
-												.each(
-														data,
-														function(key, report) {
-															//alert(report.frName);
-															
+				ajax : 'true'
 
-															document
-																	.getElementById("expExcel").disabled = false;
-															document
-																	.getElementById('range').style.display = 'block';
+			},
 
-															var index = key + 1;
-															//var tr = "<tr>";
-															var tr = $('<tr></tr>');
-															tr
-																	.append($(
-																			'<td></td>')
-																			.html(
-																					key + 1));
+			function(data) {
+				//alert("Data " +data)
 
-															
-															tr
-																	.append($(
-																			'<td></td>')
-																			.html(
-																					report.frName));
-															tr
-																	.append($(
-																			'<td></td>')
-																			.html(
-																					report.aprAmtGrn1));
-															tr
-																	.append($(
-																			'<td></td>')
-																			.html(
-																					report.aprAmtGrn2));
-															tr
-																	.append($(
-																			'<td></td>')
-																			.html(
-																					report.aprAmtGrn3));
-															
-															
-															
-							tr
-									.append($(
-											'<td></td>')
-											.html(
-													report.aprAmtGvn));
-							
-							
-															var total =report.aprAmtGrn1+report.aprAmtGrn2+report.aprAmtGrn3+report.aprAmtGvn;
-															total=total.toFixed(2);
-															tr
-																	.append($(
-																			'<td></td>')
-																			.html(
-																					total));
+				$('#table_grid td').remove();
+				$('#loader').hide();
 
-															$(
-																	'#table_grid tbody')
-																	.append(tr);
-
-														})
-
-									});
-
-				}
-			</script>
-
-			<script type="text/javascript">
-				function validate() {
-
-					var selectedFr = $("#selectFr").val();
-					var selectedMenu = $("#selectMenu").val();
-					var selectedRoute = $("#selectRoute").val();
-
-					var isValid = true;
-
-					if (selectedFr == "" || selectedFr == null) {
-
-						if (selectedRoute == "" || selectedRoute == null) {
-							alert("Please Select atleast one ");
-							isValid = false;
-						}
-						//alert("Please select Franchise/Route");
-
-					} else if (selectedMenu == "" || selectedMenu == null) {
-
-						isValid = false;
-						alert("Please select Menu");
-
-					}
-					return isValid;
-
-				}
-			</script>
-
-
-
-
-
-
-			<script type="text/javascript">
-
-				function genPdf() {
-					var from_date = $("#fromDate").val();
-					var to_date = $("#toDate").val();
-					var selectedFr = $("#selectFr").val();
-					var routeId = $("#selectRoute").val();
-					var isGrn = $("#isGrn").val();
-					
-					window.open('${pageContext.request.contextPath}/getGGreportByTypePdf');
-					
-/* 					window
-							.open('${pageContext.request.contextPath}/pdfForReport?url=pdf/showGGreportByDate/'
-									+ from_date
-									+ '/'
-									+ to_date
-									+ '/'
-									+ selectedFr
-									+ '/'
-									+ routeId
-									+ '/'
-									+ isGrn
-									+ '/');
- */
-				}
-				function exportToExcel() {
-
-					window
-							.open("${pageContext.request.contextPath}/exportToExcel");
+				if (data == "") {
+					alert("No records found !!");
 					document.getElementById("expExcel").disabled = true;
 				}
-			</script>
+                   var grandTotal=0;
+                   var grn1Amt=0;
+                   var grn2Amt=0;
+                   var grn3Amt=0;
+                   var gvnAmt=0;
+                   
+				$.each(data, function(key, report) {
+					//alert(report.frName);
 
-			<!--basic scripts-->
-			<script
-				src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-			<script>
-				window.jQuery
-						|| document
-								.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
-			</script>
-			<script
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
-			<script
-				src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-			<script
-				src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
+					document.getElementById("expExcel").disabled = false;
+					document.getElementById('range').style.display = 'block';
 
-			<!--page specific plugin scripts-->
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/jquery-tags-input/jquery.tagsinput.min.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/jquery-pwstrength/jquery.pwstrength.min.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-duallistbox/duallistbox/bootstrap-duallistbox.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/dropzone/downloads/dropzone.min.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/clockface/js/clockface.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-switch/static/js/bootstrap-switch.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
-			<script type="text/javascript"
-				src="${pageContext.request.contextPath}/resources/assets/ckeditor/ckeditor.js"></script>
+					var index = key + 1;
+					//var tr = "<tr>";
+					var tr = $('<tr></tr>');
+					tr.append($('<td></td>').html(key + 1));
 
-			<!--flaty scripts-->
-			<script
-				src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
-			<script
-				src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
+					tr.append($('<td ></td>').html(report.frName));
+					tr.append($('<td style="text-align:right;"></td>').html(
+							report.aprAmtGrn1));
+					tr.append($('<td style="text-align:right;"></td>').html(
+							report.aprAmtGrn2));
+					tr.append($('<td style="text-align:right;"></td>').html(
+							report.aprAmtGrn3));
+
+					tr.append($('<td style="text-align:right;"></td>').html(
+							report.aprAmtGvn));
+
+					var total = report.aprAmtGrn1 + report.aprAmtGrn2
+							+ report.aprAmtGrn3 + report.aprAmtGvn;
+					grandTotal=grandTotal+total;
+					grn1Amt=grn1Amt+report.aprAmtGrn1;
+					grn2Amt=grn2Amt+report.aprAmtGrn2;
+					grn3Amt=grn3Amt+report.aprAmtGrn3;
+					gvnAmt=gvnAmt+report.aprAmtGvn;
+					total = total.toFixed(2);
+					
+					tr.append($('<td style="text-align:right;"></td>').html(
+							total));
+
+					$('#table_grid tbody').append(tr);
+
+				})
+				var tr = $('<tr></tr>');
+				tr.append($('<td></td>').html("#"));
+				grn1Amt=grn1Amt.toFixed(2);
+				grn2Amt=grn2Amt.toFixed(2);
+				grn3Amt=grn3Amt.toFixed(2);
+				gvnAmt=gvnAmt.toFixed(2);
+				tr.append($('<td style="font-weight:bold";"></td>').html("Total:"));
+				tr.append($('<td style="text-align:right;font-weight:bold"></td>').html(""+grn1Amt));
+				tr.append($('<td style="text-align:right;font-weight:bold" ></td>').html(""+grn2Amt));
+				tr.append($('<td style="text-align:right;font-weight:bold"></td>').html(""+grn3Amt));
+
+				tr.append($('<td style="text-align:right;font-weight:bold"></td>').html(""+gvnAmt));
+				tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(grandTotal.toFixed(2)));
+
+				$('#table_grid tbody').append(tr);
+
+			});
+
+		}
+	</script>
+
+	<script type="text/javascript">
+		function validate() {
+
+			var selectedFr = $("#selectFr").val();
+			var selectedMenu = $("#selectMenu").val();
+			var selectedRoute = $("#selectRoute").val();
+
+			var isValid = true;
+
+			if (selectedFr == "" || selectedFr == null) {
+
+				if (selectedRoute == "" || selectedRoute == null) {
+					alert("Please Select atleast one ");
+					isValid = false;
+				}
+				//alert("Please select Franchise/Route");
+
+			} else if (selectedMenu == "" || selectedMenu == null) {
+
+				isValid = false;
+				alert("Please select Menu");
+
+			}
+			return isValid;
+
+		}
+	</script>
+
+
+
+
+
+
+	<script type="text/javascript">
+		function genPdf() {
+			var from_date = $("#fromDate").val();
+			var to_date = $("#toDate").val();
+			var selectedFr = $("#selectFr").val();
+			var routeId = $("#selectRoute").val();
+			var isGrn = $("#isGrn").val();
+
+			window
+					.open('${pageContext.request.contextPath}/getGGreportByTypePdf');
+
+			/* 					window
+			 .open('${pageContext.request.contextPath}/pdfForReport?url=pdf/showGGreportByDate/'
+			 + from_date
+			 + '/'
+			 + to_date
+			 + '/'
+			 + selectedFr
+			 + '/'
+			 + routeId
+			 + '/'
+			 + isGrn
+			 + '/');
+			 */
+		}
+		function exportToExcel() {
+
+			window.open("${pageContext.request.contextPath}/exportToExcel");
+			document.getElementById("expExcel").disabled = true;
+		}
+	</script>
+
+	<!--basic scripts-->
+	<script
+		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script>
+		window.jQuery
+				|| document
+						.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
+	</script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
+
+	<!--page specific plugin scripts-->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-inputmask/bootstrap-inputmask.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-tags-input/jquery.tagsinput.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-pwstrength/jquery.pwstrength.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-duallistbox/duallistbox/bootstrap-duallistbox.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/dropzone/downloads/dropzone.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/clockface/js/clockface.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-switch/static/js/bootstrap-switch.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/wysihtml5-0.3.0.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-wysihtml5/bootstrap-wysihtml5.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/ckeditor/ckeditor.js"></script>
+
+	<!--flaty scripts-->
+	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
 </body>
 </html>
