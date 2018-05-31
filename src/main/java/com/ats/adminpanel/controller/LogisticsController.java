@@ -1891,14 +1891,14 @@ public class LogisticsController {
 			
 			if(res!=null)
 			{
-				 if(res.getServType2()==1)
+				 if(res.getServType2()==1 && res.getTypeId()==1)
 				 {
 					 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
 		        	 map.add("vehicalId", servHeader.getVehId()); 
 		        	 VehicalMaster vehicalMaster = restTemplate.postForObject(Constants.url + "getVehicalById", map, VehicalMaster.class);
 		        	 vehicalMaster.setLastServicingKm(res.getServDoneKm()); 
 		        	 vehicalMaster.setNextServicingKm(res.getNextDueKm());
-		        	 vehicalMaster.setAlertNextServicingKm(vehicalMaster.getNextServicingKm()-100);
+		        	 vehicalMaster.setAlertNextServicingKm(vehicalMaster.getNextServicingKm()-1200);
 		        	 vehicalMaster = restTemplate.postForObject(Constants.url + "postVehicalMaster",vehicalMaster, VehicalMaster.class);
 		 			System.out.println("update Vehicle"+vehicalMaster.toString());
 		 			
@@ -1911,7 +1911,7 @@ public class LogisticsController {
 		 			{
 		 				alertVeihcleServicing.setLastServKm(res.getServDoneKm());
 		 				alertVeihcleServicing.setNextServKm(res.getNextDueKm());
-		 				alertVeihcleServicing.setAlertServKm(alertVeihcleServicing.getNextServKm()-100);
+		 				alertVeihcleServicing.setAlertServKm(alertVeihcleServicing.getNextServKm()-1200);
 		 				AlertVeihcleServicing update = restTemplate.postForObject(Constants.url + "postAlertVeihcleServicing", alertVeihcleServicing, AlertVeihcleServicing.class);
 		 				System.out.println("update alert Vehicle " + update);
 		 			}
@@ -1923,7 +1923,7 @@ public class LogisticsController {
 		 				alertVeihcleServicing.setTypeName(typeName);
 		 				alertVeihcleServicing.setLastServKm(res.getServDoneKm());
 		 				alertVeihcleServicing.setNextServKm(res.getNextDueKm());
-		 				alertVeihcleServicing.setAlertServKm(alertVeihcleServicing.getNextServKm()-100);
+		 				alertVeihcleServicing.setAlertServKm(alertVeihcleServicing.getNextServKm()-1200);
 		 				AlertVeihcleServicing insert = restTemplate.postForObject(Constants.url + "postAlertVeihcleServicing", alertVeihcleServicing, AlertVeihcleServicing.class);
 		 				System.out.println("insert alert Vehicle " + insert);
 		 			}
@@ -2328,14 +2328,14 @@ public class LogisticsController {
 			
 			if(res!=null)
 			{
-				if(res.getServType2()==1)
+				if(res.getServType2()==1 && res.getTypeId()==1)
 				 {
 					 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
 		        	 map.add("vehicalId", servHeader.getVehId()); 
 		        	 VehicalMaster vehicalMaster = restTemplate.postForObject(Constants.url + "getVehicalById", map, VehicalMaster.class);
 		        	 vehicalMaster.setLastServicingKm(servHeader.getServDoneKm()); 
 		        	 vehicalMaster.setNextServicingKm(servHeader.getNextDueKm());
-		        	 vehicalMaster.setAlertNextServicingKm(vehicalMaster.getNextServicingKm()-100);
+		        	 vehicalMaster.setAlertNextServicingKm(vehicalMaster.getNextServicingKm()-1200);
 		        	 vehicalMaster = restTemplate.postForObject(Constants.url + "postVehicalMaster",vehicalMaster, VehicalMaster.class);
 		 			System.out.println("update Vehicle"+vehicalMaster.toString());
 		 			
@@ -2348,7 +2348,7 @@ public class LogisticsController {
 		 			{
 		 				alertVeihcleServicing.setLastServKm(res.getServDoneKm());
 		 				alertVeihcleServicing.setNextServKm(res.getNextDueKm());
-		 				alertVeihcleServicing.setAlertServKm(alertVeihcleServicing.getNextServKm()-100);
+		 				alertVeihcleServicing.setAlertServKm(alertVeihcleServicing.getNextServKm()-1200);
 		 				AlertVeihcleServicing update = restTemplate.postForObject(Constants.url + "postAlertVeihcleServicing", alertVeihcleServicing, AlertVeihcleServicing.class);
 		 				System.out.println("update alert Vehicle " + update);
 		 			}
@@ -2360,7 +2360,7 @@ public class LogisticsController {
 		 				alertVeihcleServicing.setTypeName(typeName);
 		 				alertVeihcleServicing.setLastServKm(res.getServDoneKm());
 		 				alertVeihcleServicing.setNextServKm(res.getNextDueKm());
-		 				alertVeihcleServicing.setAlertServKm(alertVeihcleServicing.getNextServKm()-100);
+		 				alertVeihcleServicing.setAlertServKm(alertVeihcleServicing.getNextServKm()-1200);
 		 				AlertVeihcleServicing insert = restTemplate.postForObject(Constants.url + "postAlertVeihcleServicing", alertVeihcleServicing, AlertVeihcleServicing.class);
 		 				System.out.println("insert alert Vehicle " + insert);
 		 			}

@@ -419,7 +419,7 @@
 										<th>Next Serv Km</th>
 										<th>Alert Serv Km</th>
 										<th>Current Km</th>
-										<th>Remaining Day</th> 
+										<th>Remaining Km</th> 
 
 									</tr>
 								</thead>
