@@ -506,12 +506,11 @@
 }
 	function validation() {
 
-         //alert("hi");
+         //alert("hi"); 
 		 var makeId = $("#makeId").val();
 		 var typeId = $("#typeId").val();
-		 var variantId = $("#variantId").val();
-		 var dealerId = $("#dealerId").val();
-		 var fuelType = $("#fuelType").val();
+		 var critical = $("#critical").val();
+		 var groupId = $("#groupId").val(); 
 		 if(makeId=="")
 			 {
 			 alert("Select Company ");
@@ -519,19 +518,16 @@
 		 else if(typeId=="")
 			 {
 			 alert("Select Type ");
-			 }
-		 else if(variantId=="")
-			 {
-			 alert("Select Variant ");
-			 }
-		 else if(dealerId=="")
+			 } 
+		 else if(groupId=="")
 		 {
-		 alert("Select Dealer ");
+		 alert("Select Group ");
 		 }
-		 else if(fuelType=="")
+		 else if(critical=="")
 		 {
-		 alert("Select Fuel Type ");
+		 alert("Select is Critical");
 		 }
+		 
 		 
 	
 }

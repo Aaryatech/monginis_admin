@@ -14,7 +14,7 @@ public class ServDetail {
 	private int groupId; 
 	private int sprId; 
 	private int sprQty; 
-	private int sprRate; 
+	private float sprRate; 
 	private float sprTaxableAmt; 
 	private float sprTaxAmt;   
 	private float total; 
@@ -64,10 +64,10 @@ public class ServDetail {
 	public void setSprQty(int sprQty) {
 		this.sprQty = sprQty;
 	}
-	public int getSprRate() {
+	public float getSprRate() {
 		return sprRate;
 	}
-	public void setSprRate(int sprRate) {
+	public void setSprRate(float sprRate) {
 		this.sprRate = sprRate;
 	}
 	public float getSprTaxableAmt() {

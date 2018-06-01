@@ -10,11 +10,11 @@ public class SparePart {
 	private int groupId;  
 	private String sprUom; 
 	private String sprDate1; 
-	private int sprRate1; 
+	private float sprRate1; 
 	private String sprDate2; 
-	private int sprRate2; 
+	private float sprRate2; 
 	private String sprDate3; 
-	private int sprRate3; 
+	private float sprRate3; 
 	private int sprIscritical; 
 	private int delStatus; 
 	private int sprWarrantyPeriod; 
@@ -62,10 +62,10 @@ public class SparePart {
 	public void setSprDate1(String sprDate1) {
 		this.sprDate1 = sprDate1;
 	}
-	public int getSprRate1() {
+	public float getSprRate1() {
 		return sprRate1;
 	}
-	public void setSprRate1(int sprRate1) {
+	public void setSprRate1(float sprRate1) {
 		this.sprRate1 = sprRate1;
 	}
 	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
@@ -75,10 +75,10 @@ public class SparePart {
 	public void setSprDate2(String sprDate2) {
 		this.sprDate2 = sprDate2;
 	}
-	public int getSprRate2() {
+	public float getSprRate2() {
 		return sprRate2;
 	}
-	public void setSprRate2(int sprRate2) {
+	public void setSprRate2(float sprRate2) {
 		this.sprRate2 = sprRate2;
 	}
 	@JsonFormat(locale = "hi",timezone = "Asia/Kolkata", pattern = "dd-MM-yyyy")
@@ -88,10 +88,10 @@ public class SparePart {
 	public void setSprDate3(String sprDate3) {
 		this.sprDate3 = sprDate3;
 	}
-	public int getSprRate3() {
+	public float getSprRate3() {
 		return sprRate3;
 	}
-	public void setSprRate3(int sprRate3) {
+	public void setSprRate3(float sprRate3) {
 		this.sprRate3 = sprRate3;
 	}
 	public int getSprIscritical() {
