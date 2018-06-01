@@ -1774,6 +1774,8 @@ public class LogisticsController {
 	        	
 	        	 vehicalMaster = restTemplate.postForObject(Constants.url + "getVehicalById", map, VehicalMaster.class); 
 	        	 
+	        	 
+	        	 
 		}catch(Exception e)
 		{
 			System.out.println("errorr  "+e.getMessage());
