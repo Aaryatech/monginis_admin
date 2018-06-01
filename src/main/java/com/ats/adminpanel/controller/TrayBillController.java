@@ -34,6 +34,7 @@ import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.TrayType;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
+import com.ats.adminpanel.model.tray.GetVehicleAvg;
 import com.ats.adminpanel.model.tray.TrayMgtDetail;
 import com.ats.adminpanel.model.tray.TrayMgtDetailBean;
 
@@ -383,5 +384,45 @@ public class TrayBillController {
 				System.out.println(e.getMessage());
 			}
 			return model;
+		}
+		
+		@RequestMapping(value = "/getVehicleAvg", method = RequestMethod.GET)
+		public @ResponseBody List<GetVehicleAvg> getVehicleAvg(HttpServletRequest request,HttpServletResponse response) {
+			List<GetVehicleAvg> vehicleAvgList=null;
+			try {
+				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+			    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
+				String date = request.getParameter("date");
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				RestTemplate restTemplate = new RestTemplate();
+                map.add("date",sdf2.format(sdf.parse(date)));
+				
+                ParameterizedTypeReference<List<GetVehicleAvg>> typeRef = new ParameterizedTypeReference<List<GetVehicleAvg>>() {
+				};
+				ResponseEntity<List<GetVehicleAvg>> responseEntity = restTemplate.exchange(Constants.url + "/traymgt/getAllTrayHeadersByDate",
+						HttpMethod.POST, new HttpEntity<>(map), typeRef);
+				vehicleAvgList =responseEntity.getBody();
+			}
+			catch (Exception e) {
+				e.printStackTrace();
+			}
+			return vehicleAvgList;
+			
+		}
+		@RequestMapping(value = "/showVehAvg", method = RequestMethod.GET)
+		public ModelAndView showVehAvg(HttpServletRequest request, HttpServletResponse response) {
+
+			//Constants.mainAct=17;
+			//Constants.subAct =90;
+
+			ModelAndView model = new ModelAndView("trayBill/vehAvg");
+			try {
+				
+				
+			}
+            catch (Exception e) {
+				// TODO: handle exception
+			}
+		return model;
 		}
 }

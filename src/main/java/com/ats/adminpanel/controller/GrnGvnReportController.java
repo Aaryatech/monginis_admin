@@ -241,6 +241,11 @@ public class GrnGvnReportController {
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
 				List<GrnGvnReportByGrnType>  excelItems= grnGvnByTypeList;
+				float grandTotal=0;
+				float grn1Amt=0;
+				float grn2Amt=0;
+				float grn3Amt=0;
+				float gvnAmt=0;
 				for(int i=0;i<excelItems.size();i++)
 				{
 					  expoExcel=new ExportToExcel();
@@ -250,6 +255,11 @@ public class GrnGvnReportController {
 					
 					float total=excelItems.get(i).getAprAmtGrn1()+excelItems.get(i).getAprAmtGrn2()+excelItems.get(i).getAprAmtGrn3()+
 							+excelItems.get(i).getAprAmtGvn();
+					grandTotal=grandTotal+total;
+					grn1Amt=grn1Amt+excelItems.get(i).getAprAmtGrn1();
+					grn2Amt=grn2Amt+excelItems.get(i).getAprAmtGrn2();
+					grn3Amt=grn3Amt+excelItems.get(i).getAprAmtGrn3();
+					gvnAmt=gvnAmt+excelItems.get(i).getAprAmtGvn();
 					rowData.add(""+excelItems.get(i).getAprAmtGrn1());
 					rowData.add(""+excelItems.get(i).getAprAmtGrn2());
 					rowData.add(""+excelItems.get(i).getAprAmtGrn3());
@@ -261,7 +271,21 @@ public class GrnGvnReportController {
 					exportToExcelList.add(expoExcel);
 					
 				}
+				  expoExcel=new ExportToExcel();
+
+				 rowData=new ArrayList<String>();
+					rowData.add("Total");				rowData.add("");
+
+				rowData.add(""+grn1Amt);
 			
+				rowData.add(""+grn2Amt);
+				rowData.add(""+grn3Amt);
+				rowData.add(""+gvnAmt);
+				
+				rowData.add(""+grandTotal);
+				
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
 				
 				HttpSession session = request.getSession();
 				session.setAttribute("exportExcelList", exportToExcelList);
@@ -337,15 +361,15 @@ public class GrnGvnReportController {
 		try {
 			System.out.println("Inside PDF Table try");
 			table.setWidthPercentage(100);
-			table.setWidths(new float[] { 0.4f, 1.7f, 0.9f,1.0f,0.9f,0.9f,0.9f});
-			Font headFont = new Font(FontFamily.TIMES_ROMAN, 18, Font.NORMAL, BaseColor.BLACK);
-			Font headFont1 = new Font(FontFamily.HELVETICA, 16, Font.BOLD, BaseColor.BLACK);
+			table.setWidths(new float[] { 0.4f, 1.7f, 0.9f,1.0f,0.9f,0.9f,1.0f});
+			Font headFont = new Font(FontFamily.TIMES_ROMAN, 16, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 17, Font.BOLD, BaseColor.BLACK);
 			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
 
 			PdfPCell hcell=new PdfPCell();
 			hcell.setBackgroundColor(BaseColor.LIGHT_GRAY);
 			hcell.setPadding(4);
-			hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
+			hcell = new PdfPCell(new Phrase("Sr.", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(hcell);
 
@@ -378,7 +402,11 @@ public class GrnGvnReportController {
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(hcell);
 			
-			
+			float grandTotal=0;
+			float grn1Amt=0;
+			float grn2Amt=0;
+			float grn3Amt=0;
+			float gvnAmt=0;
 			int index = 0;
 			for (GrnGvnReportByGrnType grnGByType : grnGvnByTypeList) {
 				index++;
@@ -397,17 +425,20 @@ public class GrnGvnReportController {
 				  cell.setPadding(4);
 				table.addCell(cell);
 
-				
+				grn1Amt=grn1Amt+grnGByType.getAprAmtGrn1();
+				grn2Amt=grn2Amt+grnGByType.getAprAmtGrn2();
+				grn3Amt=grn3Amt+grnGByType.getAprAmtGrn3();
+				gvnAmt=gvnAmt+grnGByType.getAprAmtGvn();
 					cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGrn1()), headFont));
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 					cell.setPaddingRight(2);
 					  cell.setPadding(4);
 					table.addCell(cell);
 			
 					cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGrn2()), headFont));
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 					cell.setPaddingRight(2);
 					  cell.setPadding(4);
 					table.addCell(cell);
@@ -415,7 +446,7 @@ public class GrnGvnReportController {
 					
 					cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGrn3()), headFont));
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 					cell.setPaddingRight(2);
 					  cell.setPadding(4);
 					table.addCell(cell);
@@ -423,24 +454,78 @@ public class GrnGvnReportController {
 					
 					cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGvn()), headFont));
 					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 					cell.setPaddingRight(2);
 					  cell.setPadding(4);
 					  
 					  table.addCell(cell);
 				
 					
-				float total=grnGByType.getAprAmtGrn3()+grnGByType.getAprAmtGrn2()+grnGByType.getAprAmtGrn1();
-				
+				float total=grnGByType.getAprAmtGrn3()+grnGByType.getAprAmtGrn2()+grnGByType.getAprAmtGrn1()+grnGByType.getAprAmtGvn();
+				grandTotal=grandTotal+total;
 				cell = new PdfPCell(new Phrase(""+total, headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				  cell.setPadding(5);
+				table.addCell(cell);
+				// FooterTable footerEvent = new FooterTable(table);
+				// writer.setPageEvent(footerEvent);
+			}
+			PdfPCell cell;
+
+			cell = new PdfPCell(new Phrase("", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			  cell.setPadding(4);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("Total:", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setPaddingRight(2);
+			  cell.setPadding(4);
+			table.addCell(cell);
+
+			
+				cell = new PdfPCell(new Phrase(String.valueOf(""+grn1Amt), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 				cell.setPaddingRight(2);
 				  cell.setPadding(4);
 				table.addCell(cell);
-				// FooterTable footerEvent = new FooterTable(table);
-				// writer.setPageEvent(footerEvent);
-			}
+		
+				cell = new PdfPCell(new Phrase(String.valueOf(""+grn2Amt), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
+				
+				
+				cell = new PdfPCell(new Phrase(String.valueOf(""+grn3Amt), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				table.addCell(cell);
+				
+				
+				cell = new PdfPCell(new Phrase(String.valueOf(""+gvnAmt), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPaddingRight(2);
+				  cell.setPadding(4);
+				  
+				  table.addCell(cell);
+			
+			cell = new PdfPCell(new Phrase(""+grandTotal, headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(2);
+			  cell.setPadding(5);
+			table.addCell(cell);
+		
 			document.open();
 			document.add(table);
 			document.close();
