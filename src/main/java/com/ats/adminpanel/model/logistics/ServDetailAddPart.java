@@ -14,7 +14,7 @@ public class ServDetailAddPart {
 	private String vehName;
 	private int sprId; 
 	private String partName;
-	private int sprQty; 
+	private float sprQty; 
 	private float sprRate; 
 	private float sprTaxableAmt; 
 	private float sprTaxAmt;   
@@ -74,10 +74,10 @@ public class ServDetailAddPart {
 	public void setPartName(String partName) {
 		this.partName = partName;
 	}
-	public int getSprQty() {
+	public float getSprQty() {
 		return sprQty;
 	}
-	public void setSprQty(int sprQty) {
+	public void setSprQty(float sprQty) {
 		this.sprQty = sprQty;
 	}
 	public float getSprRate() {
