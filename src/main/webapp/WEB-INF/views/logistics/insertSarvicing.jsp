@@ -3,7 +3,23 @@
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 	 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<style>
+.buttonload {
+    background-color: white; /* Green background */
+    border: none; /* Remove borders */
+    color: #ec268f; /* White text */
+    padding: 12px 20px; /* Some padding */
+    font-size: 15px; /* Set a font-size */
+    display:none;
+}
 
+/* Add a right margin to each icon */
+.fa {
+    margin-left: -12px;
+    margin-right: 8px;
+}
+</style>
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 	<body>
 	
@@ -189,7 +205,9 @@
 											</select>
 									</div> 
 								
-									 	 
+									 	<button class="buttonload" id="loaderSmall">
+                                   <i class="fa fa-spinner fa-spin"></i>Loading
+                                   </button> 
 								</div><br> 
 								
 								<div class="box-content">
@@ -813,6 +831,7 @@
 								$('#servTypeDetail').trigger("chosen:updated");
 								 editItem=1;
 								//alert("editItem " + editItem);
+								$('#loaderSmall').show();
 								$.getJSON('${sparePartByGroupId}', {
 									
 									groupId : data.groupId,
@@ -842,7 +861,7 @@
 									html += '</option>';
 									$('#sprId').html(html);
 									$("#sprId").trigger("chosen:updated");
-															
+									$('#loaderSmall').hide();				
 										});
 							});
 		}
@@ -1174,7 +1193,7 @@ $(document).ready(function() {
 			function() {
 				//alert("makeId"+$(this).val());
 				var groupId=$(this).val();
-			    
+				$('#loaderSmall').show();
 				$.getJSON('${sparePartByGroupId}', {
 					
 					groupId : $(this).val(),
@@ -1192,7 +1211,7 @@ $(document).ready(function() {
 					html += '</option>';
 					$('#sprId').html(html);
 					$("#sprId").trigger("chosen:updated");
-											
+					$('#loaderSmall').hide();					
 						});
 			 
 				 

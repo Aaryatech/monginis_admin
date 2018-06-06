@@ -1459,8 +1459,8 @@ public class LogisticsController {
 		try
 		{
 			addSparePartList = new ArrayList<ServDetailAddPart>();
-			List<SparePart> getAllSparePart = restTemplate.getForObject(Constants.url + "getAllSparePart", List.class);
-			System.out.println("getAllSparePart"+getAllSparePart.toString());
+			//List<SparePart> getAllSparePart = restTemplate.getForObject(Constants.url + "getAllSparePart", List.class);
+			//System.out.println("getAllSparePart"+getAllSparePart.toString());
 			List<Dealer> getAllDealerList = restTemplate.getForObject(Constants.url + "getAllDealerList", List.class);
 			System.out.println("getAllDealerList"+getAllDealerList.toString());
 			List<VehicalMaster> vehicleList = restTemplate.getForObject(Constants.url + "getAllVehicalList", List.class);
@@ -1475,7 +1475,7 @@ public class LogisticsController {
 			System.out.println("labourGroupId"+labourGroupId);
 			
 			model.addObject("dealerList",getAllDealerList); 
-			model.addObject("sprPartList",getAllSparePart);
+			//model.addObject("sprPartList",getAllSparePart);
 			model.addObject("vehicleList",vehicleList);
 			model.addObject("labourGroupId",labourGroupId);
 		}catch(Exception e)
