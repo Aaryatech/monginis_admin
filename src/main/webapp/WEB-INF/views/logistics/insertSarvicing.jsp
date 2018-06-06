@@ -175,8 +175,8 @@
 									</select>
 								</div>
 									
-									<div class="col-md-2">Service Advice Remainder*</div>
-										<div class="col-md-3"><input type="text" id="servAdvRem" name="servAdvRem" placeholder="Service Advice Remainder" class="form-control"  required>
+									<div class="col-md-2"><!-- Service Advice Remainder* --></div>
+										<div class="col-md-3"><input type="hidden" value="" id="servAdvRem" name="servAdvRem" placeholder="Service Advice Remainder" class="form-control"  required>
 									</div>
 							
 							</div><br>
@@ -353,9 +353,9 @@
 							<hr>	
 								<div class="box-content">
 							
-									<div class="col-md-2">Service Done Remainder*</div>
+									<div class="col-md-2"><!-- Service Done Remainder* --></div>
 									<div class="col-md-3"> 
-									<input type="text" id="servDoneRem" name="servDoneRem"  class="form-control" placeholder="Service Done Remainder" required>
+									<input type="hidden" value="0" id="servDoneRem" name="servDoneRem"  class="form-control" placeholder="Service Done Remainder" required>
 									</div>
 								 
 									
@@ -429,7 +429,7 @@
 							 
 									<div class="col-md-2" >Select Pdf</div>
 												<div class="col-md-4"> 
-													<input type="file" id="file" name="attachFile" size="60" required> 
+													<input type="file" id="file" name="attachFile" size="60"  > 
 												</div>
 							
 							</div><br>
@@ -1317,10 +1317,10 @@ function check()
 	{
 	alert("Select Dealer");
 	}
-	else if(file=="")
+	/* else if(file=="")
 	{
 	alert("Select file");
-	}
+	} */
 }
 </script>
 	

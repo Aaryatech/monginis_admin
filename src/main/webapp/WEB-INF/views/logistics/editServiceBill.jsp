@@ -2,7 +2,22 @@
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
-	 
+	 <style>
+.buttonload {
+    background-color: white; /* Green background */
+    border: none; /* Remove borders */
+    color: #ec268f; /* White text */
+    padding: 12px 20px; /* Some padding */
+    font-size: 15px; /* Set a font-size */
+    display:none;
+}
+
+/* Add a right margin to each icon */
+.fa {
+    margin-left: -12px;
+    margin-right: 8px;
+}
+</style>
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 	<body>
@@ -223,7 +238,7 @@
 								</div>
 									
 									<div class="col-md-2">Service Advice Remainder*</div>
-										<div class="col-md-3"><input type="text" id="servAdvRem" name="servAdvRem" value="${editServicing.servAdviseRem}" placeholder="Service Advice Remainder" class="form-control"  required>
+										<div class="col-md-3"><input type="hidden" id="servAdvRem" name="servAdvRem" value="${editServicing.servAdviseRem}" placeholder="Service Advice Remainder" class="form-control"  required>
 									</div>
 							
 							</div><br>
@@ -254,7 +269,9 @@
 											 
 											</select>
 									</div> 
-								
+								<button class="buttonload" id="loaderSmall">
+                                   <i class="fa fa-spinner fa-spin"></i>Loading
+                                   </button> 
 									 	 
 								</div><br> 
 								
@@ -427,7 +444,7 @@
 							
 									<div class="col-md-2">Service Done Remainder*</div>
 									<div class="col-md-3"> 
-									<input type="text" id="servDoneRem" name="servDoneRem" value="${editServicing.servDoneRem}" class="form-control" placeholder="Service Done Remainder" required>
+									<input type="hidden" id="servDoneRem" name="servDoneRem" value="${editServicing.servDoneRem}" class="form-control" placeholder="Service Done Remainder" required>
 									</div>
 								 
 									
@@ -906,6 +923,7 @@
 								document.getElementById("servTypeDetail").value=data.servType;
 								$('#servTypeDetail').trigger("chosen:updated");
 								 editItem=1;
+								 $('#loaderSmall').show();
 								//alert("editItem " + editItem);
 								$.getJSON('${sparePartByGroupId}', {
 									
@@ -936,7 +954,7 @@
 									html += '</option>';
 									$('#sprId').html(html);
 									$("#sprId").trigger("chosen:updated");
-															
+									$('#loaderSmall').hide();				
 										});
 							});
 		}
@@ -1250,7 +1268,7 @@ $(document).ready(function() {
 			function() {
 				//alert("makeId"+$(this).val());
 				var groupId=$(this).val();
-			    
+				$('#loaderSmall').show();
 				$.getJSON('${sparePartByGroupId}', {
 					
 					groupId : $(this).val(),
@@ -1268,7 +1286,7 @@ $(document).ready(function() {
 					html += '</option>';
 					$('#sprId').html(html);
 					$("#sprId").trigger("chosen:updated");
-											
+					$('#loaderSmall').hide();			
 						});
 			 
 				 
