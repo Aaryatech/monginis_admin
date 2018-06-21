@@ -112,7 +112,7 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.text.pdf.parser.Path;
 import com.itextpdf.text.pdf.parser.clipper.Paths;
 
-import javafx.scene.text.TextAlignment;
+//import javafx.scene.text.TextAlignment;
 
 @Controller
 @Scope("session")

@@ -59,20 +59,15 @@
 
 			<div class="box-content">
 				<div class="row">
-                	<div class="form-group">
 						<label class="col-sm-3 col-lg-2	 control-label"> Date</label>
-						<div class="col-sm-6 col-lg-4 controls date_select">
-							<input class="form-control date-picker" id="date"
+						<div class="col-sm-6 col-lg-2 controls date_select">
+							<input class="form-control date-picker" id="date" placeholder="dd-mm-yyyy"
 								name="date" size="30" type="text" />
 						</div>
-					</div>
 
-				</div>
-	<br>
-				<div class="row">
-					<div class="col-md-12" style="text-align: center;">
+					<div class="col-md-2">
 						<button class="btn btn-info" onclick="searchReport()">Search</button>
-					<button class="btn btn-primary" value="PDF" id="PDFButton" onclick="genPdf()">PDF</button>
+					<button class="btn btn-primary" value="PDF" id="PDFButton" onclick="genPdf()" disabled>PDF</button>
 					</div>
 				</div>
 
@@ -172,17 +167,19 @@
 								
 									$('#table_grid td').remove();
 									$('#loader').hide();
-
+									 document.getElementById("PDFButton").disabled=false;
+									  document.getElementById("expExcel").disabled=false;
 									if (data == "") {
 										alert("No records found !!");
 										  document.getElementById("expExcel").disabled=true;
+										  document.getElementById("PDFButton").disabled=true;
 									}
+									
 
 									$
 											.each(
 													data,
 													function(key, report) {
-														  document.getElementById("expExcel").disabled=false;
 															document.getElementById('range').style.display = 'block';
 													    var color=0;
 													    var actualAvg=parseFloat(report.vehRunningKm/report.diesel);
@@ -214,9 +211,13 @@
 													  	tr.append($('<td></td>').html(report.vehRunningKm));
 													  	
 														tr.append($('<td></td>').html(report.diesel));
+														if(actualAvg>0){
 													  	tr.append($('<td></td>').html(actualAvg.toFixed(2)));
+														}
+														else{
+														  	tr.append($('<td></td>').html(0));
 
-
+														}
 													  	tr.append($('<td></td>').html(report.vehMiniAvg));
 
 													  	tr.append($('<td></td>').html(report.vehStandAvg));
@@ -253,10 +254,8 @@
 
 function genPdf()
 {
-	var date = $("#date").val();
-
-   window.open('${pageContext.request.contextPath}/pdfForReport?url=pdf/showSaleReportByDatePdf/'+from_date);
-
+	window
+	.open('${pageContext.request.contextPath}/getVehAvgReportPdf');
 	}
 </script>
 <script type="text/javascript">

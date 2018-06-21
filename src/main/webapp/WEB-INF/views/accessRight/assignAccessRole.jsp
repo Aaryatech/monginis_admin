@@ -148,7 +148,7 @@
 
 										<tr>
 
-
+                                            <c:set var="rId" value=""/>
 											<c:set var="empRoll" value="" />
 											<c:set var="btnClass" value="glyphicon glyphicon-plus" />
 											<c:set var="detail" value="" />
@@ -164,6 +164,7 @@
 												<c:choose>
 													<c:when test="${createdRoleList.roleId==userList.roleId}">
 														<c:set var="empRoll" value="${createdRoleList.roleName}" />
+														<c:set var="rId" value="${createdRoleList.roleId}" />
 
 														<c:set var="btnClass" value="glyphicon glyphicon-edit" />
 														<c:set var="detail" value="glyphicon glyphicon-th-list" />
@@ -182,7 +183,7 @@
 												data-toggle="tooltip" title='<c:out value="${add}" />'
 						  						onclick="editRole('${userList.username}', ${userList.id})"></span>
 												<a
-												href="${pageContext.request.contextPath}/showAssignUserDetail/<c:out value="${userList.id}" />/<c:out value="${userList.username}" />/${empRoll}"
+												href="${pageContext.request.contextPath}/showAssignUserDetail/<c:out value="${userList.id}" />/${rId}/<c:out value="${userList.username}" />/${empRoll}"
 												data-toggle="tooltip" title="Access Detail"> <span
 													class='<c:out value="${detail}" />'></span>
 											</a></td>

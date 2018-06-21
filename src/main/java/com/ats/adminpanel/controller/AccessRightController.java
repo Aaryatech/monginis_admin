@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -42,10 +43,11 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Controller
+@Scope("session")
 public class AccessRightController {
 
 	RestTemplate rest = new RestTemplate();
-	public static AccessRightModuleList accessRightModuleList;
+	public  AccessRightModuleList accessRightModuleList;
 
 	@RequestMapping(value = "/showCreateRole", method = RequestMethod.GET)
 	public ModelAndView showAccessRight(HttpServletRequest request, HttpServletResponse response) {
@@ -183,11 +185,17 @@ public class AccessRightController {
 			AssignRoleDetailList assignRoleDetailList = new AssignRoleDetailList();
 			ObjectMapper mapper = new ObjectMapper();
 			try {
+				int roleId=0;
+				try {
+					roleId=Integer.parseInt(request.getParameter("roleId"));
+				}catch (Exception e) {
+					e.printStackTrace();
+				}
 				String newsLetterJSON = mapper.writeValueAsString(moduleJsonList);
-
+                
 				System.out.println("JSON  " + newsLetterJSON);
 				assignRoleDetailList.setRoleJson(newsLetterJSON);
-
+				assignRoleDetailList.setRoleId(roleId);
 			} catch (JsonProcessingException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -308,6 +316,8 @@ public class AccessRightController {
 		Constants.subAct = 107;
 		try {
 
+			accessRightModuleList = rest.getForObject(Constants.url + "getAllModuleAndSubModule",
+					AccessRightModuleList.class);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("empType", 1);
 
@@ -347,8 +357,8 @@ public class AccessRightController {
 		return "redirect:/showAssignRole";
 	}
 
-	@RequestMapping(value = "/showAssignUserDetail/{userId}/{userName}/{roleName}", method = RequestMethod.GET)
-	public ModelAndView showAssignUserDetail(@PathVariable int userId, @PathVariable String userName,
+	@RequestMapping(value = "/showAssignUserDetail/{userId}/{roleId}/{userName}/{roleName}", method = RequestMethod.GET)
+	public ModelAndView showAssignUserDetail(@PathVariable int userId,@PathVariable int roleId, @PathVariable String userName,
 			@PathVariable String roleName, HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("accessRight/viewAssignRoleDetails");
@@ -362,9 +372,50 @@ public class AccessRightController {
 
 		List<ModuleJson> newModuleList = responseEntity.getBody();
 
+		List<AccessRightModule> accessRightModuleListRes=accessRightModuleList.getAccessRightModuleList();
+		
+		for(int i=0;i<accessRightModuleListRes.size();i++)
+		{	
+			for(int j=0;j<newModuleList.size();j++)
+			{
+				if(newModuleList.get(j).getModuleId()==accessRightModuleListRes.get(i).getModuleId())
+				{
+				   for(int l=0;l<accessRightModuleListRes.get(i).getAccessRightSubModuleList().size();l++)
+				   {
+					   boolean flag=false;
+					   for(int m=0;m<newModuleList.get(j).getSubModuleJsonList().size();m++)
+					   {
+						   if(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getSubModuleId()==newModuleList.get(j).getSubModuleJsonList().get(m).getSubModuleId())
+						   {
+							   flag=true;
+						   }
+					   }
+					   if(flag==false)
+					   {
+						   SubModuleJson sub=new SubModuleJson();
+						   sub.setSubModuleId(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getSubModuleId());
+						   sub.setView("hidden");
+						   sub.setSubModuleMapping(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getSubModuleMapping());
+						   sub.setEditReject("hidden");
+						   sub.setSubModuleDesc(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getSubModuleDesc());
+						   sub.setSubModulName(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getSubModulName());
+						   sub.setType(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getType());
+						   sub.setModuleId(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getModuleId());
+						   sub.setDeleteRejectApprove("hidden");
+						   sub.setAddApproveConfig("hidden");
+						   newModuleList.get(j).getSubModuleJsonList().add(sub);
+					   }
+				   }
+					
+				}
+				
+			}
+			
+		}
 		model.addObject("moduleJsonList", newModuleList);
 		model.addObject("userName", userName);
 		model.addObject("roleName", roleName);
+		model.addObject("roleId", roleId);
 
 		return model;
 	}

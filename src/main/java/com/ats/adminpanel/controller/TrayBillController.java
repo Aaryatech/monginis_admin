@@ -1,5 +1,14 @@
 package com.ats.adminpanel.controller;
 
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -7,11 +16,13 @@ import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
@@ -19,6 +30,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,12 +43,26 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllFrIdName;
 import com.ats.adminpanel.model.AllFrIdNameList;
+import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.TrayType;
+import com.ats.adminpanel.model.ggreports.GrnGvnReportByGrnType;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.tray.GetVehicleAvg;
 import com.ats.adminpanel.model.tray.TrayMgtDetail;
 import com.ats.adminpanel.model.tray.TrayMgtDetailBean;
+import com.ats.adminpanel.util.ItextPageEvent;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 
 @Controller
@@ -385,10 +411,10 @@ public class TrayBillController {
 			}
 			return model;
 		}
-		
+		List<GetVehicleAvg> vehicleAvgList=null;
 		@RequestMapping(value = "/getVehicleAvg", method = RequestMethod.GET)
 		public @ResponseBody List<GetVehicleAvg> getVehicleAvg(HttpServletRequest request,HttpServletResponse response) {
-			List<GetVehicleAvg> vehicleAvgList=null;
+		
 			try {
 				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			    SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd");
@@ -402,12 +428,316 @@ public class TrayBillController {
 				ResponseEntity<List<GetVehicleAvg>> responseEntity = restTemplate.exchange(Constants.url + "/traymgt/getAllTrayHeadersByDate",
 						HttpMethod.POST, new HttpEntity<>(map), typeRef);
 				vehicleAvgList =responseEntity.getBody();
+				
+				List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+				ExportToExcel expoExcel = new ExportToExcel();
+				List<String> rowData = new ArrayList<String>();
+
+				rowData.add("Sr.No.");
+				rowData.add("Vehicle No");
+				rowData.add("Driver Name");
+				rowData.add("Route");
+				rowData.add("Out Kms.");
+				rowData.add("In Kms.");
+				rowData.add("Running Kms.");
+				rowData.add("Diesel");
+				rowData.add("Actual Avg.");
+				rowData.add("Minimum Avg.");
+				rowData.add("Standard Avg.");
+			
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				for (int i = 0; i < vehicleAvgList.size(); i++) {
+					expoExcel = new ExportToExcel();
+					rowData = new ArrayList<String>();
+					rowData.add((i+1)+"");
+
+					rowData.add("" + vehicleAvgList.get(i).getVehNo());
+					rowData.add(vehicleAvgList.get(i).getDriverName());
+					rowData.add(vehicleAvgList.get(i).getRouteName());
+					rowData.add("" + vehicleAvgList.get(i).getVehOutkm());
+					rowData.add("" + vehicleAvgList.get(i).getVehInkm());
+					rowData.add("" + vehicleAvgList.get(i).getVehRunningKm());
+					rowData.add("" + vehicleAvgList.get(i).getDiesel());
+					float avg= vehicleAvgList.get(i).getVehRunningKm()/vehicleAvgList.get(i).getDiesel();
+					if(avg>0)
+					{
+					 rowData.add(SalesReportController.roundUp(avg)+"");
+					}
+					else
+					{
+					 rowData.add(SalesReportController.roundUp(0)+"");
+					}
+					rowData.add("" + vehicleAvgList.get(i).getVehMiniAvg());
+					rowData.add("" + vehicleAvgList.get(i).getVehStandAvg());
+
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+
+				}
+
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "Vehicle Avg.");
+				
+				
 			}
 			catch (Exception e) {
 				e.printStackTrace();
 			}
 			return vehicleAvgList;
 			
+		}
+		@RequestMapping(value = "/getVehAvgReportPdf", method = RequestMethod.GET)
+		public void getVehAvgReportPdf(HttpServletRequest request, HttpServletResponse response) {
+
+			BufferedOutputStream outStream = null;
+			System.out.println("Inside Pdf ");
+
+			Document document = new Document(PageSize.A4,20,20,150,30);
+			// ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+			Calendar cal = Calendar.getInstance();
+
+			String timeStamp = dateFormat.format(cal.getTime());
+			String FILE_PATH = Constants.REPORT_SAVE;
+			File file = new File(FILE_PATH);
+
+			PdfWriter writer = null;
+
+			FileOutputStream out = null;
+			try {
+				out = new FileOutputStream(FILE_PATH);
+			} catch (FileNotFoundException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+			try {
+				
+				String header=
+						" Galdhar Foods Pvt.Ltd\n" + "Factory Add: A-32 Shendra, MIDC, Auraangabad-4331667"
+								+ "\nPhone:0240-2466217, Email: aurangabad@monginis.net";
+			
+
+				String title="Report-For Vehicle Average Details";
+
+				DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+				String reportDate = DF.format(new Date());
+				
+				writer = PdfWriter.getInstance(document, out);
+				
+				ItextPageEvent event=new ItextPageEvent(header,title, reportDate);
+				
+				writer.setPageEvent(event);
+				
+			} catch (DocumentException e) {
+
+				e.printStackTrace();
+			}
+
+			PdfPTable table = new PdfPTable(11);
+			try {
+				System.out.println("Inside PDF Table try");
+				table.setWidthPercentage(100);
+				table.setWidths(new float[] {0.4f,1.7f, 1.9f,1.9f,1.6f,1.6f,1.6f,1.3f,1.3f,1.3f,1.2f});
+				Font headFont = new Font(FontFamily.TIMES_ROMAN, 13, Font.NORMAL, BaseColor.BLACK);
+				Font headFont1 = new Font(FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.BLACK);
+				Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
+
+				PdfPCell hcell=new PdfPCell();
+				hcell.setBackgroundColor(BaseColor.PINK);
+				hcell.setPadding(4);
+				
+				hcell = new PdfPCell(new Phrase("Sr.", headFont1));
+				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(hcell);
+
+				hcell = new PdfPCell(new Phrase("Vehicle No", headFont1));
+				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(hcell);
+
+				
+				hcell = new PdfPCell(new Phrase("Driver Name", headFont1));
+				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(hcell);
+				
+				
+				hcell = new PdfPCell(new Phrase("Route", headFont1));
+				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(hcell);
+				
+				
+				
+				hcell = new PdfPCell(new Phrase("Out Kms.", headFont1));
+				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(hcell);
+				
+				hcell = new PdfPCell(new Phrase("In Kms.", headFont1));
+				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(hcell);
+				
+				
+				hcell = new PdfPCell(new Phrase("Running Kms.", headFont1));
+				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(hcell);
+				
+				hcell = new PdfPCell(new Phrase("Diesel", headFont1));
+				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(hcell);
+				
+				hcell = new PdfPCell(new Phrase("Actual Avg.", headFont1));
+				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(hcell);
+				
+				hcell = new PdfPCell(new Phrase("Minimum Avg.", headFont1));
+				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(hcell);
+				
+				hcell = new PdfPCell(new Phrase("Standard Avg.", headFont1));
+				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(hcell);
+				int index = 0;
+				for (GetVehicleAvg vehicleAvg: vehicleAvgList) {
+					index++;
+					PdfPCell cell;
+
+					cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					  cell.setPadding(4);
+					table.addCell(cell);
+
+					cell = new PdfPCell(new Phrase(vehicleAvg.getVehNo(), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell.setPaddingRight(2);
+					  cell.setPadding(4);
+					table.addCell(cell);
+
+					cell = new PdfPCell(new Phrase(String.valueOf(vehicleAvg.getDriverName()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+						cell.setPaddingRight(2);
+						  cell.setPadding(4);
+						table.addCell(cell);
+				
+						cell = new PdfPCell(new Phrase(String.valueOf(vehicleAvg.getRouteName()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+						cell.setPaddingRight(2);
+						  cell.setPadding(4);
+						table.addCell(cell);
+						
+						
+						cell = new PdfPCell(new Phrase(String.valueOf(vehicleAvg.getVehOutkm()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+						cell.setPaddingRight(2);
+						  cell.setPadding(4);
+						table.addCell(cell);
+						
+						
+						cell = new PdfPCell(new Phrase(String.valueOf(vehicleAvg.getVehInkm()), headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+						cell.setPaddingRight(2);
+						  cell.setPadding(4);
+						  
+					 table.addCell(cell);
+					
+						
+					cell = new PdfPCell(new Phrase(""+vehicleAvg.getVehRunningKm(), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+					cell.setPaddingRight(2);
+					  cell.setPadding(5);
+					table.addCell(cell);
+					
+					cell = new PdfPCell(new Phrase(""+vehicleAvg.getDiesel(), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+					cell.setPaddingRight(2);
+					  cell.setPadding(5);
+					table.addCell(cell);
+					float avg=vehicleAvg.getVehRunningKm()/vehicleAvg.getDiesel();
+					if(avg>0) {
+					cell = new PdfPCell(new Phrase(SalesReportController.roundUp(avg)+"", headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+					cell.setPaddingRight(2);
+					  cell.setPadding(5);
+					table.addCell(cell);
+					}
+					else {
+						cell = new PdfPCell(new Phrase(SalesReportController.roundUp(0)+"", headFont));
+						cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+						cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+						cell.setPaddingRight(2);
+						  cell.setPadding(5);
+						table.addCell(cell);
+					}
+					
+					cell = new PdfPCell(new Phrase(""+vehicleAvg.getVehMiniAvg(), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+					cell.setPaddingRight(2);
+					  cell.setPadding(5);
+					table.addCell(cell);
+					
+					cell = new PdfPCell(new Phrase(""+vehicleAvg.getVehStandAvg(), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+					cell.setPaddingRight(2);
+					  cell.setPadding(5);
+					table.addCell(cell);
+				
+				}
+				
+				document.open();
+				document.add(table);
+				document.close();
+			
+				if (file != null) {
+
+					String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+					if (mimeType == null) {
+
+						mimeType = "application/pdf";
+
+					}
+
+					response.setContentType(mimeType);
+
+					response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+					response.setContentLength((int) file.length());
+
+					InputStream inputStream = null;
+					try {
+						inputStream = new BufferedInputStream(new FileInputStream(file));
+					} catch (FileNotFoundException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
+
+					try {
+						FileCopyUtils.copy(inputStream, response.getOutputStream());
+					} catch (IOException e) {
+						System.out.println("Excep in Opening a Pdf File");
+						e.printStackTrace();
+					}
+				}
+
+			} catch (DocumentException ex) {
+
+				System.out.println("Pdf Generation Error" + ex.getMessage());
+
+				ex.printStackTrace();
+
+			}
 		}
 		@RequestMapping(value = "/showVehAvg", method = RequestMethod.GET)
 		public ModelAndView showVehAvg(HttpServletRequest request, HttpServletResponse response) {

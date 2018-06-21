@@ -17,14 +17,14 @@ public class SparePart {
 	private float sprRate3; 
 	private int sprIscritical; 
 	private int delStatus; 
-	private int sprWarrantyPeriod; 
+	private float sprWarrantyPeriod; 
 	private int makeId; 
 	private int sprType; 
 	private float cgst; 
 	private float sgst; 
 	private float igst; 
-	private int disc; 
-	private int extraCharges;
+	private float disc; 
+	private float extraCharges;
 	public int getSprId() {
 		return sprId;
 	}
@@ -106,12 +106,7 @@ public class SparePart {
 	public void setDelStatus(int delStatus) {
 		this.delStatus = delStatus;
 	}
-	public int getSprWarrantyPeriod() {
-		return sprWarrantyPeriod;
-	}
-	public void setSprWarrantyPeriod(int sprWarrantyPeriod) {
-		this.sprWarrantyPeriod = sprWarrantyPeriod;
-	}
+	
 	public int getMakeId() {
 		return makeId;
 	}
@@ -142,16 +137,24 @@ public class SparePart {
 	public void setIgst(float igst) {
 		this.igst = igst;
 	}
-	public int getDisc() {
+	
+	
+	public float getSprWarrantyPeriod() {
+		return sprWarrantyPeriod;
+	}
+	public float getDisc() {
 		return disc;
 	}
-	public void setDisc(int disc) {
-		this.disc = disc;
-	}
-	public int getExtraCharges() {
+	public float getExtraCharges() {
 		return extraCharges;
 	}
-	public void setExtraCharges(int extraCharges) {
+	public void setSprWarrantyPeriod(float sprWarrantyPeriod) {
+		this.sprWarrantyPeriod = sprWarrantyPeriod;
+	}
+	public void setDisc(float disc) {
+		this.disc = disc;
+	}
+	public void setExtraCharges(float extraCharges) {
 		this.extraCharges = extraCharges;
 	}
 	@Override

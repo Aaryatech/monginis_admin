@@ -47,7 +47,7 @@
 							</h3>
 							
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showSparePartList">Spare Part List</a> <a data-action="collapse" href="#"><i
+								<a href="${pageContext.request.contextPath}/showAllSparePartList">View All Spare Parts</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
 							
@@ -135,7 +135,7 @@
 									
 									<div class="col-md-2">Date1 Rate*</div>
 									<div class="col-md-3">
-									<input class="form-control" id="rate1" placeholder="Date1 Rate" size="16"
+									<input class="form-control" id="rate1" placeholder="Date1 Rate" autofocus  pattern="[+-]?([0-9]*[.])?[0-9]+" size="16" title="Please Enter Numeric Value"
 											type="text" name="rate1" required />
 									</div>
 								
@@ -151,7 +151,7 @@
 									
 									<div class="col-md-2">Date2 Rate*</div>
 									<div class="col-md-3">
-									<input class="form-control" id="rate2" placeholder="Date2 Rate" size="16"
+									<input class="form-control" id="rate2" placeholder="Date2 Rate" autofocus pattern="[+-]?([0-9]*[.])?[0-9]+" size="16" title="Please Enter Numeric Value"
 											type="text" name="rate2" required />
 									</div>
 							
@@ -160,13 +160,13 @@
 							
 									<div class="col-md-2">Date3* </div>
 									<div class="col-md-3">
-									<input class="form-control date-picker" id="date3" placeholder="Date3" size="16"
+									<input class="form-control date-picker" id="date3" placeholder="Date3" size="16"  
 											type="text" name="date3"  required />
 									</div>
 									
 									<div class="col-md-2">Date3 Rate*</div>
 									<div class="col-md-3">
-									<input class="form-control" id="rate3" placeholder="Date3 Rate" size="16"
+									<input class="form-control" id="rate3" placeholder="Date3 Rate" autofocus pattern="[+-]?([0-9]*[.])?[0-9]+"  title="Please Enter Numeric Value" size="16"
 											type="text" name="rate3" required />
 									</div>
 							
@@ -176,13 +176,13 @@
 							
 									<div class="col-md-2">Spare Warranty* </div>
 									<div class="col-md-3">
-									<input class="form-control" id="warnty" placeholder="Spare Warranty" size="16"
+									<input class="form-control" id="warnty" placeholder="Spare Warranty" autofocus pattern="[+-]?([0-9]*[.])?[0-9]+"  title="Please Enter Numeric Value" size="16"
 											type="text" name="warnty"  required />
 									</div>
 						
 									<div class="col-md-2">Cgst* </div>
 									<div class="col-md-3">
-									<input class="form-control" id="cgst" placeholder="Cgst" size="16"
+									<input class="form-control" id="cgst" placeholder="Cgst" autofocus pattern="[+-]?([0-9]*[.])?[0-9]+"  title="Please Enter Numeric Value" size="16"
 											type="text" name="cgst"  required />
 									</div>
 							
@@ -192,13 +192,13 @@
 							
 									<div class="col-md-2">Sgst* </div>
 									<div class="col-md-3">
-									<input class="form-control" id="sgst" placeholder="Sgst" size="16"
+									<input class="form-control" id="sgst" placeholder="Sgst" autofocus pattern="[+-]?([0-9]*[.])?[0-9]+"  title="Please Enter Numeric Value" size="16"
 											type="text" name="sgst"  required />
 									</div>
 						
 									<div class="col-md-2">Igst* </div>
 									<div class="col-md-3">
-									<input class="form-control" id="igst" placeholder="Igst" size="16"
+									<input class="form-control" id="igst" placeholder="Igst" autofocus  pattern="[+-]?([0-9]*[.])?[0-9]+"  title="Please Enter Numeric Value"  size="16"
 											type="text" name="igst"  required />
 									</div>
 							
@@ -208,13 +208,13 @@
 							
 									<div class="col-md-2">Discount* </div>
 									<div class="col-md-3">
-									<input class="form-control" id="disc" placeholder="Discount" size="16"
+									<input class="form-control" id="disc" placeholder="Discount" autofocus pattern="[+-]?([0-9]*[.])?[0-9]+"  title="Please Enter Numeric Value"   size="16"
 											type="text" name="disc"  required />
 									</div>
 						
 									<div class="col-md-2">Extra Charges* </div>
 									<div class="col-md-3">
-									<input class="form-control" id="extra" placeholder="Extra Charges" size="16"
+									<input class="form-control" id="extra" placeholder="Extra Charges" autofocus pattern="[+-]?([0-9]*[.])?[0-9]+" title="Please Enter Numeric Value" size="16"
 											type="text" name="extra"  required />
 									</div>
 							

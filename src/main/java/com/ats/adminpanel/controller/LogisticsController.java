@@ -1113,6 +1113,32 @@ public class LogisticsController {
 		try
 		{
 			
+			List<SparePart> getAllSparePart = restTemplate.getForObject(Constants.url + "getLast50SparePart", List.class);
+			System.out.println("getAllSparePart"+getAllSparePart.toString());
+			List<Make> makeList = restTemplate.getForObject(Constants.url + "getAllMakeList", List.class);
+			System.out.println("makeList"+makeList.toString());
+			List<SprGroup> sprGroupList = restTemplate.getForObject(Constants.url + "getAllSprGroupList", List.class);
+			System.out.println("sprGroupList"+sprGroupList.toString());
+			List<MechType> mechTypeList = restTemplate.getForObject(Constants.url + "getTypeList", List.class);
+			System.out.println("mechTypeList"+mechTypeList.toString());
+			model.addObject("sprGroupList",sprGroupList); 
+			model.addObject("makeList",makeList); 
+			model.addObject("sprPartList",getAllSparePart);
+			model.addObject("mechTypeList",mechTypeList);
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+	@RequestMapping(value = "/showAllSparePartList", method = RequestMethod.GET)
+	public ModelAndView showAllSparePartList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("logistics/sparePartList"); 
+		try
+		{
+			
 			List<SparePart> getAllSparePart = restTemplate.getForObject(Constants.url + "getAllSparePart", List.class);
 			System.out.println("getAllSparePart"+getAllSparePart.toString());
 			List<Make> makeList = restTemplate.getForObject(Constants.url + "getAllMakeList", List.class);
@@ -1177,12 +1203,12 @@ public class LogisticsController {
 			float rate2 = Float.parseFloat(request.getParameter("rate2"));
 			String date3 = request.getParameter("date3"); 
 			float rate3 = Float.parseFloat(request.getParameter("rate3"));
-			int warnty =Integer.parseInt(request.getParameter("warnty"));
+			float warnty =Float.parseFloat(request.getParameter("warnty"));
 			float cgst = Float.parseFloat(request.getParameter("cgst"));
 			float sgst = Float.parseFloat(request.getParameter("sgst"));
 			float igst = Float.parseFloat(request.getParameter("igst"));
-			int disc =Integer.parseInt(request.getParameter("disc"));
-			int extra =Integer.parseInt(request.getParameter("extra"));
+			float disc =Float.parseFloat(request.getParameter("disc"));
+			float extra =Float.parseFloat(request.getParameter("extra"));
 
 			SparePart insertSparePart = new SparePart();
 			if(sprId==null || sprId.equals(""))
@@ -1267,7 +1293,38 @@ public class LogisticsController {
 		
 
 	}
+	@RequestMapping(value = "/editSpareParts/{sprId}", method = RequestMethod.GET)
 	
+	public ModelAndView editSpareParts(@PathVariable int sprId,HttpServletRequest request, HttpServletResponse response) {
+		 
+		ModelAndView model = new ModelAndView("logistics/editSparePart"); 
+	        try
+			{ 	        	
+
+	        	 System.out.println("sprId"+sprId);
+	        	 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
+	        	 map.add("sprId", sprId);
+	        	
+	        	 SparePart editSparePart = restTemplate.postForObject(Constants.url + "getSparePartById", map, SparePart.class);
+			     System.out.println("editSparePart " + editSparePart); 
+				List<MechType> mechTypeList = restTemplate.getForObject(Constants.url + "getTypeList", List.class);
+				System.out.println("mechTypeList"+mechTypeList.toString());
+				List<Make> makeList = restTemplate.getForObject(Constants.url + "getAllMakeList", List.class);
+				System.out.println("makeList"+makeList.toString());
+		        model.addObject("sparePart", editSparePart);
+			    model.addObject("mechTypeList", mechTypeList);
+			    model.addObject("makeList", makeList);
+
+		}catch(Exception e)
+		{
+			System.out.println("errorr  "+e.getMessage());
+			e.printStackTrace();
+		}
+	         
+		return model;
+		
+
+	}
 	//----------------------------------------------Servicing-----------------------------------------------------------
 	List<ServDetailAddPart> addSparePartList = new ArrayList<ServDetailAddPart>();
 	
@@ -1558,9 +1615,9 @@ public class LogisticsController {
 	        	float discDetail = Float.parseFloat(request.getParameter("discDetail"));
 	        	float extraChargeDetail = Float.parseFloat(request.getParameter("extraChargeDetail"));
 	        	int servTypeDetail = Integer.parseInt(request.getParameter("servTypeDetail")); 
-	        	int discPer = Integer.parseInt(request.getParameter("discPer"));
-	        	int extraChargePer = Integer.parseInt(request.getParameter("extraChargePer"));
-	        	int taxPer = Integer.parseInt(request.getParameter("taxPer"));
+	        	float discPer = Float.parseFloat(request.getParameter("discPer"));
+	        	float extraChargePer = Float.parseFloat(request.getParameter("extraChargePer"));
+	        	float taxPer = Float.parseFloat(request.getParameter("taxPer"));
 	        	 
 	        	 ServDetailAddPart addSparePart = new ServDetailAddPart();
 	        	 addSparePart.setSprId(sprId);

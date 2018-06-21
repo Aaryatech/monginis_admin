@@ -69,9 +69,10 @@
 
 			</div>
 			<div class=" box-content">
-				<%-- <form id="validation-form" action="submitCreateRole" class="form-horizontal" 
+				 <form id="validation-form" action="${pageContext.request.contextPath}/submitCreateRole" class="form-horizontal" 
 					enctype="multipart/form-data" method="post">
- --%>
+
+              <input type="hidden" name="roleId" id="roleId" value="${roleId}"/>
 				<!-- <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Enter Role
 										Name</label>
@@ -88,7 +89,7 @@
 					<div class="col-md-4">
 						<input type="text" name="userName" id="userName"
 							placeholder="User Name" class="form-control"
-							data-rule-required="true" value="${userName}" } disabled/>
+							data-rule-required="true" value="${userName}" readonly/>
 					</div>
 					<br />
 
@@ -99,7 +100,7 @@
 					<div class="col-md-4">
 						<input type="text" name="roleName" id="roleName"
 							placeholder="Role Name" class="form-control"
-							data-rule-required="true" value="${roleName}" } disabled />
+							data-rule-required="true" value="${roleName}" readonly />
 					</div>
 					<br />
 
@@ -193,14 +194,14 @@
 															<td><input type="checkbox"
 																class="check${moduleJsonList.moduleId}"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																value="view" disabled checked></td>
+																value="view"  checked></td>
 														</c:when>
 														<c:when test="${subModuleJsonList.view=='hidden'}">
 
 															<td><input type="checkbox"
 																class="check${moduleJsonList.moduleId}"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																value="view" disabled></td>
+																value="view" ></td>
 
 
 														</c:when>
@@ -212,14 +213,14 @@
 															<td><input type="checkbox"
 																class="check${moduleJsonList.moduleId}"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																value="add" disabled checked></td>
+																value="add"  checked></td>
 														</c:when>
 														<c:when test="${subModuleJsonList.addApproveConfig=='hidden'}">
 
 														<td><input type="checkbox"
 																class="check${moduleJsonList.moduleId}"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																value="add" disabled  ></td>
+																value="add"   ></td>
 
 
 														</c:when>
@@ -231,13 +232,13 @@
 															<td><input type="checkbox"
 																class="check${moduleJsonList.moduleId}"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																value="edit" disabled checked></td>
+																value="edit"  checked></td>
 														</c:when>
 														<c:when test="${subModuleJsonList.editReject=='hidden'}">
 															<td><input type="checkbox"
 																class="check${moduleJsonList.moduleId}"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																value="edit" disabled  ></td>
+																value="edit"   ></td>
 														</c:when>
 
 													</c:choose>
@@ -247,14 +248,14 @@
 															<td><input type="checkbox"
 																class="check${moduleJsonList.moduleId}"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																value="delete" disabled checked></td>
+																value="delete"  checked></td>
 														</c:when>
 														<c:when test="${subModuleJsonList.deleteRejectApprove=='hidden'}">
 
 															<td><input type="checkbox"
 																class="check${moduleJsonList.moduleId}"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																value="delete" disabled  ></td>
+																value="delete"   ></td>
 
 
 														</c:when>
@@ -327,13 +328,13 @@
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="view" disabled checked></td>
+																id="select_to_assign" value="view"  checked></td>
 														</c:when>
 														<c:when test="${subModuleJsonList.view=='hidden'}">
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="view" disabled  ></td>
+																id="select_to_assign" value="view"   ></td>
 
 
 														</c:when>
@@ -344,13 +345,13 @@
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="add" disabled checked></td>
+																id="select_to_assign" value="add"  checked></td>
 														</c:when>
 														<c:when test="${subModuleJsonList.addApproveConfig=='hidden'}">
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="add" disabled  ></td>
+																id="select_to_assign" value="add"   ></td>
 
 
 														</c:when>
@@ -361,12 +362,12 @@
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="edit" disabled checked></td>
+																id="select_to_assign" value="edit"  checked></td>
 														</c:when>
 														<c:when test="${subModuleJsonList.editReject=='hidden'}">
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="edit" disabled  ></td>
+																id="select_to_assign" value="edit"   ></td>
 														</c:when>
 
 													</c:choose>
@@ -375,13 +376,13 @@
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="delete" disabled checked></td>
+																id="select_to_assign" value="delete"  checked></td>
 														</c:when>
 														<c:when test="${subModuleJsonList.deleteRejectApprove=='hidden'}">
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="delete" disabled  ></td>
+																id="select_to_assign" value="delete"   ></td>
 
 
 														</c:when>
@@ -455,13 +456,13 @@
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="view" disabled checked></td>
+																id="select_to_assign" value="view"  checked></td>
 														</c:when>
 														<c:when test="${subModuleJsonList.view=='hidden'}">
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="view" disabled  ></td>
+																id="select_to_assign" value="view"   ></td>
 
 
 														</c:when>
@@ -472,13 +473,13 @@
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="add" disabled checked></td>
+																id="select_to_assign" value="add"  checked></td>
 														</c:when>
 														<c:when test="${subModuleJsonList.addApproveConfig=='hidden'}">
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="add" disabled  ></td>
+																id="select_to_assign" value="add"   ></td>
 
 
 														</c:when>
@@ -489,12 +490,12 @@
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="edit" disabled checked></td>
+																id="select_to_assign" value="edit"  checked></td>
 														</c:when>
 														<c:when test="${subModuleJsonList.editReject=='hidden'}">
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="edit" disabled  ></td>
+																id="select_to_assign" value="edit"   ></td>
 														</c:when>
 
 													</c:choose>
@@ -503,13 +504,13 @@
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="delete" disabled checked></td>
+																id="select_to_assign" value="delete"  checked></td>
 														</c:when>
 														<c:when test="${subModuleJsonList.deleteRejectApprove=='hidden'}">
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="delete" disabled  ></td>
+																id="select_to_assign" value="delete"   ></td>
 
 
 														</c:when>
@@ -583,13 +584,13 @@
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="view" disabled checked></td>
+																id="select_to_assign" value="view"  checked></td>
 														</c:when>
 														<c:when test="${subModuleJsonList.view=='hidden'}">
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="view" disabled  ></td>
+																id="select_to_assign" value="view"   ></td>
 
 
 														</c:when>
@@ -600,13 +601,13 @@
 
 															<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="add" disabled checked></td>
+																id="select_to_assign" value="add"  checked></td>
 														</c:when>
 														<c:when test="${subModuleJsonList.addApproveConfig=='hidden'}">
 
 																<td><input type="checkbox"
 																name="${subModuleJsonList.subModuleId}${subModuleJsonList.moduleId}"
-																id="select_to_assign" value="add" disabled></td>
+																id="select_to_assign" value="add" ></td>
 
 
 														</c:when>
@@ -653,17 +654,17 @@
 					</div>
 				</div>
 
-				<!-- <div class="row">
+				<div class="row">
 							<div class="col-md-12" style="text-align: center">
 								  <input type="submit"
 									class="btn btn-info" 
 									value="Submit" >
 									  
 							</div>
-						</div> -->
+						</div> 
 
 
-				<%-- </form> --%>
+				 </form> 
 			</div>
 
 
@@ -673,7 +674,7 @@
 	<!-- END Main Content -->
 
 	<footer>
-	<p>2017 © Monginis.</p>
+	<p>2018 © Monginis.</p>
 	</footer>
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i

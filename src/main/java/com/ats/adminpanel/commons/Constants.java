@@ -5,8 +5,8 @@ import java.io.File;
 public class Constants {
 	
 	public static final String url="http://132.148.151.41:8080/webapi/";
-	//public static final String url = "http://132.148.143.124:8080/webapi/";
-	//public static final String url="http://localhost:8091/";
+	//public static final String url = "http://132.148.151.41:8080/webapi/";
+	//public static final String url="http://localhost:8099/";
 	public static final String SPCAKE_IMAGE_URL = "http://132.148.151.41:8080/uploads/MSPCAKE/";
 	public static final String FR_IMAGE_URL = "http://132.148.151.41:8080/uploads/FR/";
 
