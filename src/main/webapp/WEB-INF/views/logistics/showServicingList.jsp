@@ -137,7 +137,12 @@
 													 	 
 																
 						<td><a href="${pageContext.request.contextPath}/viewServicingDetail/${servHeaderList.servId}/${flag}" class="action_btn" >
-						<abbr title="detailed"><i class="fa fa-list"></i></abbr></a></td>
+						<abbr title="detailed"><i class="fa fa-list"></i></abbr></a>
+							
+							<a href="${pageContext.request.contextPath}/deleteServicing/${servHeaderList.servId}/${flag}" onClick="return confirm('Are you sure want to delete this record');"   >
+						<span class="glyphicon glyphicon-remove" > </span></a>
+							 
+						</td>
 						
 																</tr>
 												</c:forEach>

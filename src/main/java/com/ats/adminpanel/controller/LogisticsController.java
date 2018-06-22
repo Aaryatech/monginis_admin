@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Scope; 
-import org.springframework.stereotype.Controller;
+import org.springframework.stereotype.Controller; 
 import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -42,6 +42,7 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.AllRoutesListResponse;
+import com.ats.adminpanel.model.ErrorMessage;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
@@ -1349,6 +1350,38 @@ public class LogisticsController {
 		return model;
 
 	}
+	
+	@RequestMapping(value = "/deleteServicing/{servId}/{flag}", method = RequestMethod.GET)
+	public String deleteServicing(@PathVariable int servId,@PathVariable int flag, HttpServletRequest request, HttpServletResponse response) {
+
+		 
+		 
+		try
+		{
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+				map.add("servId", servId);
+				ErrorMessage errorMessage = restTemplate.postForObject(Constants.url + "deleteServicing",map, ErrorMessage.class);
+				System.out.println(errorMessage);
+		 
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		String ret = new String();
+		
+		if(flag==0)
+		{
+			ret="redirect:/showServicingList";
+		}
+		else
+		{
+			ret="redirect:/showServicingListToDirector";
+		}
+		return ret;
+
+	}
+	
+ 
 	
 	@RequestMapping(value = "/showServicingListToDirector", method = RequestMethod.GET)
 	public ModelAndView showServicingListToDirector(HttpServletRequest request, HttpServletResponse response) {
