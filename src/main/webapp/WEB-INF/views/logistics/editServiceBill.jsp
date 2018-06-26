@@ -1395,7 +1395,30 @@ function check()
 	 
 }
 
-  
+$(document).ready(function() { 
+	$('#servType').change(
+			function() {
+				//alert("typeId"+$(this).val());
+				var servType=$(this).val();
+			    
+					if(servType==2)
+					{
+						//alert("in if"); 
+					document.getElementById("km").style.visibility="hidden"; 
+					document.getElementById("servDoneKm").required=0; 
+					document.getElementById("nextDueKm").required=0;
+					}
+					else if(servType==1)
+					{
+						//alert("in else");
+					document.getElementById("km").style.visibility="visible";  
+					document.getElementById("servDoneKm").required=""; 
+					document.getElementById("nextDueKm").required="";
+					}			
+			 
+		})
+		 		 
+});
 			 
 </script>
 	

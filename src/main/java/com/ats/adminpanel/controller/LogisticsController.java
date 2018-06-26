@@ -1905,7 +1905,7 @@ public class LogisticsController {
 			String typeName = request.getParameter("typeName");
 			int servDoneKm=0;
 			int nextDueKm=0;
-			if(type==1)
+			if(type==1 && servType==1)
 			{
 				servDoneKm =Integer.parseInt(request.getParameter("servDoneKm"));
 				nextDueKm =Integer.parseInt(request.getParameter("nextDueKm"));
@@ -1987,7 +1987,7 @@ public class LogisticsController {
 			
 			if(res!=null)
 			{
-				 if(res.getServType2()==1 && res.getTypeId()==1)
+				 if(res.getServType2()==1 && res.getTypeId()==1 && res.getServType()==1)
 				 {
 					 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
 		        	 map.add("vehicalId", servHeader.getVehId()); 
@@ -2341,7 +2341,7 @@ public class LogisticsController {
 			String typeName = request.getParameter("typeName");
 			int servDoneKm=0;
 			int nextDueKm=0;
-			if(type==1)
+			if(type==1 && servType==1)
 			{
 				servDoneKm =Integer.parseInt(request.getParameter("servDoneKm"));
 				nextDueKm =Integer.parseInt(request.getParameter("nextDueKm"));
@@ -2428,7 +2428,7 @@ public class LogisticsController {
 			
 			if(res!=null)
 			{
-				if(res.getServType2()==1 && res.getTypeId()==1)
+				if(res.getServType2()==1 && res.getTypeId()==1 && res.getServType()==1)
 				 {
 					 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object >();
 		        	 map.add("vehicalId", servHeader.getVehId()); 
