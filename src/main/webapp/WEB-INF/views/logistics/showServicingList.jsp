@@ -69,10 +69,11 @@
 										<th>Sr.No.</th>
 										
 										<th>Bill No</th>
-										<th>Bill Date</th>
+										<th style="width:100px">Bill Date</th>
 										<th>Type</th>
 										<th>Vehicle No. Or Machine Name</th>
 										<th>Type</th>
+										<th>Servicing KM</th>
 										<th>Taxable Amt</th>
 										<th>Tax Amt</th>
 										<th>Total</th>
@@ -128,9 +129,21 @@
 																		 
 																	</c:choose>
 																</c:forEach>
-																<td align="left"><c:out value="${servHeaderList.taxableAmt}" /></td>
-																<td align="left"><c:out value="${servHeaderList.taxAmt}" /></td>
-																<td align="left"><c:out value="${servHeaderList.total}" /></td>
+																
+																<c:choose>
+																	<c:when test="${servHeaderList.servType2==1}">
+																	<td style="text-align:right;"><c:out value="${servHeaderList.servDoneKm}" /></td>
+																	</c:when>
+																	
+																	<c:when test="${servHeaderList.servType2==2}">
+																	  <td style="text-align:center;"><c:out value="-" /></td>
+																	
+																	</c:when> 
+																</c:choose>
+																
+																<td style="text-align:right;"><c:out value="${servHeaderList.taxableAmt}" /></td>
+																<td style="text-align:right;"><c:out value="${servHeaderList.taxAmt}" /></td>
+																<td style="text-align:right;"><c:out value="${servHeaderList.total}" /></td>
 																<td align="left"><c:out value="${status}" /></td>
 																
 													   
@@ -283,6 +296,7 @@
 										<th>Type</th>
 										<th>Vehicle/Machine</th>
 										<th>Type</th>
+										<th>Servicing KM</th>
 										<th>Taxable Amt</th>
 										<th>Tax Amt</th>
 										<th>Total</th>
@@ -524,6 +538,15 @@
 														}
 														
 												}
+											  	
+											  	 if(itemList.servType2==1)
+												 {
+											  		tr.append($('<td style="text-align:right"></td>').html(itemList.servDoneKm));
+												 }
+											 	else
+												 {
+											 		tr.append($('<td style="text-align:right"></td>').html('-'));
+												 }
 											  	
 											  	tr.append($('<td style="text-align:right"></td>').html((itemList.taxableAmt).toFixed(2)));
 											  	tr.append($('<td style="text-align:right"></td>').html((itemList.taxAmt).toFixed(2)));

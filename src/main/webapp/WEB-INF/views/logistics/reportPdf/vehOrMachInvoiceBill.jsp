@@ -54,6 +54,7 @@ th {
 										<th style="text-align:center;">Type</th>
 										<th style="text-align:center;">Vehicle/Machine</th>
 										<th style="text-align:center;">Type</th> 
+										<th style="text-align:center;">Servicing KM</th> 
 										<th style="text-align:center;">Taxable Amt</th> 
 										<th style="text-align:center;">Disc Amt</th> 
 										<th style="text-align:center;">Extra Amt</th> 
@@ -94,6 +95,16 @@ th {
 															</c:when> 
 														</c:choose>
 													</c:forEach> 
+													
+											<c:choose>
+										  		<c:when test="${staticlist.servType2==1}">
+										  			<td style="text-align:right;"><c:out value="${staticlist.servDoneKm}" /></td>
+										  		</c:when>
+										  		<c:otherwise>
+										  			<td style="text-align:center;"><c:out value="-" /></td>
+										  		</c:otherwise>
+								  			</c:choose>
+								  	
 													<td  style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value = "${staticlist.taxableAmt}"/></td>
 													<c:set var="taxableAmt"  value="${taxableAmt+staticlist.taxableAmt }"/>
 													<td  style="text-align:right"><fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value = "${staticlist.totalDisc}"/> </td>
@@ -109,7 +120,7 @@ th {
 												</tr>
 												</c:forEach>
 								  <tr>
-								  <td colspan='6'><b>Total</b></td>
+								  <td colspan='7'><b>Total</b></td>
 								  
 								    <td style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value = "${taxableAmt}"/></b></td>
 								    <td style="text-align:right"><b><fmt:formatNumber type = "number"  maxFractionDigits = "2" minFractionDigits="2" value = "${discAmt}"/></b></td>

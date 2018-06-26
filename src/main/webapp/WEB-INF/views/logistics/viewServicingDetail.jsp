@@ -140,11 +140,7 @@
 													<input type="text" name="vehNo" id="vehNo" value="${viewServicingDetail.vehNo}" class="form-control" readonly>
 								
 													</div>
-													<div class="col-md-2">Service Advice Remainder </div>
-								<div class="col-md-3">
-									<input type="text" name="servAdviseRem"id="servAdviseRem" class="form-control" 
-									value="${viewServicingDetail.servAdviseRem}" readonly>
-								</div>
+													 
 								 
 							</div> <br/>
 							 
@@ -198,11 +194,11 @@
 						<c:choose>
 							<c:when test="${viewServicingDetail.servType2==1}">
 								<div class="box-content">
-								<div class="col-md-2" >Service Done Remainder</div>
+								<div class="col-md-2" >Service Done KM</div>
 									<div class="col-md-4">
 										  
-										<input type="text" name="servDoneRem" id="servDoneRem" class="form-control" 
-											value="${viewServicingDetail.servDoneRem}" readonly>
+										<input type="text" name="servDoneKm" id="servDoneKm" class="form-control" 
+											value="${viewServicingDetail.servDoneKm}" readonly>
 										
 									</div>
 								<div class="col-md-2" >Part Total</div>
