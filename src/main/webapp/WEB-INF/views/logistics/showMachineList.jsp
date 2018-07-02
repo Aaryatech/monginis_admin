@@ -157,7 +157,7 @@
 							
 									<div class="col-md-2">Last Cleaning Date* </div>
 									<div class="col-md-3">
-									<input class="form-control date-picker" id="lastCleanDate" placeholder="Last Cleaning Date" size="16"
+									<input class="form-control date-picker" id="lastCleanDate" onblur="nextCleaning();" placeholder="Last Cleaning Date" size="16"
 											type="text" name="lastCleanDate"  required />
 									</div>
 						
@@ -218,12 +218,12 @@
 											type="text" name="alertAmcDate"  required />
 									</div>
 							
-							</div><br>
+							</div><br><br>
 							  
 								
 							<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-										<input type="submit" class="btn btn-primary" value="Add New Machine" onclick="validation()" >
+										<input type="submit" class="btn btn-primary" value="Submit" onclick="validation()" >
 										<input type="button" class="btn btn-primary" value="Cancel" id="cancel" onclick="cancel1()" disabled>
 <!-- 										<button type="button" class="btn">Cancel</button>
  -->									</div>
@@ -747,6 +747,7 @@
 
 			var tommarowString =  yesterdayDate.getDate()+ '-' + (yesterdayDate.getMonth() + 1) + '-' +yesterdayDate.getFullYear();
 			document.getElementById("nextCleanDate").value=tommarowString; 
+			alertDate();
 		}
 		 
 		 function alertDate() {
