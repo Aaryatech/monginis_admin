@@ -57,8 +57,8 @@ public class ItextPageEvent extends PdfPageEventHelper {
             header.setLockedWidth(true);
             header.getDefaultCell().setFixedHeight(40);
             header.getDefaultCell().setBorder(Rectangle.BOTTOM);
-            header.getDefaultCell().setBorderColor(BaseColor.LIGHT_GRAY);
-
+            header.getDefaultCell().setBorderColor(BaseColor.BLACK);
+            header.getDefaultCell().setBackgroundColor(BaseColor.PINK);
 //            add image
 //           Image logo;
 //		try {
@@ -82,9 +82,8 @@ public class ItextPageEvent extends PdfPageEventHelper {
             text.setHorizontalAlignment(PdfPCell.ALIGN_CENTER);
             text.setVerticalAlignment(PdfPCell.ALIGN_CENTER);
             text.setBorder(Rectangle.NO_BORDER);
-            text.addElement(new Phrase(StrHeader, new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE)));
-            text.addElement(new Phrase("\n"+strTitle, new Font(Font.FontFamily.HELVETICA, 8)));
-            text.addElement(new Phrase("\n"+strDate, new Font(Font.FontFamily.HELVETICA, 8)));
+            text.addElement(new Phrase(StrHeader, new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.BOLD, BaseColor.BLUE)));
+            text.addElement(new Phrase("\n        "+strTitle +"   Date:  "+strDate, new Font(Font.FontFamily.HELVETICA, 9, Font.BOLD, BaseColor.BLACK)));
 
             header.addCell(text);
             

@@ -337,11 +337,11 @@ public class GrnGvnReportController {
 		try {
 			
 			String header=
-					" Galdhar Foods Pvt.Ltd\n" + "Factory Add: A-32 Shendra, MIDC, Auraangabad-4331667"
-							+ "\nPhone:0240-2466217, Email: aurangabad@monginis.net";
+					"                                           Galdhar Foods Pvt.Ltd\n" + "          Factory Add: A-32 Shendra, MIDC, Aurangabad-4331667"
+							+ "\n              Phone:0240-2466217, Email: aurangabad@monginis.net";
 		
 
-			String title="Report-For GRN GVN BY GRN TYPE";
+			String title="                 Report-For GRN GVN BY GRN TYPE";
 
 			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
 			String reportDate = DF.format(new Date());
@@ -362,46 +362,55 @@ public class GrnGvnReportController {
 			System.out.println("Inside PDF Table try");
 			table.setWidthPercentage(100);
 			table.setWidths(new float[] { 0.4f, 1.7f, 0.9f,1.0f,0.9f,0.9f,1.0f});
-			Font headFont = new Font(FontFamily.TIMES_ROMAN, 16, Font.NORMAL, BaseColor.BLACK);
-			Font headFont1 = new Font(FontFamily.HELVETICA, 17, Font.BOLD, BaseColor.BLACK);
+			Font headFont = new Font(FontFamily.TIMES_ROMAN, 15, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 16, Font.BOLD, BaseColor.BLACK);
 			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
-
+			headFont1.setColor(BaseColor.WHITE);
+			
 			PdfPCell hcell=new PdfPCell();
-			hcell.setBackgroundColor(BaseColor.LIGHT_GRAY);
-			hcell.setPadding(4);
+			hcell.setBackgroundColor(BaseColor.PINK);
+			hcell.setPaddingTop(4);hcell.setPaddingBottom(4);
 			hcell = new PdfPCell(new Phrase("Sr.", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
 			hcell = new PdfPCell(new Phrase("Franchise Name", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
 			
 			hcell = new PdfPCell(new Phrase("GRN 1", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 			
 			
 			hcell = new PdfPCell(new Phrase("GRN 2", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 			
 			
 			
 			hcell = new PdfPCell(new Phrase("GRN 3", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 			
 			hcell = new PdfPCell(new Phrase("GVN", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 			
 			
 			hcell = new PdfPCell(new Phrase("Total", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
+			table.setHeaderRows(1);
+
 			float grandTotal=0;
 			float grn1Amt=0;
 			float grn2Amt=0;
