@@ -163,7 +163,7 @@ select {
 							<div class="box">
 								<div class="box-title">
 									<h3>
-										<i class="fa fa-bars"></i> Configure Franchisee
+										<i class="fa fa-bars"></i> Configure New Item 
 									</h3>
 									<div class="box-tool">
 										<a href="${pageContext.request.contextPath}/configureFranchiseesList">Back to
@@ -176,22 +176,15 @@ select {
 								<c:set var="allFranchiseeAndMenuList"
 									value="${allFranchiseeAndMenuList}" />
 								<div class="box-content">
-									<form action="addFranchiseeProcess" class="form-horizontal"
+									<form action="${pageContext.request.contextPath}/configureItems" class="form-horizontal"
 										id="validation-form" method="post">
-
-
-
-
-
-										<div class="form-group">
+                                      <div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Franchisee</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<select data-placeholder="Select Franchisee" name="fr_id"
+												<select  name="fr_id[]"
 													class="form-control chosen" tabindex="-1" id="fr_id"
-													data-rule-required="true" onchange="onFridChange(this.value)">
-													<option value=""> </option>
+													data-rule-required="true" multiple="multiple">
 													<optgroup label="All Franchisee">
-														<option value=""></option>
 														<c:forEach
 															items="${allFranchiseeAndMenuList.getAllFranchisee()}"
 															var="franchiseeList">
@@ -207,17 +200,21 @@ select {
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Menu</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<select data-placeholder="Select Menu" name="menu"
+												<select data-placeholder="Select Menu" name="menu" 
 													class="form-control chosen" tabindex="-1" id="menu"
 													data-rule-required="true">
+													<option value="">Select Menu</option>
 	                                             <optgroup label="All Menus">                                                     
 
-													</optgroup>
+												
+   	                                    <c:forEach items="${allFranchiseeAndMenuList.getAllMenu()}"
+															var="menuList">
+															<option value="${menuList.menuId}">${menuList.menuTitle}</option>
 
+														</c:forEach>	</optgroup>
 												</select>
 											</div>
 										</div>
-
 											<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Items</label>
 											<div class="col-sm-9 col-lg-10 controls">
@@ -229,152 +226,7 @@ select {
 												
 											</div>
 										</div>
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Order Frequency</label>
-											<div class="col-sm-9 col-lg-10 controls">
-												<select data-placeholder="Select Type" name="typeselector"
-													class="form-control chosen" tabindex="-1"
-													data-rule-required="true" id="typeselector">
-													<option value=""> </option>
-													<optgroup label="Types">
-														<option value=""></option>
-														<option value="1">Daily Basis</option>
-														<option value="2">Date Basis</option>
-														<option value="3">Day Basis</option>
-													</optgroup>
-
-												</select>
-											</div>
-										</div>
-
-										<div id="2" class="formgroup" style="display: none">
-											<label class="col-sm-3 col-lg-2 control-label">Date</label>
-											<div class="col-sm-9 col-lg-10 controls">
-											<select class="form-control chosen" name="date[]" id="date" multiple="multiple">
-													<option value="0">Select Date</option>
-													 <c:forEach var = "i" begin = "1" end = "32">
-       													<option value="${i}">${i}</option>
-                                                     </c:forEach>
-												</select>
-											</div>
-										</div>
-
-										<div id="3" class="formgroup" style="display: none">
-											<label class="col-sm-3 col-lg-2 control-label">Day</label>
-											<div class="col-sm-9 col-lg-10 controls">
-												<select class="form-control chosen" name="day[]" id="day" multiple="multiple">
-													<option value="">Select Day</option>
-													<option value="1">Sunday</option>
-													<option value="2">Monday</option>
-													<option value="3">Tuesday</option>
-													<option value="4">Wednesday</option>
-													<option value="5">Thursday</option>
-													<option value="6">Friday</option>
-													<option value="7">Saturday</option>
-												</select>
-											</div>
-
-										</div>
-
 										&nbsp;
-
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">From
-												Time</label>
-											<div class="col-sm-9 col-lg-10 controls">
-												<select data-placeholder="From Time" name="frm_time"
-													class="form-control chosen" tabindex="-1" id="frm_time"
-													data-rule-required="true">
-													<option value=""> </option>
-													<optgroup label="Select From Time">
-														<option value=""></option>
-
-
-
-														<%
-	                     DateFormat tipe = new SimpleDateFormat("hh:mm a");
-
-	                     Date date = new Date();                      // timestamp now
-	                     Calendar cal = Calendar.getInstance();       // get calendar instance
-	                     cal.setTime(date);                           // set cal to date
-	                     cal.set(Calendar.HOUR_OF_DAY, 23);            // set hour to midnight
-	                     cal.set(Calendar.MINUTE,45);                 // set minute in hour
-	                     cal.set(Calendar.SECOND, 0);                 // set second in minute
-                       	cal.set(Calendar.MILLISECOND, 0);  
-
-                        %>
-														<c:forEach var="i" begin="1" end="32">
-															<c:set var="time" value="${i}" />
-															<c:forEach var="j" begin="1" end="3">
-
-
-																<% 
-                                    cal.add(Calendar.MINUTE, 15);
-                                   //out.print(tipe.format(cal.getTime()));
-                                   String time=tipe.format(cal.getTime());
-                           
-
-                              %>
-             			<option value="<%=time%>"><%=time%></option>
-
-															</c:forEach>
-
-														</c:forEach>
-													</optgroup>
-
-												</select>
-											</div>
-										</div>
-										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">To
-												Time</label>
-											<div class="col-sm-9 col-lg-10 controls">
-												<select data-placeholder="To Time" name="to_time"
-													class="form-control chosen" tabindex="-1" id="to_time"
-													data-rule-required="true">
-													<optgroup label="Select To Time">
-														<option value=""></option>
-
-														<%
-	                     DateFormat tipe1 = new SimpleDateFormat("hh:mm a");
-
-	                     Date date1 = new Date();                      // timestamp now
-	                     Calendar cal1 = Calendar.getInstance();       // get calendar instance
-	                     cal.setTime(date1);                           // set cal to date
-	                     cal.set(Calendar.HOUR_OF_DAY, 23);            // set hour to midnight
-	                     cal.set(Calendar.MINUTE,45);                 // set minute in hour
-	                     cal.set(Calendar.SECOND, 0);                 // set second in minute
-                       	cal.set(Calendar.MILLISECOND, 0);  
-
-                        %>
-														<c:forEach var="i" begin="1" end="32">
-															<c:set var="time" value="${i}" />
-															<c:forEach var="j" begin="1" end="3">
-
-
-																<% 
-                                    cal.add(Calendar.MINUTE, 15);
-                                   //out.print(tipe.format(cal.getTime()));
-                                   String time=tipe.format(cal.getTime());
-                           
-
-                              %>
-
-
-
-
-																<option value="<%=time%>"><%=time%></option>
-
-
-															</c:forEach>
-
-														</c:forEach>
-													</optgroup>
-
-												</select>
-											</div>
-										</div>
-
 										<div class="form-group">
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
@@ -439,7 +291,7 @@ $(document).ready(function() {
 				    .find('option')
 				    .remove()
 				    .end()
-				 $("#items").append($("<option></option>").attr( "value",-1).text("ALL"));
+				// $("#items").append($("<option></option>").attr( "value",-1).text("ALL"));
                     for ( var i = 0; i < len; i++) {
                             
                                 
@@ -456,13 +308,12 @@ $(document).ready(function() {
 </script>
 
 
-<script type="text/javascript">
-/* $(document).ready(function() { 
-	$('#fr_id').change( */
-			function onFridChange(frId) {
-				
+<!-- <script type="text/javascript">
+$(document).ready(function() { 
+	$('#fr_id').change(
+			function() {
 				$.getJSON('${findAllMenus}', {
-					fr_id : frId,
+					fr_id : $(this).val(),
 					ajax : 'true'
 				}, function(data) {
 					var html = '<option value="">Menu</option>';
@@ -487,9 +338,9 @@ $(document).ready(function() {
 					}
 					   $("#menu").trigger("chosen:updated");
 				});
-			}/* );
-}); */
-</script>
+			});
+});
+</script> -->
 
 <script type="text/javascript">
 $(document).ready(function() { // if all label selected set all items selected

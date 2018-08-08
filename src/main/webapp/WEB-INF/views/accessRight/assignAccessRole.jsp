@@ -29,7 +29,7 @@
 
 
 
- 
+ <div class="container" id="main-container">
 
 
 	<!-- BEGIN Sidebar -->
@@ -207,7 +207,7 @@
 
 
 		</div>
-	</div>
+	
 	<!-- END Main Content -->
 
 	<footer>
@@ -218,8 +218,8 @@
 		class="fa fa-chevron-up"></i></a>
 
 
-
-
+</div>
+</div>
 
 	<!--basic scripts-->
 	<script

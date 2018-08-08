@@ -127,8 +127,8 @@ select {
 	<c:url var="insertItem" value="/insertItem" />
 	<c:url var="deleteItems" value="/deleteItems" />
 	<c:url var="generateManualBill" value="/generateManualBill" />
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-
+ 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+ 
 
 	<div class="container" id="main-container">
 
@@ -500,7 +500,7 @@ function validation() {
 		alert("Please Enter Valid Item Qty.");
 	}
 	return isValid;
-}0
+}
 </script>
 <script type="text/javascript">
 function deleteItem(key){

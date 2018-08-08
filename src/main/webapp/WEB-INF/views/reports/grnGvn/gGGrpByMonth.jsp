@@ -11,7 +11,7 @@
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	
 	<c:url var="getGrnGvnByGrpByMonth" value="/getGrnGvnByGrpByMonth"></c:url>
-
+<div class="container" id="main-container">
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
 
@@ -140,7 +140,7 @@
 				 </div>
 				
 				
-					<div class="col-md-3" style="text-align: center;">
+					<div class="col-md-5" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
 							 Report</button>
 									    <button class="btn search_btn"  onclick="showChart()" >Graph</button>
@@ -241,7 +241,7 @@
 				</div>
 			</form>
 		</div>
-	</div>
+	
 	<!-- END Main Content -->
 	
 	<footer>
@@ -251,7 +251,7 @@
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
-
+</div></div>
 	<script type="text/javascript">
 		function searchReport() {
 		//	var isValid = validate();

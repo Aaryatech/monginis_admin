@@ -12,7 +12,7 @@
 	<c:url var="addItemToListInOldItemList" value="/addItemToListInOldItemList"></c:url>
 		<c:url var="updateRmQty0" value="/updateRmQty0"></c:url> 
 
-
+<div class="container" id="main-container">
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
 
@@ -362,7 +362,7 @@
 			</div>
 		</div>
 	</div>
-	</div>
+	
 	<!-- END Main Content -->
 
 	<footer>
@@ -373,7 +373,7 @@
 		class="fa fa-chevron-up"></i></a>
 
  
-
+</div></div>
 
 
 

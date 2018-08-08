@@ -39,7 +39,7 @@ td:hover::after, th:hover::after {
 	<c:url var="callSearchOrdersProcess" value="/searchOrdersProcess" />
 	<c:url var="callChangeQty" value="/callChangeQty" />
 	<c:url var="callDeleteOrder" value="/callDeleteOrder" />
-
+    <c:url var="excelOrderByItem" value="/excelOrderByItem" />
 
 
 
@@ -390,6 +390,21 @@ td:hover::after, th:hover::after {
 												value="EXPORT TO Excel" onclick="exportToExcel();"
 												disabled="disabled">
 										</div>
+										<div class="col-sm-3  controls">
+											<input type="button" id="expExcel1" class="btn btn-primary"
+												value="Excel order By Item Name" onclick="exportToExcel1();"
+												disabled="disabled">
+										</div>
+												<div align="center" id="loader1" style="display: none">
+
+										<span>
+											<h6>
+												<font color="#343690">Loading</font>
+											</h6>
+										</span> <span class="l-1"></span> <span class="l-2"></span> <span
+											class="l-3"></span> <span class="l-4"></span> <span
+											class="l-5"></span> <span class="l-6"></span>
+									</div>
 									</div>
 							</form>
 						</div>
@@ -398,7 +413,7 @@ td:hover::after, th:hover::after {
 			</div>
 			<!-- END Main Content -->
 			<footer>
-				<p>2017 © MONGINIS.</p>
+				<p style="text-align: center;">2018 © MONGINIS.</p>
 			</footer>
 
 
@@ -521,6 +536,8 @@ $.getJSON('${callSearchOrdersProcess}', {
 
 	$.each(data,function(key, orders) {
 		document.getElementById("expExcel").disabled=false;
+		document.getElementById("expExcel1").disabled=false;
+
 		document.getElementById('range').style.display = 'block';
 	var tr = $('<tr></tr>');
 
@@ -632,6 +649,8 @@ tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id=
 							$('#table1 td').remove();
 							
 							$.each(data,function(key, orders) {
+								document.getElementById("expExcel1").disabled=false;
+
 								document.getElementById("expExcel").disabled=false;
 								document.getElementById('range').style.display = 'block';
 							var tr = $('<tr></tr>');
@@ -687,11 +706,64 @@ tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id=
 	<script>
 	function exportToExcel()
 		{
-			 
-			window.open("${pageContext.request.contextPath}/exportToExcel");
-					document.getElementById("expExcel").disabled=true;
+	var itemIds=$("#item_id").val();
+		
+		var array=[];
+		
+		var routeIds=$("#selectRoute").val();
+		var frIds=$("#fr_id").val();
+			
+
+		var date = $("#date").val(); 
+		$('#loader1').show();
+
+	$.getJSON('${callSearchOrdersProcess}', {
+
+		fr_id_list : JSON.stringify(frIds),
+		item_id_list : JSON.stringify(itemIds),
+		route_id:routeIds,
+		date : date,
+		
+		ajax : 'true'
+
+	}, function(data) {
+		$('#loader1').hide();
+		window.open("${pageContext.request.contextPath}/exportToExcel");
+		document.getElementById("expExcel").disabled=true;
+	});
+
 		}
-			</script>
+	function exportToExcel1()
+	{
+		
+		var itemIds=$("#item_id").val();
+		
+		var array=[];
+		
+		var routeIds=$("#selectRoute").val();
+		var frIds=$("#fr_id").val();
+			
+
+		var date = $("#date").val(); 
+		$('#loader1').show();
+
+	$.getJSON('${excelOrderByItem}', {
+
+		fr_id_list : JSON.stringify(frIds),
+		item_id_list : JSON.stringify(itemIds),
+		route_id:routeIds,
+		date : date,
+		
+		ajax : 'true'
+
+	}, function(data) {
+		$('#loader1').hide();
+		window.open("${pageContext.request.contextPath}/exportToExcel");
+		document.getElementById("expExcel1").disabled=true;
+	});
+
+}
+</script>
 	<script type="text/javascript">
 
 function disableFr(){

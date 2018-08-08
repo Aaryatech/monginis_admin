@@ -7,7 +7,7 @@
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 	<c:url var="getBillList" value="/generateNewBill"></c:url>
-	<!-- BEGIN Sidebar -->
+<div class="container" id="main-container">	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
 		<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
 		<div id="sidebar-collapse" class="visible-lg">
@@ -126,7 +126,7 @@
 				</div>
 			</form>
 		</div>
-	</div>
+	
 	<!-- END Main Content -->
 
 	<footer>
@@ -135,7 +135,7 @@
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
-
+</div></div>
 	<!--basic scripts-->
 	<script
 		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>

@@ -12,6 +12,7 @@
 	<c:url var="getMenuForFr" value="/getMenuListByFr"></c:url>
 	<c:url var="getItemListByMenu" value="/getItemListById"></c:url>
  
+<div class="container" id="main-container">
 
 
 	<!-- BEGIN Sidebar -->
@@ -157,7 +158,7 @@
 					</div>
 				</form>
 			</div>
-		</div>
+		
 		<!-- END Main Content -->
 
 		<footer>
@@ -166,7 +167,7 @@
 
 		<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 			class="fa fa-chevron-up"></i></a>
-
+</div></div>
 		<script type="text/javascript">
 				function getMenu() {
 					var selectedFr = $("#selectFr").val();

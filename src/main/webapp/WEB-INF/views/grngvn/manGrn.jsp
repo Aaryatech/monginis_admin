@@ -13,7 +13,7 @@
 	<c:url var="getItemsByBillNo" value="/getItemsByBillNo"></c:url>
 
 	<c:url var="getBillForFr" value="/getBillForFr"></c:url>
-	<!-- BEGIN Sidebar -->
+<div class="container" id="main-container">	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
 
 		<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
@@ -166,7 +166,7 @@
 				</div>
 			</form>
 		</div>
-	</div>
+	
 	<!-- END Main Content -->
 
 	<footer>
@@ -175,7 +175,7 @@
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
-
+</div></div>
 	<script type="text/javascript">
 				function getBills() {
 					var selectedFr = $("#selectFr").val();

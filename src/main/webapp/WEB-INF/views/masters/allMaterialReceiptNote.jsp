@@ -11,7 +11,7 @@
 <c:url var="allRecordwithDate" value="/allRecordwithDate"></c:url>
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
-
+<div class="container" id="main-container">
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
 
@@ -282,7 +282,7 @@
 	 
 
 			</div>
-	</div>
+	
 	<!-- END Main Content -->
 
 	<footer>
@@ -293,7 +293,7 @@
 		class="fa fa-chevron-up"></i></a>
 
  
-
+</div></div>
 	
 
 	<!--basic scripts-->

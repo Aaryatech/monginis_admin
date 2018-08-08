@@ -235,10 +235,9 @@ public class HomeController {
 					
 					mav = new ModelAndView("login");
 					
-					loginResponseMessage="Invalid Login Credentials";
+					loginResponseMessage="Please check username or password";
 					mav.addObject("loginResponseMessage",loginResponseMessage);
 					
-					System.out.println("Invalid login credentials");
 
 				}
 

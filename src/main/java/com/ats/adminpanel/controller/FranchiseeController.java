@@ -295,7 +295,7 @@ public class FranchiseeController {
 	// METHOD)-------------------------
 	@RequestMapping(value = "/getAllMenus", method = RequestMethod.GET)
 	public @ResponseBody List<Menu> findAllMenu(@RequestParam(value = "fr_id", required = true) int frId) {
-
+		System.err.println("getAllMenus");
 		menuList = new ArrayList<Menu>();
 
 		List<Menu> notConfiguredMenuList = new ArrayList<Menu>();
@@ -327,6 +327,7 @@ public class FranchiseeController {
 			}
 
 		}
+		System.err.println(configuredMenuList.toString());
 
 		return notConfiguredMenuList;
 	}
@@ -2270,4 +2271,89 @@ public class FranchiseeController {
 		return franchiseeList;
 	}
 	// ----------------------------------------END--------------------------------------------
+	@RequestMapping(value = "/configureFrItems")
+	public ModelAndView configureFrItems(HttpServletRequest request, HttpServletResponse response) {
+
+		logger.info("/configureFrItems request mapping.");
+
+		ModelAndView mav = new ModelAndView("franchisee/configureItems");
+		Constants.mainAct = 2;
+		Constants.subAct = 14;
+
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			franchiseeAndMenuList = restTemplate.getForObject(Constants.url + "getFranchiseeAndMenu",
+					FranchiseeAndMenuList.class);
+
+			System.out.println("Franchisee Response " + franchiseeAndMenuList.getAllFranchisee());
+
+			mav.addObject("allFranchiseeAndMenuList", franchiseeAndMenuList);
+
+		} catch (Exception e) {
+			System.out.println("Franchisee Controller Exception " + e.getMessage());
+		}
+
+		return mav;
+	}
+	@RequestMapping(value = "/configureItems", method = RequestMethod.POST)
+	public String configureItems(HttpServletRequest request, HttpServletResponse response)
+	{
+		try {
+			String[] itemShow = request.getParameterValues("items[]");
+			String[] frId = request.getParameterValues("fr_id[]");
+			int menuId=Integer.parseInt(request.getParameter("menu"));
+			RestTemplate restTemplate = new RestTemplate();
+
+			
+			franchiseeAndMenuList = restTemplate.getForObject(Constants.url + "getFranchiseeAndMenu",
+					FranchiseeAndMenuList.class);
+
+			menuList = franchiseeAndMenuList.getAllMenu();
+			Menu frMenu = new Menu();
+			for (Menu menu : menuList) {
+				if (menu.getMenuId() == menuId) {
+					frMenu = menu;
+					break;
+				}
+			}
+			selectedCatId = frMenu.getMainCatId();
+
+			StringBuilder sb = new StringBuilder();
+
+			for (int i = 0; i < itemShow.length; i++) {
+				sb = sb.append(itemShow[i] + ",");
+
+			}
+			String items = sb.toString();
+			items = items.substring(0, items.length() - 1);
+			System.out.println("items" + items);
+
+			StringBuilder sb1 = new StringBuilder();
+
+			for (int i = 0; i < frId.length; i++) {
+				sb1 = sb1.append(frId[i] + ",");
+
+			}
+			String frIdList = sb1.toString();
+			frIdList = frIdList.substring(0, frIdList.length() - 1);
+			
+			RestTemplate rest=new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("itemIdList", items);
+			map.add("frIdList", frIdList);
+			map.add("menuId", menuId);
+            map.add("catId", selectedCatId);
+			Info errorMessage = rest.postForObject(Constants.url + "updateConfiguredItems", map, Info.class);
+
+			if(errorMessage.getError()==false)
+			{
+				System.err.println("stock");
+			}
+			
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/configureFranchiseesList";
+		
+	}
 }

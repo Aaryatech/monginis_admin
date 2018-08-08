@@ -9,7 +9,7 @@
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
-
+<div class="container" id="main-container">
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
 
@@ -179,7 +179,7 @@
  
 
 	 
-	</div>
+	
 	<!-- END Main Content -->
 
 	<footer>
@@ -188,7 +188,7 @@
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
-
+</div></div>
 	<script type="text/javascript">
 			function submitBill() {
 

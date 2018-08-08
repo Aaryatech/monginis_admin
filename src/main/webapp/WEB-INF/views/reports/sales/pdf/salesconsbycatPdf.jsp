@@ -24,6 +24,7 @@
 	border-collapse: collapse;
 	font-size: 10;
 	width:100%;
+page-break-inside: auto !important 
 
 } 
 p  {

@@ -688,6 +688,8 @@ public class SaleCompareReportController {
 			hcell.setBackgroundColor(BaseColor.PINK);
 
 			table.addCell(hcell);
+			table.setHeaderRows(1);
+
 			for (Route route : salesCompareList.getRouteList()) {
 
 				double currRouteTotal=0;
@@ -853,17 +855,18 @@ public class SaleCompareReportController {
 			
 			
 			document.open();
-			Paragraph name = new Paragraph("GFPL\n", f);
+			Paragraph name = new Paragraph(" Galdhar Foods Pvt.Ltd\n", f);
 			name.setAlignment(Element.ALIGN_CENTER);
 			document.add(name);
 			document.add(new Paragraph(" "));
-			Paragraph company = new Paragraph("Sales Comparison Report\n", f);
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+			Paragraph company = new Paragraph("Sales Comparison Report "+reportDate, f);
 			company.setAlignment(Element.ALIGN_CENTER);
 			document.add(company);
 			document.add(new Paragraph(" "));
 
-			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
-			String reportDate = DF.format(new Date());
+			
 		
 			document.add(new Paragraph("\n"));
 			document.add(table); 
@@ -984,7 +987,7 @@ public class SaleCompareReportController {
 			hcell.setBackgroundColor(BaseColor.PINK);
 
 			table.addCell(hcell);
-
+			table.setHeaderRows(1);
 		
 			for (SalesComparisonReport salesComparison : reportList.getBillTotalList()) {
 
@@ -1035,17 +1038,18 @@ public class SaleCompareReportController {
 			
 			
 			document.open();
-			Paragraph name = new Paragraph("GFPL\n", f);
+			Paragraph name = new Paragraph(" Galdhar Foods Pvt.Ltd\n", f);
 			name.setAlignment(Element.ALIGN_CENTER);
 			document.add(name);
 			document.add(new Paragraph(" "));
-			Paragraph company = new Paragraph("GRN Comparison Report\n", f);
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+			Paragraph company = new Paragraph("GRN Comparison Report "+reportDate, f);
 			company.setAlignment(Element.ALIGN_CENTER);
 			document.add(company);
 			document.add(new Paragraph(" "));
 
-			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
-			String reportDate = DF.format(new Date());
+			
 		
 			document.add(new Paragraph("\n"));
 			document.add(table); 

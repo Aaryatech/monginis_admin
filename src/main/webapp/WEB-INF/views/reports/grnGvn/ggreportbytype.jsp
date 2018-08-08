@@ -11,7 +11,7 @@
 <body>
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<c:url var="getGGvnReportByGrnType" value="/getGGvnReportByGrnType"></c:url>
-
+<div class="container" id="main-container">
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
 
@@ -176,6 +176,12 @@
 
 				</div>
 
+				<div class="col-sm-3  controls" style="display: none;" id="range">
+					<input type="button" id="expExcel" class="btn btn-primary"
+						value="EXPORT TO Excel" onclick="exportToExcel();"
+						disabled="disabled">
+				</div><br><br>
+				
 				<div align="center" id="loader" style="display: none">
 
 					<span>
@@ -186,16 +192,11 @@
 						class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
 					<span class="l-6"></span>
 				</div>
-				<div class="col-sm-3  controls" style="display: none;" id="range">
-					<input type="button" id="expExcel" class="btn btn-primary"
-						value="EXPORT TO Excel" onclick="exportToExcel();"
-						disabled="disabled">
-				</div>
 				<div align="center" id="showchart" style="display: none"></div>
 			</div>
 		</div>
 
-	</div>
+
 	<!-- END Main Content -->
 	<footer>
 		<p>2018 © Monginis.</p>
@@ -203,7 +204,7 @@
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
-
+	</div>	</div>
 	<script type="text/javascript">
 		function searchReport() {
 			//alert("In call");

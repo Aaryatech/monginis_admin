@@ -10,7 +10,7 @@
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
  
 <c:url var="allRecordwithDate" value="/allRecordwithDate"></c:url>
-
+<div class="container" id="main-container">
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
 
@@ -31,7 +31,7 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>show All Store Material Reciept
+					<i class="fa fa-file-o"></i>Show All Store Material Reciept
 				</h1>
 				
 				<!-- <h4>Bill for franchises</h4> -->
@@ -244,7 +244,7 @@
 	 
 
 			</div>
-	</div>
+
 	<!-- END Main Content -->
 
 	<footer>
@@ -254,7 +254,7 @@
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
 
- 
+ </div></div>
 
 	
 

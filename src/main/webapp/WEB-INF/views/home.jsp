@@ -4,16 +4,29 @@
 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
- 
+ <html>
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-
-<body>
+<style type="text/css">
+.bg-overlay {
+    background: linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.4)), url("${pageContext.request.contextPath}/resources/img/cake.jpeg");
+  /*  background-repeat: no-repeat; */
+    /* background-size: cover;
+    background-position: center center; */
+    color: #fff;
+    height:auto;
+    width:auto;
+    padding-top: 0px;
+}
+</style>
+</head>
+<body class="container bg-overlay">
+	
 <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<!-- BEGIN Container -->
 	 
 
 
-	<div class="container" id="main-container">
+	<div class="container1" id="main-container">
 
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
@@ -29,7 +42,7 @@
 
 
 		<!-- BEGIN Content -->
-		<div id="main-content">
+		<div id="main-content" style="background: transparent;">
 			<!-- BEGIN Page Title -->
 			<div class="page-title">
 				<div>

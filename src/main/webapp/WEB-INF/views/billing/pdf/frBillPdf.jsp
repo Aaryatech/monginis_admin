@@ -34,7 +34,7 @@
 					<h4 style="color: #000; font-size: 16px; text-align: center; margin: 0px;">Galdhar
 						Foods Pvt. Ltd.</h4>
 					<p style="color: #000; font-size: 10px; text-align: center; margin: 0px;">
-						Factory Add: A-32 Shendra, MIDC, Aurangabad-4331667 <br />
+						Factory Add: A-89, Shendra MIDC, Aurangabad-431007 <br />
 						Phone:0240-2466217, Email: aurangabad@monginis.net
 					</p>
 				</td>
@@ -292,7 +292,7 @@
 					<h4 style="color: #000; font-size: 16px; text-align: center; margin: 0px;">Galdhar
 						Foods Pvt. Ltd</h4>
 					<p style="color: #000; font-size: 10px; text-align: center; margin: 0px;">
-						Factory Add: A-32 Shendra, MIDC, Aurangabad-4331667 <br />
+						Factory Add: A-89, Shendra MIDC, Aurangabad-431007 <br />
 						Phone:0240-2466217, Email: aurangabad@monginis.net
 					</p>
 				</td>

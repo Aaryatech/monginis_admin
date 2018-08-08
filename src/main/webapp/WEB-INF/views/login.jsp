@@ -1,182 +1,110 @@
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Dashboard - Admin</title>
-<meta name="description" content="">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
-<!--base css styles-->
-<link rel="stylesheet"
-	href="resources/assets/bootstrap/css/bootstrap.min.css">
-<link rel="stylesheet"
-	href="resources/assets/font-awesome/css/font-awesome.min.css">
-
-<!--page specific css styles-->
-
-<!--flaty css styles-->
-<link rel="stylesheet" href="resources/css/flaty.css">
-<link rel="stylesheet" href="resources/css/flaty-responsive.css">
-
-<link rel="shortcut icon" href="resources/img/favicon.png">
-
+	<title>Monginis-Admin</title>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="${pageContext.request.contextPath}/resources/img/monginislogo.png"/> 
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendor/bootstrap/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/fonts/Linearicons-Free-v1.0.0/icon-font.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendor/animate/animate.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendor/css-hamburgers/hamburgers.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendor/animsition/css/animsition.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendor/select2/select2.min.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/vendor/daterangepicker/daterangepicker.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/util.css">
+	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/main.css">
+<style type="text/css">
+.bg-overlay {
+    background: linear-gradient(rgba(0,0,0,.4), rgba(0,0,0,.4)), url("${pageContext.request.contextPath}/resources/img/cake.jpeg");
+   background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center center;
+    color: #fff;
+    height:auto;
+    width:auto;
+    padding-top: 0px;
+}
+</style>
 </head>
-<body class="login-page">
-
-	<!-- BEGIN Main Content -->
-	<div class="login-wrapper">
-		<!-- BEGIN Login Form -->
-		<form id="form-login" action="loginProcess" method="post">
-			<h3>Login to your account</h3>
-		
-		
-
-
-			<hr />
-			<div class="form-group">
-				<div class="controls">
-					<input type="text" placeholder="Username" class="	form-control"
-						path="username" name="username" id="username" required/>
-
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="controls">
-					<input type="password" placeholder="Password" class="form-control"
-						path="userpassword" name="userpassword" id="userpassword"  required/>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="controls">
-					<label class="checkbox"> <input type="checkbox"
-						value="remember" /> Remember me
-					</label>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="controls">
-					<button type="submit" class="btn btn-primary form-control">Sign
-						In</button>
-				</div>
+<body class="container bg-overlay">
+	
+	<div class="limiter">
+		<div class="container-login100">
+			<div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
+				<form class="login100-form validate-form" id="form-login" action="loginProcess" method="post">
 				
-				<c:if test="${not empty loginResponseMessage}">
+					<span class="login100-form-title p-b-33">
+												<img src="${pageContext.request.contextPath}/resources/img/mongi1.png"/>
+
+					</span>
+
+					<div class="wrap-input100 validate-input" data-validate = "Valid username is required">
+						<input class="input100" type="text" id="username" name="username" placeholder="Username">
+						<span class="focus-input100-1"></span>
+						<span class="focus-input100-2"></span>
+					</div>
+                    <br>
+					<div class="wrap-input100 rs1 validate-input" data-validate="Password is required">
+						<input class="input100" type="password" name="userpassword" id="userpassword" placeholder="Password">
+						<span class="focus-input100-1"></span>
+						<span class="focus-input100-2"></span>
+					</div>
+
+					<div class="container-login100-form-btn m-t-20">
+						<button class="login100-form-btn">
+							Sign in
+						</button>
+					</div>
+	<c:if test="${not empty loginResponseMessage}">
    <!-- here would be a message with a result of processing -->
-    <div> ${loginResponseMessage} </div>
+    <div style="color:white;"> ${loginResponseMessage} </div>
         	
-</c:if>
-				
-				
-			</div>
-			<hr />
-			<p class="clearfix">
-				<a href="#" class="goto-forgot pull-left">Forgot Password?</a> <a
-					href="#" class="goto-register pull-right">Sign up now</a>
-			</p>
-		</form>
-		<!-- END Login Form -->
+</c:if><div class="text-center p-t-45 p-b-4">
+					
+						<span class="txt1">
+							<!-- Forgot -->
+						</span>
 
-		<!-- BEGIN Forgot Password Form -->
-		<form id="form-forgot" action="index.html" method="get"
-			style="display: none">
-			<h3>Get back your password</h3>
-			<hr />
-			<div class="form-group">
-				<div class="controls">
-					<input type="text" placeholder="Email" class="form-control" required/>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="controls">
-					<button type="submit" class="btn btn-primary form-control">Recover</button>
-				</div>
-			</div>
-			<hr />
-			<p class="clearfix">
-				<a href="#" class="goto-login pull-left">Back to login form</a>
-			</p>
-		</form>
-		<!-- END Forgot Password Form -->
+						<a href="#" class="txt2 hov1">
+							<!-- Username / Password? -->
+						</a>
+					</div>
 
-		<!-- BEGIN Register Form -->
-		<form id="form-register" action="index.html" method="get"
-			style="display: none">
-			<h3>Sign up</h3>
-			<hr />
-			<div class="form-group">
-				<div class="controls">
-					<input type="text" placeholder="Email" class="form-control" required/>
-				</div>
+					<div class="text-center">
+						<span class="txt1">
+							<!-- Create an account? -->
+						</span>
+
+						<a href="#" class="txt2 hov1">
+						<!-- 	Sign up -->
+						</a>
+					</div>
+				</form>
 			</div>
-			<div class="form-group">
-				<div class="controls">
-					<input type="text" placeholder="Username" class="form-control" required/>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="controls">
-					<input type="password" placeholder="Password" class="form-control" required/>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="controls">
-					<input type="password" placeholder="Repeat Password"
-						class="form-control" />
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="controls">
-					<label class="checkbox"> <input type="checkbox"
-						value="remember" /> I accept the <a href="#">user aggrement</a>
-					</label>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="controls">
-					<button type="submit" class="btn btn-primary form-control">Sign
-						up</button>
-				</div>
-			</div>
-			<hr />
-			<p class="clearfix">
-				<a href="#" class="goto-login pull-left"> Back to login form</a>
-			</p>
-		</form>
-		<!-- END Register Form -->
+		</div>
 	</div>
-	<!-- END Main Content -->
+	
 
-	<!--basic scripts-->
-	<script
-		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-	<script>window.jQuery || document.write('<script src="resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')</script>
-	<script src="resources/assets/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="${pageContext.request.contextPath}/resources/vendor/jquery/jquery-3.2.1.min.js"></script>
+<!--===============================================================================================-->
+	<script src="${pageContext.request.contextPath}/resources/vendor/animsition/js/animsition.min.js"></script>
+<!--===============================================================================================-->
+	<script src="${pageContext.request.contextPath}/resources/vendor/bootstrap/js/popper.js"></script>
+	<script src="${pageContext.request.contextPath}/resources/vendor/bootstrap/js/bootstrap.min.js"></script>
+<!--===============================================================================================-->
+	<script src="${pageContext.request.contextPath}/resources/vendor/select2/select2.min.js"></script>
+<!--===============================================================================================-->
+<!--===============================================================================================-->
+	<script src="${pageContext.request.contextPath}/resources/vendor/countdowntime/countdowntime.js"></script> 
+<!--===============================================================================================-->
+	<script src="${pageContext.request.contextPath}/resources/js/mains.js"></script>
 
-	<script type="text/javascript">
-            function goToForm(form)
-            {
-                $('.login-wrapper > form:visible').fadeOut(500, function(){
-                    $('#form-' + form).fadeIn(500);
-                });
-            }
-            $(function() {
-                $('.goto-login').click(function(){
-                    goToForm('login');
-                });
-                $('.goto-forgot').click(function(){
-                    goToForm('forgot');
-                });
-                $('.goto-register').click(function(){
-                    goToForm('register');
-                });
-            });
-        </script>
 </body>
 </html>

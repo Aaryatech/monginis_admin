@@ -8,6 +8,7 @@
 	<body>
  	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<!-- BEGIN Sidebar -->
+	<div class="container" id="main-container">
 	<div id="sidebar" class="navbar-collapse collapse">
 
 		<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
@@ -373,7 +374,7 @@
 				</div>
 			</div>
 		</div>
-	</div>
+	
 	<!-- END Main Content -->
 
 	<footer>
@@ -384,7 +385,7 @@
 		class="fa fa-chevron-up"></i></a>
 
 
-
+</div></div>
 
 
 	<!--basic scripts-->

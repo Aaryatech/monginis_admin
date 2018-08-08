@@ -8,7 +8,7 @@
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body>
 	<c:url var="getGrnGvnByDatewise" value="/getGrnReportComparison"></c:url>
-
+<div class="container" id="main-container">
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
 
@@ -172,7 +172,7 @@
 				</div>
 			</form>
 		</div>
-	</div>
+	
 	<!-- END Main Content -->
 
 	<footer>
@@ -182,7 +182,7 @@
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
-
+</div></div>
 	<script type="text/javascript">
 		function searchReport() {
 		//	var isValid = validate();

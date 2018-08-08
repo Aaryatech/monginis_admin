@@ -5,13 +5,13 @@
 
 <script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
 <script type="text/javascript"
-	src="https://www.gstatic.com/charts/loader.js"></script>
+	src="https://www.gstatic.com/charts/loader.js"></script> 
 
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body>
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<c:url var="getGrnGvnByDatewise" value="/getGrnGvnByDatewise"></c:url>
-
+<div class="container" id="main-container">
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
 
@@ -139,7 +139,7 @@
 						</select>
 					</div>
 
-					<div class="col-md-3" style="text-align: center;">
+					<div class="col-md-5" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
 							Report</button>
 						<button class="btn search_btn"
@@ -235,7 +235,7 @@
 				</div>
 			</form>
 		</div>
-	</div>
+	
 	<!-- END Main Content -->
 
 	<footer>
@@ -245,7 +245,8 @@
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
-
+</div>
+</div>
 	<script type="text/javascript">
 		function searchReport() {
 		//	var isValid = validate();

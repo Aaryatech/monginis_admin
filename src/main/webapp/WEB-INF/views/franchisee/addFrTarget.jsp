@@ -89,7 +89,7 @@
                           <div class="col2">
                           <label class="col-sm-1 col-lg-2 control-label">Select Year</label>
                           
-                        <div class="container text-center">
+                        
 
                           <input class="date-own form-control" style="width: 200px;" type="text" name="year" id="year"placeholder="select Year" value="${thisYear}">
 
@@ -100,7 +100,7 @@
                               });
                           </script>
 
-                        </div>							
+                        						
                         </div>
                         <div class="col2">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">

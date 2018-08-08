@@ -10,7 +10,7 @@
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 	<c:url var="getBillList" value="/getSaleRoyaltyByCat"></c:url>
-
+<div class="container" id="main-container">
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
 
@@ -166,7 +166,7 @@
 			<form id="submitBillForm"
 				action="${pageContext.request.contextPath}/submitNewBill"
 				method="post">
-				<div class=" box-content">
+				<div class="box-content">
 					<div class="row">
 						<div class="col-md-12 table-responsive">
 							<table class="table table-bordered table-striped fill-head "
@@ -205,7 +205,7 @@
 				</div>
 			</form>
 		</div>
-	</div>
+	
 	<!-- END Main Content -->
 
 	<footer>
@@ -214,7 +214,7 @@
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
-
+</div></div>
 
 	<script type="text/javascript">
 		function searchReport() {

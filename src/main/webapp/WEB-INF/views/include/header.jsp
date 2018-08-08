@@ -28,7 +28,6 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/loader.css">
 
-
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/assets/data-tables/bootstrap3/dataTables.bootstrap.css" />
 <link rel="stylesheet" type="text/css"
