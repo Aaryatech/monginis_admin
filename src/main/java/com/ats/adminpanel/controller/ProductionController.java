@@ -92,7 +92,8 @@ import com.ats.adminpanel.model.salesreport.OrderFromProdPdfView;
 import com.ats.adminpanel.model.stock.FinishedGoodStock;
 import com.ats.adminpanel.model.stock.FinishedGoodStockDetail;
 import com.ats.adminpanel.model.stock.GetCurProdAndBillQty;
-import com.ats.adminpanel.model.stock.GetCurProdAndBillQtyList; 
+import com.ats.adminpanel.model.stock.GetCurProdAndBillQtyList;
+import com.ats.adminpanel.util.ItextPageEvent;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -1745,7 +1746,7 @@ model.addObject("todayDate",df.format(todayDate));
 		 
 		
 		//postProdDetailList = postProductionPlanDetaillist;
-		Document document = new Document(PageSize.A4);
+		Document document = new Document(PageSize.A4,20,20,150,30);
 		// ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -1783,13 +1784,28 @@ model.addObject("todayDate",df.format(todayDate));
 
 		FileOutputStream out = new FileOutputStream(FILE_PATH);
 
-		try {
+	try {
+			
+			String header=
+					"                                           Galdhar Foods Pvt.Ltd\n" + "          Factory Add: A-32 Shendra, MIDC, Aurangabad-4331667"
+							+ "\n              Phone:0240-2466217, Email: aurangabad@monginis.net";
+		
+
+			String title="                 Report-For Production Varience";
+/*
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());*/
+			
 			writer = PdfWriter.getInstance(document, out);
+			
+			ItextPageEvent event=new ItextPageEvent(header,title, postProdPlanHeader.getProductionDate());
+			
+			writer.setPageEvent(event);
+			
 		} catch (DocumentException e) {
 
 			e.printStackTrace();
 		}
-		
 		
 		
 		
@@ -1809,39 +1825,49 @@ System.err.println("getVarianceorderlistforsort Item List " +getVarianceorderlis
 			PdfPCell hcell;
 			hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
 			hcell = new PdfPCell(new Phrase("Item Description", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
 			hcell = new PdfPCell(new Phrase("OP BAL", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
 			hcell = new PdfPCell(new Phrase("PLAN", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
 			hcell = new PdfPCell(new Phrase("PROD", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
 			hcell = new PdfPCell(new Phrase("TOTAL", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
 			hcell = new PdfPCell(new Phrase("Order", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
 			hcell = new PdfPCell(new Phrase("VARI", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
 			hcell = new PdfPCell(new Phrase("CLBAL", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
+			table.setHeaderRows(1);
 
 			int index = 0;
 			for (int j = 0; j < pdfItemList.size(); j++) {
@@ -2101,11 +2127,15 @@ System.err.println("getVarianceorderlistforsort Item List " +getVarianceorderlis
 							subVar.setOrderQty(subVar.getOrderQty()+planDetail.getOrderQty());
 							
 							float variance= (planDetail.getOrderQty()-planDetail.getCurOpeQty());
+							float clBal= (planDetail.getCurOpeQty()-planDetail.getOrderQty());
 							if(variance>0) {
 								subVar.setVariance(subVar.getVariance()+variance);
 							}
-							float clBal= (planDetail.getCurOpeQty()-planDetail.getOrderQty());
-							subVar.setClBal(subVar.getClBal()+clBal);
+							if(clBal>0)
+							{
+								subVar.setClBal(subVar.getClBal()+clBal);
+							}
+							
 						}
 					}
 				}
@@ -2235,7 +2265,7 @@ System.err.println("getVarianceorderlistforsort Item List " +getVarianceorderlis
 			}
 
 			document.open();
-			Paragraph company = new Paragraph(
+			/*Paragraph company = new Paragraph(
 					"Galdhar Foods Pvt.Ltd\n" + "Factory Add: A-32 Shendra, MIDC, Auraangabad-4331667"
 							+ "Phone:0240-2466217, Email: aurangabad@monginis.net",
 					f);
@@ -2246,14 +2276,14 @@ System.err.println("getVarianceorderlistforsort Item List " +getVarianceorderlis
 			Paragraph heading = new Paragraph("Report-For Production Varience");
 			heading.setAlignment(Element.ALIGN_CENTER);
 			document.add(heading);
-
+*//*
 			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
 			String reportDate = DF.format(new Date());
 
 			document.add(new Paragraph("" + postProdPlanHeader.getProductionDate()));
 			document.add(new Paragraph("\n"));
 
-			document.add(new Paragraph(" "));
+			document.add(new Paragraph(" "));*/
 			document.add(table);
 			document.add(new Paragraph("\n"));
 			document.add(new Paragraph("Summary By SubCategories: "));

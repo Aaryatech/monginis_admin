@@ -61,7 +61,21 @@
 				</ul>
 			</div>
 			<!-- END Breadcrumb -->
+	<form action="${pageContext.request.contextPath}/searchOrdersCount" method="post"
+								id="validation-form">
+			<div class="container" id="main-container">
+			<div class="col-md-1">
+												<div class="col1title">Date:</div>
+											</div>
+	<div class="col-md-3">
+            	<input class="form-control"	placeholder="Date" name="from_datepicker"
+													id="from_datepicker" type="date"  format="dd-mm-yyyy" value="${cDate}"/> 
+                 </div>
+                 <div class="col-md-2">
+<input type="submit" name="submit" id="submit" class="btn btn-primary"/>
 
+                 </div>
+</div></form><br><br>
 
 			<!-- BEGIN Tiles -->
 			<div class="row">
@@ -76,7 +90,7 @@
 							<div class="col-md-3">
 								<div class="tile tile-orange">
 									<div class="img">
-										<i class="fa fa-comments"></i>
+										<i class="fa fa-shopping-cart fa-5x"></i>
 									</div>
 									<div class="content">
 										<p class="big"><c:out value="${orderCounts.total}"></c:out></p>

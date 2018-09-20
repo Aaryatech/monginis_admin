@@ -60,6 +60,7 @@ import com.ats.adminpanel.model.login.UserResponse;
 import com.ats.adminpanel.model.production.GetProdDetailBySubCat;
 import com.ats.adminpanel.model.production.GetProdDetailBySubCatList;
 import com.ats.adminpanel.model.production.GetProdPlanDetail;
+import com.ats.adminpanel.util.ItextPageEvent;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -903,7 +904,7 @@ public class CreditNoteController {
 		//List<GetProdPlanDetail> moneyOutList = prodPlanDetailList;
 
 		// moneyOutList = prodPlanDetailList;
-		Document document = new Document(PageSize.A4);
+		Document document = new Document(PageSize.A4,20,20,150,30);
 		// ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -918,40 +919,59 @@ public class CreditNoteController {
 
 		FileOutputStream out = new FileOutputStream(FILE_PATH);
 		try {
+			
+			String header=
+					"                                           Galdhar Foods Pvt.Ltd\n" + "          Factory Add: A-32 Shendra, MIDC, Aurangabad-4331667"
+							+ "\n              Phone:0240-2466217, Email: aurangabad@monginis.net";
+		
+
+			String title="                Credit note Report : " + fromDate + " To "  +toDate;
+
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+			
 			writer = PdfWriter.getInstance(document, out);
+			
+			ItextPageEvent event=new ItextPageEvent(header,title, reportDate);
+			
+			writer.setPageEvent(event);
+			
 		} catch (DocumentException e) {
 
 			e.printStackTrace();
 		}
 
+
 		PdfPTable table = new PdfPTable(10);
 		try {
 			System.out.println("Inside PDF Table try");
 			table.setWidthPercentage(100);
-			table.setWidths(new float[] { 0.4f, 1.0f, 0.9f,1.7f,1.1f,1.1f,1.1f,0.8f,1.1f,1.0f});
+			table.setWidths(new float[] { 0.6f, 0.4f, 1.2f,1.7f,1.1f,1.1f,1.1f,0.8f,1.1f,1.0f});
 			Font headFont = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
 			Font headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
 			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
 
 			PdfPCell hcell=new PdfPCell();
-			hcell.setBackgroundColor(BaseColor.LIGHT_GRAY);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			hcell.setPadding(4);
 			hcell = new PdfPCell(new Phrase("Sr.", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
 			hcell = new PdfPCell(new Phrase("Crn No", headFont1));
-			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);			
+			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
 			hcell = new PdfPCell(new Phrase("Date", headFont1));
-			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
 
 			
 			hcell = new PdfPCell(new Phrase("Party Name", headFont1));
-			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 			
 			
@@ -961,33 +981,34 @@ public class CreditNoteController {
 			
 			*/
 			hcell = new PdfPCell(new Phrase("Taxable Amt", headFont1));
-			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 			
 			
 			hcell = new PdfPCell(new Phrase("SGST", headFont1));
-			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 			
 			
 			hcell = new PdfPCell(new Phrase("CGST", headFont1));
-			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 			
 			
 			hcell = new PdfPCell(new Phrase("IGST", headFont1));
-			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 			
 			
 			hcell = new PdfPCell(new Phrase("Tax Amt", headFont1));
-			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
 			hcell = new PdfPCell(new Phrase("Total", headFont1));
-			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
+			table.setHeaderRows(1);
+
 			
 			int index = 0;
 			for (GetCreditNoteReport report : creditNoteList.getCreditNoteReport()) {
@@ -1092,7 +1113,7 @@ public class CreditNoteController {
 
 			
 			document.open();
-			Paragraph company = new Paragraph(
+			/*Paragraph company = new Paragraph(
 					"Galdhar Foods Pvt.Ltd\n",
 					f);
 			company.setAlignment(Element.ALIGN_CENTER);
@@ -1100,10 +1121,9 @@ public class CreditNoteController {
 			document.add(new Paragraph(" "));
 			
 			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
-			String reportDate = DF.format(new Date());
+			String reportDate = DF.format(new Date());*/
 
-			document.add(new Paragraph("Credit note Report : " + fromDate + " To "  +toDate));
-			document.add(new Paragraph("\n"));
+			/*document.add(new Paragraph("Credit note Report : " + fromDate + " To "  +toDate));*/
 			document.add(table);
 			document.add(new Paragraph("\n"));
 			

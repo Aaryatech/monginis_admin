@@ -2,7 +2,10 @@ package com.ats.adminpanel;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -110,13 +113,17 @@ public class HomeController {
 		
 		RestTemplate restTemplate = new RestTemplate();
 
-		
-		OrderCountsResponse orderCountList=restTemplate.getForObject(
-				Constants.url+"/showOrderCounts",
+		MultiValueMap<String, Object>	map =new LinkedMultiValueMap<String, Object>();
+		DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	      			      
+		map.add("cDate",  dateFormat.format(new Date()));
+		OrderCountsResponse orderCountList=restTemplate.postForObject(
+				Constants.url+"/showOrderCounts",map,
 				OrderCountsResponse.class);
 		List<OrderCount> orderCounts=new ArrayList<OrderCount>();
 		orderCounts=orderCountList.getOrderCount();
 		mav.addObject("orderCounts",orderCounts);
+		mav.addObject("cDate",dateFormat.format(new Date()));
 		}
 		catch(Exception e)
 		{
@@ -127,7 +134,32 @@ public class HomeController {
 		
 		return mav;
 	}
+	@RequestMapping(value = "/searchOrdersCount", method = RequestMethod.POST)
+	public ModelAndView searchOrdersCount(HttpServletRequest request, HttpServletResponse response) {
 
+		ModelAndView mav = new ModelAndView("home");
+
+		try {
+			String date=request.getParameter("from_datepicker");
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String,Object> map =new LinkedMultiValueMap<String,Object>();
+		      			      
+			map.add("cDate", date);
+			OrderCountsResponse orderCountList=restTemplate.postForObject(
+					Constants.url+"/showOrderCounts",map,
+					OrderCountsResponse.class);
+			List<OrderCount> orderCounts=new ArrayList<OrderCount>();
+			orderCounts=orderCountList.getOrderCount();
+			mav.addObject("orderCounts",orderCounts);
+			mav.addObject("cDate",date);
+
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return mav;
+	}
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
 	public String logout(HttpSession session) {
 		System.out.println("User Logout");
@@ -218,12 +250,17 @@ public class HomeController {
 					
 					mav = new ModelAndView("home");
 					
-					OrderCountsResponse orderCountList=restTemplate.getForObject(
-							Constants.url+"/showOrderCounts",
+					map =new LinkedMultiValueMap<String, Object>();
+					DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+				      			      
+					map.add("cDate",  dateFormat.format(new Date()));
+					OrderCountsResponse orderCountList=restTemplate.postForObject(
+							Constants.url+"/showOrderCounts",map,
 							OrderCountsResponse.class);
 					List<OrderCount> orderCounts=new ArrayList<OrderCount>();
 					orderCounts=orderCountList.getOrderCount();
 					mav.addObject("orderCounts",orderCounts);
+					mav.addObject("cDate",dateFormat.format(new Date()));
 					System.out.println("menu list =="+orderCounts.toString());
 					System.out.println("order count tile -"+orderCounts.get(0).getMenuTitle());
 					System.out.println("order  count -"+orderCounts.get(0).getTotal());

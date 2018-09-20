@@ -110,6 +110,7 @@
 												<thead>
 													<tr class="bgpink">
 														<th width="158" style="width: 18px" align="left">#</th>
+														<th class="col-md-2">Code</th>
 														<th class="col-md-2">Name</th>
 														<th class="col-md-2">Image</th>
 														<th class="col-md-2">Owner</th>
@@ -134,6 +135,7 @@
 												<thead>
 													<tr class="bgpink">
 														<th width="138" style="width: 18px" align="left">#</th>
+														<th class="col-md-2">Code</th>
 														<th class="col-md-2">Name</th>
 														<th class="col-md-2">Image</th>
 														<th class="col-md-2">Owner</th>
@@ -155,6 +157,8 @@
 
 														<tr>
 															<td><c:out value="${count.index+1}"></c:out></td>
+															<td align="left"><c:out
+																	value="${franchiseeList.frCode}" /></td>
 															<td align="left"><c:out
 																	value="${franchiseeList.frName}" /></td>
 															<td align="left"><img
@@ -426,21 +430,27 @@
 
 <script>
 function myFunction() {
-  var input, filter, table, tr, td, i;
+	
+  var input, filter, table, tr, td,td1, i;
   input = document.getElementById("myInput");
   filter = input.value.toUpperCase();
   table = document.getElementById("table1");
   tr = table.getElementsByTagName("tr");
   for (i = 0; i < tr.length; i++) {
     td = tr[i].getElementsByTagName("td")[1];
-    if (td) {
+    td1 = tr[i].getElementsByTagName("td")[2];
+    if (td || td1) {
       if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      }else
+    	  if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
         tr[i].style.display = "";
       } else {
         tr[i].style.display = "none";
       }
     }       
   }
+  
 }
 </script>
 <script type="text/javascript">
