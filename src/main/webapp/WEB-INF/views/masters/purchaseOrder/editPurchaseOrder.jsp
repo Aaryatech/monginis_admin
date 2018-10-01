@@ -5,7 +5,7 @@
 	 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
+	<body onload="onGrpChange(${purchaseOrderHeader.suppId},${purchaseOrderHeader.userId})">
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include> 
 
@@ -14,6 +14,8 @@
 		<c:url var="deleteItem" value="/deleteItem"></c:url>
 		<c:url var="getRmCategory" value="/getRmCategory" />
 		<c:url var="getRmListByCatId" value="/getRmListByCatId" />
+		<c:url var="getRmListByGrpId" value="/getRmListByGrpId" />
+<c:url var="getItemListByGroupId" value="/getItemListByGroupId" />
 						<c:url var="getRmRateAndTax" value="/getRmRateAndTax" />
 						<c:url var="getUomForRawMaterial" value="/getUomForRawMaterial" /> 
 <div class="container" id="main-container">
@@ -34,7 +36,7 @@
 	<!-- BEGIN Content -->
 	<div id="main-content">
 		<!-- BEGIN Page Title -->
-		<div class="page-title">
+		<%-- <div class="page-title">
 			<div>
 				<h1>
 					<i class="fa fa-file-o"></i>Edit Purchase Order
@@ -52,7 +54,7 @@
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
 				<li class="active">Purchase Order</li>
 			</ul>
-		</div>
+		</div> --%>
 		<!-- END Breadcrumb -->
 		
 		<!-- BEGIN Main Content -->
@@ -177,43 +179,55 @@
 									<div class="col-md-3">
 										 <input type="text" name="quotation_date" id="quotation_date" value="${purchaseOrderHeader.quotationRefDate}" class="form-control date-picker" required>
 									</div>
-									</div><br><br>
-									<hr/>
-									
+									</div><br>
 									<div class="box-content">
-										<div class="col-md-2" >Rm Group</div>
-											<div class="col-md-3">
-											<select name="rm_group" id="rm_group" class="form-control chosen" tabindex="6" onchange="getCat()">
-											<option value="-1" disabled="disabled" selected="selected">Select RM Group</option>
+									
+										<div class="col-md-2" >Group</div>
+											<div class="col-md-4">
+											<select name="rm_group" id="rm_group" class="form-control chosen" tabindex="6" onchange="onGrpChange()">
+											<option value="-1" disabled="disabled" selected="selected">Group</option>
 											 <c:forEach items="${RawmaterialList}" var="RawmaterialList"
 											varStatus="count">
-							  					 <option value="${RawmaterialList.grpId}"><c:out value="${RawmaterialList.grpName}"/></option>
+											<c:choose>
+											<c:when test="${purchaseOrderHeader.userId==RawmaterialList.grpId}">
+											 <option value="${RawmaterialList.grpId}"selected><c:out value="${RawmaterialList.grpName}"/></option>
+											
+											</c:when>
+											<c:otherwise>
+											 <option value="${RawmaterialList.grpId}" disabled><c:out value="${RawmaterialList.grpName}"/></option>
+											
+											</c:otherwise>
+											</c:choose>
  													 
 												</c:forEach>
 						
 
 										</select>
-									</div>
-									<div class="col-md-2">RM Category </div>
+									</div></div><br>
+									<hr/>
+									
+									<div class="box-content">
+									
+								<!-- 	<div class="col-md-2">RM Category </div>
 								<div class="col-md-3">
 										<select name="rm_cat" id="rm_cat" class="form-control chosen" tabindex="6" onchange="getRm()">
 										<option value="-1"disabled="disabled" selected="selected">Select RM Category</option>
 											 
 										</select>
-								</div>
+								</div> --><input name="rm_cat" id="rm_cat"type="hidden" value="1"/>
 									
 				 
-								</div><br/>
+								<!-- </div><br/>
 								
-								<div class="box-content">
+								<div class="box-content"> -->
 								<div class="col-md-2" >Item</div>
 									<div class="col-md-3">
 										<select name="rm_id" id="rm_id" class="form-control chosen" placeholder="Select RM " tabindex="6">
 										<option value="-1" disabled="disabled" selected="selected">Select Raw Material</option> 
 										</select>
 									</div>	
-									<div class="col-md-2">Uom </div>
-								<div class="col-md-3">
+									<!-- <div class="col-md-2">Uom </div>-->
+								<div class="col-md-1"> 
 									<input type="text" placeholder="Uom" name="rm_uom" id="rm_uom" class="form-control" readonly>
 								</div>
 			
@@ -224,26 +238,26 @@
 				
 									
 				 
-			</div><br>
+		<!-- 	</div><br>
 										
-							<div class="box-content">
+							<div class="box-content"> -->
 			
-								<div class="col-md-2">Quantity </div>
-										<div class="col-md-3">
-										<input type="text" placeholder="Enetr RM Quantity" name="rm_qty" id="rm_qty" class="form-control">
+								<div class="col-md-1">Qty </div>
+										<div class="col-md-1">
+										<input type="text" placeholder="Qty" name="rm_qty" id="rm_qty" class="form-control">
 									</div>
 								
 									
-									<div class="col-md-2">Discount % </div>
-								<div class="col-md-3">
-									<input type="text" placeholder="Enter Discount %" name="disc_per" id="disc_per" value="0" class="form-control">
+									<div class="col-md-1">Disc% </div>
+								<div class="col-md-1">
+									<input type="text" placeholder="Disc%" name="disc_per" id="disc_per" value="0" class="form-control">
 								</div>
-					</div><br/>	<br>
+				<!-- 	</div><br/>	<br>
 					
 					 
 							<div class="box-content"> 
 									<div class="col-md-2"></div>
-									<div class="col-md-2"></div> 
+									<div class="col-md-2"></div>  -->
 									<div class="col-md-2">
 									<input type="button" class="btn btn-info pull-right" onclick="addItem()" value="Add Item"> 
 										 
@@ -275,15 +289,15 @@
 								style="width: 100%" id="table_grid">
 								<thead>
 									<tr>
-										<th>Sr.No.</th>
-										<th>Product</th>
-										<th>Quantity</th>
-										<th>Rate</th>
-										<th>Discount %</th>
-										<th>Value</th>
-										<th>Schedule Days</th>
-										<th>RM Remark</th>
-										<th>Action</th>
+										<th class="col-md-1">Sr.No.</th>
+										<th class="col-md-3">Product</th>
+										<th class="col-md-1">Quantity</th>
+										<th class="col-md-1">Rate</th>
+										<th class="col-md-1">Discount %</th>
+										<th class="col-md-1">Value</th>
+										<th class="col-md-1">Schedule Days</th>
+										<th class="col-md-2">RM Remark</th>
+										<th class="col-md-2">Action</th>
 
 									</tr>
 								</thead>
@@ -447,7 +461,7 @@
 	<!-- END Main Content -->
 
 	<footer>
-	<p>2017 © Monginis.</p>
+	<p>2018 © Monginis.</p>
 	</footer>
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -460,7 +474,8 @@
 
 		 
 
-			  
+			var grpId = $("#rm_group").val();
+
 				var taxation = $("#taxation").val();
 				var kind_attn = $("#kind_attn").val();
 				var rm_qty = $("#rm_qty").val();
@@ -486,6 +501,7 @@
 							rm_id : rm_id,
 							po_date : po_date,
 							po_no : po_no,
+							grpId:grpId,
 							quotation_ref_no : quotation_ref_no,
 							delv_at : delv_at,
 							delv_date : delv_date,
@@ -552,23 +568,23 @@
 												
 												if(itemList.delStatus==0)
 												{
-													tr.append($('<td></td>').html(key+1));
+													tr.append($('<td class="col-md-1"></td>').html(key+1));
 
-												  	tr.append($('<td></td>').html(itemList.rmName));
+												  	tr.append($('<td class="col-md-3"></td>').html(itemList.rmName));
 
-												  	tr.append($('<td></td>').html('<input type="text" id="poQty'+key+'" onkeyup="changeQty('+key+');"value="'+itemList.poQty+'" class="form-control" disabled="true">'));
+												  	tr.append($('<td class="col-md-1"></td>').html('<input type="text" id="poQty'+key+'" onkeyup="changeQty('+key+');"value="'+itemList.poQty+'" class="form-control" disabled="true">'));
 
-												  	tr.append($('<td></td>').html(itemList.poRate+'<input type="hidden" id="poRate'+key+'" value='+itemList.poRate+' readonly>'));
+												  	tr.append($('<td class="col-md-1"></td>').html(itemList.poRate+'<input type="hidden" id="poRate'+key+'" value='+itemList.poRate+' readonly>'));
 
-												  	tr.append($('<td></td>').html(itemList.discPer));
+												  	tr.append($('<td class="col-md-1"></td>').html(itemList.discPer));
 												  	
 												  	//tr.append($('<td></td>').html(itemList.poTaxable));
-												  	tr.append($('<td></td>').html('<input type="text" value="'+itemList.poTaxable+'" id="poValue'+key+'" class="form-control" disabled="true">'));
+												  	tr.append($('<td class="col-md-1"></td>').html('<input type="text" value="'+itemList.poTaxable+'" id="poValue'+key+'" class="form-control" disabled="true">'));
 
-												  	tr.append($('<td></td>').html(itemList.schDays));
+												  	tr.append($('<td class="col-md-1"></td>').html(itemList.schDays));
 												  	
-												  	tr.append($('<td></td>').html(itemList.rmRemark));
-												  	tr.append($('<td></td>').html('  <span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"></span> <span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span> '));
+												  	tr.append($('<td class="col-md-2"></td>').html(itemList.rmRemark));
+												  	tr.append($('<td class="col-md-2"></td>').html('  <span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"></span> <span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span> '));
 												  	 
 
 
@@ -649,7 +665,7 @@
 
 	<script type="text/javascript">
 	 
-				function getCat() {
+				/* function getCat() {
 					
 					$.getJSON('${getRmCategory}', {
 						grpId : $('#rm_group').val(),
@@ -668,8 +684,68 @@
 						$('#rm_cat').formcontrol('refresh');
 
 					});
-				} 
-	 
+				}  */
+				function onGrpChange(suppId,grpId) {
+					/* $.getJSON('${getRmCategory}', {
+						grpId : $(this).val(),
+						ajax : 'true'
+					}, function(data) {
+						var html = '<option value="" disabled="disabled" selected >Select Category</option>';
+						
+						var len = data.length;
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].catId + '">'
+									+ data[i].catName + '</option>';
+						}
+						html += '</option>';
+						$('#rm_cat').html(html);
+						$('#rm_cat').trigger("chosen:updated");
+
+					}); */
+					if(grpId==0){
+					var	suppId =document.getElementById("supp_id").value; 
+					var	grpId =document.getElementById("rm_group").value; 
+					}
+
+					if(grpId==4 || grpId==5)
+						{
+						$.getJSON('${getItemListByGroupId}', {
+							grpId : grpId,
+							suppId:suppId,
+							ajax : 'true'
+						}, function(data) {
+							var html = '<option value="" disabled="disabled" selected >Select Raw Material</option>';
+							
+							var len = data.length;
+							for ( var i = 0; i < len; i++) {
+								html += '<option value="' + data[i].id + '">'
+										+ data[i].itemName + '</option>';
+							}
+							html += '</option>';
+							$('#rm_id').html(html);
+							$("#rm_id").trigger("chosen:updated");
+
+						});
+						}else{
+					$.getJSON('${getRmListByGrpId}', {
+						grpId : grpId,
+						suppId:suppId,
+						ajax : 'true'
+					}, function(data) {
+						var html = '<option value="" disabled="disabled" selected >Select Raw Material</option>';
+						
+						var len = data.length;
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].rmId + '">'
+									+ data[i].rmName + '</option>';
+						}
+						html += '</option>';
+						$('#rm_id').html(html);
+						$("#rm_id").trigger("chosen:updated");
+
+					});
+						}
+				}
 				function getRm() {
 					
 					$.getJSON('${getRmListByCatId}', {

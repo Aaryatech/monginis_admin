@@ -28,8 +28,18 @@ public class RmRateVerification {
 	private float rateTaxIncl2;
 	 
 	private int taxId;
-	 
+
+	private int grpId;
+	
 /*	private float igstPer;*/
+
+	public int getGrpId() {
+		return grpId;
+	}
+
+	public void setGrpId(int grpId) {
+		this.grpId = grpId;
+	}
 
 	public int getRmRateVerId() {
 		return rmRateVerId;

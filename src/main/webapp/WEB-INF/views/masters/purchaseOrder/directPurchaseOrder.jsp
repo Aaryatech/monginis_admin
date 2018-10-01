@@ -5,15 +5,18 @@
 	 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	<body>
+	<body onload="onGrpChange1(${suppId},${grpId})">
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include> 
+		<c:url var="deleteItem" value="/deletePoItem"></c:url>
 
 	<c:url var="addItemToList" value="/addItemToList"></c:url>
-		<c:url var="updateRmQty0" value="/updateRmQty0"></c:url>
+		<c:url var="updateRmQty" value="/updateRmQty"></c:url>
 		<c:url var="getRmCategory" value="/getRmCategory" />
 			<c:url var="getRmListByCatId" value="/getRmListByCatId" />
 						<c:url var="getRmRateAndTax" value="/getRmRateAndTax" />
+<c:url var="getRmListByGrpId" value="/getRmListByGrpId" />
+<c:url var="getItemListByGroupId" value="/getItemListByGroupId" />
 
 	<c:url var="getUomForRawMaterial" value="/getUomForRawMaterial" />
 <div class="container" id="main-container">
@@ -35,7 +38,7 @@
 	<!-- BEGIN Content -->
 	<div id="main-content">
 		<!-- BEGIN Page Title -->
-		<div class="page-title">
+	<%-- 	<div class="page-title">
 			<div>
 				<h1>
 					<i class="fa fa-file-o"></i>Purchase Order
@@ -53,7 +56,7 @@
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
 				<li class="active">Purchase Order</li>
 			</ul>
-		</div>
+		</div> --%>
 		<!-- END Breadcrumb -->
 		
 		<!-- BEGIN Main Content -->
@@ -84,12 +87,20 @@
 				<div class="box-content">
 				<div class="col-md-2" >Supplier Name</div>
 									<div class="col-md-4">
-										<select name="supp_id" id="supp_id" class="form-control chosen" tabindex="6" required>
+										<select name="supp_id" id="supp_id" class="form-control chosen" tabindex="6"  onchange="onGrpChange()" required>
 										<option value="" disabled="disabled" selected="selected">Select Supplier</option>
 											 <c:forEach items="${supplierList}" var="supplierList"
 							varStatus="count">
-							  <option value="${supplierList.suppId}"><c:out value="${supplierList.suppName}"/></option>
- 													 
+                           <c:choose>
+							<c:when test="${suppId==supplierList.suppId}">
+						  <option value="${supplierList.suppId}" selected><c:out value="${supplierList.suppName}"/></option>
+							
+							</c:when>
+							<c:otherwise>
+						  <option value="${supplierList.suppId}"><c:out value="${supplierList.suppName}"/></option>
+															
+							</c:otherwise>
+							</c:choose> 													 
 												</c:forEach>
 						
 
@@ -144,7 +155,26 @@
 									<div class="col-md-3">
 										 <input type="text" placeholder="Select Quotation Date" name="quotation_date" id="quotation_date" class="form-control date-picker" required>
 									</div>
-									</div><br/>
+									</div><br/><div class="box-content">
+									<div class="col-md-2" >Group</div>
+											<div class="col-md-4">
+												<select name="rm_group" id="rm_group" class="form-control chosen" tabindex="6"  onchange="onGrpChange()">
+												<option value="-1" disabled="disabled" selected="selected">RM Group</option>
+													 <c:forEach items="${rmItemGroupList}" var="rmItemGroupList" varStatus="count">
+									  						 <c:choose>
+									  						 <c:when test="${grpId==rmItemGroupList.grpId}">
+									  							 <option value="${rmItemGroupList.grpId}" selected><c:out value="${rmItemGroupList.grpName}"/></option>
+									  						  </c:when>
+									  						  <c:otherwise>
+														  		 <option value="${rmItemGroupList.grpId}"><c:out value="${rmItemGroupList.grpName}"/></option>
+									  						  
+									  						  </c:otherwise>
+									  						 </c:choose>
+		 											</c:forEach> 
+												</select>
+											</div>
+												</div>
+									
 									<br/>
 									
 									
@@ -156,60 +186,51 @@
 									
 									
 									<div class="box-content">
-										<div class="col-md-2" >Raw Material Group</div>
-											<div class="col-md-3">
-												<select name="rm_group" id="rm_group" class="form-control chosen" tabindex="6">
-												<option value="-1" disabled="disabled" selected="selected">Select RM Group</option>
-													 <c:forEach items="${rmItemGroupList}" var="rmItemGroupList" varStatus="count">
-									  						 <option value="${rmItemGroupList.grpId}"><c:out value="${rmItemGroupList.grpName}"/></option>
-		 											</c:forEach> 
-												</select>
-											</div>
-								<div class="col-md-2">Raw Material Category </div>
-										<div class="col-md-3">
-											<select name="rm_cat" id="rm_cat" class="form-control chosen" tabindex="6">
+										<input name="rm_cat" id="rm_cat"type="hidden" value="1"/>
+							<!-- 	<div class="col-md-2">Raw Material Category </div>
+										<div class="col-md-3"> -->
+										<!-- 	<select name="rm_cat" id="rm_cat" class="form-control chosen" tabindex="6">
 												<option value="-1"disabled="disabled" selected="selected">Select RM Category</option>
 											 
-											</select>
-										</div>
+											</select> -->
+										<!-- </div> -->
 									
 				 
-									</div><br/>
+									</div><!-- <br/>
 			
-					<div class="box-content">
+					<div class="box-content"> -->
 								<div class="col-md-2" >Items</div>
 									<div class="col-md-3">
 										<select name="rm_id" id="rm_id" class="form-control chosen"placeholder="Select RM " tabindex="6">
 										<option value="-1" disabled="disabled" selected="selected">Select Raw Material</option> 
 										</select>
 									</div>	
-		 						<div class="col-md-2">Uom </div>
-								<div class="col-md-3">
+		 					<!-- 	<div class="col-md-1">Uom </div> -->
+								<div class="col-md-1">
 									<input type="text" placeholder="Uom" name="rm_uom" id="rm_uom" class="form-control" readonly>
 								</div>
 									
-					</div>
+					<!-- </div>
 			 		<br/>
 			 		
-			 		<div class="box-content">
+			 		<div class="box-content"> -->
 			
-								<div class="col-md-2">Quantity </div>
-										<div class="col-md-3">
-											<input type="text" placeholder="Enetr RM Quantity" name="rm_qty" id="rm_qty" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;">
+								<div class="col-md-1">Qty</div>
+										<div class="col-md-1">
+											<input type="text" placeholder="Qty" name="rm_qty" id="rm_qty" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;">
 										</div> 
-								<div class="col-md-2">Discount % </div>
-								<div class="col-md-3">
-									<input type="text" placeholder="Enter Discount %" name="disc_per" id="disc_per" value="0" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;">
-								</div>
-								
+								<div class="col-md-1">Disc % </div>
+								<div class="col-md-1">
+									<input type="text" placeholder="Disc %" name="disc_per" id="disc_per" value="0" class="form-control" onkeypress="return IsNumeric(event);" ondrop="return false;" onpaste="return false;">
+								 </div> 
 									
 								 
-					</div><br/><br>
+					<!-- </div><br/><br>
 			 
-					<div class="box-content"> 
-								<div class="col-md-2"></div>
-								<div class="col-md-2"></div>
-								<div class="col-md-2">
+					<div class="box-content">  -->
+							<!-- 	<div class="col-md-2"></div>
+								<div class="col-md-2"></div> -->
+								<div class="col-md-12">
 									<input type="button" class="btn btn-info pull-right" onclick="addItem()" value="Add Item"> 
 								</div>
 					</div><br/>
@@ -237,6 +258,28 @@
 								</thead>
 								<tbody>
 
+<c:forEach items="${purchaseOrderDetailList}" var="po" varStatus="cnt">
+											<tr>
+												<td>
+											<c:out value="${cnt.index+1}"/>  <input type="hidden" id="poRate${cnt.index}" value='${po.poRate}' readonly>
+												</td>
+												<td align="left"><c:out
+														value="${po.rmName}" /></td>
+											
+												<td align="left"><input type="text" id="poQty${cnt.index}" onkeyup="changeQty(${cnt.index});" name="poQty${cnt.index}"  value="${po.poQty}" class="form-control" disabled></td>
+											<td align="left"><c:out
+														value="${po.poRate}" /></td>		
+								        		
+										        <td align="left"><input type="text" id="discPer${cnt.index}" name="discPer${cnt.index}"  value="${po.discPer}" class="form-control" ></td>		
+												<td align="left"><input type="text" value="${po.poTaxable}" id="poValue${cnt.index}" class="form-control" disabled="disabled"></td>
+												
+												  <td align="left"><c:out
+														value="${po.schDays}" /></td>			
+												  <td align="left"><c:out
+														value="${po.specification}" /></td>							
+													
+													  <td align="left"><span class="glyphicon glyphicon-edit" id="edit${cnt.index}" onclick="edit(${cnt.index});"></span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit(${cnt.index});" id="ok${cnt.index}"></span>  <span class="glyphicon glyphicon-remove"  onclick="del(${cnt.index})" id="del${cnt.index}"></span> </td>	
+													  </tr></c:forEach> 
 								</tbody>
 							</table>
 						</div>
@@ -320,7 +363,7 @@
 	<!-- END Main Content -->
 
 	<footer>
-	<p>2017 © Monginis.</p>
+	<p>2018 © Monginis.</p>
 	</footer>
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -331,14 +374,11 @@
 	<script type="text/javascript">
 		function addItem() {
 
-		 
-
-			  
 				var taxation = $("#taxation").val();
 				var kind_attn = $("#kind_attn").val();
 				var rm_qty = $("#rm_qty").val();
 				var supp_id = $("#supp_id").val();
-
+				var grpId = $("#rm_group").val();
 				var po_type = $("#po_type").val();
 				var delv_date = $("#delv_date").val();
 				var delv_at = $("#delv_at").val();
@@ -350,13 +390,8 @@
 				 
 		 if(validate()){
 				
-			 
-				 
-				   
-			 
 				$('#loader').show();
-
-				
+			
 				$
 				.getJSON(
 						'${getRmRateAndTax}',
@@ -364,6 +399,7 @@
 						{
 							 
 							rm_id : rm_id,
+							grpId:grpId,
 							po_date : po_date,
 							po_no : po_no,
 							quotation_ref_no : quotation_ref_no,
@@ -383,14 +419,11 @@
 								alert("Item rate  is not verified !!");
 								$('#loader').hide();
 							}
-							else{
+							else{ 
 						
-				$
-						.getJSON(
+				$.getJSON(
 								'${addItemToList}',
-
 								{
-									 
 									rm_id : rm_id,
 									po_date : po_date,
 									po_no : po_no,
@@ -404,7 +437,6 @@
 									taxation : taxation,
 									disc_per : disc_per,
 									ajax : 'true'
-
 								},
 								function(data) {
 
@@ -413,10 +445,7 @@
 
 									if (data == "") {
 										alert("No records found !!");
-
 									}
-								 
-  
 								  $.each(
 												data,
 												function(key, itemList) {
@@ -424,9 +453,6 @@
 
 													var tr = $('<tr></tr>');
 
-												
-													
-													
 												  	tr.append($('<td></td>').html(key+1));
 
 												  	tr.append($('<td></td>').html(itemList.rmName));
@@ -443,23 +469,16 @@
 												  	tr.append($('<td></td>').html(itemList.schDays));
 												  	
 												  	tr.append($('<td></td>').html(itemList.rmRemark));
-												  	tr.append($('<td></td>').html('  <span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span>  <span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span>    <span class="glyphicon glyphicon-remove" id="delete'+key+'"></span>  '));
+												  	tr.append($('<td></td>').html('  <span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span>  <span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span>  <span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span> '));
 												  	 
-
-
-
- 
-
 													$('#table_grid tbody').append(tr);
 
-													 
- 
 												})  
 								});
-							}  //else
+						}  //else
 						});
 					
-		 }
+				 } 
 		}
 	</script>
 
@@ -548,34 +567,112 @@
 			 document.getElementById("poValue"+key).value=qty*rate;
 			
 		}
-		function submit(key)
-		{
-			var qty=document.getElementById("poQty"+key).value;
-			document.getElementById("poQty"+key).disabled = true;
-			//alert(qty);
-			document.getElementById("edit"+key).style.visibility="visible";
-			document.getElementById("ok"+key).style.visibility="hidden";
-			$
-			.getJSON(
-					'${updateRmQty}',
-
-					{
-						 
-						index : key,
-						updateQty : qty,
-					
-						ajax : 'true'
-
-					},
-					function(data) {
-						
-					});
-			
-			
-		}
 		
 	
 		
+	</script>
+	<script type="text/javascript">
+	function submit(key)
+	{
+		var qty=document.getElementById("poQty"+key).value;
+		document.getElementById("poQty"+key).disabled = true;
+		//alert(qty);
+		document.getElementById("edit"+key).style.visibility="visible";
+		document.getElementById("ok"+key).style.visibility="hidden";
+		$
+		.getJSON(
+				'${updateRmQty}',
+
+				{
+					 
+					index : key,
+					updateQty : qty,
+				
+					ajax : 'true'
+
+				},
+				function(data) {
+					
+				});
+		
+		
+	}
+	function del(key)
+	{
+		
+		var key=key;
+		$('#loader').show();
+		$
+		.getJSON(
+				'${deleteItem}',
+
+				{
+					 
+					index : key,
+					
+				
+					ajax : 'true'
+
+				},
+				function(data) {
+					
+					$('#table_grid td').remove();
+					$('#loader').hide();
+
+					if (data == "") {
+						alert("No records found !!");
+
+					}
+				 
+
+				  $.each(
+								data,
+								function(key, itemList) {
+								
+
+									var tr = $('<tr></tr>');
+
+								
+									
+									if(itemList.delStatus==0)
+										{
+										
+										tr.append($('<td></td>').html(key+1));
+
+									  	tr.append($('<td></td>').html(itemList.rmName));
+
+									  	tr.append($('<td></td>').html('<input type="text" id="poQty'+key+'" onkeyup="changeQty('+key+');"value="'+itemList.poQty+'" class="form-control" disabled="true">'));
+
+									  	tr.append($('<td></td>').html(itemList.poRate+'<input type="hidden" id="poRate'+key+'" value='+itemList.poRate+' readonly>'));
+
+									  	tr.append($('<td></td>').html(itemList.discPer));
+									  	
+									  	//tr.append($('<td></td>').html(itemList.poTaxable));
+									  	tr.append($('<td></td>').html('<input type="text" value="'+itemList.poTaxable+'" id="poValue'+key+'" class="form-control" disabled="true">'));
+
+									  	tr.append($('<td></td>').html(itemList.schDays));
+									  	
+									  	tr.append($('<td></td>').html(itemList.rmRemark));
+									  	tr.append($('<td></td>').html('  <span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span> <span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
+									  	 
+
+
+
+
+
+										$('#table_grid tbody').append(tr);
+										}
+								  	
+
+									 
+
+								})
+					
+				});
+		
+		
+	}
+	
 	</script>
 
 <!--   <script>
@@ -659,27 +756,92 @@ jQuery(document).ready(function() {
 		
 		
 		<script type="text/javascript">
-$(document).ready(function() { 
-	$('#rm_group').change(
-			function() {
-				$.getJSON('${getRmCategory}', {
-					grpId : $(this).val(),
+
+			function onGrpChange() {
+				var	suppId =document.getElementById("supp_id").value; 
+				var	grpId =document.getElementById("rm_group").value; 
+
+				if(grpId==4 || grpId==5)
+					{
+					$.getJSON('${getItemListByGroupId}', {
+						grpId : grpId,
+						suppId:suppId,
+						ajax : 'true'
+					}, function(data) {
+						var html = '<option value="" disabled="disabled" selected >Select Raw Material</option>';
+						
+						var len = data.length;
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].id + '">'
+									+ data[i].itemName + '</option>';
+						}
+						html += '</option>';
+						$('#rm_id').html(html);
+						$("#rm_id").trigger("chosen:updated");
+
+					});
+					}else{
+				$.getJSON('${getRmListByGrpId}', {
+					grpId : grpId,
+					suppId:suppId,
 					ajax : 'true'
 				}, function(data) {
-					var html = '<option value="" disabled="disabled" selected >Select Category</option>';
+					var html = '<option value="" disabled="disabled" selected >Select Raw Material</option>';
 					
 					var len = data.length;
 					for ( var i = 0; i < len; i++) {
-						html += '<option value="' + data[i].catId + '">'
-								+ data[i].catName + '</option>';
+						html += '<option value="' + data[i].rmId + '">'
+								+ data[i].rmName + '</option>';
 					}
 					html += '</option>';
-					$('#rm_cat').html(html);
-					$('#rm_cat').trigger("chosen:updated");
+					$('#rm_id').html(html);
+					$("#rm_id").trigger("chosen:updated");
 
 				});
-			});
-});
+					}
+			}
+			function onGrpChange1(suppId,grpId) {
+				
+
+				if(grpId==4 || grpId==5)
+					{
+					$.getJSON('${getItemListByGroupId}', {
+						grpId : grpId,
+						suppId:suppId,
+						ajax : 'true'
+					}, function(data) {
+						var html = '<option value="" disabled="disabled" selected >Select Raw Material</option>';
+						
+						var len = data.length;
+						for ( var i = 0; i < len; i++) {
+							html += '<option value="' + data[i].id + '">'
+									+ data[i].itemName + '</option>';
+						}
+						html += '</option>';
+						$('#rm_id').html(html);
+						$("#rm_id").trigger("chosen:updated");
+
+					});
+					}else{
+				$.getJSON('${getRmListByGrpId}', {
+					grpId : grpId,
+					suppId:suppId,
+					ajax : 'true'
+				}, function(data) {
+					var html = '<option value="" disabled="disabled" selected >Select Raw Material</option>';
+					
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						html += '<option value="' + data[i].rmId + '">'
+								+ data[i].rmName + '</option>';
+					}
+					html += '</option>';
+					$('#rm_id').html(html);
+					$("#rm_id").trigger("chosen:updated");
+
+				});
+					}
+			}
 $(document).ready(function() { 
 	$('#rm_cat').change(
 			function() {
@@ -720,7 +882,7 @@ $(document).ready(function() {
 					 cId=document.getElementById("rm_cat").value; 
 								$.getJSON('${getRmListByCatId}', {
 									
-									catId : cId,
+									catId : 1,
 									ajax : 'true'
 									
 								}, 

@@ -37,14 +37,14 @@
 		<!-- END Page Title -->
 
 		<!-- BEGIN Breadcrumb -->
-		<div id="breadcrumbs">
+	<%-- 	<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
 				<li class="active">Purchase Order</li>
 			</ul>
-		</div>
+		</div> --%>
 		<!-- END Breadcrumb -->
 		
 		<!-- BEGIN Main Content -->
@@ -167,6 +167,7 @@
 			</form>
 	 
 </div>
+ </div>
  
 
 	 
@@ -174,7 +175,7 @@
 	<!-- END Main Content -->
 
 	<footer>
-	<p>2017 © Monginis.</p>
+	<p>2018 © Monginis.</p>
 	</footer>
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i

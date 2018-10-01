@@ -2,7 +2,7 @@
   <div class="col-md-9" ></div> 
 					<label for="search" class="col-md-3" id="search">
     <i class="fa fa-search" style="font-size:20px"></i>
-									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search.." title="Type in a name">
+									<input type="text"  id="myInput"  style=" border-radius: 25px;box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2); " onkeyup="myFunction()" placeholder="Search.." title="Type in a name">
 										</label>  
  
   <script>

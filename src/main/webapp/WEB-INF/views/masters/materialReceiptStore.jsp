@@ -104,13 +104,13 @@
 														<c:when test="${mrntype.grpId==materialRecNote.mrnType}">
 														<option selected value="${mrntype.grpId}"><c:out value="${mrntype.grpName}"></c:out></option>
 														</c:when>
+														<c:otherwise>
+														<option value="${mrntype.grpId}"><c:out value="${mrntype.grpName}"></c:out> </option> 
+														</c:otherwise>
 														</c:choose>
 													
 													</c:forEach>
-												 
-													<c:forEach items="${mrntype}" var="mrntype"> 
-													<option value="${mrntype.grpId}"><c:out value="${mrntype.grpName}"></c:out> </option> 
-													</c:forEach> 
+												  
 													</select>
 													</c:when>
 													
@@ -584,7 +584,7 @@
 	$(document).ready(function() { 
 		$('#po_id').change(
 				function() {
-					alert("poid"+$(this).val());
+					
 					var id=$(this).val();
 				   if($(this).val()==2)
 					   {

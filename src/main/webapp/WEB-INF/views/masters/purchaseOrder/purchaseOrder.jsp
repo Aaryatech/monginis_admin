@@ -30,32 +30,32 @@
 	<!-- BEGIN Content -->
 	<div id="main-content">
 		<!-- BEGIN Page Title -->
-		<div class="page-title">
+	<!-- 	<div class="page-title">
 			<div>
 				<h1>
 					<i class="fa fa-file-o"></i>Purchase Order
 				</h1>
-				<!-- <h4>Bill for franchises</h4> -->
+				<h4>Bill for franchises</h4>
 			</div>
-		</div>
+		</div> -->
 		<!-- END Page Title -->
 
 		<!-- BEGIN Breadcrumb -->
-		<div id="breadcrumbs">
+	<%-- 	<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
 				<li class="active">Purchase Order</li>
 			</ul>
-		</div>
+		</div> --%>
 		<!-- END Breadcrumb -->
 		
 		<!-- BEGIN Main Content -->
 		<div class="box" id="polist">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>PO List
+					<i class="fa fa-bars"></i>Purchase Order List
 				</h3>
 				<div class="box-tool">
 								<a  onclick="showdatewisetable()">Show Datewise Record</a> <a data-action="collapse" href="#"><i

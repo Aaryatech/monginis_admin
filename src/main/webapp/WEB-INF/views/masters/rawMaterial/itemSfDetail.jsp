@@ -114,8 +114,10 @@
 										<option value="0" disabled="disabled" selected="selected">Select RM Group</option>
 											 <c:forEach items="${rmItemGroupList}" var="rmItemGroupList"
 						            	varStatus="count">
+						            	<c:choose>
+						            	<c:when test="${rmItemGroupList.grpId!=2&&rmItemGroupList.grpId!=3}">
 							   <option value="${rmItemGroupList.grpId}"><c:out value="${rmItemGroupList.grpName}"/></option>
- 													 
+ 											</c:when></c:choose>		 
 												</c:forEach>
 						
 

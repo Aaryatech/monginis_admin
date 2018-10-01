@@ -41,6 +41,7 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.StockItem;
 import com.ats.adminpanel.model.TrayType;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialUom;
 import com.ats.adminpanel.model.item.AllItemsListResponse;
@@ -80,7 +81,7 @@ public class ItemController {
 
 	public static List<FrItemStockConfigurePost> frItemStockConfigureList;
 
-	ArrayList<Item> itemList;
+	ArrayList<Item> itemList;ArrayList<StockItem> tempStockItemList;
 
 	public static List<GetPrevItemStockResponse> getPrevItemStockResponsesList;
 
@@ -1098,6 +1099,99 @@ public class ItemController {
 			return mav;
 
 		}
-	
+
+		@RequestMapping(value = "/showFrItemConfP")
+		public ModelAndView showFrItemConfP(HttpServletRequest request, HttpServletResponse response) {
+			ModelAndView model = new ModelAndView("items/itemConfP");
+			Constants.mainAct = 2;
+			Constants.subAct = 13;
+			try {
+				model.addObject("catId", catId);
+				model.addObject("itemList", tempItemList);
+
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+			return model;
+		}
+
+		@RequestMapping(value = "/getItemsbySubCatId", method = RequestMethod.POST)
+		public ModelAndView getItemsbySubCatId(HttpServletRequest request, HttpServletResponse response) {
+
+			ModelAndView model = new ModelAndView("items/itemConfP");
+			try {
+
+				catId = Integer.parseInt(request.getParameter("cat_name"));
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("subCatId", catId);
+				map.add("type", 8);
+				RestTemplate restTemplate = new RestTemplate();
+
+				StockItem[] item = restTemplate.postForObject(Constants.url + "getStockItemsBySubCatId", map,
+						StockItem[].class);
+
+				tempStockItemList = new ArrayList<StockItem>(Arrays.asList(item));
+
+				model.addObject("itemList", tempStockItemList);
+				model.addObject("catId", catId);
+
+			} catch (Exception e) {
+
+				System.out.println("exe in item get By CatId frItemConf " + e.getMessage());
+				e.printStackTrace();
+			}
+
+			return model;
+
+		}
+		@RequestMapping(value = "/frItemStockConfInsert", method = RequestMethod.POST)
+		public String frItemStockConfInsert(HttpServletRequest request, HttpServletResponse response) {
+
+			List<FrItemStock> frItemStocksList = new ArrayList<FrItemStock>();
+			try {
+				RestTemplate rest = new RestTemplate();
+
+				if (tempStockItemList.size() > 0) {
+
+					for (int i = 0; i < tempStockItemList.size(); i++) {
+
+						StockItem stockItemRes = tempStockItemList.get(i);
+
+						String minQty = request.getParameter(stockItemRes.getId() + "min" + i);
+						String maxQty = request.getParameter(stockItemRes.getId() + "max" + i);
+						String reorderQty = request.getParameter(stockItemRes.getId() + "reorder" + i);
+						if (Integer.parseInt(maxQty) > 0) {
+							FrItemStock frItemStock = new FrItemStock();
+							frItemStock.setFrStockId(stockItemRes.getFrStockId());
+							frItemStock.setMinQty(Integer.parseInt(minQty));
+							frItemStock.setMaxQty(Integer.parseInt(maxQty));
+							frItemStock.setReorderQty(Integer.parseInt(reorderQty));
+							frItemStock.setItemId(stockItemRes.getId());
+							frItemStock.setType(8);
+							frItemStocksList.add(frItemStock);
+						}
+
+					}
+				}
+
+				System.out.println("Fr item Stock " + frItemStocksList.toString());
+				System.out.println("fr item stock size " + frItemStocksList.size());
+
+				ErrorMessage errorResponse = rest.postForObject(Constants.url + "frItemStockPost", frItemStocksList,
+						ErrorMessage.class);
+
+			} catch (Exception e) {
+
+				System.out.println("exe in fr Item  stock insert  process  " + e.getMessage());
+
+				e.printStackTrace();
+			}
+
+			return "redirect:/showFrItemConfP";
+
+		}
+
 }
 

@@ -49,22 +49,56 @@
 							</div>
 							
 						</div>
-						
+						<div class="box-content">
+								<form action="${pageContext.request.contextPath}/showStoreOpeningStock" name="validation-from"
+													id="validation-from" method="get">
+
+
+													<div class="form-group">
+														<label class="col-sm-2 col-lg-2 control-label">Category</label>
+														<div class="col-sm-1 col-lg-3 controls">
+															<select data-placeholder="Select Category"
+																class="form-control chosen" tabindex="6" name="cat_name"
+																id="cat_name">
+															<c:forEach items="${rmItemGroupList}" var="rmItemGroupList">	<c:choose>
+																<c:when test="${subCatId==rmItemGroupList.grpId}">
+                                  								<option  value="${rmItemGroupList.grpId}" selected>${rmItemGroupList.grpName}</option>
+                                                                </c:when>
+                                                                <c:otherwise>
+															     <option  value="${rmItemGroupList.grpId}" >${rmItemGroupList.grpName}</option>
+                                                                </c:otherwise>
+																</c:choose>
+																</c:forEach>
+															</select>
+														</div>
+														<!-- </div>
+
+													<div class="form-group"> -->
+
+														<div class="col-md-2">
+															<input type="submit" class="btn btn-primary"
+																value="Submit">
+
+														</div>
+													</div><br><br>
+												</form>
+												</div>
 						
 						<div class="box-content">
 
 							<form id="completproduction" action="${pageContext.request.contextPath}/insertStoreOpeningStock" method="post">
 							 
+							 							 <input type="hidden" name="catId" id="catId" value="${subCatId}" />
 							 
 							
 							<div class=" box-content">
 								<div class="row">
 								<div class="col-md-12 table-responsive">
 									<table class="table table-bordered table-striped fill-head "
-								style="width: 50%" id="table_grid">
+								 id="table_grid">
 								<thead>
 									<tr>
-										<th>Sr.No.</th>
+										<th  style="width: 50px">Sr.No.</th>
 										<th style="width: 400px">Raw Material Name</th>
 										
 										<th style="width: 100px"> Uom</th>
@@ -105,7 +139,7 @@
 								</div>
 								</div>
 									<div class="form-group">
-												<div class="col-sm-9 col-sm-offset-3 col-lg-11 col-lg-offset-3">
+												<div class="col-sm-9 col-sm-offset-3 col-lg-11 col-lg-offset-4">
 										
 													<input type="submit" class="btn btn-primary" value="Submit">
 												</div>

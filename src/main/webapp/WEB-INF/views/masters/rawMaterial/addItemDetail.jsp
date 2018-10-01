@@ -109,7 +109,7 @@
 									</div></div>
 								<div class="form-group">
 									<label class="col-sm-2 col-lg-2 control-label">RM Type</label>
-									<div class="col-sm-6 col-lg-4 controls">
+									<div class="col-sm-6 col-lg-2 controls">
                                     <select name="rm_type" id="rm_type" class="form-control" placeholder="Raw Material Type"data-rule-required="true" onchange="return rmTypeChange()">
 											<option value="">Select RM Type</option>
 											<option value="1">Raw Material</option>
@@ -117,32 +117,34 @@
 									
 								   </select>									
 								   </div>
-                        <label class="col-sm-3 col-lg-1 control-label">Rm Group</label>
-									<div class="col-sm-6 col-lg-4 controls">
+                        <label class="col-sm-3 col-lg-2 control-label">Rm Group</label>
+									<div class="col-sm-6 col-lg-2 controls">
 										<select name="rm_group" id="rm_group" class="form-control" tabindex="6">
 										<option value="0" disabled="disabled" selected="selected">Select RM Group</option>
 											 <c:forEach items="${rmItemGroupList}" var="rmItemGroupList"
 							varStatus="count">
+							<c:choose>
+						            	<c:when test="${rmItemGroupList.grpId!=2&&rmItemGroupList.grpId!=3}">
 							   <option value="${rmItemGroupList.grpId}"><c:out value="${rmItemGroupList.grpName}"/></option>
- 													 
+ 												</c:when></c:choose>	 
 												</c:forEach>
 						
 
 										</select>
 									</div>
 								
-								</div>
-									<div class="form-group">
+								<!-- </div>
+									<div class="form-group"> -->
 				<div class="col-sm-2 col-lg-2 control-label" >RM Category</div>
-									<div class="col-md-4">
+									<div class="col-md-2">
 									<select name="rm_cat" id="rm_cat" class="form-control" tabindex="6">
 										<option value="0"disabled="disabled" selected="selected">Select RM Category</option>
 											 
 										</select>
 									</div>
-			
-		                         <label class="col-sm-3 col-lg-1 control-label">Raw Material Item</label>
-								<div class="col-sm-6 col-lg-4 controls">
+			</div><div class="form-group">
+		                         <label class="col-sm-3 col-lg-2 control-label">RM Item</label>
+								<div class="col-sm-6 col-lg-2 controls">
 									<select name="rm_id" id="rm_id"class="form-control chosen"  tabindex="6"  placeholder="Raw Material"data-rule-required="true">
 											<option value="0">Select Raw Material</option>
 										    
@@ -150,27 +152,27 @@
 				                 </div>
 				
 									
-									</div>
-								<div class="form-group">
+									
+								
 								<!-- <label class="col-sm-3 col-lg-2 control-label">RM Unit</label>
 									<div class="col-sm-6 col-lg-4 controls">-->
 						     	<input type="hidden" name="rm_unit_id" id="rm_unit_id "class="form-control"placeholder="RM Unit"/>
 									
 									<!--</div> -->
 								<label class="col-sm-3 col-lg-2 control-label">RM Qty</label>
-					      	    <div class="col-sm-6 col-lg-4 controls">
+					      	    <div class="col-sm-6 col-lg-2 controls">
 							    <input type="text" name="rm_qty" id="rm_qty" class="form-control"placeholder="RM Qty" required/>
 					     	    </div>
 					     	    
-					     	    <label class="col-sm-3 col-lg-1 control-label">RM Weight</label>
-					      	    <div class="col-sm-5 col-lg-4 controls">
-							    <input type="text" name="rm_weight"   id="rm_weight" class="form-control"placeholder="RM Weight(KG)"data-rule-required="true"/>
-					     	    </div>
-								</div>
-								<div class="form-group">
+					     	   <!--  <label class="col-sm-3 col-lg-1 control-label">RM Weight</label>
+					      	    <div class="col-sm-5 col-lg-4 controls"> -->
+							    <input type="hidden" name="rm_weight"   id="rm_weight" class="form-control"placeholder="RM Weight(KG)" value="1" data-rule-required="true"/>
+					     	   <!--  </div> -->
+								<!-- </div>
+								<div class="form-group"> -->
 				
 				                <label class="col-sm-3 col-lg-2 control-label">No. Of Pieces Per Item</label>
-								 	<div class="col-sm-6 col-lg-4 controls">
+								 	<div class="col-sm-6 col-lg-2 controls">
 						     	    <input type="text" name="base_qty" id="base_qty" class="form-control"placeholder="No. Of Pieces Per Item" value="${item.minQty}"   data-rule-required="true"/>
 									
 									</div> 
@@ -195,21 +197,21 @@
 				</div>
 					</div>
 					</form>
-					</br>
+					
 					<form action="${pageContext.request.contextPath}/addItemDetail" method="post" class="form-horizontal" id=
 									"validation-form"
 										 method="post">
 						<div class="box">
-									<div class="box-title">
+									<!-- <div class="box-title">
 										<h3>
 											<i class="fa fa-table"></i> Item Detail List
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i
 												class="fa fa-chevron-up"></i></a>
-											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
+											<a data-action="close" href="#"><i class="fa fa-times"></i></a>
 										</div>
-									</div>
+									</div> -->
 
 									<div class="box-content">
 <div class="col-md-9" ></div> 
@@ -332,10 +334,10 @@
 				         
 			          </div>
 		        </div>
-	     </div>
+	     </div></div>
 	<!-- END Main Content -->
 	<footer>
-	<p>2017 © MONGINIS.</p>
+	<p>2018 © MONGINIS.</p>
 	</footer>
 
 
@@ -676,7 +678,7 @@ $(document).ready(function() {
 	
 	});
  }
-	 document.getElementById("rm_weight").value="";
+	 document.getElementById("rm_weight").value="1";
 	 document.getElementById("rm_type").selectedIndex = "0"; 
 		var html = '<option value="0" selected >Select Raw Material</option>';
 		html += '</option>';
@@ -695,7 +697,7 @@ $(document).ready(function() {
 });
 $(document).ready(function() {
 	$("#cancel").click(function() {
-		 document.getElementById("rm_weight").value="";
+		// document.getElementById("rm_weight").value="";
 		 document.getElementById("rm_type").selectedIndex = "0"; 
 			var html = '<option value="0" selected >Select Raw Material</option>';
 			html += '</option>';

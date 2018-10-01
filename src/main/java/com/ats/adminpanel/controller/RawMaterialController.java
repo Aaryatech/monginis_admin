@@ -3,6 +3,7 @@ package com.ats.adminpanel.controller;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -30,6 +31,7 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.RawMaterial.ItemDetail;
 import com.ats.adminpanel.model.RawMaterial.ItemDetailList;
+import com.ats.adminpanel.model.StockItem;
 import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;
 import com.ats.adminpanel.model.RawMaterial.GetRawmaterialByGroup;
 import com.ats.adminpanel.model.RawMaterial.GetUomAndTax;
@@ -65,7 +67,8 @@ public class RawMaterialController {
 	public  List<ItemDetail> itemDetailList;
 	public  List<CommonConf> commonConfs=new ArrayList<CommonConf>();
 	public  int globalId=0;
-	
+	int grpIdGlobal = 0;
+	RawMaterialDetails info;
 	@RequestMapping(value = "/showAddRawMaterial", method = RequestMethod.GET)
 	public ModelAndView showRowMaterial(HttpServletRequest request, HttpServletResponse response) {
 
@@ -103,6 +106,10 @@ public class RawMaterialController {
 		Constants.subAct=85;
 			RestTemplate rest=new RestTemplate();
 			try {
+				//--------------------------------------------------------
+				SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+				Date date = new Date();
+				//--------------------------------------------------------
 			RawMaterialDetailsList rawMaterialDetailsList=rest.getForObject(Constants.url +"rawMaterial/getAllRawMaterial", RawMaterialDetailsList.class);
 		
 		System.out.println("RM Details : "+rawMaterialDetailsList.toString());
@@ -110,6 +117,18 @@ public class RawMaterialController {
 
 			model.addObject("supplierList", supplierDetailsList);
 			model.addObject("RawmaterialList", rawMaterialDetailsList.getRawMaterialDetailsList());
+			
+			//------------------------------------------------------
+			model.addObject("currentDate", formatter.format(date));
+			if (info != null) {
+				model.addObject("rmId", info.getRmId());
+				info = new RawMaterialDetails();
+			} else {
+				model.addObject("rmId", 0);
+			}
+			grpIdGlobal = 0;
+			model.addObject("groupId", 0);// new added 04 sept 18
+			//----------------------------------------------------------
 			}
 			catch(Exception e)
 			{
@@ -118,7 +137,72 @@ public class RawMaterialController {
 
 		return model;
 	}
-	
+	@RequestMapping(value = "/showRmRateVerification/{groupId}/{rmId}", method = RequestMethod.GET) // group newly added
+	public ModelAndView showRmRateVerifications(@PathVariable("groupId") int groupId, @PathVariable("rmId") int rmId,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("masters/rawMaterial/rmRateVerification");
+		Constants.mainAct = 14;
+		Constants.subAct = 85;
+		ArrayList<StockItem> tempStockItemList;
+		RestTemplate rest = new RestTemplate();
+		try {
+			SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
+			Date date = new Date();
+
+		 if(groupId==4)
+			{
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("subCatId", 18);
+				map.add("type", 8);
+				RestTemplate restTemplate = new RestTemplate();
+
+				StockItem[] item = restTemplate.postForObject(Constants.url + "getStockItemsBySubCatId", map,
+						StockItem[].class);
+
+				tempStockItemList = new ArrayList<StockItem>(Arrays.asList(item));
+				model.addObject("itemList", tempStockItemList);
+			}else if(groupId==5)
+			{
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("subCatId", 19);
+				map.add("type", 8);
+				RestTemplate restTemplate = new RestTemplate();
+
+				StockItem[] item = restTemplate.postForObject(Constants.url + "getStockItemsBySubCatId", map,
+						StockItem[].class);
+
+				tempStockItemList = new ArrayList<StockItem>(Arrays.asList(item));
+				model.addObject("itemList", tempStockItemList);
+			}
+			else {
+				
+				RawMaterialDetailsList rawMaterialDetailsList = rest.getForObject(Constants.url + "rawMaterial/getAllRawMaterial", RawMaterialDetailsList.class);
+				model.addObject("RawmaterialList", rawMaterialDetailsList.getRawMaterialDetailsList());
+
+				System.out.println("RM Details : " + rawMaterialDetailsList.toString());
+			}
+			List<SupplierDetails> supplierDetailsList = rest.getForObject(Constants.url + "getAllSupplier", List.class);
+
+			model.addObject("supplierList", supplierDetailsList);
+			model.addObject("currentDate", formatter.format(date));
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			map.add("itemId", rmId);
+			map.add("grpId", groupId);
+			List<SupplierDetails> supplierList = rest.postForObject(Constants.url + "/getSuppliersByItemId", map,
+					List.class);
+			System.err.println("supplierList" + supplierList.toString());
+			model.addObject("rmId", rmId);
+			model.addObject("supplierLists", supplierList);
+			model.addObject("groupId", groupId);// new added
+			grpIdGlobal =groupId;
+		} catch (Exception e) {
+			System.out.println("Exception In /showRmRateVerification" + e.getMessage());
+		}
+
+		return model;
+	}
 	@RequestMapping(value = "/addRawMaterial", method = RequestMethod.POST)
 	public ModelAndView addRawMaterial(HttpServletRequest request, HttpServletResponse response, @RequestParam("rm_icon") List<MultipartFile> file)
 	{
@@ -278,7 +362,8 @@ public class RawMaterialController {
 	public ModelAndView showRawMaterialDetails(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("masters/rawMaterial/showAllRawMaterial");
-		
+		ArrayList<StockItem> tempStockItemList = new ArrayList<>();
+
       try {
 		String grp_id=request.getParameter("rm_group");
 		int grpId=Integer.parseInt(grp_id);
@@ -294,6 +379,28 @@ public class RawMaterialController {
 		System.out.println("Group list :: "+rmItemGroupList.toString());
 		
 		System.out.println("RM Details : "+getRawmaterialByGroupList.toString());
+		try {
+			map = new LinkedMultiValueMap<String, Object>();
+			if (grpId == 4) {
+				map.add("subCatId", 18);
+				map.add("type", 8);
+			} else if (grpId == 5) {
+				map.add("subCatId", 19);
+				map.add("type", 8);
+			}
+			RestTemplate restTemplate = new RestTemplate();
+			if (grpId == 4||grpId == 5) {
+				StockItem[] item = restTemplate.postForObject(Constants.url + "getStockItemsBySubCatId", map,
+						StockItem[].class);
+
+				tempStockItemList = new ArrayList<StockItem>(Arrays.asList(item));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		model.addObject("itemList", tempStockItemList);
+		System.out.println("RM Details : " + tempStockItemList.toString());
 		model.addObject("grpId",grpId);
 		model.addObject("groupList", rmItemGroupList);
 		model.addObject("RawmaterialList", getRawmaterialByGroupList);
@@ -697,7 +804,8 @@ public class RawMaterialController {
 			 
 			String supp_id=request.getParameter("supp_id");
 			String rm_id=request.getParameter("rm_id");
-			
+			int grpId = Integer.parseInt(request.getParameter("grpId"));
+
 			int suppId=Integer.parseInt(supp_id);
 			int rmId=Integer.parseInt(rm_id);
 			MultiValueMap<String, Object> map=new LinkedMultiValueMap<String, Object>();
@@ -705,6 +813,7 @@ public class RawMaterialController {
 			
 			map.add("suppId", suppId);
 			map.add("rmId", rmId);
+			map.add("grpId", grpId);
 			RmRateVerification rmRateVerification=null;
 			try {
 		
@@ -761,7 +870,8 @@ public class RawMaterialController {
 			
 			String supp_id=request.getParameter("supp_id");
 			String rm_id=request.getParameter("rm_id");
-			
+			int grpId =  Integer.parseInt(request.getParameter("grpId"));
+
 				int rmId=Integer.parseInt(rm_id);
 				int suppId=Integer.parseInt(supp_id);
 				int taxId=Integer.parseInt(rm_tax_id);
@@ -777,6 +887,7 @@ public class RawMaterialController {
 			rmRateVerification.setRateDate(currRateDate);
 			rmRateVerification.setRateTaxExtra(Float.parseFloat(currRateTaxExtra));
 			rmRateVerification.setRateTaxIncl(Float.parseFloat(currRateTaxIncl));
+			rmRateVerification.setGrpId(grpId);
 			if(rmRateVerification.getRmRateVerId()==0)
 			{
 				rmRateVerification.setDate1(currRateDate);
@@ -806,7 +917,7 @@ public class RawMaterialController {
 
 			  System.out.println("response : "+ info.toString());
 			 
-			return "redirect:/showRmRateVerification";
+			  return "redirect:/showRmRateVerification/"+grpId +"/"+ rmId;
 		}
 		
 		
@@ -818,27 +929,52 @@ public class RawMaterialController {
 					 
 				 
 					String rm_id=request.getParameter("rmId");
-					
+					int grpId = Integer.parseInt(request.getParameter("grpId"));
+
 				 
 					int rmId=Integer.parseInt(rm_id);
 					MultiValueMap<String, Object> map=new LinkedMultiValueMap<String, Object>();
 					RestTemplate rest=new RestTemplate();
 					
-					 
-					map.add("rmId", rmId);
 					
 					GetUomAndTax getUomAndTax=new GetUomAndTax();
-					try {
-				
-						getUomAndTax = rest.postForObject(Constants.url + "rawMaterial/getUomAndTax",map,
-								GetUomAndTax.class);
 					
-					 
-				
-						
-					}catch (Exception e) {
-						System.out.println(e.getMessage());
-					}
+							if(grpId==4) {
+							map.add("rmId", rmId);
+					        map.add("grpId", 18);
+					        
+							try {
+
+								getUomAndTax = rest.postForObject(Constants.url + "rawMaterial/getUomAndTax", map, GetUomAndTax.class);
+
+							} catch (Exception e) {
+								System.out.println(e.getMessage());
+							}
+						}else
+							if(grpId==5) {
+							map.add("rmId", rmId);
+					        map.add("grpId", 19);
+					        
+							try {
+
+								getUomAndTax = rest.postForObject(Constants.url + "rawMaterial/getUomAndTax", map, GetUomAndTax.class);
+
+							} catch (Exception e) {
+								System.out.println(e.getMessage());
+							}
+						}else
+						{
+							map.add("rmId", rmId);
+					        map.add("grpId", grpId);
+					        
+							try {
+
+								getUomAndTax = rest.postForObject(Constants.url + "rawMaterial/getUomAndTax", map, GetUomAndTax.class);
+
+							} catch (Exception e) {
+								System.out.println(e.getMessage());
+							}
+						}
 					
 					System.out.println("List  : "+ getUomAndTax.toString());
 					

@@ -5,7 +5,7 @@
 	 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-	 
+	<!--  
 	<style type="text/css">
 	 <style type="text/css">
 	table {
@@ -44,8 +44,8 @@
             float: left;
         }
 	</style>
-	 
-	<body>
+	  -->
+	<body onload="disabledDate()">
  	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 <c:url var="getCurrentStoreStock" value="/getCurrentStoreStock" />
 <c:url var="getMonthWiseStoreStock" value="/getMonthWiseStoreStock" />
@@ -106,9 +106,8 @@
 
 
 								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Select
-										View Option Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
+									<label class="col-sm-3 col-lg-1 control-label">Option</label>
+									<div class="col-sm-5 col-lg-2 controls">
 										<select name="selectStock"  class="form-control chosen"
 											tabindex="6" id="selectStock" onchange="showDiv(this)"
 											required>
@@ -120,34 +119,50 @@
 
 										</select>
 									</div>
-
-								</div>
+  <label class="col-sm-2 col-lg-1 control-label">Group</label>
+														<div class="col-sm-1 col-lg-2 controls">
+															<select data-placeholder="Select Category"
+																class="form-control chosen" tabindex="6" name="group_id" onchange="onGrpChange(this.value)"
+																id="group_id">
+																	<option value="0">Select Group</option>
+																<c:forEach items="${rmItemGroupList}" var="rmItemGroupList">	<c:choose>
+																<c:when test="${subCatId==rmItemGroupList.grpId}">
+                                  								<option  value="${rmItemGroupList.grpId}" selected>${rmItemGroupList.grpName}</option>
+                                                                </c:when>
+                                                                <c:otherwise>
+															     <option  value="${rmItemGroupList.grpId}" >${rmItemGroupList.grpName}</option>
+                                                                </c:otherwise>
+																</c:choose>
+																</c:forEach>
+															</select>
+														</div>
+							<!-- 	</div>
 								
 							<br/>
 
 							<div class="form-group">
-								<div>
+								<div> -->
 									<div class="colOuter" style="display: none"
-										id=select_month_year><br/>
+										id=select_month_year><!-- <br/>
 										<div class="col-md-2">
 											<div class="col1title"> From :</div>
-										</div>
-										<div class="col-md-3" align="center">
+										</div> -->
+										<div class="col-md-2">
 
 
-											  <input type='text' placeholder="Select From Date" 
-												name="from_stockdate" id="from_stockdate" required class="form-control date-picker" /> 
+											  <input type='date' placeholder="Select From Date" 
+												name="from_stockdate" id="from_stockdate" required class="form-control" /> 
 												 
 										</div> 
 
-										  <div class="col-md-1"></div> 
+										  <!-- <div class="col-md-1"></div> 
 
 										<div class="col-md-2">
 											<div class="col1title"> To :</div>
-										</div>
-										<div class="col-md-3" align="center">
-											<input type='text' placeholder="Select To Date" 
-												name="to_stockdate" id="to_stockdate" required class="form-control date-picker"/>
+										</div> -->
+										<div class="col-md-2" >
+											<input type='date' placeholder="Select To Date" 
+												name="to_stockdate" id="to_stockdate" required class="form-control"/>
 										</div>
 
 									</div>
@@ -176,24 +191,84 @@
 
 									</div> -->
 
-								</div>
+							<!-- 	</div>
 
-							</div><br/><br/>
+							</div><br/><br/> -->
 							
-							<div class="row">
-					<div class="col-md-12" style="text-align: center">
+							<!-- <div class="row"> -->
+					<div class="col-md-1" >
 						<input type="button"  class="btn btn-primary" value="Get Stock" onclick="getStock()">
 					 
 
 
 					</div>
-				</div><br/>
+				</div><br/><br/>	
+					<input type="hidden" id="date1" name="date1" value="${stkDate.date1}"/>
+						<input type="hidden" id="date2" name="date2" value="${stkDate.date2}"/>
+							<input type="hidden" id="date3" name="date3" value="${stkDate.date3}"/>
+								<input type="hidden" id="date4" name="date4" value="${stkDate.date4}"/>
+									<input type="hidden" id="date5" name="date5" value="${stkDate.date5}"/>
+				<div class="form-group">&nbsp;&nbsp;
+						<c:forEach items="${rmItemGroupList}" var="rmItemGroupList">	
+						<c:choose>
+						<c:when test="${rmItemGroupList.grpId==1}">
+					   <span style="color:green;"><b>${rmItemGroupList.grpName}</b></span> = 
+					   <c:choose>
+					   <c:when test="${stkDate.date1 ne '0'}">
+				
+				              <fmt:parseDate value="${stkDate.date1}" pattern="yyyy-MM-dd" var="myDate"/>
+                              <fmt:formatDate value="${myDate}" var="startFormat" pattern="dd-MM-yyyy"/><c:out value="${startFormat}"></c:out>
+					  
+					   </c:when> <c:otherwise>-</c:otherwise> </c:choose>&nbsp;&nbsp;</c:when>
+					  <c:when test="${rmItemGroupList.grpId==2}">
+					  
+					<span style="color:green;"><b>${rmItemGroupList.grpName}</b></span> = 
+					<c:choose>
+					<c:when test="${stkDate.date2  ne '0'}">
+					
+					<fmt:parseDate value="${stkDate.date2}" pattern="yyyy-MM-dd" var="myDate"/>
+					<fmt:formatDate value="${myDate}" var="startFormat" pattern="dd-MM-yyyy"/>
+					<c:out value="${startFormat}"></c:out>
+						
+					</c:when> <c:otherwise>-</c:otherwise> 
+					</c:choose>&nbsp;&nbsp;</c:when>
+					
+					<c:when test="${rmItemGroupList.grpId==3}">
+					
+					<span style="color:green;"><b>${rmItemGroupList.grpName}</b></span> = 
+					<c:choose>
+					<c:when test="${stkDate.date3  ne '0'}"> 
+					   <fmt:parseDate value="${stkDate.date3}" pattern="yyyy-MM-dd" var="myDate"/>
+					   <fmt:formatDate value="${myDate}" var="startFormat" pattern="dd-MM-yyyy"/><c:out value="${startFormat}"></c:out>
+			        </c:when>
+			         <c:otherwise>-</c:otherwise> </c:choose>&nbsp;&nbsp;</c:when>
+					
+					<c:when test="${rmItemGroupList.grpId==4}">
+					
+					<span style="color:green;"><b>${rmItemGroupList.grpName}</b></span> = 
+					<c:choose>
+					<c:when test="${stkDate.date4  ne '0'}"> 
+					<fmt:parseDate value="${stkDate.date4}" pattern="yyyy-MM-dd" var="myDate"/>
+					<fmt:formatDate value="${myDate}" var="startFormat" pattern="dd-MM-yyyy"/>
+					<c:out value="${startFormat}"></c:out>
+						</c:when> <c:otherwise>-</c:otherwise> </c:choose>&nbsp;&nbsp;</c:when>
+							
+				<c:when test="${rmItemGroupList.grpId==5}">
+					<span style="color:green;"><b>${rmItemGroupList.grpName}</b></span> =
+		            <c:choose><c:when test="${stkDate.date5  ne '0'}"> <fmt:parseDate value="${stkDate.date5}" pattern="yyyy-MM-dd" var="myDate"/>
+                    <fmt:formatDate value="${myDate}" var="startFormat" pattern="dd-MM-yyyy"/><c:out value="${startFormat}"></c:out>
+					</c:when> <c:otherwise>-</c:otherwise> </c:choose>	&nbsp;&nbsp;</c:when> 
+					</c:choose>
+			</c:forEach>
+				
+								</div>
 							
 							<!-- </form> -->
 
 
 							<form action="${pageContext.request.contextPath}/dayEndStoreStock"
 								class="form-horizontal" method="post" id="validation-form">
+<input type="hidden" id="subCat" name="subCat"/>
 
 			<div align="center" id="loader" style="display:none">
 
@@ -208,35 +283,42 @@
 	</div>
 	
 								<div class="box">
-									<div class="box-title">
+								<!-- 	<div class="box-title">
 										<h3>
 											<i class="fa fa-table"></i> BMS Stock List
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i
 												class="fa fa-chevron-up"></i></a>
-											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
+											<a data-action="close" href="#"><i class="fa fa-times"></i></a>
 										</div>
-									</div>
+									</div> -->
 
 									<div class="box-content">
 <jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
 										<div class="clearfix"></div>
-										<div class="table-responsive" style="border: 0">
-											<table width="100%"
-												class="table table-advance table-responsive table-position"
+										<div class="table-responsive" style="display: none;" id="div1">
+											<table
+												class="table"
 												id="table1">
-												<thead>
+												<thead style="background-color: #eeeeef;">
 													<tr>
 
-														<th>Sr No</th>
-														<th>Material Name</th>
-														<th>Invert Qty</th>
-														<th>BOM Qty</th>
+													
+														<th class="col-md-1">Sr No</th>
+														<th class="col-md-1">Code</th>
+														<th class="col-md-2">Material Name</th>
+												    	<th class="col-md-1">Op Stock</th>
+														
+														<th class="col-md-2">Inward Qty</th>
+														<th class="col-md-1">BOM Qty</th>
 														 
-														<th>Opening Stock</th>
-														<th>Closing Qty</th>
+														<th class="col-md-1">Clos Qty</th>
+														<th class="col-md-1">Min Qty</th>
+														<th class="col-md-1">ROL Qty</th>
+														<th class="col-md-1">Max Qty</th>
+														
 													<!-- 	<th>Status</th> -->
 
 													</tr>
@@ -264,7 +346,46 @@
 
 											</table>
 										</div>
-<input type="hidden" id="stockDate">
+										<div class="table-responsive" style="display: none;" id="div2">
+											<table class="table" id="table2">
+												<thead style="background-color: #eeeeef;">
+													<tr>
+
+														<th class="col-md-1">Sr No</th>
+														<th class="col-md-3">Material Name</th>
+														<th class="col-md-2">Op Stock</th>		
+														<th class="col-md-2">Inward Qty</th>
+														<th class="col-md-2">BOM Qty</th>
+														<th class="col-md-2">Clos Qty</th>
+														
+													<!-- 	<th>Status</th> -->
+
+													</tr>
+
+												</thead>
+												 <tbody>
+													<%--<c:forEach items="${stockList}" var="stockList"
+														varStatus="count">
+
+														<tr>
+															<td><c:out value="${count.index+1}"></c:out></td>
+															<td><c:out value="${stockList.rmName}"></c:out></td>
+															<td><c:out value="${stockList.invertQty}"></c:out>
+															</td>
+															<td><c:out value="${stockList.bomQty}"></c:out>
+															</td>
+															 
+															<td><c:out value="${stockList.openingQty}"></c:out>
+															<td><c:out value="${stockList.closingQty}"></c:out>
+															<td><c:out value="Status"></c:out></td>
+
+														</tr>
+													</c:forEach>--%>
+												</tbody> 
+
+											</table>
+										</div>
+<input type="hidden" id="stockDate"><input type="hidden" id="stockDate1" value="27-09-2018">
 										<!-- this is for ajax call<input type="submit" class="btn btn-primary" value="Submit"
 										id="callSubmit" onclick="callSubmitGrn(); getGrnId();"> -->
 
@@ -406,14 +527,18 @@ var today = dd+'-'+mm+'-'+yyyy;
 		function getStock(){
 			 
 			  var selectId=document.getElementById("selectStock").value;
-			  
+			  var grpId=document.getElementById("group_id").value;
+
 			
 			  
 			   if(selectId==1) {
+				   document.getElementById("div1").style.display="block";
+			        document.getElementById("div2").style.display="none";
 				   $('#loader').show();
 					$.getJSON('${getCurrentStoreStock}', {
 						fromDate : fromDate,
 						toDate : toDate,
+						grpId:grpId,
 						ajax : 'true'
 					}, function(data) {
 						$('#loader').hide();
@@ -425,18 +550,33 @@ var today = dd+'-'+mm+'-'+yyyy;
 					else
 						{
 						
-					
+						 document.getElementById("submitDay").disabled = false;
+
 					 
 					 $.each(data,function(key, stockList) {
-												 
-					var tr = $('<tr></tr>');
+						 var tr ;
+							if(stockList.storeClosingStock<stockList.rmMinQty)	{
+								 tr = $('<tr bgcolor="#fd8080"></tr>');
+							}else if(stockList.storeClosingStock<stockList.rmRolQty)	{
+								 tr = $('<tr bgcolor="#ef922d" ></tr>');
+							}					 
+							else{
+								 tr = $('<tr></tr>');
+							}
+					
 
-				  	tr.append($('<td></td>').html(key+1));			  	
-				  	tr.append($('<td></td>').html(stockList.rmName));
-				  	tr.append($('<td></td>').html(stockList.purRecQty));
-				  	tr.append($('<td></td>').html(stockList.bmsIssueQty));
-				  	tr.append($('<td></td>').html(stockList.storeOpeningStock));
-				  	tr.append($('<td></td>').html(stockList.storeClosingStock));
+				  	tr.append($('<td class="col-md-1"></td>').html(key+1));			  	
+				  	tr.append($('<td class="col-md-1"></td>').html(stockList.rmCode));
+				  	tr.append($('<td class="col-md-2"></td>').html(stockList.rmName));
+				  	tr.append($('<td class="col-md-1"></td>').html(stockList.storeOpeningStock));
+
+				  	tr.append($('<td class="col-md-2"></td>').html(stockList.purRecQty));
+				  	tr.append($('<td class="col-md-1"></td>').html(stockList.bmsIssueQty));
+				  	tr.append($('<td class="col-md-1"></td>').html(stockList.storeClosingStock));
+				  	tr.append($('<td class="col-md-1"></td>').html(stockList.rmMinQty));
+				  	tr.append($('<td class="col-md-1"></td>').html(stockList.rmRolQty));
+				  	tr.append($('<td class="col-md-1"></td>').html(stockList.rmMaxQty));
+
 				  	//alert(stockList.storeStockDate);
 				  	document.getElementById("stockDate").value = stockList.storeStockDate;
 				$('#table1 tbody').append(tr);
@@ -448,7 +588,9 @@ var today = dd+'-'+mm+'-'+yyyy;
 				} 
 			  
 			   else if(selectId==2){
-				   
+				   document.getElementById("div1").style.display="none";
+			        document.getElementById("div2").style.display="block";
+			        
 				var fromDate=document.getElementById("from_stockdate").value;
 				  var toDate=document.getElementById("to_stockdate").value;
 				 
@@ -456,11 +598,11 @@ var today = dd+'-'+mm+'-'+yyyy;
 					$('#loader').show();
 				$.getJSON('${getMonthWiseStoreStock}', {
 					fromDate : fromDate,
-					toDate : toDate,
+					toDate : toDate,grpId:grpId,
 					ajax : 'true'
 				}, function(data) {
 					$('#loader').hide();
-					$('#table1 td').remove();
+					$('#table2 td').remove();
 					if(data=="")
 					{
 						alert("No Record Found");
@@ -476,11 +618,13 @@ var today = dd+'-'+mm+'-'+yyyy;
 
 			  	tr.append($('<td></td>').html(key+1));			  	
 			  	tr.append($('<td></td>').html(stockList.rmName));
+			  	tr.append($('<td></td>').html(stockList.storeOpeningStock));		  	
 			  	tr.append($('<td></td>').html(stockList.purRecQty));
 			  	tr.append($('<td></td>').html(stockList.bmsIssueQty));
-			  	tr.append($('<td></td>').html(stockList.storeOpeningStock));
 			  	tr.append($('<td></td>').html(stockList.storeClosingStock));
-			$('#table1 tbody').append(tr);
+			  	document.getElementById("stockDate").value = stockList.storeStockDate;
+
+			$('#table2 tbody').append(tr);
 			
 										})
 										
@@ -493,7 +637,9 @@ var today = dd+'-'+mm+'-'+yyyy;
 				}
 			}
 			else if(selectId=3){
-				
+				 document.getElementById("div1").style.display="none";
+			        document.getElementById("div2").style.display="block";
+			
 				var fromDate=document.getElementById("from_stockdate").value;
 				  var toDate=document.getElementById("to_stockdate").value;
 				 
@@ -502,11 +648,12 @@ var today = dd+'-'+mm+'-'+yyyy;
 					$.getJSON('${getDateWiseStoreStock}', {
 						fromDate : fromDate,
 						toDate : toDate,
+						grpId:grpId,
 						ajax : 'true'
 					}, function(data) {
 					 
 						$('#loader').hide();
-						$('#table1 td').remove();
+						$('#table2 td').remove();
 						if(data=="")
 						{
 						alert("No Record Found");
@@ -522,11 +669,11 @@ var today = dd+'-'+mm+'-'+yyyy;
 
 				  	tr.append($('<td></td>').html(key+1));			  	
 				  	tr.append($('<td></td>').html(stockList.rmName));
+				  	tr.append($('<td></td>').html(stockList.storeOpeningStock));
 				  	tr.append($('<td></td>').html(stockList.purRecQty));
 				  	tr.append($('<td></td>').html(stockList.bmsIssueQty));
-				  	tr.append($('<td></td>').html(stockList.storeOpeningStock));
 				  	tr.append($('<td></td>').html(stockList.storeClosingStock));
-				$('#table1 tbody').append(tr);
+				$('#table2 tbody').append(tr);
 				
 											})
 											
@@ -582,6 +729,38 @@ var today = dd+'-'+mm+'-'+yyyy;
 });
 	 
 	 </script>
+	 	 <script type="text/javascript">
+	 function onGrpChange(grpId)
+	 {
+		 disabledDate(grpId);
+		 document.getElementById("subCat").value=grpId;
+		 document.getElementById("submitDay").disabled = true;
+
+	 }
+	 
+	 </script>
+	 <script type="text/javascript">
+	 function disabledDate (id) {
+		 
+		 var c = document.getElementById("date"+id).value; 
+		 var toDateValue = c.split('-');
+			 var dtToday = new Date();
+			 dtToday.setFullYear(toDateValue[0],(toDateValue[1] - 1 ),toDateValue[2]); 
+			  var month = dtToday.getMonth() + 1;     // getMonth() is zero-based
+			  var day = dtToday.getDate();
+			  var year = dtToday.getFullYear();
+			  if(month < 10)
+			      month = '0' + month.toString();
+			  if(day < 10)
+			      day = '0' + day.toString(); 
+			  var maxDate = year + '-' + month + '-' + day;
+			
+	  		$('#from_stockdate').attr('max', maxDate);
+	  		$('#to_stockdate').attr('max', maxDate);
+	  
+	 }
+ 
+ </script>
 </body>
 </html>
 

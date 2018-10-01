@@ -11,9 +11,10 @@
 <c:url var="gateEntryList" value="/gateEntryList"></c:url>
 	<c:url var="editRmQtyOnGate" value="/editRmQtyOnGate"></c:url>
 	<c:url var="deleteRmItem" value="/deleteRmItem"></c:url>
-
+<c:url var="getGroupsBySupp" value="/getGroupsBySupp"></c:url>
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-
+<c:url var="getRmListByGrpId" value="/getRmListByGrpId" />
+<c:url var="getItemListByGroupId" value="/getItemListByGroupId" />
 
 	<div class="container" id="main-container">
 
@@ -32,13 +33,13 @@
 		<!-- BEGIN Content -->
 		<div id="main-content">
 			<!-- BEGIN Page Title -->
-			<div class="page-title">
+		<!-- 	<div class="page-title">
 				<div>
 					<h1>
 						<i class="fa fa-file-o"></i>Material Receipt Gate Entry
 					</h1>
 				</div>
-			</div>
+			</div> -->
 			<!-- END Page Title -->
 
 			<div class="row">
@@ -64,31 +65,38 @@
 							enctype="multipart/form-data">
 							<div class="box-content">
 								<div class="col-md-2">InwardNo:</div>
-								<div class="col-md-3"><input type="text" id="mrn_no" name="mrn_no" value="${mrnno}" class="form-control" readonly>
+								<div class="col-md-1"><input type="text" id="mrn_no" name="mrn_no" value="${mrnno}" class="form-control" readonly>
 								</div>
 								
-							<div class="col-md-2"> Date</div> 
-							<div class="col-md-3">
+						
+							<div class="col-md-2">
 							<jsp:useBean id="now" class="java.util.Date"/>    
-                                    <fmt:formatDate value="${now}" pattern="dd-MMM-yyyy"/>
+                                 Date: <fmt:formatDate value="${now}" pattern="dd-MM-yyyy"/>
                                     <input type="hidden" id="nowDate" name="nowDate" value=" <fmt:formatDate value="${now}" pattern="dd-mm-yyyy"/>" class="form-control" readonly>
 								
 							</div>
-					
-							</div><br>
-							
-							<div class="box-content">
-							
-								<div class="col-md-2">Supplier</div>
+						<div class="col-md-2">Supplier</div>
 									<div class="col-md-3">
 									
-									<select name="supp_id" id="supp_id" class="form-control chosen" tabindex="6" required>
+									<select name="supp_id" id="supp_id" class="form-control chosen" tabindex="6" onchange="onSupplierChange(this.value)" required>
 											<option value="">Select Supplier</option>
 											<c:forEach items="${supplierList}" var="supplierList"> 
 												<option value="${supplierList.suppId}"><c:out value="${supplierList.suppName}"></c:out> </option>
 											 </c:forEach>
 										</select>
 									
+									</div>
+							</div><br>
+							
+							<div class="box-content">
+							
+									<div class="col-md-2" >Group</div>
+							<div class="col-md-3">
+										<select name="rm_group" id="rm_group" class="form-control chosen" onchange="onGrpChange()" tabindex="6">
+										<option value="">Select Group</option>
+											 
+
+										</select>
 									</div>
 								<div class="col-md-2">Vehicle No</div>
 									<div class="col-md-3">
@@ -138,7 +146,6 @@
 									</div>
 							
 							</div><br>
-							
 							
 							<div class="box-content">
 								 <div class="form-group">
@@ -373,7 +380,7 @@
 			
 				var rm_id = $("#rm_id").val();
 				var rm_qty = $("#rm_qty").val();
-				
+				var rm_group = $("#rm_group").val();
 				if(validation()==true){	
 					
 				
@@ -387,6 +394,7 @@
 									 
 									rm_id : rm_id,
 									rm_qty : rm_qty,
+									rm_group:rm_group,
 									ajax : 'true'
 
 								},
@@ -547,7 +555,75 @@ function check()
 	}
 }
 </script>
-	
+	<script type="text/javascript">
+	function onSupplierChange(suppId)
+	{
+						$.getJSON('${getGroupsBySupp}', {
+							suppId :suppId,
+							ajax : 'true'
+						}, function(data) {
+							var html = '<option value="" disabled="disabled" selected >Select Group</option>';
+							
+							var len = data.length;
+							for ( var i = 0; i < len; i++) {
+								html += '<option value="' + data[i].grpId + '">'
+										+ data[i].grpName + '</option>';
+							}
+							html += '</option>';
+							$('#rm_group').html(html);
+							$("#rm_group").trigger("chosen:updated");
+
+						});
+						
+					 
+		 
+		
+	}
+
+	function onGrpChange() {
+		var	suppId =document.getElementById("supp_id").value; 
+		var	grpId =document.getElementById("rm_group").value; 
+
+		if(grpId==4 || grpId==5)
+			{
+			$.getJSON('${getItemListByGroupId}', {
+				grpId : grpId,
+				suppId:suppId,
+				ajax : 'true'
+			}, function(data) {
+				var html = '<option value="" disabled="disabled" selected >Select Raw Material</option>';
+				
+				var len = data.length;
+				for ( var i = 0; i < len; i++) {
+					html += '<option value="' + data[i].id + '">'
+							+ data[i].itemName + '</option>';
+				}
+				html += '</option>';
+				$('#rm_id').html(html);
+				$("#rm_id").trigger("chosen:updated");
+
+			});
+			}else{
+		$.getJSON('${getRmListByGrpId}', {
+			grpId : grpId,
+			suppId:suppId,
+			ajax : 'true'
+		}, function(data) {
+			var html = '<option value="" disabled="disabled" selected >Select Raw Material</option>';
+			
+			var len = data.length;
+			for ( var i = 0; i < len; i++) {
+				html += '<option value="' + data[i].rmId + '">'
+						+ data[i].rmName + '</option>';
+			}
+			html += '</option>';
+			$('#rm_id').html(html);
+			$("#rm_id").trigger("chosen:updated");
+
+		});
+			}
+	}
+	</script>
 								
 							
 	

@@ -334,7 +334,7 @@ public class ItemSfController {
 		
 		int sfItemUoM=Integer.parseInt(request.getParameter("sf_item_uom"));
 				
-		int sfItewWeight=Integer.parseInt(request.getParameter("sf_item_weight"));
+		float sfItewWeight=Float.parseFloat(request.getParameter("sf_item_weight"));
 		
 		int sfStockQty=Integer.parseInt(request.getParameter("sf_stock_qty"));
 						

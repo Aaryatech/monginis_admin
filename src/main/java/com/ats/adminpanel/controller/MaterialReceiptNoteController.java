@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -29,8 +30,10 @@ import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.MRawMaterial;
 import com.ats.adminpanel.model.MaterialRecieptAcc;
+import com.ats.adminpanel.model.StockItem;
 import com.ats.adminpanel.model.RawMaterial.GetRawMaterialDetailList;
 import com.ats.adminpanel.model.RawMaterial.Info;
+import com.ats.adminpanel.model.RawMaterial.RawMaterialDetailsList;
 import com.ats.adminpanel.model.RawMaterial.RmItemGroup;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.materialreceipt.GetMaterialRecNoteList;
@@ -96,6 +99,27 @@ public class MaterialReceiptNoteController {
 		}
 		return model;
 
+	}
+	@RequestMapping(value = "/getGroupsBySupp", method = RequestMethod.GET)
+	public @ResponseBody List<RmItemGroup> getGroupsBySupp(HttpServletRequest request,
+		HttpServletResponse response) {
+		List<RmItemGroup> tempGrpList=null;
+		int suppId=Integer.parseInt(request.getParameter("suppId"));
+		try {
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>();
+		map.add("suppId", suppId);
+			
+		RestTemplate rest=new RestTemplate();
+			
+		 tempGrpList=rest.postForObject(Constants.url +"/rawMaterial/getRmItemGroup", map,  List.class);
+		
+	
+		System.out.println("tempGrpList"+tempGrpList.toString());
+		
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return tempGrpList;
 	}
 	
 	@RequestMapping(value = "/allRecordwithDate", method = RequestMethod.GET)
@@ -300,6 +324,8 @@ public class MaterialReceiptNoteController {
 		String photo1 = request.getParameter("image1");
 		String photo2 = request.getParameter("image2");
 		String nowDate = request.getParameter("nowDate");
+		int grpId = Integer.parseInt(request.getParameter("rm_group"));
+
 		System.out.println("NOW data   dfghjjj :" + nowDate);
 
 		System.out.println(sup_id + vehino + lrno + tran_id + no_of_items + remark + photo1 + photo2);
@@ -324,6 +350,7 @@ public class MaterialReceiptNoteController {
 			Date dt = sf.parse(sf.format(new Date()));
 
 			materialRecNote.setMrnId(0);
+			materialRecNote.setGrpId(grpId);
 			materialRecNote.setMrnNo(mrn_no);
 			materialRecNote.setGateEntryTime("00:00:00");
 			materialRecNote.setGateEntryDate(nowDate);
@@ -339,7 +366,7 @@ public class MaterialReceiptNoteController {
 			materialRecNote.setGateRemark(remark);
 			// --------------------------------------------
 			materialRecNote.setMrnStoreDate(dt);
-			materialRecNote.setMrnType(0);
+			materialRecNote.setMrnType(grpId);
 			materialRecNote.setApainstPo(0);
 			materialRecNote.setPoId(0);
 			materialRecNote.setPoNo("");
@@ -376,6 +403,7 @@ public class MaterialReceiptNoteController {
 
 				materialRecNoteDetails.setRmId(addmaterialRecNoteDetailslist.get(i).getRmId());
 				materialRecNoteDetails.setRmName(addmaterialRecNoteDetailslist.get(i).getRmName());
+				materialRecNoteDetails.setGrpId(addmaterialRecNoteDetailslist.get(i).getGrpId());
 				materialRecNoteDetails.setPoRate(0);
 				materialRecNoteDetails.setMrnDetailId(0);
 				materialRecNoteDetails.setMrnId(0);
@@ -433,7 +461,7 @@ public class MaterialReceiptNoteController {
 		return "redirect:/gateEntries";
 	}
 
-	@RequestMapping(value = "/gateEntryList", method = RequestMethod.GET)
+/*	@RequestMapping(value = "/gateEntryList", method = RequestMethod.GET)
 	public @ResponseBody List<MaterialRecNoteDetails> gateEntryList(HttpServletRequest request,
 			HttpServletResponse response) {
 
@@ -472,8 +500,134 @@ public class MaterialReceiptNoteController {
 
 		return addmaterialRecNoteDetailslist;
 
-	}
+	}*/
 
+	@RequestMapping(value = "/gateEntryList", method = RequestMethod.GET)
+	public @ResponseBody List<MaterialRecNoteDetails> gateEntryList(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		int rmId = Integer.parseInt(request.getParameter("rm_id"));
+		int qty = Integer.parseInt(request.getParameter("rm_qty"));
+		int grpId = Integer.parseInt(request.getParameter("rm_group"));
+
+		System.out.println("!!!!!!!!!!!!!!!!!!!!!!!!!!!!"+grpId);
+		RestTemplate rest = new RestTemplate();
+		
+			if(grpId==4)
+			{
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("subCatId", 18);
+				map.add("type", 8);
+				RestTemplate restTemplate = new RestTemplate();
+
+				StockItem[] item = restTemplate.postForObject(Constants.url + "getStockItemsBySubCatId", map,
+						StockItem[].class);
+
+				ArrayList<StockItem>	tempStockItemList = new ArrayList<StockItem>(Arrays.asList(item));
+				
+				try {
+
+					for (int i = 0; i < tempStockItemList.size(); i++) {
+						if (tempStockItemList.get(i).getId() == rmId) {
+
+							System.out.println("rawMaterialDetails  :"
+									+ tempStockItemList.get(i).toString());
+							MaterialRecNoteDetails materialRecNoteDetails = new MaterialRecNoteDetails();
+							materialRecNoteDetails.setRmId(rmId);
+							materialRecNoteDetails.setGrpId(grpId);
+							materialRecNoteDetails
+									.setRmName(tempStockItemList.get(i).getItemName());
+							materialRecNoteDetails.setRecdQty(qty);
+							materialRecNoteDetails.setMrnNo("");
+							materialRecNoteDetails.setRmUom("");
+							System.out.println("########################################"+materialRecNoteDetails.toString());
+							addmaterialRecNoteDetailslist.add(materialRecNoteDetails);
+
+						}
+					}
+					System.out.println(addmaterialRecNoteDetailslist.size());
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println(e.getMessage());
+				}
+			}else if(grpId==5)
+			{
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("subCatId", 19);
+				map.add("type", 8);
+				RestTemplate restTemplate = new RestTemplate();
+
+				StockItem[] item = restTemplate.postForObject(Constants.url + "getStockItemsBySubCatId", map,
+						StockItem[].class);
+
+				ArrayList<StockItem>	tempStockItemList = new ArrayList<StockItem>(Arrays.asList(item));
+				try {
+
+					for (int i = 0; i < tempStockItemList.size(); i++) {
+						if (tempStockItemList.get(i).getId() == rmId) {
+
+							System.out.println("rawMaterialDetails  :"
+									+ tempStockItemList.get(i).toString());
+							MaterialRecNoteDetails materialRecNoteDetails = new MaterialRecNoteDetails();
+							materialRecNoteDetails.setRmId(rmId);
+							materialRecNoteDetails.setGrpId(grpId);
+							materialRecNoteDetails
+									.setRmName(tempStockItemList.get(i).getItemName());
+							materialRecNoteDetails.setRecdQty(qty);
+							materialRecNoteDetails.setMrnNo("");
+							materialRecNoteDetails.setRmUom("");
+							System.out.println("########################################"+materialRecNoteDetails.toString());
+							addmaterialRecNoteDetailslist.add(materialRecNoteDetails);
+
+						}
+					}
+					System.out.println(addmaterialRecNoteDetailslist.size());
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println(e.getMessage());
+				}
+			}
+			else {
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+				map.add("grpId",grpId);
+				RawMaterialDetailsList	getRawMaterialDetailList = rest.postForObject(Constants.url + "rawMaterial/getAllRawMaterialByGroup",map,
+						RawMaterialDetailsList.class);
+			/*
+				getRawMaterialDetailList = rest.getForObject(Constants.url + "rawMaterial/getAllRawMaterialList",
+						GetRawMaterialDetailList.class);*/
+
+				try {
+
+					for (int i = 0; i < getRawMaterialDetailList.getRawMaterialDetailsList().size(); i++) {
+						if (getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmId() == rmId) {
+
+							System.out.println("rawMaterialDetails  :"
+									+ getRawMaterialDetailList.getRawMaterialDetailsList().get(i).toString());
+							MaterialRecNoteDetails materialRecNoteDetails = new MaterialRecNoteDetails();
+							materialRecNoteDetails.setRmId(rmId);
+							materialRecNoteDetails.setGrpId(grpId);
+							materialRecNoteDetails
+									.setRmName(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmName());
+							materialRecNoteDetails.setRecdQty(qty);
+							materialRecNoteDetails.setMrnNo("");
+							materialRecNoteDetails.setRmUom("");
+							System.out.println("########################################"+materialRecNoteDetails.toString());
+							addmaterialRecNoteDetailslist.add(materialRecNoteDetails);
+
+						}
+					}
+					System.out.println(addmaterialRecNoteDetailslist.size());
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println(e.getMessage());
+				}
+				}
+				
+		
+		return addmaterialRecNoteDetailslist;
+
+	}
 	@RequestMapping(value = "/editRmQtyOnGate", method = RequestMethod.GET)
 	public @ResponseBody List<MaterialRecNoteDetails> editRmQtyOnGate(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -530,6 +684,7 @@ public class MaterialReceiptNoteController {
 
 		ModelAndView model = new ModelAndView("masters/editGateEntry");
 		addmaterialRecNoteDetailslist = new ArrayList<MaterialRecNoteDetails>();
+		ArrayList<StockItem> tempStockItemList=new ArrayList<>();
 
 		flag = Integer.parseInt(request.getParameter("flag"));
 		int mrnId = Integer.parseInt(request.getParameter("mrnId"));
@@ -549,17 +704,46 @@ public class MaterialReceiptNoteController {
 		Supplist supplierDetailsList = rest.getForObject(Constants.url + "/getAllSupplierlist", Supplist.class);
 
 		System.out.println(supplierDetailsList.getSupplierDetailslist().toString());
+		map = new LinkedMultiValueMap<String, Object>();
 
-		GetRawMaterialDetailList getRawMaterialDetail = rest
+		map.add("grpId",materialRecNoteHeader.getGrpId());
+		RawMaterialDetailsList	getRawMaterialDetailList = rest.postForObject(Constants.url + "rawMaterial/getAllRawMaterialByGroup",map,
+				RawMaterialDetailsList.class);
+		//-------------------------------------------------------------------------------------------------------
+		if( materialRecNoteHeader.getGrpId()==4)
+		{
+			 map = new LinkedMultiValueMap<String, Object>();
+			map.add("subCatId", 18);
+			map.add("type", 8);
+			RestTemplate restTemplate = new RestTemplate();
+
+			StockItem[] item = restTemplate.postForObject(Constants.url + "getStockItemsBySubCatId", map,
+					StockItem[].class);
+
+			tempStockItemList = new ArrayList<StockItem>(Arrays.asList(item));
+		}else if( materialRecNoteHeader.getGrpId()==5)
+		{
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("subCatId", 19);
+			map.add("type", 8);
+			RestTemplate restTemplate = new RestTemplate();
+
+			StockItem[] item = restTemplate.postForObject(Constants.url + "getStockItemsBySubCatId", map,
+					StockItem[].class);
+
+			tempStockItemList = new ArrayList<StockItem>(Arrays.asList(item));
+		}
+	/*	GetRawMaterialDetailList getRawMaterialDetail = rest
 				.getForObject(Constants.url + "rawMaterial/getAllRawMaterialList", GetRawMaterialDetailList.class);
-
+*/
 		model.addObject("materialRecNote", materialRecNoteHeader);
 		model.addObject("materialRecNoteDetail", getmaterialRecNoteDetailslist);
 		model.addObject("supplierList", supplierDetailsList.getSupplierDetailslist());
 		model.addObject("transport", transporterList.getTransporterList());
-		model.addObject("rmlist", getRawMaterialDetail.getRawMaterialDetailsList());
+		model.addObject("rmlist", getRawMaterialDetailList.getRawMaterialDetailsList());
 		model.addObject("flag",flag);
-		
+		model.addObject("grpId", materialRecNoteHeader.getGrpId());
+		model.addObject("itemList", tempStockItemList);
 		model.addObject("imageUrl",Constants.GATE_ENTRY_IMG_URL);
 		return model;
 	}
@@ -570,10 +754,11 @@ public class MaterialReceiptNoteController {
 
 		int rmId = Integer.parseInt(request.getParameter("rm_id"));
 		int qty = Integer.parseInt(request.getParameter("rm_qty"));
+		int grpId = Integer.parseInt(request.getParameter("rm_group"));
 
 		System.out.println(qty);
 		RestTemplate rest = new RestTemplate();
-		getRawMaterialDetailList = rest.getForObject(Constants.url + "rawMaterial/getAllRawMaterialList",
+		/*getRawMaterialDetailList = rest.getForObject(Constants.url + "rawMaterial/getAllRawMaterialList",
 				GetRawMaterialDetailList.class);
 
 		try {
@@ -600,7 +785,114 @@ public class MaterialReceiptNoteController {
 			e.printStackTrace();
 			System.out.println(e.getMessage());
 		}
+*/
+		if(grpId==4)
+		{
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("subCatId", 18);
+			map.add("type", 8);
+			RestTemplate restTemplate = new RestTemplate();
 
+			StockItem[] item = restTemplate.postForObject(Constants.url + "getStockItemsBySubCatId", map,
+					StockItem[].class);
+
+			ArrayList<StockItem>	tempStockItemList = new ArrayList<StockItem>(Arrays.asList(item));
+			
+			try {
+
+				for (int i = 0; i < tempStockItemList.size(); i++) {
+					if (tempStockItemList.get(i).getId() == rmId) {
+
+						System.out.println("rawMaterialDetails  :"
+								+ tempStockItemList.get(i).toString());
+						MaterialRecNoteDetails materialRecNoteDetails = new MaterialRecNoteDetails();
+						materialRecNoteDetails.setRmId(rmId);
+						materialRecNoteDetails.setGrpId(grpId);
+						materialRecNoteDetails
+								.setRmName(tempStockItemList.get(i).getItemName());
+						materialRecNoteDetails.setRecdQty(qty);
+						materialRecNoteDetails.setMrnNo("");
+						materialRecNoteDetails.setRmUom("");
+						System.out.println("########################################"+materialRecNoteDetails.toString());
+						getmaterialRecNoteDetailslist.add(materialRecNoteDetails);
+
+					}
+				}
+				System.out.println(getmaterialRecNoteDetailslist.size());
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println(e.getMessage());
+			}
+		}else if(grpId==5)
+		{
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("subCatId", 19);
+			map.add("type", 8);
+			RestTemplate restTemplate = new RestTemplate();
+
+			StockItem[] item = restTemplate.postForObject(Constants.url + "getStockItemsBySubCatId", map,
+					StockItem[].class);
+
+			ArrayList<StockItem>	tempStockItemList = new ArrayList<StockItem>(Arrays.asList(item));
+			try {
+
+				for (int i = 0; i < tempStockItemList.size(); i++) {
+					if (tempStockItemList.get(i).getId() == rmId) {
+
+						System.out.println("rawMaterialDetails  :"
+								+ tempStockItemList.get(i).toString());
+						MaterialRecNoteDetails materialRecNoteDetails = new MaterialRecNoteDetails();
+						materialRecNoteDetails.setRmId(rmId);
+						materialRecNoteDetails.setGrpId(grpId);
+						materialRecNoteDetails
+								.setRmName(tempStockItemList.get(i).getItemName());
+						materialRecNoteDetails.setRecdQty(qty);
+						materialRecNoteDetails.setMrnNo("");
+						materialRecNoteDetails.setRmUom("");
+						System.out.println("########################################"+materialRecNoteDetails.toString());
+						getmaterialRecNoteDetailslist.add(materialRecNoteDetails);
+
+					}
+				}
+				System.out.println(addmaterialRecNoteDetailslist.size());
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println(e.getMessage());
+			}
+		}else
+		 {
+			MultiValueMap<String, Object>	map = new LinkedMultiValueMap<String, Object>();
+
+			map.add("grpId",grpId);
+			RawMaterialDetailsList	getRawMaterialDetailList = rest.postForObject(Constants.url + "rawMaterial/getAllRawMaterialByGroup",map,
+					RawMaterialDetailsList.class);
+				try {
+
+					for (int i = 0; i < getRawMaterialDetailList.getRawMaterialDetailsList().size(); i++) {
+						if (getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmId() == rmId) {
+
+							System.out.println("rawMaterialDetails  :"
+									+ getRawMaterialDetailList.getRawMaterialDetailsList().get(i).toString());
+							MaterialRecNoteDetails materialRecNoteDetails = new MaterialRecNoteDetails();
+							materialRecNoteDetails.setRmId(rmId);
+							materialRecNoteDetails.setGrpId(grpId);
+							materialRecNoteDetails
+									.setRmName(getRawMaterialDetailList.getRawMaterialDetailsList().get(i).getRmName());
+							materialRecNoteDetails.setRecdQty(qty);
+							materialRecNoteDetails.setMrnNo("");
+							materialRecNoteDetails.setRmUom("");
+							System.out.println("########################################"+materialRecNoteDetails.toString());
+							getmaterialRecNoteDetailslist.add(materialRecNoteDetails);
+
+
+						}
+					}
+					System.out.println(getmaterialRecNoteDetailslist.size());
+				} catch (Exception e) {
+					e.printStackTrace();
+					System.out.println(e.getMessage());
+				}
+				}
 		return getmaterialRecNoteDetailslist;
 
 	}
@@ -666,6 +958,7 @@ public class MaterialReceiptNoteController {
 			@RequestParam("image1") List<MultipartFile> image1, @RequestParam("image2") List<MultipartFile> image2) {
 
 		int sup_id = Integer.parseInt(request.getParameter("supp_id"));
+		int grpId = Integer.parseInt(request.getParameter("rm_group"));
 		String mrn_no = request.getParameter("mrn_no");
 		String vehino = request.getParameter("vehicle_no");
 		String lrno = request.getParameter("lr_no");
@@ -756,6 +1049,7 @@ public class MaterialReceiptNoteController {
 			materialRecNote.setGateUserId(1);
 			materialRecNote.setGateRemark(remark);
 			materialRecNote.setPoDate("");
+			materialRecNote.setGrpId(grpId);
 
 			System.out.println("SEt header data" + materialRecNote.toString());
 			for (int i = 0; i < getmaterialRecNoteDetailslist.size(); i++) {
@@ -1254,8 +1548,9 @@ public class MaterialReceiptNoteController {
 			 }
 			map.add("suppId", supId);
 			map.add("rmId", id);
+			map.add("grpId", materialRecNote.getGrpId());
 			System.out.println("map"+map);
-			ItemRateByRmIdAndSuppId itemRateByRmIdAndSuppId = rest.postForObject(Constants.url + "/getRateByRmId", map,
+			ItemRateByRmIdAndSuppId itemRateByRmIdAndSuppId = rest.postForObject(Constants.url + "/getRateByRmIdGrp", map,
 					ItemRateByRmIdAndSuppId.class);
 			System.out.println("itemRateByRmIdAndSuppId " + itemRateByRmIdAndSuppId.toString());
 			

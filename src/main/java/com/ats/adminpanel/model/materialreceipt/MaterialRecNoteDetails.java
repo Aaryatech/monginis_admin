@@ -42,7 +42,17 @@ public class MaterialRecNoteDetails {
 		private float other3; 
 		private float other4;
 		private float varifiedRate;
+		private int grpId;
 		
+		
+
+		public int getGrpId() {
+			return grpId;
+		}
+
+		public void setGrpId(int grpId) {
+			this.grpId = grpId;
+		}
 
 		public int getMrnDetailId() {
 			return mrnDetailId;

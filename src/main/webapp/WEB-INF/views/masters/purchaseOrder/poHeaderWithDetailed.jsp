@@ -30,25 +30,25 @@
 	<!-- BEGIN Content -->
 	<div id="main-content">
 		<!-- BEGIN Page Title -->
-		<div class="page-title">
+	<!-- 	<div class="page-title">
 			<div>
 				<h1>
 					<i class="fa fa-file-o"></i>Purchase Order Detailed
 				</h1>
-				<!-- <h4>Bill for franchises</h4> -->
+				<h4>Bill for franchises</h4>
 			</div>
-		</div>
+		</div> -->
 		<!-- END Page Title -->
 
 		<!-- BEGIN Breadcrumb -->
-		<div id="breadcrumbs">
+		<%-- <div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
 				<li class="active">Purchase Order</li>
 			</ul>
-		</div>
+		</div> --%>
 		<!-- END Breadcrumb -->
 		
 		<!-- BEGIN Main Content -->
@@ -65,7 +65,7 @@
 		<div class="box">
 			<form id="submitPurchaseOrder"
 				action="${pageContext.request.contextPath}/requestPOFinalByDirectore"
-				method="post" enctype="multipart/form-data" onsubmit="return(validate());">
+				method="post" onsubmit="return(validate());"> <!--  enctype="multipart/form-data" -->
 			<div class="box-content">
 				<div class="col-md-2">PO No.  </div>
 				<div class="col-md-4"><input type="text" id="po_no" name="po_no" value="${purchaseOrderHeader.poNo}" class="form-control" readonly>
@@ -155,7 +155,7 @@
 									
 						</div>	<br/>		
 							
-							 <c:choose>
+						<%-- 	 <c:choose>
 									<c:when test="${(purchaseOrderHeader.poStatus==2) and (flag==2)}">
 										<div class="box-content">
 											<div class="col-md-2" >Select Pdf</div>
@@ -164,7 +164,7 @@
 												</div> 
 									</div><br/>
 									</c:when>  
-							</c:choose>
+							</c:choose> --%>
 			
 			
 				<div class=" box-content">
@@ -302,21 +302,21 @@
 									<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}/${flag}" ><input type="button" value="Edit" class="btn btn-info">
 									</a>
 								
-								<a href="${pageContext.request.contextPath}/requestPOStoreToPurchase/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Purchase" class="btn btn-info">
+								<a href="${pageContext.request.contextPath}/requestPOStoreToPurchase/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Director" class="btn btn-info">
 								</a>
 							</c:when>
 							 <c:when test="${(purchaseOrderHeader.poStatus==3) and (flag==0)}">
 							 	<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}/${flag}" ><input type="button" value="Edit" class="btn btn-info">
 								</a>
 								
-								<a href="${pageContext.request.contextPath}/requestPOStoreToPurchase/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Purchase" class="btn btn-info">
+								<a href="${pageContext.request.contextPath}/requestPOStoreToPurchase/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Director" class="btn btn-info">
 								</a>
           						 
 						</c:when>
 						<c:when test="${(purchaseOrderHeader.poStatus==4) and (flag==1)}"> 
 						<a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}/${flag}" ><input type="button" value="Edit" class="btn btn-info">
 								</a>
-									<a href="${pageContext.request.contextPath}/requestPOPurachaseToDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Directore" class="btn btn-info">
+									<a href="${pageContext.request.contextPath}/requestPOPurachaseToDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Director" class="btn btn-info">
 									</a>
 								
 								<a href="${pageContext.request.contextPath}/rejectPOPurachaseToStore/${purchaseOrderHeader.poId}"
@@ -327,7 +327,7 @@
 							 <c:when test="${(purchaseOrderHeader.poStatus==1) and (flag==1)}">
 							 <a href="${pageContext.request.contextPath}/editPurchaseOrder/${purchaseOrderHeader.poId}/${flag}" ><input type="button" value="Edit" class="btn btn-info">
 								</a>
-							 	<a href="${pageContext.request.contextPath}/requestPOPurachaseToDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Directore" class="btn btn-info">
+							 	<a href="${pageContext.request.contextPath}/requestPOPurachaseToDirectore/${purchaseOrderHeader.poId}" ><input type="button" value="Request To Director" class="btn btn-info">
 									</a>
 								
 								<a href="${pageContext.request.contextPath}/rejectPOPurachaseToStore/${purchaseOrderHeader.poId}"
@@ -346,7 +346,7 @@
 									</a>
 								
 								<a href="${pageContext.request.contextPath}/rejectPODirectoreToPurchase/${purchaseOrderHeader.poId}"
-						onClick="return confirm('You Want To Reject This Record To Purchase');" ><input type="button" value="Reject To Purchase" class="btn btn-info">
+						onClick="return confirm('You Want To Reject This Record To Store');" ><input type="button" value="Reject To Store" class="btn btn-info">
 								</a>
 							</c:when>
 						
@@ -361,7 +361,7 @@
 			</form>
 			</div>
 		</div>
-	</div>
+	</div>	</div>
 	
 	<!-- END Main Content -->
 

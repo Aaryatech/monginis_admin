@@ -62,8 +62,16 @@ public class MaterialRecNote {
 		private float other2; 
 		private float other3; 
 		private float other4;
-		 
+		private int grpId;
 		List<MaterialRecNoteDetails> materialRecNoteDetails;
+
+		public int getGrpId() {
+			return grpId;
+		}
+
+		public void setGrpId(int grpId) {
+			this.grpId = grpId;
+		}
 
 		public int getMrnId() {
 			return mrnId;

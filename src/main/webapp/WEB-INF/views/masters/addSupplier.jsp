@@ -192,7 +192,7 @@
 													onKeyPress="return isNumberCommaDot(event)" />
 									</div>
 
-									<label class="col-sm-3 col-lg-2 control-label">Email 5</label>
+									<label class="col-sm-3 col-lg-2 control-label">Lead Time</label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="email" name="supp_email5" class="form-control"placeholder="Enter Email 5 "
 													data-rule-email="true"/>
