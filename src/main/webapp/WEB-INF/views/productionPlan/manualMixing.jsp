@@ -144,11 +144,12 @@
 										</tbody>
 									</table>
 								</div>
-
+	<div class="col-md-12" style="text-align: center">
 								<input type="submit" class="btn btn-info" value="Submit List"
 									onclick="insertItemDetail()"> <input type="hidden"
 									id="prodHeaderId" value="${prodHeaderId}"> <input
 									type="hidden" id="prodDate" value="${prodDate}">
+									</div>
 
 							</form>
 						</div>

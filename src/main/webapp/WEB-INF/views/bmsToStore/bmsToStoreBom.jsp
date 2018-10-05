@@ -5,7 +5,28 @@
 
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
- 
+ <style>
+.alert {
+    padding: 20px;
+    background-color: #f44336;
+    color: white;
+}
+
+.closebtn {
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    float: right;
+    font-size: 22px;
+    line-height: 20px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.closebtn:hover {
+    color: black;
+}
+</style>
 <style>
 @media only screen and (min-width: 1200px) {
 	.franchisee_label, .menu_label {
@@ -72,6 +93,7 @@
 				 <form action="submitBmstoStore" method="post" class="form-horizontal" id=
 									"validation-form"
 										enctype="multipart/form-data" method="post">
+				<c:choose><c:when test="${flag=='0'}">
 					<div class="row">
 						<div class="col-md-12 table-responsive">
 							<table class="table table-bordered table-striped fill-head "
@@ -193,7 +215,15 @@
 							<input type="submit" class="btn btn-info" value="Submit" name="Submit" id="Submit">
 
 						</div>
-					</div>
+					</div></c:when>
+					<c:otherwise>
+					<div class="alert">
+  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
+  <strong>Please Day End First!!</strong>
+</div>
+					</c:otherwise>
+					
+					</c:choose>
 					</form>
 		</div>
 		

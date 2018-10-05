@@ -63,8 +63,21 @@
 									<div class="col-sm-5 col-lg-3 controls">
 										<select name="matType" class="form-control chosen"
 											tabindex="6" id="mat_Type" required>
-											<option value="1">Raw Material</option>
+											<c:choose>
+											<c:when test="${matType==1}">
+											<option value="1" selected>Raw Material</option>
 											<option value="2">Semi Finished</option>
+											</c:when>
+												<c:when test="${matType==2}">
+											<option value="1">Raw Material</option>
+											<option value="2" selected>Semi Finished</option>
+											</c:when>
+											<c:otherwise>
+												<option value="1">Raw Material</option>
+											<option value="2">Semi Finished</option>
+											
+											</c:otherwise>
+											</c:choose>
 										</select>
 									</div>
 								</div>
@@ -80,10 +93,33 @@
 											required>
 
 											<option value="-1">Select Option</option>
-											<option value="1" id="currentStock">Get Current Stock</option>
+											<c:choose>
+											<c:when test="${sType==1}">
+											<option value="1" id="currentStock" selected>Get Current Stock</option>
 											<option value="2" id="monthStock">Get Stock Between Month</option>
 											<option value="3" id="dateStock">Get Stock Between Dates</option>
-
+											
+											</c:when>
+											<c:when test="${sType==2}">
+											<option value="1" id="currentStock">Get Current Stock</option>
+											<option value="2" id="monthStock" selected>Get Stock Between Month</option>
+											<option value="3" id="dateStock">Get Stock Between Dates</option>
+											
+											</c:when>
+											<c:when test="${sType==3}">
+											<option value="1" id="currentStock">Get Current Stock</option>
+											<option value="2" id="monthStock">Get Stock Between Month</option>
+											<option value="3" id="dateStock" selected>Get Stock Between Dates</option>
+											
+											</c:when>
+											<c:otherwise>
+											<option value="1" id="currentStock">Get Current Stock</option>
+											<option value="2" id="monthStock">Get Stock Between Month</option>
+											<option value="3" id="dateStock" >Get Stock Between Dates</option>
+											
+											</c:otherwise>
+											</c:choose>
+											
 										</select>
 									</div>
 
@@ -132,7 +168,9 @@
 
 
 								<div class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+								<div class="col-md-3" style="color: green;"><b>Stock Date:</b>	${stockDate}</div>
+									<div class="col-sm-9 col-sm-offset-3 col-lg-5 col-lg-offset-3">
+								
 										<input type="submit" class="btn btn-primary" value="Search">
 									</div>
 								</div>
@@ -175,7 +213,7 @@
 																<th>Mix Issue Qty</th>
 																<th>Mix Return Qty</th>
 																<th>Mix Rej Qty</th>
-																<th>Store Issue Qty</th>
+																<th>Store Received Qty</th>
 																<th>Store Rej Qty</th>
 
 																<th>Closing Qty</th>
@@ -227,7 +265,7 @@
 																<th>Prod Issue Qty</th>
 																<th>Prod Rej Qty</th>
 																<th>Prod Return Qty</th>
-																<th>Mix Issue Qty</th>
+																<th>Mix Prod Qty</th>
 
 																<th>Mix Rej Qty</th>
 

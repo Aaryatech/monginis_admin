@@ -354,19 +354,6 @@
 			window
 					.open('${pageContext.request.contextPath}/getGGreportByTypePdf');
 
-			/* 					window
-			 .open('${pageContext.request.contextPath}/pdfForReport?url=pdf/showGGreportByDate/'
-			 + from_date
-			 + '/'
-			 + to_date
-			 + '/'
-			 + selectedFr
-			 + '/'
-			 + routeId
-			 + '/'
-			 + isGrn
-			 + '/');
-			 */
 		}
 		function exportToExcel() {
 

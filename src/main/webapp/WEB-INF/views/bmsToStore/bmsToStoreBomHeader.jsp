@@ -117,8 +117,17 @@
 																</td>
 																
 																
-						<td><a href="${pageContext.request.contextPath}/viewDetailBOMBmsToStoreRequest?reqId=${getbomList.reqId}&settingvalue=${settingvalue}" class="action_btn" >
-						<abbr title="detailed"><i class="fa fa-list"></i></abbr></a></td>
+						<td>
+						<c:choose><c:when test="${flag==1}">
+						<a href="${pageContext.request.contextPath}/viewDetailBOMBmsToStoreRequest?reqId=${getbomList.reqId}&settingvalue=${settingvalue}" class="action_btn" >
+						<abbr title="detailed"><i class="fa fa-list"></i></abbr></a>
+						</c:when>
+						<c:when test="${flag==0}">
+							<a href="${pageContext.request.contextPath}/viewDetailBOMBmsToStoreRequests?reqId=${getbomList.reqId}&settingvalue=${settingvalue}" class="action_btn" >
+						<abbr title="detailed"><i class="fa fa-list"></i></abbr></a>
+					
+						</c:when>
+						</c:choose></td>
 						
 																</tr>
 												</c:forEach>

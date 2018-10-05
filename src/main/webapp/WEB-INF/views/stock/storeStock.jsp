@@ -693,11 +693,14 @@ var today = dd+'-'+mm+'-'+yyyy;
 		function dayEnd()
 		{
 			var stockDate=document.getElementById("stockDate").value;
-			if(stockDate>today)
+			var d1=new Date(stockDate.split("-").reverse().join("-"));
+			var d2=new Date(today.split("-").reverse().join("-"));
+
+			if(d1>d2){
 				alert(" You can't day end today, please try tomarrow !!");
-			else{
+			}else{
 				  document.getElementById("validation-form").submit();
-			}
+			} 
 		}
 	</script>
 	 

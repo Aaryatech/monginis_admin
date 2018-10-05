@@ -25,6 +25,7 @@
 
 	<c:url var="insertBomHeader" value="/insertBomHeader" />
 
+     <c:url var="manBomAddItemsNew" value="/manBomAddItemsNew" />
  
 
 
@@ -72,13 +73,17 @@
 
 						</div>
 						<div class="box-content">
-							<form action="" method="post" class="form-horizontal"
+							<form action="${pageContext.request.contextPath}/insertBomHeader" method="post" class="form-horizontal"
 								id="validation-form" method="post">
-
+ 						   <input type="hidden" name="fromDeptName" id="fromDeptName"  />
+                           <input type="hidden" name="toDeptName" id="toDeptName"  />
 								<div class="form-group">
 
 
 									<c:choose>
+									<c:when test="${prodHeaderId==0}">
+											<h4 align="center">Prod	Date ${prodDate}</h4>
+										</c:when>
 										<c:when test="${isProd==1}">
 											<h4 align="center">Prod Header Id ${prodHeaderId} Prod
 												Date ${prodDate}</h4>
@@ -126,7 +131,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">
 										Material Type</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<select name="material_type" id="material_type"
+										<select name="material_type" id="material_type" onchange="submitItem()"
 											class="form-control" placeholder="Material Type"
 											data-rule-required="true">
 											<option value="0">Select Material Type</option>
@@ -135,7 +140,7 @@
 										</select>
 									</div>
 
-									<label class=" col-sm-3 col-lg-2 control-label">
+									<!-- <label class=" col-sm-3 col-lg-2 control-label">
 										Material Name</label>
 									<div class="col-sm-6 col-lg-4 controls" id="chooseRM">
 										<select name="rm_material_name" id="rm_material_name"
@@ -145,9 +150,9 @@
 
 										</select>
 									</div>
-
+ -->
 								</div>
-
+<!-- 
 								<div class="form-group">
 
 									<label class="col-sm-3 col-lg-2 control-label">UOM</label>
@@ -176,7 +181,7 @@
 											onclick="submitItem()">
 
 									</div>
-								</div>
+								</div> -->
 
 								<div class="clearfix"></div>
 								<div class="table-responsive" style="border: 0">
@@ -184,12 +189,12 @@
 										<thead>
 											<tr>
 
-												<th width="140" style="width: 30px" align="left">Sr No</th>
+												<th width="140" style="width: 30px" align="center">Sr No</th>
 												<th width="138" align="left">Material Name</th>
 												<th width="120" align="left">Material Type</th>
 												<th width="120" align="left">Qty</th>
 												<th width="120" align="left">UOM</th>
-												<th width="120" align="left">Action</th>
+											<!-- 	<th width="120" align="left">Action</th> -->
 
 											</tr>
 
@@ -247,9 +252,9 @@
 								</div>
                                  <center>
 								<input type="button" class="btn btn-info" value="Submit List"
-									onclick="insertItemDetail()"> <input type="hidden"
+									onclick="insertItemDetail()"> <input type="hidden" name="prodHeaderId"
 									id="prodHeaderId" value="${prodHeaderId}"> <input
-									type="hidden" id="prodDate" value="${prodDate}"></center>
+									type="hidden" name="prodDate" id="prodDate" value="${prodDate}"></center>
 
 							</form>
 						</div>
@@ -340,6 +345,51 @@
 
 
 	<script type="text/javascript">
+	function submitItem() {
+		
+		var materialType = $('#material_type').val();
+		$('#table1 td').remove();
+		
+		$.getJSON('${manBomAddItemsNew}', {
+			 mat_type : materialType,
+			
+			ajax : 'true',
+
+		},function(data) {
+			
+			var len = data.length;
+			$('#table1 td').remove();
+			
+			$.each(data,function(key, bomDetail) {
+			
+			var tr = $('<tr></tr>');
+			var rmTypeName;
+			if(bomDetail.rmType == 1){
+				rmTypeName="RM";
+			}else if(bomDetail.rmType == 2){
+				rmTypeName="SF";
+			}
+
+			if(bomDetail.delStatus == 0){
+				
+		  	tr.append($('<td></td>').html(key+1));
+
+		  	tr.append($('<td></td>').html(bomDetail.rmName));
+
+		  	tr.append($('<td style="text-align:center;"></td>').html(""+rmTypeName));
+
+		  	tr.append($('<td style="text-align:center;"></td>').html("<input type=number  style='text-align: center;    height: 24px;' class='form-control' min=0 name=qty"+key+"   id=qty"+key+" Value=0 required>"));
+
+		  	tr.append($('<td style="text-align:center;"></td>').html(bomDetail.uom));
+		  
+			}
+			$('#table1 tbody').append(tr);
+
+			})
+
+			});
+	}
+/* 
 function submitItem() {
 				
 				var materialType = $('#material_type').val();
@@ -403,7 +453,7 @@ function submitItem() {
 				 document.getElementById("from_dept").selectedIndex = "0"; 
 				 document.getElementById("to_dept").selectedIndex = "0"; 
 				}
-				
+				 */
 				function deleteBomDetail(key){
 					
 					$.getJSON('${deleteBomDetail}',
@@ -454,25 +504,27 @@ function submitItem() {
 
 function insertItemDetail(){
 	
-	alert("inside Bom Header Insert ");
+	//alert("inside Bom Header Insert ");
 	
 	var fromDeptName=$("#from_dept option:selected").html();
 	
 	var toDeptName=$("#to_dept option:selected").html();
-
+	 document.getElementById("fromDeptName").value=fromDeptName;
+	 document.getElementById("toDeptName").value=toDeptName;
 	var prodHeaderId= $('#prodHeaderId').val();
 	//var prodHeaderId = document.getElementById("prodHeaderId").value;
 
 	var prodDate=$('#prodDate').val();
 	
 //salert(prodDate);
-alert(prodHeaderId);
-alert(prodDate);
+//alert(prodHeaderId);
+//alert(prodDate);
 
 	var fromDept = $('#from_dept').val();
 	var toDept = $('#to_dept').val();
-	
-	$.getJSON('${insertBomHeader}',
+    document.getElementById('validation-form').submit();
+
+	/* $.getJSON('${insertBomHeader}',
 			{
 		fromDeptName:fromDeptName,
 		toDeptName:toDeptName,
@@ -484,12 +536,12 @@ alert(prodDate);
 });
 	
 	alert("Inserted Suucessfully");
-	$('#table1 td').remove();
+	$('#table1 td').remove(); */
 }
 
 </script>
 
-	<script type="text/javascript">
+<!-- 	<script type="text/javascript">
 $(document).ready(function() { 
 	$('#material_type').change(
 			function() {
@@ -514,8 +566,8 @@ $(document).ready(function() {
 			});
 
 });
-</script>
-
+</script> -->
+<!-- 
 	<script type="text/javascript">
 $(document).ready(function() { 
 	$('#rm_material_name').change(
@@ -539,7 +591,7 @@ $(document).ready(function() {
 			});
 			
 
-</script>
+</script> -->
 
 
 </body>

@@ -82,13 +82,14 @@ public class BmsStockController {
 		System.out.println("inside get Bms Stock Page ");
 		ModelAndView mav = new ModelAndView("stock/bmsStock");
 		System.out.println("inside get BMS Stock Page  ");
+		String stockDate="";
 		try {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
-
+			int sType=Integer.parseInt(request.getParameter("selectStock"));
 			Date cDate = new Date();
-
+			int matType = Integer.parseInt(request.getParameter("matType"));
 			// if getCurrentStock
 			if (Integer.parseInt(request.getParameter("selectStock")) == 1) {
 
@@ -125,7 +126,7 @@ public class BmsStockController {
 					SimpleDateFormat sdF = new SimpleDateFormat("dd-MM-yyyy");
 
 					String globalDate = sdF.format(globalHeaderDate);
-
+					stockDate=globalDate;
 					globalHeaderDate = sdF.parse(globalDate);
 
 					System.out.println(" RM :Global Header Date " + globalHeaderDate);
@@ -247,7 +248,7 @@ public class BmsStockController {
 					SimpleDateFormat sdF = new SimpleDateFormat("dd-MM-yyyy");
 
 					String globalDate = sdF.format(globalHeaderDate);
-
+					stockDate=globalDate;
 					globalHeaderDate = sdF.parse(globalDate);
 
 					System.out.println("SF: Global Header Date " + globalHeaderDate);
@@ -383,7 +384,9 @@ public class BmsStockController {
 				}
 
 			} // end of else Get Stock Between two Date
-
+          mav.addObject("sType", sType);
+          mav.addObject("matType", matType);
+          mav.addObject("stockDate", stockDate);
 		} catch (Exception e) {
 
 			System.out.println("Exce in Getting Stock BMS stock " + e.getMessage());

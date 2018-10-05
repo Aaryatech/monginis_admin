@@ -62,6 +62,7 @@ public class BmsToStoreBomController {
 	 	Constants.subAct =46;
  
 		ModelAndView model = new ModelAndView("bmsToStore/bmsToStoreBom");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
 		try {
 
@@ -78,10 +79,10 @@ public class BmsToStoreBomController {
 			
 			
 			BmsStockHeader bmsStockHeader=rest.postForObject(Constants.url +"getBmsStockHeader",map, BmsStockHeader.class);
-		
-		System.out.println("BMS Header  :  "+bmsStockHeader.toString());	
+			Date currDate=new Date();
+
+		System.out.println(currDate.compareTo(bmsStockHeader.getBmsStockDate())+"BMS Header  :  "+bmsStockHeader.toString());	
 			map=new LinkedMultiValueMap<>();
-			
 			map.add("fromDate", new SimpleDateFormat("yyyy-MM-dd").format(bmsStockHeader.getBmsStockDate()));
 			map.add("toDate", new SimpleDateFormat("yyyy-MM-dd").format(bmsStockHeader.getBmsStockDate()));
 			map.add("rmType", 1);
@@ -168,7 +169,13 @@ public class BmsToStoreBomController {
 			 System.out.println("Rm Stock List  :  "+bmsStockDetailedList.toString());
 			model.addObject("rmStockList",bmsStockDetailedList);
 			model.addObject("rmList",rawMaterialDetailsList.getRawMaterialDetailsList());
-			
+
+			 if (validSearchRange(sdf.format(bmsStockHeader.getBmsStockDate()),sdf.format(currDate))==true) {
+		            model.addObject("flag",0);
+		        }else
+		        {
+		        	model.addObject("flag",1);
+		        }
 		} catch (Exception e) {
 
 			System.out.println("Error in Getting   details " + e.getMessage());
@@ -180,7 +187,17 @@ public class BmsToStoreBomController {
 
 	}
 	
-	
+	public static boolean validSearchRange(String start, String end){
+	    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    try {
+	        Date start_date = dateFormat.parse(start);
+	        Date end_date = dateFormat.parse(end);
+	        return start_date.equals(end_date);
+	    } catch (ParseException e) {
+	        e.printStackTrace();
+	    }
+	    return false;
+	}
 	
 	@RequestMapping(value = "/submitBmstoStore", method = RequestMethod.POST)
 	public String submitBmstoStore( HttpServletRequest request, HttpServletResponse response) {
@@ -339,6 +356,80 @@ public class BmsToStoreBomController {
 	
 	@RequestMapping(value = "/getBomListBmsToStore", method = RequestMethod.GET)
 	public ModelAndView getBomList(HttpServletRequest request, HttpServletResponse response) {
+		 Constants.mainAct =10;
+		Constants.subAct=64; 
+		
+		ModelAndView model = new ModelAndView("bmsToStore/bmsToStoreBomHeader");//
+		getbomList = new ArrayList<BillOfMaterialHeader>();
+		HttpSession session=request.getSession();
+		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
+		 
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		RestTemplate rest = new RestTemplate();
+		int fromDept=0;
+		try
+		{
+			String settingKey = new String();
+
+			settingKey = "BMS" + "," + "STORE";
+
+			map.add("settingKeyList", settingKey);
+			
+			// web Service to get Dept Name And Dept Id for bom toDept and toDeptId
+			
+			FrItemStockConfigureList settingList = rest.postForObject(Constants.url + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			
+			 
+			
+			System.out.println("new Field Dept Id = "+userResponse.getUser().getDeptId());
+			
+			int toDeptId=0;
+			
+			String toDeptName=new String();
+			List<FrItemStockConfigure> settingKeyList = settingList.getFrItemStockConfigure();
+			for (int i = 0; i < settingKeyList.size(); i++) {
+
+				if (settingKeyList.get(i).getSettingKey().equalsIgnoreCase("BMS")) {
+
+					fromDept = settingKeyList.get(i).getSettingValue();
+
+				}
+				if (settingKeyList.get(i).getSettingKey().equalsIgnoreCase("STORE")) {
+
+					toDeptId = settingKeyList.get(i).getSettingValue();
+					toDeptName=settingKeyList.get(i).getSettingKey();
+				}
+				 
+
+			}
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("fromDept",fromDept);         
+			map.add("toDept",toDeptId);           
+			map.add("status","0"); 
+			
+			GetBillOfMaterialList getBillOfMaterialList= rest.postForObject(Constants.url + "/getBOMHeaderBmsAndStore",map, GetBillOfMaterialList.class);
+			 
+			
+			System.out.println("getbomList"+getBillOfMaterialList.getBillOfMaterialHeader().toString());
+			getbomList=getBillOfMaterialList.getBillOfMaterialHeader();
+			System.out.println("bomHeaderList"+getBillOfMaterialList.getBillOfMaterialHeader().toString());
+			
+		}catch(Exception e)
+		{
+			System.out.println("error in controller "+e.getMessage());
+		}
+		model.addObject("settingvalue",fromDept) ;
+		model.addObject("deptId",userResponse.getUser().getDeptId()) ;
+		model.addObject("getbomList",getbomList) ;
+		model.addObject("flag",1) ;
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/getBomListBmsToStores", method = RequestMethod.GET)
+	public ModelAndView getBomLists(HttpServletRequest request, HttpServletResponse response) {
 		 Constants.mainAct =8;
 		Constants.subAct=47; 
 		
@@ -406,10 +497,10 @@ public class BmsToStoreBomController {
 		model.addObject("settingvalue",fromDept) ;
 		model.addObject("deptId",userResponse.getUser().getDeptId()) ;
 		model.addObject("getbomList",getbomList) ;
+		model.addObject("flag",0) ;
 		return model;
 
 	}
-	
 	
 	
 	
@@ -494,12 +585,38 @@ public class BmsToStoreBomController {
 		model.addObject("deptId",deptId);
 		model.addObject("billOfMaterialHeader",billOfMaterialHeader);
 		model.addObject("bomwithdetaild", bomwithdetaild);
-		
+		model.addObject("flag", 1);
 		return model;
 	}
 	
 	//getBOMHeaderListBmsAndStore
 	
+	@RequestMapping(value = "/viewDetailBOMBmsToStoreRequests", method = RequestMethod.GET)
+	public ModelAndView viewDetailBOMRequests(HttpServletRequest request, HttpServletResponse response) {
+		/*Constants.mainAct = 17;
+		Constants.subAct=184;*/
+		ModelAndView model = new ModelAndView("bmsToStore/bmsToStoreBomDetail");
+		
+		HttpSession session=request.getSession();
+		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail"); 
+		int deptId=userResponse.getUser().getDeptId();
+		
+		//String mixId=request.getParameter("mixId");
+		int reqId=Integer.parseInt(request.getParameter("reqId"));
+		System.out.println(reqId);
+		
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("reqId",reqId);
+		RestTemplate rest = new RestTemplate();
+		billOfMaterialHeader=rest.postForObject(Constants.url + "/getDetailedwithreqId",map, BillOfMaterialHeader.class);
+		bomwithdetaild =billOfMaterialHeader.getBillOfMaterialDetailed();
+		
+		model.addObject("deptId",deptId);
+		model.addObject("billOfMaterialHeader",billOfMaterialHeader);
+		model.addObject("bomwithdetaild", bomwithdetaild);
+		model.addObject("flag", 0);
+		return model;
+	}
 	
 	
 	
