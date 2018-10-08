@@ -68,8 +68,18 @@
 										Route Name</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="route_name" id="route_name"
-											value="${route.routeName }" placeholder="Route"
+											value="${route.routeName}" placeholder="Route"
 											class="form-control" data-rule-required="true" />
+									</div>
+								</div>
+								
+								
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Route Seq No</label>
+									<div class="col-sm-9 col-lg-10 controls">
+										<input type="text" value="${route.routeSeqNo}" name="route_seq_no" id="route_seq_no"
+											placeholder="Route Sequence No" class="form-control"
+											data-rule-required="true" data-rule-number="true"/>
 									</div>
 								</div>
 								<div class="form-group">
@@ -111,7 +121,8 @@
 												<thead>
 													<tr>
 														<th width="45" style="width: 18px">#</th>
-														<th width="939" align="left">Name</th>
+														<th width="700" align="left">Name</th>
+															<th width="200" align="left">Seq No</th>
 														<th width="81" align="left">Action</th>
 													</tr>
 												</thead>
@@ -121,6 +132,8 @@
 															<td>1</td>
 															<td align="left"><c:out
 																	value="${routeList.routeName}"></c:out></td>
+																	<td align="left"><c:out
+																	value="${routeList.routeSeqNo}"></c:out></td>
 															<td align="left"><a
 																href="${pageContext.request.contextPath}/updateRoute/${routeList.routeId}"><span
 																	class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;

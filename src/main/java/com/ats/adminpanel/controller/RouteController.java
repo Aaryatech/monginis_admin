@@ -31,8 +31,12 @@ public class RouteController {
 		RestTemplate rest = new RestTemplate();
 		
 		String routeName = request.getParameter("route_name");
+		int routeSeqNo= Integer.parseInt(request.getParameter("route_seq_no"));
+		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("routeName", routeName);
+		map.add("routeSeqNo", routeSeqNo);
+		
 		String routeResponse = rest.postForObject(Constants.url+"insertRoute", map, String.class);
 		model=new ModelAndView("masters/route");
 		return "redirect:/addroute";
@@ -130,7 +134,8 @@ public class RouteController {
 		
 		map.add("id", routeId);
 		map.add("routeName", routeName);
-		
+		int routeSeqNo= Integer.parseInt(request.getParameter("route_seq_no"));
+		map.add("routeSeqNo", routeSeqNo);
 		String routeResponse=restTemplate
 				.postForObject(""+Constants.url+"updateRoute",map,String.class);
 		
