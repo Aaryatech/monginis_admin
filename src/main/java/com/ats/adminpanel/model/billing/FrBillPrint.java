@@ -24,7 +24,16 @@ public class FrBillPrint {
 	
 	public List<SubCategory> subCatList;
 	
+	Company company;
 	
+	
+	
+	public Company getCompany() {
+		return company;
+	}
+	public void setCompany(Company company) {
+		this.company = company;
+	}
 	public String getInvoiceNo() {
 		return invoiceNo;
 	}

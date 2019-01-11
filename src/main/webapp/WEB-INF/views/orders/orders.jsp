@@ -379,7 +379,20 @@ td:hover::after, th:hover::after {
 										</div>
 
 
-									</div>
+									</div>	<div class="box-content">	<div id="table-scroll" class="table-scroll">
+									<table id="subCat" class="main-table" style="text-align:left; border: solid 1px #DDEEEE;background-color: pink;">
+													<thead style="background-color: pink;  ">
+														<tr class="bgpink">
+															<th width="168" style="width: 28px" align="left">Sr.</th>
+															<th width="198" align="left">Sub Category</th>
+															<th width="190" align="left">Total</th>
+															
+														</tr>
+													</thead>
+													<tbody>
+													
+													</tbody>
+												</table></div></div>
 									<div class="form-group"
 										style="display: <c:out value="${dis}" />;" id="range">
 
@@ -406,6 +419,7 @@ td:hover::after, th:hover::after {
 											class="l-5"></span> <span class="l-6"></span>
 									</div>
 									</div>
+									
 							</form>
 						</div>
 					</div>
@@ -533,8 +547,8 @@ $.getJSON('${callSearchOrdersProcess}', {
 
 
 	$('#table1 td').remove();
-
-	$.each(data,function(key, orders) {
+	$('#subCat td').remove();
+	$.each(data.orderList,function(key, orders) {
 		document.getElementById("expExcel").disabled=false;
 		document.getElementById("expExcel1").disabled=false;
 
@@ -575,6 +589,15 @@ tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id=
 
 })
 
+
+$.each(data.orderItemSubCatTotalList,function(key, subCat) {
+   var tr = $('<tr></tr>');
+	tr.append($('<td></td>').html(key+1));
+	tr.append($('<td></td>').html(subCat.subCatName));
+
+	tr.append($('<td></td>').html(subCat.total));
+	$('#subCat tbody').append(tr);
+});
 });
 
 }

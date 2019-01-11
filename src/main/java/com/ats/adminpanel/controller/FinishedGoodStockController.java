@@ -500,6 +500,12 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 				detail.setOpT2(t2);
 				detail.setOpT3(t3);
 				detail.setOpTotal(t1 + t2 + t3);
+				
+				if(detail.getStockDate()==null) {
+					
+					detail.setStockDate(new Date()); 
+					detail.setDelStatus(0);
+				}
 				/*
 				 * detail.setStockDate(new Date()); detail.setDelStatus(0);
 				 * detail.setCatId(detail.getCatId());

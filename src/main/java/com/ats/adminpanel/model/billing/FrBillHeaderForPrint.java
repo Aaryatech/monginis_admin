@@ -1,5 +1,6 @@
 package com.ats.adminpanel.model.billing;
 
+
 public class FrBillHeaderForPrint {
 
 	private Integer billNo;
@@ -17,6 +18,17 @@ public class FrBillHeaderForPrint {
 	private Integer delStatus;
 	private int isSameState;
 	private String frAddress;
+
+	Company company;
+	
+	
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
 
 	public Integer getBillNo() {
 		return billNo;

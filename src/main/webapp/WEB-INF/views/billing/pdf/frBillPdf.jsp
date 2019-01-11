@@ -23,7 +23,7 @@
 	
 		<div style="text-align: center; font-size: 12px;"><b>TAX INVOICE</b></div>
 		<div style="text-align: right; font-size: 10px;">CIN -
-			U15122MH2011PTC221108</div>
+			${frDetails.company.cinNo}</div>
 		<table width="100%" border="0" cellpadding="0" cellspacing="0"
 			style="border-left: 1px solid #313131; border-right: 1px solid #313131; border-top: 1px solid #313131;">
 			<tr>
@@ -31,11 +31,10 @@
 					style="padding: 10px; color: #FFF; font-size: 15px;">&nbsp;</td>
 				<td width="60%" colspan="6"
 					style="border-left: 1px solid #313131; padding: 5px; color: #000; font-size: 15px; text-align: center">
-					<h4 style="color: #000; font-size: 16px; text-align: center; margin: 0px;">Galdhar
-						Foods Pvt. Ltd.</h4>
+					<h4 style="color: #000; font-size: 16px; text-align: center; margin: 0px;">${frDetails.company.compName}</h4>
 					<p style="color: #000; font-size: 10px; text-align: center; margin: 0px;">
-						Factory Add: A-89, Shendra MIDC, Aurangabad-431007 <br />
-						Phone:0240-2466217, Email: aurangabad@monginis.net
+						Factory Add: ${frDetails.company.factAddress} <br />
+						Phone:${frDetails.company.phoneNo1}, Email: ${frDetails.company.email}
 					</p>
 				</td>
 				<td colspan="3" width="20%"
@@ -55,8 +54,8 @@
 					<p
 						style="color: #000; font-size: 13px; text-align:; left; margin: 0px;">
 						GSTIN:
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>27AAECG5545R1ZX</b>&nbsp;&nbsp;&nbsp;&nbsp;<span>
-							State:&nbsp;27 Maharashtra </span>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>${frDetails.company.gstin}</b>&nbsp;&nbsp;&nbsp;&nbsp;<span>
+							State:&nbsp;${frDetails.company.stateCode} ${frDetails.company.state} </span>
 					</p> <!--         <p style="color:#000; font-size:13px; text-align:left;margin:0px;"></p>
  -->
 					<p
@@ -210,9 +209,8 @@
 					style="border-left: 1px solid #313131; border-right: 1px solid #313131; padding: 8px; color: #000; font-size: 12px;">
 					<p
 						style="color: #000; font-size: 12px; text-align: left; margin: 0px;">FDA
-						Declaration: We hereby certify that food mentioned in the Tax
-						Invoice is warranted to be of the nature and quality which it
-						purpose to be. FDA Lic. No: 11515044000208</p>
+						Declaration: ${frDetails.company.fdaDeclaration}
+						purpose to be. FDA Lic. No: ${frDetails.company.fdaLicenceNo}</p>
 				</td>
 
 
@@ -258,7 +256,7 @@
 
 				<td align="center" colspan="5" width="38%"
 					style="border-bottom: 1px solid #313131; border-top: 1px solid #313131; border-left: 1px solid #313131; padding: 10px; color: #000; font-size: 11px;"><p>
-						<b>For Galdhar Foods Pvt. Ltd.<br></br> <br></br> <br></br>
+						<b>For ${frDetails.company.compName}.<br></br> <br></br> <br></br>
 							Authorised Signatory
 						</b>
 					</p></td>
@@ -281,7 +279,7 @@
 								
 		<div style="text-align: center; font-size: 12px;"><b>TAX INVOICE</b></div>
 		<div style="text-align: right; font-size: 10px;">CIN -
-			U15122MH2011PTC221108</div>
+			${frDetails.company.cinNo}</div>
 		<table width="100%" border="0" cellpadding="0" cellspacing="0"
 			style="border-left: 1px solid #313131; border-right: 1px solid #313131; border-top: 1px solid #313131;">
 			<tr>
@@ -289,11 +287,10 @@
 					style="padding: 10px; color: #FFF; font-size: 15px;">&nbsp;</td>
 				<td width="60%" colspan="6"
 					style="border-left: 1px solid #313131; padding: 5px; color: #000; font-size: 15px; text-align: center">
-					<h4 style="color: #000; font-size: 16px; text-align: center; margin: 0px;">Galdhar
-						Foods Pvt. Ltd</h4>
+					<h4 style="color: #000; font-size: 16px; text-align: center; margin: 0px;">${frDetails.company.compName}</h4>
 					<p style="color: #000; font-size: 10px; text-align: center; margin: 0px;">
-						Factory Add: A-89, Shendra MIDC, Aurangabad-431007 <br />
-						Phone:0240-2466217, Email: aurangabad@monginis.net
+						Factory Add: ${frDetails.company.factAddress}<br />
+						Phone:${frDetails.company.phoneNo1}, Email: ${frDetails.company.email}
 					</p>
 				</td>
 				<td colspan="3" width="20%"
@@ -313,8 +310,8 @@
 					<p
 						style="color: #000; font-size: 13px; text-align:; left; margin: 0px;">
 						GSTIN:
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>27AAECG5545R1ZX</b>&nbsp;&nbsp;&nbsp;&nbsp;<span>
-							State:&nbsp;27 Maharashtra </span>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<b>${frDetails.company.gstin}</b>&nbsp;&nbsp;&nbsp;&nbsp;<span>
+							State:&nbsp;${frDetails.company.stateCode} ${frDetails.company.state} </span>
 					</p> <!--         <p style="color:#000; font-size:13px; text-align:left;margin:0px;"></p>
  -->
 					<p
@@ -621,9 +618,7 @@
 					style="border-left: 1px solid #313131; border-right: 1px solid #313131; padding: 8px; color: #000; font-size: 12px;">
 					<p
 						style="color: #000; font-size: 12px; text-align: left; margin: 0px;">FDA
-						Declaration: We hereby certify that food mentioned in the Tax
-						Invoice is warranted to be of the nature and quality which it
-						purpose to be. FDA Lic. No: 11515044000208</p>
+						Declaration:${frDetails.company.fdaDeclaration} FDA Lic. No: ${frDetails.company.fdaLicenceNo}</p>
 				</td>
 
 
@@ -671,7 +666,7 @@
 
 				<td align="center" colspan="5" width="38%"
 					style="border-bottom: 1px solid #313131; border-top: 1px solid #313131; border-left: 1px solid #313131; padding: 10px; color: #000; font-size: 11px;"><p>
-						<b>For Galdhar Foods Pvt. Ltd.<br></br> <br></br> <br></br>
+						<b>For ${frDetails.company.compName}<br></br> <br></br> <br></br>
 							Authorised Signatory
 						</b>
 					</p></td>

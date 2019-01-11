@@ -29,11 +29,13 @@ import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.GetOrder;
 import com.ats.adminpanel.model.GetOrderListResponse;
+import com.ats.adminpanel.model.GetOrdersResponse;
 import com.ats.adminpanel.model.GetRegSpCakeOrders;
 import com.ats.adminpanel.model.GetSpCakeOrders;
 import com.ats.adminpanel.model.GetSpCkOrder;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.Order;
+import com.ats.adminpanel.model.OrderItemSubCatTotal;
 import com.ats.adminpanel.model.RegularSpCkOrder;
 import com.ats.adminpanel.model.RegularSpCkOrdersResponse;
 import com.ats.adminpanel.model.Route;
@@ -114,9 +116,10 @@ public class OrderController {
 	}
 	
 	@RequestMapping(value = "/searchOrdersProcess",method = RequestMethod.GET)//getOrderListForAllFr new web service
-	public  @ResponseBody  List<GetOrder>  searchOrderProcess(HttpServletRequest request, HttpServletResponse response) {
+	public  @ResponseBody  GetOrdersResponse  searchOrderProcess(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("orders/orders");
 		
+		GetOrdersResponse getOrdersResponse=new GetOrdersResponse();
 		System.out.println("/inside search order process  ");
 		//model.addObject("franchiseeList", franchiseeList);
 		try {
@@ -186,6 +189,14 @@ public class OrderController {
 
 			
 			orderList = orderListResponse.getGetOder();
+			getOrdersResponse.setOrderList(orderList);
+			try {
+			List<OrderItemSubCatTotal> orderItemSubCatTotalList=restTemplate1.postForObject(Constants.url + 
+					"getSubCatOrderTotalAllFr",map, List.class);
+			getOrdersResponse.setOrderItemSubCatTotalList(orderItemSubCatTotalList);
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
 
 			System.out.println("order list is " + orderList.toString());
 			System.out.println("order list count is" + orderList.size());
@@ -222,7 +233,15 @@ public class OrderController {
 
 			
 			orderList = orderListResponse.getGetOder();
-
+			getOrdersResponse.setOrderList(orderList);
+			try {
+			List<OrderItemSubCatTotal> orderItemSubCatTotalList=restTemplate1.postForObject(Constants.url + 
+					"getSubCatOrderTotal",map, List.class);
+			getOrdersResponse.setOrderItemSubCatTotalList(orderItemSubCatTotalList);
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 			System.out.println("order list is " + orderList.toString());
 			System.out.println("order list count is" + orderList.size());
 			model.addObject("orderList", orderList);
@@ -267,7 +286,6 @@ public class OrderController {
 			
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
-			System.out.println("List"+orderList.get(i).toString());
 		}
 		 
 		
@@ -280,7 +298,7 @@ public class OrderController {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		return orderList;
+		return getOrdersResponse;
 	}
 	@RequestMapping(value = "/excelOrderByItem",method = RequestMethod.GET)//getOrderListForAllFr new web service
 	public @ResponseBody List<GetOrder> excelOrderByItem(HttpServletRequest request, HttpServletResponse response) {
