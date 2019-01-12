@@ -60,20 +60,28 @@
 						</div> -->
 
 						<div class="box-content">
-							<form class="form-horizontal" id="validation-form">
+							<form action="showFinishedGoodStock" class="form-horizontal" id="showFinishedGoodStock" method="get">
 
-								<%-- <div class="form-group">
+								  <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Category</label>
 
 									<div class="col-sm-9 col-lg-10 controls">
 										<select class="form-control chosen" name="catId" id="catId">
 
 
-										<option value="-1">All</option>
+										<option value="0">All</option>
 
 											<c:forEach items="${catList}" var="catList">
+												<c:choose>
+													<c:when test="${catList.catId==catId}">
+														<option value="${catList.catId}" selected>${catList.catName} </option>
+													</c:when>
+													<c:otherwise>
+														<option value="${catList.catId}">${catList.catName} </option>
+													</c:otherwise>
+												</c:choose>
 
-												<option value="${catList.catId}">${catList.catName} </option>
+												
 
 											</c:forEach>
 
@@ -83,16 +91,16 @@
 
 								</div>
 
-								 --%>
+								  
 
-								<!-- 
+							 
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
 
-										<input type="button" class="btn btn-info" name="submit"
-											value="submit" onclick="searchItemsByCategory()" />
+										<input type="submit" class="btn btn-info" name="submit"
+											value="submit"   />
 									</div>
-								</div> -->
+								</div> 
 								<input type="hidden" id="selectedCatId" name="selectedCatId" />
 
 							</form>
@@ -158,6 +166,8 @@
 												</thead> -->
 												<tbody>
 											
+											<c:choose>
+												<c:when test="${catId==0}">
 													<c:forEach items="${itemsList}" var="item" varStatus="count">
 														<tr>
 															<td><c:out value="${count.index+1}"></c:out></td>
@@ -167,6 +177,127 @@
 															<td><input type=text  class=form-control  id="qty3${item.itemId}" value="${item.opT3}" name="qty3${item.itemId}"  ></td>
 														</tr>
 													</c:forEach>
+												</c:when>
+												<c:otherwise>
+													<c:set var="sr" value="0"></c:set>
+														<c:forEach items="${itemsList}" var="item" varStatus="count">
+															<c:if test="${item.catId==catId}">
+																<tr>
+																	<td><c:out value="${sr+1}"></c:out><c:set var="sr" value="${sr+1}"></c:set></td>
+																	<td><c:out value="${item.itemName}"></c:out></td>
+																	<td><input type=text  class=form-control  id="qty1${item.itemId}" value="${item.opT1}" name="qty1${item.itemId}" ></td>
+																	<td><input type=text  class=form-control  id="qty2${item.itemId}" value="${item.opT2}" name="qty2${item.itemId}"  ></td>
+																	<td><input type=text  class=form-control  id="qty3${item.itemId}" value="${item.opT3}" name="qty3${item.itemId}"  ></td>
+																</tr>
+															</c:if> 
+													</c:forEach>
+													
+												</c:otherwise>
+											</c:choose>
+													
+
+												</tbody>
+											</table>
+										</div><br>
+										
+										
+										<div class="clearfix"></div>
+										<div id="table-scroll" class="table-scroll">
+										<div id="faux-table" class="faux-table" aria="hidden">
+									<table id="table3" class="main-table">
+											<thead>
+												<tr class="bgpink">
+												<th width="30" align="left">Sr No</th>
+														<th width="120" align="left">Sub Category</th>
+														<th width="100">T1</th>
+														<th width="100">T2</th>
+														<th width="100">T3</th>
+												</tr>
+												</thead>
+												</table>
+									
+									</div>
+										<div class="table-wrap">
+									
+										<table id="table4" class="table table-advance">
+											<thead>
+												<tr class="bgpink">
+											<th width="30" align="left">Sr No</th>
+														<th width="120" align="left">Sub Category</th>
+														<th width="100">T1</th>
+														<th width="100">T2</th>
+														<th width="100">T3</th>
+												</tr>
+												</thead>
+									 
+												<tbody>
+											
+											<c:choose>
+												<c:when test="${catId==0}">
+														 <c:set var="sr" value="0"></c:set>
+																<c:forEach items="${catList}" var="catList">
+																	<c:forEach items="${catList.subCategory}" var="subCategory">
+																		<c:set value="0" var="opT1Total"></c:set>
+																		<c:set value="0" var="opT2Total"></c:set>
+																		<c:set value="0" var="opT3Total"></c:set>
+																		<tr>
+																		<c:forEach items="${itemsList}" var="itemsList">
+																			<c:choose>
+																				<c:when test="${subCategory.subCatId==itemsList.groupId}">
+																					<c:set value="${opT1Total+itemsList.opT1}" var="opT1Total"></c:set>
+																					<c:set value="${opT2Total+itemsList.opT2}" var="opT2Total"></c:set>
+																					<c:set value="${opT3Total+itemsList.opT3}" var="opT3Total"></c:set>
+																					 
+																				</c:when> 
+																			</c:choose> 
+																		</c:forEach>
+																		
+																		
+																	<td><c:out value="${sr+1}"></c:out><c:set var="sr" value="${sr+1}"></c:set></td>
+																	<td><c:out value="${subCategory.subCatName}"></c:out></td>
+																	<td> ${opT1Total}</td>
+																	<td> ${opT2Total}</td>
+																	<td> ${opT3Total}</td>
+																</tr>
+																		
+																	</c:forEach>
+																</c:forEach>
+														 
+												</c:when>
+												<c:otherwise>
+													<c:set var="sr" value="0"></c:set>
+																<c:forEach items="${catList}" var="catList">
+																<c:if test="${catList.catId==catId}"> 
+																	<c:forEach items="${catList.subCategory}" var="subCategory">
+																		<c:set value="0" var="opT1Total"></c:set>
+																		<c:set value="0" var="opT2Total"></c:set>
+																		<c:set value="0" var="opT3Total"></c:set>
+																		<c:forEach items="${itemsList}" var="itemsList">
+																			<c:choose>
+																				<c:when test="${subCategory.subCatId==itemsList.groupId}">
+																					<c:set value="${opT1Total+itemsList.opT1}" var="opT1Total"></c:set>
+																					<c:set value="${opT2Total+itemsList.opT2}" var="opT2Total"></c:set>
+																					<c:set value="${opT3Total+itemsList.opT3}" var="opT3Total"></c:set>
+																					 
+																				</c:when> 
+																			</c:choose> 
+																		</c:forEach>
+																		
+																		<tr>
+																	<td><c:out value="${sr+1}"></c:out><c:set var="sr" value="${sr+1}"></c:set></td>
+																	<td><c:out value="${subCategory.subCatName}"></c:out></td>
+																	<td> ${opT1Total}</td>
+																	<td> ${opT2Total}</td>
+																	<td> ${opT3Total}</td>
+																</tr>
+																		
+																	</c:forEach>
+																	</c:if>
+																</c:forEach>
+													
+												</c:otherwise>
+											</c:choose>
+													
 
 												</tbody>
 											</table>
@@ -190,7 +321,7 @@
 									</div>
 
 								</div>
-
+</div></div>
 							</form>
 						</div>
 

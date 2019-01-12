@@ -83,6 +83,15 @@ public class FinishedGoodStockController {
 		try {
 			Constants.mainAct = 4;
 			Constants.subAct = 40;
+			
+			if(request.getParameter("catId")!=null) {
+				int catId = Integer.parseInt(request.getParameter("catId"));
+				model.addObject("catId", catId);
+			}else {
+				model.addObject("catId", 0);
+			}
+			
+			
 			String sDate="";
 			RestTemplate restTemplate = new RestTemplate();
 
@@ -101,26 +110,28 @@ public class FinishedGoodStockController {
 				}
 			}
 
-			model.addObject("catList", filteredCatList);
+			//System.out.println("catList "+ catList);
+			
+			model.addObject("catList", catList);
 			List<Item> itemsList = new ArrayList<>();
 
 			allItemsListResponse = restTemplate.getForObject(Constants.url + "getAllItems", AllItemsListResponse.class);
 
 			itemsList = new ArrayList<Item>();
 			itemsList = allItemsListResponse.getItems();
-			System.out.println("LIst of items" + itemsList.toString());
+			//System.out.println("LIst of items" + itemsList.toString());
 			List<Item> tempItemList = itemsList;
 
-			for (int i = 0; i < tempItemList.size(); i++) {
+			 /*for (int i = 0; i < tempItemList.size(); i++) {
 
 				if (tempItemList.get(i).getItemGrp1() == 3) {
-					System.out.println("item removed " + itemsList.get(i).getItemName());
+					//System.out.println("item removed " + itemsList.get(i).getItemName());
 
 					itemsList.remove(i);
 
 				}
 
-			}
+			} */
 			showFinStockDetail = new ArrayList<FinishedGoodStockDetail>();
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("stockStatus", 0);
@@ -147,16 +158,13 @@ public class FinishedGoodStockController {
 				List<Integer> idList=new ArrayList<Integer>();
 				
 				
-for(int i=0;i<showFinStockDetail.size();i++) {
-					
-					idList.add(showFinStockDetail.get(i).getItemId());
-					
-					
-}
-			
-					
-					
-					
+				for(int i=0;i<showFinStockDetail.size();i++) {
+									
+									idList.add(showFinStockDetail.get(i).getItemId());
+									
+									
+				} 
+				
 					for(int j=0;j<itemsList.size();  j++) {
 						
 						if(!idList.contains(itemsList.get(j).getId())) {
@@ -165,8 +173,8 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 							d.setCatId(itemsList.get(j).getItemGrp1());
 							d.setItemId(itemsList.get(j).getId());
 							d.setItemName(itemsList.get(j).getItemName());
-							
-							System.err.println("New Item Found and added " +d.getItemName());
+							d.setGroupId(itemsList.get(j).getItemGrp2());
+							System.err.println("New Item Found and added " +d);
 							showFinStockDetail.add(d);
 						}
 						
@@ -181,7 +189,7 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 					detail.setItemName(itemsList.get(i).getItemName());
 					detail.setCatId(itemsList.get(i).getItemGrp1());
 					detail.setItemId(itemsList.get(i).getId());
-
+					detail.setGroupId(itemsList.get(i).getItemGrp2());
 					showFinStockDetail.add(detail);
 				}
 
@@ -191,6 +199,18 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 
 			// model.addObject("itemsList", itemsList);
 
+			for(int j=0;j<itemsList.size();  j++) {
+				
+				for(int i=0;i<showFinStockDetail.size();  i++) {
+					
+					 if(itemsList.get(j).getId()==showFinStockDetail.get(i).getItemId()) {
+						 showFinStockDetail.get(i).setGroupId(itemsList.get(j).getItemGrp2());
+					 }
+				}
+				
+			}
+			 
+			System.err.println("showFinStockDetail " + showFinStockDetail);
 			model.addObject("itemsList", showFinStockDetail);
 			model.addObject("sDate", sDate);//mahesh code (3 march)
 			
@@ -419,108 +439,112 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 	}
 
 	@RequestMapping(value = "/insertOpeningStock", method = RequestMethod.POST)
-	public ModelAndView insertOpeningStock(HttpServletRequest request, HttpServletResponse response) {
+	public String insertOpeningStock(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("stock/finishedGoodStock");
 		RestTemplate restTemplate = new RestTemplate();
 
-		if (isFirstStock == 1) {
-			System.out.println("Its Opening Stock Insert call");
+		try {
+			if (isFirstStock == 1) {
+				System.out.println("Its Opening Stock Insert call");
 
-			FinishedGoodStock goodStockHeader = new FinishedGoodStock();
+				FinishedGoodStock goodStockHeader = new FinishedGoodStock();
 
-			List<FinishedGoodStockDetail> finGoodStockList = new ArrayList<>();
-			FinishedGoodStockDetail detail;
+				List<FinishedGoodStockDetail> finGoodStockList = new ArrayList<>();
+				FinishedGoodStockDetail detail;
 
-			for (int i = 0; i < globalItemList.size(); i++) {
-				// detail=new FinishedGoodStockDetail();
-				// detail=showFinStockDetail.get(i);
+				for (int i = 0; i < globalItemList.size(); i++) {
+					// detail=new FinishedGoodStockDetail();
+					// detail=showFinStockDetail.get(i);
 
-				float t1 = Float.parseFloat(request.getParameter("qty1" + globalItemList.get(i).getId()));
-				float t2 = Float.parseFloat(request.getParameter("qty2" + globalItemList.get(i).getId()));
-				float t3 = Float.parseFloat(request.getParameter("qty3" + globalItemList.get(i).getId()));
+					float t1 = Float.parseFloat(request.getParameter("qty1" + globalItemList.get(i).getId()));
+					float t2 = Float.parseFloat(request.getParameter("qty2" + globalItemList.get(i).getId()));
+					float t3 = Float.parseFloat(request.getParameter("qty3" + globalItemList.get(i).getId()));
 
-				// System.out.println("t1 for Item :" + detail.getItemName() + ":" + t1);
-				// System.out.println("t2 for Item :" + detail.getItemName() + ":" + t2);
-				// System.out.println("t3 for Item :" + detail.getItemName() + ":" + t3);
+					// System.out.println("t1 for Item :" + detail.getItemName() + ":" + t1);
+					// System.out.println("t2 for Item :" + detail.getItemName() + ":" + t2);
+					// System.out.println("t3 for Item :" + detail.getItemName() + ":" + t3);
 
-				FinishedGoodStockDetail finGoodStockDetail = new FinishedGoodStockDetail();
+					FinishedGoodStockDetail finGoodStockDetail = new FinishedGoodStockDetail();
 
-				finGoodStockDetail.setItemId(globalItemList.get(i).getId());
-				finGoodStockDetail.setItemName(globalItemList.get(i).getItemName());
-				finGoodStockDetail.setOpT1(t1);
-				finGoodStockDetail.setOpT2(t2);
-				finGoodStockDetail.setOpT3(t3);
-				finGoodStockDetail.setOpTotal(t1 + t2 + t3);
-				finGoodStockDetail.setStockDate(new Date());
-				finGoodStockDetail.setDelStatus(0);
-				finGoodStockDetail.setCatId(globalItemList.get(i).getItemGrp1());
-				finGoodStockList.add(finGoodStockDetail);
+					finGoodStockDetail.setItemId(globalItemList.get(i).getId());
+					finGoodStockDetail.setItemName(globalItemList.get(i).getItemName());
+					finGoodStockDetail.setOpT1(t1);
+					finGoodStockDetail.setOpT2(t2);
+					finGoodStockDetail.setOpT3(t3);
+					finGoodStockDetail.setOpTotal(t1 + t2 + t3);
+					finGoodStockDetail.setStockDate(new Date());
+					finGoodStockDetail.setDelStatus(0);
+					finGoodStockDetail.setCatId(globalItemList.get(i).getItemGrp1());
+					finGoodStockList.add(finGoodStockDetail);
 
-			}
-
-			goodStockHeader.setCatId(selectedCat);
-			goodStockHeader.setFinGoodStockDate(new Date());
-			goodStockHeader.setFinGoodStockStatus(0);
-			goodStockHeader.setDelStatus(0);
-			goodStockHeader.setFinishedGoodStockDetail(finGoodStockList);
-
-			model.addObject("catList", filteredCatList);
-
-			Info info = restTemplate.postForObject(Constants.url + "insertFinishedGoodOpStock", goodStockHeader,
-					Info.class);
-
-			isFirstStock = 0;
-
-		} // end of if isFirstStock
-		else if (isFirstStock == 0) {
-
-			System.out.println("Its Opening Stock Update call");
-
-			FinishedGoodStockDetail detail;
-			List<FinishedGoodStockDetail> finGoodStockList = new ArrayList<>();
-
-			for (int i = 0; i < showFinStockDetail.size(); i++) {
-
-				detail = showFinStockDetail.get(i);
-
-				float t1 = Float.parseFloat(request.getParameter("qty1" + detail.getItemId()));
-				float t2 = Float.parseFloat(request.getParameter("qty2" + detail.getItemId()));
-				float t3 = Float.parseFloat(request.getParameter("qty3" + detail.getItemId()));
-
-				System.out.println("t1 for Item :" + detail.getItemName() + ":" + t1);
-				System.out.println("t2 for Item :" + detail.getItemName() + ":" + t2);
-				System.out.println("t3 for Item :" + detail.getItemName() + ":" + t3);
-
-				/*
-				 * detail.setItemId(detail.getItemId());
-				 * detail.setItemName(detail.getItemName());
-				 */
-				detail.setOpT1(t1);
-				detail.setOpT2(t2);
-				detail.setOpT3(t3);
-				detail.setOpTotal(t1 + t2 + t3);
-				
-				if(detail.getStockDate()==null) {
-					
-					detail.setStockDate(new Date()); 
-					detail.setDelStatus(0);
 				}
-				/*
-				 * detail.setStockDate(new Date()); detail.setDelStatus(0);
-				 * detail.setCatId(detail.getCatId());
-				 */
-				finGoodStockList.add(detail);
+
+				goodStockHeader.setCatId(selectedCat);
+				goodStockHeader.setFinGoodStockDate(new Date());
+				goodStockHeader.setFinGoodStockStatus(0);
+				goodStockHeader.setDelStatus(0);
+				goodStockHeader.setFinishedGoodStockDetail(finGoodStockList);
+
+				model.addObject("catList", filteredCatList);
+
+				Info info = restTemplate.postForObject(Constants.url + "insertFinishedGoodOpStock", goodStockHeader,
+						Info.class);
+
+				isFirstStock = 0;
+
+			} // end of if isFirstStock
+			else if (isFirstStock == 0) {
+
+				System.out.println("Its Opening Stock Update call");
+
+				FinishedGoodStockDetail detail;
+				List<FinishedGoodStockDetail> finGoodStockList = new ArrayList<>();
+
+				for (int i = 0; i < showFinStockDetail.size(); i++) {
+
+					detail = showFinStockDetail.get(i);
+
+					float t1 = Float.parseFloat(request.getParameter("qty1" + detail.getItemId()));
+					float t2 = Float.parseFloat(request.getParameter("qty2" + detail.getItemId()));
+					float t3 = Float.parseFloat(request.getParameter("qty3" + detail.getItemId()));
+
+					System.out.println("t1 for Item :" + detail.getItemName() + ":" + t1);
+					System.out.println("t2 for Item :" + detail.getItemName() + ":" + t2);
+					System.out.println("t3 for Item :" + detail.getItemName() + ":" + t3);
+
+					/*
+					 * detail.setItemId(detail.getItemId());
+					 * detail.setItemName(detail.getItemName());
+					 */
+					detail.setOpT1(t1);
+					detail.setOpT2(t2);
+					detail.setOpT3(t3);
+					detail.setOpTotal(t1 + t2 + t3);
+					
+					if(detail.getStockDate()==null) {
+						
+						detail.setStockDate(new Date()); 
+						detail.setDelStatus(0);
+					}
+					/*
+					 * detail.setStockDate(new Date()); detail.setDelStatus(0);
+					 * detail.setCatId(detail.getCatId());
+					 */
+					finGoodStockList.add(detail);
+
+				}
+				showStockHeader.setFinishedGoodStockDetail(finGoodStockList);
+
+				Info info = restTemplate.postForObject(Constants.url + "insertFinishedGoodOpStock", showStockHeader,
+						Info.class);
 
 			}
-			showStockHeader.setFinishedGoodStockDetail(finGoodStockList);
-
-			Info info = restTemplate.postForObject(Constants.url + "insertFinishedGoodOpStock", showStockHeader,
-					Info.class);
-
+		}catch(Exception e) {
+			e.printStackTrace();
 		}
-
-		return model;
+		 
+		return "redirect:/showFinishedGoodStock";
 
 	}
 
