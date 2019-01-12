@@ -9,7 +9,7 @@
 	
 	
 	<c:url var="getGroup2ByCatId" value="/getGroup2ByCatId" />
-
+<c:url var="getGroup3ByGroup2" value="/getGroup3ByGroup2" />
 	<div class="container" id="main-container">
 
 		<!-- BEGIN Sidebar -->
@@ -111,14 +111,14 @@
 										</select>
 									</div>
 								</div>
-
-
+ 
+ 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Group2</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<select data-placeholder="Select Group" name="item_grp2"
 											class="form-control chosen-select" tabindex="-1"
-											id="item_grp2" data-rule-required="true">
+											id="item_grp2" data-rule-required="true" onchange="showMiniSubCatListBySubCatId()">
 											<option selected value="${selectedItemId}"><c:out value="${selectedItem}"></c:out></option>
 											
 											 <c:forEach items="${subCategoryList}" var="subCategoryList">
@@ -128,36 +128,25 @@
 												</c:forEach>
 										</select>
 									</div>
-								</div>
+								</div>  
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Group3</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<select data-placeholder="Select Group" name="item_grp3"
-											class="form-control chosen" tabindex="-1" id="selS0V"
-											>
-											
+											class="form-control chosen" tabindex="-1" id="item_grp3" >
+											<c:forEach items="${miniSubCategoryList}" var="miniSubCategoryList"> 
 											<c:choose>
-													<c:when test="${itemGrp3.equals('1')}">
-													<option selected value="1">Small</option>
-													<option  value="2">Medium</option>
-													<option  value="3">Large</option>
-													</c:when>
+												<c:when test="${miniSubCategoryList.miniCatId==itemGrp3}">
+													<option value="${miniSubCategoryList.miniCatId}" selected> ${miniSubCategoryList.miniCatName} </option>
+												</c:when>
+												<c:otherwise>
+												<option value="${miniSubCategoryList.miniCatId}"  > ${miniSubCategoryList.miniCatName} </option>
+												</c:otherwise>
+											</c:choose>
 													
-													<c:when test="${itemGrp3.equals('2')}">
-													<option  value="1">Small</option>
-													<option selected  value="2">Medium</option>
-													<option  value="3">Large</option>
-													</c:when>
-													
-													<c:when test="${itemGrp3.equals('3')}">
-													<option  value="1">Small</option>
-													<option   value="2">Medium</option>
-													<option  selected value="3">Large</option>
-													</c:when>
-													
-													</c:choose>
-											
-											
+												</c:forEach>
+										 
+											 
 										</select>
 									</div>
 								</div>
@@ -563,6 +552,35 @@
 
 
 	<script type="text/javascript">
+	function showMiniSubCatListBySubCatId() {
+		var subCatId = parseFloat($("#item_grp2").val());
+		 
+		$ .getJSON(
+				'${getGroup3ByGroup2}',
+				{
+					subCatId : subCatId,
+					ajax : 'true'
+				},
+				function(data) {
+					//alert(data);
+					var html = '<option value="" selected >select Group 3</option>';
+
+					var len = data.length;
+					for (var i = 0; i < len; i++) {
+						//alert(data[i].miniCatName);
+						html += '<option value="' + data[i].miniCatId + '">'
+								+ data[i].miniCatName
+								+ '</option>';
+					}
+					html += '</option>';
+					$(
+							'#item_grp3')
+							.html(
+									html);
+					 
+					$("#item_grp3").trigger("chosen:updated");
+				});
+	}
 $(document).ready(function() { 
 	$('#item_grp1').change(
 			function() {

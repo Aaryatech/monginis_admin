@@ -8,6 +8,7 @@
 <body>
 
 	<c:url var="getGroup2ByCatId" value="/getGroup2ByCatId" />
+	<c:url var="getGroup3ByGroup2" value="/getGroup3ByGroup2" />
 
 
 	<div class="container" id="main-container">
@@ -160,7 +161,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<select data-placeholder="Select Group"
 											class="form-control chosen-select" name="item_grp2"
-											tabindex="-1" id="item_grp2" data-rule-required="true">
+											tabindex="-1" id="item_grp2" onchange="showMiniSubCatListBySubCatId()" data-rule-required="true">
 
 										</select>
 									</div>
@@ -169,13 +170,13 @@
 									<label class="col-sm-3 col-lg-2 control-label">Group3</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<select data-placeholder="Select Group" name="item_grp3"
-											class="form-control chosen" tabindex="-1" id="selS0V"
+											class="form-control chosen" tabindex="-1" id="item_grp3"
 											data-rule-required="true">
-											<option value=""> </option>
+											<!-- <option value=""> </option>
 
 											<option value="1">Small</option>
 											<option value="2">Medium</option>
-											<option value="3">Large</option>
+											<option value="3">Large</option> -->
 
 
 										</select>
@@ -504,6 +505,36 @@
 																});
 											});
 						});
+		
+		function showMiniSubCatListBySubCatId() {
+			var subCatId = parseFloat($("#item_grp2").val());
+			 
+			$ .getJSON(
+					'${getGroup3ByGroup2}',
+					{
+						subCatId : subCatId,
+						ajax : 'true'
+					},
+					function(data) {
+						//alert(data);
+						var html = '<option value="" selected >select Group 3</option>';
+
+						var len = data.length;
+						for (var i = 0; i < len; i++) {
+							//alert(data[i].miniCatName);
+							html += '<option value="' + data[i].miniCatId + '">'
+									+ data[i].miniCatName
+									+ '</option>';
+						}
+						html += '</option>';
+						$(
+								'#item_grp3')
+								.html(
+										html);
+						 
+						$("#item_grp3").trigger("chosen:updated");
+					});
+		}
 	</script>
 
 	<script>

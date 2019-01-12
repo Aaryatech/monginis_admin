@@ -41,6 +41,7 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.MiniSubCategory;
 import com.ats.adminpanel.model.StockItem;
 import com.ats.adminpanel.model.TrayType;
 import com.ats.adminpanel.model.RawMaterial.RawMaterialUom;
@@ -136,6 +137,33 @@ public class ItemController {
 		System.out.println("Finding sub cat List " + subCatList.toString());
 
 		return subCatList;
+	}
+	
+	@RequestMapping(value = "/getGroup3ByGroup2", method = RequestMethod.GET)
+	public @ResponseBody List<MiniSubCategory> getGroup3ByGroup2(@RequestParam(value = "subCatId", required = true) int subCatId) {
+		 
+		List<MiniSubCategory> miniSubCategoryList = new ArrayList<MiniSubCategory>();
+		
+		try {
+			
+			RestTemplate restTemplate = new RestTemplate();;
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+ 
+			map.add("subCatId", subCatId);
+
+			MiniSubCategory[] miniSubCategory = restTemplate.postForObject(Constants.url + "/showMiniSubCatListBySubCatId",
+					map, MiniSubCategory[].class);
+
+			miniSubCategoryList = new ArrayList<MiniSubCategory>(Arrays.asList(miniSubCategory));
+			 
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+
+		return miniSubCategoryList;
 	}
 
 	// end
@@ -787,7 +815,16 @@ public class ItemController {
 
 		int itemGrp3 = item.getItemGrp3();
 		mav.addObject("itemGrp3", String.valueOf(itemGrp3));
+		
+		map = new LinkedMultiValueMap<String, Object>(); 
+		map.add("subCatId", selectedItemId);
+		 
+		MiniSubCategory[] miniSubCategory = restTemplate.postForObject(Constants.url + "/showMiniSubCatListBySubCatId",
+				map, MiniSubCategory[].class);
 
+		List<MiniSubCategory> miniSubCategoryList = new ArrayList<MiniSubCategory>(Arrays.asList(miniSubCategory));
+		mav.addObject("miniSubCategoryList", miniSubCategoryList);
+		System.err.println(miniSubCategoryList);
 		return mav;
 
 	}
