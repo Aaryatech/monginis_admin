@@ -1144,7 +1144,12 @@ public class SalesReportController {
 		return model;
 
 	}
-
+	@RequestMapping(value = "/setAllFrIdSelected", method = RequestMethod.GET)
+	public @ResponseBody List<AllFrIdName> setAllFrIdSelected() {
+		//logger.info("inside ajax call for fr all selected");
+	
+		return allFrIdNameList.getFrIdNamesList();
+	}
 	@RequestMapping(value = "/getSaleBillwiseGrpByMonth", method = RequestMethod.GET)
 	public @ResponseBody List<SalesReportBillwise> getSaleBillwiseGrpByMonth(HttpServletRequest request,
 			HttpServletResponse response) {

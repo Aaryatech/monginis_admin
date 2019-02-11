@@ -8,6 +8,7 @@
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 	<body>
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+    <c:url var="setAllFrIdSelected"  value="/setAllFrIdSelected" />
 
 	<c:url var="getBillList" value="/getSaleBillwiseGrpByMonth"></c:url>
 <div class="container" id="main-container">
@@ -39,14 +40,14 @@
 		<!-- END Page Title -->
 
 		<!-- BEGIN Breadcrumb -->
-		<div id="breadcrumbs">
+		<%-- <div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
 				<li class="active">Bill Report</li>
 			</ul>
-		</div>
+		</div> --%>
 		<!-- END Breadcrumb -->
 
 		<!-- BEGIN Main Content -->
@@ -91,7 +92,7 @@
 					<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">Select
 							Route</label>
-						<div class="col-sm-6 col-lg-4 controls">
+						<div class="col-sm-6 col-lg-10 controls">
 							<select data-placeholder="Select Route"
 								class="form-control chosen" name="selectRoute" id="selectRoute"
 								onchange="disableFr()">
@@ -103,14 +104,16 @@
 							</select>
 
 						</div>
-
-						<label class="col-sm-3 col-lg-2 control-label"><b>OR</b>Select
+</div></div><br>
+<div class="form-group">
+						<label class="col-sm-3 col-lg-2 control-label"><b>OR</b>
 							Franchisee</label>
-						<div class="col-sm-6 col-lg-4">
+						<div class="col-sm-6 col-lg-10">
 
 							<select data-placeholder="Choose Franchisee"
-								class="form-control chosen" multiple="multiple" tabindex="6"
-								id="selectFr" name="selectFr" onchange="disableRoute()">
+								class="form-control chosen" multiple="multiple" tabindex="12"
+								id="selectFr" name="selectFr" onchange="disableRoute()"  style="width:100% max-height: 50px !important;
+            overflow: scroll;">
 
 								<option value="-1"><c:out value="All"/></option>
 
@@ -121,10 +124,10 @@
 							</select>
 
 						</div>
-					</div>
+					
 				</div>
 
-				<br>
+				<br><br>
 				<div class="row">
 					<div class="col-md-12" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
@@ -595,5 +598,45 @@ function exportToExcel()
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
+	<script type="text/javascript">
+$(document).ready(function() { // if all label selected set all items selected
+	
+$('#selectFr').change(
+		function () {
+			 var selected=$('#selectFr').val();
+	
+        if(selected==-1){
+			$.getJSON('${setAllFrIdSelected}', {
+			//	selected : selected,
+				ajax : 'true'
+			}, function(data) {
+				var html = '<option value="">Select Franchise</option>';
+			
+				var len = data.length;
+				
+				$('#selectFr')
+			    .find('option')
+			    .remove()
+			    .end()
+				 $("#selectFr").append($("<option></option>").attr( "value",-1).text("ALL"));
+
+				for ( var i = 0; i < len; i++) {
+    
+                   $("#selectFr").append(
+                           $("<option selected></option>").attr(
+                               "value", data[i].frId).text(data[i].frName)
+                       );
+				}
+		
+				   $("#selectFr").trigger("chosen:updated");
+			});
+  }
+});
+});
+
+
+
+</script>	
+		
 </body>
 </html>

@@ -30,9 +30,39 @@
 
 <link rel="shortcut icon"
 	href="${pageContext.request.contextPath}/resources/img/favicon.png">
+<style>
+<!--
+
+-->
+#preloader  {
+     position: fixed;
+     top: 0;
+     left: 0;
+     right: 0;
+     bottom: 0;
+     background-color: #fff;
+     z-index: 99;
+    height: 100%;
+ }
+
+#status  {
+     width: 200px;
+     height: 200px;
+     position: absolute;
+     left: 50%;
+     top: 50%;
+     background-image: url(${pageContext.request.contextPath}/resources/img/loader1.gif);
+     background-repeat: no-repeat;
+     background-position: center;
+     margin: -100px 0 0 -100px;
+ }
+</style>
 </head>
 <body>
-
+<div id="preloader">
+  <div id="status"></div>
+</div>
+ 
  
 <c:url var="setSubModId" value="/setSubModId" />
 
@@ -233,5 +263,17 @@
  }
  
  </script>
+ <script>
+//makes sure the whole site is loaded
+jQuery(window).load(function() {
+    // will first fade out the loading animation
+jQuery("#status").fadeOut();
+    // will fade out the whole DIV that covers the website.
+jQuery("#preloader").delay(1000).fadeOut("slow");
+
+})
+
+
+</script>
 </body>
 </html>

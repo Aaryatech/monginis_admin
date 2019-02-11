@@ -161,18 +161,19 @@ public class BillController {
 
 		if (length == 1)
 
-			invoiceNo = strYear + "-" + "0000" + settingValue;
+			/*invoiceNo = strYear + "-" + "0000" + settingValue;*/
+			invoiceNo ="0000"+settingValue;
 		if (length == 2)
 
-			invoiceNo = strYear + "-" + "000" + settingValue;
+			invoiceNo ="000"+settingValue;
 
 		if (length == 3)
 
-			invoiceNo = strYear + "-" + "00" + settingValue;
+			invoiceNo ="00"+settingValue;
 
 		if (length == 4)
 
-			invoiceNo = strYear + "-" + "0" + settingValue;
+			invoiceNo ="0"+settingValue;
 
 		System.out.println("*** settingValue= " + settingValue);
 		return invoiceNo;
