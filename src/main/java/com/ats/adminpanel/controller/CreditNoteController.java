@@ -355,7 +355,7 @@ public class CreditNoteController {
 					postCreditHeader.setIsTallySync(creditNote.getIsTallySync());
 					postCreditHeader.setRoundOff(creditNote.getAprROff());
 					postCreditHeader.setUserId(userId);
-					postCreditHeader.setCrnNo("gfpl :default");
+					postCreditHeader.setCrnNo("gfpl :default");//CRN no Setted in web service end for GFPL In this Field
 
 					// newly set 23 FEB
 
@@ -1029,7 +1029,7 @@ public class CreditNoteController {
 				  cell.setPadding(4);
 				table.addCell(cell);
 
-				cell = new PdfPCell(new Phrase(""+report.getCrnId(), headFont));
+				cell = new PdfPCell(new Phrase(""+report.getCrnNo(), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 				cell.setPaddingRight(2);
@@ -1270,6 +1270,8 @@ public class CreditNoteController {
 
 				cNoteHeaderPrint.setFrName(creditHeaderList.get(i).getFrName());
 				cNoteHeaderPrint.setCrnId(creditHeaderList.get(i).getCrnId());
+				cNoteHeaderPrint.setCrnNo(creditHeaderList.get(i).getCrnNo());
+
 				cNoteHeaderPrint.setCrnDate(creditHeaderList.get(i).getCrnDate());
 
 				cNoteHeaderPrint.setFrGstNo(creditHeaderList.get(i).getFrGstNo());

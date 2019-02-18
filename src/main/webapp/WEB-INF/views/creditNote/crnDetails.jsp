@@ -91,7 +91,7 @@
     <i class="fa fa-search" style="font-size:20px"></i>
 									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search items by name.." title="Type in a name">
 										</label> <br>
-										<h5> Credit Note No : ${creditNoteHeaders.crnId} </h5>
+										<h5> Credit Note No : ${creditNoteHeaders.crnNo} </h5>
 										<h5> Franchisee Name : ${creditNoteHeaders.frName} </h5> 
 										<h5> Date : ${creditNoteHeaders.crnDate} </h5> 
 										<h5> Taxable Amount : ${creditNoteHeaders.crnTaxableAmt} </h5> 

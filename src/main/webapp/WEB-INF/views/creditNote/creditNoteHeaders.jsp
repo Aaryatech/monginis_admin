@@ -319,7 +319,7 @@
 
 			  	tr.append($('<td></td>').html(headers.crnDate));
 			  	
-			  	tr.append($('<td></td>').html(headers.crnId));
+			  	tr.append($('<td></td>').html(headers.crnNo));
 
 
 			  	tr.append($('<td></td>').html(headers.frName));

@@ -84,7 +84,7 @@
 					</p>
 					<p
 						style="color: #000; font-size: 13px; text-align: left; margin: 0px;">
-						Supply Dt & Time:&nbsp;&nbsp;&nbsp; &nbsp;<b>${dateTime}</b>
+						Print Dt & Time:&nbsp;&nbsp;&nbsp; &nbsp;<b>${dateTime}</b>
 					</p>
 					<p
 						style="color: #000; font-size: 13px; text-align: left; margin: 0px;">Place
