@@ -596,7 +596,7 @@ public class CreditNoteController {
 					 
 				 
 					 rowData.add(""+(i+1));
-					 rowData.add(""+creditNoteList.getCreditNoteList().get(i).getvNo());
+					 rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrnNo());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getDate());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getvType()); 
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getFrId()); 
@@ -715,7 +715,7 @@ public class CreditNoteController {
 					 
 				 
 					 rowData.add(""+(i+1));
-					 rowData.add(""+report.getCrnId());
+					 rowData.add(""+report.getCrnNo());
 					 rowData.add(""+report.getCrnDate());
 					 if(report.getIsGrn()==1) {
 						 rowData.add("GRN");
