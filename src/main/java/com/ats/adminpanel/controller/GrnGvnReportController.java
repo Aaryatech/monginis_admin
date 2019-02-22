@@ -1065,7 +1065,12 @@ public class GrnGvnReportController {
 				rowData.add("" + excelItems.get(i).getAprQty());
 
 				rowData.add("" + excelItems.get(i).getAprGrandTotal());
-				rowData.add("" + roundUp(excelItems.get(i).getAprGrandTotal() * 0.25));
+				
+				float value1=excelItems.get(i).getAprGrandTotal()*100;
+				float billValue=(value1)/75;
+				float frCont=(float) ((billValue)*0.25);
+			  	
+				rowData.add("" + roundUp(frCont));
 
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
@@ -1085,7 +1090,7 @@ public class GrnGvnReportController {
 		return grnGvnGrpByFrList;
 
 	}
-	public static float roundUp(double d) {
+	public static float roundUp(float d) {
 		return BigDecimal.valueOf(d).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
 	}
 

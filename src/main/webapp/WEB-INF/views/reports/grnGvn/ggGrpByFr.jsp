@@ -311,7 +311,13 @@
 													  	tr.append($('<td></td>').html(report.totalAmt));
 													  	tr.append($('<td></td>').html(report.aprQty));
 													  	tr.append($('<td></td>').html(report.aprGrandTotal));
-													  	tr.append($('<td></td>').html((report.aprGrandTotal*0.25).toFixed(2)));
+													  	
+													  	var value1=parseFloat(report.aprGrandTotal)*100;
+													  	var billValue=parseFloat(value1)/75;
+													  	var frCont=parseFloat(billValue)*0.25;
+													  	
+													  	
+													  	tr.append($('<td></td>').html(frCont.toFixed(2)));
 
 														$('#table_grid tbody')
 																.append(
