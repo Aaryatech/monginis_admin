@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -76,34 +77,33 @@ import com.itextpdf.text.pdf.PdfWriter;
 @Controller
 @Scope("session")
 public class GrnGvnReportController {
-	
-	
+
 	public AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
-	
+
 	public List<Route> routeList = new ArrayList<Route>();
-	AllRoutesListResponse  allRouteListResponse= new AllRoutesListResponse();
-	 
+	AllRoutesListResponse allRouteListResponse = new AllRoutesListResponse();
+
 	AllFrIdNameList getFrNameId() {
-		
+
 		RestTemplate restTemplate = new RestTemplate();
-		return allFrIdNameList=restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+		return allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
 	}
-	
+
 	AllRoutesListResponse getAllRoute() {
-		
+
 		RestTemplate restTemplate = new RestTemplate();
 
-		return  allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
+		return allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
 				AllRoutesListResponse.class);
-		
+
 	}
-	//25-05-2018
-	
+	// 25-05-2018
+
 	@RequestMapping(value = "/showGGvnReportByGrnType", method = RequestMethod.GET)
 	public ModelAndView showGGvnReportByGrnType(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("reports/grnGvn/ggreportbytype");
-		
+
 		try {
 
 			ZoneId z = ZoneId.of("Asia/Calcutta");
@@ -115,7 +115,7 @@ public class GrnGvnReportController {
 			allFrIdNameList = getFrNameId();
 
 			allRouteListResponse = getAllRoute();
-			
+
 			model.addObject("routeList", allRouteListResponse.getRoute());
 			model.addObject("todaysDate", todaysDate);
 			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
@@ -127,15 +127,17 @@ public class GrnGvnReportController {
 
 		return model;
 	}
-	
-	List<GrnGvnReportByGrnType> grnGvnByTypeList=new ArrayList<>();
-	
-	List<GrnGvnReportByGrnType> pdfTypeList=new ArrayList<>();
+
+	List<GrnGvnReportByGrnType> grnGvnByTypeList = new ArrayList<>();
+
+	List<GrnGvnReportByGrnType> pdfTypeList = new ArrayList<>();
+
 	@RequestMapping(value = "/getGGvnReportByGrnType", method = RequestMethod.GET)
 	@ResponseBody
-	public  List<GrnGvnReportByGrnType> getGGvnReportByGrnType(HttpServletRequest request, HttpServletResponse response) {
+	public List<GrnGvnReportByGrnType> getGGvnReportByGrnType(HttpServletRequest request,
+			HttpServletResponse response) {
 		System.err.println("Inside Ajax call /getGGvnReportByGrnType");
-		List<GrnGvnReportByGrnType> grnGvnByTypeList= new ArrayList<>();
+		List<GrnGvnReportByGrnType> grnGvnByTypeList = new ArrayList<>();
 
 		try {
 
@@ -171,7 +173,7 @@ public class GrnGvnReportController {
 			}
 
 			if (!routeId.equalsIgnoreCase("0")) {
-				 map = new LinkedMultiValueMap<String, Object>();
+				map = new LinkedMultiValueMap<String, Object>();
 				map.add("routeId", routeId);
 
 				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
@@ -197,7 +199,7 @@ public class GrnGvnReportController {
 			map = new LinkedMultiValueMap<String, Object>();
 			if (isAllFrSelected) {
 
-								System.out.println("Inside IF  is All fr Selected " + isAllFrSelected);
+				System.out.println("Inside IF  is All fr Selected " + isAllFrSelected);
 
 				map.add("frIdList", 0);
 				// model.addObject("billHeadersList",billHeadersListForPrint);
@@ -206,115 +208,106 @@ public class GrnGvnReportController {
 
 				System.out.println("Inside Else: Few Fr Selected ");
 				map.add("frIdList", frIdString);
-				
+
 			}
 
 			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 			map.add("toDate", DateConvertor.convertToYMD(toDate));
-			
-			
-				ParameterizedTypeReference<List<GrnGvnReportByGrnType>> typeRef = new ParameterizedTypeReference<List<GrnGvnReportByGrnType>>() {
-				};
-				ResponseEntity<List<GrnGvnReportByGrnType>> responseEntity = restTemplate.exchange(
-						Constants.url + "getGrnGvnReportByGrnType", HttpMethod.POST, new HttpEntity<>(map), typeRef);
-				
-				grnGvnByTypeList = responseEntity.getBody();
-				pdfTypeList=grnGvnByTypeList;
-				System.err.println("List getGrnGvnReportByGrnType " +grnGvnByTypeList.toString());
-				
-				
-		List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
-				
-				ExportToExcel expoExcel=new ExportToExcel();
-				List<String> rowData=new ArrayList<String>();
-				 
-				
-				rowData.add("Sr. No.");
-				
-				rowData.add("Franchise Name");
-				rowData.add("GRN 1");
-				rowData.add("GRN 2");
-				rowData.add("GRN 3");
-				rowData.add("GVN");
-				rowData.add("Total");
-			
+
+			ParameterizedTypeReference<List<GrnGvnReportByGrnType>> typeRef = new ParameterizedTypeReference<List<GrnGvnReportByGrnType>>() {
+			};
+			ResponseEntity<List<GrnGvnReportByGrnType>> responseEntity = restTemplate.exchange(
+					Constants.url + "getGrnGvnReportByGrnType", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			grnGvnByTypeList = responseEntity.getBody();
+			pdfTypeList = grnGvnByTypeList;
+			System.err.println("List getGrnGvnReportByGrnType " + grnGvnByTypeList.toString());
+
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+
+			rowData.add("Sr. No.");
+
+			rowData.add("Franchise Name");
+			rowData.add("GRN 1");
+			rowData.add("GRN 2");
+			rowData.add("GRN 3");
+			rowData.add("GVN");
+			rowData.add("Total");
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			List<GrnGvnReportByGrnType> excelItems = grnGvnByTypeList;
+			float grandTotal = 0;
+			float grn1Amt = 0;
+			float grn2Amt = 0;
+			float grn3Amt = 0;
+			float gvnAmt = 0;
+			for (int i = 0; i < excelItems.size(); i++) {
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+				rowData.add("" + (i + 1));
+				rowData.add("" + excelItems.get(i).getFrName());
+
+				float total = excelItems.get(i).getAprAmtGrn1() + excelItems.get(i).getAprAmtGrn2()
+						+ excelItems.get(i).getAprAmtGrn3() + +excelItems.get(i).getAprAmtGvn();
+				grandTotal = grandTotal + total;
+				grn1Amt = grn1Amt + excelItems.get(i).getAprAmtGrn1();
+				grn2Amt = grn2Amt + excelItems.get(i).getAprAmtGrn2();
+				grn3Amt = grn3Amt + excelItems.get(i).getAprAmtGrn3();
+				gvnAmt = gvnAmt + excelItems.get(i).getAprAmtGvn();
+				rowData.add("" + excelItems.get(i).getAprAmtGrn1());
+				rowData.add("" + excelItems.get(i).getAprAmtGrn2());
+				rowData.add("" + excelItems.get(i).getAprAmtGrn3());
+
+				rowData.add("" + excelItems.get(i).getAprAmtGvn());
+				rowData.add("" + total);
+
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
-				List<GrnGvnReportByGrnType>  excelItems= grnGvnByTypeList;
-				float grandTotal=0;
-				float grn1Amt=0;
-				float grn2Amt=0;
-				float grn3Amt=0;
-				float gvnAmt=0;
-				for(int i=0;i<excelItems.size();i++)
-				{
-					  expoExcel=new ExportToExcel();
-					 rowData=new ArrayList<String>();
-						rowData.add(""+(i+1));
-					rowData.add(""+excelItems.get(i).getFrName());
-					
-					float total=excelItems.get(i).getAprAmtGrn1()+excelItems.get(i).getAprAmtGrn2()+excelItems.get(i).getAprAmtGrn3()+
-							+excelItems.get(i).getAprAmtGvn();
-					grandTotal=grandTotal+total;
-					grn1Amt=grn1Amt+excelItems.get(i).getAprAmtGrn1();
-					grn2Amt=grn2Amt+excelItems.get(i).getAprAmtGrn2();
-					grn3Amt=grn3Amt+excelItems.get(i).getAprAmtGrn3();
-					gvnAmt=gvnAmt+excelItems.get(i).getAprAmtGvn();
-					rowData.add(""+excelItems.get(i).getAprAmtGrn1());
-					rowData.add(""+excelItems.get(i).getAprAmtGrn2());
-					rowData.add(""+excelItems.get(i).getAprAmtGrn3());
-					
-					rowData.add(""+excelItems.get(i).getAprAmtGvn());
-					rowData.add(""+total);
-					
-					expoExcel.setRowData(rowData);
-					exportToExcelList.add(expoExcel);
-					
-				}
-				  expoExcel=new ExportToExcel();
 
-				 rowData=new ArrayList<String>();
-					rowData.add("Total");				rowData.add("");
+			}
+			expoExcel = new ExportToExcel();
 
-				rowData.add(""+grn1Amt);
-			
-				rowData.add(""+grn2Amt);
-				rowData.add(""+grn3Amt);
-				rowData.add(""+gvnAmt);
-				
-				rowData.add(""+grandTotal);
-				
-				expoExcel.setRowData(rowData);
-				exportToExcelList.add(expoExcel);
-				
-				HttpSession session = request.getSession();
-				session.setAttribute("exportExcelList", exportToExcelList);
-				session.setAttribute("excelName", "grnGvnByTypeReport");
+			rowData = new ArrayList<String>();
+			rowData.add("Total");
+			rowData.add("");
+
+			rowData.add("" + grn1Amt);
+
+			rowData.add("" + grn2Amt);
+			rowData.add("" + grn3Amt);
+			rowData.add("" + gvnAmt);
+
+			rowData.add("" + grandTotal);
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "grnGvnByTypeReport");
 
 		} catch (Exception e) {
 
 			System.out.println("Ex in getting /getgGReportByDate List  Ajax call" + e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 		return grnGvnByTypeList;
-	
+
 	}
-	
-	
-	
-	
-	
+
 	@RequestMapping(value = "/getGGreportByTypePdf", method = RequestMethod.GET)
 	public void getGGreportByTypePdf(HttpServletRequest request, HttpServletResponse response) {
 
 		BufferedOutputStream outStream = null;
 		System.out.println("Inside Pdf prod From Order Or Plan");
 
-		
-
 		grnGvnByTypeList = pdfTypeList;
-		Document document = new Document(PageSize.A4,20,20,150,30);
+		Document document = new Document(PageSize.A4, 20, 20, 150, 30);
 		// ByteArrayOutputStream out = new ByteArrayOutputStream();
 
 		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
@@ -335,23 +328,22 @@ public class GrnGvnReportController {
 			e2.printStackTrace();
 		}
 		try {
-			
-			String header=
-					"                                           Galdhar Foods Pvt.Ltd\n" + "          Factory Add: A-32 Shendra, MIDC, Aurangabad-4331667"
-							+ "\n              Phone:0240-2466217, Email: aurangabad@monginis.net";
-		
 
-			String title="                 Report-For GRN GVN BY GRN TYPE";
+			String header = "                                           Galdhar Foods Pvt.Ltd\n"
+					+ "          Factory Add: A-32 Shendra, MIDC, Aurangabad-4331667"
+					+ "\n              Phone:0240-2466217, Email: aurangabad@monginis.net";
+
+			String title = "                 Report-For GRN GVN BY GRN TYPE";
 
 			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
 			String reportDate = DF.format(new Date());
-			
+
 			writer = PdfWriter.getInstance(document, out);
-			
-			ItextPageEvent event=new ItextPageEvent(header,title, reportDate);
-			
+
+			ItextPageEvent event = new ItextPageEvent(header, title, reportDate);
+
 			writer.setPageEvent(event);
-			
+
 		} catch (DocumentException e) {
 
 			e.printStackTrace();
@@ -361,15 +353,16 @@ public class GrnGvnReportController {
 		try {
 			System.out.println("Inside PDF Table try");
 			table.setWidthPercentage(100);
-			table.setWidths(new float[] { 0.4f, 1.7f, 0.9f,1.0f,0.9f,0.9f,1.0f});
+			table.setWidths(new float[] { 0.4f, 1.7f, 0.9f, 1.0f, 0.9f, 0.9f, 1.0f });
 			Font headFont = new Font(FontFamily.TIMES_ROMAN, 15, Font.NORMAL, BaseColor.BLACK);
 			Font headFont1 = new Font(FontFamily.HELVETICA, 16, Font.BOLD, BaseColor.BLACK);
 			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
 			headFont1.setColor(BaseColor.WHITE);
-			
-			PdfPCell hcell=new PdfPCell();
+
+			PdfPCell hcell = new PdfPCell();
 			hcell.setBackgroundColor(BaseColor.PINK);
-			hcell.setPaddingTop(4);hcell.setPaddingBottom(4);
+			hcell.setPaddingTop(4);
+			hcell.setPaddingBottom(4);
 			hcell = new PdfPCell(new Phrase("Sr.", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
@@ -380,42 +373,37 @@ public class GrnGvnReportController {
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
-			
 			hcell = new PdfPCell(new Phrase("GRN 1", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
-			
+
 			hcell = new PdfPCell(new Phrase("GRN 2", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
-			
-			
+
 			hcell = new PdfPCell(new Phrase("GRN 3", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
+
 			hcell = new PdfPCell(new Phrase("GVN", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
-			
+
 			hcell = new PdfPCell(new Phrase("Total", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 			table.setHeaderRows(1);
 
-			float grandTotal=0;
-			float grn1Amt=0;
-			float grn2Amt=0;
-			float grn3Amt=0;
-			float gvnAmt=0;
+			float grandTotal = 0;
+			float grn1Amt = 0;
+			float grn2Amt = 0;
+			float grn3Amt = 0;
+			float gvnAmt = 0;
 			int index = 0;
 			for (GrnGvnReportByGrnType grnGByType : grnGvnByTypeList) {
 				index++;
@@ -424,59 +412,57 @@ public class GrnGvnReportController {
 				cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				  cell.setPadding(4);
+				cell.setPadding(4);
 				table.addCell(cell);
 
 				cell = new PdfPCell(new Phrase(grnGByType.getFrName(), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 				cell.setPaddingRight(2);
-				  cell.setPadding(4);
+				cell.setPadding(4);
 				table.addCell(cell);
 
-				grn1Amt=grn1Amt+grnGByType.getAprAmtGrn1();
-				grn2Amt=grn2Amt+grnGByType.getAprAmtGrn2();
-				grn3Amt=grn3Amt+grnGByType.getAprAmtGrn3();
-				gvnAmt=gvnAmt+grnGByType.getAprAmtGvn();
-					cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGrn1()), headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-					cell.setPaddingRight(2);
-					  cell.setPadding(4);
-					table.addCell(cell);
-			
-					cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGrn2()), headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-					cell.setPaddingRight(2);
-					  cell.setPadding(4);
-					table.addCell(cell);
-					
-					
-					cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGrn3()), headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-					cell.setPaddingRight(2);
-					  cell.setPadding(4);
-					table.addCell(cell);
-					
-					
-					cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGvn()), headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-					cell.setPaddingRight(2);
-					  cell.setPadding(4);
-					  
-					  table.addCell(cell);
-				
-					
-				float total=grnGByType.getAprAmtGrn3()+grnGByType.getAprAmtGrn2()+grnGByType.getAprAmtGrn1()+grnGByType.getAprAmtGvn();
-				grandTotal=grandTotal+total;
-				cell = new PdfPCell(new Phrase(""+total, headFont));
+				grn1Amt = grn1Amt + grnGByType.getAprAmtGrn1();
+				grn2Amt = grn2Amt + grnGByType.getAprAmtGrn2();
+				grn3Amt = grn3Amt + grnGByType.getAprAmtGrn3();
+				gvnAmt = gvnAmt + grnGByType.getAprAmtGvn();
+				cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGrn1()), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 				cell.setPaddingRight(2);
-				  cell.setPadding(5);
+				cell.setPadding(4);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGrn2()), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(4);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGrn3()), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(4);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(String.valueOf(grnGByType.getAprAmtGvn()), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(4);
+
+				table.addCell(cell);
+
+				float total = grnGByType.getAprAmtGrn3() + grnGByType.getAprAmtGrn2() + grnGByType.getAprAmtGrn1()
+						+ grnGByType.getAprAmtGvn();
+				grandTotal = grandTotal + total;
+				cell = new PdfPCell(new Phrase("" + total, headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(5);
 				table.addCell(cell);
 				// FooterTable footerEvent = new FooterTable(table);
 				// writer.setPageEvent(footerEvent);
@@ -486,84 +472,77 @@ public class GrnGvnReportController {
 			cell = new PdfPCell(new Phrase("", headFont));
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-			  cell.setPadding(4);
+			cell.setPadding(4);
 			table.addCell(cell);
 
 			cell = new PdfPCell(new Phrase("Total:", headFont));
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 			cell.setPaddingRight(2);
-			  cell.setPadding(4);
+			cell.setPadding(4);
 			table.addCell(cell);
 
-			
-				cell = new PdfPCell(new Phrase(String.valueOf(""+grn1Amt), headFont));
-				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell.setPaddingRight(2);
-				  cell.setPadding(4);
-				table.addCell(cell);
-		
-				cell = new PdfPCell(new Phrase(String.valueOf(""+grn2Amt), headFont));
-				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell.setPaddingRight(2);
-				  cell.setPadding(4);
-				table.addCell(cell);
-				
-				
-				cell = new PdfPCell(new Phrase(String.valueOf(""+grn3Amt), headFont));
-				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell.setPaddingRight(2);
-				  cell.setPadding(4);
-				table.addCell(cell);
-				
-				
-				cell = new PdfPCell(new Phrase(String.valueOf(""+gvnAmt), headFont));
-				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell.setPaddingRight(2);
-				  cell.setPadding(4);
-				  
-				  table.addCell(cell);
-			
-			cell = new PdfPCell(new Phrase(""+grandTotal, headFont));
+			cell = new PdfPCell(new Phrase(String.valueOf("" + grn1Amt), headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setPaddingRight(2);
+			cell.setPadding(4);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase(String.valueOf("" + grn2Amt), headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setPaddingRight(2);
+			cell.setPadding(4);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase(String.valueOf("" + grn3Amt), headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setPaddingRight(2);
+			cell.setPadding(4);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase(String.valueOf("" + gvnAmt), headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setPaddingRight(2);
+			cell.setPadding(4);
+
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("" + grandTotal, headFont));
 			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
 			cell.setPaddingRight(2);
-			  cell.setPadding(5);
+			cell.setPadding(5);
 			table.addCell(cell);
-		
+
 			document.open();
 			document.add(table);
 			document.close();
-			
-			/*document.open();
-			Paragraph company = new Paragraph(
-					"Galdhar Foods Pvt.Ltd\n",
-					f);
-			company.setAlignment(Element.ALIGN_CENTER);
-			document.add(company);
-			document.add(new Paragraph(" "));
-			
-			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
-			String reportDate = DF.format(new Date());
 
-			document.add(new Paragraph("Report Date: " + reportDate));
-			document.add(new Paragraph("\n"));
-			
-			document.add(new Paragraph("Grn Gvn Report By Grn Type "));
+			/*
+			 * document.open(); Paragraph company = new Paragraph(
+			 * "Galdhar Foods Pvt.Ltd\n", f); company.setAlignment(Element.ALIGN_CENTER);
+			 * document.add(company); document.add(new Paragraph(" "));
+			 * 
+			 * DateFormat DF = new SimpleDateFormat("dd-MM-yyyy"); String reportDate =
+			 * DF.format(new Date());
+			 * 
+			 * document.add(new Paragraph("Report Date: " + reportDate)); document.add(new
+			 * Paragraph("\n"));
+			 * 
+			 * document.add(new Paragraph("Grn Gvn Report By Grn Type "));
+			 * 
+			 * document.add(new Paragraph("\n")); document.add(table); document.add(new
+			 * Paragraph("\n"));
+			 * 
+			 * int totalPages = writer.getPageNumber();
+			 */
+			// System.out.println("Page no " + totalPages);
 
-			document.add(new Paragraph("\n"));
-			document.add(table);
-			document.add(new Paragraph("\n"));
-		
-			int totalPages = writer.getPageNumber();
-*/
-//			System.out.println("Page no " + totalPages);
-
-		//	document.close();
+			// document.close();
 			// Atul Sir code to open a Pdf File
 			if (file != null) {
 
@@ -605,31 +584,16 @@ public class GrnGvnReportController {
 
 		}
 
-		
-		
-		
-		
-		
-		
 	}
-	
-	
-	
-	
-	
-	
-	
-	//25-05-2018
-	
-	
-	
-	
-	//r1
+
+	// 25-05-2018
+
+	// r1
 	@RequestMapping(value = "/showGGReportDateWise", method = RequestMethod.GET)
 	public ModelAndView showGGReportDateWise(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("reports/grnGvn/ggByDate");
-		
+
 		try {
 
 			ZoneId z = ZoneId.of("Asia/Calcutta");
@@ -641,7 +605,7 @@ public class GrnGvnReportController {
 			allFrIdNameList = getFrNameId();
 
 			allRouteListResponse = getAllRoute();
-			
+
 			model.addObject("routeList", allRouteListResponse.getRoute());
 			model.addObject("todaysDate", todaysDate);
 			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
@@ -653,16 +617,13 @@ public class GrnGvnReportController {
 
 		return model;
 	}
-	//consume R1 web Service
-	
-	
-	
-	
+	// consume R1 web Service
+
 	@RequestMapping(value = "/getGrnGvnByDatewise", method = RequestMethod.GET)
 	@ResponseBody
-	public  List<GGReportByDateAndFr> getGrnGvnByDatewise(HttpServletRequest request, HttpServletResponse response) {
-		
-		List<GGReportByDateAndFr> grnGvnByDateList= new ArrayList<>();
+	public List<GGReportByDateAndFr> getGrnGvnByDatewise(HttpServletRequest request, HttpServletResponse response) {
+
+		List<GGReportByDateAndFr> grnGvnByDateList = new ArrayList<>();
 
 		try {
 
@@ -679,22 +640,21 @@ public class GrnGvnReportController {
 			String fromDate = request.getParameter("from_date");
 			String toDate = request.getParameter("to_date");
 			routeId = request.getParameter("route_id");
-			
-			String isGrn=request.getParameter("is_grn");
-			String grnType;
-if(isGrn.equalsIgnoreCase("2")) {
-	
-	System.err.println("Is Grn =2");
-	grnType="1"+","+ "0";
-	
-	map.add("isGrn", grnType);
-}else {
-	System.err.println("Is Grn not =2");
-	grnType=isGrn;
-	map.add("isGrn", isGrn);
 
-}
-			
+			String isGrn = request.getParameter("is_grn");
+			String grnType;
+			if (isGrn.equalsIgnoreCase("2")) {
+
+				System.err.println("Is Grn =2");
+				grnType = "1" + "," + "0";
+
+				map.add("isGrn", grnType);
+			} else {
+				System.err.println("Is Grn not =2");
+				grnType = isGrn;
+				map.add("isGrn", isGrn);
+
+			}
 
 			System.out.println("fromDate= " + fromDate);
 
@@ -740,7 +700,7 @@ if(isGrn.equalsIgnoreCase("2")) {
 			map = new LinkedMultiValueMap<String, Object>();
 			if (isAllFrSelected) {
 
-								System.out.println("Inside IF  is All fr Selected " + isAllFrSelected);
+				System.out.println("Inside IF  is All fr Selected " + isAllFrSelected);
 
 				map.add("frIdList", 0);
 				// model.addObject("billHeadersList",billHeadersListForPrint);
@@ -749,102 +709,95 @@ if(isGrn.equalsIgnoreCase("2")) {
 
 				System.out.println("Inside Else: Few Fr Selected ");
 				map.add("frIdList", frIdString);
-				
+
 			}
 
 			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 			map.add("toDate", DateConvertor.convertToYMD(toDate));
 			map.add("isGrn", grnType);
-			
-			
-				ParameterizedTypeReference<List<GGReportByDateAndFr>> typeRef = new ParameterizedTypeReference<List<GGReportByDateAndFr>>() {
-				};
-				ResponseEntity<List<GGReportByDateAndFr>> responseEntity = restTemplate.exchange(
-						Constants.url + "getgGReportByDate", HttpMethod.POST, new HttpEntity<>(map), typeRef);
-				
-				grnGvnByDateList = responseEntity.getBody();
-				
-				System.err.println("List " +grnGvnByDateList.toString());
-				
-				
-				
-				
-		List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
-				
-				ExportToExcel expoExcel=new ExportToExcel();
-				List<String> rowData=new ArrayList<String>();
-				 
-				
-				rowData.add("Sr. No.");
-				 rowData.add("Date");
-				rowData.add("Type");
-				rowData.add("GrnGvn SrNo");
-				rowData.add("Franchise Name");
-				rowData.add("Req Qty");
-				rowData.add("Req Value");
-				rowData.add("Apr Qty");
-				rowData.add("Apr Value");
-			
+
+			ParameterizedTypeReference<List<GGReportByDateAndFr>> typeRef = new ParameterizedTypeReference<List<GGReportByDateAndFr>>() {
+			};
+			ResponseEntity<List<GGReportByDateAndFr>> responseEntity = restTemplate
+					.exchange(Constants.url + "getgGReportByDate", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			grnGvnByDateList = responseEntity.getBody();
+
+			System.err.println("List " + grnGvnByDateList.toString());
+
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+
+			rowData.add("Sr. No.");
+			rowData.add("Date");
+			rowData.add("Type");
+			rowData.add("GrnGvn SrNo");
+			rowData.add("Franchise Name");
+			rowData.add("Req Qty");
+			rowData.add("Req Value");
+			rowData.add("Apr Qty");
+			rowData.add("Apr Value");
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			List<GGReportByDateAndFr> excelItems = grnGvnByDateList;
+			for (int i = 0; i < excelItems.size(); i++) {
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+				rowData.add("" + (i + 1));
+				rowData.add("" + excelItems.get(i).getGrngvnDate());
+
+				String type;
+				if (excelItems.get(i).getIsGrn() == 1) {
+					type = "GRN";
+
+				} else {
+					type = "GVN";
+				}
+				rowData.add(type);
+				rowData.add(excelItems.get(i).getGrngvnSrno());
+				rowData.add(excelItems.get(i).getFrName());
+				rowData.add("" + excelItems.get(i).getReqQty());
+				rowData.add("" + excelItems.get(i).getTotalAmt());
+				rowData.add("" + excelItems.get(i).getAprQty());
+
+				rowData.add("" + excelItems.get(i).getAprGrandTotal());
+
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
-				List<GGReportByDateAndFr>  excelItems= grnGvnByDateList;
-				for(int i=0;i<excelItems.size();i++)
-				{
-					  expoExcel=new ExportToExcel();
-					 rowData=new ArrayList<String>();
-						rowData.add(""+(i+1));
-					rowData.add(""+excelItems.get(i).getGrngvnDate());
-					
-					String type;
-					if(excelItems.get(i).getIsGrn()==1) {
-						type="GRN";
-						
-					}else {
-						type="GVN";
-					}
-					rowData.add(type);
-					rowData.add(excelItems.get(i).getGrngvnSrno());
-					rowData.add(excelItems.get(i).getFrName());
-					rowData.add(""+excelItems.get(i).getReqQty());
-					rowData.add(""+excelItems.get(i).getTotalAmt());
-					rowData.add(""+excelItems.get(i).getAprQty());
-					
-					rowData.add(""+excelItems.get(i).getAprGrandTotal());
-					
-					expoExcel.setRowData(rowData);
-					exportToExcelList.add(expoExcel);
-					
-				}
-			
-				
-				HttpSession session = request.getSession();
-				session.setAttribute("exportExcelList", exportToExcelList);
-				session.setAttribute("excelName", "grnGvnReport");
+
+			}
+
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "grnGvnReport");
 
 		} catch (Exception e) {
 
 			System.out.println("Ex in getting /getgGReportByDate List  Ajax call" + e.getMessage());
 			e.printStackTrace();
 		}
-		
+
 		return grnGvnByDateList;
-	
+
 	}
-	//showGGreportByDate PDF
-	
+	// showGGreportByDate PDF
+
 	@RequestMapping(value = "pdf/showGGreportByDate/{fDate}/{tDate}/{selectedFr}/{routeId}/{isGrn}", method = RequestMethod.GET)
 	public ModelAndView showGGreportByDatePdf(@PathVariable String fDate, @PathVariable String tDate,
-			@PathVariable String selectedFr, @PathVariable String routeId,@PathVariable int isGrn, HttpServletRequest request,
-			HttpServletResponse response) {
+			@PathVariable String selectedFr, @PathVariable String routeId, @PathVariable int isGrn,
+			HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("reports/grnGvn/pdf/r1");
 
-		List<GGReportByDateAndFr> grnGvnByDateList= new ArrayList<>();
-		
+		List<GGReportByDateAndFr> grnGvnByDateList = new ArrayList<>();
+
 		System.err.println("Inside PDF mapping");
-		
+
 		boolean isAllFrSelected = false;
-		
+
 		try {
 
 			if (!routeId.equalsIgnoreCase("0")) {
@@ -886,41 +839,38 @@ if(isGrn.equalsIgnoreCase("2")) {
 
 				System.out.println("Inside If all fr Selected ");
 				map.add("frIdList", 0);
-				
+
 			} else {
 				System.out.println("Inside else Few fr Selected ");
 
 				map.add("frIdList", selectedFr);
-				
-				
+
 			}
-			
-			if(isGrn==2) {
+
+			if (isGrn == 2) {
 				System.err.println("Is Grn ==2");
-				
-				map.add("isGrn", "1"+","+"0");
-			}
-			else {
+
+				map.add("isGrn", "1" + "," + "0");
+			} else {
 				System.err.println("Is Grn  not Eq 2");
 
 				map.add("isGrn", isGrn);
 
 			}
-			
-				map.add("fromDate", DateConvertor.convertToYMD(fDate));
-				map.add("toDate", DateConvertor.convertToYMD(tDate));
-				//map.add("isGrn", isGrn);
 
-				ParameterizedTypeReference<List<GGReportByDateAndFr>> typeRef = new ParameterizedTypeReference<List<GGReportByDateAndFr>>() {
-				};
-				ResponseEntity<List<GGReportByDateAndFr>> responseEntity = restTemplate.exchange(
-						Constants.url + "getgGReportByDate", HttpMethod.POST, new HttpEntity<>(map), typeRef);
-				
-				grnGvnByDateList = responseEntity.getBody();
-				
-				System.err.println("List---- " +grnGvnByDateList.toString());
+			map.add("fromDate", DateConvertor.convertToYMD(fDate));
+			map.add("toDate", DateConvertor.convertToYMD(tDate));
+			// map.add("isGrn", isGrn);
 
-			
+			ParameterizedTypeReference<List<GGReportByDateAndFr>> typeRef = new ParameterizedTypeReference<List<GGReportByDateAndFr>>() {
+			};
+			ResponseEntity<List<GGReportByDateAndFr>> responseEntity = restTemplate
+					.exchange(Constants.url + "getgGReportByDate", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			grnGvnByDateList = responseEntity.getBody();
+
+			System.err.println("List---- " + grnGvnByDateList.toString());
+
 		} catch (Exception e) {
 			System.err.println("Exc in GRN PDF report 2");
 			e.printStackTrace();
@@ -935,932 +885,921 @@ if(isGrn.equalsIgnoreCase("2")) {
 		return model;
 	}
 
+	// r2
+	@RequestMapping(value = "/showGGReportGrpByFr", method = RequestMethod.GET)
+	public ModelAndView showGGReportGrpByFr(HttpServletRequest request, HttpServletResponse response) {
 
-	
-	
-	
-	
-	//r2
-		@RequestMapping(value = "/showGGReportGrpByFr", method = RequestMethod.GET)
-		public ModelAndView showGGReportGrpByFr(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView model = new ModelAndView("reports/grnGvn/ggGrpByFr");
 
-			ModelAndView model = new ModelAndView("reports/grnGvn/ggGrpByFr");
-			
-			try {
+		try {
 
-				ZoneId z = ZoneId.of("Asia/Calcutta");
+			ZoneId z = ZoneId.of("Asia/Calcutta");
 
-				LocalDate date = LocalDate.now(z);
-				DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
-				String todaysDate = date.format(formatters);
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			String todaysDate = date.format(formatters);
 
-				allFrIdNameList = getFrNameId();
+			allFrIdNameList = getFrNameId();
 
-				allRouteListResponse = getAllRoute();
-				
-				model.addObject("routeList", allRouteListResponse.getRoute());
-				model.addObject("todaysDate", todaysDate);
-				model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
+			allRouteListResponse = getAllRoute();
 
-			} catch (Exception e) {
-				System.out.println("Exce inshowGGReportDateWise " + e.getMessage());
-				e.printStackTrace();
-			}
+			model.addObject("routeList", allRouteListResponse.getRoute());
+			model.addObject("todaysDate", todaysDate);
+			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
 
-			return model;
+		} catch (Exception e) {
+			System.out.println("Exce inshowGGReportDateWise " + e.getMessage());
+			e.printStackTrace();
 		}
-		//consume r2 web service Ajax call
-		@RequestMapping(value = "/getGrnGvnByGrpByFr", method = RequestMethod.GET)
-		@ResponseBody
-		public  List<GGReportGrpByFrId> getGrnGvnByGrpByFr(HttpServletRequest request, HttpServletResponse response) {
-			
-			List<GGReportGrpByFrId> grnGvnGrpByFrList= new ArrayList<>();
 
-			try {
+		return model;
+	}
 
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+	// consume r2 web service Ajax call
+	@RequestMapping(value = "/getGrnGvnByGrpByFr", method = RequestMethod.GET)
+	@ResponseBody
+	public List<GGReportGrpByFrId> getGrnGvnByGrpByFr(HttpServletRequest request, HttpServletResponse response) {
 
-				RestTemplate restTemplate = new RestTemplate();
+		List<GGReportGrpByFrId> grnGvnGrpByFrList = new ArrayList<>();
 
-				String routeId = "0";
-				String frIdString = "";
+		try {
 
-				System.out.println("inside getGrnGvnByDatewise ajax call");
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-				frIdString = request.getParameter("fr_id_list");
-				String fromDate = request.getParameter("from_date");
-				String toDate = request.getParameter("to_date");
-				routeId = request.getParameter("route_id");
-				String isGrn=request.getParameter("is_grn");
+			RestTemplate restTemplate = new RestTemplate();
 
-				String grnType;
-				if(isGrn.equalsIgnoreCase("2")) {
-					
-					System.err.println("Is Grn =2");
-					grnType="1"+","+ "0";
-					
-					map.add("isGrn", grnType);
-				}else {
-					System.err.println("Is Grn not =2");
-					grnType=isGrn;
-					map.add("isGrn", isGrn);
+			String routeId = "0";
+			String frIdString = "";
 
-				}
-							
-				System.out.println("fromDate= " + fromDate);
+			System.out.println("inside getGrnGvnByDatewise ajax call");
 
-				boolean isAllFrSelected = false;
+			frIdString = request.getParameter("fr_id_list");
+			String fromDate = request.getParameter("from_date");
+			String toDate = request.getParameter("to_date");
+			routeId = request.getParameter("route_id");
+			String isGrn = request.getParameter("is_grn");
+			System.err.println("Is Grn " + isGrn);
+			String grnType;
+			if (isGrn.equalsIgnoreCase("2")) {
 
-				frIdString = frIdString.substring(1, frIdString.length() - 1);
-				frIdString = frIdString.replaceAll("\"", "");
+				System.err.println("Is Grn =2");
+				grnType = "1" + "," + "0" + "," + "2";
 
-				List<String> franchIds = new ArrayList();
-				franchIds = Arrays.asList(frIdString);
-
-				System.out.println("fr Id ArrayList " + franchIds.toString());
-
-				if (franchIds.contains("-1")) {
-					isAllFrSelected = true;
-
-				}
-
-				if (!routeId.equalsIgnoreCase("0")) {
-
-					map.add("routeId", routeId);
-
-					FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
-							map, FrNameIdByRouteIdResponse.class);
-
-					List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
-
-					System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
-
-					StringBuilder sbForRouteFrId = new StringBuilder();
-					for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
-
-						sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
-
-					}
-
-					String strFrIdRouteWise = sbForRouteFrId.toString();
-					frIdString = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
-					System.out.println("fr Id Route WISE = " + frIdString);
-
-				} // end of if
-
-				map = new LinkedMultiValueMap<String, Object>();
-				if (isAllFrSelected) {
-
-									System.out.println("Inside IF  is All fr Selected " + isAllFrSelected);
-
-					map.add("frIdList", 0);
-					// model.addObject("billHeadersList",billHeadersListForPrint);
-
-				} else { // few franchisee selected
-
-					System.out.println("Inside Else: Few Fr Selected ");
-					map.add("frIdList", frIdString);
-					
-				}
-				
-				
-
-				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
-				map.add("toDate", DateConvertor.convertToYMD(toDate));
 				map.add("isGrn", grnType);
-				
-				
-					ParameterizedTypeReference<List<GGReportGrpByFrId>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByFrId>>() {
-					};
-					ResponseEntity<List<GGReportGrpByFrId>> responseEntity = restTemplate.exchange(
-							Constants.url + "gGReportGrpByFrId", HttpMethod.POST, new HttpEntity<>(map), typeRef);
-					
-					grnGvnGrpByFrList = responseEntity.getBody();
-					
-					System.err.println("List " +grnGvnGrpByFrList.toString());
-					
-					
-					
-					
-					List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
-					
-					ExportToExcel expoExcel=new ExportToExcel();
-					List<String> rowData=new ArrayList<String>();
-					 
-					
-					rowData.add("Sr. No.");
-					rowData.add("Type");
-					rowData.add("Franchise Name");
-					rowData.add("Req Qty");
-					rowData.add("Req Value");
-					rowData.add("Apr Qty");
-					rowData.add("Apr Value");
-				
-					expoExcel.setRowData(rowData);
-					exportToExcelList.add(expoExcel);
-					List<GGReportGrpByFrId>   excelItems= grnGvnGrpByFrList;
-					for(int i=0;i<excelItems.size();i++)
-					{
-						  expoExcel=new ExportToExcel();
-						 rowData=new ArrayList<String>();
-							rowData.add(""+(i+1));
-						
-						String type;
-						if(excelItems.get(i).getIsGrn()==1) {
-							type="GRN";
-							
-						}else {
-							type="GVN";
-						}
-						rowData.add(type);
-						rowData.add(excelItems.get(i).getFrName());
-						rowData.add(""+excelItems.get(i).getReqQty());
-						rowData.add(""+excelItems.get(i).getTotalAmt());
-						rowData.add(""+excelItems.get(i).getAprQty());
-						
-						rowData.add(""+excelItems.get(i).getAprGrandTotal());
-						
-						expoExcel.setRowData(rowData);
-						exportToExcelList.add(expoExcel);
-						
-					}
-				
-					
-					HttpSession session = request.getSession();
-					session.setAttribute("exportExcelList", exportToExcelList);
-					session.setAttribute("excelName", "grnGvnReport");
+			} else if (isGrn.equalsIgnoreCase("0")) {
+				System.err.println("Its GVN ");
+				grnType = "0" + "," + "2";
+			} else {
 
-			} catch (Exception e) {
+				System.err.println("Is Grn not =2");
+				grnType = isGrn;
+				map.add("isGrn", isGrn);
 
-				System.out.println("Ex in getting /getGrnGvnByGrpByFr List  Ajax call" + e.getMessage());
-				e.printStackTrace();
 			}
-			
-			return grnGvnGrpByFrList;
-		
-		}
-		
-		//r2 PDFshowGGreportGrpByFr
-		
-		@RequestMapping(value = "pdf/showGGreportGrpByFr/{fDate}/{tDate}/{selectedFr}/{routeId}/{isGrn}", method = RequestMethod.GET)
-		public ModelAndView showSaleReportByDatePdf(@PathVariable String fDate, @PathVariable String tDate,
-				@PathVariable String selectedFr, @PathVariable String routeId,@PathVariable int isGrn, HttpServletRequest request,
-				HttpServletResponse response) {
 
-			ModelAndView model = new ModelAndView("reports/grnGvn/pdf/r2");
+			System.out.println("fromDate= " + fromDate);
 
-			List<GGReportGrpByFrId> grnGvnGrpByFrList= new ArrayList<>();
-			
-			System.err.println("Inside PDF mapping");
-			
 			boolean isAllFrSelected = false;
-			
-			try {
 
-				if (!routeId.equalsIgnoreCase("0")) {
+			frIdString = frIdString.substring(1, frIdString.length() - 1);
+			frIdString = frIdString.replaceAll("\"", "");
 
-					MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			List<String> franchIds = new ArrayList();
+			franchIds = Arrays.asList(frIdString);
 
-					RestTemplate restTemplate = new RestTemplate();
+			System.out.println("fr Id ArrayList " + franchIds.toString());
 
-					map.add("routeId", routeId);
+			if (franchIds.contains("-1")) {
+				isAllFrSelected = true;
 
-					FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
-							map, FrNameIdByRouteIdResponse.class);
-
-					List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
-
-					System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
-
-					StringBuilder sbForRouteFrId = new StringBuilder();
-					for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
-
-						sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
-
-					}
-
-					String strFrIdRouteWise = sbForRouteFrId.toString();
-					selectedFr = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
-					System.out.println("fr Id Route WISE = " + selectedFr);
-
-				} // end of if
-
-				if (selectedFr.equalsIgnoreCase("-1")) {
-					isAllFrSelected = true;
-				}
-
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				RestTemplate restTemplate = new RestTemplate();
-
-				if (isAllFrSelected) {
-
-					System.out.println("Inside If all fr Selected ");
-					map.add("frIdList", 0);
-					
-				} else {
-					System.out.println("Inside else Few fr Selected ");
-
-					map.add("frIdList", selectedFr);
-					
-					
-				}
-				
-				if(isGrn==2) {
-					System.err.println("Is Grn ==2");
-					
-					map.add("isGrn", "1"+","+"0");
-				}
-				else {
-					System.err.println("Is Grn  not Eq 2");
-
-					map.add("isGrn", isGrn);
-
-				}
-				
-					map.add("fromDate", DateConvertor.convertToYMD(fDate));
-					map.add("toDate", DateConvertor.convertToYMD(tDate));
-					//map.add("isGrn", isGrn);
-
-					ParameterizedTypeReference<List<GGReportGrpByFrId>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByFrId>>() {
-					};
-					ResponseEntity<List<GGReportGrpByFrId>> responseEntity = restTemplate.exchange(
-							Constants.url + "gGReportGrpByFrId", HttpMethod.POST, new HttpEntity<>(map), typeRef);
-					
-					grnGvnGrpByFrList = responseEntity.getBody();
-					
-					System.err.println("List---- " +grnGvnGrpByFrList.toString());
-
-				
-			} catch (Exception e) {
-				System.err.println("Exc in GRN PDF report 2");
-				e.printStackTrace();
 			}
 
-			model.addObject("fromDate", fDate);
+			if (!routeId.equalsIgnoreCase("0")) {
 
-			model.addObject("toDate", tDate);
+				map.add("routeId", routeId);
 
-			model.addObject("report", grnGvnGrpByFrList);
+				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
+						map, FrNameIdByRouteIdResponse.class);
 
-			return model;
-		}
+				List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
 
+				System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
 
-		
-		//r3
-		
-		@RequestMapping(value = "/showGGReportGrpByDate", method = RequestMethod.GET)
-		public ModelAndView showGGReportGrpByDate(HttpServletRequest request, HttpServletResponse response) {
+				StringBuilder sbForRouteFrId = new StringBuilder();
+				for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
 
-			ModelAndView model = new ModelAndView("reports/grnGvn/grnGvnGrpByDate");
-			
-			try {
-
-				ZoneId z = ZoneId.of("Asia/Calcutta");
-
-				LocalDate date = LocalDate.now(z);
-				DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
-				String todaysDate = date.format(formatters);
-
-				allFrIdNameList = getFrNameId();
-
-				allRouteListResponse = getAllRoute();
-				
-				model.addObject("routeList", allRouteListResponse.getRoute());
-				model.addObject("todaysDate", todaysDate);
-				model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
-
-			} catch (Exception e) {
-				System.out.println("Exce inshowGGReportDateWise " + e.getMessage());
-				e.printStackTrace();
-			}
-
-			return model;
-		}
-		
-		
-		//consume r3 web service  ajax call
-		//
-		
-		@RequestMapping(value = "/getGrnGvnByGrpByDate", method = RequestMethod.GET)
-		@ResponseBody
-		public  List<GGReportGrpByMonthDate> getGrnGvnByGrpByDate(HttpServletRequest request, HttpServletResponse response) {
-			
-			List<GGReportGrpByMonthDate> grnGvnGrpByDateList= new ArrayList<>();
-
-			try {
-
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-
-				RestTemplate restTemplate = new RestTemplate();
-
-				String routeId = "0";
-				String frIdString = "";
-
-				System.out.println("inside getGrnGvnByDatewise ajax call");
-
-				frIdString = request.getParameter("fr_id_list");
-				String fromDate = request.getParameter("from_date");
-				String toDate = request.getParameter("to_date");
-				routeId = request.getParameter("route_id");
-				String isGrn=request.getParameter("is_grn");
-				
-				
-				String grnType;
-				if(isGrn.equalsIgnoreCase("2")) {
-					
-					System.err.println("Is Grn =2");
-					grnType="1"+","+ "0";
-					
-					map.add("isGrn", grnType);
-				}else {
-					System.err.println("Is Grn not =2");
-					grnType=isGrn;
-					map.add("isGrn", isGrn);
-
-				}
-							
-
-				System.out.println("fromDate= " + fromDate);
-
-				boolean isAllFrSelected = false;
-
-				frIdString = frIdString.substring(1, frIdString.length() - 1);
-				frIdString = frIdString.replaceAll("\"", "");
-
-				List<String> franchIds = new ArrayList();
-				franchIds = Arrays.asList(frIdString);
-
-				System.out.println("fr Id ArrayList " + franchIds.toString());
-
-				if (franchIds.contains("-1")) {
-					isAllFrSelected = true;
+					sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
 
 				}
 
-				if (!routeId.equalsIgnoreCase("0")) {
+				String strFrIdRouteWise = sbForRouteFrId.toString();
+				frIdString = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+				System.out.println("fr Id Route WISE = " + frIdString);
 
-					map.add("routeId", routeId);
+			} // end of if
 
-					FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
-							map, FrNameIdByRouteIdResponse.class);
+			map = new LinkedMultiValueMap<String, Object>();
+			if (isAllFrSelected) {
 
-					List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+				System.out.println("Inside IF  is All fr Selected " + isAllFrSelected);
 
-					System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
-
-					StringBuilder sbForRouteFrId = new StringBuilder();
-					for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
-
-						sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
-
-					}
-
-					String strFrIdRouteWise = sbForRouteFrId.toString();
-					frIdString = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
-					System.out.println("fr Id Route WISE = " + frIdString);
-
-				} // end of if
-
-				map = new LinkedMultiValueMap<String, Object>();
-				if (isAllFrSelected) {
-
-									System.out.println("Inside IF  is All fr Selected " + isAllFrSelected);
-
-					map.add("frIdList", 0);
-					// model.addObject("billHeadersList",billHeadersListForPrint);
-
-				} else { // few franchisee selected
-
-					System.out.println("Inside Else: Few Fr Selected ");
-					map.add("frIdList", frIdString);
-					
-				}
-
-				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
-				map.add("toDate", DateConvertor.convertToYMD(toDate));
-				map.add("isGrn", grnType);
 				map.add("frIdList", 0);
-				
-					ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
-					};
-					ResponseEntity<List<GGReportGrpByMonthDate>> responseEntity = restTemplate.exchange(
-							Constants.url + "getGGReportGrpByDate", HttpMethod.POST, new HttpEntity<>(map), typeRef);
-					
-					grnGvnGrpByDateList = responseEntity.getBody();
-					
-					System.err.println("List " +grnGvnGrpByDateList.toString());
-					
-					
-					List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
-					
-					ExportToExcel expoExcel=new ExportToExcel();
-					List<String> rowData=new ArrayList<String>();
-					 
-					
-					rowData.add("Sr. No.");
-					rowData.add("Date");
+				// model.addObject("billHeadersList",billHeadersListForPrint);
 
-					rowData.add("Type");
-					rowData.add("Req Qty");
-					rowData.add("Req Value");
-					rowData.add("Apr Qty");
-					rowData.add("Apr Value");
-				
-					expoExcel.setRowData(rowData);
-					exportToExcelList.add(expoExcel);
-					List<GGReportGrpByMonthDate>    excelItems= grnGvnGrpByDateList;
-					for(int i=0;i<excelItems.size();i++)
-					{
-						  expoExcel=new ExportToExcel();
-						 rowData=new ArrayList<String>();
-							rowData.add(""+(i+1));
-						
-						String type;
-						if(excelItems.get(i).getIsGrn()==1) {
-							type="GRN";
-							
-						}else {
-							type="GVN";
-						}
-						rowData.add(excelItems.get(i).getGrnGvnDate());
-						rowData.add(type);
-						rowData.add(""+excelItems.get(i).getReqQty());
-						rowData.add(""+excelItems.get(i).getTotalAmt());
-						rowData.add(""+excelItems.get(i).getAprQty());
-						
-						rowData.add(""+excelItems.get(i).getAprGrandTotal());
-						
-						expoExcel.setRowData(rowData);
-						exportToExcelList.add(expoExcel);
-						
-					}
-				
-					
-					HttpSession session = request.getSession();
-					session.setAttribute("exportExcelList", exportToExcelList);
-					session.setAttribute("excelName", "grnGvnReport");
-					
-					
+			} else { // few franchisee selected
 
-			} catch (Exception e) {
+				System.out.println("Inside Else: Few Fr Selected ");
+				map.add("frIdList", frIdString);
 
-				System.out.println("Ex in getting /getGrnGvnByGrpByDate List  Ajax call" + e.getMessage());
-				e.printStackTrace();
 			}
-			
-			return grnGvnGrpByDateList;
-		
+
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+			map.add("isGrn", grnType);
+
+			ParameterizedTypeReference<List<GGReportGrpByFrId>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByFrId>>() {
+			};
+			ResponseEntity<List<GGReportGrpByFrId>> responseEntity = restTemplate
+					.exchange(Constants.url + "gGReportGrpByFrId", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			grnGvnGrpByFrList = responseEntity.getBody();
+
+			System.err.println("List " + grnGvnGrpByFrList.toString());
+
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+
+			rowData.add("Sr. No.");
+			rowData.add("Type");
+			rowData.add("Franchise Name");
+			rowData.add("Req Qty");
+			rowData.add("Req Value");
+			rowData.add("Apr Qty");
+			rowData.add("Apr Value");
+
+			rowData.add("Fr Contri Value");
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			List<GGReportGrpByFrId> excelItems = grnGvnGrpByFrList;
+			for (int i = 0; i < excelItems.size(); i++) {
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+				rowData.add("" + (i + 1));
+
+				String type;
+				if (isGrn.equalsIgnoreCase("1")) {
+					type = "GRN";
+
+				} else if (isGrn.equalsIgnoreCase("0")) {
+					type = "GVN";
+				} else {
+					type = "All";
+				}
+				rowData.add(type);
+				rowData.add(excelItems.get(i).getFrName());
+				rowData.add("" + excelItems.get(i).getReqQty());
+				rowData.add("" + excelItems.get(i).getTotalAmt());
+				rowData.add("" + excelItems.get(i).getAprQty());
+
+				rowData.add("" + excelItems.get(i).getAprGrandTotal());
+				rowData.add("" + roundUp(excelItems.get(i).getAprGrandTotal() * 0.25));
+
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+
+			}
+
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "grnGvnReport");
+
+		} catch (Exception e) {
+
+			System.out.println("Ex in getting /getGrnGvnByGrpByFr List  Ajax call" + e.getMessage());
+			e.printStackTrace();
 		}
-		
-		//showGGreportGrpByDate r3 PDF
-		
-		@RequestMapping(value = "pdf/showGGreportGrpByDate/{fDate}/{tDate}/{selectedFr}/{routeId}/{isGrn}", method = RequestMethod.GET)
-		public ModelAndView showGGreportGrpByDatePdf(@PathVariable String fDate, @PathVariable String tDate,
-				@PathVariable String selectedFr, @PathVariable String routeId,@PathVariable int isGrn, HttpServletRequest request,
-				HttpServletResponse response) {
 
-			ModelAndView model = new ModelAndView("reports/grnGvn/pdf/r3");
+		return grnGvnGrpByFrList;
 
-			List<GGReportGrpByMonthDate> grnGvnGrpByDateList= new ArrayList<>();
-			
-			System.err.println("Inside PDF mapping");
-			
+	}
+	public static float roundUp(double d) {
+		return BigDecimal.valueOf(d).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+	}
+
+	// r2 PDFshowGGreportGrpByFr
+
+	@RequestMapping(value = "pdf/showGGreportGrpByFr/{fDate}/{tDate}/{selectedFr}/{routeId}/{isGrn}", method = RequestMethod.GET)
+	public ModelAndView showSaleReportByDatePdf(@PathVariable String fDate, @PathVariable String tDate,
+			@PathVariable String selectedFr, @PathVariable String routeId, @PathVariable int isGrn,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/grnGvn/pdf/r2");
+
+		List<GGReportGrpByFrId> grnGvnGrpByFrList = new ArrayList<>();
+
+		System.err.println("Inside PDF mapping");
+
+		boolean isAllFrSelected = false;
+
+		try {
+
+			if (!routeId.equalsIgnoreCase("0")) {
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+				RestTemplate restTemplate = new RestTemplate();
+
+				map.add("routeId", routeId);
+
+				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
+						map, FrNameIdByRouteIdResponse.class);
+
+				List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+
+				System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+
+				StringBuilder sbForRouteFrId = new StringBuilder();
+				for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
+
+					sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
+
+				}
+
+				String strFrIdRouteWise = sbForRouteFrId.toString();
+				selectedFr = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+				System.out.println("fr Id Route WISE = " + selectedFr);
+
+			} // end of if
+
+			if (selectedFr.equalsIgnoreCase("-1")) {
+				isAllFrSelected = true;
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+
+			if (isAllFrSelected) {
+
+				System.out.println("Inside If all fr Selected ");
+				map.add("frIdList", 0);
+
+			} else {
+				System.out.println("Inside else Few fr Selected ");
+
+				map.add("frIdList", selectedFr);
+
+			}
+
+			/*
+			 * if(isGrn==2) { System.err.println("Is Grn ==2");
+			 * 
+			 * map.add("isGrn", "1"+","+"0"); } else {
+			 * System.err.println("Is Grn  not Eq 2");
+			 * 
+			 * map.add("isGrn", isGrn);
+			 * 
+			 * }
+			 */
+
+			String grnType;
+			if (isGrn == 2) {
+
+				System.err.println("Is Grn =2");
+				grnType = "1" + "," + "0" + "," + "2";
+
+				//map.add("isGrn", grnType);
+			} else if (isGrn == 0) {
+				System.err.println("Its GVN ");
+				grnType = "0" + "," + "2";
+			} else {
+
+				System.err.println("Is Grn not =2");
+				grnType = "1";
+				
+
+			}
+			map.add("isGrn", grnType);
+			map.add("fromDate", DateConvertor.convertToYMD(fDate));
+			map.add("toDate", DateConvertor.convertToYMD(tDate));
+			// map.add("isGrn", isGrn);
+
+			ParameterizedTypeReference<List<GGReportGrpByFrId>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByFrId>>() {
+			};
+			ResponseEntity<List<GGReportGrpByFrId>> responseEntity = restTemplate
+					.exchange(Constants.url + "gGReportGrpByFrId", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			grnGvnGrpByFrList = responseEntity.getBody();
+
+			System.err.println("List---- " + grnGvnGrpByFrList.toString());
+
+		} catch (Exception e) {
+			System.err.println("Exc in GRN PDF report 2");
+			e.printStackTrace();
+		}
+
+		model.addObject("fromDate", fDate);
+
+		model.addObject("toDate", tDate);
+
+		model.addObject("report", grnGvnGrpByFrList);
+		
+		model.addObject("isGrn", isGrn);
+
+		return model;
+	}
+
+	// r3
+
+	@RequestMapping(value = "/showGGReportGrpByDate", method = RequestMethod.GET)
+	public ModelAndView showGGReportGrpByDate(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/grnGvn/grnGvnGrpByDate");
+
+		try {
+
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			String todaysDate = date.format(formatters);
+
+			allFrIdNameList = getFrNameId();
+
+			allRouteListResponse = getAllRoute();
+
+			model.addObject("routeList", allRouteListResponse.getRoute());
+			model.addObject("todaysDate", todaysDate);
+			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
+
+		} catch (Exception e) {
+			System.out.println("Exce inshowGGReportDateWise " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	// consume r3 web service ajax call
+	//
+
+	@RequestMapping(value = "/getGrnGvnByGrpByDate", method = RequestMethod.GET)
+	@ResponseBody
+	public List<GGReportGrpByMonthDate> getGrnGvnByGrpByDate(HttpServletRequest request, HttpServletResponse response) {
+
+		List<GGReportGrpByMonthDate> grnGvnGrpByDateList = new ArrayList<>();
+
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			String routeId = "0";
+			String frIdString = "";
+
+			System.out.println("inside getGrnGvnByDatewise ajax call");
+
+			frIdString = request.getParameter("fr_id_list");
+			String fromDate = request.getParameter("from_date");
+			String toDate = request.getParameter("to_date");
+			routeId = request.getParameter("route_id");
+			String isGrn = request.getParameter("is_grn");
+
+			String grnType;
+			if (isGrn.equalsIgnoreCase("2")) {
+
+				System.err.println("Is Grn =2");
+				grnType = "1" + "," + "0";
+
+				map.add("isGrn", grnType);
+			} else {
+				System.err.println("Is Grn not =2");
+				grnType = isGrn;
+				map.add("isGrn", isGrn);
+
+			}
+
+			System.out.println("fromDate= " + fromDate);
+
 			boolean isAllFrSelected = false;
-			
-			try {
 
-				if (!routeId.equalsIgnoreCase("0")) {
+			frIdString = frIdString.substring(1, frIdString.length() - 1);
+			frIdString = frIdString.replaceAll("\"", "");
 
-					MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			List<String> franchIds = new ArrayList();
+			franchIds = Arrays.asList(frIdString);
 
-					RestTemplate restTemplate = new RestTemplate();
+			System.out.println("fr Id ArrayList " + franchIds.toString());
 
-					map.add("routeId", routeId);
+			if (franchIds.contains("-1")) {
+				isAllFrSelected = true;
 
-					FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
-							map, FrNameIdByRouteIdResponse.class);
-
-					List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
-
-					System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
-
-					StringBuilder sbForRouteFrId = new StringBuilder();
-					for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
-
-						sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
-
-					}
-
-					String strFrIdRouteWise = sbForRouteFrId.toString();
-					selectedFr = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
-					System.out.println("fr Id Route WISE = " + selectedFr);
-
-				} // end of if
-
-				if (selectedFr.equalsIgnoreCase("-1")) {
-					isAllFrSelected = true;
-				}
-
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				RestTemplate restTemplate = new RestTemplate();
-
-				if (isAllFrSelected) {
-
-					System.out.println("Inside If all fr Selected ");
-					map.add("frIdList", 0);
-					
-				} else {
-					System.out.println("Inside else Few fr Selected ");
-
-					map.add("frIdList", selectedFr);
-					
-					
-				}
-				
-				
-				if(isGrn==2) {
-					System.err.println("Is Grn ==2");
-					
-					map.add("isGrn", "1"+","+"0");
-				}
-				else {
-					System.err.println("Is Grn  not Eq 2");
-
-					map.add("isGrn", isGrn);
-
-				}
-				
-					map.add("fromDate", DateConvertor.convertToYMD(fDate));
-					map.add("toDate", DateConvertor.convertToYMD(tDate));
-					//map.add("isGrn", isGrn);
-					map.add("frIdList", 0);
-
-					ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
-					};
-					ResponseEntity<List<GGReportGrpByMonthDate>> responseEntity = restTemplate.exchange(
-							Constants.url + "getGGReportGrpByDate", HttpMethod.POST, new HttpEntity<>(map), typeRef);
-					
-					grnGvnGrpByDateList = responseEntity.getBody();
-					
-					System.err.println("List---- " +grnGvnGrpByDateList.toString());
-
-				
-			} catch (Exception e) {
-				System.err.println("Exc in GRN PDF report 2");
-				e.printStackTrace();
 			}
 
-			model.addObject("fromDate", fDate);
+			if (!routeId.equalsIgnoreCase("0")) {
 
-			model.addObject("toDate", tDate);
+				map.add("routeId", routeId);
 
-			model.addObject("report", grnGvnGrpByDateList);
+				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
+						map, FrNameIdByRouteIdResponse.class);
 
-			return model;
-		}
+				List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
 
-		//r4
-		
-		@RequestMapping(value = "/showGGReportGrpByMonth", method = RequestMethod.GET)
-		public ModelAndView showGGReportGrpByMonth(HttpServletRequest request, HttpServletResponse response) {
+				System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
 
-			ModelAndView model = new ModelAndView("reports/grnGvn/gGGrpByMonth");
-			
-			try {
+				StringBuilder sbForRouteFrId = new StringBuilder();
+				for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
 
-				ZoneId z = ZoneId.of("Asia/Calcutta");
-
-				LocalDate date = LocalDate.now(z);
-				DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
-				String todaysDate = date.format(formatters);
-
-				allFrIdNameList = getFrNameId();
-
-				allRouteListResponse = getAllRoute();
-				
-				model.addObject("routeList", allRouteListResponse.getRoute());
-				model.addObject("todaysDate", todaysDate);
-				model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
-
-			} catch (Exception e) {
-				System.out.println("Exce inshowGGReportDateWise " + e.getMessage());
-				e.printStackTrace();
-			}
-
-			return model;
-		}
-		
-		//r4 consume web service
-		
-		@RequestMapping(value = "/getGrnGvnByGrpByMonth", method = RequestMethod.GET)
-		@ResponseBody
-		public  List<GGReportGrpByMonthDate> getGrnGvnByGrpByMonth(HttpServletRequest request, HttpServletResponse response) {
-			
-			List<GGReportGrpByMonthDate> grnGvnGrpByMonthList= new ArrayList<>();
-			
-			try {
-
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-
-				RestTemplate restTemplate = new RestTemplate();
-
-				String routeId = "0";
-				String frIdString = "";
-
-				System.out.println("inside getGrnGvnByDatewise ajax call");
-
-				frIdString = request.getParameter("fr_id_list");
-				String fromDate = request.getParameter("from_date");
-				String toDate = request.getParameter("to_date");
-				routeId = request.getParameter("route_id");
-				String isGrn=request.getParameter("is_grn");
-
-				
-				String grnType;
-				if(isGrn.equalsIgnoreCase("2")) {
-					
-					System.err.println("Is Grn =2");
-					grnType="1"+","+ "0";
-					
-					map.add("isGrn", grnType);
-				}else {
-					System.err.println("Is Grn not =2");
-					grnType=isGrn;
-					map.add("isGrn", isGrn);
-
-				}
-				
-				System.out.println("fromDate= " + fromDate);
-
-				boolean isAllFrSelected = false;
-
-				frIdString = frIdString.substring(1, frIdString.length() - 1);
-				frIdString = frIdString.replaceAll("\"", "");
-
-				List<String> franchIds = new ArrayList();
-				franchIds = Arrays.asList(frIdString);
-
-				System.out.println("fr Id ArrayList " + franchIds.toString());
-
-				if (franchIds.contains("-1")) {
-					isAllFrSelected = true;
+					sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
 
 				}
 
-				if (!routeId.equalsIgnoreCase("0")) {
+				String strFrIdRouteWise = sbForRouteFrId.toString();
+				frIdString = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+				System.out.println("fr Id Route WISE = " + frIdString);
 
-					map.add("routeId", routeId);
+			} // end of if
 
-					FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
-							map, FrNameIdByRouteIdResponse.class);
+			map = new LinkedMultiValueMap<String, Object>();
+			if (isAllFrSelected) {
 
-					List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+				System.out.println("Inside IF  is All fr Selected " + isAllFrSelected);
 
-					System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
-
-					StringBuilder sbForRouteFrId = new StringBuilder();
-					for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
-
-						sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
-
-					}
-
-					String strFrIdRouteWise = sbForRouteFrId.toString();
-					frIdString = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
-					System.out.println("fr Id Route WISE = " + frIdString);
-
-				} // end of if
-
-				map = new LinkedMultiValueMap<String, Object>();
-				if (isAllFrSelected) {
-
-									System.out.println("Inside IF  is All fr Selected " + isAllFrSelected);
-
-					map.add("frIdList", 0);
-					// model.addObject("billHeadersList",billHeadersListForPrint);
-
-				} else { // few franchisee selected
-
-					System.out.println("Inside Else: Few Fr Selected ");
-					map.add("frIdList", frIdString);
-					
-				}
-
-				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
-				map.add("toDate", DateConvertor.convertToYMD(toDate));
-				map.add("isGrn", grnType);
 				map.add("frIdList", 0);
-				
-					ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
-					};
-					ResponseEntity<List<GGReportGrpByMonthDate>> responseEntity = restTemplate.exchange(
-							Constants.url + "getGGReportGrpByMonth", HttpMethod.POST, new HttpEntity<>(map), typeRef);
-					
-					grnGvnGrpByMonthList = responseEntity.getBody();
-					
-					
-					System.err.println("List " +grnGvnGrpByMonthList.toString());
-					
-					
-					
-List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
-					
-					ExportToExcel expoExcel=new ExportToExcel();
-					List<String> rowData=new ArrayList<String>();
-					 
-					
-					rowData.add("Sr. No.");
-					rowData.add("Month");
+				// model.addObject("billHeadersList",billHeadersListForPrint);
 
-					rowData.add("Req Qty");
-					rowData.add("Req Value");
-					rowData.add("Apr Qty");
-					rowData.add("Apr Value");
-				
-					expoExcel.setRowData(rowData);
-					exportToExcelList.add(expoExcel);
-					List<GGReportGrpByMonthDate>    excelItems= grnGvnGrpByMonthList;
-					for(int i=0;i<excelItems.size();i++)
-					{
-						  expoExcel=new ExportToExcel();
-						 rowData=new ArrayList<String>();
-							rowData.add(""+(i+1));
-						
-						
-						rowData.add(excelItems.get(i).getMonth());
-						rowData.add(""+excelItems.get(i).getReqQty());
-						rowData.add(""+excelItems.get(i).getTotalAmt());
-						rowData.add(""+excelItems.get(i).getAprQty());
-						
-						rowData.add(""+excelItems.get(i).getAprGrandTotal());
-						
-						expoExcel.setRowData(rowData);
-						exportToExcelList.add(expoExcel);
-						
-					}
-				
-					HttpSession session = request.getSession();
-					session.setAttribute("exportExcelList", exportToExcelList);
-					session.setAttribute("excelName", "grnGvnReport");
+			} else { // few franchisee selected
 
-			} catch (Exception e) {
+				System.out.println("Inside Else: Few Fr Selected ");
+				map.add("frIdList", frIdString);
 
-				System.out.println("Ex in getting /getGrnGvnByGrpByDate List  Ajax call" + e.getMessage());
-				e.printStackTrace();
 			}
-			
-			return grnGvnGrpByMonthList;
-			
+
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+			map.add("isGrn", grnType);
+			map.add("frIdList", 0);
+
+			ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
+			};
+			ResponseEntity<List<GGReportGrpByMonthDate>> responseEntity = restTemplate
+					.exchange(Constants.url + "getGGReportGrpByDate", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			grnGvnGrpByDateList = responseEntity.getBody();
+
+			System.err.println("List " + grnGvnGrpByDateList.toString());
+
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+
+			rowData.add("Sr. No.");
+			rowData.add("Date");
+
+			rowData.add("Type");
+			rowData.add("Req Qty");
+			rowData.add("Req Value");
+			rowData.add("Apr Qty");
+			rowData.add("Apr Value");
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			List<GGReportGrpByMonthDate> excelItems = grnGvnGrpByDateList;
+			for (int i = 0; i < excelItems.size(); i++) {
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+				rowData.add("" + (i + 1));
+
+				String type;
+				if (excelItems.get(i).getIsGrn() == 1) {
+					type = "GRN";
+
+				} else {
+					type = "GVN";
+				}
+				rowData.add(excelItems.get(i).getGrnGvnDate());
+				rowData.add(type);
+				rowData.add("" + excelItems.get(i).getReqQty());
+				rowData.add("" + excelItems.get(i).getTotalAmt());
+				rowData.add("" + excelItems.get(i).getAprQty());
+
+				rowData.add("" + excelItems.get(i).getAprGrandTotal());
+
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+
+			}
+
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "grnGvnReport");
+
+		} catch (Exception e) {
+
+			System.out.println("Ex in getting /getGrnGvnByGrpByDate List  Ajax call" + e.getMessage());
+			e.printStackTrace();
 		}
-		
-		
-		//showGGreportGrpByMonth r4 PDF
-		
-				@RequestMapping(value = "pdf/showGGreportGrpByMonth/{fDate}/{tDate}/{selectedFr}/{routeId}/{isGrn}", method = RequestMethod.GET)
-				public ModelAndView showGGreportGrpByMonthPdf(@PathVariable String fDate, @PathVariable String tDate,
-						@PathVariable String selectedFr, @PathVariable String routeId,@PathVariable int isGrn, HttpServletRequest request,
-						HttpServletResponse response) {
 
-					ModelAndView model = new ModelAndView("reports/grnGvn/pdf/r4");
+		return grnGvnGrpByDateList;
 
-					List<GGReportGrpByMonthDate> grnGvnGrpByDateList= new ArrayList<>();
-					
-					System.err.println("Inside PDF mapping");
-					
-					boolean isAllFrSelected = false;
-					
-					try {
+	}
 
-						if (!routeId.equalsIgnoreCase("0")) {
+	// showGGreportGrpByDate r3 PDF
 
-							MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+	@RequestMapping(value = "pdf/showGGreportGrpByDate/{fDate}/{tDate}/{selectedFr}/{routeId}/{isGrn}", method = RequestMethod.GET)
+	public ModelAndView showGGreportGrpByDatePdf(@PathVariable String fDate, @PathVariable String tDate,
+			@PathVariable String selectedFr, @PathVariable String routeId, @PathVariable int isGrn,
+			HttpServletRequest request, HttpServletResponse response) {
 
-							RestTemplate restTemplate = new RestTemplate();
+		ModelAndView model = new ModelAndView("reports/grnGvn/pdf/r3");
 
-							map.add("routeId", routeId);
+		List<GGReportGrpByMonthDate> grnGvnGrpByDateList = new ArrayList<>();
 
-							FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
-									map, FrNameIdByRouteIdResponse.class);
+		System.err.println("Inside PDF mapping");
 
-							List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+		boolean isAllFrSelected = false;
 
-							System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+		try {
 
-							StringBuilder sbForRouteFrId = new StringBuilder();
-							for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
+			if (!routeId.equalsIgnoreCase("0")) {
 
-								sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-							}
+				RestTemplate restTemplate = new RestTemplate();
 
-							String strFrIdRouteWise = sbForRouteFrId.toString();
-							selectedFr = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
-							System.out.println("fr Id Route WISE = " + selectedFr);
+				map.add("routeId", routeId);
 
-						} // end of if
+				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
+						map, FrNameIdByRouteIdResponse.class);
 
-						if (selectedFr.equalsIgnoreCase("-1")) {
-							isAllFrSelected = true;
-						}
+				List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
 
-						MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-						RestTemplate restTemplate = new RestTemplate();
+				System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
 
-						if (isAllFrSelected) {
+				StringBuilder sbForRouteFrId = new StringBuilder();
+				for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
 
-							System.out.println("Inside If all fr Selected ");
-							map.add("frIdList", 0);
-							
-						} else {
-							System.out.println("Inside else Few fr Selected ");
+					sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
 
-							map.add("frIdList", selectedFr);
-							
-							
-						}
-						
-							map.add("fromDate", DateConvertor.convertToYMD(fDate));
-							map.add("toDate", DateConvertor.convertToYMD(tDate));
-							
-							
-							if(isGrn==2) {
-								System.err.println("Is Grn ==2");
-								
-								map.add("isGrn", "1"+","+"0");
-							}
-							else {
-								System.err.println("Is Grn  not Eq 2");
-
-								map.add("isGrn", isGrn);
-
-							}
-							//map.add("isGrn", isGrn);
-							map.add("frIdList", 0);
-
-							ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
-							};
-							ResponseEntity<List<GGReportGrpByMonthDate>> responseEntity = restTemplate.exchange(
-									Constants.url + "getGGReportGrpByMonth", HttpMethod.POST, new HttpEntity<>(map), typeRef);
-							
-							grnGvnGrpByDateList = responseEntity.getBody();
-							
-							System.err.println("List---- " +grnGvnGrpByDateList.toString());
-
-						
-					} catch (Exception e) {
-						System.err.println("Exc in GRN PDF report 2");
-						e.printStackTrace();
-					}
-
-					model.addObject("fromDate", fDate);
-
-					model.addObject("toDate", tDate);
-
-					model.addObject("report", grnGvnGrpByDateList);
-
-					return model;
 				}
 
-		
+				String strFrIdRouteWise = sbForRouteFrId.toString();
+				selectedFr = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+				System.out.println("fr Id Route WISE = " + selectedFr);
+
+			} // end of if
+
+			if (selectedFr.equalsIgnoreCase("-1")) {
+				isAllFrSelected = true;
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+
+			if (isAllFrSelected) {
+
+				System.out.println("Inside If all fr Selected ");
+				map.add("frIdList", 0);
+
+			} else {
+				System.out.println("Inside else Few fr Selected ");
+
+				map.add("frIdList", selectedFr);
+
+			}
+
+			if (isGrn == 2) {
+				System.err.println("Is Grn ==2");
+
+				map.add("isGrn", "1" + "," + "0");
+			} else {
+				System.err.println("Is Grn  not Eq 2");
+
+				map.add("isGrn", isGrn);
+
+			}
+
+			map.add("fromDate", DateConvertor.convertToYMD(fDate));
+			map.add("toDate", DateConvertor.convertToYMD(tDate));
+			// map.add("isGrn", isGrn);
+			map.add("frIdList", 0);
+
+			ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
+			};
+			ResponseEntity<List<GGReportGrpByMonthDate>> responseEntity = restTemplate
+					.exchange(Constants.url + "getGGReportGrpByDate", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			grnGvnGrpByDateList = responseEntity.getBody();
+
+			System.err.println("List---- " + grnGvnGrpByDateList.toString());
+
+		} catch (Exception e) {
+			System.err.println("Exc in GRN PDF report 2");
+			e.printStackTrace();
+		}
+
+		model.addObject("fromDate", fDate);
+
+		model.addObject("toDate", tDate);
+
+		model.addObject("report", grnGvnGrpByDateList);
+
+		return model;
+	}
+
+	// r4
+
+	@RequestMapping(value = "/showGGReportGrpByMonth", method = RequestMethod.GET)
+	public ModelAndView showGGReportGrpByMonth(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/grnGvn/gGGrpByMonth");
+
+		try {
+
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			String todaysDate = date.format(formatters);
+
+			allFrIdNameList = getFrNameId();
+
+			allRouteListResponse = getAllRoute();
+
+			model.addObject("routeList", allRouteListResponse.getRoute());
+			model.addObject("todaysDate", todaysDate);
+			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
+
+		} catch (Exception e) {
+			System.out.println("Exce inshowGGReportDateWise " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	// r4 consume web service
+
+	@RequestMapping(value = "/getGrnGvnByGrpByMonth", method = RequestMethod.GET)
+	@ResponseBody
+	public List<GGReportGrpByMonthDate> getGrnGvnByGrpByMonth(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		List<GGReportGrpByMonthDate> grnGvnGrpByMonthList = new ArrayList<>();
+
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			String routeId = "0";
+			String frIdString = "";
+
+			System.out.println("inside getGrnGvnByDatewise ajax call");
+
+			frIdString = request.getParameter("fr_id_list");
+			String fromDate = request.getParameter("from_date");
+			String toDate = request.getParameter("to_date");
+			routeId = request.getParameter("route_id");
+			String isGrn = request.getParameter("is_grn");
+
+			String grnType;
+			if (isGrn.equalsIgnoreCase("2")) {
+
+				System.err.println("Is Grn =2");
+				grnType = "1" + "," + "0";
+
+				map.add("isGrn", grnType);
+			} else {
+				System.err.println("Is Grn not =2");
+				grnType = isGrn;
+				map.add("isGrn", isGrn);
+
+			}
+
+			System.out.println("fromDate= " + fromDate);
+
+			boolean isAllFrSelected = false;
+
+			frIdString = frIdString.substring(1, frIdString.length() - 1);
+			frIdString = frIdString.replaceAll("\"", "");
+
+			List<String> franchIds = new ArrayList();
+			franchIds = Arrays.asList(frIdString);
+
+			System.out.println("fr Id ArrayList " + franchIds.toString());
+
+			if (franchIds.contains("-1")) {
+				isAllFrSelected = true;
+
+			}
+
+			if (!routeId.equalsIgnoreCase("0")) {
+
+				map.add("routeId", routeId);
+
+				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
+						map, FrNameIdByRouteIdResponse.class);
+
+				List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+
+				System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+
+				StringBuilder sbForRouteFrId = new StringBuilder();
+				for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
+
+					sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
+
+				}
+
+				String strFrIdRouteWise = sbForRouteFrId.toString();
+				frIdString = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+				System.out.println("fr Id Route WISE = " + frIdString);
+
+			} // end of if
+
+			map = new LinkedMultiValueMap<String, Object>();
+			if (isAllFrSelected) {
+
+				System.out.println("Inside IF  is All fr Selected " + isAllFrSelected);
+
+				map.add("frIdList", 0);
+				// model.addObject("billHeadersList",billHeadersListForPrint);
+
+			} else { // few franchisee selected
+
+				System.out.println("Inside Else: Few Fr Selected ");
+				map.add("frIdList", frIdString);
+
+			}
+
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+			map.add("isGrn", grnType);
+			map.add("frIdList", 0);
+
+			ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
+			};
+			ResponseEntity<List<GGReportGrpByMonthDate>> responseEntity = restTemplate
+					.exchange(Constants.url + "getGGReportGrpByMonth", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			grnGvnGrpByMonthList = responseEntity.getBody();
+
+			System.err.println("List " + grnGvnGrpByMonthList.toString());
+
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+
+			rowData.add("Sr. No.");
+			rowData.add("Month");
+
+			rowData.add("Req Qty");
+			rowData.add("Req Value");
+			rowData.add("Apr Qty");
+			rowData.add("Apr Value");
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			List<GGReportGrpByMonthDate> excelItems = grnGvnGrpByMonthList;
+			for (int i = 0; i < excelItems.size(); i++) {
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+				rowData.add("" + (i + 1));
+
+				rowData.add(excelItems.get(i).getMonth());
+				rowData.add("" + excelItems.get(i).getReqQty());
+				rowData.add("" + excelItems.get(i).getTotalAmt());
+				rowData.add("" + excelItems.get(i).getAprQty());
+
+				rowData.add("" + excelItems.get(i).getAprGrandTotal());
+
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+
+			}
+
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "grnGvnReport");
+
+		} catch (Exception e) {
+
+			System.out.println("Ex in getting /getGrnGvnByGrpByDate List  Ajax call" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return grnGvnGrpByMonthList;
+
+	}
+
+	// showGGreportGrpByMonth r4 PDF
+
+	@RequestMapping(value = "pdf/showGGreportGrpByMonth/{fDate}/{tDate}/{selectedFr}/{routeId}/{isGrn}", method = RequestMethod.GET)
+	public ModelAndView showGGreportGrpByMonthPdf(@PathVariable String fDate, @PathVariable String tDate,
+			@PathVariable String selectedFr, @PathVariable String routeId, @PathVariable int isGrn,
+			HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/grnGvn/pdf/r4");
+
+		List<GGReportGrpByMonthDate> grnGvnGrpByDateList = new ArrayList<>();
+
+		System.err.println("Inside PDF mapping");
+
+		boolean isAllFrSelected = false;
+
+		try {
+
+			if (!routeId.equalsIgnoreCase("0")) {
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+				RestTemplate restTemplate = new RestTemplate();
+
+				map.add("routeId", routeId);
+
+				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
+						map, FrNameIdByRouteIdResponse.class);
+
+				List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+
+				System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+
+				StringBuilder sbForRouteFrId = new StringBuilder();
+				for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
+
+					sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
+
+				}
+
+				String strFrIdRouteWise = sbForRouteFrId.toString();
+				selectedFr = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+				System.out.println("fr Id Route WISE = " + selectedFr);
+
+			} // end of if
+
+			if (selectedFr.equalsIgnoreCase("-1")) {
+				isAllFrSelected = true;
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+
+			if (isAllFrSelected) {
+
+				System.out.println("Inside If all fr Selected ");
+				map.add("frIdList", 0);
+
+			} else {
+				System.out.println("Inside else Few fr Selected ");
+
+				map.add("frIdList", selectedFr);
+
+			}
+
+			map.add("fromDate", DateConvertor.convertToYMD(fDate));
+			map.add("toDate", DateConvertor.convertToYMD(tDate));
+
+			if (isGrn == 2) {
+				System.err.println("Is Grn ==2");
+
+				map.add("isGrn", "1" + "," + "0");
+			} else {
+				System.err.println("Is Grn  not Eq 2");
+
+				map.add("isGrn", isGrn);
+
+			}
+			// map.add("isGrn", isGrn);
+			map.add("frIdList", 0);
+
+			ParameterizedTypeReference<List<GGReportGrpByMonthDate>> typeRef = new ParameterizedTypeReference<List<GGReportGrpByMonthDate>>() {
+			};
+			ResponseEntity<List<GGReportGrpByMonthDate>> responseEntity = restTemplate
+					.exchange(Constants.url + "getGGReportGrpByMonth", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			grnGvnGrpByDateList = responseEntity.getBody();
+
+			System.err.println("List---- " + grnGvnGrpByDateList.toString());
+
+		} catch (Exception e) {
+			System.err.println("Exc in GRN PDF report 2");
+			e.printStackTrace();
+		}
+
+		model.addObject("fromDate", fDate);
+
+		model.addObject("toDate", tDate);
+
+		model.addObject("report", grnGvnGrpByDateList);
+
+		return model;
+	}
+
 }

@@ -11,107 +11,133 @@
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Grn Gvn Report  PDF</title>
+<title>Grn Gvn Report PDF</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
- <style type="text/css">
- table {
+<style type="text/css">
+table {
 	border-collapse: collapse;
 	font-size: 14;
-	width:100%;
+	width: 100%;
+}
 
-} 
-p  {
-    color: black;
-    font-family: arial;
-    font-size: 60%;
+p {
+	color: black;
+	font-family: arial;
+	font-size: 60%;
 	margin-top: 0;
 	padding: 0;
-
 }
-h6  {
-    color: black;
-    font-family: arial;
-    font-size: 80%;
+
+h6 {
+	color: black;
+	font-family: arial;
+	font-size: 80%;
 }
 
 th {
 	background-color: #EA3291;
 	color: white;
-	
 }
 </style>
 
 </head>
 <body onload="myFunction()">
-<h3 align="center">Galdhar Foods Pvt Ltd</h3>
-<p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
+	<h3 align="center">Galdhar Foods</h3>
+	<p align="center">Plot No.48,Chikalthana Midc, Aurangabad.</p>
 
-<div align="center"> <h5> GRN GVN Report (Franchise Wise)  &nbsp;&nbsp;&nbsp;&nbsp; From &nbsp; ${fromDate}  &nbsp;To &nbsp; ${toDate}</h5></div>
-	<table  align="center" border="1" cellspacing="0" cellpadding="1" 
+	<div align="center">
+		<h5>GRN GVN Report (Franchise Wise) &nbsp;&nbsp;&nbsp;&nbsp; From
+			&nbsp; ${fromDate} &nbsp;To &nbsp; ${toDate}</h5>
+	</div>
+	<table align="center" border="1" cellspacing="0" cellpadding="1"
 		id="table_grid" class="table table-bordered">
 		<thead>
 			<tr class="bgpink">
-				<th >Sr. No.</th>
-				<th >Type</th>
-				<th >Party Name</th>
-				<th >Req Qty</th>
-				<th  >Req Value</th>
-				<th >Apr Qty</th>
-				<th >Apr Amt</th>
+				<th>Sr. No.</th>
+				<th>Type</th>
+				<th>Party Name</th>
+				<th>Req Qty</th>
+				<th>Req Value</th>
+				<th>Apr Qty</th>
+				<th>Apr Amt</th>
+				<th>Fr Contri</th>
 			</tr>
 		</thead>
 		<tbody>
 			<c:set var="reqQtySum" value="${0}" />
+
+			<c:set var="frContriSum" value="${0}" />
 			<c:set var="reqValSum" value="${0}" />
 			<c:set var="aprQtySum" value="${0}" />
 			<c:set var="aprValSum" value="${0}" />
 			<c:forEach items="${report}" var="report" varStatus="count">
 				<tr>
-					<td width="60" align="center" ><c:out value="${count.index+1}" /></td>
+					<td width="60" align="center"><c:out value="${count.index+1}" /></td>
 					<c:choose>
-					<c:when test="${report.isGrn==0 || report.isGrn==2}">
-								<c:set var="type" value="GVN" />
-					</c:when>
-					<c:when test="${report.isGrn==1}">
-													<c:set var="type" value="GRN" />
-					</c:when>
+						<c:when test="${isGrn==0}">
+							<c:set var="type" value="GVN" />
+						</c:when>
+						<c:when test="${isGrn==1}">
+							<c:set var="type" value="GRN" />
+						</c:when>
+						<c:otherwise>
+							<c:set var="type" value="All" />
+						</c:otherwise>
 					</c:choose>
 					<td width="100" align="center"><c:out value="${type}" /></td>
 					<td width="120"><c:out value="${report.frName}" /></td>
 					<td width="100" align="center"><c:out value="${report.reqQty}" /></td>
-					<td width="100" align="right"><c:out value="${report.totalAmt}" /></td>
-										<td align="center" width="100"><c:out value="${report.aprQty}" /></td>
-										<td  align="right" width="100"><c:out value="${report.aprGrandTotal}" /></td>
+					<td width="100" align="right"><c:out
+							value="${report.totalAmt}" /></td>
+					<td align="center" width="100"><c:out value="${report.aprQty}" /></td>
+					<td align="right" width="100"><c:out
+							value="${report.aprGrandTotal}" /></td>
+					<td align="right" width="100"><fmt:formatNumber type="number"
+							maxFractionDigits="2" minFractionDigits="2"
+							value="${report.aprGrandTotal*0.25}" />
+						<%-- <c:out value="${report.aprGrandTotal*0.25}" /> --%></td>
+
+					<c:set var="frContriSum"
+						value="${frContriSum+report.aprGrandTotal*0.25}" />
+
 					<c:set var="reqQtySum" value="${reqQtySum + report.reqQty}" />
-					<c:set var="reqValSum"
-						value="${reqValSum+report.totalAmt}" />
-						
-							<c:set var="aprQtySum" value="${aprQtySum + report.aprQty}" />
-					<c:set var="aprValSum"
-						value="${aprValSum+report.aprGrandTotal}" />
-					
+					<c:set var="reqValSum" value="${reqValSum+report.totalAmt}" />
+
+					<c:set var="aprQtySum" value="${aprQtySum + report.aprQty}" />
+					<c:set var="aprValSum" value="${aprValSum+report.aprGrandTotal}" />
+
 				</tr>
 			</c:forEach>
-				<tr>
-				
-					<td width="100"colspan='3' align="right"><b>Total</b></td>
-					<td width="100"align="right"><b><fmt:formatNumber type="number"
-								maxFractionDigits="0"  minFractionDigits="0"  value="${reqQtySum}" /></b></td>
-					<td width="100" align="right"><b><fmt:formatNumber type="number"
-								maxFractionDigits="2"  minFractionDigits="2"  value="${reqValSum}" /></b></td>
-					<td width="100"align="right"><b><fmt:formatNumber type="number"
-								maxFractionDigits="0"  minFractionDigits="0"  value="${aprQtySum}" /></b></td>
-				
-					<td width="100" align="right"><b><fmt:formatNumber type="number"
-								maxFractionDigits="2"  minFractionDigits="2"  value="${aprValSum}" /></b></td>
-				</tr>
+			<tr>
+
+				<td width="100" colspan='3' align="right"><b>Total</b></td>
+				<td width="100" align="right"><b><fmt:formatNumber
+							type="number" maxFractionDigits="0" minFractionDigits="0"
+							value="${reqQtySum}" /></b></td>
+				<td width="100" align="right"><b><fmt:formatNumber
+							type="number" maxFractionDigits="2" minFractionDigits="2"
+							value="${reqValSum}" /></b></td>
+				<td width="100" align="right"><b><fmt:formatNumber
+							type="number" maxFractionDigits="0" minFractionDigits="0"
+							value="${aprQtySum}" /></b></td>
+
+				<td width="100" align="right"><b><fmt:formatNumber
+							type="number" maxFractionDigits="2" minFractionDigits="2"
+							value="${aprValSum}" /></b></td>
+
+				<td width="100" align="right"><b><fmt:formatNumber
+							type="number" maxFractionDigits="2" minFractionDigits="2"
+							value="${frContriSum}" /></b></td>
+
+
+			</tr>
 		</tbody>
 	</table>
-	
+
 
 	<!-- END Main Content -->
 

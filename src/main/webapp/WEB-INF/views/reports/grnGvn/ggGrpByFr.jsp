@@ -192,6 +192,7 @@
 										<th>Req Value</th>
 										<th>Apr Qty</th>
 										<th>Apr Value</th>
+										<th>Fr Contri</th>
 										
 									</tr>
 								</thead>
@@ -296,11 +297,11 @@
 														//var tr = "<tr>";
 														
 														var type=null;
-														if(report.isGrn==0)
+														if(isGrn==0)
 															type="GVN";
-														else if(report.isGrn==1)
+														else if(isGrn==1)
 															type="GRN";
-														else type="Cust Complaint";
+														else type="All";
 														
 														var tr = $('<tr></tr>');
 													  	tr.append($('<td></td>').html(key+1));
@@ -310,7 +311,8 @@
 													  	tr.append($('<td></td>').html(report.totalAmt));
 													  	tr.append($('<td></td>').html(report.aprQty));
 													  	tr.append($('<td></td>').html(report.aprGrandTotal));
-														
+													  	tr.append($('<td></td>').html((report.aprGrandTotal*0.25).toFixed(2)));
+
 														$('#table_grid tbody')
 																.append(
 																		tr);

@@ -54,6 +54,7 @@ import com.itextpdf.text.Font.FontFamily;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.sun.org.apache.bcel.internal.util.SyntheticRepository;
 
 @Controller
 @Scope("session")
@@ -69,7 +70,9 @@ public class SaleCompareReportController {
 			modelAndView = new ModelAndView("reports/salescomparison");
 
 			int year = Year.now().getValue();
-
+			int prevYear=year-1;
+			
+			modelAndView.addObject("prevYear", prevYear);
 			modelAndView.addObject("year", year);
 		} catch (Exception e) {
 
@@ -238,13 +241,68 @@ public class SaleCompareReportController {
 	
 		try {
 		String month = request.getParameter("month");
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		
+		
+		int year = Year.now().getValue();
+		String m=null;
+		if(Integer.parseInt(month)>12) {
+			
+			year=year-1;
+			
+		}
+		if(Integer.parseInt(month)==13) {
+			System.err.println("a 13");
+			m="1";
+		}else if(Integer.parseInt(month)==20) {
+			System.err.println("a 20");
+			m="2";
+		}else if(Integer.parseInt(month)==30) {
+			System.err.println("a 30");
+			m="3";
+		}
+		else if(Integer.parseInt(month)==40) {
+			System.err.println("a 40");
+			m="4";
+		}else if(Integer.parseInt(month)==50) {
+			System.err.println("a 50");
+			m="5";
+		}
+		else if(Integer.parseInt(month)==60) {
+			System.err.println("a 60");
+			m="6";
+		}else if(Integer.parseInt(month)==70) {
+			System.err.println("a 70");
+			m="7";
+		}else if(Integer.parseInt(month)==80) {
+			System.err.println("a 80");
+			m="8";
+		}else if(Integer.parseInt(month)==90) {
+			System.err.println("a 90");
+			m="9";
+		}else if(Integer.parseInt(month)==100) {
+			System.err.println("a 100");
+			m="10";
+		}else if(Integer.parseInt(month)==110) {
+			System.err.println("a 110");
+			m="11";
+		}else if(Integer.parseInt(month)==120) {
+			System.err.println("a 120");
+			m="12";
+		}
+		else {
+			m=month;
+			System.err.println("m Else final ");
+		}
+		System.err.println("Year " +year +"Month " +month);
+	
+		map.add("monthNumber", m);
+		map.add("year", year);
+
 
 		RestTemplate restTemplate = new RestTemplate();
 
-		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-		int year = Year.now().getValue();
-		map.add("monthNumber", month);
-		map.add("year", year);
+	
 		SalesComparison reportList = restTemplate.postForObject(Constants.url + "getSalesReportComparion", map,
 				SalesComparison.class);
 		AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
@@ -299,7 +357,7 @@ public class SaleCompareReportController {
 		}
 
 		map = new LinkedMultiValueMap<String, Object>();
-		int intMonth = Integer.parseInt(month);
+		int intMonth = Integer.parseInt(m);
 		intMonth = intMonth - 1;
 
 		map.add("monthNumber", intMonth);
@@ -416,7 +474,7 @@ public class SaleCompareReportController {
 		List<String> months = Arrays.asList("","January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
 		salesCompareList.setPrevMonth(months.get(intMonth)+"-"+year);
-		salesCompareList.setCurrMonth(months.get(Integer.parseInt(month))+"-"+year);
+		salesCompareList.setCurrMonth(months.get(Integer.parseInt(m))+"-"+year);
 		
 		
 		            // export to excel
