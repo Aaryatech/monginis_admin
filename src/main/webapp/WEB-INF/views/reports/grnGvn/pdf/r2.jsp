@@ -64,7 +64,7 @@ th {
 				<th>Req Value</th>
 				<th>Apr Qty</th>
 				<th>Apr Amt</th>
-			<!-- 	<th>Fr Contri</th> -->
+				<th>Fr Contri</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -96,13 +96,37 @@ th {
 					<td align="center" width="100"><c:out value="${report.aprQty}" /></td>
 					<td align="right" width="100"><c:out
 							value="${report.aprGrandTotal}" /></td>
-				<%-- 	<td align="right" width="100"><fmt:formatNumber type="number"
-							maxFractionDigits="2" minFractionDigits="2"
-							value="${report.aprGrandTotal*0.25}" /> --%>
-						<%-- <c:out value="${report.aprGrandTotal*0.25}" /> --%></td>
 
-					<c:set var="frContriSum"
-						value="${frContriSum+report.aprGrandTotal*0.25}" />
+					<%-- <c:out value="${report.aprGrandTotal*0.25}" /> --%>
+				
+
+					<!-- var value1=parseFloat(report.aprGrandTotal)*100;
+													  	var billValue=parseFloat(value1)/75;
+													  	 frCont=parseFloat(billValue)*0.25;
+													  	  -->
+					<c:set var="value1" value="${report.aprGrandTotal*100}" />
+
+					<c:set var="billValue" value="${value1/75}" />
+
+					<c:set var="frCont" value="${billValue*0.25}" />
+
+					<c:choose>
+						<c:when test="${isGrn==1 or isGrn==2}">
+							<td align="right" width="100"><fmt:formatNumber
+									type="number" maxFractionDigits="2" minFractionDigits="2"
+									value="${frCont}" /></td>
+						</c:when>
+						<c:otherwise>
+
+
+							<td align="right" width="100"><fmt:formatNumber
+									type="number" maxFractionDigits="2" minFractionDigits="2"
+									value="${0}" /></td>
+						</c:otherwise>
+					</c:choose>
+
+
+					<c:set var="frContriSum" value="${frContriSum+frCont}" />
 
 					<c:set var="reqQtySum" value="${reqQtySum + report.reqQty}" />
 					<c:set var="reqValSum" value="${reqValSum+report.totalAmt}" />
@@ -129,9 +153,9 @@ th {
 							type="number" maxFractionDigits="2" minFractionDigits="2"
 							value="${aprValSum}" /></b></td>
 
-				<%-- <td width="100" align="right"><b><fmt:formatNumber
+				<td width="100" align="right"><b><fmt:formatNumber
 							type="number" maxFractionDigits="2" minFractionDigits="2"
-							value="${frContriSum}" /></b></td> --%>
+							value="${frContriSum}" /></b></td>
 
 
 			</tr>
