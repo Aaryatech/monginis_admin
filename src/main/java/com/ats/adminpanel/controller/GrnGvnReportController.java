@@ -1065,10 +1065,12 @@ public class GrnGvnReportController {
 				rowData.add("" + excelItems.get(i).getAprQty());
 
 				rowData.add("" + excelItems.get(i).getAprGrandTotal());
-				
+			float 	frCont=0;
+			if (isGrn.equalsIgnoreCase("1")|| isGrn.equalsIgnoreCase("2")) {
 				float value1=excelItems.get(i).getAprGrandTotal()*100;
 				float billValue=(value1)/75;
-				float frCont=(float) ((billValue)*0.25);
+				 frCont=(float) ((billValue)*0.25);
+			}
 			  	
 				rowData.add("" + roundUp(frCont));
 

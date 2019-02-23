@@ -64,7 +64,7 @@ th {
 				<th>Req Value</th>
 				<th>Apr Qty</th>
 				<th>Apr Amt</th>
-				<th>Fr Contri</th>
+			<!-- 	<th>Fr Contri</th> -->
 			</tr>
 		</thead>
 		<tbody>
@@ -96,9 +96,9 @@ th {
 					<td align="center" width="100"><c:out value="${report.aprQty}" /></td>
 					<td align="right" width="100"><c:out
 							value="${report.aprGrandTotal}" /></td>
-					<td align="right" width="100"><fmt:formatNumber type="number"
+				<%-- 	<td align="right" width="100"><fmt:formatNumber type="number"
 							maxFractionDigits="2" minFractionDigits="2"
-							value="${report.aprGrandTotal*0.25}" />
+							value="${report.aprGrandTotal*0.25}" /> --%>
 						<%-- <c:out value="${report.aprGrandTotal*0.25}" /> --%></td>
 
 					<c:set var="frContriSum"
@@ -129,9 +129,9 @@ th {
 							type="number" maxFractionDigits="2" minFractionDigits="2"
 							value="${aprValSum}" /></b></td>
 
-				<td width="100" align="right"><b><fmt:formatNumber
+				<%-- <td width="100" align="right"><b><fmt:formatNumber
 							type="number" maxFractionDigits="2" minFractionDigits="2"
-							value="${frContriSum}" /></b></td>
+							value="${frContriSum}" /></b></td> --%>
 
 
 			</tr>
