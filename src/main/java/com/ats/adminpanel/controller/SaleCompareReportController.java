@@ -241,16 +241,35 @@ public class SaleCompareReportController {
 	
 		try {
 		String month = request.getParameter("month");
+		String month_next = request.getParameter("month_next");
+		
+		System.err.println("Year" +month +"Month" +month_next);
+		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		
 		
 		int year = Year.now().getValue();
+		int year_next = Year.now().getValue();
+		
 		String m=null;
+		String m_next=null;
+		
+		
+		
 		if(Integer.parseInt(month)>12) {
 			
 			year=year-1;
 			
 		}
+		if(Integer.parseInt(month_next)>12) {
+			
+			year_next=year_next-1;
+			
+		}
+		
+		System.err.println("Year " +year_next +"Month_next" +m_next);
+		System.err.println("Year " +year +"Month " +m);
+		
 		if(Integer.parseInt(month)==13) {
 			System.err.println("a 13");
 			m="1";
@@ -294,7 +313,57 @@ public class SaleCompareReportController {
 			m=month;
 			System.err.println("m Else final ");
 		}
-		System.err.println("Year " +year +"Month " +month);
+		
+		
+		
+		if(Integer.parseInt(month_next)==13) {
+			System.err.println("a 13");
+			m_next="1";
+		}else if(Integer.parseInt(month_next)==20) {
+			System.err.println("a 20");
+			m_next="2";
+		}else if(Integer.parseInt(month_next)==30) {
+			System.err.println("a 30");
+			m_next="3";
+		}
+		else if(Integer.parseInt(month_next)==40) {
+			System.err.println("a 40");
+			m_next="4";
+		}else if(Integer.parseInt(month_next)==50) {
+			System.err.println("a 50");
+			m_next="5";
+		}
+		else if(Integer.parseInt(month_next)==60) {
+			System.err.println("a 60");
+			m_next="6";
+		}else if(Integer.parseInt(month_next)==70) {
+			System.err.println("a 70");
+			m_next="7";
+		}else if(Integer.parseInt(month_next)==80) {
+			System.err.println("a 80");
+			m_next="8";
+		}else if(Integer.parseInt(month_next)==90) {
+			System.err.println("a 90");
+			m_next="9";
+		}else if(Integer.parseInt(month_next)==100) {
+			System.err.println("a 100");
+			m_next="10";
+		}else if(Integer.parseInt(month_next)==110) {
+			System.err.println("a 110");
+			m_next="11";
+		}else if(Integer.parseInt(month_next)==120) {
+			System.err.println("a 120");
+			m_next="12";
+		}
+		else {
+			m_next=month_next;
+			System.err.println("m Else final ");
+		}
+		
+		
+		
+		System.err.println("Year " +year_next +"Month " +m_next);
+		System.err.println("Year " +year +"Month " +m);
 	
 		map.add("monthNumber", m);
 		map.add("year", year);
@@ -357,11 +426,11 @@ public class SaleCompareReportController {
 		}
 
 		map = new LinkedMultiValueMap<String, Object>();
-		int intMonth = Integer.parseInt(m);
-		intMonth = intMonth - 1;
+		int intMonth = Integer.parseInt(m_next);
+		//intMonth = intMonth - 1;
 
 		map.add("monthNumber", intMonth);
-		map.add("year", year);
+		map.add("year", year_next);
 		SalesComparison prevMonthReport = restTemplate.postForObject(Constants.url + "getSalesReportComparion", map,
 				SalesComparison.class);
 
@@ -473,8 +542,8 @@ public class SaleCompareReportController {
 		salesCompareList.setSaleCompFinal(saleCompFinal);
 		List<String> months = Arrays.asList("","January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December");
 
-		salesCompareList.setPrevMonth(months.get(intMonth)+"-"+year);
-		salesCompareList.setCurrMonth(months.get(Integer.parseInt(m))+"-"+year);
+		salesCompareList.setPrevMonth(months.get(Integer.parseInt(m))+"-"+year);
+		salesCompareList.setCurrMonth(months.get(intMonth)+"-"+year_next);
 		
 		
 		            // export to excel
@@ -485,15 +554,15 @@ public class SaleCompareReportController {
 					List<String> rowData = new ArrayList<String>();
 
 					rowData.add("Party Name");
-					rowData.add("Prev Month Sale Value("+salesCompareList.getPrevMonth()+")");
-					rowData.add("Current Month Sale Value("+salesCompareList.getCurrMonth()+")");
+					rowData.add("First Month Sale Value("+salesCompareList.getPrevMonth()+")");
+					rowData.add("Second Month Sale Value("+salesCompareList.getCurrMonth()+")");
 					rowData.add("Last Month Diff("+salesCompareList.getPrevMonth()+"--"+salesCompareList.getCurrMonth()+")");
 					rowData.add("%");
 					rowData.add("Route");
 					rowData.add("Average Per Day Sale");
-					rowData.add("11.11% ("+salesCompareList.getCurrMonth()+")");
-					rowData.add("14.9% ("+salesCompareList.getCurrMonth()+")");
-					rowData.add("17.6% ("+salesCompareList.getCurrMonth()+")");
+					rowData.add("11.11% ("+salesCompareList.getPrevMonth()+")");
+					rowData.add("14.9% ("+salesCompareList.getPrevMonth()+")");
+					rowData.add("17.6% ("+salesCompareList.getPrevMonth()+")");
 					
 					expoExcel.setRowData(rowData);
 					exportToExcelList.add(expoExcel);
@@ -516,8 +585,9 @@ public class SaleCompareReportController {
 						prevMonthRouteTotal=prevMonthRouteTotal+salesCompareList.getSaleCompFinal().get(i).getPrevMonthSale();
 						
 						rowData.add("" + salesCompareList.getSaleCompFinal().get(i).getFrName());
-						rowData.add("" + salesCompareList.getSaleCompFinal().get(i).getPrevMonthSale());
 						rowData.add("" + salesCompareList.getSaleCompFinal().get(i).getPerMonthSale());
+						rowData.add("" + salesCompareList.getSaleCompFinal().get(i).getPrevMonthSale());
+						
 						rowData.add("" + salesCompareList.getSaleCompFinal().get(i).getLastMonthDiff());
 						rowData.add(roundUp(salesCompareList.getSaleCompFinal().get(i).getMonthDiffInPer())+"");
 						rowData.add("" + salesCompareList.getSaleCompFinal().get(i).getRouteName());
@@ -729,19 +799,19 @@ public class SaleCompareReportController {
 
 			table.addCell(hcell);
 			
-			hcell = new PdfPCell(new Phrase("11.11% ("+salesCompareList.getCurrMonth()+")", headFont1));
+			hcell = new PdfPCell(new Phrase("11.11% ("+salesCompareList.getPrevMonth()+")", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 
 			table.addCell(hcell);
 			
-			hcell = new PdfPCell(new Phrase("14.9% ("+salesCompareList.getCurrMonth()+")", headFont1));
+			hcell = new PdfPCell(new Phrase("14.9% ("+salesCompareList.getPrevMonth()+")", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 
 			table.addCell(hcell);
 			
-			hcell = new PdfPCell(new Phrase("17.6% ("+salesCompareList.getCurrMonth()+")", headFont1));
+			hcell = new PdfPCell(new Phrase("17.6% ("+salesCompareList.getPrevMonth()+")", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 
@@ -766,6 +836,14 @@ public class SaleCompareReportController {
 				cell.setPadding(3);
 				table.addCell(cell);
 
+				cell = new PdfPCell(new Phrase(""+salesComparison.getPerMonthSale(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+				
+				
 				cell = new PdfPCell(new Phrase(""+salesComparison.getPrevMonthSale(), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
@@ -773,12 +851,7 @@ public class SaleCompareReportController {
 				cell.setPadding(3);
 				table.addCell(cell);
 				
-				cell = new PdfPCell(new Phrase(""+salesComparison.getPerMonthSale(), headFont));
-				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-				cell.setPaddingRight(2);
-				cell.setPadding(3);
-				table.addCell(cell);
+				
 				currRouteTotal=currRouteTotal+salesComparison.getPerMonthSale();
 				prevMonthRouteTotal=prevMonthRouteTotal+salesComparison.getPrevMonthSale();
 				float perDaySaleAvg=roundUp(salesComparison.getPerMonthSale()/30);

@@ -61,11 +61,24 @@
 
 
 					<div class="form-group">
-						<label class="col-sm-3 col-lg-2	 control-label">Select
+						<label class="col-sm-3 col-lg-2	 control-label">Select First
 							Month</label>
 						<div class="col-sm-6 col-lg-4 controls date_select">
 							<select class="form-control" name="sel_month" id="sel_month">
 
+								<option value="13">Jan  ${prevYear}</option>
+								<option value="20">Feb  ${prevYear}</option>
+								<option value="30">Mar  ${prevYear}</option>
+								<option value="40">Apr  ${prevYear}</option>
+								<option value="50">May  ${prevYear}</option>
+								<option value="60">Jun  ${prevYear}</option>
+								<option value="70">Jul  ${prevYear}</option>
+								<option value="80">Aug  ${prevYear}</option>
+								<option value="90">Sep  ${prevYear}</option>
+								<option value="100">Oct ${prevYear}</option>
+								<option value="110">Nov ${prevYear}</option>
+								<option value="120">Dec  ${prevYear}</option>
+								
 								<option value="1">Jan  ${year}</option>
 								<option value="2">Feb  ${year}</option>
 								<option value="3">Mar  ${year}</option>
@@ -80,6 +93,17 @@
 								<option value="12">Dec  ${year}</option>
 								
 								
+								
+
+							</select>
+						</div>
+						
+					
+						<label class="col-sm-3 col-lg-2	 control-label">Select Second
+							Month</label>
+						<div class="col-sm-6 col-lg-4 controls date_select">
+							<select class="form-control" name="sel_month_next" id="sel_month_next">
+
 								<option value="13">Jan  ${prevYear}</option>
 								<option value="20">Feb  ${prevYear}</option>
 								<option value="30">Mar  ${prevYear}</option>
@@ -92,9 +116,30 @@
 								<option value="100">Oct ${prevYear}</option>
 								<option value="110">Nov ${prevYear}</option>
 								<option value="120">Dec  ${prevYear}</option>
+								
+								<option value="1">Jan  ${year}</option>
+								<option value="2">Feb  ${year}</option>
+								<option value="3">Mar  ${year}</option>
+								<option value="4">Apr  ${year}</option>
+								<option value="5">May  ${year}</option>
+								<option value="6">Jun  ${year}</option>
+								<option value="7">Jul  ${year}</option>
+								<option value="8">Aug  ${year}</option>
+								<option value="9">Sep  ${year}</option>
+								<option value="10">Oct ${year}</option>
+								<option value="11">Nov ${year}</option>
+								<option value="12">Dec  ${year}</option>
+								
+								
+								
 
 							</select>
 						</div>
+						
+						
+						
+						
+						
 						<label class="col-sm-3 col-lg-2	 control-label"></label>
 						<div class="col-sm-6 col-lg-4 controls date_select">
 							<button class="btn btn-info" onclick="searchReport()">Search
@@ -104,6 +149,7 @@
 						</div>
 					</div>
 				</div>
+				
 				<br>
 
 				<div align="center" id="loader" style="display: none">
@@ -154,27 +200,27 @@
 								<th rowspan="1"></th>
 								<th rowspan="1"></th>
 								<th rowspan="1" ></th>
-								<th colspan="3" style="text-align:center;" id="actualMonth"></th>
+								<th colspan="3" style="text-align:center;" id="actualMonth">First Month</th>
 								
 							</tr>
 							<tr>
 							
 								<th rowspan="2">Party Name</th>
-								<th colspan="2">Prev Month Sale Value</th>
-								<th colspan="2" >Current Month</th>
-								<th colspan="2">Last Month</th>
+								<th colspan="2">First Month Sale Value</th>
+								<th colspan="2" >Second Month Sale Value</th>
+								<th colspan="2">Sale Difference</th>
 								<th rowspan="2">Percent(%)</th>
 								<th rowspan="2">Route</th>
-								<th rowspan="2">Avg Per Day Sale</th>
+								<th rowspan="2">Avg Per Day Sale First Month</th>
 								<th colspan="3">Franchise Margin On Billing Not On Mrp</th>
 							</tr>
 							<tr>
 							<th colspan="2" align="center" id="prevMonth"></th>
 							<th colspan="2" align="center" id="currMonth"></th>
 							<th colspan="2" align="left" id="diff"></th>
-							<th rowspan="1">10%</th>
-								<th rowspan="1">13%</th>
-								<th rowspan="1">15%</th>
+							<th rowspan="1">10% First Month</th>
+								<th rowspan="1">13% First Month</th>
+								<th rowspan="1">15% First Month</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -231,12 +277,36 @@
 		class="fa fa-chevron-up"></i></a>
 </div></div>
 	<script type="text/javascript">
+	
+	
+	  function dropdown(monthfield, yearfield){
+        var monthtext=['01','02','03','04','05','06','07','08','09','10','11','12'];
+        var today=new Date()
+        var monthfield=document.getElementById(monthfield)
+        var yearfield=document.getElementById(yearfield)
+        var thisyear=today.getFullYear()
+        var thismonth=today.getMonth()
+        
+        var id = 0;
+        for (var y=0; y<=20; y++){
+            for (var m=(monthtext.length-1); m>=0; m--, id++){
+                if(m<=thismonth){
+                    yearfield.options[id]=new Option(thisyear+"-"+monthtext[m], thisyear+""+monthtext[m])
+                }else{}
+            }
+            thisyear-=1
+            thismonth = 12;
+        }
+        yearfield.options[0]=new Option(today.getFullYear(), today.getFullYear(), true, true) //select today's year
+    }
+	
+	
 		function searchReport() {
 		//	var isValid = validate();
 		
 			var month = $("#sel_month").val();
-		
-				
+			var month_next = $("#sel_month_next").val();
+			
 
 				$('#loader').show();
 
@@ -247,6 +317,7 @@
 								{
 									
 									month:month,
+									month_next:month_next,
 									ajax : 'true'
 
 								},
@@ -270,7 +341,7 @@
 									 document.getElementById('prevMonth').innerHTML=data.prevMonth;
 									 document.getElementById('currMonth').innerHTML=data.currMonth;
 									 document.getElementById('diff').innerHTML=data.prevMonth+" "+data.currMonth+"  diff";
-									 document.getElementById('actualMonth').innerHTML=data.currMonth;
+									 document.getElementById('actualMonth').innerHTML=data.prevMonth;
 									 $.each(data.routeList,function(key, route) {
 								    var prevMonthRouteSale=0;
 								    var currMonthRouteSale=0;
@@ -285,8 +356,8 @@
 													  	//tr.append($('<td></td>').html(key+1));
 													  
 													  	tr.append($('<td style="text-align:left;"></td>').html(report.frName));
-													  	tr.append($('<td colspan="2" style="text-align:right;"></td>').html((report.prevMonthSale).toFixed(2)));
 													  	tr.append($('<td colspan="2" style="text-align:right;"></td>').html((report.perMonthSale).toFixed(2)));
+													  	tr.append($('<td colspan="2" style="text-align:right;"></td>').html((report.prevMonthSale).toFixed(2)));	
 													  	tr.append($('<td colspan="2" style="text-align:right;"></td>').html((report.lastMonthDiff).toFixed(2)));
 													  	tr.append($('<td style="text-align:right;"></td>').html((report.monthDiffInPer).toFixed(2)));
 													  	tr.append($('<td style="text-align:left;"></td>').html(report.routeName));
