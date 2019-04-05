@@ -921,7 +921,7 @@ public class CreditNoteController {
 		try {
 			
 			String header=
-					"                                           Galdhar Foods Pvt.Ltd\n" + "          Factory Add: A-32 Shendra, MIDC, Aurangabad-4331667"
+					"                                           Galdhar Foods\n" + "          Factory Add: Plot No.48,Chikalthana Midc, Aurangabad."
 							+ "\n              Phone:0240-2466217, Email: aurangabad@monginis.net";
 		
 
@@ -947,9 +947,9 @@ public class CreditNoteController {
 			System.out.println("Inside PDF Table try");
 			table.setWidthPercentage(100);
 			table.setWidths(new float[] { 0.6f, 0.4f, 1.2f,1.7f,1.1f,1.1f,1.1f,0.8f,1.1f,1.0f});
-			Font headFont = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
-			Font headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
-			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
+			Font headFont = new Font(FontFamily.TIMES_ROMAN, 11, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 11, Font.BOLD, BaseColor.BLACK);
+			Font f = new Font(FontFamily.TIMES_ROMAN, 11.0f, Font.UNDERLINE, BaseColor.BLUE);
 
 			PdfPCell hcell=new PdfPCell();
 			hcell.setBackgroundColor(BaseColor.PINK);

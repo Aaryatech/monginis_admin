@@ -986,7 +986,7 @@ public class SaleCompareReportController {
 			
 			
 			document.open();
-			Paragraph name = new Paragraph(" Galdhar Foods Pvt.Ltd\n", f);
+			Paragraph name = new Paragraph(" Galdhar Foods\n", f);
 			name.setAlignment(Element.ALIGN_CENTER);
 			document.add(name);
 			document.add(new Paragraph(" "));
@@ -1169,7 +1169,7 @@ public class SaleCompareReportController {
 			
 			
 			document.open();
-			Paragraph name = new Paragraph(" Galdhar Foods Pvt.Ltd\n", f);
+			Paragraph name = new Paragraph(" Galdhar Foods\n", f);
 			name.setAlignment(Element.ALIGN_CENTER);
 			document.add(name);
 			document.add(new Paragraph(" "));

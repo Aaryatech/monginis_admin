@@ -390,7 +390,7 @@ public class RegCakeAsSpOrderController {
 
 			document.open();
 			Paragraph company = new Paragraph(
-					"Galdhar Foods Pvt.Ltd\n" + "Factory Add: A-32 Shendra, MIDC, Auraangabad-4331667"
+					"Galdhar Foods\n" + "Factory Add: Plot No.48,Chikalthana Midc, Aurangabad."
 							+ " Phone:0240-2466217, Email: aurangabad@monginis.net",
 					f);
 			company.setAlignment(Element.ALIGN_CENTER);

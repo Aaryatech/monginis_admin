@@ -15,8 +15,8 @@ contentType="text/html; charset=ISO8859_1"%>
 <body>
   	<c:forEach items="${crnPrint}" var="headerH" varStatus="count">
 						<h4 align="center">Credit Note</h4>
-    <h4 style="color:#000; font-size:16px; text-align:center; margin:0px;">Galdhar Foods Pvt.Ltd</h4>
-   <p style="color:#000; font-size:10px; text-align:center;margin:0px;">Factory Add: A-32 Shendra, MIDC, Auraangabad-4331667 <br />
+    <h4 style="color:#000; font-size:16px; text-align:center; margin:0px;">Galdhar Foods</h4>
+   <p style="color:#000; font-size:10px; text-align:center;margin:0px;">Factory Add: Plot No.48,Chikalthana Midc, Aurangabad. <br />
 Phone:0240-2466217, Email: aurangabad@monginis.net</p>
 <br></br> 
 <table width="100%" border="0"  cellpadding="0" cellspacing="0" style="border-left:1px solid #313131;border-right:1px solid #313131;">

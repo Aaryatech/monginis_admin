@@ -88,7 +88,7 @@
 					</p>
 					<p
 						style="color: #000; font-size: 13px; text-align: left; margin: 0px;">Place
-						of supply: &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Maharashtra</p>
+						of supply: &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ${frDetails.company.state}</p>
 				</td>
 			</tr>
 			<tr>
@@ -344,7 +344,7 @@
 					</p>
 					<p
 						style="color: #000; font-size: 13px; text-align: left; margin: 0px;">Place
-						of supply:&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; Maharashtra</p>
+						of supply:&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; ${frDetails.company.state}</p>
 				</td>
 			</tr>
 			<tr>
