@@ -51,7 +51,7 @@ th {
 	<h4 align="center">Galdhar Foods Pvt Ltd</h4>
 	<p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
 	<div align="center">
-		<h5>Dispatch Sheet &nbsp;&nbsp;&nbsp;&nbsp; Date &nbsp;
+		<h5>Stationwise Item Dispatch Sheet &nbsp;&nbsp;&nbsp;&nbsp; Date &nbsp;
 			${billDate} Route ${routeName}</h5>
 	</div>
 
@@ -134,7 +134,7 @@ th {
 
 
 
-			<tr>
+			<%-- <tr>
 				<td bgcolor="#fc67ca"><c:out value="" /></td>
 
 				<c:set var="totalItems" value="0" />
@@ -158,7 +158,7 @@ th {
 				<td align="right" bgcolor="#fc67ca"><b><fmt:formatNumber
 							type="number" maxFractionDigits="2" value="${totalItems}" /></b></td>
 			</tr>
-
+ --%>
 
 			<tr>
 

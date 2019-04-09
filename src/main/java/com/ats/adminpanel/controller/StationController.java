@@ -200,7 +200,7 @@ public class StationController {
 			System.out.println(e.getMessage());
 		}
 
-		return "redirect:/showDiscountList";
+		return "redirect:/addStation";
 	}
 
 	AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
@@ -280,11 +280,11 @@ public class StationController {
 			String routeId = request.getParameter("route_id");
 			String selectedStation = request.getParameter("station_id_list");
 
-			boolean isAllCatSelected = false;
+			boolean isAllStationSelected = false;
 			String selectedFr = null;
 
 			if (selectedStation.contains("-1")) {
-				isAllCatSelected = true;
+				isAllStationSelected = true;
 			} else {
 				selectedStation = selectedStation.substring(1, selectedStation.length() - 1);
 				selectedStation = selectedStation.replaceAll("\"", "");
@@ -317,9 +317,6 @@ public class StationController {
 			selectedFr = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
 			System.out.println("fr Id Route WISE = " + selectedFr);
 
-			if (selectedStation.contains("-1")) {
-				isAllCatSelected = true;
-			}
 
 			map = new LinkedMultiValueMap<String, Object>();
 
@@ -334,7 +331,7 @@ public class StationController {
 
 			}
 
-			if (isAllCatSelected) {
+			if (isAllStationSelected) {
 				map = new LinkedMultiValueMap<String, Object>();
 
 				Station[] usrArray = restTemplate.getForObject(Constants.url + "getStationList", Station[].class);
@@ -383,7 +380,7 @@ public class StationController {
 				dispatchReports.setItemList(responseEntity1.getBody());
 
 			} else {
-				System.out.println("selectedCat" + selectedStation.toString());
+				System.out.println("selectedStation" + selectedStation.toString());
 				System.out.println("selectedFr" + selectedFr.toString());
 
 				List<Integer> stationIdList = Stream.of(selectedStation.split(",")).map(Integer::parseInt)
@@ -421,7 +418,7 @@ public class StationController {
 				System.out.println("dispatchReportList = " + dispatchReportList.toString());
 
 				map = new LinkedMultiValueMap<String, Object>();
-				map.add("itemIdList", selectedStation);
+				map.add("itemIdList", itemIdList);
 				ParameterizedTypeReference<List<Item>> typeRef1 = new ParameterizedTypeReference<List<Item>>() {
 				};
 
@@ -444,7 +441,7 @@ public class StationController {
 
 	}
 
-	@RequestMapping(value = "pdf/getStationReportPdf/{billDate}/{routeId}/{selectedCat}", method = RequestMethod.GET)
+	@RequestMapping(value = "pdf/getStationReportPdf/{billDate}/{routeId}/{selectedStation}", method = RequestMethod.GET)
 	public ModelAndView getStationReportPdf(@PathVariable String billDate, @PathVariable String routeId,
 			@PathVariable String selectedStation, HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("reports/stationReportPdf");
@@ -608,7 +605,7 @@ public class StationController {
 				System.out.println("dispatchReportList = " + dispatchReportList.toString());
 
 				map = new LinkedMultiValueMap<String, Object>();
-				map.add("itemIdList", selectedStation);
+				map.add("itemIdList", itemIdList);
 				ParameterizedTypeReference<List<Item>> typeRef1 = new ParameterizedTypeReference<List<Item>>() {
 				};
 
