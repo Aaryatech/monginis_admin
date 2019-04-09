@@ -317,7 +317,6 @@ public class StationController {
 			selectedFr = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
 			System.out.println("fr Id Route WISE = " + selectedFr);
 
-
 			map = new LinkedMultiValueMap<String, Object>();
 
 			allFrIdNameList = new AllFrIdNameList();
@@ -448,7 +447,7 @@ public class StationController {
 		RestTemplate restTemplate = new RestTemplate();
 
 		List<DispatchReport> dispatchReportList = new ArrayList<DispatchReport>();
-		DispatchReportList dispatchReports = new DispatchReportList();
+		List<Station> stationListRes = new ArrayList<Station>();
 		try {
 			System.out.println("Inside get Dispatch Report");
 
@@ -532,6 +531,7 @@ public class StationController {
 				for (Station sList : stationList) {
 					// cateList.add(mCategoryList.getCatId());
 					cateList = cateList.append(sList.getItemId().toString() + ",");
+					stationListRes.add(sList);
 				}
 
 				String catlist = cateList.toString();
@@ -583,6 +583,7 @@ public class StationController {
 						// cateList.add(mCategoryList.getCatId());
 						if (stationList.get(i).getStationId() == stationIdList.get(j)) {
 							listofItemId = listofItemId.append(stationList.get(i).getItemId().toString() + ",");
+							stationListRes.add(stationList.get(i));
 						}
 					}
 				}
@@ -618,6 +619,7 @@ public class StationController {
 
 			}
 			model.addObject("routeName", routeName);
+			model.addObject("stationListRes", stationListRes);
 		} catch (Exception e) {
 			System.out.println("get Dispatch Report Exception: " + e.getMessage());
 			e.printStackTrace();
