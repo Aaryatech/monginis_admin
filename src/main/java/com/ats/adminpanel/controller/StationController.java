@@ -64,8 +64,46 @@ public class StationController {
 
 			model.addObject("itemsList", itemsList);
 
-			List<Station> stationList = restTemplate.getForObject(Constants.url + "/getAllStationList", List.class);
+			Station[] stList = restTemplate.getForObject(Constants.url + "/getAllStationList", Station[].class);
+			List<Station> stationList = new ArrayList<Station>(Arrays.asList(stList));
+			
+			String Bill_date;
+			Bill_date = request.getParameter("Bill_date");
+			System.out.println("Bill_date"+ Bill_date);
+			
+			
+				if(request.getParameter("Bill_date")==null ) {
+				
+					}
+			else {
+				
+				 Bill_date = request.getParameter("Bill_date");
+				System.out.println("Bill_date"+ Bill_date);
+				
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+				map.add("Bill_date", DateConvertor.convertToYMD(Bill_date));
+				Station[] stList1 = restTemplate.postForObject(Constants.url + "/getStationCount",map, Station[].class);
+				List<Station> stationList1 = new ArrayList<Station>(Arrays.asList(stList1));
+				
+				for (int i = 0; i < stationList1.size(); i++)
+				{
+					for (int j = 0; j < stationList.size(); j++) 
+					{
+						if (stationList1.get(i).getStationId()==stationList.get(j).getStationId()) 
+						{
+							stationList.get(j).setExInt1(stationList1.get(i).getExInt1());
+						}
+						
+					}
+				}
+				
+				
+			}
+			
+			
 			model.addObject("stationList", stationList);
+			model.addObject("Bill_date", Bill_date);
 			System.out.println("stationList" + stationList.toString());
 
 		} catch (Exception e) {
@@ -74,6 +112,8 @@ public class StationController {
 
 		return model;
 	}
+			
+			
 
 	@RequestMapping(value = "/getAllItemsForStation", method = RequestMethod.GET)
 	public @ResponseBody List<Item> getAllItemsForStation() {

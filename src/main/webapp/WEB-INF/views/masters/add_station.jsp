@@ -118,15 +118,35 @@
 							</form>
 						</div>
 
+
+						<div class="box-content">
+						<form action="${pageContext.request.contextPath}/addStation"
+								class="form-horizontal" method="GET" id="validation-form">
+							<div class="row">
+
+
+								<div class="form-group">
+
+
+
+
+									<label class="col-sm-1 col-lg-2 control-label" for="payment_desc">Bill Date</label>
+									<div class="col-sm-3 col-lg-2 control-label controls date_select">
+										<input class="form-control date-picker" id="Bill_date"
+											name="Bill_date" size="30" type="text"  value="${Bill_date}"  />
+									</div>
+									
+								<input type="submit" class="btn btn-primary" value="Submit">
+								</div>
+
+							</div>
+							</form>
+						</div>
+
+
 						<div class="box-content">
 
-							<div class="col-md-9"></div>
-							<label for="search" class="col-md-3" id="search"> <i
-								class="fa fa-search" style="font-size: 20px"></i> <input
-								type="text" id="myInput" style="border-radius: 25px;"
-								onkeyup="myFunction()" placeholder="Search.."
-								title="Type in a name">
-							</label>
+							
 							<div class="clearfix"></div>
 							<div id="table-scroll" class="table-scroll">
 
@@ -135,10 +155,10 @@
 									<table id="table1" class="table table-advance">
 										<thead>
 											<tr class="bgpink">
-												<th width="138" style="width: 18px" align="left">#SR</th>
+												<th width="138" style="width: 18px" align="left">SR No</th>
 												<th class="col-md-2">Station No.</th>
 												<th class="col-md-10">Items</th>
-
+												<th class="col-md-10">Total Order</th>
 												<th class="col-md-2" width="90px">Action</th>
 											</tr>
 										</thead>
@@ -151,7 +171,7 @@
 													<td><c:out value="${count.index+1}"></c:out></td>
 													<td align="left"><c:out value="${station.stationNo}" /></td>
 													<td align="left"><c:out value="${station.itemId}" /></td>
-
+													<td align="left"><c:out value="${station.exInt1}" /></td>
 													<td align="left"><a
 														href="editStation/${station.stationId}"><span
 															class="glyphicon glyphicon-edit"></span></a>&nbsp; <a
