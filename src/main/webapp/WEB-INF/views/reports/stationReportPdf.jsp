@@ -48,10 +48,11 @@ th {
 </style>
 </head>
 <body onload="myFunction()">
+	<c:forEach items="${stationListRes}" var="station" varStatus="cnt">
 	<h4 align="center">Galdhar Foods Pvt Ltd</h4>
 	<p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
 	<div align="center">
-		<h5>Stationwise Item Dispatch Sheet &nbsp;&nbsp;&nbsp;&nbsp; Date &nbsp;
+		<h5>Station [ ${station.stationNo} ] Item Dispatch Sheet &nbsp;&nbsp;&nbsp;&nbsp; Date &nbsp;
 			${billDate} Route ${routeName}</h5>
 	</div>
 
@@ -89,6 +90,8 @@ th {
 			</tr>
 			<c:set var="srNo" value="1"></c:set>
 			<c:forEach items="${itemList}" var="item" varStatus="count">
+				<c:choose>
+								<c:when test="${station.stationId eq item.itemImage}">
 				<c:set var="total" value="0" />
 				<c:set var="frTotal" value="0" />
 
@@ -117,7 +120,7 @@ th {
 							</c:choose>
 							<c:set var="frTotal" value="${report.billQty+frTotal}" />
 						</c:forEach>
-						<td width="40px" align="right">${billQty}</td>
+						<td width="40px" align="right" >${billQty}</td>
 
 					</c:forEach>
 
@@ -125,17 +128,49 @@ th {
 					<c:set var="allTotal" value="${total+allTotal}"></c:set>
 				</tr>
 
-
+</c:when>
+</c:choose>
 
 
 			</c:forEach>
 
+<%-- 
+<tr>
 
+				<td colspan='2'><b>Total</b></td>
 
-
+	<c:forEach items="${itemList}" var="item" varStatus="count">
+				<c:choose>
+								<c:when test="${station.stationId eq item.itemImage}">
+				<c:forEach items="${frList}" var="fr" varStatus="count">
+					<c:set var="itemTotal" value="0" />
+					<c:forEach items="${dispatchReportList}" var="report"
+						varStatus="count">
+						<c:choose>
+								<c:when test="${report.itemId==item.id}">
+		<c:choose>
+							<c:when test="${report.frId==fr.frId}">
+								<c:set var="itemTotal" value="${report.billQty+itemTotal}" />
+							</c:when>
+						</c:choose>
+						</c:when>
+						</c:choose>
+					</c:forEach>
+					<td align="right"><b><fmt:formatNumber type="number"
+								maxFractionDigits="2" value="${itemTotal}" /></b></td>
+				</c:forEach>
+				
+</c:when>
+</c:choose>
+</c:forEach>
+			
+				<td align="right"><b><fmt:formatNumber type="number"
+							maxFractionDigits="2" value="${allTotal}" /></b></td>
+			</tr>
+ --%>
 
 			<%-- <tr>
-				<td bgcolor="#fc67ca"><c:out value="" /></td>
+				<td colspan='2'><b>Total</b></td>
 
 				<c:set var="totalItems" value="0" />
 				<c:forEach items="${frList}" var="fr" varStatus="count">
@@ -160,33 +195,40 @@ th {
 			</tr>
  --%>
 
-			<tr>
+		<%-- <tr>
 
 				<td colspan='2'><b>Total</b></td>
 
+	<c:forEach items="${itemList}" var="item" varStatus="count">
+				<c:choose>
+								<c:when test="${station.stationId eq item.itemImage}">
 
 				<c:forEach items="${frList}" var="fr" varStatus="count">
 					<c:set var="itemTotal" value="0" />
 					<c:forEach items="${dispatchReportList}" var="report"
 						varStatus="count">
-
+	<c:choose>
+			  <c:when test="${report.itemId==item.id}">
 						<c:choose>
 							<c:when test="${report.frId==fr.frId}">
 								<c:set var="itemTotal" value="${report.billQty+itemTotal}" />
 							</c:when>
 						</c:choose>
-
+    </c:when></c:choose>
 					</c:forEach>
 					<td align="right"><b><fmt:formatNumber type="number"
 								maxFractionDigits="2" value="${itemTotal}" /></b></td>
 				</c:forEach>
+				</c:when>
+				</c:choose>
+				</c:forEach>
 				<td align="right"><b><fmt:formatNumber type="number"
 							maxFractionDigits="2" value="${allTotal}" /></b></td>
-			</tr>
+			</tr> --%>
 		</tbody>
 	</table>
-
-
+<div style="page-break-after: always;"></div>
+</c:forEach>
 	<!-- END Main Content -->
 
 </body>

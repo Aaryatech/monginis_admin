@@ -559,7 +559,7 @@ public class StationController {
 				};
 
 				ResponseEntity<List<Item>> responseEntity1 = restTemplate.exchange(
-						Constants.url + "getItemsByItemIdForDisp", HttpMethod.POST, new HttpEntity<>(map), typeRef1);
+						Constants.url + "getItemsByItemIdForDispNew", HttpMethod.POST, new HttpEntity<>(map), typeRef1);
 				System.out.println("Items:" + responseEntity1.toString());
 
 				model.addObject("dispatchReportList", dispatchReportList);
@@ -611,7 +611,7 @@ public class StationController {
 				};
 
 				ResponseEntity<List<Item>> responseEntity1 = restTemplate.exchange(
-						Constants.url + "getItemsByItemIdForDisp", HttpMethod.POST, new HttpEntity<>(map), typeRef1);
+						Constants.url + "getItemsByItemIdForDispNew", HttpMethod.POST, new HttpEntity<>(map), typeRef1);
 
 				model.addObject("dispatchReportList", dispatchReportList);
 				model.addObject("frList", frNameIdByRouteIdList);
