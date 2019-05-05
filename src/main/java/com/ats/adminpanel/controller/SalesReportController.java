@@ -83,15 +83,13 @@ public class SalesReportController {
 	List<SalesReportItemwise> staticSaleListItemWise;
 
 	RoyaltyListBean staticRoyaltyBean = new RoyaltyListBean();
-	
-	
+
 	float getRoyPer() {
-		
-		
+
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 		RestTemplate restTemplate = new RestTemplate();
-		
+
 		String settingKey = new String();
 
 		settingKey = "roy_percentage";
@@ -102,7 +100,7 @@ public class SalesReportController {
 				FrItemStockConfigureList.class);
 
 		float royPer = settingList.getFrItemStockConfigure().get(0).getSettingValue();
-		
+
 		return royPer;
 	}
 
@@ -1144,12 +1142,14 @@ public class SalesReportController {
 		return model;
 
 	}
+
 	@RequestMapping(value = "/setAllFrIdSelected", method = RequestMethod.GET)
 	public @ResponseBody List<AllFrIdName> setAllFrIdSelected() {
-		//logger.info("inside ajax call for fr all selected");
-	
+		// logger.info("inside ajax call for fr all selected");
+
 		return allFrIdNameList.getFrIdNamesList();
 	}
+
 	@RequestMapping(value = "/getSaleBillwiseGrpByMonth", method = RequestMethod.GET)
 	public @ResponseBody List<SalesReportBillwise> getSaleBillwiseGrpByMonth(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -1423,11 +1423,9 @@ public class SalesReportController {
 			todaysDate = date.format(formatters);
 
 			RestTemplate restTemplate = new RestTemplate();
-			
-			
+
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-			
 			// get Routes
 
 			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
@@ -1458,7 +1456,7 @@ public class SalesReportController {
 			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
 
 			model.addObject("routeList", routeList);
-			model.addObject("royPer",getRoyPer());
+			model.addObject("royPer", getRoyPer());
 
 		} catch (Exception e) {
 
@@ -1534,8 +1532,7 @@ public class SalesReportController {
 
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
-				
-				
+
 				ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
 				};
 				ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
@@ -1560,21 +1557,21 @@ public class SalesReportController {
 				royaltyListForPdf = new ArrayList<>();
 			}
 
-				royaltyListForPdf = royaltyList;
+			royaltyListForPdf = royaltyList;
 
-				System.out.println("royaltyList List Bill Wise " + saleList.toString());
+			System.out.println("royaltyList List Bill Wise " + saleList.toString());
 
-				CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
-						CategoryListResponse.class);
-				List<MCategoryList> categoryList;
-				categoryList = categoryListResponse.getmCategoryList();
-				// allFrIdNameList = new AllFrIdNameList();
-				System.out.println("Category list  " + categoryList);
+			CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
+					CategoryListResponse.class);
+			List<MCategoryList> categoryList;
+			categoryList = categoryListResponse.getmCategoryList();
+			// allFrIdNameList = new AllFrIdNameList();
+			System.out.println("Category list  " + categoryList);
 
-				royaltyBean.setCategoryList(categoryList);
-				royaltyBean.setSalesReportRoyalty(royaltyList);
-				staticRoyaltyBean = royaltyBean;
-			
+			royaltyBean.setCategoryList(categoryList);
+			royaltyBean.setSalesReportRoyalty(royaltyList);
+			staticRoyaltyBean = royaltyBean;
+
 		} catch (Exception e) {
 			System.out.println("get sale Report royaltyList by cat " + e.getMessage());
 			e.printStackTrace();
@@ -1670,13 +1667,11 @@ public class SalesReportController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 			RestTemplate restTemplate = new RestTemplate();
-			
-			
-			float royPer=getRoyPer();
-			
+
+			float royPer = getRoyPer();
+
 			if (!routeId.equalsIgnoreCase("0")) {
 
-		
 				map = new LinkedMultiValueMap<String, Object>();
 				map.add("routeId", routeId);
 
@@ -1704,23 +1699,21 @@ public class SalesReportController {
 				isAllFrSelected = true;
 			}
 
-			 map = new LinkedMultiValueMap<String, Object>();
-		
+			map = new LinkedMultiValueMap<String, Object>();
+
 			if (isAllFrSelected) {
 
 				System.out.println("Inside If all fr Selected ");
 				// getSalesReportRoyaltyAllFr
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
-				
-				
+
 				ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
 				};
 				ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
 						Constants.url + "getSalesReportRoyaltyAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 				royaltyList = responseEntity.getBody();
-				
 
 			} else {
 				System.out.println("Inside else Few fr Selected ");
@@ -1735,26 +1728,26 @@ public class SalesReportController {
 						Constants.url + "getSalesReportRoyalty", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 				royaltyList = responseEntity.getBody();
-				
+
 			}
-				royaltyListForPdf = new ArrayList<>();
+			royaltyListForPdf = new ArrayList<>();
 
-				royaltyListForPdf = royaltyList;
+			royaltyListForPdf = royaltyList;
 
-				System.out.println("royaltyList List Bill Wise " + saleList.toString());
+			System.out.println("royaltyList List Bill Wise " + saleList.toString());
 
-				CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
-						CategoryListResponse.class);
-				List<MCategoryList> categoryList;
-				categoryList = categoryListResponse.getmCategoryList();
-				// allFrIdNameList = new AllFrIdNameList();
-				System.out.println("Category list  " + categoryList);
+			CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
+					CategoryListResponse.class);
+			List<MCategoryList> categoryList;
+			categoryList = categoryListResponse.getmCategoryList();
+			// allFrIdNameList = new AllFrIdNameList();
+			System.out.println("Category list  " + categoryList);
 
-				royaltyBean.setCategoryList(categoryList);
-				royaltyBean.setSalesReportRoyalty(royaltyList);
-				staticRoyaltyBean = royaltyBean;
-				model.addObject("royPer",royPer);
-			
+			royaltyBean.setCategoryList(categoryList);
+			royaltyBean.setSalesReportRoyalty(royaltyList);
+			staticRoyaltyBean = royaltyBean;
+			model.addObject("royPer", royPer);
+
 		} catch (Exception e) {
 			System.out.println("get sale Report royaltyList by cat " + e.getMessage());
 			e.printStackTrace();
@@ -1814,7 +1807,7 @@ public class SalesReportController {
 			List<Menu> selectedMenuList = new ArrayList<Menu>();
 
 			System.out.println(" Fr " + allFrIdNameList.getFrIdNamesList());
-model.addObject("royPer",getRoyPer());
+			model.addObject("royPer", getRoyPer());
 			model.addObject("todaysDate", todaysDate);
 			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
 
@@ -1889,11 +1882,12 @@ model.addObject("royPer",getRoyPer());
 				// Web Service :getSalesReportRoyaltyFrAllFr
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
-				
+
 				ParameterizedTypeReference<List<SalesReportRoyaltyFr>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyaltyFr>>() {
 				};
 				ResponseEntity<List<SalesReportRoyaltyFr>> responseEntity = restTemplate.exchange(
-						Constants.url + "getSalesReportRoyaltyFrAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+						Constants.url + "getSalesReportRoyaltyFrAllFr", HttpMethod.POST, new HttpEntity<>(map),
+						typeRef);
 
 				royaltyFrList = new ArrayList<>();
 				royaltyFrList = responseEntity.getBody();
@@ -1913,17 +1907,16 @@ model.addObject("royPer",getRoyPer());
 				royaltyFrList = new ArrayList<>();
 				royaltyFrList = responseEntity.getBody();
 			}
-				// royaltyListForPdf=new ArrayList<>();
+			// royaltyListForPdf=new ArrayList<>();
 
-				// royaltyListForPdf=royaltyList;
-				staticRoyaltyFrList = new ArrayList<>();
+			// royaltyListForPdf=royaltyList;
+			staticRoyaltyFrList = new ArrayList<>();
 
-				staticRoyaltyFrList = royaltyFrList;
-				System.out.println("royalty List List royaltyFr List " + royaltyFrList.toString());
+			staticRoyaltyFrList = royaltyFrList;
+			System.out.println("royalty List List royaltyFr List " + royaltyFrList.toString());
 
-				// allFrIdNameList = new AllFrIdNameList();
+			// allFrIdNameList = new AllFrIdNameList();
 
-			
 		} catch (Exception e) {
 			System.out.println("get sale Report royaltyList by cat " + e.getMessage());
 			e.printStackTrace();
@@ -2029,16 +2022,17 @@ model.addObject("royPer",getRoyPer());
 
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
-				
+
 				ParameterizedTypeReference<List<SalesReportRoyaltyFr>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyaltyFr>>() {
 				};
 				ResponseEntity<List<SalesReportRoyaltyFr>> responseEntity = restTemplate.exchange(
-						Constants.url + "getSalesReportRoyaltyFrAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+						Constants.url + "getSalesReportRoyaltyFrAllFr", HttpMethod.POST, new HttpEntity<>(map),
+						typeRef);
 
 				royaltyFrList = new ArrayList<>();
 				royaltyFrList = responseEntity.getBody();
-				
-				//getSalesReportRoyaltyFrAllFr
+
+				// getSalesReportRoyaltyFrAllFr
 
 			} else {
 				System.out.println("Inside else Few fr Selected ");
@@ -2054,33 +2048,30 @@ model.addObject("royPer",getRoyPer());
 
 				royaltyFrList = new ArrayList<>();
 				royaltyFrList = responseEntity.getBody();
-				
+
 			}
-				// royaltyListForPdf=new ArrayList<>();
+			// royaltyListForPdf=new ArrayList<>();
 
-				// royaltyListForPdf=royaltyList;
-				staticRoyaltyFrList = new ArrayList<>();
+			// royaltyListForPdf=royaltyList;
+			staticRoyaltyFrList = new ArrayList<>();
 
-				staticRoyaltyFrList = royaltyFrList;
-				System.out.println("royalty List List royaltyFr List " + royaltyFrList.toString());
+			staticRoyaltyFrList = royaltyFrList;
+			System.out.println("royalty List List royaltyFr List " + royaltyFrList.toString());
 
-				// allFrIdNameList = new AllFrIdNameList();
+			// allFrIdNameList = new AllFrIdNameList();
 
-			
 		} catch (Exception e) {
 			System.out.println("get sale Report royaltyList by Fr " + e.getMessage());
 			e.printStackTrace();
 
 		}
-		model.addObject("royPer",getRoyPer());
+		model.addObject("royPer", getRoyPer());
 
 		model.addObject("fromDate", fromDate);
 
 		model.addObject("toDate", toDate);
 
 		model.addObject("report", staticRoyaltyFrList);
-		
-		
 
 		return model;
 	}
@@ -2499,23 +2490,22 @@ model.addObject("royPer",getRoyPer());
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
-			
-				map.add("fromDate", fromDate);
-				map.add("toDate", toDate);
 
-				ParameterizedTypeReference<List<SalesReportBillwiseAllFr>> typeRef = new ParameterizedTypeReference<List<SalesReportBillwiseAllFr>>() {
-				};
-				ResponseEntity<List<SalesReportBillwiseAllFr>> responseEntity = restTemplate.exchange(
-						Constants.url + "getSaleReportBillwiseAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			map.add("fromDate", fromDate);
+			map.add("toDate", toDate);
 
-				saleList = responseEntity.getBody();
-				staticSaleByAllFr = new ArrayList<>();
-				staticSaleByAllFr = saleList;
-				// saleListForPdf=saleList;
+			ParameterizedTypeReference<List<SalesReportBillwiseAllFr>> typeRef = new ParameterizedTypeReference<List<SalesReportBillwiseAllFr>>() {
+			};
+			ResponseEntity<List<SalesReportBillwiseAllFr>> responseEntity = restTemplate.exchange(
+					Constants.url + "getSaleReportBillwiseAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
-				System.out.println("sales List Bill Wise all fr  " + saleList.toString());
+			saleList = responseEntity.getBody();
+			staticSaleByAllFr = new ArrayList<>();
+			staticSaleByAllFr = saleList;
+			// saleListForPdf=saleList;
 
-			
+			System.out.println("sales List Bill Wise all fr  " + saleList.toString());
+
 		} catch (Exception e) {
 			System.out.println("get sale Report Bill Wise all Fr " + e.getMessage());
 			e.printStackTrace();
@@ -2649,26 +2639,25 @@ model.addObject("royPer",getRoyPer());
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
-			
-				System.out.println("Inside else Few fr Selected ");
 
-				// map.add("frIdList", selectedFr);
-				map.add("fromDate", fromDate);
-				map.add("toDate", toDate);
+			System.out.println("Inside else Few fr Selected ");
 
-				ParameterizedTypeReference<List<SalesReportBillwiseAllFr>> typeRef = new ParameterizedTypeReference<List<SalesReportBillwiseAllFr>>() {
-				};
-				ResponseEntity<List<SalesReportBillwiseAllFr>> responseEntity = restTemplate.exchange(
-						Constants.url + "getSaleReportBillwiseAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			// map.add("frIdList", selectedFr);
+			map.add("fromDate", fromDate);
+			map.add("toDate", toDate);
 
-				saleList = responseEntity.getBody();
-				staticSaleByAllFr = new ArrayList<>();
-				staticSaleByAllFr = saleList;
-				// saleListForPdf=saleList;
+			ParameterizedTypeReference<List<SalesReportBillwiseAllFr>> typeRef = new ParameterizedTypeReference<List<SalesReportBillwiseAllFr>>() {
+			};
+			ResponseEntity<List<SalesReportBillwiseAllFr>> responseEntity = restTemplate.exchange(
+					Constants.url + "getSaleReportBillwiseAllFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
-				System.out.println("sales List Bill Wise all fr  " + saleList.toString());
+			saleList = responseEntity.getBody();
+			staticSaleByAllFr = new ArrayList<>();
+			staticSaleByAllFr = saleList;
+			// saleListForPdf=saleList;
 
-			
+			System.out.println("sales List Bill Wise all fr  " + saleList.toString());
+
 		} catch (Exception e) {
 			System.out.println("get sale Report Bill Wise all Fr " + e.getMessage());
 			e.printStackTrace();
@@ -2737,8 +2726,7 @@ model.addObject("royPer",getRoyPer());
 			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
 
 			model.addObject("routeList", routeList);
-			model.addObject("royPer",getRoyPer());
-
+			model.addObject("royPer", getRoyPer());
 
 		} catch (Exception e) {
 
@@ -2828,6 +2816,9 @@ model.addObject("royPer",getRoyPer());
 			String billDate = request.getParameter("bill_date");
 			String routeId = request.getParameter("route_id");
 			String selectedCat = request.getParameter("cat_id_list");
+			String status = request.getParameter("status");
+
+			System.out.println("------------------------------------------" + status);
 
 			boolean isAllCatSelected = false;
 			String selectedFr = null;
@@ -2893,29 +2884,42 @@ model.addObject("royPer",getRoyPer());
 				StringBuilder cateList = new StringBuilder();
 
 				for (MCategoryList mCategoryList : categoryList) {
-					 //cateList.add(mCategoryList.getCatId());
+					// cateList.add(mCategoryList.getCatId());
 					cateList = cateList.append(mCategoryList.getCatId().toString() + ",");
 				}
-				
+
 				String catlist = cateList.toString();
 				selectedCat = catlist.substring(0, catlist.length() - 1);
 				System.out.println("cateList" + selectedCat.toString());
 				System.out.println("selectedFr" + selectedFr.toString());
 				System.out.println("billDate" + billDate.toString());
-				
 
 				map.add("categories", selectedCat);
 				map.add("billDate", billDate);
 				map.add("frId", selectedFr);
 
-				ParameterizedTypeReference<List<DispatchReport>> typeRef = new ParameterizedTypeReference<List<DispatchReport>>() {
-				};
+				if (status.equals("1")) {
 
-				ResponseEntity<List<DispatchReport>> responseEntity = restTemplate.exchange(
-						Constants.url + "getDispatchItemReport", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+					ParameterizedTypeReference<List<DispatchReport>> typeRef = new ParameterizedTypeReference<List<DispatchReport>>() {
+					};
 
-				dispatchReportList = responseEntity.getBody();
-				System.out.println("dispatchReportList = " + dispatchReportList.toString());
+					ResponseEntity<List<DispatchReport>> responseEntity = restTemplate.exchange(
+							Constants.url + "getDispatchItemReport", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+					dispatchReportList = responseEntity.getBody();
+					System.out.println("dispatchReportList = " + dispatchReportList.toString());
+				} else {
+
+					ParameterizedTypeReference<List<DispatchReport>> typeRef = new ParameterizedTypeReference<List<DispatchReport>>() {
+					};
+
+					ResponseEntity<List<DispatchReport>> responseEntity = restTemplate.exchange(
+							Constants.url + "getDispatchItemReportByOrder", HttpMethod.POST, new HttpEntity<>(map),
+							typeRef);
+
+					dispatchReportList = responseEntity.getBody();
+					System.out.println("dispatchReportList = " + dispatchReportList.toString());
+				}
 
 				map = new LinkedMultiValueMap<String, Object>();
 				map.add("catIdList", selectedCat);
@@ -2943,15 +2947,27 @@ model.addObject("royPer",getRoyPer());
 				map.add("billDate", billDate);
 				map.add("frId", selectedFr);
 
-				ParameterizedTypeReference<List<DispatchReport>> typeRef = new ParameterizedTypeReference<List<DispatchReport>>() {
-				};
+				if (status.equals("1")) {
 
-				ResponseEntity<List<DispatchReport>> responseEntity = restTemplate.exchange(
-						Constants.url + "getDispatchItemReport", HttpMethod.POST, new HttpEntity<>(map), typeRef);
-				System.out.println("Items:" + responseEntity.toString());
+					ParameterizedTypeReference<List<DispatchReport>> typeRef = new ParameterizedTypeReference<List<DispatchReport>>() {
+					};
 
-				dispatchReportList = responseEntity.getBody();
-				System.out.println("dispatchReportList = " + dispatchReportList.toString());
+					ResponseEntity<List<DispatchReport>> responseEntity = restTemplate.exchange(
+							Constants.url + "getDispatchItemReport", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+					System.out.println("Items:" + responseEntity.toString());
+					dispatchReportList = responseEntity.getBody();
+					System.out.println("dispatchReportList = " + dispatchReportList.toString());
+				} else {
+					ParameterizedTypeReference<List<DispatchReport>> typeRef = new ParameterizedTypeReference<List<DispatchReport>>() {
+					};
+
+					ResponseEntity<List<DispatchReport>> responseEntity = restTemplate.exchange(
+							Constants.url + "getDispatchItemReportByOrder", HttpMethod.POST, new HttpEntity<>(map),
+							typeRef);
+					System.out.println("Items:" + responseEntity.toString());
+					dispatchReportList = responseEntity.getBody();
+					System.out.println("dispatchReportList = " + dispatchReportList.toString());
+				}
 
 				map = new LinkedMultiValueMap<String, Object>();
 				map.add("catIdList", selectedCat);
@@ -3071,17 +3087,17 @@ model.addObject("royPer",getRoyPer());
 				CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
 						CategoryListResponse.class);
 				List<MCategoryList> categoryList = categoryListResponse.getmCategoryList();
-				
+
 				StringBuilder cateList = new StringBuilder();
-				//List<String> cateList = new ArrayList<>();
+				// List<String> cateList = new ArrayList<>();
 				for (MCategoryList mCategoryList : categoryList) {
 					cateList = cateList.append(mCategoryList.getCatId().toString() + ",");
-					//cateList.add("" + mCategoryList.getCatId());
+					// cateList.add("" + mCategoryList.getCatId());
 				}
 				System.err.println(cateList);
 				String catlist = cateList.toString();
 				selectedCat = catlist.substring(0, catlist.length() - 1);
-				map.add("categories",selectedCat);
+				map.add("categories", selectedCat);
 				map.add("billDate", billDate);
 				map.add("frId", selectedFr);
 
@@ -3180,8 +3196,6 @@ model.addObject("royPer",getRoyPer());
 				 * dispachReport.setBillQty(0); dispatchReportList.add(dispachReport); } } } }
 				 */
 
-			
-
 				model.addObject("dispatchReportList", dispatchReportList);
 				model.addObject("frList", frNameIdByRouteIdList);
 				model.addObject("itemList", responseEntity1.getBody());
@@ -3268,24 +3282,21 @@ model.addObject("royPer",getRoyPer());
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
-			
-			
-			
+
 			// new code
-			
+
 			if (isAllFrSelected) {
 
 				System.out.println("Inside If all fr Selected ");
-				if(isAllCatSelected) {
+				if (isAllCatSelected) {
 					map.add("catIdList", 0);
-				}else {
-					map.add("catIdList",selectedCat);
+				} else {
+					map.add("catIdList", selectedCat);
 				}
-				
+
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
-				
-				
+
 				if (isGraph == 0) {
 					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
 					};
@@ -3294,45 +3305,42 @@ model.addObject("royPer",getRoyPer());
 							Constants.url + "getSaleReportRoyConsoByCatAllFr", HttpMethod.POST, new HttpEntity<>(map),
 							typeRef);
 
-					
 					royaltyList = responseEntity.getBody();
 					royaltyListForPdf = new ArrayList<>();
 
 					royaltyListForPdf = royaltyList;
 				}
 
-				/*if (isGraph == 1) {
-					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
-					};
+				/*
+				 * if (isGraph == 1) { ParameterizedTypeReference<List<SalesReportRoyalty>>
+				 * typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() { };
+				 * 
+				 * ResponseEntity<List<SalesReportRoyalty>> responseEntity =
+				 * restTemplate.exchange( Constants.url + "getSaleReportRoyConsoByCatForGraph",
+				 * HttpMethod.POST, new HttpEntity<>(map), typeRef);
+				 * 
+				 * royaltyList = responseEntity.getBody(); royaltyListForPdf = new
+				 * ArrayList<>();
+				 * 
+				 * royaltyListForPdf = royaltyList; }
+				 */
 
-					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
-							Constants.url + "getSaleReportRoyConsoByCatForGraph", HttpMethod.POST,
-							new HttpEntity<>(map), typeRef);
-
-					royaltyList = responseEntity.getBody();
-					royaltyListForPdf = new ArrayList<>();
-
-					royaltyListForPdf = royaltyList;
-				}
-*/
-				
-
-				}//end of if all fr Selected 
+			} // end of if all fr Selected
 			else {
-				
-				//few fr Selected 
-				
-				if(isAllCatSelected) {
+
+				// few fr Selected
+
+				if (isAllCatSelected) {
 					map.add("catIdList", 0);
-				}else {
-					map.add("catIdList",selectedCat);
+				} else {
+					map.add("catIdList", selectedCat);
 				}
-				
+
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
-				
+
 				map.add("frIdList", selectedFr);
-				
+
 				if (isGraph == 0) {
 					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
 					};
@@ -3347,119 +3355,104 @@ model.addObject("royPer",getRoyPer());
 					royaltyListForPdf = royaltyList;
 				}
 
-				/*if (isGraph == 1) {
-					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
-					};
+				/*
+				 * if (isGraph == 1) { ParameterizedTypeReference<List<SalesReportRoyalty>>
+				 * typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() { };
+				 * 
+				 * ResponseEntity<List<SalesReportRoyalty>> responseEntity =
+				 * restTemplate.exchange( Constants.url + "getSaleReportRoyConsoByCatForGraph",
+				 * HttpMethod.POST, new HttpEntity<>(map), typeRef);
+				 * 
+				 * royaltyList = responseEntity.getBody(); royaltyListForPdf = new
+				 * ArrayList<>();
+				 * 
+				 * royaltyListForPdf = royaltyList; }
+				 */
 
-					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
-							Constants.url + "getSaleReportRoyConsoByCatForGraph", HttpMethod.POST,
-							new HttpEntity<>(map), typeRef);
+			} // end of else
 
-					royaltyList = responseEntity.getBody();
-					royaltyListForPdf = new ArrayList<>();
+			// new code
 
-					royaltyListForPdf = royaltyList;
-				}
-*/
-				
-			}//end of else
-			
-			
-			
-			
-			
-			//new code
+			/*
+			 * if (isAllCatSelected) {
+			 * 
+			 * System.out.println("Inside If all fr Selected ");
+			 * 
+			 * map.add("catIdList", 0);
+			 * 
+			 * map.add("fromDate", fromDate); map.add("toDate", toDate);
+			 * 
+			 * } else {
+			 * 
+			 * map.add("catIdList", selectedCat); map.add("fromDate", fromDate);
+			 * map.add("toDate", toDate);
+			 * 
+			 * }
+			 * 
+			 * if (isAllFrSelected) {
+			 * 
+			 * System.out.println("Inside If all fr Selected "); map.add("fromDate",
+			 * fromDate); map.add("toDate", toDate);
+			 * 
+			 * // getSaleReportRoyConsoByCatAllFr
+			 * 
+			 * } else { System.out.println("Inside else Few fr Selected "); //
+			 * map.add("catIdList", selectedCat); map.add("frIdList", selectedFr);
+			 * map.add("fromDate", fromDate); map.add("toDate", toDate); if (isGraph == 0) {
+			 * ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new
+			 * ParameterizedTypeReference<List<SalesReportRoyalty>>() { };
+			 * 
+			 * ResponseEntity<List<SalesReportRoyalty>> responseEntity =
+			 * restTemplate.exchange( Constants.url + "getSaleReportRoyConsoByCat",
+			 * HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			 * 
+			 * royaltyList = responseEntity.getBody(); royaltyListForPdf = new
+			 * ArrayList<>();
+			 * 
+			 * royaltyListForPdf = royaltyList; }
+			 * 
+			 * if (isGraph == 1) { ParameterizedTypeReference<List<SalesReportRoyalty>>
+			 * typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() { };
+			 * 
+			 * ResponseEntity<List<SalesReportRoyalty>> responseEntity =
+			 * restTemplate.exchange( Constants.url + "getSaleReportRoyConsoByCatForGraph",
+			 * HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			 * 
+			 * royaltyList = responseEntity.getBody(); royaltyListForPdf = new
+			 * ArrayList<>();
+			 * 
+			 * royaltyListForPdf = royaltyList; }
+			 */
 
-			/*if (isAllCatSelected) {
+			System.out.println("royaltyList List Bill Wise " + royaltyList.toString());
 
-				System.out.println("Inside If all fr Selected ");
-				
-				map.add("catIdList", 0);
+			CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
+					CategoryListResponse.class);
+			List<MCategoryList> categoryList;
 
-				map.add("fromDate", fromDate);
-				map.add("toDate", toDate);
+			categoryList = categoryListResponse.getmCategoryList();
+			// allFrIdNameList = new AllFrIdNameList();
+			System.out.println("Category list  " + categoryList);
+			List<MCategoryList> tempList = new ArrayList<>();
 
-			} else {
+			// royaltyBean.setCategoryList(categoryList);
+			Map<Integer, String> catNameId = new HashMap<Integer, String>();
 
-				map.add("catIdList", selectedCat);
-				map.add("fromDate", fromDate);
-				map.add("toDate", toDate);
+			for (int i = 0; i < categoryList.size(); i++) {
 
-			}
+				for (int j = 0; j < royaltyList.size(); j++) {
 
-			if (isAllFrSelected) {
+					if (categoryList.get(i).getCatId() == royaltyList.get(j).getCatId()) {
+						catNameId.put(categoryList.get(i).getCatId(), categoryList.get(i).getCatName());
 
-				System.out.println("Inside If all fr Selected ");
-				map.add("fromDate", fromDate);
-				map.add("toDate", toDate);
+						if (!tempList.contains(categoryList.get(i))) {
 
-				// getSaleReportRoyConsoByCatAllFr
+							tempList.add(categoryList.get(i));
 
-			} else {
-				System.out.println("Inside else Few fr Selected ");
-				// map.add("catIdList", selectedCat);
-				map.add("frIdList", selectedFr);
-				map.add("fromDate", fromDate);
-				map.add("toDate", toDate);
-				if (isGraph == 0) {
-					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
-					};
-
-					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
-							Constants.url + "getSaleReportRoyConsoByCat", HttpMethod.POST, new HttpEntity<>(map),
-							typeRef);
-
-					royaltyList = responseEntity.getBody();
-					royaltyListForPdf = new ArrayList<>();
-
-					royaltyListForPdf = royaltyList;
-				}
-
-				if (isGraph == 1) {
-					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
-					};
-
-					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
-							Constants.url + "getSaleReportRoyConsoByCatForGraph", HttpMethod.POST,
-							new HttpEntity<>(map), typeRef);
-
-					royaltyList = responseEntity.getBody();
-					royaltyListForPdf = new ArrayList<>();
-
-					royaltyListForPdf = royaltyList;
-				}*/
-
-				System.out.println("royaltyList List Bill Wise " + royaltyList.toString());
-
-				CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
-						CategoryListResponse.class);
-				List<MCategoryList> categoryList;
-
-				categoryList = categoryListResponse.getmCategoryList();
-				// allFrIdNameList = new AllFrIdNameList();
-				System.out.println("Category list  " + categoryList);
-				List<MCategoryList> tempList = new ArrayList<>();
-
-				// royaltyBean.setCategoryList(categoryList);
-				Map<Integer, String> catNameId = new HashMap<Integer, String>();
-
-				for (int i = 0; i < categoryList.size(); i++) {
-
-					for (int j = 0; j < royaltyList.size(); j++) {
-
-						if (categoryList.get(i).getCatId() == royaltyList.get(j).getCatId()) {
-							catNameId.put(categoryList.get(i).getCatId(), categoryList.get(i).getCatName());
-
-							if (!tempList.contains(categoryList.get(i))) {
-
-								tempList.add(categoryList.get(i));
-
-							}
 						}
-
 					}
 
-				
+				}
 
 				System.out.println("temp list " + tempList.toString() + "size of t List " + tempList.size());
 				royaltyBean.setCategoryList(tempList);
@@ -3519,7 +3512,7 @@ model.addObject("royPer",getRoyPer());
 
 				float netValue = royaltyList.get(i).gettBillTaxableAmt()
 						- (royaltyList.get(i).gettGrnTaxableAmt() + royaltyList.get(i).gettGvnTaxableAmt());
-				float royPer=getRoyPer();
+				float royPer = getRoyPer();
 
 				float rAmt = netValue * royPer / 100;
 
@@ -3611,100 +3604,87 @@ model.addObject("royPer",getRoyPer());
 			if (isAllFrSelected) {
 
 				System.out.println("Inside If all fr Selected ");
-				if(isAllCatSelected) {
+				if (isAllCatSelected) {
 					map.add("catIdList", 0);
-				}else {
-					map.add("catIdList",selectedCat);
+				} else {
+					map.add("catIdList", selectedCat);
 				}
-				
+
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
-				
-				
-			
-					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
-					};
 
-					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
-							Constants.url + "getSaleReportRoyConsoByCatAllFr", HttpMethod.POST, new HttpEntity<>(map),
-							typeRef);
+				ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
+				};
 
-					royaltyList = responseEntity.getBody();
-					royaltyListForPdf = new ArrayList<>();
+				ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
+						Constants.url + "getSaleReportRoyConsoByCatAllFr", HttpMethod.POST, new HttpEntity<>(map),
+						typeRef);
 
-					royaltyListForPdf = royaltyList;
-			
+				royaltyList = responseEntity.getBody();
+				royaltyListForPdf = new ArrayList<>();
 
-				
+				royaltyListForPdf = royaltyList;
 
-				
-
-				}//end of if all fr Selected 
+			} // end of if all fr Selected
 			else {
-				
-				//few fr Selected 
-				
-				if(isAllCatSelected) {
+
+				// few fr Selected
+
+				if (isAllCatSelected) {
 					map.add("catIdList", 0);
-				}else {
-					map.add("catIdList",selectedCat);
+				} else {
+					map.add("catIdList", selectedCat);
 				}
-				
+
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
-				
+
 				map.add("frIdList", selectedFr);
-				
-			
-					ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
-					};
 
-					ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
-							Constants.url + "getSaleReportRoyConsoByCat", HttpMethod.POST, new HttpEntity<>(map),
-							typeRef);
+				ParameterizedTypeReference<List<SalesReportRoyalty>> typeRef = new ParameterizedTypeReference<List<SalesReportRoyalty>>() {
+				};
 
-					royaltyList = responseEntity.getBody();
-					royaltyListForPdf = new ArrayList<>();
+				ResponseEntity<List<SalesReportRoyalty>> responseEntity = restTemplate.exchange(
+						Constants.url + "getSaleReportRoyConsoByCat", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
-					royaltyListForPdf = royaltyList;
-			
-					
-				
+				royaltyList = responseEntity.getBody();
+				royaltyListForPdf = new ArrayList<>();
 
-				
-			}//end of else
+				royaltyListForPdf = royaltyList;
 
-				System.out.println("royaltyList List Bill Wise " + royaltyList.toString());
+			} // end of else
 
-				CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
-						CategoryListResponse.class);
-				List<MCategoryList> categoryList;
+			System.out.println("royaltyList List Bill Wise " + royaltyList.toString());
 
-				categoryList = categoryListResponse.getmCategoryList();
-				// allFrIdNameList = new AllFrIdNameList();
-				System.out.println("Category list  " + categoryList);
-				List<MCategoryList> tempList = new ArrayList<>();
+			CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
+					CategoryListResponse.class);
+			List<MCategoryList> categoryList;
 
-				// royaltyBean.setCategoryList(categoryList);
-				Map<Integer, String> catNameId = new HashMap<Integer, String>();
+			categoryList = categoryListResponse.getmCategoryList();
+			// allFrIdNameList = new AllFrIdNameList();
+			System.out.println("Category list  " + categoryList);
+			List<MCategoryList> tempList = new ArrayList<>();
 
-				for (int i = 0; i < categoryList.size(); i++) {
+			// royaltyBean.setCategoryList(categoryList);
+			Map<Integer, String> catNameId = new HashMap<Integer, String>();
 
-					for (int j = 0; j < royaltyList.size(); j++) {
+			for (int i = 0; i < categoryList.size(); i++) {
 
-						if (categoryList.get(i).getCatId() == royaltyList.get(j).getCatId()) {
-							catNameId.put(categoryList.get(i).getCatId(), categoryList.get(i).getCatName());
+				for (int j = 0; j < royaltyList.size(); j++) {
 
-							if (!tempList.contains(categoryList.get(i))) {
+					if (categoryList.get(i).getCatId() == royaltyList.get(j).getCatId()) {
+						catNameId.put(categoryList.get(i).getCatId(), categoryList.get(i).getCatName());
 
-								tempList.add(categoryList.get(i));
+						if (!tempList.contains(categoryList.get(i))) {
 
-							}
+							tempList.add(categoryList.get(i));
+
 						}
-
 					}
 
-				//}
+				}
+
+				// }
 
 				System.out.println("temp list " + tempList.toString() + "size of t List " + tempList.size());
 				royaltyBean.setCategoryList(tempList);
@@ -3712,9 +3692,8 @@ model.addObject("royPer",getRoyPer());
 				model.addObject("royaltyList", royaltyBean);
 				model.addObject("fromDate", fromDate);
 				model.addObject("toDate", toDate);
-				
-				model.addObject("royPer",getRoyPer());
 
+				model.addObject("royPer", getRoyPer());
 
 			}
 		} catch (Exception e) {
@@ -3748,8 +3727,8 @@ model.addObject("royPer",getRoyPer());
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 
-			File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
-			//File f = new File("/home/ats-12/report.pdf");
+		File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
+		// File f = new File("/home/ats-12/report.pdf");
 
 		try {
 			runConverter(Constants.ReportURL + url, f, request, response);
@@ -3765,7 +3744,7 @@ model.addObject("royPer",getRoyPer());
 		String appPath = context.getRealPath("");
 		String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
 
-		//String filePath ="/home/ats-12/report.pdf";
+		// String filePath ="/home/ats-12/report.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;
@@ -3852,6 +3831,7 @@ model.addObject("royPer",getRoyPer());
 			pd4ml.render(urlstring, fos);
 		}
 	}
+
 	@RequestMapping(value = "/pdfForDisReport", method = RequestMethod.GET)
 	public void showPDF1(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("Inside PDf For Report URL ");
@@ -3859,7 +3839,7 @@ model.addObject("royPer",getRoyPer());
 		System.out.println("URL " + url);
 
 		File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
-		//File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
+		// File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
 
 		try {
 			runConverter1(Constants.ReportURL + url, f, request, response);
@@ -3875,7 +3855,7 @@ model.addObject("royPer",getRoyPer());
 		String appPath = context.getRealPath("");
 		String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
 
-	// String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
+		// String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
 
 		// construct the complete absolute path of the file
 		String fullPath = appPath + filePath;
@@ -3934,12 +3914,12 @@ model.addObject("royPer",getRoyPer());
 			pd4ml.enableSmartTableBreaks(true);
 			try {
 
-				  try {                                                              
-                      pd4ml.setPageSize( landscapeValue ? pd4ml.changePageOrientation( format ): format );
-                   } catch (Exception e) {
-                      e.printStackTrace();
-                   }
-                     
+				try {
+					pd4ml.setPageSize(landscapeValue ? pd4ml.changePageOrientation(format) : format);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
 				PD4PageMark footer = new PD4PageMark();
 
 				footer.setPageNumberTemplate("Page $[page] of $[total]");
@@ -3964,5 +3944,5 @@ model.addObject("royPer",getRoyPer());
 			pd4ml.render(urlstring, fos);
 		}
 	}
-	
+
 }
