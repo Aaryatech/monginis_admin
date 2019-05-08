@@ -1,7 +1,7 @@
 package com.ats.adminpanel.controller;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -15,7 +15,6 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -42,18 +41,9 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
-import com.ats.adminpanel.model.AllFrIdName;
-import com.ats.adminpanel.model.AllFrIdNameList;
-import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.ExportToExcel;
-import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.SpCakeWtCount;
-import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
-import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
-import com.ats.adminpanel.model.franchisee.Menu;
-import com.ats.adminpanel.model.ggreports.GrnGvnReportByGrnType;
-import com.ats.adminpanel.model.salesreport.SalesReportBillwise;
-import com.ats.adminpanel.util.ItextPageEvent;
+import com.ats.adminpanel.model.franchisee.AllMenuResponse;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -72,15 +62,26 @@ import com.itextpdf.text.pdf.PdfWriter;
 public class ReportController {
 	String todaysDate;
 
+	RestTemplate restTemplate = new RestTemplate();
+
 	@RequestMapping(value = "/showTSPCakeCountBetweenDate", method = RequestMethod.GET)
 	public ModelAndView showTSPCakeCountBetweenDate(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("reports/tspCakeBetDate");
+		AllMenuResponse allMenus = new AllMenuResponse();
 		try {
 			ZoneId z = ZoneId.of("Asia/Calcutta");
 			LocalDate date = LocalDate.now(z);
 			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
 			todaysDate = date.format(formatters);
 			model.addObject("todaysDate", todaysDate);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+
+			map.add("catId", 5);
+			allMenus = restTemplate.postForObject(Constants.url + "getMenuByCat", map, AllMenuResponse.class);
+			model.addObject("allMenus", allMenus.getMenuConfigurationPage());
+			System.out.println(allMenus.getMenuConfigurationPage().toString());
+
 		} catch (Exception e) {
 			System.out.println("Exc in show Report report tspcake wise  " + e.getMessage());
 			e.printStackTrace();
@@ -99,12 +100,20 @@ public class ReportController {
 
 			String fromDate = request.getParameter("fromDate");
 			String toDate = request.getParameter("toDate");
+			String menuIdList = request.getParameter("menuIdList");
+
+			System.out.println(menuIdList);
+
+			menuIdList = menuIdList.substring(1, menuIdList.length() - 1);
+			menuIdList = menuIdList.replaceAll("\"", "");
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
 
 			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 			map.add("toDate", DateConvertor.convertToYMD(toDate));
+
+			map.add("menuIdList", menuIdList);
 			ParameterizedTypeReference<List<SpCakeWtCount>> typeRef = new ParameterizedTypeReference<List<SpCakeWtCount>>() {
 			};
 			ResponseEntity<List<SpCakeWtCount>> responseEntity = restTemplate
@@ -122,7 +131,7 @@ public class ReportController {
 
 		// exportToExcel
 		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
-
+		double totalCount = 0;
 		ExportToExcel expoExcel = new ExportToExcel();
 		List<String> rowData = new ArrayList<String>();
 		rowData.add("Sr No.");
@@ -131,19 +140,30 @@ public class ReportController {
 
 		expoExcel.setRowData(rowData);
 		exportToExcelList.add(expoExcel);
-		int index=0;
+		int index = 0;
 		for (int i = 0; i < spCakeList.size(); i++) {
 			expoExcel = new ExportToExcel();
-			index=index+1;
+			index = index + 1;
 			rowData = new ArrayList<String>();
-			rowData.add((index)+"");
+			rowData.add((index) + "");
 			rowData.add("" + spCakeList.get(i).getSpSelectedWt());
 			rowData.add("" + spCakeList.get(i).getCount());
+			totalCount = totalCount + spCakeList.get(i).getCount();
 
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
 
 		}
+
+		expoExcel = new ExportToExcel();
+
+		rowData = new ArrayList<String>();
+		rowData.add("");
+		rowData.add("Total");
+		rowData.add("" + totalCount);
+
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
 
 		HttpSession session = request.getSession();
 		session.setAttribute("exportExcelList", exportToExcelList);
@@ -207,6 +227,8 @@ public class ReportController {
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
 
+			double totalCount = 0;
+
 			int index = 0;
 			for (int j = 0; j < spCakeList.size(); j++) {
 
@@ -230,7 +252,28 @@ public class ReportController {
 				cell.setPaddingRight(1);
 				table.addCell(cell);
 
+				totalCount = totalCount + spCakeList.get(j).getCount();
+
 			}
+
+			PdfPCell cell;
+
+			cell = new PdfPCell(new Phrase("", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("Total", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(1);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("" + totalCount + "  ", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(1);
+			table.addCell(cell);
 			document.open();
 
 			Paragraph heading = new Paragraph("Sp Cake Report \n From Date:" + fromDate + " To Date:" + toDate);

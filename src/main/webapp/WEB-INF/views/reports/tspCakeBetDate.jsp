@@ -4,7 +4,8 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <%-- <script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
- --%><!-- <script type="text/javascript"
+ --%>
+<!-- <script type="text/javascript"
 	src="https://www.gstatic.com/charts/loader.js"></script>
  -->
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
@@ -40,7 +41,7 @@
 			<!-- END Page Title -->
 
 			<!-- BEGIN Breadcrumb -->
-		<%-- 	<div id="breadcrumbs">
+			<%-- 	<div id="breadcrumbs">
 				<ul class="breadcrumb">
 					<li><i class="fa fa-home"></i> <a
 						href="${pageContext.request.contextPath}/home">Home</a> <span
@@ -92,7 +93,26 @@
 
 					<br>
 					<div class="row">
-						<div class="col-md-12" style="text-align: center;">
+
+						<div class="form-group">
+							<label class="col-sm-3 col-lg-2 control-label">Menu</label>
+							<div class="col-sm-4 col-lg-4 controls">
+								<select data-placeholder="Select Menu" name="menuIdList"
+									class="form-control chosen" tabindex="-1" id="menuIdList"
+									multiple="multiple" data-rule-required="true">
+									<option value=""></option>
+
+									<option value=""></option>
+									<c:forEach items="${allMenus}" var="allMenus">
+										<option value="${allMenus.menuId}">${allMenus.menuTitle}</option>
+
+									</c:forEach>
+
+								</select>
+							</div>
+						</div>
+
+						<div class="col-md-3" style="text-align: center;">
 							<button class="btn btn-info" onclick="searchReport()">Search
 								Report</button>
 							<!-- <button class="btn search_btn" onclick="showChart()">Graph</button> -->
@@ -220,6 +240,8 @@
 
 			var from_date = $("#fromDate").val();
 			var to_date = $("#toDate").val();
+			var menuIdList = $("#menuIdList").val();
+			//alert("menuIdList" + menuIdList);
 
 			$('#loader').show();
 
@@ -229,9 +251,12 @@
 
 				fromDate : from_date,
 				toDate : to_date,
+				menuIdList : JSON.stringify(menuIdList),
+
 				ajax : 'true'
 
 			}, function(data) {
+				var totalCount = 0;
 
 				$('#table_grid td').remove();
 				$('#loader').hide();
@@ -250,12 +275,22 @@
 					//var tr = "<tr>";
 					var tr = $('<tr></tr>');
 					tr.append($('<td></td>').html(key + 1));
-					tr.append($('<td style="text-align:right;"></td>').html(report.spSelectedWt));
-					tr.append($('<td style="text-align:right;"></td>').html(report.count));
+					tr.append($('<td style="text-align:right;"></td>').html(
+							report.spSelectedWt));
+					totalCount = totalCount + report.count;
+					tr.append($('<td style="text-align:right;"></td>').html(
+							report.count));
 
 					$('#table_grid tbody').append(tr);
 
 				})
+				var tr = $('<tr></tr>');
+				tr.append($('<td style="text-align:right;"></td>').html(" "));
+				tr.append($('<td style="text-align:right;"></td>')
+						.html("Total"));
+				tr.append($('<td style="text-align:right;"></td>').html(
+						totalCount));
+				$('#table_grid tbody').append(tr);
 
 			});
 
