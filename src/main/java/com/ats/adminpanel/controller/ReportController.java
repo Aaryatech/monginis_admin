@@ -125,16 +125,18 @@ public class ReportController {
 
 		ExportToExcel expoExcel = new ExportToExcel();
 		List<String> rowData = new ArrayList<String>();
-
+		rowData.add("Sr No.");
 		rowData.add("Sp Cake weight");
 		rowData.add("Count");
 
 		expoExcel.setRowData(rowData);
 		exportToExcelList.add(expoExcel);
+		int index=0;
 		for (int i = 0; i < spCakeList.size(); i++) {
 			expoExcel = new ExportToExcel();
+			index=index+1;
 			rowData = new ArrayList<String>();
-
+			rowData.add((index)+"");
 			rowData.add("" + spCakeList.get(i).getSpSelectedWt());
 			rowData.add("" + spCakeList.get(i).getCount());
 

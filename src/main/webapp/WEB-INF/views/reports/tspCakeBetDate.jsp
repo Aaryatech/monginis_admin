@@ -3,10 +3,10 @@
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
-<script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
-<script type="text/javascript"
+<%-- <script src="${pageContext.request.contextPath}/resources/js/main.js"></script>
+ --%><!-- <script type="text/javascript"
 	src="https://www.gstatic.com/charts/loader.js"></script>
-
+ -->
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body>
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
@@ -40,14 +40,14 @@
 			<!-- END Page Title -->
 
 			<!-- BEGIN Breadcrumb -->
-			<div id="breadcrumbs">
+		<%-- 	<div id="breadcrumbs">
 				<ul class="breadcrumb">
 					<li><i class="fa fa-home"></i> <a
 						href="${pageContext.request.contextPath}/home">Home</a> <span
 						class="divider"><i class="fa fa-angle-right"></i></span></li>
 					<li class="active">SP Cake Report</li>
 				</ul>
-			</div>
+			</div> --%>
 			<!-- END Breadcrumb -->
 
 			<!-- BEGIN Main Content -->
@@ -204,7 +204,7 @@
 			<!-- END Main Content -->
 
 			<footer>
-				<p>2017 © Monginis.</p>
+				<p>2019 © Monginis.</p>
 			</footer>
 
 
@@ -250,8 +250,8 @@
 					//var tr = "<tr>";
 					var tr = $('<tr></tr>');
 					tr.append($('<td></td>').html(key + 1));
-					tr.append($('<td></td>').html(report.spSelectedWt));
-					tr.append($('<td></td>').html(report.count));
+					tr.append($('<td style="text-align:right;"></td>').html(report.spSelectedWt));
+					tr.append($('<td style="text-align:right;"></td>').html(report.count));
 
 					$('#table_grid tbody').append(tr);
 
