@@ -6,7 +6,6 @@ import java.util.Date;
 
 public class DateConvertor {
 
-	 
 		public static String convertToYMD(String date) {
 			
 			String convertedDate=null;
