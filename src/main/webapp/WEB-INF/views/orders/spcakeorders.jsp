@@ -6,6 +6,7 @@
   <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
  <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
 <body>
 
 
@@ -201,6 +202,11 @@
 
 										
 									</div>
+									<div class="col-md-9" ></div> 
+					<label for="search" class="col-md-3" id="search">
+    <i class="fa fa-search" style="font-size:20px"></i>
+									<input type="text"  style="border-radius:25px;" id="myInput" onkeyup="myFunction()" style="border-radius: 25px;" placeholder="Search by Sr.No or Franhise" >
+										</label>  
 								</div>
 								
 									<div align="center" id="loader" style="display:none">
@@ -419,7 +425,29 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
+<script>
+function myFunction() {
+  var input, filter, table, tr, td,td1, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("table1");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[0];
+    td1 = tr[i].getElementsByTagName("td")[2];
 
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      }else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      }  else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+</script>
 	<script type="text/javascript">
 		function callSearch() {
 			
