@@ -237,8 +237,8 @@ public class ReportController {
 
 		System.out.println("SpOrder" + getSpCakeOrderForProdAppLsitLocal.toString());
 		model.addObject("spCakeOrder", getSpCakeOrderForProdAppLsitLocal);
-		model.addObject("imgUrl", Constants.SP_CAKE_FOLDER);
-		model.addObject("imgUrl2", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
+		model.addObject("imgUrl2", Constants.SP_CAKE_FOLDER);
+		model.addObject("imgUrl", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
 
 		return model;
 
@@ -401,77 +401,64 @@ public class ReportController {
 
 	}
 
-	/*@RequestMapping(value = "/excelForTspRegCake", method = RequestMethod.GET)
-	@ResponseBody
-	public GetSpCakeOrderForProdApp excelForTspRegCake(HttpServletRequest request, HttpServletResponse response) {
-
-		GetSpCakeOrderForProdApp salesVoucherList = new GetSpCakeOrderForProdApp();
-		try {
-
-			String checkboxes = request.getParameter("checkboxes");
-			System.out.println("checkboxescheckboxescheckboxes" + checkboxes);
-
-			checkboxes = checkboxes.substring(0, checkboxes.length() - 1);
-			System.out.println("string " + checkboxes);
-
-			List<Integer> checkBoxList = Stream.of(checkboxes.split(",")).map(Integer::parseInt)
-					.collect(Collectors.toList());
-
-			try {
-				List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
-
-				ExportToExcel expoExcel = new ExportToExcel();
-				List<String> rowData = new ArrayList<String>();
-				rowData.add("Sr No.");
-				rowData.add("Sequnce In Route");
-				rowData.add("Route Name");
-				rowData.add("Franchise Name");
-				rowData.add("Cake Code");
-				rowData.add("Weight");
-
-				rowData.add("Deliver At");
-
-				expoExcel.setRowData(rowData);
-				exportToExcelList.add(expoExcel);
-				int index = 0;
-				for (int i = 0; i < getRegSpCakeOrderForProdAppList.size(); i++) {
-
-					for (int j = 0; j < checkBoxList.size(); j++) {
-						if (checkBoxList.get(j) == getRegSpCakeOrderForProdAppList.get(i).getSupId()) {
-							expoExcel = new ExportToExcel();
-							index = index + 1;
-							rowData = new ArrayList<String>();
-
-							rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getSrNo());
-							rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getNoInRoute());
-							rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getRouteName());
-							rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getFrName());
-							rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getFrCode());
-							rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getInputKgProd());
-
-							rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getRspPlace());
-
-							expoExcel.setRowData(rowData);
-							exportToExcelList.add(expoExcel);
-						}
-					}
-
-				}
-
-				HttpSession session = request.getSession();
-				session.setAttribute("exportExcelList", exportToExcelList);
-				session.setAttribute("excelName", "SPRegularCakeReportForApp");
-			} catch (Exception e) {
-				e.printStackTrace();
-				System.out.println("Exception to genrate excel ");
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return salesVoucherList;
-
-	}
-*/
+	/*
+	 * @RequestMapping(value = "/excelForTspRegCake", method = RequestMethod.GET)
+	 * 
+	 * @ResponseBody public GetSpCakeOrderForProdApp
+	 * excelForTspRegCake(HttpServletRequest request, HttpServletResponse response)
+	 * {
+	 * 
+	 * GetSpCakeOrderForProdApp salesVoucherList = new GetSpCakeOrderForProdApp();
+	 * try {
+	 * 
+	 * String checkboxes = request.getParameter("checkboxes");
+	 * System.out.println("checkboxescheckboxescheckboxes" + checkboxes);
+	 * 
+	 * checkboxes = checkboxes.substring(0, checkboxes.length() - 1);
+	 * System.out.println("string " + checkboxes);
+	 * 
+	 * List<Integer> checkBoxList =
+	 * Stream.of(checkboxes.split(",")).map(Integer::parseInt)
+	 * .collect(Collectors.toList());
+	 * 
+	 * try { List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+	 * 
+	 * ExportToExcel expoExcel = new ExportToExcel(); List<String> rowData = new
+	 * ArrayList<String>(); rowData.add("Sr No."); rowData.add("Sequnce In Route");
+	 * rowData.add("Route Name"); rowData.add("Franchise Name");
+	 * rowData.add("Cake Code"); rowData.add("Weight");
+	 * 
+	 * rowData.add("Deliver At");
+	 * 
+	 * expoExcel.setRowData(rowData); exportToExcelList.add(expoExcel); int index =
+	 * 0; for (int i = 0; i < getRegSpCakeOrderForProdAppList.size(); i++) {
+	 * 
+	 * for (int j = 0; j < checkBoxList.size(); j++) { if (checkBoxList.get(j) ==
+	 * getRegSpCakeOrderForProdAppList.get(i).getSupId()) { expoExcel = new
+	 * ExportToExcel(); index = index + 1; rowData = new ArrayList<String>();
+	 * 
+	 * rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getSrNo());
+	 * rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getNoInRoute());
+	 * rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getRouteName());
+	 * rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getFrName());
+	 * rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getFrCode());
+	 * rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getInputKgProd());
+	 * 
+	 * rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getRspPlace());
+	 * 
+	 * expoExcel.setRowData(rowData); exportToExcelList.add(expoExcel); } }
+	 * 
+	 * }
+	 * 
+	 * HttpSession session = request.getSession();
+	 * session.setAttribute("exportExcelList", exportToExcelList);
+	 * session.setAttribute("excelName", "SPRegularCakeReportForApp"); } catch
+	 * (Exception e) { e.printStackTrace();
+	 * System.out.println("Exception to genrate excel "); } } catch (Exception e) {
+	 * e.printStackTrace(); } return salesVoucherList;
+	 * 
+	 * }
+	 */
 	@RequestMapping(value = "/showTSPCakeCountBetweenDate", method = RequestMethod.GET)
 	public ModelAndView showTSPCakeCountBetweenDate(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("reports/tspCakeBetDate");

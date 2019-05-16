@@ -65,11 +65,11 @@
 				<td
 					style="font-family: arial; font-size: 18px; border-left: 1px solid #000000; border-bottom: 1px solid #000000; padding: 1px 7px; font-weight: bold;">${spCakeOrder.itemName}--${spCakeOrder.frCode}
 				</td>
-				
+
 				<td
-					style="font-size: 16px; padding: 5px 7px; font-weight: bold; border-left: 1px solid #000000; border-bottom: 1px solid #000000;">Weight --
-					 ${spCakeOrder.inputKgProd} kg</td>
-			 
+					style="font-size: 16px; padding: 5px 7px; font-weight: bold; border-left: 1px solid #000000; border-bottom: 1px solid #000000;">Weight
+					-- ${spCakeOrder.inputKgProd} kg</td>
+
 
 
 			</tr>
@@ -96,14 +96,13 @@
 				<td
 					style="text-align: left; font-size: 16px; font-weight: bold; border-left: 1px solid #000000; border-bottom: 1px solid #000000;">Photo
 					1 :<img src="${imgUrl2}${spCakeOrder.photo1}" height="60"
-					width="60" style="border: medium;"
-					alt="${imgUrl}${spCakeOrder.photo2}">
+					width="60" style="border: medium;" alt="NO IMAGE">
 				</td>
 
 				<td
 					style="text-align: left; font-size: 16px; font-weight: bold; border-left: 1px solid #000000; border-bottom: 1px solid #000000;">Photo
-					2 :<img src="${imgUrl}${spCakeOrder.photo1}" height="60" width="60"
-					alt="${imgUrl2}${spCakeOrder.photo2}">
+					2 :<img src="${imgUrl}${spCakeOrder.photo2}" height="60" width="60"
+					alt="NO IMAGE">
 				</td>
 			</tr>
 		</table>

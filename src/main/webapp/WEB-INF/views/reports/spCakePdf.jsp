@@ -108,15 +108,14 @@
 					style="font-size: 12px; padding: 5px 7px; font-weight: bold; border-left: 1px solid #000000; border-bottom: 1px solid #000000;">Photo</td>
 				<td
 					style="text-align: left; font-size: 16px; font-weight: bold; border-left: 1px solid #000000; border-bottom: 1px solid #000000;">Photo
-					1 :<img src="${imgUrl2}${spCakeOrder.orderPhoto}" height="60"
-					width="60" style="border: medium;"
-					alt="${imgUrl}${spCakeOrder.orderPhoto}">
+					1 :<img src="${imgUrl}${spCakeOrder.orderPhoto2}" height="60"
+					width="60" style="border: medium;" alt="NO IMAGE">
 				</td>
 
 				<td
 					style="text-align: left; font-size: 16px; font-weight: bold; border-left: 1px solid #000000; border-bottom: 1px solid #000000;">Photo
-					2 :<img src="${imgUrl}${spCakeOrder.orderPhoto}" height="60"
-					width="60" alt="${imgUrl2}${spCakeOrder.orderPhoto}">
+					2 :<img src="${imgUrl2}${spCakeOrder.orderPhoto}" height="60"
+					width="60" alt="NO IMAGE">
 				</td>
 			</tr>
 		</table>
