@@ -1,13 +1,8 @@
 package com.ats.adminpanel.controller;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -31,17 +26,14 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
-import com.ats.adminpanel.model.AllFrIdName;
 import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.FrMenu;
 
 import com.ats.adminpanel.model.GetFrMenus;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.item.Item;
-import com.ats.adminpanel.model.stock.PostFrItemStockCommon;
 import com.ats.adminpanel.model.stock.PostFrItemStockDetail;
 import com.ats.adminpanel.model.stock.PostFrItemStockHeader;
-import com.sun.org.apache.bcel.internal.generic.FMUL;
 
 @Controller
 @Scope("session")
@@ -86,37 +78,37 @@ public class StockController {
 	public @ResponseBody List<FrMenu> getMenuListByFr(HttpServletRequest request, HttpServletResponse response) {
 
 		logger.info("/getMenuListByFr AJAX Call mapping.");
-try {
-		frId = request.getParameter("fr_id");
+		try {
+			frId = request.getParameter("fr_id");
 
-		RestTemplate restTemplate = new RestTemplate();
+			RestTemplate restTemplate = new RestTemplate();
 
-		MultiValueMap<String, Object> menuMap = new LinkedMultiValueMap<String, Object>();
-		menuMap.add("frId", frId);
+			MultiValueMap<String, Object> menuMap = new LinkedMultiValueMap<String, Object>();
+			menuMap.add("frId", frId);
 
-		GetFrMenus getFrMenus = restTemplate.postForObject(Constants.url + "getFrConfigMenus", menuMap,
-				GetFrMenus.class);
+			GetFrMenus getFrMenus = restTemplate.postForObject(Constants.url + "getFrConfigMenus", menuMap,
+					GetFrMenus.class);
 
-		filterFrMenus = new ArrayList<FrMenu>();
+			filterFrMenus = new ArrayList<FrMenu>();
 
-		for (int i = 0; i < getFrMenus.getFrMenus().size(); i++) {
+			for (int i = 0; i < getFrMenus.getFrMenus().size(); i++) {
 
-			FrMenu frMenu = getFrMenus.getFrMenus().get(i);
+				FrMenu frMenu = getFrMenus.getFrMenus().get(i);
 
-			if (frMenu.getMenuId() == 26 || frMenu.getMenuId() == 31 || frMenu.getMenuId() == 33
-					|| frMenu.getMenuId() == 34 || frMenu.getMenuId() == 49) {
+				if (frMenu.getMenuId() == 26 || frMenu.getMenuId() == 31 || frMenu.getMenuId() == 33
+						|| frMenu.getMenuId() == 34 || frMenu.getMenuId() == 49) {
 
-				filterFrMenus.add(frMenu);
+					filterFrMenus.add(frMenu);
+
+				}
 
 			}
-
+			System.err.println("Menus " + filterFrMenus);
+		} catch (Exception e) {
+			System.err.println("Exc in ");
+			System.err.println("dvld");
+			e.printStackTrace();
 		}
-System.err.println("Menus " +filterFrMenus);
-}catch (Exception e) {
-	System.err.println("Exc in ");
-	System.err.println("dvld");
-	e.printStackTrace();
-}
 		return filterFrMenus;
 	}
 

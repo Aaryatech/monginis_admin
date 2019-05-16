@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +44,8 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.ExportToExcel;
+import com.ats.adminpanel.model.GetRegSpCakeOrderForProdApp;
+import com.ats.adminpanel.model.GetSpCakeOrderForProdApp;
 import com.ats.adminpanel.model.SpCakeWtCount;
 import com.ats.adminpanel.model.franchisee.AllMenuResponse;
 import com.itextpdf.text.BaseColor;
@@ -64,6 +68,410 @@ public class ReportController {
 
 	RestTemplate restTemplate = new RestTemplate();
 
+	@RequestMapping(value = "/showTSPCakeOrderForApp", method = RequestMethod.GET)
+	public ModelAndView showTSPCakeOrderForApp(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView model = new ModelAndView("reports/tspCakeForAppReport");
+		AllMenuResponse allMenus = new AllMenuResponse();
+		try {
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			todaysDate = date.format(formatters);
+			model.addObject("todaysDate", todaysDate);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+
+			map.add("catId", 5);
+			allMenus = restTemplate.postForObject(Constants.url + "getMenuByCat", map, AllMenuResponse.class);
+			model.addObject("allMenus", allMenus.getMenuConfigurationPage());
+			System.out.println(allMenus.getMenuConfigurationPage().toString());
+
+		} catch (Exception e) {
+			System.out.println("Exc in show Report report tspcake wise  " + e.getMessage());
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+
+	List<GetSpCakeOrderForProdApp> getSpCakeOrderForProdAppLsit = new ArrayList<>();
+
+	@RequestMapping(value = "/getSpCakeListAjax", method = RequestMethod.GET)
+	public @ResponseBody List<GetSpCakeOrderForProdApp> getSpCakeListAjax(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		try {
+
+			String fromDate = request.getParameter("fromDate");
+			String toDate = request.getParameter("toDate");
+			String menuIdList = request.getParameter("menuIdList");
+			int seqence = Integer.parseInt(request.getParameter("seqenceList"));
+
+			System.out.println(menuIdList);
+
+			menuIdList = menuIdList.substring(1, menuIdList.length() - 1);
+			menuIdList = menuIdList.replaceAll("\"", "");
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+
+			map.add("menuIdList", menuIdList);
+
+			if (seqence == 1) {
+
+				map.add("isSlotUsed", 0);
+
+				map.add("isOrderBy", 0);
+			} else if (seqence == 2) {
+				map.add("isSlotUsed", 0);
+
+				map.add("isOrderBy", 1);
+			} else {
+				map.add("isSlotUsed", 1);
+
+				map.add("isOrderBy", 1);
+			}
+			ParameterizedTypeReference<List<GetSpCakeOrderForProdApp>> typeRef = new ParameterizedTypeReference<List<GetSpCakeOrderForProdApp>>() {
+			};
+			ResponseEntity<List<GetSpCakeOrderForProdApp>> responseEntity = restTemplate
+					.exchange(Constants.url + "getSpCakeOrdersForApp", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			getSpCakeOrderForProdAppLsit = responseEntity.getBody();
+
+			System.out.println("sales List Bill Wise " + spCakeList.toString());
+
+		} catch (Exception e) {
+			System.out.println("get sale Report Bill Wise " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		// exportToExcel
+		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+		double totalCount = 0;
+		ExportToExcel expoExcel = new ExportToExcel();
+		List<String> rowData = new ArrayList<String>();
+		rowData.add("Sr No.");
+		rowData.add("Sequnce In Route");
+		rowData.add("Route Name");
+		rowData.add("Franchise Name");
+		rowData.add("Cake Code");
+		rowData.add("Weight");
+		rowData.add("Flavour");
+		rowData.add("Deliver At");
+
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+		int index = 0;
+		for (int i = 0; i < getSpCakeOrderForProdAppLsit.size(); i++) {
+			expoExcel = new ExportToExcel();
+			index = index + 1;
+			rowData = new ArrayList<String>();
+
+			rowData.add("" + getSpCakeOrderForProdAppLsit.get(i).getSrNo());
+			rowData.add("" + getSpCakeOrderForProdAppLsit.get(i).getNoInRoute());
+			rowData.add("" + getSpCakeOrderForProdAppLsit.get(i).getRouteName());
+			rowData.add("" + getSpCakeOrderForProdAppLsit.get(i).getFrName());
+			rowData.add("" + getSpCakeOrderForProdAppLsit.get(i).getFrCode());
+			rowData.add("" + getSpCakeOrderForProdAppLsit.get(i).getInputKgFr());
+			rowData.add("" + getSpCakeOrderForProdAppLsit.get(i).getSpfName());
+			rowData.add("" + getSpCakeOrderForProdAppLsit.get(i).getSpDeliveryPlace());
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+
+		}
+
+		expoExcel = new ExportToExcel();
+
+		rowData = new ArrayList<String>();
+		rowData.add("");
+		rowData.add("Total");
+		rowData.add("" + totalCount);
+
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+
+		HttpSession session = request.getSession();
+		session.setAttribute("exportExcelList", exportToExcelList);
+		session.setAttribute("excelName", "SP Cake Report");
+
+		return getSpCakeOrderForProdAppLsit;
+	}
+
+	@RequestMapping(value = "/excelForTspCake/{checkboxes}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView excelForTspCake(@PathVariable("checkboxes") String checkboxes, HttpServletRequest request,
+			HttpServletResponse response) {
+		ModelAndView model = new ModelAndView("reports/spCakePdf");
+
+		List<GetSpCakeOrderForProdApp> getSpCakeOrderForProdAppLsitLocal = new ArrayList<>();
+		try {
+
+			System.out.println("checkboxescheckboxescheckboxes" + checkboxes);
+
+			checkboxes = checkboxes.substring(0, checkboxes.length() - 1);
+			System.out.println("string " + checkboxes);
+
+			List<Integer> checkBoxList = Stream.of(checkboxes.split(",")).map(Integer::parseInt)
+					.collect(Collectors.toList());
+
+			for (int i = 0; i < getSpCakeOrderForProdAppLsit.size(); i++) {
+
+				for (int j = 0; j < checkBoxList.size(); j++) {
+					if (checkBoxList.get(j) == getSpCakeOrderForProdAppLsit.get(i).gettSpCakeSupNo()) {
+						getSpCakeOrderForProdAppLsitLocal.add(getSpCakeOrderForProdAppLsit.get(i));
+
+					}
+				}
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Exception to genrate excel ");
+		}
+
+		System.out.println("SpOrder" + getSpCakeOrderForProdAppLsitLocal.toString());
+		model.addObject("spCakeOrder", getSpCakeOrderForProdAppLsitLocal);
+		model.addObject("imgUrl", Constants.SP_CAKE_FOLDER);
+		model.addObject("imgUrl2", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
+
+		return model;
+
+	}
+
+	@RequestMapping(value = "/showTSPRegularCakeOrderForApp", method = RequestMethod.GET)
+	public ModelAndView showTSPRegularCakeOrderForApp(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView model = new ModelAndView("reports/tspRegCakeForAppReport");
+		AllMenuResponse allMenus = new AllMenuResponse();
+		try {
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			todaysDate = date.format(formatters);
+			model.addObject("todaysDate", todaysDate);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+
+			map.add("catId", 2);
+			allMenus = restTemplate.postForObject(Constants.url + "getMenuByCat", map, AllMenuResponse.class);
+			model.addObject("allMenus", allMenus.getMenuConfigurationPage());
+			System.out.println(allMenus.getMenuConfigurationPage().toString());
+
+		} catch (Exception e) {
+			System.out.println("Exc in show Report report tspcake wise  " + e.getMessage());
+			e.printStackTrace();
+		}
+		return model;
+
+	}
+
+	List<GetRegSpCakeOrderForProdApp> getRegSpCakeOrderForProdAppList = new ArrayList<>();
+
+	@RequestMapping(value = "/getSpRegCakeListAjax", method = RequestMethod.GET)
+	public @ResponseBody List<GetRegSpCakeOrderForProdApp> getSpRegCakeListAjax(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		try {
+
+			String fromDate = request.getParameter("fromDate");
+			String toDate = request.getParameter("toDate");
+			String menuIdList = request.getParameter("menuIdList");
+			int seqence = Integer.parseInt(request.getParameter("seqenceList"));
+
+			System.out.println(menuIdList);
+
+			menuIdList = menuIdList.substring(1, menuIdList.length() - 1);
+			menuIdList = menuIdList.replaceAll("\"", "");
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+
+			map.add("menuIdList", menuIdList);
+
+			if (seqence == 1) {
+				map.add("isOrderBy", 1);
+			} else if (seqence == 2) {
+
+				map.add("isOrderBy", 0);
+			}
+			ParameterizedTypeReference<List<GetRegSpCakeOrderForProdApp>> typeRef = new ParameterizedTypeReference<List<GetRegSpCakeOrderForProdApp>>() {
+			};
+			ResponseEntity<List<GetRegSpCakeOrderForProdApp>> responseEntity = restTemplate.exchange(
+					Constants.url + "geRegSpCakeOrdersForApp", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			getRegSpCakeOrderForProdAppList = responseEntity.getBody();
+
+			System.out.println("sales List Bill Wise " + spCakeList.toString());
+
+		} catch (Exception e) {
+			System.out.println("get sale Report Bill Wise " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		// exportToExcel
+		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+		double totalCount = 0;
+		ExportToExcel expoExcel = new ExportToExcel();
+		List<String> rowData = new ArrayList<String>();
+		rowData.add("Sr No.");
+		rowData.add("Sequnce In Route");
+		rowData.add("Route Name");
+		rowData.add("Franchise Name");
+		rowData.add("Cake Code");
+		rowData.add("Weight");
+		rowData.add("Flavour");
+		rowData.add("Deliver At");
+
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+		int index = 0;
+		for (int i = 0; i < getRegSpCakeOrderForProdAppList.size(); i++) {
+			expoExcel = new ExportToExcel();
+			index = index + 1;
+			rowData = new ArrayList<String>();
+
+			rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getSrNo());
+			rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getNoInRoute());
+			rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getRouteName());
+			rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getFrName());
+			rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getFrCode());
+			rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getInputKgProd());
+			rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getNoInRoute());
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+
+		}
+
+		HttpSession session = request.getSession();
+		session.setAttribute("exportExcelList", exportToExcelList);
+		session.setAttribute("excelName", "SP Cake Report");
+
+		return getRegSpCakeOrderForProdAppList;
+	}
+
+	@RequestMapping(value = "/excelForTspRegCake/{checkboxes}", method = RequestMethod.GET)
+	@ResponseBody
+	public ModelAndView excelForTspRegCake(@PathVariable("checkboxes") String checkboxes, HttpServletRequest request,
+			HttpServletResponse response) {
+		ModelAndView model = new ModelAndView("reports/spRegCakePdf");
+
+		List<GetRegSpCakeOrderForProdApp> getRegSpCakeOrderForProdAppListLocal = new ArrayList<>();
+		try {
+
+			System.out.println("checkboxescheckboxescheckboxes" + checkboxes);
+
+			checkboxes = checkboxes.substring(0, checkboxes.length() - 1);
+			System.out.println("string " + checkboxes);
+
+			List<Integer> checkBoxList = Stream.of(checkboxes.split(",")).map(Integer::parseInt)
+					.collect(Collectors.toList());
+
+			for (int i = 0; i < getRegSpCakeOrderForProdAppList.size(); i++) {
+
+				for (int j = 0; j < checkBoxList.size(); j++) {
+					if (checkBoxList.get(j) == getRegSpCakeOrderForProdAppList.get(i).getSupId()) {
+						getRegSpCakeOrderForProdAppListLocal.add(getRegSpCakeOrderForProdAppList.get(i));
+
+					}
+				}
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("Exception to genrate excel ");
+		}
+
+		System.out.println("SpOrder" + getRegSpCakeOrderForProdAppListLocal.toString());
+		model.addObject("spCakeOrder", getRegSpCakeOrderForProdAppListLocal);
+		model.addObject("imgUrl", Constants.SP_CAKE_FOLDER);
+		model.addObject("imgUrl2", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
+
+		return model;
+
+	}
+
+	/*@RequestMapping(value = "/excelForTspRegCake", method = RequestMethod.GET)
+	@ResponseBody
+	public GetSpCakeOrderForProdApp excelForTspRegCake(HttpServletRequest request, HttpServletResponse response) {
+
+		GetSpCakeOrderForProdApp salesVoucherList = new GetSpCakeOrderForProdApp();
+		try {
+
+			String checkboxes = request.getParameter("checkboxes");
+			System.out.println("checkboxescheckboxescheckboxes" + checkboxes);
+
+			checkboxes = checkboxes.substring(0, checkboxes.length() - 1);
+			System.out.println("string " + checkboxes);
+
+			List<Integer> checkBoxList = Stream.of(checkboxes.split(",")).map(Integer::parseInt)
+					.collect(Collectors.toList());
+
+			try {
+				List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+				ExportToExcel expoExcel = new ExportToExcel();
+				List<String> rowData = new ArrayList<String>();
+				rowData.add("Sr No.");
+				rowData.add("Sequnce In Route");
+				rowData.add("Route Name");
+				rowData.add("Franchise Name");
+				rowData.add("Cake Code");
+				rowData.add("Weight");
+
+				rowData.add("Deliver At");
+
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				int index = 0;
+				for (int i = 0; i < getRegSpCakeOrderForProdAppList.size(); i++) {
+
+					for (int j = 0; j < checkBoxList.size(); j++) {
+						if (checkBoxList.get(j) == getRegSpCakeOrderForProdAppList.get(i).getSupId()) {
+							expoExcel = new ExportToExcel();
+							index = index + 1;
+							rowData = new ArrayList<String>();
+
+							rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getSrNo());
+							rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getNoInRoute());
+							rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getRouteName());
+							rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getFrName());
+							rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getFrCode());
+							rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getInputKgProd());
+
+							rowData.add("" + getRegSpCakeOrderForProdAppList.get(i).getRspPlace());
+
+							expoExcel.setRowData(rowData);
+							exportToExcelList.add(expoExcel);
+						}
+					}
+
+				}
+
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "SPRegularCakeReportForApp");
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Exception to genrate excel ");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return salesVoucherList;
+
+	}
+*/
 	@RequestMapping(value = "/showTSPCakeCountBetweenDate", method = RequestMethod.GET)
 	public ModelAndView showTSPCakeCountBetweenDate(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("reports/tspCakeBetDate");
