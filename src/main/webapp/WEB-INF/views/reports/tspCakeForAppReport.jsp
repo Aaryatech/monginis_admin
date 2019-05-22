@@ -278,6 +278,12 @@
 															.getElementById('range').style.display = 'block';
 
 													var index = key + 1;
+													var colorName = " ";
+													if (report.status == 1) {
+														colorName = "red";
+													} else if (report.status == 2) {
+														colorName = "green";
+													}
 													//var tr = "<tr>";
 													var tr = $('<tr></tr>');
 
@@ -289,49 +295,49 @@
 
 													tr
 															.append($(
-																	'<td style="text-align:left;"></td>')
+																	'<td style="text-align:left;  color:'+colorName+';"></td>')
 																	.html(
 																			report.srNo));
 
 													tr
 															.append($(
-																	'<td style="text-align:left;"></td>')
+																	'<td style="text-align:left;  color:'+colorName+';"></td>')
 																	.html(
 																			report.noInRoute));
 
 													tr
 															.append($(
-																	'<td style="text-align:left;"></td>')
+																	'<td style="text-align:left;  color:'+colorName+';"></td>')
 																	.html(
 																			report.routeName));
 
 													tr
 															.append($(
-																	'<td style="text-align:left;"></td>')
+																	'<td style="text-align:left;  color:'+colorName+';"></td>')
 																	.html(
 																			report.frName));
 
 													tr
 															.append($(
-																	'<td style="text-align:left;"></td>')
+																	'<td style="text-align:left;  color:'+colorName+';"></td>')
 																	.html(
 																			report.spCode));
 
 													tr
 															.append($(
-																	'<td style="text-align:left;"></td>')
+																	'<td style="text-align:left;  color:'+colorName+';"></td>')
 																	.html(
 																			report.inputKgFr));
 
 													tr
 															.append($(
-																	'<td style="text-align:left;"></td>')
+																	'<td style="text-align:left;  color:'+colorName+';"></td>')
 																	.html(
 																			report.spfName));
 
 													tr
 															.append($(
-																	'<td style="text-align:left;"></td>')
+																	'<td style="text-align:left;  color:'+colorName+';"></td>')
 																	.html(
 																			report.spDeliveryPlace));
 
