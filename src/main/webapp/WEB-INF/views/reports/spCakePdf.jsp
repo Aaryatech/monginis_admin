@@ -63,7 +63,7 @@
 					style="font-size: 12px; border-bottom: 1px solid #000000; padding: 1px 7px; font-weight: bold;">Sp,Cake
 					Code / Name</td>
 				<td
-					style="font-family: arial; font-size: 18px; border-left: 1px solid #000000; border-bottom: 1px solid #000000; padding: 1px 7px; font-weight: bold;">${spCakeOrder.spName}--${spCakeOrder.frCode}
+					style="font-family: arial; font-size: 18px; border-left: 1px solid #000000; border-bottom: 1px solid #000000; padding: 1px 7px; font-weight: bold;">${spCakeOrder.spName}--${spCakeOrder.spCode}
 				</td>
 				<td
 					style="font-size: 14px; border-bottom: 1px solid #000000; padding: 5px 7px; border-left: 1px solid #000000; font-weight: bold;">Message--
