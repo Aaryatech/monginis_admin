@@ -265,7 +265,7 @@ public class CategoryStkUtilityController {
             {
 		
         		  int frId=franchiseList.get(j).getFrId();
-        		  int qty=Integer.parseInt(request.getParameter("orderQty"+frId+""+subCategoryList.get(j).getSubCatId()));
+        		  int qty=Integer.parseInt(request.getParameter("orderQty"+frId+""+subCategoryList.get(i).getSubCatId()));
         		  System.out.println("qty"+qty);
         			
 		
@@ -380,8 +380,9 @@ public class CategoryStkUtilityController {
 		orderList.add(order);
          }
    }
-		
-			if(orderList!=null || !orderList.isEmpty())
+	       System.out.println("Place Order Response" + orderList.toString());
+
+		if(orderList!=null || !orderList.isEmpty())
 			{
 				orderListResponse = restTemplate.postForObject(Constants.url + "placeOrder", orderList,List.class);
 				orderList=new ArrayList<Orders>();
