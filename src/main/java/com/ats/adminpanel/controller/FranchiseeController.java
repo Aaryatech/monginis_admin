@@ -1052,7 +1052,7 @@ public class FranchiseeController {
 			rowData.add("" + franchisee.get(i).getCustomerId());
 			rowData.add(franchisee.get(i).getFrCode());
 			rowData.add(franchisee.get(i).getCustomerName());
-			rowData.add(""+franchisee.get(i).getFrRateCat());
+			rowData.add("" + franchisee.get(i).getFrRateCat());
 			rowData.add(franchisee.get(i).getCity());
 			rowData.add(franchisee.get(i).getAddress1());
 
@@ -2270,6 +2270,7 @@ public class FranchiseeController {
 		}
 		return franchiseeList;
 	}
+
 	// ----------------------------------------END--------------------------------------------
 	@RequestMapping(value = "/configureFrItems")
 	public ModelAndView configureFrItems(HttpServletRequest request, HttpServletResponse response) {
@@ -2295,16 +2296,15 @@ public class FranchiseeController {
 
 		return mav;
 	}
+
 	@RequestMapping(value = "/configureItems", method = RequestMethod.POST)
-	public String configureItems(HttpServletRequest request, HttpServletResponse response)
-	{
+	public String configureItems(HttpServletRequest request, HttpServletResponse response) {
 		try {
 			String[] itemShow = request.getParameterValues("items[]");
 			String[] frId = request.getParameterValues("fr_id[]");
-			int menuId=Integer.parseInt(request.getParameter("menu"));
+			int menuId = Integer.parseInt(request.getParameter("menu"));
 			RestTemplate restTemplate = new RestTemplate();
 
-			
 			franchiseeAndMenuList = restTemplate.getForObject(Constants.url + "getFranchiseeAndMenu",
 					FranchiseeAndMenuList.class);
 
@@ -2336,24 +2336,149 @@ public class FranchiseeController {
 			}
 			String frIdList = sb1.toString();
 			frIdList = frIdList.substring(0, frIdList.length() - 1);
-			
-			RestTemplate rest=new RestTemplate();
+
+			RestTemplate rest = new RestTemplate();
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("itemIdList", items);
 			map.add("frIdList", frIdList);
 			map.add("menuId", menuId);
-            map.add("catId", selectedCatId);
+			map.add("catId", selectedCatId);
 			Info errorMessage = rest.postForObject(Constants.url + "updateConfiguredItems", map, Info.class);
 
-			if(errorMessage.getError()==false)
-			{
+			if (errorMessage.getError() == false) {
 				System.err.println("stock");
 			}
-			
-		}catch (Exception e) {
+
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return "redirect:/configureFranchiseesList";
-		
+
 	}
+
+	@RequestMapping(value = "/showAddFrTargetNew", method = RequestMethod.GET)
+	public ModelAndView showAddFrTargetNew(HttpServletRequest request, HttpServletResponse response) {
+		Constants.mainAct = 2;
+		Constants.subAct = 114;
+		ModelAndView model = new ModelAndView("franchisee/frTargetNew");
+
+		List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August",
+				"September", "October", "November", "December");
+		String thisYear = new SimpleDateFormat("yyyy").format(new Date());
+		RestTemplate restTemplate = new RestTemplate();
+
+		AllFranchiseeList allFranchiseeList = restTemplate.getForObject(Constants.url + "getAllFranchisee",
+				AllFranchiseeList.class);
+		List<FranchiseeList> franchiseeList = new ArrayList<FranchiseeList>();
+		franchiseeList = allFranchiseeList.getFranchiseeList();
+		System.out.println("Franchisee List:" + franchiseeList.toString());
+
+		model.addObject("franchiseeList", franchiseeList);
+		model.addObject("thisYear", thisYear);
+		model.addObject("months", months);
+		model.addObject("isSave", 0);
+
+		return model;
+	}
+
+	@RequestMapping(value = "/addFrTargetProcessNew", method = RequestMethod.POST)
+	public ModelAndView addFrTargetProcessNew(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("franchisee/frTargetNew");
+		RestTemplate restTemplate = new RestTemplate();
+
+		try {
+
+			int frId = Integer.parseInt(request.getParameter("fr_id"));
+			System.out.println("frId:" + frId);
+
+			int frTargetYear = Integer.parseInt(request.getParameter("year"));
+			System.out.println("frTargetYear:" + frTargetYear);
+
+			List<FrTarget> frTargetList = new ArrayList<FrTarget>();
+
+			for (int j = 1; j <= 12; j++) {
+
+				// String frMonth = request.getParameter("month"+chk);
+				// System.out.println("month:" + frMonth);
+
+				float frTargetAmt = Float.parseFloat(request.getParameter("target" + j));
+				System.out.println("frTarget:" + frTargetAmt);
+
+				float frAchievedSale = Float.parseFloat(request.getParameter("grngvn_target" + j));
+				System.out.println("frAchTarget:" + frAchievedSale);
+
+				String frAward = request.getParameter("school_target" + j);
+				System.out.println("frAward" + frAward);
+
+				String remark = request.getParameter("sch_act" + j);
+				System.out.println("remark" + remark);
+				System.out.println("==============" + frId);
+				FrTarget franchiseTarget = new FrTarget();
+
+				franchiseTarget.setFrId(frId);
+				franchiseTarget.setFrTargetAmt(frTargetAmt);
+				franchiseTarget.setFrAchievedSale(frAchievedSale);
+				franchiseTarget.setFrAward(frAward);
+				franchiseTarget.setFrTargetMonth(j);
+				franchiseTarget.setFrTargetYear(frTargetYear);
+				franchiseTarget.setRemark(remark);
+				franchiseTarget.setStatus(1);
+				franchiseTarget.setDelStatus(0);
+				frTargetList.add(franchiseTarget);
+			}
+			Info info = restTemplate.postForObject(Constants.url + "/saveFrTarget", frTargetList, Info.class);
+			System.out.println("saveFrTarget Response:" + info.toString());
+
+			List<String> months = Arrays.asList("January", "February", "March", "April", "May", "June", "July",
+					"August", "September", "October", "November", "December");
+
+			AllFranchiseeList allFranchiseeList = restTemplate.getForObject(Constants.url + "getAllFranchisee",
+					AllFranchiseeList.class);
+			List<FranchiseeList> franchiseeList = new ArrayList<FranchiseeList>();
+			franchiseeList = allFranchiseeList.getFranchiseeList();
+
+			System.out.println("Franchisee List:" + franchiseeList.toString());
+
+			model.addObject("franchiseeList", franchiseeList);
+			model.addObject("months", months);
+			model.addObject("frId", frId);
+			model.addObject("thisYear", frTargetYear);
+			model.addObject("isSave", 1);
+		} catch (Exception e) {
+			System.out.println("Exception In /saveFrTarget" + e.getMessage());
+			e.printStackTrace();
+		}
+		return model;
+	}
+
+	// ------------------------------------showAddFrTarget--------------------------------------------
+
+	// --------------------------------------------------------------------------------------------------
+
+	@RequestMapping(value = "/searchFrMonthTargetNew", method = RequestMethod.GET)
+	public @ResponseBody List<FrTarget> searchFrMonthTargetNew(HttpServletRequest request,
+			HttpServletResponse response) {
+		FrTargetList frTargetList = new FrTargetList();
+		try {
+			int frId = Integer.parseInt(request.getParameter("frId"));
+			System.out.println("frId:" + frId);
+
+			int year = Integer.parseInt(request.getParameter("year"));
+			System.out.println("year:" + year);
+
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("frId", frId);
+			map.add("year", year);
+
+			frTargetList = restTemplate.postForObject(Constants.url + "/getFrTargetList", map, FrTargetList.class);
+			System.out.println("Fr Target List:" + frTargetList.toString());
+
+		} catch (Exception e) {
+			System.out.println("Exception In Search FrTarget Data By FrId" + e.getMessage());
+		}
+		return frTargetList.getFrTargetList();
+	}
+
 }
