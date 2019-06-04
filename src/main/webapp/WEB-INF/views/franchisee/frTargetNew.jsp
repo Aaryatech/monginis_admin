@@ -210,6 +210,10 @@
 												<tbody> -->
 														<c:forEach items="${months}" var="months"
 															varStatus="count">
+
+															<input type="hidden" class="form-control"
+																name="id${count.index+1}" id="id${count.index+1}"
+																value="0" />
 															<tr>
 
 																<td><c:out value="${count.index+1}" /></td>
@@ -238,7 +242,11 @@
 
 
 
+
+
 															</tr>
+
+
 
 														</c:forEach>
 													</tbody>
@@ -368,6 +376,7 @@
 						//document.getElementById('remark'+frTarget.frTargetMonth).value = frTarget.remark;
 					//	document.getElementById('remark'+frTarget.frTargetMonth).disabled = true;
 						document.getElementById('sch_act'+frTarget.frTargetMonth).value = frTarget.remark; 
+						document.getElementById('id'+frTarget.frTargetMonth).value = frTarget.frTargetId;
 				
 					})
 					
