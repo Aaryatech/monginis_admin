@@ -338,7 +338,7 @@
 <script type="text/javascript">
 
 	function searchFrMonthTarget() {
-		alert("hi");
+		//alert("hi");
 		
 		var frId = document.getElementById("fr_id").value;
 		var year = document.getElementById("year").value;
@@ -352,7 +352,7 @@
 					year:year,
 					ajax : 'true'
 				}, function(data) {
-					alert(data);
+					//alert(data);
 					var len = data.length;
 					$('#loader').hide();
 					//document.getElementById("targetSave").disabled = false;
@@ -367,7 +367,7 @@
 					//	document.getElementById('award'+frTarget.frTargetMonth).disabled = true;
 						//document.getElementById('remark'+frTarget.frTargetMonth).value = frTarget.remark;
 					//	document.getElementById('remark'+frTarget.frTargetMonth).disabled = true;
-						document.getElementById('sch_act'+frTarget.frTargetMonth).value = frTarget.frTargetId; 
+						document.getElementById('sch_act'+frTarget.frTargetMonth).value = frTarget.remark; 
 				
 					})
 					
