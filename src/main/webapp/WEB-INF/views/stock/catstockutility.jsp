@@ -132,7 +132,7 @@
 								</select>
 
 							</div>
-							<label class="col-sm-3 col-lg-2 control-label"><b>OR</b>
+							<label class="col-sm-3 col-lg-2 control-label">
 								Select Franchisee</label>
 							<div class="col-sm-6 col-lg-4">
 
@@ -296,7 +296,7 @@
 																		});
 														tr.insertCell(i).outerHTML = "<th >"
 																+ subCat.subCatName
-																+ "&nbsp;&nbsp;<select class='form-control chosen' name=items"
+																+ '<select class="form-control chosen" name=items'
 																+ subCat.subCatId
 																+ " id=items"
 																+ subCat.subCatId

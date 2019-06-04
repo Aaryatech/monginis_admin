@@ -138,6 +138,8 @@
 									Report</button>
 								<button class="btn btn-primary" value="PDF" id="PDFButton"
 									onclick="genPdf()">PDF</button>
+									<button class="btn btn-primary" value="PDF" id="PDFButton"
+									onclick="genExcel()">Excel</button>
 							</div>
 						</div>
 					</div>
@@ -683,6 +685,15 @@
 			var selectedCat = $("#selectCat").val();
 
 			window.open('pdfForDisReport?url=pdf/getDispatchReportPdf/'
+					+ billDate + '/' + routeId + '/' + selectedCat);
+
+		}
+		function genExcel() {
+			var billDate = $("#billDate").val();
+			var routeId = $("#selectRoute").val();
+			var selectedCat = $("#selectCat").val();
+
+			window.open('pdf/getDispatchReportPdf/'
 					+ billDate + '/' + routeId + '/' + selectedCat);
 
 		}

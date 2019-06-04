@@ -3009,6 +3009,8 @@ public class SalesReportController {
 
 		List<DispatchReport> dispatchReportList = new ArrayList<DispatchReport>();
 		DispatchReportList dispatchReports = new DispatchReportList();
+		List<SubCategory> subCategoryList=new ArrayList<SubCategory>();
+		List<Item> itemList=new ArrayList<Item>();
 		try {
 			System.out.println("Inside get Dispatch Report");
 			// String billDate = request.getParameter("bill_date");
@@ -3122,7 +3124,7 @@ public class SalesReportController {
 						SubCategory[].class);
 
 				ArrayList<SubCategory> subCatAList = new ArrayList<SubCategory>(Arrays.asList(subCatList));
-
+				subCategoryList.addAll(subCatAList);
 				/*
 				 * if(!dispatchReportList.isEmpty()&&!responseEntity1.getBody().isEmpty()&&!
 				 * frNameIdByRouteIdList.isEmpty()) { for(int
@@ -3140,6 +3142,7 @@ public class SalesReportController {
 				 * dispachReport.setItemId(responseEntity1.getBody().get(j).getId());
 				 * dispachReport.setBillQty(0); dispatchReportList.add(dispachReport); } } } }
 				 */
+				itemList.addAll(responseEntity1.getBody());
 				model.addObject("dispatchReportList", dispatchReportList);
 				model.addObject("frList", frNameIdByRouteIdList);
 				model.addObject("itemList", responseEntity1.getBody());
@@ -3177,7 +3180,7 @@ public class SalesReportController {
 
 				ResponseEntity<List<SubCategory>> responseEntity2 = restTemplate
 						.exchange(Constants.url + "getSubCatList", HttpMethod.POST, new HttpEntity<>(map), typeRef2);
-
+				subCategoryList.addAll(responseEntity2.getBody());
 				/*
 				 * if(!dispatchReportList.isEmpty()&&!responseEntity1.getBody().isEmpty()&&!
 				 * frNameIdByRouteIdList.isEmpty()) { for(int
@@ -3195,11 +3198,135 @@ public class SalesReportController {
 				 * dispachReport.setItemId(responseEntity1.getBody().get(j).getId());
 				 * dispachReport.setBillQty(0); dispatchReportList.add(dispachReport); } } } }
 				 */
-
+				itemList.addAll(responseEntity1.getBody());
 				model.addObject("dispatchReportList", dispatchReportList);
 				model.addObject("frList", frNameIdByRouteIdList);
 				model.addObject("itemList", responseEntity1.getBody());
 				model.addObject("subCatList", responseEntity2.getBody());
+			}
+			try {
+			// exportToExcel
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+
+			rowData.add("Sr.No.");
+
+			rowData.add("Item Name");
+			for(int i=0;i<frNameIdByRouteIdList.size();i++)
+			{
+				rowData.add(""+frNameIdByRouteIdList.get(i).getFrName());
+			}
+			rowData.add("Total");
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			float allTotal=0.0f;
+			
+			for (int i = 0; i < subCategoryList.size(); i++) {
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+				rowData.add("");
+				rowData.add(""+ subCategoryList.get(i).getSubCatName());
+				for(int j=0;j<frNameIdByRouteIdList.size();j++)
+				{
+					rowData.add("");
+				}
+				rowData.add("");
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+
+				int srNo=1;
+				for(int k=0;k<itemList.size();k++)
+				{
+					float total=0.0f;float frTotal=0.0f;
+					if(itemList.get(k).getItemGrp2()==subCategoryList.get(i).getSubCatId())
+					{
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+				rowData.add(""+srNo);
+				srNo=srNo+1;
+				rowData.add(""+itemList.get(k).getItemName());
+				for(int j=0;j<frNameIdByRouteIdList.size();j++)
+				{
+					float billQty=0.0f;
+					for(int l=0;l<dispatchReportList.size();l++)
+					{
+						if(dispatchReportList.get(l).getItemId()==itemList.get(k).getId())
+						{
+							if(dispatchReportList.get(l).getFrId()==frNameIdByRouteIdList.get(j).getFrId())
+							{
+								billQty=dispatchReportList.get(l).getBillQty();
+								total=total+dispatchReportList.get(l).getBillQty();
+							}
+						}
+						frTotal=frTotal+dispatchReportList.get(l).getBillQty();
+					}
+				rowData.add(""+billQty);
+				}
+				rowData.add(""+total);
+				allTotal=allTotal+total;
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+					}
+				}
+			}
+			for (int i = 0; i < subCategoryList.size(); i++) {
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+				rowData.add("");
+				rowData.add(""+ subCategoryList.get(i).getSubCatName());
+				float totalItems=0.0f;
+				for(int j=0;j<frNameIdByRouteIdList.size();j++)
+				{
+				float itemTotal=0.0f;
+				  for(int l=0;l<dispatchReportList.size();l++)
+				   {
+					  if(dispatchReportList.get(l).getSubCatId()==subCategoryList.get(i).getSubCatId())
+						{
+							if(dispatchReportList.get(l).getFrId()==frNameIdByRouteIdList.get(j).getFrId())
+							{
+								itemTotal=itemTotal+dispatchReportList.get(l).getBillQty();
+							}
+						}
+					}
+				  totalItems=totalItems+itemTotal;
+				  rowData.add(""+itemTotal);
+				}
+				 rowData.add(""+totalItems);
+				 expoExcel.setRowData(rowData);
+				 exportToExcelList.add(expoExcel);
+			}
+
+			expoExcel = new ExportToExcel();
+			rowData = new ArrayList<String>();
+			rowData.add("Total");
+			rowData.add(" ");
+
+			for(int j=0;j<frNameIdByRouteIdList.size();j++)
+			{
+					float itemTotal=0.0f;
+					 for(int l=0;l<dispatchReportList.size();l++)
+					   {
+
+							if(dispatchReportList.get(l).getFrId()==frNameIdByRouteIdList.get(j).getFrId())
+							{
+								itemTotal=itemTotal+dispatchReportList.get(l).getBillQty();
+							}
+					   }
+					 rowData.add(""+itemTotal);
+			 }
+			 rowData.add(""+allTotal);
+			 expoExcel.setRowData(rowData);
+			 exportToExcelList.add(expoExcel);
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "DispatchReport");
+			
+			}
+			catch (Exception e) {
+				e.printStackTrace();
 			}
 			model.addObject("routeName", routeName);
 		} catch (Exception e) {
