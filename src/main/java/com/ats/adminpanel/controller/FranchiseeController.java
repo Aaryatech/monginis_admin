@@ -2402,6 +2402,16 @@ public class FranchiseeController {
 				// String frMonth = request.getParameter("month"+chk);
 				// System.out.println("month:" + frMonth);
 
+				int frTargetId = 0;
+				try {
+					frTargetId = Integer.parseInt(request.getParameter("id" + j));
+					System.out.println("frTargetId:frTargetIdfrTargetIdfrTargetIdfrTargetId" + frTargetId);
+
+				} catch (Exception e) {
+					frTargetId = 0;
+					// TODO: handle exception
+				}
+
 				float frTargetAmt = Float.parseFloat(request.getParameter("target" + j));
 				System.out.println("frTarget:" + frTargetAmt);
 
@@ -2415,7 +2425,7 @@ public class FranchiseeController {
 				System.out.println("remark" + remark);
 				System.out.println("==============" + frId);
 				FrTarget franchiseTarget = new FrTarget();
-
+				franchiseTarget.setFrTargetId(frTargetId);
 				franchiseTarget.setFrId(frId);
 				franchiseTarget.setFrTargetAmt(frTargetAmt);
 				franchiseTarget.setFrAchievedSale(frAchievedSale);
