@@ -88,7 +88,7 @@
 							</div> -->
 						</div>
 						<div class="box-content">
-							<form action="addAlbumProcess" class="form-horizontal"
+							<form action="updateAlbumProcess" class="form-horizontal"
 								id="validation-form" method="post" enctype="multipart/form-data">
 
 
@@ -110,7 +110,7 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="albumCode" id="albumCode"
 											placeholder="Album Code" class="form-control"
-											data-rule-required="true" />
+											value="${album.albumCode}" data-rule-required="true" />
 									</div>
 								</div>
 
@@ -122,11 +122,11 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="albumName" id="
 											albumName"
-											placeholder="Album Name" class="form-control"
-											data-rule-required="true" />
+											value="${album.albumName}" placeholder="Album Name"
+											class="form-control" data-rule-required="true" />
 									</div>
 								</div>
-
+								<input type="hidden" name="albumId" value="${album.albumId}" />
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Photo1</label>
@@ -135,10 +135,8 @@
 											data-provides="fileupload">
 											<div class="fileupload-new img-thumbnail"
 												style="width: 200px; height: 150px;">
-												<img
-													src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
-													alt="" />
-
+												<img src="${url}${album.photo1}"
+													onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';" />
 											</div>
 											<div
 												class="fileupload-preview fileupload-exists img-thumbnail"
@@ -147,8 +145,9 @@
 												<span class="btn btn-default btn-file"><span
 													class="fileupload-new">Select image</span> <span
 													class="fileupload-exists">Change</span> <input type="file"
-													class="file-input" name="photo1" id="photo1" /></span> <a
-													href="#" class="btn btn-default fileupload-exists"
+													class="file-input" name="photo1" id="photo1"
+													value="${album.photo1}" /></span> <a href="#"
+													class="btn btn-default fileupload-exists"
 													data-dismiss="fileupload">Remove</a>
 											</div>
 										</div>
@@ -161,10 +160,8 @@
 											data-provides="fileupload">
 											<div class="fileupload-new img-thumbnail"
 												style="width: 200px; height: 150px;">
-												<img
-													src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
-													alt="" />
-
+												<img src="${url}${album.photo2}"
+													onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';" />
 											</div>
 											<div
 												class="fileupload-preview fileupload-exists img-thumbnail"
@@ -173,8 +170,9 @@
 												<span class="btn btn-default btn-file"><span
 													class="fileupload-new">Select image</span> <span
 													class="fileupload-exists">Change</span> <input type="file"
-													class="file-input" name="photo2" id="photo2" /></span> <a
-													href="#" class="btn btn-default fileupload-exists"
+													class="file-input" name="photo2" id="photo2"
+													value="${album.photo2}" /></span> <a href="#"
+													class="btn btn-default fileupload-exists"
 													data-dismiss="fileupload">Remove</a>
 											</div>
 										</div>
@@ -191,7 +189,7 @@
 												<option value="">Select Special Cake</option>
 												<c:forEach items="${spList}" var="spList" varStatus="count">
 													<c:choose>
-														<c:when test="${spList.spId==spList.spId}">
+														<c:when test="${spList.spId==album.spId}">
 															<option value="${spList.spId}" selected><c:out
 																	value="${spList.spName}" /></option>
 														</c:when>
@@ -205,6 +203,54 @@
 										</div>
 									</div>
 
+									<%-- <div class="form-group row">
+										<label class="col-form-label col-lg-2" for="select2">Select
+											Location :</label>
+										<div class="col-lg-10">
+											<select name="locId" data-placeholder="Select Location"
+												id="locId"
+												class="form-control form-control-select2 select2-hidden-accessible"
+												multiple="multiple" tabindex="-1" aria-hidden="true">
+												<option></option>
+
+
+												<c:forEach items="${locationList}" var="location">
+													<c:set var="flag" value="0"></c:set>
+													<c:forEach items="${locIdList}" var="selFr"
+														varStatus="count2">
+														<c:choose>
+															<c:when test="${selFr==location.locId}">
+																<option selected value="${location.locId}"><c:out
+																		value="${location.locName}" /></option>
+																<c:set var="flag" value="1"></c:set>
+															</c:when>
+															<c:otherwise>
+
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+													<c:choose>
+														<c:when test="${flag==0}">
+															<option value="${location.locId}"><c:out
+																	value="${location.locName}" /></option>
+														</c:when>
+													</c:choose>
+												</c:forEach>
+												<c:forEach items="${locationList}" var="location">
+													<c:choose>
+														<c:when test="${location.locId == editHoliday.companyId}">
+															<option value="${location.locId}" selected="selected">${location.locName}</option>
+														</c:when>
+														<c:otherwise>
+															<option value="${location.locId}">${location.locName}</option>
+														</c:otherwise>
+													</c:choose>
+												</c:forEach>
+											</select> <span class="validation-invalid-label" id="error_locId"
+												style="display: none;">This field is required.</span>
+										</div>
+									</div>
+ --%>
 									<div class="col2">
 										<label class="col-sm-3 col-lg-2 control-label"> Select
 											Flavour </label>
@@ -213,7 +259,43 @@
 												class="form-control chosen" placeholder="Select Flavour"
 												data-rule-required="true" multiple="multiple">
 
-												<c:forEach items="${flavoursList}" var="flavoursList"
+
+
+
+
+
+
+												<c:forEach items="${flavoursList}" var="flavour">
+													<c:set var="flag" value="0"></c:set>
+													<c:forEach items="${fIdList}" var="selFr"
+														varStatus="count2">
+														<c:choose>
+															<c:when test="${selFr==flavour.spfId}">
+																<option selected value="${flavour.spfId}"><c:out
+																		value="${flavour.spfName}" /></option>
+																<c:set var="flag" value="1"></c:set>
+															</c:when>
+															<c:otherwise>
+
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+													<c:choose>
+														<c:when test="${flag==0}">
+															<option value="${flavour.spfId}"><c:out
+																	value="${flavour.spfName}" /></option>
+														</c:when>
+													</c:choose>
+												</c:forEach>
+
+
+
+
+
+
+
+
+												<%-- 	<c:forEach items="${flavoursList}" var="flavoursList"
 													varStatus="count">
 													<c:choose>
 														<c:when test="${flavoursList.spfId==flavoursList.spfId}">
@@ -225,7 +307,7 @@
 																	value="${flavoursList.spfName}" /></option>
 														</c:otherwise>
 													</c:choose>
-												</c:forEach>
+												</c:forEach> --%>
 											</select>
 										</div>
 									</div>
@@ -236,7 +318,7 @@
 									<div class="col-sm-6 col-lg-3 controls">
 										<input type="text" name="minWt" id="minWt"
 											placeholder="Minimum Weight" class="form-control"
-											data-rule-required="true" value="${spCkSupp.spHsncd}" />
+											data-rule-required="true" value="${album.minWt}" />
 									</div>
 
 
@@ -245,7 +327,7 @@
 									<div class="col-sm-6 col-lg-3 controls">
 										<input type="text" name="maxWt" id="maxWt"
 											placeholder="Maximum Weight" class="form-control"
-											data-rule-required="true" value="${spCkSupp.spHsncd}" />
+											data-rule-required="true" value="${album.maxWt}" />
 									</div>
 								</div>
 
@@ -256,19 +338,35 @@
 										Details</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<textarea class="form-control" rows="3" name="desc"
-											id="transliterateTextarea1" data-rule-required="true"></textarea>
+											id="transliterateTextarea1" data-rule-required="true">${album.desc}</textarea>
 									</div>
 								</div>
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Status</label>
 									<div class="col-sm-9 col-lg-10 controls">
+
 										<select class="form-control input-sm" name="is_active"
 											id="is_active">
-											<option value="1">Active</option>
-											<option value="0">In Active</option>
+
+											<c:choose>
+												<c:when test="${isActive.equals('1')}">
+													<option selected value="1">Active</option>
+													<option value="0">In-Active</option>
+
+
+												</c:when>
+												<c:when test="${isActive.equals('0')}">
+													<option selected value="0">In-Active</option>
+													<option value="1">Active</option>
+
+
+												</c:when>
+											</c:choose>
+
 
 										</select>
+
 									</div>
 								</div>
 

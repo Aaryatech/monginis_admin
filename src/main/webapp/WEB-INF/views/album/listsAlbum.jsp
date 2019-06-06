@@ -106,9 +106,9 @@
 													<td align="left"><c:out value="${message.desc}" /></td>
 
 													<td align="center"><a
-														href="updateMessage/${message.albumId}"><span
+														href="updateAlbum/${message.albumId}"><span
 															class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp; <a
-														href="deleteMessage/${message.albumId}"
+														href="deleteAlbum/${message.albumId}"
 														onClick="return confirm('Are you sure want to delete this record');"><span
 															class="glyphicon glyphicon-remove"></span></a></td>
 												</tr>
