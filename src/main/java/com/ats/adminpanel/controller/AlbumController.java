@@ -88,12 +88,12 @@ public class AlbumController {
 			String albumName = request.getParameter("albumName");
 			// String msgImage=request.getParameter("msg_image");
 			String desc = request.getParameter("desc");
-			String[] flavourIds = request.getParameterValues("flavourId");
 
 			int isActive = Integer.parseInt(request.getParameter("is_active"));
 			int spId = Integer.parseInt(request.getParameter("spId"));
-			float minWt = Float.parseFloat(request.getParameter("minWt"));
-			float maxWt = Float.parseFloat(request.getParameter("maxWt"));
+			// String[] flavourIds = request.getParameterValues("flavourId");
+			// float minWt = Float.parseFloat(request.getParameter("minWt"));
+			// float maxWt = Float.parseFloat(request.getParameter("maxWt"));
 
 			VpsImageUpload upload = new VpsImageUpload();
 
@@ -131,15 +131,15 @@ public class AlbumController {
 				e.printStackTrace();
 			}
 
-			StringBuilder sb = new StringBuilder();
-
-			for (int i = 0; i < flavourIds.length; i++) {
-				sb = sb.append(flavourIds[i] + ",");
-
-			}
-			String flavourIdList = sb.toString();
-			flavourIdList = flavourIdList.substring(0, flavourIdList.length() - 1);
-
+			/*
+			 * StringBuilder sb = new StringBuilder();
+			 * 
+			 * for (int i = 0; i < flavourIds.length; i++) { sb = sb.append(flavourIds[i] +
+			 * ",");
+			 * 
+			 * } String flavourIdList = sb.toString(); flavourIdList =
+			 * flavourIdList.substring(0, flavourIdList.length() - 1);
+			 */
 			RestTemplate rest = new RestTemplate();
 
 			System.out.println(albumCode);
@@ -147,8 +147,8 @@ public class AlbumController {
 
 			System.out.println(desc);
 			System.out.println(isActive);
-			System.out.println(maxWt);
-			System.out.println(minWt);
+			System.out.println(1);
+			System.out.println(1);
 			System.out.println(curTimeStamp + "-" + file1.get(0).getOriginalFilename().replace(' ', '_'));
 			System.out.println(curTimeStamp + "-" + file2.get(0).getOriginalFilename().replace(' ', '_'));
 
@@ -159,10 +159,10 @@ public class AlbumController {
 			album.setAlbumName(albumName);
 			album.setDelStatus(0);
 			album.setDesc(desc);
-			album.setFlavourId(flavourIdList);
+			album.setFlavourId(" ");
 			album.setIsActive(isActive);
-			album.setMaxWt(maxWt);
-			album.setMinWt(minWt);
+			album.setMaxWt(0);
+			album.setMinWt(0);
 			album.setPhoto1(curTimeStamp + "-" + file1.get(0).getOriginalFilename().replace(' ', '_'));
 			album.setPhoto2(curTimeStamp + "-" + file2.get(0).getOriginalFilename().replace(' ', '_'));
 			album.setSpId(spId);
@@ -222,21 +222,27 @@ public class AlbumController {
 				List.class);
 		System.out.println("spSuppList" + spSuppList.toString());
 
-		AllFlavoursListResponse allFlavoursListResponse = restTemplate.getForObject(Constants.url + "showFlavourList",
-				AllFlavoursListResponse.class);
-
-		List<Flavour> flavoursList = new ArrayList<Flavour>();
-		flavoursList = allFlavoursListResponse.getFlavour();
-		mav.addObject("flavoursList", flavoursList);
+		/*
+		 * AllFlavoursListResponse allFlavoursListResponse =
+		 * restTemplate.getForObject(Constants.url + "showFlavourList",
+		 * AllFlavoursListResponse.class);
+		 * 
+		 * List<Flavour> flavoursList = new ArrayList<Flavour>(); flavoursList =
+		 * allFlavoursListResponse.getFlavour(); mav.addObject("flavoursList",
+		 * flavoursList);
+		 */
 		mav.addObject("spList", spSuppList);
 
 		mav.addObject("isActive", isActive);
 		mav.addObject("url", Constants.MESSAGE_IMAGE_URL);
 
-		List<Integer> fIdList = Stream.of(album.getFlavourId().split(",")).map(Integer::parseInt)
-				.collect(Collectors.toList());
-
-		mav.addObject("fIdList", fIdList);
+		/*
+		 * List<Integer> fIdList =
+		 * Stream.of(album.getFlavourId().split(",")).map(Integer::parseInt)
+		 * .collect(Collectors.toList());
+		 * 
+		 * mav.addObject("fIdList", fIdList);
+		 */
 		return mav;
 
 	}
@@ -256,12 +262,14 @@ public class AlbumController {
 			String albumName = request.getParameter("albumName");
 			// String msgImage=request.getParameter("msg_image");
 			String desc = request.getParameter("desc");
-			String[] flavourIds = request.getParameterValues("flavourId");
 
 			int isActive = Integer.parseInt(request.getParameter("is_active"));
 			int spId = Integer.parseInt(request.getParameter("spId"));
-			float minWt = Float.parseFloat(request.getParameter("minWt"));
-			float maxWt = Float.parseFloat(request.getParameter("maxWt"));
+			/*
+			 * String[] flavourIds = request.getParameterValues("flavourId"); float minWt =
+			 * Float.parseFloat(request.getParameter("minWt")); float maxWt =
+			 * Float.parseFloat(request.getParameter("maxWt"));
+			 */
 
 			String photo1 = request.getParameter("photo1");
 			String photo2 = request.getParameter("photo2");
@@ -323,24 +331,25 @@ public class AlbumController {
 			}
 
 			// String msgImage= ImageS3Util.uploadMessageImage(file);
-			StringBuilder sb = new StringBuilder();
-
-			for (int i = 0; i < flavourIds.length; i++) {
-				sb = sb.append(flavourIds[i] + ",");
-
-			}
-			String flavourIdList = sb.toString();
-			flavourIdList = flavourIdList.substring(0, flavourIdList.length() - 1);
+			/*
+			 * StringBuilder sb = new StringBuilder();
+			 * 
+			 * for (int i = 0; i < flavourIds.length; i++) { sb = sb.append(flavourIds[i] +
+			 * ",");
+			 * 
+			 * } String flavourIdList = sb.toString(); flavourIdList =
+			 * flavourIdList.substring(0, flavourIdList.length() - 1);
+			 */
 
 			album.setAlbumId(id);
 			album.setAlbumCode(albumCode);
 			album.setAlbumName(albumName);
 			album.setDelStatus(0);
 			album.setDesc(desc);
-			album.setFlavourId(flavourIdList);
+			album.setFlavourId(" ");
 			album.setIsActive(isActive);
-			album.setMaxWt(maxWt);
-			album.setMinWt(minWt);
+			album.setMaxWt(0);
+			album.setMinWt(0);
 			album.setPhoto1(photo1 + "-" + file1.get(0).getOriginalFilename().replace(' ', '_'));
 			album.setPhoto2(photo2 + "-" + file2.get(0).getOriginalFilename().replace(' ', '_'));
 			album.setSpId(spId);

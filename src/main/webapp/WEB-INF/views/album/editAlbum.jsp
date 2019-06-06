@@ -103,7 +103,120 @@
 									pageContext.setAttribute("frdate", date);
 								%>
 
+								<div class="form-group">
+									<div class="col2">
+										<label class="col-sm-3 col-lg-2 control-label">Special
+											Cake</label>
+										<div class="col-sm-9 col-lg-3 controls">
+											<select name="spId" id="spId" class="form-control chosen"
+												placeholder="Special Cake  " data-rule-required="true">
+												<option value="">Select Special Cake</option>
+												<c:forEach items="${spList}" var="spList" varStatus="count">
+													<c:choose>
+														<c:when test="${spList.spId==album.spId}">
+															<option value="${spList.spId}" selected><c:out
+																	value="${spList.spName}" /></option>
+														</c:when>
+														<c:otherwise>
+															<option value="${spList.spId}"><c:out
+																	value="${spList.spName}" /></option>
+														</c:otherwise>
+													</c:choose>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
 
+									<%-- <div class="form-group row">
+										<label class="col-form-label col-lg-2" for="select2">Select
+											Location :</label>
+										<div class="col-lg-10">
+											<select name="locId" data-placeholder="Select Location"
+												id="locId"
+												class="form-control form-control-select2 select2-hidden-accessible"
+												multiple="multiple" tabindex="-1" aria-hidden="true">
+												<option></option>
+
+
+												<c:forEach items="${locationList}" var="location">
+													<c:set var="flag" value="0"></c:set>
+													<c:forEach items="${locIdList}" var="selFr"
+														varStatus="count2">
+														<c:choose>
+															<c:when test="${selFr==location.locId}">
+																<option selected value="${location.locId}"><c:out
+																		value="${location.locName}" /></option>
+																<c:set var="flag" value="1"></c:set>
+															</c:when>
+															<c:otherwise>
+
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+													<c:choose>
+														<c:when test="${flag==0}">
+															<option value="${location.locId}"><c:out
+																	value="${location.locName}" /></option>
+														</c:when>
+													</c:choose>
+												</c:forEach>
+												<c:forEach items="${locationList}" var="location">
+													<c:choose>
+														<c:when test="${location.locId == editHoliday.companyId}">
+															<option value="${location.locId}" selected="selected">${location.locName}</option>
+														</c:when>
+														<c:otherwise>
+															<option value="${location.locId}">${location.locName}</option>
+														</c:otherwise>
+													</c:choose>
+												</c:forEach>
+											</select> <span class="validation-invalid-label" id="error_locId"
+												style="display: none;">This field is required.</span>
+										</div>
+									</div>
+ --%>
+									<%-- <div class="col2">
+										<label class="col-sm-3 col-lg-2 control-label"> Select
+											Flavour </label>
+										<div class="col-sm-9 col-lg-3 controls">
+											<select name="flavourId" id="flavourId"
+												class="form-control chosen" placeholder="Select Flavour"
+												data-rule-required="true" multiple="multiple">
+
+
+
+
+
+
+
+												<c:forEach items="${flavoursList}" var="flavour">
+													<c:set var="flag" value="0"></c:set>
+													<c:forEach items="${fIdList}" var="selFr"
+														varStatus="count2">
+														<c:choose>
+															<c:when test="${selFr==flavour.spfId}">
+																<option selected value="${flavour.spfId}"><c:out
+																		value="${flavour.spfName}" /></option>
+																<c:set var="flag" value="1"></c:set>
+															</c:when>
+															<c:otherwise>
+
+															</c:otherwise>
+														</c:choose>
+													</c:forEach>
+													<c:choose>
+														<c:when test="${flag==0}">
+															<option value="${flavour.spfId}"><c:out
+																	value="${flavour.spfName}" /></option>
+														</c:when>
+													</c:choose>
+												</c:forEach>
+
+ 
+											</select>
+										</div>
+									</div> --%>
+								</div>
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Album
 										Code </label>
@@ -179,140 +292,8 @@
 
 									</div>
 								</div>
-								<div class="form-group">
-									<div class="col2">
-										<label class="col-sm-3 col-lg-2 control-label">Special
-											Cake</label>
-										<div class="col-sm-9 col-lg-3 controls">
-											<select name="spId" id="spId" class="form-control"
-												placeholder="Special Cake  " data-rule-required="true">
-												<option value="">Select Special Cake</option>
-												<c:forEach items="${spList}" var="spList" varStatus="count">
-													<c:choose>
-														<c:when test="${spList.spId==album.spId}">
-															<option value="${spList.spId}" selected><c:out
-																	value="${spList.spName}" /></option>
-														</c:when>
-														<c:otherwise>
-															<option value="${spList.spId}"><c:out
-																	value="${spList.spName}" /></option>
-														</c:otherwise>
-													</c:choose>
-												</c:forEach>
-											</select>
-										</div>
-									</div>
 
-									<%-- <div class="form-group row">
-										<label class="col-form-label col-lg-2" for="select2">Select
-											Location :</label>
-										<div class="col-lg-10">
-											<select name="locId" data-placeholder="Select Location"
-												id="locId"
-												class="form-control form-control-select2 select2-hidden-accessible"
-												multiple="multiple" tabindex="-1" aria-hidden="true">
-												<option></option>
-
-
-												<c:forEach items="${locationList}" var="location">
-													<c:set var="flag" value="0"></c:set>
-													<c:forEach items="${locIdList}" var="selFr"
-														varStatus="count2">
-														<c:choose>
-															<c:when test="${selFr==location.locId}">
-																<option selected value="${location.locId}"><c:out
-																		value="${location.locName}" /></option>
-																<c:set var="flag" value="1"></c:set>
-															</c:when>
-															<c:otherwise>
-
-															</c:otherwise>
-														</c:choose>
-													</c:forEach>
-													<c:choose>
-														<c:when test="${flag==0}">
-															<option value="${location.locId}"><c:out
-																	value="${location.locName}" /></option>
-														</c:when>
-													</c:choose>
-												</c:forEach>
-												<c:forEach items="${locationList}" var="location">
-													<c:choose>
-														<c:when test="${location.locId == editHoliday.companyId}">
-															<option value="${location.locId}" selected="selected">${location.locName}</option>
-														</c:when>
-														<c:otherwise>
-															<option value="${location.locId}">${location.locName}</option>
-														</c:otherwise>
-													</c:choose>
-												</c:forEach>
-											</select> <span class="validation-invalid-label" id="error_locId"
-												style="display: none;">This field is required.</span>
-										</div>
-									</div>
- --%>
-									<div class="col2">
-										<label class="col-sm-3 col-lg-2 control-label"> Select
-											Flavour </label>
-										<div class="col-sm-9 col-lg-3 controls">
-											<select name="flavourId" id="flavourId"
-												class="form-control chosen" placeholder="Select Flavour"
-												data-rule-required="true" multiple="multiple">
-
-
-
-
-
-
-
-												<c:forEach items="${flavoursList}" var="flavour">
-													<c:set var="flag" value="0"></c:set>
-													<c:forEach items="${fIdList}" var="selFr"
-														varStatus="count2">
-														<c:choose>
-															<c:when test="${selFr==flavour.spfId}">
-																<option selected value="${flavour.spfId}"><c:out
-																		value="${flavour.spfName}" /></option>
-																<c:set var="flag" value="1"></c:set>
-															</c:when>
-															<c:otherwise>
-
-															</c:otherwise>
-														</c:choose>
-													</c:forEach>
-													<c:choose>
-														<c:when test="${flag==0}">
-															<option value="${flavour.spfId}"><c:out
-																	value="${flavour.spfName}" /></option>
-														</c:when>
-													</c:choose>
-												</c:forEach>
-
-
-
-
-
-
-
-
-												<%-- 	<c:forEach items="${flavoursList}" var="flavoursList"
-													varStatus="count">
-													<c:choose>
-														<c:when test="${flavoursList.spfId==flavoursList.spfId}">
-															<option value="${flavoursList.spfId}"><c:out
-																	value="${flavoursList.spfName}" /></option>
-														</c:when>
-														<c:otherwise>
-															<option value="${flavoursList.spfId}"><c:out
-																	value="${flavoursList.spfName}" /></option>
-														</c:otherwise>
-													</c:choose>
-												</c:forEach> --%>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
+								<%-- 	<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Minimum
 										Weight</label>
 									<div class="col-sm-6 col-lg-3 controls">
@@ -330,7 +311,7 @@
 											data-rule-required="true" value="${album.maxWt}" />
 									</div>
 								</div>
-
+ --%>
 
 
 								<div class="form-group">

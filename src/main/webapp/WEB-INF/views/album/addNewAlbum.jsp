@@ -103,6 +103,56 @@
 									pageContext.setAttribute("frdate", date);
 								%>
 
+								<div class="form-group">
+									<div class="col2">
+										<label class="col-sm-3 col-lg-2 control-label">Special
+											Cake</label>
+										<div class="col-sm-9 col-lg-3 controls">
+											<select name="spId" id="spId" class="form-control chosen"
+												placeholder="Special Cake  " data-rule-required="true">
+												<option value="">Select Special Cake</option>
+												<c:forEach items="${spList}" var="spList" varStatus="count">
+													<c:choose>
+														<c:when test="${spList.spId==spList.spId}">
+															<option value="${spList.spId}" selected><c:out
+																	value="${spList.spName}" /></option>
+														</c:when>
+														<c:otherwise>
+															<option value="${spList.spId}"><c:out
+																	value="${spList.spName}" /></option>
+														</c:otherwise>
+													</c:choose>
+												</c:forEach>
+											</select>
+										</div>
+									</div>
+
+									<%-- <div class="col2">
+										<label class="col-sm-3 col-lg-2 control-label"> Select
+											Flavour </label>
+										<div class="col-sm-9 col-lg-3 controls">
+											<select name="flavourId" id="flavourId"
+												class="form-control chosen" placeholder="Select Flavour"
+												data-rule-required="true" multiple="multiple">
+
+												<c:forEach items="${flavoursList}" var="flavoursList"
+													varStatus="count">
+													<c:choose>
+														<c:when test="${flavoursList.spfId==flavoursList.spfId}">
+															<option value="${flavoursList.spfId}"><c:out
+																	value="${flavoursList.spfName}" /></option>
+														</c:when>
+														<c:otherwise>
+															<option value="${flavoursList.spfId}"><c:out
+																	value="${flavoursList.spfName}" /></option>
+														</c:otherwise>
+													</c:choose>
+												</c:forEach>
+											</select>
+										</div>
+									</div> --%>
+								</div>
+
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Album
@@ -113,6 +163,9 @@
 											data-rule-required="true" />
 									</div>
 								</div>
+
+
+
 
 
 
@@ -181,62 +234,14 @@
 
 									</div>
 								</div>
-								<div class="form-group">
-									<div class="col2">
-										<label class="col-sm-3 col-lg-2 control-label">Special
-											Cake</label>
-										<div class="col-sm-9 col-lg-3 controls">
-											<select name="spId" id="spId" class="form-control"
-												placeholder="Special Cake  " data-rule-required="true">
-												<option value="">Select Special Cake</option>
-												<c:forEach items="${spList}" var="spList" varStatus="count">
-													<c:choose>
-														<c:when test="${spList.spId==spList.spId}">
-															<option value="${spList.spId}" selected><c:out
-																	value="${spList.spName}" /></option>
-														</c:when>
-														<c:otherwise>
-															<option value="${spList.spId}"><c:out
-																	value="${spList.spName}" /></option>
-														</c:otherwise>
-													</c:choose>
-												</c:forEach>
-											</select>
-										</div>
-									</div>
 
-									<div class="col2">
-										<label class="col-sm-3 col-lg-2 control-label"> Select
-											Flavour </label>
-										<div class="col-sm-9 col-lg-3 controls">
-											<select name="flavourId" id="flavourId"
-												class="form-control chosen" placeholder="Select Flavour"
-												data-rule-required="true" multiple="multiple">
-
-												<c:forEach items="${flavoursList}" var="flavoursList"
-													varStatus="count">
-													<c:choose>
-														<c:when test="${flavoursList.spfId==flavoursList.spfId}">
-															<option value="${flavoursList.spfId}"><c:out
-																	value="${flavoursList.spfName}" /></option>
-														</c:when>
-														<c:otherwise>
-															<option value="${flavoursList.spfId}"><c:out
-																	value="${flavoursList.spfName}" /></option>
-														</c:otherwise>
-													</c:choose>
-												</c:forEach>
-											</select>
-										</div>
-									</div>
-								</div>
-								<div class="form-group">
+								<!-- <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Minimum
 										Weight</label>
 									<div class="col-sm-6 col-lg-3 controls">
 										<input type="text" name="minWt" id="minWt"
 											placeholder="Minimum Weight" class="form-control"
-											data-rule-required="true" value="${spCkSupp.spHsncd}" />
+											data-rule-required="true" value="0" />
 									</div>
 
 
@@ -245,11 +250,11 @@
 									<div class="col-sm-6 col-lg-3 controls">
 										<input type="text" name="maxWt" id="maxWt"
 											placeholder="Maximum Weight" class="form-control"
-											data-rule-required="true" value="${spCkSupp.spHsncd}" />
+											data-rule-required="true" value="0" />
 									</div>
 								</div>
 
-
+ -->
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Description
