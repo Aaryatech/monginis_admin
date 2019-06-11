@@ -234,7 +234,7 @@ public class AlbumController {
 		mav.addObject("spList", spSuppList);
 
 		mav.addObject("isActive", isActive);
-		mav.addObject("url", Constants.MESSAGE_IMAGE_URL);
+		mav.addObject("url", Constants.Album_IMAGE_URL);
 
 		/*
 		 * List<Integer> fIdList =

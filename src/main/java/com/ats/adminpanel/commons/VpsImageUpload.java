@@ -16,7 +16,8 @@ public class VpsImageUpload {
 	public static final String ITEM_FOLDER = "/opt/tomcat-latest/webapps/uploads/ITEM/";
 
 	public static final String MSG_FOLDER = "/opt/tomcat-latest/webapps/uploads/MSG/";
-	
+	public static final String ALBUM_FOLDER = "/opt/tomcat-latest/webapps/uploads/ALBUM/";
+
 	public static final String M_SP_CAKE_FOLDER = "/opt/tomcat-latest/webapps/uploads/MSPCAKE/";
 	
 	public static final String RAW_MAT_IMAGE_FOLDER = "/opt/tomcat-latest/webapps/uploads/RAWMAT/";
@@ -78,6 +79,11 @@ public class VpsImageUpload {
 			else if (imageType == 8) {
 
 				path = Paths.get(LOGIS_BILL_FILE + imageName);
+
+			}
+			else if (imageType == 9) {
+
+				path = Paths.get(ALBUM_FOLDER + imageName);
 
 			}
 
