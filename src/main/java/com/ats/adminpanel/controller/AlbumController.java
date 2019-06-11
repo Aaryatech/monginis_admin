@@ -158,7 +158,7 @@ public class AlbumController {
 			album.setAlbumCode(albumCode);
 			album.setAlbumName(albumName);
 			album.setDelStatus(0);
-			album.setDesc(desc);
+			album.setAlbumDesc(desc);
 			album.setFlavourId(" ");
 			album.setIsActive(isActive);
 			album.setMaxWt(0);
@@ -345,7 +345,7 @@ public class AlbumController {
 			album.setAlbumCode(albumCode);
 			album.setAlbumName(albumName);
 			album.setDelStatus(0);
-			album.setDesc(desc);
+			album.setAlbumDesc(desc);
 			album.setFlavourId(" ");
 			album.setIsActive(isActive);
 			album.setMaxWt(0);

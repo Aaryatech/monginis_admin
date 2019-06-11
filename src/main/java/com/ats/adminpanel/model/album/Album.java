@@ -20,7 +20,7 @@ public class Album {
 
 	private String flavourId;
 	private int isActive;
-	private String desc;
+	private String albumDesc;
 
 	public int getAlbumId() {
 		return albumId;
@@ -110,19 +110,20 @@ public class Album {
 		this.isActive = isActive;
 	}
 
-	public String getDesc() {
-		return desc;
+	public String getAlbumDesc() {
+		return albumDesc;
 	}
 
-	public void setDesc(String desc) {
-		this.desc = desc;
+	public void setAlbumDesc(String albumDesc) {
+		this.albumDesc = albumDesc;
 	}
 
 	@Override
 	public String toString() {
 		return "Album [albumId=" + albumId + ", albumCode=" + albumCode + ", albumName=" + albumName + ", photo1="
 				+ photo1 + ", photo2=" + photo2 + ", minWt=" + minWt + ", maxWt=" + maxWt + ", delStatus=" + delStatus
-				+ ", spId=" + spId + ", flavourId=" + flavourId + ", isActive=" + isActive + ", desc=" + desc + "]";
+				+ ", spId=" + spId + ", flavourId=" + flavourId + ", isActive=" + isActive + ", albumDesc=" + albumDesc
+				+ "]";
 	}
 
 }

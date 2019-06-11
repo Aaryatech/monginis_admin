@@ -103,7 +103,7 @@
 														onerror="this.src='resources/img/No_Image_Available.jpg';" /></td>
 
 
-													<td align="left"><c:out value="${message.desc}" /></td>
+													<td align="left"><c:out value="${message.albumDesc}" /></td>
 
 													<td align="center"><a
 														href="updateAlbum/${message.albumId}"><span

@@ -319,7 +319,7 @@
 										Details</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<textarea class="form-control" rows="3" name="desc"
-											id="transliterateTextarea1" data-rule-required="true">${album.desc}</textarea>
+											id="transliterateTextarea1" data-rule-required="true">${album.albumDesc}</textarea>
 									</div>
 								</div>
 
