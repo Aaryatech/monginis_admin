@@ -271,12 +271,12 @@ public class AlbumController {
 			 * Float.parseFloat(request.getParameter("maxWt"));
 			 */
 
-			String photo1 = request.getParameter("photo1");
-			String photo2 = request.getParameter("photo2");
+			String photo1 = request.getParameter("prevPh1");
+			String photo2 = request.getParameter("prevPh2");
 
 			if (!file1.get(0).getOriginalFilename().equalsIgnoreCase("")) {
-
-				System.out.println("Empty image");
+				photo1=null;
+				System.out.println("Empty image1");
 				// msgImage= ImageS3Util.uploadMessageImage(file);
 
 				VpsImageUpload upload = new VpsImageUpload();
@@ -294,7 +294,7 @@ public class AlbumController {
 					upload.saveUploadedFiles(file1, Constants.ALBUM_IMAGE_TYPE,
 							photo1 + "-" + file1.get(0).getOriginalFilename().replace(' ', '_'));
 					System.out.println("upload method called " + file1.toString());
-
+					photo1=photo1 + "-" + file1.get(0).getOriginalFilename().replace(' ', '_');
 				} catch (IOException e) {
 
 					System.out.println("Exce in File Upload In Item Insert " + e.getMessage());
@@ -303,8 +303,8 @@ public class AlbumController {
 			}
 
 			if (!file2.get(0).getOriginalFilename().equalsIgnoreCase("")) {
-
-				System.out.println("Empty image");
+				photo2=null;
+				System.out.println("Empty image2");
 				// msgImage= ImageS3Util.uploadMessageImage(file);
 
 				VpsImageUpload upload = new VpsImageUpload();
@@ -322,7 +322,7 @@ public class AlbumController {
 					upload.saveUploadedFiles(file2, Constants.ALBUM_IMAGE_TYPE,
 							photo2 + "-" + file2.get(0).getOriginalFilename().replace(' ', '_'));
 					System.out.println("upload method called " + file1.toString());
-
+					photo2=photo2 + "-" + file2.get(0).getOriginalFilename().replace(' ', '_');
 				} catch (IOException e) {
 
 					System.out.println("Exce in File Upload In Item Insert " + e.getMessage());
@@ -350,8 +350,8 @@ public class AlbumController {
 			album.setIsActive(isActive);
 			album.setMaxWt(0);
 			album.setMinWt(0);
-			album.setPhoto1(photo1 + "-" + file1.get(0).getOriginalFilename().replace(' ', '_'));
-			album.setPhoto2(photo2 + "-" + file2.get(0).getOriginalFilename().replace(' ', '_'));
+			album.setPhoto1(photo1);
+			album.setPhoto2(photo2);
 			album.setSpId(spId);
 
 			System.out.println("albumalbumalbumalbumalbumalbum" + album.toString());

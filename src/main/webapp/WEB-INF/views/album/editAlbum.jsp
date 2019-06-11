@@ -240,7 +240,8 @@
 									</div>
 								</div>
 								<input type="hidden" name="albumId" value="${album.albumId}" />
-
+<input type="hidden" name="prevPh1" value="${album.photo1}">
+<input type="hidden" name="prevPh2" value="${album.photo2}">
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Photo1</label>
 									<div class="col-sm-6 col-lg-3 controls">
