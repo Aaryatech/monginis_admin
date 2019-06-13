@@ -25,6 +25,9 @@ public class VpsImageUpload {
 	public static final String GATE_ENTRY_IMAGE_FOLDER = "/opt/tomcat-latest/webapps/uploads/GATEENTRY/";
 	
 	public static final String LOGIS_BILL_FILE= "/opt/tomcat-latest/webapps/uploads/MSPCAKE/";
+	
+	public static final String APP_FILE= "/opt/tomcat-latest/webapps/uploads/APP/";
+
 
 	private static final String FIELDMAP_FOLDER = null;
 	private static final String KYC_FOLDER = null;
@@ -85,7 +88,12 @@ public class VpsImageUpload {
 
 				path = Paths.get(ALBUM_FOLDER + imageName);
 
+			}else if (imageType == 111) {
+
+				path = Paths.get(APP_FILE + imageName);
+
 			}
+
 
 			Files.write(path, bytes);
 
