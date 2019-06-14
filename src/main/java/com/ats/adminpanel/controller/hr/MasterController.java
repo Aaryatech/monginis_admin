@@ -741,7 +741,8 @@ public class MasterController {
 			model.addObject("catList", catList);
 			model.addObject("typeList", typeList);
 			model.addObject("salList", salList);
-
+			model.addObject("url",Constants.APP_IMAGE_URL);
+			
 		} catch (Exception e) {
 			System.out.println("Exc In showAddEmp:" + e.getMessage());
 		}
@@ -981,6 +982,7 @@ public class MasterController {
 			mav.addObject("salList", salList);
 
 			mav.addObject("emp", emp);
+			mav.addObject("url",Constants.APP_IMAGE_URL);
 
 		} catch (Exception e) {
 			System.out.println("Exception In Edit EMP:" + e.getMessage());
