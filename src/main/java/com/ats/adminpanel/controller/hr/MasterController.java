@@ -1371,9 +1371,9 @@ public class MasterController {
 	// --------------CHECK UNIQUE EMP CODE----------------------------------
 
 	@RequestMapping(value = "/checkuniqueEmpCodeProcess", method = RequestMethod.GET)
-	public @ResponseBody String checkuniqueEmpCode(HttpServletRequest request, HttpServletResponse response) {
+	public @ResponseBody Info checkuniqueEmpCode(HttpServletRequest request, HttpServletResponse response) {
 
-		String result = null;
+		Info result = new Info();
 
 		try {
 
@@ -1384,7 +1384,7 @@ public class MasterController {
 			map.add("code", code);
 
 			result = restTemplate.postForObject(Constants.security_app_url + "transaction/checkUniqueEmpCode", map,
-					String.class);
+					Info.class);
 
 			System.err.println("result *********///////////////***************" + result);
 
