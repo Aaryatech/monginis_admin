@@ -7,7 +7,8 @@
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body onload="funRandomNumberonLoad()">
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
-	<c:url var="checkuniqueEmpCodeProcess" value="/checkuniqueEmpCodeProcess"></c:url>
+	<c:url var="checkuniqueEmpCodeProcess"
+		value="/checkuniqueEmpCodeProcess"></c:url>
 
 	<link rel="stylesheet"
 		href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
@@ -56,9 +57,10 @@
 						</div>
 
 						<div class="box-content">
+
 							<form action="${pageContext.request.contextPath}/addHrEmp"
 								class="form-horizontal" method="post" id="validation-form"
-								enctype="multipart/form-data">
+								onsubmit="return validation()" enctype="multipart/form-data">
 
 								<input type="hidden" name="emp_id" id="emp_id"
 									value="${emp.empId}" /> <input type="hidden" name="oldDsc"
@@ -110,8 +112,11 @@
 											<input type="text" name="emp_code" id="emp_code"
 												placeholder="Employee Code" class="form-control"
 												onchange="checkUniqueEmpCode()" data-rule-required="true"
-												value="${emp.empCode}" />
+												value="${emp.empCode}" /><span id="uniqueCode"
+												hidden="hidden"> <font color="red">Employee
+													Code Already Exists!</font></span>
 										</div>
+
 									</div>
 
 
@@ -132,9 +137,8 @@
 
 									</div>
 
-
-
 								</div>
+
 
 								<div class="form-group">
 
@@ -386,31 +390,18 @@
 										</label>
 										<div class="col-sm-3 col-lg-4 controls">
 
+											<label class="radio-inline"> <input type="radio"
+												${emp.gender==1 ? 'checked' : ''} name="gender" id="gender"
+												checked value="1"> Male
+											</label> <label class="radio-inline"> <input type="radio"
+												${emp.gender==2 ? 'checked' : ''} name="gender" id="gender"
+												value="2"> Female
+											</label>
 
-											<c:choose>
-												<c:when test="${emp.gender==1}">
-													<label class="radio-inline"> <input type="radio"
-														name="gender" id="gender" value="1" checked /> Male
-													</label>
-													<label class="radio-inline"> <input type="radio"
-														name="gender" id="gender" value="2"> Female
-													</label>
-												</c:when>
-												<c:otherwise>
-													<label class="radio-inline"> <input type="radio"
-														name="gender" id="gender" value="1" /> Male
-													</label>
-													<label class="radio-inline"> <input type="radio"
-														name="gender" id="gender" value="2" checked>
-														Female
-													</label>
-
-												</c:otherwise>
-
-											</c:choose>
 
 										</div>
 									</div>
+
 
 									<div class="col2">
 										<label class="col-sm-3 col-lg-2 control-label">Date of
@@ -696,10 +687,10 @@
 				empCode = $("#emp_code").val();
 
 				
+
 				if (empCode == null) {
 					alert("Please Insert Employee Code")
 				} else {
-					
 
 					$.getJSON('${checkuniqueEmpCodeProcess}',
 
@@ -709,9 +700,11 @@
 
 					}, function(data) {
 
-						 alert(data);
- 
-						
+						if (data.error == true) {
+							$("#uniqueCode").show();
+						} else {
+							$("#uniqueCode").hide();
+						}
 
 					});//data function
 
@@ -720,6 +713,40 @@
 			}
 		</script>
 
+		<script>
+			function validation() {
+
+				var empCode;
+				empCode = $("#emp_code").val();
+
+
+				if (empCode == null) {
+					alert("Please Insert Employee Code")
+				} else {
+
+					$.getJSON('${checkuniqueEmpCodeProcess}',
+
+					{
+						code : empCode,
+						ajax : 'true'
+
+					}, function(data) {
+
+						if (data.error == true) {
+							alert("Employee Code Already Exists!");
+							$("#uniqueCode").show();
+							return false;
+						} else {
+							$("#uniqueCode").hide();
+							return true;
+						}
+
+					});//data function
+
+				}//else
+
+			}
+		</script>
 
 
 		<!-- Search -->
