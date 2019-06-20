@@ -46,7 +46,18 @@ private int empId;
 	private String exVar2; 
 	private String exVar3;
 	
-	
+	private float grossSalary;
+	private float noOfHrs;
+	private String gender;
+	private String dob;
+	private String scanCopy1;
+	private String scanCopy2;
+	private Integer pf;
+	private Integer esic;
+	private Integer bonus;
+	private Integer cl;
+	private Integer sl;
+	private Integer pl;
 	
 	
 	public Employee() {
@@ -98,9 +109,71 @@ private int empId;
 		this.makerUserId = makerUserId;
 		this.makerEnterDatetime = makerEnterDatetime;
 	}
+	
+	
+	
 
 
 
+
+	public Employee(int empId, String empDsc, String empCode, int companyId, int empCatId, int empTypeId, int empDeptId,
+			int locId, String empFname, String empMname, String empSname, String empPhoto, String empMobile1,
+			String empMobile2, String empEmail, String empAddressTemp, String empAddressPerm, String empBloodgrp,
+			String empEmergencyPerson1, String empEmergencyNo1, String empEmergencyPerson2, String empEmergencyNo2,
+			float empRatePerhr, String empJoiningDate, float empPrevExpYrs, float empPrevExpMonths,
+			String empLeavingDate, String empLeavingReason, String lockPeriod, String termConditions, int salaryId,
+			int delStatus, int isActive, int makerUserId, String makerEnterDatetime, float grossSalary, float noOfHrs,
+			String gender, String dob, String scanCopy1, String scanCopy2, Integer pf, Integer esic, Integer bonus,
+			Integer cl, Integer sl, Integer pl) {
+		super();
+		this.empId = empId;
+		this.empDsc = empDsc;
+		this.empCode = empCode;
+		this.companyId = companyId;
+		this.empCatId = empCatId;
+		this.empTypeId = empTypeId;
+		this.empDeptId = empDeptId;
+		this.locId = locId;
+		this.empFname = empFname;
+		this.empMname = empMname;
+		this.empSname = empSname;
+		this.empPhoto = empPhoto;
+		this.empMobile1 = empMobile1;
+		this.empMobile2 = empMobile2;
+		this.empEmail = empEmail;
+		this.empAddressTemp = empAddressTemp;
+		this.empAddressPerm = empAddressPerm;
+		this.empBloodgrp = empBloodgrp;
+		this.empEmergencyPerson1 = empEmergencyPerson1;
+		this.empEmergencyNo1 = empEmergencyNo1;
+		this.empEmergencyPerson2 = empEmergencyPerson2;
+		this.empEmergencyNo2 = empEmergencyNo2;
+		this.empRatePerhr = empRatePerhr;
+		this.empJoiningDate = empJoiningDate;
+		this.empPrevExpYrs = empPrevExpYrs;
+		this.empPrevExpMonths = empPrevExpMonths;
+		this.empLeavingDate = empLeavingDate;
+		this.empLeavingReason = empLeavingReason;
+		this.lockPeriod = lockPeriod;
+		this.termConditions = termConditions;
+		this.salaryId = salaryId;
+		this.delStatus = delStatus;
+		this.isActive = isActive;
+		this.makerUserId = makerUserId;
+		this.makerEnterDatetime = makerEnterDatetime;
+		this.grossSalary = grossSalary;
+		this.noOfHrs = noOfHrs;
+		this.gender = gender;
+		this.dob = dob;
+		this.scanCopy1 = scanCopy1;
+		this.scanCopy2 = scanCopy2;
+		this.pf = pf;
+		this.esic = esic;
+		this.bonus = bonus;
+		this.cl = cl;
+		this.sl = sl;
+		this.pl = pl;
+	}
 
 	public int getEmpId() {
 		return empId;
@@ -348,6 +421,108 @@ private int empId;
 	public void setExVar3(String exVar3) {
 		this.exVar3 = exVar3;
 	}
+	
+	
+	
+	
+	public float getGrossSalary() {
+		return grossSalary;
+	}
+
+	public void setGrossSalary(float grossSalary) {
+		this.grossSalary = grossSalary;
+	}
+
+	public float getNoOfHrs() {
+		return noOfHrs;
+	}
+
+	public void setNoOfHrs(float noOfHrs) {
+		this.noOfHrs = noOfHrs;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getDob() {
+		return dob;
+	}
+
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+
+	public String getScanCopy1() {
+		return scanCopy1;
+	}
+
+	public void setScanCopy1(String scanCopy1) {
+		this.scanCopy1 = scanCopy1;
+	}
+
+	public String getScanCopy2() {
+		return scanCopy2;
+	}
+
+	public void setScanCopy2(String scanCopy2) {
+		this.scanCopy2 = scanCopy2;
+	}
+
+	public Integer getPf() {
+		return pf;
+	}
+
+	public void setPf(Integer pf) {
+		this.pf = pf;
+	}
+
+	public Integer getEsic() {
+		return esic;
+	}
+
+	public void setEsic(Integer esic) {
+		this.esic = esic;
+	}
+
+	public Integer getBonus() {
+		return bonus;
+	}
+
+	public void setBonus(Integer bonus) {
+		this.bonus = bonus;
+	}
+
+	public Integer getCl() {
+		return cl;
+	}
+
+	public void setCl(Integer cl) {
+		this.cl = cl;
+	}
+
+	public Integer getSl() {
+		return sl;
+	}
+
+	public void setSl(Integer sl) {
+		this.sl = sl;
+	}
+
+	public Integer getPl() {
+		return pl;
+	}
+
+	public void setPl(Integer pl) {
+		this.pl = pl;
+	}
+	
+	
+
 	@Override
 	public String toString() {
 		return "Employee [empId=" + empId + ", empDsc=" + empDsc + ", empCode=" + empCode + ", companyId=" + companyId
@@ -363,7 +538,9 @@ private int empId;
 				+ termConditions + ", salaryId=" + salaryId + ", delStatus=" + delStatus + ", isActive=" + isActive
 				+ ", makerUserId=" + makerUserId + ", makerEnterDatetime=" + makerEnterDatetime + ", exInt1=" + exInt1
 				+ ", exInt2=" + exInt2 + ", exInt3=" + exInt3 + ", exVar1=" + exVar1 + ", exVar2=" + exVar2
-				+ ", exVar3=" + exVar3 + "]";
+				+ ", exVar3=" + exVar3 + ", grossSalary=" + grossSalary + ", noOfHrs=" + noOfHrs + ", gender=" + gender
+				+ ", dob=" + dob + ", scanCopy1=" + scanCopy1 + ", scanCopy2=" + scanCopy2 + ", pf=" + pf + ", esic="
+				+ esic + ", bonus=" + bonus + ", cl=" + cl + ", sl=" + sl + ", pl=" + pl + "]";
 	}
 	
 	

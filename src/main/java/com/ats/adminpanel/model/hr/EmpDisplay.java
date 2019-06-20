@@ -51,6 +51,19 @@ private int empId;
 	private String typeName;
 	private String companyName;
 	
+	private float grossSalary;
+	private float noOfHrs;
+	private String gender;
+	private String dob;
+	private String scanCopy1;
+	private String scanCopy2;
+	private Integer pf;
+	private Integer esic;
+	private Integer bonus;
+	private Integer cl;
+	private Integer sl;
+	private Integer pl;
+	
 	public int getEmpId() {
 		return empId;
 	}
@@ -321,6 +334,85 @@ private int empId;
 	public void setCompanyName(String companyName) {
 		this.companyName = companyName;
 	}
+	
+	
+	
+	public float getGrossSalary() {
+		return grossSalary;
+	}
+	public void setGrossSalary(float grossSalary) {
+		this.grossSalary = grossSalary;
+	}
+	public float getNoOfHrs() {
+		return noOfHrs;
+	}
+	public void setNoOfHrs(float noOfHrs) {
+		this.noOfHrs = noOfHrs;
+	}
+	public String getGender() {
+		return gender;
+	}
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+	public String getDob() {
+		return dob;
+	}
+	public void setDob(String dob) {
+		this.dob = dob;
+	}
+	public String getScanCopy1() {
+		return scanCopy1;
+	}
+	public void setScanCopy1(String scanCopy1) {
+		this.scanCopy1 = scanCopy1;
+	}
+	public String getScanCopy2() {
+		return scanCopy2;
+	}
+	public void setScanCopy2(String scanCopy2) {
+		this.scanCopy2 = scanCopy2;
+	}
+	public Integer getPf() {
+		return pf;
+	}
+	public void setPf(Integer pf) {
+		this.pf = pf;
+	}
+	public Integer getEsic() {
+		return esic;
+	}
+	public void setEsic(Integer esic) {
+		this.esic = esic;
+	}
+	public Integer getBonus() {
+		return bonus;
+	}
+	public void setBonus(Integer bonus) {
+		this.bonus = bonus;
+	}
+	public Integer getCl() {
+		return cl;
+	}
+	public void setCl(Integer cl) {
+		this.cl = cl;
+	}
+	public Integer getSl() {
+		return sl;
+	}
+	public void setSl(Integer sl) {
+		this.sl = sl;
+	}
+	public Integer getPl() {
+		return pl;
+	}
+	public void setPl(Integer pl) {
+		this.pl = pl;
+	}
+	
+	
+	
+	
 	@Override
 	public String toString() {
 		return "EmpDisplay [empId=" + empId + ", empDsc=" + empDsc + ", empCode=" + empCode + ", companyId=" + companyId
@@ -337,7 +429,9 @@ private int empId;
 				+ ", makerUserId=" + makerUserId + ", makerEnterDatetime=" + makerEnterDatetime + ", exInt1=" + exInt1
 				+ ", exInt2=" + exInt2 + ", exInt3=" + exInt3 + ", exVar1=" + exVar1 + ", exVar2=" + exVar2
 				+ ", exVar3=" + exVar3 + ", deptName=" + deptName + ", catName=" + catName + ", typeName=" + typeName
-				+ ", companyName=" + companyName + "]";
+				+ ", companyName=" + companyName + ", grossSalary=" + grossSalary + ", noOfHrs=" + noOfHrs + ", gender="
+				+ gender + ", dob=" + dob + ", scanCopy1=" + scanCopy1 + ", scanCopy2=" + scanCopy2 + ", pf=" + pf
+				+ ", esic=" + esic + ", bonus=" + bonus + ", cl=" + cl + ", sl=" + sl + ", pl=" + pl + "]";
 	}
 	
 	

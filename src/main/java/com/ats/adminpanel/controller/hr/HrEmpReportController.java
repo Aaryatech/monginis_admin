@@ -73,7 +73,7 @@ public class HrEmpReportController {
 	List<VisitorGatepassDisplay> reportList = new ArrayList<>();
 
 	List<EmpGatepassDisplay> supervisorReportList = new ArrayList<>();
-	
+
 	List<EmpGatepassDisplay> empWiseReportList = new ArrayList<>();
 
 	List<MaterialGatepassDisplay> materialReportList = new ArrayList<>();
@@ -347,8 +347,8 @@ public class HrEmpReportController {
 		Calendar cal = Calendar.getInstance();
 
 		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
-		 String FILE_PATH = Constants.REPORT_SAVE;
-		//String FILE_PATH = Constants.APP_IMAGE_URL + "Report.pdf";
+		String FILE_PATH = Constants.REPORT_SAVE;
+		// String FILE_PATH = Constants.APP_IMAGE_URL + "Report.pdf";
 		File file = new File(FILE_PATH);
 
 		PdfWriter writer = null;
@@ -494,8 +494,8 @@ public class HrEmpReportController {
 		Calendar cal = Calendar.getInstance();
 
 		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
-		 String FILE_PATH = Constants.REPORT_SAVE;
-		//String FILE_PATH = Constants.APP_IMAGE_URL + "Report.pdf";
+		String FILE_PATH = Constants.REPORT_SAVE;
+		// String FILE_PATH = Constants.APP_IMAGE_URL + "Report.pdf";
 		File file = new File(FILE_PATH);
 
 		PdfWriter writer = null;
@@ -887,16 +887,14 @@ public class HrEmpReportController {
 
 					for (int i = 0; i < supervisorReportList.size(); i++) {
 
-						String dateOut = DateConvertor.convertToDMY(supervisorReportList.get(i).getEmpDateOut());
-						String dateIn = DateConvertor.convertToDMY(supervisorReportList.get(i).getEmpDateIn());
-						supervisorReportList.get(i).setEmpDateOut(dateOut);
-						supervisorReportList.get(i).setEmpDateIn(dateIn);
-
-						newReportList.add(supervisorReportList.get(i));
+						supervisorReportList.get(i)
+								.setEmpDateOut(DateConvertor.convertToDMY(supervisorReportList.get(i).getEmpDateOut()));
+						supervisorReportList.get(i)
+								.setEmpDateIn(DateConvertor.convertToDMY(supervisorReportList.get(i).getEmpDateIn()));
 
 					}
 
-					mav.addObject("reportList", newReportList);
+					mav.addObject("reportList", supervisorReportList);
 					mav.addObject("fromDate", fromDate);
 					mav.addObject("toDate", toDate);
 					mav.addObject("emp", empName);
@@ -975,8 +973,8 @@ public class HrEmpReportController {
 		Calendar cal = Calendar.getInstance();
 
 		System.out.println("time in PDF ==" + dateFormat.format(cal.getTime()));
-		 String FILE_PATH = Constants.REPORT_SAVE;
-		//String FILE_PATH = Constants.APP_IMAGE_URL + "Report.pdf";
+		String FILE_PATH = Constants.REPORT_SAVE;
+		// String FILE_PATH = Constants.APP_IMAGE_URL + "Report.pdf";
 		File file = new File(FILE_PATH);
 
 		PdfWriter writer = null;
@@ -1110,9 +1108,7 @@ public class HrEmpReportController {
 		}
 
 	}
-	
-	
-	
+
 	@RequestMapping(value = "/showSupCompDetailPdf/{fromDate}/{toDate}", method = RequestMethod.GET)
 	public void showSupCompDetailPdf(@PathVariable("fromDate") String fromDate, @PathVariable("toDate") String toDate,
 			HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
@@ -1124,8 +1120,8 @@ public class HrEmpReportController {
 		Calendar cal = Calendar.getInstance();
 
 		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
-		 String FILE_PATH = Constants.REPORT_SAVE;
-		//String FILE_PATH = Constants.APP_IMAGE_URL + "Report.pdf";
+		String FILE_PATH = Constants.REPORT_SAVE;
+		// String FILE_PATH = Constants.APP_IMAGE_URL + "Report.pdf";
 		File file = new File(FILE_PATH);
 
 		PdfWriter writer = null;
@@ -1163,7 +1159,7 @@ public class HrEmpReportController {
 			hcell.setBackgroundColor(BaseColor.PINK);
 
 			table.addCell(hcell);
-			
+
 			hcell = new PdfPCell(new Phrase("Employee", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
@@ -1185,12 +1181,12 @@ public class HrEmpReportController {
 			hcell.setBackgroundColor(BaseColor.PINK);
 
 			table.addCell(hcell);
-			
+
 			hcell = new PdfPCell(new Phrase("Out Time", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
+
 			hcell = new PdfPCell(new Phrase("In Time", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
@@ -1201,7 +1197,7 @@ public class HrEmpReportController {
 			hcell.setBackgroundColor(BaseColor.PINK);
 
 			table.addCell(hcell);
-			
+
 			int index = 0;
 
 			System.err.println("REPORT LIST -------------------------------------------------- " + reportList);
@@ -1216,7 +1212,7 @@ public class HrEmpReportController {
 				cell.setPadding(3);
 				cell.setPaddingRight(2);
 				table.addCell(cell);
-				
+
 				cell = new PdfPCell(new Phrase("" + work.getUserName(), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -1237,15 +1233,15 @@ public class HrEmpReportController {
 				cell.setPaddingRight(2);
 				cell.setPadding(3);
 				table.addCell(cell);
-				
-				String type="";
-				if(work.getGatePassSubType()==1) {
-					type="Temporary";
-				}else if(work.getGatePassSubType()==2) {
-					type="Day";
+
+				String type = "";
+				if (work.getGatePassSubType() == 1) {
+					type = "Temporary";
+				} else if (work.getGatePassSubType() == 2) {
+					type = "Day";
 				}
 
-				cell = new PdfPCell(new Phrase(""+type , headFont));
+				cell = new PdfPCell(new Phrase("" + type, headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 				cell.setPaddingRight(2);
@@ -1265,8 +1261,6 @@ public class HrEmpReportController {
 				cell.setPaddingRight(2);
 				cell.setPadding(3);
 				table.addCell(cell);
-
-			
 
 				cell = new PdfPCell(new Phrase("" + work.getNewInTime(), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1342,14 +1336,10 @@ public class HrEmpReportController {
 		}
 
 	}
-	
-	
-	
-	
-	
-	
-	//-------------------------------EMP WISE REPORT FOR EMPLOYEE--------------------------------------------
-	
+
+	// -------------------------------EMP WISE REPORT FOR
+	// EMPLOYEE--------------------------------------------
+
 	@RequestMapping(value = "/showEmpWiseReportForEmp", method = RequestMethod.GET)
 	public ModelAndView showEmpWiseReportForEmp(HttpServletRequest request, HttpServletResponse response) {
 
@@ -1376,18 +1366,16 @@ public class HrEmpReportController {
 					Employee[].class);
 
 			List<Employee> empList = new ArrayList<>(Arrays.asList(empArray));
-			
-			EmpDeptDisplay[] deptArray=restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeDepartmentList",
-					EmpDeptDisplay[].class);
+
+			EmpDeptDisplay[] deptArray = restTemplate.getForObject(
+					Constants.security_app_url + "master/allEmployeeDepartmentList", EmpDeptDisplay[].class);
 			List<EmpDeptDisplay> deptList = new ArrayList<>(Arrays.asList(deptArray));
-			
 
 			// end get Employee
 
 			model.addObject("todaysDate", todaysDate);
 			model.addObject("empList", empList);
 			model.addObject("deptList", deptList);
-
 
 		} catch (Exception e) {
 
@@ -1398,15 +1386,12 @@ public class HrEmpReportController {
 		return model;
 
 	}
-	
-	
+
 	@RequestMapping(value = "/getEmpwiseGatepassReport", method = RequestMethod.GET)
 	public @ResponseBody List<EmpGatepassDisplay> getEmpwiseGatepassReport(HttpServletRequest request,
 			HttpServletResponse response) {
 
 		List<EmpWiseVisitorReport> reportList = new ArrayList<>();
-
-		
 
 		try {
 			String fromDate = request.getParameter("fromDate");
@@ -1417,11 +1402,11 @@ public class HrEmpReportController {
 			fromDate = DateConvertor.convertToYMD(fromDate);
 			toDate = DateConvertor.convertToYMD(toDate);
 
-			boolean isAllEmpSelected = false,isAllDeptSelected=false;
-			
+			boolean isAllEmpSelected = false, isAllDeptSelected = false;
+
 			selectedEmpId = selectedEmpId.substring(1, selectedEmpId.length() - 1);
 			selectedEmpId = selectedEmpId.replaceAll("\"", "");
-			
+
 			selectedDeptId = selectedDeptId.substring(1, selectedDeptId.length() - 1);
 			selectedDeptId = selectedDeptId.replaceAll("\"", "");
 
@@ -1431,7 +1416,7 @@ public class HrEmpReportController {
 			if (empList.contains("-1")) {
 				isAllEmpSelected = true;
 			}
-			
+
 			deptList = new ArrayList<>();
 			deptList = Arrays.asList(selectedDeptId);
 
@@ -1454,7 +1439,7 @@ public class HrEmpReportController {
 				map.add("empIds", selectedEmpId);
 
 			}
-			
+
 			if (isAllDeptSelected) {
 
 				System.out.println("Inside If all DEPT Selected ");
@@ -1487,7 +1472,7 @@ public class HrEmpReportController {
 		}
 
 		// exportToExcel
-		
+
 		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
 		ExportToExcel expoExcel = new ExportToExcel();
@@ -1534,9 +1519,7 @@ public class HrEmpReportController {
 
 		return empWiseReportList;
 	}
-	
-	
-	
+
 	@RequestMapping(value = "/showEmpGatepassPdf/{fromDate}/{toDate}", method = RequestMethod.GET)
 	public void showEmpGatepassPdf(@PathVariable("fromDate") String fromDate, @PathVariable("toDate") String toDate,
 			HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
@@ -1547,8 +1530,8 @@ public class HrEmpReportController {
 		Calendar cal = Calendar.getInstance();
 
 		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
-		 String FILE_PATH = Constants.REPORT_SAVE;
-		//String FILE_PATH = Constants.APP_IMAGE_URL + "Report.pdf";
+		String FILE_PATH = Constants.REPORT_SAVE;
+		// String FILE_PATH = Constants.APP_IMAGE_URL + "Report.pdf";
 		File file = new File(FILE_PATH);
 
 		PdfWriter writer = null;
@@ -1580,7 +1563,7 @@ public class HrEmpReportController {
 			hcell.setBackgroundColor(BaseColor.PINK);
 
 			table.addCell(hcell);
-			
+
 			hcell = new PdfPCell(new Phrase("Supervisor", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
@@ -1608,12 +1591,12 @@ public class HrEmpReportController {
 			hcell.setBackgroundColor(BaseColor.PINK);
 
 			table.addCell(hcell);
-			
+
 			hcell = new PdfPCell(new Phrase("Out Time", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
 			table.addCell(hcell);
-			
+
 			hcell = new PdfPCell(new Phrase("In Time", headFont1));
 			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 			hcell.setBackgroundColor(BaseColor.PINK);
@@ -1624,7 +1607,7 @@ public class HrEmpReportController {
 			hcell.setBackgroundColor(BaseColor.PINK);
 
 			table.addCell(hcell);
-			
+
 			int index = 0;
 
 			System.err.println("REPORT LIST -------------------------------------------------- " + empWiseReportList);
@@ -1639,7 +1622,7 @@ public class HrEmpReportController {
 				cell.setPadding(3);
 				cell.setPaddingRight(2);
 				table.addCell(cell);
-				
+
 				cell = new PdfPCell(new Phrase("" + work.getUserName(), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
@@ -1660,15 +1643,15 @@ public class HrEmpReportController {
 				cell.setPaddingRight(2);
 				cell.setPadding(3);
 				table.addCell(cell);
-				
-				String type="";
-				if(work.getGatePassSubType()==1) {
-					type="Temporary";
-				}else if(work.getGatePassSubType()==2) {
-					type="Day";
+
+				String type = "";
+				if (work.getGatePassSubType() == 1) {
+					type = "Temporary";
+				} else if (work.getGatePassSubType() == 2) {
+					type = "Day";
 				}
 
-				cell = new PdfPCell(new Phrase(""+type , headFont));
+				cell = new PdfPCell(new Phrase("" + type, headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 				cell.setPaddingRight(2);
@@ -1688,8 +1671,6 @@ public class HrEmpReportController {
 				cell.setPaddingRight(2);
 				cell.setPadding(3);
 				table.addCell(cell);
-
-			
 
 				cell = new PdfPCell(new Phrase("" + work.getNewInTime(), headFont));
 				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
@@ -1765,968 +1746,910 @@ public class HrEmpReportController {
 		}
 
 	}
-	
-	
-	
-	
-	
-	//-------------------------------Material Gatepass  REPORT--------------------------------------------
-	
-		@RequestMapping(value = "/showMatGatepassReport", method = RequestMethod.GET)
-		public ModelAndView showMatGatepassReport(HttpServletRequest request, HttpServletResponse response) {
 
-			ModelAndView model = new ModelAndView("hrEmployeeReports/materialReport");
+	// -------------------------------Material Gatepass
+	// REPORT--------------------------------------------
 
-			HttpSession session = request.getSession();
+	@RequestMapping(value = "/showMatGatepassReport", method = RequestMethod.GET)
+	public ModelAndView showMatGatepassReport(HttpServletRequest request, HttpServletResponse response) {
 
-			System.out.println("session Id in show Page  " + session.getId());
+		ModelAndView model = new ModelAndView("hrEmployeeReports/materialReport");
 
-			materialReportList.clear();
+		HttpSession session = request.getSession();
 
-			try {
-				ZoneId z = ZoneId.of("Asia/Calcutta");
+		System.out.println("session Id in show Page  " + session.getId());
 
-				LocalDate date = LocalDate.now(z);
-				DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
-				String todaysDate = date.format(formatters);
+		materialReportList.clear();
 
-				RestTemplate restTemplate = new RestTemplate();
+		try {
+			ZoneId z = ZoneId.of("Asia/Calcutta");
 
-				// get Supplier
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			String todaysDate = date.format(formatters);
 
-				SupplierModel[] empArray = restTemplate.getForObject(Constants.store_api_url + "getAllVendorByIsUsed",
-						SupplierModel[].class);
+			RestTemplate restTemplate = new RestTemplate();
 
-				List<SupplierModel> supList = new ArrayList<>(Arrays.asList(empArray));
-				
-				System.err.println("SUPPLIER - -------------------------------- "+supList);
-				
-				
-				model.addObject("todaysDate", todaysDate);
-				model.addObject("supList", supList);
+			// get Supplier
 
+			SupplierModel[] empArray = restTemplate.getForObject(Constants.store_api_url + "getAllVendorByIsUsed",
+					SupplierModel[].class);
 
-			} catch (Exception e) {
+			List<SupplierModel> supList = new ArrayList<>(Arrays.asList(empArray));
 
-				System.out.println("Exc in show material gatepass report " + e.getMessage());
-				e.printStackTrace();
+			System.err.println("SUPPLIER - -------------------------------- " + supList);
+
+			model.addObject("todaysDate", todaysDate);
+			model.addObject("supList", supList);
+
+		} catch (Exception e) {
+
+			System.out.println("Exc in show material gatepass report " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+
+	}
+
+	@RequestMapping(value = "/getMatGatepassReport", method = RequestMethod.GET)
+	public @ResponseBody List<MaterialGatepassDisplay> getMatGatepassReport(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		List<MaterialGatepassDisplay> reportList = new ArrayList<>();
+
+		List<MaterialGatepassDisplay> newReportList = new ArrayList<>();
+
+		try {
+			String fromDate = request.getParameter("fromDate");
+			String toDate = request.getParameter("toDate");
+			String selectedSupId = request.getParameter("sup_id_list");
+
+			fromDate = DateConvertor.convertToYMD(fromDate);
+			toDate = DateConvertor.convertToYMD(toDate);
+
+			boolean isAllSupSelected = false;
+
+			selectedSupId = selectedSupId.substring(1, selectedSupId.length() - 1);
+			selectedSupId = selectedSupId.replaceAll("\"", "");
+
+			supList = new ArrayList<>();
+			supList = Arrays.asList(selectedSupId);
+
+			if (supList.contains("-1")) {
+				isAllSupSelected = true;
 			}
 
-			return model;
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+
+			if (isAllSupSelected) {
+
+				System.out.println("Inside If all Sup Selected ");
+
+				map.add("supIds", -1);
+
+			} else {
+				System.out.println("Inside else Few Emp Selected " + supList.toString());
+
+				map.add("supIds", selectedSupId);
+
+			}
+
+			map.add("fromDate", fromDate);
+			map.add("toDate", toDate);
+
+			ParameterizedTypeReference<List<MaterialGatepassDisplay>> typeRef = new ParameterizedTypeReference<List<MaterialGatepassDisplay>>() {
+			};
+			ResponseEntity<List<MaterialGatepassDisplay>> responseEntity = restTemplate.exchange(
+					Constants.security_app_url + "report/getMaterialGatepassReport", HttpMethod.POST,
+					new HttpEntity<>(map), typeRef);
+
+			newReportList = responseEntity.getBody();
+			System.err.println("MAterial ***********************" + newReportList.toString());
+
+		} catch (Exception e) {
+			System.out.println("get mat wise Report  " + e.getMessage());
+			e.printStackTrace();
 
 		}
-		
-		
-		
 
-		@RequestMapping(value = "/getMatGatepassReport", method = RequestMethod.GET)
-		public @ResponseBody List<MaterialGatepassDisplay> getMatGatepassReport(HttpServletRequest request,
-				HttpServletResponse response) {
+		try {
 
-			List<MaterialGatepassDisplay> reportList = new ArrayList<>();
+			if (newReportList != null) {
 
-			List<MaterialGatepassDisplay> newReportList=new ArrayList<>();
+				for (int i = 0; i < newReportList.size(); i++) {
 
+					String date = DateConvertor.convertToDMY(newReportList.get(i).getInwardDate());
+					newReportList.get(i).setInwardDate(date);
 
-			try {
-				String fromDate = request.getParameter("fromDate");
-				String toDate = request.getParameter("toDate");
-				String selectedSupId = request.getParameter("sup_id_list");
-
-				fromDate = DateConvertor.convertToYMD(fromDate);
-				toDate = DateConvertor.convertToYMD(toDate);
-
-				boolean isAllSupSelected = false;
-				
-				selectedSupId = selectedSupId.substring(1, selectedSupId.length() - 1);
-				selectedSupId = selectedSupId.replaceAll("\"", "");
-				
-
-				supList = new ArrayList<>();
-				supList = Arrays.asList(selectedSupId);
-
-				if (supList.contains("-1")) {
-					isAllSupSelected = true;
-				}
-				
-
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				RestTemplate restTemplate = new RestTemplate();
-
-				if (isAllSupSelected) {
-
-					System.out.println("Inside If all Sup Selected ");
-
-					map.add("supIds", -1);
-
-				} else {
-					System.out.println("Inside else Few Emp Selected " + supList.toString());
-
-					map.add("supIds", selectedSupId);
+					materialReportList.add(newReportList.get(i));
 
 				}
-				
-				
-
-				map.add("fromDate", fromDate);
-				map.add("toDate", toDate);
-
-				ParameterizedTypeReference<List<MaterialGatepassDisplay>> typeRef = new ParameterizedTypeReference<List<MaterialGatepassDisplay>>() {
-				};
-				ResponseEntity<List<MaterialGatepassDisplay>> responseEntity = restTemplate.exchange(
-						Constants.security_app_url + "report/getMaterialGatepassReport", HttpMethod.POST,
-						new HttpEntity<>(map), typeRef);
-
-				newReportList = responseEntity.getBody();
-				System.err.println("MAterial ***********************" + newReportList.toString());
-
-			} catch (Exception e) {
-				System.out.println("get mat wise Report  " + e.getMessage());
-				e.printStackTrace();
 
 			}
-			
-			try {
 
-				if (newReportList != null) {
+		} catch (Exception e) {
+			System.out.println("Exception In mat Report :" + e.getMessage());
+		}
 
-					for (int i = 0; i < newReportList.size(); i++) {
+		// exportToExcel
 
-						String date = DateConvertor.convertToDMY(newReportList.get(i).getInwardDate());
-						newReportList.get(i).setInwardDate(date);
+		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
-						materialReportList.add(newReportList.get(i));
+		ExportToExcel expoExcel = new ExportToExcel();
+		List<String> rowData = new ArrayList<String>();
 
-					}
+		rowData.add("Date");
+		rowData.add("Type");
+		rowData.add("Invoice No");
+		rowData.add("Party Name");
+		rowData.add("Security");
 
-				}
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+		for (int i = 0; i < materialReportList.size(); i++) {
+			expoExcel = new ExportToExcel();
+			rowData = new ArrayList<String>();
 
-			} catch (Exception e) {
-				System.out.println("Exception In mat Report :" + e.getMessage());
+			rowData.add("" + materialReportList.get(i).getInwardDate());
+
+			if (materialReportList.get(i).getGatePassSubType() == 1) {
+				rowData.add("Material");
+			} else if (materialReportList.get(i).getGatePassSubType() == 2) {
+				rowData.add("Parcel");
 			}
-			
+			rowData.add("" + materialReportList.get(i).getInvoiceNumber());
+			rowData.add("" + materialReportList.get(i).getPartyName());
 
-			// exportToExcel
-			
-			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
-
-			ExportToExcel expoExcel = new ExportToExcel();
-			List<String> rowData = new ArrayList<String>();
-
-			rowData.add("Date");
-			rowData.add("Type");
-			rowData.add("Invoice No");
-			rowData.add("Party Name");
-			rowData.add("Security");
+			rowData.add("" + materialReportList.get(i).getSecurityName());
 
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
-			for (int i = 0; i < materialReportList.size(); i++) {
-				expoExcel = new ExportToExcel();
-				rowData = new ArrayList<String>();
-
-				rowData.add("" + materialReportList.get(i).getInwardDate());
-				
-				if (materialReportList.get(i).getGatePassSubType() == 1) {
-					rowData.add("Material");
-				} else if (materialReportList.get(i).getGatePassSubType() == 2) {
-					rowData.add("Parcel");
-				}
-				rowData.add("" + materialReportList.get(i).getInvoiceNumber());
-				rowData.add("" + materialReportList.get(i).getPartyName());
-
-				rowData.add("" + materialReportList.get(i).getSecurityName());
-
-				expoExcel.setRowData(rowData);
-				exportToExcelList.add(expoExcel);
-
-			}
-
-			HttpSession session = request.getSession();
-			session.setAttribute("exportExcelList", exportToExcelList);
-			session.setAttribute("excelName", "Material_Gatepass_Report");
-
-			return materialReportList;
-		}
-		
-		
-		
-		@RequestMapping(value = "/showMatGatepassPdf/{fromDate}/{toDate}", method = RequestMethod.GET)
-		public void showMatGatepassPdf(@PathVariable("fromDate") String fromDate, @PathVariable("toDate") String toDate,
-				HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
-			BufferedOutputStream outStream = null;
-			Document document = new Document(PageSize.A4);
-
-			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-			Calendar cal = Calendar.getInstance();
-
-			System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
-			 String FILE_PATH = Constants.REPORT_SAVE;
-			//String FILE_PATH = Constants.APP_IMAGE_URL + "Report.pdf";
-			File file = new File(FILE_PATH);
-
-			PdfWriter writer = null;
-
-			FileOutputStream out = new FileOutputStream(FILE_PATH);
-			try {
-				writer = PdfWriter.getInstance(document, out);
-			} catch (DocumentException e) {
-
-				e.printStackTrace();
-			}
-
-			PdfPTable table = new PdfPTable(6);
-			try {
-				System.out.println("Inside PDF Table try");
-				table.setWidthPercentage(100);
-				table.setWidths(new float[] { 2.4f, 3.2f, 3.2f, 3.2f, 3.2f, 3.2f });
-				Font headFont = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
-				Font headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
-				headFont1.setColor(BaseColor.WHITE);
-				Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
-
-				PdfPCell hcell = new PdfPCell();
-				hcell.setBackgroundColor(BaseColor.PINK);
-
-				hcell.setPadding(3);
-				hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.PINK);
-
-				table.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase("Date", headFont1));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.PINK);
-
-				table.addCell(hcell);
-
-				hcell = new PdfPCell(new Phrase("Type", headFont1));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.PINK);
-
-				table.addCell(hcell);
-
-				hcell = new PdfPCell(new Phrase("Invoice No", headFont1));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.PINK);
-
-				table.addCell(hcell);
-				hcell = new PdfPCell(new Phrase("Party Name", headFont1));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.PINK);
-
-				table.addCell(hcell);
-				hcell = new PdfPCell(new Phrase("Security", headFont1));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.PINK);
-
-				table.addCell(hcell);
-				
-				
-				int index = 0;
-
-				System.err.println("REPORT LIST -------------------------------------------------- " + materialReportList);
-
-				for (MaterialGatepassDisplay work : materialReportList) {
-					index++;
-					PdfPCell cell;
-
-					cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setPadding(3);
-					cell.setPaddingRight(2);
-					table.addCell(cell);
-					
-					cell = new PdfPCell(new Phrase("" + work.getInwardDate(), headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-					cell.setPaddingRight(2);
-					cell.setPadding(3);
-					table.addCell(cell);
-					
-					String type="";
-					
-					if(work.getGatePassSubType()==1) {
-						type="Material";
-					}else {
-						type="Parcel";
-					}
-
-					cell = new PdfPCell(new Phrase("" + type, headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-					cell.setPaddingRight(2);
-					cell.setPadding(3);
-					table.addCell(cell);
-
-					cell = new PdfPCell(new Phrase("" + work.getInvoiceNumber(), headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-					cell.setPaddingRight(2);
-					cell.setPadding(3);
-					table.addCell(cell);
-					
-					cell = new PdfPCell(new Phrase(""+work.getPartyName() , headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-					cell.setPaddingRight(2);
-					cell.setPadding(3);
-					table.addCell(cell);
-
-					cell = new PdfPCell(new Phrase("" + work.getSecurityName(), headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-					cell.setPaddingRight(2);
-					cell.setPadding(3);
-					table.addCell(cell);
-
-					
-
-				}
-				document.open();
-				Paragraph name = new Paragraph("GFPL\n", f);
-				name.setAlignment(Element.ALIGN_CENTER);
-				document.add(name);
-				document.add(new Paragraph(" "));
-				Paragraph company = new Paragraph("Material Gatepass  Report\n", f);
-				company.setAlignment(Element.ALIGN_CENTER);
-				document.add(company);
-				document.add(new Paragraph(" "));
-
-				DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
-				String reportDate = DF.format(new Date());
-				Paragraph p1 = new Paragraph("From Date:" + fromDate + "  To Date:" + toDate, headFont);
-				p1.setAlignment(Element.ALIGN_CENTER);
-				document.add(p1);
-				document.add(new Paragraph("\n"));
-				document.add(table);
-
-				int totalPages = writer.getPageNumber();
-
-				System.out.println("Page no " + totalPages);
-
-				document.close();
-
-				if (file != null) {
-
-					String mimeType = URLConnection.guessContentTypeFromName(file.getName());
-
-					if (mimeType == null) {
-
-						mimeType = "application/pdf";
-
-					}
-
-					response.setContentType(mimeType);
-
-					response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
-
-					response.setContentLength((int) file.length());
-
-					BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file));
-
-					try {
-						FileCopyUtils.copy(inputStream, response.getOutputStream());
-					} catch (IOException e) {
-						System.out.println("Excep in Opening a Pdf File");
-						e.printStackTrace();
-					}
-				}
-
-			} catch (DocumentException ex) {
-
-				System.out.println("Pdf Generation Error: " + ex.getMessage());
-
-				ex.printStackTrace();
-
-			}
 
 		}
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		//---------------------------------------------------------------------------------------------
-		
-		
-		@RequestMapping(value = "/showMatTrackReportBetDate", method = RequestMethod.GET)
-		public ModelAndView showMatTrackReportBetDate(HttpServletRequest request, HttpServletResponse response) {
 
-			ModelAndView model = new ModelAndView("hrEmployeeReports/matTrackingReportBetDate");
+		HttpSession session = request.getSession();
+		session.setAttribute("exportExcelList", exportToExcelList);
+		session.setAttribute("excelName", "Material_Gatepass_Report");
 
-			HttpSession session = request.getSession();
+		return materialReportList;
+	}
 
-			System.out.println("session Id in show Page  " + session.getId());
+	@RequestMapping(value = "/showMatGatepassPdf/{fromDate}/{toDate}", method = RequestMethod.GET)
+	public void showMatGatepassPdf(@PathVariable("fromDate") String fromDate, @PathVariable("toDate") String toDate,
+			HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+		BufferedOutputStream outStream = null;
+		Document document = new Document(PageSize.A4);
 
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+
+		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
+		String FILE_PATH = Constants.REPORT_SAVE;
+		// String FILE_PATH = Constants.APP_IMAGE_URL + "Report.pdf";
+		File file = new File(FILE_PATH);
+
+		PdfWriter writer = null;
+
+		FileOutputStream out = new FileOutputStream(FILE_PATH);
+		try {
+			writer = PdfWriter.getInstance(document, out);
+		} catch (DocumentException e) {
+
+			e.printStackTrace();
+		}
+
+		PdfPTable table = new PdfPTable(6);
+		try {
+			System.out.println("Inside PDF Table try");
+			table.setWidthPercentage(100);
+			table.setWidths(new float[] { 2.4f, 3.2f, 3.2f, 3.2f, 3.2f, 3.2f });
+			Font headFont = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+			headFont1.setColor(BaseColor.WHITE);
+			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
+
+			PdfPCell hcell = new PdfPCell();
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			hcell.setPadding(3);
+			hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Date", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Type", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Invoice No", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+			hcell = new PdfPCell(new Phrase("Party Name", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+			hcell = new PdfPCell(new Phrase("Security", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			int index = 0;
+
+			System.err.println("REPORT LIST -------------------------------------------------- " + materialReportList);
+
+			for (MaterialGatepassDisplay work : materialReportList) {
+				index++;
+				PdfPCell cell;
+
+				cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPadding(3);
+				cell.setPaddingRight(2);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + work.getInwardDate(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				String type = "";
+
+				if (work.getGatePassSubType() == 1) {
+					type = "Material";
+				} else {
+					type = "Parcel";
+				}
+
+				cell = new PdfPCell(new Phrase("" + type, headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + work.getInvoiceNumber(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + work.getPartyName(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + work.getSecurityName(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+			}
+			document.open();
+			Paragraph name = new Paragraph("GFPL\n", f);
+			name.setAlignment(Element.ALIGN_CENTER);
+			document.add(name);
+			document.add(new Paragraph(" "));
+			Paragraph company = new Paragraph("Material Gatepass  Report\n", f);
+			company.setAlignment(Element.ALIGN_CENTER);
+			document.add(company);
+			document.add(new Paragraph(" "));
+
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+			Paragraph p1 = new Paragraph("From Date:" + fromDate + "  To Date:" + toDate, headFont);
+			p1.setAlignment(Element.ALIGN_CENTER);
+			document.add(p1);
+			document.add(new Paragraph("\n"));
+			document.add(table);
+
+			int totalPages = writer.getPageNumber();
+
+			System.out.println("Page no " + totalPages);
+
+			document.close();
+
+			if (file != null) {
+
+				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+				if (mimeType == null) {
+
+					mimeType = "application/pdf";
+
+				}
+
+				response.setContentType(mimeType);
+
+				response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+				response.setContentLength((int) file.length());
+
+				BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+				try {
+					FileCopyUtils.copy(inputStream, response.getOutputStream());
+				} catch (IOException e) {
+					System.out.println("Excep in Opening a Pdf File");
+					e.printStackTrace();
+				}
+			}
+
+		} catch (DocumentException ex) {
+
+			System.out.println("Pdf Generation Error: " + ex.getMessage());
+
+			ex.printStackTrace();
+
+		}
+
+	}
+
+	// ---------------------------------------------------------------------------------------------
+
+	@RequestMapping(value = "/showMatTrackReportBetDate", method = RequestMethod.GET)
+	public ModelAndView showMatTrackReportBetDate(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("hrEmployeeReports/matTrackingReportBetDate");
+
+		HttpSession session = request.getSession();
+
+		System.out.println("session Id in show Page  " + session.getId());
+
+		materialReportList.clear();
+
+		try {
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			String todaysDate = date.format(formatters);
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			// get Supplier
+
+			EmpDeptDisplay[] deptArray = restTemplate.getForObject(
+					Constants.security_app_url + "master/allEmployeeDepartmentList", EmpDeptDisplay[].class);
+			List<EmpDeptDisplay> deptList = new ArrayList<>(Arrays.asList(deptArray));
+
+			model.addObject("todaysDate", todaysDate);
+			model.addObject("deptList", deptList);
+
+		} catch (Exception e) {
+
+			System.out.println("Exc in show material track report " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+
+	}
+
+	@RequestMapping(value = "/getMatTrackReport", method = RequestMethod.GET)
+	public @ResponseBody List<MaterialGatepassDisplay> getMatTrackReport(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		List<MaterialGatepassDisplay> reportList = new ArrayList<>();
+
+		List<MaterialGatepassDisplay> newReportList = new ArrayList<>();
+
+		try {
+			String fromDate = request.getParameter("fromDate");
+			String toDate = request.getParameter("toDate");
+			String selectedDeptId = request.getParameter("dept_id_list");
+			String stat = request.getParameter("status");
+
+			fromDate = DateConvertor.convertToYMD(fromDate);
+			toDate = DateConvertor.convertToYMD(toDate);
+
+			boolean isAllDeptSelected = false;
+
+			selectedDeptId = selectedDeptId.substring(1, selectedDeptId.length() - 1);
+			selectedDeptId = selectedDeptId.replaceAll("\"", "");
+
+			deptList = new ArrayList<>();
+			deptList = Arrays.asList(selectedDeptId);
+
+			if (deptList.contains("-1")) {
+				isAllDeptSelected = true;
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+			if (isAllDeptSelected) {
+
+				System.out.println("Inside If all Dept Selected ");
+
+				map.add("deptIds", -1);
+
+			} else {
+				System.out.println("Inside else Few Emp Selected " + supList.toString());
+
+				map.add("deptIds", selectedDeptId);
+
+			}
+
+			map.add("fromDate", fromDate);
+			map.add("toDate", toDate);
+			map.add("empIds", -1);
+
+			int status = Integer.parseInt(stat);
+
+			if (status == 0) {
+				map.add("status", 0);
+			} else if (status == 1) {
+				map.add("status", 1);
+			} else if (status == 2) {
+				map.add("status", 2);
+			}
+
+			System.err.println("MAP------------------------------------------------- = " + map.toString());
+			System.err.println("STATUS------------------------------------------------- = " + status);
+
+			ParameterizedTypeReference<List<MaterialGatepassDisplay>> typeRef = new ParameterizedTypeReference<List<MaterialGatepassDisplay>>() {
+			};
+			ResponseEntity<List<MaterialGatepassDisplay>> responseEntity = restTemplate.exchange(
+					Constants.security_app_url + "transaction/getMaterialTrackGatepassListWithDateFilter",
+					HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			newReportList = responseEntity.getBody();
+			System.err.println("MAterial ***********************" + newReportList.toString());
 			materialReportList.clear();
 
-			try {
-				ZoneId z = ZoneId.of("Asia/Calcutta");
-
-				LocalDate date = LocalDate.now(z);
-				DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
-				String todaysDate = date.format(formatters);
-
-				RestTemplate restTemplate = new RestTemplate();
-
-				// get Supplier
-
-				EmpDeptDisplay[] deptArray = restTemplate.getForObject(
-						Constants.security_app_url + "master/allEmployeeDepartmentList", EmpDeptDisplay[].class);
-				List<EmpDeptDisplay> deptList = new ArrayList<>(Arrays.asList(deptArray));
-				
-				
-				model.addObject("todaysDate", todaysDate);
-				model.addObject("deptList", deptList);
-
-
-			} catch (Exception e) {
-
-				System.out.println("Exc in show material track report " + e.getMessage());
-				e.printStackTrace();
-			}
-
-			return model;
+		} catch (Exception e) {
+			System.out.println("get mat wise Report  " + e.getMessage());
+			e.printStackTrace();
 
 		}
-		
-		
-		@RequestMapping(value = "/getMatTrackReport", method = RequestMethod.GET)
-		public @ResponseBody List<MaterialGatepassDisplay> getMatTrackReport(HttpServletRequest request,
-				HttpServletResponse response) {
 
-			List<MaterialGatepassDisplay> reportList = new ArrayList<>();
+		try {
 
-			List<MaterialGatepassDisplay> newReportList=new ArrayList<>();
+			if (newReportList != null) {
 
+				for (int i = 0; i < newReportList.size(); i++) {
 
-			try {
-				String fromDate = request.getParameter("fromDate");
-				String toDate = request.getParameter("toDate");
-				String selectedDeptId = request.getParameter("dept_id_list");
-				String stat = request.getParameter("status");
+					String date = DateConvertor.convertToDMY(newReportList.get(i).getInwardDate());
+					newReportList.get(i).setInwardDate(date);
 
-				fromDate = DateConvertor.convertToYMD(fromDate);
-				toDate = DateConvertor.convertToYMD(toDate);
-
-				boolean isAllDeptSelected = false;
-				
-				selectedDeptId = selectedDeptId.substring(1, selectedDeptId.length() - 1);
-				selectedDeptId = selectedDeptId.replaceAll("\"", "");
-				
-
-				deptList = new ArrayList<>();
-				deptList = Arrays.asList(selectedDeptId);
-
-				if (deptList.contains("-1")) {
-					isAllDeptSelected = true;
-				}
-				
-
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				RestTemplate restTemplate = new RestTemplate();
-				if (isAllDeptSelected) {
-
-					System.out.println("Inside If all Dept Selected ");
-
-					map.add("deptIds", -1);
-
-				} else {
-					System.out.println("Inside else Few Emp Selected " + supList.toString());
-
-					map.add("deptIds", selectedDeptId);
+					materialReportList.add(newReportList.get(i));
 
 				}
-				
-				
-				map.add("fromDate", fromDate);
-				map.add("toDate", toDate);
-				map.add("empIds", -1);
-				
-				int status=Integer.parseInt(stat);
 
-				if(status== 0) {
-					map.add("status", 0);	
-				}else if(status==1) {
-					map.add("status", 1);	
-				}else if(status==2) {
-					map.add("status", 2);	
-				}
-			
-				
-				
-				System.err.println("MAP------------------------------------------------- = "+map.toString());		
-				System.err.println("STATUS------------------------------------------------- = "+status);		
-
-				ParameterizedTypeReference<List<MaterialGatepassDisplay>> typeRef = new ParameterizedTypeReference<List<MaterialGatepassDisplay>>() {
-				};
-				ResponseEntity<List<MaterialGatepassDisplay>> responseEntity = restTemplate.exchange(
-						Constants.security_app_url + "transaction/getMaterialTrackGatepassListWithDateFilter", HttpMethod.POST,
-						new HttpEntity<>(map), typeRef);
-
-				newReportList = responseEntity.getBody();
-				System.err.println("MAterial ***********************" + newReportList.toString());
+			} else {
 				materialReportList.clear();
-
-			} catch (Exception e) {
-				System.out.println("get mat wise Report  " + e.getMessage());
-				e.printStackTrace();
-
 			}
-			
-			try {
 
-				if (newReportList != null) {
+		} catch (Exception e) {
+			System.out.println("Exception In mat Report :" + e.getMessage());
+		}
 
-					for (int i = 0; i < newReportList.size(); i++) {
+		// exportToExcel
 
-						String date = DateConvertor.convertToDMY(newReportList.get(i).getInwardDate());
-						newReportList.get(i).setInwardDate(date);
+		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
-						materialReportList.add(newReportList.get(i));
+		ExportToExcel expoExcel = new ExportToExcel();
+		List<String> rowData = new ArrayList<String>();
 
-					}
+		rowData.add("Date");
+		rowData.add("Type");
+		rowData.add("Invoice No");
+		rowData.add("Party Name");
+		rowData.add("Security");
 
-				}else {
-					materialReportList.clear();
-				}
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+		for (int i = 0; i < materialReportList.size(); i++) {
+			expoExcel = new ExportToExcel();
+			rowData = new ArrayList<String>();
 
-			} catch (Exception e) {
-				System.out.println("Exception In mat Report :" + e.getMessage());
+			rowData.add("" + materialReportList.get(i).getInwardDate());
+
+			if (materialReportList.get(i).getGatePassSubType() == 1) {
+				rowData.add("Material");
+			} else if (materialReportList.get(i).getGatePassSubType() == 2) {
+				rowData.add("Parcel");
 			}
-			
+			rowData.add("" + materialReportList.get(i).getInvoiceNumber());
+			rowData.add("" + materialReportList.get(i).getPartyName());
 
-			// exportToExcel
-			
-			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
-
-			ExportToExcel expoExcel = new ExportToExcel();
-			List<String> rowData = new ArrayList<String>();
-
-			rowData.add("Date");
-			rowData.add("Type");
-			rowData.add("Invoice No");
-			rowData.add("Party Name");
-			rowData.add("Security");
+			rowData.add("" + materialReportList.get(i).getSecurityName());
 
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
-			for (int i = 0; i < materialReportList.size(); i++) {
-				expoExcel = new ExportToExcel();
-				rowData = new ArrayList<String>();
 
-				rowData.add("" + materialReportList.get(i).getInwardDate());
-				
-				if (materialReportList.get(i).getGatePassSubType() == 1) {
-					rowData.add("Material");
-				} else if (materialReportList.get(i).getGatePassSubType() == 2) {
-					rowData.add("Parcel");
-				}
-				rowData.add("" + materialReportList.get(i).getInvoiceNumber());
-				rowData.add("" + materialReportList.get(i).getPartyName());
+		}
 
-				rowData.add("" + materialReportList.get(i).getSecurityName());
+		HttpSession session = request.getSession();
+		session.setAttribute("exportExcelList", exportToExcelList);
+		session.setAttribute("excelName", "Material_Tracking_Report_Bet_Date");
 
-				expoExcel.setRowData(rowData);
-				exportToExcelList.add(expoExcel);
+		return materialReportList;
+	}
+
+	@RequestMapping(value = "/showMatTrackReportByStatus", method = RequestMethod.GET)
+	public ModelAndView showMatTrackReportByStatus(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("hrEmployeeReports/matTrackReportByStatus");
+
+		HttpSession session = request.getSession();
+
+		System.out.println("session Id in show Page  " + session.getId());
+
+		materialReportList.clear();
+
+		try {
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			String todaysDate = date.format(formatters);
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			EmpDeptDisplay[] deptArray = restTemplate.getForObject(
+					Constants.security_app_url + "master/allEmployeeDepartmentList", EmpDeptDisplay[].class);
+			List<EmpDeptDisplay> deptList = new ArrayList<>(Arrays.asList(deptArray));
+
+			model.addObject("deptList", deptList);
+
+		} catch (Exception e) {
+
+			System.out.println("Exc in show material track report " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+
+	}
+
+	@RequestMapping(value = "/getMatTrackReportData", method = RequestMethod.GET)
+	public @ResponseBody List<MaterialGatepassDisplay> getMatTrackReportData(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		List<MaterialGatepassDisplay> reportList = new ArrayList<>();
+
+		List<MaterialGatepassDisplay> newReportList = new ArrayList<>();
+
+		try {
+			String selectedDeptId = request.getParameter("dept_id_list");
+			String stat = request.getParameter("status");
+
+			boolean isAllDeptSelected = false;
+
+			selectedDeptId = selectedDeptId.substring(1, selectedDeptId.length() - 1);
+			selectedDeptId = selectedDeptId.replaceAll("\"", "");
+
+			deptList = new ArrayList<>();
+			deptList = Arrays.asList(selectedDeptId);
+
+			if (deptList.contains("-1")) {
+				isAllDeptSelected = true;
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+			if (isAllDeptSelected) {
+
+				System.out.println("Inside If all Dept Selected ");
+
+				map.add("deptIds", -1);
+
+			} else {
+				System.out.println("Inside else Few Dept Selected " + supList.toString());
+
+				map.add("deptIds", selectedDeptId);
 
 			}
 
-			HttpSession session = request.getSession();
-			session.setAttribute("exportExcelList", exportToExcelList);
-			session.setAttribute("excelName", "Material_Tracking_Report_Bet_Date");
+			// map.add("deptIds", -1);
+			map.add("empIds", -1);
 
-			return materialReportList;
-		}
-		
-		
-		
-		@RequestMapping(value = "/showMatTrackReportByStatus", method = RequestMethod.GET)
-		public ModelAndView showMatTrackReportByStatus(HttpServletRequest request, HttpServletResponse response) {
+			int status = Integer.parseInt(stat);
 
-			ModelAndView model = new ModelAndView("hrEmployeeReports/matTrackReportByStatus");
+			if (status == 0) {
+				map.add("status", 0);
+			} else if (status == 1) {
+				map.add("status", 1);
+			} else if (status == 2) {
+				map.add("status", 2);
+			}
 
-			HttpSession session = request.getSession();
+			System.err.println("MAP------------------------------------------------- = " + map.toString());
+			System.err.println("STATUS------------------------------------------------- = " + status);
 
-			System.out.println("session Id in show Page  " + session.getId());
+			ParameterizedTypeReference<List<MaterialGatepassDisplay>> typeRef = new ParameterizedTypeReference<List<MaterialGatepassDisplay>>() {
+			};
+			ResponseEntity<List<MaterialGatepassDisplay>> responseEntity = restTemplate.exchange(
+					Constants.security_app_url + "transaction/getMaterialTrackGatepassListWithFilter", HttpMethod.POST,
+					new HttpEntity<>(map), typeRef);
 
+			newReportList = responseEntity.getBody();
+			System.err.println("MAterial ***********************" + newReportList.toString());
 			materialReportList.clear();
 
-			try {
-				ZoneId z = ZoneId.of("Asia/Calcutta");
-
-				LocalDate date = LocalDate.now(z);
-				DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
-				String todaysDate = date.format(formatters);
-
-				RestTemplate restTemplate = new RestTemplate();
-
-
-				EmpDeptDisplay[] deptArray = restTemplate.getForObject(
-						Constants.security_app_url + "master/allEmployeeDepartmentList", EmpDeptDisplay[].class);
-				List<EmpDeptDisplay> deptList = new ArrayList<>(Arrays.asList(deptArray));
-				
-				
-				model.addObject("deptList", deptList);
-					
-					
-			} catch (Exception e) {
-
-				System.out.println("Exc in show material track report " + e.getMessage());
-				e.printStackTrace();
-			}
-
-			return model;
+		} catch (Exception e) {
+			System.out.println("get mat wise Report  " + e.getMessage());
+			e.printStackTrace();
 
 		}
-		
-		
-		
-		@RequestMapping(value = "/getMatTrackReportData", method = RequestMethod.GET)
-		public @ResponseBody List<MaterialGatepassDisplay> getMatTrackReportData(HttpServletRequest request,
-				HttpServletResponse response) {
 
-			List<MaterialGatepassDisplay> reportList = new ArrayList<>();
+		try {
 
-			List<MaterialGatepassDisplay> newReportList=new ArrayList<>();
+			if (newReportList != null) {
 
+				for (int i = 0; i < newReportList.size(); i++) {
 
-			try {
-				String selectedDeptId = request.getParameter("dept_id_list");
-				String stat = request.getParameter("status");
+					String date = DateConvertor.convertToDMY(newReportList.get(i).getInwardDate());
+					newReportList.get(i).setInwardDate(date);
 
-
-				boolean isAllDeptSelected = false;
-				
-				selectedDeptId = selectedDeptId.substring(1, selectedDeptId.length() - 1);
-				selectedDeptId = selectedDeptId.replaceAll("\"", "");
-				
-
-				deptList = new ArrayList<>();
-				deptList = Arrays.asList(selectedDeptId);
-
-				if (deptList.contains("-1")) {
-					isAllDeptSelected = true;
-				}
-				
-
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				RestTemplate restTemplate = new RestTemplate();
-				if (isAllDeptSelected) {
-
-					System.out.println("Inside If all Dept Selected ");
-
-					map.add("deptIds", -1);
-
-				} else {
-					System.out.println("Inside else Few Dept Selected " + supList.toString());
-
-					map.add("deptIds", selectedDeptId);
+					materialReportList.add(newReportList.get(i));
 
 				}
-				
-				
-				//map.add("deptIds", -1);
-				map.add("empIds", -1);
-				
-				int status=Integer.parseInt(stat);
 
-				if(status== 0) {
-					map.add("status", 0);	
-				}else if(status==1) {
-					map.add("status", 1);	
-				}else if(status==2) {
-					map.add("status", 2);	
-				}
-			
-				
-				
-				System.err.println("MAP------------------------------------------------- = "+map.toString());		
-				System.err.println("STATUS------------------------------------------------- = "+status);		
-
-				ParameterizedTypeReference<List<MaterialGatepassDisplay>> typeRef = new ParameterizedTypeReference<List<MaterialGatepassDisplay>>() {
-				};
-				ResponseEntity<List<MaterialGatepassDisplay>> responseEntity = restTemplate.exchange(
-						Constants.security_app_url + "transaction/getMaterialTrackGatepassListWithFilter", HttpMethod.POST,
-						new HttpEntity<>(map), typeRef);
-
-				newReportList = responseEntity.getBody();
-				System.err.println("MAterial ***********************" + newReportList.toString());
+			} else {
 				materialReportList.clear();
-
-			} catch (Exception e) {
-				System.out.println("get mat wise Report  " + e.getMessage());
-				e.printStackTrace();
-
 			}
-			
-			try {
 
-				if (newReportList != null) {
+		} catch (Exception e) {
+			System.out.println("Exception In mat Report :" + e.getMessage());
+		}
 
-					for (int i = 0; i < newReportList.size(); i++) {
+		// exportToExcel
 
-						String date = DateConvertor.convertToDMY(newReportList.get(i).getInwardDate());
-						newReportList.get(i).setInwardDate(date);
+		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
-						materialReportList.add(newReportList.get(i));
+		ExportToExcel expoExcel = new ExportToExcel();
+		List<String> rowData = new ArrayList<String>();
 
-					}
+		rowData.add("Date");
+		rowData.add("Type");
+		rowData.add("Invoice No");
+		rowData.add("Party Name");
+		rowData.add("Security");
 
-				}else {
-					materialReportList.clear();
-				}
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+		for (int i = 0; i < materialReportList.size(); i++) {
+			expoExcel = new ExportToExcel();
+			rowData = new ArrayList<String>();
 
-			} catch (Exception e) {
-				System.out.println("Exception In mat Report :" + e.getMessage());
+			rowData.add("" + materialReportList.get(i).getInwardDate());
+
+			if (materialReportList.get(i).getGatePassSubType() == 1) {
+				rowData.add("Material");
+			} else if (materialReportList.get(i).getGatePassSubType() == 2) {
+				rowData.add("Parcel");
 			}
-			
+			rowData.add("" + materialReportList.get(i).getInvoiceNumber());
+			rowData.add("" + materialReportList.get(i).getPartyName());
 
-			// exportToExcel
-			
-			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
-
-			ExportToExcel expoExcel = new ExportToExcel();
-			List<String> rowData = new ArrayList<String>();
-
-			rowData.add("Date");
-			rowData.add("Type");
-			rowData.add("Invoice No");
-			rowData.add("Party Name");
-			rowData.add("Security");
+			rowData.add("" + materialReportList.get(i).getSecurityName());
 
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
-			for (int i = 0; i < materialReportList.size(); i++) {
-				expoExcel = new ExportToExcel();
-				rowData = new ArrayList<String>();
-
-				rowData.add("" + materialReportList.get(i).getInwardDate());
-				
-				if (materialReportList.get(i).getGatePassSubType() == 1) {
-					rowData.add("Material");
-				} else if (materialReportList.get(i).getGatePassSubType() == 2) {
-					rowData.add("Parcel");
-				}
-				rowData.add("" + materialReportList.get(i).getInvoiceNumber());
-				rowData.add("" + materialReportList.get(i).getPartyName());
-
-				rowData.add("" + materialReportList.get(i).getSecurityName());
-
-				expoExcel.setRowData(rowData);
-				exportToExcelList.add(expoExcel);
-
-			}
-
-			HttpSession session = request.getSession();
-			session.setAttribute("exportExcelList", exportToExcelList);
-			session.setAttribute("excelName", "Material_Tracking_Report_By_Status");
-
-			return materialReportList;
-		}
-		
-		
-		
-		@RequestMapping(value = "/showMatGatepassByStatusPdf", method = RequestMethod.GET)
-		public void showMatGatepassByStatusPdf(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
-			BufferedOutputStream outStream = null;
-			Document document = new Document(PageSize.A4);
-
-			DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
-			Calendar cal = Calendar.getInstance();
-
-			System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
-			 String FILE_PATH = Constants.REPORT_SAVE;
-			//String FILE_PATH = Constants.APP_IMAGE_URL + "Report.pdf";
-			File file = new File(FILE_PATH);
-
-			PdfWriter writer = null;
-
-			FileOutputStream out = new FileOutputStream(FILE_PATH);
-			try {
-				writer = PdfWriter.getInstance(document, out);
-			} catch (DocumentException e) {
-
-				e.printStackTrace();
-			}
-
-			PdfPTable table = new PdfPTable(6);
-			try {
-				System.out.println("Inside PDF Table try");
-				table.setWidthPercentage(100);
-				table.setWidths(new float[] { 2.4f, 3.2f, 3.2f, 3.2f, 3.2f, 3.2f });
-				Font headFont = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
-				Font headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
-				headFont1.setColor(BaseColor.WHITE);
-				Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
-
-				PdfPCell hcell = new PdfPCell();
-				hcell.setBackgroundColor(BaseColor.PINK);
-
-				hcell.setPadding(3);
-				hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.PINK);
-
-				table.addCell(hcell);
-				
-				hcell = new PdfPCell(new Phrase("Date", headFont1));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.PINK);
-
-				table.addCell(hcell);
-
-				hcell = new PdfPCell(new Phrase("Type", headFont1));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.PINK);
-
-				table.addCell(hcell);
-
-				hcell = new PdfPCell(new Phrase("Invoice No", headFont1));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.PINK);
-
-				table.addCell(hcell);
-				hcell = new PdfPCell(new Phrase("Party Name", headFont1));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.PINK);
-
-				table.addCell(hcell);
-				hcell = new PdfPCell(new Phrase("Security", headFont1));
-				hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				hcell.setBackgroundColor(BaseColor.PINK);
-
-				table.addCell(hcell);
-				
-				
-				int index = 0;
-
-				System.err.println("REPORT LIST -------------------------------------------------- " + materialReportList);
-
-				for (MaterialGatepassDisplay work : materialReportList) {
-					index++;
-					PdfPCell cell;
-
-					cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-					cell.setPadding(3);
-					cell.setPaddingRight(2);
-					table.addCell(cell);
-					
-					cell = new PdfPCell(new Phrase("" + work.getInwardDate(), headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-					cell.setPaddingRight(2);
-					cell.setPadding(3);
-					table.addCell(cell);
-					
-					String type="";
-					
-					if(work.getGatePassSubType()==1) {
-						type="Material";
-					}else {
-						type="Parcel";
-					}
-
-					cell = new PdfPCell(new Phrase("" + type, headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-					cell.setPaddingRight(2);
-					cell.setPadding(3);
-					table.addCell(cell);
-
-					cell = new PdfPCell(new Phrase("" + work.getInvoiceNumber(), headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-					cell.setPaddingRight(2);
-					cell.setPadding(3);
-					table.addCell(cell);
-					
-					cell = new PdfPCell(new Phrase(""+work.getPartyName() , headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-					cell.setPaddingRight(2);
-					cell.setPadding(3);
-					table.addCell(cell);
-
-					cell = new PdfPCell(new Phrase("" + work.getSecurityName(), headFont));
-					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-					cell.setPaddingRight(2);
-					cell.setPadding(3);
-					table.addCell(cell);
-
-					
-
-				}
-				document.open();
-				Paragraph name = new Paragraph("GFPL\n", f);
-				name.setAlignment(Element.ALIGN_CENTER);
-				document.add(name);
-				document.add(new Paragraph(" "));
-				Paragraph company = new Paragraph("Material Gatepass Report\n", f);
-				company.setAlignment(Element.ALIGN_CENTER);
-				document.add(company);
-				document.add(new Paragraph(" "));
-
-				DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
-				String reportDate = DF.format(new Date());
-				//Paragraph p1 = new Paragraph("From Date:" + fromDate + "  To Date:" + toDate, headFont);
-				//p1.setAlignment(Element.ALIGN_CENTER);
-				//document.add(p1);
-				document.add(new Paragraph("\n"));
-				document.add(table);
-
-				int totalPages = writer.getPageNumber();
-
-				System.out.println("Page no " + totalPages);
-
-				document.close();
-
-				if (file != null) {
-
-					String mimeType = URLConnection.guessContentTypeFromName(file.getName());
-
-					if (mimeType == null) {
-
-						mimeType = "application/pdf";
-
-					}
-
-					response.setContentType(mimeType);
-
-					response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
-
-					response.setContentLength((int) file.length());
-
-					BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file));
-
-					try {
-						FileCopyUtils.copy(inputStream, response.getOutputStream());
-					} catch (IOException e) {
-						System.out.println("Excep in Opening a Pdf File");
-						e.printStackTrace();
-					}
-				}
-
-			} catch (DocumentException ex) {
-
-				System.out.println("Pdf Generation Error: " + ex.getMessage());
-
-				ex.printStackTrace();
-
-			}
 
 		}
-		
-		
+
+		HttpSession session = request.getSession();
+		session.setAttribute("exportExcelList", exportToExcelList);
+		session.setAttribute("excelName", "Material_Tracking_Report_By_Status");
+
+		return materialReportList;
+	}
+
+	@RequestMapping(value = "/showMatGatepassByStatusPdf", method = RequestMethod.GET)
+	public void showMatGatepassByStatusPdf(HttpServletRequest request, HttpServletResponse response)
+			throws FileNotFoundException {
+		BufferedOutputStream outStream = null;
+		Document document = new Document(PageSize.A4);
+
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+
+		System.out.println("time in Gen Bill PDF ==" + dateFormat.format(cal.getTime()));
+		String FILE_PATH = Constants.REPORT_SAVE;
+		// String FILE_PATH = Constants.APP_IMAGE_URL + "Report.pdf";
+		File file = new File(FILE_PATH);
+
+		PdfWriter writer = null;
+
+		FileOutputStream out = new FileOutputStream(FILE_PATH);
+		try {
+			writer = PdfWriter.getInstance(document, out);
+		} catch (DocumentException e) {
+
+			e.printStackTrace();
+		}
+
+		PdfPTable table = new PdfPTable(6);
+		try {
+			System.out.println("Inside PDF Table try");
+			table.setWidthPercentage(100);
+			table.setWidths(new float[] { 2.4f, 3.2f, 3.2f, 3.2f, 3.2f, 3.2f });
+			Font headFont = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+			headFont1.setColor(BaseColor.WHITE);
+			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
+
+			PdfPCell hcell = new PdfPCell();
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			hcell.setPadding(3);
+			hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Date", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Type", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Invoice No", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+			hcell = new PdfPCell(new Phrase("Party Name", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+			hcell = new PdfPCell(new Phrase("Security", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+
+			table.addCell(hcell);
+
+			int index = 0;
+
+			System.err.println("REPORT LIST -------------------------------------------------- " + materialReportList);
+
+			for (MaterialGatepassDisplay work : materialReportList) {
+				index++;
+				PdfPCell cell;
+
+				cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPadding(3);
+				cell.setPaddingRight(2);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + work.getInwardDate(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				String type = "";
+
+				if (work.getGatePassSubType() == 1) {
+					type = "Material";
+				} else {
+					type = "Parcel";
+				}
+
+				cell = new PdfPCell(new Phrase("" + type, headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + work.getInvoiceNumber(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + work.getPartyName(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + work.getSecurityName(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				cell.setPadding(3);
+				table.addCell(cell);
+
+			}
+			document.open();
+			Paragraph name = new Paragraph("GFPL\n", f);
+			name.setAlignment(Element.ALIGN_CENTER);
+			document.add(name);
+			document.add(new Paragraph(" "));
+			Paragraph company = new Paragraph("Material Gatepass Report\n", f);
+			company.setAlignment(Element.ALIGN_CENTER);
+			document.add(company);
+			document.add(new Paragraph(" "));
+
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+			// Paragraph p1 = new Paragraph("From Date:" + fromDate + " To Date:" + toDate,
+			// headFont);
+			// p1.setAlignment(Element.ALIGN_CENTER);
+			// document.add(p1);
+			document.add(new Paragraph("\n"));
+			document.add(table);
+
+			int totalPages = writer.getPageNumber();
+
+			System.out.println("Page no " + totalPages);
+
+			document.close();
+
+			if (file != null) {
+
+				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+				if (mimeType == null) {
+
+					mimeType = "application/pdf";
+
+				}
+
+				response.setContentType(mimeType);
+
+				response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+				response.setContentLength((int) file.length());
+
+				BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+				try {
+					FileCopyUtils.copy(inputStream, response.getOutputStream());
+				} catch (IOException e) {
+					System.out.println("Excep in Opening a Pdf File");
+					e.printStackTrace();
+				}
+			}
+
+		} catch (DocumentException ex) {
+
+			System.out.println("Pdf Generation Error: " + ex.getMessage());
+
+			ex.printStackTrace();
+
+		}
+
+	}
 
 }

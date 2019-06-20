@@ -11,6 +11,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
@@ -29,11 +34,15 @@ import com.ats.adminpanel.model.hr.Info;
 import com.ats.adminpanel.model.hr.LocDisplay;
 import com.ats.adminpanel.model.hr.Location;
 import com.ats.adminpanel.model.hr.Salary;
+import com.ats.adminpanel.model.hr.Settings;
+import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.hr.Company;
 import com.ats.adminpanel.model.hr.EmpDept;
 import com.ats.adminpanel.model.hr.EmpDeptDisplay;
 import com.ats.adminpanel.model.hr.EmpDisplay;
+import com.ats.adminpanel.model.hr.EmpGatepassDisplay;
 import com.ats.adminpanel.model.hr.EmpType;
+import com.ats.adminpanel.model.hr.EmpWiseVisitorReport;
 import com.ats.adminpanel.model.hr.Employee;
 import com.ats.adminpanel.model.hr.EmployeeCategory;
 import com.ats.adminpanel.model.hr.EmployeeCategoryDisplay;
@@ -51,14 +60,14 @@ public class MasterController {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 
-			Company[] cmpArray=restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
+			Company[] cmpArray = restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
 					Company[].class);
 			List<Company> companyList = new ArrayList<>(Arrays.asList(cmpArray));
 
 			System.out.println("Response: " + companyList.toString());
 			model.addObject("companyList", companyList);
-			model.addObject("url",Constants.APP_IMAGE_URL);
-			
+			model.addObject("url", Constants.APP_IMAGE_URL);
+
 		} catch (Exception e) {
 			System.out.println("Exc In showAddCompany:" + e.getMessage());
 		}
@@ -68,7 +77,8 @@ public class MasterController {
 	// ------------ADD COMPANY------------------------------------
 
 	@RequestMapping(value = "/addCompany", method = RequestMethod.POST)
-	public String addCompany(HttpServletRequest request, HttpServletResponse response,@RequestParam("logo") List<MultipartFile> file) {
+	public String addCompany(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam("logo") List<MultipartFile> file) {
 
 		try {
 			int cmpId = 0;
@@ -86,41 +96,37 @@ public class MasterController {
 			String cmpName = request.getParameter("cmp_name");
 			String cmpDesc = request.getParameter("cmp_desc");
 			String imageName = request.getParameter("logo");
-			
+
 			if (!file.get(0).getOriginalFilename().equalsIgnoreCase("")) {
-				imageName=null;
-				
-			 VpsImageUpload upload = new VpsImageUpload();
-			 
+				imageName = null;
+
+				VpsImageUpload upload = new VpsImageUpload();
+
 				Calendar cal1 = Calendar.getInstance();
-				long lo=cal1.getTimeInMillis();
+				long lo = cal1.getTimeInMillis();
 
 				String curTimeStamp = String.valueOf(lo);
-				
-				imageName=curTimeStamp+"_"+file.get(0).getOriginalFilename().replace(' ', '_');
 
-				
-				
+				imageName = curTimeStamp + "_" + file.get(0).getOriginalFilename().replace(' ', '_');
+
 				try {
-					
+
 					upload.saveUploadedFiles(file, Constants.APP_IMAGE_TYPE, imageName);
 					System.out.println("upload method called " + file.toString());
-					
+
 				} catch (IOException e) {
-					
+
 					System.out.println("Exce in File Upload In Item Insert " + e.getMessage());
 					e.printStackTrace();
 				}
-				
+
 			}
-			
-			if(imageName==null) {
-				imageName="na";
+
+			if (imageName == null) {
+				imageName = "na";
 			}
-			
-			
-			System.out.println("IMAGE NAME----------------- "+imageName);
-			
+
+			System.out.println("IMAGE NAME----------------- " + imageName);
 
 			HttpSession session = request.getSession();
 			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
@@ -132,7 +138,7 @@ public class MasterController {
 
 			Company cmp = new Company(cmpId, cmpName, imageName, cmpDesc, 1, 1, userId,
 					"" + dtFormat.format(cal.getTimeInMillis()));
-			
+
 			RestTemplate restTemplate = new RestTemplate();
 
 			Company company = restTemplate.postForObject(Constants.security_app_url + "master/saveCompany", cmp,
@@ -164,14 +170,13 @@ public class MasterController {
 					Company.class);
 			System.out.println(company.toString());
 
-			Company[] cmpArray=rest.getForObject(Constants.security_app_url + "master/allCompany",
-					Company[].class);
+			Company[] cmpArray = rest.getForObject(Constants.security_app_url + "master/allCompany", Company[].class);
 			List<Company> companyList = new ArrayList<>(Arrays.asList(cmpArray));
 
 			System.out.println("Response: " + companyList.toString());
 			mav.addObject("companyList", companyList);
 			mav.addObject("cmp", company);
-			mav.addObject("url",Constants.APP_IMAGE_URL);
+			mav.addObject("url", Constants.APP_IMAGE_URL);
 
 		} catch (Exception e) {
 			System.out.println("Exception In Edit Company:" + e.getMessage());
@@ -224,12 +229,11 @@ public class MasterController {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 
-			
-			EmployeeCategoryDisplay[] catArray=restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeCategoryList",
-					EmployeeCategoryDisplay[].class);
+			EmployeeCategoryDisplay[] catArray = restTemplate.getForObject(
+					Constants.security_app_url + "master/allEmployeeCategoryList", EmployeeCategoryDisplay[].class);
 			List<EmployeeCategoryDisplay> catList = new ArrayList<>(Arrays.asList(catArray));
-			
-			Company[] cmpArray=restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
+
+			Company[] cmpArray = restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
 					Company[].class);
 			List<Company> companyList = new ArrayList<>(Arrays.asList(cmpArray));
 
@@ -310,15 +314,12 @@ public class MasterController {
 
 			System.out.println(empCat.toString());
 
-			EmployeeCategoryDisplay[] catArray=rest.getForObject(Constants.security_app_url + "master/allEmployeeCategoryList",
-					EmployeeCategoryDisplay[].class);
+			EmployeeCategoryDisplay[] catArray = rest.getForObject(
+					Constants.security_app_url + "master/allEmployeeCategoryList", EmployeeCategoryDisplay[].class);
 			List<EmployeeCategoryDisplay> catList = new ArrayList<>(Arrays.asList(catArray));
-			
-			
-			Company[] cmpArray=rest.getForObject(Constants.security_app_url + "master/allCompany",
-					Company[].class);
+
+			Company[] cmpArray = rest.getForObject(Constants.security_app_url + "master/allCompany", Company[].class);
 			List<Company> companyList = new ArrayList<>(Arrays.asList(cmpArray));
-			
 
 			System.out.println("Response: " + companyList.toString());
 			System.out.println("Response: " + catList.toString());
@@ -377,13 +378,12 @@ public class MasterController {
 		ModelAndView model = new ModelAndView("hrEmployee/addEmpDepartment");
 		try {
 			RestTemplate restTemplate = new RestTemplate();
-			
-			EmpDeptDisplay[] deptArray=restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeDepartmentList",
-					EmpDeptDisplay[].class);
+
+			EmpDeptDisplay[] deptArray = restTemplate.getForObject(
+					Constants.security_app_url + "master/allEmployeeDepartmentList", EmpDeptDisplay[].class);
 			List<EmpDeptDisplay> deptList = new ArrayList<>(Arrays.asList(deptArray));
-			
-			
-			Company[] cmpArray=restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
+
+			Company[] cmpArray = restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
 					Company[].class);
 			List<Company> companyList = new ArrayList<>(Arrays.asList(cmpArray));
 
@@ -393,7 +393,7 @@ public class MasterController {
 			model.addObject("deptList", deptList);
 			model.addObject("compList", companyList);
 			model.addObject("url", Constants.APP_IMAGE_URL);
-			
+
 		} catch (Exception e) {
 			System.out.println("Exc In showAddDept:" + e.getMessage());
 		}
@@ -462,17 +462,16 @@ public class MasterController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("empDeptId", deptId);
 
-			EmpDept dept = restTemplate.postForObject(Constants.security_app_url + "/master/getEmployeeDepartmentById", map,
-					EmpDept.class);
+			EmpDept dept = restTemplate.postForObject(Constants.security_app_url + "/master/getEmployeeDepartmentById",
+					map, EmpDept.class);
 
 			System.out.println(dept.toString());
 
-			EmpDeptDisplay[] deptArray=restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeDepartmentList",
-					EmpDeptDisplay[].class);
+			EmpDeptDisplay[] deptArray = restTemplate.getForObject(
+					Constants.security_app_url + "master/allEmployeeDepartmentList", EmpDeptDisplay[].class);
 			List<EmpDeptDisplay> deptList = new ArrayList<>(Arrays.asList(deptArray));
-			
-			
-			Company[] cmpArray=restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
+
+			Company[] cmpArray = restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
 					Company[].class);
 			List<Company> companyList = new ArrayList<>(Arrays.asList(cmpArray));
 
@@ -483,7 +482,6 @@ public class MasterController {
 			mav.addObject("compList", companyList);
 			mav.addObject("dept", dept);
 			mav.addObject("url", Constants.APP_IMAGE_URL);
-
 
 		} catch (Exception e) {
 			System.out.println("Exception In Edit Department:" + e.getMessage());
@@ -534,13 +532,12 @@ public class MasterController {
 		ModelAndView model = new ModelAndView("hrEmployee/addLocation");
 		try {
 			RestTemplate restTemplate = new RestTemplate();
-			
-			LocDisplay[] locArray=restTemplate.getForObject(Constants.security_app_url + "master/allLocationList",
+
+			LocDisplay[] locArray = restTemplate.getForObject(Constants.security_app_url + "master/allLocationList",
 					LocDisplay[].class);
 			List<LocDisplay> locList = new ArrayList<>(Arrays.asList(locArray));
-			
-			
-			Company[] cmpArray=restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
+
+			Company[] cmpArray = restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
 					Company[].class);
 			List<Company> companyList = new ArrayList<>(Arrays.asList(cmpArray));
 
@@ -621,16 +618,16 @@ public class MasterController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("locId", locId);
 
-			Location loc = restTemplate.postForObject(Constants.security_app_url + "/master/getLocById", map, Location.class);
+			Location loc = restTemplate.postForObject(Constants.security_app_url + "/master/getLocById", map,
+					Location.class);
 
 			System.out.println(loc.toString());
 
-			LocDisplay[] locArray=restTemplate.getForObject(Constants.security_app_url + "master/allLocationList",
+			LocDisplay[] locArray = restTemplate.getForObject(Constants.security_app_url + "master/allLocationList",
 					LocDisplay[].class);
 			List<LocDisplay> locList = new ArrayList<>(Arrays.asList(locArray));
-			
-			
-			Company[] cmpArray=restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
+
+			Company[] cmpArray = restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
 					Company[].class);
 			List<Company> companyList = new ArrayList<>(Arrays.asList(cmpArray));
 
@@ -691,41 +688,33 @@ public class MasterController {
 		try {
 			RestTemplate restTemplate = new RestTemplate();
 
-		
-			EmpDisplay[] empArray=restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeList",
+			EmpDisplay[] empArray = restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeList",
 					EmpDisplay[].class);
 			List<EmpDisplay> empList = new ArrayList<>(Arrays.asList(empArray));
-			
-			
-			Company[] cmpArray=restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
+
+			Company[] cmpArray = restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
 					Company[].class);
 			List<Company> companyList = new ArrayList<>(Arrays.asList(cmpArray));
-			
-			
-			LocDisplay[] locArray=restTemplate.getForObject(Constants.security_app_url + "master/allLocationList",
+
+			LocDisplay[] locArray = restTemplate.getForObject(Constants.security_app_url + "master/allLocationList",
 					LocDisplay[].class);
 			List<LocDisplay> locList = new ArrayList<>(Arrays.asList(locArray));
-			
-			
-			EmpDeptDisplay[] deptArray=restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeDepartmentList",
-					EmpDeptDisplay[].class);
+
+			EmpDeptDisplay[] deptArray = restTemplate.getForObject(
+					Constants.security_app_url + "master/allEmployeeDepartmentList", EmpDeptDisplay[].class);
 			List<EmpDeptDisplay> deptList = new ArrayList<>(Arrays.asList(deptArray));
 
-		
-			EmployeeCategoryDisplay[] catArray=restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeCategoryList",
-					EmployeeCategoryDisplay[].class);
+			EmployeeCategoryDisplay[] catArray = restTemplate.getForObject(
+					Constants.security_app_url + "master/allEmployeeCategoryList", EmployeeCategoryDisplay[].class);
 			List<EmployeeCategoryDisplay> catList = new ArrayList<>(Arrays.asList(catArray));
 
-		
-			EmpType[] typeArray=restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeType",
+			EmpType[] typeArray = restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeType",
 					EmpType[].class);
 			List<EmpType> typeList = new ArrayList<>(Arrays.asList(typeArray));
-			
-			
-			Salary[] salArray=restTemplate.getForObject(Constants.security_app_url + "master/allSalaryBracket",
+
+			Salary[] salArray = restTemplate.getForObject(Constants.security_app_url + "master/allSalaryBracket",
 					Salary[].class);
 			List<Salary> salList = new ArrayList<>(Arrays.asList(salArray));
-			
 
 			System.out.println("COMPANY -------------- " + companyList);
 			System.out.println("LOCATION -------------- " + locList);
@@ -741,8 +730,8 @@ public class MasterController {
 			model.addObject("catList", catList);
 			model.addObject("typeList", typeList);
 			model.addObject("salList", salList);
-			model.addObject("url",Constants.APP_IMAGE_URL);
-			
+			model.addObject("url", Constants.APP_IMAGE_URL);
+
 		} catch (Exception e) {
 			System.out.println("Exc In showAddEmp:" + e.getMessage());
 		}
@@ -750,36 +739,38 @@ public class MasterController {
 	}
 
 	// ------------ADD EMPLOYEE------------------------------------
-	
-	
-	private static final String ALPHA_NUMERIC_STRING = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+	// private static final String ALPHA_NUMERIC_STRING =
+	// "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+	private static final String ALPHA_NUMERIC_STRING = "0123456789";
 
 	public static String randomAlphaNumeric(int count) {
 
-	StringBuilder builder = new StringBuilder();
+		StringBuilder builder = new StringBuilder();
 
-	while (count-- != 0) {
+		while (count-- != 0) {
 
-	int character = (int)(Math.random()*ALPHA_NUMERIC_STRING.length());
+			int character = (int) (Math.random() * ALPHA_NUMERIC_STRING.length());
 
-	builder.append(ALPHA_NUMERIC_STRING.charAt(character));
+			builder.append(ALPHA_NUMERIC_STRING.charAt(character));
 
-	}
+		}
 
-	return builder.toString();
+		return builder.toString();
 
 	}
 
 	@RequestMapping(value = "/addHrEmp", method = RequestMethod.POST)
-	public String addHrEmp(HttpServletRequest request, HttpServletResponse response,@RequestParam("photo") List<MultipartFile> file) {
+	public String addHrEmp(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam("photo") List<MultipartFile> file) {
 
 		try {
 			int empId = 0;
-			String dsc="";
-			
+			// String dsc = "";
+
 			try {
 				empId = Integer.parseInt(request.getParameter("emp_id"));
-				dsc = request.getParameter("dsc");
+				// dsc = request.getParameter("dsc");
 
 			} catch (Exception e) {
 				empId = 0;
@@ -787,23 +778,32 @@ public class MasterController {
 				System.out.println("In Catch of Add EMP Exc:" + e.getMessage());
 
 			}
-			
-			if(empId==0) {
-				dsc=randomAlphaNumeric(5);
-			}
-			
-			System.out.println("DSC *****************************************************************************  "+dsc);
-			
 
+			// if (empId == 0) {
+			// dsc = randomAlphaNumeric(5);
+			// }
+
+			// System.out.println(
+			// "DSC
+			// *****************************************************************************
+			// " + dsc);
+
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("empId", empId);
+
+			Employee emp = restTemplate.postForObject(Constants.security_app_url + "/master/getEmployeeById", map,
+					Employee.class);
+
+			String dsc = request.getParameter("dsc");
 			int compId = Integer.parseInt(request.getParameter("comp_id"));
 			int deptId = Integer.parseInt(request.getParameter("dept_id"));
 			int catId = Integer.parseInt(request.getParameter("cat_id"));
 			int locId = Integer.parseInt(request.getParameter("loc_id"));
 			int typeId = Integer.parseInt(request.getParameter("type_id"));
-			int salId = Integer.parseInt(request.getParameter("sal_id"));
 			String bgId = request.getParameter("bloodGrp");
 
-			//dsc = request.getParameter("dsc");
+			// dsc = request.getParameter("dsc");
 			String empCode = request.getParameter("emp_code");
 			String fName = request.getParameter("f_name");
 			String mName = request.getParameter("m_name");
@@ -811,15 +811,220 @@ public class MasterController {
 			String imageName = request.getParameter("prevPhoto");
 			String mobile1 = request.getParameter("mobile1");
 			String mobile2 = request.getParameter("mobile2");
-
 			String email = request.getParameter("email");
 			String perAdd = request.getParameter("perAdd");
 			String tmpAdd = request.getParameter("tmpAdd");
-
 			String emrgPer1 = request.getParameter("emrgPer1");
 			String emrgNo1 = request.getParameter("emrgNo1");
 			String emrgPer2 = request.getParameter("emrgPer2");
 			String emrgNo2 = request.getParameter("emrgNo2");
+			String terms = request.getParameter("terms");
+			String strGender = request.getParameter("gender");
+			String strDob = request.getParameter("dob");
+
+			String strFile1, strFile2, gender, joinDate, lvReason, leaveDate, lock;
+			float grSal, nHrs, fRate, fYrExp, fMonExp;
+			int pf, esic, bonus, cl, sl, pl, salId;
+
+			if (empId == 0) {
+
+				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+				strFile1 = "na";
+				strFile2 = "na";
+				grSal = 0;
+				nHrs = 0;
+				gender = "1";
+				pf = 0;
+				esic = 0;
+				bonus = 0;
+				cl = 0;
+				sl = 0;
+				pl = 0;
+				fRate = 0;
+				fYrExp = 0;
+				fMonExp = 0;
+				joinDate = sdf.format(Calendar.getInstance().getTimeInMillis());
+				leaveDate = sdf.format(Calendar.getInstance().getTimeInMillis());
+				lvReason = "na";
+				lock = "0";
+				salId = 0;
+
+			} else {
+
+				strFile1 = emp.getScanCopy1();
+				strFile2 = emp.getScanCopy2();
+				grSal = emp.getGrossSalary();
+				nHrs = emp.getNoOfHrs();
+				gender = emp.getGender();
+				pf = emp.getPf();
+				esic = emp.getEsic();
+				bonus = emp.getBonus();
+				cl = emp.getCl();
+				sl = emp.getSl();
+				pl = emp.getPl();
+				fRate = emp.getEmpRatePerhr();
+				fYrExp = emp.getEmpPrevExpYrs();
+				fMonExp = emp.getEmpPrevExpMonths();
+				joinDate = emp.getEmpJoiningDate();
+				leaveDate = emp.getEmpLeavingDate();
+				lvReason = emp.getEmpLeavingReason();
+				lock = emp.getLockPeriod();
+				salId = emp.getSalaryId();
+
+			}
+
+			HttpSession session = request.getSession();
+			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
+
+			int userId = userResponse.getUser().getId();
+
+			if (!file.get(0).getOriginalFilename().equalsIgnoreCase("")) {
+				imageName = null;
+
+				VpsImageUpload upload = new VpsImageUpload();
+
+				Calendar cal1 = Calendar.getInstance();
+				long lo = cal1.getTimeInMillis();
+
+				String curTimeStamp = String.valueOf(lo);
+
+				imageName = curTimeStamp + "_" + file.get(0).getOriginalFilename().replace(' ', '_');
+
+				try {
+
+					upload.saveUploadedFiles(file, Constants.APP_IMAGE_TYPE, imageName);
+					System.out.println("upload method called " + file.toString());
+
+				} catch (IOException e) {
+
+					System.out.println("Exce in File Upload In Emp Insert " + e.getMessage());
+					e.printStackTrace();
+				}
+
+			}
+
+			if (imageName == null) {
+				imageName = "na";
+			}
+
+			System.out.println("IMAGE NAME----------------- " + imageName);
+
+			SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar cal = Calendar.getInstance();
+
+			String dob = DateConvertor.convertToYMD(strDob);
+
+			Employee emp1 = new Employee(empId, dsc, empCode, compId, catId, typeId, deptId, locId, fName, mName, sName,
+					imageName, mobile1, mobile2, email, tmpAdd, perAdd, bgId, emrgPer1, emrgNo1, emrgPer2, emrgNo2,
+					fRate, joinDate, fYrExp, fMonExp, leaveDate, lvReason, lock, terms, salId, 1, 1, userId,
+					"" + dtFormat.format(cal.getTimeInMillis()), grSal, nHrs, strGender, dob, strFile1, strFile2, pf,
+					esic, bonus, cl, sl, pl);
+
+			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
+			map1.add("code", empCode);
+
+			String result = restTemplate.postForObject(Constants.security_app_url + "transaction/checkUniqueEmpCode",
+					map1, String.class);
+
+			boolean isValidCode = false;
+
+			if (result != null) {
+
+				if (result.equalsIgnoreCase("Yes")) {
+					isValidCode = true;
+				} else if (result.equalsIgnoreCase("No")) {
+					isValidCode = false;
+				}
+
+			}
+
+			if (isValidCode) {
+				Employee saveEmp = restTemplate.postForObject(Constants.security_app_url + "master/saveEmployee", emp1,
+						Employee.class);
+
+				System.out.println("Response: " + saveEmp.toString());
+			}
+
+			// return "redirect:/showAddHrEmp";
+
+		} catch (Exception e) {
+			System.out.println("Exception In Add Emp Process:" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return "redirect:/showAddHrEmp";
+	}
+
+	@RequestMapping(value = "/showHrEmpList", method = RequestMethod.GET)
+	public ModelAndView showHrEmpList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("hrEmployee/empList");
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+
+			EmpDisplay[] empArray = restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeList",
+					EmpDisplay[].class);
+			List<EmpDisplay> empList = new ArrayList<>(Arrays.asList(empArray));
+
+			model.addObject("empList", empList);
+			model.addObject("url", Constants.APP_IMAGE_URL);
+
+		} catch (Exception e) {
+			System.out.println("Exc In showAddEmp:" + e.getMessage());
+		}
+		return model;
+	}
+
+	@RequestMapping(value = "/addHrEmpAcc", method = RequestMethod.POST)
+	public String addHrEmpAcc(HttpServletRequest request, HttpServletResponse response,
+			@RequestParam("file1") List<MultipartFile> imgFile1, @RequestParam("file2") List<MultipartFile> imgFile2) {
+
+		try {
+			int empId = 0;
+
+			try {
+				empId = Integer.parseInt(request.getParameter("emp_id"));
+
+			} catch (Exception e) {
+				empId = 0;
+
+				System.out.println("In Catch of Add EMP Acc Exc:" + e.getMessage());
+			}
+
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("empId", empId);
+
+			Employee emp = restTemplate.postForObject(Constants.security_app_url + "/master/getEmployeeById", map,
+					Employee.class);
+
+			String dsc = emp.getEmpDsc();
+			int compId = emp.getCompanyId();
+			int deptId = emp.getEmpDeptId();
+			int catId = emp.getEmpCatId();
+			int locId = emp.getLocId();
+			int typeId = emp.getEmpTypeId();
+			int salId = Integer.parseInt(request.getParameter("sal_id"));
+			String bgId = emp.getEmpBloodgrp();
+
+			// dsc = request.getParameter("dsc");
+			String empCode = emp.getEmpCode();
+			String fName = emp.getEmpFname();
+			String mName = emp.getEmpMname();
+			String sName = emp.getEmpSname();
+			String imageName = emp.getEmpPhoto();
+			String mobile1 = emp.getEmpMobile1();
+			String mobile2 = emp.getEmpMobile2();
+
+			String email = emp.getEmpEmail();
+			String perAdd = emp.getEmpAddressPerm();
+			String tmpAdd = emp.getEmpAddressTemp();
+
+			String emrgPer1 = emp.getEmpEmergencyPerson1();
+			String emrgNo1 = emp.getEmpEmergencyNo1();
+			String emrgPer2 = emp.getEmpEmergencyPerson2();
+			String emrgNo2 = emp.getEmpEmergencyNo2();
 			String rate = request.getParameter("rate");
 			String jDate = request.getParameter("jDate");
 			String yrExp = request.getParameter("yrExp");
@@ -827,7 +1032,31 @@ public class MasterController {
 			String lvDate = request.getParameter("lvDate");
 			String lvReason = request.getParameter("lvReason");
 			String lock = request.getParameter("lock");
-			String terms = request.getParameter("terms");
+			String terms = emp.getTermConditions();
+
+			String strGrSal = request.getParameter("grSal");
+			String strNHrs = request.getParameter("nHrs");
+			String strGender = emp.getGender();
+			String strDob = emp.getDob();
+			String strFile1 = request.getParameter("scan1");
+			String strFile2 = request.getParameter("scan2");
+			String strPF = request.getParameter("pf");
+			String strEsic = request.getParameter("esic");
+			String strBonus = request.getParameter("bonus");
+			String strCL = request.getParameter("cl");
+			String strSL = request.getParameter("sl");
+			String strPL = request.getParameter("pl");
+
+			float grSal = Float.parseFloat(strGrSal);
+			float nHrs = Float.parseFloat(strNHrs);
+
+			int gender = Integer.parseInt(strGender);
+			int pf = Integer.parseInt(strPF);
+			int esic = Integer.parseInt(strEsic);
+			int bonus = Integer.parseInt(strBonus);
+			int cl = Integer.parseInt(strCL);
+			int sl = Integer.parseInt(strSL);
+			int pl = Integer.parseInt(strPL);
 
 			float fRate = Float.parseFloat(rate);
 
@@ -838,66 +1067,94 @@ public class MasterController {
 			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
 
 			int userId = userResponse.getUser().getId();
-			
-			if (!file.get(0).getOriginalFilename().equalsIgnoreCase("")) {
-				imageName=null;
-				
-			 VpsImageUpload upload = new VpsImageUpload();
-			 
+
+			if (!imgFile1.get(0).getOriginalFilename().equalsIgnoreCase("")) {
+				strFile1 = null;
+
+				VpsImageUpload upload = new VpsImageUpload();
+
 				Calendar cal1 = Calendar.getInstance();
-				long lo=cal1.getTimeInMillis();
+				long lo = cal1.getTimeInMillis();
 
 				String curTimeStamp = String.valueOf(lo);
-				
-				imageName=curTimeStamp+"_"+file.get(0).getOriginalFilename().replace(' ', '_');
-				
+
+				strFile1 = curTimeStamp + "_" + imgFile1.get(0).getOriginalFilename().replace(' ', '_');
+
 				try {
-					
-					upload.saveUploadedFiles(file, Constants.APP_IMAGE_TYPE, imageName);
-					System.out.println("upload method called " + file.toString());
-					
+
+					upload.saveUploadedFiles(imgFile1, Constants.APP_IMAGE_TYPE, strFile1);
+					System.out.println("upload method called " + imgFile1.toString());
+
 				} catch (IOException e) {
-					
-					System.out.println("Exce in File Upload In Item Insert " + e.getMessage());
+
+					System.out.println("Exce in File Upload In Emp Insert " + e.getMessage());
 					e.printStackTrace();
 				}
-			
+
 			}
-			
-			if(imageName==null) {
-				imageName="na";
+
+			if (strFile1 == null) {
+				strFile1 = "na";
 			}
-			
-			
-			System.out.println("IMAGE NAME----------------- "+imageName);
-			
+
+			System.out.println("strFile1 NAME----------------- " + strFile1);
+
+			if (!imgFile2.get(0).getOriginalFilename().equalsIgnoreCase("")) {
+				strFile2 = null;
+
+				VpsImageUpload upload = new VpsImageUpload();
+
+				Calendar cal1 = Calendar.getInstance();
+				long lo = cal1.getTimeInMillis();
+
+				String curTimeStamp = String.valueOf(lo);
+
+				strFile2 = curTimeStamp + "_" + imgFile2.get(0).getOriginalFilename().replace(' ', '_');
+
+				try {
+
+					upload.saveUploadedFiles(imgFile2, Constants.APP_IMAGE_TYPE, strFile2);
+					System.out.println("upload method called " + imgFile2.toString());
+
+				} catch (IOException e) {
+
+					System.out.println("Exce in File Upload In Emp Insert " + e.getMessage());
+					e.printStackTrace();
+				}
+
+			}
+
+			if (strFile2 == null) {
+				strFile2 = "na";
+			}
+
+			System.out.println("strFile2 NAME----------------- " + strFile2);
 
 			SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar cal = Calendar.getInstance();
-			
-			
-			String joinDate=DateConvertor.convertToYMD(jDate);
-			String leaveDate=DateConvertor.convertToYMD(lvDate);
 
-			Employee emp = new Employee(empId, dsc, empCode, compId, catId, typeId, deptId, locId, fName, mName, sName,
-					imageName, mobile1, mobile2, email, tmpAdd, perAdd, bgId, emrgPer1, emrgNo1, emrgPer2, emrgNo2, fRate,
-					joinDate, fYrExp, fMonExp, leaveDate, lvReason, lock, terms, salId, 1, 1, userId,
-					"" + dtFormat.format(cal.getTimeInMillis()));
+			String joinDate = DateConvertor.convertToYMD(jDate);
+			String leaveDate = DateConvertor.convertToYMD(lvDate);
+			// String dob = DateConvertor.convertToYMD(strDob);
 
-			RestTemplate restTemplate = new RestTemplate();
+			Employee emp1 = new Employee(empId, dsc, empCode, compId, catId, typeId, deptId, locId, fName, mName, sName,
+					imageName, mobile1, mobile2, email, tmpAdd, perAdd, bgId, emrgPer1, emrgNo1, emrgPer2, emrgNo2,
+					fRate, joinDate, fYrExp, fMonExp, leaveDate, lvReason, lock, terms, salId, 1, 1, userId,
+					"" + dtFormat.format(cal.getTimeInMillis()), grSal, nHrs, strGender, strDob, strFile1, strFile2, pf,
+					esic, bonus, cl, sl, pl);
 
-			Employee saveEmp = restTemplate.postForObject(Constants.security_app_url + "master/saveEmployee", emp,
+			Employee saveEmp = restTemplate.postForObject(Constants.security_app_url + "master/saveEmployee", emp1,
 					Employee.class);
 
 			System.out.println("Response: " + saveEmp.toString());
 
-			return "redirect:/showAddHrEmp";
+			return "redirect:/showHrEmpList";
 
 		} catch (Exception e) {
-			System.out.println("Exception In Add Emp Process:" + e.getMessage());
+			System.out.println("Exception In Add Emp Acc Process:" + e.getMessage());
 		}
 
-		return "redirect:/showAddHrEmp";
+		return "redirect:/showHrEmpList";
 	}
 
 	// ---------------UPDATE EMPLOYEE------------------------
@@ -916,52 +1173,40 @@ public class MasterController {
 
 			System.out.println(emp.toString());
 
-			EmpDisplay[] empArray=restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeList",
+			EmpDisplay[] empArray = restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeList",
 					EmpDisplay[].class);
 			List<EmpDisplay> empList = new ArrayList<>(Arrays.asList(empArray));
-			
-			
-			Company[] cmpArray=restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
+
+			Company[] cmpArray = restTemplate.getForObject(Constants.security_app_url + "master/allCompany",
 					Company[].class);
 			List<Company> companyList = new ArrayList<>(Arrays.asList(cmpArray));
-			
-			
-			LocDisplay[] locArray=restTemplate.getForObject(Constants.security_app_url + "master/allLocationList",
+
+			LocDisplay[] locArray = restTemplate.getForObject(Constants.security_app_url + "master/allLocationList",
 					LocDisplay[].class);
 			List<LocDisplay> locList = new ArrayList<>(Arrays.asList(locArray));
-			
-			
-			EmpDeptDisplay[] deptArray=restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeDepartmentList",
-					EmpDeptDisplay[].class);
+
+			EmpDeptDisplay[] deptArray = restTemplate.getForObject(
+					Constants.security_app_url + "master/allEmployeeDepartmentList", EmpDeptDisplay[].class);
 			List<EmpDeptDisplay> deptList = new ArrayList<>(Arrays.asList(deptArray));
 
-		
-			EmployeeCategoryDisplay[] catArray=restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeCategoryList",
-					EmployeeCategoryDisplay[].class);
+			EmployeeCategoryDisplay[] catArray = restTemplate.getForObject(
+					Constants.security_app_url + "master/allEmployeeCategoryList", EmployeeCategoryDisplay[].class);
 			List<EmployeeCategoryDisplay> catList = new ArrayList<>(Arrays.asList(catArray));
 
-		
-			EmpType[] typeArray=restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeType",
+			EmpType[] typeArray = restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeType",
 					EmpType[].class);
 			List<EmpType> typeList = new ArrayList<>(Arrays.asList(typeArray));
-			
-			
-			Salary[] salArray=restTemplate.getForObject(Constants.security_app_url + "master/allSalaryBracket",
+
+			Salary[] salArray = restTemplate.getForObject(Constants.security_app_url + "master/allSalaryBracket",
 					Salary[].class);
 			List<Salary> salList = new ArrayList<>(Arrays.asList(salArray));
-			
 
-			
 			try {
-					
-					String joinDate=DateConvertor.convertToDMY(emp.getEmpJoiningDate());
-					String leaveDate=DateConvertor.convertToDMY(emp.getEmpLeavingDate());
-					
-					System.out.println("JOIN DATE : ------------------------------------   "+joinDate+"                                LEAVE DATE : "+leaveDate);
-					
-					emp.setEmpJoiningDate(joinDate);
-					emp.setEmpLeavingDate(leaveDate);
-					
+
+				String dob = DateConvertor.convertToDMY(emp.getDob());
+
+				emp.setDob(dob);
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -982,7 +1227,76 @@ public class MasterController {
 			mav.addObject("salList", salList);
 
 			mav.addObject("emp", emp);
-			mav.addObject("url",Constants.APP_IMAGE_URL);
+			mav.addObject("url", Constants.APP_IMAGE_URL);
+
+		} catch (Exception e) {
+			System.out.println("Exception In Edit EMP:" + e.getMessage());
+
+			return mav;
+
+		}
+		return mav;
+	}
+
+	// ---------------UPDATE ACCOUNT-----------------------------
+	@RequestMapping(value = "/updateHrEmpAcc/{empId}", method = RequestMethod.GET)
+	public ModelAndView updateHrEmpAcc(@PathVariable int empId) {
+
+		ModelAndView mav = new ModelAndView("hrEmployee/addHrEmpAccountDetails");
+		try {
+
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("empId", empId);
+
+			Employee emp = restTemplate.postForObject(Constants.security_app_url + "/master/getEmployeeById", map,
+					Employee.class);
+
+			System.out.println(emp.toString());
+
+			EmpDisplay[] empArray = restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeList",
+					EmpDisplay[].class);
+			List<EmpDisplay> empList = new ArrayList<>(Arrays.asList(empArray));
+
+			Salary[] salArray = restTemplate.getForObject(Constants.security_app_url + "master/allSalaryBracket",
+					Salary[].class);
+			List<Salary> salList = new ArrayList<>(Arrays.asList(salArray));
+
+			try {
+
+				String joinDate = DateConvertor.convertToDMY(emp.getEmpJoiningDate());
+				String leaveDate = DateConvertor.convertToDMY(emp.getEmpLeavingDate());
+
+				System.out.println("JOIN DATE : ------------------------------------   " + joinDate
+						+ "                                LEAVE DATE : " + leaveDate);
+
+				emp.setEmpJoiningDate(joinDate);
+				emp.setEmpLeavingDate(leaveDate);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+
+			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
+			map1.add("key", emp.getEmpTypeId());
+
+			Settings settings = restTemplate.postForObject(Constants.security_app_url + "master/getSettingsByKey", map1,
+					Settings.class);
+
+			System.err.println("SETTINGS : ----------------------------- " + settings);
+
+			float noOfHrs = 0;
+			if (settings != null) {
+				noOfHrs = Float.parseFloat(settings.getSettingValue());
+			}
+
+			mav.addObject("noOfHrs", noOfHrs);
+
+			mav.addObject("empList", empList);
+			mav.addObject("salList", salList);
+
+			mav.addObject("emp", emp);
+			mav.addObject("url", Constants.APP_IMAGE_URL);
 
 		} catch (Exception e) {
 			System.out.println("Exception In Edit EMP:" + e.getMessage());
@@ -1022,6 +1336,65 @@ public class MasterController {
 
 		}
 
+	}
+
+	@RequestMapping(value = "/deleteHrEmpFromList/{empId}", method = RequestMethod.GET)
+	public String deleteHrEmpFromList(@PathVariable int empId) {
+
+		try {
+
+			RestTemplate rest = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("empId", empId);
+
+			Info errorResponse = rest.postForObject(Constants.security_app_url + "/master/deleteEmployee", map,
+					Info.class);
+			System.out.println(errorResponse.toString());
+
+			if (errorResponse.isError()) {
+
+				return "redirect:/showHrEmpList";
+
+			} else {
+				return "redirect:/showHrEmpList";
+
+			}
+		} catch (Exception e) {
+			System.out.println("Exception In delete EMP:" + e.getMessage());
+
+			return "redirect:/showHrEmpList";
+
+		}
+
+	}
+
+	// --------------CHECK UNIQUE EMP CODE----------------------------------
+
+	@RequestMapping(value = "/checkuniqueEmpCodeProcess", method = RequestMethod.GET)
+	public @ResponseBody String checkuniqueEmpCode(HttpServletRequest request, HttpServletResponse response) {
+
+		String result = null;
+
+		try {
+
+			String code = request.getParameter("code");
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+			map.add("code", code);
+
+			result = restTemplate.postForObject(Constants.security_app_url + "transaction/checkUniqueEmpCode", map,
+					String.class);
+
+			System.err.println("result *********///////////////***************" + result);
+
+		} catch (Exception e) {
+			System.out.println("get emp wise Report  " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		return result;
 	}
 
 }
