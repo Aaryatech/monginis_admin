@@ -35,6 +35,7 @@
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body>
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+	<c:url var="getFrByTypeId" value="/getFrByTypeId"></c:url>
 
 	<%@ page import="java.util.Calendar"%>
 	<%@ page import="java.util.Date"%>
@@ -89,7 +90,8 @@
 						</div>
 						<div class="box-content">
 							<form action="addAlbumProcess" class="form-horizontal"
-								id="validation-form" method="post" enctype="multipart/form-data">
+								onsubmit="return validation()" id="validation-form"
+								method="post" enctype="multipart/form-data">
 
 
 
@@ -109,7 +111,7 @@
 											Cake</label>
 										<div class="col-sm-9 col-lg-3 controls">
 											<select name="spId" id="spId" class="form-control chosen"
-												placeholder="Special Cake  " data-rule-required="true">
+												placeholder="Special Cake" data-rule-required="true">
 												<option value="">Select Special Cake</option>
 												<c:forEach items="${spList}" var="spList" varStatus="count">
 													<c:choose>
@@ -235,13 +237,14 @@
 									</div>
 								</div>
 
-								<!-- <div class="form-group">
+								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Minimum
 										Weight</label>
 									<div class="col-sm-6 col-lg-3 controls">
 										<input type="text" name="minWt" id="minWt"
 											placeholder="Minimum Weight" class="form-control"
-											data-rule-required="true" value="0" />
+											pattern="[0-9.]+" data-rule-required="true" />
+
 									</div>
 
 
@@ -250,11 +253,64 @@
 									<div class="col-sm-6 col-lg-3 controls">
 										<input type="text" name="maxWt" id="maxWt"
 											placeholder="Maximum Weight" class="form-control"
-											data-rule-required="true" value="0" />
+											pattern="[0-9.]+" data-rule-required="true" />
+
 									</div>
 								</div>
 
- -->
+
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Select
+										Type</label>
+									<div class="col-sm-6 col-lg-3 controls">
+										<select data-placeholder="Choose Type"
+											class="form-control chosen" id="selectType" name="selectType"
+											onchange="showFranchisee()">
+
+											<option value="-1"><c:out value="Select Type" /></option>
+
+											<c:forEach items="${typeList}" var="tp" varStatus="count">
+												<option value="${tp.typeId}"><c:out
+														value="${tp.typeName}" /></option>
+											</c:forEach>
+										</select><span id="typeError" hidden="hidden"> <font
+											color="#b94a48">Please Select Type</font></span>
+									</div>
+
+									<div class="col2">
+										<label class="col-sm-3 col-lg-2 control-label"> Select
+											Menu </label>
+										<div class="col-sm-9 col-lg-3 controls">
+											<select data-placeholder="Choose Menu"
+												class="form-control chosen" multiple="multiple" id="menu"
+												name="menu" data-rule-required="true">
+
+												<c:forEach items="${menuList}" var="menuList"
+													varStatus="count">
+													<c:choose>
+														<c:when test="${menuList.menuId==menuList.menuId}">
+															<option value="${menuList.menuId}"><c:out
+																	value="${menuList.menuTitle}" /></option>
+														</c:when>
+														<c:otherwise>
+															<option value="${menuList.menuId}"><c:out
+																	value="${menuList.menuTitle}" /></option>
+														</c:otherwise>
+													</c:choose>
+												</c:forEach>
+											</select>
+										</div>
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Franchisee</label>
+									<div class="col-sm-9 col-lg-10 controls">
+										<textarea name="fr" id="fr" placeholder="Selected Franchisees"
+											readonly="readonly" class="form-control"></textarea>
+									</div>
+								</div>
 
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Description
@@ -309,6 +365,58 @@
 		<!-- END Content -->
 	</div>
 	<!-- END Container -->
+
+
+
+	<script>
+		function showFranchisee() {
+
+			var typeId = $("#selectType").val();
+
+			if (typeId == null) {
+				alert("Please Select Type");
+			} else {
+
+				$.getJSON('${getFrByTypeId}', {
+					typeId : typeId,
+					ajax : 'true'
+
+				}, function(data) {
+
+					if (data.error == true) {
+						return false;
+					} else {
+						document.getElementById("fr").value = data.message;
+						return true;
+					}
+
+				});//data function 
+
+			}//else 
+
+		}
+	</script>
+
+
+	<script>
+		function validation() {
+
+			var typeId = $("#selectType").val();
+
+			if (typeId == -1) {
+				$("#typeError").show();
+				return false;
+			} else {
+				$("#typeError").hide();
+				return true;
+			}
+
+		}
+	</script>
+
+
+
+
 
 	<!--basic scripts-->
 	<script

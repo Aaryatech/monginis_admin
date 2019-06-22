@@ -5,7 +5,7 @@
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
 <!---------------Script For Translate Special Instructions------->
-<script type="text/javascript">
+<!-- <script type="text/javascript">
 	// Load the Google Transliterate API
 	google.load("elements", "1", {
 		packages : "transliteration"
@@ -30,8 +30,10 @@
 		control.makeTransliteratable([ 'transliterateTextarea1' ]);
 	}
 	google.setOnLoadCallback(onLoad);
-</script>
+</script> -->
 <!--------------------------------END------------------------------------>
+
+
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body>
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
@@ -294,7 +296,7 @@
 									</div>
 								</div>
 
-								<%-- 	<div class="form-group">
+								 	<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Minimum
 										Weight</label>
 									<div class="col-sm-6 col-lg-3 controls">
@@ -312,7 +314,7 @@
 											data-rule-required="true" value="${album.maxWt}" />
 									</div>
 								</div>
- --%>
+ 
 
 
 								<div class="form-group">
