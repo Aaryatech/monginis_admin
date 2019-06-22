@@ -56,6 +56,7 @@ import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.SpCakeResponse;
 import com.ats.adminpanel.model.SpDayConfigure;
 import com.ats.adminpanel.model.SpecialCake;
+import com.ats.adminpanel.model.album.Album;
 import com.ats.adminpanel.model.franchisee.AllFranchiseeAndMenu;
 import com.ats.adminpanel.model.franchisee.AllFranchiseeList;
 import com.ats.adminpanel.model.franchisee.AllMenuResponse;
@@ -1095,13 +1096,13 @@ public class FranchiseeController {
 
 		System.out.println("Finding Item List for Selected CatId=" + selectedCatId);
 
-		List<SpecialCake> specialCakeList = new ArrayList<SpecialCake>();
+		List<Album> albumCakeList = new ArrayList<Album>();
 		List<Item> filterItemsList = new ArrayList<Item>();
 
 		List<CommonConf> commonConfList = new ArrayList<CommonConf>();
 
 		if (selectedCatId == 5) {
-			SpCakeResponse spCakeResponse = restTemplate.getForObject(Constants.url + "showSpecialCakeList",
+			/*SpCakeResponse spCakeResponse = restTemplate.getForObject(Constants.url + "showSpecialCakeList",
 					SpCakeResponse.class);
 			System.out.println("SpCake Controller SpCakeList Response " + spCakeResponse.toString());
 
@@ -1113,7 +1114,33 @@ public class FranchiseeController {
 				commonConf.setName(specialCake.getSpCode() + "-" + specialCake.getSpName());
 				commonConfList.add(commonConf);
 				System.out.println("spCommonConf" + commonConf.toString());
+			}*/
+			
+			Album[] album = restTemplate.getForObject(Constants.url + "getAlbumList", Album[].class);
+			albumCakeList = new ArrayList<Album>(Arrays.asList(album));
+			
+			/*albumCakeList = restTemplate.getForObject(Constants.url + "getAlbumList",
+					List.class);*/
+			System.out.println("Album Cake Response " + albumCakeList.toString());
+
+			for(int i=0;i<albumCakeList.size();i++) {
+				System.out.println("ALBUM : ----------- "+albumCakeList.get(i));
+				CommonConf commonConf = new CommonConf();
+				commonConf.setId(albumCakeList.get(i).getSpId());
+				commonConf.setName(albumCakeList.get(i).getAlbumCode() + "-" + albumCakeList.get(i).getAlbumName());
+				commonConfList.add(commonConf);
+				System.out.println("spCommonConf" + commonConf.toString());
 			}
+
+			for (Album albumCake : albumCakeList) {
+				
+				CommonConf commonConf = new CommonConf();
+				commonConf.setId(albumCake.getSpId());
+				commonConf.setName(albumCake.getAlbumCode() + "-" + albumCake.getAlbumName());
+				commonConfList.add(commonConf);
+				System.out.println("spCommonConf" + commonConf.toString());
+			}
+			
 
 			System.out.println("------------------------");
 		} else {

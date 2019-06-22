@@ -19,20 +19,30 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.VpsImageUpload;
+import com.ats.adminpanel.model.ConfigureFranchisee;
 import com.ats.adminpanel.model.album.Album;
+import com.ats.adminpanel.model.album.TypeWiseFr;
+import com.ats.adminpanel.model.album.TypeWiseFrDisplay;
 import com.ats.adminpanel.model.flavours.AllFlavoursListResponse;
 import com.ats.adminpanel.model.flavours.Flavour;
+import com.ats.adminpanel.model.franchisee.Menu;
+import com.ats.adminpanel.model.hr.Company;
+import com.ats.adminpanel.model.hr.Info;
 import com.ats.adminpanel.model.masters.GetSpCkSupplement;
 import com.ats.adminpanel.model.modules.ErrorMessage;
+import com.google.gson.Gson;
 
 @Controller
 public class AlbumController {
+
+	public List<TypeWiseFrDisplay> typeList = new ArrayList();
 
 	@RequestMapping(value = "/addNewAlbum", method = RequestMethod.GET)
 	public ModelAndView addNewAlbum(HttpServletRequest request, HttpServletResponse response) {
@@ -53,8 +63,25 @@ public class AlbumController {
 		flavoursList = allFlavoursListResponse.getFlavour();
 		mav.addObject("flavoursList", flavoursList);
 
+		TypeWiseFrDisplay[] typeArray = restTemplate.getForObject(Constants.url + "getTypeWiseFrNameList",
+				TypeWiseFrDisplay[].class);
+
+		typeList.clear();
+		typeList = new ArrayList<>(Arrays.asList(typeArray));
+
+		mav.addObject("typeList", typeList);
+
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("catId", 5);
+		map.add("isSameDay", 4);
+		map.add("delStatus", 0);
+
+		List<Menu> menuList = restTemplate.postForObject(Constants.url + "/getMenuForAlbum", map, List.class);
+		System.out.println("Menu List" + menuList.toString());
+
 		System.out.println(flavoursList.toString());
 		mav.addObject("spList", spSuppList);
+		mav.addObject("menuList", menuList);
 
 		return mav;
 	}
@@ -92,8 +119,14 @@ public class AlbumController {
 			int isActive = Integer.parseInt(request.getParameter("is_active"));
 			int spId = Integer.parseInt(request.getParameter("spId"));
 			// String[] flavourIds = request.getParameterValues("flavourId");
-			// float minWt = Float.parseFloat(request.getParameter("minWt"));
-			// float maxWt = Float.parseFloat(request.getParameter("maxWt"));
+			float minWt = Float.parseFloat(request.getParameter("minWt"));
+			float maxWt = Float.parseFloat(request.getParameter("maxWt"));
+
+			String[] strMenuIds = request.getParameterValues("menu");
+			int typeId = Integer.parseInt(request.getParameter("selectType"));
+
+			System.err.println("Menu -------------------- " + strMenuIds);
+			System.err.println("Type -------------------- " + typeId);
 
 			VpsImageUpload upload = new VpsImageUpload();
 
@@ -140,17 +173,17 @@ public class AlbumController {
 			 * } String flavourIdList = sb.toString(); flavourIdList =
 			 * flavourIdList.substring(0, flavourIdList.length() - 1);
 			 */
+
+			StringBuilder sb = new StringBuilder();
+
+			for (int i = 0; i < strMenuIds.length; i++) {
+				sb = sb.append(strMenuIds[i] + ",");
+			}
+
+			String menuIds = sb.toString();
+			menuIds = menuIds.substring(0, menuIds.length() - 1);
+
 			RestTemplate rest = new RestTemplate();
-
-			System.out.println(albumCode);
-			System.out.println(albumName);
-
-			System.out.println(desc);
-			System.out.println(isActive);
-			System.out.println(1);
-			System.out.println(1);
-			System.out.println(curTimeStamp + "-" + file1.get(0).getOriginalFilename().replace(' ', '_'));
-			System.out.println(curTimeStamp + "-" + file2.get(0).getOriginalFilename().replace(' ', '_'));
 
 			System.out.println(spId);
 			Album album = new Album();
@@ -161,8 +194,8 @@ public class AlbumController {
 			album.setAlbumDesc(desc);
 			album.setFlavourId(" ");
 			album.setIsActive(isActive);
-			album.setMaxWt(0);
-			album.setMinWt(0);
+			album.setMaxWt(maxWt);
+			album.setMinWt(minWt);
 			album.setPhoto1(curTimeStamp + "-" + file1.get(0).getOriginalFilename().replace(' ', '_'));
 			album.setPhoto2(curTimeStamp + "-" + file2.get(0).getOriginalFilename().replace(' ', '_'));
 			album.setSpId(spId);
@@ -170,6 +203,81 @@ public class AlbumController {
 			System.out.println("albumalbumalbumalbumalbumalbum" + album.toString());
 			Album errorResponse = rest.postForObject(Constants.url + "saveAlbum", album, Album.class);
 			System.out.println(errorResponse.toString());
+
+			if (errorResponse != null) {
+				
+				int albumId=0;
+				albumId=errorResponse.getAlbumId();
+
+				String frIds = "";
+				for (int i = 0; i < typeList.size(); i++) {
+
+					if (typeId == typeList.get(i).getTypeId()) {
+						frIds = typeList.get(i).getFrIds();
+						break;
+					}
+
+				}
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("frIds", frIds);
+				map.add("menuIds", menuIds);
+
+				ConfigureFranchisee[] conFr = rest.postForObject(Constants.url + "getConfigListByFrAndMenu", map,
+						ConfigureFranchisee[].class);
+				List<ConfigureFranchisee> configList = new ArrayList<>(Arrays.asList(conFr));
+
+				System.err.println("CONFIG LIST ------------------------- " + configList);
+
+				if (configList != null) {
+					if (configList.size() > 0) {
+						for (int i = 0; i < configList.size(); i++) {
+
+							ConfigureFranchisee model = configList.get(i);
+							System.err.println("MODEL ---------------- " + model);
+
+							int settingId = configList.get(i).getSettingId();
+
+							String strItemList = configList.get(i).getItemShow();
+
+							List<String> strItemIdList = Arrays.asList(strItemList.split("\\s*,\\s*"));
+							List<Integer> itemIdList = strItemIdList.stream().map(s -> Integer.parseInt(s))
+									.collect(Collectors.toList());
+
+							System.err.println("ITEM SHOW ====================== " + itemIdList);
+
+							if (itemIdList.size() > 0) {
+
+								boolean flag = false;
+								for (int j = 0; j < itemIdList.size(); j++) {
+									if (albumId == itemIdList.get(j)) {
+										flag = true;
+										break;
+									}
+								}
+
+								if (!flag) {
+
+									String newItems = strItemList + "," + albumId;
+
+									MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
+									map1.add("items", newItems);
+									map1.add("settingId", settingId);
+
+									Info info = rest.postForObject(Constants.url + "updateFrConfItemShow", map1,
+											Info.class);
+
+									System.err.println("UPDATE RESPONSE-------- " + info);
+
+								}
+
+							}
+
+						}
+					}
+				}
+
+			}
 
 		} catch (Exception e) {
 			System.out.println("exce in msg con: " + e.getMessage());
@@ -265,17 +373,16 @@ public class AlbumController {
 
 			int isActive = Integer.parseInt(request.getParameter("is_active"));
 			int spId = Integer.parseInt(request.getParameter("spId"));
-			/*
-			 * String[] flavourIds = request.getParameterValues("flavourId"); float minWt =
-			 * Float.parseFloat(request.getParameter("minWt")); float maxWt =
-			 * Float.parseFloat(request.getParameter("maxWt"));
-			 */
+
+			// String[] flavourIds = request.getParameterValues("flavourId");
+			float minWt = Float.parseFloat(request.getParameter("minWt"));
+			float maxWt = Float.parseFloat(request.getParameter("maxWt"));
 
 			String photo1 = request.getParameter("prevPh1");
 			String photo2 = request.getParameter("prevPh2");
 
 			if (!file1.get(0).getOriginalFilename().equalsIgnoreCase("")) {
-				photo1=null;
+				photo1 = null;
 				System.out.println("Empty image1");
 				// msgImage= ImageS3Util.uploadMessageImage(file);
 
@@ -294,7 +401,7 @@ public class AlbumController {
 					upload.saveUploadedFiles(file1, Constants.ALBUM_IMAGE_TYPE,
 							photo1 + "-" + file1.get(0).getOriginalFilename().replace(' ', '_'));
 					System.out.println("upload method called " + file1.toString());
-					photo1=photo1 + "-" + file1.get(0).getOriginalFilename().replace(' ', '_');
+					photo1 = photo1 + "-" + file1.get(0).getOriginalFilename().replace(' ', '_');
 				} catch (IOException e) {
 
 					System.out.println("Exce in File Upload In Item Insert " + e.getMessage());
@@ -303,7 +410,7 @@ public class AlbumController {
 			}
 
 			if (!file2.get(0).getOriginalFilename().equalsIgnoreCase("")) {
-				photo2=null;
+				photo2 = null;
 				System.out.println("Empty image2");
 				// msgImage= ImageS3Util.uploadMessageImage(file);
 
@@ -322,7 +429,7 @@ public class AlbumController {
 					upload.saveUploadedFiles(file2, Constants.ALBUM_IMAGE_TYPE,
 							photo2 + "-" + file2.get(0).getOriginalFilename().replace(' ', '_'));
 					System.out.println("upload method called " + file1.toString());
-					photo2=photo2 + "-" + file2.get(0).getOriginalFilename().replace(' ', '_');
+					photo2 = photo2 + "-" + file2.get(0).getOriginalFilename().replace(' ', '_');
 				} catch (IOException e) {
 
 					System.out.println("Exce in File Upload In Item Insert " + e.getMessage());
@@ -348,8 +455,8 @@ public class AlbumController {
 			album.setAlbumDesc(desc);
 			album.setFlavourId(" ");
 			album.setIsActive(isActive);
-			album.setMaxWt(0);
-			album.setMinWt(0);
+			album.setMaxWt(maxWt);
+			album.setMinWt(minWt);
 			album.setPhoto1(photo1);
 			album.setPhoto2(photo2);
 			album.setSpId(spId);
@@ -364,6 +471,43 @@ public class AlbumController {
 		}
 		return "redirect:/showAlbums";
 
+	}
+
+	// --------------CHECK FR BY TYPE----------------------------------
+
+	@RequestMapping(value = "/getFrByTypeId", method = RequestMethod.GET)
+	public @ResponseBody Info getFrByTypeId(HttpServletRequest request, HttpServletResponse response) {
+
+		Info result = new Info();
+
+		try {
+
+			int typeId = Integer.parseInt(request.getParameter("typeId"));
+			System.err.println("TYPE ------------------------------------------------------ " + typeId);
+
+			if (typeList != null) {
+				for (int i = 0; i < typeList.size(); i++) {
+					if (typeId == typeList.get(i).getTypeId()) {
+						result.setError(false);
+						result.setMessage("" + typeList.get(i).getFrName());
+						break;
+					}
+				}
+
+			} else {
+				result.setError(true);
+				result.setMessage("");
+			}
+
+			System.err.println("result *********///////////////***************" + result);
+
+		} catch (Exception e) {
+			System.out.println("get emp wise Report  " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		return result;
 	}
 
 }
