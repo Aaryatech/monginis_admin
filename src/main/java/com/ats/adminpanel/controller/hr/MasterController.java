@@ -924,26 +924,78 @@ public class MasterController {
 			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
 			map1.add("code", empCode);
 
-			String result = restTemplate.postForObject(Constants.security_app_url + "transaction/checkUniqueEmpCode",
-					map1, String.class);
+			Info result = restTemplate.postForObject(Constants.security_app_url + "transaction/checkUniqueEmpCode",
+					map1, Info.class);
+
+			System.err.println("RESULT------------------------------------------------------" + result);
 
 			boolean isValidCode = false;
 
 			if (result != null) {
+				System.err.println("IF CHK UNIQUE CODE------------------------------------------------------" + result);
 
-				if (result.equalsIgnoreCase("Yes")) {
-					isValidCode = true;
-				} else if (result.equalsIgnoreCase("No")) {
+				if (result.getMessage().equalsIgnoreCase("Yes")) {
 					isValidCode = false;
+				} else if (result.getMessage().equalsIgnoreCase("No")) {
+					isValidCode = true;
 				}
 
 			}
 
-			if (isValidCode) {
-				Employee saveEmp = restTemplate.postForObject(Constants.security_app_url + "master/saveEmployee", emp1,
-						Employee.class);
+			System.err.println("IS VALID CODE------------------------------------------------------" + isValidCode);
 
-				System.out.println("Response: " + saveEmp.toString());
+			if (isValidCode) {
+
+				// --------DSC--------
+
+				if (empId == 0) {
+					System.err.println("IF EMP ID=0------------------------------------------------------");
+
+					MultiValueMap<String, Object> map2 = new LinkedMultiValueMap<String, Object>();
+					map2.add("key", "dsc");
+
+					Settings settings = restTemplate.postForObject(
+							Constants.security_app_url + "master/getSettingsByKey", map2, Settings.class);
+
+					String dscNo = settings.getSettingValue();
+
+					emp1.setEmpDsc(dscNo);
+
+					System.err.println("IF SAVE EMP--------------------" + emp1);
+
+					Employee saveEmp = restTemplate.postForObject(Constants.security_app_url + "master/saveEmployee",
+							emp1, Employee.class);
+
+					System.err.println("Response: " + saveEmp.toString());
+
+					if (saveEmp.getEmpId() > 0) {
+
+						int val = Integer.parseInt(settings.getSettingValue());
+						val = val + 1;
+
+						String newVal = String.format("%03d", val);
+						System.err.println("NEW VAL ------------------- " + newVal);
+
+						MultiValueMap<String, Object> map3 = new LinkedMultiValueMap<String, Object>();
+						map3.add("settingsId", settings.getSettingId());
+						map3.add("value", newVal);
+
+						Info info = restTemplate.postForObject(
+								Constants.security_app_url + "master/updateSettingsValueByKey", map3, Info.class);
+
+						System.err.println("DSC UPDATE ------------ " + info);
+
+					}
+
+				} else {
+
+					System.err.println("ELSE------------------------------------- ");
+
+					Employee saveEmp = restTemplate.postForObject(Constants.security_app_url + "master/saveEmployee",
+							emp1, Employee.class);
+
+					System.err.println("Response: " + saveEmp.toString());
+				}
 			}
 
 			// return "redirect:/showAddHrEmp";
@@ -1387,6 +1439,62 @@ public class MasterController {
 					Info.class);
 
 			System.err.println("result *********///////////////***************" + result);
+
+		} catch (Exception e) {
+			System.out.println("get emp wise Report  " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		return result;
+	}
+
+	// --------------AJAX UPDATE DSC----------------------------------
+
+	@RequestMapping(value = "/updateDSCCode", method = RequestMethod.GET)
+	public @ResponseBody Info updateDSCCode(HttpServletRequest request, HttpServletResponse response) {
+
+		Info result = new Info();
+
+		try {
+
+			int empId = Integer.parseInt(request.getParameter("empId"));
+			String dsc = request.getParameter("dsc");
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map2 = new LinkedMultiValueMap<String, Object>();
+			map2.add("key", "dsc");
+
+			Settings settings = restTemplate.postForObject(Constants.security_app_url + "master/getSettingsByKey", map2,
+					Settings.class);
+
+			MultiValueMap<String, Object> map3 = new LinkedMultiValueMap<String, Object>();
+			map3.add("empId", empId);
+			map3.add("dsc", settings.getSettingValue());
+
+			Info info = restTemplate.postForObject(Constants.security_app_url + "master/updateDSC", map3, Info.class);
+
+			if (info != null) {
+				if (!info.isError()) {
+
+					int val = Integer.parseInt(settings.getSettingValue());
+					val = val + 1;
+
+					String newVal = String.format("%03d", val);
+					System.err.println("NEW VAL ------------------- " + newVal);
+
+					MultiValueMap<String, Object> map4 = new LinkedMultiValueMap<String, Object>();
+					map4.add("settingsId", settings.getSettingId());
+					map4.add("value", newVal);
+
+					result = restTemplate.postForObject(Constants.security_app_url + "master/updateSettingsValueByKey",
+							map4, Info.class);
+
+					System.err.println("DSC UPDATE ------------ " + result);
+
+				}
+			}
 
 		} catch (Exception e) {
 			System.out.println("get emp wise Report  " + e.getMessage());
