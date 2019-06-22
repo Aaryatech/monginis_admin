@@ -3,15 +3,17 @@
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
 
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-<body onload="funRandomNumberonLoad()">
+<body>
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<c:url var="checkuniqueEmpCodeProcess"
 		value="/checkuniqueEmpCodeProcess"></c:url>
 
-	<link rel="stylesheet"
-		href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
+	<c:url var="updateDSCCode" value="/updateDSCCode"></c:url>
+
 
 
 	<div class="container" id="main-container">
@@ -121,23 +123,36 @@
 
 
 
-									<div class="col2">
-										<label class="col-sm-3 col-lg-2 control-label">DSC
-											Code </label>
-										<div class="col-sm-2 col-lg-3 controls">
-											<input type="text" name="dsc" id="dsc" readonly="readonly"
-												placeholder="DSC Code" class="form-control"
-												data-rule-required="true" value="${emp.empDsc}" />
-										</div>
+									<c:if test="${emp.empDsc>0}">
 
-										<div class="col-sm-1 col-lg-1 controls">
-											<input type="button" class="btn btn-primary" value="update"
-												onclick="funRandomNumber()">
-										</div>
+										<div class="col2">
+											<label class="col-sm-3 col-lg-2 control-label">DSC
+												Code </label>
+											<div class="col-sm-2 col-lg-2 controls">
+												<input type="text" name="dsc" id="dsc" readonly="readonly"
+													placeholder="DSC Code" class="form-control"
+													data-rule-required="true" value="${emp.empDsc}" />
+											</div>
+											<div   class="col-sm-2 col-lg-1 controls"  id="loader" style="display: none">
+												<img
+													src="${pageContext.request.contextPath}/resources/img/loader1.gif" style=" height="50%"; width="50%"; "/>
 
-									</div>
+											</div>
+
+											<div class="col-sm-1 col-lg-1 controls">
+												<input type="button" class="btn btn-primary" value="update" id="update"
+													onclick="updateDSC()">
+											</div>
+
+										</div>
+									</c:if>
 
 								</div>
+
+
+
+
+
 
 
 								<div class="form-group">
@@ -407,7 +422,7 @@
 										<label class="col-sm-3 col-lg-2 control-label">Date of
 											Birth</label>
 										<div class="col-sm-3 col-lg-4 controls">
-											<input type="text" name="dob" id="dob"
+											<input type="text" name="dob" id="dob" data-end-date="0d"
 												placeholder="Date of Birth" class="form-control date-picker"
 												data-rule-required="true" value="${emp.dob}" />
 										</div>
@@ -641,142 +656,190 @@
 		</div>
 		<!-- END Container -->
 
+	</div>
 
 
+	<!-- Generate Random Number -->
+	<script>
+		function funRandomNumber() {
 
-		<!-- Generate Random Number -->
-		<script>
-			function funRandomNumber() {
+			document.getElementById("dsc").value = Math
+					.floor(Math.random() * 90000) + 10000;
 
+		}
+	</script>
+
+	<!-- Generate Random Number -->
+	<script>
+		function funRandomNumberonLoad() {
+
+			var x = sal = $("#oldDsc").val();
+
+			if (x == "") {
 				document.getElementById("dsc").value = Math
 						.floor(Math.random() * 90000) + 10000;
-
 			}
-		</script>
 
-		<!-- Generate Random Number -->
-		<script>
-			function funRandomNumberonLoad() {
+		}
+	</script>
 
-				var x = sal = $("#oldDsc").val();
+	<!-- Calculate Rate per Hr -->
+	<script>
+		function calculateRatePerHr() {
+			var sal, nHrs;
+			sal = $("#grSal").val();
+			nHrs = $("#nHrs").val();
 
-				if (x == "") {
-					document.getElementById("dsc").value = Math.floor(Math
-							.random() * 90000) + 10000;
-				}
+			alert("Salary - " + (sal / nHrs));
+			document.getElementById("rate").value = (sal / nHrs);
+		}
+	</script>
 
+	<!-- Check Emp Code for unique -->
+	<script>
+		function checkUniqueEmpCode() {
+			var empCode;
+			empCode = $("#emp_code").val();
+
+			/* var dob=$("#dob").val();
+			alert("dob - "+dob);
+			var currentDate = new Date();
+			alert("curr - "+currentDate);
+			
+			var date = dateEntered.substring(0, 2);
+			var month = dateEntered.substring(3, 5);
+			var year = dateEntered.substring(6, 10);
+			
+			var dateToCompare = new Date(year, month - 1, date);
+			
+
+			if (dateToCompare > currentDate) {
+			alert("Please enter DOB less than Current Date ");
+			document.getElementById('dob').value = "";
 			}
-		</script>
+			 */
 
-		<!-- Calculate Rate per Hr -->
-		<script>
-			function calculateRatePerHr() {
-				var sal, nHrs;
-				sal = $("#grSal").val();
-				nHrs = $("#nHrs").val();
+			if (empCode == null) {
+				alert("Please Insert Employee Code")
+			} else {
 
-				alert("Salary - " + (sal / nHrs));
-				document.getElementById("rate").value = (sal / nHrs);
-			}
-		</script>
+				$.getJSON('${checkuniqueEmpCodeProcess}',
 
-		<!-- Check Emp Code for unique -->
-		<script>
-			function checkUniqueEmpCode() {
-				var empCode;
-				empCode = $("#emp_code").val();
+				{
+					code : empCode,
+					ajax : 'true'
 
+				}, function(data) {
+
+					if (data.error == true) {
+						$("#uniqueCode").show();
+					} else {
+						$("#uniqueCode").hide();
+					}
+
+				});//data function
+
+			}//else
+
+		}
+	</script>
+
+
+	<!-- UPDATE DSC CODE -->
+	<script>
+		function updateDSC() {
+
+			var empId = $("#emp_id").val();
+			var dsc = $("#dsc").val();
+
+			$('#loader').show();
+			$('#update').hide();
+
+			$.getJSON('${updateDSCCode}',
+
+			{
+				empId : empId,
+				dsc : dsc,
+				ajax : 'true'
+
+			}, function(data) {
+
+				$('#loader').hide();
+				$('#update').show();
 				
-
-				if (empCode == null) {
-					alert("Please Insert Employee Code")
-				} else {
-
-					$.getJSON('${checkuniqueEmpCodeProcess}',
-
-					{
-						code : empCode,
-						ajax : 'true'
-
-					}, function(data) {
-
-						if (data.error == true) {
-							$("#uniqueCode").show();
-						} else {
-							$("#uniqueCode").hide();
-						}
-
-					});//data function
-
-				}//else
-
-			}
-		</script>
-
-		<script>
-			function validation() {
-
-				var empCode;
-				empCode = $("#emp_code").val();
-
-
-				if (empCode == null) {
-					alert("Please Insert Employee Code")
-				} else {
-
-					$.getJSON('${checkuniqueEmpCodeProcess}',
-
-					{
-						code : empCode,
-						ajax : 'true'
-
-					}, function(data) {
-
-						if (data.error == true) {
-							alert("Employee Code Already Exists!");
-							$("#uniqueCode").show();
-							return false;
-						} else {
-							$("#uniqueCode").hide();
-							return true;
-						}
-
-					});//data function
-
-				}//else
-
-			}
-		</script>
-
-
-		<!-- Search -->
-		<script>
-			function myFunction() {
-				var input, filter, table, tr, td, i;
-				input = document.getElementById("myInput");
-				filter = input.value.toUpperCase();
-
-				if (!document.getElementById('table1')) {
-
-					table = document.getElementById("table_grid");
-				} else {
-					table = document.getElementById("table1");
+				if (data.error == false) {
+					alert("DSC Code Updated Successfully");
+					window.location.reload();
 				}
-				tr = table.getElementsByTagName("tr");
-				//td = table.getElementsByTagName("td");
-				//alert("td value = "+td.length);
-				for (i = 0; i < tr.length; i++) {
-					td = tr[i].getElementsByTagName("td")[4];
-					if (td) {
-						if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-							tr[i].style.display = "";
-						} else {
-							tr[i].style.display = "none";
-						}
+
+			});//data function
+
+		}
+	</script>
+
+	<script>
+		function validation() {
+
+			var empCode;
+			empCode = $("#emp_code").val();
+
+			if (empCode == null) {
+				alert("Please Insert Employee Code")
+			} else {
+
+				$.getJSON('${checkuniqueEmpCodeProcess}',
+
+				{
+					code : empCode,
+					ajax : 'true'
+
+				}, function(data) {
+
+					if (data.error == true) {
+						alert("Employee Code Already Exists!");
+						$("#uniqueCode").show();
+						return false;
+					} else {
+						$("#uniqueCode").hide();
+						return true;
+					}
+
+				});//data function
+
+			}//else
+
+		}
+	</script>
+
+
+	<!-- Search -->
+	<script>
+		function myFunction() {
+			var input, filter, table, tr, td, i;
+			input = document.getElementById("myInput");
+			filter = input.value.toUpperCase();
+
+			if (!document.getElementById('table1')) {
+
+				table = document.getElementById("table_grid");
+			} else {
+				table = document.getElementById("table1");
+			}
+			tr = table.getElementsByTagName("tr");
+			//td = table.getElementsByTagName("td");
+			//alert("td value = "+td.length);
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[4];
+				if (td) {
+					if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
 					}
 				}
 			}
-		</script>
+		}
+	</script>
 
 
 
@@ -786,68 +849,68 @@
 
 
 
-		<!--basic scripts-->
-		<script
-			src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-		<script>
-			window.jQuery
-					|| document
-							.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
-		</script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
+	<!--basic scripts-->
+	<script
+		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script>
+		window.jQuery
+				|| document
+						.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
+	</script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
 
-		<!--page specific plugin scripts-->
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
-
-
-		<!--page specific plugin scripts-->
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
+	<!--page specific plugin scripts-->
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
 
 
+	<!--page specific plugin scripts-->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
 
 
-		<!--flaty scripts-->
-		<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
-		<!--page specific plugin scripts-->
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/clockface/js/clockface.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+
+	<!--flaty scripts-->
+	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
+	<!--page specific plugin scripts-->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/clockface/js/clockface.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 </body>
 </html>
