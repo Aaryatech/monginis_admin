@@ -51,6 +51,7 @@ import com.ats.adminpanel.model.ConfiguredSpDayCkResponse;
 import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.GetConfiguredSpDayCk;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.ItemIdOnly;
 import com.ats.adminpanel.model.ItemNameId;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.SpCakeResponse;
@@ -2516,6 +2517,40 @@ public class FranchiseeController {
 			System.out.println("Exception In Search FrTarget Data By FrId" + e.getMessage());
 		}
 		return frTargetList.getFrTargetList();
+	}
+	
+
+	@RequestMapping(value = "/getItemsByMenuIdMultiple", method = RequestMethod.GET)
+	@ResponseBody
+	public List<ItemIdOnly> getItemsByMenuIdMultiple(HttpServletRequest request, HttpServletResponse response) {
+
+		List<ItemIdOnly> itemList = null;
+
+		try {
+
+			System.out.println("hiiiiiiiiiiiiiii");
+			String menuId = request.getParameter("menuId");
+			StringBuilder sb = new StringBuilder();
+
+			menuId = menuId.substring(1, menuId.length() - 1);
+			menuId = menuId.replaceAll("\"", "");
+			logger.info("menuIds" + menuId);
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("menuId", menuId);
+			RestTemplate restTemplate = new RestTemplate();
+
+			itemList = restTemplate.postForObject(Constants.url + "/getItemsByMenuIdMultiple", map, List.class);
+
+			System.out.println("itemList" + itemList.toString());
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return itemList;
+
 	}
 
 }

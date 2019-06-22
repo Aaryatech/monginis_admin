@@ -32,14 +32,18 @@ td:hover::after, th:hover::after {
 
 
 <body>
+	<c:url var="getItemListByMenuId" value="/getItemsByMenuIdMultiple"></c:url>
+
 
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 
 	<c:url var="callSearchOrdersProcess" value="/searchOrdersProcess" />
+	<c:url var="callSearchOrdersProcessByItem"
+		value="/searchOrdersProcessByItem" />
 	<c:url var="callChangeQty" value="/callChangeQty" />
 	<c:url var="callDeleteOrder" value="/callDeleteOrder" />
-    <c:url var="excelOrderByItem" value="/excelOrderByItem" />
+	<c:url var="excelOrderByItem" value="/excelOrderByItem" />
 
 
 
@@ -190,7 +194,9 @@ td:hover::after, th:hover::after {
 											id="selectRoute" onchange="disableFr()">
 											<option value="0">Select Route</option>
 											<c:forEach items="${routeList}" var="route" varStatus="count">
-												<option value="${route.routeId}"><c:out value="${route.routeName}"/> </option>
+												<option value="${route.routeId}"><c:out
+														value="${route.routeName}" />
+												</option>
 
 											</c:forEach>
 										</select>
@@ -202,7 +208,8 @@ td:hover::after, th:hover::after {
 									<label for="textfield2" class="col-xs-3 col-lg-2 control-label">Menu</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<select class="form-control chosen" multiple="multiple"
-											tabindex="6" name="item_id" id="item_id">
+											tabindex="6" name="item_id" id="item_id"
+											onchange="getItemsByMenuId()">
 
 											<c:forEach items="${menuList}" var="menuList">
 												<option value="${menuList.menuId}">${menuList.menuTitle}</option>
@@ -221,12 +228,29 @@ td:hover::after, th:hover::after {
 									</div>
 								</div>
 
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Items</label>
+									<div class="col-sm-9 col-lg-10 controls">
+										<select data-placeholder="Select Items" name="items[]"
+											class="form-control chosen" tabindex="-1" id="item"
+											multiple="multiple" data-rule-required="true">
+											<option value=""></option>
+											<optgroup label="All Items">
+												<option value=""></option>
+
+											</optgroup>
+										</select>
+
+									</div>
+
+								</div>
+
 
 								<div align="center" class="form-group">
 									<div
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
 										<input type="button" class="btn btn-primary" value="Submit"
-											id="callSubmit" onclick="callSearch()">
+											onclick="callSearch()">
 
 
 									</div>
@@ -294,29 +318,9 @@ td:hover::after, th:hover::after {
 															<th width="100" align="right">Action</th>
 														</tr>
 													</thead>
-													<!-- 	<div class="table-responsive" style="border: 0">
-											<table width="100%" class="table table-advance" id="table1">
-												<thead>
-													<tr>
-														<th width="148" style="width: 18px" align="left">
-															No</th>
-														<th width="138" align="left">Franchisee Name</th>
-														<th width="159" align="left">Item Name</th>
-														<th width="159" align="left">Category</th>
-														<th width="159" align="left">Quantity</th>
-														<th width="100" align="left">Action</th> -->
 
-													<!-- <th width="91" align="left">Quantity</th> -->
-													<!-- 	<th width="105" align="left">MRP</th> -->
-													<!-- <th width="423" align="left">isEdit</th>
-														<th width="88" align="left">edit Quantity</th>
-														<th width="423" align="left">is Positive</th> -->
-													<!-- <th width="70" align="left">Total</th> -->
-													<!-- <th width="70" align="left">Remarks</th>
-														<th width="70" align="left">Action</th> -->
 
-													<!-- </tr>
-												</thead> -->
+
 													<tbody>
 														<c:forEach items="${orderList}" var="orderList"
 															varStatus="count">
@@ -336,39 +340,7 @@ td:hover::after, th:hover::after {
 
 																<td align="left"><c:out value="${orderList.id}" /></td>
 
-																<%-- <td align="left"><c:out
-																	value="${orderList.orderQty}" /></td>
-															<td align="left"><c:out value="" /></td> --%>
 
-																<%-- 
-															<td align="left"><label><input type="radio"
-																	name="is_edit${orderList.orderId}"
-																	id="is_edit${orderList.orderId}" value="1" checked>
-																	false</label> <label><input type="radio"
-																	name="is_edit${orderList.orderId}"
-																	id="is_edit${orderList.orderId}" value="0">true</label></td>
-
-															<td align="left"><label><input type="text"
-																	style="width: 60px; padding: 2px" name="edit-qty"
-																	id="edit-qty" value="${orderList.editQty}"></label></td>
-
-															<td align="left"><label><input type="radio"
-																	name="is_positive${orderList.orderId}"
-																	id="is_positive${orderList.orderId}" value="1" checked>false</label>
-																<label><input type="radio"
-																	name="is_positive${orderList.orderId}"
-																	id="is_positive${orderList.orderId}" value="0">true</label></td>
- --%>
-																<!-- <td align="left"><label><input type="text"
-																	style="width: 60px; padding: 2px" name="total"maxlength="10" size="10"
-																	id="total" value="total amt" readonly="readonly"></label></td> -->
-
-																<!-- <td align="left"><label><input type="text"
-																	style="width: 60px; padding: 2px" name="remarks"
-																	id="remarks" value="ramarks"></label></td>
-															<td align="left"><label><input type="submit"
-																	name="submit_button" id="submit_button"></label></td>
- -->
 
 															</tr>
 														</c:forEach>
@@ -379,20 +351,49 @@ td:hover::after, th:hover::after {
 										</div>
 
 
-									</div>	<div class="box-content">	<div id="table-scroll" class="table-scroll">
-									<table id="subCat" class="main-table" style="text-align:left; border: solid 1px #DDEEEE;background-color: pink;">
-													<thead style="background-color: pink;  ">
-														<tr class="bgpink">
-															<th width="168" style="width: 28px" align="left">Sr.</th>
-															<th width="198" align="left">Sub Category</th>
-															<th width="190" align="left">Total</th>
-															
-														</tr>
-													</thead>
-													<tbody>
-													
-													</tbody>
-												</table></div></div>
+									</div>
+									<div class="box-content">
+										<div id="table-scroll" class="table-scroll">
+											<table id="subCat" class="main-table"
+												style="text-align: left; border: solid 1px #DDEEEE; background-color: pink;">
+												<thead style="background-color: pink;">
+													<tr class="bgpink">
+														<th width="168" style="width: 28px" align="left">Sr.</th>
+														<th width="198" align="left">Sub Category</th>
+														<th width="190" align="left">Total</th>
+
+													</tr>
+												</thead>
+												<tbody>
+
+												</tbody>
+											</table>
+										</div>
+									</div>
+
+									<div class="form-group" align="left" style="display: none;"
+										id="opt">
+										<div>
+											<label class=" col-md-2">Production Date</label>
+											<div class="col-md-2">
+												<input class="form-control" name="production_date"
+													id="production_date" type="date" />
+											</div>
+											<label class=" col-md-2">Delivery Date</label>
+											<div class="col-md-2">
+												<input class="form-control" name="delivery_date"
+													id="delivery_date" type="date" />
+											</div>
+
+										</div>
+
+										<div class="col-md-1">
+											<input type="button" class="btn btn-primary" value="Update"
+												disabled="disabled" id="callupdate"
+												onclick="updateDetails()">
+
+										</div>
+									</div>
 									<div class="form-group"
 										style="display: <c:out value="${dis}" />;" id="range">
 
@@ -408,18 +409,17 @@ td:hover::after, th:hover::after {
 												value="Excel order By Item Name" onclick="exportToExcel1();"
 												disabled="disabled">
 										</div>
-												<div align="center" id="loader1" style="display: none">
+										<div align="center" id="loader1" style="display: none">
 
-										<span>
-											<h6>
-												<font color="#343690">Loading</font>
-											</h6>
-										</span> <span class="l-1"></span> <span class="l-2"></span> <span
-											class="l-3"></span> <span class="l-4"></span> <span
-											class="l-5"></span> <span class="l-6"></span>
+											<span>
+												<h6>
+													<font color="#343690">Loading</font>
+												</h6>
+											</span> <span class="l-1"></span> <span class="l-2"></span> <span
+												class="l-3"></span> <span class="l-4"></span> <span
+												class="l-5"></span> <span class="l-6"></span>
+										</div>
 									</div>
-									</div>
-									
 							</form>
 						</div>
 					</div>
@@ -507,310 +507,844 @@ td:hover::after, th:hover::after {
 
 
 
+	<!-- <script type="text/javascript">
+		function callSearch() {
+
+			var isDelete = document.getElementById("isDelete").value;
+			var isEdit = document.getElementById("isEdit").value;
+
+			//	alert("isDelete" +isDelete);
+			//alert("isEdit" +isEdit);
+
+			var itemIds = $("#item_id").val();
+
+			var array = [];
+
+			var routeIds = $("#selectRoute").val();
+			var frIds = $("#fr_id").val();
+
+			var date = $("#date").val();
+			//alert(date);
+			$('#loader').show();
+
+			$
+					.getJSON(
+							'${callSearchOrdersProcess}',
+							{
+
+								fr_id_list : JSON.stringify(frIds),
+								item_id_list : JSON.stringify(itemIds),
+								route_id : routeIds,
+								date : date,
+
+								ajax : 'true'
+
+							},
+							function(data) {
+								document.getElementById("expExcel").disabled = true;
+								$('#loader').hide();
+								var len = data.length;
+
+								$('#table1 td').remove();
+								$('#subCat td').remove();
+								$
+										.each(
+												data.orderList,
+												function(key, orders) {
+													document
+															.getElementById("expExcel").disabled = false;
+													document
+															.getElementById("expExcel1").disabled = false;
+
+													document
+															.getElementById('range').style.display = 'block';
+													var tr = $('<tr></tr>');
+
+													tr.append($('<td></td>')
+															.html(key + 1));
+
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			orders.frName));
+
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			orders.itemName));
+
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			orders.catName));
+
+													if (isEdit == 1) {
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				"<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="
+																						+ orders.orderId
+																						+ " Value="
+																						+ orders.orderQty
+																						+ " disabled>"));
+
+													} else {
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				"<input type=number onkeypress='return IsNumeric(event);' disabled ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="
+																						+ orders.orderId
+																						+ " Value="
+																						+ orders.orderQty
+																						+ " disabled>"));
+
+													}
+
+													if (isDelete == 1) {
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				' <a>   <span class="glyphicon glyphicon-edit" id="edit'
+																						+ orders.orderId
+																						+ '" onClick=editQty('
+																						+ orders.orderId
+																						+ ');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'
+																						+ orders.orderId
+																						+ '" onClick=deleteOrder('
+																						+ orders.orderId
+																						+ ');> </span></a>'));
+
+													} else {
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				' <a>  <span class="glyphicon glyphicon-edit" id="edit'
+																						+ orders.orderId
+																						+ '" onClick=editQty('
+																						+ orders.orderId
+																						+ ');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'
+																						+ orders.orderId
+																						+ '" onClick=('
+																						+ orders.orderId
+																						+ ');> </span></a>'));
+													}
+
+													//tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
+
+													//tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
+
+													$('#table1 tbody').append(
+															tr);
+
+												})
+
+								$.each(data.orderItemSubCatTotalList, function(
+										key, subCat) {
+									var tr = $('<tr></tr>');
+									tr.append($('<td></td>').html(key + 1));
+									tr.append($('<td></td>').html(
+											subCat.subCatName));
+
+									tr
+											.append($('<td></td>').html(
+													subCat.total));
+									$('#subCat tbody').append(tr);
+								});
+							});
+
+		}
+	</script> -->
+
 	<script type="text/javascript">
+		function callSearch() {
+			alert("Hii");
 
-function callSearch() {
+			$('#all').prop('checked', false);
 
-	
-	var isDelete=document.getElementById("isDelete").value;
-	var isEdit=document.getElementById("isEdit").value;
-	
-//	alert("isDelete" +isDelete);
-	//alert("isEdit" +isEdit);
+			var isDelete = document.getElementById("isDelete").value;
+			var isEdit = document.getElementById("isEdit").value;
 
-	
-	var itemIds=$("#item_id").val();
-	
-	var array=[];
-	
-	var routeIds=$("#selectRoute").val();
-	var frIds=$("#fr_id").val();
-		
+			//	alert("isDelete" +isDelete);
+			//alert("isEdit" +isEdit);
 
-	var date = $("#date").val(); 
-	//alert(date);
-	$('#loader').show();
+			var isValid = validate();
+			if (isValid == true) {
+				var menuIds = $("#item_id").val();
+				var itemId = $("#item").val();
+				var array = [];
 
-$.getJSON('${callSearchOrdersProcess}', {
+				alert(itemId);
 
-	fr_id_list : JSON.stringify(frIds),
-	item_id_list : JSON.stringify(itemIds),
-	route_id:routeIds,
-	date : date,
-	
-	ajax : 'true'
+				var routeIds = $("#selectRoute").val();
+				var frIds = $("#fr_id").val();
 
-}, function(data) {
-	document.getElementById("expExcel").disabled=true;
-	$('#loader').hide();
-	var len = data.length;
+				var date = $("#date").val();
+				//alert(date);
+				$('#loader').show();
+				if (itemId == "-1" || itemId == "") {
+					$
+							.getJSON(
+									'${callSearchOrdersProcess}',
+									{
 
+										fr_id_list : JSON.stringify(frIds),
+										item_id_list : JSON.stringify(menuIds),
+										route_id : routeIds,
+										date : date,
 
-	$('#table1 td').remove();
-	$('#subCat td').remove();
-	$.each(data.orderList,function(key, orders) {
-		document.getElementById("expExcel").disabled=false;
-		document.getElementById("expExcel1").disabled=false;
+										ajax : 'true'
 
-		document.getElementById('range').style.display = 'block';
-	var tr = $('<tr></tr>');
+									},
+									function(data) {
+										alert("data" + data);
+										document.getElementById("expExcel").disabled = true;
+										document.getElementById("callupdate").disabled = false;
+										document.getElementById("calldelete").disabled = true;
+										$("#opt").css("display", "block");
 
-  	tr.append($('<td></td>').html(key+1));
+										$('#loader').hide();
+										var len = data.length;
 
-  	tr.append($('<td></td>').html(orders.frName));
+										$('#table1 td').remove();
 
-  	tr.append($('<td></td>').html(orders.itemName));
+										$
+												.each(
+														data,
+														function(key, orders) {
+															document
+																	.getElementById("expExcel").disabled = false;
+															document
+																	.getElementById("calldelete").disabled = false;
 
-  	tr.append($('<td></td>').html(orders.catName));
-  	
-	if(isEdit==1){
-	 	tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
-  		
-  	}else{
-	 	tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' disabled ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
-  		
-  	}
+															document
+																	.getElementById('range').style.display = 'block';
+															var tr = $('<tr></tr>');
 
-  	
-if(isDelete==1){
-tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
+															tr
+																	.append($(
+																			'<td class="col-sm-1"></td>')
+																			.html(
+																					"<input type='checkbox' name='selorder' class='selorder' id="+orders.orderId+"   value="+orders.orderId+">"));
 
-}else{
-	 	tr.append($('<td></td>').html(' <a>  <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=('+orders.orderId+');> </span></a>'));
-  	}
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					key + 1));
 
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					orders.frName));
 
- 	//tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
-  
- //tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
-  		
- 
-	$('#table1 tbody').append(tr);
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					orders.itemName));
 
-})
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					orders.catName));
 
+															if (isEdit == 1) {
+																tr
+																		.append($(
+																				'<td></td>')
+																				.html(
+																						"<input type='number' onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;    height: 24px;' class='form-control' min='0' id=qty"
+																								+ orders.orderId
+																								+ " value="
+																								+ orders.orderQty
+																								+ " disabled='disabled' >"));
 
-$.each(data.orderItemSubCatTotalList,function(key, subCat) {
-   var tr = $('<tr></tr>');
-	tr.append($('<td></td>').html(key+1));
-	tr.append($('<td></td>').html(subCat.subCatName));
+															} else {
+																tr
+																		.append($(
+																				'<td></td>')
+																				.html(
+																						"<input type='number' onkeypress='return IsNumeric(event);'  ondrop='return false;' onpaste='return false;' style='text-align: center;    height: 24px;' class='form-control' min='0' id=qty"
+																								+ orders.orderId
+																								+ " value="
+																								+ orders.orderQty
+																								+ "  disabled='disabled' >"));
 
-	tr.append($('<td></td>').html(subCat.total));
-	$('#subCat tbody').append(tr);
-});
-});
+															}
+															/* tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					orders.deliveryDate));
+															 */
+															if (isDelete == 1) {
+																tr
+																		.append($(
+																				'<td></td>')
+																				.html(
+																						' <a>   <span class="glyphicon glyphicon-edit" id="edit'
+																								+ orders.orderId
+																								+ '" onClick=editQty('
+																								+ orders.orderId
+																								+ ');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'
+																								+ orders.orderId
+																								+ '" onClick=deleteOrder('
+																								+ orders.orderId
+																								+ ');> </span></a>'));
 
-}
+															} else {
+																tr
+																		.append($(
+																				'<td></td>')
+																				.html(
+																						' <a>  <span class="glyphicon glyphicon-edit" id="edit'
+																								+ orders.orderId
+																								+ '" onClick=editQty('
+																								+ orders.orderId
+																								+ ');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'
+																								+ orders.orderId
+																								+ '" onClick=deleteOrder('
+																								+ orders.orderId
+																								+ ');> </span></a>'));
+															}
 
-</script>
+															//tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
+
+															//tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
+
+															$('#table1 tbody')
+																	.append(tr);
+
+														})
+
+									});
+
+				} else {
+
+					$
+							.getJSON(
+									'${callSearchOrdersProcessByItem}',
+									{
+
+										fr_id_list : JSON.stringify(frIds),
+										item_id_list : JSON.stringify(menuIds),
+										itemId : JSON.stringify(itemId),
+										route_id : routeIds,
+										date : date,
+
+										ajax : 'true'
+
+									},
+									function(data) {
+										document.getElementById("expExcel").disabled = true;
+										document.getElementById("callupdate").disabled = false;
+										document.getElementById("calldelete").disabled = true;
+
+										$("#opt").css("display", "block");
+
+										$('#loader').hide();
+										var len = data.length;
+
+										$('#table1 td').remove();
+
+										$
+												.each(
+														data,
+														function(key, orders) {
+															document
+																	.getElementById("expExcel").disabled = false;
+															document
+																	.getElementById("calldelete").disabled = false;
+
+															document
+																	.getElementById('range').style.display = 'block';
+															var tr = $('<tr></tr>');
+
+															tr
+																	.append($(
+																			'<td class="col-sm-1"></td>')
+																			.html(
+																					"<input type='checkbox' name='selorder' class='selorder' id="+orders.orderId+"   value="+orders.orderId+">"));
+
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					key + 1));
+
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					orders.frName));
+
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					orders.itemName));
+
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					orders.catName));
+
+															if (isEdit == 1) {
+																tr
+																		.append($(
+																				'<td></td>')
+																				.html(
+																						"<input type='number' onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;    height: 24px;' class='form-control' min='0' id=qty"
+																								+ orders.orderId
+																								+ " value="
+																								+ orders.orderQty
+																								+ " disabled='disabled' >"));
+
+															} else {
+																tr
+																		.append($(
+																				'<td></td>')
+																				.html(
+																						"<input type='number' onkeypress='return IsNumeric(event);'  ondrop='return false;' onpaste='return false;' style='text-align: center;    height: 24px;' class='form-control' min='0' id=qty"
+																								+ orders.orderId
+																								+ " value="
+																								+ orders.orderQty
+																								+ "  disabled='disabled' >"));
+
+															}
+															/* 	tr
+																		.append($(
+																				'<td></td>')
+																				.html(
+																						orders.deliveryDate));
+															 */
+															if (isDelete == 1) {
+																tr
+																		.append($(
+																				'<td></td>')
+																				.html(
+																						' <a>   <span class="glyphicon glyphicon-edit" id="edit'
+																								+ orders.orderId
+																								+ '" onClick=editQty('
+																								+ orders.orderId
+																								+ ');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'
+																								+ orders.orderId
+																								+ '" onClick=deleteOrder('
+																								+ orders.orderId
+																								+ ');> </span></a>'));
+
+															} else {
+																tr
+																		.append($(
+																				'<td></td>')
+																				.html(
+																						' <a>  <span class="glyphicon glyphicon-edit" id="edit'
+																								+ orders.orderId
+																								+ '" onClick=editQty('
+																								+ orders.orderId
+																								+ ');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'
+																								+ orders.orderId
+																								+ '" onClick=deleteOrder('
+																								+ orders.orderId
+																								+ ');> </span></a>'));
+															}
+
+															//tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
+
+															//tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
+
+															$('#table1 tbody')
+																	.append(tr);
+
+														})
+
+									});
+
+				}
+			}
+
+		}
+	</script>
 
 
 
 
 	<script type="text/javascript">
-		function editQty(orderId)
-		{
-			var state=document.getElementById(orderId).disabled;
-			var textId=document.getElementById(orderId).value;
+		function editQty(orderId) {
+			var state = document.getElementById(orderId).disabled;
+			var textId = document.getElementById(orderId).value;
 			//alert(textId);
 			//document.getElementById(orderId).disabled=false;
-			if(state)
-				{
-				$("#edit"+orderId).removeClass("glyphicon glyphicon-edit");
-				 $("#edit"+orderId).addClass("glyphicon glyphicon-ok");
-				document.getElementById(orderId).disabled=false;
-				
-				}
-			else{
-				$("#edit"+orderId).removeClass("glyphicon glyphicon-ok");
-				 $("#edit"+orderId).addClass("glyphicon glyphicon-edit");
-				document.getElementById(orderId).disabled=true;
-				$.getJSON('${callChangeQty}',
-						{
-					
-							order_id : orderId,
-							order_qty : textId,
-							
-							ajax : 'true'
-							
-						});
+			if (state) {
+				$("#edit" + orderId).removeClass("glyphicon glyphicon-edit");
+				$("#edit" + orderId).addClass("glyphicon glyphicon-ok");
+				document.getElementById(orderId).disabled = false;
+
+			} else {
+				$("#edit" + orderId).removeClass("glyphicon glyphicon-ok");
+				$("#edit" + orderId).addClass("glyphicon glyphicon-edit");
+				document.getElementById(orderId).disabled = true;
+				$.getJSON('${callChangeQty}', {
+
+					order_id : orderId,
+					order_qty : textId,
+
+					ajax : 'true'
+
+				});
 			}
 		}
-		
+
 		var specialKeys = new Array();
-        specialKeys.push(8); //Backspace
-        function IsNumeric(e) {
-            var keyCode = e.which ? e.which : e.keyCode
-            var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1);
-           /*  document.getElementById("error").style.display = ret ? "none" : "inline"; */
-            return ret;
-        }
-        
-        
-		</script>
+		specialKeys.push(8); //Backspace
+		function IsNumeric(e) {
+			var keyCode = e.which ? e.which : e.keyCode
+			var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys
+					.indexOf(keyCode) != -1);
+			/*  document.getElementById("error").style.display = ret ? "none" : "inline"; */
+			return ret;
+		}
+	</script>
 	<script type="text/javascript">
-		function deleteOrder(orderId)
-		{
-			var isDelete=document.getElementById("isDelete").value;
-			var isEdit=document.getElementById("isEdit").value;
-			
-			
-			
-		    if (confirm("Do you want to Delete this order?") == true) {
-		    	$.getJSON('${callDeleteOrder}',
-						{
-							order_id : orderId,
-							
-							ajax : 'true'
-							
-						}, function(data) {
-							document.getElementById("expExcel").disabled=true;
-							$('#loader').hide();
-							var len = data.length;
+		function deleteOrder(orderId) {
+			var isDelete = document.getElementById("isDelete").value;
+			var isEdit = document.getElementById("isEdit").value;
 
+			if (confirm("Do you want to Delete this order?") == true) {
+				$
+						.getJSON(
+								'${callDeleteOrder}',
+								{
+									order_id : orderId,
 
-							$('#table1 td').remove();
-							
-							$.each(data,function(key, orders) {
-								document.getElementById("expExcel1").disabled=false;
+									ajax : 'true'
 
-								document.getElementById("expExcel").disabled=false;
-								document.getElementById('range').style.display = 'block';
-							var tr = $('<tr></tr>');
+								},
+								function(data) {
+									document.getElementById("expExcel").disabled = true;
+									$('#loader').hide();
+									var len = data.length;
 
-						  	tr.append($('<td></td>').html(key+1));
+									$('#table1 td').remove();
 
-						  	tr.append($('<td></td>').html(orders.frName));
+									$
+											.each(
+													data,
+													function(key, orders) {
+														document
+																.getElementById("expExcel1").disabled = false;
 
-						  	tr.append($('<td></td>').html(orders.itemName));
+														document
+																.getElementById("expExcel").disabled = false;
+														document
+																.getElementById('range').style.display = 'block';
+														var tr = $('<tr></tr>');
 
-						  	tr.append($('<td></td>').html(orders.catName));
-						  	
-						  	if(isEdit==1){
-							 	tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				key + 1));
 
-						  		
-						  	}else{
-							 	tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' disabled ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				orders.frName));
 
-						  		
-						  	}
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				orders.itemName));
 
-						  	
- 				if(isDelete==1){
-	 			tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
-		
-				}else{
-							 	tr.append($('<td></td>').html(' <a>  <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=('+orders.orderId+');> </span></a>'));
-						  	}
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				orders.catName));
 
- 	
- 	
-						 	/* tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
-						  
-						 	tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
-						  		 */
-						 
-							$('#table1 tbody').append(tr);
+														if (isEdit == 1) {
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					"<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="
+																							+ orders.orderId
+																							+ " Value="
+																							+ orders.orderQty
+																							+ " disabled>"));
 
-						})
+														} else {
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					"<input type=number onkeypress='return IsNumeric(event);' disabled ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="
+																							+ orders.orderId
+																							+ " Value="
+																							+ orders.orderQty
+																							+ " disabled>"));
 
-					
-		    } );
-		    
-		    }		
-			
-			
+														}
+
+														if (isDelete == 1) {
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					' <a>   <span class="glyphicon glyphicon-edit" id="edit'
+																							+ orders.orderId
+																							+ '" onClick=editQty('
+																							+ orders.orderId
+																							+ ');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'
+																							+ orders.orderId
+																							+ '" onClick=deleteOrder('
+																							+ orders.orderId
+																							+ ');> </span></a>'));
+
+														} else {
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					' <a>  <span class="glyphicon glyphicon-edit" id="edit'
+																							+ orders.orderId
+																							+ '" onClick=editQty('
+																							+ orders.orderId
+																							+ ');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'
+																							+ orders.orderId
+																							+ '" onClick=('
+																							+ orders.orderId
+																							+ ');> </span></a>'));
+														}
+
+														/* tr.append($('<td></td>').html("<input type=number onkeypress='return IsNumeric(event);' ondrop='return false;' onpaste='return false;' style='text-align: center;' class='form-control' min=0 id="+orders.orderId+" Value="+orders.orderQty+" disabled>"));
+														
+														tr.append($('<td></td>').html(' <a>   <span class="glyphicon glyphicon-edit" id="edit'+orders.orderId+'" onClick=editQty('+orders.orderId+');> </span> </a><a><span class="glyphicon glyphicon-remove" id="delete'+orders.orderId+'" onClick=deleteOrder('+orders.orderId+');> </span></a>'));
+														 */
+
+														$('#table1 tbody')
+																.append(tr);
+
+													})
+
+								});
+
+			}
 
 		}
-		
-		</script>
+	</script>
 
 	<script>
-	function exportToExcel()
-		{
-	var itemIds=$("#item_id").val();
-		
-		var array=[];
-		
-		var routeIds=$("#selectRoute").val();
-		var frIds=$("#fr_id").val();
-			
+		function exportToExcel() {
+			var itemIds = $("#item_id").val();
 
-		var date = $("#date").val(); 
-		$('#loader1').show();
+			var array = [];
 
-	$.getJSON('${callSearchOrdersProcess}', {
+			var routeIds = $("#selectRoute").val();
+			var frIds = $("#fr_id").val();
 
-		fr_id_list : JSON.stringify(frIds),
-		item_id_list : JSON.stringify(itemIds),
-		route_id:routeIds,
-		date : date,
-		
-		ajax : 'true'
+			var date = $("#date").val();
+			$('#loader1').show();
 
-	}, function(data) {
-		$('#loader1').hide();
-		window.open("${pageContext.request.contextPath}/exportToExcel");
-		document.getElementById("expExcel").disabled=true;
-	});
+			$
+					.getJSON(
+							'${callSearchOrdersProcess}',
+							{
+
+								fr_id_list : JSON.stringify(frIds),
+								item_id_list : JSON.stringify(itemIds),
+								route_id : routeIds,
+								date : date,
+
+								ajax : 'true'
+
+							},
+							function(data) {
+								$('#loader1').hide();
+								window
+										.open("${pageContext.request.contextPath}/exportToExcel");
+								document.getElementById("expExcel").disabled = true;
+							});
 
 		}
-	function exportToExcel1()
-	{
-		
-		var itemIds=$("#item_id").val();
-		
-		var array=[];
-		
-		var routeIds=$("#selectRoute").val();
-		var frIds=$("#fr_id").val();
-			
+		function exportToExcel1() {
 
-		var date = $("#date").val(); 
-		$('#loader1').show();
+			var itemIds = $("#item_id").val();
 
-	$.getJSON('${excelOrderByItem}', {
+			var array = [];
 
-		fr_id_list : JSON.stringify(frIds),
-		item_id_list : JSON.stringify(itemIds),
-		route_id:routeIds,
-		date : date,
-		
-		ajax : 'true'
+			var routeIds = $("#selectRoute").val();
+			var frIds = $("#fr_id").val();
 
-	}, function(data) {
-		$('#loader1').hide();
-		window.open("${pageContext.request.contextPath}/exportToExcel");
-		document.getElementById("expExcel1").disabled=true;
-	});
+			var date = $("#date").val();
+			$('#loader1').show();
 
-}
-</script>
+			$
+					.getJSON(
+							'${excelOrderByItem}',
+							{
+
+								fr_id_list : JSON.stringify(frIds),
+								item_id_list : JSON.stringify(itemIds),
+								route_id : routeIds,
+								date : date,
+
+								ajax : 'true'
+
+							},
+							function(data) {
+								$('#loader1').hide();
+								window
+										.open("${pageContext.request.contextPath}/exportToExcel");
+								document.getElementById("expExcel1").disabled = true;
+							});
+
+		}
+	</script>
 	<script type="text/javascript">
+		function disableFr() {
 
-function disableFr(){
+			//alert("Inside Disable Fr ");
+			document.getElementById("fr_id").disabled = true;
 
-	//alert("Inside Disable Fr ");
-document.getElementById("fr_id").disabled = true;
+		}
 
-}
+		function disableRoute() {
 
-function disableRoute(){
+			//alert("Inside Disable route ");
+			var x = document.getElementById("selectRoute")
+			//alert(x.options.length);
+			var i;
+			for (i = 0; i < x; i++) {
+				document.getElementById("selectRoute").options[i].disabled;
+				//document.getElementById("pets").options[2].disabled = true;
+			}
+			//document.getElementById("selectRoute").disabled = true;
 
-	//alert("Inside Disable route ");
-	var x=document.getElementById("selectRoute")
-	//alert(x.options.length);
-	var i;
-	for(i=0;i<x;i++){
-		document.getElementById("selectRoute").options[i].disabled;
-		 //document.getElementById("pets").options[2].disabled = true;
-	}
-//document.getElementById("selectRoute").disabled = true;
+		}
+	</script>
 
-}
+	<script>
+		function getItemsByMenuId() {
+			//alert("hii");
 
-</script>
+			var menuIds = $("#item_id").val();
+
+			if (menuIds == "" || menuIds == null) {
+
+				$('#item').find('option').remove().end()
+				$("#item").trigger("chosen:updated");
+			} else {
+				$.getJSON('${getItemListByMenuId}', {
+
+					menuId : JSON.stringify(menuIds),
+					ajax : 'true'
+				}, function(data) {
+					//alert(data);
+					var html = '<option value="">Select Item</option>';
+
+					var len = data.length;
+
+					$('#item').find('option').remove().end()
+
+					$("#item").append(
+							$("<option></option>").attr("value", -1)
+									.text("ALL"));
+
+					for (var i = 0; i < len; i++) {
+						$("#item").append(
+								$("<option ></option>").attr("value",
+										data[i].id).text(data[i].itemName));
+					}
+					$("#item").trigger("chosen:updated");
+				});
+			}
+		}
+	</script>
+
+	<script type="text/javascript">
+		function updateDetails() {
+
+			var delDate = $("#delivery_date").val();
+			var prodDate = $("#production_date").val();
+			if (prodDate == "") {
+
+				alert("Please Select Production Date");
+			} else if (delDate == "") {
+				alert("Please Select Delivery Date");
+			} else {
+				var selectedItems = new Array();
+
+				var checkedVals = $('.selorder:checkbox:checked').map(
+						function() {
+							return this.value;
+						}).get();
+
+				if (checkedVals == "") {
+					alert("Please select atleast one order!!")
+				} else {
+
+					$.getJSON('${updateOrderDetails}', {
+
+						ids : checkedVals.join(","),
+						delDate : delDate,
+						prodDate : prodDate,
+						ajax : 'true'
+
+					}, function(data) {
+
+						if (data.error == false) {
+
+							alert("Delivery Date updated Successfully.");
+							callSearch();
+						} else {
+							alert("Delivery Date Not Updated.");
+						}
+					});
+				}
+			}
+		}
+	</script>
+	<script type="text/javascript">
+		function validate() {
+
+			var menu = $("#item_id").val();
+			var selectFr = $("#selectRoute").val();
+			var selectItem = $("#item").val();
+
+			var isValid = true;
+
+			if (selectFr == "" || selectFr == null) {
+				isValid = false;
+				alert("Please Select Franchise");
+			} else if (menu == "" || menu == null) {
+
+				isValid = false;
+				alert("Please Select Menu");
+			} else if (selectItem == "" || selectItem == null) {
+
+				isValid = false;
+				alert("Please Select Items");
+			}
+			return isValid;
+
+		}
+	</script>
+
+
+	</script>
 
 </body>
 </html>
