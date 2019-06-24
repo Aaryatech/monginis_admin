@@ -1103,29 +1103,32 @@ public class FranchiseeController {
 		List<CommonConf> commonConfList = new ArrayList<CommonConf>();
 
 		if (selectedCatId == 5) {
-			/*SpCakeResponse spCakeResponse = restTemplate.getForObject(Constants.url + "showSpecialCakeList",
-					SpCakeResponse.class);
-			System.out.println("SpCake Controller SpCakeList Response " + spCakeResponse.toString());
+			/*
+			 * SpCakeResponse spCakeResponse = restTemplate.getForObject(Constants.url +
+			 * "showSpecialCakeList", SpCakeResponse.class);
+			 * System.out.println("SpCake Controller SpCakeList Response " +
+			 * spCakeResponse.toString());
+			 * 
+			 * specialCakeList = spCakeResponse.getSpecialCake();
+			 * 
+			 * for (SpecialCake specialCake : specialCakeList) { CommonConf commonConf = new
+			 * CommonConf(); commonConf.setId(specialCake.getSpId());
+			 * commonConf.setName(specialCake.getSpCode() + "-" + specialCake.getSpName());
+			 * commonConfList.add(commonConf); System.out.println("spCommonConf" +
+			 * commonConf.toString()); }
+			 */
 
-			specialCakeList = spCakeResponse.getSpecialCake();
-
-			for (SpecialCake specialCake : specialCakeList) {
-				CommonConf commonConf = new CommonConf();
-				commonConf.setId(specialCake.getSpId());
-				commonConf.setName(specialCake.getSpCode() + "-" + specialCake.getSpName());
-				commonConfList.add(commonConf);
-				System.out.println("spCommonConf" + commonConf.toString());
-			}*/
-			
 			Album[] album = restTemplate.getForObject(Constants.url + "getAlbumList", Album[].class);
 			albumCakeList = new ArrayList<Album>(Arrays.asList(album));
-			
-			/*albumCakeList = restTemplate.getForObject(Constants.url + "getAlbumList",
-					List.class);*/
+
+			/*
+			 * albumCakeList = restTemplate.getForObject(Constants.url + "getAlbumList",
+			 * List.class);
+			 */
 			System.out.println("Album Cake Response " + albumCakeList.toString());
 
-			for(int i=0;i<albumCakeList.size();i++) {
-				System.out.println("ALBUM : ----------- "+albumCakeList.get(i));
+			for (int i = 0; i < albumCakeList.size(); i++) {
+				System.out.println("ALBUM : ----------- " + albumCakeList.get(i));
 				CommonConf commonConf = new CommonConf();
 				commonConf.setId(albumCakeList.get(i).getSpId());
 				commonConf.setName(albumCakeList.get(i).getAlbumCode() + "-" + albumCakeList.get(i).getAlbumName());
@@ -1134,14 +1137,13 @@ public class FranchiseeController {
 			}
 
 			for (Album albumCake : albumCakeList) {
-				
+
 				CommonConf commonConf = new CommonConf();
 				commonConf.setId(albumCake.getSpId());
 				commonConf.setName(albumCake.getAlbumCode() + "-" + albumCake.getAlbumName());
 				commonConfList.add(commonConf);
 				System.out.println("spCommonConf" + commonConf.toString());
 			}
-			
 
 			System.out.println("------------------------");
 		} else {
@@ -2518,7 +2520,6 @@ public class FranchiseeController {
 		}
 		return frTargetList.getFrTargetList();
 	}
-	
 
 	@RequestMapping(value = "/getItemsByMenuIdMultiple", method = RequestMethod.GET)
 	@ResponseBody
@@ -2528,19 +2529,14 @@ public class FranchiseeController {
 
 		try {
 			String menuId = request.getParameter("menuId");
-			String frId=request.getParameter("frId");
 
 			menuId = menuId.substring(1, menuId.length() - 1);
 			menuId = menuId.replaceAll("\"", "");
 			logger.info("menuIds" + menuId);
 
-			frId = frId.substring(1, frId.length() - 1);
-			frId = frId.replaceAll("\"", "");
-			logger.info("frId" + frId);
-			
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 			map.add("menuId", menuId);
-			map.add("frId", frId);
+
 			RestTemplate restTemplate = new RestTemplate();
 			itemList = restTemplate.postForObject(Constants.url + "/getItemsByMenuIdMultiple", map, List.class);
 
