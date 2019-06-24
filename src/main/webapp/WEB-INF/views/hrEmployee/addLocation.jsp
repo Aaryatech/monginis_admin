@@ -1,3 +1,4 @@
+<html style="overflow-x: hidden;">
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -276,6 +277,7 @@
 				class="fa fa-chevron-up"></i></a>
 		</div>
 		<!-- END Content -->
+	</div>
 	</div>
 	<!-- END Container -->
 

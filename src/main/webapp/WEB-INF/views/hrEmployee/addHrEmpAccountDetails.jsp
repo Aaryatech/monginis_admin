@@ -1,3 +1,4 @@
+<html style="overflow-x: hidden;">
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -49,10 +50,10 @@
 								<i class="fa fa-bars"></i> Add Account Details
 							</h3>
 							<div class="box-tool">
-										<a href="${pageContext.request.contextPath}/showHrEmpList">Back
-											to List</a> <a data-action="collapse" href="#"><i
-											class="fa fa-chevron-up"></i></a>
-									</div>
+								<a href="${pageContext.request.contextPath}/showHrEmpList">Back
+									to List</a> <a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i></a>
+							</div>
 
 						</div>
 
@@ -527,106 +528,111 @@
 							<br>
 
 						</div>
+						<!-- div-content -->
 					</div>
+					<!-- box -->
 				</div>
-				<!-- END Main Content -->
-				<footer>
-					<p>2017 © MONGINIS.</p>
-				</footer>
-
-				<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-					class="fa fa-chevron-up"></i></a>
+				<!-- col-md-12 -->
 			</div>
-			<!-- END Content -->
+			<!-- row -->
+
+			<footer>
+				<p>2017 © MONGINIS.</p>
+			</footer>
+
+			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+				class="fa fa-chevron-up"></i></a>
+
+
 		</div>
-		<!-- END Container -->
+		<!-- Main Content -->
+	</div>
+	<!-- END Container -->
 
 
 
-		<script>
-			function calculateRatePerHr() {
-				var sal, nHrs;
-				sal = $("#grSal").val();
-				nHrs = $("#nHrs").val();
+	<script>
+		function calculateRatePerHr() {
+			var sal, nHrs;
+			sal = $("#grSal").val();
+			nHrs = $("#nHrs").val();
 
-				var noOfHrs = sal / nHrs;
+			var noOfHrs = sal / nHrs;
 
-				var result = 0;
-			
+			var result = 0;
 
-				if (parseFloat(nHrs) > 0) {
-					
-					result = noOfHrs.toFixed(2);
-				}
-				
+			if (parseFloat(nHrs) > 0) {
 
-				document.getElementById("rate").value = result;
+				result = noOfHrs.toFixed(2);
 			}
-		</script>
+
+			document.getElementById("rate").value = result;
+		}
+	</script>
 
 
-		<!--basic scripts-->
-		<script
-			src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
-		<script>
-			window.jQuery
-					|| document
-							.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
-		</script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
+	<!--basic scripts-->
+	<script
+		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+	<script>
+		window.jQuery
+				|| document
+						.write('<script src="${pageContext.request.contextPath}/resources/assets/jquery/jquery-2.0.3.min.js"><\/script>')
+	</script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap/js/bootstrap.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/jquery-cookie/jquery.cookie.js"></script>
 
-		<!--page specific plugin scripts-->
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
-
-
-		<!--page specific plugin scripts-->
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
+	<!--page specific plugin scripts-->
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.resize.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.pie.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
 
 
+	<!--page specific plugin scripts-->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 
 
 
-		<!--flaty scripts-->
-		<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
-		<script
-			src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
-		<!--page specific plugin scripts-->
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/clockface/js/clockface.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
-		<script type="text/javascript"
-			src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
+
+
+	<!--flaty scripts-->
+	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
+	<script
+		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
+	<!--page specific plugin scripts-->
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-fileupload/bootstrap-fileupload.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/chosen-bootstrap/chosen.jquery.min.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/clockface/js/clockface.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-timepicker/js/bootstrap-timepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-colorpicker/js/bootstrap-colorpicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-datepicker/js/bootstrap-datepicker.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
+	<script type="text/javascript"
+		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 </body>
 </html>

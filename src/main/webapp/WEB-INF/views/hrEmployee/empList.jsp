@@ -1,3 +1,4 @@
+<html style="overflow-x: hidden;">
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -77,7 +78,7 @@
 									<div class="clearfix"></div>
 									<div id="table-scroll" class="table-scroll">
 
-										<div id="faux-table" class="faux-table" aria="hidden">
+										<div id="faux-table" class="faux-table" aria="hidden" >
 											<table id="table2" class="main-table">
 												<thead>
 													<tr class="bgpink">
@@ -158,6 +159,7 @@
 						</div>
 					</div>
 				</div>
+			</div>
 				<!-- END Main Content -->
 				<footer>
 					<p>2017 © MONGINIS.</p>
@@ -165,8 +167,9 @@
 
 				<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 					class="fa fa-chevron-up"></i></a>
-			</div>
+			
 			<!-- END Content -->
+		</div>
 		</div>
 		<!-- END Container -->
 

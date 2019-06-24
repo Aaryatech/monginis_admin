@@ -1,3 +1,4 @@
+<html style="overflow-x: hidden;">
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
@@ -133,15 +134,17 @@
 													placeholder="DSC Code" class="form-control"
 													data-rule-required="true" value="${emp.empDsc}" />
 											</div>
-											<div   class="col-sm-2 col-lg-1 controls"  id="loader" style="display: none">
+											<div class="col-sm-2 col-lg-1 controls" id="loader"
+												style="display: none">
 												<img
-													src="${pageContext.request.contextPath}/resources/img/loader1.gif" style=" height="50%"; width="50%"; "/>
+													src="${pageContext.request.contextPath}/resources/img/loader1.gif"
+													style="" 50%"; width="50%" ; "/>
 
 											</div>
 
 											<div class="col-sm-1 col-lg-1 controls">
-												<input type="button" class="btn btn-primary" value="update" id="update"
-													onclick="updateDSC()">
+												<input type="button" class="btn btn-primary" value="update"
+													id="update" onclick="updateDSC()">
 											</div>
 
 										</div>
@@ -528,8 +531,7 @@
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 										<input type="submit" class="btn btn-primary" value="Submit">
-										<!-- 										<button type="button" class="btn">Cancel</button>
- -->
+
 									</div>
 								</div>
 							</form>
@@ -560,10 +562,11 @@
 										title="Type in a name">
 									</label>
 
-									<div class="clearfix"></div>
+
 									<div id="table-scroll" class="table-scroll">
 
-										<div id="faux-table" class="faux-table" aria="hidden">
+										<div id="faux-table" class="faux-table" aria="hidden"
+											>
 											<table id="table2" class="main-table">
 												<thead>
 													<tr class="bgpink">
@@ -637,26 +640,38 @@
 												</tbody>
 											</table>
 										</div>
+										<!-- table-wrap -->
 									</div>
+									<!-- table-scroll -->
 								</div>
+								<!-- box-content  for table -->
 
 							</div>
-						</div>
-					</div>
-				</div>
-				<!-- END Main Content -->
-				<footer>
-					<p>2017 © MONGINIS.</p>
-				</footer>
+							<!-- box for table -->
 
-				<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-					class="fa fa-chevron-up"></i></a>
+						</div>
+						<!-- box-content before form  -->
+					</div>
+					<!-- box -->
+				</div>
+				<!-- col-md-12 -->
 			</div>
+			<!-- row -->
+			
+			
+			<footer>
+				<p>2017 © MONGINIS.</p>
+			</footer>
+
+			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+				class="fa fa-chevron-up"></i></a>
+
 			<!-- END Content -->
 		</div>
-		<!-- END Container -->
+		<!-- END Main Content -->
+	
 
-	</div>
+	</div>	<!-- END main Container -->
 
 
 	<!-- Generate Random Number -->
@@ -766,7 +781,7 @@
 
 				$('#loader').hide();
 				$('#update').show();
-				
+
 				if (data.error == false) {
 					alert("DSC Code Updated Successfully");
 					window.location.reload();
