@@ -5,25 +5,40 @@ import java.util.List;
 
 public class GetOrderListResponse {
 
-   
-    private Info info;
-    
-    private List<GetOrder> getOder = null;
+	List<OrderItemSubCatTotal> orderItemSubCatTotalList;
 
-    public Info getInfo() {
-        return info;
-    }
+	private Info info;
 
-    public void setInfo(Info info) {
-        this.info = info;
-    }
+	private List<GetOrder> getOder = null;
 
-    public List<GetOrder> getGetOder() {
-        return getOder;
-    }
+	public Info getInfo() {
+		return info;
+	}
 
-    public void setGetOder(List<GetOrder> getOder) {
-        this.getOder = getOder;
-    }
+	public void setInfo(Info info) {
+		this.info = info;
+	}
+
+	public List<GetOrder> getGetOder() {
+		return getOder;
+	}
+
+	public void setGetOder(List<GetOrder> getOder) {
+		this.getOder = getOder;
+	}
+
+	public List<OrderItemSubCatTotal> getOrderItemSubCatTotalList() {
+		return orderItemSubCatTotalList;
+	}
+
+	public void setOrderItemSubCatTotalList(List<OrderItemSubCatTotal> orderItemSubCatTotalList) {
+		this.orderItemSubCatTotalList = orderItemSubCatTotalList;
+	}
+
+	@Override
+	public String toString() {
+		return "GetOrderListResponse [orderItemSubCatTotalList=" + orderItemSubCatTotalList + ", info=" + info
+				+ ", getOder=" + getOder + "]";
+	}
 
 }

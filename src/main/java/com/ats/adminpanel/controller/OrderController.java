@@ -1079,9 +1079,11 @@ public class OrderController {
 
 	@RequestMapping(value = "/searchOrdersProcessByItem", method = RequestMethod.GET) // getOrderListForAllFr new web
 																						// service
-	public @ResponseBody List<GetOrder> searchOrdersProcessByItem(HttpServletRequest request,
+	public @ResponseBody GetOrderListResponse searchOrdersProcessByItem(HttpServletRequest request,
 			HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("orders/orders");
+
+		GetOrderListResponse getOrdersResponse = new GetOrderListResponse();
 
 		// System.out.println("/inside search order process ");
 		// model.addObject("franchiseeList", franchiseeList);
@@ -1153,6 +1155,25 @@ public class OrderController {
 
 				orderList = orderListResponse.getGetOder();
 
+				getOrdersResponse.setGetOder(orderList);
+
+				getOrdersResponse.setGetOder(orderList);
+				try {
+
+					map = new LinkedMultiValueMap<String, Object>();
+
+					map.add("menuId", menuId);
+					map.add("date", date);
+					List<OrderItemSubCatTotal> orderItemSubCatTotalList = restTemplate1
+							.postForObject(Constants.url + "getSubCatOrderTotalAllFr", map, List.class);
+					getOrdersResponse.setOrderItemSubCatTotalList(orderItemSubCatTotalList);
+					System.out.println(
+							"orderItemSubCatTotalListorderItemSubCatTotalListorderItemSubCatTotalList list count is"
+									+ orderItemSubCatTotalList.toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
 				System.out.println("order list is " + orderList.toString());
 				System.out.println("order list count is" + orderList.size());
 
@@ -1183,9 +1204,29 @@ public class OrderController {
 						.postForObject(Constants.url + "getOrderListByItem", map, GetOrderListResponse.class);
 
 				orderList = orderListResponse.getGetOder();
+				getOrdersResponse.setGetOder(orderList);
+
+				try {
+
+					map = new LinkedMultiValueMap<String, Object>();
+
+					map.add("date", date);
+					map.add("menuId", menuId);
+					map.add("frId", frIdString);
+
+					List<OrderItemSubCatTotal> orderItemSubCatTotalList = restTemplate1
+							.postForObject(Constants.url + "getSubCatOrderTotal", map, List.class);
+					getOrdersResponse.setOrderItemSubCatTotalList(orderItemSubCatTotalList);
+					System.out.println(
+							"orderItemSubCatTotalListorderItemSubCatTotalListorderItemSubCatTotalList list count is"
+									+ orderItemSubCatTotalList.toString());
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 
 				System.out.println("order list is " + orderList.toString());
 				System.out.println("order list count is" + orderList.size());
+
 				model.addObject("orderList", orderList);
 				model.addObject("franchiseeList", franchiseeList);
 
@@ -1227,7 +1268,38 @@ public class OrderController {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
-		return orderList;
+		return getOrdersResponse;
+	}
+
+	@RequestMapping(value = "/updateOrderDetails", method = RequestMethod.GET)
+	public @ResponseBody Info updateOrderDetails(HttpServletRequest request, HttpServletResponse response) {
+
+		String ids = request.getParameter("ids");
+		String delDate = request.getParameter("delDate");
+		String prodDate = request.getParameter("prodDate");
+
+		System.out.println("--------------------------" + prodDate);
+		System.out.println("********************" + delDate);
+
+		/*
+		 * StringBuilder sb1 = new StringBuilder(); for (int i = 0; i < ids.length; i++)
+		 * { sb1 = sb1.append(ids[i] + ",");
+		 * 
+		 * } String orderIds = sb1.toString(); orderIds = orderIds.substring(0,
+		 * orderIds.length() - 1);
+		 */
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("orderIds", ids);
+		map.add("delDate", delDate);
+		map.add("prodDate", prodDate);
+		System.err.println(map.toString());
+		RestTemplate restTemp = new RestTemplate();
+
+		Info info = restTemp.postForObject(Constants.url + "updateOrderDetails", map, Info.class);
+
+		System.out.println(info.toString());
+
+		return info;
 	}
 
 }
