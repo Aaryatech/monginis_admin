@@ -2527,19 +2527,21 @@ public class FranchiseeController {
 		List<ItemIdOnly> itemList = null;
 
 		try {
-
-			System.out.println("hiiiiiiiiiiiiiii");
 			String menuId = request.getParameter("menuId");
-			StringBuilder sb = new StringBuilder();
+			String frId=request.getParameter("frId");
 
 			menuId = menuId.substring(1, menuId.length() - 1);
 			menuId = menuId.replaceAll("\"", "");
 			logger.info("menuIds" + menuId);
 
+			frId = frId.substring(1, frId.length() - 1);
+			frId = frId.replaceAll("\"", "");
+			logger.info("frId" + frId);
+			
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 			map.add("menuId", menuId);
+			map.add("frId", frId);
 			RestTemplate restTemplate = new RestTemplate();
-
 			itemList = restTemplate.postForObject(Constants.url + "/getItemsByMenuIdMultiple", map, List.class);
 
 			System.out.println("itemList" + itemList.toString());

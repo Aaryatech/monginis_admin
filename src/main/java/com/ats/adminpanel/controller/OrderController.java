@@ -226,7 +226,7 @@ public class OrderController {
 					e.printStackTrace();
 				}
 
-				System.out.println("order list is " + orderList.toString());
+				System.out.println("order list1 is " + getOrdersResponse.toString());
 				System.out.println("order list count is" + orderList.size());
 				model.addObject("orderList", orderList);
 				model.addObject("franchiseeList", franchiseeList);
