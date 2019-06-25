@@ -762,7 +762,8 @@ public class MasterController {
 
 	@RequestMapping(value = "/addHrEmp", method = RequestMethod.POST)
 	public String addHrEmp(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("photo") List<MultipartFile> file) {
+			@RequestParam("photo") List<MultipartFile> file, @RequestParam("file1") List<MultipartFile> imgFile1,
+			@RequestParam("file2") List<MultipartFile> imgFile2, @RequestParam("file3") List<MultipartFile> imgFile3) {
 
 		try {
 			int empId = 0;
@@ -801,7 +802,8 @@ public class MasterController {
 			int catId = Integer.parseInt(request.getParameter("cat_id"));
 			int locId = Integer.parseInt(request.getParameter("loc_id"));
 			int typeId = Integer.parseInt(request.getParameter("type_id"));
-			String bgId = request.getParameter("bloodGrp");
+			// String bgId = request.getParameter("bloodGrp");
+			String bgId = "0";
 
 			// dsc = request.getParameter("dsc");
 			String empCode = request.getParameter("emp_code");
@@ -811,18 +813,22 @@ public class MasterController {
 			String imageName = request.getParameter("prevPhoto");
 			String mobile1 = request.getParameter("mobile1");
 			String mobile2 = request.getParameter("mobile2");
-			String email = request.getParameter("email");
+			// String email = request.getParameter("email");
+			String email = "na";
 			String perAdd = request.getParameter("perAdd");
 			String tmpAdd = request.getParameter("tmpAdd");
 			String emrgPer1 = request.getParameter("emrgPer1");
 			String emrgNo1 = request.getParameter("emrgNo1");
 			String emrgPer2 = request.getParameter("emrgPer2");
 			String emrgNo2 = request.getParameter("emrgNo2");
-			String terms = request.getParameter("terms");
 			String strGender = request.getParameter("gender");
 			String strDob = request.getParameter("dob");
 
-			String strFile1, strFile2, gender, joinDate, lvReason, leaveDate, lock;
+			String strFile1 = request.getParameter("scan1");
+			String strFile2 = request.getParameter("scan2");
+			String strFile3 = request.getParameter("scan3");
+
+			String gender, joinDate, lvReason, leaveDate, lock, terms;
 			float grSal, nHrs, fRate, fYrExp, fMonExp;
 			int pf, esic, bonus, cl, sl, pl, salId;
 
@@ -830,8 +836,9 @@ public class MasterController {
 
 				SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
-				strFile1 = "na";
-				strFile2 = "na";
+				// strFile1 = "na";
+				// strFile2 = "na";
+				// strFile3 = "na";
 				grSal = 0;
 				nHrs = 0;
 				gender = "1";
@@ -849,11 +856,13 @@ public class MasterController {
 				lvReason = "na";
 				lock = "0";
 				salId = 0;
+				terms = "na";
 
 			} else {
 
-				strFile1 = emp.getScanCopy1();
-				strFile2 = emp.getScanCopy2();
+				// strFile1 = emp.getScanCopy1();
+				// strFile2 = emp.getScanCopy2();
+				// strFile3 = emp.getExVar2();
 				grSal = emp.getGrossSalary();
 				nHrs = emp.getNoOfHrs();
 				gender = emp.getGender();
@@ -871,8 +880,11 @@ public class MasterController {
 				lvReason = emp.getEmpLeavingReason();
 				lock = emp.getLockPeriod();
 				salId = emp.getSalaryId();
+				terms = emp.getTermConditions();
 
 			}
+
+			System.err.println("DSC TO SAVE *****************************************  " + dsc);
 
 			HttpSession session = request.getSession();
 			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
@@ -909,216 +921,6 @@ public class MasterController {
 			}
 
 			System.out.println("IMAGE NAME----------------- " + imageName);
-
-			SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd");
-			Calendar cal = Calendar.getInstance();
-
-			String dob = DateConvertor.convertToYMD(strDob);
-
-			Employee emp1 = new Employee(empId, dsc, empCode, compId, catId, typeId, deptId, locId, fName, mName, sName,
-					imageName, mobile1, mobile2, email, tmpAdd, perAdd, bgId, emrgPer1, emrgNo1, emrgPer2, emrgNo2,
-					fRate, joinDate, fYrExp, fMonExp, leaveDate, lvReason, lock, terms, salId, 1, 1, userId,
-					"" + dtFormat.format(cal.getTimeInMillis()), grSal, nHrs, strGender, dob, strFile1, strFile2, pf,
-					esic, bonus, cl, sl, pl);
-
-			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
-			map1.add("code", empCode);
-
-			Info result = restTemplate.postForObject(Constants.security_app_url + "transaction/checkUniqueEmpCode",
-					map1, Info.class);
-
-			System.err.println("RESULT------------------------------------------------------" + result);
-
-			boolean isValidCode = false;
-
-			if (result != null) {
-				System.err.println("IF CHK UNIQUE CODE------------------------------------------------------" + result);
-
-				if (result.getMessage().equalsIgnoreCase("Yes")) {
-					isValidCode = false;
-				} else if (result.getMessage().equalsIgnoreCase("No")) {
-					isValidCode = true;
-				}
-
-			}
-
-			System.err.println("IS VALID CODE------------------------------------------------------" + isValidCode);
-
-			if (isValidCode) {
-
-				// --------DSC--------
-
-				if (empId == 0) {
-					System.err.println("IF EMP ID=0------------------------------------------------------");
-
-					MultiValueMap<String, Object> map2 = new LinkedMultiValueMap<String, Object>();
-					map2.add("key", "dsc");
-
-					Settings settings = restTemplate.postForObject(
-							Constants.security_app_url + "master/getSettingsByKey", map2, Settings.class);
-
-					String dscNo = settings.getSettingValue();
-
-					emp1.setEmpDsc(dscNo);
-
-					System.err.println("IF SAVE EMP--------------------" + emp1);
-
-					Employee saveEmp = restTemplate.postForObject(Constants.security_app_url + "master/saveEmployee",
-							emp1, Employee.class);
-
-					System.err.println("Response: " + saveEmp.toString());
-
-					if (saveEmp.getEmpId() > 0) {
-
-						int val = Integer.parseInt(settings.getSettingValue());
-						val = val + 1;
-
-						String newVal = String.format("%03d", val);
-						System.err.println("NEW VAL ------------------- " + newVal);
-
-						MultiValueMap<String, Object> map3 = new LinkedMultiValueMap<String, Object>();
-						map3.add("settingsId", settings.getSettingId());
-						map3.add("value", newVal);
-
-						Info info = restTemplate.postForObject(
-								Constants.security_app_url + "master/updateSettingsValueByKey", map3, Info.class);
-
-						System.err.println("DSC UPDATE ------------ " + info);
-
-					}
-
-				} else {
-
-					System.err.println("ELSE------------------------------------- ");
-
-					Employee saveEmp = restTemplate.postForObject(Constants.security_app_url + "master/saveEmployee",
-							emp1, Employee.class);
-
-					System.err.println("Response: " + saveEmp.toString());
-				}
-			}
-
-			// return "redirect:/showAddHrEmp";
-
-		} catch (Exception e) {
-			System.out.println("Exception In Add Emp Process:" + e.getMessage());
-			e.printStackTrace();
-		}
-
-		return "redirect:/showAddHrEmp";
-	}
-
-	@RequestMapping(value = "/showHrEmpList", method = RequestMethod.GET)
-	public ModelAndView showHrEmpList(HttpServletRequest request, HttpServletResponse response) {
-
-		ModelAndView model = new ModelAndView("hrEmployee/empList");
-		try {
-			RestTemplate restTemplate = new RestTemplate();
-
-			EmpDisplay[] empArray = restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeList",
-					EmpDisplay[].class);
-			List<EmpDisplay> empList = new ArrayList<>(Arrays.asList(empArray));
-
-			model.addObject("empList", empList);
-			model.addObject("url", Constants.APP_IMAGE_URL);
-
-		} catch (Exception e) {
-			System.out.println("Exc In showAddEmp:" + e.getMessage());
-		}
-		return model;
-	}
-
-	@RequestMapping(value = "/addHrEmpAcc", method = RequestMethod.POST)
-	public String addHrEmpAcc(HttpServletRequest request, HttpServletResponse response,
-			@RequestParam("file1") List<MultipartFile> imgFile1, @RequestParam("file2") List<MultipartFile> imgFile2) {
-
-		try {
-			int empId = 0;
-
-			try {
-				empId = Integer.parseInt(request.getParameter("emp_id"));
-
-			} catch (Exception e) {
-				empId = 0;
-
-				System.out.println("In Catch of Add EMP Acc Exc:" + e.getMessage());
-			}
-
-			RestTemplate restTemplate = new RestTemplate();
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			map.add("empId", empId);
-
-			Employee emp = restTemplate.postForObject(Constants.security_app_url + "/master/getEmployeeById", map,
-					Employee.class);
-
-			String dsc = emp.getEmpDsc();
-			int compId = emp.getCompanyId();
-			int deptId = emp.getEmpDeptId();
-			int catId = emp.getEmpCatId();
-			int locId = emp.getLocId();
-			int typeId = emp.getEmpTypeId();
-			int salId = Integer.parseInt(request.getParameter("sal_id"));
-			String bgId = emp.getEmpBloodgrp();
-
-			// dsc = request.getParameter("dsc");
-			String empCode = emp.getEmpCode();
-			String fName = emp.getEmpFname();
-			String mName = emp.getEmpMname();
-			String sName = emp.getEmpSname();
-			String imageName = emp.getEmpPhoto();
-			String mobile1 = emp.getEmpMobile1();
-			String mobile2 = emp.getEmpMobile2();
-
-			String email = emp.getEmpEmail();
-			String perAdd = emp.getEmpAddressPerm();
-			String tmpAdd = emp.getEmpAddressTemp();
-
-			String emrgPer1 = emp.getEmpEmergencyPerson1();
-			String emrgNo1 = emp.getEmpEmergencyNo1();
-			String emrgPer2 = emp.getEmpEmergencyPerson2();
-			String emrgNo2 = emp.getEmpEmergencyNo2();
-			String rate = request.getParameter("rate");
-			String jDate = request.getParameter("jDate");
-			String yrExp = request.getParameter("yrExp");
-			String monExp = request.getParameter("monExp");
-			String lvDate = request.getParameter("lvDate");
-			String lvReason = request.getParameter("lvReason");
-			String lock = request.getParameter("lock");
-			String terms = emp.getTermConditions();
-
-			String strGrSal = request.getParameter("grSal");
-			String strNHrs = request.getParameter("nHrs");
-			String strGender = emp.getGender();
-			String strDob = emp.getDob();
-			String strFile1 = request.getParameter("scan1");
-			String strFile2 = request.getParameter("scan2");
-			String strPF = request.getParameter("pf");
-			String strEsic = request.getParameter("esic");
-			String strBonus = request.getParameter("bonus");
-			String strCL = request.getParameter("cl");
-			String strSL = request.getParameter("sl");
-			String strPL = request.getParameter("pl");
-
-			float grSal = Float.parseFloat(strGrSal);
-			float nHrs = Float.parseFloat(strNHrs);
-
-			int gender = Integer.parseInt(strGender);
-			int pf = Integer.parseInt(strPF);
-			int esic = Integer.parseInt(strEsic);
-			int bonus = Integer.parseInt(strBonus);
-			int cl = Integer.parseInt(strCL);
-			int sl = Integer.parseInt(strSL);
-			int pl = Integer.parseInt(strPL);
-
-			float fRate = Float.parseFloat(rate);
-
-			float fYrExp = Float.parseFloat(yrExp);
-			float fMonExp = Float.parseFloat(monExp);
-
-			HttpSession session = request.getSession();
-			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
-
-			int userId = userResponse.getUser().getId();
 
 			if (!imgFile1.get(0).getOriginalFilename().equalsIgnoreCase("")) {
 				strFile1 = null;
@@ -1182,6 +984,352 @@ public class MasterController {
 
 			System.out.println("strFile2 NAME----------------- " + strFile2);
 
+			if (!imgFile3.get(0).getOriginalFilename().equalsIgnoreCase("")) {
+				strFile3 = null;
+
+				VpsImageUpload upload = new VpsImageUpload();
+
+				Calendar cal1 = Calendar.getInstance();
+				long lo = cal1.getTimeInMillis();
+
+				String curTimeStamp = String.valueOf(lo);
+
+				strFile3 = curTimeStamp + "_" + imgFile3.get(0).getOriginalFilename().replace(' ', '_');
+
+				try {
+
+					upload.saveUploadedFiles(imgFile3, Constants.APP_IMAGE_TYPE, strFile3);
+					System.out.println("upload method called " + imgFile3.toString());
+
+				} catch (IOException e) {
+
+					System.out.println("Exce in File Upload In Emp Insert " + e.getMessage());
+					e.printStackTrace();
+				}
+
+			}
+
+			if (strFile3 == null) {
+				strFile3 = "na";
+			}
+
+			System.out.println("strFile3 NAME----------------- " + strFile3);
+
+			SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd");
+			Calendar cal = Calendar.getInstance();
+
+			String dob = DateConvertor.convertToYMD(strDob);
+
+			Employee emp1 = new Employee(empId, dsc, empCode, compId, catId, typeId, deptId, locId, fName, mName, sName,
+					imageName, mobile1, mobile2, email, tmpAdd, perAdd, bgId, emrgPer1, emrgNo1, emrgPer2, emrgNo2,
+					fRate, joinDate, fYrExp, fMonExp, leaveDate, lvReason, lock, terms, salId, 1, 1, userId,
+					"" + dtFormat.format(cal.getTimeInMillis()), grSal, nHrs, strGender, dob, strFile1, strFile2, pf,
+					esic, bonus, cl, sl, pl, strFile3);
+
+			boolean isValidCode = false, isValidDSC = false;
+
+			MultiValueMap<String, Object> map1 = new LinkedMultiValueMap<String, Object>();
+			map1.add("code", empCode);
+
+			Info result = null;
+			if (empId == 0) {
+				result = restTemplate.postForObject(Constants.security_app_url + "transaction/checkUniqueEmpCode", map1,
+						Info.class);
+			} else {
+				result = restTemplate.postForObject(Constants.security_app_url + "transaction/checkUniqueEmpCodeList",
+						map1, Info.class);
+
+			}
+			System.err.println("RESULT------------------------------------------------------" + result);
+
+			if (result != null) {
+				System.err.println("IF CHK UNIQUE CODE------------------------------------------------------" + result);
+
+				if (result.getMessage().equalsIgnoreCase("Yes")) {
+					isValidCode = false;
+				} else if (result.getMessage().equalsIgnoreCase("No")) {
+					isValidCode = true;
+				}
+
+			}
+
+			System.err.println("IS VALID CODE------------------------------------------------------" + isValidCode);
+
+			// -------------------CHECK DSC UNIQUE------------
+
+			MultiValueMap<String, Object> map4 = new LinkedMultiValueMap<String, Object>();
+			map4.add("dsc", dsc);
+
+			Info result1 = null;
+			if (empId == 0) {
+				result1 = restTemplate.postForObject(Constants.security_app_url + "transaction/checkUniqueEmpDSC", map4,
+						Info.class);
+			} else {
+				result1 = restTemplate.postForObject(Constants.security_app_url + "transaction/checkUniqueEmpDSCList",
+						map4, Info.class);
+			}
+
+			System.err.println("DSC RESULT------------------------------------------------------" + result1);
+
+			if (result1 != null) {
+				System.err.println("IF CHK UNIQUE DSC------------------------------------------------------" + result1);
+
+				if (result1.getMessage().equalsIgnoreCase("Yes")) {
+					isValidDSC = false;
+				} else if (result1.getMessage().equalsIgnoreCase("No")) {
+					isValidDSC = true;
+				}
+
+			}
+
+			System.err.println("IS VALID DSC------------------------------------------------------" + isValidDSC);
+
+			if (empId > 0) {
+
+				boolean editCodeMatch = false, editDSCMatch = false;
+
+				if (emp.getEmpCode().equalsIgnoreCase(empCode)) {
+					editCodeMatch = true;
+				}
+
+				if (emp.getEmpDsc().equalsIgnoreCase(dsc)) {
+					editDSCMatch = true;
+				}
+
+				if (editCodeMatch && editDSCMatch) {
+					Employee saveEmp = restTemplate.postForObject(Constants.security_app_url + "master/saveEmployee",
+							emp1, Employee.class);
+
+					System.err.println("Response: " + saveEmp.toString());
+
+				} else if (editCodeMatch && !editDSCMatch) {
+
+					if (isValidDSC) {
+						Employee saveEmp = restTemplate.postForObject(
+								Constants.security_app_url + "master/saveEmployee", emp1, Employee.class);
+
+						System.err.println("Response: " + saveEmp.toString());
+
+					}
+
+				} else if (!editCodeMatch && editDSCMatch) {
+
+					if (isValidCode) {
+						Employee saveEmp = restTemplate.postForObject(
+								Constants.security_app_url + "master/saveEmployee", emp1, Employee.class);
+
+						System.err.println("Response: " + saveEmp.toString());
+
+					}
+
+				} else {
+
+					if (isValidCode && isValidDSC) {
+
+						Employee saveEmp = restTemplate.postForObject(
+								Constants.security_app_url + "master/saveEmployee", emp1, Employee.class);
+
+						System.err.println("Response: " + saveEmp.toString());
+					}
+
+				}
+
+			} else {
+				if (isValidCode && isValidDSC) {
+
+					Employee saveEmp = restTemplate.postForObject(Constants.security_app_url + "master/saveEmployee",
+							emp1, Employee.class);
+
+					System.err.println("Response: " + saveEmp.toString());
+				}
+
+			}
+
+			/*
+			 * if (isValidCode && isValidDSC) {
+			 * 
+			 * Employee saveEmp = restTemplate.postForObject(Constants.security_app_url +
+			 * "master/saveEmployee", emp1, Employee.class);
+			 * 
+			 * System.err.println("Response: " + saveEmp.toString());
+			 */
+			// --------DSC--------
+
+			/*
+			 * if (empId == 0) { System.err.
+			 * println("IF EMP ID=0------------------------------------------------------");
+			 * 
+			 * MultiValueMap<String, Object> map2 = new LinkedMultiValueMap<String,
+			 * Object>(); map2.add("key", "dsc");
+			 * 
+			 * Settings settings = restTemplate.postForObject( Constants.security_app_url +
+			 * "master/getSettingsByKey", map2, Settings.class);
+			 * 
+			 * String dscNo = settings.getSettingValue();
+			 * 
+			 * emp1.setEmpDsc(dscNo);
+			 * 
+			 * System.err.println("IF SAVE EMP--------------------" + emp1);
+			 * 
+			 * Employee saveEmp = restTemplate.postForObject(Constants.security_app_url +
+			 * "master/saveEmployee", emp1, Employee.class);
+			 * 
+			 * System.err.println("Response: " + saveEmp.toString());
+			 * 
+			 * if (saveEmp.getEmpId() > 0) {
+			 * 
+			 * int val = Integer.parseInt(settings.getSettingValue()); val = val + 1;
+			 * 
+			 * String newVal = String.format("%03d", val);
+			 * System.err.println("NEW VAL ------------------- " + newVal);
+			 * 
+			 * MultiValueMap<String, Object> map3 = new LinkedMultiValueMap<String,
+			 * Object>(); map3.add("settingsId", settings.getSettingId()); map3.add("value",
+			 * newVal);
+			 * 
+			 * Info info = restTemplate.postForObject( Constants.security_app_url +
+			 * "master/updateSettingsValueByKey", map3, Info.class);
+			 * 
+			 * System.err.println("DSC UPDATE ------------ " + info);
+			 * 
+			 * }
+			 * 
+			 * } else {
+			 * 
+			 * System.err.println("ELSE------------------------------------- ");
+			 * 
+			 * Employee saveEmp = restTemplate.postForObject(Constants.security_app_url +
+			 * "master/saveEmployee", emp1, Employee.class);
+			 * 
+			 * System.err.println("Response: " + saveEmp.toString()); }
+			 */
+			// }
+
+			// return "redirect:/showAddHrEmp";
+
+		} catch (Exception e) {
+			System.out.println("Exception In Add Emp Process:" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return "redirect:/showAddHrEmp";
+	}
+
+	@RequestMapping(value = "/showHrEmpList", method = RequestMethod.GET)
+	public ModelAndView showHrEmpList(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("hrEmployee/empList");
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+
+			EmpDisplay[] empArray = restTemplate.getForObject(Constants.security_app_url + "master/allEmployeeList",
+					EmpDisplay[].class);
+			List<EmpDisplay> empList = new ArrayList<>(Arrays.asList(empArray));
+
+			model.addObject("empList", empList);
+			model.addObject("url", Constants.APP_IMAGE_URL);
+
+		} catch (Exception e) {
+			System.out.println("Exc In showAddEmp:" + e.getMessage());
+		}
+		return model;
+	}
+
+	@RequestMapping(value = "/addHrEmpAcc", method = RequestMethod.POST)
+	public String addHrEmpAcc(HttpServletRequest request, HttpServletResponse response) {
+
+		try {
+			int empId = 0;
+
+			try {
+				empId = Integer.parseInt(request.getParameter("emp_id"));
+
+			} catch (Exception e) {
+				empId = 0;
+
+				System.out.println("In Catch of Add EMP Acc Exc:" + e.getMessage());
+			}
+
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("empId", empId);
+
+			Employee emp = restTemplate.postForObject(Constants.security_app_url + "/master/getEmployeeById", map,
+					Employee.class);
+
+			String dsc = emp.getEmpDsc();
+			int compId = emp.getCompanyId();
+			int deptId = emp.getEmpDeptId();
+			int catId = emp.getEmpCatId();
+			int locId = emp.getLocId();
+			int typeId = emp.getEmpTypeId();
+			int salId = Integer.parseInt(request.getParameter("sal_id"));
+			String bgId = emp.getEmpBloodgrp();
+
+			// dsc = request.getParameter("dsc");
+			String empCode = emp.getEmpCode();
+			String fName = emp.getEmpFname();
+			String mName = emp.getEmpMname();
+			String sName = emp.getEmpSname();
+			String imageName = emp.getEmpPhoto();
+			String mobile1 = emp.getEmpMobile1();
+			String mobile2 = emp.getEmpMobile2();
+
+			String email = emp.getEmpEmail();
+			String perAdd = emp.getEmpAddressPerm();
+			String tmpAdd = emp.getEmpAddressTemp();
+
+			String emrgPer1 = emp.getEmpEmergencyPerson1();
+			String emrgNo1 = emp.getEmpEmergencyNo1();
+			String emrgPer2 = emp.getEmpEmergencyPerson2();
+			String emrgNo2 = emp.getEmpEmergencyNo2();
+			String rate = request.getParameter("rate");
+			String jDate = request.getParameter("jDate");
+			String yrExp = request.getParameter("yrExp");
+			String monExp = request.getParameter("monExp");
+			String lvDate = request.getParameter("lvDate");
+			String lvReason = request.getParameter("lvReason");
+			String lock = request.getParameter("lock");
+			// String terms = emp.getTermConditions();
+
+			String strGrSal = request.getParameter("grSal");
+			String strNHrs = request.getParameter("nHrs");
+			String strGender = emp.getGender();
+			String strDob = emp.getDob();
+
+			String strPF = request.getParameter("pf");
+			String strEsic = request.getParameter("esic");
+			String strBonus = request.getParameter("bonus");
+			String strCL = request.getParameter("cl");
+			String strSL = request.getParameter("sl");
+			String strPL = request.getParameter("pl");
+			String terms = request.getParameter("terms");
+
+			String strFile1 = emp.getScanCopy1();
+			String strFile2 = emp.getScanCopy2();
+			String strFile3 = emp.getExVar2();
+
+			float grSal = Float.parseFloat(strGrSal);
+			float nHrs = Float.parseFloat(strNHrs);
+
+			int gender = Integer.parseInt(strGender);
+			int pf = Integer.parseInt(strPF);
+			int esic = Integer.parseInt(strEsic);
+			int bonus = Integer.parseInt(strBonus);
+			int cl = Integer.parseInt(strCL);
+			int sl = Integer.parseInt(strSL);
+			int pl = Integer.parseInt(strPL);
+
+			float fRate = Float.parseFloat(rate);
+
+			float fYrExp = Float.parseFloat(yrExp);
+			float fMonExp = Float.parseFloat(monExp);
+
+			HttpSession session = request.getSession();
+			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
+
+			int userId = userResponse.getUser().getId();
+
 			SimpleDateFormat dtFormat = new SimpleDateFormat("yyyy-MM-dd");
 			Calendar cal = Calendar.getInstance();
 
@@ -1193,7 +1341,7 @@ public class MasterController {
 					imageName, mobile1, mobile2, email, tmpAdd, perAdd, bgId, emrgPer1, emrgNo1, emrgPer2, emrgNo2,
 					fRate, joinDate, fYrExp, fMonExp, leaveDate, lvReason, lock, terms, salId, 1, 1, userId,
 					"" + dtFormat.format(cal.getTimeInMillis()), grSal, nHrs, strGender, strDob, strFile1, strFile2, pf,
-					esic, bonus, cl, sl, pl);
+					esic, bonus, cl, sl, pl, strFile3);
 
 			Employee saveEmp = restTemplate.postForObject(Constants.security_app_url + "master/saveEmployee", emp1,
 					Employee.class);
@@ -1442,6 +1590,35 @@ public class MasterController {
 
 		} catch (Exception e) {
 			System.out.println("get emp wise Report  " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		return result;
+	}
+
+	// --------------CHECK UNIQUE EMP DSC----------------------------------
+
+	@RequestMapping(value = "/checkuniqueEmpDSCProcess", method = RequestMethod.GET)
+	public @ResponseBody Info checkuniqueEmpDSC(HttpServletRequest request, HttpServletResponse response) {
+
+		Info result = new Info();
+
+		try {
+
+			String dsc = request.getParameter("dsc");
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+			map.add("dsc", dsc);
+
+			result = restTemplate.postForObject(Constants.security_app_url + "transaction/checkUniqueEmpDSC", map,
+					Info.class);
+
+			System.err.println("result DSC *********///////////////***************" + result);
+
+		} catch (Exception e) {
+			System.out.println("checkuniqueEmpDSCProcess  " + e.getMessage());
 			e.printStackTrace();
 
 		}

@@ -124,7 +124,7 @@ private int empId;
 			String empLeavingDate, String empLeavingReason, String lockPeriod, String termConditions, int salaryId,
 			int delStatus, int isActive, int makerUserId, String makerEnterDatetime, float grossSalary, float noOfHrs,
 			String gender, String dob, String scanCopy1, String scanCopy2, Integer pf, Integer esic, Integer bonus,
-			Integer cl, Integer sl, Integer pl) {
+			Integer cl, Integer sl, Integer pl,String exVar2) {
 		super();
 		this.empId = empId;
 		this.empDsc = empDsc;
@@ -173,6 +173,7 @@ private int empId;
 		this.cl = cl;
 		this.sl = sl;
 		this.pl = pl;
+		this.exVar2=exVar2;
 	}
 
 	public int getEmpId() {
