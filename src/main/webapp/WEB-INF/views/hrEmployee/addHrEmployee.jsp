@@ -15,6 +15,9 @@
 
 	<c:url var="updateDSCCode" value="/updateDSCCode"></c:url>
 
+	<c:url var="checkuniqueEmpDSCProcess" value="/checkuniqueEmpDSCProcess"></c:url>
+
+
 
 
 	<div class="container" id="main-container">
@@ -63,7 +66,8 @@
 
 							<form action="${pageContext.request.contextPath}/addHrEmp"
 								class="form-horizontal" method="post" id="validation-form"
-								onsubmit="return validation()" enctype="multipart/form-data">
+								enctype="multipart/form-data">
+								
 
 								<input type="hidden" name="emp_id" id="emp_id"
 									value="${emp.empId}" /> <input type="hidden" name="oldDsc"
@@ -124,31 +128,33 @@
 
 
 
-									<c:if test="${emp.empDsc>0}">
+									<%-- <c:if test="${emp.empDsc>0}"> --%>
 
-										<div class="col2">
-											<label class="col-sm-3 col-lg-2 control-label">DSC
-												Code </label>
-											<div class="col-sm-2 col-lg-2 controls">
-												<input type="text" name="dsc" id="dsc" readonly="readonly"
-													placeholder="DSC Code" class="form-control"
-													data-rule-required="true" value="${emp.empDsc}" />
-											</div>
-											<div class="col-sm-2 col-lg-1 controls" id="loader"
-												style="display: none">
-												<img
-													src="${pageContext.request.contextPath}/resources/img/loader1.gif"
-													style="" 50%"; width="50%" ; "/>
-
-											</div>
-
-											<div class="col-sm-1 col-lg-1 controls">
-												<input type="button" class="btn btn-primary" value="update"
-													id="update" onclick="updateDSC()">
-											</div>
+									<div class="col2">
+										<label class="col-sm-3 col-lg-2 control-label">DSC
+											Code </label>
+										<div class="col-sm-2 col-lg-4 controls">
+											<input type="text" name="dsc" id="dsc" placeholder="DSC Code"
+												onchange="checkUniqueEmpDsc()" class="form-control"
+												data-rule-required="true" value="${emp.empDsc}" /><span
+												id="uniqueDsc" hidden="hidden"> <font color="red">Employee
+													DSC Code Already Exists!</font></span>
+										</div>
+										<%-- <div class="col-sm-2 col-lg-1 controls" id="loader"
+											style="display: none">
+											<img
+												src="${pageContext.request.contextPath}/resources/img/loader1.gif"
+												style="" 50%"; width="50%" ; "/>
 
 										</div>
-									</c:if>
+
+										<div class="col-sm-1 col-lg-1 controls">
+											<input type="button" class="btn btn-primary" value="update"
+												id="update" onclick="updateDSC()">
+										</div> --%>
+
+									</div>
+									<%-- </c:if> --%>
 
 								</div>
 
@@ -356,14 +362,14 @@
 
 								<div class="form-group">
 
-									<div class="col2">
+									<div class="col2" style="display: none;">
 										<label class="col-sm-3 col-lg-2 control-label">Select
 											Blood Group </label>
 										<div class="col-sm-3 col-lg-4 controls">
 											<select name="bloodGrp" data-placeholder="Please Select"
 												id="bloodGrp"
 												class="form-control form-control-select2 select2-hidden-accessible"
-												tabindex="" aria-hidden="true" data-rule-required="true">
+												tabindex="" aria-hidden="true">
 												<option value="">Please Select</option>
 
 												<option ${emp.empBloodgrp == '0'  ? 'Selected': '' }
@@ -390,12 +396,12 @@
 									</div>
 
 
-									<div class="col2">
+									<div class="col2" style="display: none;">
 										<label class="col-sm-3 col-lg-2 control-label">Email </label>
 										<div class="col-sm-3 col-lg-4 controls">
 											<input type="text" name="email" id="email"
 												placeholder="Email Address" class="form-control"
-												data-rule-required="true" value="${emp.empEmail}" />
+												value="${emp.empEmail}" />
 										</div>
 									</div>
 								</div>
@@ -511,21 +517,121 @@
 								</div>
 
 
-
 								<div class="form-group">
+
+									<div class="col2">
+										<label class="col-sm-3 col-lg-2 control-label">Scan
+											Copy 1</label>
+										<div class="col-sm-9 col-lg-4 controls">
+											<div class="fileupload fileupload-new"
+												data-provides="fileupload">
+												<div class="fileupload-new img-thumbnail"
+													style="width: 200px; height: 150px;">
+													<!-- <img
+													src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
+													alt="" /> -->
+													<img src="${url}${emp.scanCopy1}"
+														onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';" />
+
+
+												</div>
+												<div
+													class="fileupload-preview fileupload-exists img-thumbnail"
+													style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+												<div>
+													<span class="btn btn-default btn-file"><span
+														class="fileupload-new">Select File</span> <span
+														class="fileupload-exists">Change</span> <input type="file"
+														class="file-input" name="file1" id="file1" /></span> <a href="#"
+														class="btn btn-default fileupload-exists"
+														data-dismiss="fileupload">Remove</a>
+												</div>
+											</div>
+
+										</div>
+									</div>
 
 
 									<div class="col2">
-										<label class="col-sm-3 col-lg-2 control-label">Terms
-											and Conditions </label>
-										<div class="col-sm-3 col-lg-10 controls">
-											<textarea name="terms" id="terms"
-												placeholder="Terms and Conditions" class="form-control"
-												data-rule-required="true">${emp.termConditions}</textarea>
+										<label class="col-sm-3 col-lg-2 control-label">Scan
+											Copy 2</label>
+										<div class="col-sm-9 col-lg-4 controls">
+											<div class="fileupload fileupload-new"
+												data-provides="fileupload">
+												<div class="fileupload-new img-thumbnail"
+													style="width: 200px; height: 150px;">
+													<!-- <img
+													src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
+													alt="" /> -->
+													<img src="${url}${emp.scanCopy2}"
+														onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';" />
+
+
+												</div>
+												<div
+													class="fileupload-preview fileupload-exists img-thumbnail"
+													style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+												<div>
+													<span class="btn btn-default btn-file"><span
+														class="fileupload-new">Select File</span> <span
+														class="fileupload-exists">Change</span> <input type="file"
+														class="file-input" name="file2" id="file2" /></span> <a href="#"
+														class="btn btn-default fileupload-exists"
+														data-dismiss="fileupload">Remove</a>
+												</div>
+											</div>
+
+										</div>
+									</div>
+
+
+								</div>
+
+
+
+								<div class="form-group">
+
+									<div class="col2">
+										<label class="col-sm-3 col-lg-2 control-label">Scan
+											Copy 3</label>
+										<div class="col-sm-9 col-lg-4 controls">
+											<div class="fileupload fileupload-new"
+												data-provides="fileupload">
+												<div class="fileupload-new img-thumbnail"
+													style="width: 200px; height: 150px;">
+													<!-- <img
+													src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
+													alt="" /> -->
+													<img src="${url}${emp.exVar2}"
+														onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';" />
+
+
+												</div>
+												<div
+													class="fileupload-preview fileupload-exists img-thumbnail"
+													style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
+												<div>
+													<span class="btn btn-default btn-file"><span
+														class="fileupload-new">Select File</span> <span
+														class="fileupload-exists">Change</span> <input type="file"
+														class="file-input" name="file3" id="file3" /></span> <a href="#"
+														class="btn btn-default fileupload-exists"
+														data-dismiss="fileupload">Remove</a>
+												</div>
+											</div>
+
 										</div>
 									</div>
 
 								</div>
+
+								<div>
+									<input type="hidden" name="scan1" value="${emp.scanCopy1}">
+									<input type="hidden" name="scan2" value="${emp.scanCopy2}">
+									<input type="hidden" name="scan3" value="${emp.exVar2}">
+								</div>
+
+
 
 								<br>
 								<div class="form-group">
@@ -551,7 +657,7 @@
 
 								<div class="box-content">
 
-									<%-- <jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include> --%>
+									<%-- <jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>  --%>
 
 									<div class="col-md-9"></div>
 									<label for="search" class="col-md-3" id="search"> <i
@@ -562,11 +668,12 @@
 										title="Type in a name">
 									</label>
 
+									<div class="clearfix"></div>
 
 									<div id="table-scroll" class="table-scroll">
 
-										<div id="faux-table" class="faux-table" aria="hidden"
-											>
+
+										<div id="faux-table" class="faux-table" aria="hidden">
 											<table id="table2" class="main-table">
 												<thead>
 													<tr class="bgpink">
@@ -585,6 +692,9 @@
 											</table>
 
 										</div>
+
+
+
 										<div class="table-wrap">
 
 											<table id="table1" class="table table-advance">
@@ -657,8 +767,8 @@
 				<!-- col-md-12 -->
 			</div>
 			<!-- row -->
-			
-			
+
+
 			<footer>
 				<p>2017 © MONGINIS.</p>
 			</footer>
@@ -669,9 +779,10 @@
 			<!-- END Content -->
 		</div>
 		<!-- END Main Content -->
-	
 
-	</div>	<!-- END main Container -->
+
+	</div>
+	<!-- END main Container -->
 
 
 	<!-- Generate Random Number -->
@@ -710,29 +821,45 @@
 		}
 	</script>
 
+	<!-- Check Emp DSC for unique -->
+	<script>
+		function checkUniqueEmpDsc() {
+		
+			var dsc;
+			dsc = $("#dsc").val();
+
+			if (dsc == null) {
+				alert("Please Insert Employee DSC")
+			} else {
+
+				$.getJSON('${checkuniqueEmpDSCProcess}',
+
+				{
+					dsc : dsc,
+					ajax : 'true'
+
+				}, function(data) {
+
+					if (data.error == true) {
+						$("#uniqueDsc").show();
+						document.getElementById('dsc').value = " ";
+					} else {
+						$("#uniqueDsc").hide();
+					}
+
+				});//data function
+
+			}//else
+
+		}
+	</script>
+
+
 	<!-- Check Emp Code for unique -->
 	<script>
 		function checkUniqueEmpCode() {
 			var empCode;
 			empCode = $("#emp_code").val();
-
-			/* var dob=$("#dob").val();
-			alert("dob - "+dob);
-			var currentDate = new Date();
-			alert("curr - "+currentDate);
-			
-			var date = dateEntered.substring(0, 2);
-			var month = dateEntered.substring(3, 5);
-			var year = dateEntered.substring(6, 10);
-			
-			var dateToCompare = new Date(year, month - 1, date);
-			
-
-			if (dateToCompare > currentDate) {
-			alert("Please enter DOB less than Current Date ");
-			document.getElementById('dob').value = "";
-			}
-			 */
 
 			if (empCode == null) {
 				alert("Please Insert Employee Code")
@@ -748,6 +875,7 @@
 
 					if (data.error == true) {
 						$("#uniqueCode").show();
+						document.getElementById('emp_code').value = " ";
 					} else {
 						$("#uniqueCode").hide();
 					}
@@ -798,8 +926,16 @@
 			var empCode;
 			empCode = $("#emp_code").val();
 
-			if (empCode == null) {
+			
+
+			var dsc;
+			dsc = $("#dsc").val();
+			
+
+			if (empCode == "") {
 				alert("Please Insert Employee Code")
+			}else if (dsc == "") {
+				alert("Please Insert Employee DSC Code")
 			} else {
 
 				$.getJSON('${checkuniqueEmpCodeProcess}',
@@ -813,6 +949,7 @@
 					if (data.error == true) {
 						alert("Employee Code Already Exists!");
 						$("#uniqueCode").show();
+						document.getElementById('emp_code').value = " ";
 						return false;
 					} else {
 						$("#uniqueCode").hide();
@@ -820,6 +957,28 @@
 					}
 
 				});//data function
+				
+				
+				
+				 $.getJSON('${checkuniqueEmpDSCProcess}',
+
+						{
+							dsc : dsc,
+							ajax : 'true'
+
+						}, function(data) {
+
+							if (data.error == true) {
+								alert("Employee DSC Already Exists!");
+								$("#uniqueDsc").show();
+								document.getElementById('dsc').value = " ";
+								return false;
+							} else {
+								$("#uniqueDsc").hide();
+								return true;
+							}
+
+						});//data function 
 
 			}//else
 

@@ -140,7 +140,7 @@
 										
 							<div id="table-scroll" class="table-scroll">
 								 		
-								<div id="faux-table" class="faux-table" aria="hidden" >
+								<div id="faux-table" class="faux-table" aria="hidden" style="display:none;">
 									<table id="table2" class="main-table">
 											<thead>
 												<tr class="bgpink">

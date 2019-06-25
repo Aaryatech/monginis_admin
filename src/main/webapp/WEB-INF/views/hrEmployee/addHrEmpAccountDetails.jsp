@@ -372,7 +372,7 @@
 
 								</div>
 
-								<div class="form-group">
+								 <div class="form-group">
 
 									<div class="col2">
 										<label class="col-sm-3 col-lg-2 control-label">Sick
@@ -436,84 +436,28 @@
 								</div>
 
 
-								<div>
+							<%-- 	<div>
 									<input type="hidden" name="scan1" value="${emp.scanCopy1}">
 									<input type="hidden" name="scan2" value="${emp.scanCopy2}">
-								</div>
+								</div> --%>
 
+
+								
 
 								<div class="form-group">
 
 
 									<div class="col2">
-										<label class="col-sm-3 col-lg-2 control-label">Scan
-											Copy 1</label>
-										<div class="col-sm-9 col-lg-4 controls">
-											<div class="fileupload fileupload-new"
-												data-provides="fileupload">
-												<div class="fileupload-new img-thumbnail"
-													style="width: 200px; height: 150px;">
-													<!-- <img
-													src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
-													alt="" /> -->
-													<img src="${url}${emp.scanCopy1}"
-														onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';" />
-
-
-												</div>
-												<div
-													class="fileupload-preview fileupload-exists img-thumbnail"
-													style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-												<div>
-													<span class="btn btn-default btn-file"><span
-														class="fileupload-new">Select File</span> <span
-														class="fileupload-exists">Change</span> <input type="file"
-														class="file-input" name="file1" id="file1" /></span> <a href="#"
-														class="btn btn-default fileupload-exists"
-														data-dismiss="fileupload">Remove</a>
-												</div>
-											</div>
-
+										<label class="col-sm-3 col-lg-2 control-label">Terms
+											and Conditions </label>
+										<div class="col-sm-3 col-lg-10 controls">
+											<textarea name="terms" id="terms"
+												placeholder="Terms and Conditions" class="form-control"
+												data-rule-required="true">${emp.termConditions}</textarea>
 										</div>
 									</div>
-
-
-									<div class="col2">
-										<label class="col-sm-3 col-lg-2 control-label">Scan
-											Copy 2</label>
-										<div class="col-sm-9 col-lg-4 controls">
-											<div class="fileupload fileupload-new"
-												data-provides="fileupload">
-												<div class="fileupload-new img-thumbnail"
-													style="width: 200px; height: 150px;">
-													<!-- <img
-													src="http://www.placehold.it/200x150/EFEFEF/AAAAAA&amp;text=no+image"
-													alt="" /> -->
-													<img src="${url}${emp.scanCopy2}"
-														onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';" />
-
-
-												</div>
-												<div
-													class="fileupload-preview fileupload-exists img-thumbnail"
-													style="max-width: 200px; max-height: 150px; line-height: 20px;"></div>
-												<div>
-													<span class="btn btn-default btn-file"><span
-														class="fileupload-new">Select File</span> <span
-														class="fileupload-exists">Change</span> <input type="file"
-														class="file-input" name="file2" id="file2" /></span> <a href="#"
-														class="btn btn-default fileupload-exists"
-														data-dismiss="fileupload">Remove</a>
-												</div>
-											</div>
-
-										</div>
-									</div>
-
 
 								</div>
-
-
 
 
 								<br>
