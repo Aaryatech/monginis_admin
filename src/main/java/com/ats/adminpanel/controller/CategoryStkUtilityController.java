@@ -288,7 +288,7 @@ public class CategoryStkUtilityController {
 
 					int frId = franchiseList.get(j).getFrId();
 					int qty = Integer.parseInt(
-							request.getParameter("orderQty" + frId + "" + subCategoryList.get(j).getSubCatId()));
+							request.getParameter("orderQty" + frId + "" + subCategoryList.get(i).getSubCatId()));
 					System.out.println("qty" + qty);
 
 					// System.out.println("menuId"+menuId);
