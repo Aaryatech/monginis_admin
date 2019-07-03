@@ -798,6 +798,10 @@ public class FranchiseeController {
 
 		specialCakeList = spCakeResponse.getSpecialCake();
 
+		// Album[] album = restTemplate.getForObject(Constants.url + "getAlbumList",
+		// Album[].class);
+		// albumCakeList = new ArrayList<Album>(Arrays.asList(album));
+
 		return specialCakeList;
 
 	}
@@ -851,7 +855,69 @@ public class FranchiseeController {
 			if (menuList.get(i).getMenuId() == franchiseeList.getMenuId()) {
 				menuName = menuList.get(i).getMenuTitle();
 
-				if (menuList.get(i).getMainCatId() == 5) {
+				if (menuList.get(i).getMainCatId() == 5 && menuList.get(i).getIsSameDayApplicable().equalsIgnoreCase("4")) {
+
+					System.err.println("MENU--------------------------------------------------------------------- 5,4");
+
+					// List<SpecialCake> getSpCakeByCatId =
+					// spCakeById(menuList.get(i).getMainCatId());
+
+					List<SpecialCake> getSpCakeByCatId = new ArrayList();
+
+					Album[] album = restTemplate.getForObject(Constants.url + "getAlbumList", Album[].class);
+					List<Album> albumCakeList = new ArrayList<Album>(Arrays.asList(album));
+
+					for (int a = 0; a < albumCakeList.size(); a++) {
+
+						SpecialCake sp = new SpecialCake();
+						sp.setSpId(albumCakeList.get(a).getAlbumId());
+						sp.setSpCode(albumCakeList.get(a).getAlbumCode());
+						sp.setSpName(albumCakeList.get(a).getAlbumName());
+						getSpCakeByCatId.add(sp);
+
+					}
+
+					System.out
+							.println("-------------getSpCakeByCatId--------------------" + getSpCakeByCatId.toString());
+					List<SpecialCake> tempAllSpCkList = getSpCakeByCatId;
+
+					System.out.println("-------------tempAllSpCkList--------------------" + tempAllSpCkList.toString());
+
+					List<SpecialCake> selectedSpCk = new ArrayList<SpecialCake>();
+
+					String frPrevItems = franchiseeList.getItemShow();
+					System.out.println("-------------frPrevItems--------------------" + frPrevItems.toString());
+
+					List<String> frPrevItemsList = Arrays.asList(frPrevItems.split("\\s*,\\s*"));
+
+					System.out.println("-------------frPrevItemsList--------------------" + frPrevItemsList.toString());
+
+					for (int j = 0; j < frPrevItemsList.size(); j++) {
+
+						for (int k = 0; k < getSpCakeByCatId.size(); k++) {
+
+							if (Integer.parseInt(frPrevItemsList.get(j)) == (getSpCakeByCatId.get(k).getSpId())) {
+								// System.out.println("-------------if--------------------"+frPrevItemsList.size()+"----"+frPrevItemsList.get(j));
+								// System.out.println("-------------if--------------------"+getSpCakeByCatId.size()+"---"+getSpCakeByCatId.get(k).getSpId());
+
+								selectedSpCk.add(getSpCakeByCatId.get(k));
+								tempAllSpCkList.remove(k);
+							}
+
+						}
+
+					}
+					System.out.println("-------------selectedSpCk--------------------" + selectedSpCk.toString());
+
+					model.addObject("selectedItems", selectedSpCk);
+					System.out.println("-------------tempAllSpCkList--------------------" + tempAllSpCkList.toString());
+
+					model.addObject("remItems", tempAllSpCkList);
+					model.addObject("catId", menuList.get(i).getMainCatId());
+				} else if (menuList.get(i).getMainCatId() == 5) {
+
+					System.err.println("MENU--------------------------------------------------------------------- 5");
+
 					List<SpecialCake> getSpCakeByCatId = spCakeById(menuList.get(i).getMainCatId());
 
 					System.out
@@ -892,6 +958,10 @@ public class FranchiseeController {
 					model.addObject("remItems", tempAllSpCkList);
 					model.addObject("catId", menuList.get(i).getMainCatId());
 				} else {
+
+					System.err
+							.println("MENU--------------------------------------------------------------------- else");
+
 					List<Item> getItemByMenuId = itemById(menuList.get(i).getMainCatId());
 					List<Item> tempAllItemsList = getItemByMenuId;
 					List<Item> selectedItems = new ArrayList<Item>();
