@@ -8,7 +8,8 @@
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body>
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
-
+	<link rel="stylesheet"
+		href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
 
 	<div class="container" id="main-container">
 
@@ -30,7 +31,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Department
+						<i class="fa fa-file-o"></i>Duty
 					</h1>
 
 				</div>
@@ -43,120 +44,49 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> Add Department
+								<i class="fa fa-bars"></i> Duty List
 							</h3>
 							<div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showAddHrEmpDept"></a>
+								<a href="${pageContext.request.contextPath}/showAllDutyHeader"></a>
 								<a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
+							</div>
+
+							<div class="box-tool">
+								<a href="${pageContext.request.contextPath}/showAddDutyShift"></a>
+								<a data-action="collapse" href="#"><i
+									class="fa fa-chevron-up"></i>Add Duty</a>
 							</div>
 
 						</div>
 
 						<div class="box-content">
-							<form action="${pageContext.request.contextPath}/addHrEmpDept"
-								class="form-horizontal" method="post" id="validation-form">
-
-								<input type="hidden" name="dept_id" id="dept_id"
-									value="${dept.empDeptId}" />
-
-								<div class="form-group">
-
-									<div class="col2">
-										<label class="col-sm-3 col-lg-2 control-label">Company</label>
-										<div class="col-sm-3 col-lg-4 controls">
-											<select name="comp_id" id="comp_id" class="form-control"
-												data-rule-required="true">
-												<option value="-1">Select Company</option>
-												<c:forEach items="${compList}" var="companyList">
-													<c:choose>
-														<c:when test="${companyList.companyId==dept.companyId}">
-															<option value="${companyList.companyId}" selected><c:out
-																	value="${companyList.companyName}"></c:out></option>
-														</c:when>
-														<c:otherwise>
-															<option value="${companyList.companyId}"><c:out
-																	value="${companyList.companyName}"></c:out></option>
-														</c:otherwise>
-													</c:choose>
-												</c:forEach>
-											</select>
-										</div>
-									</div>
-
-									<div class="col2">
-										<label class="col-sm-3 col-lg-2 control-label">Department
-											Name </label>
-										<div class="col-sm-3 col-lg-4 controls">
-											<input type="text" name="dept_name" id="dept_name"
-												placeholder="Department Name" class="form-control"
-												data-rule-required="true" value="${dept.empDeptName}" />
-										</div>
-									</div>
-								</div>
-
-								<div class="form-group">
-
-									<div class="col2">
-										<label class="col-sm-3 col-lg-2 control-label">Short
-											Name </label>
-										<div class="col-sm-3 col-lg-4 controls">
-											<input type="text" name="dept_short_name"
-												id="dept_short_name" placeholder="Short Name"
-												class="form-control" data-rule-required="true"
-												value="${dept.empDeptShortName}" />
-										</div>
-									</div>
-
-									<div class="col2">
-										<label class="col-sm-3 col-lg-2 control-label">Description
-										</label>
-										<div class="col-sm-3 col-lg-4 controls">
-											<input type="text" name="dept_desc" id="dept_desc"
-												placeholder="Description" class="form-control"
-												data-rule-required="true" value="${dept.empDeptRemarks}" />
-										</div>
-									</div>
-								</div>
-
-								<br>
-								<div class="form-group">
-									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-										<input type="submit" class="btn btn-primary" value="Submit">
-										<!-- 										<button type="button" class="btn">Cancel</button>
- -->
-									</div>
-								</div>
-							</form>
-							<br>
 							<div class="box">
-								<div class="box-title">
-									<h3>
-										<i class="fa fa-table"></i>Department List
-									</h3>
-									<div class="box-tool">
-										<a data-action="collapse" href="#"><i
-											class="fa fa-chevron-up"></i></a>
-										<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
-									</div>
-								</div>
 
 								<div class="box-content">
-									<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
+									<div class="col-md-9"></div>
+									<label for="search" class="col-md-3" id="search"> <i
+										class="fa fa-search" style="font-size: 20px"></i> <input
+										type="text" id="myInput"
+										style="border-radius: 25px; box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2);"
+										onkeyup="myFunction()" placeholder="Search.."
+										title="Type in a name">
+									</label>
 
+									<div class="clearfix"></div>
 									<div id="table-scroll" class="table-scroll">
 
-										<div id="faux-table" class="faux-table" aria="hidden"
-											style="display: none;">
+										<div id="faux-table" class="faux-table" aria="hidden">
 											<table id="table2" class="main-table">
 												<thead>
 													<tr class="bgpink">
 														<th width="45" style="width: 18px">Sr.No.</th>
+														<th width="100" align="left">Duty Name</th>
 														<th width="100" align="left">Department</th>
-														<th width="100" align="left">Short Name</th>
-														<th width="100" align="left">Description</th>
-														<th width="100" align="left">Company</th>
+														<th width="100" align="left">From Time</th>
+														<th width="100" align="left">To Time</th>
+														<th width="100" align="left">Type</th>
 
 														<th width="81" align="left">Action</th>
 													</tr>
@@ -170,42 +100,53 @@
 												<thead>
 													<tr class="bgpink">
 														<th width="45" style="width: 18px">Sr.No.</th>
+														<th width="100" align="left">Duty Name</th>
 														<th width="100" align="left">Department</th>
-														<th width="100" align="left">Short Name</th>
-														<th width="100" align="left">Description</th>
-														<th width="100" align="left">Company</th>
+														<th width="100" align="left">From Time</th>
+														<th width="100" align="left">To Time</th>
+														<th width="100" align="left">Type</th>
 
 														<th width="81" align="left">Action</th>
 													</tr>
 												</thead>
 
 												<tbody>
-													<c:forEach items="${deptList}" var="deptList"
+													<c:forEach items="${dutyList}" var="dutyList"
 														varStatus="count">
 														<tr>
 
 															<td><c:out value="${count.index+1}" /></td>
 
+															<td align="left"><c:out value="${dutyList.dutyName}"></c:out></td>
+
+															<td align="left"><c:out value="${dutyList.deptName}"></c:out></td>
 
 															<td align="left"><c:out
-																	value="${deptList.empDeptName}"></c:out></td>
+																	value="${dutyList.shiftFromTime}"></c:out></td>
 
 															<td align="left"><c:out
-																	value="${deptList.empDeptShortName}"></c:out></td>
+																	value="${dutyList.shiftToTime}"></c:out></td>
 
-															<td align="left"><c:out
-																	value="${deptList.empDeptRemarks}"></c:out></td>
+															<c:choose>
+																<c:when test="${dutyList.type==1}">
+																	<td align="left">Daily Basis</td>
+																</c:when>
 
-															<td align="left"><c:out
-																	value="${deptList.companyName}"></c:out></td>
+																<c:when test="${dutyList.type==2}">
+																	<td align="left">Day Basis</td>
+																</c:when>
+
+																<c:when test="${dutyList.type==3}">
+																	<td align="left">Date Basis</td>
+																</c:when>
+															</c:choose>
 
 															<td align="left"><a
-																href="${pageContext.request.contextPath}/updateHrDept/${deptList.empDeptId}"><span
+																href="${pageContext.request.contextPath}/editDutyAndTask/${dutyList.dutyId}"><span
 																	class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp; <a
-																href="${pageContext.request.contextPath}/deleteHrDept/${deptList.empDeptId}"
+																href="${pageContext.request.contextPath}/deleteDuty/${dutyList.dutyId}"
 																onClick="return confirm('Are you sure want to delete this record');"><span
 																	class="glyphicon glyphicon-remove"></span></a></td>
-
 														</tr>
 
 													</c:forEach>
@@ -227,11 +168,46 @@
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 				class="fa fa-chevron-up"></i></a>
-
-			<!-- END Content -->
 		</div>
+		<!-- END Content -->
 	</div>
 	<!-- END Container -->
+
+	<script type="text/javascript">
+		$('#fromTime').timepicker();
+	</script>
+
+	<!-- Search -->
+	<script>
+		function myFunction() {
+			var input, filter, table, tr, td, i;
+			input = document.getElementById("myInput");
+			filter = input.value.toUpperCase();
+
+			if (!document.getElementById('table1')) {
+
+				table = document.getElementById("table_grid");
+			} else {
+				table = document.getElementById("table1");
+			}
+			tr = table.getElementsByTagName("tr");
+			//td = table.getElementsByTagName("td");
+			//alert("td value = "+td.length);
+			for (i = 0; i < tr.length; i++) {
+				td = tr[i].getElementsByTagName("td")[1];
+				if (td) {
+					if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+						tr[i].style.display = "";
+					} else {
+						tr[i].style.display = "none";
+					}
+				}
+			}
+		}
+	</script>
+
+
+
 
 	<!--basic scripts-->
 	<script

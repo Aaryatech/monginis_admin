@@ -271,7 +271,8 @@
 
 											<c:forEach items="${typeList}" var="tp" varStatus="count">
 												<option value="${tp.typeId}"><c:out
-														value="${tp.typeName}" /></option>
+														value="${tp.typeName}"
+														 /></option>
 											</c:forEach>
 										</select><span id="typeError" hidden="hidden"> <font
 											color="#b94a48">Please Select Type</font></span>
@@ -372,6 +373,8 @@
 		function showFranchisee() {
 
 			var typeId = $("#selectType").val();
+			
+			
 
 			if (typeId == null) {
 				alert("Please Select Type");
