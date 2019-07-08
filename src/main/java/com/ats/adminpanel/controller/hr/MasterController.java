@@ -793,8 +793,14 @@ public class MasterController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("empId", empId);
 
-			Employee emp = restTemplate.postForObject(Constants.security_app_url + "/master/getEmployeeById", map,
-					Employee.class);
+			Employee emp = new Employee();
+
+			try {
+				emp = restTemplate.postForObject(Constants.security_app_url + "/master/getEmployeeById", map,
+						Employee.class);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 			String dsc = request.getParameter("dsc");
 			int compId = Integer.parseInt(request.getParameter("comp_id"));
