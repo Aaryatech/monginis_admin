@@ -235,7 +235,7 @@ public class SalesCompareFrController {
 
 						firstList.setFrId(billTotalList.get(j).getFrId());
 
-						float finalGrnTotal = (float) (((grnGvnTotalList.get(i).getBillTotal() * 100) / 75) * 0.25);
+						float finalGrnTotal = (float) (((grnGvnTotalList.get(i).getBillTotal() / 100)) * 25);
 
 						System.out.println("finalGrnTotal*********" + finalGrnTotal);
 
@@ -305,8 +305,8 @@ public class SalesCompareFrController {
 
 						prevList.setFrId(billTotalListPrev.get(j).getFrId());
 
-						float finalGrnPrevTotal = (float) (((grnGvnTotalListPrevMonth.get(i).getBillTotal() * 100) / 75)
-								* 0.25);
+						float finalGrnPrevTotal = (float) (((grnGvnTotalListPrevMonth.get(i).getBillTotal() / 100))
+								* 25);
 
 						System.out.println("finalGrnTotal*********" + finalGrnPrevTotal);
 
