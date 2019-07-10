@@ -49,11 +49,11 @@
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
 
 </head> --%>
-	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
 <body>
 
-	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include> 
+	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 
 
@@ -94,18 +94,21 @@
 								<div class="box-title">
 									<h3>
 										<i class="fa fa-bars"></i> Add Special Cake
-										
+
 									</h3>
-                         <div class="box-tool">
-								<a href="${pageContext.request.contextPath}/showSpecialCake">Back to List</a> <a data-action="collapse" href="#"><i
-									class="fa fa-chevron-up"></i></a>
-							</div>
+									<div class="box-tool">
+										<a href="${pageContext.request.contextPath}/showSpecialCake">Back
+											to List</a> <a data-action="collapse" href="#"><i
+											class="fa fa-chevron-up"></i></a>
+									</div>
 								</div>
 								<div class="box-content">
 									<form action="addSpCakeProcess" class="form-horizontal"
-									id="validation-form"
-										enctype="multipart/form-data" method="post">
+										id="validation-form" enctype="multipart/form-data"
+										method="post">
 
+
+										<input type="hidden" id="flag" name="flag" value="${flag}" />
 
 
 										<div class="form-group">
@@ -121,12 +124,13 @@
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Name </label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<input type="text" name="spc_name" id="spc_name" 
-													class="form-control" placeholder="Name" data-rule-required="true"  />
+												<input type="text" name="spc_name" id="spc_name"
+													class="form-control" placeholder="Name"
+													data-rule-required="true" />
 											</div>
 
 										</div>
-											<div class="form-group">
+										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Image</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<div class="fileupload fileupload-new"
@@ -156,13 +160,14 @@
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Description</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<textarea class="form-control" name="sp_desc" data-rule-required="true"
-													cols="" rows="" id="sp_desc" placeholder="Description"></textarea>
+												<textarea class="form-control" name="sp_desc"
+													data-rule-required="true" cols="" rows="" id="sp_desc"
+													placeholder="Description"></textarea>
 
 											</div>
 
 										</div>
-										
+
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Type</label>
 
@@ -176,9 +181,9 @@
 													<option name="All" value="0">All</option>
 												</select>
 											</div>
-											
+
 										</div>
-											<!-- <div class="col-sm-9 col-lg-10 controls">
+										<!-- <div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="spc_type" id="spc_type"
 													class="form-control" />
 											</div> -->
@@ -190,10 +195,8 @@
 												Weight</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="min_weight" id="min_weight"
-													
 													placeholder="Min Weight" data-rule-required="true"
-													class="form-control" data-rule-number="true"
-													 />
+													class="form-control" data-rule-number="true" />
 											</div>
 										</div>
 
@@ -203,9 +206,9 @@
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="max_weight" id="max_weight"
 													max_weight""
-													placeholder="Max Weight" data-rule-required="true"
-													class="form-control" data-rule-number="true"
-													 />
+													placeholder="Max Weight"
+													data-rule-required="true" class="form-control"
+													data-rule-number="true" />
 											</div>
 										</div>
 
@@ -216,107 +219,102 @@
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="book_before" id="book_before"
 													placeholder="Book Before" class="form-control"
-													data-rule-required="true"
-													data-rule-number="true" />
+													data-rule-required="true" data-rule-number="true" />
 											</div>
 										</div>
 
-										
-                                      <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Local Rate
-											</label>
+
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Local
+												Rate </label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="sp_rate1" id="sp_rate1"
-													 placeholder="Special Cake Rate 1" class="form-control"
-													 data-rule-required="true"
-													data-rule-number="true" />
+													placeholder="Special Cake Rate 1" class="form-control"
+													data-rule-required="true" data-rule-number="true" />
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Out Station Rate
-											</label>
+											<label class="col-sm-3 col-lg-2 control-label">Out
+												Station Rate </label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="sp_rate2" id="sp_rate2"
-													 placeholder="Special Cake Rate 2" class="form-control"
-													 data-rule-required="true"
-													data-rule-number="true" />
+													placeholder="Special Cake Rate 2" class="form-control"
+													data-rule-required="true" data-rule-number="true" />
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Special Rate
-											</label>
+											<label class="col-sm-3 col-lg-2 control-label">Special
+												Rate </label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="sp_rate3" id="sp_rate3"
-									                placeholder="Special Cake Rate 3" class="form-control"
-									                data-rule-required="true"
-													data-rule-number="true" />
+													placeholder="Special Cake Rate 3" class="form-control"
+													data-rule-required="true" data-rule-number="true" />
 											</div>
 										</div>
-										  <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Local MRP
-											</label>
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Local
+												MRP </label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="mrp_rate1" id="mrp_rate1"
-													 placeholder="MRP Rate 1" class="form-control"
-													 data-rule-required="true"
-													data-rule-number="true" />
+													placeholder="MRP Rate 1" class="form-control"
+													data-rule-required="true" data-rule-number="true" />
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Out Station MRP
-											</label>
+											<label class="col-sm-3 col-lg-2 control-label">Out
+												Station MRP </label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="mrp_rate2" id="mrp_rate2"
-													 placeholder="MRP Rate 2" class="form-control"
-													 data-rule-required="true"
-													data-rule-number="true" />
+													placeholder="MRP Rate 2" class="form-control"
+													data-rule-required="true" data-rule-number="true" />
 											</div>
 										</div>
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Special MRP
-											</label>
+											<label class="col-sm-3 col-lg-2 control-label">Special
+												MRP </label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="mrp_rate3" id="mrp_rate3"
-									                placeholder="MRP Rate 3" class="form-control"
+													placeholder="MRP Rate 3" class="form-control"
 													data-rule-number="true" data-rule-required="true" />
 											</div>
 										</div>
-									
-                                       <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Minimum Order Qty
-											</label>
+
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Minimum
+												Order Qty </label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="order_qty" id="order_qty"
-											        placeholder="Order Quantity" class="form-control"
+													placeholder="Order Quantity" class="form-control"
 													data-rule-required="true" data-rule-number="true" />
-											</div> 
+											</div>
 										</div>
-                                       <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Order Discount %
-											</label>
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Order
+												Discount % </label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="order_disc" id="order_disc"
-											        placeholder="Order Discount" class="form-control"
+													placeholder="Order Discount" class="form-control"
 													data-rule-number="true" data-rule-required="true" />
 											</div>
 										</div>
-                                       <div class="form-group">
+										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">IGST %
 											</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="tax_3" id="tax_3"
 													tax_3"" placeholder="IGST" class="form-control"
-													data-rule-required="true" data-rule-number="true" value="0.0" onchange="calTotalGst()"/>
+													data-rule-required="true" data-rule-number="true"
+													value="0.0" onchange="calTotalGst()" />
 											</div>
 										</div>
-										 <div class="form-group">
+										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">CGST %
 											</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="tax_1" id="tax_1"
-													 placeholder="CGST" class="form-control"
-													data-rule-required="true"
-													data-rule-number="true" value="0.0" onchange="calTotalGst()"/>
+													placeholder="CGST" class="form-control"
+													data-rule-required="true" data-rule-number="true"
+													value="0.0" onchange="calTotalGst()" />
 											</div>
 										</div>
 
@@ -325,30 +323,33 @@
 											</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="tax_2" id="tax_2"
-													 placeholder="SGST" class="form-control"	
+													placeholder="SGST" class="form-control"
 													data-rule-required="true" data-rule-number="true"
 													value="0.0" />
-													
+
 											</div>
 										</div>
 
-                                      
-                                 <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Total GST Applicable %</label>
-									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="total_gst_appli" id="total_gst_appli"
-											placeholder="Total GST Applicable" class="form-control"
-											data-rule-required="true" data-rule-number="true" disabled/>
-									</div>
-								</div>
-							
+
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Total
+												GST Applicable %</label>
+											<div class="col-sm-9 col-lg-10 controls">
+												<input type="text" name="total_gst_appli"
+													id="total_gst_appli" placeholder="Total GST Applicable"
+													class="form-control" data-rule-required="true"
+													data-rule-number="true" disabled />
+											</div>
+										</div>
+
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Events</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<select data-placeholder="Select Events"
 													class="form-control chosen" multiple="multiple"
-													tabindex="6" name="spe_id_list[]" id="spe_id_list"data-rule-required="true">
-													<option value=""> </option>
+													tabindex="6" name="spe_id_list[]" id="spe_id_list"
+													data-rule-required="true">
+													<option value=""></option>
 													<optgroup label="EVENTS">
 
 
@@ -368,13 +369,14 @@
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="erplinkcode" id="erplinkcode"
 													placeholder="ERP Link Code" class="form-control"
-													data-rule-required="true"/>
+													data-rule-required="true" />
 
 											</div>
 										</div>
 
-                                         <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Is Customer Choice Cake?</label>
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Is
+												Customer Choice Cake?</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<label class="radio-inline"> <input type="radio"
 													name="is_cust_choice_ck" id="is_cust_choice_ck" value="0"
@@ -385,15 +387,16 @@
 												</label>
 											</div>
 										</div>
-                                       <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Is Addon Rate Appli?</label>
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Is
+												Addon Rate Appli?</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<label class="radio-inline"> <input type="radio"
-													name="is_addon_rate_appli" id="is_addon_rate_appli" value="0"
-													checked>No
+													name="is_addon_rate_appli" id="is_addon_rate_appli"
+													value="0" checked>No
 												</label> <label class="radio-inline"> <input type="radio"
-													name="is_addon_rate_appli" id="is_addon_rate_appli" value="1">
-													Yes
+													name="is_addon_rate_appli" id="is_addon_rate_appli"
+													value="1"> Yes
 												</label>
 											</div>
 										</div>
@@ -416,7 +419,7 @@
 												Used?</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<label class="radio-inline"> <input type="radio"
-													name="is_used" id="is_used" value="0" checked > No
+													name="is_used" id="is_used" value="0" checked> No
 												</label> <label class="radio-inline"> <input type="radio"
 													name="is_used" id="is_used" value="1" /> Yes
 												</label>
@@ -431,33 +434,32 @@
 													name="allowphupload" id="allowphupload" value="0" checked>
 													No
 												</label> <label class="radio-inline"> <input type="radio"
-													name="allowphupload"  id="allowphupload" value="1" />
-													Yes
+													name="allowphupload" id="allowphupload" value="1" /> Yes
 												</label>
 											</div>
 										</div>
 
-                                       	<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Is Slot Used?</label>
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Is
+												Slot Used?</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<label class="radio-inline"> <input type="radio"
 													name="isSlotUsed" id="isSlotUsed" value="0" checked>
 													No
 												</label> <label class="radio-inline"> <input type="radio"
-													name="isSlotUsed"  id="isSlotUsed" value="1" />
-													Yes
+													name="isSlotUsed" id="isSlotUsed" value="1" /> Yes
 												</label>
 											</div>
 										</div>
-                                       
+
 
 										<div class="form-group">
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
-												<button type="submit" class="btn btn-primary" style="width: 70px" onclick="return validation()">
-														 Save
-														</button>
-										
+												<button type="submit" class="btn btn-primary"
+													style="width: 70px" onclick="return validation()">
+													Save</button>
+
 												<button type="button" class="btn">Cancel</button>
 
 												<!--<button type="button" class="btn">Cancel</button>-->
@@ -474,7 +476,7 @@
 			</div>
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+				<p>2017 © MONGINIS.</p>
 			</footer>
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -545,20 +547,20 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script> --%>
-	
+
 </body>
-		
+
 <script>
-    function calTotalGst() {
-   
-	  var igst=parseFloat($("#tax_3").val());
-	  var cgst=parseFloat($("#tax_1").val());
-	  var sgst=parseFloat(igst-cgst);
-	  var totGst=parseFloat(cgst+sgst);
-	  document.getElementById("tax_2").setAttribute('value',sgst);
-	  document.getElementById("total_gst_appli").setAttribute('value', totGst);
-}
-   
-</script>	
+	function calTotalGst() {
+
+		var igst = parseFloat($("#tax_3").val());
+		var cgst = parseFloat($("#tax_1").val());
+		var sgst = parseFloat(igst - cgst);
+		var totGst = parseFloat(cgst + sgst);
+		document.getElementById("tax_2").setAttribute('value', sgst);
+		document.getElementById("total_gst_appli")
+				.setAttribute('value', totGst);
+	}
+</script>
 
 </html>
