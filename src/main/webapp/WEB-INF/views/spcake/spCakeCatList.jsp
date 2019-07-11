@@ -186,13 +186,13 @@
 																		</td>
 																		<td align="left"><c:out
 																				value="${specialCake.spCode}  "></c:out></td>
-																				
-																				
-																				<td align="left"><c:out
+
+
+																		<td align="left"><c:out
 																				value="${specialCake.erpLinkcode}  "></c:out></td>
-																				
-																				
-																				
+
+
+
 																		<td align="left"><c:out
 																				value="${specialCake.spName}  "></c:out></td>
 																		<c:choose>
@@ -223,12 +223,9 @@
 																		<c:choose>
 																			<c:when test="${isEdit==1 and isDelete==1}">
 																				<td align="left"><a
-																					href="updateSpCake/${specialCake.spId}"><span
+																					href="updateSpCakeCat/${specialCake.spId}"><span
 																						class="glyphicon glyphicon-edit"></span></a> <a
-																					href="viewSpCakeDetailed/${specialCake.spId}"
-																					class="action_btn"> <abbr title="Detailed"><i
-																							class="fa fa-list"></i></abbr></a> <a
-																					href="deleteSpecialCake/${specialCake.spId}"
+																					href="deleteSpecialCakeCat/${specialCake.spId}"
 																					onClick="return confirm('Are you sure want to delete this record');"><span
 																						class="glyphicon glyphicon-remove"></span></a></td>
 
@@ -236,12 +233,9 @@
 
 																			<c:when test="${isEdit==1 and isDelete==0}">
 																				<td align="left"><a
-																					href="updateSpCake/${specialCake.spId}"><span
+																					href="updateSpCakeCat/${specialCake.spId}"><span
 																						class="glyphicon glyphicon-edit"></span></a> <a
-																					href="viewSpCakeDetailed/${specialCake.spId}"
-																					class="action_btn"> <abbr title="Detailed"><i
-																							class="fa fa-list"></i></abbr></a> <a
-																					href="deleteSpecialCake/${specialCake.spId}"
+																					href="deleteSpecialCakeCat/${specialCake.spId}"
 																					class="disableClick"
 																					onClick="return confirm('Are you sure want to delete this record');"><span
 																						class="glyphicon glyphicon-remove"></span></a></td>
@@ -249,13 +243,10 @@
 
 																			<c:when test="${isEdit==0 and isDelete==1}">
 																				<td align="left"><a
-																					href="updateSpCake/${specialCake.spId}"
+																					href="updateSpCakeCat/${specialCake.spId}"
 																					class="disableClick"><span
 																						class="glyphicon glyphicon-edit"></span></a> <a
-																					href="viewSpCakeDetailed/${specialCake.spId}"
-																					class="action_btn"> <abbr title="Detailed"><i
-																							class="fa fa-list"></i></abbr></a> <a
-																					href="deleteSpecialCake/${specialCake.spId}"
+																					href="deleteSpecialCakeCat/${specialCake.spId}"
 																					onClick="return confirm('Are you sure want to delete this record');"><span
 																						class="glyphicon glyphicon-remove"></span></a></td>
 																			</c:when>
@@ -263,13 +254,13 @@
 																			<c:otherwise>
 
 																				<td align="left"><a
-																					href="updateSpCake/${specialCake.spId}"
+																					href="updateSpCakeCat/${specialCake.spId}"
 																					class="disableClick"><span
 																						class="glyphicon glyphicon-edit"></span></a> <a
 																					href="viewSpCakeDetailed/${specialCake.spId}"
 																					class="action_btn"> <abbr title="Detailed"><i
 																							class="fa fa-list"></i></abbr></a> <a
-																					href="deleteSpecialCake/${specialCake.spId}"
+																					href="deleteSpecialCakeCat/${specialCake.spId}"
 																					class="disableClick"
 																					onClick="return confirm('Are you sure want to delete this record');"><span
 																						class="glyphicon glyphicon-remove"></span></a></td>
@@ -470,34 +461,33 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 </body>
 <script>
-function myFunction() {
-  var input, filter, table, tr, td,td1, i;
-  input = document.getElementById("myInput");
-  filter = input.value.toUpperCase();
-  table = document.getElementById("table1");
-  tr = table.getElementsByTagName("tr");
-  for (i = 0; i < tr.length; i++) {
-    td = tr[i].getElementsByTagName("td")[2];
-    td1 = tr[i].getElementsByTagName("td")[3];
+	function myFunction() {
+		var input, filter, table, tr, td, td1, i;
+		input = document.getElementById("myInput");
+		filter = input.value.toUpperCase();
+		table = document.getElementById("table1");
+		tr = table.getElementsByTagName("tr");
+		for (i = 0; i < tr.length; i++) {
+			td = tr[i].getElementsByTagName("td")[2];
+			td1 = tr[i].getElementsByTagName("td")[3];
 
-    if (td) {
-      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      }else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
-        tr[i].style.display = "";
-      }  else {
-        tr[i].style.display = "none";
-      }
-    }       
-  }
-}
+			if (td) {
+				if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				} else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+					tr[i].style.display = "";
+				} else {
+					tr[i].style.display = "none";
+				}
+			}
+		}
+	}
 </script>
 
 <script type="text/javascript">
-function exportToExcel()
-{
-	window.open("${pageContext.request.contextPath}/exportToExcel");
-			document.getElementById("expExcel").disabled=true;
-}
+	function exportToExcel() {
+		window.open("${pageContext.request.contextPath}/exportToExcel");
+		document.getElementById("expExcel").disabled = true;
+	}
 </script>
 </html>
