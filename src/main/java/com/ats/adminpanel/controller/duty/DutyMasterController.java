@@ -589,7 +589,7 @@ public class DutyMasterController {
 				map = new LinkedMultiValueMap<String, Object>();
 				map.add("taskId", deleteDetail.getTaskId());
 
-				Info errMsg = rest.postForObject(Constants.url + "duty/master/deleteTask", map, Info.class);
+				Info errMsg = rest.postForObject(Constants.security_app_url + "duty/master/deleteTask", map, Info.class);
 
 				taskList.remove(index);
 
@@ -786,7 +786,7 @@ public class DutyMasterController {
 			map.add("dutyId", dutyId);
 			map.add("status", 0);
 
-			Info errMsg = restTemplate.postForObject(Constants.url + "duty/master/deleteDuty", map, Info.class);
+			Info errMsg = restTemplate.postForObject(Constants.security_app_url + "duty/master/deleteDuty", map, Info.class);
 
 		} catch (Exception e) {
 
