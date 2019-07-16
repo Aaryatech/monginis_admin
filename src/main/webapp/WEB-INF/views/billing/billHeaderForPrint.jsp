@@ -413,8 +413,24 @@ form.submit();
 
 		});
 	</script>
+	
 
 	<script type="text/javascript">
+	function tConvert (time) {
+		//alert("tConvert------------ "+time)
+		  // Check correct time format and split into components
+		  time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)(.0)?$/) || [time];
+
+		  if (time.length > 1) { // If time format correct
+		    time = time.slice (1);  // Remove full string match value
+		    time[5] = +time[0] < 12 ? 'AM' : 'PM'; // Set AM/PM
+		    time[0] = +time[0] % 12 || 12; // Adjust hours
+		  }
+		  return time.join (''); // return adjusted time or original string
+		}
+	
+	
+	
 		function callSearch() {
 
 			//var frId = document.getElementById("fr_id").value;
@@ -450,6 +466,12 @@ form.submit();
 
 													var tr = $('<tr></tr>');
 													
+													
+													var timeStr=bill.remark.split(" ",2);
+													var time=tConvert(timeStr[1]);
+													//alert("TIME - "+tConvert(time[1]));
+													
+													
 															
 													tr
 															.append($(
@@ -471,6 +493,12 @@ form.submit();
 																	'<td class="col-md-1"></td>')
 																	.html(
 																			bill.billDate));
+													
+													tr
+													.append($(
+															'<td class="col-md-1"></td>')
+															.html(
+																	time));
 
 													tr.append($('<td class="col-md-2"></td>')
 															.html(bill.frName));
