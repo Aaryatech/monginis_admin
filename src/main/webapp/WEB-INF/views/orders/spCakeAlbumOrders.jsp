@@ -40,7 +40,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Special Cake Album Orders
+						<i class="fa fa-file-o"></i> Album Special Cake Orders
 					</h1>
 
 				</div>

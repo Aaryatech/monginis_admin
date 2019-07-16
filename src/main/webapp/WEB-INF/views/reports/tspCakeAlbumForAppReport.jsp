@@ -34,7 +34,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> SP Cake Order-App
+						<i class="fa fa-file-o"></i> Album SP Cake Order-App
 					</h1>
 					<h4></h4>
 				</div>
@@ -56,7 +56,7 @@
 			<div class="box">
 				<div class="box-title">
 					<h3>
-						<i class="fa fa-bars"></i>SP Cake Album Order-App
+						<i class="fa fa-bars"></i>Album SP Cake Order-App
 					</h3>
 
 				</div>

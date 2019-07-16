@@ -34,7 +34,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Special Cake Category
+						<i class="fa fa-file-o"></i>Album Special Cake Category
 					</h1>
 				</div>
 			</div>
@@ -108,7 +108,7 @@
 										<div class="box">
 											<div class="box-title">
 												<h3>
-													<i class="fa fa-table"></i> Special Cake Category List
+													<i class="fa fa-table"></i> Album Special Cake Category List
 												</h3>
 												<div class="box-tool">
 													<a data-action="collapse" href="#"><i
