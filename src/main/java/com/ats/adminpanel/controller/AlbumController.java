@@ -52,7 +52,7 @@ public class AlbumController {
 		Constants.mainAct = 1;
 		Constants.subAct = 119;
 
-		List<GetSpCkSupplement> spSuppList = restTemplate.getForObject(Constants.url + "/getSpCakeSuppList",
+		List<GetSpCkSupplement> spSuppList = restTemplate.getForObject(Constants.url + "/getSpCakeCatSuppList",
 				List.class);
 		System.out.println("spSuppList" + spSuppList.toString());
 
@@ -326,7 +326,7 @@ public class AlbumController {
 		int intisActive = album.getIsActive();
 		String isActive = String.valueOf(intisActive);
 
-		List<GetSpCkSupplement> spSuppList = restTemplate.getForObject(Constants.url + "/getSpCakeSuppList",
+		List<GetSpCkSupplement> spSuppList = restTemplate.getForObject(Constants.url + "/getSpCakeCatSuppList",
 				List.class);
 		System.out.println("spSuppList" + spSuppList.toString());
 

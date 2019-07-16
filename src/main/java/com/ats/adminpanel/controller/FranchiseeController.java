@@ -855,7 +855,8 @@ public class FranchiseeController {
 			if (menuList.get(i).getMenuId() == franchiseeList.getMenuId()) {
 				menuName = menuList.get(i).getMenuTitle();
 
-				if (menuList.get(i).getMainCatId() == 5 && menuList.get(i).getIsSameDayApplicable().equalsIgnoreCase("4")) {
+				if (menuList.get(i).getMainCatId() == 5
+						&& menuList.get(i).getIsSameDayApplicable().equalsIgnoreCase("4")) {
 
 					System.err.println("MENU--------------------------------------------------------------------- 5,4");
 
@@ -1164,6 +1165,7 @@ public class FranchiseeController {
 			}
 		}
 		selectedCatId = frMenu.getMainCatId();
+		String isSameDay = frMenu.getIsSameDayApplicable();
 
 		System.out.println("Finding Item List for Selected CatId=" + selectedCatId);
 
@@ -1172,29 +1174,11 @@ public class FranchiseeController {
 
 		List<CommonConf> commonConfList = new ArrayList<CommonConf>();
 
-		if (selectedCatId == 5) {
-			/*
-			 * SpCakeResponse spCakeResponse = restTemplate.getForObject(Constants.url +
-			 * "showSpecialCakeList", SpCakeResponse.class);
-			 * System.out.println("SpCake Controller SpCakeList Response " +
-			 * spCakeResponse.toString());
-			 * 
-			 * specialCakeList = spCakeResponse.getSpecialCake();
-			 * 
-			 * for (SpecialCake specialCake : specialCakeList) { CommonConf commonConf = new
-			 * CommonConf(); commonConf.setId(specialCake.getSpId());
-			 * commonConf.setName(specialCake.getSpCode() + "-" + specialCake.getSpName());
-			 * commonConfList.add(commonConf); System.out.println("spCommonConf" +
-			 * commonConf.toString()); }
-			 */
+		if (selectedCatId == 5 && isSameDay.equalsIgnoreCase("4")) {
 
 			Album[] album = restTemplate.getForObject(Constants.url + "getAlbumList", Album[].class);
 			albumCakeList = new ArrayList<Album>(Arrays.asList(album));
 
-			/*
-			 * albumCakeList = restTemplate.getForObject(Constants.url + "getAlbumList",
-			 * List.class);
-			 */
 			System.out.println("Album Cake Response " + albumCakeList.toString());
 
 			for (int i = 0; i < albumCakeList.size(); i++) {
@@ -1211,6 +1195,23 @@ public class FranchiseeController {
 				CommonConf commonConf = new CommonConf();
 				commonConf.setId(albumCake.getSpId());
 				commonConf.setName(albumCake.getAlbumCode() + "-" + albumCake.getAlbumName());
+				commonConfList.add(commonConf);
+				System.out.println("spCommonConf" + commonConf.toString());
+			}
+
+			System.out.println("------------------------");
+		} else if (selectedCatId == 5) {
+
+			SpCakeResponse spCakeResponse = restTemplate.getForObject(Constants.url + "showSpecialCakeList",
+					SpCakeResponse.class);
+			System.out.println("SpCake Controller SpCakeList Response " + spCakeResponse.toString());
+
+			List<SpecialCake> specialCakeList = spCakeResponse.getSpecialCake();
+
+			for (SpecialCake specialCake : specialCakeList) {
+				CommonConf commonConf = new CommonConf();
+				commonConf.setId(specialCake.getSpId());
+				commonConf.setName(specialCake.getSpCode() + "-" + specialCake.getSpName());
 				commonConfList.add(commonConf);
 				System.out.println("spCommonConf" + commonConf.toString());
 			}

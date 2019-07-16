@@ -448,6 +448,38 @@ public class OrderController {
 
 		return model;
 	}
+	
+	//------ANMOL 13-7-2019---------------------------
+	@RequestMapping(value = "/spCakeAlbumOrders")
+	public ModelAndView searchSpCakeAlbumOrder(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("orders/spCakeAlbumOrders");
+		Constants.mainAct = 4;
+		Constants.subAct = 28;
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+			AllFranchiseeList allFranchiseeList = restTemplate.getForObject(Constants.url + "getAllFranchisee",
+					AllFranchiseeList.class);
+
+			// franchiseeList= new ArrayList<FranchiseeList>();
+			franchiseeList = allFranchiseeList.getFranchiseeList();
+			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
+					AllRoutesListResponse.class);
+
+			List<Route> routeList = new ArrayList<Route>();
+
+			routeList = allRouteListResponse.getRoute();
+			model.addObject("routeList", routeList);
+
+			model.addObject("todayDate", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
+			model.addObject("franchiseeList", franchiseeList);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
 
 	@RequestMapping(value = "/regularSpCakeOrderProcess")
 	public ModelAndView regularSpCakeOrderProcess(HttpServletRequest request, HttpServletResponse response) {
@@ -540,6 +572,12 @@ public class OrderController {
 																												// added
 
 			spCakeOrderList = orderListResponse.getSpCakeOrdersBean();
+		/*	
+			for(int i=0;i<spCakeOrderList.size();i++)
+			{
+				String[] arryOfStr=spCakeOrderList.get(i).getItemId().split("#",3);
+				spCakeOrderList.get(i).setName(arryOfStr[]);
+			}*/
 			model.addObject("spCakeOrderList", spCakeOrderList);
 
 		} else
@@ -627,6 +665,172 @@ public class OrderController {
 		session.setAttribute("excelName", "SpCakeOrders");
 		return spCakeOrderList;
 	}
+	
+	
+	//-----Anmol 13-7-2019----------------
+	@RequestMapping(value = "/spCakeAlbumOrderProcess", method = RequestMethod.GET)
+	public @ResponseBody List<SpCakeOrdersBean> spCakeAlbumOrderProcess(HttpServletRequest request,
+			HttpServletResponse response) {
+		ModelAndView model = null;
+		System.out.println("/inside search sp cake album order process  ");
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		RestTemplate restTemplate1 = new RestTemplate();
+		spCakeOrderList = new ArrayList<SpCakeOrdersBean>();
+		/* try { */
+		model = new ModelAndView("orders/spCakeAlbumOrders");
+		model.addObject("franchiseeList", franchiseeList);
+
+		String frIdString = request.getParameter("fr_id_list");
+		String prodDate = request.getParameter("prod_date");
+		int routeId = Integer.parseInt(request.getParameter("route_id"));
+		List<String> franchIds = new ArrayList();
+
+		if (frIdString != null) {
+			frIdString = frIdString.substring(1, frIdString.length() - 1);
+			frIdString = frIdString.replaceAll("\"", "");
+			System.out.println("frIds  New =" + frIdString);
+
+			franchIds = Arrays.asList(frIdString);
+		}
+		System.out.println("fr Id ArrayList " + franchIds.toString());
+		if (routeId != 0) {
+
+			MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			mvm.add("routeId", routeId);
+
+			FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId", mvm,
+					FrNameIdByRouteIdResponse.class);
+
+			List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+
+			System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+
+			StringBuilder sbForRouteFrId = new StringBuilder();
+			for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
+
+				sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
+
+			}
+
+			String strFrIdRouteWise = sbForRouteFrId.toString();
+			frIdString = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+			System.out.println("fr Id Route WISE = " + frIdString);
+			map = new LinkedMultiValueMap<String, Object>();
+
+			map.add("frId", frIdString);
+			map.add("prodDate", prodDate);
+
+			SpCakeOrdersBeanResponse orderListResponse = restTemplate1
+					.postForObject(Constants.url + "getSpCakeAlbumOrderLists", map, SpCakeOrdersBeanResponse.class); // s
+																												// added
+
+			spCakeOrderList = orderListResponse.getSpCakeOrdersBean();
+			model.addObject("spCakeOrderList", spCakeOrderList);
+
+		} else
+
+		if (franchIds.contains("0")) {
+			System.out.println("all fr selected");
+
+			map.add("prodDate", prodDate);
+
+			orderListResponse = restTemplate1.postForObject(Constants.url + "getAllFrSpCakeAlbumOrderList", map,
+					SpCakeOrdersBeanResponse.class);
+
+			spCakeOrderList = orderListResponse.getSpCakeOrdersBean();
+
+			System.out.println("order list is" + spCakeOrderList.toString());
+			System.out.println("order list count is" + spCakeOrderList.size());
+
+			model.addObject("spCakeOrderList", spCakeOrderList);
+
+		} // end of if
+
+		else {
+
+			System.out.println("few fr selected" + frIdString.toString());
+
+			map.add("frId", frIdString);
+			map.add("prodDate", prodDate);
+
+			SpCakeOrdersBeanResponse orderListResponse = restTemplate1
+					.postForObject(Constants.url + "getSpCakeAlbumOrderLists", map, SpCakeOrdersBeanResponse.class); // s
+																												// added
+
+			spCakeOrderList = orderListResponse.getSpCakeOrdersBean();
+			System.out.println("order list is" + spCakeOrderList.toString());
+			System.out.println("order list count is" + spCakeOrderList.size());
+			model.addObject("spCakeOrderList", spCakeOrderList);
+
+		} // end of else
+
+		/*
+		 * } catch (Exception e) { System.out.println("exception in order display" +
+		 * e.getMessage()); }
+		 */
+
+		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+		ExportToExcel expoExcel = new ExportToExcel();
+		List<String> rowData = new ArrayList<String>();
+		rowData.add("Order No");
+		rowData.add("Franchisee Name");
+
+		rowData.add("Item Id");
+		rowData.add("Sp Code");
+		rowData.add("Category");
+		rowData.add("Sp Flavour");
+
+		rowData.add("Event");
+		rowData.add("Price");
+		rowData.add("Sp Total Add Rate");
+
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+		for (int i = 0; i < spCakeOrderList.size(); i++) {
+			expoExcel = new ExportToExcel();
+			rowData = new ArrayList<String>();
+			rowData.add("" + spCakeOrderList.get(i).getSpOrderNo());
+			rowData.add(spCakeOrderList.get(i).getFrName());
+			
+			String itemCode="";
+			try {
+				
+				String[] arr=spCakeOrderList.get(i).getItemId().split("#",3);
+				itemCode=arr[1];
+				
+			}catch(Exception e) {
+				e.printStackTrace();
+				itemCode=spCakeOrderList.get(i).getItemId();
+			}
+			
+
+			rowData.add(itemCode);
+			rowData.add(spCakeOrderList.get(i).getSpCode());
+
+			rowData.add(spCakeOrderList.get(i).getSpfName());
+			rowData.add(spCakeOrderList.get(i).getSpName());
+			rowData.add(spCakeOrderList.get(i).getSpEvents());
+			rowData.add("" + spCakeOrderList.get(i).getSpPrice());
+			rowData.add("" + spCakeOrderList.get(i).getSpTotalAddRate());
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			System.out.println("List" + spCakeOrderList.get(i).toString());
+		}
+
+		HttpSession session = request.getSession();
+		session.setAttribute("exportExcelList", exportToExcelList);
+		session.setAttribute("excelName", "SpCakeAlbumOrders");
+		return spCakeOrderList;
+	}
+	
+	
+	
+	
 
 	boolean isDelete = false;
 	public String[] frIds = null;
@@ -891,6 +1095,10 @@ public class OrderController {
 		}
 		return spCakeOrderList;
 	}
+	
+	
+	
+	
 
 	@RequestMapping(value = "/deleteRegSpOrder/{rspId}", method = RequestMethod.GET)
 	public ModelAndView deleteRegSpOrder(@PathVariable int rspId, HttpServletRequest request,
@@ -976,6 +1184,22 @@ public class OrderController {
 		model.addObject("spCakeOrder", orderListResponse.get(0));
 		return model;
 	}
+	
+	@RequestMapping(value = "/showHtmlViewSpcakeAlbumOrder/{spOrderNo}", method = RequestMethod.GET)
+	public ModelAndView showHtmlViewSpcakeAlbumOrder(@PathVariable("spOrderNo") int spOrderNo, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("orders/htmlViewSpCakeOrder");
+
+		RestTemplate restTemp = new RestTemplate();
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("spOrderNo", spOrderNo);
+		List<GetSpCakeOrders> orderListResponse = restTemp.postForObject(Constants.url + "getSpCakeAlbumOrderBySpOrderNo",
+				map, List.class);
+
+		model.addObject("spCakeOrder", orderListResponse.get(0));
+		return model;
+	}
 
 	@RequestMapping(value = "/showSpcakeOrderPdf/{spOrderNo}/{key}", method = RequestMethod.GET)
 	public ModelAndView showSpcakeOrderPdf(@PathVariable("spOrderNo") int spOrderNo, @PathVariable("key") int key,
@@ -986,6 +1210,26 @@ public class OrderController {
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("spOrderNo", spOrderNo);
 		List<GetSpCkOrder> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKOrderBySpOrderNo", map,
+				List.class);
+
+		model.addObject("from", key);
+		System.out.println("SpOrder" + orderListResponse.toString());
+		model.addObject("spCakeOrder", orderListResponse);
+		model.addObject("imgUrl", Constants.SP_CAKE_FOLDER);
+		model.addObject("imgUrl2", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
+		return model;
+	}
+	
+	//----------ANMOL 13-7-2019
+	@RequestMapping(value = "/showSpcakeAlbumOrderPdf/{spOrderNo}/{key}", method = RequestMethod.GET)
+	public ModelAndView showSpcakeAlbumOrderPdf(@PathVariable("spOrderNo") int spOrderNo, @PathVariable("key") int key,
+			HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView model = new ModelAndView("orders/spCakeOrderPdf");
+
+		RestTemplate restTemp = new RestTemplate();
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("spOrderNo", spOrderNo);
+		List<GetSpCkOrder> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map,
 				List.class);
 
 		model.addObject("from", key);
@@ -1020,6 +1264,36 @@ public class OrderController {
 		model.addObject("imgUrl2", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
 		return model;
 	}
+	
+	
+	
+	//------------ANMOL 13-7-2019------------------
+	@RequestMapping(value = "/showSpcakeAlbumOrderPdfInRange/{from}/{to}", method = RequestMethod.GET)
+	public ModelAndView showSpcakeAbumOrderPdfInRange(@PathVariable("from") int from, @PathVariable("to") int to,
+			HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView model = new ModelAndView("orders/spCakeOrderPdf");
+
+		RestTemplate restTemp = new RestTemplate();
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		StringBuffer orderId = new StringBuffer("0,");
+		for (int i = from - 1; i < to && i < spCakeOrderList.size(); i++) {
+			orderId.append(Integer.toString(spCakeOrderList.get(i).getSpOrderNo()) + ",");
+		}
+
+		orderId.setLength(orderId.length() - 1);
+		map.add("spOrderNo", orderId);
+		List<GetSpCkOrder> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map,
+				List.class);
+
+		System.out.println("SpOrder" + orderListResponse.toString());
+		model.addObject("spCakeOrder", orderListResponse);
+		model.addObject("from", from);
+		model.addObject("imgUrl", Constants.SP_CAKE_FOLDER);
+		model.addObject("imgUrl2", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
+		return model;
+	}
+	
+	
 
 	@RequestMapping(value = "/showHtmlViewRegSpcakeOrder/{orderNo}", method = RequestMethod.GET)
 	public ModelAndView showHtmlViewRegSpcakeOrder(@PathVariable("orderNo") int orderNo, HttpServletRequest request,

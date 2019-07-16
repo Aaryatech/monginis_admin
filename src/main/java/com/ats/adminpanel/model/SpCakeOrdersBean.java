@@ -4,35 +4,42 @@ package com.ats.adminpanel.model;
 import java.util.Date;
 
 public class SpCakeOrdersBean {
-	
-   /*  private int frId;// frId added
-*/	private int spOrderNo;
-    private String spCode;
-    private String spName;
-    private String spfName;
-    private String spEvents;
-    private String spDeliveryDate;
-    private float spPrice;
-    private float spTotalAddRate;
-    private String frName;
-    private String itemId;
+
+	/*
+	 * private int frId;// frId added
+	 */ private int spOrderNo;
+	private String spCode;
+	private String spName;
+	private String spfName;
+	private String spEvents;
+	private String spDeliveryDate;
+	private float spPrice;
+	private float spTotalAddRate;
+	private String frName;
+	private String itemId;
 	private float spSelectedWeight;
 
-/*
-    public int getFrId() {
-    	return frId;
-    }
+	private String name;
 
-    public void setFrId(int frId) {
-    	this.frId = frId;
-    }
-    */
-	
-    public String getSpCode() {
-        return spCode;
-    }
+	/*
+	 * public int getFrId() { return frId; }
+	 * 
+	 * public void setFrId(int frId) { this.frId = frId; }
+	 */
 
-    public float getSpSelectedWeight() {
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getSpCode() {
+		return spCode;
+	}
+
+	public float getSpSelectedWeight() {
 		return spSelectedWeight;
 	}
 
@@ -49,19 +56,18 @@ public class SpCakeOrdersBean {
 	}
 
 	public void setSpCode(String spCode) {
-        this.spCode = spCode;
-    }
+		this.spCode = spCode;
+	}
 
-    public String getSpName() {
-        return spName;
-    }
+	public String getSpName() {
+		return spName;
+	}
 
-    public void setSpName(String spName) {
-        this.spName = spName;
-    }
+	public void setSpName(String spName) {
+		this.spName = spName;
+	}
 
-    
-    public String getSpfName() {
+	public String getSpfName() {
 		return spfName;
 	}
 
@@ -70,16 +76,13 @@ public class SpCakeOrdersBean {
 	}
 
 	public String getSpEvents() {
-        return spEvents;
-    }
+		return spEvents;
+	}
 
-    public void setSpEvents(String spEvents) {
-        this.spEvents = spEvents;
-    }
+	public void setSpEvents(String spEvents) {
+		this.spEvents = spEvents;
+	}
 
-   
-
-	
 	public String getSpDeliveryDate() {
 		return spDeliveryDate;
 	}
@@ -105,29 +108,27 @@ public class SpCakeOrdersBean {
 	}
 
 	public String getFrName() {
-        return frName;
-    }
+		return frName;
+	}
 
-    public void setFrName(String frName) {
-        this.frName = frName;
-    }
+	public void setFrName(String frName) {
+		this.frName = frName;
+	}
 
-    public String getItemId() {
-        return itemId;
-    }
+	public String getItemId() {
+		return itemId;
+	}
 
-    public void setItemId(String itemId) {
-        this.itemId = itemId;
-    }
+	public void setItemId(String itemId) {
+		this.itemId = itemId;
+	}
 
 	@Override
 	public String toString() {
 		return "SpCakeOrdersBean [spOrderNo=" + spOrderNo + ", spCode=" + spCode + ", spName=" + spName + ", spfName="
 				+ spfName + ", spEvents=" + spEvents + ", spDeliveryDate=" + spDeliveryDate + ", spPrice=" + spPrice
-				+ ", spTotalAddRate=" + spTotalAddRate + ", frName=" + frName + ", itemId=" + itemId + "]";
+				+ ", spTotalAddRate=" + spTotalAddRate + ", frName=" + frName + ", itemId=" + itemId
+				+ ", spSelectedWeight=" + spSelectedWeight + ", name=" + name + "]";
 	}
 
-	
-	
-	
 }
