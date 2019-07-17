@@ -678,7 +678,7 @@
 												<thead>
 													<tr class="bgpink">
 														<th width="45" style="width: 18px">Sr.No.</th>
-														<th width="100" align="left">Photo</th>
+														<th width="100" align="left" style="width: 80">Photo</th>
 														<th width="100" align="left">DSC</th>
 														<th width="100" align="left">EMP Code</th>
 														<th width="100" align="left">Name</th>
@@ -701,7 +701,7 @@
 												<thead>
 													<tr class="bgpink">
 														<th width="45" style="width: 18px">Sr.No.</th>
-														<th width="100" align="left">Photo</th>
+														<th width="100" align="left" style="width: 80">Photo</th>
 														<th width="100" align="left">DSC</th>
 														<th width="100" align="left">EMP Code</th>
 														<th width="100" align="left">Name</th>
@@ -718,26 +718,26 @@
 														varStatus="count">
 														<tr>
 
-															<td><c:out value="${count.index+1}" /></td>
+															<td width="45" align="left" style="width: 18px"><c:out value="${count.index+1}" /></td>
 
-															<td align="left"><img
+															<td width="100" align="left"><img
 																src="${url}${empList.empPhoto}" width="80" height="60" /></td>
 
-															<td align="left"><c:out value="${empList.empDsc}"></c:out></td>
+															<td width="100" align="left"><c:out value="${empList.empDsc}"></c:out></td>
 
-															<td align="left"><c:out value="${empList.empCode}"></c:out></td>
+															<td width="100" align="left"><c:out value="${empList.empCode}"></c:out></td>
 
-															<td align="left"><c:out
+															<td width="100" align="left"><c:out
 																	value="${empList.empFname} ${empList.empMname} ${empList.empSname}"></c:out></td>
-															<td align="left"><c:out value="${empList.deptName}"></c:out></td>
+															<td width="100" align="left"><c:out value="${empList.deptName}"></c:out></td>
 
-															<td align="left"><c:out value="${empList.catName}"></c:out></td>
+															<td width="100" align="left"><c:out value="${empList.catName}"></c:out></td>
 
-															<td align="left"><c:out
+															<td width="100" align="left"><c:out
 																	value="${empList.companyName}"></c:out></td>
 
 
-															<td align="left"><a
+															<td width="81" align="left"><a
 																href="${pageContext.request.contextPath}/updateHrEmp/${empList.empId}"><span
 																	class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp; <a
 																href="${pageContext.request.contextPath}/deleteHrEmp/${empList.empId}"
