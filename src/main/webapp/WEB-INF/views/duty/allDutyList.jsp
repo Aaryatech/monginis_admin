@@ -78,7 +78,7 @@
 									<div id="table-scroll" class="table-scroll">
 
 										<div id="faux-table" class="faux-table" aria="hidden">
-											<table id="table2" class="main-table">
+											<table id="table2" class="main-table" >
 												<thead>
 													<tr class="bgpink">
 														<th width="45" style="width: 18px">Sr.No.</th>
@@ -115,33 +115,33 @@
 														varStatus="count">
 														<tr>
 
-															<td><c:out value="${count.index+1}" /></td>
+															<td width="45" style="width: 18px"><c:out value="${count.index+1}" /></td>
 
-															<td align="left"><c:out value="${dutyList.dutyName}"></c:out></td>
+															<td width="100" align="left"><c:out value="${dutyList.dutyName}"></c:out></td>
 
-															<td align="left"><c:out value="${dutyList.deptName}"></c:out></td>
+															<td width="100" align="left"><c:out value="${dutyList.deptName}"></c:out></td>
 
-															<td align="left"><c:out
+															<td width="100" align="left"><c:out
 																	value="${dutyList.shiftFromTime}"></c:out></td>
 
-															<td align="left"><c:out
+															<td width="100" align="left"><c:out
 																	value="${dutyList.shiftToTime}"></c:out></td>
 
 															<c:choose>
 																<c:when test="${dutyList.type==1}">
-																	<td align="left">Daily Basis</td>
+																	<td width="100" align="left">Daily Basis</td>
 																</c:when>
 
 																<c:when test="${dutyList.type==2}">
-																	<td align="left">Day Basis</td>
+																	<td width="100" align="left">Day Basis</td>
 																</c:when>
 
 																<c:when test="${dutyList.type==3}">
-																	<td align="left">Date Basis</td>
+																	<td width="100" align="left">Date Basis</td>
 																</c:when>
 															</c:choose>
 
-															<td align="left"><a
+															<td width="100" align="left"><a
 																href="${pageContext.request.contextPath}/editDutyAndTask/${dutyList.dutyId}"><span
 																	class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp; <a
 																href="${pageContext.request.contextPath}/deleteDuty/${dutyList.dutyId}"
