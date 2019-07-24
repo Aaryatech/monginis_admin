@@ -711,7 +711,7 @@
 
 								document.getElementById("photo2").checked = true;
 								document.getElementById("remark2").checked = true;
-								document.getElementById("timeReq").checked = true;
+								document.getElementById("timeReq1").checked = true;
 
 								document
 										.getElementById("transliterateTextarea1").value = "";
