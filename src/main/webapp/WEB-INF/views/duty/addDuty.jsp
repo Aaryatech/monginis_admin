@@ -288,10 +288,10 @@
 									</div>
 
 									<div class="form-group">
-										<div class="col1">
-											<label class="col-sm-2 col-lg-2 control-label">Photo
+										<div class="col2">
+											<label class="col-sm-2 col-lg-3 control-label">Photo
 												Required </label>
-											<div class="col-sm-1 col-lg-1 controls">
+											<div class="col-sm-2 col-lg-3 controls">
 												<label class="radio-inline"> <input type="radio"
 													name="photo" id="photo1" value="1"> YES
 												</label> <label class="radio-inline"> <input type="radio"
@@ -300,10 +300,10 @@
 											</div>
 										</div>
 
-										<div class="col1">
-											<label class="col-sm-2 col-lg-2 control-label">Remark
+										<div class="col2">
+											<label class="col-sm-2 col-lg-3 control-label">Remark
 												Required </label>
-											<div class="col-sm-1 col-lg-1 controls">
+											<div class="col-sm-2 col-lg-3 controls">
 												<label class="radio-inline"> <input type="radio"
 													name="remark" id="remark1" value="1"> YES
 												</label> <label class="radio-inline"> <input type="radio"
@@ -311,11 +311,16 @@
 												</label>
 											</div>
 										</div>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col2">
 
 										<div class="col2">
-											<label class="col-sm-2 col-lg-2 control-label">Time
+											<label class="col-sm-2 col-lg-3 control-label">Time
 												Required </label>
-											<div class="col-sm-1 col-lg-1 controls">
+											<div class="col-sm-2 col-lg-3 controls">
 												<label class="radio-inline"> <input type="radio"
 													name="timeReq" id="timeReq" value="1"
 													onchange="timeRequredChange(this.value)"> YES
@@ -329,9 +334,9 @@
 
 										<div style="display: none" id="timeReqVarId">
 
-											<div class="col1">
+											<div class="col2">
 
-												<div class="col-sm-1 controls">
+												<div class="col-sm-2 controls">
 													<input type="time" name="timeReqVar" id="timeReqVar"
 														placeholder="timeReqVar" class="form-control" />
 												</div>
@@ -339,10 +344,10 @@
 										</div>
 
 
-										<div class="col1">
-											<label class="col-sm-1 col-lg-1 control-label">Task
+										<div class="col2">
+											<label class="col-sm-2 col-lg-2 control-label">Task
 												Weightage </label>
-											<div class="col-sm-1 controls">
+											<div class="col-sm-2 controls">
 												<input type="number" name="weight" id="weight"
 													placeholder="weight" min="1" max="100" class="form-control"
 													value="1" />
