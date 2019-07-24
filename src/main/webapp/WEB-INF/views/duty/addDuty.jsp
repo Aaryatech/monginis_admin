@@ -242,133 +242,129 @@
 								</div>
 								<hr>
 
-								<div class="row">
 
-									<div class="form-group">
-										<label class="col-sm-3 col-lg-2 control-label">Task
-											Name </label>
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Task
+										Name </label>
+									<div class="col-sm-3 col-lg-3 controls">
+										<textarea name="taskNameEng" id="taskNameEng"
+											placeholder="Task Name in English" class="form-control"></textarea>
+									</div>
+
+									<div class="col-sm-3 col-lg-3 controls">
+										<textarea name="taskNameMar"
+											placeholder="Task Name in Marathi" class="form-control"
+											id="transliterateTextarea1"></textarea>
+									</div>
+
+									<div class="col-sm-3 col-lg-3 controls">
+										<textarea name="taskNameHin" placeholder="Task Name in Hindi"
+											class="form-control" id="transliterateTextarea2"></textarea>
+									</div>
+
+								</div>
+
+
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Task
+										Description </label>
+									<div class="col-sm-3 col-lg-3 controls">
+										<textarea name="taskDescEng" id="taskDescEng"
+											placeholder="Task Description in English"
+											class="form-control"></textarea>
+									</div>
+
+									<div class="col-sm-3 col-lg-3 controls">
+										<textarea name="taskDescMar" id="transliterateTextarea3"
+											placeholder="Task Description in Marathi"
+											class="form-control"></textarea>
+									</div>
+
+									<div class="col-sm-3 col-lg-3 controls">
+										<textarea name="taskDescHin" id="transliterateTextarea4"
+											placeholder="Task Description in Hindi" class="form-control"></textarea>
+									</div>
+
+								</div>
+
+								<div class="form-group">
+									<div class="col2">
+										<label class="col-sm-3 col-lg-2 control-label">Photo
+											Required </label>
 										<div class="col-sm-3 col-lg-3 controls">
-											<textarea name="taskNameEng" id="taskNameEng"
-												placeholder="Task Name in English" class="form-control"></textarea>
+											<label class="radio-inline"> <input type="radio"
+												name="photo" id="photo1" value="1"> YES
+											</label> <label class="radio-inline"> <input type="radio"
+												name="photo" id="photo2" value="0" checked> NO
+											</label>
+										</div>
+									</div>
+
+									<div class="col2">
+										<label class="col-sm-3 col-lg-2 control-label">Remark
+											Required </label>
+										<div class="col-sm-3 col-lg-3 controls">
+											<label class="radio-inline"> <input type="radio"
+												name="remark" id="remark1" value="1"> YES
+											</label> <label class="radio-inline"> <input type="radio"
+												name="remark" id="remark2" value="0" checked> NO
+											</label>
+										</div>
+									</div>
+								</div>
+
+
+								<div class="form-group">
+
+									<div class="col2">
+										<label class="col-sm-3 col-lg-2 control-label">Time
+											Required </label>
+										<div class="col-sm-3 col-lg-3 controls">
+											<label class="radio-inline"> <input type="radio"
+												name="timeReq" id="timeReq" value="1"
+												onchange="timeRequredChange(this.value)"> YES
+											</label> <label class="radio-inline"> <input type="radio"
+												name="timeReq" id="timeReq1" value="0"
+												onchange="timeRequredChange(this.value)" checked> NO
+											</label>
 										</div>
 
-										<div class="col-sm-3 col-lg-3 controls">
-											<textarea name="taskNameMar"
-												placeholder="Task Name in Marathi" class="form-control"
-												id="transliterateTextarea1"></textarea>
-										</div>
+										<div style="display: none" id="timeReqVarId">
 
-										<div class="col-sm-3 col-lg-3 controls">
-											<textarea name="taskNameHin" placeholder="Task Name in Hindi"
-												class="form-control" id="transliterateTextarea2"></textarea>
+											<div class="col-sm-2 col-lg-2 controls">
+												<input type="time" name="timeReqVar" id="timeReqVar"
+													placeholder="timeReqVar" class="form-control" />
+											</div>
 										</div>
 
 									</div>
 
-									<div class="form-group">
+
+
+
+									<div class="col2">
 										<label class="col-sm-3 col-lg-2 control-label">Task
-											Description </label>
-										<div class="col-sm-3 col-lg-3 controls">
-											<textarea name="taskDescEng" id="taskDescEng"
-												placeholder="Task Description in English"
-												class="form-control"></textarea>
-										</div>
-
-										<div class="col-sm-3 col-lg-3 controls">
-											<textarea name="taskDescMar" id="transliterateTextarea3"
-												placeholder="Task Description in Marathi"
-												class="form-control"></textarea>
-										</div>
-
-										<div class="col-sm-3 col-lg-3 controls">
-											<textarea name="taskDescHin" id="transliterateTextarea4"
-												placeholder="Task Description in Hindi" class="form-control"></textarea>
-										</div>
-
-									</div>
-
-									<div class="form-group">
-										<div class="col2">
-											<label class="col-sm-2 col-lg-3 control-label">Photo
-												Required </label>
-											<div class="col-sm-2 col-lg-3 controls">
-												<label class="radio-inline"> <input type="radio"
-													name="photo" id="photo1" value="1"> YES
-												</label> <label class="radio-inline"> <input type="radio"
-													name="photo" id="photo2" value="0" checked> NO
-												</label>
-											</div>
-										</div>
-
-										<div class="col2">
-											<label class="col-sm-2 col-lg-3 control-label">Remark
-												Required </label>
-											<div class="col-sm-2 col-lg-3 controls">
-												<label class="radio-inline"> <input type="radio"
-													name="remark" id="remark1" value="1"> YES
-												</label> <label class="radio-inline"> <input type="radio"
-													name="remark" id="remark2" value="0" checked> NO
-												</label>
-											</div>
+											Weightage </label>
+										<div class="col-sm-2 controls">
+											<input type="number" name="weight" id="weight"
+												placeholder="weight" min="1" max="100" class="form-control"
+												value="1" />
 										</div>
 									</div>
 								</div>
 
 								<div class="form-group">
-									<div class="col2">
-
-										<div class="col2">
-											<label class="col-sm-2 col-lg-3 control-label">Time
-												Required </label>
-											<div class="col-sm-2 col-lg-3 controls">
-												<label class="radio-inline"> <input type="radio"
-													name="timeReq" id="timeReq" value="1"
-													onchange="timeRequredChange(this.value)"> YES
-												</label> <label class="radio-inline"> <input type="radio"
-													name="timeReq" id="timeReq1" value="0"
-													onchange="timeRequredChange(this.value)" checked>
-													NO
-												</label>
-											</div>
-										</div>
-
-										<div style="display: none" id="timeReqVarId">
-
-											<div class="col2">
-
-												<div class="col-sm-2 controls">
-													<input type="time" name="timeReqVar" id="timeReqVar"
-														placeholder="timeReqVar" class="form-control" />
-												</div>
-											</div>
-										</div>
-
-
-										<div class="col2">
-											<label class="col-sm-2 col-lg-2 control-label">Task
-												Weightage </label>
-											<div class="col-sm-2 controls">
-												<input type="number" name="weight" id="weight"
-													placeholder="weight" min="1" max="100" class="form-control"
-													value="1" />
-											</div>
-										</div>
-
+									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+										<input type="button" value="Add" class="btn btn-primary"
+											style="align-content: center; width: 113px;" onclick="add()" />
 									</div>
-
-									<div class="form-group">
-										<div
-											class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-											<input type="button" value="Add" class="btn btn-primary"
-												style="align-content: center; width: 113px;" onclick="add()" />
-										</div>
-									</div>
-
-									<input type="hidden" id="isDelete" name="isDelete" value="0">
-									<input type="hidden" name="isEdit" id="isEdit" value="0">
-									<input type="hidden" name="index" id="index" value="0">
-
 								</div>
+
+								<input type="hidden" id="isDelete" name="isDelete" value="0">
+								<input type="hidden" name="isEdit" id="isEdit" value="0">
+								<input type="hidden" name="index" id="index" value="0">
+
+
 
 								<div class="table-responsive" style="border: 0">
 
@@ -382,7 +378,7 @@
 												<th width="50" align="left">Photo</th>
 												<th width="50" align="left">Remark</th>
 												<th width="50" align="left">Weightage</th>
-												<th width="50" align="left">Time Required</th>
+												<th width="50" align="left">Time</th>
 
 												<th width="20px" align="left">Action</th>
 											</tr>
@@ -448,6 +444,7 @@
 			var taskDescHin = document.getElementById("transliterateTextarea4").value;
 			var timeReqVar = document.getElementById("timeReqVar").value;
 
+			//alert("TIME - "+timeReqVar);
 			//
 
 			var photoReq = $("#photo").val();
@@ -519,6 +516,9 @@
 
 									document.getElementById("photo2").checked = true;
 									document.getElementById("remark2").checked = true;
+									document.getElementById("timeReq1").checked = true;
+
+									document.getElementById("timeReqVarId").style.display = "none";
 
 									document
 											.getElementById("transliterateTextarea1").value = "";
@@ -582,16 +582,32 @@
 																		'<td></td>')
 																		.html(
 																				v.taskDescEng));
+
+														var ph = "";
+														if (v.photoReq == 1) {
+															ph = "Yes";
+														} else {
+															ph = "No";
+														}
+
 														tr
 																.append($(
 																		'<td></td>')
 																		.html(
-																				v.photoReq));
+																				ph));
+
+														var rm = "";
+														if (v.photoReq == 1) {
+															rm = "Yes";
+														} else {
+															rm = "No";
+														}
+
 														tr
 																.append($(
 																		'<td></td>')
 																		.html(
-																				v.remarkReq));
+																				rm));
 														tr
 																.append($(
 																		'<td></td>')
@@ -602,7 +618,7 @@
 																.append($(
 																		'<td></td>')
 																		.html(
-																				v.exInt1));
+																				v.exVar1));
 														tr
 																.append($(
 																		'<td></td>')
@@ -663,9 +679,11 @@
 								}
 
 								if (data.exInt1 == 1) {
-									document.getElementById("timeReq1").checked = true;
-								} else {
 									document.getElementById("timeReq").checked = true;
+									document.getElementById("timeReqVarId").style.display = "block";
+								} else {
+									document.getElementById("timeReq1").checked = true;
+									document.getElementById("timeReqVarId").style.display = "none";
 								}
 
 								document
@@ -717,6 +735,8 @@
 								document.getElementById("photo2").checked = true;
 								document.getElementById("remark2").checked = true;
 								document.getElementById("timeReq1").checked = true;
+								
+								document.getElementById("timeReqVarId").style.display = "none";
 
 								document
 										.getElementById("transliterateTextarea1").value = "";
@@ -727,6 +747,8 @@
 								document
 										.getElementById("transliterateTextarea4").value = "";
 								document.getElementById("index").value = 0;
+
+								document.getElementById("timeReqVar").value = "";
 
 								$('#table_grid td').remove();
 
@@ -772,15 +794,44 @@
 																	'<td></td>')
 																	.html(
 																			v.taskDescEng));
-													tr.append($('<td></td>')
+
+													/* tr.append($('<td></td>')
 															.html(v.photoReq));
 													tr.append($('<td></td>')
 															.html(v.remarkReq));
+													 */
+													var ph = "";
+													if (v.photoReq == 1) {
+														ph = "Yes";
+													} else {
+														ph = "No";
+													}
+
+													tr.append($('<td></td>')
+															.html(ph));
+
+													var rm = "";
+													if (v.remarkReq == 1) {
+														rm = "Yes";
+													} else {
+														rm = "No";
+													}
+
+													tr.append($('<td></td>')
+															.html(rm));
+
 													tr
 															.append($(
 																	'<td></td>')
 																	.html(
 																			v.taskWeight));
+													
+													tr
+													.append($(
+															'<td></td>')
+															.html(
+																	v.exVar1));
+													
 													tr.append($('<td></td>')
 															.html(str));
 

@@ -376,10 +376,46 @@
 											</div>
 										</div>
 
+
+
+									</div>
+
+
+									<div class="form-group">
+
+										<div class="col2">
+											<label class="col-sm-3 col-lg-2 control-label">Time
+												Required </label>
+											<div class="col-sm-3 col-lg-2 controls">
+												<label class="radio-inline"> <input type="radio"
+													name="timeReq" id="timeReq" value="1"
+													onchange="timeRequredChange(this.value)"> YES
+												</label> <label class="radio-inline"> <input type="radio"
+													name="timeReq" id="timeReq1" value="0"
+													onchange="timeRequredChange(this.value)" checked>
+													NO
+												</label>
+											</div>
+										</div>
+
+										<div class="col2">
+											<div style="display: none" id="timeReqVarId">
+
+												<div class="col2">
+
+													<div class="col-sm-2 col-lg-2 controls">
+														<input type="time" name="timeReqVar" id="timeReqVar"
+															placeholder="timeReqVar" class="form-control" />
+													</div>
+												</div>
+											</div>
+										</div>
+
+
 										<div class="col2">
 											<label class="col-sm-3 col-lg-2 control-label">Task
 												Weightage </label>
-											<div class="col-sm-1 controls">
+											<div class="col-sm-2 controls">
 												<input type="number" name="weight" id="weight"
 													placeholder="weight" min="1" max="100" class="form-control"
 													value="1" />
@@ -387,6 +423,10 @@
 										</div>
 
 									</div>
+
+
+
+
 
 									<div class="form-group">
 										<div
@@ -406,7 +446,7 @@
 
 									<table class="table table-advance" id="table_grid">
 										<thead>
-											<tr>
+											<tr class="bgpink">
 
 												<th width="15">Sr.No.</th>
 												<th width="200" align="left">Task Name</th>
@@ -414,6 +454,7 @@
 												<th width="50" align="left">Photo</th>
 												<th width="50" align="left">Remark</th>
 												<th width="50" align="left">Weightage</th>
+												<th width="50" align="left">Time</th>
 
 												<th width="20px" align="left">Action</th>
 											</tr>
@@ -433,14 +474,17 @@
 															value="${editTaskList.taskDescEng}" /></td>
 
 													<td style="text-align: left"><c:out
-															value="${editTaskList.photoReq}" /></td>
+															value="${editTaskList.photoReq==1 ? 'Yes':'No'}" /></td>
 
 													<td style="text-align: left"><c:out
-															value="${editTaskList.remarkReq}" /></td>
+															value="${editTaskList.remarkReq==1 ? 'Yes':'No'}" /></td>
 
 
 													<td style="text-align: left"><c:out
 															value="${editTaskList.taskWeight}" /></td>
+
+													<td style="text-align: left"><c:out
+															value="${editTaskList.exVar1}" /></td>
 
 													<td style="text-align: center"><a href="#"
 														onclick="callEdit(${editTaskList.taskId},${count.index})"><i
@@ -515,10 +559,12 @@
 			var taskDescEng = $("#taskDescEng").val();
 			var taskDescMar = document.getElementById("transliterateTextarea3").value;
 			var taskDescHin = document.getElementById("transliterateTextarea4").value;
-
+			var timeReqVar = document.getElementById("timeReqVar").value;
+			
 			var photoReq = $("#photo").val();
 			var remarkReq = $("#remark").val();
 			var weight = $("#weight").val();
+			var timeReq = $("#timeReq").val();
 
 			if (document.getElementById("photo1").checked == true) {
 				photoReq = 1;
@@ -530,6 +576,12 @@
 				remarkReq = 1;
 			} else {
 				remarkReq = 0;
+			}
+			
+			if (document.getElementById("timeReq").checked == true) {
+				timeReq = 1;
+			} else {
+				timeReq = 0;
 			}
 
 			var isEdit = document.getElementById("isEdit").value;
@@ -561,6 +613,8 @@
 									remarkReq : remarkReq,
 									weight : weight,
 									dutyId : dutyId,
+									timeReq : timeReq,
+									timeReqVar : timeReqVar,
 									ajax : 'true',
 
 								},
@@ -577,6 +631,9 @@
 
 									document.getElementById("photo2").checked = true;
 									document.getElementById("remark2").checked = true;
+									document.getElementById("timeReq1").checked = true;
+
+									document.getElementById("timeReqVarId").style.display = "none";
 
 									document
 											.getElementById("transliterateTextarea1").value = "";
@@ -587,6 +644,8 @@
 									document
 											.getElementById("transliterateTextarea4").value = "";
 									document.getElementById("index").value = 0;
+									
+									document.getElementById("timeReqVar").value = "";
 
 									$('#table_grid td').remove();
 
@@ -638,7 +697,8 @@
 																		'<td></td>')
 																		.html(
 																				v.taskDescEng));
-														tr
+														
+														/* tr
 																.append($(
 																		'<td></td>')
 																		.html(
@@ -647,12 +707,46 @@
 																.append($(
 																		'<td></td>')
 																		.html(
-																				v.remarkReq));
+																				v.remarkReq)); */
+																				
+																				var ph = "";
+																				if (v.photoReq == 1) {
+																					ph = "Yes";
+																				} else {
+																					ph = "No";
+																				}
+
+																				tr
+																						.append($(
+																								'<td></td>')
+																								.html(
+																										ph));
+
+																				var rm = "";
+																				if (v.remarkReq == 1) {
+																					rm = "Yes";
+																				} else {
+																					rm = "No";
+																				}
+																				
+																				tr
+																				.append($(
+																						'<td></td>')
+																						.html(
+																								rm));
+																				
+																				
 														tr
 																.append($(
 																		'<td></td>')
 																		.html(
 																				v.taskWeight));
+														
+														tr
+														.append($(
+																'<td></td>')
+																.html(
+																		v.exVar1));
 														tr
 																.append($(
 																		'<td></td>')
@@ -711,6 +805,19 @@
 								} else {
 									document.getElementById("remark2").checked = true;
 								}
+								
+								if (data.exInt1 == 1) {
+									document.getElementById("timeReq").checked = true;
+									document.getElementById("timeReqVarId").style.display = "block";
+								} else {
+									document.getElementById("timeReq1").checked = true;
+									document.getElementById("timeReqVarId").style.display = "none";
+								}
+								
+								
+								
+								document.getElementById("timeReqVar").value = data.exVar1;
+								
 
 								document
 										.getElementById("transliterateTextarea1").value = data.taskNameMar;
@@ -756,6 +863,9 @@
 
 								document.getElementById("photo2").checked = true;
 								document.getElementById("remark2").checked = true;
+document.getElementById("timeReq1").checked = true;
+								
+								document.getElementById("timeReqVarId").style.display = "none";
 
 								document
 										.getElementById("transliterateTextarea1").value = "";
@@ -766,6 +876,8 @@
 								document
 										.getElementById("transliterateTextarea4").value = "";
 								document.getElementById("index").value = 0;
+								
+								document.getElementById("timeReqVar").value = "";
 
 								$('#table_grid td').remove();
 
@@ -811,15 +923,45 @@
 																	'<td></td>')
 																	.html(
 																			v.taskDescEng));
-													tr.append($('<td></td>')
+													
+													/* tr.append($('<td></td>')
 															.html(v.photoReq));
 													tr.append($('<td></td>')
-															.html(v.remarkReq));
+															.html(v.remarkReq)); */
+															
+															var ph = "";
+															if (v.photoReq == 1) {
+																ph = "Yes";
+															} else {
+																ph = "No";
+															}
+
+															tr.append($('<td></td>')
+																	.html(ph));
+
+															var rm = "";
+															if (v.remarkReq == 1) {
+																rm = "Yes";
+															} else {
+																rm = "No";
+															}
+
+															tr.append($('<td></td>')
+																	.html(rm));
+													
+													
 													tr
 															.append($(
 																	'<td></td>')
 																	.html(
 																			v.taskWeight));
+													
+													tr
+													.append($(
+															'<td></td>')
+															.html(
+																	v.exVar1));
+													
 													tr.append($('<td></td>')
 															.html(str));
 
@@ -837,6 +979,22 @@
 		}
 		function callAlert(msg) {
 			alert(msg);
+		}
+		
+		function timeRequredChange(timeReq) {
+			//alert("hii");
+			//	alert(timeReq);
+
+			if (timeReq == 1) {
+
+				document.getElementById("timeReqVarId").style.display = "block";
+
+			} else {
+
+				document.getElementById("timeReqVarId").style.display = "none";
+
+			}
+
 		}
 	</script>
 
