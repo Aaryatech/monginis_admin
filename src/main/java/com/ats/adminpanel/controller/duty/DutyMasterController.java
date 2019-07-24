@@ -5,6 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -267,6 +269,9 @@ public class DutyMasterController {
 				remark = Integer.parseInt(request.getParameter("remarkReq"));
 				weight = Integer.parseInt(request.getParameter("weight"));
 				timeReq = Integer.parseInt(request.getParameter("timeReq"));
+				
+				System.err.println("TIME-------------------------------------- "+timeReqVar);
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -314,6 +319,8 @@ public class DutyMasterController {
 				}
 
 			} else {
+				
+				System.err.println("ELSE TIME---------------------- "+timeReqVar);
 
 				TaskDetail temp = new TaskDetail(0, 0, taskNameEng, taskNameMar, taskNameHin, taskDescEng, taskDescMar,
 						taskDescHin, photo, remark, weight, timeReq, timeReqVar, userId, todaysDate, 1);
@@ -328,10 +335,12 @@ public class DutyMasterController {
 			e.printStackTrace();
 		}
 		System.err.println("tempList " + tempList.toString());
+		
 
 		return tempList;
 
 	}
+	
 
 	@RequestMapping(value = "/getTaskForEdit", method = RequestMethod.GET)
 	public @ResponseBody TaskDetail getTaskForEdit(HttpServletRequest request, HttpServletResponse response) {
@@ -428,8 +437,9 @@ public class DutyMasterController {
 						tempList.get(i).getTaskNameMar(), tempList.get(i).getTaskNameHin(),
 						tempList.get(i).getTaskDescEng(), tempList.get(i).getTaskDescMar(),
 						tempList.get(i).getTaskDescHin(), tempList.get(i).getPhotoReq(), tempList.get(i).getRemarkReq(),
-						tempList.get(i).getTaskWeight(), tempList.get(i).getExInt1(), taskList.get(i).getExVar1(),
+						tempList.get(i).getTaskWeight(), tempList.get(i).getExInt1(), tempList.get(i).getExVar1(),
 						tempList.get(i).getCreatedBy(), tempList.get(i).getCreatedDate(), 1);
+				
 
 				detailList.add(detail);
 

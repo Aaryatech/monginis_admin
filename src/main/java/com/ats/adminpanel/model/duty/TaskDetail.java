@@ -44,6 +44,7 @@ public class TaskDetail {
 		this.remarkReq = remarkReq;
 		this.taskWeight = taskWeight;
 		this.exInt1 = exInt1;
+		this.exVar1 = exVar1;
 		this.createdBy = createdBy;
 		this.createdDate = createdDate;
 		this.delStatus = delStatus;
