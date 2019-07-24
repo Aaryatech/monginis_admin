@@ -22,20 +22,15 @@ public class TaskDetail {
 	private String exVar1;
 	private String exVar2;
 	private String exVar3;
-	
-	
 
 	public TaskDetail() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
-	
-	
-	
 
 	public TaskDetail(int taskId, int dutyId, String taskNameEng, String taskNameMar, String taskNameHin,
 			String taskDescEng, String taskDescMar, String taskDescHin, int photoReq, int remarkReq, int taskWeight,
-			int createdBy, String createdDate, int delStatus) {
+			int exInt1, String exVar1, int createdBy, String createdDate, int delStatus) {
 		super();
 		this.taskId = taskId;
 		this.dutyId = dutyId;
@@ -48,13 +43,11 @@ public class TaskDetail {
 		this.photoReq = photoReq;
 		this.remarkReq = remarkReq;
 		this.taskWeight = taskWeight;
+		this.exInt1 = exInt1;
 		this.createdBy = createdBy;
 		this.createdDate = createdDate;
 		this.delStatus = delStatus;
 	}
-
-
-
 
 	public int getTaskId() {
 		return taskId;
