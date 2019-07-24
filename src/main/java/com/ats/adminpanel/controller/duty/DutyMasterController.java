@@ -245,8 +245,8 @@ public class DutyMasterController {
 	public @ResponseBody List<TaskDetail> addDutyTaskDetail(HttpServletRequest request, HttpServletResponse response) {
 
 		String taskNameEng = null, taskNameMar = null, taskNameHin = null, taskDescEng = null, taskDescMar = null,
-				taskDescHin = null;
-		int photo = 0, remark = 0, weight = 0;
+				taskDescHin = null, timeReqVar = null;
+		int photo = 0, remark = 0, weight = 0, timeReq = 0;
 
 		try {
 
@@ -261,10 +261,12 @@ public class DutyMasterController {
 				taskDescEng = request.getParameter("taskDescEng");
 				taskDescMar = request.getParameter("taskDescMar");
 				taskDescHin = request.getParameter("taskDescHin");
+				timeReqVar = request.getParameter("timeReqVar");
 
 				photo = Integer.parseInt(request.getParameter("photoReq"));
 				remark = Integer.parseInt(request.getParameter("remarkReq"));
 				weight = Integer.parseInt(request.getParameter("weight"));
+				timeReq = Integer.parseInt(request.getParameter("timeReq"));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -272,6 +274,8 @@ public class DutyMasterController {
 			System.out.println("IsDelete" + isDelete);
 			System.out.println("IsEdit" + isEdit);
 			System.out.println("Index" + index);
+
+			System.out.println("timeReqtimeReqtimeReq" + timeReq);
 
 			HttpSession session = request.getSession();
 			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
@@ -303,6 +307,8 @@ public class DutyMasterController {
 					tempList.get(index).setPhotoReq(photo);
 					tempList.get(index).setRemarkReq(remark);
 					tempList.get(index).setTaskWeight(weight);
+					tempList.get(index).setExInt1(timeReq);
+					tempList.get(index).setExVar1(timeReqVar);
 
 					System.out.println("templist  =====" + tempList.toString());
 				}
@@ -310,7 +316,7 @@ public class DutyMasterController {
 			} else {
 
 				TaskDetail temp = new TaskDetail(0, 0, taskNameEng, taskNameMar, taskNameHin, taskDescEng, taskDescMar,
-						taskDescHin, photo, remark, weight, userId, todaysDate, 1);
+						taskDescHin, photo, remark, weight, timeReq, timeReqVar, userId, todaysDate, 1);
 				tempList.add(temp);
 
 				System.err.println("tempList in else " + tempList.toString());
@@ -422,8 +428,8 @@ public class DutyMasterController {
 						tempList.get(i).getTaskNameMar(), tempList.get(i).getTaskNameHin(),
 						tempList.get(i).getTaskDescEng(), tempList.get(i).getTaskDescMar(),
 						tempList.get(i).getTaskDescHin(), tempList.get(i).getPhotoReq(), tempList.get(i).getRemarkReq(),
-						tempList.get(i).getTaskWeight(), tempList.get(i).getCreatedBy(),
-						tempList.get(i).getCreatedDate(), 1);
+						tempList.get(i).getTaskWeight(), tempList.get(i).getExInt1(), taskList.get(i).getExVar1(),
+						tempList.get(i).getCreatedBy(), tempList.get(i).getCreatedDate(), 1);
 
 				detailList.add(detail);
 
@@ -512,7 +518,7 @@ public class DutyMasterController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
+
 			try {
 				List<Integer> selectedDateList = Stream.of(editDuty.getTypeDesc().split(",")).map(Integer::parseInt)
 						.collect(Collectors.toList());
@@ -521,7 +527,6 @@ public class DutyMasterController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 
 			TaskDetail[] taskArray = restTemplate
 					.postForObject(Constants.security_app_url + "duty/master/allTaskByDuty", map, TaskDetail[].class);
@@ -546,8 +551,8 @@ public class DutyMasterController {
 		try {
 
 			String taskNameEng = null, taskNameMar = null, taskNameHin = null, taskDescEng = null, taskDescMar = null,
-					taskDescHin = null;
-			int photo = 0, remark = 0, weight = 0;
+					taskDescHin = null, timeReqVar = null;
+			int photo = 0, remark = 0, weight = 0, timeReq = 0;
 
 			RestTemplate rest = new RestTemplate();
 
@@ -562,10 +567,13 @@ public class DutyMasterController {
 				taskDescEng = request.getParameter("taskDescEng");
 				taskDescMar = request.getParameter("taskDescMar");
 				taskDescHin = request.getParameter("taskDescHin");
+				timeReqVar = request.getParameter("timeReqVar");
 
 				photo = Integer.parseInt(request.getParameter("photoReq"));
 				remark = Integer.parseInt(request.getParameter("remarkReq"));
 				weight = Integer.parseInt(request.getParameter("weight"));
+				timeReq = Integer.parseInt(request.getParameter("timeReq"));
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -589,7 +597,8 @@ public class DutyMasterController {
 				map = new LinkedMultiValueMap<String, Object>();
 				map.add("taskId", deleteDetail.getTaskId());
 
-				Info errMsg = rest.postForObject(Constants.security_app_url + "duty/master/deleteTask", map, Info.class);
+				Info errMsg = rest.postForObject(Constants.security_app_url + "duty/master/deleteTask", map,
+						Info.class);
 
 				taskList.remove(index);
 
@@ -606,6 +615,8 @@ public class DutyMasterController {
 					taskList.get(index).setPhotoReq(photo);
 					taskList.get(index).setRemarkReq(remark);
 					taskList.get(index).setTaskWeight(weight);
+					taskList.get(index).setExInt1(timeReq);
+					taskList.get(index).setExVar1(timeReqVar);
 
 					System.out.println("templist  =====" + tempList.toString());
 				}
@@ -619,7 +630,8 @@ public class DutyMasterController {
 				if (taskList.size() > 0) {
 
 					TaskDetail temp = new TaskDetail(0, dutyId, taskNameEng, taskNameMar, taskNameHin, taskDescEng,
-							taskDescMar, taskDescHin, photo, remark, weight, userId, todaysDate, 1);
+							taskDescMar, taskDescHin, photo, remark, weight, timeReq, timeReqVar, userId, todaysDate,
+							1);
 
 					System.err.println("tempList in else " + tempList.toString());
 
@@ -725,7 +737,8 @@ public class DutyMasterController {
 						taskList.get(i).getTaskNameHin(), taskList.get(i).getTaskDescEng(),
 						taskList.get(i).getTaskDescMar(), taskList.get(i).getTaskDescHin(),
 						taskList.get(i).getPhotoReq(), taskList.get(i).getRemarkReq(), taskList.get(i).getTaskWeight(),
-						taskList.get(i).getCreatedBy(), taskList.get(i).getCreatedDate(), 1);
+						taskList.get(i).getExInt1(), taskList.get(i).getExVar1(), taskList.get(i).getCreatedBy(),
+						taskList.get(i).getCreatedDate(), 1);
 
 				detailList.add(detail);
 
@@ -786,7 +799,8 @@ public class DutyMasterController {
 			map.add("dutyId", dutyId);
 			map.add("status", 0);
 
-			Info errMsg = restTemplate.postForObject(Constants.security_app_url + "duty/master/deleteDuty", map, Info.class);
+			Info errMsg = restTemplate.postForObject(Constants.security_app_url + "duty/master/deleteDuty", map,
+					Info.class);
 
 		} catch (Exception e) {
 

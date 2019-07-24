@@ -288,10 +288,10 @@
 									</div>
 
 									<div class="form-group">
-										<div class="col2">
-											<label class="col-sm-3 col-lg-2 control-label">Photo
+										<div class="col1">
+											<label class="col-sm-2 col-lg-2 control-label">Photo
 												Required </label>
-											<div class="col-sm-3 col-lg-2 controls">
+											<div class="col-sm-1 col-lg-1 controls">
 												<label class="radio-inline"> <input type="radio"
 													name="photo" id="photo1" value="1"> YES
 												</label> <label class="radio-inline"> <input type="radio"
@@ -300,10 +300,10 @@
 											</div>
 										</div>
 
-										<div class="col2">
-											<label class="col-sm-3 col-lg-2 control-label">Remark
+										<div class="col1">
+											<label class="col-sm-2 col-lg-2 control-label">Remark
 												Required </label>
-											<div class="col-sm-3 col-lg-2 controls">
+											<div class="col-sm-1 col-lg-1 controls">
 												<label class="radio-inline"> <input type="radio"
 													name="remark" id="remark1" value="1"> YES
 												</label> <label class="radio-inline"> <input type="radio"
@@ -313,7 +313,34 @@
 										</div>
 
 										<div class="col2">
-											<label class="col-sm-3 col-lg-2 control-label">Task
+											<label class="col-sm-2 col-lg-2 control-label">Time
+												Required </label>
+											<div class="col-sm-1 col-lg-1 controls">
+												<label class="radio-inline"> <input type="radio"
+													name="timeReq" id="timeReq" value="1"
+													onchange="timeRequredChange(this.value)"> YES
+												</label> <label class="radio-inline"> <input type="radio"
+													name="timeReq" id="timeReq1" value="0"
+													onchange="timeRequredChange(this.value)" checked>
+													NO
+												</label>
+											</div>
+										</div>
+
+										<div style="display: none" id="timeReqVarId">
+
+											<div class="col1">
+
+												<div class="col-sm-1 controls">
+													<input type="time" name="timeReqVar" id="timeReqVar"
+														placeholder="timeReqVar" class="form-control" />
+												</div>
+											</div>
+										</div>
+
+
+										<div class="col1">
+											<label class="col-sm-1 col-lg-1 control-label">Task
 												Weightage </label>
 											<div class="col-sm-1 controls">
 												<input type="number" name="weight" id="weight"
@@ -350,6 +377,7 @@
 												<th width="50" align="left">Photo</th>
 												<th width="50" align="left">Remark</th>
 												<th width="50" align="left">Weightage</th>
+												<th width="50" align="left">Time Required</th>
 
 												<th width="20px" align="left">Action</th>
 											</tr>
@@ -413,10 +441,14 @@
 			var taskDescEng = $("#taskDescEng").val();
 			var taskDescMar = document.getElementById("transliterateTextarea3").value;
 			var taskDescHin = document.getElementById("transliterateTextarea4").value;
+			var timeReqVar = document.getElementById("timeReqVar").value;
+
+			//
 
 			var photoReq = $("#photo").val();
 			var remarkReq = $("#remark").val();
 			var weight = $("#weight").val();
+			var timeReq = $("#timeReq").val();
 
 			if (document.getElementById("photo1").checked == true) {
 				photoReq = 1;
@@ -428,6 +460,12 @@
 				remarkReq = 1;
 			} else {
 				remarkReq = 0;
+			}
+
+			if (document.getElementById("timeReq").checked == true) {
+				timeReq = 1;
+			} else {
+				timeReq = 0;
 			}
 
 			var isEdit = document.getElementById("isEdit").value;
@@ -457,7 +495,9 @@
 									taskDescHin : taskDescHin,
 									photoReq : photoReq,
 									remarkReq : remarkReq,
+									timeReq : timeReq,
 									weight : weight,
+									timeReqVar : timeReqVar,
 									ajax : 'true',
 
 								},
@@ -483,6 +523,8 @@
 											.getElementById("transliterateTextarea3").value = "";
 									document
 											.getElementById("transliterateTextarea4").value = "";
+
+									document.getElementById("timeReqVar").value = "";
 									document.getElementById("index").value = 0;
 
 									$('#table_grid td').remove();
@@ -550,6 +592,12 @@
 																		'<td></td>')
 																		.html(
 																				v.taskWeight));
+
+														tr
+																.append($(
+																		'<td></td>')
+																		.html(
+																				v.exInt1));
 														tr
 																.append($(
 																		'<td></td>')
@@ -609,6 +657,12 @@
 									document.getElementById("remark2").checked = true;
 								}
 
+								if (data.exInt1 == 1) {
+									document.getElementById("timeReq1").checked = true;
+								} else {
+									document.getElementById("timeReq").checked = true;
+								}
+
 								document
 										.getElementById("transliterateTextarea1").value = data.taskNameMar;
 								document
@@ -617,6 +671,10 @@
 										.getElementById("transliterateTextarea3").value = data.taskDescMar;
 								document
 										.getElementById("transliterateTextarea4").value = data.taskDescHin;
+
+								document.getElementById("timeReqVar").value = data.exVar1;
+
+								//timeReqVar
 								document.getElementById("index").value = index;
 
 							});
@@ -653,6 +711,7 @@
 
 								document.getElementById("photo2").checked = true;
 								document.getElementById("remark2").checked = true;
+								document.getElementById("timeReq").checked = true;
 
 								document
 										.getElementById("transliterateTextarea1").value = "";
@@ -734,6 +793,22 @@
 		}
 		function callAlert(msg) {
 			alert(msg);
+		}
+
+		function timeRequredChange(timeReq) {
+			//alert("hii");
+			//	alert(timeReq);
+
+			if (timeReq == 1) {
+
+				document.getElementById("timeReqVarId").style.display = "block";
+
+			} else {
+
+				document.getElementById("timeReqVarId").style.display = "none";
+
+			}
+
 		}
 	</script>
 
