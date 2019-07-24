@@ -44,6 +44,16 @@ public class GetSpCakeOrderForProdApp {
 
 	private String spEventsName;
 
+	private int isAllocated;
+
+	public int getIsAllocated() {
+		return isAllocated;
+	}
+
+	public void setIsAllocated(int isAllocated) {
+		this.isAllocated = isAllocated;
+	}
+
 	public String getIsCharUsed() {
 		return isCharUsed;
 	}
@@ -270,7 +280,7 @@ public class GetSpCakeOrderForProdApp {
 				+ ", spInstructions=" + spInstructions + ", spDeliveryDate=" + spDeliveryDate + ", startTimeStamp="
 				+ startTimeStamp + ", endTimeStamp=" + endTimeStamp + ", orderPhoto=" + orderPhoto + ", orderPhoto2="
 				+ orderPhoto2 + ", isCharUsed=" + isCharUsed + ", spEvents=" + spEvents + ", spEventsName="
-				+ spEventsName + "]";
+				+ spEventsName + ", isAllocated=" + isAllocated + "]";
 	}
 
 }
