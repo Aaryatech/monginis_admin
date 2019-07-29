@@ -432,6 +432,8 @@ $(document).ready(function() {
                     menuId : $(this).val(),
                     ajax : 'true'
                 }, function(data) {
+                	
+                	alert("DATA ------------------ "+JSON.stringify(data));
                 
                     var len = data.length;
 
