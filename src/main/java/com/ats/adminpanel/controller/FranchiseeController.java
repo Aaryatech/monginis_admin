@@ -815,6 +815,7 @@ public class FranchiseeController {
 	public ModelAndView updateFranchiseeConf(@PathVariable int settingId) {
 
 		ModelAndView model = new ModelAndView("franchisee/editConfigureFr");
+		
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
@@ -915,6 +916,9 @@ public class FranchiseeController {
 
 					model.addObject("remItems", tempAllSpCkList);
 					model.addObject("catId", menuList.get(i).getMainCatId());
+					
+					System.err.println("ALBUM ___________FR CONF-----------------------------*****************************-------- "+selectedSpCk);
+					
 				} else if (menuList.get(i).getMainCatId() == 5) {
 
 					System.err.println("MENU--------------------------------------------------------------------- 5");
@@ -1184,20 +1188,20 @@ public class FranchiseeController {
 			for (int i = 0; i < albumCakeList.size(); i++) {
 				System.out.println("ALBUM : ----------- " + albumCakeList.get(i));
 				CommonConf commonConf = new CommonConf();
-				commonConf.setId(albumCakeList.get(i).getSpId());
+				commonConf.setId(albumCakeList.get(i).getAlbumId());
 				commonConf.setName(albumCakeList.get(i).getAlbumCode() + "-" + albumCakeList.get(i).getAlbumName());
 				commonConfList.add(commonConf);
 				System.out.println("spCommonConf" + commonConf.toString());
 			}
 
-			for (Album albumCake : albumCakeList) {
+		/*	for (Album albumCake : albumCakeList) {
 
 				CommonConf commonConf = new CommonConf();
 				commonConf.setId(albumCake.getSpId());
 				commonConf.setName(albumCake.getAlbumCode() + "-" + albumCake.getAlbumName());
 				commonConfList.add(commonConf);
 				System.out.println("spCommonConf" + commonConf.toString());
-			}
+			}*/
 
 			System.out.println("------------------------");
 		} else if (selectedCatId == 5) {
