@@ -140,13 +140,27 @@ public class AlbumController {
 
 			String curTimeStamp = String.valueOf(lo);
 
+			String img1Name = "", img2Name = "";
+
 			try {
 
-				upload.saveUploadedFiles(file1, Constants.ALBUM_IMAGE_TYPE,
-						curTimeStamp + "-" + file1.get(0).getOriginalFilename().replace(' ', '_'));
+				int pos = file1.get(0).getOriginalFilename().lastIndexOf(".");
+				String ext = file1.get(0).getOriginalFilename().substring(pos + 1);
+
+				img1Name = curTimeStamp + "." + ext;
+
+				/*
+				 * upload.saveUploadedFiles(file1, Constants.ALBUM_IMAGE_TYPE, curTimeStamp +
+				 * "-" + file1.get(0).getOriginalFilename().replace(' ', '_'));
+				 */
+
+				upload.saveUploadedFiles(file1, Constants.ALBUM_IMAGE_TYPE, img1Name);
+
 				System.out.println("upload method called " + file1.toString());
 
 			} catch (IOException e) {
+
+				img1Name = file1.get(0).getOriginalFilename().replace(' ', '_');
 
 				System.out.println("Exce in File Upload In Item Insert " + e.getMessage());
 				e.printStackTrace();
@@ -154,11 +168,23 @@ public class AlbumController {
 
 			try {
 
-				upload.saveUploadedFiles(file2, Constants.ALBUM_IMAGE_TYPE,
-						curTimeStamp + "-" + file2.get(0).getOriginalFilename().replace(' ', '_'));
+				int pos = file2.get(0).getOriginalFilename().lastIndexOf(".");
+				String ext = file2.get(0).getOriginalFilename().substring(pos + 1);
+
+				img2Name = curTimeStamp + "." + ext;
+
+				/*
+				 * upload.saveUploadedFiles(file2, Constants.ALBUM_IMAGE_TYPE, curTimeStamp +
+				 * "-" + file2.get(0).getOriginalFilename().replace(' ', '_'));
+				 */
+
+				upload.saveUploadedFiles(file2, Constants.ALBUM_IMAGE_TYPE, img2Name);
+
 				System.out.println("upload method called " + file2.toString());
 
 			} catch (IOException e) {
+
+				img2Name = file2.get(0).getOriginalFilename().replace(' ', '_');
 
 				System.out.println("Exce in File Upload In Item Insert " + e.getMessage());
 				e.printStackTrace();
@@ -196,8 +222,14 @@ public class AlbumController {
 			album.setIsActive(isActive);
 			album.setMaxWt(maxWt);
 			album.setMinWt(minWt);
-			album.setPhoto1(curTimeStamp + "-" + file1.get(0).getOriginalFilename().replace(' ', '_'));
-			album.setPhoto2(curTimeStamp + "-" + file2.get(0).getOriginalFilename().replace(' ', '_'));
+			// album.setPhoto1(curTimeStamp + "-" +
+			// file1.get(0).getOriginalFilename().replace(' ', '_'));
+			// album.setPhoto2(curTimeStamp + "-" +
+			// file2.get(0).getOriginalFilename().replace(' ', '_'));
+
+			album.setPhoto1(img1Name);
+			album.setPhoto2(img2Name);
+
 			album.setSpId(spId);
 
 			System.out.println("albumalbumalbumalbumalbumalbum" + album.toString());
@@ -205,9 +237,9 @@ public class AlbumController {
 			System.out.println(errorResponse.toString());
 
 			if (errorResponse != null) {
-				
-				int albumId=0;
-				albumId=errorResponse.getAlbumId();
+
+				int albumId = 0;
+				albumId = errorResponse.getAlbumId();
 
 				String frIds = "";
 				for (int i = 0; i < typeList.size(); i++) {
@@ -394,17 +426,28 @@ public class AlbumController {
 				long lo = cal.getTimeInMillis();
 				System.out.println(sdf.format(cal.getTime()));
 
-				photo1 = String.valueOf(lo);
+				//photo1 = String.valueOf(lo);
 
 				try {
 
-					upload.saveUploadedFiles(file1, Constants.ALBUM_IMAGE_TYPE,
+					int pos = file1.get(0).getOriginalFilename().lastIndexOf(".");
+					String ext = file1.get(0).getOriginalFilename().substring(pos + 1);
+
+					photo1 = String.valueOf(lo) + "." + ext;
+
+					/*upload.saveUploadedFiles(file1, Constants.ALBUM_IMAGE_TYPE,
 							photo1 + "-" + file1.get(0).getOriginalFilename().replace(' ', '_'));
 					System.out.println("upload method called " + file1.toString());
-					photo1 = photo1 + "-" + file1.get(0).getOriginalFilename().replace(' ', '_');
+					photo1 = photo1 + "-" + file1.get(0).getOriginalFilename().replace(' ', '_');*/
+
+					 upload.saveUploadedFiles(file1, Constants.ALBUM_IMAGE_TYPE, photo1);
+					System.out.println("upload method called " + file1.toString());
+
 				} catch (IOException e) {
 
-					System.out.println("Exce in File Upload In Item Insert " + e.getMessage());
+					photo1 = photo1 + "-" + file1.get(0).getOriginalFilename().replace(' ', '_');
+
+					System.out.println("Exce in File Upload In Item Insert 1 " + e.getMessage());
 					e.printStackTrace();
 				}
 			}
@@ -422,17 +465,31 @@ public class AlbumController {
 				long lo = cal.getTimeInMillis();
 				System.out.println(sdf.format(cal.getTime()));
 
-				photo2 = String.valueOf(lo);
+				//photo2 = String.valueOf(lo);
 
 				try {
 
-					upload.saveUploadedFiles(file2, Constants.ALBUM_IMAGE_TYPE,
-							photo2 + "-" + file2.get(0).getOriginalFilename().replace(' ', '_'));
-					System.out.println("upload method called " + file1.toString());
-					photo2 = photo2 + "-" + file2.get(0).getOriginalFilename().replace(' ', '_');
+					int pos = file2.get(0).getOriginalFilename().lastIndexOf(".");
+					String ext = file2.get(0).getOriginalFilename().substring(pos + 1);
+
+					photo2 = String.valueOf(lo) + "." + ext;
+
+					
+					 /* upload.saveUploadedFiles(file2, Constants.ALBUM_IMAGE_TYPE, photo2 + "-" +
+					  file2.get(0).getOriginalFilename().replace(' ', '_'));
+					  System.out.println("upload method called " + file1.toString()); photo2 =
+					  photo2 + "-" + file2.get(0).getOriginalFilename().replace(' ', '_');*/
+					 
+
+					upload.saveUploadedFiles(file2, Constants.ALBUM_IMAGE_TYPE, photo2);
+					
+					System.out.println("upload method called " + file2.toString());
+
 				} catch (IOException e) {
 
-					System.out.println("Exce in File Upload In Item Insert " + e.getMessage());
+					//photo2 = photo2 + "-" + file2.get(0).getOriginalFilename().replace(' ', '_');
+
+					System.out.println("Exce in File Upload In Item Insert 2 " + e.getMessage());
 					e.printStackTrace();
 				}
 			}
