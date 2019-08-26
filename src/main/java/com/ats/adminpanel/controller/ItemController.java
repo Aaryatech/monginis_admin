@@ -951,7 +951,7 @@ public class ItemController {
 			List<MCategoryList> resCatList=new ArrayList<MCategoryList>();
 			for(MCategoryList mCat:mCategoryList)
 			{
-				if(mCat.getCatId()!=5 && mCat.getCatId()!=6)
+				if(mCat.getCatId()!=5)
 				{
 					resCatList.add(mCat);
 				}

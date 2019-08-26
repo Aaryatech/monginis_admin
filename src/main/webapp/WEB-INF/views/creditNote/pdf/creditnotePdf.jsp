@@ -59,21 +59,39 @@ Phone:0240-2466217, Email: aurangabad@monginis.net</p>
     <td align="center" width="5%" rowspan="2" style="border-bottom:1px solid #313131; border-left:1px solid #313131; padding:10px;color:#000; font-size:10px;">UOM </td>
     <td align="center" width="5.3%" rowspan="2" style="border-bottom:1px solid #313131; border-left:1px solid #313131; padding:10px;color:#000; font-size:10px;">Rate</td>
     <td align="center" width="5%" rowspan="2" style="border-bottom:1px solid #313131; border-left:1px solid #313131; padding:10px;color:#000; font-size:10px;">Value</td>
+     <c:choose>
+	<c:when test="${headerH.creditHeader.isSameState==1}">
     <td align="center" width="10%" colspan="2" style="border-left:1px solid #313131; padding:10px;color:#000; font-size:10px; text-align:center;"> CGST</td>
     <td align="center" width="10%" colspan="2" style="border-left:1px solid #313131; padding:10px;color:#000; font-size:10px;text-align:center;">SGST</td>
+     </c:when>
+     <c:otherwise>
+         <td align="center" width="20%" colspan="4" style="border-left:1px solid #313131; padding:10px;color:#000; font-size:10px; text-align:center;">IGST</td>
+     
+     </c:otherwise>
+     </c:choose>
+  
   </tr>
   <tr>
+  <c:choose>
+	<c:when test="${headerH.creditHeader.isSameState==1}">
     <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:10px;">Rate% </td>
     <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131;  padding:4px;color:#000; font-size:10px;">Amount</td>
     <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:10px;">Rate%</td>
     <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:10px;">Amount</td>
+    </c:when>
+    <c:otherwise>
+     <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:10px;">Rate% </td>
+    <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131;  padding:4px;color:#000; font-size:10px;">Amount</td>
+   
+    </c:otherwise>
+    </c:choose>
   </tr>
  
   <c:set var = "totalQty" value = "0"/>
    <c:set var = "totalAmt" value = "0"/>
     <c:set var = "totalCgst" value = "0"/>
         <c:set var = "totalSgst" value = "0"/>
-      
+       <c:set var = "totalIgst" value = "0"/>
        <c:forEach items="${headerH.creditHeader.srNoDateList}" var="srNos">
        <tr>
            <td  style="border-left:1px solid #313131; padding:3px 5px;color:#000; font-size:0px;">-</td>
@@ -88,8 +106,11 @@ Phone:0240-2466217, Email: aurangabad@monginis.net</p>
     <td align="right" style="border-left:1px solid #313131; padding:3px 4px;color:#000; font-size:0px;">-</td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 4px;color:#000;font-size:0px;">-</td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000; font-size:0px;">-</td>
+     <c:choose>
+	<c:when test="${headerH.creditHeader.isSameState==1}">
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000; font-size:0px;">-</td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000;font-size:0px;">-</td>
+  </c:when></c:choose>
   </tr>
         <c:forEach items="${headerH.creditHeader.crnDetails}" var="crnDetail" varStatus="count1">
   
@@ -112,9 +133,12 @@ Phone:0240-2466217, Email: aurangabad@monginis.net</p>
 			  <c:set var = "totalQty" value = "${totalQty+crnDetail.grnGvnQty}"/>					
     <td align="right" style="border-left:1px solid #313131; padding:3px 4px;color:#000; font-size:10px;"><fmt:formatNumber type="number"
 								maxFractionDigits="2" minFractionDigits="2" value="${crnDetail.taxableAmt}"/></td>
+              <c:set var = "totalAmt" value = "${totalAmt+crnDetail.taxableAmt}"/>
+    <c:choose>
+	<c:when test="${headerH.creditHeader.isSameState==1}">
     <td align="right" style="border-left:1px solid #313131; padding:3px 4px;color:#000;font-size:10px;"><fmt:formatNumber type="number"
 								maxFractionDigits="2" minFractionDigits="2" value="${crnDetail.cgstPer}"/></td>
-								   <c:set var = "totalAmt" value = "${totalAmt+crnDetail.taxableAmt}"/>
+								  
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000; font-size:10px;"><fmt:formatNumber type="number"
 								maxFractionDigits="2" minFractionDigits="2" value="${crnDetail.cgstRs}"/></td>
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000; font-size:10px;"><fmt:formatNumber type="number"
@@ -122,9 +146,16 @@ Phone:0240-2466217, Email: aurangabad@monginis.net</p>
 								  <c:set var = "totalCgst" value = "${totalCgst+crnDetail.cgstRs}"/>
     <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000;font-size:10px;"><fmt:formatNumber type="number"
 								maxFractionDigits="2" minFractionDigits="2" value="${crnDetail.sgstRs}"/></td>
-								
 								 <c:set var = "totalSgst" value = "${totalSgst+crnDetail.sgstRs}"/>
-   
+   </c:when>
+   <c:otherwise>
+    <td align="right" style="border-left:1px solid #313131; padding:3px 4px;color:#000;font-size:10px;"><fmt:formatNumber type="number"
+								maxFractionDigits="2" minFractionDigits="2" value="${crnDetail.igstPer}"/></td>
+	 <td align="right" style="border-left:1px solid #313131; padding:3px 5px;color:#000; font-size:10px;"><fmt:formatNumber type="number"
+								maxFractionDigits="2" minFractionDigits="2" value="${crnDetail.igstRs}"/></td>
+  		 <c:set var = "totalIgst" value = "${totalIgst+crnDetail.igstRs}"/>
+   </c:otherwise>
+  </c:choose>
   </tr>
     </c:when>
   <%--   <c:otherwise>
@@ -159,20 +190,41 @@ Phone:0240-2466217, Email: aurangabad@monginis.net</p>
     <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:white; font-size:10px;">-</td>
     <td align="right" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:12px;"><b><fmt:formatNumber type="number"
 								maxFractionDigits="2" minFractionDigits="2" value="${totalAmt}"/></b></td>
+   <c:choose>
+	<c:when test="${headerH.creditHeader.isSameState==1}">
     <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:white; font-size:10px;">-</td>
     <td align="right" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:12px;"><b><fmt:formatNumber type="number"
 								maxFractionDigits="2" minFractionDigits="2" value="${totalCgst}"/></b></td>
     <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:white; font-size:10px;">-</td>
     <td align="right" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:12px;"><b><fmt:formatNumber type="number"
 								maxFractionDigits="2" minFractionDigits="2" value="${totalSgst}"/></b></td>
+	</c:when>
+	<c:otherwise>
+	  <td align="center" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:white; font-size:10px;">-</td>
+      <td align="right" style="border-top:1px solid #313131;border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:#000; font-size:12px;"><b><fmt:formatNumber type="number"
+								maxFractionDigits="2" minFractionDigits="2" value="${totalIgst}"/></b></td>
+	
+	</c:otherwise>
+	</c:choose>
   </tr>
    <tr>
-   
+    <c:choose>
+	<c:when test="${headerH.creditHeader.isSameState==1}">
     <td align="right" style="border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:white; font-size:10px;">-</td>
         <td align="right" style="border-left:1px solid #313131;border-bottom:1px solid #313131; padding:4px;color:white; font-size:10px;">-</td>
+     </c:when>
+     </c:choose>
     <td style="border-bottom:1px solid #313131; font-size:0px;">-</td><td style="border-bottom:1px solid #313131; font-size:10px;">-</td><td style="border-bottom:1px solid #313131;font-size:0px;">-</td><td style="border-bottom:1px solid #313131;padding:4px;color:#000; font-size:0px;">-</td><td style="border-bottom:1px solid #313131;font-size:0px;">-</td><td style="border-bottom:1px solid #313131;padding:4px;color:#000; font-size:0px;">-</td><td style="border-bottom:1px solid #313131;font-size:0px;">-</td><td style="border-bottom:1px solid #313131;font-size:12px;"><b>Grand Total:</b></td>
+     <c:choose>
+	<c:when test="${headerH.creditHeader.isSameState==1}">
     <td align="right" style="border-left:1px solid #313131;border-bottom:0px solid #313131; padding:4px;color:#000; font-size:12px;"><b><fmt:formatNumber type="number"
 								maxFractionDigits="0" value="${totalAmt+totalCgst+totalSgst}"/></b></td>
+	</c:when>
+	<c:otherwise>
+	  <td align="right" style="border-left:1px solid #313131;border-bottom:0px solid #313131; padding:4px;color:#000; font-size:12px;"><b><fmt:formatNumber type="number"
+								maxFractionDigits="0" value="${totalAmt+totalIgst}"/></b></td>
+	</c:otherwise>
+	</c:choose>
   </tr>
 </table>
 

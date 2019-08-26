@@ -586,7 +586,8 @@ public class CreditNoteController {
 				rowData.add("Cr Db Date ");
 				rowData.add("Is Grn");
 				rowData.add("Erp Link");
-				
+				rowData.add("Is Same State");
+
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
 				for(int i=0;i<creditNoteList.getCreditNoteList().size();i++)
@@ -637,6 +638,8 @@ public class CreditNoteController {
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getCrDbDate()); 
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getIsGrn());
 					rowData.add(creditNoteList.getCreditNoteList().get(i).getErpLink());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getIsSameState());
+
 					expoExcel.setRowData(rowData);
 					exportToExcelList.add(expoExcel);
 					 
@@ -1276,6 +1279,7 @@ public class CreditNoteController {
 
 				cNoteHeaderPrint.setFrGstNo(creditHeaderList.get(i).getFrGstNo());
 				cNoteHeaderPrint.setIsGrn(creditHeaderList.get(i).getIsGrn());
+				cNoteHeaderPrint.setIsSameState(creditHeaderList.get(i).getIsSameState());
 
 				List<GetCrnDetails> crnPrintDetailList = new ArrayList<>();
 

@@ -17,6 +17,7 @@ public class CreditNote {
 	private String hsnCode; 
 	private String uom; 
 	private int qty; 
+	private int isSameState; 
 	private float rate; 
 	private float amount; 
 	private float cgstPer; 
@@ -49,6 +50,14 @@ public class CreditNote {
 	private String itemcode;
 	private int isGrn;
 	private String erpLink;
+	
+	
+	public int getIsSameState() {
+		return isSameState;
+	}
+	public void setIsSameState(int isSameState) {
+		this.isSameState = isSameState;
+	}
 	public int getCrndId() {
 		return crndId;
 	}
@@ -325,19 +334,16 @@ public class CreditNote {
 	public String toString() {
 		return "CreditNote [crndId=" + crndId + ", crnNo=" + crnNo + ", vNo=" + vNo + ", date=" + date + ", vType="
 				+ vType + ", partyName=" + partyName + ", gstin=" + gstin + ", state=" + state + ", itemName="
-				+ itemName + ", hsnCode=" + hsnCode + ", uom=" + uom + ", qty=" + qty + ", rate=" + rate + ", amount="
-				+ amount + ", cgstPer=" + cgstPer + ", sgstPer=" + sgstPer + ", igstPer=" + igstPer + ", cessPer="
-				+ cessPer + ", cgstRs=" + cgstRs + ", sgstRs=" + sgstRs + ", igstRs=" + igstRs + ", cessRs=" + cessRs
-				+ ", itemDiscPer=" + itemDiscPer + ", totalDisc=" + totalDisc + ", roundOff=" + roundOff + ", totalAmt="
-				+ totalAmt + ", billTotal=" + billTotal + ", refBillNo=" + refBillNo + ", refBillDate=" + refBillDate
-				+ ", grnGvnHeaderId=" + grnGvnHeaderId + ", isDeposited=" + isDeposited + ", grngvnSrno=" + grngvnSrno
-				+ ", crDbNo=" + crDbNo + ", crDbDate=" + crDbDate + ", frId=" + frId + ", frCode=" + frCode
-				+ ", itemId=" + itemId + ", catId=" + catId + ", crnTaxableAmt=" + crnTaxableAmt + ", crnTotalTax="
-				+ crnTotalTax + ", crnGrandTotal=" + crnGrandTotal + ", itemcode=" + itemcode + ", isGrn=" + isGrn
-				+ ", erpLink=" + erpLink + "]";
+				+ itemName + ", hsnCode=" + hsnCode + ", uom=" + uom + ", qty=" + qty + ", isSameState=" + isSameState
+				+ ", rate=" + rate + ", amount=" + amount + ", cgstPer=" + cgstPer + ", sgstPer=" + sgstPer
+				+ ", igstPer=" + igstPer + ", cessPer=" + cessPer + ", cgstRs=" + cgstRs + ", sgstRs=" + sgstRs
+				+ ", igstRs=" + igstRs + ", cessRs=" + cessRs + ", itemDiscPer=" + itemDiscPer + ", totalDisc="
+				+ totalDisc + ", roundOff=" + roundOff + ", totalAmt=" + totalAmt + ", billTotal=" + billTotal
+				+ ", refBillNo=" + refBillNo + ", refBillDate=" + refBillDate + ", grnGvnHeaderId=" + grnGvnHeaderId
+				+ ", isDeposited=" + isDeposited + ", grngvnSrno=" + grngvnSrno + ", crDbNo=" + crDbNo + ", crDbDate="
+				+ crDbDate + ", frId=" + frId + ", frCode=" + frCode + ", itemId=" + itemId + ", catId=" + catId
+				+ ", crnTaxableAmt=" + crnTaxableAmt + ", crnTotalTax=" + crnTotalTax + ", crnGrandTotal="
+				+ crnGrandTotal + ", itemcode=" + itemcode + ", isGrn=" + isGrn + ", erpLink=" + erpLink + "]";
 	}
  
- 
-	
-
 }
