@@ -42,21 +42,25 @@ import org.zefer.pd4ml.PD4ML;
 import org.zefer.pd4ml.PD4PageMark;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.AllFrIdName;
 import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.DispatchReport;
 import com.ats.adminpanel.model.DispatchReportList;
 import com.ats.adminpanel.model.ExportToExcel;
+import com.ats.adminpanel.model.Orders;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
+import com.ats.adminpanel.model.franchisee.FranchiseeAndMenuList;
 import com.ats.adminpanel.model.franchisee.Menu;
 import com.ats.adminpanel.model.franchisee.SubCategory;
 import com.ats.adminpanel.model.item.CategoryListResponse;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.item.MCategoryList;
+import com.ats.adminpanel.model.production.OrderDispatchRepDao;
 import com.ats.adminpanel.model.salesreport.RoyaltyListBean;
 import com.ats.adminpanel.model.salesreport.SalesReportBillwise;
 import com.ats.adminpanel.model.salesreport.SalesReportBillwiseAllFr;
@@ -3868,9 +3872,113 @@ public class SalesReportController {
 		return model;
 
 	}
+	@RequestMapping(value = "/showOrderDispatchReport", method = RequestMethod.GET)
+	public ModelAndView showOrderDispatchReport(HttpServletRequest request, HttpServletResponse response) {
 
+		ModelAndView model = new ModelAndView("reports/orderDispReport");
+		try {
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			todaysDate = date.format(formatters);
+            String deliveryDate=request.getParameter("deliveryDate");
+          
+			RestTemplate restTemplate = new RestTemplate();
+			CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
+					CategoryListResponse.class);
+			List<MCategoryList> categoryList;
+			categoryList = categoryListResponse.getmCategoryList();
+
+			model.addObject("catList", categoryList);
+		    int flag=0;
+			  if(deliveryDate!=null) {
+				  int menuId=Integer.parseInt(request.getParameter("menuId"));
+				  int catId=Integer.parseInt(request.getParameter("catId"));
+					MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				    map.add("catId", catId);
+				    map.add("menuId", menuId);
+				    map.add("deliveryDate",DateConvertor.convertToYMD(deliveryDate));
+					ParameterizedTypeReference<List<OrderDispatchRepDao>> typeRef = new ParameterizedTypeReference<List<OrderDispatchRepDao>>() {
+					};
+
+					ResponseEntity<List<OrderDispatchRepDao>> responseEntity = restTemplate.exchange(
+							Constants.url + "getOrderDispatchReport", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+					List<OrderDispatchRepDao> dispatchList = responseEntity.getBody();
+				    model.addObject("todaysDate", deliveryDate);
+				    model.addObject("dispatchList", dispatchList);
+				    
+					FranchiseeAndMenuList	franchiseeAndMenuList = restTemplate.getForObject(Constants.url + "getFranchiseeAndMenu",
+							FranchiseeAndMenuList.class);
+
+					model.addObject("menuList", franchiseeAndMenuList.getAllMenu());
+					
+					flag=1;
+					
+					// exportToExcel
+					List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+					ExportToExcel expoExcel = new ExportToExcel();
+					List<String> rowData = new ArrayList<String>();
+
+					rowData.add("Sr.No.");
+					rowData.add("Item Name");
+					rowData.add("Op Stock Qty");
+					rowData.add("Order Qty");
+
+					rowData.add("Take from Opening");
+					rowData.add("Take from Fresh");
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					if (!dispatchList.isEmpty()) {
+						for (int i = 0; i < dispatchList.size(); i++) {
+							int index = 1;
+							index = index + i;
+							expoExcel = new ExportToExcel();
+							rowData = new ArrayList<String>();
+
+							rowData.add("" + index);
+							rowData.add("" + dispatchList.get(i).getItemName());
+							rowData.add("" + dispatchList.get(i).getOpTotal());
+							rowData.add("" + dispatchList.get(i).getOrderQty());
+							float op=0;
+							float fresh=0;
+							if(dispatchList.get(i).getOrderQty()<=dispatchList.get(i).getOpTotal() && dispatchList.get(i).getOrderQty()>0)
+							{
+								op=dispatchList.get(i).getOrderQty();
+								fresh=dispatchList.get(i).getOpTotal()-dispatchList.get(i).getOrderQty();
+							}
+							else
+							if(dispatchList.get(i).getOrderQty()>dispatchList.get(i).getOpTotal())
+							{
+								fresh=dispatchList.get(i).getOrderQty()-dispatchList.get(i).getOpTotal();
+								op=dispatchList.get(i).getOpTotal();
+							}
+							rowData.add(""+op);
+							rowData.add(""+fresh);
+							expoExcel.setRowData(rowData);
+							exportToExcelList.add(expoExcel);
+
+						}
+					}
+
+					HttpSession session = request.getSession();
+					session.setAttribute("exportExcelList", exportToExcelList);
+					session.setAttribute("excelName", "OrderDispatchReport");
+					model.addObject("catId", catId);
+					model.addObject("menuId", menuId);
+            }else
+            {
+            	model.addObject("todaysDate",todaysDate);
+            }
+				model.addObject("flag",flag);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return model;
+	}
 	// pdf function
-
 	private Dimension format = PD4Constants.A4;
 	private boolean landscapeValue = false;
 	private int topValue = 8;

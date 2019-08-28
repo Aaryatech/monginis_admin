@@ -172,6 +172,14 @@ public class FranchiseeController {
 
 			mav.addObject("allFranchiseeAndMenuList", franchiseeAndMenuList);
 			mav.addObject("menuList", franchiseeAndMenuList.getAllMenu());
+			
+			// get Routes
+			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
+								AllRoutesListResponse.class);
+
+			List<Route> routeList = new ArrayList<Route>();
+			routeList = allRouteListResponse.getRoute();
+			mav.addObject("routeList",routeList);
 
 		} catch (Exception e) {
 			System.out.println("Franchisee Controller Exception " + e.getMessage());

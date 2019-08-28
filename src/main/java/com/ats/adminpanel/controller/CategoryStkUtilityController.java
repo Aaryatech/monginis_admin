@@ -39,6 +39,7 @@ import com.ats.adminpanel.model.catstock.CategoryWiseOrderData;
 import com.ats.adminpanel.model.franchisee.AllMenuResponse;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
+import com.ats.adminpanel.model.franchisee.FranchiseeAndMenuList;
 import com.ats.adminpanel.model.franchisee.FranchiseeList;
 import com.ats.adminpanel.model.franchisee.SubCategory;
 import com.ats.adminpanel.model.item.AllItemsListResponse;
@@ -139,12 +140,26 @@ public class CategoryStkUtilityController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 			RestTemplate restTemplate = new RestTemplate();
-
+            if(routeId!=-1) {
 			map.add("routeId", routeId);
 
 			FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId", map,
 					FrNameIdByRouteIdResponse.class);
 			frList = frNameId.getFrNameIdByRouteIds();
+            }else
+            {
+            	frList=new ArrayList<FrNameIdByRouteId>();
+            	FranchiseeAndMenuList	franchiseeAndMenuList = restTemplate.getForObject(Constants.url + "getFranchiseeAndMenu",
+    					FranchiseeAndMenuList.class);
+            	for(int i=0;i<franchiseeAndMenuList.getAllFranchisee().size();i++)
+            	{
+            		FrNameIdByRouteId frNameIdByRouteId=new FrNameIdByRouteId();
+            		frNameIdByRouteId.setFrId(franchiseeAndMenuList.getAllFranchisee().get(i).getFrId());
+            		frNameIdByRouteId.setFrName(franchiseeAndMenuList.getAllFranchisee().get(i).getFrName());
+            		frList.add(frNameIdByRouteId);
+            	}
+            }
+            
 		} catch (Exception e) {
 
 		}

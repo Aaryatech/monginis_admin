@@ -121,7 +121,7 @@ select {
 <body>
 
 	<c:url var="setAllItemSelected" value="/setAllItemSelected" />
-
+   <c:url var="findFranchiseByRouteId" value="/getAllFrByRouteId" />
 	<c:url var="findItemsByCatId" value="/getCommonByMenuId" />
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 
@@ -178,24 +178,31 @@ select {
 									<form action="updateFrMenuTime" class="form-horizontal"
 										id="validation-form" method="post">
 
+						<div class="form-group">
+						<label class="col-sm-3 col-lg-2 control-label">Select
+							Route</label>
+						<div class="col-sm-6 col-lg-4 controls">
+							<select data-placeholder="Select Route"
+								class="form-control chosen" name="selectRoute" id="selectRoute"
+								>
+								<option value="">Select Route</option>
+								<option value="-1">All</option>
+								<c:forEach items="${routeList}" var="route" varStatus="count">
+									<option value="${route.routeId}"><c:out value="${route.routeName}"/> </option>
 
-
-
-
+								</c:forEach>
+							</select>
+							
+						</div>
+						</div>
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Franchisee</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<select data-placeholder="Select Franchisee" name="fr_id"
+												<select data-placeholder="Select Franchisee" name="fr_id" multiple="multiple"
 													class="form-control chosen" tabindex="-1" id="fr_id"
 													data-rule-required="true">
 													<option value=""> </option>
 													
-														<option value="-1">All</option>
-														<c:forEach
-															items="${allFranchiseeAndMenuList.getAllFranchisee()}"
-															var="franchiseeList">
-															<option value="${franchiseeList.frId}">${franchiseeList.frName}</option>
-														</c:forEach>
 												</select>
 											</div>
 										</div>
@@ -362,41 +369,65 @@ $('#select_all').click(function() {
     $('#items').chosen('destroy').val(["hola","mundo","cruel"]).chosen();
 });
 </script>
-
-
-<!-- <script type="text/javascript">
+ <script type="text/javascript">
 $(document).ready(function() { 
-	$('#fr_id').change(
+	$('#selectRoute').change(
 			function() {
-				$.getJSON('${findAllMenus}', {
-					fr_id : $(this).val(),
+				$.getJSON('${findFranchiseByRouteId}', {
+					routeId : $(this).val(),
 					ajax : 'true'
 				}, function(data) {
-					var html = '<option value="">Menu</option>';
+					var html = '<option value="">Franchisee</option>';
 				
 					var len = data.length;
 					
-					$('#menu')
+					$('#fr_id')
 				    .find('option')
 				    .remove()
 				    .end()
 				    
-				 $("#menu").append(
-                                $("<option></option>").attr(
-                                    "value", 0).text("Select Menu")
-                            );
+				 $("#fr_id").append($("<option></option>").attr("value",-1).text("All"));
 					
 					for ( var i = 0; i < len; i++) {
-                        $("#menu").append(
+                        $("#fr_id").append(
                                 $("<option></option>").attr(
-                                    "value", data[i].menuId).text(data[i].menuTitle)
+                                    "value", data[i].frId).text(data[i].frName)
                             );
 					}
-					   $("#menu").trigger("chosen:updated");
+					   $("#fr_id").trigger("chosen:updated");
 				});
 			});
 });
-</script> -->
+$(document).ready(function() { 
+	$('#fr_id').change(
+			function() {
+				if($(this).val()==-1){
+				var routeId=document.getElementById("selectRoute").value;
+				
+				$.getJSON('${findFranchiseByRouteId}', {
+					routeId : routeId,
+					ajax : 'true'
+				}, function(data) {
+					var html = '<option value="">Franchisee</option>';
+				
+					var len = data.length;
+					
+					$('#fr_id')
+				    .find('option')
+				    .remove()
+				    .end()
+				    
+				 $("#fr_id").append($("<option></option>").attr("value",-1).text("All"));
+					
+					for ( var i = 0; i < len; i++) {
+                        $("#fr_id").append($("<option selected></option>").attr("value", data[i].frId).text(data[i].frName));
+					}
+					   $("#fr_id").trigger("chosen:updated");
+				});
+				}
+			});
+});
+</script> 
 
 <script>
 $( "#date" ).datepicker({ 

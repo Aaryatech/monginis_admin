@@ -660,13 +660,14 @@
 											document.getElementById("taxAmtDetail").value="";
 											document.getElementById("totalDetail").value="";	
 											document.getElementById("spareQty").value=""; 
-											document.getElementById("groupId").value="";  
-											$('#groupId').trigger("chosen:updated");
-											var html = '<option value="">Select Spare Part</option>';
-											$('#sprId').html(html);
+											//document.getElementById("groupId").value="";  
+											///$('#groupId').trigger("chosen:updated");
+											//var html = '<option value="">Select Spare Part</option>';
+											//$('#sprId').html(html);
+										    document.getElementById("sprId").value="";  
 											$('#sprId').trigger("chosen:updated");
-											document.getElementById("servTypeDetail").value="";
-											$('#servTypeDetail').trigger("chosen:updated");
+											//document.getElementById("servTypeDetail").value="";
+											//$('#servTypeDetail').trigger("chosen:updated");
 										});
 
 						}
@@ -776,13 +777,14 @@
 											document.getElementById("taxAmtDetail").value="";
 											document.getElementById("totalDetail").value="";	
 											document.getElementById("spareQty").value=""; 
-											document.getElementById("groupId").value="";  
-											$('#groupId').trigger("chosen:updated");
-											var html = '<option value="">Select Spare Part</option>';
-											$('#sprId').html(html);
+											//document.getElementById("groupId").value="";  
+											//$('#groupId').trigger("chosen:updated");
+										/* 	var html = '<option value="">Select Spare Part</option>';
+											$('#sprId').html(html); */
+											document.getElementById("sprId").value="";  
 											$('#sprId').trigger("chosen:updated");
-											document.getElementById("servTypeDetail").value="";
-											$('#servTypeDetail').trigger("chosen:updated");
+											//document.getElementById("servTypeDetail").value="";
+											//$('#servTypeDetail').trigger("chosen:updated");
 										});
 
 						}
