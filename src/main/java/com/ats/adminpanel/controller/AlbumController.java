@@ -121,6 +121,8 @@ public class AlbumController {
 			// String[] flavourIds = request.getParameterValues("flavourId");
 			float minWt = Float.parseFloat(request.getParameter("minWt"));
 			float maxWt = Float.parseFloat(request.getParameter("maxWt"));
+			
+			int isVisible = Integer.parseInt(request.getParameter("isVisible"));
 
 			String[] strMenuIds = request.getParameterValues("menu");
 			int typeId = Integer.parseInt(request.getParameter("selectType"));
@@ -229,6 +231,7 @@ public class AlbumController {
 
 			album.setPhoto1(img1Name);
 			album.setPhoto2(img2Name);
+			album.setIsVisibleToAlbum(isVisible);
 
 			album.setSpId(spId);
 
@@ -402,6 +405,8 @@ public class AlbumController {
 			String albumName = request.getParameter("albumName");
 			// String msgImage=request.getParameter("msg_image");
 			String desc = request.getParameter("desc");
+			
+			int isVisible = Integer.parseInt(request.getParameter("isVisible"));
 
 			int isActive = Integer.parseInt(request.getParameter("is_active"));
 			int spId = Integer.parseInt(request.getParameter("spId"));
@@ -517,6 +522,7 @@ public class AlbumController {
 			album.setPhoto1(photo1);
 			album.setPhoto2(photo2);
 			album.setSpId(spId);
+			album.setIsVisibleToAlbum(isVisible);
 
 			System.out.println("albumalbumalbumalbumalbumalbum" + album.toString());
 			Album errorResponse = restTemplate.postForObject(Constants.url + "saveAlbum", album, Album.class);

@@ -21,6 +21,7 @@ public class Album {
 	private String flavourId;
 	private int isActive;
 	private String albumDesc;
+	private int isVisibleToAlbum;
 
 	public int getAlbumId() {
 		return albumId;
@@ -117,13 +118,25 @@ public class Album {
 	public void setAlbumDesc(String albumDesc) {
 		this.albumDesc = albumDesc;
 	}
+	
+	
+
+	public int getIsVisibleToAlbum() {
+		return isVisibleToAlbum;
+	}
+
+	public void setIsVisibleToAlbum(int isVisibleToAlbum) {
+		this.isVisibleToAlbum = isVisibleToAlbum;
+	}
+	
+	
 
 	@Override
 	public String toString() {
 		return "Album [albumId=" + albumId + ", albumCode=" + albumCode + ", albumName=" + albumName + ", photo1="
 				+ photo1 + ", photo2=" + photo2 + ", minWt=" + minWt + ", maxWt=" + maxWt + ", delStatus=" + delStatus
 				+ ", spId=" + spId + ", flavourId=" + flavourId + ", isActive=" + isActive + ", albumDesc=" + albumDesc
-				+ "]";
+				+ ", isVisibleToAlbum=" + isVisibleToAlbum + "]";
 	}
 
 }
