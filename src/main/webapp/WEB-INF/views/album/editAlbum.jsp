@@ -76,7 +76,7 @@
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i> Add Album
+								<i class="fa fa-bars"></i> Edit Album
 							</h3>
 							<div class="box-tool">
 								<a href="${pageContext.request.contextPath}/showAlbums">Back
@@ -242,8 +242,8 @@
 									</div>
 								</div>
 								<input type="hidden" name="albumId" value="${album.albumId}" />
-<input type="hidden" name="prevPh1" value="${album.photo1}">
-<input type="hidden" name="prevPh2" value="${album.photo2}">
+								<input type="hidden" name="prevPh1" value="${album.photo1}">
+								<input type="hidden" name="prevPh2" value="${album.photo2}">
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Photo1</label>
 									<div class="col-sm-6 col-lg-3 controls">
@@ -296,7 +296,7 @@
 									</div>
 								</div>
 
-								 	<div class="form-group">
+								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Minimum
 										Weight</label>
 									<div class="col-sm-6 col-lg-3 controls">
@@ -314,7 +314,7 @@
 											data-rule-required="true" value="${album.maxWt}" />
 									</div>
 								</div>
- 
+
 
 
 								<div class="form-group">
@@ -350,6 +350,38 @@
 
 
 										</select>
+
+									</div>
+								</div>
+
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Cake
+										Visible to Album</label>
+									<div class="col-sm-9 col-lg-10 controls">
+
+										<c:choose>
+											<c:when test="${album.isVisibleToAlbum==0}">
+												<label class="radio-inline"> <input type="radio"
+													name="isVisible" id="optionsRadios1" value="0" checked>
+													YES
+												</label>
+												<label class="radio-inline"> <input type="radio"
+													name="isVisible" id="optionsRadios1" value="1" /> NO
+												</label>
+
+											</c:when>
+											<c:otherwise>
+												<label class="radio-inline"> <input type="radio"
+													name="isVisible" id="optionsRadios1" value="0" >
+													YES
+												</label>
+												<label class="radio-inline"> <input type="radio"
+													name="isVisible" id="optionsRadios1" value="1" checked/> NO
+												</label>
+
+											</c:otherwise>
+
+										</c:choose>
 
 									</div>
 								</div>

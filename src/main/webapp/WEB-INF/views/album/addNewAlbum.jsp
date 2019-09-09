@@ -271,8 +271,7 @@
 
 											<c:forEach items="${typeList}" var="tp" varStatus="count">
 												<option value="${tp.typeId}"><c:out
-														value="${tp.typeName}"
-														 /></option>
+														value="${tp.typeName}" /></option>
 											</c:forEach>
 										</select><span id="typeError" hidden="hidden"> <font
 											color="#b94a48">Please Select Type</font></span>
@@ -334,6 +333,19 @@
 									</div>
 								</div>
 
+								<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">Cake
+										Visible to Album</label>
+									<div class="col-sm-9 col-lg-10 controls">
+										<label class="radio-inline"> <input type="radio"
+											name="isVisible" id="optionsRadios1" value="0" checked>
+											YES
+										</label> <label class="radio-inline"> <input type="radio"
+											name="isVisible" id="optionsRadios1" value="1" /> NO
+										</label>
+									</div>
+								</div>
+
 
 								<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
@@ -373,8 +385,6 @@
 		function showFranchisee() {
 
 			var typeId = $("#selectType").val();
-			
-			
 
 			if (typeId == null) {
 				alert("Please Select Type");
