@@ -96,13 +96,14 @@
 								Menu</label>
 							<div class="col-sm-6 col-lg-2 controls">
 								<select data-placeholder="Select Menu"
-									class="form-control chosen" name="menuId" id="menuId">
+									class="form-control chosen" name="menuId" id="menuId" multiple="multiple">
 							    <option value=""><c:out value="Select Menu"/></option>
                                 <c:if test="${flag==1}">	
                                 
                                 <c:forEach items="${menuList}" var="menu" varStatus="count">
                                    <c:choose>
                                 <c:when test="${menu.mainCatId==catId}">
+                                 <c:forEach items="${menuIdList}" var="menuId" varStatus="count">
                                 <c:choose>
                                 <c:when test="${menu.menuId==menuId}">
                                 	<option value="${menu.menuId}" selected><c:out value="${menu.menuTitle}"/></option>
@@ -111,6 +112,7 @@
                                  <option value="${menu.menuId}"><c:out value="${menu.menuTitle}"/></option>
                                  </c:otherwise>
                                 </c:choose>
+                                </c:forEach>
                                 </c:when>
                                 </c:choose>
 								</c:forEach>
@@ -122,7 +124,7 @@
 									<div class="col-md-1">
 										<input type="submit" class="btn btn-primary" value="Submit">
 								</div> <c:if test="${flag==1}">	
-								<div class="col-md-1">
+								<div class="col-md-2">
 									<input type="button" id="expExcel" class="btn btn-primary"
 										value="Export Excel" onclick="exportToExcel();"
 										>
@@ -174,7 +176,7 @@
 											 <c:choose>
 											 <c:when test="${dispatch.orderQty<=dispatch.opTotal && dispatch.orderQty>0}">
 											 <c:set var="op" value="${dispatch.orderQty}"/>
-											  <c:set var="fresh" value="${dispatch.opTotal-dispatch.orderQty}"/>
+											  <c:set var="fresh" value="0"/>
 											 </c:when>
 											  <c:when test="${dispatch.orderQty>dispatch.opTotal}">
 											 <c:set var="fresh" value="${dispatch.orderQty-dispatch.opTotal}"/>
@@ -190,15 +192,12 @@
 									</table>
 								</div>
 							</div>
-							<div class="form-group" style="display: none;" id="range">
-
-
-
-								<div class="col-sm-3  controls">
-									<input type="button" id="expExcel" class="btn btn-primary"
-										value="EXPORT TO Excel" onclick="exportToExcel();"
-										disabled="disabled">
+							<c:if test="${flag==1}">
+							<div class="form-group" >&nbsp;&nbsp;
+							<button class="btn btn-primary" value="PDF" id="PDFButton"
+							onclick="genPdf()">PDF</button>
 								</div>
+							</c:if>
 							</div>
 						</div>
 
@@ -218,6 +217,11 @@
 	</div>
 
 <script>
+function genPdf() {
+
+	window.open('${pageContext.request.contextPath}/showOrderDispatchReportPdf',"_blank");
+
+}
 function getMenusByCatId(catId)
 {
 		if (catId == "" || catId == null) {

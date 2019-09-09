@@ -2,17 +2,25 @@ package com.ats.adminpanel.controller;
 
 import java.awt.Dimension;
 import java.awt.Insets;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.math.BigDecimal;
+import java.net.URLConnection;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +37,7 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -56,6 +65,7 @@ import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
 import com.ats.adminpanel.model.franchisee.FranchiseeAndMenuList;
 import com.ats.adminpanel.model.franchisee.Menu;
 import com.ats.adminpanel.model.franchisee.SubCategory;
+import com.ats.adminpanel.model.ggreports.GrnGvnReportByGrnType;
 import com.ats.adminpanel.model.item.CategoryListResponse;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.item.Item;
@@ -67,6 +77,18 @@ import com.ats.adminpanel.model.salesreport.SalesReportBillwiseAllFr;
 import com.ats.adminpanel.model.salesreport.SalesReportItemwise;
 import com.ats.adminpanel.model.salesreport.SalesReportRoyalty;
 import com.ats.adminpanel.model.salesreport.SalesReportRoyaltyFr;
+import com.ats.adminpanel.util.ItextPageEvent;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 @Controller
 @Scope("session")
@@ -3872,6 +3894,7 @@ public class SalesReportController {
 		return model;
 
 	}
+	List<OrderDispatchRepDao> dispatchList=null;
 	@RequestMapping(value = "/showOrderDispatchReport", method = RequestMethod.GET)
 	public ModelAndView showOrderDispatchReport(HttpServletRequest request, HttpServletResponse response) {
 
@@ -3892,11 +3915,17 @@ public class SalesReportController {
 			model.addObject("catList", categoryList);
 		    int flag=0;
 			  if(deliveryDate!=null) {
-				  int menuId=Integer.parseInt(request.getParameter("menuId"));
+				  String menuIdStr="";
+				  List<Integer>  menuIdList=new ArrayList<>();
+				  String[] menuId=request.getParameterValues("menuId");
+					for (int i = 0; i < menuId.length; i++) {
+						menuIdStr = menuIdStr + "," + menuId[i];
+						menuIdList.add(Integer.parseInt(menuId[i]));
+					}
 				  int catId=Integer.parseInt(request.getParameter("catId"));
 					MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 				    map.add("catId", catId);
-				    map.add("menuId", menuId);
+				    map.add("menuId", menuIdStr);
 				    map.add("deliveryDate",DateConvertor.convertToYMD(deliveryDate));
 					ParameterizedTypeReference<List<OrderDispatchRepDao>> typeRef = new ParameterizedTypeReference<List<OrderDispatchRepDao>>() {
 					};
@@ -3904,7 +3933,7 @@ public class SalesReportController {
 					ResponseEntity<List<OrderDispatchRepDao>> responseEntity = restTemplate.exchange(
 							Constants.url + "getOrderDispatchReport", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
-					List<OrderDispatchRepDao> dispatchList = responseEntity.getBody();
+					 dispatchList = responseEntity.getBody();
 				    model.addObject("todaysDate", deliveryDate);
 				    model.addObject("dispatchList", dispatchList);
 				    
@@ -3946,7 +3975,7 @@ public class SalesReportController {
 							if(dispatchList.get(i).getOrderQty()<=dispatchList.get(i).getOpTotal() && dispatchList.get(i).getOrderQty()>0)
 							{
 								op=dispatchList.get(i).getOrderQty();
-								fresh=dispatchList.get(i).getOpTotal()-dispatchList.get(i).getOrderQty();
+								fresh=0;
 							}
 							else
 							if(dispatchList.get(i).getOrderQty()>dispatchList.get(i).getOpTotal())
@@ -3966,7 +3995,7 @@ public class SalesReportController {
 					session.setAttribute("exportExcelList", exportToExcelList);
 					session.setAttribute("excelName", "OrderDispatchReport");
 					model.addObject("catId", catId);
-					model.addObject("menuId", menuId);
+					model.addObject("menuIdList", menuIdList);
             }else
             {
             	model.addObject("todaysDate",todaysDate);
@@ -3977,6 +4006,248 @@ public class SalesReportController {
 			e.printStackTrace();
 		}
 		return model;
+	}
+	@RequestMapping(value = "/showOrderDispatchReportPdf", method = RequestMethod.GET)
+	public void showOrderDispatchReportPdf(HttpServletRequest request, HttpServletResponse response) {
+
+		BufferedOutputStream outStream = null;
+		Document document = new Document(PageSize.A4, 20, 20, 150, 30);
+
+		String FILE_PATH = Constants.REPORT_SAVE;
+		File file = new File(FILE_PATH);
+
+		PdfWriter writer = null;
+
+		FileOutputStream out = null;
+		try {
+			out = new FileOutputStream(FILE_PATH);
+		} catch (FileNotFoundException e2) {
+			// TODO Auto-generated catch block
+			e2.printStackTrace();
+		}
+		try {
+
+			String header = "                                           Galdhar Foods\n"
+					+ "          Factory Add: Plot No.48,Chikalthana Midc, Aurangabad."
+					+ "\n              Phone:0240-2466217, Email: aurangabad@monginis.net";
+
+			String title = "                Order Dispatch Report";
+
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+
+			writer = PdfWriter.getInstance(document, out);
+
+			ItextPageEvent event = new ItextPageEvent(header, title, reportDate);
+
+			writer.setPageEvent(event);
+
+		} catch (DocumentException e) {
+
+			e.printStackTrace();
+		}
+
+		PdfPTable table = new PdfPTable(6);
+		try {
+			System.out.println("Inside PDF Table try");
+			table.setWidthPercentage(100);
+			table.setWidths(new float[] { 0.4f, 1.7f, 0.9f, 1.0f, 0.9f, 0.9f });
+			Font headFont = new Font(FontFamily.TIMES_ROMAN, 12, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 12, Font.BOLD, BaseColor.BLACK);
+			Font f = new Font(FontFamily.TIMES_ROMAN, 12.0f, Font.UNDERLINE, BaseColor.BLUE);
+			headFont1.setColor(BaseColor.WHITE);
+
+			PdfPCell hcell = new PdfPCell();
+			hcell.setBackgroundColor(BaseColor.PINK);
+			hcell.setPaddingTop(4);
+			hcell.setPaddingBottom(4);
+			hcell = new PdfPCell(new Phrase("Sr.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Item Name", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Op Stock Qty", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Order Qty", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Take From Opening", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Take From Fresh", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+			table.addCell(hcell);
+
+			float opStockQty = 0;
+			float orderQty = 0;
+			float takeFromOp = 0;
+			float takeFromFresh = 0;
+			int index = 0;
+			if (!dispatchList.isEmpty()) {
+			for (OrderDispatchRepDao dispatch : dispatchList) {
+				index++;
+				PdfPCell cell;
+
+				cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				cell.setPadding(4);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(dispatch.getItemName(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(2);
+				cell.setPadding(4);
+				table.addCell(cell);
+				
+				cell = new PdfPCell(new Phrase(String.valueOf(dispatch.getOpTotal()), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(4);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(String.valueOf(dispatch.getOrderQty()), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(4);
+				table.addCell(cell);
+				float fresh=0;float op=0;
+				 if(dispatch.getOrderQty()<=dispatch.getOpTotal() && dispatch.getOrderQty()>0) {
+				        op=dispatch.getOrderQty();
+						fresh=0;
+			     }else if(dispatch.getOrderQty()>dispatch.getOpTotal())
+			     {
+				  fresh=dispatch.getOrderQty()-dispatch.getOpTotal();
+			 	  op=dispatch.getOpTotal();
+			     }
+				cell = new PdfPCell(new Phrase(String.valueOf(op), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(4);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase(String.valueOf(fresh), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+				cell.setPaddingRight(2);
+				cell.setPadding(4);
+
+				table.addCell(cell);
+
+				 opStockQty = opStockQty+dispatch.getOpTotal();
+				 orderQty = orderQty+dispatch.getOrderQty();
+				 takeFromOp = takeFromOp+op;
+				 takeFromFresh =takeFromFresh+fresh;
+			}
+			}
+			PdfPCell cell;
+
+			cell = new PdfPCell(new Phrase("", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			cell.setPadding(4);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("Total:", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setPaddingRight(2);
+			cell.setPadding(4);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase(String.valueOf("" + opStockQty), headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(2);
+			cell.setPadding(4);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase(String.valueOf("" + orderQty), headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(2);
+			cell.setPadding(4);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase(String.valueOf("" + takeFromOp), headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(2);
+			cell.setPadding(4);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase(String.valueOf("" + takeFromFresh), headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+			cell.setPaddingRight(2);
+			cell.setPadding(4);
+
+			table.addCell(cell);
+
+
+			document.open();
+			document.add(table);
+			document.close();
+
+		
+			// Atul Sir code to open a Pdf File
+			if (file != null) {
+
+				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+				if (mimeType == null) {
+
+					mimeType = "application/pdf";
+
+				}
+
+				response.setContentType(mimeType);
+
+				response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+				response.setContentLength((int) file.length());
+
+				InputStream inputStream = null;
+				try {
+					inputStream = new BufferedInputStream(new FileInputStream(file));
+				} catch (FileNotFoundException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+
+				try {
+					FileCopyUtils.copy(inputStream, response.getOutputStream());
+				} catch (IOException e) {
+					System.out.println("Excep in Opening a Pdf File");
+					e.printStackTrace();
+				}
+			}
+
+		} catch (DocumentException ex) {
+
+			System.out.println("Pdf Generation Error:Disp Order Report" + ex.getMessage());
+
+			ex.printStackTrace();
+
+		}
+
 	}
 	// pdf function
 	private Dimension format = PD4Constants.A4;
