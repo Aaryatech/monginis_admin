@@ -569,6 +569,8 @@ public class DutyMasterController {
 			int isDelete = Integer.parseInt(request.getParameter("isDelete"));
 			int isEdit = Integer.parseInt(request.getParameter("isEdit"));
 			int index = Integer.parseInt(request.getParameter("index"));
+			
+			System.err.println("EDIT - "+isEdit+"                    DELETE - "+isDelete+"                  INDEX - "+index);
 
 			try {
 				taskNameEng = request.getParameter("taskNameEng");
@@ -637,7 +639,7 @@ public class DutyMasterController {
 
 				int dutyId = Integer.parseInt(request.getParameter("dutyId"));
 
-				if (taskList.size() > 0) {
+				//if (taskList.size() > 0) {
 
 					TaskDetail temp = new TaskDetail(0, dutyId, taskNameEng, taskNameMar, taskNameHin, taskDescEng,
 							taskDescMar, taskDescHin, photo, remark, weight, timeReq, timeReqVar, userId, todaysDate,
@@ -647,7 +649,7 @@ public class DutyMasterController {
 
 					taskList.add(temp);
 
-				}
+				//}
 			}
 
 		} catch (Exception e) {
