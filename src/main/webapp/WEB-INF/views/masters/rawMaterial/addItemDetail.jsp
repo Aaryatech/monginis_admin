@@ -612,7 +612,7 @@ $(document).ready(function() {
 	}//if edit false then else....
 	else
 		{
-
+	
 //	alert(rmId);
 	$.getJSON('${insertItemDetail}', {
 		
@@ -763,10 +763,10 @@ function validation() {
 	} else if (rmId ==0) {
 		isValid = false;
 		alert("Please Select RM ");
-	}else if (rmQty == ""||rmQty=='0'||isNaN(rmQty) || rmQty < 1 ) {
+	}/* else if (rmQty == ""||isNaN(rmQty)) {
 		isValid = false;
 		alert("Please Enter Valid RM Qty");
-	}else if (rmWeight == ""||rmWeight=='0'||isNaN(rmWeight) || rmWeight < 1) {
+	} */else if (rmWeight == ""||rmWeight=='0'||isNaN(rmWeight) || rmWeight < 1) {
 		isValid = false;
 		alert("Please Enter Valid RM Weight");
 	}else if (baseQty == ""||isNaN(baseQty) || baseQty < 1) {

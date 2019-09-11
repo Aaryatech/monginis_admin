@@ -94,7 +94,7 @@
 						<div class="col-sm-6 col-lg-4 controls">
 							<select data-placeholder="Select Route"
 								class="form-control chosen" name="selectRoute" id="selectRoute"
-								onchange="disableFr()">
+								>
 								<option value="0">Select Route</option>
 								<c:forEach items="${routeList}" var="route" varStatus="count">
 									<option value="${route.routeId}"><c:out value="${route.routeName}"/> </option>
@@ -110,7 +110,7 @@
 
 							<select data-placeholder="Choose Franchisee"
 								class="form-control chosen" multiple="multiple" tabindex="6"
-								id="selectFr" name="selectFr" onchange="disableRoute()">
+								id="selectFr" name="selectFr">
 
 								<option value="-1"><c:out value="All"/></option>
 
@@ -135,7 +135,7 @@
 				
 				<option value="1">GRN</option>
 				<option value="0">GVN</option>
-				<option value="2">ALL</option>
+		    	<option value="2">ALL</option> 
 				 </select>
 				 </div>
 				
@@ -175,7 +175,7 @@
 				</h3>
 
 			</div>
-
+<div class="box-content">
 			<form id="submitBillForm"
 				
 				method="post">
@@ -191,7 +191,7 @@
 										<th>Req Qty</th>
 										<th>Req Value</th>
 										<th>Apr Qty</th>
-										<th>Apr Value</th>
+										<th>Company Value</th>
 										<th>Fr Contri</th>
 										
 									</tr>
@@ -231,7 +231,7 @@
 			 
 				 
 				</div>
-			</form>
+			</form></div>
 		</div>
 	
 	<!-- END Main Content -->
@@ -312,17 +312,7 @@
 													  	tr.append($('<td></td>').html(report.aprQty));
 													  	tr.append($('<td></td>').html(report.aprGrandTotal));
 													  	
-													  	var frCont=0;
-													  	if(isGrn==1 || isGrn==2){
-													  	var value1=parseFloat(report.aprGrandTotal)*100;
-													  	var billValue=parseFloat(value1)/75;
-													  	 frCont=parseFloat(billValue)*0.25;
-													  	}
-													  	else {
-													  		frCont=0;
-													  	}
-													  	
-													  	tr.append($('<td></td>').html(frCont.toFixed(2)));
+													  	tr.append($('<td></td>').html(report.frContr.toFixed(2)));
 
 														$('#table_grid tbody')
 																.append(

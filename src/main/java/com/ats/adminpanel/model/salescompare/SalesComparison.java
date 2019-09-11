@@ -9,7 +9,6 @@ public class SalesComparison {
 	List<SalesComparisonReport> billTotalList;
 
 	List<SalesCompareGrnTot> grnGvnTotalList;
-   
 	
 	int frId;
 	String frName;
@@ -21,6 +20,7 @@ public class SalesComparison {
 	
 	float monthDiffInPer;
 	
+  
 
 	public List<SalesComparisonReport> getBillTotalList() {
 		return billTotalList;
@@ -105,10 +105,12 @@ public class SalesComparison {
 
 	@Override
 	public String toString() {
-		return "SalesComparison [billTotalList=" + billTotalList + ", grnGvnTotalList=" + grnGvnTotalList
-				+ ", frId=" + frId + ", frName=" + frName + ", perMonthSale="
-				+ perMonthSale + ", prevMonthSale=" + prevMonthSale + ", lastMonthDiff=" + lastMonthDiff
-				+ ", routeName=" + routeName + ", routeId=" + routeId + ", monthDiffInPer=" + monthDiffInPer + "]";
+		return "SalesComparison [billTotalList=" + billTotalList + ", grnGvnTotalList=" + grnGvnTotalList + ", frId="
+				+ frId + ", frName=" + frName + ", perMonthSale=" + perMonthSale + ", prevMonthSale=" + prevMonthSale
+				+ ", lastMonthDiff=" + lastMonthDiff + ", routeName=" + routeName + ", routeId=" + routeId
+				+ ", monthDiffInPer=" + monthDiffInPer + "]";
 	}
+
+	
     
 }

@@ -21,7 +21,7 @@ private String rmName;
 	
 	private int grpId;
 	 
-	private int rmWeight;
+	private float rmWeight;
 	 
 	private int rmPackQty;
 	
@@ -99,11 +99,11 @@ private String rmName;
 		this.rmIcon = rmIcon;
 	}
 
-	public int getRmWeight() {
+	public float getRmWeight() {
 		return rmWeight;
 	}
 
-	public void setRmWeight(int rmWeight) {
+	public void setRmWeight(float rmWeight) {
 		this.rmWeight = rmWeight;
 	}
 

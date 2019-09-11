@@ -3,6 +3,9 @@ package com.ats.adminpanel.model.salescompare;
 
 public class SalesComparisonReport {
 
+	
+	private String id;
+	
 	private int frId;
 	
 	private	int month;
@@ -20,6 +23,14 @@ public class SalesComparisonReport {
 	private	float grnAmt;
 	
 	
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public float getGrnAmt() {
 		return grnAmt;

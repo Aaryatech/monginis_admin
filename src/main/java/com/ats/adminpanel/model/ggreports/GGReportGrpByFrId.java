@@ -14,9 +14,17 @@ public class GGReportGrpByFrId {
 	
 	float aprGrandTotal;
 	float totalAmt;
+	float frContr;//new
 	String frName;
 	int reqQty;
 	int aprQty ;
+	
+	public float getFrContr() {
+		return frContr;
+	}
+	public void setFrContr(float frContr) {
+		this.frContr = frContr;
+	}
 	public int getFrId() {
 		return frId;
 	}

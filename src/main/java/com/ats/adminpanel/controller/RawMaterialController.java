@@ -224,25 +224,25 @@ public class RawMaterialController {
 		
 		String rmWeight=request.getParameter("rm_weight");
 		String rmPackQty=request.getParameter("rm_pack_qty");
-		String rmRate=request.getParameter("rm_rate");
-		String rmTaxId=request.getParameter("rm_tax_id");
+		//String rmRate=request.getParameter("rm_rate");
+		//String rmTaxId=request.getParameter("rm_tax_id");
 		String rmMinQty=request.getParameter("rm_min_qty");
 		String rmMaxQty=request.getParameter("rm_max_qty");
 		String rmRolQty=request.getParameter("rm_rol_qty");
 
-		String rmOpRate=request.getParameter("rm_op_rate");
-		String rmOpQty=request.getParameter("rm_op_qty");
-		String rmRecdQty=request.getParameter("rm_recd_qty");
+		 //String rmOpRate=request.getParameter("rm_op_rate");
+	     //String rmOpQty=request.getParameter("rm_op_qty");
+	     //String rmRecdQty=request.getParameter("rm_recd_qty");
 		
-		String rmIssQty=request.getParameter("rm_iss_qty");
-		String rmRejQty=request.getParameter("rm_rej_qty");
-		String rmCloQty=request.getParameter("rm_clo_qty");
-		String rmIsCritical=request.getParameter("rm_is_critical");
+		//String rmIssQty=request.getParameter("rm_iss_qty");
+		//String rmRejQty=request.getParameter("rm_rej_qty");
+		//String rmCloQty=request.getParameter("rm_clo_qty");
+		//String rmIsCritical=request.getParameter("rm_is_critical");
 		
-		String extRmIcon=request.getParameter("prevImage");
+		//String extRmIcon=request.getParameter("prevImage");
 	 
 	
-			if(!file.get(0).getOriginalFilename().equalsIgnoreCase("")) {
+		/*	if(!file.get(0).getOriginalFilename().equalsIgnoreCase("")) {
 			
 			System.out.println("Empty image");
 			//extRmIcon=ImageS3Util.uploadFrImage(file);
@@ -266,11 +266,11 @@ public class RawMaterialController {
 				System.out.println("Exce in File Upload In Sp Cake  Insert " + e.getMessage());
 				e.printStackTrace();
 			}
-		}
+		}*/
 		
 			
 			
-			VpsImageUpload upload = new VpsImageUpload();
+		/*	VpsImageUpload upload = new VpsImageUpload();
 
 			Calendar cal = Calendar.getInstance();
 			SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
@@ -289,7 +289,7 @@ public class RawMaterialController {
 				System.out.println("Exce in File Upload In Sp Cake  Insert " + e.getMessage());
 				e.printStackTrace();
 			}	
-		 
+		 */
 			
 		
 		RawMaterialDetails rawMaterialDetails=new RawMaterialDetails();
@@ -303,29 +303,29 @@ public class RawMaterialController {
 			//model.addObject("supplierList", supplierDetailsList);
 		}
 		rawMaterialDetails.setRmName(rmName);
-		rawMaterialDetails.setRmCloQty(Integer.parseInt(rmCloQty));
+		rawMaterialDetails.setRmCloQty(0);//Integer.parseInt(rmCloQty));
 		rawMaterialDetails.setRmCode(rmCode);
-		rawMaterialDetails.setRmTaxId(Integer.parseInt(rmTaxId));
+		rawMaterialDetails.setRmTaxId(1);;//Integer.parseInt(rmTaxId));
 		//rawMaterialDetails.setRmIcon(rmIcon);
 		
-		rawMaterialDetails.setRmIcon(extRmIcon);
+		rawMaterialDetails.setRmIcon("");//extRmIcon
 		
-		rawMaterialDetails.setRmIsCritical(Integer.parseInt(rmIsCritical));
-		rawMaterialDetails.setRmIssQty(Integer.parseInt(rmIssQty));
+		rawMaterialDetails.setRmIsCritical(0);//(Integer.parseInt(rmIsCritical)
+		rawMaterialDetails.setRmIssQty(0);
 		rawMaterialDetails.setRmMaxQty(Integer.parseInt(rmMaxQty));
 		rawMaterialDetails.setRmMinQty(Integer.parseInt(rmMinQty));
-		rawMaterialDetails.setRmOpQty(Integer.parseInt(rmOpQty));
+		rawMaterialDetails.setRmOpQty(0);
 		rawMaterialDetails.setRmSpecification(rmSpecification);
-		rawMaterialDetails.setRmWeight(Integer.parseInt(rmWeight));
+		rawMaterialDetails.setRmWeight(Float.parseFloat(rmWeight));
 		rawMaterialDetails.setRmUomId(Integer.parseInt(rmUomId));
 		rawMaterialDetails.setRmRolQty(Integer.parseInt(rmRolQty));
 		
-		rawMaterialDetails.setRmRejQty(Integer.parseInt(rmRejQty));
-		rawMaterialDetails.setRmReceivedQty(Integer.parseInt(rmRecdQty));
-		rawMaterialDetails.setRmRate(Integer.parseInt(rmRate));
+		rawMaterialDetails.setRmRejQty(0);
+		rawMaterialDetails.setRmReceivedQty(0);
+		rawMaterialDetails.setRmRate(0);
 		rawMaterialDetails.setRmPackQty(Integer.parseInt(rmPackQty));
 		
-		rawMaterialDetails.setRmOpRate(Integer.parseInt(rmOpRate));
+		rawMaterialDetails.setRmOpRate(0);
 		rawMaterialDetails.setGrpId(Integer.parseInt(rmGroup));
 		rawMaterialDetails.setCatId(Integer.parseInt(rmCat));
 		rawMaterialDetails.setSubCatId(Integer.parseInt(rmSubCat));
@@ -1569,7 +1569,7 @@ public class RawMaterialController {
 			
 			int rmWeight=Integer.parseInt(request.getParameter("rmWeight"));
 			
-			int rmQty=Integer.parseInt(request.getParameter("rmQty"));
+			float rmQty=Float.parseFloat(request.getParameter("rmQty"));
 			
 			
 			ItemDetail itemDetail=new ItemDetail();
@@ -1578,7 +1578,6 @@ public class RawMaterialController {
 			itemDetail.setItemName(itemName);
 			itemDetail.setRmId(rmId);
 			itemDetail.setRmName(rmName);
-			itemDetail.setRmQty(rmQty);
 			itemDetail.setRmWeight(rmWeight);
 			itemDetail.setRmQty(rmQty);
 			itemDetail.setRmType(rmType);
@@ -1672,7 +1671,7 @@ public class RawMaterialController {
 			
 			int rmWeight=Integer.parseInt(request.getParameter("rmWeight"));
 			
-			int rmQty=Integer.parseInt(request.getParameter("rmQty"));
+			float rmQty=Float.parseFloat(request.getParameter("rmQty"));
 			
 			int index=Integer.parseInt(request.getParameter("key"));
 			System.out.println("Key:"+index);

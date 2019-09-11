@@ -20,7 +20,7 @@ public class ItemDetail {
 	
 	private int rmUomId;
 	
-	private int rmQty;
+	private float rmQty;
 	
 	private float rmWeight;
 	
@@ -92,11 +92,11 @@ public class ItemDetail {
 		this.rmUomId = rmUomId;
 	}
 
-	public int getRmQty() {
+	public float getRmQty() {
 		return rmQty;
 	}
 
-	public void setRmQty(int rmQty) {
+	public void setRmQty(float rmQty) {
 		this.rmQty = rmQty;
 	}
 

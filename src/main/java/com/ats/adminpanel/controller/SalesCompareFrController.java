@@ -235,11 +235,11 @@ public class SalesCompareFrController {
 
 						firstList.setFrId(billTotalList.get(j).getFrId());
 
-						float finalGrnTotal = (float) (((grnGvnTotalList.get(i).getBillTotal() / 100)) * 25);
+						//float finalGrnTotal = (float) (((grnGvnTotalList.get(i).getBillTotal() / 100)) * 25);
 
-						System.out.println("finalGrnTotal*********" + finalGrnTotal);
+						//System.out.println("finalGrnTotal*********" + finalGrnTotal);
 
-						firstList.setPerMonthSale(billTotalList.get(j).getBillTotal() - finalGrnTotal);
+						firstList.setPerMonthSale(billTotalList.get(j).getBillTotal() - grnGvnTotalList.get(i).getBillTotal());
 
 					}
 
@@ -253,15 +253,6 @@ public class SalesCompareFrController {
 				saleCompListFirst.add(firstList);
 			}
 
-			for (int i = 0; i < saleCompListFirst.size(); i++) {
-
-				if (saleCompListFirst.get(i).getFrId() == 15) {
-					System.out.println("fr Id 15 found ");
-					System.err.println("saleCompListFirst for May " + saleCompListFirst.get(i));
-
-				}
-
-			}
 
 			map = new LinkedMultiValueMap<String, Object>();
 			int intMonth = Integer.parseInt(m_next);
@@ -293,24 +284,15 @@ public class SalesCompareFrController {
 
 					if (grnGvnTotalListPrevMonth.get(i).getFrId() == billTotalListPrev.get(j).getFrId()) {
 
-						if (grnGvnTotalListPrevMonth.get(i).getFrId() == 15) {
-
-							System.err.println("fr Id 15 is avail in prev month");
-
-							System.err.println("grnGvnTotalListPrevMonth for apri " + grnGvnTotalListPrevMonth.get(i));
-
-							System.err.println("billTotalListPrev for apri " + billTotalListPrev.get(i));
-
-						}
-
+					
 						prevList.setFrId(billTotalListPrev.get(j).getFrId());
 
-						float finalGrnPrevTotal = (float) (((grnGvnTotalListPrevMonth.get(i).getBillTotal() / 100))
-								* 25);
+						/*float finalGrnPrevTotal = (float) (((grnGvnTotalListPrevMonth.get(i).getBillTotal() / 100))
+								* 25);*/
 
-						System.out.println("finalGrnTotal*********" + finalGrnPrevTotal);
+						//System.out.println("finalGrnTotal*********" + finalGrnPrevTotal);
 
-						prevList.setPrevMonthSale((billTotalListPrev.get(j).getBillTotal() - finalGrnPrevTotal));
+						prevList.setPrevMonthSale((billTotalListPrev.get(j).getBillTotal() - grnGvnTotalListPrevMonth.get(i).getBillTotal()));
 
 					}
 
@@ -324,14 +306,7 @@ public class SalesCompareFrController {
 				saleCompListPrev.add(prevList);
 
 			}
-			for (int j = 0; j < saleCompListPrev.size(); j++) {
-
-				if (saleCompListPrev.get(j).getFrId() == 15) {
-					System.out.println("fr Id 15 found ");
-					System.err.println("saleCompListPrev for April " + saleCompListPrev.get(j));
-
-				}
-			}
+		
 
 			List<SalesComparison> saleCompFinal = new ArrayList<SalesComparison>();
 			SalesComparison sales;

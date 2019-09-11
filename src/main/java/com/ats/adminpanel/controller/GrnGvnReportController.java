@@ -943,12 +943,12 @@ public class GrnGvnReportController {
 			if (isGrn.equalsIgnoreCase("2")) {
 
 				System.err.println("Is Grn =2");
-				grnType = "1" + "," + "0" + "," + "2";
+				grnType = "0,1,2";
 
 				map.add("isGrn", grnType);
 			} else if (isGrn.equalsIgnoreCase("0")) {
 				System.err.println("Its GVN ");
-				grnType = "0" + "," + "2";
+				grnType = "0,2";
 			} else {
 
 				System.err.println("Is Grn not =2");
@@ -1065,14 +1065,14 @@ public class GrnGvnReportController {
 				rowData.add("" + excelItems.get(i).getAprQty());
 
 				rowData.add("" + excelItems.get(i).getAprGrandTotal());
-			float 	frCont=0;
+		/*	float 	frCont=0;
 			if (isGrn.equalsIgnoreCase("1")|| isGrn.equalsIgnoreCase("2")) {
 				float value1=excelItems.get(i).getAprGrandTotal()*100;
 				float billValue=(value1)/75;
 				 frCont=(float) ((billValue)*0.25);
-			}
+			}*/
 			  	
-				rowData.add("" + roundUp(frCont));
+				rowData.add("" + roundUp( excelItems.get(i).getFrContr()));
 
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);

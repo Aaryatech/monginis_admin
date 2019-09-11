@@ -2,8 +2,9 @@ package com.ats.adminpanel.model.salescompare;
 
 public class SalesCompareGrnTot {
 	
+	private	String id;
 	
-private int frId;
+    private int frId;
 	
 	private	int month;
 	
@@ -16,6 +17,17 @@ private int frId;
 	private	int frRouteId;
 	
 	private	float billTotal;
+
+	
+	
+	
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
 
 	public int getFrId() {
 		return frId;

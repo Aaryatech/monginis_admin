@@ -174,7 +174,7 @@
 
 						
 					</div>
-					<div class="form-group">
+					<%-- <div class="form-group">
 					<label class="col-sm-3 col-lg-2 control-label">RM Opening Rate
 						</label>
 						<div class="col-sm-6 col-lg-4 controls">
@@ -242,8 +242,8 @@
   							<input type="radio" name="rm_is_critical" value="0"> Low
   							
   								</div>
-  								</div>
-									<div class="form-group">
+  								</div> --%>
+									<!-- <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Raw Material Image</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<div class="fileupload fileupload-new"
@@ -269,7 +269,7 @@
 										</div>
 
 									</div>
-								</div>
+								</div> -->
 							
 					<div class="row">
 						<div class="col-md-12" style="text-align: center">
@@ -432,7 +432,7 @@ function validation() {
 	  }
 	return isValid;
 }
-function validationForStore() {
+/* function validationForStore() {
 	
 	var storeIssueQty=parseFloat($("#rm_iss_qty").val());
 	var storeOpQty=parseFloat($("#rm_op_qty").val());
@@ -453,9 +453,9 @@ function validationForStore() {
 	}
     }
 	return isValid;
-}
+} */
 function validate() {
-    return validation() && validationForStore();
+    return validation();// && validationForStore();
 }
 </script> 
 
