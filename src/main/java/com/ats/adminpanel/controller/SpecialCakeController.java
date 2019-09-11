@@ -291,7 +291,11 @@ public class SpecialCakeController {
 		RestTemplate rest = new RestTemplate();
 
 		String code = request.getParameter("spc_code");
-		System.out.println("code" + code);
+		System.out.println("old code" + code);
+		
+		//code.replace('-', ' ');
+		System.out.println("new code" + code.replace('-', ' '));
+		
 
 		/*
 		 * String spimg = request.getParameter("sp_image");
@@ -630,6 +634,30 @@ public class SpecialCakeController {
 		return model;
 
 	}
+	
+	
+	@RequestMapping(value = "/deleteSpecialCakeCat/{spId}", method = RequestMethod.GET)
+	public String deleteSpecialCakeCat(@PathVariable int spId) {
+		ModelAndView model = new ModelAndView("spcake/spCakeCatList");
+
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("spId", spId);
+		RestTemplate restTemplate = new RestTemplate();
+		Info info = restTemplate.postForObject(Constants.url + "deleteSpecialCakeCat", map, Info.class);
+		map = new LinkedMultiValueMap<String, Object>();
+		map.add("id", spId);
+		Info infoSpCk = restTemplate.postForObject(Constants.url + "deleteSpCakeCatSup", map, Info.class);
+
+		if (info.getError() || infoSpCk.getError()) {
+			return "redirect:/showSpecialCakeCat";
+		} else {
+			return "redirect:/showSpecialCakeCat";
+
+		}
+
+	}
+	
+	
 
 	// editspcakeCat
 

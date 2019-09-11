@@ -216,7 +216,7 @@ public class AlbumController {
 			System.out.println(spId);
 			Album album = new Album();
 
-			album.setAlbumCode(albumCode);
+			album.setAlbumCode(albumCode.replace('-', ' '));
 			album.setAlbumName(albumName);
 			album.setDelStatus(0);
 			album.setAlbumDesc(desc);
