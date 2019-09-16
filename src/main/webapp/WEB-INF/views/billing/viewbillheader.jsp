@@ -227,7 +227,7 @@
 											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 										</div>
 									</div>
-${isEdit} ${isDelete}
+
 									<div class="box-content">
 
 										<div class="clearfix"></div>
