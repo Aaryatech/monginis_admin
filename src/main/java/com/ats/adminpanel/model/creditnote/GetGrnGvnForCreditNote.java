@@ -99,7 +99,14 @@ public class GetGrnGvnForCreditNote {
 	
 	//new column 23 FEB
 	private int grnGvnHeaderId;
+	
+	//new column 16-9-2019
+		private String albumCode;
 
+		//new column 16-9-2019
+		private int albumSpId;
+
+		
 	public int getGrnGvnId() {
 		return grnGvnId;
 	}
@@ -372,6 +379,26 @@ public class GetGrnGvnForCreditNote {
 		this.grnGvnHeaderId = grnGvnHeaderId;
 	}
 
+	
+	
+	public String getAlbumCode() {
+		return albumCode;
+	}
+
+	public void setAlbumCode(String albumCode) {
+		this.albumCode = albumCode;
+	}
+
+	public int getAlbumSpId() {
+		return albumSpId;
+	}
+
+	public void setAlbumSpId(int albumSpId) {
+		this.albumSpId = albumSpId;
+	}
+	
+	
+
 	@Override
 	public String toString() {
 		return "GetGrnGvnForCreditNote [grnGvnId=" + grnGvnId + ", grnGvnDate=" + grnGvnDate + ", billNo=" + billNo
@@ -384,7 +411,7 @@ public class GetGrnGvnForCreditNote {
 				+ aprTaxableAmt + ", aprTotalTax=" + aprTotalTax + ", aprROff=" + aprROff + ", itemName=" + itemName
 				+ ", frName=" + frName + ", isCreditNote=" + isCreditNote + ", menuId=" + menuId + ", catId=" + catId
 				+ ", invoiceNo=" + invoiceNo + ", refInvoiceDate=" + refInvoiceDate + ", grngvnSrno=" + grngvnSrno
-				+ ", grnGvnHeaderId=" + grnGvnHeaderId + "]";
+				+ ", grnGvnHeaderId=" + grnGvnHeaderId + ", albumCode=" + albumCode + ", albumSpId=" + albumSpId + "]";
 	}
 
 

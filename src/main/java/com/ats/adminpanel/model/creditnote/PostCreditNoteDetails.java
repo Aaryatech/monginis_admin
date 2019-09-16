@@ -72,6 +72,9 @@ public class PostCreditNoteDetails {
 		//new column 23 FEB
 		private int grnGvnHeaderId;
 		
+		private Integer exInt1;
+		private String exVarchar1;
+		
 	
 	
 	public int getBillNo() {
@@ -291,6 +294,26 @@ public class PostCreditNoteDetails {
 	public void setGrnGvnHeaderId(int grnGvnHeaderId) {
 		this.grnGvnHeaderId = grnGvnHeaderId;
 	}
+	
+	
+
+	public Integer getExInt1() {
+		return exInt1;
+	}
+
+	public void setExInt1(Integer exInt1) {
+		this.exInt1 = exInt1;
+	}
+
+	public String getExVarchar1() {
+		return exVarchar1;
+	}
+
+	public void setExVarchar1(String exVarchar1) {
+		this.exVarchar1 = exVarchar1;
+	}
+	
+	
 
 	@Override
 	public String toString() {
@@ -301,7 +324,7 @@ public class PostCreditNoteDetails {
 				+ ", sgstRs=" + sgstRs + ", igstRs=" + igstRs + ", cessRs=" + cessRs + ", delStatus=" + delStatus
 				+ ", billNo=" + billNo + ", billDate=" + billDate + ", catId=" + catId + ", baseRate=" + baseRate
 				+ ", cessPer=" + cessPer + ", refInvoiceNo=" + refInvoiceNo + ", grngvnSrno=" + grngvnSrno
-				+ ", grnGvnHeaderId=" + grnGvnHeaderId + "]";
+				+ ", grnGvnHeaderId=" + grnGvnHeaderId + ", exInt1=" + exInt1 + ", exVarchar1=" + exVarchar1 + "]";
 	}
 
 

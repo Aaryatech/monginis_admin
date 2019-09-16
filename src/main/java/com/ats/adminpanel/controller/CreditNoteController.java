@@ -285,6 +285,11 @@ public class CreditNoteController {
 						// 23 Feb
 						creditNoteDetail.setGrngvnSrno(creditNote.getGrngvnSrno());
 						creditNoteDetail.setGrnGvnHeaderId(creditNote.getGrnGvnHeaderId());
+						
+						//16-9-2019
+						creditNoteDetail.setExInt1(creditNote.getAlbumSpId());
+						creditNoteDetail.setExVarchar1(creditNote.getAlbumCode());
+						
 
 						postCreditNoteDetailsListMatched.add(creditNoteDetail);
 
@@ -419,6 +424,11 @@ public class CreditNoteController {
 					creditNoteDetail.setGrnGvnHeaderId(creditNote.getGrnGvnHeaderId());
 					creditNoteDetail.setGrngvnSrno(creditNote.getGrngvnSrno());
 					// newly set 23 FEB
+					
+					//16-9-2019
+					creditNoteDetail.setExInt1(creditNote.getAlbumSpId());
+					creditNoteDetail.setExVarchar1(creditNote.getAlbumCode());
+					
 
 					List<PostCreditNoteDetails> postCreditNoteDetailsList = new ArrayList<>();
 
