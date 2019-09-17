@@ -33,6 +33,7 @@ public class SpecialCake {
 	private float mrpRate2; 
 	private float mrpRate3;
 	private String erpLinkCode;
+	private Integer isAlbum;
 	
 	public int getId() {
 		return id;
@@ -186,13 +187,26 @@ public class SpecialCake {
 		this.erpLinkCode = erpLinkCode;
 	}
 
+	
+	
+	public Integer getIsAlbum() {
+		return isAlbum;
+	}
+
+	public void setIsAlbum(Integer isAlbum) {
+		this.isAlbum = isAlbum;
+	}
+	
+	
+
 	@Override
 	public String toString() {
 		return "SpecialCake [id=" + id + ", ItemName=" + ItemName + ", itemGroup=" + itemGroup + ", subGroup="
 				+ subGroup + ", subSubGroup=" + subSubGroup + ", hsnCode=" + hsnCode + ", uom=" + uom + ", sgstPer="
 				+ sgstPer + ", cgstPer=" + cgstPer + ", igstPer=" + igstPer + ", cessPer=" + cessPer + ", spCode="
 				+ spCode + ", spRate1=" + spRate1 + ", spRate2=" + spRate2 + ", spRate3=" + spRate3 + ", mrpRate1="
-				+ mrpRate1 + ", mrpRate2=" + mrpRate2 + ", mrpRate3=" + mrpRate3 + ", erpLinkCode=" + erpLinkCode + "]";
+				+ mrpRate1 + ", mrpRate2=" + mrpRate2 + ", mrpRate3=" + mrpRate3 + ", erpLinkCode=" + erpLinkCode
+				+ ", isAlbum=" + isAlbum + "]";
 	}
 	
 }

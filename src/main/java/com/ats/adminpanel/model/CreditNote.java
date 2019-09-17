@@ -50,6 +50,7 @@ public class CreditNote {
 	private String itemcode;
 	private int isGrn;
 	private String erpLink;
+	private int isAlbum;
 	
 	
 	public int getIsSameState() {
@@ -330,6 +331,17 @@ public class CreditNote {
 	public void setErpLink(String erpLink) {
 		this.erpLink = erpLink;
 	}
+	
+	
+	
+	public int getIsAlbum() {
+		return isAlbum;
+	}
+	public void setIsAlbum(int isAlbum) {
+		this.isAlbum = isAlbum;
+	}
+	
+	
 	@Override
 	public String toString() {
 		return "CreditNote [crndId=" + crndId + ", crnNo=" + crnNo + ", vNo=" + vNo + ", date=" + date + ", vType="
@@ -343,7 +355,8 @@ public class CreditNote {
 				+ ", isDeposited=" + isDeposited + ", grngvnSrno=" + grngvnSrno + ", crDbNo=" + crDbNo + ", crDbDate="
 				+ crDbDate + ", frId=" + frId + ", frCode=" + frCode + ", itemId=" + itemId + ", catId=" + catId
 				+ ", crnTaxableAmt=" + crnTaxableAmt + ", crnTotalTax=" + crnTotalTax + ", crnGrandTotal="
-				+ crnGrandTotal + ", itemcode=" + itemcode + ", isGrn=" + isGrn + ", erpLink=" + erpLink + "]";
+				+ crnGrandTotal + ", itemcode=" + itemcode + ", isGrn=" + isGrn + ", erpLink=" + erpLink + ", isAlbum="
+				+ isAlbum + "]";
 	}
  
 }

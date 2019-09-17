@@ -993,6 +993,7 @@ public class BillController {
 				rowData.add("Bill Total");
 				rowData.add("Remark");
 				rowData.add("Erp Link");
+				rowData.add("Is Album");
 			 
 					
 				expoExcel.setRowData(rowData);
@@ -1042,6 +1043,7 @@ public class BillController {
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getBillTotal());
 					rowData.add(salesVoucherList.getSalesVoucherList().get(i).getRemark());
 					rowData.add(salesVoucherList.getSalesVoucherList().get(i).getErpLink());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getIsAlbum());
 					
 					
 					expoExcel.setRowData(rowData);

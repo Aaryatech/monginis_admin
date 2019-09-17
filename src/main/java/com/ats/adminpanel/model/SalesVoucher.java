@@ -44,6 +44,7 @@ public class SalesVoucher {
 	private String frCode;
 	private String remark;
 	private String erpLink;
+	private int isAlbum;
   
 
 	public int getBillDetailNo() {
@@ -358,6 +359,18 @@ public class SalesVoucher {
 	public void setErpLink(String erpLink) {
 		this.erpLink = erpLink;
 	}
+	
+	
+
+	public int getIsAlbum() {
+		return isAlbum;
+	}
+
+	public void setIsAlbum(int isAlbum) {
+		this.isAlbum = isAlbum;
+	}
+	
+	
 
 	@Override
 	public String toString() {
@@ -370,7 +383,8 @@ public class SalesVoucher {
 				+ roundOff + ", totalAmt=" + totalAmt + ", billTotal=" + billTotal + ", totalTaxableAmt="
 				+ totalTaxableAmt + ", sgstSum=" + sgstSum + ", cgstSum=" + cgstSum + ", igstSum=" + igstSum
 				+ ", totalTax=" + totalTax + ", frId=" + frId + ", itemId=" + itemId + ", catId=" + catId
-				+ ", itemCode=" + itemCode + ", frCode=" + frCode + ", remark=" + remark + ", erpLink=" + erpLink + "]";
+				+ ", itemCode=" + itemCode + ", frCode=" + frCode + ", remark=" + remark + ", erpLink=" + erpLink
+				+ ", isAlbum=" + isAlbum + "]";
 	}
 	
 	

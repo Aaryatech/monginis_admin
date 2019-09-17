@@ -169,6 +169,11 @@ public class SpecialCakeController {
 			SpCakeList spResponse = restTemplate.getForObject(Constants.url + "tally/getAllExcelSpCake",
 					SpCakeList.class);
 
+//			SpCakeList spResponse = restTemplate.getForObject(Constants.url + "tally/getAllExcelSpCakeAndAlbum",
+//					SpCakeList.class);
+			
+			System.err.println("SP AND ALBUM LIST FOR EXCEL--------------------- "+spResponse);
+			
 			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
 			ExportToExcel expoExcel = new ExportToExcel();

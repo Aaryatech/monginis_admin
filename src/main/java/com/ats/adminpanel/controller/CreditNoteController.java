@@ -597,6 +597,7 @@ public class CreditNoteController {
 				rowData.add("Is Grn");
 				rowData.add("Erp Link");
 				rowData.add("Is Same State");
+				rowData.add("Is Album");
 
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
@@ -649,6 +650,7 @@ public class CreditNoteController {
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getIsGrn());
 					rowData.add(creditNoteList.getCreditNoteList().get(i).getErpLink());
 					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getIsSameState());
+					rowData.add(""+creditNoteList.getCreditNoteList().get(i).getIsAlbum());
 
 					expoExcel.setRowData(rowData);
 					exportToExcelList.add(expoExcel);
