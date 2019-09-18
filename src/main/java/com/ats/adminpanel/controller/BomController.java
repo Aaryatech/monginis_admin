@@ -83,9 +83,9 @@ public class BomController {
 	String prodOrMixDate;
 	int globalHeaderId;
 int globalIsPlan;
-	@RequestMapping(value = "/showBom/{prodHeaderId}/{isMix}/{date}/{isPlan}/{catId}", method = RequestMethod.GET)
+	@RequestMapping(value = "/showBom/{prodHeaderId}/{isMix}/{date}/{isPlan}/{catId}/{fromDept}/{toDept}", method = RequestMethod.GET)
 	public ModelAndView showBom2(@PathVariable int prodHeaderId, @PathVariable int isMix, @PathVariable String date,
-			@PathVariable int isPlan,@PathVariable int catId,
+			@PathVariable int isPlan,@PathVariable int catId,@PathVariable String fromDept,@PathVariable String toDept,
 			HttpServletRequest request, HttpServletResponse response) throws ParseException {
 
 		prodOrMixDate = date;
@@ -101,9 +101,13 @@ int globalIsPlan;
 
 			RestTemplate restTemplate = new RestTemplate();
 			if (isMix == 1) {
-System.out.println("It is Production BOM ");
+            System.out.println("It is Production BOM ");
+            map.add("settingKeyList", toDept);
+            FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+		    FrItemStockConfigureList.class);
+            map = new LinkedMultiValueMap<String, Object>();
 				map.add("headerId", prodHeaderId);
-
+				map.add("deptId", settingList.getFrItemStockConfigure().get(0).getSettingValue());
 				getSFPlanDetailForBomList = restTemplate.postForObject(Constants.url + "getSfPlanDetailForBom", map,
 						GetSFPlanDetailForMixingList.class);
 
@@ -142,7 +146,8 @@ System.out.println("It is Production BOM ");
 			}
 
 			mav.addObject("isMix", isMix);
-
+			mav.addObject("fromDept", fromDept);
+			mav.addObject("toDept", toDept);
 		} catch (Exception e) {
 			e.printStackTrace();
 
@@ -164,10 +169,10 @@ System.out.println("It is Production BOM ");
 		RestTemplate restTemplate = new RestTemplate();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		 int userId=userResponse.getUser().getId();
-		
+		 String fromDept =request.getParameter("fromDept");
+		 String toDept = request.getParameter("toDept");
 		String settingKey = new String();
-		settingKey = "BMS";
-		map.add("settingKeyList", settingKey);
+		map.add("settingKeyList", toDept);
 		FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
 				FrItemStockConfigureList.class);
 		
@@ -180,6 +185,8 @@ System.out.println("It is Production BOM ");
 		int isMixing = Integer.parseInt(isMix);
 		System.out.println("inside insert Bom ");
 		int catId = Integer.parseInt(request.getParameter("catId"));
+		
+
 		Date prodOrMixDate1 = null;
 
 		SimpleDateFormat dtFormat = new SimpleDateFormat("dd-MM-yyyy");
@@ -197,7 +204,7 @@ System.out.println("It is Production BOM ");
 			
 			
 			
-			int toDeptId=settingList.getFrItemStockConfigure().get(0).getSettingValue();
+			int toDeptId=settingList.getFrItemStockConfigure().get(0).getSettingValue(); //change on 18-09-2019
 			String toDeptName=settingList.getFrItemStockConfigure().get(0).getSettingKey();
 			
 			Date date = new Date();
@@ -229,8 +236,7 @@ System.out.println("It is Production BOM ");
 				
 				map = new LinkedMultiValueMap<String, Object>();
 				String settingKey1 = new String();
-				settingKey1 = "PROD";
-				map.add("settingKeyList", settingKey1);
+				map.add("settingKeyList", fromDept);
 				FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
 						FrItemStockConfigureList.class);
 				int fromDeptId=settingList1.getFrItemStockConfigure().get(0).getSettingValue();
@@ -279,6 +285,7 @@ System.out.println("It is Production BOM ");
 					map = new LinkedMultiValueMap<String, Object>();
 					map.add("productionId", prodId);
 					map.add("flag", 1);
+					map.add("deptId", toDeptId);
 					int updateisBom = restTemplate.postForObject(Constants.url + "updateisMixingandBom", map,
 							Integer.class); 
 					System.out.println("updateIsBom "+updateisBom);
@@ -371,8 +378,8 @@ System.out.println("It is Production BOM ");
 	FrItemStockConfigureList PROD = new FrItemStockConfigureList();
 	FrItemStockConfigureList MIX = new FrItemStockConfigureList();
 	
-	@RequestMapping(value = "/getBomList", method = RequestMethod.GET)
-	public ModelAndView getBomList(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/getBomList/{fromDept}/{toDept}", method = RequestMethod.GET)
+	public ModelAndView getBomList(@PathVariable("fromDept")String fromDept,@PathVariable("toDept")String toDept,HttpServletRequest request, HttpServletResponse response) {
 		Constants.mainAct =8;
 		Constants.subAct=44;
 		
@@ -390,16 +397,12 @@ System.out.println("It is Production BOM ");
 			System.out.println("date"+df.format(date));
 			
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			String key = new String();
-			key = "PROD";
-			map.add("settingKeyList", key);
+			map.add("settingKeyList", fromDept);
 			 PROD = rest.postForObject(Constants.url + "getDeptSettingValue", map,
 					FrItemStockConfigureList.class);
 			
 			map = new LinkedMultiValueMap<String, Object>();
-			String key1 = new String();
-			key1 = "MIX";
-			map.add("settingKeyList", key1);
+			map.add("settingKeyList", toDept);
 			 MIX = rest.postForObject(Constants.url + "getDeptSettingValue", map,
 					FrItemStockConfigureList.class);
 			
@@ -410,7 +413,8 @@ System.out.println("It is Production BOM ");
 				 
 				if(getBillOfMaterialList.getBillOfMaterialHeader().get(i).getStatus()==0 || df.format(date).equals(df.format(getBillOfMaterialList.getBillOfMaterialHeader().get(i).getReqDate())))
 				{
-					if(getBillOfMaterialList.getBillOfMaterialHeader().get(i).getFromDeptId()==PROD.getFrItemStockConfigure().get(0).getSettingValue() || getBillOfMaterialList.getBillOfMaterialHeader().get(i).getFromDeptId()==MIX.getFrItemStockConfigure().get(0).getSettingValue()) 
+					//getBillOfMaterialList.getBillOfMaterialHeader().get(i).getFromDeptId()==PROD.getFrItemStockConfigure().get(0).getSettingValue() ||
+					if( getBillOfMaterialList.getBillOfMaterialHeader().get(i).getToDeptId()==MIX.getFrItemStockConfigure().get(0).getSettingValue()) 
 						getbomList.add(getBillOfMaterialList.getBillOfMaterialHeader().get(i)); 
 				}
 			}
@@ -513,13 +517,13 @@ System.out.println("It is Production BOM ");
 			e.printStackTrace();
 		}
 		
-		 PdfPTable table = new PdfPTable(3);
+		 PdfPTable table = new PdfPTable(5);
 		 try {
 		 System.out.println("Inside PDF Table try");
 		 table.setWidthPercentage(100);
-	     table.setWidths(new float[]{0.5f, 1.4f,0.5f});
-	     Font headFont = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK);
-	     Font headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
+	     table.setWidths(new float[]{0.5f, 1.4f,0.5f, 1.4f, 1.4f});
+	     Font headFont = new Font(FontFamily.HELVETICA, 10, Font.NORMAL, BaseColor.BLACK);
+	     Font headFont1 = new Font(FontFamily.HELVETICA, 11, Font.BOLD, BaseColor.BLACK);
 	     Font f=new Font(FontFamily.TIMES_ROMAN,12.0f,Font.UNDERLINE,BaseColor.BLUE);
 	     
 	     PdfPCell hcell;
@@ -531,7 +535,15 @@ System.out.println("It is Production BOM ");
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	     table.addCell(hcell);
 	    
-	     hcell = new PdfPCell(new Phrase("Order Quantity", headFont1));
+	     hcell = new PdfPCell(new Phrase("Order Qty", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
+	     hcell = new PdfPCell(new Phrase("Requested Qty", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
+	     hcell = new PdfPCell(new Phrase("Issue Qty", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	     table.addCell(hcell);
 	 
@@ -553,6 +565,20 @@ System.out.println("It is Production BOM ");
 	         table.addCell(cell);
 	         
 	         cell = new PdfPCell(new Phrase(String.valueOf(bomDetail.getRmIssueQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(2);
+	         table.addCell(cell);
+	         
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(bomDetail.getAutoRmReqQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(2);
+	         table.addCell(cell);
+	         
+	         
+	         cell = new PdfPCell();//new
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	         cell.setPaddingRight(2);

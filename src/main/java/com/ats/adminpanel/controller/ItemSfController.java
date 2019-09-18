@@ -38,6 +38,7 @@ import com.ats.adminpanel.model.RawMaterial.RmItemGroup;
 import com.ats.adminpanel.model.RawMaterial.SfItemDetailList;
 import com.ats.adminpanel.model.franchisee.CommonConf;
 import com.ats.adminpanel.model.item.Item;
+import com.ats.adminpanel.model.spprod.MDeptList;
 
 @Controller
 @Scope("session")
@@ -94,7 +95,11 @@ public class ItemSfController {
 			
 			//itemHeaderList=restTemplate.postForObject(Constants.url+"getItemSfHeaderList",map,List.class);
 
-			System.out.println(" Header List "+itemHeaderList);
+			//System.out.println(" Header List "+itemHeaderList);
+			
+			MDeptList mDeptList = restTemplate.getForObject(Constants.url + "/spProduction/mDeptList", MDeptList.class);
+			System.out.println("Response: " + mDeptList.toString());
+			model.addObject("deptList", mDeptList.getList());
 			
 			model.addObject("itemHeaderList",itemHeaderList);
 
@@ -146,10 +151,14 @@ public class ItemSfController {
 		
 		String sfType=request.getParameter("sf_item_type");
 		
+		int deptId=Integer.parseInt(request.getParameter("to_dept"));//new
+		
+		int issueSeqNo=Integer.parseInt(request.getParameter("issueSeqNo"));//new
+
 		
 		int sfItemUoM=Integer.parseInt(request.getParameter("sf_item_uom"));
 				
-		float sfItewWeight=Float.parseFloat(request.getParameter("sf_item_weight"));
+		//float sfItewWeight=Float.parseFloat(request.getParameter("sf_item_weight"));
 		
 		int sfStockQty=Integer.parseInt(request.getParameter("sf_stock_qty"));
 						
@@ -163,14 +172,15 @@ public class ItemSfController {
 		
 		ItemSfHeader header=new ItemSfHeader();
 		header.setDelStatus(0);
-		
+		header.setInt1(deptId);//deptId
+		header.setInt2(issueSeqNo);//issueSeqNo
 		header.setMaxLevelQty(sfMaxQty);
 		header.setMinLevelQty(sfMinQty);
 		header.setReorderLevelQty(sfReorderQty);
 		header.setSfName(sfItemName);
 		header.setSfType(sfType);
 		header.setSfUomId(sfItemUoM);
-		header.setSfWeight(sfItewWeight);
+		header.setSfWeight(0);
 		header.setStockQty(sfStockQty);
 		header.setMulFactor(mulFactor);
 		System.out.println("header= "+header.toString());
@@ -295,7 +305,10 @@ public class ItemSfController {
 			sfTypeList=new ArrayList<>();
 		 sfTypeList=restTemplate.postForObject(Constants.url+"getSfType",map,List.class);
 		
-		 
+			
+			MDeptList mDeptList = restTemplate.getForObject(Constants.url + "/spProduction/mDeptList", MDeptList.class);
+			System.out.println("Response: " + mDeptList.toString());
+			model.addObject("deptList", mDeptList.getList());
 		model.addObject("editHeader",editHeader);
 		model.addObject("sfName",sfName);	
 		model.addObject("sfType",sfTypeName);
@@ -331,7 +344,10 @@ public class ItemSfController {
 		
 		String sfType=request.getParameter("sf_item_type");
 		
+        int deptId=Integer.parseInt(request.getParameter("to_dept"));//new
 		
+		int issueSeqNo=Integer.parseInt(request.getParameter("issueSeqNo"));//new
+
 		int sfItemUoM=Integer.parseInt(request.getParameter("sf_item_uom"));
 				
 		float sfItewWeight=Float.parseFloat(request.getParameter("sf_item_weight"));
@@ -361,6 +377,8 @@ public class ItemSfController {
 		header.setSfWeight(sfItewWeight);
 		header.setStockQty(sfStockQty);
 		header.setMulFactor(mulFactor);
+		header.setInt1(deptId);//deptId
+		header.setInt2(issueSeqNo);//issueSeqNo
 		System.out.println("header= "+header.toString());
 
 		Info info=restTemplate.postForObject(Constants.url+"postSfItemHeader",header,Info.class);

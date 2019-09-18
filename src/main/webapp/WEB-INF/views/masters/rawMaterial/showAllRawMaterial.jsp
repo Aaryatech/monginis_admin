@@ -223,7 +223,7 @@
 													<th class="col-md-1" align="center">Sub Category</th>
 													<th class="col-md-1" align="center">BMS ROL Qty</th>
  
-													<th class="col-md-1" align="center">Store ROL Qty</th>
+													<!-- <th class="col-md-1" align="center">Store ROL Qty</th> -->
 											     	<th class="col-md-1" align="center">SGST %</th> 
 												 	<th class="col-md-1" align="center">CGST %</th> 
 	                                                <th class="col-md-1" align="center">IGST %</th> 
@@ -255,7 +255,7 @@
 
 														<td align="center"><c:out value="${RawmaterialList.bmsRolQty}" /></td>
 
-														<td align="center"><c:out value="${RawmaterialList.storeRolQty}" /></td>
+														<%-- <td align="center"><c:out value="${RawmaterialList.storeRolQty}" /></td> --%>
 
 														 <td class="col-sm-1" align="left"><c:out value="${RawmaterialList.sgstPer}" /></td>
 														 <td class="col-sm-1" align="left"><c:out value="${RawmaterialList.cgstPer}" /></td>

@@ -138,7 +138,7 @@
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label"> SF Name</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="sf_item_name" id="sf_item_name"
+										<input type="text" name="sf_item_name" id="sf_item_name" autocomplete="off"
 											class="form-control" placeholder="SF Name"
 											data-rule-required="true" />
 									</div>
@@ -177,8 +177,8 @@
 									<label class="col-sm-3 col-lg-2 control-label">SF
 										Weight </label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="sf_item_weight" id="sf_item_weight"
-											class="form-control" placeholder="SF Weight "
+										<input type="text" name="sf_item_weight" id="sf_item_weight" autocomplete="off"
+											class="form-control" placeholder="SF Weight " value="0" readonly
 											data-rule-required="true" data-rule-number="true" />
 									</div>
 								</div>
@@ -189,7 +189,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Stock
 										Qty</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="sf_stock_qty" id="sf_stock_qty"
+										<input type="text" name="sf_stock_qty" id="sf_stock_qty" autocomplete="off"
 											class="form-control" placeholder="Stock Qty"
 											data-rule-required="true" data-rule-number="true"
 											onKeyPress="return isNumberCommaDot(event)" />
@@ -199,7 +199,7 @@
 										Level Qty </label>
 
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="sf_reorder_level_qty"
+										<input type="text" name="sf_reorder_level_qty" autocomplete="off"
 											id="sf_reorder_level_qty" class="form-control"
 											placeholder="Reorder Level Qty " data-rule-required="true"
 											data-rule-number="true"
@@ -213,7 +213,7 @@
 
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_min_qty" id="sf_min_qty"
-											class="form-control" placeholder="Min Level Qty"
+											class="form-control" placeholder="Min Level Qty" autocomplete="off"
 											data-rule-required="true" data-rule-number="true"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
@@ -221,7 +221,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">Max
 										Level Qty </label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="sf_max_qty" id="sf_max_qty"
+										<input type="text" name="sf_max_qty" id="sf_max_qty" autocomplete="off"
 											class="form-control" placeholder="Max Level Qty"
 											data-rule-required="true" data-rule-number="true"
 											onKeyPress="return isNumberCommaDot(event)" />
@@ -231,12 +231,27 @@
 									<label class="col-sm-3 col-lg-2 control-label">Multiplication
 										Factor </label>
 
-									<div class="col-sm-6 col-lg-4 controls">
+									<div class="col-sm-6 col-lg-2 controls">
 										<input type="text" name="mul_factor" id="mul_factor"
-											class="form-control" placeholder="Multi Factot"
+											class="form-control" placeholder="Multi Factor" autocomplete="off"
 											data-rule-required="true" data-rule-number="true"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
+									<label class="col-sm-3 col-lg-2 control-label">Issue Seq.No
+						</label>
+						<div class="col-sm-6 col-lg-2 controls">
+							<input type="text" name="issueSeqNo"  id="issueSeqNo"  class="form-control"placeholder="Issue Seq.No "data-rule-number="true" data-rule-required="true"   autocomplete="off"/>
+						</div>
+						<label class="col-sm-3 col-lg-1 control-label">Department </label>
+						<div class="col-sm-6 col-lg-3 controls">
+	                        <select name="to_dept" id="to_dept" class="form-control"
+											placeholder="Department" data-rule-required="true">
+											<option value="0">Select Department</option>
+											<c:forEach items="${deptList}" var="dept">
+												<option value="${dept.deptId}">${dept.deptName}</option>
+											</c:forEach>
+										</select>
+						</div>
 								</div>
 
 								<div class="row">

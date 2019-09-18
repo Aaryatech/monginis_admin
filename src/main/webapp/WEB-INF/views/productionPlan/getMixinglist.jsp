@@ -76,7 +76,7 @@
 										
 										<th>Mixing Date</th>
 										<th>Production Batch</th>
-										<th>Time Slot</th>
+										<!-- <th>Time Slot</th> -->
 										<th>Status</th>
 										<th>Action</th>
 										
@@ -114,9 +114,9 @@
 													<td align="left"><c:out
 																value="${todaysmixrequest.productionBatch}" />  </td>
 															
-															<td align="left"><c:out	
+														<%-- 	<td align="left"><c:out	
 																value="${todaysmixrequest.timeSlot}" />
-																</td>
+																</td> --%>
 																
 																
 																<td align="left"><c:out	
@@ -152,25 +152,31 @@
 							
 						</div>
 						<div class=" box-content">
-						<div class="form-group"><br>
+						<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">From Date:</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="from_date" size="16"
+									<div class="col-sm-5 col-lg-2 controls">
+										<input class="form-control date-picker" id="from_date" size="16" autocomplete="off"
 											 type="text" name="from_date" required />
-											 <input class="form-control " id="deptId" size="16"
+											 <input class="form-control " id="deptId" size="16" placeholder="From Date"
 											 type="hidden" name="deptId" value="${flag}" required />
 									
 										</div>
 										
 										<label class="col-sm-3 col-lg-2 control-label">To Date:</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="to_date" size="16"
+									<div class="col-sm-5 col-lg-2 controls">
+										<input class="form-control date-picker" id="to_date" size="16"  placeholder="To Date" autocomplete="off"
 											 type="text" name="to_date" required />
 									
 										</div>
+										<div class="col-sm-5 col-lg-4 controls">
+										<input type="button" class="btn btn-primary" value="Pending" id="search"
+											onclick="searchMix()">
+				
+										<input type="button" class="btn btn-primary" value="View All" id="searchmixall"
+											onclick="searchmixall()">
 										
 										
-										</div><br>
+										</div>
 						
 								</div>
 								
@@ -182,15 +188,10 @@
 								<div class="form-group">
 								
 								<div align="center" class="form-group">
-									 <div
+									<!--  <div
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0"> 
-										<input type="button" class="btn btn-primary" value="Search" id="search"
-											onclick="searchMix()">
-				
-										<input type="button" class="btn btn-primary" value="View All" id="searchmixall"
-											onclick="searchmixall()">
-
-									 </div><br> 
+										
+									 </div><br>  -->
 									
 									<div align="center" id="loader" style="display: none">
 
@@ -240,10 +241,10 @@
 		</div>
 					</div>
 				</div>
-			</div>
+			</div></div>
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+			<p>2019 © MONGINIS.</p>
 			</footer>
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i

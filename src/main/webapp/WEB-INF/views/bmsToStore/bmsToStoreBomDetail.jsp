@@ -107,7 +107,7 @@
 										<c:set var="sts" value="Request Closed"></c:set>
 									</c:when>
 									</c:choose>
-										<input type="text" id="status" name="status"
+										<input type="text" id="statuss" name="status"
 											value="${sts}" class="form-control"
 											readonly>
 									</div>
@@ -309,7 +309,7 @@
 		</div>
 		<!-- END Main Content -->
 		<footer>
-		<p>2017 © MONGINIS.</p>
+		<p>2019 © MONGINIS.</p>
 		</footer>
 
 		<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i

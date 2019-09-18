@@ -12,6 +12,8 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -286,12 +288,14 @@ public class TempManualBom {
 
 		
 		int materialType = Integer.parseInt(request.getParameter("mat_type"));
-		
+		int toDept= Integer.parseInt(request.getParameter("toDept"));
 		if (materialType == 1) {
 			System.out.println("inside if");
 			try {
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("deptId", toDept);
 				RawMaterialDetailsList rawMaterialDetailsList = rest
-						.getForObject(Constants.url + "rawMaterial/getAllRawMaterial", RawMaterialDetailsList.class);
+						.postForObject(Constants.url + "rawMaterial/getAllRawMaterialByDept",map, RawMaterialDetailsList.class);
 
 				System.out.println("RM Details : " + rawMaterialDetailsList.toString());
 
@@ -316,7 +320,9 @@ public class TempManualBom {
 			}
 
 		} else {
-			ItemSfHeaderList itemHeaderDetailList = rest.getForObject(Constants.url + "rawMaterial/getItemSfHeaders",
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("deptId", toDept);
+			ItemSfHeaderList itemHeaderDetailList = rest.postForObject(Constants.url + "rawMaterial/getItemSfHeadersByDept",map,
 					ItemSfHeaderList.class);
 
 			System.out.println("ItemSfHeaderList Details : " + itemHeaderDetailList.toString());

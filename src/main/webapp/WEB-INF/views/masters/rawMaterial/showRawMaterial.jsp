@@ -67,6 +67,7 @@
 							<form action="${pageContext.request.contextPath}/addRawMaterial" method="post" class="form-horizontal" id=
 									"validation-form"
 										enctype="multipart/form-data" method="post">
+												<input type="hidden" name="rm_id" id="rm_id"value="${rawMaterialDetails.rmId}"  />
 							
 
 								<div class="form-group">
@@ -197,15 +198,43 @@
 								Quantity </label>
 
 							<div class="col-sm-6 col-lg-4 controls">
-								<input type="text" value="${rawMaterialDetails.rmMaxQty }" name="rm_max_qty"  id="rm_max_qty" class="form-control"placeholder="Max Qty "data-rule-required="true" data-rule-number="true"/>
+								<input type="text" value="${rawMaterialDetails.rmMaxQty}" name="rm_max_qty"  id="rm_max_qty" class="form-control"placeholder="Max Qty "data-rule-required="true" data-rule-number="true"/>
 							</div>
 							<label class="col-sm-3 col-lg-2 control-label">BMS ROL Qty</label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" value="${rawMaterialDetails.rmRolQty }" name="rm_rol_qty" id="rm_rol_qty" class="form-control"placeholder="Re Order level" data-rule-required="true" data-rule-number="true"/>
+							<input type="text" value="${rawMaterialDetails.rmRolQty}" name="rm_rol_qty" id="rm_rol_qty" class="form-control"placeholder="Re Order level" data-rule-required="true" data-rule-number="true"/>
 						</div>
 						 
 					</div>
-					<div class="form-group">
+					<%--NEW Fields Added --%>
+					 <div class="form-group">
+					<label class="col-sm-3 col-lg-2 control-label">Issue Seq.No
+						</label>
+						<div class="col-sm-6 col-lg-4 controls">
+							<input type="text" name="issueSeqNo"  id="issueSeqNo" class="form-control"placeholder="Issue Seq.No "data-rule-number="true" data-rule-required="true" value="${rawMaterialDetails.rmIcon}" />
+						</div>
+						<label class="col-sm-3 col-lg-2 control-label">Department </label>
+						<div class="col-sm-6 col-lg-4 controls">
+	                        <select name="to_dept" id="to_dept" class="form-control"
+											placeholder="Department" data-rule-required="true">
+											<option value="0">Select Department</option>
+											<c:forEach items="${deptList}" var="dept">
+											<c:choose>
+											<c:when test="${dept.deptId==rawMaterialDetails.rmOpRate}">
+											<option value="${dept.deptId}" selected>${dept.deptName}</option>
+											
+											</c:when>
+											<c:otherwise>
+										<option value="${dept.deptId}">${dept.deptName}</option>
+											
+											</c:otherwise>
+											</c:choose>
+											</c:forEach>
+										</select>
+						</div>
+
+					</div>
+				<%-- 	<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">RM OP Rate
 						</label>
 						<div class="col-sm-6 col-lg-4 controls">
@@ -217,8 +246,8 @@
 							<input type="text" value="${rawMaterialDetails.rmRate }" name="rm_rate" id="rm_rate" class="form-control" placeholder="Rate"data-rule-required="true"data-rule-number="true"/>
 						</div>
 					</div>
-
-					<div class="form-group">
+ --%>
+				<%-- 	<div class="form-group">
 							<label class="col-sm-3 col-lg-2 control-label">RM GST % </label>
 						<div class="col-sm-6 col-lg-4 controls">
 							<select name="rm_tax_id" id="rm_tax_id" class="form-control">
@@ -245,9 +274,9 @@
 						</div>
 						
 
-					</div>
+					</div> --%>
 				
-					<div class="form-group">
+				<%-- 	<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">Store Max Qty </label>
 						<div class="col-sm-6 col-lg-4 controls">
 							<input type="text" value="${rawMaterialDetails.rmOpQty }" name="rm_op_qty" id="rm_op_qty" class="form-control"placeholder="Store Max Qty"data-rule-required="true" data-rule-number="true" />
@@ -258,11 +287,10 @@
 						<div class="col-sm-6 col-lg-4 controls">
 							<input type="text" value="${rawMaterialDetails.rmReceivedQty }" name="rm_recd_qty" id="rm_recd_qty" class="form-control" placeholder="Store ROL Qty"data-rule-required="true" data-rule-number="true"/>
 						</div>
-					<input type="hidden" name="rm_id" id="rm_id"value="${rawMaterialDetails.rmId}"  />
 						
-					</div>
+					</div> --%>
 					
-					<div class="form-group">
+				<%-- 	<div class="form-group">
 						<label class="col-sm-3 col-lg-2 control-label">HSN Code</label>
 
 						<div class="col-sm-6 col-lg-4 controls">
@@ -274,9 +302,9 @@
 						<div class="col-sm-6 col-lg-4 controls">
 							<input type="text" value="${rawMaterialDetails.rmRejQty }"name="rm_rej_qty" id="rm_rej_qty" class="form-control"placeholder="Raw Rejected Qty "data-rule-required="true" data-rule-number="true"/>
 						</div>
-					</div>
+					</div> --%>
 					
-					<div class="form-group">
+					<%-- <div class="form-group">
 
 						<label class="col-sm-3 col-lg-2 control-label">RM
 							isCritical </label>
@@ -303,18 +331,18 @@
 																	</c:when>
 																
 													</c:choose>
-							  <%-- <input type="radio" name="rm_is_critical"id="rm_high" checked=<c:out value="${high}" /> value="2"> High
+							  <input type="radio" name="rm_is_critical"id="rm_high" checked=<c:out value="${high}" /> value="2"> High
 							  <input type="radio" name="rm_is_critical" id="rm_normal"checked=<c:out value="${normal}" /> value="1"> Normal
   							<input type="radio" name="rm_is_critical" id="rm_low"   value="0"> Low
-  							 --%>
+  							
  						 </div>
 
 					<label class="col-sm-3 col-lg-2 control-label">
 					 </label>
 					 <input type="hidden" value="${rawMaterialDetails.rmIsCritical }"id="temp_is_critical" >
 						
-				</div>
-				
+				</div> --%>
+				<%-- 
 							<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Raw Material Image</label>
 														<div class="col-sm-9 col-lg-10 controls">
@@ -343,15 +371,13 @@
 										
 
 					</div>
-</div>
+</div> --%>
 				<br/>
 					<br/>
 					<div class="row">
 							<div class="col-md-12" style="text-align: center">
 						<input type="submit" class="btn btn-success" value="Submit" id="btn_submit" onclick="return validate()">
-						<!-- <input type="button" class="btn btn-info" value="Edit" id="edit" onclick="editClick()"> -->
-<!-- 						<input type="button" class="btn btn-danger" value="Delete" id="delete" onclick="deleteClick()">
- -->					
+						
 					</div>
 					</div>
 					</form>
@@ -363,7 +389,7 @@
 	</div>
 	<!-- END Main Content -->
 	<footer>
-	<p>2017 © MONGINIS.</p>
+	<p>2019 © MONGINIS.</p>
 	</footer>
 
 

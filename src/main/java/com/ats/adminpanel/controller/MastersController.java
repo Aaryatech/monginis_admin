@@ -19,7 +19,10 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllEventListResponse;
+import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.MiniSubCategory;
 import com.ats.adminpanel.model.Route;
+import com.ats.adminpanel.model.SubCategory2;
 import com.ats.adminpanel.model.events.Event;
 import com.ats.adminpanel.model.flavours.AllFlavoursListResponse;
 import com.ats.adminpanel.model.flavours.Flavour;
@@ -624,5 +627,74 @@ public String redirectToUpdateRouteProcess(HttpServletRequest request, HttpServl
 		   return "redirect:/showSpMessages";
 
 }
+@RequestMapping(value="/addGroup")
+public ModelAndView addGroup(HttpServletRequest request, HttpServletResponse response) {
 
+	    ModelAndView model = new ModelAndView("masters/addGroup");
+		RestTemplate restTemplate = new RestTemplate();
+
+		List<MiniSubCategory> miniSubCategory = restTemplate.getForObject(Constants.url + "/showMiniSubCatList",
+				 List.class);
+		model.addObject("miniSubCategory", miniSubCategory);
+		return model;
+ }
+@RequestMapping(value="/deleteMiniSubCategory/{miniCatId}",method=RequestMethod.GET)
+public String deleteGroup(@PathVariable int miniCatId) {
+
+
+	ModelAndView mav = new ModelAndView("masters/addGroup");
+	RestTemplate restTemplate = new RestTemplate();
+    MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+    map.add("miniCatId",miniCatId);
+
+    Info errorResponse = restTemplate.postForObject(Constants.url+"deleteSubCategory2ById", map,Info.class);
+	  return "redirect:/addGroup";
+}
+
+@RequestMapping(value="/addGroupProcess",method=RequestMethod.POST)
+  public String addGroupProcess(HttpServletRequest request, HttpServletResponse response) {
+	
+	int miniCatId=0;
+	try {
+		miniCatId=Integer.parseInt(request.getParameter("miniCatId"));
+	}catch (Exception e) {
+		miniCatId=0;
+	}
+	String groupName=request.getParameter("group_name");
+	int seqNo=Integer.parseInt(request.getParameter("seq_no"));
+	
+	 RestTemplate rest = new RestTemplate();
+	 SubCategory2 subCat=new SubCategory2();
+	 subCat.setMiniCatId(miniCatId);
+	 subCat.setMiniCatName(groupName);
+	 subCat.setSubCatId(seqNo);		 
+	 subCat.setDelStatus(0);
+	SubCategory2 subCategory2Res = rest.postForObject(""+Constants.url+"saveSubCategory2",subCat, SubCategory2.class);
+    return "redirect:/addGroup";
+
+  }
+@RequestMapping(value = "/updateMiniSubCategory/{miniCatId}", method=RequestMethod.GET)
+public ModelAndView updateMiniSubCategory(@PathVariable int miniCatId, HttpServletRequest request, HttpServletResponse response) {
+	
+	ModelAndView model = new ModelAndView("masters/addGroup");
+	try {
+	
+	MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+	RestTemplate restTemplate = new RestTemplate();
+	map.add("miniCatId", miniCatId);
+	
+	SubCategory2 subCategory2=restTemplate
+			.postForObject(Constants.url+"getSubCategory2ById",map,SubCategory2.class);
+	
+	model.addObject("subCategory2",subCategory2);
+	
+	List<MiniSubCategory> miniSubCategory = restTemplate.getForObject(Constants.url + "/showMiniSubCatList",
+			 List.class);
+	model.addObject("miniSubCategory", miniSubCategory);
+	}
+	catch(Exception e) {
+		e.printStackTrace();
+	}
+   return model;	
+ }
 }

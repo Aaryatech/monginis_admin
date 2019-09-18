@@ -279,40 +279,55 @@ public class ViewMixingController {
 			e.printStackTrace();
 		}
 		
-		 PdfPTable table = new PdfPTable(5);
+		 PdfPTable table = new PdfPTable(7);
 		 try {
 		 System.out.println("Inside PDF Table try");
 		 table.setWidthPercentage(100);
-	     table.setWidths(new float[]{0.9f, 1.8f,1.4f,1.4f,1.4f});
-	     Font headFont = new Font(FontFamily.HELVETICA, 8, Font.ITALIC, BaseColor.BLACK);
-	     Font headFont1 = new Font(FontFamily.HELVETICA, 8, Font.BOLD, BaseColor.BLACK);
+	     table.setWidths(new float[]{0.9f, 2.0f,2.0f,2.0f,2.0f,2.0f,2.0f});
+	     Font headFont = new Font(FontFamily.HELVETICA,11 , Font.NORMAL, BaseColor.BLACK);
+	     Font headFont1 = new Font(FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.BLACK);
 	     Font f=new Font(FontFamily.TIMES_ROMAN,12.0f,Font.UNDERLINE,BaseColor.BLUE);
 	     
 	     PdfPCell hcell;
-	     hcell = new PdfPCell(new Phrase("Sr.No.", headFont1));
+	     hcell = new PdfPCell(new Phrase("Sr.", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     hcell.setBackgroundColor(BaseColor.PINK);
 	     table.addCell(hcell);
 
 	     hcell = new PdfPCell(new Phrase("SF Name", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     hcell.setBackgroundColor(BaseColor.PINK);
 	     table.addCell(hcell);
 	    
 	     
-	     hcell = new PdfPCell(new Phrase("Ori Quantity", headFont1));
+	     hcell = new PdfPCell(new Phrase("Original Qty", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     hcell.setBackgroundColor(BaseColor.PINK);
 	     table.addCell(hcell);
 	     
 	     
+	     hcell = new PdfPCell(new Phrase("Multipl Factor", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     hcell.setBackgroundColor(BaseColor.PINK);
+	     table.addCell(hcell);
+	     
+	     hcell = new PdfPCell(new Phrase("Auto Order Qty", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     hcell.setBackgroundColor(BaseColor.PINK);
+	     table.addCell(hcell);
+	         
 	    
-	     
-	     hcell = new PdfPCell(new Phrase("Multiplication Factor", headFont1));
+	     hcell = new PdfPCell(new Phrase("Received Qty", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     hcell.setBackgroundColor(BaseColor.PINK);
 	     table.addCell(hcell);
 	     
-	    
-	     hcell = new PdfPCell(new Phrase("Order Quantity", headFont1));
+
+	     hcell = new PdfPCell(new Phrase("Production Qty", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     hcell.setBackgroundColor(BaseColor.PINK);
 	     table.addCell(hcell);
+	     
 	 
 	     int index=0;
 	     for (MixingDetailed mixDetail : mixDetailList) {
@@ -338,15 +353,24 @@ public class ViewMixingController {
 	         cell.setPaddingRight(4);
 	         table.addCell(cell);
 	         
-	         
-	         cell = new PdfPCell(new Phrase(String.valueOf(mixDetail.getExInt2()),headFont));
+	         cell = new PdfPCell(new Phrase(String.valueOf(mixDetail.getExVarchar1()),headFont));
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	         cell.setPaddingRight(4);
 	         table.addCell(cell);
 	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(mixDetail.getAutoOrderQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(4);
+	         table.addCell(cell);
 	         
 	         cell = new PdfPCell(new Phrase(String.valueOf(mixDetail.getReceivedQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(4);
+	         table.addCell(cell);
+	         cell = new PdfPCell(new Phrase(String.valueOf(mixDetail.getProductionQty()),headFont));
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	         cell.setPaddingRight(4);

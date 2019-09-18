@@ -57,6 +57,7 @@ import com.ats.adminpanel.model.franchisee.Menu;
 import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.ErrorMessage;
 import com.ats.adminpanel.model.item.Item;
+import com.ats.adminpanel.model.spprod.MDeptList;
 import com.ats.adminpanel.model.supplierMaster.SupplierDetails;
 
 @Controller
@@ -85,7 +86,12 @@ public class RawMaterialController {
 		List<RawMaterialTaxDetails> rawMaterialTaxDetailsList=rest.getForObject(Constants.url + "rawMaterial/getAllRmTax", List.class);
 		System.out.println("RM Tax data : "+rawMaterialTaxDetailsList);
 		
-		
+		RestTemplate restTemplate = new RestTemplate();
+
+		MDeptList mDeptList = restTemplate.getForObject(Constants.url + "/spProduction/mDeptList", MDeptList.class);
+		System.out.println("Response: " + mDeptList.toString());
+		model.addObject("deptList", mDeptList.getList());
+
 		model.addObject("rmUomList", rawMaterialUomList);
 		model.addObject("rmTaxList", rawMaterialTaxDetailsList);
 		model.addObject("groupList", rmItemGroupList);
@@ -224,6 +230,9 @@ public class RawMaterialController {
 		
 		String rmWeight=request.getParameter("rm_weight");
 		String rmPackQty=request.getParameter("rm_pack_qty");
+		String dept=request.getParameter("to_dept");//new
+		String issueSeqNo=request.getParameter("issueSeqNo");//new
+
 		//String rmRate=request.getParameter("rm_rate");
 		//String rmTaxId=request.getParameter("rm_tax_id");
 		String rmMinQty=request.getParameter("rm_min_qty");
@@ -305,10 +314,11 @@ public class RawMaterialController {
 		rawMaterialDetails.setRmName(rmName);
 		rawMaterialDetails.setRmCloQty(0);//Integer.parseInt(rmCloQty));
 		rawMaterialDetails.setRmCode(rmCode);
-		rawMaterialDetails.setRmTaxId(1);;//Integer.parseInt(rmTaxId));
-		//rawMaterialDetails.setRmIcon(rmIcon);
-		
-		rawMaterialDetails.setRmIcon("");//extRmIcon
+		rawMaterialDetails.setRmTaxId(1);//Integer.parseInt(rmTaxId));
+		rawMaterialDetails.setRmIcon(Integer.parseInt(issueSeqNo)+"");//new
+		rawMaterialDetails.setRmOpRate(Integer.parseInt(dept));//change
+
+		//rawMaterialDetails.setRmIcon("");//extRmIcon
 		
 		rawMaterialDetails.setRmIsCritical(0);//(Integer.parseInt(rmIsCritical)
 		rawMaterialDetails.setRmIssQty(0);
@@ -325,7 +335,6 @@ public class RawMaterialController {
 		rawMaterialDetails.setRmRate(0);
 		rawMaterialDetails.setRmPackQty(Integer.parseInt(rmPackQty));
 		
-		rawMaterialDetails.setRmOpRate(0);
 		rawMaterialDetails.setGrpId(Integer.parseInt(rmGroup));
 		rawMaterialDetails.setCatId(Integer.parseInt(rmCat));
 		rawMaterialDetails.setSubCatId(Integer.parseInt(rmSubCat));
@@ -398,7 +407,7 @@ public class RawMaterialController {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+	
 		model.addObject("itemList", tempStockItemList);
 		System.out.println("RM Details : " + tempStockItemList.toString());
 		model.addObject("grpId",grpId);
@@ -531,7 +540,9 @@ public class RawMaterialController {
 		
 		int rmUomId=rawMaterialDetails.getRmUomId();
 		System.out.println("UOM ID : "+rmUomId);
-		
+		MDeptList mDeptList = rest.getForObject(Constants.url + "/spProduction/mDeptList", MDeptList.class);
+		System.out.println("Response: " + mDeptList.toString());
+		model.addObject("deptList", mDeptList.getList());
 		model.addObject("url",Constants.FR_IMAGE_URL);
 		//model.addObject("rmIconStr", rmIconStr);
 		model.addObject("rmUomList", rawMaterialUomList);
@@ -1442,6 +1453,10 @@ public class RawMaterialController {
 		itemDetail.setRmUomId(itemDetailsList.getItemDetailList().get(i).getRmUomId());
 		itemDetail.setRmWeight(itemDetailsList.getItemDetailList().get(i).getRmWeight());
 		itemDetail.setDelStatus(itemDetailsList.getItemDetailList().get(i).getDelStatus());
+		itemDetail.setInt1(itemDetailsList.getItemDetailList().get(i).getInt1());//new
+		itemDetail.setInt2(itemDetailsList.getItemDetailList().get(i).getInt2());//new
+		itemDetail.setVarchar1(itemDetailsList.getItemDetailList().get(i).getVarchar1());//new
+
 		itemDetailList.add(itemDetail);
 	}
 	model.addObject("itemDetailList", itemDetailsList.getItemDetailList());
@@ -1474,6 +1489,25 @@ public class RawMaterialController {
 			
 		}
 		return baseQty;
+	}
+	@RequestMapping(value = "/getItemsForItemDetail", method = RequestMethod.GET)
+	public @ResponseBody List<Item> getItemsForItemDetail(HttpServletRequest request, HttpServletResponse response) {
+
+		RestTemplate rest=new RestTemplate();
+		int rmId=Integer.parseInt(request.getParameter("rmId"));
+		int rmType=Integer.parseInt(request.getParameter("rmType"));
+		List<Item> itemList=new ArrayList<>();
+		try {
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("rmId", rmId);
+			map.add("rmType",rmType);
+		AllItemsListResponse	allItemsListResponse = rest.postForObject(Constants.url + "getAllItemsForForItemDetail",map, AllItemsListResponse.class);
+		itemList=allItemsListResponse.getItems();
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return itemList;
 	}
 
 	  //---------------------------------------AJAX For RM List -----------------------------------------
@@ -1571,6 +1605,11 @@ public class RawMaterialController {
 			
 			float rmQty=Float.parseFloat(request.getParameter("rmQty"));
 			
+            int int1=Integer.parseInt(request.getParameter("isMultiFactor"));//isMultiFactor new
+			
+			int int2=Integer.parseInt(request.getParameter("applItemId"));//applItemId new
+			
+			String varchar1=request.getParameter("multiFactor");//multiFactor new
 			
 			ItemDetail itemDetail=new ItemDetail();
 			
@@ -1582,6 +1621,10 @@ public class RawMaterialController {
 			itemDetail.setRmQty(rmQty);
 			itemDetail.setRmType(rmType);
 			itemDetail.setNoOfPiecesPerItem(noOfPiecesPerItem);
+			
+			itemDetail.setInt1(int1);//new
+			itemDetail.setInt2(int2);//new
+			itemDetail.setVarchar1(varchar1);//new
 			
 			for(CommonConf commonConf:commonConfs)
 			{
@@ -1637,6 +1680,9 @@ public class RawMaterialController {
 				itemDetail.setRmUomId(itemDetailsList.getItemDetailList().get(i).getRmUomId());
 				itemDetail.setRmWeight(itemDetailsList.getItemDetailList().get(i).getRmWeight());
 				itemDetail.setDelStatus(itemDetailsList.getItemDetailList().get(i).getDelStatus());
+				itemDetail.setInt1(itemDetailsList.getItemDetailList().get(i).getInt1());//new
+				itemDetail.setInt2(itemDetailsList.getItemDetailList().get(i).getInt2());//new
+				itemDetail.setVarchar1(itemDetailsList.getItemDetailList().get(i).getVarchar1());//new
 				itemDetailList.add(itemDetail);
 			}
 			}
@@ -1676,6 +1722,12 @@ public class RawMaterialController {
 			int index=Integer.parseInt(request.getParameter("key"));
 			System.out.println("Key:"+index);
 			
+			int int1=Integer.parseInt(request.getParameter("isMultiFactor"));//isMultiFactor new
+			
+			int int2=Integer.parseInt(request.getParameter("applItemId"));//applItemId new
+			
+			String varchar1=request.getParameter("multiFactor");//multiFactor new
+			
 			System.out.println("itemDetailList::"+itemDetailList.toString());
 			for(int i=0;i<itemDetailList.size();i++)
 			{
@@ -1690,6 +1742,10 @@ public class RawMaterialController {
 					 itemDetailList.get(index).setRmQty(rmQty);
 					 itemDetailList.get(index).setRmType(rmType);
 					 itemDetailList.get(index).setNoOfPiecesPerItem(noOfPiecesPerItem);
+					 itemDetailList.get(index).setInt1(int1);//new
+					 itemDetailList.get(index).setInt2(int2);//new
+					 itemDetailList.get(index).setVarchar1(varchar1);//new
+					 
 
 			    for(CommonConf commonConf:commonConfs)
 			    {

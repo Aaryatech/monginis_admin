@@ -174,8 +174,8 @@
 						<div class=" box-content">
 						<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">From Date:</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="from_date" size="16"
+									<div class="col-sm-5 col-lg-2 controls">
+										<input class="form-control date-picker" id="from_date" size="16"  autocomplete="off"
 											 type="text" name="from_date" required />
 										<input class="form-control " id="toDept" size="16"
 											 type="hidden" name="toDept" value="${toDept}" readonly/>
@@ -185,14 +185,17 @@
 										</div>
 										
 										<label class="col-sm-3 col-lg-2 control-label">To Date:</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" id="to_date" size="16"
+									<div class="col-sm-5 col-lg-2 controls">
+										<input class="form-control date-picker" id="to_date" size="16" autocomplete="off"
 											 type="text" name="to_date" required />
 									
 										</div>
+											<div class="col-sm-5 col-lg-1 controls">
+											<input class="btn btn-primary" value="View All" id="searchmixall"
+											onclick="searchbomall()">
+											</div>
 										
-										
-										</div><br>
+										</div>
 						
 								</div>
 								
@@ -204,14 +207,13 @@
 								<div class="form-group">
 								
 								<div align="center" class="form-group">
-									<div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
+								<!-- 	<div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
 										
 				
-										<input class="btn btn-primary" value="View All" id="searchmixall"
-											onclick="searchbomall()">
+									
 
 									</div><br>
-									
+									 -->
 									<div align="center" id="loader" style="display: none">
 
 									<span>

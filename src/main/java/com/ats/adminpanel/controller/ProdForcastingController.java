@@ -620,7 +620,7 @@ System.out.println("converted date"+convertedDate);
 			postProductionHeader.setIsMixing(0);
 			postProductionHeader.setIsPlanned(1);
 			postProductionHeader.setProductionBatch("0");
-			postProductionHeader.setProductionStatus(1);
+			postProductionHeader.setProductionStatus(3);
 			postProductionHeader.setProductionHeaderId(0);
 			
 			List<PostProductionPlanDetail> postProductionDetailList = new ArrayList<>();

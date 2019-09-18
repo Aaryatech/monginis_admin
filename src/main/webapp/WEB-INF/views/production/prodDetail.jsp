@@ -171,8 +171,8 @@
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Status
 											</label>
-											<div class="col-sm-5 col-lg-3 controls">
-												<input disabled type="text" name="status" id="status"
+											<div class="col-sm-5 col-lg-3 controls" style="height:15px; ">
+												<input disabled type="text" name="status" id="statuse"
 													value="${sts}" class="form-control" />
 											</div>
 
@@ -428,28 +428,57 @@
 
 
 												<div
-													class="col-sm-1 col-sm-offset-1 col-lg-9 col-lg-offset-1">
+													class="col-sm-1 col-sm-offset-1 col-lg-12 col-lg-offset-0">
 													<c:choose>
-														<c:when test="${planHeader.isBom==0}">
+														<c:when test="${planHeader.isStoreBom==0}">
 															<a
-																href="${pageContext.request.contextPath}/showBom/${planHeader.productionHeaderId}/1/${planHeader.productionDate}/${planHeader.isPlanned}/${planHeader.catId}">
+																href="${pageContext.request.contextPath}/showBom/${planHeader.productionHeaderId}/1/${planHeader.productionDate}/${planHeader.isPlanned}/${planHeader.catId}/PROD/STORE">
 																<button type="button" class="btn btn-primary">
-																	<i class="fa fa-check"></i> Req.To BOM
+																	<i class="fa fa-check"></i> Req. BOM For Store
+																</button>
+															</a>
+														 </c:when>
+														 <c:otherwise>
+														 	<button type="button" class="btn btn-primary"
+																disabled="disabled">
+																<i class="fa fa-check"></i> Req. BOM For Store
+															</button>
+														</c:otherwise>
+														</c:choose>
+														<c:choose>
+														<c:when test="${planHeader.isMixing==0}">
+															<a
+																href="${pageContext.request.contextPath}/showBom/${planHeader.productionHeaderId}/1/${planHeader.productionDate}/${planHeader.isPlanned}/${planHeader.catId}/PROD/MIX">
+																<button type="button" class="btn btn-primary">
+																	<i class="fa fa-check"></i> Req. BOM For Mixing
 																</button>
 															</a>
 														</c:when>
-
-														<c:when test="${planHeader.isBom==1}">
+													
+														 <c:otherwise>
 															<button type="button" class="btn btn-primary"
 																disabled="disabled">
-																<i class="fa fa-check"></i> Req. BOM
+																<i class="fa fa-check"></i> Req. BOM For Mixing
 															</button>
-														</c:when>
-														<c:otherwise>
-														</c:otherwise>
+															 </c:otherwise>
+													
+													
+														
 													</c:choose>
+														<%-- 	<a
+																href="${pageContext.request.contextPath}/showBom/${planHeader.productionHeaderId}/1/${planHeader.productionDate}/${planHeader.isPlanned}/${planHeader.catId}/11">
+																<button type="button" class="btn btn-primary">
+																	<i class="fa fa-check"></i> Req. BOM For BMS
+																</button>
+															</a> --%>
+													
+													<%--	<button type="button" class="btn btn-primary"
+																disabled="disabled">
+																<i class="fa fa-check"></i> Req. BOM For BMS
+																<br>
+															</button> --%> 
 													&nbsp;&nbsp;
-													<c:choose>
+												<%-- 	<c:choose>
 
 														<c:when
 															test="${planHeader.isMixing==0 && planHeader.productionStatus==1 or planHeader.productionStatus==2 or planHeader.productionStatus==3}">
@@ -459,10 +488,10 @@
 																</button>
 															</a>
 
-														</c:when>
+														</c:when> --%>
 
 
-														<c:when
+														<%-- <c:when
 															test="${planHeader.productionStatus==4 or planHeader.productionStatus==5}">
 															<button type="button" class="btn btn-primary"
 																disabled="disabled">
@@ -479,8 +508,8 @@
 														</c:when>
 														<c:otherwise>
 
-														</c:otherwise>
-													</c:choose>
+														</c:otherwise> --%>
+													<%-- </c:choose> --%>
 													<input type="hidden" name="productionStatus"
 														id="productionStatus"
 														value="${planHeader.productionStatus}" /> &nbsp;&nbsp;
@@ -556,7 +585,7 @@
 							</select> -->
 
 												<div class="form-group">
-													<label class="col-sm-3 col-lg-3 control-label">Select
+													<label class="col-sm-3 col-lg-1 control-label">
 														Unit</label> <br></br>
 													<div class="col-sm-5 col-lg-3 controls">
 
@@ -587,7 +616,7 @@
 
 			<!-- END Main Content -->
 			<footer>
-				<p>2017 © MONGINIS.</p>
+				<p>2019 © MONGINIS.</p>
 			</footer>
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i

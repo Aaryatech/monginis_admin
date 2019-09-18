@@ -20,9 +20,9 @@
 <c:url var="editItem" value="/editItem"/>
 <c:url var="addItemDetail" value="/addItemDetail"/>
 <c:url var="redirectToItemList" value="/redirectToItemList"/>
-	<c:url var="getRmCategory" value="/getRmCategory" />
-	<c:url var="getRmListByCatId" value="/getRmListByCatId" />
-
+<c:url var="getRmCategory" value="/getRmCategory" />
+<c:url var="getRmListByCatId" value="/getRmListByCatId" />
+<c:url var="getItemsForItemDetail" value="/getItemsForItemDetail" />
 
 	<div class="container" id="main-container">
 
@@ -110,17 +110,17 @@
 								<div class="form-group">
 									<label class="col-sm-2 col-lg-2 control-label">RM Type</label>
 									<div class="col-sm-6 col-lg-2 controls">
-                                    <select name="rm_type" id="rm_type" class="form-control" placeholder="Raw Material Type"data-rule-required="true" onchange="return rmTypeChange()">
-											<option value="">Select RM Type</option>
+                                    <select name="rm_type" id="rm_type" class="form-control"  placeholder="Raw Material Type"data-rule-required="true" onchange="return rmTypeChange()">
+											<option value="">RM Type</option>
 											<option value="1">Raw Material</option>
 											<option value="2">Semi Finished</option>
 									
 								   </select>									
 								   </div>
-                        <label class="col-sm-3 col-lg-2 control-label">Rm Group</label>
+                        <label class="col-sm-3 col-lg-1 control-label">Rm Group</label>
 									<div class="col-sm-6 col-lg-2 controls">
 										<select name="rm_group" id="rm_group" class="form-control" tabindex="6">
-										<option value="0" disabled="disabled" selected="selected">Select RM Group</option>
+										<option value="0" disabled="disabled" selected="selected">RM Group</option>
 											 <c:forEach items="${rmItemGroupList}" var="rmItemGroupList"
 							varStatus="count">
 							<c:choose>
@@ -135,18 +135,18 @@
 								
 								<!-- </div>
 									<div class="form-group"> -->
-				<div class="col-sm-2 col-lg-2 control-label" >RM Category</div>
+				              <div class="col-sm-2 col-lg-2 control-label" >RM Category</div>
 									<div class="col-md-2">
 									<select name="rm_cat" id="rm_cat" class="form-control" tabindex="6">
-										<option value="0"disabled="disabled" selected="selected">Select RM Category</option>
+										<option value="0"disabled="disabled" selected="selected">RM Category</option>
 											 
 										</select>
 									</div>
-			</div><div class="form-group">
+		                  	</div><div class="form-group">
 		                         <label class="col-sm-3 col-lg-2 control-label">RM Item</label>
 								<div class="col-sm-6 col-lg-2 controls">
-									<select name="rm_id" id="rm_id"class="form-control chosen"  tabindex="6"  placeholder="Raw Material"data-rule-required="true">
-											<option value="0">Select Raw Material</option>
+									<select name="rm_id" id="rm_id"class="form-control chosen" onchange="onRmIdChange()" tabindex="6"  placeholder="Raw Material"data-rule-required="true">
+											<option value="0">Raw Material</option>
 										    
 							     	</select> 	
 				                 </div>
@@ -159,7 +159,7 @@
 						     	<input type="hidden" name="rm_unit_id" id="rm_unit_id "class="form-control"placeholder="RM Unit"/>
 									
 									<!--</div> -->
-								<label class="col-sm-3 col-lg-2 control-label">RM Qty</label>
+								<label class="col-sm-3 col-lg-1 control-label">RM Qty</label>
 					      	    <div class="col-sm-6 col-lg-2 controls">
 							    <input type="text" name="rm_qty" id="rm_qty" class="form-control"placeholder="RM Qty" required/>
 					     	    </div>
@@ -176,6 +176,33 @@
 						     	    <input type="text" name="base_qty" id="base_qty" class="form-control"placeholder="No. Of Pieces Per Item" value="${item.minQty}"   data-rule-required="true"/>
 									
 									</div> 
+								</div>
+									<div class="form-group">
+									<label class="col-sm-3 col-lg-2 control-label">is Multipl Factor Appl?</label>
+									<div class="col-sm-9 col-lg-2 controls">
+									</label> <label class="radio-inline"> <input type="radio"
+											name="isMultiFactor" id="optionsRadios1" value="0" checked/> No
+										</label>
+										<label class="radio-inline"> <input type="radio"
+											name="isMultiFactor" id="optionsRadios2" value="1"  />
+											Yes
+										
+									</div>
+									<div style="display: none" id="itemDiv">
+									<label class="col-sm-3 col-lg-1 control-label">Item</label>
+								<div class="col-sm-6 col-lg-2 controls">
+								
+									<select name="ratio_item_id" id="ratio_item_id"class="form-control chosen"  tabindex="6"  placeholder="Raw Material"data-rule-required="true">
+										    <option value="" selected>Select Item</option>
+										    
+							     	</select> 	
+				                 </div>
+									  <label class="col-sm-3 col-lg-2 control-label">Multiplication Factor</label>
+								 	<div class="col-sm-6 col-lg-2 controls">
+						     	    <input type="text" name="multiFactor" id="multiFactor" class="form-control" placeholder="Multiplication Factor" value="0.0"   data-rule-required="true"/>
+									
+									</div> 
+									 </div>
 								</div>
 								
 								
@@ -217,11 +244,11 @@
 <div class="col-md-9" ></div> 
 					<label for="search" class="col-md-3" id="search">
     <i class="fa fa-search" style="font-size:20px"></i>
-									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search.." title="Type in a name">
+									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search.." style="border-radius: 25px;" title="Type in a name">
 										</label>  
 										<div class="clearfix"></div>
 										<div id="table-scroll" class="table-scroll">
-							 
+							 <!-- 
 									<div id="faux-table" class="faux-table" aria="hidden">
 									<table id="table2" class="main-table">
 											<thead>
@@ -238,10 +265,10 @@
 												</thead>
 												</table>
 									
-									</div>
+									</div> -->
 									<div class="table-wrap">
 									
-										<table id="table1" class="table table-advance">
+										<table id="table1" class="table table-bordered table-striped fill-head">
 											<thead>
 												<tr class="bgpink">
 											<th width="45" style="width: 18px">Sr.No.</th>
@@ -337,7 +364,7 @@
 	     </div></div>
 	<!-- END Main Content -->
 	<footer>
-	<p>2018 © MONGINIS.</p>
+	<p>2019 © MONGINIS.</p>
 	</footer>
 
 
@@ -521,7 +548,7 @@ var key1=0;
 $(document).ready(function() {
 	$("#add").click(function() {
 		
-	var isValid = validation();
+	var isValid = validation();//alert(isValid);
 	if (isValid) {
 		
  	var itemId = $("#item_id").val();
@@ -541,7 +568,11 @@ $(document).ready(function() {
 	var rmQty = $("#rm_qty").val();
 	
 	var rmName=$('#rm_id option:selected').text();
-
+	var isMultiFactor=$("input:radio:checked").val();
+	//alert("isMultiFactor"+isMultiFactor);
+	var multiFactor= $("#multiFactor").val();//alert("multiFactor"+multiFactor);
+	var ratioItemId= $("#ratio_item_id").val();//alert("ratioItemId"+ratioItemId);
+	
 	if(editFlag==true)
 	{
 		editFlag=false;
@@ -556,6 +587,9 @@ $(document).ready(function() {
 			rmName:rmName,
 			rmQty:rmQty,
 			rmWeight:rmWeight,
+			isMultiFactor:isMultiFactor,
+			applItemId:ratioItemId,
+			multiFactor:multiFactor,
 			key:key1,
 			
 			ajax : 'true',
@@ -624,6 +658,9 @@ $(document).ready(function() {
 		rmName:rmName,
 		rmQty:rmQty,
 		rmWeight:rmWeight,
+		isMultiFactor:isMultiFactor,
+		applItemId:ratioItemId,
+		multiFactor:multiFactor,
 		
 		ajax : 'true',
 	},  function(data) { 
@@ -690,7 +727,14 @@ $(document).ready(function() {
 	 document.getElementById("base_qty").value ="";
 	 document.getElementById("rm_group").selectedIndex = "0";  
 	 document.getElementById("rm_cat").selectedIndex = "0";  
-
+	 document.getElementById("multiFactor").value="0.0";
+	 document.getElementById("optionsRadios1").checked = true;
+	 
+	 var html = '<option value="0" selected >Select Item</option>';
+		html += '</option>';
+		$('#ratio_item_id').html(html);
+		$("#ratio_item_id").trigger("chosen:updated");
+		  $("#itemDiv").hide(); 	
 	}
 });
 
@@ -708,6 +752,10 @@ $(document).ready(function() {
 		 document.getElementById("base_qty").value ="";
 		 document.getElementById("rm_group").selectedIndex = "0";  
 		 document.getElementById("rm_cat").selectedIndex = "0";  
+		 document.getElementById("multiFactor").value="0.0";
+		 document.getElementById("optionsRadios1").checked = true;
+		 
+		  $("#itemDiv").hide(); 	
 	});
 });
 
@@ -739,6 +787,20 @@ function editItemDetail(token){
 				 document.getElementById("rm_type").options.selectedIndex =data.rmType;
 				 document.getElementById("base_qty").value =data.noOfPiecesPerItem;
 				 document.getElementById("rm_id").options.selectedIndex =data.rmId;
+				
+				 if(data.int1==0){
+				 document.getElementById("optionsRadios1").checked = true;
+				   $("#itemDiv").hide();
+				 }else
+					 {
+					 onRmIdChangeForEdit(data.rmId,data.rmType,data.int2);
+					 document.getElementById("optionsRadios2").checked = true;		
+					   $("#itemDiv").show();
+					  
+					   document.getElementById("multiFactor").value =data.varchar1;
+					   
+					 }
+
 				 key1=token;
 				 
 					appendRmItem(data.rmId);
@@ -755,6 +817,7 @@ function validation() {
 	var rmId = $("#rm_id").val();
 	var rmWeight = $("#rm_weight").val();
 	var rmQty = $("#rm_qty").val();
+	var chkedRadioBtn=$("input:radio:checked").val();
 
 	var isValid = true;
 	if (rmType==0) { 
@@ -772,6 +835,19 @@ function validation() {
 	}else if (baseQty == ""||isNaN(baseQty) || baseQty < 1) {
 		isValid = false;
 		alert("Please Enter No. of Pieces Per Item.");
+	}else if(chkedRadioBtn==1){
+		
+		var ratioItemId=$("#ratio_item_id").val();
+		var multiFactor=$("#multiFactor").val();
+		
+		if (ratioItemId ==null) {
+			isValid = false;
+			alert("Please Select ItemId ");
+		}else if(multiFactor<=0||isNaN(multiFactor))
+			{
+			isValid = false;
+			alert("Please Enter Valid Multiplication factor");
+			}
 	}
 	return isValid;
 }
@@ -790,11 +866,7 @@ function deleteItemDetail(key){
 
 	}, function(data) {
 		
-		 //$('#loader').hide();
 		var len = data.length;
-
-		//alert(len);
-
 		$('#table1 td').remove();
 
 		$.each(data,function(key, item) {
@@ -912,5 +984,78 @@ function myFunction() {
   }
 }
 </script>
+<script>
+$(document).ready(function() {
+    $("input[name$='isMultiFactor']").click(function() {
+        var test = $(this).val();
+        if(test==1){
+        $("#itemDiv").show();
+        onRmIdChange();
+        }else
+        	{
+        	  $("#itemDiv").hide(); 	
+        	}
+       
+    });
+});
+
+</script>
+<script type="text/javascript">
+function onRmIdChange()
+{
+	var rmType = $("#rm_type").val();
+	var rmId = $("#rm_id").val();
+
+		$.getJSON('${getItemsForItemDetail}', {
+			rmType : rmType,
+			rmId:rmId,
+			ajax : 'true'
+		}, function(data) {
+			var html = '<option value="" disabled="disabled" selected >Select Item</option>';
+			
+			var len = data.length;
+			for ( var i = 0; i < len; i++) {
+				html += '<option value="' + data[i].id + '">'
+						+ data[i].itemName + '</option>';
+			}
+			html += '</option>';
+			$('#ratio_item_id').html(html);
+			$("#ratio_item_id").trigger("chosen:updated");
+
+		});
+	
+}
+
+function onRmIdChangeForEdit(rmId,rmType,id)
+{
+	
+		$.getJSON('${getItemsForItemDetail}', {
+			rmType : rmType,
+			rmId:rmId,
+			ajax : 'true'
+		}, function(data) {
+			var html = '<option value="" disabled="disabled" selected >Select Item</option>';
+			
+			var len = data.length;
+			for ( var i = 0; i < len; i++) {
+				if(id==data[i].id){
+				html += '<option value="' + data[i].id + '" selected>'
+						+ data[i].itemName + '</option>';
+				}
+				else
+					{
+					html += '<option value="' + data[i].id + '">'
+					+ data[i].itemName + '</option>';
+					}
+			}
+			html += '</option>';
+			$('#ratio_item_id').html(html);
+			$("#ratio_item_id").trigger("chosen:updated");
+
+		});
+	
+}
+</script>
+
 </html>
 

@@ -112,7 +112,7 @@
 											<c:set var="sts" value="Request Closed"></c:set>
 										</c:when>
 									</c:choose>
-									<input type="text" id="status" name="status"
+									<input type="text" id="statuss" name="status"
 											value="${sts}" class="form-control"
 											readonly>
 										<input type="hidden" id="status" name="status"

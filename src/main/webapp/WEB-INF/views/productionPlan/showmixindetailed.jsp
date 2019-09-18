@@ -88,46 +88,24 @@
 											<c:set var="sts" value="Production Completed"></c:set>
 										</c:when>
 									</c:choose>
-									
-									
-									
-									<input type="text" id="status" name="status"
+									<input type="text" id="statuss" name="status"
 											value="${sts}" class="form-control" readonly>
 										<input type="hidden" id="status" name="status"
 											value="${mixheader.status}" class="form-control" readonly>
 									</div>
 								</div>
 								<br>
-
-								<div class="box-content">
-
-
-									<div class="col-md-2">Time Slot</div>
-									<div class="col-md-3">
-										<input class="form-control" id="time_slot" size="16"
-											type="text" name="time_slot" value="${mixheader.timeSlot}"
-											readonly />
-									</div>
-
-								</div>
-								<br>
-
-								<div class="box-content">
-
-									<div class="col-md-2">Production Batch</div>
+                             	<div class="box-content">
+									<div class="col-md-2">Production Id</div>
 									<div class="col-md-3">
 										<input type="text" id="production_batch"
-											name="production_batch" value="${mixheader.productionBatch}"
+											name="production_batch" value="${mixheader.productionId}"
 											class="form-control" readonly>
 
 									</div>
 								</div>
 								<br>
-
-
-
-
-								<div class=" box-content">
+                              <div class=" box-content">
 									<div class="row">
 										<div class="col-md-12 table-responsive">
 											<table class="table table-bordered table-striped fill-head "
@@ -137,11 +115,12 @@
 														<th>Sr.No.</th>
 														<th>Sf Name</th>
 														<th>Original Qty</th>
+														<th>Multiplication Factor</th>
 														<th>Auto Order Qty</th>
 														<th>Received Qty</th>
 														<th>Production Qty</th>
-														<th>Rejected Qty</th> 
-														<th>Mixing Date</th>
+														<!-- <th>Rejected Qty</th> 
+														<th>Mixing Date</th> -->
 
 
 													</tr>
@@ -157,12 +136,13 @@
 															<c:set var="srNo" value="${srNo+1}" />
 															<td><c:out value="${mixwithdetaild.sfName}" /></td>
 															<td style="text-align:right;"><c:out value="${mixwithdetaild.originalQty}" /></td>
+															<td style="text-align:right;"><c:out value="${mixwithdetaild.exVarchar1}" /></td>
 															<td style="text-align:right;">  <c:out value="${mixwithdetaild.autoOrderQty}" /></td>
 
 															<td style="text-align:right;"><c:out value="${mixwithdetaild.receivedQty}" /></td>
-
-															<c:choose>
-																<c:when test="${(mixheader.status!=2) and (deptId==15)}">
+															<td style="text-align:right;"><c:out value="${mixwithdetaild.productionQty}" /></td>
+														<%-- 	<c:choose>
+																<c:when test="${(mixheader.status==2)}">
 																	<td style="text-align:right;"><input type="text"
 																		name='production_Qty<c:out
 																		value="${mixwithdetaild.mixing_detailId}" />'
@@ -179,9 +159,9 @@
 																	<td style="text-align:right;"><c:out value="${mixwithdetaild.productionQty}" /></td>
 																	<td style="text-align:right;"><c:out value="${mixwithdetaild.rejectedQty}" /></td>
 																</c:otherwise>
-															</c:choose>
+															</c:choose> --%>
 															 
-															<td style="text-align:right;"><fmt:formatDate pattern = "dd-MM-yyyy" value = "${mixwithdetaild.mixingDate}" /></td>
+															<%-- <td style="text-align:right;"><fmt:formatDate pattern = "dd-MM-yyyy" value = "${mixwithdetaild.mixingDate}" /></td> --%>
 
 
 														</tr>
@@ -197,11 +177,11 @@
 							<div class=" box-content">
 								<div class="form-group">
 									<div align="center" class="form-group">
-										<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+										<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-6">
 											
 								
 						
-											<c:choose>
+										<%-- 	<c:choose>
 												<c:when test="${(mixheader.status!=2) and (deptId==15)}">
 													<c:choose>
 														<c:when test="${mixheader.isBom==0}"> <!-- /showBom/${mixheader.mixId}/0/${date}/0/0 <--last 0 is cat id for mixing -->
@@ -221,10 +201,10 @@
 													</button>
 										 
 												</c:when> 
-											</c:choose>
+											</c:choose> --%>
 											
 											<c:choose>
-												<c:when test="${(mixheader.status!=2) and (deptId==15)}">
+												<c:when test="${(mixheader.status!=2) and (deptId==10)}">
 										 			<input type="submit" class="btn btn-primary"
 													value="Complete Production">
 											    </c:when>

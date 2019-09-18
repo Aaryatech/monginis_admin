@@ -110,6 +110,12 @@ public class ItemController {
 
 			model.addObject("itemId", maxId);
 			model.addObject("mCategoryList", mCategoryList);
+			
+
+			List<MiniSubCategory> miniSubCategory = restTemplate.getForObject(Constants.url + "/showMiniSubCatList",
+					 List.class);
+			model.addObject("miniSubCategory", miniSubCategory);
+			System.err.println(miniSubCategory.toString());
 
 		} catch (Exception e) {
 			System.out.println("error in item show sachin" + e.getMessage());
@@ -816,11 +822,11 @@ public class ItemController {
 		int itemGrp3 = item.getItemGrp3();
 		mav.addObject("itemGrp3", String.valueOf(itemGrp3));
 		
-		map = new LinkedMultiValueMap<String, Object>(); 
-		map.add("subCatId", selectedItemId);
+		//map = new LinkedMultiValueMap<String, Object>(); 
+		//map.add("subCatId", selectedItemId);
 		 
-		MiniSubCategory[] miniSubCategory = restTemplate.postForObject(Constants.url + "/showMiniSubCatListBySubCatId",
-				map, MiniSubCategory[].class);
+		MiniSubCategory[] miniSubCategory = restTemplate.getForObject(Constants.url + "/showMiniSubCatList",
+				MiniSubCategory[].class);
 
 		List<MiniSubCategory> miniSubCategoryList = new ArrayList<MiniSubCategory>(Arrays.asList(miniSubCategory));
 		mav.addObject("miniSubCategoryList", miniSubCategoryList);

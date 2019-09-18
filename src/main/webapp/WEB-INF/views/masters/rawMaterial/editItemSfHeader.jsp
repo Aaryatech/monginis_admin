@@ -124,7 +124,7 @@
 										Weight </label>
 									<div class="col-sm-6 col-lg-4 controls">
 										<input type="text" name="sf_item_weight" id="sf_item_weight" value="${editHeader.sfWeight}"
-											class="form-control" placeholder="Specification "
+											class="form-control" placeholder="Specification " readonly
 											data-rule-required="true"  data-rule-number="true"/>
 									</div>
 								</div>
@@ -179,13 +179,36 @@
 								<div class="form-group">
 								<label class="col-sm-3 col-lg-2 control-label">Multiplication
 										Factor</label>
-								<div class="col-sm-6 col-lg-4 controls">
+								<div class="col-sm-6 col-lg-2 controls">
 										<input type="text" name="mul_factor" id="mul_factor"
-											class="form-control" placeholder="Multiplication Factot"
+											class="form-control" placeholder="Multiplication Factor"
 											value="${editHeader.mulFactor}"
 											data-rule-required="true" data-rule-number="true"
 											onKeyPress="return isNumberCommaDot(event)" />
 									</div>
+									<label class="col-sm-3 col-lg-2 control-label">Issue Seq.No
+						</label>
+						<div class="col-sm-6 col-lg-2 controls">
+							<input type="text" name="issueSeqNo"  id="issueSeqNo" value="${editHeader.int2}" class="form-control"placeholder="Issue Seq.No "data-rule-number="true" data-rule-required="true"   autocomplete="off"/>
+						</div>
+						<label class="col-sm-3 col-lg-1 control-label">Department </label>
+						<div class="col-sm-6 col-lg-3 controls">
+	                        <select name="to_dept" id="to_dept" class="form-control"
+											placeholder="Department" data-rule-required="true">
+											<option value="0">Select Department</option>
+											<c:forEach items="${deptList}" var="dept">
+											<c:choose>
+											<c:when test="${dept.deptId==editHeader.int1}">
+											<option value="${dept.deptId}" selected>${dept.deptName}</option>
+											</c:when>
+											<c:otherwise>
+											<option value="${dept.deptId}">${dept.deptName}</option>
+											</c:otherwise>
+											</c:choose>
+												
+											</c:forEach>
+										</select>
+						</div>
 									</div>
 									
 								<div class="row">
@@ -208,7 +231,7 @@
 		</div>
 		<!-- END Main Content -->
 		<footer>
-		<p>2017 © MONGINIS.</p>
+		<p>2019 © MONGINIS.</p>
 		</footer>
 
 

@@ -64,22 +64,19 @@
 									type="hidden" name="productionId" value="${productionId}"
 									readonly> <input type="hidden" name="ismixing"
 									value="${isMixing}" readonly>
+									 <input
+									type="hidden" name="deptId" value="${deptId}"
+									readonly>
 								<div class="table-responsive" style="border: 0">
 									<table width="100%" class="table table-advance" id="table1">
 										<thead>
 											<tr>
 												<th width="17" style="width: 18px">Sr No</th>
 												<th width="120" align="left">Rm Name</th>
-
-												<th width="120" align="left">Multip Factor</th>
-
 												<th width="120" align="left">Qty</th>
-
+												<th width="120" align="left">Multip Factor</th>
 												<th width="120" align="left">Req Qty</th>
-
-
 												<th width="120" align="left">Edit Req Qty</th>
-
 												<th width="100" align="left">Unit</th>
 											</tr>
 										</thead>
@@ -90,12 +87,11 @@
 												<tr>
 													<td><c:out value="${count.index+1}" /></td>
 													<td align="left"><c:out value="${mixingList.rmName}" /></td>
-													<td align="left"><c:out value="${mixingList.mulFactor}" /></td>
-
 													<td align="left"><c:out value="${mixingList.total}" /></td>
+												    <td align="left"><c:out value="${mixingList.mulFactor}" /></td>
 													<td align="left"><%-- c:out
 															value="${mixingList.total * mixingList.mulFactor}" /> --%>
-<fmt:formatNumber type="number" maxFractionDigits="2" var="total" value="${mixingList.total * mixingList.mulFactor}" />
+<fmt:formatNumber type="number" maxFractionDigits="0" groupingUsed="false" var="total" value="${mixingList.total * mixingList.mulFactor}" />
 <c:out
 															value="${total}" />
 </td>
@@ -115,19 +111,19 @@
 									</table>
 								</div>
 
-								<c:choose>
-									<c:when test="${isMixing==0}">
+							<%-- 	<c:choose>
+									<c:when test="${isMixing==0}"> --%>
 										<div align="center" class="form-group">
 											<div
 												class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
 												<input type="submit" class="btn btn-primary"
-													value="Request For Mixing From Production" id="search">
+													value="Add to Production" id="search">
 
 											</div>
 											<br>
 										</div>
-									</c:when>
-								</c:choose>
+							<%-- 		</c:when>
+								</c:choose> --%>
 
 	<div style="text-align: center;">
 								<a href="${pageContext.request.contextPath}/showMixReqPdf"
@@ -139,7 +135,7 @@
 			</div>
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+			<p>2019 © MONGINIS.</p>
 			</footer>
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i

@@ -73,13 +73,13 @@
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">RM Code</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="rm_code" class="form-control"placeholder="Raw Material Code"data-rule-required="true" />
+										<input type="text" name="rm_code" class="form-control"placeholder="Raw Material Code"data-rule-required="true" autocomplete="off"/>
 									</div>
 
 									<label class="col-sm-3 col-lg-2 control-label">RM Name
 									</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="rm_name" class="form-control"placeholder="Raw Material Name"data-rule-required="true" />
+										<input type="text" name="rm_name" class="form-control"placeholder="Raw Material Name"data-rule-required="true" autocomplete="off"/>
 									</div>
 
 								</div>
@@ -99,7 +99,7 @@
 									<label class="col-sm-3 col-lg-2 control-label">RM
 										Specification </label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="rm_specification" class="form-control"placeholder="Specification "data-rule-required="true"/>
+										<input type="text" name="rm_specification" class="form-control"placeholder="Specification "data-rule-required="true" autocomplete="off"/>
 									</div>
 								</div>
 							
@@ -138,7 +138,7 @@
 									</div>
 									<label class="col-sm-3 col-lg-2 control-label">Weight</label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_weight" class="form-control"placeholder="Weight"data-rule-required="true"data-rule-number="true" />
+							<input type="text" name="rm_weight" class="form-control"placeholder="Weight"data-rule-required="true"data-rule-number="true" autocomplete="off"/>
 						</div>
 								</div>
 								<div class="form-group">
@@ -146,7 +146,7 @@
 										Quantity</label>
 
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="rm_pack_qty" class="form-control"placeholder="Pack Qty"data-rule-required="true"data-rule-number="true" />
+										<input type="text" name="rm_pack_qty" class="form-control"placeholder="Pack Qty"data-rule-required="true"data-rule-number="true" autocomplete="off"/>
 									</div>
 								 
 
@@ -154,7 +154,7 @@
 								<label class="col-sm-3 col-lg-2 control-label">BMS min
 									Quantity</label>
 								<div class="col-sm-6 col-lg-4 controls">
-									<input type="text" name="rm_min_qty" id="rm_min_qty" class="form-control"placeholder="Min Qty"data-rule-required="true"data-rule-number="true" />
+									<input type="text" name="rm_min_qty" id="rm_min_qty" class="form-control"placeholder="Min Qty"data-rule-required="true"data-rule-number="true"  autocomplete="off"/>
 								</div>
 						</div>
 
@@ -164,16 +164,37 @@
 								Quantity </label>
 
 							<div class="col-sm-6 col-lg-4 controls">
-								<input type="text" name="rm_max_qty" id="rm_max_qty" class="form-control"placeholder="Max Qty "data-rule-required="true" data-rule-number="true" />
+								<input type="text" name="rm_max_qty" id="rm_max_qty" class="form-control"placeholder="Max Qty "data-rule-required="true" data-rule-number="true"  autocomplete="off"/>
 							</div>
 						 <label class="col-sm-3 col-lg-2 control-label">BMS ROL Qty</label>
 						<div class="col-sm-6 col-lg-4 controls">
-							<input type="text" name="rm_rol_qty" id="rm_rol_qty" class="form-control"placeholder="Re Order level Qty"data-rule-required="true"data-rule-number="true" />
+							<input type="text" name="rm_rol_qty" id="rm_rol_qty" class="form-control"placeholder="Re Order level Qty"data-rule-required="true"data-rule-number="true"  autocomplete="off"/>
 						</div>
 					
 
 						
 					</div>
+					<%--NEW Fields Added --%>
+					 <div class="form-group">
+					<label class="col-sm-3 col-lg-2 control-label">Issue Seq.No
+						</label>
+						<div class="col-sm-6 col-lg-4 controls">
+							<input type="text" name="issueSeqNo"  id="issueSeqNo" class="form-control"placeholder="Issue Seq.No "data-rule-number="true" data-rule-required="true"   autocomplete="off"/>
+						</div>
+						<label class="col-sm-3 col-lg-2 control-label">Department </label>
+						<div class="col-sm-6 col-lg-4 controls">
+	                        <select name="to_dept" id="to_dept" class="form-control"
+											placeholder="Department" data-rule-required="true">
+											<option value="0">Select Department</option>
+											<c:forEach items="${deptList}" var="dept">
+												<option value="${dept.deptId}">${dept.deptName}</option>
+											</c:forEach>
+										</select>
+						</div>
+
+					</div>
+					
+					
 					<%-- <div class="form-group">
 					<label class="col-sm-3 col-lg-2 control-label">RM Opening Rate
 						</label>
@@ -286,7 +307,7 @@
 	</div>
 	<!-- END Main Content -->
 	<footer>
-	<p>2017 © MONGINIS.</p>
+	<p>2019 © MONGINIS.</p>
 	</footer>
 
 

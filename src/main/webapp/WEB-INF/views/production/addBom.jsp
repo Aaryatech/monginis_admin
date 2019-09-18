@@ -6,6 +6,7 @@
  
   <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
  <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+ 
 <body>
 
 
@@ -67,7 +68,9 @@
 							<form action="${pageContext.request.contextPath}/insertBom"
 								name="validation-form" id="validation-form">
 								<div class="clearfix"></div>
-								<input type="hidden" name="isMix" value="${isMix}">
+								<input type="text" name="isMix" value="${isMix}">
+								<input type="hidden" name="fromDept" value="${fromDept}">
+									<input type="hidden" name="toDept" value="${toDept}">
 	                            <input type="hidden" name="catId" value="${catId}">
 								<div class="table-responsive" style="border: 0">
 									<table width="100%" class="table table-advance" id="table1">
@@ -77,6 +80,8 @@
 <!-- 												<th width="100" align="left">Rm Id</th>
  -->												<th width="120" align="left">Rm Name</th>
 												<th width="100" align="left">Rm Type</th>
+												<th width="100" align="left">Single Cut</th>
+												<th width="100" align="left">Double Cut</th>
 												<th width="120" align="left">Qty</th>
 
 												<th width="120" align="left">Edit Qty</th>
@@ -107,7 +112,10 @@
 														</c:when>
 
 													</c:choose>
-													<c:set var="total"><fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${planDetailForBom.total}" /></c:set>
+													<td  align="left">${planDetailForBom.singleCut}</td>
+													<td align="left">${planDetailForBom.doubleCut}</td>
+													
+													<c:set var="total"><fmt:formatNumber type="number" minFractionDigits="2" maxFractionDigits="2" value="${planDetailForBom.total}" groupingUsed="false" /></c:set>
 													<td align="left"><c:out
 															value="${total}" /></td>
 
@@ -138,9 +146,10 @@
 					</div>
 				</div>
 			</div>
+	
 			<!-- END Main Content -->
 			<footer>
-			<p>2017 © MONGINIS.</p>
+			<p>2019 © MONGINIS.</p>
 			</footer>
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i

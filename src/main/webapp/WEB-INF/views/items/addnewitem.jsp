@@ -6,6 +6,7 @@
 
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body>
+<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 	<c:url var="getGroup2ByCatId" value="/getGroup2ByCatId" />
 	<c:url var="getGroup3ByGroup2" value="/getGroup3ByGroup2" />
@@ -161,8 +162,8 @@
 									<div class="col-sm-9 col-lg-10 controls">
 										<select data-placeholder="Select Group"
 											class="form-control chosen-select" name="item_grp2"
-											tabindex="-1" id="item_grp2" onchange="showMiniSubCatListBySubCatId()" data-rule-required="true">
-
+											tabindex="-1" id="item_grp2" data-rule-required="true">
+	
 										</select>
 									</div>
 								</div>
@@ -172,12 +173,12 @@
 										<select data-placeholder="Select Group" name="item_grp3"
 											class="form-control chosen" tabindex="-1" id="item_grp3"
 											data-rule-required="true">
-											<!-- <option value=""> </option>
+											<option selected>Select Group 3</option>
+                                            <c:forEach items="${miniSubCategory}" var="miniSubCategory">
 
-											<option value="1">Small</option>
-											<option value="2">Medium</option>
-											<option value="3">Large</option> -->
 
+												<option value="${miniSubCategory.miniCatId}"><c:out value="${miniSubCategory.miniCatName}"></c:out></option>
+											</c:forEach>
 
 										</select>
 									</div>

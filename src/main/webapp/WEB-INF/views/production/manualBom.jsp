@@ -134,7 +134,7 @@
 										<select name="material_type" id="material_type" onchange="submitItem()"
 											class="form-control" placeholder="Material Type"
 											data-rule-required="true">
-											<option value="0">Select Material Type</option>
+											<option value="">Select Material Type</option>
 											<option value="1">RM</option>
 											<option value="2">SF</option>
 										</select>
@@ -348,11 +348,12 @@
 	function submitItem() {
 		
 		var materialType = $('#material_type').val();
+		var toDept = $('#to_dept').val();
 		$('#table1 td').remove();
 		
 		$.getJSON('${manBomAddItemsNew}', {
 			 mat_type : materialType,
-			
+			 toDept:toDept,
 			ajax : 'true',
 
 		},function(data) {

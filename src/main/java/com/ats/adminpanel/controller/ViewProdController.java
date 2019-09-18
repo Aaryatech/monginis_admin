@@ -1015,8 +1015,8 @@ public class ViewProdController {
 
 	List<ProdMixingReqP1> prodMixingReqP1;
 
-	@RequestMapping(value = "/addMixing", method = RequestMethod.GET)
-	public ModelAndView showMixing(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/addToMixing/{headerId}", method = RequestMethod.GET)
+	public ModelAndView showMixing(@PathVariable("headerId")int headerId,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView mav = new ModelAndView("production/addMixing");
 
@@ -1027,8 +1027,8 @@ public class ViewProdController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 			System.out.println("globalHeaderId:" + globalHeaderId);
-			map.add("headerId", globalHeaderId);
-
+			map.add("headerId", headerId);
+			map.add("deptId", 10);
 			prodMixingReqP1List = restTemplate.postForObject(Constants.url + "getSfPlanDetailForMixing", map,
 					ProdMixingReqP1List.class);
 
@@ -1036,97 +1036,17 @@ public class ViewProdController {
 
 			prodMixingReqP1 = prodMixingReqP1List.getProdMixingReqP1();
 
-			System.out.println("Phase 1 Data " + prodMixingReqP1.toString());
-
-			// sfPlanDetailForMixing =
-			// getSFPlanDetailForMixingList.getSfPlanDetailForMixing();
-			mav.addObject("mixingList", prodMixingReqP1);
+			
 			System.out.println("sf Plan Detail For Mixing  " + sfPlanDetailForMixing.toString());
-			// ceil fun 6 feb
 			for (int i = 0; i < prodMixingReqP1.size(); i++) {
-
-				System.out.println("total === " + prodMixingReqP1.get(i).getTotal());
-
 				prodMixingReqP1.get(i).setTotal((int) Math.ceil(prodMixingReqP1.get(i).getTotal()));
-
-				System.out.println("total seiled new  " + prodMixingReqP1.get(i).getTotal());
-
 			}
-
-			TempMixing tempMx = null;
-			/*
-			 * for (int i = 0; i < prodMixingReqP1.size(); i++) {
-			 * 
-			 * ProdMixingReqP1 planMixing = prodMixingReqP1.get(i);
-			 * 
-			 * tempMx = new TempMixing();
-			 * 
-			 * tempMx.setQty(planMixing.getTotal()*planMixing.getMulFactor());
-			 * 
-			 * tempMx.setRmId(planMixing.getRmId()); tempMx.setSfId(0);
-			 * 
-			 * tempMx.setProdHeaderId(globalHeaderId);
-			 * 
-			 * tempMixing.add(tempMx); }
-			 * 
-			 * System.out.println("temp Mix List " + tempMixing.toString());
-			 * 
-			 * Info info = restTemplate.postForObject(Constants.url + "insertTempMixing",
-			 * tempMixing, Info.class);
-			 * 
-			 * map = new LinkedMultiValueMap<String, Object>();
-			 * 
-			 * map.add("prodHeaderId", globalHeaderId);
-			 * 
-			 * getTempMixItemDetailList = restTemplate.postForObject(Constants.url +
-			 * "getTempMixItemDetail", map, GetTempMixItemDetailList.class);
-			 * 
-			 * tempMixItemDetail = getTempMixItemDetailList.getTempMixItemDetail();
-			 * 
-			 * System.out.println("temp Mix Item Detail  " + tempMixItemDetail.toString());
-			 * 
-			 * // Calculations
-			 */
-			/*
-			 * boolean isSameItem = false; ProdMixingReqP1 newItem = null;
-			 * 
-			 * for (int j = 0; j < tempMixItemDetail.size(); j++) {
-			 * 
-			 * GetTempMixItemDetail tempMixItem = tempMixItemDetail.get(j);
-			 * 
-			 * for (int i = 0; i < prodMixingReqP1.size(); i++) {
-			 * 
-			 * ProdMixingReqP1 planMixing = prodMixingReqP1.get(i);
-			 * 
-			 * if (tempMixItem.getRmId() == planMixing.getRmId()) {
-			 * 
-			 * planMixing.setTotal((int)(Math.ceil(planMixing.getTotal() +
-			 * tempMixItem.getTotal())));
-			 * 
-			 * isSameItem = true;
-			 * 
-			 * } } if (isSameItem == false) {
-			 * 
-			 * newItem = new ProdMixingReqP1();
-			 * 
-			 * newItem.setRmName(tempMixItem.getRmName());
-			 * newItem.setRmType(tempMixItem.getRmType());
-			 * newItem.setRmId(tempMixItem.getSfId());
-			 * newItem.setTotal((int)Math.ceil(tempMixItem.getTotal()));
-			 * newItem.setUom(tempMixItem.getUom());
-			 * 
-			 * prodMixingReqP1.add(newItem);
-			 * 
-			 * } //isSameItem=false; }
-			 */
-			System.out.println("Final List " + prodMixingReqP1.toString());
-
-			// mav.addObject("mixingList", sfPlanDetailForMixing);
-			// mav.addObject("mixingList", prodMixingReqP1);
+			mav.addObject("mixingList", prodMixingReqP1);
 			mav.addObject("productionBatch", globalProductionBatch);
 			mav.addObject("globalTimeSlot", globalTimeSlot);
-			mav.addObject("productionId", productionId);
+			mav.addObject("productionId", headerId);
 			mav.addObject("isMixing", isMixing);
+			mav.addObject("deptId", 10);
 			ModelAndView model = new ModelAndView("production/addBom");
 			model.addObject("prodDate", globalProdDate);
 		} catch (Exception e) {
@@ -1152,6 +1072,7 @@ public class ViewProdController {
 		int timeSlot = Integer.parseInt(request.getParameter("globalTimeSlot"));
 		String globalProductionBatch = request.getParameter("globalProductionBatch");
 		int prodId = Integer.parseInt(request.getParameter("productionId"));
+		int deptId = Integer.parseInt(request.getParameter("deptId"));
 		// new code 31 Jan
 		int count = 0;
 		for (int i = 0; i < prodMixingReqP1.size(); i++) {
@@ -1258,11 +1179,12 @@ public class ViewProdController {
 		mixingHeader.setMixDate(date);
 		mixingHeader.setProductionId(prodId);
 		mixingHeader.setProductionBatch(globalProductionBatch);
-		mixingHeader.setStatus(0);
+		mixingHeader.setStatus(2);
 		mixingHeader.setDelStatus(0);
 		mixingHeader.setTimeSlot(timeSlot);
 		mixingHeader.setIsBom(0);
 		mixingHeader.setExBool1(0);
+		mixingHeader.setExInt1(deptId);//deptId
 		mixingHeader.setExInt2(0);
 		mixingHeader.setExInt3(0);
 		mixingHeader.setExVarchar1("");
@@ -1280,15 +1202,15 @@ public class ViewProdController {
 
 			mixingDetailed.setSfName(prodMixingReqP1.get(i).getRmName());
 			mixingDetailed.setReceivedQty(prodMixingReqP1.get(i).getTotal());
+			mixingDetailed.setProductionQty(prodMixingReqP1.get(i).getTotal());//req qty set to Production
 
 			mixingDetailed.setUom(prodMixingReqP1.get(i).getUom());
 			mixingDetailed.setMixingDate(date);
 			mixingDetailed.setExBool1(0);
-			mixingDetailed.setExInt2((int) prodMixingReqP1.get(i).getMulFactor());// temp it is typecasted to insert
-																					// mulfactor
+			mixingDetailed.setExInt2(0);
 			mixingDetailed.setExInt1(0);
 			mixingDetailed.setExInt3(0);
-			mixingDetailed.setExVarchar1("");
+			mixingDetailed.setExVarchar1(""+prodMixingReqP1.get(i).getMulFactor());
 			mixingDetailed.setExVarchar2("");
 			mixingDetailed.setExVarchar3("");
 
@@ -1318,6 +1240,7 @@ public class ViewProdController {
 		map = new LinkedMultiValueMap<String, Object>();
 		map.add("productionId", prodId);
 		map.add("flag", 0);
+		map.add("deptId", 10);
 		if (mixingHeaderin != null) {
 			int updateisMixing = rest.postForObject(Constants.url + "updateisMixingandBom", map, Integer.class);
 		}

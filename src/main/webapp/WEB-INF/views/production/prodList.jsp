@@ -7,10 +7,64 @@
   
  <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
  <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+ <style>
+ .form-elegant .font-small {
+    font-size: 0.8rem; }
+
+.form-elegant .z-depth-1a {
+    -webkit-box-shadow: 0 2px 5px 0 rgba(55, 161, 255, 0.26), 0 4px 12px 0 rgba(121, 155, 254, 0.25);
+    box-shadow: 0 2px 5px 0 rgba(55, 161, 255, 0.26), 0 4px 12px 0 rgba(121, 155, 254, 0.25); }
+
+.form-elegant .z-depth-1-half,
+.form-elegant .btn:hover {
+    -webkit-box-shadow: 0 5px 11px 0 rgba(85, 182, 255, 0.28), 0 4px 15px 0 rgba(36, 133, 255, 0.15);
+    box-shadow: 0 5px 11px 0 rgba(85, 182, 255, 0.28), 0 4px 15px 0 rgba(36, 133, 255, 0.15); }
+
+.form-elegant .modal-header {
+    border-bottom: none; }
+
+.modal-dialog .form-elegant .btn .fab {
+    color: #2196f3!important; }
+
+.form-elegant .modal-body, .form-elegant .modal-footer {
+    font-weight: 400; }
+    
+  body {
+  box-sizing: border-box;
+  padding: 0 20px 20px;
+  background: #fafafa;
+  position: relative;
+}
+
+.mdl-data-table {
+  margin-bottom: 12px;
+}
+
+.mdl-data-table td {
+  padding-bottom: 12px;
+  vertical-align: middle;
+}
+
+.mdl-data-table_full {
+  max-width: 100%;
+  width: 100%;
+}
+
+.mdl-data-table .controls {
+  text-align: center;
+}
+
+.app-page {  
+  margin: 0 auto;
+}
+
+  
+ </style>
 <body>
 
 
  
+<c:url var="showDetailsForLayering" value="/showDetailsForLayering"/>
 
 
 	<div class="container" id="main-container">
@@ -33,9 +87,21 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Production Header
-					</h1>
-
+					<c:choose>
+					<c:when test="${type==1}">
+					<i class="fa fa-file-o"></i>Generate Mixing For Production
+					</c:when>
+						<c:when test="${type==2}">
+					<i class="fa fa-file-o"></i>Generate Mixing For Cream Preparation
+					</c:when>
+						<c:when test="${type==3}">
+					<i class="fa fa-file-o"></i>Generate Mixing For Layering
+					</c:when>
+					<c:otherwise>
+						<i class="fa fa-file-o"></i>Production Headers
+					</c:otherwise>
+					</c:choose>
+                      </h1>
 				</div>
 			</div>
 			<!-- END Page Title -->
@@ -63,11 +129,10 @@
 
 
 						<div class="box-content">
-							<form action="${pageContext.request.contextPath}/showProdHeader" class="form-horizontal"
+							<form action="${pageContext.request.contextPath}/generateMixingForProduction/${type}" class="form-horizontal"
 								id="validation-form" method="get">
 
-
-
+                            
 								<input type="hidden" name="mode_add" id="mode_add"
 									value="add_att">
 
@@ -195,11 +260,28 @@
 													</c:choose>
 
 
-													<td align="left"><a
-														href="${pageContext.request.contextPath}/getProdDetail/${planHeader.productionHeaderId}"><span
-															class="glyphicon glyphicon-info-sign"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+													<td align="left">
+														<c:choose>
+																<c:when test="${type==1}">
+																	<a
+																		href="${pageContext.request.contextPath}/addToMixing/${planHeader.productionHeaderId}"><span
+																		class="glyphicon glyphicon-info-sign"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+																</c:when>
+																<c:when test="${type==2}">
+																	<div class="text-center">
+  <a href="" onclick="showDetailsForLayering(${planHeader.productionHeaderId}/BMS)" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm">Action</a>
+</div>
+															    </c:when>
+																<c:when test="${type==3}">
+																	-
+																</c:when>
+																<c:otherwise>
+																--
+																</c:otherwise>
+														</c:choose>
 
-													</td>
+
+														</td>
 												</tr>
 											</c:forEach>
 
@@ -215,6 +297,63 @@
 				</div>
 
 	</div>
+	
+			<!-- Modal -->
+<div class="modal fade" id="elegantModalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document" style="width:80%;height:50%">
+    <!--Content-->
+    <div class="modal-content form-elegant">
+      <!--Header-->
+      <div class="modal-header text-center">
+        <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3" id="myModalLabel"><strong>Add Bom</strong></h3>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div> <div class="modal-body mx-6" style="margin: 20px;">
+      <div class="table-responsive" style="border: 0">
+									<table width="80%" class="table table-advance" id="modeltable">
+										<thead>
+											<tr>
+											<th width="17" style="width: 18px"><input type="checkbox" /></th>
+												<th width="17" style="width: 18px">Sr No</th>
+												<th width="120" align="left">Product Name</th>
+												<th width="100" align="left">Product Type</th>
+												<th width="120" align="left">Qty</th>
+
+												<th width="120" align="left">Edit Qty</th>
+
+												<th width="100" align="left">UOM</th>
+											</tr>
+										</thead>
+										<tbody>
+											
+										</tbody>
+									</table>
+									
+								</div>
+						</div>			
+      <!--Body-->
+      <div class="modal-body mx-4" >
+        <!--Body-->
+       
+
+        <div class="text-center mb-1">
+          <button type="button" class="btn btn-primary">Add Bom</button>
+        </div>
+    
+
+       
+      </div>
+      <!--Footer-->
+    
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+<!-- Modal -->
+
+
 	<!-- END Main Content -->
 	<footer>
 	<p>2019 © MONGINIS.</p>
@@ -226,7 +365,20 @@
 	<!-- END Content -->
 	</div>
 	<!-- END Container -->
-
+    <script type="text/javascript">
+    function showDetailsForLayering(prodHeaderId,dept)
+    {
+    	$.getJSON('${showDetailsForLayering}', {
+    		
+    		prodHeaderId:prodHeaderId,
+    		toDept:JSON.stringify(dept),
+    		ajax : 'true',
+    	},  function(data) { 
+    		
+    		
+    	});
+    }
+    </script>
 	<!--basic scripts-->
 	<script
 		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>

@@ -1033,7 +1033,7 @@ model.addObject("todayDate",df.format(todayDate));
 			postProductionHeader.setIsMixing(0);
 			postProductionHeader.setIsPlanned(0);
 			postProductionHeader.setProductionBatch("");
-			postProductionHeader.setProductionStatus(2);
+			postProductionHeader.setProductionStatus(3);
 
 			List<PostProductionDetail> postProductionDetailList = new ArrayList<>();
 			PostProductionDetail postProductionDetail;
@@ -2380,7 +2380,7 @@ System.err.println("getVarianceorderlistforsort Item List " +getVarianceorderlis
 
 		RestTemplate restTemplate = new RestTemplate();
 		try {
-			postProdPlanHeadernewplan.setProductionStatus(2);
+			postProdPlanHeadernewplan.setProductionStatus(3);
 			postProdPlanHeadernewplan.setItemGrp1(postProdPlanHeader.getItemGrp1());
 			postProdPlanHeadernewplan.setProductionDate(postProdPlanHeader.getProductionDate());
 			postProdPlanHeadernewplan.setTimeSlot(postProdPlanHeader.getTimeSlot());
@@ -2453,7 +2453,7 @@ System.err.println("getVarianceorderlistforsort Item List " +getVarianceorderlis
 
 		RestTemplate restTemplate = new RestTemplate();
 		try {
-			postProdPlanHeadernewplan.setProductionStatus(2);
+			postProdPlanHeadernewplan.setProductionStatus(3);
 			postProdPlanHeadernewplan.setItemGrp1(postProdPlanHeader.getItemGrp1());
 			postProdPlanHeadernewplan.setProductionDate(postProdPlanHeader.getProductionDate());
 			postProdPlanHeadernewplan.setTimeSlot(postProdPlanHeader.getTimeSlot());

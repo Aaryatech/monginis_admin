@@ -25,6 +25,10 @@ public class GetSFPlanDetailForMixing {
 	
 	private float planQty;
 	
+	float singleCut;
+	
+	float doubleCut;
+	
 	float total;
 	
 	//private float mulFactor; // Not in new Query by sumit Sir 30 Jan 2018
@@ -34,6 +38,22 @@ public class GetSFPlanDetailForMixing {
 
 	public int getItemDetailId() {
 		return itemDetailId;
+	}
+
+	public float getSingleCut() {
+		return singleCut;
+	}
+
+	public float getDoubleCut() {
+		return doubleCut;
+	}
+
+	public void setSingleCut(float singleCut) {
+		this.singleCut = singleCut;
+	}
+
+	public void setDoubleCut(float doubleCut) {
+		this.doubleCut = doubleCut;
 	}
 
 	public void setItemDetailId(int itemDetailId) {
@@ -116,7 +136,10 @@ public class GetSFPlanDetailForMixing {
 	public String toString() {
 		return "GetSFPlanDetailForMixing [itemDetailId=" + itemDetailId + ", itemId=" + itemId + ", rmType=" + rmType
 				+ ", rmId=" + rmId + ", uom=" + uom + ", rmQty=" + rmQty + ", noPiecesPerItem=" + noPiecesPerItem
-				+ ", rmName=" + rmName + ", planQty=" + planQty + ", total=" + total + "]";
+				+ ", rmName=" + rmName + ", planQty=" + planQty + ", singleCut=" + singleCut + ", doubleCut="
+				+ doubleCut + ", total=" + total + "]";
 	}
+
+	
 
 }
