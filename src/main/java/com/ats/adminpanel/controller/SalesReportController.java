@@ -2797,15 +2797,15 @@ public class SalesReportController {
 		rowData.add("Item Name");
 		rowData.add("Item Hsn Code");
 		rowData.add("Bill Qty Sum");
+		rowData.add("Taxable Amt");
 		rowData.add("Item Tax1");
-		rowData.add("Item Tax2");
 		rowData.add("Item Tax2");
 		rowData.add("Total Tax");
 		rowData.add("sgst sum");
 		rowData.add("cgst sum");
 		rowData.add("igst sum");
-
-		rowData.add("Taxable Amt");
+		rowData.add("Total");
+		
 
 		expoExcel.setRowData(rowData);
 		exportToExcelList.add(expoExcel);
@@ -2818,6 +2818,7 @@ public class SalesReportController {
 			rowData.add("" + saleList.get(i).getItemName());
 			rowData.add("" + saleList.get(i).getItemHsncd());
 			rowData.add("" + saleList.get(i).getBillQtySum());
+			rowData.add("" + saleList.get(i).getTaxableAmtSum());
 			rowData.add("" + saleList.get(i).getItemTax1());
 
 			rowData.add("" + saleList.get(i).getItemTax2());
@@ -2826,7 +2827,7 @@ public class SalesReportController {
 			rowData.add("" + saleList.get(i).getCgstRsSum());
 
 			rowData.add("" + saleList.get(i).getIgstRsSum());
-			rowData.add("" + saleList.get(i).getTaxableAmtSum());
+			rowData.add("" + saleList.get(i).getIgstRsSum()+saleList.get(i).getCgstRsSum()+saleList.get(i).getSgstRsSum()+ saleList.get(i).getTaxableAmtSum());
 
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);

@@ -183,7 +183,7 @@
 										<th>CGST</th>
 										<th>SGST</th>
 										<th>IGST</th>
-										<th>Total GST</th>
+										<th>Total</th>
 
 									</tr>
 								</thead>
@@ -283,7 +283,7 @@
 														tr.append($('<td></td>').html(report.sgstRsSum.toFixed(2)));
 														tr.append($('<td></td>').html(report.igstRsSum.toFixed(2)));
 														
-														var total=report.sgstRsSum+report.cgstRsSum;
+														var total=report.taxableAmtSum+report.sgstRsSum+report.cgstRsSum+report.igstRsSum;
 														total=total.toFixed(2);
 														
 													  	tr.append($('<td></td>').html(total));
