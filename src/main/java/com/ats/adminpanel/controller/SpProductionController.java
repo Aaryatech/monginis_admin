@@ -2024,7 +2024,6 @@ public class SpProductionController {
 						billOfMaterialHeader.setIsProduction(4);
 						billOfMaterialHeader.setIsPlan(0);
 						
-						billOfMaterialHeader.setIsPlan(0);
 						}
 					}
 						List<BillOfMaterialDetailed> bomDetailList = new ArrayList<BillOfMaterialDetailed>();

@@ -570,8 +570,11 @@ $(document).ready(function() {
 	var rmName=$('#rm_id option:selected').text();
 	var isMultiFactor=$("input:radio:checked").val();
 	//alert("isMultiFactor"+isMultiFactor);
-	var multiFactor= $("#multiFactor").val();//alert("multiFactor"+multiFactor);
-	var ratioItemId= $("#ratio_item_id").val();//alert("ratioItemId"+ratioItemId);
+	var multiFactor=0;var ratioItemId=0;
+	if(isMultiFactor!=0){
+	 multiFactor= $("#multiFactor").val();//alert("multiFactor"+multiFactor);
+	 ratioItemId= $("#ratio_item_id").val();//alert("ratioItemId"+ratioItemId);
+	}
 	
 	if(editFlag==true)
 	{
