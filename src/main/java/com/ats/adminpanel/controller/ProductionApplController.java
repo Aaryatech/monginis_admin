@@ -4,11 +4,13 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
@@ -24,20 +26,20 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.controller.model.GetSfData;
-import com.ats.adminpanel.model.GetPrepData;
+import com.ats.adminpanel.model.DepartmentList;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.MiniSubCategory;
+import com.ats.adminpanel.model.RawMaterial.GetSfType;
 import com.ats.adminpanel.model.RawMaterial.ItemSfDetail;
 import com.ats.adminpanel.model.RawMaterial.SfItemDetailList;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
+import com.ats.adminpanel.model.item.Item;
+import com.ats.adminpanel.model.login.UserResponse;
 import com.ats.adminpanel.model.production.GetProdPlanHeader;
 import com.ats.adminpanel.model.production.GetProdPlanHeaderList;
 import com.ats.adminpanel.model.production.PostProdPlanHeader;
-import com.ats.adminpanel.model.production.mixing.temp.GetSFMixingForBomList;
 import com.ats.adminpanel.model.production.mixing.temp.GetSFPlanDetailForMixing;
 import com.ats.adminpanel.model.production.mixing.temp.GetSFPlanDetailForMixingList;
-import com.ats.adminpanel.model.production.mixing.temp.ProdMixingReqP1;
-import com.ats.adminpanel.model.production.mixing.temp.ProdMixingReqP1List;
-import com.ats.adminpanel.model.production.mixing.temp.TempMixing;
 import com.ats.adminpanel.model.productionplan.BillOfMaterialDetailed;
 import com.ats.adminpanel.model.productionplan.BillOfMaterialHeader;
 import com.ats.adminpanel.model.productionplan.MixingDetailed;
@@ -47,6 +49,7 @@ import com.ats.adminpanel.model.productionplan.MixingHeader;
 @Scope("session")
 public class ProductionApplController {
 
+	
 	@RequestMapping(value = "/generateMixingForProduction/{type}", method = RequestMethod.GET)
 	public ModelAndView prodListForGenerateMixingForProd(@PathVariable("type")int type,HttpServletRequest request, HttpServletResponse response) {
 
@@ -90,6 +93,16 @@ public class ProductionApplController {
 
 			prodPlanHeaderList = prodHeader.getProdPlanHeader();
 
+			List<MiniSubCategory> miniSubCategory = restTemplate.getForObject(Constants.url + "/showMiniSubCatList",
+					 List.class);
+			model.addObject("miniSubCategory", miniSubCategory);
+			DepartmentList departmentList=restTemplate.getForObject(Constants.url+"getAllDept", DepartmentList.class);
+			model.addObject("departmentList", departmentList);
+		
+			 map = new LinkedMultiValueMap<String, Object>();
+			map.add("delStatus", 0);
+			List<GetSfType> sfTypeList=restTemplate.postForObject(Constants.url+"getSfType",map,List.class);
+			model.addObject("sfTypeList", sfTypeList);
 			System.out.println("prod header " + prodPlanHeaderList.toString());
 			model.addObject("fromDate", fromDate);
 			model.addObject("toDate", toDate);
@@ -203,6 +216,7 @@ public class ProductionApplController {
 	
 		List<ItemSfDetail> sfItemDetailListRes;
 	   sfItemDetailListNew=new ArrayList<>();
+	   List<ItemSfDetail> sfItemDetailListNew1=new ArrayList<>();
        try {
     		StringBuilder sfIds = new StringBuilder();
 			for (int i = 0; i < data.size(); i++) {
@@ -219,38 +233,68 @@ public class ProductionApplController {
 			sfItemDetailListRes=sfDetaiListItems.getSfItemDetail();
 			
 			for (int i = 0; i < sfItemDetailListRes.size(); i++) {
-			if(sfItemDetailListNew.size()==0)
-			{
-				sfItemDetailListNew.add(sfItemDetailListRes.get(0));
-			}
-			else 
-			{ int flag=0;
-				for(int y=0;y<sfItemDetailListNew.size();y++)
+				if(sfItemDetailListNew.size()==0)
 				{
-					if(sfItemDetailListNew.get(y).getRmId()==sfItemDetailListRes.get(i).getRmId()&&sfItemDetailListNew.get(y).getRmType()==sfItemDetailListRes.get(i).getRmType())
+					sfItemDetailListNew.add(sfItemDetailListRes.get(0));
+				}
+				else 
+				{ int flag=0;
+					for(int y=0;y<sfItemDetailListNew.size();y++)
 					{
-						flag=1;
+						if(sfItemDetailListNew.get(y).getRmId()==sfItemDetailListRes.get(i).getRmId()&&sfItemDetailListNew.get(y).getRmType()==sfItemDetailListRes.get(i).getRmType())
+						{
+							flag=1;
+							
+						}
+					}
+					if(flag==0)
+					{
+						sfItemDetailListNew.add(sfItemDetailListRes.get(i));
+					}
+				}
+				
+	           }
+			
+			
+			for (int i = 0; i < data.size(); i++) {
+				
+				float totalRmWeight=0;
+				float totalRmWeightPer1=0;
+
+				for (int j = 0;j < sfItemDetailListRes.size(); j++) {
+					if(data.get(i).getSfId()==sfItemDetailListRes.get(j).getSfId())
+					totalRmWeight+=sfItemDetailListRes.get(j).getRmWeight();
+				}
+				totalRmWeightPer1=totalRmWeight/100;
+
+				for (int j = 0;j < sfItemDetailListRes.size(); j++) {
+					if(data.get(i).getSfId()==sfItemDetailListRes.get(j).getSfId())
+					{
+						float totalValueItemPerc=sfItemDetailListRes.get(j).getRmWeight()/totalRmWeightPer1;
+						
+						ItemSfDetail sfDetail=new ItemSfDetail();
+						sfDetail.setSfDid(sfItemDetailListRes.get(j).getSfDid());
+						sfDetail.setRmId(sfItemDetailListRes.get(j).getRmId());
+						sfDetail.setRmName(sfItemDetailListRes.get(j).getRmName());
+						sfDetail.setRmType(sfItemDetailListRes.get(j).getRmType());
+						sfDetail.setRmUnit(sfItemDetailListRes.get(j).getRmUnit());
+						sfDetail.setRmWeight(sfItemDetailListRes.get(j).getRmWeight());
+						sfDetail.setSfId(sfItemDetailListRes.get(j).getSfId());
+						sfDetail.setRmQty((data.get(i).getRmQty()*totalValueItemPerc)/100);
+						sfItemDetailListNew1.add(sfDetail);
 						
 					}
 				}
-				if(flag==0)
-				{
-					sfItemDetailListNew.add(sfItemDetailListRes.get(i));
-				}
 			}
-			
-           }
-			
-			
 			for (int i = 0; i < sfItemDetailListNew.size(); i++) {
 				float rmQty=0;
 				float rmWeight=0;
-				for (int j = 0; j < sfItemDetailListRes.size(); j++) {
+				for (int j = 0; j < sfItemDetailListNew1.size(); j++) {
 					
-					if(sfItemDetailListRes.get(i).getRmType()==sfDetaiListItems.getSfItemDetail().get(j).getRmType() && sfItemDetailListRes.get(i).getRmId()==sfDetaiListItems.getSfItemDetail().get(j).getRmId())
+					if(sfItemDetailListNew.get(i).getRmType()==sfItemDetailListNew1.get(j).getRmType() && sfItemDetailListNew.get(i).getRmId()==sfItemDetailListNew1.get(j).getRmId())
 					{
-						rmQty=rmQty+sfDetaiListItems.getSfItemDetail().get(j).getRmQty();
-						rmWeight=rmWeight+sfDetaiListItems.getSfItemDetail().get(j).getRmWeight();
+						rmQty=rmQty+sfItemDetailListNew1.get(j).getRmQty();
+						rmWeight=rmWeight+sfItemDetailListNew1.get(j).getRmWeight();
 					}
 					
 				}
@@ -258,16 +302,7 @@ public class ProductionApplController {
 				sfItemDetailListNew.get(i).setRmWeight(rmWeight);
 			
 			}
-			
-			for (int i = 0; i < data.size(); i++) {
-				for (int j = 0;j < sfItemDetailListNew.size(); j++) {
-					if(data.get(i).getSfId()==sfItemDetailListNew.get(j).getSfId())
-					{
-						sfItemDetailListNew.get(i).setRmQty((data.get(i).getRmQty()*sfItemDetailListNew.get(j).getRmQty()*sfItemDetailListNew.get(j).getRmWeight()));
-					}
-				}
-			}
-			System.err.println(sfItemDetailListNew.toString());
+		
 			
        }catch (Exception e) {
 		e.printStackTrace();
@@ -280,6 +315,8 @@ public class ProductionApplController {
 	
 		List<ItemSfDetail> sfItemDetailListRes;
 		sfItemDetailListLayering=new ArrayList<>();
+		List<ItemSfDetail>  sfItemDetailListLayering1=new ArrayList<>();
+
        try {
     		StringBuilder sfIds = new StringBuilder();
 			for (int i = 0; i < data.size(); i++) {
@@ -296,38 +333,68 @@ public class ProductionApplController {
 			sfItemDetailListRes=sfDetaiListItems.getSfItemDetail();
 			
 			for (int i = 0; i < sfItemDetailListRes.size(); i++) {
-			if(sfItemDetailListLayering.size()==0)
-			{
-				sfItemDetailListLayering.add(sfItemDetailListRes.get(0));
-			}
-			else 
-			{ int flag=0;
-				for(int y=0;y<sfItemDetailListLayering.size();y++)
+				if(sfItemDetailListLayering.size()==0)
 				{
-					if(sfItemDetailListLayering.get(y).getRmId()==sfItemDetailListRes.get(i).getRmId()&&sfItemDetailListLayering.get(y).getRmType()==sfItemDetailListRes.get(i).getRmType())
+					sfItemDetailListLayering.add(sfItemDetailListRes.get(0));
+				}
+				else 
+				{ int flag=0;
+					for(int y=0;y<sfItemDetailListLayering.size();y++)
 					{
-						flag=1;
+						if(sfItemDetailListLayering.get(y).getRmId()==sfItemDetailListRes.get(i).getRmId()&&sfItemDetailListLayering.get(y).getRmType()==sfItemDetailListRes.get(i).getRmType())
+						{
+							flag=1;
+							
+						}
+					}
+					if(flag==0)
+					{
+						sfItemDetailListLayering.add(sfItemDetailListRes.get(i));
+					}
+				}
+				
+	           }
+			
+			
+			for (int i = 0; i < data.size(); i++) {
+				
+				float totalRmWeight=0;
+				float totalRmWeightPer1=0;
+
+				for (int j = 0;j < sfItemDetailListRes.size(); j++) {
+					if(data.get(i).getSfId()==sfItemDetailListRes.get(j).getSfId())
+					totalRmWeight+=sfItemDetailListRes.get(j).getRmWeight();
+				}
+				totalRmWeightPer1=totalRmWeight/100;
+
+				for (int j = 0;j < sfItemDetailListRes.size(); j++) {
+					if(data.get(i).getSfId()==sfItemDetailListRes.get(j).getSfId())
+					{
+						float totalValueItemPerc=sfItemDetailListRes.get(j).getRmWeight()/totalRmWeightPer1;
+						
+						ItemSfDetail sfDetail=new ItemSfDetail();
+						sfDetail.setSfDid(sfItemDetailListRes.get(j).getSfDid());
+						sfDetail.setRmId(sfItemDetailListRes.get(j).getRmId());
+						sfDetail.setRmName(sfItemDetailListRes.get(j).getRmName());
+						sfDetail.setRmType(sfItemDetailListRes.get(j).getRmType());
+						sfDetail.setRmUnit(sfItemDetailListRes.get(j).getRmUnit());
+						sfDetail.setRmWeight(sfItemDetailListRes.get(j).getRmWeight());
+						sfDetail.setSfId(sfItemDetailListRes.get(j).getSfId());
+						sfDetail.setRmQty((data.get(i).getRmQty()*totalValueItemPerc)/100);
+						sfItemDetailListLayering1.add(sfDetail);
 						
 					}
 				}
-				if(flag==0)
-				{
-					sfItemDetailListLayering.add(sfItemDetailListRes.get(i));
-				}
 			}
-			
-           }
-			
-			
 			for (int i = 0; i < sfItemDetailListLayering.size(); i++) {
 				float rmQty=0;
 				float rmWeight=0;
-				for (int j = 0; j < sfItemDetailListRes.size(); j++) {
+				for (int j = 0; j < sfItemDetailListLayering1.size(); j++) {
 					
-					if(sfItemDetailListRes.get(i).getRmType()==sfDetaiListItems.getSfItemDetail().get(j).getRmType() && sfItemDetailListRes.get(i).getRmId()==sfDetaiListItems.getSfItemDetail().get(j).getRmId())
+					if(sfItemDetailListLayering.get(i).getRmType()==sfItemDetailListLayering1.get(j).getRmType() && sfItemDetailListLayering.get(i).getRmId()==sfItemDetailListLayering1.get(j).getRmId())
 					{
-						rmQty=rmQty+sfDetaiListItems.getSfItemDetail().get(j).getRmQty();
-						rmWeight=rmWeight+sfDetaiListItems.getSfItemDetail().get(j).getRmWeight();
+						rmQty=rmQty+sfItemDetailListLayering1.get(j).getRmQty();
+						rmWeight=rmWeight+sfItemDetailListLayering1.get(j).getRmWeight();
 					}
 					
 				}
@@ -335,16 +402,6 @@ public class ProductionApplController {
 				sfItemDetailListLayering.get(i).setRmWeight(rmWeight);
 			
 			}
-			
-			for (int i = 0; i < data.size(); i++) {
-				for (int j = 0;j < sfItemDetailListLayering.size(); j++) {
-					if(data.get(i).getSfId()==sfItemDetailListLayering.get(j).getSfId())
-					{
-						sfItemDetailListLayering.get(i).setRmQty((data.get(i).getRmQty()*sfItemDetailListLayering.get(j).getRmQty()*sfItemDetailListLayering.get(j).getRmWeight()));
-					}
-				}
-			}
-			System.err.println(sfItemDetailListLayering.toString());
 			
        }catch (Exception e) {
 		e.printStackTrace();
@@ -358,7 +415,9 @@ public class ProductionApplController {
 		try {
 				
 			 RestTemplate restTemplate = new RestTemplate();
-				
+				HttpSession session = request.getSession();
+				UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
+
 			 List<MixingDetailed> addmixingDetailedlist = new ArrayList<MixingDetailed>();
 			 Date date = new Date();
 
@@ -420,7 +479,7 @@ public class ProductionApplController {
 				mixingHeader.setStatus(2);
 				mixingHeader.setDelStatus(0);
 				mixingHeader.setTimeSlot(postProdPlanHeader.getTimeSlot());
-				mixingHeader.setIsBom(0);
+				mixingHeader.setIsBom(1);
 				mixingHeader.setExBool1(0);
 				mixingHeader.setExInt1(settingList.getFrItemStockConfigure().get(0).getSettingValue());//deptId
 				mixingHeader.setExInt2(0);
@@ -431,22 +490,8 @@ public class ProductionApplController {
 				
 				mixingHeader.setMixingDetailed(addmixingDetailedlist);
 				System.out.println("while inserting Mixing Header = " + mixingHeader.toString());
-				RestTemplate rest = new RestTemplate();
-				MixingHeader mixingHeaderin = rest.postForObject(Constants.url + "insertMixingHeaderndDetailed", mixingHeader,
-						MixingHeader.class);
-				/*map = new LinkedMultiValueMap<String, Object>();
-				map.add("productionId", prodHeaderId);
-				map.add("flag", 0);
-				map.add("deptId", settingList.getFrItemStockConfigure().get(0).getSettingValue());
-				if (mixingHeaderin != null) {
-					int updateisMixing = rest.postForObject(Constants.url + "updateisMixingandBom", map, Integer.class);
-				}*/
-				if (mixingHeaderin != null) {
-					flag+=1;
-				}
 				
-				String ret="";
-
+				
 				try {
 					 String[] sfDidList=request.getParameterValues("sfDid");
 					 List<BillOfMaterialDetailed> bomDetailList = new ArrayList<BillOfMaterialDetailed>();
@@ -483,14 +528,14 @@ public class ProductionApplController {
 					BillOfMaterialHeader billOfMaterialHeader = new BillOfMaterialHeader();
 
 					billOfMaterialHeader.setApprovedDate(date);
-					billOfMaterialHeader.setApprovedUserId(0);
+					billOfMaterialHeader.setApprovedUserId(userResponse.getUser().getId());//hardcoded
 					billOfMaterialHeader.setDelStatus(0);
 					 
 					billOfMaterialHeader.setProductionDate(date);
 					billOfMaterialHeader.setProductionId(prodHeaderId);
 					billOfMaterialHeader.setReqDate(date);
-					billOfMaterialHeader.setSenderUserid(1);//hardcoded
-					billOfMaterialHeader.setStatus(0);
+					billOfMaterialHeader.setSenderUserid(userResponse.getUser().getId());//hardcoded
+					billOfMaterialHeader.setStatus(4);
 				
 					billOfMaterialHeader.setExInt1(postProdPlanHeader.getItemGrp1());//Category
 					billOfMaterialHeader.setRejApproveDate(date);
@@ -501,8 +546,7 @@ public class ProductionApplController {
 					billOfMaterialHeader.setIsManual(0);
 
 						map = new LinkedMultiValueMap<String, Object>();
-						String settingKey1 = new String();
-						map.add("settingKeyList", "BMSSTORE");
+						map.add("settingKeyList",dept);
 						FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
 								FrItemStockConfigureList.class);
 						int toDeptId=settingList1.getFrItemStockConfigure().get(0).getSettingValue();
@@ -520,23 +564,22 @@ public class ProductionApplController {
 						billOfMaterialHeader.setBillOfMaterialDetailed(bomDetailList);
 
 						System.out.println(" insert List " + billOfMaterialHeader.toString());
-						int prodId=billOfMaterialHeader.getProductionId();
 						Info info = restTemplate.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);
 						System.out.println(info);
 						if(info.getError()==false)
 						{
+							flag=1;
+						}
+						
+						if(flag==1) {
+						RestTemplate rest = new RestTemplate();
+						MixingHeader mixingHeaderin = rest.postForObject(Constants.url + "insertMixingHeaderndDetailed", mixingHeader,
+								MixingHeader.class);
+						
+						if (mixingHeaderin != null) {
 							flag+=1;
 						}
-						/*if(info.getError()==false)
-						{
-							map = new LinkedMultiValueMap<String, Object>();
-							map.add("productionId", prodId);
-							map.add("flag", 1);
-							map.add("deptId", toDeptId);
-							int updateisBom = restTemplate.postForObject(Constants.url + "updateisMixingandBom", map,
-									Integer.class); 
-							System.out.println("updateIsBom "+updateisBom);
-						}*/
+						}
 					 }catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -553,7 +596,8 @@ public class ProductionApplController {
 		try {
 				
 			 RestTemplate restTemplate = new RestTemplate();
-				
+			 HttpSession session = request.getSession();
+				UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
 			 List<MixingDetailed> addmixingDetailedlist = new ArrayList<MixingDetailed>();
 			 Date date = new Date();
 
@@ -610,7 +654,7 @@ public class ProductionApplController {
 				mixingHeader.setStatus(2);
 				mixingHeader.setDelStatus(0);
 				mixingHeader.setTimeSlot(postProdPlanHeader.getTimeSlot());
-				mixingHeader.setIsBom(0);
+				mixingHeader.setIsBom(1);
 				mixingHeader.setExBool1(0);
 				mixingHeader.setExInt1(settingList.getFrItemStockConfigure().get(0).getSettingValue());//deptId
 				mixingHeader.setExInt2(0);
@@ -621,21 +665,8 @@ public class ProductionApplController {
 				
 				mixingHeader.setMixingDetailed(addmixingDetailedlist);
 				System.out.println("while inserting Mixing Header = " + mixingHeader.toString());
-				RestTemplate rest = new RestTemplate();
-				MixingHeader mixingHeaderin = rest.postForObject(Constants.url + "insertMixingHeaderndDetailed", mixingHeader,
-						MixingHeader.class);
-				/*map = new LinkedMultiValueMap<String, Object>();
-				map.add("productionId", prodHeaderId);
-				map.add("flag", 0);
-				map.add("deptId", settingList.getFrItemStockConfigure().get(0).getSettingValue());
-				if (mixingHeaderin != null) {
-					int updateisMixing = rest.postForObject(Constants.url + "updateisMixingandBom", map, Integer.class);
-				}*/
-				if (mixingHeaderin != null) {
-					flag+=1;
-				}
 				
-				String ret="";
+				
 
 				try {
 					 String[] sfDidList=request.getParameterValues("sfDid");
@@ -673,14 +704,14 @@ public class ProductionApplController {
 					BillOfMaterialHeader billOfMaterialHeader = new BillOfMaterialHeader();
 
 					billOfMaterialHeader.setApprovedDate(date);
-					billOfMaterialHeader.setApprovedUserId(0);
+					billOfMaterialHeader.setApprovedUserId(userResponse.getUser().getId());
 					billOfMaterialHeader.setDelStatus(0);
 					 
 					billOfMaterialHeader.setProductionDate(date);
 					billOfMaterialHeader.setProductionId(prodHeaderId);
 					billOfMaterialHeader.setReqDate(date);
-					billOfMaterialHeader.setSenderUserid(1);//hardcoded
-					billOfMaterialHeader.setStatus(0);
+					billOfMaterialHeader.setSenderUserid(userResponse.getUser().getId());//hardcoded
+					billOfMaterialHeader.setStatus(4);
 				
 					billOfMaterialHeader.setExInt1(postProdPlanHeader.getItemGrp1());//Category
 					billOfMaterialHeader.setRejApproveDate(date);
@@ -691,8 +722,7 @@ public class ProductionApplController {
 					billOfMaterialHeader.setIsManual(0);
 
 						map = new LinkedMultiValueMap<String, Object>();
-						String settingKey1 = new String();
-						map.add("settingKeyList", "BMSSTORE");
+						map.add("settingKeyList", "BMS");
 						FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
 								FrItemStockConfigureList.class);
 						int toDeptId=settingList1.getFrItemStockConfigure().get(0).getSettingValue();
@@ -710,23 +740,22 @@ public class ProductionApplController {
 						billOfMaterialHeader.setBillOfMaterialDetailed(bomDetailList);
 
 						System.out.println(" insert List " + billOfMaterialHeader.toString());
-						int prodId=billOfMaterialHeader.getProductionId();
 						Info info = restTemplate.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);
 						System.out.println(info);
 						if(info.getError()==false)
 						{
+							flag=1;
+						}
+					
+						if(flag==1) {
+						RestTemplate rest = new RestTemplate();
+						MixingHeader mixingHeaderin = rest.postForObject(Constants.url + "insertMixingHeaderndDetailed", mixingHeader,
+								MixingHeader.class);
+					
+						if (mixingHeaderin != null) {
 							flag+=1;
 						}
-						/*if(info.getError()==false)
-						{
-							map = new LinkedMultiValueMap<String, Object>();
-							map.add("productionId", prodId);
-							map.add("flag", 1);
-							map.add("deptId", toDeptId);
-							int updateisBom = restTemplate.postForObject(Constants.url + "updateisMixingandBom", map,
-									Integer.class); 
-							System.out.println("updateIsBom "+updateisBom);
-						}*/
+						}
 					 }catch (Exception e) {
 							e.printStackTrace();
 						}
@@ -743,7 +772,8 @@ public class ProductionApplController {
 		try {
 				
 			 RestTemplate restTemplate = new RestTemplate();
-				
+			 HttpSession session = request.getSession();
+				UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
 			 List<MixingDetailed> addmixingDetailedlist = new ArrayList<MixingDetailed>();
 			 Date date = new Date();
 
@@ -800,7 +830,7 @@ public class ProductionApplController {
 				mixingHeader.setStatus(2);
 				mixingHeader.setDelStatus(0);
 				mixingHeader.setTimeSlot(postProdPlanHeader.getTimeSlot());
-				mixingHeader.setIsBom(0);
+				mixingHeader.setIsBom(1);
 				mixingHeader.setExBool1(0);
 				mixingHeader.setExInt1(settingList.getFrItemStockConfigure().get(0).getSettingValue());//deptId
 				mixingHeader.setExInt2(0);
@@ -811,21 +841,8 @@ public class ProductionApplController {
 				
 				mixingHeader.setMixingDetailed(addmixingDetailedlist);
 				System.out.println("while inserting Mixing Header = " + mixingHeader.toString());
-				RestTemplate rest = new RestTemplate();
-				MixingHeader mixingHeaderin = rest.postForObject(Constants.url + "insertMixingHeaderndDetailed", mixingHeader,
-						MixingHeader.class);
-				/*map = new LinkedMultiValueMap<String, Object>();
-				map.add("productionId", prodHeaderId);
-				map.add("flag", 0);
-				map.add("deptId", settingList.getFrItemStockConfigure().get(0).getSettingValue());
-				if (mixingHeaderin != null) {
-					int updateisMixing = rest.postForObject(Constants.url + "updateisMixingandBom", map, Integer.class);
-				}*/
-				if (mixingHeaderin != null) {
-					flag+=1;
-				}
 				
-				String ret="";
+				
 
 				try {
 					 String[] sfDidList=request.getParameterValues("sfDid");
@@ -863,14 +880,14 @@ public class ProductionApplController {
 					BillOfMaterialHeader billOfMaterialHeader = new BillOfMaterialHeader();
 
 					billOfMaterialHeader.setApprovedDate(date);
-					billOfMaterialHeader.setApprovedUserId(0);
+					billOfMaterialHeader.setApprovedUserId(userResponse.getUser().getId());//hardcoded
 					billOfMaterialHeader.setDelStatus(0);
 					 
 					billOfMaterialHeader.setProductionDate(date);
 					billOfMaterialHeader.setProductionId(prodHeaderId);
 					billOfMaterialHeader.setReqDate(date);
-					billOfMaterialHeader.setSenderUserid(1);//hardcoded
-					billOfMaterialHeader.setStatus(0);
+					billOfMaterialHeader.setSenderUserid(userResponse.getUser().getId());//hardcoded
+					billOfMaterialHeader.setStatus(4);
 				
 					billOfMaterialHeader.setExInt1(postProdPlanHeader.getItemGrp1());//Category
 					billOfMaterialHeader.setRejApproveDate(date);
@@ -881,8 +898,7 @@ public class ProductionApplController {
 					billOfMaterialHeader.setIsManual(0);
 
 						map = new LinkedMultiValueMap<String, Object>();
-						String settingKey1 = new String();
-						map.add("settingKeyList", "BMSSTORE");
+						map.add("settingKeyList", "BMS");
 						FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
 								FrItemStockConfigureList.class);
 						int toDeptId=settingList1.getFrItemStockConfigure().get(0).getSettingValue();
@@ -900,23 +916,203 @@ public class ProductionApplController {
 						billOfMaterialHeader.setBillOfMaterialDetailed(bomDetailList);
 
 						System.out.println(" insert List " + billOfMaterialHeader.toString());
-						int prodId=billOfMaterialHeader.getProductionId();
 						Info info = restTemplate.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);
 						System.out.println(info);
 						if(info.getError()==false)
 						{
+							flag=1;
+						}
+						if(flag==1) {
+						RestTemplate rest = new RestTemplate();
+						MixingHeader mixingHeaderin = rest.postForObject(Constants.url + "insertMixingHeaderndDetailed", mixingHeader,
+								MixingHeader.class);
+					
+						if (mixingHeaderin != null) {
 							flag+=1;
 						}
-						/*if(info.getError()==false)
+						}
+					 }catch (Exception e) {
+							e.printStackTrace();
+						}
+				
+		 }catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
+		
+	}
+	
+	
+	@RequestMapping(value = "/findItemsByGrpIdForRmIssue", method = RequestMethod.GET)
+	public @ResponseBody List<Item> findItemsByGrpIdForRmIssue(HttpServletRequest request, HttpServletResponse response) {
+	
+		ArrayList<Item> itemsList = new ArrayList<Item>();
+		try {
+			int grpId = Integer.parseInt(request.getParameter("grpId"));
+			int prodHeaderId  = Integer.parseInt(request.getParameter("prodHeaderId"));
+			System.out.println("cat Id " + grpId);
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("itemGrp3", grpId);
+			map.add("prodHeaderId", prodHeaderId);
+			RestTemplate restTemplate = new RestTemplate();
+
+			Item[] item = restTemplate.postForObject(Constants.url + "findItemsByGrpIdForRmIssue", map, Item[].class);
+
+			itemsList = new ArrayList<Item>(Arrays.asList(item));
+			System.out.println("itemsList"+itemsList.toString());
+
+		} catch (Exception e) {
+			System.out.println("Exception in /AJAX findItemsByGrpIdForRmIssue");
+		}
+		return itemsList;
+	}
+	@RequestMapping(value = "/getSfDetailsForIssue", method = RequestMethod.POST)
+	public @ResponseBody List<GetSFPlanDetailForMixing> getSfDetailsForIssue(HttpServletRequest request, HttpServletResponse response) throws ParseException {
+		
+		List<GetSFPlanDetailForMixing> sfPlanDetailForBom=null;
+		try {
+			int prodHeaderId=Integer.parseInt(request.getParameter("prodHeaderId4"));
+			 String dept=request.getParameter("dept4");
+			System.err.println(dept);
+			String[] itemIds = request.getParameterValues("items[]");
+
+			StringBuilder sb = new StringBuilder();
+
+			for (int i = 0; i < itemIds.length; i++) {
+				sb = sb.append(itemIds[i] + ",");
+
+			}
+			String items = sb.toString();
+			items = items.substring(0, items.length() - 1);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+		
+            map.add("settingKeyList", dept);
+            FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+		    FrItemStockConfigureList.class);
+            map = new LinkedMultiValueMap<String, Object>();
+				map.add("headerId", prodHeaderId);
+				map.add("deptId", settingList.getFrItemStockConfigure().get(0).getSettingValue());
+				map.add("itemId", items);
+			GetSFPlanDetailForMixingList getSFPlanDetailForBomList = restTemplate
+					.postForObject(Constants.url + "getSfDetailsForIssue", map,
+						GetSFPlanDetailForMixingList.class);
+
+		sfPlanDetailForBom = getSFPlanDetailForBomList.getSfPlanDetailForMixing();
+		System.err.println(sfPlanDetailForBom);
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+	}
+		
+	return sfPlanDetailForBom;
+
+	}
+
+	@RequestMapping(value = "/postIssueData", method = RequestMethod.POST)
+	public @ResponseBody int postIssueData(HttpServletRequest request, HttpServletResponse response) throws ParseException {
+		 int flag=0;
+		try {
+				
+			 RestTemplate restTemplate = new RestTemplate();
+			 HttpSession session = request.getSession();
+				UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
+			 Date date = new Date();
+
+			 String dept=request.getParameter("dept4");
+
+			 int prodHeaderId=Integer.parseInt(request.getParameter("prodHeaderId4"));
+			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			 map.add("planHeaderId", prodHeaderId);
+
+				PostProdPlanHeader	postProdPlanHeader = restTemplate.postForObject(Constants.url + "PostProdPlanHeaderwithDetailed", map,
+						PostProdPlanHeader.class);
+				
+				map = new LinkedMultiValueMap<String, Object>();
+	            map.add("settingKeyList", dept);
+	            FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+			    FrItemStockConfigureList.class);
+
+				try {
+					 String[] itemDetailIdList=request.getParameterValues("itemDetailId");
+					 List<BillOfMaterialDetailed> bomDetailList = new ArrayList<BillOfMaterialDetailed>();
+
+					 for(int i=0;i<itemDetailIdList.length;i++)
+					 {
+							int rmId = Integer.parseInt(request.getParameter("sfId" + itemDetailIdList[i]));
+							int rmType = Integer.parseInt(request.getParameter("rmType" +itemDetailIdList[i]));
+							float rmQty = Float.parseFloat(request.getParameter("rmQty" + itemDetailIdList[i]));
+							float prevRmQty = Float.parseFloat(request.getParameter("prevRmQty" +itemDetailIdList[i]));
+							 String rmName=request.getParameter("rmName" + itemDetailIdList[i]);
+							 String uomName=request.getParameter("uom" + itemDetailIdList[i]);
+							 
+							BillOfMaterialDetailed	bomDetail = new BillOfMaterialDetailed();
+
+							bomDetail.setDelStatus(0);
+							bomDetail.setRmId(rmId);
+							bomDetail.setRmIssueQty(rmQty);
+							bomDetail.setUom(uomName);
+							bomDetail.setRmType(rmType);
+							bomDetail.setRmReqQty(rmQty);
+							bomDetail.setRmName(rmName);
+							
+							bomDetail.setRejectedQty(0);
+							bomDetail.setAutoRmReqQty(prevRmQty);
+							
+							bomDetail.setReturnQty(0);
+							bomDetailList.add(bomDetail);
+					 }
+					
+					int fromDeptId=settingList.getFrItemStockConfigure().get(0).getSettingValue(); //change on 18-09-2019
+					String fromDeptName=settingList.getFrItemStockConfigure().get(0).getSettingKey();
+					
+					BillOfMaterialHeader billOfMaterialHeader = new BillOfMaterialHeader();
+
+					billOfMaterialHeader.setApprovedDate(date);
+					billOfMaterialHeader.setApprovedUserId(userResponse.getUser().getId());//hardcoded
+					billOfMaterialHeader.setDelStatus(0);
+					 
+					billOfMaterialHeader.setProductionDate(date);
+					billOfMaterialHeader.setProductionId(prodHeaderId);
+					billOfMaterialHeader.setReqDate(date);
+					billOfMaterialHeader.setSenderUserid(userResponse.getUser().getId());//hardcoded
+					billOfMaterialHeader.setStatus(4);
+				
+					billOfMaterialHeader.setExInt1(postProdPlanHeader.getItemGrp1());//Category
+					billOfMaterialHeader.setRejApproveDate(date);
+					billOfMaterialHeader.setRejApproveUserId(0);
+					billOfMaterialHeader.setRejDate(date);
+					billOfMaterialHeader.setRejUserId(0);
+					
+					billOfMaterialHeader.setIsManual(0);
+
+						map = new LinkedMultiValueMap<String, Object>();
+						map.add("settingKeyList", "BMS");
+						FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+								FrItemStockConfigureList.class);
+						int toDeptId=settingList1.getFrItemStockConfigure().get(0).getSettingValue();
+						String toDeptName=settingList1.getFrItemStockConfigure().get(0).getSettingKey();
+						
+						billOfMaterialHeader.setToDeptId(toDeptId);
+						billOfMaterialHeader.setToDeptName(toDeptName);
+						billOfMaterialHeader.setIsProduction(1);
+						billOfMaterialHeader.setFromDeptId(fromDeptId);
+						billOfMaterialHeader.setFromDeptName(fromDeptName);
+						billOfMaterialHeader.setIsPlan(postProdPlanHeader.getIsPlanned());			
+
+						
+						System.out.println("bom detail List " + bomDetailList.toString());
+						billOfMaterialHeader.setBillOfMaterialDetailed(bomDetailList);
+
+						System.out.println(" insert List " + billOfMaterialHeader.toString());
+						Info info = restTemplate.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);
+						System.out.println(info);
+						if(info.getError()==false)
 						{
-							map = new LinkedMultiValueMap<String, Object>();
-							map.add("productionId", prodId);
-							map.add("flag", 1);
-							map.add("deptId", toDeptId);
-							int updateisBom = restTemplate.postForObject(Constants.url + "updateisMixingandBom", map,
-									Integer.class); 
-							System.out.println("updateIsBom "+updateisBom);
-						}*/
+							flag=1;
+						}
+						
 					 }catch (Exception e) {
 							e.printStackTrace();
 						}

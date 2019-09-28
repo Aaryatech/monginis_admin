@@ -68,7 +68,7 @@
 							<form action="${pageContext.request.contextPath}/insertBom"
 								name="validation-form" id="validation-form">
 								<div class="clearfix"></div>
-								<input type="text" name="isMix" value="${isMix}">
+								<input type="hidden" name="isMix" value="${isMix}">
 								<input type="hidden" name="fromDept" value="${fromDept}">
 									<input type="hidden" name="toDept" value="${toDept}">
 	                            <input type="hidden" name="catId" value="${catId}">
@@ -83,9 +83,7 @@
 												<th width="100" align="left">Single Cut</th>
 												<th width="100" align="left">Double Cut</th>
 												<th width="120" align="left">Qty</th>
-
 												<th width="120" align="left">Edit Qty</th>
-
 												<th width="100" align="left">Unit</th>
 											</tr>
 										</thead>

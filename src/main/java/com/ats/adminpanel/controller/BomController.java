@@ -263,7 +263,8 @@ int globalIsPlan;
 					bomDetail.setRmType(sfPlanDetailForBom.get(i).getRmType());
 					bomDetail.setRmReqQty(Float.parseFloat(editQty));
 					bomDetail.setRmName(sfPlanDetailForBom.get(i).getRmName());
-					
+					bomDetail.setExVarchar1(sfPlanDetailForBom.get(i).getSingleCut()+"");
+					bomDetail.setExVarchar2(sfPlanDetailForBom.get(i).getDoubleCut()+"");
 					bomDetail.setRejectedQty(0);
 					bomDetail.setAutoRmReqQty(sfPlanDetailForBom.get(i).getTotal());
 					
@@ -517,11 +518,11 @@ int globalIsPlan;
 			e.printStackTrace();
 		}
 		
-		 PdfPTable table = new PdfPTable(5);
+		 PdfPTable table = new PdfPTable(6);
 		 try {
 		 System.out.println("Inside PDF Table try");
 		 table.setWidthPercentage(100);
-	     table.setWidths(new float[]{0.5f, 1.4f,0.5f, 1.4f, 1.4f});
+	     table.setWidths(new float[]{0.5f, 1.4f, 1.4f, 1.4f,1.4f, 1.4f});
 	     Font headFont = new Font(FontFamily.HELVETICA, 10, Font.NORMAL, BaseColor.BLACK);
 	     Font headFont1 = new Font(FontFamily.HELVETICA, 11, Font.BOLD, BaseColor.BLACK);
 	     Font f=new Font(FontFamily.TIMES_ROMAN,12.0f,Font.UNDERLINE,BaseColor.BLUE);
@@ -534,12 +535,22 @@ int globalIsPlan;
 	     hcell = new PdfPCell(new Phrase("Item Name", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	     table.addCell(hcell);
-	    
+	  /*  
 	     hcell = new PdfPCell(new Phrase("Order Qty", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	     table.addCell(hcell);
-	     
+	     */
 	     hcell = new PdfPCell(new Phrase("Requested Qty", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
+	     
+	     hcell = new PdfPCell(new Phrase("Single Cut", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
+	     
+	     
+	     hcell = new PdfPCell(new Phrase("Double Cut", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	     table.addCell(hcell);
 	     
@@ -564,14 +575,29 @@ int globalIsPlan;
 	         cell.setPaddingRight(2);
 	         table.addCell(cell);
 	         
-	         cell = new PdfPCell(new Phrase(String.valueOf(bomDetail.getRmIssueQty()),headFont));
+	        /* cell = new PdfPCell(new Phrase(String.valueOf(bomDetail.getRmIssueQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(2);
+	         table.addCell(cell);*/
+	         
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(bomDetail.getAutoRmReqQty()),headFont));
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	         cell.setPaddingRight(2);
 	         table.addCell(cell);
 	         
 	         
-	         cell = new PdfPCell(new Phrase(String.valueOf(bomDetail.getAutoRmReqQty()),headFont));
+	         cell = new PdfPCell(new Phrase(String.valueOf(bomDetail.getExVarchar1()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(2);
+	         table.addCell(cell);
+	         
+	         
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(bomDetail.getExVarchar2()),headFont));
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	         cell.setPaddingRight(2);
@@ -680,7 +706,8 @@ int globalIsPlan;
 		HttpSession session=request.getSession();
 		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
 		
-		
+		String fromDept=request.getParameter("fromDept");
+		String toDept=request.getParameter("toDept");
 		int userId=userResponse.getUser().getId();
 		
 		
@@ -716,7 +743,7 @@ int globalIsPlan;
 		Info info = rest.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);	
 		System.out.println(info);
 		
-		return "redirect:/getBomList";
+		return "redirect:/getBomList/"+fromDept+"/"+toDept;
 	}
 	
 	
@@ -898,7 +925,7 @@ int globalIsPlan;
 						FrItemStockConfigureList.class);
 			map = new LinkedMultiValueMap<String, Object>();
 			String todep = new String(); 
-			todep = "BMS"; 
+			todep = "MIX"; 
 			map.add("settingKeyList", todep);
 			tosettingvalue = rest.postForObject(Constants.url + "getDeptSettingValue", map,
 					FrItemStockConfigureList.class);

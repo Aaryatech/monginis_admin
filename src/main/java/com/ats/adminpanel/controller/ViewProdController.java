@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.URLConnection;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -113,6 +114,10 @@ public class ViewProdController {
 	private String globalProdDate;
 	String fromDate, toDate;
 
+	public static float roundUp(float d) {
+		return BigDecimal.valueOf(d).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
+	}
+	
 	@RequestMapping(value = "/showProdHeader", method = RequestMethod.GET)
 	public ModelAndView showProdHeader(HttpServletRequest request, HttpServletResponse response) {
 
@@ -1015,8 +1020,8 @@ public class ViewProdController {
 
 	List<ProdMixingReqP1> prodMixingReqP1;
 
-	@RequestMapping(value = "/addToMixing/{headerId}", method = RequestMethod.GET)
-	public ModelAndView showMixing(@PathVariable("headerId")int headerId,HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/addToMixing/{headerId}/{dept}", method = RequestMethod.GET)
+	public ModelAndView showMixing(@PathVariable("headerId")int headerId,@PathVariable("dept")String dept,HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView mav = new ModelAndView("production/addMixing");
 
@@ -1025,10 +1030,15 @@ public class ViewProdController {
 			RestTemplate restTemplate = new RestTemplate();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-
-			System.out.println("globalHeaderId:" + globalHeaderId);
+			map.add("settingKeyList", dept);
+			
+			// web Service to get Dept Name And Dept Id for bom toDept and toDeptId
+			
+			FrItemStockConfigureList toSettingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
+			map = new LinkedMultiValueMap<String, Object>();
 			map.add("headerId", headerId);
-			map.add("deptId", 10);
+			map.add("deptId", toSettingList.getFrItemStockConfigure().get(0).getSettingValue());
 			prodMixingReqP1List = restTemplate.postForObject(Constants.url + "getSfPlanDetailForMixing", map,
 					ProdMixingReqP1List.class);
 
@@ -1046,7 +1056,7 @@ public class ViewProdController {
 			mav.addObject("globalTimeSlot", globalTimeSlot);
 			mav.addObject("productionId", headerId);
 			mav.addObject("isMixing", isMixing);
-			mav.addObject("deptId", 10);
+			mav.addObject("deptId", toSettingList.getFrItemStockConfigure().get(0).getSettingValue());
 			ModelAndView model = new ModelAndView("production/addBom");
 			model.addObject("prodDate", globalProdDate);
 		} catch (Exception e) {
@@ -1058,7 +1068,183 @@ public class ViewProdController {
 		return mav;
 
 	}
+	@RequestMapping(value = "/showMixPDF", method = RequestMethod.GET)
+	public void  showMixPDF(HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+		  BufferedOutputStream outStream = null;
+		Document doc=new Document();
+				
+		Document document = new Document(PageSize.A4);
+		//  ByteArrayOutputStream out = new ByteArrayOutputStream();
+		 
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
 
+		String timeStamp=dateFormat.format(cal.getTime());
+		String FILE_PATH=Constants.REPORT_SAVE;
+		File file=new File(FILE_PATH);
+		
+		PdfWriter writer = null;
+		
+		
+		 FileOutputStream out=new FileOutputStream(FILE_PATH);
+		   try {
+			    writer=PdfWriter.getInstance(document,out);
+		} catch (DocumentException e) {
+			
+			e.printStackTrace();
+		}
+		
+		 PdfPTable table = new PdfPTable(7);
+		 try {
+		 System.out.println("Inside PDF Table try");
+		 table.setWidthPercentage(100);
+	     table.setWidths(new float[]{0.9f, 2.0f,2.0f,2.0f,2.0f,2.0f,2.0f});
+	     Font headFont = new Font(FontFamily.HELVETICA,11 , Font.NORMAL, BaseColor.BLACK);
+	     Font headFont1 = new Font(FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.BLACK);
+	     Font f=new Font(FontFamily.TIMES_ROMAN,12.0f,Font.UNDERLINE,BaseColor.BLUE);
+	     
+	     PdfPCell hcell;
+	     hcell = new PdfPCell(new Phrase("Sr.", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     hcell.setBackgroundColor(BaseColor.PINK);
+	     table.addCell(hcell);
+
+	     hcell = new PdfPCell(new Phrase("SF Name", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     hcell.setBackgroundColor(BaseColor.PINK);
+	     table.addCell(hcell);
+	    
+	     
+	     hcell = new PdfPCell(new Phrase("Original Qty", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     hcell.setBackgroundColor(BaseColor.PINK);
+	     table.addCell(hcell);
+	     
+	     
+	     hcell = new PdfPCell(new Phrase("Multipl Factor", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     hcell.setBackgroundColor(BaseColor.PINK);
+	     table.addCell(hcell);
+	     
+	     hcell = new PdfPCell(new Phrase("Auto Order Qty", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     hcell.setBackgroundColor(BaseColor.PINK);
+	     table.addCell(hcell);
+	         
+	    
+	     hcell = new PdfPCell(new Phrase("Received Qty", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     hcell.setBackgroundColor(BaseColor.PINK);
+	     table.addCell(hcell);
+	     
+
+	     hcell = new PdfPCell(new Phrase("Production Qty", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     hcell.setBackgroundColor(BaseColor.PINK);
+	     table.addCell(hcell);
+	     
+	 
+	     int index=0;
+	     if(prodMixingReqP1.size()>0) {
+	     for (ProdMixingReqP1 mixDetail : prodMixingReqP1) {
+	       index++;
+	         PdfPCell cell;
+
+	        cell = new PdfPCell(new Phrase(String.valueOf(index),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         table.addCell(cell);
+
+	        
+	         cell = new PdfPCell(new Phrase(mixDetail.getRmName(),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+	         cell.setPaddingRight(4);
+	         table.addCell(cell);
+	         
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(mixDetail.getTotal()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(4);
+	         table.addCell(cell);
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(mixDetail.getMulFactor()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(4);
+	         table.addCell(cell);
+	         float prodQty=roundUp(mixDetail.getTotal()*mixDetail.getMulFactor());
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(prodQty),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(4);
+	         table.addCell(cell);
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(Math.round(prodQty)),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(4);
+	         table.addCell(cell);
+	         cell = new PdfPCell(new Phrase(String.valueOf(""),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(4);
+	         table.addCell(cell);
+	     }
+	     }
+
+	     document.open();
+	     Paragraph company = new Paragraph("Galdhar Foods\n" + 
+					"Factory Add: Plot No.48,Chikalthana Midc, Aurangabad." + 
+					"Phone:0240-2466217, Email: aurangabad@monginis.net", f);
+	     company.setAlignment(Element.ALIGN_CENTER);
+	     document.add(company);
+	     document.add(new Paragraph(" "));
+
+	     Paragraph heading = new Paragraph("Report-Mixing Request");
+	     heading.setAlignment(Element.ALIGN_CENTER);
+	     document.add(heading);
+	     DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+			
+			document.add(new Paragraph(""+ reportDate));
+			document.add(new Paragraph("\n"));
+	     document.add(table);
+	 	 int totalPages=writer.getPageNumber();
+	 	  document.close();
+	  	if (file != null) {
+
+				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+				if (mimeType == null) {
+
+					mimeType = "application/pdf";
+
+				}
+
+				response.setContentType(mimeType);
+
+				response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+				response.setContentLength((int) file.length());
+
+				InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+				try {
+					FileCopyUtils.copy(inputStream, response.getOutputStream());
+				} catch (IOException e) {
+					System.out.println("Excep in Opening a Pdf File for Mixing");
+					e.printStackTrace();
+				}
+			}
+	     
+	    
+	 } catch (DocumentException ex) {
+		 ex.printStackTrace();
+	 }
+	}
 	@RequestMapping(value = "/addMixingreqst", method = RequestMethod.POST)
 	public String addMixingreqst(HttpServletRequest request, HttpServletResponse response) {
 		// Constants.mainAct = 17;

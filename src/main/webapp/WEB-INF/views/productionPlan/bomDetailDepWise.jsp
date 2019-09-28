@@ -178,13 +178,15 @@
 														<th>Auto Request Qty</th>
 														<th>request Qty</th>
 														<th>issue Qty</th>
-														<c:choose>
+														<th>Single Cut</th>
+														<th>Double Cut</th>
+												<%-- 		<c:choose>
 															<c:when test="${billOfMaterialHeader.status!=0}">
 																<th>Return Qty</th>
 																<th>Reject Qty</th>
 															</c:when>
 														</c:choose>
-
+ --%>
 
 
 													</tr>
@@ -204,9 +206,10 @@
   															
   															
   															<td><c:out value="${bomwithdetaild.rmIssueQty}" /></td>
-																 
+															<td><c:out value="${bomwithdetaild.exVarchar1}" /></td>
+															<td><c:out value="${bomwithdetaild.exVarchar2}" /></td>
 
-															<c:choose>
+															<%-- <c:choose>
 																<c:when test="${billOfMaterialHeader.status!=0}">
 
 																	<td><c:out value="${bomwithdetaild.returnQty}" /></td>
@@ -215,7 +218,7 @@
 
 
 																</c:when>
-															</c:choose>
+															</c:choose> --%>
 													</c:forEach>
 
 

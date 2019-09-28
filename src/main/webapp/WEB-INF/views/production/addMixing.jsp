@@ -118,16 +118,14 @@
 												class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
 												<input type="submit" class="btn btn-primary"
 													value="Add to Production" id="search">
-
-											</div>
+                                 &nbsp;&nbsp;   &nbsp;&nbsp;   &nbsp;&nbsp;   &nbsp;&nbsp;
+								<a href="${pageContext.request.contextPath}/showMixPDF"
+								target="_blank">PDF</a></div>
 											<br>
 										</div>
 							<%-- 		</c:when>
 								</c:choose> --%>
 
-	<div style="text-align: center;">
-								<a href="${pageContext.request.contextPath}/showMixReqPdf"
-								target="_blank">PDF</a></div>
 							</form>
 						</div>
 					</div>
