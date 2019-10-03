@@ -212,7 +212,8 @@
 
 							<form action="${pageContext.request.contextPath}/dayEndProcess"
 								class="form-horizontal" method="post" id="validation-form">
-								<input type="hidden" id="clsdeptId" name="clsdeptId" value="${deptId}">
+								<input type="hidden" id="clsdeptId" name="clsdeptId"
+									value="${deptId}">
 								<div class="box">
 									<div class="box-title">
 										<h3>
@@ -312,8 +313,7 @@
 										</div>
 
 
-										<div
-											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-2">
+										<div class="box-content" style="text-align: center;">
 											<!-- <input type="submit" value="Submit" class="btn btn-primary"> -->
 											<!-- <input type="submit" value=" Store BOM"
 												class="btn btn-success">

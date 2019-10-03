@@ -51,6 +51,8 @@ public class BmsStockInsertController {
 		
 		ModelAndView model = new ModelAndView("productionPlan/bmsstock");//
 		
+		int deptId = Integer.parseInt(request.getParameter("deptId"));
+		model.addObject("deptId", deptId);
 
 		return model;
 
@@ -68,6 +70,8 @@ public class BmsStockInsertController {
 		RestTemplate rest = new RestTemplate();
 		List<GetItemSfHeader> itemHeaderList=new ArrayList<GetItemSfHeader>();
 		value=Integer.parseInt(request.getParameter("itemType"));
+		int deptId = Integer.parseInt(request.getParameter("deptId"));
+		
 		System.out.println("Value "+value);
 		
 		 RawMaterialUomList rawMaterialUomList = rest.getForObject(Constants.url + "rawMaterial/getRmUomList",
@@ -77,6 +81,7 @@ public class BmsStockInsertController {
 	        
 	        MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 	        map.add("type", value);
+	        map.add("deptId", deptId);
 	        try
 			{ 
 	        bmsStockHeaderedit =  rest.postForObject(Constants.url + "getBmsStockForEdit",map,BmsStockHeader.class);
