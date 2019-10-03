@@ -168,7 +168,7 @@ public class ReportController {
 			ParameterizedTypeReference<List<GetSpCakeOrderForProdApp>> typeRef = new ParameterizedTypeReference<List<GetSpCakeOrderForProdApp>>() {
 			};
 			ResponseEntity<List<GetSpCakeOrderForProdApp>> responseEntity = restTemplate
-					.exchange(Constants.url + "getSpCakeOrdersForApp", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+					.exchange(Constants.url + "getSpCakeAlbumOrdersForApp", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 			getSpCakeOrderForProdAppLsit = responseEntity.getBody();
 
