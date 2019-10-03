@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.context.annotation.Scope;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -29,6 +33,7 @@ import com.ats.adminpanel.controller.model.GetSfData;
 import com.ats.adminpanel.model.DepartmentList;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.MiniSubCategory;
+import com.ats.adminpanel.model.RawMaterial.GetItemSfHeader;
 import com.ats.adminpanel.model.RawMaterial.GetSfType;
 import com.ats.adminpanel.model.RawMaterial.ItemSfDetail;
 import com.ats.adminpanel.model.RawMaterial.SfItemDetailList;
@@ -97,12 +102,13 @@ public class ProductionApplController {
 					 List.class);
 			model.addObject("miniSubCategory", miniSubCategory);
 			DepartmentList departmentList=restTemplate.getForObject(Constants.url+"getAllDept", DepartmentList.class);
-			model.addObject("departmentList", departmentList);
+			model.addObject("departmentList", departmentList.getDepartmentList());
 		
 			 map = new LinkedMultiValueMap<String, Object>();
 			map.add("delStatus", 0);
 			List<GetSfType> sfTypeList=restTemplate.postForObject(Constants.url+"getSfType",map,List.class);
 			model.addObject("sfTypeList", sfTypeList);
+			
 			System.out.println("prod header " + prodPlanHeaderList.toString());
 			model.addObject("fromDate", fromDate);
 			model.addObject("toDate", toDate);
@@ -967,6 +973,34 @@ public class ProductionApplController {
 		}
 		return itemsList;
 	}
+	
+	@RequestMapping(value = "/findSfsByTypeId", method = RequestMethod.GET)
+	public @ResponseBody List<GetItemSfHeader> findSfsByTypeId(HttpServletRequest request, HttpServletResponse response) {
+	
+		List<GetItemSfHeader> itemHeaderList = new ArrayList<GetItemSfHeader>();
+	 try {
+			int typeId = Integer.parseInt(request.getParameter("typeId"));
+			System.err.println("typeId"+typeId);
+			//int prodHeaderId  = Integer.parseInt(request.getParameter("prodHeaderId"));
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("sfType", typeId);
+			
+			RestTemplate restTemplate = new RestTemplate();
+				ParameterizedTypeReference<List<GetItemSfHeader>> typeRef = new ParameterizedTypeReference<List<GetItemSfHeader>>() {
+				};
+				ResponseEntity<List<GetItemSfHeader>> responseEntity = restTemplate.exchange(Constants.url + "getItemSfHeadersBySfType",
+						HttpMethod.POST, new HttpEntity<>(map), typeRef);
+				
+				itemHeaderList = responseEntity.getBody();
+				System.err.println("itemHeaderList"+itemHeaderList.toString());
+
+		} catch (Exception e) {
+			System.out.println("Exception in /AJAX findSfByTypeId"+e.getMessage());
+		}
+		return itemHeaderList;
+	}
+	
 	@RequestMapping(value = "/getSfDetailsForIssue", method = RequestMethod.POST)
 	public @ResponseBody List<GetSFPlanDetailForMixing> getSfDetailsForIssue(HttpServletRequest request, HttpServletResponse response) throws ParseException {
 		

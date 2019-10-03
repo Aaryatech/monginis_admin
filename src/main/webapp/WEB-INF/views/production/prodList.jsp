@@ -14,6 +14,8 @@
 <c:url var="showDetailsForCp" value="/showDetailsForCp"/>
 <c:url var="showDetailsForCoating" value="/showDetailsForCoating"/>
 <c:url var="findItemsByGrpId" value="/findItemsByGrpIdForRmIssue"/>
+<c:url var="findSfByTypeId" value="/findSfsByTypeId"/>
+
 	<div class="container" id="main-container">
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
@@ -172,12 +174,12 @@
 																</c:when>
 																<c:when test="${type==2}">
 																	<div class="text-center">
- 																 <a href="" onclick="showDetailsForCp(${planHeader.productionHeaderId})" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm">CP</a>&nbsp;&nbsp;
-																 <a href="" onclick="showDetailsForLayering(${planHeader.productionHeaderId})" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm2">Layering</a>
-																 <a href="" onclick="showDetailsForCoating(${planHeader.productionHeaderId})" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm3">Coating</a>
-																 <a href="" onclick="showDetailsForIssue(${planHeader.productionHeaderId})" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm4">Issue</a>
-																  <a href="" onclick="showDetailsForManual(${planHeader.productionHeaderId})" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm5">Issue</a>
-																</div>
+ 																 <a href="" onclick="showDetailsForCp(${planHeader.productionHeaderId},'${planHeader.productionDate}')" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm">CP</a>&nbsp;&nbsp;
+																 <a href="" onclick="showDetailsForLayering(${planHeader.productionHeaderId},'${planHeader.productionDate}')" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm2">Layering</a>
+																 <a href="" onclick="showDetailsForCoating(${planHeader.productionHeaderId},'${planHeader.productionDate}')" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm3">Coating</a>
+																 <a href="" onclick="showDetailsForIssue(${planHeader.productionHeaderId},'${planHeader.productionDate}')" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm4">Issue</a>
+<%-- 																  <a href="" onclick="showDetailsForManual(${planHeader.productionHeaderId})" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm5">Issue</a>
+ --%>																</div>
 															    </c:when>
 																
 																<c:otherwise>
@@ -223,6 +225,9 @@
       </div> 
       <div class="modal-body mx-6" >
       	<form name="modalfrm" id="modalfrm"  method="post"> 
+      			<label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Production Id :<span id="prodIdSpan"></span></label>
+      		    <label class="col-sm-3 col-lg-4 control-label" style="color:#e20b31;">Production Date :<span id="prodDateSpan"></span></label>
+      		    
      		 <input type="hidden" name="dept" id="dept"  />
      		  <input type="hidden" name="prodHeaderId" id="prodHeaderId"  />
      			<div class="component">
@@ -303,6 +308,9 @@
        <div class="modal-body mx-6" >
       	<form name="modalfrm2" id="modalfrm2"  method="post"> 
      		 <input type="hidden" name="dept2" id="dept2"  />
+     		 	<label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Production Id :<span id="prodIdSpan2"></span></label>
+      		    <label class="col-sm-3 col-lg-4 control-label" style="color:#e20b31;">Production Date :<span id="prodDateSpan2"></span></label>
+      		    
      		 <input type="hidden" name="prodHeaderId2" id="prodHeaderId2"  />
      		  <input type="hidden" name="itemDetailId2" id="itemDetailId2"  />
      		 
@@ -386,6 +394,9 @@
        <div class="modal-body mx-6" >
       	<form name="modalfrm3" id="modalfrm3"  method="post"> 
      		 <input type="hidden" name="dept3" id="dept3"  />
+     		 	<label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Production Id :<span id="prodIdSpan3"></span></label>
+      		    <label class="col-sm-3 col-lg-4 control-label" style="color:#e20b31;">Production Date :<span id="prodDateSpan3"></span></label>
+      		    
      		 <input type="hidden" name="prodHeaderId3" id="prodHeaderId3"  />
      		  <input type="hidden" name="itemDetailId3" id="itemDetailId3"  />
      		 
@@ -467,6 +478,9 @@
       </div>
        <div class="modal-body mx-6" >
       	<form name="modalfrm4" id="modalfrm4"  method="post"> 
+      	 <div class="form-group">	<label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Production Id :<span id="prodIdSpan4"></span></label>
+      		    <label class="col-sm-3 col-lg-4 control-label" style="color:#e20b31;">Production Date :<span id="prodDateSpan4"></span></label>
+      		   </div> <br><br>
      		 <input type="hidden" name="dept4" id="dept4"  />
      		 <input type="hidden" name="prodHeaderId4" id="prodHeaderId4"  />
      		  <input type="hidden" name="itemDetailId4" id="itemDetailId4"  />
@@ -556,31 +570,35 @@
       </div>
        <div class="modal-body mx-6" >
       	<form name="modalfrm5" id="modalfrm5"  method="post"> 
+      	 <div class="form-group">
+      		<label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Production Id :<span id="prodIdSpan5"></span></label>
+      		    <label class="col-sm-3 col-lg-4 control-label" style="color:#e20b31;">Production Date :<span id="prodDateSpan5"></span></label>
+      	</div>   <br><br>
      		 <input type="hidden" name="dept5" id="dept5"  />
      		 <input type="hidden" name="prodHeaderId5" id="prodHeaderId5"  />
      		  <input type="hidden" name="itemDetailId5" id="itemDetailId5"  />
      		 <div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Dept</label>
-											<div class="col-sm-9 col-lg-2 controls">
+											<div class="col-sm-9 col-lg-3 controls">
 												<select data-placeholder="Select Type" name="deptId"
 													class="form-control chosen" tabindex="-1" id="deptId" onchange="onDeptChange(this.value)"
 													data-rule-required="true"  >
 						<option value="" disabled="disabled" selected style="text-align: left;">Select Department</option>
 														
-	                                        <c:forEach items="${departmentList}" var="departmentList">
+	                                         <c:forEach items="${departmentList}" var="departmentList">
 												<option value="${departmentList.deptId}" style="text-align: left;">${departmentList.deptName}</option>
-											</c:forEach> 
+											 </c:forEach> 
 
 												</select>
 											</div>
 											<label class="col-sm-3 col-lg-2 control-label">Type</label>
-											<div class="col-sm-9 col-lg-2 controls">
+											<div class="col-sm-9 col-lg-3 controls">
 												<select data-placeholder="Select Type" name="typeId"
 													class="form-control chosen" tabindex="-1" id="typeId" onchange="onTypeChange(this.value)"
 													data-rule-required="true"  >
 						<option value="" disabled="disabled" selected style="text-align: left;">Select Type</option>
 												
-	                                        <c:forEach items="${sfTypeList}" var="sfTypeList">
+	                                       <c:forEach items="${sfTypeList}" var="sfTypeList">
 												<option value="${sfTypeList.id}" style="text-align: left;">${sfTypeList.sfTypeName}</option>
 											</c:forEach> 
 												</select>
@@ -619,7 +637,7 @@
   </div>
 </div>
 </div>
-<!----------------------------------------------End Model 3----------------------------------------------->
+<!----------------------------------------------End Model 5----------------------------------------------->
 	<!-- END Main Content -->
 	<footer>
 	<p>2019 © MONGINIS.</p>
@@ -635,7 +653,7 @@
 </div>
 	<!-- END Container -->
 <script type="text/javascript">
-    function showDetailsForCp(prodHeaderId)
+    function showDetailsForCp(prodHeaderId,prodDate)
     {
     	$('#modeltable2 td').remove();
     	$.getJSON('${showDetailsForCp}', {
@@ -648,6 +666,10 @@
     		$('#modeltable td').remove();
     		document.getElementById("dept").value="BMS";
     		document.getElementById("prodHeaderId").value=prodHeaderId;
+    		document.getElementById("prodIdSpan").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodHeaderId;
+    		document.getElementById("prodDateSpan").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodDate;
+
+    		
     		$.each(data,function(key, data) {
     			 var actQty=0;
 				 if(data.total>0)
@@ -779,7 +801,7 @@
     	
     </script>
     <script type="text/javascript">
-    function showDetailsForLayering(prodHeaderId)
+    function showDetailsForLayering(prodHeaderId,prodDate)
     {
     	$('#modeltable4 td').remove();
     	$.getJSON('${showDetailsForLayering}', {
@@ -789,9 +811,12 @@
     		ajax : 'true',
     	},  function(data) {
     		var len = data.length;
-    		$('#modeltable3 td').remove();
+    		$('#modeltable3 tbody').empty();
+
     		document.getElementById("dept2").value="BMS";
     		document.getElementById("prodHeaderId2").value=prodHeaderId;
+    		document.getElementById("prodIdSpan2").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodHeaderId;
+    		document.getElementById("prodDateSpan2").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodDate;
     		$.each(data,function(key, data) {
     			 var actQty=0;
     				 if(data.total>0)
@@ -818,7 +843,7 @@
     }
     </script>
      <script type="text/javascript">
-    function showDetailsForCoating(prodHeaderId)
+    function showDetailsForCoating(prodHeaderId,prodDate)
     {
     	$('#modeltable6 td').remove();
     	$.getJSON('${showDetailsForCoating}', {
@@ -828,9 +853,12 @@
     		ajax : 'true',
     	},  function(data) {
     		var len = data.length;
-    		$('#modeltable5 td').remove();
+    		$('#modeltable5 tbody').empty();
+
     		document.getElementById("dept3").value="BMS";
     		document.getElementById("prodHeaderId3").value=prodHeaderId;
+    		document.getElementById("prodIdSpan3").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodHeaderId;
+    		document.getElementById("prodDateSpan3").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodDate;
     		$.each(data,function(key, data) {
     			 var actQty=0;
 				 if(data.total>0)
@@ -888,6 +916,7 @@
   		               
   		               var len = data.length;
   		     		$('#modeltable4 td').remove();
+  		     		
   		     		$.each(data,function(key, data) {
   		     			
   	    			  var rmName=(data.rmName.split("#"))[0]; var uom=(data.rmName.split("#"))[1];
@@ -1043,6 +1072,10 @@
 
             function onGrpChange(grpId) { 
             	
+            	$('#items')
+			    .find('option')
+			    .remove()
+			    .end();
             	var prodHeaderId=$('#prodHeaderId4').val();
                 $.getJSON('${findItemsByGrpId}', {
                     grpId : grpId,
@@ -1104,14 +1137,82 @@
                 });
 	 }
 }
+ function onTypeChange(typeId) { 
+ 
+ 	var prodHeaderId=$('#prodHeaderId4').val();
+     $.getJSON('${findSfByTypeId}', {
+    	 typeId : typeId,
+         prodHeaderId : prodHeaderId,
+         ajax : 'true'
+     }, function(data) {
+ 
+         var len = data.length;
+
+			$('#sfitems')
+		    .find('option')
+		    .remove()
+		    .end()
+		 $("#sfitems").append($("<option style='text-align: left;'></option>").attr( "value",-1).text("ALL"));
+         for ( var i = 0; i < len; i++) {
+             $("#sfitems").append(
+                     $("<option style='text-align: left;'></option>").attr(
+                         "value", data[i].sfId).text(data[i].sfName)
+                 );
+         }
+
+         $("#sfitems").trigger("chosen:updated");
+     });
+ }
+function onAllSfSelect() { 
+ 	
+var items=$('#sfitems').val();
+if(items.includes("-1")){
+
+ 	var prodHeaderId=$('#prodHeaderId4').val();
+ 	var typeId=$('#typeId').val();
+     $.getJSON('${findSfByTypeId}', {
+    	 typeId : typeId,
+         prodHeaderId : prodHeaderId,
+         ajax : 'true'
+     }, function(data) {
+ 
+         var len = data.length;
+
+			$('#sfitems')
+		    .find('option')
+		    .remove()
+		    .end()
+		 $("#sfitems").append($("<option style='text-align: left;' ></option>").attr( "value",-1).text("ALL"));
+         for ( var i = 0; i < len; i++) {
+                 
+                     
+             $("#sfitems").append(
+                     $("<option style='text-align: left;'  selected></option>").attr(
+                         "value", data[i].sfId).text(data[i].sfName)
+                 );
+            
+         }
+
+         $("#sfitems").trigger("chosen:updated");
+     });
+}
+}
 </script>
  <script type="text/javascript">
-    function showDetailsForIssue(prodHeaderId)
+    function showDetailsForIssue(prodHeaderId,prodDate)
     {
+    
     	$('#modeltable7 td').remove();
     	document.getElementById("dept4").value="BMS";
     	document.getElementById("prodHeaderId4").value=prodHeaderId;
-    	
+    	document.getElementById("prodIdSpan4").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodHeaderId;
+		document.getElementById("prodDateSpan4").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodDate;
+	
+    	$('#items')
+	    .find('option')
+	    .remove()
+	    .end()
+	    $("#items").trigger("chosen:updated");
     }
     function showDetailsForManual(prodHeaderId)
     {
