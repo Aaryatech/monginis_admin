@@ -63,23 +63,42 @@
 									<div class="col-sm-5 col-lg-3 controls">
 										<select name="matType" class="form-control chosen"
 											tabindex="6" id="mat_Type" required>
+
 											<c:choose>
-											<c:when test="${matType==1}">
-											<option value="1" selected>Raw Material</option>
-											<option value="2">Semi Finished</option>
-											</c:when>
-												<c:when test="${matType==2}">
-											<option value="1">Raw Material</option>
-											<option value="2" selected>Semi Finished</option>
-											</c:when>
-											<c:otherwise>
-												<option value="1">Raw Material</option>
-											<option value="2">Semi Finished</option>
-											
-											</c:otherwise>
+												<c:when test="${deptId==10}">
+													<c:choose>
+														<c:when test="${matType==1}">
+															<option value="2" selected>Semi Finished</option>
+														</c:when>
+														<c:otherwise>
+															<option value="2" selected>Semi Finished</option>
+														</c:otherwise>
+													</c:choose>
+												</c:when>
+												<c:otherwise>
+													<c:choose>
+														<c:when test="${matType==1}">
+															<option value="1" selected>Raw Material</option>
+															<option value="2">Semi Finished</option>
+														</c:when>
+														<c:when test="${matType==2}">
+															<option value="1">Raw Material</option>
+															<option value="2" selected>Semi Finished</option>
+														</c:when>
+														<c:otherwise>
+															<option value="1">Raw Material</option>
+															<option value="2">Semi Finished</option>
+
+														</c:otherwise>
+													</c:choose>
+
+												</c:otherwise>
 											</c:choose>
+
 										</select>
 									</div>
+									<input type="hidden" id="deptId" name="deptId"
+										value="${deptId}">
 								</div>
 
 
@@ -94,32 +113,44 @@
 
 											<option value="-1">Select Option</option>
 											<c:choose>
-											<c:when test="${sType==1}">
-											<option value="1" id="currentStock" selected>Get Current Stock</option>
-											<option value="2" id="monthStock">Get Stock Between Month</option>
-											<option value="3" id="dateStock">Get Stock Between Dates</option>
-											
-											</c:when>
-											<c:when test="${sType==2}">
-											<option value="1" id="currentStock">Get Current Stock</option>
-											<option value="2" id="monthStock" selected>Get Stock Between Month</option>
-											<option value="3" id="dateStock">Get Stock Between Dates</option>
-											
-											</c:when>
-											<c:when test="${sType==3}">
-											<option value="1" id="currentStock">Get Current Stock</option>
-											<option value="2" id="monthStock">Get Stock Between Month</option>
-											<option value="3" id="dateStock" selected>Get Stock Between Dates</option>
-											
-											</c:when>
-											<c:otherwise>
-											<option value="1" id="currentStock">Get Current Stock</option>
-											<option value="2" id="monthStock">Get Stock Between Month</option>
-											<option value="3" id="dateStock" >Get Stock Between Dates</option>
-											
-											</c:otherwise>
+												<c:when test="${sType==1}">
+													<option value="1" id="currentStock" selected>Get
+														Current Stock</option>
+													<option value="2" id="monthStock">Get Stock
+														Between Month</option>
+													<option value="3" id="dateStock">Get Stock Between
+														Dates</option>
+
+												</c:when>
+												<c:when test="${sType==2}">
+													<option value="1" id="currentStock">Get Current
+														Stock</option>
+													<option value="2" id="monthStock" selected>Get
+														Stock Between Month</option>
+													<option value="3" id="dateStock">Get Stock Between
+														Dates</option>
+
+												</c:when>
+												<c:when test="${sType==3}">
+													<option value="1" id="currentStock">Get Current
+														Stock</option>
+													<option value="2" id="monthStock">Get Stock
+														Between Month</option>
+													<option value="3" id="dateStock" selected>Get
+														Stock Between Dates</option>
+
+												</c:when>
+												<c:otherwise>
+													<option value="1" id="currentStock">Get Current
+														Stock</option>
+													<option value="2" id="monthStock">Get Stock
+														Between Month</option>
+													<option value="3" id="dateStock">Get Stock Between
+														Dates</option>
+
+												</c:otherwise>
 											</c:choose>
-											
+
 										</select>
 									</div>
 
@@ -168,9 +199,11 @@
 
 
 								<div class="form-group">
-								<div class="col-md-3" style="color: green;"><b>Stock Date:</b>	${stockDate}</div>
+									<div class="col-md-3" style="color: green;">
+										<b>Stock Date:</b> ${stockDate}
+									</div>
 									<div class="col-sm-9 col-sm-offset-3 col-lg-5 col-lg-offset-3">
-								
+
 										<input type="submit" class="btn btn-primary" value="Search">
 									</div>
 								</div>
@@ -179,7 +212,7 @@
 
 							<form action="${pageContext.request.contextPath}/dayEndProcess"
 								class="form-horizontal" method="post" id="validation-form">
-
+								<input type="hidden" id="clsdeptId" name="clsdeptId" value="${deptId}">
 								<div class="box">
 									<div class="box-title">
 										<h3>
@@ -206,17 +239,10 @@
 															<tr>
 																<th>Sr No</th>
 																<th>Mat Name</th>
-																<th>Opening Stock</th>
-																<th>Prod Issue Qty</th>
-																<th>Prod Rej Qty</th>
-																<th>Prod Return Qty</th>
-																<th>Mix Issue Qty</th>
-																<th>Mix Return Qty</th>
-																<th>Mix Rej Qty</th>
-																<th>Store Received Qty</th>
-																<th>Store Rej Qty</th>
-
-																<th>Closing Qty</th>
+																<th style="text-align: right;">Opening Stock</th>
+																<th style="text-align: right;">Production Qty</th>
+																<th style="text-align: right;">Issue Qty</th>
+																<th style="text-align: right;">Closing Qty</th>
 
 															</tr>
 
@@ -229,22 +255,14 @@
 																	<td><c:out value="${count.index+1}"></c:out></td>
 																	<td><c:out value="${stockList.rmName}"></c:out></td>
 
-																	<td><c:out value="${stockList.bmsOpeningStock}"></c:out>
-																	<td><c:out value="${stockList.prodIssueQty}"></c:out>
-																	</td>
-																	<td><c:out value="${stockList.prodRejectedQty}"></c:out>
-																	</td>
-																	<td><c:out value="${stockList.prodReturnQty}"></c:out>
-																	</td>
-																	<td><c:out value="${stockList.mixingIssueQty}"></c:out>
-																	<td><c:out
-																			value="${stockList.mixingRejectedQty}"></c:out>
-																	<td><c:out value="${stockList.mixingReturnQty}"></c:out>
-																	<td><c:out value="${stockList.storeIssueQty}"></c:out>
-																	</td>
-																	<td><c:out value="${stockList.storeRejectedQty}"></c:out>
-																	</td>
-																	<td><c:out value="${stockList.bmsClosingStock}"></c:out>
+																	<td style="text-align: right;"><c:out
+																			value="${stockList.bmsOpeningStock}"></c:out></td>
+																	<td style="text-align: right;"><c:out
+																			value="${stockList.mixingIssueQty}"></c:out></td>
+																	<td style="text-align: right;"><c:out
+																			value="${stockList.prodIssueQty}"></c:out></td>
+																	<td style="text-align: right;"><c:out
+																			value="${stockList.bmsClosingStock}"></c:out>
 																</tr>
 															</c:forEach>
 														</tbody>
@@ -258,18 +276,12 @@
 														id="table1">
 														<thead>
 															<tr>
-
 																<th>Sr No</th>
 																<th>Mat Name</th>
-																<th>Opening Stock</th>
-																<th>Prod Issue Qty</th>
-																<th>Prod Rej Qty</th>
-																<th>Prod Return Qty</th>
-																<th>Mix Prod Qty</th>
-
-																<th>Mix Rej Qty</th>
-
-																<th>Closing Qty</th>
+																<th style="text-align: right;">Opening Stock</th>
+																<th style="text-align: right;">Production Qty</th>
+																<th style="text-align: right;">Issue Qty</th>
+																<th style="text-align: right;">Closing Qty</th>
 
 															</tr>
 
@@ -281,17 +293,14 @@
 																<tr>
 																	<td><c:out value="${count.index+1}"></c:out></td>
 																	<td><c:out value="${stockList.sfName}"></c:out></td>
-																	<td><c:out value="${stockList.bmsOpeningStock}"></c:out>
-																	<td><c:out value="${stockList.prodIssueQty}"></c:out>
-																	</td>
-																	<td><c:out value="${stockList.prodRejectedQty}"></c:out>
-																	</td>
-																	<td><c:out value="${stockList.prodReturnQty}"></c:out>
-																	</td>
-																	<td><c:out value="${stockList.mixingIssueQty}"></c:out>
-																	<td><c:out
-																			value="${stockList.mixingRejectedQty}"></c:out></td>
-																	<td><c:out value="${stockList.bmsClosingStock}"></c:out>
+																	<td style="text-align: right;"><c:out
+																			value="${stockList.bmsOpeningStock}"></c:out></td>
+																	<td style="text-align: right;"><c:out
+																			value="${stockList.mixingIssueQty}"></c:out></td>
+																	<td style="text-align: right;"><c:out
+																			value="${stockList.prodIssueQty}"></c:out></td>
+																	<td style="text-align: right;"><c:out
+																			value="${stockList.bmsClosingStock}"></c:out>
 																</tr>
 															</c:forEach>
 														</tbody>
