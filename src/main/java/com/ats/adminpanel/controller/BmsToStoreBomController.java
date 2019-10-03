@@ -149,8 +149,7 @@ public class BmsToStoreBomController {
 					if(getBmsCurrentStockList.getBmsCurrentStock().get(j).getRmId()==bmsStockDetailedList.get(i).getRmId())
 					{
 						GetBmsCurrentStock getBmsCurrentStock=getBmsCurrentStockList.getBmsCurrentStock().get(j); 
-							float stockQty=(getBmsCurrentStock.getBmsOpeningStock()+getBmsCurrentStock.getStoreIssueQty()+getBmsCurrentStock.getProdReturnQty()+getBmsCurrentStock.getMixingReturnQty())
-							-(getBmsCurrentStock.getProdIssueQty()+getBmsCurrentStock.getMixingIssueQty()+getBmsCurrentStock.getStoreRejectedQty());
+							float stockQty=(getBmsCurrentStock.getBmsOpeningStock()+getBmsCurrentStock.getMixingIssueQty()+getBmsCurrentStock.getProdIssueQty());
 							bmsStockDetailedList.get(i).setClosingQty(stockQty);
 							
 							/*System.out.println("name"+getBmsCurrentStock.getRmName());

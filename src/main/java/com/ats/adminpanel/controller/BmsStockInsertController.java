@@ -51,8 +51,15 @@ public class BmsStockInsertController {
 		
 		ModelAndView model = new ModelAndView("productionPlan/bmsstock");//
 		
-		int deptId = Integer.parseInt(request.getParameter("deptId"));
-		model.addObject("deptId", deptId);
+		try {
+			
+			int deptId = Integer.parseInt(request.getParameter("deptId"));
+			model.addObject("deptId", deptId);
+			
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
 
 		return model;
 
