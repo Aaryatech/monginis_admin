@@ -256,14 +256,26 @@
 																	<td><c:out value="${count.index+1}"></c:out></td>
 																	<td><c:out value="${stockList.rmName}"></c:out></td>
 
-																	<td style="text-align: right;"><c:out
-																			value="${stockList.bmsOpeningStock}"></c:out></td>
-																	<td style="text-align: right;"><c:out
-																			value="${stockList.mixingIssueQty}"></c:out></td>
-																	<td style="text-align: right;"><c:out
-																			value="${stockList.prodIssueQty}"></c:out></td>
-																	<td style="text-align: right;"><c:out
-																			value="${stockList.bmsClosingStock}"></c:out>
+																	<td style="text-align: right;"><fmt:formatNumber
+																			type="number" maxFractionDigits="2"
+																			minFractionDigits="2"
+																			value="${stockList.bmsOpeningStock}"
+																			groupingUsed="false" /></td>
+																	<td style="text-align: right;"><fmt:formatNumber
+																			type="number" maxFractionDigits="2"
+																			minFractionDigits="2"
+																			value="${stockList.mixingIssueQty}"
+																			groupingUsed="false" /></td>
+																	<td style="text-align: right;"><fmt:formatNumber
+																			type="number" maxFractionDigits="2"
+																			minFractionDigits="2"
+																			value="${stockList.prodIssueQty}"
+																			groupingUsed="false" /></td>
+																	<td style="text-align: right;"><fmt:formatNumber
+																			type="number" maxFractionDigits="2"
+																			minFractionDigits="2"
+																			value="${stockList.bmsClosingStock}"
+																			groupingUsed="false" /></td>
 																</tr>
 															</c:forEach>
 														</tbody>
@@ -294,14 +306,26 @@
 																<tr>
 																	<td><c:out value="${count.index+1}"></c:out></td>
 																	<td><c:out value="${stockList.sfName}"></c:out></td>
-																	<td style="text-align: right;"><c:out
-																			value="${stockList.bmsOpeningStock}"></c:out></td>
-																	<td style="text-align: right;"><c:out
-																			value="${stockList.mixingIssueQty}"></c:out></td>
-																	<td style="text-align: right;"><c:out
-																			value="${stockList.prodIssueQty}"></c:out></td>
-																	<td style="text-align: right;"><c:out
-																			value="${stockList.bmsClosingStock}"></c:out>
+																	<td style="text-align: right;"><fmt:formatNumber
+																			type="number" maxFractionDigits="2"
+																			minFractionDigits="2"
+																			value="${stockList.bmsOpeningStock}"
+																			groupingUsed="false" /></td>
+																	<td style="text-align: right;"><fmt:formatNumber
+																			type="number" maxFractionDigits="2"
+																			minFractionDigits="2"
+																			value="${stockList.mixingIssueQty}"
+																			groupingUsed="false" /></td>
+																	<td style="text-align: right;"><fmt:formatNumber
+																			type="number" maxFractionDigits="2"
+																			minFractionDigits="2"
+																			value="${stockList.prodIssueQty}"
+																			groupingUsed="false" /></td>
+																	<td style="text-align: right;"><fmt:formatNumber
+																			type="number" maxFractionDigits="2"
+																			minFractionDigits="2"
+																			value="${stockList.bmsClosingStock}"
+																			groupingUsed="false" /></td>
 																</tr>
 															</c:forEach>
 														</tbody>
