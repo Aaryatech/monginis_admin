@@ -954,14 +954,28 @@ public class ProductionApplController {
 	
 		ArrayList<Item> itemsList = new ArrayList<Item>();
 		try {
+			RestTemplate restTemplate = new RestTemplate();
+
 			int grpId = Integer.parseInt(request.getParameter("grpId"));
 			int prodHeaderId  = Integer.parseInt(request.getParameter("prodHeaderId"));
+			String fromDept=request.getParameter("fromDept");
+			String toDept=request.getParameter("toDept");
 			System.out.println("cat Id " + grpId);
-
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+            map.add("settingKeyList", fromDept);
+            FrItemStockConfigureList frSettingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+		    FrItemStockConfigureList.class);
+            
+            map = new LinkedMultiValueMap<String, Object>();
+            map.add("settingKeyList", toDept);
+            FrItemStockConfigureList toSettingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+		    FrItemStockConfigureList.class);
+            
+			 map = new LinkedMultiValueMap<String, Object>();
 			map.add("itemGrp3", grpId);
 			map.add("prodHeaderId", prodHeaderId);
-			RestTemplate restTemplate = new RestTemplate();
+            map.add("fromDept", frSettingList.getFrItemStockConfigure().get(0).getSettingValue());
+            map.add("toDept", toSettingList.getFrItemStockConfigure().get(0).getSettingValue());
 
 			Item[] item = restTemplate.postForObject(Constants.url + "findItemsByGrpIdForRmIssue", map, Item[].class);
 
@@ -1095,6 +1109,7 @@ public class ProductionApplController {
 							bomDetail.setAutoRmReqQty(prevRmQty);
 							
 							bomDetail.setReturnQty(0);
+							bomDetail.setExInt1(1);//Status of issue
 							bomDetailList.add(bomDetail);
 					 }
 					
@@ -1118,7 +1133,7 @@ public class ProductionApplController {
 					billOfMaterialHeader.setRejApproveUserId(0);
 					billOfMaterialHeader.setRejDate(date);
 					billOfMaterialHeader.setRejUserId(0);
-					
+					billOfMaterialHeader.setExInt2(1);//Status of issue
 					billOfMaterialHeader.setIsManual(0);
 
 						map = new LinkedMultiValueMap<String, Object>();

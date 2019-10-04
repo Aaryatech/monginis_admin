@@ -655,6 +655,8 @@
 <script type="text/javascript">
     function showDetailsForCp(prodHeaderId,prodDate)
     {
+    	$("#prodIdSpan").css("color", "red");
+		$("#prodDateSpan").css("color", "red");
     	$('#modeltable2 td').remove();
     	$.getJSON('${showDetailsForCp}', {
     		
@@ -669,13 +671,21 @@
     		document.getElementById("prodIdSpan").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodHeaderId;
     		document.getElementById("prodDateSpan").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodDate;
 
-    		
+    		var approveStatusStyle="disabled";var styleClass="";
     		$.each(data,function(key, data) {
+    			
+    			if(data.doubleCut==0){
+    				approveStatusStyle="";
+    			}
+    			if(data.doubleCut==1){
+    				styleClass="disabled";
+    			}
+    			
     			 var actQty=0;
 				 if(data.total>0)
     			 actQty=(data.total/1000).toFixed(3);
 						var tr = $('<tr></tr>');
-						tr.append($('<td></td>').html("<input type=checkbox name='chk'  value="+data.itemDetailId+"   id="+ data.itemDetailId+"  >  <label for="+ data.itemDetailId+" ></label>"));
+						tr.append($('<td></td>').html("<input type=checkbox name='chk'  "+styleClass+" value="+data.itemDetailId+"   id="+ data.itemDetailId+"  >  <label for="+ data.itemDetailId+" ></label>"));
 					  	tr.append($('<td></td>').html(key+1));
 					  	tr.append($('<td></td>').html(data.rmName+""+"<input type=hidden value='"+data.rmName+"'  id=rmName"+data.itemDetailId+"  name=rmName"+data.itemDetailId+"  >"));
 					 
@@ -691,9 +701,13 @@
     		});
     		var tr = $('<tr></tr>');
 			tr.append($('<td colspan="6"></td>').html("<a href='#' style='text-decoration:underline;' onclick='checkAll()' > Select All </a> &nbsp;&nbsp;<a href='#' style='color:grey;text-decoration:underline;' onclick='uncheckAll()'> Remove </a> "));
-			tr.append($('<td ></td>').html(" <button type='button' class='btn btn-primary' id='addSfItem' onclick='onSfAdd()'  >Add</button>"));
+			tr.append($('<td ></td>').html(" <button type='button' "+approveStatusStyle+"   class='btn btn-primary' id='addSfItem' onclick='onSfAdd()'  >Add</button>"));
 			$('#modeltable tbody').append(tr);
-    		
+    		if(approveStatusStyle=="disabled")
+    		{
+    			$("#prodIdSpan").css("color", "green");
+    			$("#prodDateSpan").css("color", "green");
+    		}
     	});
     }
    
@@ -845,6 +859,8 @@
      <script type="text/javascript">
     function showDetailsForCoating(prodHeaderId,prodDate)
     {
+    	$("#prodIdSpan3").css("color", "red");
+		$("#prodDateSpan3").css("color", "red");
     	$('#modeltable6 td').remove();
     	$.getJSON('${showDetailsForCoating}', {
     		
@@ -859,7 +875,17 @@
     		document.getElementById("prodHeaderId3").value=prodHeaderId;
     		document.getElementById("prodIdSpan3").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodHeaderId;
     		document.getElementById("prodDateSpan3").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodDate;
+    		var approveStatusStyle="disabled";var styleClass="";
     		$.each(data,function(key, data) {
+    			
+    			if(data.doubleCut==0){
+    				approveStatusStyle="";
+    			}
+    			if(data.doubleCut==1){
+    				styleClass="disabled";
+    			}
+    			
+    			
     			 var actQty=0;
 				 if(data.total>0)
     			 actQty=(data.total/1000).toFixed(3);
@@ -875,12 +901,16 @@
 					  	tr.append($('<td></td>').html("<input type=text onkeypress='return IsNumeric(event);' style='width:100px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control' name='rmQty"+data.itemDetailId+"'  id=rmQty"
 								+ data.itemDetailId+" value="+actQty+" /> &nbsp;  <input type=hidden id=sfId"+data.itemDetailId+"  name=sfId"+data.itemDetailId+"  value="+data.rmId+" />" ));
 						tr.append($('<td></td>').html(data.uom+""+"<input type=hidden value='"+data.uom+"'  id=uom"+data.itemDetailId+"  name=uom"+data.itemDetailId+"  >"));
-						tr.append($('<td></td>').html("<input type=button name='btn' id='btn' value='BOM' class='btn btn-primary' onclick=onSfAdd3("+data.itemDetailId+") > "));
+						tr.append($('<td></td>').html("<input type=button name='btn'  "+styleClass+"    id='btn' value='BOM' class='btn btn-primary' onclick=onSfAdd3("+data.itemDetailId+") > "));
 
 						$('#modeltable5 tbody').append(tr);
     		});
     		
-    		
+    		if(approveStatusStyle=="disabled")
+    		{
+    			$("#prodIdSpan3").css("color", "green");
+    			$("#prodDateSpan3").css("color", "green");
+    		}
     	});
     }
     </script>
@@ -1080,6 +1110,8 @@
                 $.getJSON('${findItemsByGrpId}', {
                     grpId : grpId,
                     prodHeaderId : prodHeaderId,
+                    fromDept:"PROD",
+                    toDept:"BMS",
                     ajax : 'true'
                 }, function(data) {
             
@@ -1092,11 +1124,18 @@
 				 $("#items").append($("<option style='text-align: left;'></option>").attr( "value",-1).text("ALL"));
                     for ( var i = 0; i < len; i++) {
                             
-                                
+                                if(data[i].itemId==1){
                         $("#items").append(
-                                $("<option style='text-align: left;'></option>").attr(
-                                    "value", data[i].id).text(data[i].itemName)
-                            );
+                                $("<option style='text-align: left;' disabled></option>").attr(
+                                    "value", data[i].id).text(data[i].itemName)   );
+                                }
+                                else
+                                	{
+                                	 $("#items").append(
+                                             $("<option style='text-align: left;'></option>").attr(
+                                                 "value", data[i].id).text(data[i].itemName)   );
+                                	}
+                         
                        
                     }
 
@@ -1112,7 +1151,9 @@
             	var grpId=$('#grpId').val();
                 $.getJSON('${findItemsByGrpId}', {
                     grpId : grpId,
-                    prodHeaderId : prodHeaderId,
+                    prodHeaderId : prodHeaderId, 
+                    fromDept:"PROD",
+                    toDept:"BMS",
                     ajax : 'true'
                 }, function(data) {
             
@@ -1239,7 +1280,7 @@ $('#searchIssueItems').click(function(){
   		     		$('#modeltable7 td').remove();
   		     		$.each(data,function(key, data) {
   		     		    document.getElementById("searchIssueItems").value="Search";
-
+                    if(data.doubleCut==1){
   		     		 var actQty=0;
   					 if(data.total>0)
   	    			 actQty=(data.total/1000).toFixed(3);
@@ -1257,6 +1298,7 @@ $('#searchIssueItems').click(function(){
   							tr.append($('<td></td>').html(data.uom+""+"<input type=hidden value='"+data.uom+"'  id=uom"+data.itemDetailId+"  name=uom"+data.itemDetailId+"  >"));
 
   							$('#modeltable7 tbody').append(tr);
+                    }
   	     		});
   		     	        
   		             },
