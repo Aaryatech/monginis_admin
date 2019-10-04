@@ -2,29 +2,29 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
- <style>
+<style>
 .alert {
-    padding: 20px;
-    background-color: #f44336;
-    color: white;
+	padding: 20px;
+	background-color: #f44336;
+	color: white;
 }
 
 .closebtn {
-    margin-left: 15px;
-    color: white;
-    font-weight: bold;
-    float: right;
-    font-size: 22px;
-    line-height: 20px;
-    cursor: pointer;
-    transition: 0.3s;
+	margin-left: 15px;
+	color: white;
+	font-weight: bold;
+	float: right;
+	font-size: 22px;
+	line-height: 20px;
+	cursor: pointer;
+	transition: 0.3s;
 }
 
 .closebtn:hover {
-    color: black;
+	color: black;
 }
 </style>
 <style>
@@ -44,207 +44,223 @@
 	}
 }
 </style>
-  <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
- <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 <body>
 
 
 
 	<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-<div class="container" id="main-container">
+	<div class="container" id="main-container">
 
-	<!-- BEGIN Sidebar -->
-	<div id="sidebar" class="navbar-collapse collapse">
+		<!-- BEGIN Sidebar -->
+		<div id="sidebar" class="navbar-collapse collapse">
 
-		<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
+			<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
 
-		<div id="sidebar-collapse" class="visible-lg">
-			<i class="fa fa-angle-double-left"></i>
-		</div>
-		<!-- END Sidebar Collapse Button -->
-	</div>
-	<!-- END Sidebar -->
-
-
-
-	<!-- BEGIN Content -->
-	<div id="main-content">
-		<!-- BEGIN Page Title -->
-		<div class="page-title">
-			<div>
-				<h1>
-					<i class="fa fa-file-o"></i>Bill of Material to Store
-				</h1>
-				<!-- <h4>Bill for franchises</h4> -->
+			<div id="sidebar-collapse" class="visible-lg">
+				<i class="fa fa-angle-double-left"></i>
 			</div>
+			<!-- END Sidebar Collapse Button -->
 		</div>
-		<!-- END Page Title -->
+		<!-- END Sidebar -->
 
-		
-		<!-- BEGIN Main Content -->
-		<div class="box">
-			<div class="box-title">
-				<h3>
-					<i class="fa fa-bars"></i>Raw Material Stock Calculation
-				</h3>
 
-			</div> 
+
+		<!-- BEGIN Content -->
+		<div id="main-content">
+			<!-- BEGIN Page Title -->
+			<div class="page-title">
+				<div>
+					<h1>
+						<i class="fa fa-file-o"></i>Bill of Material to Store
+					</h1>
+					<!-- <h4>Bill for franchises</h4> -->
+				</div>
+			</div>
+			<!-- END Page Title -->
+
+
+			<!-- BEGIN Main Content -->
+			<div class="box">
+				<div class="box-title">
+					<h3>
+						<i class="fa fa-bars"></i>Raw Material Stock Calculation
+					</h3>
+
+				</div>
 				<div class=" box-content">
-				 <form action="submitBmstoStore" method="post" class="form-horizontal" id=
-									"validation-form"
-										enctype="multipart/form-data" method="post">
-				<c:choose><c:when test="${flag=='0'}">
-					<div class="row">
-						<div class="col-md-12 table-responsive">
-							<table class="table table-bordered table-striped fill-head "
-								style="width: 100%" id="table_grid">
-								<thead>
-									<tr>
-										
-										<th align="left"><input type="checkbox"
-													onClick="selectAll(this)"
-													  /> Select All</th>
-										<th>Sr.No.</th>
-										<th>RM Name</th>
-										<th>Re Order</th>
-										<th>Max Order</th>
-										<th>Current Stock Qty</th>
-										 <th>Order Qty</th>
-									 
+					<form action="submitBmstoStore" method="post"
+						class="form-horizontal" id="validation-form"
+						enctype="multipart/form-data" method="post">
+						<c:choose>
+							<c:when test="${flag=='0'}">
+								<div class="row">
+									<div class="col-md-12 table-responsive">
+										<table class="table table-bordered table-striped fill-head "
+											style="width: 100%" id="table_grid">
+											<thead>
+												<tr>
+
+													<th align="left"><input type="checkbox"
+														onClick="selectAll(this)" /> Select All</th>
+													<th>Sr.No.</th>
+													<th>RM Name</th>
+													<th>Re Order</th>
+													<th>Max Order</th>
+													<th>Current Stock Qty</th>
+													<th>Order Qty</th>
 
 
-									</tr>
-								</thead>
-								
-								<tbody>
 
-									<c:forEach items="${rmList}" var="rmList"
-													varStatus="count">
+												</tr>
+											</thead>
 
-											 	
-													 
-													
-												 
-												 
-												 <c:forEach items="${rmStockList}" var="rmStockList" >
-													
-													
-													<c:choose>
-													<c:when test="${rmList.rmId==rmStockList.rmId}">
-													 
-													<tr>
-													<c:choose>
-													<c:when test="${rmStockList.closingQty < rmList.rmRolQty}">
-													 <td><input type="checkbox" name="select_to_approve"
-																id="select_to_approve" checked readonly
-																value="${rmList.rmId}"  
-																 ></td>
-																 <c:set var="orderQty" value="${rmList.rmMaxQty-rmStockList.closingQty}" />
-																  
-													</c:when>
-													 
-													 
-													
-													<c:otherwise>
-													  <td><input type="checkbox" name="select_to_approve"
-																id="select_to_approve"
-																value="${rmList.rmId}"  
-																onchange="selectCheck(${rmList.rmId})" ></td>
-																  <c:set var="orderQty" value="0" />
-																   
-													
-													</c:otherwise>
-													</c:choose>  
-													
-													
-													
-													
-														<td  ><c:out value="${count.index+1}" /></td>
+											<tbody>
 
-														<td align="left"  ><c:out
-																value="${rmList.rmName}" /></td>
-																
-																<td align="right"  ><c:out
-																value="${rmList.rmRolQty}" /></td>
-																
-																 
-													  
-												 	 <td align="right"  >${rmList.rmMaxQty}  
-																<input type="hidden" name='rmMaxQty${rmList.rmId }' class='form-control' readonly id='rmMaxQty${rmList.rmId }'   value="${rmList.rmMaxQty}">
-																</td>
-												 	
-													<td align="right"  >${rmStockList.closingQty}
-																<input type="hidden" name='closingQty${rmList.rmId }' class='form-control' readonly id='closingQty${rmList.rmId }'   value=<c:out value = "${rmStockList.closingQty}"/>>
-																</td>
-																
-																 <c:choose>
-													<c:when test="${rmStockList.closingQty < rmList.rmRolQty}">
-													<td align="right"><input type=text name='orderQty${rmList.rmId}' onkeyup="validation('${rmList.rmId}')" class='form-control'   id='orderQty${rmList.rmId }'   value=<c:out value = "${orderQty}"/>>
-																</td> 
-																  
-													</c:when>
-													 
-													 
-													
-													<c:otherwise>
-													  <td align="right"><input type=text name='orderQty${rmList.rmId}' onkeyup="validation('${rmList.rmId}')" class='form-control' readonly id='orderQty${rmList.rmId }'   value=<c:out value = "${orderQty}"/>>
-																</td>
-																   
-													
-													</c:otherwise>
-													</c:choose>
-													  <%-- <td align="right"><input type=text name='orderQty${rmList.rmId}' onkeyup="validation('${rmList.rmId}')" class='form-control' readonly id='orderQty${rmList.rmId }'   value=<c:out value = "${orderQty}"/>>
-																</td> --%>  	
-														
-												 
-												
-													 	</tr>
-															 </c:when>
-															 </c:choose>
-															</c:forEach>	
-							 
-															
-																 
+												<c:forEach items="${rmList}" var="rmList" varStatus="count">
+
+
+
+
+
+
+													<c:forEach items="${rmStockList}" var="rmStockList">
+
+
+														<c:choose>
+															<c:when test="${rmList.rmId==rmStockList.rmId}">
+
+																<tr>
+																	<c:choose>
+																		<c:when
+																			test="${rmStockList.closingQty < rmList.rmRolQty}">
+																			<td><input type="checkbox"
+																				name="select_to_approve" id="select_to_approve"
+																				checked readonly value="${rmList.rmId}"></td>
+																			<c:set var="orderQty"
+																				value="${rmList.rmMaxQty-rmStockList.closingQty}" />
+
+																		</c:when>
+
+
+
+																		<c:otherwise>
+																			<td><input type="checkbox"
+																				name="select_to_approve" id="select_to_approve"
+																				value="${rmList.rmId}"
+																				onchange="selectCheck(${rmList.rmId})"></td>
+																			<c:set var="orderQty" value="0" />
+
+
+																		</c:otherwise>
+																	</c:choose>
+
+																	<td><c:out value="${count.index+1}" /></td>
+
+																	<td align="left"><c:out value="${rmList.rmName}" /></td>
+
+																	<td align="right"><c:out
+																			value="${rmList.rmRolQty}" /></td>
+
+
+
+																	<td align="right">${rmList.rmMaxQty}<input
+																		type="hidden" name='rmMaxQty${rmList.rmId }'
+																		class='form-control' readonly
+																		id='rmMaxQty${rmList.rmId }'
+																		value="${rmList.rmMaxQty}">
+																	</td>
+
+																	<td align="right"><fmt:formatNumber type="number"
+																			maxFractionDigits="2" minFractionDigits="2"
+																			value="${rmStockList.closingQty}"
+																			groupingUsed="false" /><input type="hidden"
+																		name='closingQty${rmList.rmId }' class='form-control'
+																		readonly id='closingQty${rmList.rmId }'
+																		value=<c:out value = "${rmStockList.closingQty}"/>>
+																	</td>
+
+																	<c:choose>
+																		<c:when
+																			test="${rmStockList.closingQty < rmList.rmRolQty}">
+																			<td align="right"><input type=text
+																				name='orderQty${rmList.rmId}'
+																				onkeyup="validation('${rmList.rmId}')"
+																				class='form-control' id='orderQty${rmList.rmId }'
+																				value=<c:out value = "${orderQty}"/>></td>
+
+																		</c:when>
+
+
+
+																		<c:otherwise>
+																			<td align="right"><input type=text
+																				name='orderQty${rmList.rmId}'
+																				onkeyup="validation('${rmList.rmId}')"
+																				class='form-control' readonly
+																				id='orderQty${rmList.rmId }'
+																				value=<c:out value = "${orderQty}"/>></td>
+
+
+																		</c:otherwise>
+																	</c:choose>
+																	<%-- <td align="right"><input type=text name='orderQty${rmList.rmId}' onkeyup="validation('${rmList.rmId}')" class='form-control' readonly id='orderQty${rmList.rmId }'   value=<c:out value = "${orderQty}"/>>
+																</td> --%>
+
+
+
+																</tr>
+															</c:when>
+														</c:choose>
+													</c:forEach>
+
+
+
 												</c:forEach>
-								</tbody>
-							</table>
-						</div>
-					</div>
-			<div class="row">
-						<div class="col-md-12" style="text-align: center">
-							<input type="submit" class="btn btn-info" value="Submit" name="Submit" id="Submit">
+											</tbody>
+										</table>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-md-12" style="text-align: center">
+										<input type="submit" class="btn btn-info" value="Submit"
+											name="Submit" id="Submit">
 
-						</div>
-					</div></c:when>
-					<c:otherwise>
-					<div class="alert">
-  <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-  <strong>Please Day End First!!</strong>
-</div>
-					</c:otherwise>
-					
-					</c:choose>
+									</div>
+								</div>
+							</c:when>
+							<c:otherwise>
+								<div class="alert">
+									<span class="closebtn"
+										onclick="this.parentElement.style.display='none';">&times;</span>
+									<strong>Please Day End First!!</strong>
+								</div>
+							</c:otherwise>
+
+						</c:choose>
 					</form>
+				</div>
+
+
+
+
+
+			</div>
+
+			<!-- END Main Content -->
+
+			<footer>
+			<p>2017 © Monginis.</p>
+			</footer>
+
+			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+				class="fa fa-chevron-up"></i></a>
+
+
 		</div>
-		
-		
-		
-				 
-	 
 	</div>
 
-	<!-- END Main Content -->
-
-	<footer>
-	<p>2017 © Monginis.</p>
-	</footer>
-
-	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-		class="fa fa-chevron-up"></i></a>
-
- 
-</div></div>
-	
 
 	<!--basic scripts-->
 	<script
@@ -301,10 +317,10 @@
 	<script src="${pageContext.request.contextPath}/resources/js/flaty.js"></script>
 	<script
 		src="${pageContext.request.contextPath}/resources/js/flaty-demo-codes.js"></script>
-		
-		
-		
-		<script>
+
+
+
+	<script>
 	
 		function selectAll(source) {
 			checkboxes = document.getElementsByName('select_to_approve');
@@ -347,7 +363,7 @@
 		}
 		
 		</script>
-		
-		
+
+
 </body>
 </html>
