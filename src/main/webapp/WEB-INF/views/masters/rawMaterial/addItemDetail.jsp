@@ -199,7 +199,7 @@
 				                 </div>
 									  <label class="col-sm-3 col-lg-2 control-label">Multiplication Factor</label>
 								 	<div class="col-sm-6 col-lg-2 controls">
-						     	    <input type="text" name="multiFactor" id="multiFactor" class="form-control" placeholder="Multiplication Factor" value="0.0"   data-rule-required="true"/>
+						     	    <input type="text" name="multiFactor" id="multiFactor" class="form-control" placeholder="Multiplication Factor" value="1.0"   data-rule-required="true"/>
 									
 									</div> 
 									 </div>
@@ -570,8 +570,14 @@ $(document).ready(function() {
 	var rmName=$('#rm_id option:selected').text();
 	var isMultiFactor=$("input:radio:checked").val();
 	//alert("isMultiFactor"+isMultiFactor);
-	var multiFactor= $("#multiFactor").val();//alert("multiFactor"+multiFactor);
-	var ratioItemId= $("#ratio_item_id").val();//alert("ratioItemId"+ratioItemId);
+	var multiFactor= $("#multiFactor").val();
+	var ratioItemId=0;
+	if(isMultiFactor!=0){
+	//alert("multiFactor"+multiFactor);
+	 ratioItemId= $("#ratio_item_id").val();
+	 if(ratioItemId==null || ratioItemId=="")
+		 ratioItemId=0;
+	}
 	
 	if(editFlag==true)
 	{
@@ -837,13 +843,13 @@ function validation() {
 		alert("Please Enter No. of Pieces Per Item.");
 	}else if(chkedRadioBtn==1){
 		
-		var ratioItemId=$("#ratio_item_id").val();
+	//	var ratioItemId=$("#ratio_item_id").val();
 		var multiFactor=$("#multiFactor").val();
 		
-		if (ratioItemId ==null) {
+	/* 	if (ratioItemId ==null) {
 			isValid = false;
 			alert("Please Select ItemId ");
-		}else if(multiFactor<=0||isNaN(multiFactor))
+		}else */ if(multiFactor<=0||isNaN(multiFactor))
 			{
 			isValid = false;
 			alert("Please Enter Valid Multiplication factor");

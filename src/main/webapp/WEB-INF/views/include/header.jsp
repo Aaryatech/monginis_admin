@@ -74,8 +74,8 @@
 	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.stack.js"></script>
 <script
 	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.crosshair.js"></script>
-<script
-	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script>
+<%-- <script
+	src="${pageContext.request.contextPath}/resources/assets/flot/jquery.flot.tooltip.min.js"></script> --%>
 <script
 	src="${pageContext.request.contextPath}/resources/assets/sparkline/jquery.sparkline.min.js"></script>
 	
@@ -83,9 +83,9 @@
 	src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/date.js"></script>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstrap-datepicker.js"></script>
-<script type="text/javascript"
+<%-- <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/js/common.js"></script>
-	
+	 --%>
 	<script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/jquery.validate.min.js"></script>
 <script type="text/javascript"

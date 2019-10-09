@@ -7,13 +7,13 @@ public class GetCurrentBmsSFStock {
 	private String sfName;
 	private int sfUomId;
 	
-	float prodIssueQty;
+	float prodIssueQty; //prodIssueQty
 	float prodRejectedQty;
 	float prodReturnQty;
-	float mixingIssueQty;
+	float mixingIssueQty; //productionQty
 	float mixingRejectedQty; 
 	
-	float bmsOpeningStock;
+	float bmsOpeningStock;  //openingQty
 	
 	float bmsClosingStock;
 

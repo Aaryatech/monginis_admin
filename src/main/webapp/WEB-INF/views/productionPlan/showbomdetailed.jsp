@@ -114,16 +114,19 @@
 								<div class="box-content">
 								<c:set var="prod" value="PROD"></c:set>
 								<c:set var="mix" value="MIX"></c:set>
-									<c:choose>
+								<input type="hidden" name="fromDept" id="fromDept" value="${billOfMaterialHeader.fromDeptName}"/>
+								<input type="hidden" name="toDept" id="toDept" value="${billOfMaterialHeader.toDeptName}" />
+								<c:set var="depname" value="${billOfMaterialHeader.fromDeptName}"></c:set>
+									<%-- <c:choose>
 									 	<c:when test="${billOfMaterialHeader.fromDeptName==prod}">
-									 	<c:set var="depname" value="Production"></c:set>
+									 
 									 	
 									 	</c:when>
 									 	<c:when test="${billOfMaterialHeader.fromDeptName==mix}">
 									 	<c:set var="depname" value="Mixing"></c:set>
 									 	
 									 	</c:when>
-									</c:choose>
+									</c:choose> --%>
 
 									<div class="col-md-2">From Department Name</div>
 									<div class="col-md-3">
@@ -163,6 +166,8 @@
 														<th>Name</th>
 														<th>Auto Request Qty</th>
 														<th>Request Qty</th>
+														<th>Single Cut</th>
+														<th>Double Cut</th>
 														<th>Issue Qty</th>
 														<c:choose>
 															<c:when test="${billOfMaterialHeader.status!=0}">
@@ -186,7 +191,8 @@
 															<td><c:out value="${bomwithdetaild.rmName}" /></td>
 															<td><c:out value="${bomwithdetaild.autoRmReqQty}" /></td>
 															<td><c:out value="${bomwithdetaild.rmReqQty}" /></td>
-
+                                                             <td><c:out value="${bomwithdetaild.exVarchar1}" /></td>
+															  <td><c:out value="${bomwithdetaild.exVarchar2}" /></td>
 															<c:choose>
 																<c:when test="${billOfMaterialHeader.status==0}">
 																	<td><input type="text"
@@ -200,7 +206,7 @@
 																	<td><c:out value="${bomwithdetaild.rmIssueQty}" /></td>
 																</c:otherwise>
 															</c:choose>
-
+                                                           
 															<c:choose>
 																<c:when test="${billOfMaterialHeader.status!=0}">
 

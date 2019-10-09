@@ -348,7 +348,7 @@
 										<div class="col-sm-2 controls">
 											<input type="number" name="weight" id="weight"
 												placeholder="weight" min="1" max="100" class="form-control"
-												value="1" />
+												value="1" oninput="validity.valid||(value='');" />
 										</div>
 									</div>
 								</div>

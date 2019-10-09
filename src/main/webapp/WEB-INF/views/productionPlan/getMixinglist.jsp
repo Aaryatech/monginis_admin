@@ -97,7 +97,7 @@
 															
 														</c:when>
 														<c:when test="${todaysmixrequest.status==2}">
-															<c:set var="sts" value="Production Complet"></c:set>
+															<c:set var="sts" value="Production Completed"></c:set>
 															
 														</c:when>
 													</c:choose>
@@ -112,7 +112,7 @@
 																
 													  
 													<td align="left"><c:out
-																value="${todaysmixrequest.productionBatch}" />  </td>
+																value="${todaysmixrequest.productionId}" />  </td>
 															
 														<%-- 	<td align="left"><c:out	
 																value="${todaysmixrequest.timeSlot}" />

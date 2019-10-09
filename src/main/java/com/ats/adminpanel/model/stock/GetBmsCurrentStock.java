@@ -6,16 +6,16 @@ public class GetBmsCurrentStock {
 	
 		private int rmId;
 		private String rmName;
-		float prodIssueQty;
+		float prodIssueQty; //issueQty
 		float prodRejectedQty;
 		
 		float prodReturnQty;
-		float mixingIssueQty;
+		float mixingIssueQty; //productionQty
 		float mixingRejectedQty; 
 		float mixingReturnQty;
 		float storeIssueQty; 
 		float storeRejectedQty;
-		float bmsOpeningStock;
+		float bmsOpeningStock; //openingQty
 		
 		float bmsClosingStock;
 		

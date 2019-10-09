@@ -69,7 +69,16 @@ public class BmsStockController {
 	public ModelAndView showBmsStock(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView mav = new ModelAndView("stock/bmsStock");
-		System.out.println("inside show BMS stock page ");
+
+		try {
+
+			int deptId = Integer.parseInt(request.getParameter("deptId"));
+
+			mav.addObject("deptId", deptId);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
 		Constants.mainAct = 8;
 		Constants.subAct = 48;
@@ -79,17 +88,20 @@ public class BmsStockController {
 
 	@RequestMapping(value = "/getBmsStock", method = RequestMethod.POST)
 	public ModelAndView getBmsStock(HttpServletRequest request, HttpServletResponse response) {
-		System.out.println("inside get Bms Stock Page ");
+
 		ModelAndView mav = new ModelAndView("stock/bmsStock");
-		System.out.println("inside get BMS Stock Page  ");
-		String stockDate="";
+
+		String stockDate = "";
 		try {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
-			int sType=Integer.parseInt(request.getParameter("selectStock"));
+			int sType = Integer.parseInt(request.getParameter("selectStock"));
 			Date cDate = new Date();
 			int matType = Integer.parseInt(request.getParameter("matType"));
+
+			int deptId = Integer.parseInt(request.getParameter("deptId"));
+
 			// if getCurrentStock
 			if (Integer.parseInt(request.getParameter("selectStock")) == 1) {
 
@@ -108,9 +120,8 @@ public class BmsStockController {
 					map = new LinkedMultiValueMap<String, Object>();
 
 					map.add("status", 0);
-
 					map.add("rmType", 1);
-
+					map.add("deptId", deptId);
 					BmsStockHeader bmsStockHeader = restTemplate.postForObject(Constants.url + "getBmsStockHeader", map,
 							BmsStockHeader.class);
 
@@ -126,7 +137,7 @@ public class BmsStockController {
 					SimpleDateFormat sdF = new SimpleDateFormat("dd-MM-yyyy");
 
 					String globalDate = sdF.format(globalHeaderDate);
-					stockDate=globalDate;
+					stockDate = globalDate;
 					globalHeaderDate = sdF.parse(globalDate);
 
 					System.out.println(" RM :Global Header Date " + globalHeaderDate);
@@ -134,13 +145,13 @@ public class BmsStockController {
 					globalBmsHeaderId = bmsStockHeader.getBmsStockId();
 
 					int showDayEnd = 0;
-					
+
 					if (headerDate.before(cDate) || headerDate.equals(cDate)) {
 
 						showDayEnd = 1;
 
 					} else {
-						
+
 						showDayEnd = 0;
 					}
 
@@ -185,14 +196,10 @@ public class BmsStockController {
 
 					}
 
-					System.out.println(
-							"Mix Dept Id " + mixDeptId + "Prod Dept Id " + prodDeptId + "BMS Dept Id " + bmsDeptId);
 					map = new LinkedMultiValueMap<String, Object>();
 
 					map = new LinkedMultiValueMap<String, Object>();
-					map.add("prodDeptId", prodDeptId);
-					map.add("bmsDeptId", bmsDeptId);
-					map.add("mixDeptId", mixDeptId);
+					map.add("deptId", deptId);
 					map.add("stockDate", globalDate);
 
 					bmsCurrentStockList = restTemplate.postForObject(Constants.url + "getCurentBmsStockRM", map,
@@ -209,9 +216,7 @@ public class BmsStockController {
 
 						bmsCurrentStock.get(i).setBmsClosingStock(0);
 
-						bmsCurrentStock.get(i).setBmsClosingStock(((stock.getBmsOpeningStock()
-								+ stock.getProdReturnQty() + stock.getStoreIssueQty() + stock.getMixingReturnQty())
-								- (stock.getProdIssueQty() + stock.getMixingIssueQty() + stock.getStoreRejectedQty())));
+						bmsCurrentStock.get(i).setBmsClosingStock(stock.getBmsOpeningStock()+stock.getMixingIssueQty()-stock.getProdIssueQty());
 
 					}
 
@@ -230,9 +235,8 @@ public class BmsStockController {
 					map = new LinkedMultiValueMap<String, Object>();
 
 					map.add("status", 0);
-
 					map.add("rmType", globalRmType);
-
+					map.add("deptId", deptId);
 					BmsStockHeader bmsStockHeader = restTemplate.postForObject(Constants.url + "getBmsStockHeader", map,
 							BmsStockHeader.class);
 
@@ -248,23 +252,21 @@ public class BmsStockController {
 					SimpleDateFormat sdF = new SimpleDateFormat("dd-MM-yyyy");
 
 					String globalDate = sdF.format(globalHeaderDate);
-					stockDate=globalDate;
+					stockDate = globalDate;
 					globalHeaderDate = sdF.parse(globalDate);
-
-					System.out.println("SF: Global Header Date " + globalHeaderDate);
 
 					globalBmsHeaderId = bmsStockHeader.getBmsStockId();
 
 					int showDayEnd = 0;
-					
+
 					if (headerDate.before(cDate) || headerDate.equals(cDate)) {
 
 						showDayEnd = 1;
 
 					} else {
-						
+
 						showDayEnd = 0;
-						
+
 					}
 
 					// System.out.println("show day end " + showDayEnd);
@@ -282,16 +284,10 @@ public class BmsStockController {
 
 					System.out.println("SettingKeyList" + settingList.toString());
 
-					int prodDeptId = 0;
-
 					List<FrItemStockConfigure> settingKeyList = settingList.getFrItemStockConfigure();
 
-					prodDeptId = settingKeyList.get(0).getSettingValue();
-
-					System.out.println("SF: Prod Dept Id " + prodDeptId);
-
 					map = new LinkedMultiValueMap<String, Object>();
-					map.add("prodDeptId", prodDeptId);
+					map.add("deptId", deptId);
 					map.add("stockDate", globalDate);
 
 					currentBmsSFStockList = restTemplate.postForObject(Constants.url + "getCurentBmsStockSF", map,
@@ -312,8 +308,7 @@ public class BmsStockController {
 						bmsCurrentStockSf.get(i).setBmsClosingStock(0);
 
 						bmsCurrentStockSf.get(i).setBmsClosingStock(
-								((stock.getBmsOpeningStock() + stock.getMixingIssueQty() + stock.getProdReturnQty())
-										- stock.getProdIssueQty()));
+								stock.getBmsOpeningStock() + stock.getMixingIssueQty() - stock.getProdIssueQty());
 
 					}
 					mav.addObject("stockList", bmsCurrentStockSf);
@@ -384,9 +379,10 @@ public class BmsStockController {
 				}
 
 			} // end of else Get Stock Between two Date
-          mav.addObject("sType", sType);
-          mav.addObject("matType", matType);
-          mav.addObject("stockDate", stockDate);
+			mav.addObject("sType", sType);
+			mav.addObject("matType", matType);
+			mav.addObject("stockDate", stockDate);
+			mav.addObject("deptId", deptId);
 		} catch (Exception e) {
 
 			System.out.println("Exce in Getting Stock BMS stock " + e.getMessage());
@@ -398,10 +394,11 @@ public class BmsStockController {
 	}
 
 	@RequestMapping(value = "/dayEndProcess", method = RequestMethod.POST)
-	public ModelAndView dayEndProcess(HttpServletRequest request, HttpServletResponse response) {
+	public String dayEndProcess(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView mav = new ModelAndView("stock/bmsStock");
-
+		
+		int clsdeptId = Integer.parseInt(request.getParameter("clsdeptId"));
 		try {
 
 			BmsStockHeader bmsStockHeader = new BmsStockHeader();
@@ -413,7 +410,8 @@ public class BmsStockController {
 
 			RestTemplate restTemplate = new RestTemplate();
 
-			System.out.println(" Inside day End Process BMS Stock ");
+			
+			
 
 			if (globalRmType == 1) {
 
@@ -453,14 +451,11 @@ public class BmsStockController {
 						rmUpdate, Info.class);
 				System.out.println("Response BMS Stock Update for Day End RM : " + updateBmsRmStockResponse);
 
-				bmsStockHeader.setBmsStockId(globalBmsHeaderId);
-
-				bmsStockHeader.setBmsStatus(1);
-
-				bmsStockHeader.setBmsStockDate(globalHeaderDate);
-
+				bmsStockHeader.setBmsStockId(globalBmsHeaderId); 
+				bmsStockHeader.setBmsStatus(1); 
+				bmsStockHeader.setBmsStockDate(globalHeaderDate); 
 				bmsStockHeader.setRmType(1);
-				bmsStockHeader.setExInt(0);
+				bmsStockHeader.setExInt(clsdeptId);
 				bmsStockHeader.setExInt1(0);
 				bmsStockHeader.setExBoll(0);
 				bmsStockHeader.setExBoll1(0);
@@ -483,7 +478,7 @@ public class BmsStockController {
 				String output = sdf.format(c.getTime());
 				Date stockDate = sdf.parse(output);
 
-				System.out.println("Date for Next Day Entry : RM Stock " + stockDate);
+				//System.out.println("Date for Next Day Entry : RM Stock " + stockDate);
 
 				BmsStockHeader bmsStockHeaderInsert = new BmsStockHeader();
 
@@ -491,7 +486,7 @@ public class BmsStockController {
 				bmsStockHeaderInsert.setBmsStockDate(stockDate);
 				bmsStockHeaderInsert.setBmsStatus(0);
 				bmsStockHeaderInsert.setRmType(globalRmType);
-				bmsStockHeaderInsert.setExInt(0);
+				bmsStockHeaderInsert.setExInt(clsdeptId);
 				bmsStockHeaderInsert.setExInt1(0);
 				bmsStockHeaderInsert.setExBoll(0);
 				bmsStockHeaderInsert.setExBoll1(0);
@@ -514,7 +509,7 @@ public class BmsStockController {
 					bmsStockDetailedlist.add(bmsStockDetailed);
 
 				}
-				
+
 				bmsStockHeaderInsert.setBmsStockDetailed(bmsStockDetailedlist);
 
 				bmsStockHeader = new BmsStockHeader();
@@ -525,13 +520,13 @@ public class BmsStockController {
 				System.out.println("bsm RM Stock Header Insert Response" + bmsStockHeader.toString());
 
 			} else if (globalRmType == 2) {
-				
+
 				// day end for Sf Stock
 
 				UpdateBmsSfStockList sfUpdate = new UpdateBmsSfStockList();
 
 				List<UpdateBmsSfStock> sfStockList = new ArrayList<>();
-		
+
 				System.out.println("Day End For SF ");
 
 				for (int j = 0; j < bmsCurrentStockSf.size(); j++) {
@@ -562,22 +557,22 @@ public class BmsStockController {
 				bmsStockHeader.setBmsStockId(globalBmsHeaderId);
 				bmsStockHeader.setBmsStockDate(globalHeaderDate);
 				bmsStockHeader.setRmType(globalRmType);
-				bmsStockHeader.setExInt(0);
+				bmsStockHeader.setExInt(clsdeptId);
 				bmsStockHeader.setExInt1(0);
 				bmsStockHeader.setExBoll(0);
 				bmsStockHeader.setExBoll1(0);
 				bmsStockHeader.setExVarchar("");
 				bmsStockHeader.setBmsStatus(1);
-				
+
 				bmsStockHeaderResponse = restTemplate.postForObject(Constants.url + "insertBmsStock", bmsStockHeader,
 						BmsStockHeader.class);// end of update bms stock Day end Process
-			
+
 				System.out.println("bMS SF Stock Header Update Response" + bmsStockHeaderResponse.toString());
-				
+
 				// Inserting next Day Entry for BMS Stock//
 
 				System.out.println("Inserting next day stock Entry for BMS Stock");
-				
+
 				SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 				Calendar c = Calendar.getInstance();
 				c.setTime(globalHeaderDate); // Now use today date.
@@ -593,7 +588,7 @@ public class BmsStockController {
 				bmsStockHeaderInsert.setBmsStockDate(stockDate);
 				bmsStockHeaderInsert.setBmsStatus(0);
 				bmsStockHeaderInsert.setRmType(globalRmType);
-				bmsStockHeaderInsert.setExInt(0);
+				bmsStockHeaderInsert.setExInt(clsdeptId);
 				bmsStockHeaderInsert.setExInt1(0);
 				bmsStockHeaderInsert.setExBoll(0);
 				bmsStockHeaderInsert.setExBoll1(0);
@@ -614,14 +609,14 @@ public class BmsStockController {
 					bmsStockDetailedlist.add(bmsStockDetailed);
 
 				}
-				
+
 				bmsStockHeaderInsert.setBmsStockDetailed(bmsStockDetailedlist);
 
 				bmsStockHeader = new BmsStockHeader();
-				
+
 				bmsStockHeader = restTemplate.postForObject(Constants.url + "insertBmsStock", bmsStockHeaderInsert,
 						BmsStockHeader.class);// End of inserting BMS Stock for Next Day
-				
+
 				System.out.println("bMS SF Stock Header iNSERT Response" + bmsStockHeader.toString());
 
 			}
@@ -632,7 +627,7 @@ public class BmsStockController {
 			e.printStackTrace();
 		}
 
-		return mav;
+		return "redirect:/showBmsStock?deptId="+clsdeptId;
 
 	}
 

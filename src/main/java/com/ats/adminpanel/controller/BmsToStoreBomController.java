@@ -76,7 +76,7 @@ public class BmsToStoreBomController {
 			map.add("status", 0);
 			 
 			map.add("rmType", 1);
-			
+			map.add("deptId", 11);
 			
 			BmsStockHeader bmsStockHeader=rest.postForObject(Constants.url +"getBmsStockHeader",map, BmsStockHeader.class);
 			Date currDate=new Date();
@@ -136,9 +136,7 @@ public class BmsToStoreBomController {
 				 
 				map=new LinkedMultiValueMap<>();
 				
-				map.add("prodDeptId", prodDeptId);
-				map.add("mixDeptId", mixDeptId);
-				map.add("bmsDeptId", bmsDeptId);
+				map.add("deptId", 11);
 				map.add("stockDate", new SimpleDateFormat("dd-MM-yyyy").format(bmsStockHeader.getBmsStockDate()));
 				System.out.println("map"+map);
 				GetBmsCurrentStockList getBmsCurrentStockList=rest.postForObject(Constants.url +"/getCurentBmsStockRM",map, GetBmsCurrentStockList.class);
@@ -151,8 +149,7 @@ public class BmsToStoreBomController {
 					if(getBmsCurrentStockList.getBmsCurrentStock().get(j).getRmId()==bmsStockDetailedList.get(i).getRmId())
 					{
 						GetBmsCurrentStock getBmsCurrentStock=getBmsCurrentStockList.getBmsCurrentStock().get(j); 
-							float stockQty=(getBmsCurrentStock.getBmsOpeningStock()+getBmsCurrentStock.getStoreIssueQty()+getBmsCurrentStock.getProdReturnQty()+getBmsCurrentStock.getMixingReturnQty())
-							-(getBmsCurrentStock.getProdIssueQty()+getBmsCurrentStock.getMixingIssueQty()+getBmsCurrentStock.getStoreRejectedQty());
+							float stockQty=(getBmsCurrentStock.getBmsOpeningStock()+getBmsCurrentStock.getMixingIssueQty()+getBmsCurrentStock.getProdIssueQty());
 							bmsStockDetailedList.get(i).setClosingQty(stockQty);
 							
 							/*System.out.println("name"+getBmsCurrentStock.getRmName());

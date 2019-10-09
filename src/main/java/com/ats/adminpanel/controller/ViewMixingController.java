@@ -85,10 +85,7 @@ public class ViewMixingController {
 		Constants.subAct=42;
 		
 		ModelAndView model = new ModelAndView("productionPlan/getMixinglist");//
-
-		
-		
-		RestTemplate rest = new RestTemplate();
+         RestTemplate rest = new RestTemplate();
 		
 			GetMixingList getMixingList= rest.getForObject(Constants.url + "/gettodaysMixingRequest", GetMixingList.class);
 			
@@ -99,9 +96,7 @@ public class ViewMixingController {
 			RestTemplate restTemplate = new RestTemplate();
 			FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
 					FrItemStockConfigureList.class);
-			 
-			System.out.println("flag "+settingList1.getFrItemStockConfigure().get(0).getSettingValue());
-		
+			System.out.println("getMixingList "+getMixingList.toString());
 		
 		model.addObject("todaysmixrequest",getMixingList.getMixingHeaderList());
 		model.addObject("flag",settingList1.getFrItemStockConfigure().get(0).getSettingValue());
