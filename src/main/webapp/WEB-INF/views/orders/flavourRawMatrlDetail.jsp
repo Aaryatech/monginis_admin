@@ -6,12 +6,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
- <link rel="stylesheet"
+<link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
-	
-<%--  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/component.css" />  --%>
 <body>
 
 
@@ -19,7 +17,6 @@
 
 	<c:url var="deleteSpOrder" value="/deleteSpOrder" />
 
-<c:url var="showSpcakeRawMaterialInfo" value="/showSpcakeRawMaterialInfo" />
 
 
 
@@ -43,7 +40,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i> Album Special Cake Orders
+						<i class="fa fa-file-o"></i> Flavour Raw Material Details
 					</h1>
 
 				</div>
@@ -113,7 +110,7 @@
 			<div class="row">
 				<div class="col-md-12">
 					<div class="box">
-						<div class="box-title">
+						<!-- <div class="box-title">
 							<h3>
 								<i class="fa fa-bars"></i>Search Order
 							</h3>
@@ -121,22 +118,23 @@
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a>
 							</div>
-							<!-- <div class="box-tool">
+							<div class="box-tool">
 								<a data-action="collapse" href="#"><i
 									class="fa fa-chevron-up"></i></a> <a data-action="close" href="#"><i
 									class="fa fa-times"></i></a>
-							</div> -->
-						</div>
+							</div>
+						</div> -->
 
 
 						<div class="box-content">
-							<form class="form-horizontal" method="post" id="validationform">
+								<%-- <form action="${pageContext.request.contextPath}/addFlavourRawMaterial" method="post" class="form-horizontal"
+									 id="validation-form"	 method="post"> --%>
 								<!-- action="spCakeOrderProcess" -->
 
 
 
 
-								<div class="form-group">
+								<%-- <div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Franchisee
 									</label>
 									<div class="col-sm-3 col-lg-4 controls">
@@ -170,7 +168,7 @@
 										</select>
 
 									</div>
-								</div>
+								</div> --%>
 
 								<%-- <div class="form-group">
 										<label for="textfield2"
@@ -191,45 +189,43 @@
 
 
 
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Production
+							 <div class="form-group">
+									<label class="col-sm-2 col-lg-2 control-label">Production
 										Date</label>
-									<div class="col-sm-5 col-lg-3 controls">
-										<input class="form-control date-picker" value="${todayDate }"
-											id="dp2" size="16" type="text" name="prod_date"
+									<div class="col-sm-3 col-lg-2  controls">
+										<input class="form-control date-picker" value="${date}"
+											id="dp2" 	 type="text" readonly
 											data-rule-required="true" />
 									</div>
 									
-									
-									<label class="col-sm-1 col-lg-1 control-label">By</label>
-									<div class="col-sm-1 col-lg-3 controls">
-										<select data-placeholder="By"
-											class="form-control chosen" name="select_way"
-											id="select_way" onchange="callSearch()">
-											<option selected value="0">Sr. No.</option>
-											<option value="1">Alternate</option>
-										</select>
-								</div> 
-								<!-- </div>
-								
-								
+									<label for="from"
+											class="col-md-2 col-md-2 control-label">From</label>
+										<div class="col-sm-3 col-lg-1 controls">
+											<input id="dp2" value="${from}" type="text" readonly/>
+										</div>
+										
+										<label for="to"
+											class="col-md-2 col-md-2 control-label">To</label>
+										<div class="col-sm-3 col-lg-1 controls">
+											<input id="dp2" value="${to}" type="text" readonly/>
+										</div>
+								</div>
 
 
 
-								<div align="center" class="form-group"> -->
-									<div
-										class="col-md-1">
-										<input class="btn btn-primary" value="Search" id="callSubmit"
+								<div align="center" class="form-group">
+									<!-- <div
+										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
+										<input class="btn btn-primary" value="Submit" id="callSubmit"
 											onclick="callSearch()">
-
-
-									</div>
+									</div> -->
+									
 									<div class="col-md-9"></div>
 									<label for="search" class="col-md-3" id="search"> <i
 										class="fa fa-search" style="font-size: 20px"></i> <input
 										type="text" style="border-radius: 25px;" id="myInput"
 										onkeyup="myFunction()" style="border-radius: 25px;"
-										placeholder="Search by Sr.No or Franhise">
+										placeholder="by RM Name or RM Type">
 									</label>
 								</div>
 
@@ -256,7 +252,7 @@
 								<div class="box">
 									<div class="box-title">
 										<h3>
-											<i class="fa fa-table"></i> Order List
+											<i class="fa fa-table"></i> Raw Material List
 										</h3>
 										<div class="box-tool">
 											<a data-action="collapse" href="#"><i
@@ -264,6 +260,8 @@
 											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 										</div>
 									</div>
+									
+								
 
 									<c:set var="dis" value="none" />
 
@@ -274,13 +272,14 @@
 											<table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
-														<th width="17" style="width: 18px"><input type="checkbox" id="selCheck" name="selCheck" style="display: none;"/>  </th>
 														<th width="130" align="left">Sr No</th>
-														<th width="87" align="left">Action</th>
+														<!-- <th width="87" align="left">Action</th> -->
 
-														<th width="208" align="left">Franchisee</th>
-														<th width="203" align="left">Delivery Date</th>
-														<th width="159" align="left"><span
+														<th>RM Name</th>
+														<th>RM Type</th>
+														<th>Total Qty.</th>
+														<th> Qty.</th>
+														<!-- <th width="159" align="left"><span
 															style="width: 130px;">Category</span></th>
 														<th width="159" align="left"><span
 															style="width: 130px;">Sp Code</span></th>
@@ -291,13 +290,13 @@
 														<th width="75" align="left">Add Rate</th>
 														<th width="91" align="left">Total</th>
 														<th width="87" align="left">View</th>
-														<th width="87" align="left">PDF</th>
+														<th width="87" align="left">PDF</th> -->
 
 													</tr>
 												</thead>
 												<tbody>
 
-													<c:forEach items="${spCakeOrderList}" var="spCakeOrder"
+													<c:forEach items="${flvrRawMtrl}" var="flvrRawMtrl"
 														varStatus="count">
 														<c:set var="dis" value="block" />
 														<tr>
@@ -309,11 +308,34 @@
 															<%-- <c:set var="codeParts" value="${fn:split(${spCakeOrder.itemId}, '#')}" /> --%>
 
 															<td><c:out value="${count.index+1}" /></td>
-															<td align="left"><c:out
-																	value="${spCakeOrder.frName}"></c:out></td>
-															<td align="left"><c:out value="${spCakeOrder.name}"></c:out></td>
+															<td><c:out	value="${flvrRawMtrl.rmName}"></c:out></td>
+														
+															<c:choose>
+         
+                                                                <c:when test = "${flvrRawMtrl.rmType==1}">
+                                                                 
+																	<td><c:out
+																	value="Raw Material"></c:out></td>
+                                                                </c:when>
+         
+      															   <c:when test = "${flvrRawMtrl.rmType==2}">
+       															   
+																	<td align="left"><c:out
+																	value="Semi Finished"></c:out></td>
+       																  </c:when>
+         
+       															  <c:otherwise>
+       															  </c:otherwise>
+      														</c:choose>
+      														
+															<td><c:out value="${flvrRawMtrl.ttlQty}"></c:out></td>
+															<td width="240"><div class="col-sm-3 col-lg-1 controls">
+																<input id="ttl_qty" name="ttl_qty" 
+																		value="${flvrRawMtrl.ttlQty}" type="text" />
+																</div>
+															</td>
 
-															<td align="left"><c:out
+															<%-- <td align="left"><c:out
 																	value="${spCakeOrder.spName}"></c:out></td>
 															<td align="left"><c:out
 																	value="${spCakeOrder.spfName}"></c:out></td>
@@ -341,7 +363,10 @@
 
 															<td align="left"><c:out value="PDF"></c:out></td>
 
-															<td align="left"><c:out value="ADMIN PDF"></c:out></td>
+															<td align="left"><c:out value="ADMIN PDF"></c:out></td> --%>
+
+
+
 
 
 														</tr>
@@ -354,39 +379,42 @@
 
 										</div>
 									</div>
+								
 								</div>
-								<div class="form-group"
+								<%-- <div class="form-group"
 									style="display: <c:out value="${dis}" />;" id="range">
-									<div id="range_fields">
-										<div class="col-sm-2  controls">
-											<input type="text" class="form-control" id="from" name="from"
-												placeholder="from no">
-										</div>
-										<div class="col-sm-2  controls">
-											<input type="text" class="form-control" id="to" name="to"
-												placeholder="to no">
-										</div>
+									<div class="col-sm-2  controls">
+										<input type="text" class="form-control" id="from"
+											placeholder="to no">
 									</div>
-									
+									<div class="col-sm-2  controls">
+										<input type="text" class="form-control" id="to"
+											placeholder="from no">
+									</div>
 									<div class="col-sm-3  controls">
 										<input type="button" id="from" class="btn btn-primary"
 											value="EXPORT TO PDF IN RANGE" onclick="inRangePdf();">
 									</div>
 									<div class="col-sm-3  controls">
-										<%-- <a onclick="exportToExcel()" id="expExcel" href="${pageContext.request.contextPath}/download" disabled="true" class="btn btn-primary">EXPORT TO Excel</a> --%>
+										<a onclick="exportToExcel()" id="expExcel" href="${pageContext.request.contextPath}/download" disabled="true" class="btn btn-primary">EXPORT TO Excel</a>
 										<input type="button" id="expExcel" class="btn btn-primary"
 											value="EXPORT TO Excel" onclick="exportToExcel();"
 											disabled="disabled">
 									</div>
 									
 									<div class="col-sm-2  controls">
-									<a href="#" onclick="getRawMatrialInfo()" data-toggle="modal" data-target="#elegantModalForm"><button type="button" class="btn btn-primary">RM Info</button></a>
-										<!-- <input type="button" id="raw" class="btn btn-primary"
-											value="RM Info" onclick="getRawMatrialInfo()"> -->
+										<input type="button" id="raw" class="btn btn-primary"
+											value="RM Info" onclick="getRawMatrialInfo()">
 									</div>
-									
-								</div>
-							</form>
+								</div> --%>
+								<div class="row">
+						<div class="col-md-12" style="text-align: center">
+							<input type="submit" class="btn btn-info" value="Submit" name="Submit" id="Submit">
+
+						</div>
+					</div>
+								
+							<!-- </form> -->
 						</div>
 					</div>
 				</div>
@@ -475,7 +503,7 @@
 			table = document.getElementById("table1");
 			tr = table.getElementsByTagName("tr");
 			for (i = 0; i < tr.length; i++) {
-				td = tr[i].getElementsByTagName("td")[0];
+				td = tr[i].getElementsByTagName("td")[1];
 				td1 = tr[i].getElementsByTagName("td")[2];
 
 				if (td) {
@@ -491,16 +519,11 @@
 		}
 	</script>
 	<script type="text/javascript">
-		function callSearch() {
+		/* function callSearch() {
 
 			var isDelete = document.getElementById("isDelete").value;
 			var isEdit = document.getElementById("isEdit").value;
 
-			var chkYes = document.getElementById("select_way").value;
-			if(chkYes==0)
-			document.getElementById("range_fields").style.display = "none";
-			else
-				document.getElementById("range_fields").style.display = "block";
 			var frIds = $("#fr_id").val();
 			var array = [];
 			var routeIds = $("#selectRoute").val();
@@ -537,13 +560,6 @@
 															.split('#');
 
 													var tr = $('<tr></tr>');
-													if(chkYes==0){
-														tr
-														.append($(
-																'<td></td>')
-																.html(
-																		'<input type="checkbox" name="selCheck" value='+spCakeOrder.spOrderNo+' id='+key+'/>'));
-													}												
 
 													tr.append($('<td></td>')
 															.html(key + 1));
@@ -625,9 +641,9 @@
 
 							});
 
-		}
+		} */
 
-		function inRangePdf() {
+		/* function inRangePdf() {
 			var to = document.getElementById("to").value;
 
 			var from = document.getElementById("from").value;
@@ -643,58 +659,32 @@
 								+ from + "/" + to);
 
 			}
-		}
-		function getRawMatrialInfo() {
-			var from = document.getElementById("from").value;
+		} */
+		
+		/* function getRawMatrialInfo() {
 			var to = document.getElementById("to").value;
-			var chkYes = document.getElementById("select_way").value;	
-			var prodDate = document.getElementById("dp2").value;
+
+			var from = document.getElementById("from").value;
 			
-			if(chkYes==1){
-					if (from == null || from == "") {
-						alert("Enter to from");
-					} else if (to == null || to == "") {
-						alert("Enter to no");
-					} 
+			var date = $("#dp2").val();
+			alert(date);
+
+			if (from == null || from == "") {
+				alert("Enter to from");
+			} else if (to == null || to == "") {
+				alert("Enter to no");
+			} else {
+
+				window
+						.open("${pageContext.request.contextPath}/showSpcakeRawMaterialInfo/"
+								+ from + "/" + to + "/" + date );
+
 			}
-				//$('#loader').show();
-				$.ajax({
-				    type: "POST",
-		             url: "${pageContext.request.contextPath}/showSpcakeRawMaterialInfo",
-		             data: $("#validationform").serialize(),
-		             dataType: 'json',
-				success: function(data){
-					$('#modeltable td').remove();
-				//	$('#loader').hide();
-					if (data == "") {
-						alert("No Orders Found");
-					}
-					$.each(data,function(key, flvrRawMtrl) {
-										var rmType = "";
-										if(flvrRawMtrl.rmType==1){
-											rmType = 'Raw Material';
-										}else if(flvrRawMtrl.rmType==2){
-											rmType = 'Semi Finished';
-										}
-										var tr = $('<tr></tr>');
-										 /* tr.append($('<td></td>').html('<input type="checkbox"  value='+key+' name="selCheck"  id='+key+'/>'));  */
-                                        tr.append($('<td></td>').html(key + 1));
-										tr.append($('<td></td>').html(flvrRawMtrl.rmName));
-										tr.append($('<td></td>').html(rmType));
-										tr.append($('<td></td>').html(flvrRawMtrl.ttlQty));
-										tr.append($('<td></td>').html('<input type="text"  value='+flvrRawMtrl.ttlQty+' id='+0+'/>'));
-										$('#modeltable tbody').append(tr);
-									})
-									document.getElementById("prodDateSpan").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodDate;
-				}
-			}).done(function() {
-				setTimeout(function(){
-				},500);
-			});
-		}
+		} */
+		
 	</script>
 	<script type="text/javascript">
-		function deleteSpOrder(spOrderNo) {
+		/* function deleteSpOrder(spOrderNo) {
 
 			if (confirm("Do you want to Delete this order?") == true) {
 				$
@@ -811,18 +801,18 @@
 
 								});
 			}
-		}
+		} */
 	</script>
 	<script>
-		function exportToExcel() {
+		/* function exportToExcel() {
 
 			window.open("${pageContext.request.contextPath}/exportToExcel");
 			document.getElementById("expExcel").disabled = true;
-		}
+		} */
 	</script>
 	<script type="text/javascript">
 		function disableFr() {
-
+/* 
 			//alert("Inside Disable Fr ");
 			document.getElementById("fr_id").disabled = true;
 
@@ -840,131 +830,7 @@
 			}
 			//document.getElementById("selectRoute").disabled = true;
 
-		}
+		} */
 	</script>
-	
-	<!-- ------------------------------------------------Model------------------------------------------- -->
-	
-	<div class="modal fade" id="elegantModalForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true" >
-  
-  <!--SAVE LOADER-->
-    <div id="overlay">
-	<div class="clock"></div>
-  </div>
-  
-  <div class="modal-dialog" role="document" style="width:80%;height:50%;">
-    <!--Content-->
-    <div class="modal-content form-elegant">
-      <!--Header-->
-       <div class="modal-header text-center">
-        <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3" id="myModalLabel" style="color:#ea4973;"><strong>Raw Material List</strong></h3>     
-            <a href="#" class="close" data-dismiss="modal" aria-label="Close" id="closeHrefModel">
-                <img src="${pageContext.request.contextPath}/resources/img/close.png" alt="X" class="imageclass"/>
-            </a> 
-         <div>
-      </div> 
-      <div class="modal-body mx-6" >
-      	<form name="modalfrm" id="modalfrm"  method="post"> 
-      			<!-- <label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Production Id :<span id="prodIdSpan"></span></label> -->
-      		    <label class="col-sm-3 col-lg-4 control-label" style="color:#e20b31;">Production Date :<span id="prodDateSpan"></span></label>
-      		    
-     		 <input type="hidden" name="dept" id="dept"  />
-     		  <input type="hidden" name="prodHeaderId" id="prodHeaderId"  />
-     			<div class="component">
-     		
-									<table width="80%"  id="modeltable" style="font-size: 13px; font-weight:bold; border: 1px solid;border-color: #91d6b8;" >
-										<thead>
-											<tr>
-											<th width="130" align="left">Sr No</th>
-														<!-- <th width="87" align="left">Action</th> -->
-
-														<th>RM Name</th>
-														<th>RM Type</th>
-														<th>Total Qty.</th>
-														<th> Qty.</th>
-											</tr>
-										</thead>
-										<tbody>										
-										</tbody>
-									</table>
-									
-								</div>
-								<!-- <div class="component" >
-									<table width="80%"  id="modeltable2" style="font-size: 13px; font-weight:bold; border: 1px solid;border-color: #91d6b8;" > class="table table-advance"
-										<thead>
-											<tr>
-												<th width="17" style="width: 18px">Sr No</th>
-												<th width="120" align="left">Product Name</th>
-												<th width="100" align="left">Product Type</th>
-												<th width="120" align="left">Qty</th>
-												<th width="120" align="left">Edit Qty</th>
-												<th width="100" align="left">UOM</th> 
-											</tr>
-										</thead>
-										<tbody>
-											
-										</tbody>
-									</table>
-								
-								</div> -->
-								</form>	
-						</div>			
-      <!--Body-->
-      <div class="modal-body mx-4" >
-        <!--Body-->
-        <div class="text-center mb-1">
-          <button type="button" class="btn btn-primary" id="sbtbtn">Submit</button>
-        </div>          
-      </div>
-      <!--Footer-->   
-    </div>
-    <!--/.Content-->
-  </div>
-</div></div>
-
- <script type="text/javascript">
-    	$('#sbtbtn').click(function(){
-    		$("#overlay").fadeIn(300);
-    		
-    		$.ajax({
-    			    type: "POST",
-		             url: "${pageContext.request.contextPath}/addFlavourRawMaterial",
-		             data: $("#modalfrm").serialize(),
-		             dataType: 'json',
-    			success: function(data){
-    				if(data==2)
-    					{
-    					$('#modeltable td').remove();    					
-    					alert("Mixing And Bom Done")
-    					$("#overlay").fadeOut(300);
-    					$("#closeHrefModel")[0].click()
-
-
-    					}
-    			}
-    		}).done(function() {
-    			setTimeout(function(){
-    				$("#overlay").fadeOut(300);
-    			},500);
-    		});
-    	});	
-    	
-    </script>
-   <!-- <script type="text/javascript">
-		function submitBill() {
-var form = document.getElementById("validation-form")
-form.action = "${pageContext.request.contextPath}/getSpcakeRawMaterialInfo";
-form.submit();
-		}
-		$('#btn_submit')
-				.click(
-						function() {
-							var form = document.getElementById("validation-form")
-							form.action = "${pageContext.request.contextPath}/getSpcakeRawMaterialInfo";
-							form.submit();
-						});	
-		
-	</script> -->
 </body>
 </html>

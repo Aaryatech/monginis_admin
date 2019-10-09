@@ -183,8 +183,12 @@
 
 										<td align="left"><a
 											href="updateFlavour/${flavoursList.spfId}"><span
-												class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
-
+												class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
+											
+											
+											 <a href="showFlavourDetail/${flavoursList.spfId}"><span
+												class="glyphicon glyphicon-list"></span></a>&nbsp;&nbsp;
+											
 											<a href="deleteFlavour/${flavoursList.spfId}"
 											onClick="return confirm('Are you sure want to delete this record');"><span
 												class="glyphicon glyphicon-remove"></span></a>

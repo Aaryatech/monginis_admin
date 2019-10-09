@@ -1458,6 +1458,7 @@ public class RawMaterialController {
 		itemDetail.setVarchar1(itemDetailsList.getItemDetailList().get(i).getVarchar1());//new
 
 		itemDetailList.add(itemDetail);
+		System.out.println("Items------"+itemDetailList);
 	}
 	model.addObject("itemDetailList", itemDetailsList.getItemDetailList());
 	model.addObject("item", item);

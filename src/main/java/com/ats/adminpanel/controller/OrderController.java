@@ -14,6 +14,7 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.spi.LocationAwareLogger;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -41,6 +42,7 @@ import com.ats.adminpanel.model.RegularSpCkOrdersResponse;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.SpCakeOrdersBean;
 import com.ats.adminpanel.model.SpCakeOrdersBeanResponse;
+import com.ats.adminpanel.model.flavours.FlavourRawMaterialInfo;
 import com.ats.adminpanel.model.franchisee.AllFranchiseeList;
 import com.ats.adminpanel.model.franchisee.AllMenuResponse;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
@@ -1576,4 +1578,66 @@ public class OrderController {
 		return info;
 	}
 
+	//-------------------------------------------------------------------------------//
+	//Mahendra Singh
+	//03-10-2019
+	
+	@RequestMapping(value = "/showSpcakeRawMaterialInfo", method = RequestMethod.POST)
+	@ResponseBody public List<FlavourRawMaterialInfo> showSpcakeRawMaterialInfo(HttpServletRequest request, HttpServletResponse response, Model model) {
+		
+		String date = request.getParameter("prod_date");
+		int from = 0;
+		int to=0;
+		
+		int value = Integer.parseInt(request.getParameter("select_way"));
+		
+		List<FlavourRawMaterialInfo> flvrRawMtrl  = new ArrayList<FlavourRawMaterialInfo>();
+		//ModelAndView model = new ModelAndView("orders/flavourRawMatrlDetail");
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		RestTemplate restTemp = new RestTemplate();
+
+		if(value==1) {
+			 from = Integer.parseInt(request.getParameter("from"));
+			
+			 to = Integer.parseInt(request.getParameter("to"));
+			System.out.println("input------"+date+" / "+from+" / "+to+" / "+value);
+
+		StringBuffer orderId = new StringBuffer("0,");
+		for (int i = from - 1; i < to && i < spCakeOrderList.size(); i++) {
+			orderId.append(Integer.toString(spCakeOrderList.get(i).getSpOrderNo()) + ",");
+		}
+
+		orderId.setLength(orderId.length() - 1);
+		map.add("spOrderNo", orderId);
+		FlavourRawMaterialInfo[] arr = restTemp.postForObject(Constants.url + "getRawMaterialDetails", map,
+				FlavourRawMaterialInfo[].class);
+		
+		 flvrRawMtrl = new ArrayList<>(Arrays.asList(arr));
+		System.out.println("AlbumList------------------"+flvrRawMtrl);
+		}else {
+			System.out.println("In Else");
+			
+			
+			  String[] rawMatril = request.getParameterValues("selCheck");
+			  String matrilList = new String(); 
+				  for (int i = 0; i < rawMatril.length; i++) {
+					  matrilList = rawMatril[i] + "," + matrilList; 
+					  } 
+				  matrilList = matrilList.substring(0, matrilList.length() - 1);
+			  
+			  System.out.println("selected bills for Printing " + matrilList);
+			  
+			  map.add("spOrderNo", matrilList); 
+			  FlavourRawMaterialInfo[] arr = restTemp.postForObject(Constants.url + "getRawMaterialDetails", map, FlavourRawMaterialInfo[].class);
+			  
+			  flvrRawMtrl = new ArrayList<>(Arrays.asList(arr));
+			 
+		}
+		
+		model.addAttribute("flvrRawMtrl",flvrRawMtrl );
+		model.addAttribute("from", from);
+		model.addAttribute("to", to);
+		model.addAttribute("date", date);
+		return flvrRawMtrl;
+	}
 }
