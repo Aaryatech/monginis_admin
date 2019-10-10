@@ -247,7 +247,6 @@ int globalIsPlan;
 				billOfMaterialHeader.setFromDeptName(fromDeptName);
 				billOfMaterialHeader.setIsPlan(globalIsPlan);
 
-				billOfMaterialHeader.setIsPlan(0);
 
 				for (int i = 0; i < sfPlanDetailForBom.size(); i++) {
 
@@ -311,7 +310,6 @@ int globalIsPlan;
 				billOfMaterialHeader.setFromDeptName(fromDeptName);
 				billOfMaterialHeader.setIsProduction(0);
 				
-				billOfMaterialHeader.setIsPlan(0);
 
 				for (int i = 0; i < sFMixingForBom.size(); i++) {
 

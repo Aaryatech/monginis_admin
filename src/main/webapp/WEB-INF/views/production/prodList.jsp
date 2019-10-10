@@ -15,7 +15,7 @@
 <c:url var="showDetailsForCoating" value="/showDetailsForCoating"/>
 <c:url var="findItemsByGrpId" value="/findItemsByGrpIdForRmIssue"/>
 <c:url var="findSfByTypeId" value="/findSfsByTypeId"/>
-
+<c:url var="showDetailItemLayering" value="/showDetailItemLayering"/>
 	<div class="container" id="main-container">
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
@@ -323,8 +323,8 @@
 												<th width="17" style="width: 18px">Sr No</th>
 												<th width="120" align="left">Product Name</th>
 												<th width="100" align="left">Product Type</th>
-												<th width="120" align="left">Qty</th>
-												<th width="120" align="left">Edit Qty</th>
+												<th width="120" align="left">Prep.Qty</th>
+												<th width="120" align="left">Prod. Qty</th>
 												<th width="100" align="left">UOM</th>
 										        <th width="17" style="width: 18px">Action</th>
 												
@@ -638,6 +638,72 @@
 </div>
 </div>
 <!----------------------------------------------End Model 5----------------------------------------------->
+<!------------------------------------------ MODEL 6-------------------------------------------------->
+<div class="modal fade" id="elegantModalForm6" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" >
+  <!-- SAVE LOADER -->
+<div id="overlay6">
+	<div class="clock"></div>
+</div>
+
+  <div class="modal-dialog" role="document" style="width:50%;height:50%; margin-right: 20px; margin-top: 200px;">
+    <!--Content-->
+    <div class="modal-content form-elegant">
+      <!--Header-->
+      <div class="modal-header text-center">
+<!--         <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3" id="myModalLabel" style="color:#ea4973;"><strong>Items</strong></h3>
+ -->       
+            <a href="#" class="close" data-dismiss="modal" aria-label="Close" id="closeHrefModel6">
+      <img src="${pageContext.request.contextPath}/resources/img/close.png" alt="X" class="imageclass"/>
+    </a> 
+   <!--   <div>
+      </div> -->
+       <div class="modal-body mx-6" >
+      	<form name="modalfrm6" id="modalfrm6"  method="post"> 
+      	 <div class="form-group">	
+      	 <label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Prod.Id :<span id="prodIdSpan6"></span></label>
+      	        <label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Prep.Qty :<span id="prepQtySpan6"></span></label>
+      		    <label class="col-sm-3 col-lg-6 control-label" style="color:#e20b31;">Item :<span id="itemNameSpan6"></span></label>
+      		   </div> <br><br>
+     		 <input type="hidden" name="dept6" id="dept6"  />
+     		 <input type="hidden" name="prodHeaderId6" id="prodHeaderId6"  />
+     		  <input type="hidden" name="itemDetailId6" id="itemDetailId6"  />
+     			<div class="component">
+     		
+									<table width="80%"  id="modeltable8" style="font-size: 13px; font-weight:bold; border: 1px solid;border-color: #91d6b8;"  >
+										<thead>
+											<tr>
+											<th width="100" align="left">Select</th>
+												<th width="17" style="width: 18px">Sr No</th>
+												<th width="120" align="left">Item Name</th>
+												<th width="120" align="left">Qty</th>
+												<th width="100" align="left">UOM</th>
+												
+											</tr>
+										</thead>
+										<tbody>
+											
+										</tbody>
+									</table>
+									
+								</div>
+								
+								</form>	
+						</div>			
+      <!--Body-->
+     <!--  <div class="modal-body mx-4" >
+        Body
+        <div class="text-center mb-1">
+          <button type="button" class="btn btn-primary" id="sbtbtn6" disabled="disabled">Submit</button>
+        </div>         
+      </div> -->
+      <!--Footer-->    
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+</div>
+<!----------------------------------------------End Model 6---------------------------------------------->
 	<!-- END Main Content -->
 	<footer>
 	<p>2019 © MONGINIS.</p>
@@ -836,8 +902,8 @@
     				 if(data.total>0)
     					 actQty=(data.total/1000).toFixed(3);
 						var tr = $('<tr id="modeltable3'+data.itemDetailId+'" ></tr>');
-					  	tr.append($('<td></td>').html(key+1));
-					  	tr.append($('<td></td>').html(data.rmName+""+"<input type=hidden value='"+data.rmName+"'  id=rmName"+data.itemDetailId+"  name=rmName"+data.itemDetailId+"  >"));
+					  	tr.append($('<td></td>').html(key+1+"<input type=hidden name=layer"+data.itemDetailId+" id=layer"+data.itemDetailId+" > "));
+					  	tr.append($('<td></td>').html("<a href='#' onclick='showDetailsForLayerDetails("+prodHeaderId+","+data.rmId+","+data.itemDetailId+",\""+prodDate+"\","+actQty+",\""+data.rmName+"\")'   class='btn btn-default btn-rounded' data-toggle='modal' data-target='#elegantModalForm6'>"+data.rmName+"</a>"+"<input type=hidden value='"+data.rmName+"'  id=rmName"+data.itemDetailId+"  name=rmName"+data.itemDetailId+"  >"));
 					 
 					  	if(data.rmType==1)
 					  	tr.append($('<td></td>').html("RM"+"<input type=hidden value="+data.singleCut+"  id=mulFactor"+data.itemDetailId+"  name=mulFactor"+data.itemDetailId+"  >"));
@@ -845,7 +911,7 @@
 						  	tr.append($('<td></td>').html("SF"+"<input type=hidden value="+data.singleCut+"  id=mulFactor"+data.itemDetailId+"  name=mulFactor"+data.itemDetailId+"  >"));
 					  	tr.append($('<td></td>').html(actQty+""+"<input type=hidden value="+actQty+"  id=prevRmQty"+data.itemDetailId+"  name=prevRmQty"+data.itemDetailId+"  >"));
 					  	tr.append($('<td></td>').html("<input type=text onkeypress='return IsNumeric(event);' style='width:100px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control' name='rmQty"+data.itemDetailId+"'  id=rmQty"
-								+ data.itemDetailId+" value="+actQty+" /> &nbsp;  <input type=hidden id=sfId"+data.itemDetailId+"  name=sfId"+data.itemDetailId+"  value="+data.rmId+" />" ));
+								+ data.itemDetailId+" value="+actQty+"  readonly /> &nbsp;  <input type=hidden id=sfId"+data.itemDetailId+"  name=sfId"+data.itemDetailId+"  value="+data.rmId+" />" ));
 						tr.append($('<td></td>').html(data.uom+""+"<input type=hidden value='"+data.uom+"'  id=uom"+data.itemDetailId+"  name=uom"+data.itemDetailId+"  >"));
 						tr.append($('<td></td>').html("<input type=button name='btn' id='btn' value='BOM' class='btn btn-primary' onclick=onSfAdd2("+data.itemDetailId+") > "));
 
@@ -899,7 +965,7 @@
 						  	tr.append($('<td></td>').html("SF"+"<input type=hidden value="+data.singleCut+"  id=mulFactor"+data.itemDetailId+"  name=mulFactor"+data.itemDetailId+"  >"));
 					  	tr.append($('<td></td>').html(actQty+""+"<input type=hidden value="+actQty+"  id=prevRmQty"+data.itemDetailId+"  name=prevRmQty"+data.itemDetailId+"  >"));
 					  	tr.append($('<td></td>').html("<input type=text onkeypress='return IsNumeric(event);' style='width:100px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control' name='rmQty"+data.itemDetailId+"'  id=rmQty"
-								+ data.itemDetailId+" value="+actQty+" /> &nbsp;  <input type=hidden id=sfId"+data.itemDetailId+"  name=sfId"+data.itemDetailId+"  value="+data.rmId+" />" ));
+								+ data.itemDetailId+" value="+actQty+" readonly  /> &nbsp;  <input type=hidden id=sfId"+data.itemDetailId+"  name=sfId"+data.itemDetailId+"  value="+data.rmId+" />" ));
 						tr.append($('<td></td>').html(data.uom+""+"<input type=hidden value='"+data.uom+"'  id=uom"+data.itemDetailId+"  name=uom"+data.itemDetailId+"  >"));
 						tr.append($('<td></td>').html("<input type=button name='btn'  "+styleClass+"    id='btn' value='BOM' class='btn btn-primary' onclick=onSfAdd3("+data.itemDetailId+") > "));
 
@@ -1338,6 +1404,92 @@ $('#searchIssueItems').click(function(){
 			},500);
 		});
 	});	
+    </script>
+    <script type="text/javascript">
+    function showDetailsForLayerDetails(prodHeaderId,rmId,itemDetailId,prodDate,actQty,rmName)
+    {
+    	 var itemIds=document.getElementById("layer"+itemDetailId).value;
+    	 var itemIdsArr;
+    	 if(itemIds!=null && itemIds!="")
+    		 itemIdsArr=itemIds.split(',');
+
+    	$.getJSON('${showDetailItemLayering}', {
+    		
+    		prodHeaderId:prodHeaderId,
+    		rmId:rmId,
+    		toDept:'BMS',
+    		ajax : 'true',
+    	},  function(data) {
+    		var len = data.length;
+    		$('#modeltable8 td').remove();
+    		document.getElementById("dept6").value="BMS";
+    		document.getElementById("prodHeaderId6").value=prodHeaderId;
+    		document.getElementById("prodIdSpan6").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodHeaderId;
+    		document.getElementById("prepQtySpan6").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+actQty;
+    		document.getElementById("itemNameSpan6").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+rmName;
+    		var approveStatusStyle="disabled";var styleClass="";
+            $.each(data,function(key, data) {
+            	if(data.doubleCut==0){
+        			approveStatusStyle="";
+        			styleClass="";
+        		}
+        		if(data.doubleCut==1){
+        			styleClass="disabled";
+        		}
+            	
+    			 var actQty=0;
+				 if(data.total>0)
+    			 actQty=(data.total/1000).toFixed(3);
+						var tr = $('<tr id="modeltable8'+data.itemDetailId+'" ></tr>');
+						if(data.doubleCut==1){
+							tr.append($('<td></td>').html(""));
+						}else{
+						tr.append($('<td></td>').html("<input type='checkbox'      name='chklayering'  value="+data.itemId+"   id=ld"+data.itemId+"  >  <label for='ld"+data.itemId+"' ></label>"));
+						}
+					  	tr.append($('<td></td>').html(key+1));
+					  	tr.append($('<td></td>').html(data.rmName));
+					 	tr.append($('<td></td>').html(actQty+"<input type='hidden' onkeypress='return IsNumeric(event);' style='width:100px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control' name='itemQty"+data.itemId+"'  id=itemQty"+data.itemId+" value="+actQty+" /> "));
+					 	tr.append($('<td></td>').html(data.uom));
+						$('#modeltable8 tbody').append(tr);
+    		});
+            var tr = $('<tr></tr>');
+			tr.append($('<td colspan="4"></td>').html("<a href='#' style='text-decoration:underline;' onclick='checkAll()' > Select All </a> &nbsp;&nbsp;<a href='#' style='color:grey;text-decoration:underline;' onclick='uncheckAll()'> Remove </a> "));
+			tr.append($('<td ></td>').html(" <button type='button' "+approveStatusStyle+"  class='btn btn-primary' id='addLayerItem' onclick='onLayerItemAdd("+itemDetailId+")'  >Add</button>"));
+			$('#modeltable8 tbody').append(tr);
+    		
+    	});
+    	if(itemIdsArr.length>0){
+    	itemIdsArr.forEach(function(v) {
+    		alert(v)
+
+    		
+    	});
+    	}
+    }
+    </script>
+    <script type="text/javascript">
+    function onLayerItemAdd(itemDetailId)
+    {
+    	 var arr=[]; var itemIdArr=[];
+    		$('input[name="chklayering"]:checked').each(function() {
+    			 arr.push(this.value);
+    		});
+    		var totalQty=0;
+    		arr.forEach(function(v) {
+    				 var itemQty=parseFloat($('#itemQty'+v).val());
+    				 totalQty=totalQty+itemQty;
+    				 
+    				 itemIdArr.push(v);
+    				
+    		});
+    		var itemIds=itemIdArr.join();;
+    		  document.getElementById("rmQty"+itemDetailId).value=totalQty.toFixed(3);
+    		  document.getElementById("layer"+itemDetailId).value=itemIds;
+
+    		  $('#modeltable8 td').remove();
+				$("#overlay6").fadeOut(300);
+				$("#closeHrefModel6")[0].click()
+    }
     </script>
 	<!--basic scripts-->
  <script

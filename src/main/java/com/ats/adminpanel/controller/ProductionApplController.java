@@ -215,7 +215,39 @@ public class ProductionApplController {
 	return sfPlanDetailForBom;
 
 	}
-	
+	@RequestMapping(value = "/showDetailItemLayering", method = RequestMethod.GET)
+	public @ResponseBody List<GetSFPlanDetailForMixing> showDetailItemLayering(HttpServletRequest request, HttpServletResponse response) throws ParseException {
+		
+		List<GetSFPlanDetailForMixing> sfPlanDetailForBom=null;
+		try {
+			int prodHeaderId=Integer.parseInt(request.getParameter("prodHeaderId"));
+			int rmId=Integer.parseInt(request.getParameter("rmId"));
+			String toDept=request.getParameter("toDept");
+			System.err.println(toDept);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+		
+            map.add("settingKeyList", toDept);
+            FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+		    FrItemStockConfigureList.class);
+            map = new LinkedMultiValueMap<String, Object>();
+				map.add("headerId", prodHeaderId);
+				map.add("rmId", rmId);
+				map.add("deptId", settingList.getFrItemStockConfigure().get(0).getSettingValue());
+			GetSFPlanDetailForMixingList getSFPlanDetailForBomList = restTemplate
+					.postForObject(Constants.url + "showDetailItemLayering", map,
+						GetSFPlanDetailForMixingList.class);
+
+		sfPlanDetailForBom = getSFPlanDetailForBomList.getSfPlanDetailForMixing();
+		System.err.println(sfPlanDetailForBom);
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+	}
+		
+	return sfPlanDetailForBom;
+
+	}
 	List<ItemSfDetail> sfItemDetailListNew=null;
 	@RequestMapping(value = "/getSfDetails", method = RequestMethod.POST)
 	public @ResponseBody List<ItemSfDetail> getSfDetails(@RequestBody List<GetSfData> data) throws ParseException {
@@ -628,6 +660,7 @@ public class ProductionApplController {
 				 float mulFactor=Float.parseFloat(request.getParameter("mulFactor"+itemDetailId));
 				 String sfName=request.getParameter("rmName"+itemDetailId);
 				 String uom=request.getParameter("uom"+itemDetailId);
+				 String  itemIds=request.getParameter("layer"+itemDetailId);
 				 
 				   MixingDetailed mixingDetailed = new MixingDetailed();
 					mixingDetailed.setMixing_detailId(0);
@@ -665,7 +698,7 @@ public class ProductionApplController {
 				mixingHeader.setExInt1(settingList.getFrItemStockConfigure().get(0).getSettingValue());//deptId
 				mixingHeader.setExInt2(0);
 				mixingHeader.setExInt3(0);
-				mixingHeader.setExVarchar1("");
+				mixingHeader.setExVarchar1(""+itemIds);
 				mixingHeader.setExVarchar2("");
 				mixingHeader.setExVarchar3("");
 				
