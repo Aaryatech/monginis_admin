@@ -8,7 +8,11 @@
  <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
  <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/component.css" />
- 
+ <style type="text/css">
+    a[disabled="disabled"] {
+        pointer-events: none;
+    }
+</style>
 <body>
 <c:url var="showDetailsForLayering" value="/showDetailsForLayering"/>
 <c:url var="showDetailsForCp" value="/showDetailsForCp"/>
@@ -742,6 +746,7 @@
     			
     			if(data.doubleCut==0){
     				approveStatusStyle="";
+    				styleClass="";
     			}
     			if(data.doubleCut==1){
     				styleClass="disabled";
@@ -766,7 +771,7 @@
 						$('#modeltable tbody').append(tr);
     		});
     		var tr = $('<tr></tr>');
-			tr.append($('<td colspan="6"></td>').html("<a href='#' style='text-decoration:underline;' onclick='checkAll()' > Select All </a> &nbsp;&nbsp;<a href='#' style='color:grey;text-decoration:underline;' onclick='uncheckAll()'> Remove </a> "));
+			tr.append($('<td colspan="6"></td>').html("<a href='#' disabled="+approveStatusStyle+"  style='text-decoration:underline;' onclick='checkAll()' > Select All </a> &nbsp;&nbsp;<a href='#' style='color:grey;text-decoration:underline;' onclick='uncheckAll()'> Remove </a> "));
 			tr.append($('<td ></td>').html(" <button type='button' "+approveStatusStyle+"   class='btn btn-primary' id='addSfItem' onclick='onSfAdd()'  >Add</button>"));
 			$('#modeltable tbody').append(tr);
     		if(approveStatusStyle=="disabled")
@@ -911,7 +916,7 @@
 						  	tr.append($('<td></td>').html("SF"+"<input type=hidden value="+data.singleCut+"  id=mulFactor"+data.itemDetailId+"  name=mulFactor"+data.itemDetailId+"  >"));
 					  	tr.append($('<td></td>').html(actQty+""+"<input type=hidden value="+actQty+"  id=prevRmQty"+data.itemDetailId+"  name=prevRmQty"+data.itemDetailId+"  >"));
 					  	tr.append($('<td></td>').html("<input type=text onkeypress='return IsNumeric(event);' style='width:100px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control' name='rmQty"+data.itemDetailId+"'  id=rmQty"
-								+ data.itemDetailId+" value="+actQty+"  readonly /> &nbsp;  <input type=hidden id=sfId"+data.itemDetailId+"  name=sfId"+data.itemDetailId+"  value="+data.rmId+" />" ));
+								+ data.itemDetailId+" value="+0+"  readonly /> &nbsp;  <input type=hidden id=sfId"+data.itemDetailId+"  name=sfId"+data.itemDetailId+"  value="+data.rmId+" />" ));
 						tr.append($('<td></td>').html(data.uom+""+"<input type=hidden value='"+data.uom+"'  id=uom"+data.itemDetailId+"  name=uom"+data.itemDetailId+"  >"));
 						tr.append($('<td></td>').html("<input type=button name='btn' id='btn' value='BOM' class='btn btn-primary' onclick=onSfAdd2("+data.itemDetailId+") > "));
 
@@ -991,8 +996,12 @@
 	  var sfItems = [];
 
 	 var arr=[];
+	 var flag=0;
 			 arr.push(itemDetailId);
 		arr.forEach(function(v) {
+			if($('#rmQty'+v).val()<=0){
+				flag=1;
+			}
 		var sf = {
 				  "sfId": $('#sfId'+v).val(),
 				  "rmQty": $('#rmQty'+v).val()
@@ -1000,6 +1009,11 @@
 		sfItems.push(sf);
 		});
   			$("#sbtbtn2").prop("disabled", true);
+  			if(flag==1)
+  				{
+  				alert("Qty should be greator than 0")
+  				}
+  			else{
   		 	$.ajax({
   		             type: "POST",
   		             contentType: "application/json",
@@ -1040,7 +1054,7 @@
   		                 //...
   		             }
   			});
-  		
+  			}//if close
 
   		}
 
@@ -1346,7 +1360,7 @@ $('#searchIssueItems').click(function(){
   		     		$('#modeltable7 td').remove();
   		     		$.each(data,function(key, data) {
   		     		    document.getElementById("searchIssueItems").value="Search";
-                    if(data.doubleCut==1){
+                   
   		     		 var actQty=0;
   					 if(data.total>0)
   	    			 actQty=(data.total/1000).toFixed(3);
@@ -1364,7 +1378,7 @@ $('#searchIssueItems').click(function(){
   							tr.append($('<td></td>').html(data.uom+""+"<input type=hidden value='"+data.uom+"'  id=uom"+data.itemDetailId+"  name=uom"+data.itemDetailId+"  >"));
 
   							$('#modeltable7 tbody').append(tr);
-                    }
+                   
   	     		});
   		     	        
   		             },
@@ -1453,7 +1467,7 @@ $('#searchIssueItems').click(function(){
 						$('#modeltable8 tbody').append(tr);
     		});
             var tr = $('<tr></tr>');
-			tr.append($('<td colspan="4"></td>').html("<a href='#' style='text-decoration:underline;' onclick='checkAll()' > Select All </a> &nbsp;&nbsp;<a href='#' style='color:grey;text-decoration:underline;' onclick='uncheckAll()'> Remove </a> "));
+			tr.append($('<td colspan="4"></td>').html("<a href='#' disabled="+approveStatusStyle+"  style='text-decoration:underline;' onclick='checkAll()' > Select All </a> &nbsp;&nbsp;<a href='#' style='color:grey;text-decoration:underline;' onclick='uncheckAll()'> Remove </a> "));
 			tr.append($('<td ></td>').html(" <button type='button' "+approveStatusStyle+"  class='btn btn-primary' id='addLayerItem' onclick='onLayerItemAdd("+itemDetailId+")'  >Add</button>"));
 			$('#modeltable8 tbody').append(tr);
     		

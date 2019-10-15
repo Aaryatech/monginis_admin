@@ -1281,7 +1281,7 @@ public class ViewProdController {
 
 			tempMx = new TempMixing();
 
-			tempMx.setQty(planMixing.getTotal() * planMixing.getMulFactor());
+			tempMx.setQty(planMixing.getTotal());// * planMixing.getMulFactor()
 
 			tempMx.setRmId(planMixing.getRmId());
 			tempMx.setSfId(0);
@@ -1426,7 +1426,7 @@ public class ViewProdController {
 		map = new LinkedMultiValueMap<String, Object>();
 		map.add("productionId", prodId);
 		map.add("flag", 0);
-		map.add("deptId", 10);
+		map.add("deptId", deptId);
 		if (mixingHeaderin != null) {
 			int updateisMixing = rest.postForObject(Constants.url + "updateisMixingandBom", map, Integer.class);
 		}
