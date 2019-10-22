@@ -1020,11 +1020,11 @@ public class ProductionApplController {
 		}
 		return itemsList;
 	}
-	
+	List<GetItemSfHeader> itemHeaderList = new ArrayList<GetItemSfHeader>();
+
 	@RequestMapping(value = "/findSfsByTypeId", method = RequestMethod.GET)
 	public @ResponseBody List<GetItemSfHeader> findSfsByTypeId(HttpServletRequest request, HttpServletResponse response) {
 	
-		List<GetItemSfHeader> itemHeaderList = new ArrayList<GetItemSfHeader>();
 	 try {
 			int typeId = Integer.parseInt(request.getParameter("typeId"));
 			System.err.println("typeId"+typeId);
@@ -1118,16 +1118,26 @@ public class ProductionApplController {
 				try {
 					 String[] itemDetailIdList=request.getParameterValues("itemDetailId");
 					 List<BillOfMaterialDetailed> bomDetailList = new ArrayList<BillOfMaterialDetailed>();
-
+                     String items="";
+					 StringBuilder sb = new StringBuilder();
+                     List<Integer> itemAList=new ArrayList<>();
 					 for(int i=0;i<itemDetailIdList.length;i++)
 					 {
+							
+							
 							int rmId = Integer.parseInt(request.getParameter("sfId" + itemDetailIdList[i]));
 							int rmType = Integer.parseInt(request.getParameter("rmType" +itemDetailIdList[i]));
 							float rmQty = Float.parseFloat(request.getParameter("rmQty" + itemDetailIdList[i]));
 							float prevRmQty = Float.parseFloat(request.getParameter("prevRmQty" +itemDetailIdList[i]));
 							 String rmName=request.getParameter("rmName" + itemDetailIdList[i]);
 							 String uomName=request.getParameter("uom" + itemDetailIdList[i]);
-							 
+							 int itemId=Integer.parseInt(request.getParameter("itemId" + itemDetailIdList[i]));
+							 if(!itemAList.contains(itemId))
+							 {
+							   itemAList.add(itemId); 
+		                       sb = sb.append(itemId + ",");
+							 }
+
 							BillOfMaterialDetailed	bomDetail = new BillOfMaterialDetailed();
 
 							bomDetail.setDelStatus(0);
@@ -1145,7 +1155,8 @@ public class ProductionApplController {
 							bomDetail.setExInt1(1);//Status of issue
 							bomDetailList.add(bomDetail);
 					 }
-					
+					 String itemsString = sb.toString();
+					 itemsString = itemsString.substring(0, itemsString.length() - 1);
 					int fromDeptId=settingList.getFrItemStockConfigure().get(0).getSettingValue(); //change on 18-09-2019
 					String fromDeptName=settingList.getFrItemStockConfigure().get(0).getSettingKey();
 					
@@ -1167,6 +1178,7 @@ public class ProductionApplController {
 					billOfMaterialHeader.setRejDate(date);
 					billOfMaterialHeader.setRejUserId(0);
 					billOfMaterialHeader.setExInt2(1);//Status of issue
+					billOfMaterialHeader.setExVarchar2(itemsString);//itemId
 					billOfMaterialHeader.setIsManual(0);
 
 						map = new LinkedMultiValueMap<String, Object>();
@@ -1199,6 +1211,186 @@ public class ProductionApplController {
 							e.printStackTrace();
 						}
 				
+		 }catch (Exception e) {
+			e.printStackTrace();
+		}
+		return flag;
+		
+	}
+	@RequestMapping(value = "/postManualData", method = RequestMethod.POST)
+	public @ResponseBody int postManualData(HttpServletRequest request, HttpServletResponse response) throws ParseException {
+		 int flag=0;
+		try {
+				
+			 RestTemplate restTemplate = new RestTemplate();
+			 HttpSession session = request.getSession();
+				UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
+			 List<MixingDetailed> addmixingDetailedlist = new ArrayList<MixingDetailed>();
+			 Date date = new Date();
+
+			 String dept=request.getParameter("dept5");
+
+			 int prodHeaderId=Integer.parseInt(request.getParameter("prodHeaderId5"));
+			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			 map.add("planHeaderId", prodHeaderId);
+
+				PostProdPlanHeader	postProdPlanHeader = restTemplate.postForObject(Constants.url + "PostProdPlanHeaderwithDetailed", map,
+						PostProdPlanHeader.class);
+				
+				map = new LinkedMultiValueMap<String, Object>();
+	            map.add("settingKeyList", dept);
+	            FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+			    FrItemStockConfigureList.class);
+	            int sfId=Integer.parseInt(request.getParameter("sfitems"));
+				 float sfQty=Float.parseFloat(request.getParameter("no_of_kg"));
+	            System.err.println("itemHeaderList"+sfId);System.err.println("itemHeaderList"+itemHeaderList.toString());
+				 for(int m=0;m<itemHeaderList.size();m++) {
+					 if(itemHeaderList.get(m).getSfId()==sfId) 
+					 {
+				
+				 float prevSfQty=sfQty;
+				 float mulFactor=itemHeaderList.get(m).getMulFactor();
+				 String sfName=itemHeaderList.get(m).getSfName();
+				 String uom="";//itemHeaderList.get(m).u
+				 String  itemIds="";
+				 
+				   MixingDetailed mixingDetailed = new MixingDetailed();
+					mixingDetailed.setMixing_detailId(0);
+					mixingDetailed.setMixingId(0);
+					mixingDetailed.setSfId(sfId);
+
+					mixingDetailed.setSfName(sfName);
+					mixingDetailed.setReceivedQty(sfQty);
+					mixingDetailed.setProductionQty(sfQty);//req qty set to Production
+
+					mixingDetailed.setUom(uom);
+					mixingDetailed.setMixingDate(date);
+					mixingDetailed.setExBool1(0);
+					mixingDetailed.setExInt2(0);
+					mixingDetailed.setExInt1(0);
+					mixingDetailed.setExInt3(0);
+					mixingDetailed.setExVarchar1(""+mulFactor);//+prodMixingReqP1.get(i).getMulFactor()
+					mixingDetailed.setExVarchar2("");
+					mixingDetailed.setExVarchar3("");
+					mixingDetailed.setOriginalQty(prevSfQty*mulFactor);//prodMixingReqP1.get(i).getPrevTotal()// new field 22 Jan
+					mixingDetailed.setAutoOrderQty(prevSfQty*mulFactor);// prodMixingReqP1.get(i).getMulFactor() * prodMixingReqP1.get(i).getPrevTotal()
+																															// field
+					addmixingDetailedlist.add(mixingDetailed);
+				MixingHeader mixingHeader = new MixingHeader();
+			
+				mixingHeader.setMixId(0);
+				mixingHeader.setMixDate(date);
+				mixingHeader.setProductionId(prodHeaderId);
+				mixingHeader.setProductionBatch(postProdPlanHeader.getProductionBatch());
+				mixingHeader.setStatus(2);
+				mixingHeader.setDelStatus(0);
+				mixingHeader.setTimeSlot(postProdPlanHeader.getTimeSlot());
+				mixingHeader.setIsBom(1);
+				mixingHeader.setExBool1(0);
+				mixingHeader.setExInt1(settingList.getFrItemStockConfigure().get(0).getSettingValue());//deptId
+				mixingHeader.setExInt2(1);//manual mixing
+				mixingHeader.setExInt3(0);
+				mixingHeader.setExVarchar1("");
+				mixingHeader.setExVarchar2("");
+				mixingHeader.setExVarchar3("");
+				
+				mixingHeader.setMixingDetailed(addmixingDetailedlist);
+				System.out.println("while inserting Mixing Header = " + mixingHeader.toString());
+				
+				
+
+				try {
+					 String[] sfDidList=request.getParameterValues("sfDid");
+					 List<BillOfMaterialDetailed> bomDetailList = new ArrayList<BillOfMaterialDetailed>();
+
+					 for(int i=0;i<sfDidList.length;i++)
+					 {
+							int rmId = Integer.parseInt(request.getParameter("rmId" + sfDidList[i]));
+							int rmType = Integer.parseInt(request.getParameter("rmType" +sfDidList[i]));
+							float rmQty = Float.parseFloat(request.getParameter("rmQty2" + sfDidList[i]));
+							float prevRmQty = Float.parseFloat(request.getParameter("prevRmQty" +sfDidList[i]));
+							 String rmName=request.getParameter("rmName" + sfDidList[i]);
+							 String uomName=request.getParameter("uomRm" + sfDidList[i]);
+							 
+							BillOfMaterialDetailed	bomDetail = new BillOfMaterialDetailed();
+
+							bomDetail.setDelStatus(0);
+							bomDetail.setRmId(rmId);
+							bomDetail.setRmIssueQty(rmQty);
+							bomDetail.setUom(uomName);
+							bomDetail.setRmType(rmType);
+							bomDetail.setRmReqQty(rmQty);
+							bomDetail.setRmName(rmName);
+							
+							bomDetail.setRejectedQty(0);
+							bomDetail.setAutoRmReqQty(prevRmQty);
+							
+							bomDetail.setReturnQty(0);
+							bomDetailList.add(bomDetail);
+					 }
+					
+					int fromDeptId=settingList.getFrItemStockConfigure().get(0).getSettingValue(); //change on 18-09-2019
+					String fromDeptName=settingList.getFrItemStockConfigure().get(0).getSettingKey();
+					
+					BillOfMaterialHeader billOfMaterialHeader = new BillOfMaterialHeader();
+
+					billOfMaterialHeader.setApprovedDate(date);
+					billOfMaterialHeader.setApprovedUserId(userResponse.getUser().getId());
+					billOfMaterialHeader.setDelStatus(0);
+					 
+					billOfMaterialHeader.setProductionDate(date);
+					billOfMaterialHeader.setProductionId(prodHeaderId);
+					billOfMaterialHeader.setReqDate(date);
+					billOfMaterialHeader.setSenderUserid(userResponse.getUser().getId());//hardcoded
+					billOfMaterialHeader.setStatus(4);
+				
+					billOfMaterialHeader.setExInt1(postProdPlanHeader.getItemGrp1());//Category
+					billOfMaterialHeader.setRejApproveDate(date);
+					billOfMaterialHeader.setRejApproveUserId(0);
+					billOfMaterialHeader.setRejDate(date);
+					billOfMaterialHeader.setRejUserId(0);
+					
+					billOfMaterialHeader.setIsManual(1);
+
+						map = new LinkedMultiValueMap<String, Object>();
+						map.add("settingKeyList", "BMS");
+						FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+								FrItemStockConfigureList.class);
+						int toDeptId=settingList1.getFrItemStockConfigure().get(0).getSettingValue();
+						String toDeptName=settingList1.getFrItemStockConfigure().get(0).getSettingKey();
+						
+						billOfMaterialHeader.setToDeptId(toDeptId);
+						billOfMaterialHeader.setToDeptName(toDeptName);
+						billOfMaterialHeader.setIsProduction(1);
+						billOfMaterialHeader.setFromDeptId(fromDeptId);
+						billOfMaterialHeader.setFromDeptName(fromDeptName);
+						billOfMaterialHeader.setIsPlan(postProdPlanHeader.getIsPlanned());			
+
+						System.out.println("bom detail List " + bomDetailList.toString());
+						billOfMaterialHeader.setBillOfMaterialDetailed(bomDetailList);
+
+						System.out.println(" insert List " + billOfMaterialHeader.toString());
+						Info info = restTemplate.postForObject(Constants.url + "saveBom", billOfMaterialHeader, Info.class);
+						System.out.println(info);
+						if(info.getError()==false)
+						{
+							flag=1;
+						}
+					
+						if(flag==1) {
+						RestTemplate rest = new RestTemplate();
+						MixingHeader mixingHeaderin = rest.postForObject(Constants.url + "insertMixingHeaderndDetailed", mixingHeader,
+								MixingHeader.class);
+					
+						if (mixingHeaderin != null) {
+							flag+=1;
+						}
+						}
+					 }catch (Exception e) {
+							e.printStackTrace();
+						}
+				 }
+				 }
 		 }catch (Exception e) {
 			e.printStackTrace();
 		}

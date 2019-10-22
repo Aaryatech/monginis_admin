@@ -182,8 +182,8 @@
 																 <a href="" onclick="showDetailsForLayering(${planHeader.productionHeaderId},'${planHeader.productionDate}')" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm2">Layering</a>
 																 <a href="" onclick="showDetailsForCoating(${planHeader.productionHeaderId},'${planHeader.productionDate}')" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm3">Coating</a>
 																 <a href="" onclick="showDetailsForIssue(${planHeader.productionHeaderId},'${planHeader.productionDate}')" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm4">Issue</a>
-<%-- 																  <a href="" onclick="showDetailsForManual(${planHeader.productionHeaderId})" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm5">Issue</a>
- --%>																</div>
+															  <a href="" onclick="showDetailsForManual(${planHeader.productionHeaderId},'${planHeader.productionDate}')" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm5">Manual Prod</a>
+ 															</div>
 															    </c:when>
 																
 																<c:otherwise>
@@ -559,7 +559,9 @@
 <!------------------------------------------ MODEL 5-------------------------------------------------->
 <div class="modal fade" id="elegantModalForm5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true" >
-
+<div id="overlay7">
+	<div class="clock"></div>
+</div>
   <div class="modal-dialog" role="document" style="width:80%;height:50%;">
     <!--Content-->
     <div class="modal-content form-elegant">
@@ -582,7 +584,7 @@
      		 <input type="hidden" name="prodHeaderId5" id="prodHeaderId5"  />
      		  <input type="hidden" name="itemDetailId5" id="itemDetailId5"  />
      		 <div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Dept</label>
+											<%-- <label class="col-sm-3 col-lg-2 control-label">Dept</label>
 											<div class="col-sm-9 col-lg-3 controls">
 												<select data-placeholder="Select Type" name="deptId"
 													class="form-control chosen" tabindex="-1" id="deptId" onchange="onDeptChange(this.value)"
@@ -594,7 +596,7 @@
 											 </c:forEach> 
 
 												</select>
-											</div>
+											</div> --%>
 											<label class="col-sm-3 col-lg-2 control-label">Type</label>
 											<div class="col-sm-9 col-lg-3 controls">
 												<select data-placeholder="Select Type" name="typeId"
@@ -607,23 +609,47 @@
 											</c:forEach> 
 												</select>
 											</div>
-										</div>
+										<!-- </div>
                                             <br><br><br>
-											<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label">Product</label>
-											<div class="col-sm-9 col-lg-8 controls">
-												<select data-placeholder="Select Products" name="sfitems[]"
-													class="form-control chosen" tabindex="-1" id="sfitems" multiple="multiple"
+											<div class="form-group"> -->
+											<label class="col-sm-3 col-lg-1 control-label">Product</label>
+											<div class="col-sm-9 col-lg-3 controls">
+												<select data-placeholder="Select Products" name="sfitems"
+													class="form-control chosen" tabindex="-1" id="sfitems" 
 													data-rule-required="true" onchange='onAllSfSelect()'>
                                                    
 												</select>
 												
 											</div>
+											<label class="col-sm-3 col-lg-1 control-label">Kg</label>
+											<div class="col-sm-9 col-lg-1 controls">
+												<input type="text" name="no_of_kg" id="no_of_kg" value="0" class="form-control" />
+												
+											</div>
 										<!-- </div><br>
 										 <div class="form-group"> -->
-										 <input type="button" class="btn bn-primary" value="Search" id="searchManualItems" onclick="searchManualItems()"/>
+										 	<div class="col-sm-9 col-lg-1 controls">
+										 <input type="button" class="btn bn-primary" value="Search" id="searchManualItems" onclick="onSfAddManualProdLayering()"/>
 										 </div>
-     		 
+										 </div>
+     		 	<div class="component" >
+									<table width="80%"  id="modeltable9" style="font-size: 13px; font-weight:bold; border: 1px solid;border-color: #91d6b8;" > <!-- class="table table-advance" -->
+										<thead>
+											<tr>
+												<th width="17" style="width: 18px">Sr No</th>
+												<th width="120" align="left">Product Name</th>
+												<th width="100" align="left">Product Type</th>
+												<th width="120" align="left">Qty</th>
+												<th width="120" align="left">Edit Qty</th>
+												<th width="100" align="left">UOM</th> 
+											</tr>
+										</thead>
+										<tbody>
+											
+										</tbody>
+									</table>
+								
+								</div>
      			
 								
 								</form>	
@@ -632,7 +658,7 @@
       <div class="modal-body mx-4" >
         <!--Body-->
         <div class="text-center mb-1">
-          <button type="button" class="btn btn-primary" id="sbtbtn5" disabled="disabled">Submit</button>
+          <button type="button" class="btn btn-primary" id="sbtbtn7" disabled="disabled">Submit</button>
         </div>         
       </div>
       <!--Footer-->    
@@ -1190,7 +1216,7 @@
                 $.getJSON('${findItemsByGrpId}', {
                     grpId : grpId,
                     prodHeaderId : prodHeaderId,
-                    fromDept:"PROD",
+                    fromDept:"BMS",
                     toDept:"BMS",
                     ajax : 'true'
                 }, function(data) {
@@ -1232,7 +1258,7 @@
                 $.getJSON('${findItemsByGrpId}', {
                     grpId : grpId,
                     prodHeaderId : prodHeaderId, 
-                    fromDept:"PROD",
+                    fromDept:"BMS",
                     toDept:"BMS",
                     ajax : 'true'
                 }, function(data) {
@@ -1247,10 +1273,17 @@
                     for ( var i = 0; i < len; i++) {
                             
                                 
-                        $("#items").append(
-                                $("<option style='text-align: left;'  selected></option>").attr(
-                                    "value", data[i].id).text(data[i].itemName)
-                            );
+                    	 if(data[i].itemId==1){
+                             $("#items").append(
+                                     $("<option style='text-align: left;' disabled></option>").attr(
+                                         "value", data[i].id).text(data[i].itemName)   );
+                                     }
+                                     else
+                                     	{
+                                     	 $("#items").append(
+                                                  $("<option style='text-align: left;' selected></option>").attr(
+                                                      "value", data[i].id).text(data[i].itemName)   );
+                                     	}
                        
                     }
 
@@ -1328,17 +1361,26 @@ if(items.includes("-1")){
     	document.getElementById("prodHeaderId4").value=prodHeaderId;
     	document.getElementById("prodIdSpan4").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodHeaderId;
 		document.getElementById("prodDateSpan4").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodDate;
-	
+		document.getElementById("grpId").value="";   $("#grpId").trigger("chosen:updated");
     	$('#items')
 	    .find('option')
 	    .remove()
 	    .end()
 	    $("#items").trigger("chosen:updated");
-    }
-    function showDetailsForManual(prodHeaderId)
-    {
-    	document.getElementById("prodHeaderId5").value=prodHeaderId;
     	
+    }
+    function showDetailsForManual(prodHeaderId,prodDate)
+    {
+    	document.getElementById("prodHeaderId5").value=prodHeaderId;document.getElementById("dept5").value="BMS";
+    	document.getElementById("prodIdSpan5").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodHeaderId;
+		document.getElementById("prodDateSpan5").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodDate;
+		$('#modeltable9 td').remove();
+		$('#sfitems')
+	    .find('option')
+	    .remove()
+	    .end();
+		$("#sfitems").trigger("chosen:updated");
+		  document.getElementById("no_of_kg").value="0";
     }
     </script>
      <script type="text/javascript">
@@ -1365,7 +1407,7 @@ $('#searchIssueItems').click(function(){
   					 if(data.total>0)
   	    			 actQty=(data.total/1000).toFixed(3);
   							var tr = $('<tr id="modeltable7'+data.itemDetailId+'" ></tr>');
-  						  	tr.append($('<td></td>').html((key+1)+"<input type=hidden name='itemDetailId'  value="+data.itemDetailId+"   id="+ data.itemDetailId+"  > "));
+  						  	tr.append($('<td></td>').html((key+1)+"<input type=hidden name='itemDetailId'  value="+data.itemDetailId+"   id="+ data.itemDetailId+"  />   <input type=hidden name='itemId"+ data.itemDetailId+"'  value="+data.itemId+"   id="+ data.itemDetailId+"  > "));
   						  	tr.append($('<td></td>').html(data.rmName+""+"<input type=hidden value='"+data.rmName+"'  id=rmName"+data.itemDetailId+"  name=rmName"+data.itemDetailId+"  >"));
   						 
   						  	if(data.rmType==1)
@@ -1475,6 +1517,7 @@ $('#searchIssueItems').click(function(){
     	if(itemIdsArr.length>0){
     	itemIdsArr.forEach(function(v) {
     		alert(v)
+    		  document.getElementById("ld"+v).checked = true;
 
     		
     	});
@@ -1504,6 +1547,97 @@ $('#searchIssueItems').click(function(){
 				$("#overlay6").fadeOut(300);
 				$("#closeHrefModel6")[0].click()
     }
+    </script>
+       <script type="text/javascript">
+ function onSfAddManualProdLayering() {
+	 
+	 var sfItems = [];
+	 var flag=0;
+		
+			if($('#no_of_kg').val()<=0){
+				flag=1;
+			}
+		var sf = {
+				  "sfId": $('#sfitems').val(),
+				  "rmQty": $('#no_of_kg').val()
+				}
+		sfItems.push(sf);
+		
+  			//$("#sbtbtn2").prop("disabled", true);
+  			if(flag==1)
+  				{
+  				alert("Qty should be greator than 0")
+  				}
+  			else{
+  		 	$.ajax({
+  		             type: "POST",
+  		             contentType: "application/json",
+  		             url: "${pageContext.request.contextPath}/getSfDetailsForLayering",
+  		             data: JSON.stringify(sfItems),
+  		             dataType: 'json',
+  		             timeout: 600000,
+  		             success: function (data) {
+  		                 $("#sbtbtn7").prop("disabled", false);
+  		               
+  		               var len = data.length;
+  		     		$('#modeltable9 td').remove();
+  		     		
+  		     		$.each(data,function(key, data) {
+  		     			
+  	    			  var rmName=(data.rmName.split("#"))[0]; var uom=(data.rmName.split("#"))[1];
+  	    			 var actQty=0;
+  					 if(data.rmQty>0)
+  	    			 actQty=(data.rmQty).toFixed(3);
+  		 						var tr = $('<tr></tr>');
+  		 						//tr.append($('<td></td>').html("<input type=checkbox name='chk'  value="+data.itemDetailId+"   id="+ data.itemDetailId+"  >  <label for="+ data.itemDetailId+" ></label>"));
+  		 					  	tr.append($('<td></td>').html((key+1)+"<input type=hidden name='sfDid'  value="+data.sfDid+"   id="+ data.sfDid+"  > "));
+  		 					  	tr.append($('<td></td>').html(rmName+"<input type=hidden name=rmName"+data.sfDid+" id=rmName"+data.sfDid+" value='"+rmName+"' />"));
+  		 					  	if(data.rmType==1)
+  		 					  	tr.append($('<td></td>').html("RM"+"<input type=hidden name=rmType"+data.sfDid+" id=rmType"+data.sfDid+" value=1 />"));
+  		 					  	else
+  		 						  	tr.append($('<td></td>').html("SF"+"<input type=hidden name=rmType"+data.sfDid+" id=rmType"+data.sfDid+" value=2 />"));
+  		 					  	tr.append($('<td></td>').html(actQty+"<input type=hidden name=prevRmQty"+data.sfDid+" id=prevRmQty"+data.sfDid+" value="+data.rmQty+" />"));
+  		 					  	tr.append($('<td></td>').html("<input type=text onkeypress='return IsNumeric(event);' style='width:100px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control'  name=rmQty2"+ data.sfDid+"  id=rmQty2"
+  		 								+ data.sfDid+" value="+actQty+" /> &nbsp;  <input type=hidden id=rmId"+data.sfDid+"  name=rmId"+data.sfDid+"  value="+data.rmId+" />" ));
+  		 						tr.append($('<td></td>').html(uom+""+"<input type=hidden value='"+uom+"'  id=uomRm"+data.sfDid+"  name=uomRm"+data.sfDid+"  >"));
+  		 						$('#modeltable9 tbody').append(tr);
+  	     		});
+  		     	        
+  		             },
+  		             error: function (e) {
+  		                 $("#sbtbtn7").prop("disabled", false);
+  		                 //...
+  		             }
+  			});
+  			}//if close
+
+  		}
+
+    </script>
+    <script type="text/javascript">
+    $('#sbtbtn7').click(function(){
+		$("#overlay7").fadeIn(300);
+		
+		$.ajax({
+			    type: "POST",
+	             url: "${pageContext.request.contextPath}/postManualData",
+	             data: $("#modalfrm5").serialize(),
+	             dataType: 'json',
+			success: function(data){
+				if(data>=1)
+					{
+					$('#modeltable9 td').remove();
+					alert("Mixing and Bom Done")
+					$("#overlay7").fadeOut(300);
+					$("#closeHrefModel5")[0].click()
+					}
+			}
+		}).done(function() {
+			setTimeout(function(){
+				$("#overlay7").fadeOut(300);
+			},500);
+		});
+	});	
     </script>
 	<!--basic scripts-->
  <script
