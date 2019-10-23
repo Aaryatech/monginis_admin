@@ -1017,7 +1017,7 @@ public class ProductionApplController {
             map.add("settingKeyList", toDept);
             FrItemStockConfigureList toSettingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
 		    FrItemStockConfigureList.class);
-            
+             
 			 map = new LinkedMultiValueMap<String, Object>();
 			map.add("itemGrp3", grpId);
 			map.add("prodHeaderId", prodHeaderId);
