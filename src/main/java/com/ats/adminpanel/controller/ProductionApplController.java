@@ -75,7 +75,6 @@ public class ProductionApplController {
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
 
-				System.out.println("inside if ");
 			} else {
 				fromDate = request.getParameter("from_date");
 				toDate = request.getParameter("to_date");
@@ -104,12 +103,20 @@ public class ProductionApplController {
 			DepartmentList departmentList=restTemplate.getForObject(Constants.url+"getAllDept", DepartmentList.class);
 			model.addObject("departmentList", departmentList.getDepartmentList());
 		
-			 map = new LinkedMultiValueMap<String, Object>();
-			map.add("delStatus", 0);
-			List<GetSfType> sfTypeList=restTemplate.postForObject(Constants.url+"getSfType",map,List.class);
-			model.addObject("sfTypeList", sfTypeList);
+			if(type==2) {
+				  map.add("settingKeyList", "BMS");
+		            FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+				    FrItemStockConfigureList.class);
+		            model.addObject("deptId", settingList.getFrItemStockConfigure().get(0).getSettingValue());
+					System.out.println("deptId"+settingList.getFrItemStockConfigure().get(0).getSettingValue());
+
+			}
 			
-			System.out.println("prod header " + prodPlanHeaderList.toString());
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("delStatus",0);
+			List<GetSfType> sfTypeList=restTemplate.postForObject(Constants.url+"getSfType",map,List.class);
+			
+			model.addObject("sfTypeList", sfTypeList);
 			model.addObject("fromDate", fromDate);
 			model.addObject("toDate", toDate);
 			model.addObject("type", type);
@@ -568,8 +575,10 @@ public class ProductionApplController {
 					billOfMaterialHeader.setApprovedDate(date);
 					billOfMaterialHeader.setApprovedUserId(userResponse.getUser().getId());//hardcoded
 					billOfMaterialHeader.setDelStatus(0);
-					 
-					billOfMaterialHeader.setProductionDate(date);
+					DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+					Date date1 = new Date();
+					date1 = df.parse(postProdPlanHeader.getProductionDate());
+					billOfMaterialHeader.setProductionDate(date1);
 					billOfMaterialHeader.setProductionId(prodHeaderId);
 					billOfMaterialHeader.setReqDate(date);
 					billOfMaterialHeader.setSenderUserid(userResponse.getUser().getId());//hardcoded
@@ -745,8 +754,10 @@ public class ProductionApplController {
 					billOfMaterialHeader.setApprovedDate(date);
 					billOfMaterialHeader.setApprovedUserId(userResponse.getUser().getId());
 					billOfMaterialHeader.setDelStatus(0);
-					 
-					billOfMaterialHeader.setProductionDate(date);
+					DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+					Date date1 = new Date();
+					date1 = df.parse(postProdPlanHeader.getProductionDate());
+					billOfMaterialHeader.setProductionDate(date1);
 					billOfMaterialHeader.setProductionId(prodHeaderId);
 					billOfMaterialHeader.setReqDate(date);
 					billOfMaterialHeader.setSenderUserid(userResponse.getUser().getId());//hardcoded
@@ -921,8 +932,11 @@ public class ProductionApplController {
 					billOfMaterialHeader.setApprovedDate(date);
 					billOfMaterialHeader.setApprovedUserId(userResponse.getUser().getId());//hardcoded
 					billOfMaterialHeader.setDelStatus(0);
+					DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+					 Date date1 = new Date();
+					 date1 = df.parse(postProdPlanHeader.getProductionDate());
 					 
-					billOfMaterialHeader.setProductionDate(date);
+					billOfMaterialHeader.setProductionDate(date1);
 					billOfMaterialHeader.setProductionId(prodHeaderId);
 					billOfMaterialHeader.setReqDate(date);
 					billOfMaterialHeader.setSenderUserid(userResponse.getUser().getId());//hardcoded
@@ -1165,8 +1179,10 @@ public class ProductionApplController {
 					billOfMaterialHeader.setApprovedDate(date);
 					billOfMaterialHeader.setApprovedUserId(userResponse.getUser().getId());//hardcoded
 					billOfMaterialHeader.setDelStatus(0);
-					 
-					billOfMaterialHeader.setProductionDate(date);
+					DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+					Date date1 = new Date();
+					date1 = df.parse(postProdPlanHeader.getProductionDate());
+					billOfMaterialHeader.setProductionDate(date1);
 					billOfMaterialHeader.setProductionId(prodHeaderId);
 					billOfMaterialHeader.setReqDate(date);
 					billOfMaterialHeader.setSenderUserid(userResponse.getUser().getId());//hardcoded
@@ -1337,8 +1353,10 @@ public class ProductionApplController {
 					billOfMaterialHeader.setApprovedDate(date);
 					billOfMaterialHeader.setApprovedUserId(userResponse.getUser().getId());
 					billOfMaterialHeader.setDelStatus(0);
-					 
-					billOfMaterialHeader.setProductionDate(date);
+					DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+					Date date1 = new Date();
+					date1 = df.parse(postProdPlanHeader.getProductionDate());
+					billOfMaterialHeader.setProductionDate(date1);
 					billOfMaterialHeader.setProductionId(prodHeaderId);
 					billOfMaterialHeader.setReqDate(date);
 					billOfMaterialHeader.setSenderUserid(userResponse.getUser().getId());//hardcoded

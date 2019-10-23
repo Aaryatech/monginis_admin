@@ -605,7 +605,13 @@
 						<option value="" disabled="disabled" selected style="text-align: left;">Select Type</option>
 												
 	                                       <c:forEach items="${sfTypeList}" var="sfTypeList">
-												<option value="${sfTypeList.id}" style="text-align: left;">${sfTypeList.sfTypeName}</option>
+	                                       <c:choose>
+	                                       <c:when test="${deptId==sfTypeList.delStatus}">
+	                                       <option value="${sfTypeList.id}" style="text-align: left;" >${sfTypeList.sfTypeName}</option>
+	                                       </c:when>
+	                                      
+	                                       </c:choose>
+												
 											</c:forEach> 
 												</select>
 											</div>
@@ -1306,7 +1312,7 @@
 		    .find('option')
 		    .remove()
 		    .end()
-		 $("#sfitems").append($("<option style='text-align: left;'></option>").attr( "value",-1).text("ALL"));
+		 $("#sfitems").append($("<option style='text-align: left;'></option>").attr( "value","").text("Select Product"));
          for ( var i = 0; i < len; i++) {
              $("#sfitems").append(
                      $("<option style='text-align: left;'></option>").attr(
@@ -1336,7 +1342,7 @@ if(items.includes("-1")){
 		    .find('option')
 		    .remove()
 		    .end()
-		 $("#sfitems").append($("<option style='text-align: left;' ></option>").attr( "value",-1).text("ALL"));
+		 $("#sfitems").append($("<option style='text-align: left;' ></option>").attr( "value","").text("Select Product"));
          for ( var i = 0; i < len; i++) {
                  
                      
@@ -1357,7 +1363,7 @@ if(items.includes("-1")){
     {
     
     	$('#modeltable7 td').remove();
-    	document.getElementById("dept4").value="BMS";
+    	document.getElementById("dept4").value="PROD";
     	document.getElementById("prodHeaderId4").value=prodHeaderId;
     	document.getElementById("prodIdSpan4").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodHeaderId;
 		document.getElementById("prodDateSpan4").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodDate;
