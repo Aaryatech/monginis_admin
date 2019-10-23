@@ -12,6 +12,10 @@
     a[disabled="disabled"] {
         pointer-events: none;
     }
+    .switch-toggle {
+  width: 14em;
+}
+
 </style>
 <body>
 <c:url var="showDetailsForLayering" value="/showDetailsForLayering"/>
@@ -473,7 +477,16 @@
     <div class="modal-content form-elegant">
       <!--Header-->
       <div class="modal-header text-center">
-        <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3" id="myModalLabel" style="color:#ea4973;"><strong>ISSUE RM</strong></h3>
+    
+        <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3" id="myModalLabel" style="color:#ea4973;"><strong>ISSUE RM</strong>  <div class="switch-toggle switch-3 switch-candy">
+  <input id="on" name="stated" type="radio" checked="" value="0" style="color:green;" onclick="onGrpChange(0)"/>
+  <label for="on" onclick="">Issue</label>
+
+  <input id="off" name="stated" type="radio" value="1" style="color:green;"   onclick="onGrpChange(1)"/>
+  <label for="off" onclick="">Manual Issue</label>
+
+  <a></a>
+</div></h3>
        
             <a href="#" class="close" data-dismiss="modal" aria-label="Close" id="closeHrefModel4">
       <img src="${pageContext.request.contextPath}/resources/img/close.png" alt="X" class="imageclass"/>
@@ -492,7 +505,7 @@
 											<label class="col-sm-3 col-lg-2 control-label">Group</label>
 											<div class="col-sm-9 col-lg-8 controls">
 												<select data-placeholder="Select Group" name="grpId"
-													class="form-control chosen" tabindex="-1" id="grpId" onchange="onGrpChange(this.value)"
+													class="form-control chosen" tabindex="-1" id="grpId" onchange="onGrpChange(0)"
 													data-rule-required="true"  >
 						<option value="" disabled="disabled" selected style="text-align: left;">Select Group</option>
 													
@@ -788,7 +801,7 @@
 				 if(data.total>0)
     			 actQty=(data.total/1000).toFixed(3);
 						var tr = $('<tr></tr>');
-						tr.append($('<td></td>').html("<input type=checkbox name='chk'  "+styleClass+" value="+data.itemDetailId+"   id="+ data.itemDetailId+"  >  <label for="+ data.itemDetailId+" ></label>"));
+						tr.append($('<td></td>').html("<input type=checkbox name='chk'  "+styleClass+" value="+data.itemDetailId+"   id="+ data.itemDetailId+"  onclick='onEditCp()'>  <label for="+ data.itemDetailId+" ></label>"));
 					  	tr.append($('<td></td>').html(key+1));
 					  	tr.append($('<td></td>').html(data.rmName+""+"<input type=hidden value='"+data.rmName+"'  id=rmName"+data.itemDetailId+"  name=rmName"+data.itemDetailId+"  >"));
 					 
@@ -798,7 +811,7 @@
 						  	tr.append($('<td></td>').html("SF"+"<input type=hidden value="+data.singleCut+"  id=mulFactor"+data.itemDetailId+"  name=mulFactor"+data.itemDetailId+"  >"));
 					  	tr.append($('<td></td>').html(actQty+""+"<input type=hidden value="+actQty+"  id=prevRmQty"+data.itemDetailId+"  name=prevRmQty"+data.itemDetailId+"  >"));
 					  	tr.append($('<td></td>').html("<input type=text onkeypress='return IsNumeric(event);' style='width:100px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control' name='rmQty"+data.itemDetailId+"'  id=rmQty"
-								+ data.itemDetailId+" value="+actQty+" /> &nbsp;  <input type=hidden id=sfId"+data.itemDetailId+"  name=sfId"+data.itemDetailId+"  value="+data.rmId+" />" ));
+								+ data.itemDetailId+" value="+actQty+" oninput='onSfAdd()' /> &nbsp;  <input type=hidden id=sfId"+data.itemDetailId+"  name=sfId"+data.itemDetailId+"  value="+data.rmId+" />" ));
 						tr.append($('<td></td>').html(data.uom+""+"<input type=hidden value='"+data.uom+"'  id=uom"+data.itemDetailId+"  name=uom"+data.itemDetailId+"  >"));
 						$('#modeltable tbody').append(tr);
     		});
@@ -817,11 +830,13 @@
    
     function checkAll ()
     {
-    	$("input[type=checkbox]").prop('checked', true);
+    	$("input[type=checkbox]").prop('checked', true);alert("jj");
+    	showTotalQty();
     }
     function uncheckAll ()
     {
     	$("input[type=checkbox]").prop('checked', false);
+    	showTotalQty();
     }
     </script>
     <script type="text/javascript">
@@ -947,10 +962,10 @@
 					  	else
 						  	tr.append($('<td></td>').html("SF"+"<input type=hidden value="+data.singleCut+"  id=mulFactor"+data.itemDetailId+"  name=mulFactor"+data.itemDetailId+"  >"));
 					  	tr.append($('<td></td>').html(actQty+""+"<input type=hidden value="+actQty+"  id=prevRmQty"+data.itemDetailId+"  name=prevRmQty"+data.itemDetailId+"  >"));
-					  	tr.append($('<td></td>').html("<input type=text onkeypress='return IsNumeric(event);' style='width:100px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control' name='rmQty"+data.itemDetailId+"'  id=rmQty"
-								+ data.itemDetailId+" value="+0+"  readonly /> &nbsp;  <input type=hidden id=sfId"+data.itemDetailId+"  name=sfId"+data.itemDetailId+"  value="+data.rmId+" />" ));
+					  	tr.append($('<td></td>').html("<input type=text onkeypress='return IsNumeric(event);' style='width:100px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control' name='rmQty"+data.itemDetailId+"'  id='rmQty"
+								+ data.itemDetailId+"' value="+0+"  readonly /> &nbsp;  <input type=hidden id=sfId"+data.itemDetailId+"  name=sfId"+data.itemDetailId+"  value="+data.rmId+" />" ));
 						tr.append($('<td></td>').html(data.uom+""+"<input type=hidden value='"+data.uom+"'  id=uom"+data.itemDetailId+"  name=uom"+data.itemDetailId+"  >"));
-						tr.append($('<td></td>').html("<input type=button name='btn' id='btn' value='BOM' class='btn btn-primary' onclick=onSfAdd2("+data.itemDetailId+") > "));
+						tr.append($('<td></td>').html("<input type=button name='btn' id='layerbombtn"+data.itemDetailId+"' value='BOM' class='btn btn-primary' onclick=onSfAdd2("+data.itemDetailId+") > "));
 
 						$('#modeltable3 tbody').append(tr);
     		});
@@ -1024,6 +1039,7 @@
      $('#modeltable3 tr').addClass("blackselected");
      document.getElementById('modeltable3'+itemDetailId).className = 'pinkselected';
      document.getElementById('itemDetailId2').value=itemDetailId;
+     document.getElementById('layerbombtn'+itemDetailId).disabled=true;
 
 	  var sfItems = [];
 
@@ -1098,7 +1114,6 @@
      $('#modeltable5 tr').addClass("blackselected");
      document.getElementById('modeltable5'+itemDetailId).className = 'pinkselected';
      document.getElementById('itemDetailId3').value=itemDetailId;
-
 	  var sfItems = [];
 
 	 var arr=[];
@@ -1212,8 +1227,8 @@
     
 <script type="text/javascript">
 
-            function onGrpChange(grpId) { 
-            	
+            function onGrpChange(isManual) { 
+            	var grpId=$('#grpId').val();
             	$('#items')
 			    .find('option')
 			    .remove()
@@ -1236,7 +1251,7 @@
 				 $("#items").append($("<option style='text-align: left;'></option>").attr( "value",-1).text("ALL"));
                     for ( var i = 0; i < len; i++) {
                             
-                                if(data[i].itemId==1){
+                                if(data[i].itemId==1 && isManual==0){
                         $("#items").append(
                                 $("<option style='text-align: left;' disabled></option>").attr(
                                     "value", data[i].id).text(data[i].itemName)   );
@@ -1403,11 +1418,11 @@ $('#searchIssueItems').click(function(){
   		             dataType: 'json',
   		             success: function (data) {
   		                 $("#sbtbtn4").prop("disabled", false);
-  		               
+  		               document.getElementById("searchIssueItems").value="Search";
   		               var len = data.length;
   		     		$('#modeltable7 td').remove();
   		     		$.each(data,function(key, data) {
-  		     		    document.getElementById("searchIssueItems").value="Search";
+  		     		   
                    
   		     		 var actQty=0;
   					 if(data.total>0)
@@ -1471,6 +1486,8 @@ $('#searchIssueItems').click(function(){
     function showDetailsForLayerDetails(prodHeaderId,rmId,itemDetailId,prodDate,actQty,rmName)
     {
     	 var itemIds=document.getElementById("layer"+itemDetailId).value;
+         
+
     	 var itemIdsArr;
     	 if(itemIds!=null && itemIds!="")
     		 itemIdsArr=itemIds.split(',');
@@ -1486,6 +1503,8 @@ $('#searchIssueItems').click(function(){
     		$('#modeltable8 td').remove();
     		document.getElementById("dept6").value="BMS";
     		document.getElementById("prodHeaderId6").value=prodHeaderId;
+    		//document.getElementById("rmQty"+itemDetailId).value=0;
+
     		document.getElementById("prodIdSpan6").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodHeaderId;
     		document.getElementById("prepQtySpan6").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+actQty;
     		document.getElementById("itemNameSpan6").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+rmName;
@@ -1506,7 +1525,7 @@ $('#searchIssueItems').click(function(){
 						if(data.doubleCut==1){
 							tr.append($('<td></td>').html(""));
 						}else{
-						tr.append($('<td></td>').html("<input type='checkbox'      name='chklayering'  value="+data.itemId+"   id=ld"+data.itemId+"  >  <label for='ld"+data.itemId+"' ></label>"));
+						tr.append($('<td></td>').html("<input type='checkbox'  onclick='showTotalQty()'   name='chklayering'  value="+data.itemId+"   id=ld"+data.itemId+"  >  <label for='ld"+data.itemId+"' ></label>"));
 						}
 					  	tr.append($('<td></td>').html(key+1));
 					  	tr.append($('<td></td>').html(data.rmName));
@@ -1515,15 +1534,16 @@ $('#searchIssueItems').click(function(){
 						$('#modeltable8 tbody').append(tr);
     		});
             var tr = $('<tr></tr>');
-			tr.append($('<td colspan="4"></td>').html("<a href='#' disabled="+approveStatusStyle+"  style='text-decoration:underline;' onclick='checkAll()' > Select All </a> &nbsp;&nbsp;<a href='#' style='color:grey;text-decoration:underline;' onclick='uncheckAll()'> Remove </a> "));
+			tr.append($('<td colspan="4"></td>').html("<a href='#' disabled="+approveStatusStyle+"  style='text-decoration:underline;' onclick='checkAll()' > Select All </a> &nbsp;&nbsp;<a href='#' style='color:grey;text-decoration:underline;' onclick='uncheckAll()'> Remove </a> &nbsp;&nbsp;&nbsp;&nbsp;  <input type='text' value='0' id='layerDetailQty' name='layerDetailQty' readonly   style='  padding: 6px 10px; margin: 4px 0; width:100px;	border-radius:25px;text-align:center;  box-sizing: border-box;  border: none; font-weight:bold; background-color: #3CBC8D; color: white;'  /> "));
 			tr.append($('<td ></td>').html(" <button type='button' "+approveStatusStyle+"  class='btn btn-primary' id='addLayerItem' onclick='onLayerItemAdd("+itemDetailId+")'  >Add</button>"));
 			$('#modeltable8 tbody').append(tr);
     		
     	});
     	if(itemIdsArr.length>0){
     	itemIdsArr.forEach(function(v) {
-    		alert(v)
+    		
     		  document.getElementById("ld"+v).checked = true;
+    		 
 
     		
     	});
@@ -1548,7 +1568,9 @@ $('#searchIssueItems').click(function(){
     		var itemIds=itemIdArr.join();;
     		  document.getElementById("rmQty"+itemDetailId).value=totalQty.toFixed(3);
     		  document.getElementById("layer"+itemDetailId).value=itemIds;
+    		     document.getElementById('layerbombtn'+itemDetailId).disabled=false;
 
+    		  $('#modeltable4 td').remove();
     		  $('#modeltable8 td').remove();
 				$("#overlay6").fadeOut(300);
 				$("#closeHrefModel6")[0].click()
@@ -1644,6 +1666,25 @@ $('#searchIssueItems').click(function(){
 			},500);
 		});
 	});	
+    </script>
+    <script type="text/javascript">
+    function showTotalQty()
+    {
+    	 var arr=[]; 
+ 		$('input[name="chklayering"]:checked').each(function() {
+ 			 arr.push(this.value);
+ 		});
+ 		var totalQty=0;
+ 		arr.forEach(function(v) {
+ 				 var itemQty=parseFloat($('#itemQty'+v).val());
+ 				 totalQty=totalQty+itemQty; 				 			
+ 		});
+ 		 document.getElementById("layerDetailQty").value=totalQty.toFixed(3);
+    }  
+    function onEditCp()
+    {
+    	$('#modeltable2 td').remove();
+    }
     </script>
 	<!--basic scripts-->
  <script

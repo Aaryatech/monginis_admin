@@ -1116,8 +1116,8 @@ public class ProductionApplController {
 			 Date date = new Date();
 
 			 String dept=request.getParameter("dept4");
-
 			 int prodHeaderId=Integer.parseInt(request.getParameter("prodHeaderId4"));
+			 int stated=Integer.parseInt(request.getParameter("state-d"));
 			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			 map.add("planHeaderId", prodHeaderId);
 
@@ -1195,7 +1195,7 @@ public class ProductionApplController {
 					billOfMaterialHeader.setRejUserId(0);
 					billOfMaterialHeader.setExInt2(1);//Status of issue
 					billOfMaterialHeader.setExVarchar2(itemsString);//itemId
-					billOfMaterialHeader.setIsManual(0);
+					billOfMaterialHeader.setIsManual(stated);
 
 						map = new LinkedMultiValueMap<String, Object>();
 						map.add("settingKeyList", "BMS");
