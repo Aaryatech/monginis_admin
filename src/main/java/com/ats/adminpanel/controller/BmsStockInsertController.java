@@ -15,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -44,17 +45,17 @@ public class BmsStockInsertController {
 	public int value;
 	BmsStockHeader bmsStockHeaderedit= new BmsStockHeader();
 	
-	@RequestMapping(value = "/bmsstock", method = RequestMethod.GET)
-	public ModelAndView bmsstock(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/bmsstock/{deptId}", method = RequestMethod.GET)
+	public ModelAndView bmsstock(@PathVariable("deptId")  int deptId,HttpServletRequest request, HttpServletResponse response) {
 		Constants.mainAct =8;
 		Constants.subAct=122;
-		
+		int deptIdJsp=deptId;
 		ModelAndView model = new ModelAndView("productionPlan/bmsstock");//
 		
 		try {
 			
-			int deptId = Integer.parseInt(request.getParameter("deptId"));
-			model.addObject("deptId", deptId);
+			deptIdJsp= Integer.parseInt(request.getParameter("deptId"));
+			model.addObject("deptId", deptIdJsp);
 			
 		}catch(Exception e) {
 			e.printStackTrace();

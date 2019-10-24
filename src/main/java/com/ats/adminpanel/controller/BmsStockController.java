@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.client.RestTemplate;
@@ -65,16 +66,16 @@ public class BmsStockController {
 
 	int globalBmsHeaderId;
 
-	@RequestMapping(value = "/showBmsStock", method = RequestMethod.GET)
-	public ModelAndView showBmsStock(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/showBmsStock/{deptId}", method = RequestMethod.GET)
+	public ModelAndView showBmsStock(@PathVariable("deptId")  int deptId, HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView mav = new ModelAndView("stock/bmsStock");
-
+		int deptIdJsp=deptId;
 		try {
 
-			int deptId = Integer.parseInt(request.getParameter("deptId"));
+			deptIdJsp = Integer.parseInt(request.getParameter("deptId"));
 
-			mav.addObject("deptId", deptId);
+			mav.addObject("deptId", deptIdJsp);
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -627,7 +628,7 @@ public class BmsStockController {
 			e.printStackTrace();
 		}
 
-		return "redirect:/showBmsStock?deptId="+clsdeptId;
+		return "redirect:/showBmsStock/"+clsdeptId;
 
 	}
 

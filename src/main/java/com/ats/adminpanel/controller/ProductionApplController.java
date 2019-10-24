@@ -1083,7 +1083,7 @@ public class ProductionApplController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
 		
-            map.add("settingKeyList", dept);
+            map.add("settingKeyList", "BMS");
             FrItemStockConfigureList settingList = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
 		    FrItemStockConfigureList.class);
             map = new LinkedMultiValueMap<String, Object>();

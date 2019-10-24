@@ -1094,11 +1094,11 @@ public class ViewProdController {
 			e.printStackTrace();
 		}
 		
-		 PdfPTable table = new PdfPTable(7);
+		 PdfPTable table = new PdfPTable(5);
 		 try {
 		 System.out.println("Inside PDF Table try");
 		 table.setWidthPercentage(100);
-	     table.setWidths(new float[]{0.9f, 2.0f,2.0f,2.0f,2.0f,2.0f,2.0f});
+	     table.setWidths(new float[]{0.9f, 2.0f,2.0f,2.0f,2.0f});
 	     Font headFont = new Font(FontFamily.HELVETICA,11 , Font.NORMAL, BaseColor.BLACK);
 	     Font headFont1 = new Font(FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.BLACK);
 	     Font f=new Font(FontFamily.TIMES_ROMAN,12.0f,Font.UNDERLINE,BaseColor.BLUE);
@@ -1115,7 +1115,7 @@ public class ViewProdController {
 	     table.addCell(hcell);
 	    
 	     
-	     hcell = new PdfPCell(new Phrase("Original Qty", headFont1));
+	   /*  hcell = new PdfPCell(new Phrase("Original Qty", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	     hcell.setBackgroundColor(BaseColor.PINK);
 	     table.addCell(hcell);
@@ -1124,7 +1124,7 @@ public class ViewProdController {
 	     hcell = new PdfPCell(new Phrase("Multipl Factor", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	     hcell.setBackgroundColor(BaseColor.PINK);
-	     table.addCell(hcell);
+	     table.addCell(hcell);*/
 	     
 	     hcell = new PdfPCell(new Phrase("Auto Order Qty", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -1163,7 +1163,7 @@ public class ViewProdController {
 	         table.addCell(cell);
 	         
 	         
-	         cell = new PdfPCell(new Phrase(String.valueOf(mixDetail.getTotal()),headFont));
+	       /*  cell = new PdfPCell(new Phrase(String.valueOf(mixDetail.getTotal()),headFont));
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	         cell.setPaddingRight(4);
@@ -1173,7 +1173,7 @@ public class ViewProdController {
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	         cell.setPaddingRight(4);
-	         table.addCell(cell);
+	         table.addCell(cell);*/
 	         float prodQty=roundUp(mixDetail.getTotal()*mixDetail.getMulFactor());
 	         
 	         cell = new PdfPCell(new Phrase(String.valueOf(prodQty),headFont));
