@@ -44,11 +44,15 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
+import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
+import com.ats.adminpanel.model.franchisee.SubCategory;
+import com.ats.adminpanel.model.ggreports.GGReportByDateAndFr;
 import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.CategoryListResponse;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.item.MCategoryList;
-import com.ats.adminpanel.model.item.StockDetail; 
+import com.ats.adminpanel.model.item.StockDetail;
 import com.ats.adminpanel.model.stock.FinGoodBean;
 import com.ats.adminpanel.model.stock.FinishedGoodStock;
 import com.ats.adminpanel.model.stock.FinishedGoodStockDetail;
@@ -60,7 +64,7 @@ import com.itextpdf.text.log.SysoLogger;
 @Controller
 public class FinishedGoodStockController {
 
-	public  List<Item> globalItemList;
+	public List<Item> globalItemList;
 
 	List<MCategoryList> filteredCatList;
 
@@ -83,16 +87,15 @@ public class FinishedGoodStockController {
 		try {
 			Constants.mainAct = 4;
 			Constants.subAct = 40;
-			
-			if(request.getParameter("catId")!=null) {
+
+			if (request.getParameter("catId") != null) {
 				int catId = Integer.parseInt(request.getParameter("catId"));
 				model.addObject("catId", catId);
-			}else {
+			} else {
 				model.addObject("catId", 0);
 			}
-			
-			
-			String sDate="";
+
+			String sDate = "";
 			RestTemplate restTemplate = new RestTemplate();
 
 			CategoryListResponse allCategoryResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
@@ -110,8 +113,8 @@ public class FinishedGoodStockController {
 				}
 			}
 
-			//System.out.println("catList "+ catList);
-			
+			// System.out.println("catList "+ catList);
+
 			model.addObject("catList", catList);
 			List<Item> itemsList = new ArrayList<>();
 
@@ -119,19 +122,21 @@ public class FinishedGoodStockController {
 
 			itemsList = new ArrayList<Item>();
 			itemsList = allItemsListResponse.getItems();
-			//System.out.println("LIst of items" + itemsList.toString());
+			// System.out.println("LIst of items" + itemsList.toString());
 			List<Item> tempItemList = itemsList;
 
-			 /*for (int i = 0; i < tempItemList.size(); i++) {
-
-				if (tempItemList.get(i).getItemGrp1() == 3) {
-					//System.out.println("item removed " + itemsList.get(i).getItemName());
-
-					itemsList.remove(i);
-
-				}
-
-			} */
+			/*
+			 * for (int i = 0; i < tempItemList.size(); i++) {
+			 * 
+			 * if (tempItemList.get(i).getItemGrp1() == 3) {
+			 * //System.out.println("item removed " + itemsList.get(i).getItemName());
+			 * 
+			 * itemsList.remove(i);
+			 * 
+			 * }
+			 * 
+			 * }
+			 */
 			showFinStockDetail = new ArrayList<FinishedGoodStockDetail>();
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("stockStatus", 0);
@@ -143,7 +148,7 @@ public class FinishedGoodStockController {
 			if (stockHeader != null) {
 				showFinStockDetail = new ArrayList<FinishedGoodStockDetail>();
 				showStockHeader = stockHeader;
-				 sDate = dfYmd.format(stockHeader.getFinGoodStockDate());
+				sDate = dfYmd.format(stockHeader.getFinGoodStockDate());
 
 				System.out.println("s Date ===" + sDate);
 				map = new LinkedMultiValueMap<String, Object>();
@@ -155,31 +160,28 @@ public class FinishedGoodStockController {
 						Constants.url + "getFinGoodStockDetailAllCat", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 				showFinStockDetail = responseEntity.getBody();
-				List<Integer> idList=new ArrayList<Integer>();
-				
-				
-				for(int i=0;i<showFinStockDetail.size();i++) {
-									
-									idList.add(showFinStockDetail.get(i).getItemId());
-									
-									
-				} 
-				
-					for(int j=0;j<itemsList.size();  j++) {
-						
-						if(!idList.contains(itemsList.get(j).getId())) {
-							
-							FinishedGoodStockDetail d=new FinishedGoodStockDetail();
-							d.setCatId(itemsList.get(j).getItemGrp1());
-							d.setItemId(itemsList.get(j).getId());
-							d.setItemName(itemsList.get(j).getItemName());
-							d.setGroupId(itemsList.get(j).getItemGrp2());
-							System.err.println("New Item Found and added " +d);
-							showFinStockDetail.add(d);
-						}
-						
+				List<Integer> idList = new ArrayList<Integer>();
+
+				for (int i = 0; i < showFinStockDetail.size(); i++) {
+
+					idList.add(showFinStockDetail.get(i).getItemId());
+
+				}
+
+				for (int j = 0; j < itemsList.size(); j++) {
+
+					if (!idList.contains(itemsList.get(j).getId())) {
+
+						FinishedGoodStockDetail d = new FinishedGoodStockDetail();
+						d.setCatId(itemsList.get(j).getItemGrp1());
+						d.setItemId(itemsList.get(j).getId());
+						d.setItemName(itemsList.get(j).getItemName());
+						d.setGroupId(itemsList.get(j).getItemGrp2());
+						System.err.println("New Item Found and added " + d);
+						showFinStockDetail.add(d);
 					}
-			
+
+				}
 
 			} else {
 				System.out.println("showFinStockDetail" + showFinStockDetail.toString());
@@ -199,69 +201,61 @@ public class FinishedGoodStockController {
 
 			// model.addObject("itemsList", itemsList);
 
-			for(int j=0;j<itemsList.size();  j++) {
-				
-				for(int i=0;i<showFinStockDetail.size();  i++) {
-					
-					 if(itemsList.get(j).getId()==showFinStockDetail.get(i).getItemId()) {
-						 showFinStockDetail.get(i).setGroupId(itemsList.get(j).getItemGrp2());
-					 }
+			for (int j = 0; j < itemsList.size(); j++) {
+
+				for (int i = 0; i < showFinStockDetail.size(); i++) {
+
+					if (itemsList.get(j).getId() == showFinStockDetail.get(i).getItemId()) {
+						showFinStockDetail.get(i).setGroupId(itemsList.get(j).getItemGrp2());
+					}
 				}
-				
+
 			}
-			 
+
 			System.err.println("showFinStockDetail " + showFinStockDetail);
 			model.addObject("itemsList", showFinStockDetail);
-			model.addObject("sDate", sDate);//mahesh code (3 march)
-			
-			try
-			{
-				
-				List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
-				
-				ExportToExcel expoExcel=new ExportToExcel();
-				List<String> rowData=new ArrayList<String>();
-				 
-				rowData.add("Sr.No."); 
-				rowData.add("Item Name");  
+			model.addObject("sDate", sDate);// mahesh code (3 march)
+
+			try {
+
+				List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+				ExportToExcel expoExcel = new ExportToExcel();
+				List<String> rowData = new ArrayList<String>();
+
+				rowData.add("Sr.No.");
+				rowData.add("Item Name");
 				rowData.add("T1");
 				rowData.add("T2");
-				rowData.add("T3");  
-			 
-					
+				rowData.add("T3");
+
 				expoExcel.setRowData(rowData);
-				exportToExcelList.add(expoExcel); 
-				for(int i=0;i<showFinStockDetail.size();i++)
-				{
-					  expoExcel=new ExportToExcel();
-					 rowData=new ArrayList<String>();
-					 
-				 
-					 
-					 rowData.add(""+(i+1));  
-					rowData.add(""+showFinStockDetail.get(i).getItemName()); 
-					rowData.add(""+showFinStockDetail.get(i).getOpT1());
-					rowData.add(""+showFinStockDetail.get(i).getOpT2());
-					rowData.add(""+showFinStockDetail.get(i).getOpT3());  
-					
+				exportToExcelList.add(expoExcel);
+				for (int i = 0; i < showFinStockDetail.size(); i++) {
+					expoExcel = new ExportToExcel();
+					rowData = new ArrayList<String>();
+
+					rowData.add("" + (i + 1));
+					rowData.add("" + showFinStockDetail.get(i).getItemName());
+					rowData.add("" + showFinStockDetail.get(i).getOpT1());
+					rowData.add("" + showFinStockDetail.get(i).getOpT2());
+					rowData.add("" + showFinStockDetail.get(i).getOpT3());
+
 					expoExcel.setRowData(rowData);
 					exportToExcelList.add(expoExcel);
-					 
+
 				}
-				
-				 
-				
+
 				HttpSession session = request.getSession();
 				session.setAttribute("exportExcelList", exportToExcelList);
 				session.setAttribute("excelName", "finishGoodStock");
-				
-			}catch(Exception e)
-			{
+
+			} catch (Exception e) {
 				e.printStackTrace();
 				System.out.println("Exception in generate excel ");
 			}
 
-			globalItemList=new ArrayList<>();
+			globalItemList = new ArrayList<>();
 			globalItemList = itemsList;
 		} catch (Exception e) {
 
@@ -271,7 +265,7 @@ public class FinishedGoodStockController {
 		return model;
 
 	}
-	
+
 	@RequestMapping(value = "pdf/finishedGoodStockPdf", method = RequestMethod.GET)
 	public ModelAndView billWisePdf(HttpServletRequest request, HttpServletResponse response) {
 
@@ -279,7 +273,7 @@ public class FinishedGoodStockController {
 		try {
 			Constants.mainAct = 4;
 			Constants.subAct = 40;
-			String sDate="";
+			String sDate = "";
 			RestTemplate restTemplate = new RestTemplate();
 
 			CategoryListResponse allCategoryResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
@@ -300,7 +294,8 @@ public class FinishedGoodStockController {
 			model.addObject("catList", filteredCatList);
 			List<Item> itemsList = new ArrayList<>();
 
-			AllItemsListResponse allItemsListResponse = restTemplate.getForObject(Constants.url + "getAllItems", AllItemsListResponse.class);
+			AllItemsListResponse allItemsListResponse = restTemplate.getForObject(Constants.url + "getAllItems",
+					AllItemsListResponse.class);
 
 			itemsList = new ArrayList<Item>();
 			itemsList = allItemsListResponse.getItems();
@@ -326,8 +321,8 @@ public class FinishedGoodStockController {
 			DateFormat dfYmd = new SimpleDateFormat("dd-MM-yyyy");
 
 			if (stockHeader != null) {
-				showFinStockDetail = new ArrayList<FinishedGoodStockDetail>(); 
-				 sDate = dfYmd.format(stockHeader.getFinGoodStockDate());
+				showFinStockDetail = new ArrayList<FinishedGoodStockDetail>();
+				sDate = dfYmd.format(stockHeader.getFinGoodStockDate());
 
 				System.out.println("s Date ===" + sDate);
 				map = new LinkedMultiValueMap<String, Object>();
@@ -339,34 +334,28 @@ public class FinishedGoodStockController {
 						Constants.url + "getFinGoodStockDetailAllCat", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 				showFinStockDetail = responseEntity.getBody();
-				List<Integer> idList=new ArrayList<Integer>();
-				
-				
-for(int i=0;i<showFinStockDetail.size();i++) {
-					
+				List<Integer> idList = new ArrayList<Integer>();
+
+				for (int i = 0; i < showFinStockDetail.size(); i++) {
+
 					idList.add(showFinStockDetail.get(i).getItemId());
-					
-					
-}
-			
-					
-					
-					
-					for(int j=0;j<itemsList.size();  j++) {
-						
-						if(!idList.contains(itemsList.get(j).getId())) {
-							
-							FinishedGoodStockDetail d=new FinishedGoodStockDetail();
-							d.setCatId(itemsList.get(j).getItemGrp1());
-							d.setItemId(itemsList.get(j).getId());
-							d.setItemName(itemsList.get(j).getItemName());
-							
-							System.err.println("New Item Found and added " +d.getItemName());
-							showFinStockDetail.add(d);
-						}
-						
+
+				}
+
+				for (int j = 0; j < itemsList.size(); j++) {
+
+					if (!idList.contains(itemsList.get(j).getId())) {
+
+						FinishedGoodStockDetail d = new FinishedGoodStockDetail();
+						d.setCatId(itemsList.get(j).getItemGrp1());
+						d.setItemId(itemsList.get(j).getId());
+						d.setItemName(itemsList.get(j).getItemName());
+
+						System.err.println("New Item Found and added " + d.getItemName());
+						showFinStockDetail.add(d);
 					}
-			
+
+				}
 
 			} else {
 				System.out.println("showFinStockDetail" + showFinStockDetail.toString());
@@ -381,15 +370,14 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 				}
 
 				// assign name to detail Object ;
-			 
+
 			}
 
 			// model.addObject("itemsList", itemsList);
 
 			model.addObject("staticlist", showFinStockDetail);
-			model.addObject("sDate", sDate);//mahesh code (3 march)
-			 
-			 
+			model.addObject("sDate", sDate);// mahesh code (3 march)
+
 		} catch (Exception e) {
 
 			System.out.println("Exe in showing add Fin good Stock Page " + e.getMessage());
@@ -399,7 +387,7 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 
 	}
 
-	AllItemsListResponse allItemsListResponse=new AllItemsListResponse();
+	AllItemsListResponse allItemsListResponse = new AllItemsListResponse();
 
 	@RequestMapping(value = "/getItemsByCatIdForFinGood", method = RequestMethod.GET)
 	public @ResponseBody List<Item> getItemsByCategory(HttpServletRequest request, HttpServletResponse response) {
@@ -409,7 +397,7 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 		// int catId = Integer.parseInt(request.getParameter("catId"));
 
 		// int option = Integer.parseInt(request.getParameter("option"));
-		allItemsListResponse=new AllItemsListResponse();
+		allItemsListResponse = new AllItemsListResponse();
 		allItemsListResponse = restTemplate.getForObject(Constants.url + "getAllItems", AllItemsListResponse.class);
 
 		itemsList = new ArrayList<Item>();
@@ -521,10 +509,10 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 					detail.setOpT2(t2);
 					detail.setOpT3(t3);
 					detail.setOpTotal(t1 + t2 + t3);
-					
-					if(detail.getStockDate()==null) {
-						
-						detail.setStockDate(new Date()); 
+
+					if (detail.getStockDate() == null) {
+
+						detail.setStockDate(new Date());
 						detail.setDelStatus(0);
 					}
 					/*
@@ -540,10 +528,10 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 						Info.class);
 
 			}
-		}catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		 
+
 		return "redirect:/showFinishedGoodStock";
 
 	}
@@ -577,12 +565,15 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 		return model;
 	}
 
+	
+	static List<FinishedGoodStockDetail> goodstocklistforpdf = new ArrayList<>();
+
 	@RequestMapping(value = "/getFinGoodStock", method = RequestMethod.GET)
 	public @ResponseBody FinGoodBean getFinGoodStock(HttpServletRequest request, HttpServletResponse response) {
 		System.out.println("Inside get Fin good Ajax Call");
 		FinGoodBean bean = new FinGoodBean();
 		RestTemplate restTemplate = new RestTemplate();
-
+		goodstocklistforpdf = new ArrayList<>();
 		int catId = Integer.parseInt(request.getParameter("catId"));
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
@@ -612,7 +603,7 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 				System.out.println("stock Header " + stockHeader.toString());
 
 				Date stockDate = stockHeader.getFinGoodStockDate();
-				
+
 				bean.setStockDate(new SimpleDateFormat("dd-MM-yyyy").format(stockDate));
 				String timestamp = stockHeader.getTimestamp();
 
@@ -679,7 +670,7 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 				String stkDate = df.format(stockDate);
 
 				System.out.println("Stock date for getting stock bet date " + stkDate);
-				
+
 				List<FinishedGoodStockDetail> finGoodDetail = new ArrayList<>();
 
 				if (selectedCat == -1 || selectedCat == 0) {
@@ -748,12 +739,12 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 							int billQty = (curProdBilQty.getBillQty() + curProdBilQty.getDamagedQty());
 							int prodQty = curProdBilQty.getProdQty();
 							int rejQty = curProdBilQty.getRejectedQty();
-							System.out.println("Item Name  " +curProdBilQty.getItemName());
-							System.err.println("Damaged Qty " +curProdBilQty.getDamagedQty());
-							
-							System.err.println("Damaged Qty " +curProdBilQty.getBillQty());
+							System.out.println("Item Name  " + curProdBilQty.getItemName());
+							System.err.println("Damaged Qty " + curProdBilQty.getDamagedQty());
 
-							System.err.println("Bill Qty " +billQty+ "prodQty " +prodQty + "Rej Qty  " +rejQty);
+							System.err.println("Damaged Qty " + curProdBilQty.getBillQty());
+
+							System.err.println("Bill Qty " + billQty + "prodQty " + prodQty + "Rej Qty  " + rejQty);
 							float t1 = stockDetail.getOpT1();
 							float t2 = stockDetail.getOpT2();
 							float t3 = stockDetail.getOpT3();
@@ -823,8 +814,6 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 
 							updateStockDetailList.add(stockDetail);
 
-							
-
 						} // end of if isSameItem =true
 					} // end of Inner For Loop
 				} // End of outer For loop
@@ -867,7 +856,7 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 					// map.add("stockStatus", 1);
 					map.add("fromDate", fromDate);
 					map.add("toDate", "" + toDate);
-					updateStockDetailList=new ArrayList<>();
+					updateStockDetailList = new ArrayList<>();
 
 					ParameterizedTypeReference<List<FinishedGoodStockDetail>> typeRef = new ParameterizedTypeReference<List<FinishedGoodStockDetail>>() {
 					};
@@ -879,7 +868,7 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 				} else {
 
 					System.out.println("If Specific Category Selected Option Cat ID =" + selectedCat);
-					updateStockDetailList=new ArrayList<>();
+					updateStockDetailList = new ArrayList<>();
 					map = new LinkedMultiValueMap<String, Object>();
 
 					map.add("catId", selectedCat);
@@ -904,81 +893,103 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 
 		selectedCat = 0;
 
-		System.out.println("isDayEnd " + bean.getIsDayEndEnable());
 		bean.setStockDetail(updateStockDetailList);
-		
-		System.out.println("Final Bean Fin Good Stock : "+bean.toString());
-		
-		try
-		{
-			
-			List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
-			
-			ExportToExcel expoExcel=new ExportToExcel();
-			List<String> rowData=new ArrayList<String>();
-			 
-			rowData.add("Sr.No."); 
-			rowData.add("Item Name");  
+
+		System.out.println("Final Bean Fin Good Stock : " + bean.toString());
+
+		try {
+
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+
+			rowData.add("Sr.No.");
+			rowData.add("Item Name");
 			rowData.add("T");
 			rowData.add("T-1");
-			rowData.add("T-2"); 
-			rowData.add("Op Total"); 
-			rowData.add("Prod Qty"); 
-			rowData.add("Rej Qty"); 
-			
-			rowData.add("Bill Qty"); 
-			rowData.add("Dummy Qty");  
+			rowData.add("T-2");
+			rowData.add("Op Total");
+			rowData.add("Prod Qty");
+			rowData.add("Rej Qty");
+
+			rowData.add("Bill Qty");
+			rowData.add("Dummy Qty");
 			rowData.add("Current Closing ");
 			rowData.add("Close T");
 			rowData.add("Close T1");
-			rowData.add("Close T2"); 
-			rowData.add("Total Closing"); 
-		 
-				
+			rowData.add("Close T2");
+			rowData.add("Total Closing");
+
 			expoExcel.setRowData(rowData);
-			exportToExcelList.add(expoExcel); 
-			for(int i=0;i<bean.getStockDetail().size();i++)
-			{
-				  expoExcel=new ExportToExcel();
-				 rowData=new ArrayList<String>();
-				 
-			 
-				 
-				 rowData.add(""+(i+1));  
-				rowData.add(""+bean.getStockDetail().get(i).getItemName()); 
-				rowData.add(""+bean.getStockDetail().get(i).getOpT1());
-				rowData.add(""+bean.getStockDetail().get(i).getOpT2());
-				rowData.add(""+bean.getStockDetail().get(i).getOpT3()); 
-				rowData.add(""+bean.getStockDetail().get(i).getOpTotal()); 
-				rowData.add(""+bean.getStockDetail().get(i).getProdQty());
-				rowData.add(""+bean.getStockDetail().get(i).getRejQty()); 
-				
-				rowData.add(""+bean.getStockDetail().get(i).getFrSaleQty()); 
-				rowData.add(""+bean.getStockDetail().get(i).getGateSaleQty()); 
-				rowData.add(""+bean.getStockDetail().get(i).getCloCurrent()); 
-				rowData.add(""+bean.getStockDetail().get(i).getCloT1()); 
-				rowData.add(""+bean.getStockDetail().get(i).getCloT2()); 
-				rowData.add(""+bean.getStockDetail().get(i).getCloT3());  
-				rowData.add(""+bean.getStockDetail().get(i).getTotalCloStk()); 
-				
+			exportToExcelList.add(expoExcel);
+			for (int i = 0; i < bean.getStockDetail().size(); i++) {
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+
+				rowData.add("" + (i + 1));
+				rowData.add("" + bean.getStockDetail().get(i).getItemName());
+				rowData.add("" + bean.getStockDetail().get(i).getOpT1());
+				rowData.add("" + bean.getStockDetail().get(i).getOpT2());
+				rowData.add("" + bean.getStockDetail().get(i).getOpT3());
+				rowData.add("" + bean.getStockDetail().get(i).getOpTotal());
+				rowData.add("" + bean.getStockDetail().get(i).getProdQty());
+				rowData.add("" + bean.getStockDetail().get(i).getRejQty());
+
+				rowData.add("" + bean.getStockDetail().get(i).getFrSaleQty());
+				rowData.add("" + bean.getStockDetail().get(i).getGateSaleQty());
+				rowData.add("" + bean.getStockDetail().get(i).getCloCurrent());
+				rowData.add("" + bean.getStockDetail().get(i).getCloT1());
+				rowData.add("" + bean.getStockDetail().get(i).getCloT2());
+				rowData.add("" + bean.getStockDetail().get(i).getCloT3());
+				rowData.add("" + bean.getStockDetail().get(i).getTotalCloStk());
+
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
-				 
+
 			}
-			
-			 
-			
+
+			goodstocklistforpdf = bean.getStockDetail();
+
+			// System.out.println(bean.getStockDetail());
 			HttpSession session = request.getSession();
 			session.setAttribute("exportExcelList", exportToExcelList);
 			session.setAttribute("excelName", "currentStock");
-			
-		}catch(Exception e)
-		{
+
+		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("Exception in generate excel ");
 		}
 		return bean;
 
+	}
+
+	@RequestMapping(value = "pdf/finishgoodstockpdf", method = RequestMethod.GET)
+	public ModelAndView showGGreportByDatePdf(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/finishgoodstockpdf");
+		 
+
+		try {
+
+			RestTemplate restTemplate = new RestTemplate();
+			SubCategory[] subCategory = restTemplate.getForObject(Constants.url + "getAllSubCatList",
+					SubCategory[].class);
+			List<SubCategory> subCatList  = new ArrayList<>(Arrays.asList(subCategory));
+
+			AllItemsListResponse allItemsListResponse = restTemplate
+					.getForObject(Constants.url + "getAllItemsBySorting", AllItemsListResponse.class);
+
+			model.addObject("goodstocklistforpdf", goodstocklistforpdf);
+			model.addObject("subCatList", subCatList);
+			model.addObject("itemList", allItemsListResponse.getItems());
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		return model;
 	}
 
 	@RequestMapping(value = "/finishedGoodDayEnd", method = RequestMethod.POST)
@@ -1212,13 +1223,13 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 		return model;
 
 	}
-	
+
 	private Dimension format = PD4Constants.A2;
 	private boolean landscapeValue = false;
 	private int topValue = 8;
 	private int leftValue = 0;
 	private int rightValue = 0;
-	private int bottomValue =8;
+	private int bottomValue = 8;
 	private String unitsValue = "m";
 	private String proxyHost = "";
 	private int proxyPort = 0;
@@ -1231,13 +1242,13 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 		System.out.println("Inside PDf For Report URL ");
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
-		
+
 		File f = new File("/opt/tomcat-latest/webapps/uploads/Inward.pdf");
-		//File f = new File("C:/pdf/ordermemo221.pdf");
+		// File f = new File("C:/pdf/ordermemo221.pdf");
 
 		try {
-			runConverter(Constants.ReportURL + url, f,request,response);
-			//runConverter("www.google.com", f,request,response);
+			runConverter(Constants.ReportURL + url, f, request, response);
+			// runConverter("www.google.com", f,request,response);
 
 		} catch (IOException e) {
 
@@ -1247,7 +1258,7 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		 //String filePath = "C:/pdf/ordermemo221.pdf";
+		// String filePath = "C:/pdf/ordermemo221.pdf";
 
 		String filePath = "/opt/tomcat-latest/webapps/uploads/Inward.pdf";
 
@@ -1281,7 +1292,6 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 			byte[] buffer = new byte[BUFFER_SIZE];
 			int bytesRead = -1;
 
-
 			while ((bytesRead = inputStream.read(buffer)) != -1) {
 				outStream.write(buffer, 0, bytesRead);
 			}
@@ -1295,7 +1305,8 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 		}
 	}
 
-	private void runConverter(String urlstring, File output, HttpServletRequest request, HttpServletResponse response ) throws IOException {
+	private void runConverter(String urlstring, File output, HttpServletRequest request, HttpServletResponse response)
+			throws IOException {
 
 		if (urlstring.length() > 0) {
 			if (!urlstring.startsWith("http://") && !urlstring.startsWith("file:")) {
@@ -1305,21 +1316,21 @@ for(int i=0;i<showFinStockDetail.size();i++) {
 			java.io.FileOutputStream fos = new java.io.FileOutputStream(output);
 
 			PD4ML pd4ml = new PD4ML();
-		
+
 			try {
 
 				Dimension landscapeA4 = pd4ml.changePageOrientation(PD4Constants.A4);
 				pd4ml.setPageSize(landscapeA4);
-			
-				PD4PageMark footer = new PD4PageMark();  
-				
-	            footer.setPageNumberTemplate("Page $[page] of $[total]");  
-	            footer.setPageNumberAlignment(PD4PageMark.RIGHT_ALIGN);  
-	            footer.setFontSize(10);  
-	            footer.setAreaHeight(20);     
-	            
-	            pd4ml.setPageFooter(footer); 
-				
+
+				PD4PageMark footer = new PD4PageMark();
+
+				footer.setPageNumberTemplate("Page $[page] of $[total]");
+				footer.setPageNumberAlignment(PD4PageMark.RIGHT_ALIGN);
+				footer.setFontSize(10);
+				footer.setAreaHeight(20);
+
+				pd4ml.setPageFooter(footer);
+
 			} catch (Exception e) {
 				System.out.println("Pdf conversion method excep " + e.getMessage());
 			}

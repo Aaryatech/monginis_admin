@@ -79,7 +79,8 @@
 
 											<c:forEach items="${catList}" var="catList">
 
-												<option value="${catList.catId}">${catList.catName} </option>
+												<option value="${catList.catId}">${catList.catName}
+												</option>
 
 											</c:forEach>
 
@@ -97,9 +98,11 @@
 											tabindex="6" id="selectStock" onchange="showDiv(this)"
 											required>
 
-											<option value="1" id="currentStock">Get Current Stock</option>
+											<option value="1" id="currentStock">Get Current
+												Stock</option>
 											<!-- <option value="2" id="monthStock">Get Stock Between Month</option> -->
-											<option value="3" id="dateStock">Get Stock Between Dates</option>
+											<option value="3" id="dateStock">Get Stock Between
+												Dates</option>
 										</select>
 									</div>
 
@@ -167,21 +170,22 @@
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
 
 										<input type="button" class="btn btn-info" name="submit"
-											value="Get Stock " onclick="searchItemsByCategory()" />
-											
-											
+											value="Get Stock " onclick="searchItemsByCategory()" /> <input
+											class="btn btn-primary" value="PDF" id="PDFButton"
+											onclick="genPdf()" type="button" />
+
 									</div>
-									
+
 									<div align="center" id="loader" style="display: none">
 
-									<span>
-										<h3>
-											<font color="#343690">Loading</font>
-										</h3>
-									</span> <span class="l-1"></span> <span class="l-2"></span> <span
-										class="l-3"></span> <span class="l-4"></span> <span
-										class="l-5"></span> <span class="l-6"></span>
-								</div>
+										<span>
+											<h3>
+												<font color="#343690">Loading</font>
+											</h3>
+										</span> <span class="l-1"></span> <span class="l-2"></span> <span
+											class="l-3"></span> <span class="l-4"></span> <span
+											class="l-5"></span> <span class="l-6"></span>
+									</div>
 								</div>
 								<input type="hidden" id="selectedCatId" name="selectedCatId" />
 
@@ -200,90 +204,92 @@
 										</div>
 									</div>
 									<br>
-									<div class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-4">
+									<div
+										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-4">
 										<!-- 										<input type="submit" class="btn btn-primary" value="Submit">
  -->
-<input type="text" readonly    style="width: 134px; font: bold; height: 35px; color: maroon; size: 20px;"
-											value="" id="setDate" />
-										<input type="button" class="btn btn-danger"
-											value="Day End Process" id="dayEndButton" disabled="disabled" />
+										<input type="text" readonly
+											style="width: 134px; font: bold; height: 35px; color: maroon; size: 20px;"
+											value="" id="setDate" /> <input type="button"
+											class="btn btn-danger" value="Day End Process"
+											id="dayEndButton" disabled="disabled" />
 
 									</div>
 
 									<div class="box-content">
 
 										<div class="clearfix"></div>
-									<div id="table-scroll" class="table-scroll"> 
-									<div id="faux-table" class="faux-table" aria="hidden">
-									<table  class="table table-advance" id="table">
-												<thead>
-													<tr class="bgpink">
-														<th width="30" align="left">Sr No</th>
-														<th width="160" align="left">Item Name</th>
-														<th width="50">T</th>
-														<th width="50">T-1</th>
-														<th width="50">T-2</th>
-														<th width="50">Op Total</th>
+										<div id="table-scroll" class="table-scroll">
+											<div id="faux-table" class="faux-table" aria="hidden">
+												<table class="table table-advance" id="table">
+													<thead>
+														<tr class="bgpink">
+															<th width="30" align="left">Sr No</th>
+															<th width="160" align="left">Item Name</th>
+															<th width="50">T</th>
+															<th width="50">T-1</th>
+															<th width="50">T-2</th>
+															<th width="50">Op Total</th>
 
-														<th width="50">Prod Qty</th>
-														<th width="50">Rej Qty</th>
-														<th width="50">Bill Qty</th>
-														<th width="50">Dummy Qty</th>
-														<th width="50">Current Closing</th>
-														<th width="50">Clo T</th>
-														<th width="50">Clo T-1</th>
-														<th width="50">Clo T-2</th>
-														<th width="70">Total Closing</th>
-													</tr>
-												</thead>
-												 
-											</table>
-									</div>
-									<div class="table-wrap">
-											<table  class="table table-advance" id="table1">
-												<thead>
-													<tr class="bgpink">
-														<th width="30" align="left">Sr No</th>
-														<th width="120" align="left">Item Name</th>
-														<th width="50">T</th>
-														<th width="50">T-1</th>
-														<th width="50">T-2</th>
-														<th width="50">Op Total</th>
+															<th width="50">Prod Qty</th>
+															<th width="50">Rej Qty</th>
+															<th width="50">Bill Qty</th>
+															<th width="50">Dummy Qty</th>
+															<th width="50">Current Closing</th>
+															<th width="50">Clo T</th>
+															<th width="50">Clo T-1</th>
+															<th width="50">Clo T-2</th>
+															<th width="70">Total Closing</th>
+														</tr>
+													</thead>
 
-														<th width="50">Prod Qty</th>
-														<th width="50">Rej Qty</th>
-														<th width="50">Bill Qty</th>
-														<th width="50">Dummy Qty</th>
-														<th width="50">Current Closing</th>
-														<th width="50">Clo T</th>
-														<th width="50">Clo T-1</th>
-														<th width="50">Clo T-2</th>
-														<th width="70">Total Closing</th>
-													</tr>
-												</thead>
-												<tbody>
+												</table>
+											</div>
+											<div class="table-wrap">
+												<table class="table table-advance" id="table1">
+													<thead>
+														<tr class="bgpink">
+															<th width="30" align="left">Sr No</th>
+															<th width="120" align="left">Item Name</th>
+															<th width="50">T</th>
+															<th width="50">T-1</th>
+															<th width="50">T-2</th>
+															<th width="50">Op Total</th>
 
-												</tbody>
-											</table>
+															<th width="50">Prod Qty</th>
+															<th width="50">Rej Qty</th>
+															<th width="50">Bill Qty</th>
+															<th width="50">Dummy Qty</th>
+															<th width="50">Current Closing</th>
+															<th width="50">Clo T</th>
+															<th width="50">Clo T-1</th>
+															<th width="50">Clo T-2</th>
+															<th width="70">Total Closing</th>
+														</tr>
+													</thead>
+													<tbody>
+
+													</tbody>
+												</table>
+											</div>
 										</div>
+
+
 									</div>
 
+									<div align="center" class="form-group">
 
-								</div>
-
-								<div align="center" class="form-group">
-
-									<div
-										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
-										<!-- 										<input type="submit" class="btn btn-primary" value="Submit">
+										<div
+											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
+											<!-- 										<input type="submit" class="btn btn-primary" value="Submit">
  -->
-<input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled>
+											<input type="button" id="expExcel" class="btn btn-primary"
+												value="EXPORT TO Excel" onclick="exportToExcel();" disabled>
 
+
+										</div>
 
 									</div>
-
-								</div>
-
 							</form>
 						</div>
 
@@ -297,7 +303,9 @@
 
 			<!-- END Main Content -->
 			<footer>
-			<center><p>2017 © MONGINIS.</p></center>
+				<center>
+					<p>2017 © MONGINIS.</p>
+				</center>
 			</footer>
 
 			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -372,9 +380,7 @@
 
 	<script type="text/javascript">
 		function searchItemsByCategory() {
-			
-			
-			
+
 			var catId = $("#catId").val();
 			document.getElementById("selectedCatId").value = catId;
 			//var to_datepicker = document.getElementById("to_datepicker").value ;
@@ -383,10 +389,9 @@
 			var to_datepicker = $('#to_datepicker').val();
 
 			var from_datepicker = $('#from_datepicker').val();
-			
+
 			var option = $("#selectStock").val();
-			
-			
+
 			$('#loader').show();
 
 			$
@@ -406,18 +411,17 @@
 
 								$('#loader').hide();
 								//alert("Day End " +data.isDayEndEnable);
-								document.getElementById("setDate").value =data.stockDate;
-								if(data.isDayEndEnable==1){
-									if(option==1 && catId==-1){
-										
+								document.getElementById("setDate").value = data.stockDate;
+								if (data.isDayEndEnable == 1) {
+									if (option == 1 && catId == -1) {
+
 										//alert("in if enable true");
 										//$('#dayEndButton').removeAttr('disabled');
-										 document.getElementById("dayEndButton").disabled = false; 
+										document.getElementById("dayEndButton").disabled = false;
 
-									}
-									else if(data.isDayEndEnable==0){
+									} else if (data.isDayEndEnable == 0) {
 										//alert("in else disable true");
-										document.getElementById("dayEndButton").disabled=true;
+										document.getElementById("dayEndButton").disabled = true;
 									}
 								}
 
@@ -430,8 +434,9 @@
 										.each(
 												data.stockDetail,
 												function(key, stock) {
-													
-													document.getElementById("expExcel").disabled=false;	
+
+													document
+															.getElementById("expExcel").disabled = false;
 													var index = key + 1;
 
 													var tr = "<tr>";
@@ -451,23 +456,20 @@
 
 													var opTotal = "<td align=center ><input type=text size='3'  class=form-control   value="+stock.opTotal+" ></td>";
 
-
 													var prodQty = "<td align=center ><input type=text size='3'  class=form-control   value="+stock.prodQty+"  ></td>";
-													
+
 													var rejQty = "<td align=center ><input type=text size='3' class=form-control   value="+stock.rejQty+"  ></td>";
-													
 
 													var billQty = "<td align=center ><input type=text size='3'  class=form-control   value="+stock.frSaleQty+"  ></td>";
-													
+
 													var gateSaleQty = "<td align=center ><input type=text size='3'  class=form-control   value="+stock.gateSaleQty+"  ></td>";
-													
+
 													var cloT1 = "<td align=center ><input type=text size='3'  class=form-control   value="+stock.cloT1+"></td>";
 
 													var cloT2 = "<td align=center ><input type=text size='3'  class=form-control   value="+stock.cloT2+"></td>";
 
 													var cloT3 = "<td align=center ><input type=text  size='3' class=form-control   value="+stock.cloT3+"></td>";
 
-													
 													var cloCurrent = "<td align=center ><input type=text  size='3' class=form-control   value="+stock.cloCurrent+"></td>";
 
 													var totalClosing = "<td align=center ><input type=text size='3' class=form-control   value="+stock.totalCloStk+"></td>";
@@ -503,20 +505,18 @@
 													$('#table1 tbody').append(
 															gateSaleQty);
 
-
 													$('#table1 tbody').append(
 															cloCurrent);
-													
+
 													$('#table1 tbody').append(
 															cloT1);
-													
+
 													$('#table1 tbody').append(
 															cloT2);
-													
+
 													$('#table1 tbody').append(
 															cloT3);
-													
-													
+
 													$('#table1 tbody').append(
 															totalClosing);
 
@@ -529,36 +529,44 @@
 			/* if(stock.isDayEndEnable==1){
 			$('#dayEndButton').removeAttr('disabled');
 			} */
-			document.getElementById("dayEndButton").disabled=true;
+			document.getElementById("dayEndButton").disabled = true;
 
 		}
-		
-	
 	</script>
 
 	<script type="text/javascript">
-		$('#dayEndButton').click(function() {
+		$('#dayEndButton')
+				.click(
+						function() {
 
-			var option = $("#selectStock").val();
-			if (option == 1) {
-			var dayEnd=confirm("Day End ");
-				if(dayEnd==true){
-			 var form = document.getElementById("validation-form")
-			 
-			// alert(form);
-			  	  form.action ="${pageContext.request.contextPath}/finishedGoodDayEnd";
-			    form.submit();
-			    
-				}
-			    
-			}
-			
-			 else {
+							var option = $("#selectStock").val();
+							if (option == 1) {
+								var dayEnd = confirm("Day End ");
+								if (dayEnd == true) {
+									var form = document
+											.getElementById("validation-form")
 
-				alert("Please Select Current Stock");
+									// alert(form);
+									form.action = "${pageContext.request.contextPath}/finishedGoodDayEnd";
+									form.submit();
 
-			}
-		});
+								}
+
+							}
+
+							else {
+
+								alert("Please Select Current Stock");
+
+							}
+						});
+
+		function genPdf() {
+
+			window
+					.open('${pageContext.request.contextPath}/pdfForDisReport?url=pdf/finishgoodstockpdf/');
+
+		}
 	</script>
 
 	<script>
@@ -577,11 +585,10 @@
 			}
 
 		}
-		function exportToExcel()
-		{
-			 
+		function exportToExcel() {
+
 			window.open("${pageContext.request.contextPath}/exportToExcel");
-					document.getElementById("expExcel").disabled=true;
+			document.getElementById("expExcel").disabled = true;
 		}
 	</script>
 </body>
