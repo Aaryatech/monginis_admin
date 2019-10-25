@@ -181,9 +181,10 @@ public class BmsStockInsertController {
 				  map = new LinkedMultiValueMap<String, Object>();
 				
 				map.add("delStatus", 0);
+				map.add("deptId", deptId);
 				ParameterizedTypeReference<List<GetItemSfHeader>> typeRef = new ParameterizedTypeReference<List<GetItemSfHeader>>() {
 				};
-				ResponseEntity<List<GetItemSfHeader>> responseEntity = rest.exchange(Constants.url + "getItemSfHeaderList",
+				ResponseEntity<List<GetItemSfHeader>> responseEntity = rest.exchange(Constants.url + "getItemSfHeaderListForOpeningStock",
 						HttpMethod.POST, new HttpEntity<>(map), typeRef);
 				
 				itemHeaderList = responseEntity.getBody();

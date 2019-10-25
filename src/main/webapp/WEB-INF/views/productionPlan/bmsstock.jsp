@@ -68,9 +68,15 @@
 											class="form-control" name="item_type" tabindex="-1"
 											id="item_type">
 											<option selected value="-1">Select Item type</option>
-											<option value="1">Raw Material</option>
-											<option value="2">Semi Finished</option>
-
+											<c:choose>
+												<c:when test="${deptId==10}">
+													<option value="2">Semi Finished</option>
+												</c:when>
+												<c:when test="${deptId==11}">
+													<option value="1">Raw Material</option>
+													<option value="2">Semi Finished</option>
+												</c:when>
+											</c:choose>
 
 										</select>
 
