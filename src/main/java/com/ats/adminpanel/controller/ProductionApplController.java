@@ -1117,7 +1117,7 @@ public class ProductionApplController {
 
 			 String dept=request.getParameter("dept4");
 			 int prodHeaderId=Integer.parseInt(request.getParameter("prodHeaderId4"));
-			 int stated=Integer.parseInt(request.getParameter("state-d"));
+			 int stated=Integer.parseInt(request.getParameter("stated"));
 			 MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			 map.add("planHeaderId", prodHeaderId);
 

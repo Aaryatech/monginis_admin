@@ -471,7 +471,7 @@
 <div id="overlay4">
 	<div class="clock"></div>
 </div>
-
+	<form name="modalfrm4" id="modalfrm4"  method="post"> 
   <div class="modal-dialog" role="document" style="width:80%;height:50%;">
     <!--Content-->
     <div class="modal-content form-elegant">
@@ -494,7 +494,7 @@
      <div>
       </div>
        <div class="modal-body mx-6" >
-      	<form name="modalfrm4" id="modalfrm4"  method="post"> 
+      
       	 <div class="form-group">	<label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Production Id :<span id="prodIdSpan4"></span></label>
       		    <label class="col-sm-3 col-lg-4 control-label" style="color:#e20b31;">Production Date :<span id="prodDateSpan4"></span></label>
       		   </div> <br><br>
@@ -553,7 +553,7 @@
 									
 								</div>
 								
-								</form>	
+
 						</div>			
       <!--Body-->
       <div class="modal-body mx-4" >
@@ -566,7 +566,7 @@
     </div>
     <!--/.Content-->
   </div>
-</div>
+</div>								</form>	
 </div>
 <!----------------------------------------------End Model 4----------------------------------------------->
 <!------------------------------------------ MODEL 5-------------------------------------------------->
@@ -1237,7 +1237,7 @@
                 $.getJSON('${findItemsByGrpId}', {
                     grpId : grpId,
                     prodHeaderId : prodHeaderId,
-                    fromDept:"BMS",
+                    fromDept:"PROD",
                     toDept:"BMS",
                     ajax : 'true'
                 }, function(data) {
@@ -1250,7 +1250,7 @@
 				    .end()
 				 $("#items").append($("<option style='text-align: left;'></option>").attr( "value",-1).text("ALL"));
                     for ( var i = 0; i < len; i++) {
-                            
+                           
                                 if(data[i].itemId==1 && isManual==0){
                         $("#items").append(
                                 $("<option style='text-align: left;' disabled></option>").attr(
@@ -1279,7 +1279,7 @@
                 $.getJSON('${findItemsByGrpId}', {
                     grpId : grpId,
                     prodHeaderId : prodHeaderId, 
-                    fromDept:"BMS",
+                    fromDept:"PROD",
                     toDept:"BMS",
                     ajax : 'true'
                 }, function(data) {
