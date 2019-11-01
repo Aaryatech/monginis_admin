@@ -59,6 +59,7 @@ import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.DispatchReport;
 import com.ats.adminpanel.model.DispatchReportList;
 import com.ats.adminpanel.model.ExportToExcel;
+import com.ats.adminpanel.model.ItemWiseGrnGvnReport;
 import com.ats.adminpanel.model.Orders;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
@@ -199,6 +200,124 @@ public class SalesReportController {
 
 		return model;
 
+	}
+
+	@RequestMapping(value = "/itemwiseGrnGvnReport", method = RequestMethod.GET)
+	public ModelAndView itemwiseGrnGvnReport(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/grnGvn/itemwiseGrnGvnReport");
+
+		try {
+
+			String fromDate = request.getParameter("fromDate");
+			String toDate = request.getParameter("toDate");
+
+			if (fromDate != null && toDate != null) {
+
+				String isGrn = request.getParameter("isGrn");
+
+				int grn = Integer.parseInt(isGrn);
+
+				if (isGrn.equals("-1")) {
+					isGrn = "0,1,2";
+				} else if (isGrn.equals("0")) {
+					isGrn = "0,2";
+				}
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+				map.add("toDate", DateConvertor.convertToYMD(toDate));
+				map.add("isGrn", isGrn);
+
+				RestTemplate restTemplate = new RestTemplate();
+				ItemWiseGrnGvnReport[] itemWiseGrnGvnReport = restTemplate.postForObject(
+						Constants.url + "itemwiseGrnGvnReportbetweenDate", map, ItemWiseGrnGvnReport[].class);
+
+				List<ItemWiseGrnGvnReport> list = new ArrayList<>(Arrays.asList(itemWiseGrnGvnReport));
+				model.addObject("list", list);
+				model.addObject("fromDate", fromDate);
+				model.addObject("toDate", toDate);
+				model.addObject("grn", grn);
+
+				List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+				ExportToExcel expoExcel = new ExportToExcel();
+				List<String> rowData = new ArrayList<String>();
+
+				rowData.add("Sr No");
+				rowData.add("Item Name");
+				rowData.add("Request QTY");
+				rowData.add("Approved QTY");
+				rowData.add("Taxable AMT");
+				rowData.add("Tax AMT");
+				rowData.add("Total");
+
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				for (int i = 0; i < list.size(); i++) {
+					expoExcel = new ExportToExcel();
+					rowData = new ArrayList<String>();
+
+					rowData.add("" + (i + 1));
+					rowData.add(list.get(i).getItemName());
+					rowData.add("" + list.get(i).getGrnGvnQty());
+					rowData.add("" + list.get(i).getAprQtyAcc());
+					rowData.add("" + list.get(i).getAprTaxableAmt());
+					rowData.add("" + list.get(i).getAprTotalTax());
+					rowData.add("" + list.get(i).getAprGrandTotal());
+
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+
+				}
+
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "itemwisegrnreport");
+			}
+
+		} catch (Exception e) {
+
+			System.out.println("Exc in show sales report bill wise  " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+
+	}
+
+	@RequestMapping(value = "pdf/showItemwiseGrnReportPdf/{fromDate}/{toDate}/{isGrn}", method = RequestMethod.GET)
+	public ModelAndView showItemwiseGrnReportPdf(@PathVariable String fromDate, @PathVariable String toDate,
+			@PathVariable String isGrn, HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/grnGvn/pdf/itemwiseGrnReportPdf");
+
+		try {
+			if (isGrn.equals("-1")) {
+				isGrn = "0,1,2";
+			} else if (isGrn.equals("0")) {
+				isGrn = "0,2";
+			}
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+			map.add("isGrn", isGrn);
+
+			RestTemplate restTemplate = new RestTemplate();
+			ItemWiseGrnGvnReport[] itemWiseGrnGvnReport = restTemplate.postForObject(
+					Constants.url + "itemwiseGrnGvnReportbetweenDate", map, ItemWiseGrnGvnReport[].class);
+
+			List<ItemWiseGrnGvnReport> list = new ArrayList<>(Arrays.asList(itemWiseGrnGvnReport));
+			model.addObject("list", list);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+		model.addObject("fromDate", fromDate);
+		model.addObject("toDate", toDate);
+		return model;
 	}
 
 	@RequestMapping(value = "/getSaleBillwise", method = RequestMethod.GET)
@@ -793,6 +912,7 @@ public class SalesReportController {
 
 		return model;
 	}
+
 	@RequestMapping(value = "/showSaleReportBySubCatAndItem", method = RequestMethod.GET)
 	public ModelAndView showSaleReportBySubCatAndItem(HttpServletRequest request, HttpServletResponse response) {
 
@@ -840,7 +960,7 @@ public class SalesReportController {
 			categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
 					CategoryListResponse.class);
 
-			List<MCategoryList> mCategoryList= categoryListResponse.getmCategoryList();
+			List<MCategoryList> mCategoryList = categoryListResponse.getmCategoryList();
 
 			model.addObject("mCategoryList", mCategoryList);
 		} catch (Exception e) {
@@ -852,12 +972,14 @@ public class SalesReportController {
 		return model;
 
 	}
+
 	@RequestMapping(value = "/getFrListofAllFrForFrSummery", method = RequestMethod.GET)
 	@ResponseBody
 	public List<AllFrIdName> getFrListofAllFrForFrSummery(HttpServletRequest request, HttpServletResponse response) {
 
 		return allFrIdNameList.getFrIdNamesList();
 	}
+
 	@RequestMapping(value = "/getSaleReportBySubCatAndFrItem", method = RequestMethod.GET)
 	public @ResponseBody SubCatFrRepItemList getSaleReportBySubCatAndFrItem(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -1167,6 +1289,7 @@ public class SalesReportController {
 
 		return subCatFrReportListData;
 	}
+
 	@RequestMapping(value = "pdf/showSummeryFrAndSubCatItemPdf/{fromDate}/{toDate}/{selectedFr}/{selectedSubCatIdList} ", method = RequestMethod.GET)
 	public ModelAndView showSummeryFrAndSubCatItemPdf(@PathVariable String fromDate, @PathVariable String toDate,
 			@PathVariable String selectedFr, @PathVariable String selectedSubCatIdList, HttpServletRequest request,
@@ -1290,6 +1413,7 @@ public class SalesReportController {
 
 		return model;
 	}
+
 	@RequestMapping(value = "/getSubCatByCatIdForReport", method = RequestMethod.GET)
 	public @ResponseBody List<SubCategory> getSubCatByCatIdForReport(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -1325,6 +1449,7 @@ public class SalesReportController {
 
 		return subCatList;
 	}
+
 	// report 3
 	@RequestMapping(value = "/showSaleReportGrpByDate", method = RequestMethod.GET)
 	public ModelAndView showSaleReportGrpByDate(HttpServletRequest request, HttpServletResponse response) {
@@ -2805,7 +2930,6 @@ public class SalesReportController {
 		rowData.add("cgst sum");
 		rowData.add("igst sum");
 		rowData.add("Total");
-		
 
 		expoExcel.setRowData(rowData);
 		exportToExcelList.add(expoExcel);
@@ -2827,7 +2951,8 @@ public class SalesReportController {
 			rowData.add("" + saleList.get(i).getCgstRsSum());
 
 			rowData.add("" + saleList.get(i).getIgstRsSum());
-			rowData.add("" + saleList.get(i).getIgstRsSum()+saleList.get(i).getCgstRsSum()+saleList.get(i).getSgstRsSum()+ saleList.get(i).getTaxableAmtSum());
+			rowData.add("" + saleList.get(i).getIgstRsSum() + saleList.get(i).getCgstRsSum()
+					+ saleList.get(i).getSgstRsSum() + saleList.get(i).getTaxableAmtSum());
 
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
@@ -4430,7 +4555,9 @@ public class SalesReportController {
 		return model;
 
 	}
-	List<OrderDispatchRepDao> dispatchList=null;
+
+	List<OrderDispatchRepDao> dispatchList = null;
+
 	@RequestMapping(value = "/showOrderDispatchReport", method = RequestMethod.GET)
 	public ModelAndView showOrderDispatchReport(HttpServletRequest request, HttpServletResponse response) {
 
@@ -4440,8 +4567,8 @@ public class SalesReportController {
 			LocalDate date = LocalDate.now(z);
 			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
 			todaysDate = date.format(formatters);
-            String deliveryDate=request.getParameter("deliveryDate");
-          
+			String deliveryDate = request.getParameter("deliveryDate");
+
 			RestTemplate restTemplate = new RestTemplate();
 			CategoryListResponse categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
 					CategoryListResponse.class);
@@ -4449,100 +4576,97 @@ public class SalesReportController {
 			categoryList = categoryListResponse.getmCategoryList();
 
 			model.addObject("catList", categoryList);
-		    int flag=0;
-			  if(deliveryDate!=null) {
-				  String menuIdStr="";
-				  List<Integer>  menuIdList=new ArrayList<>();
-				  String[] menuId=request.getParameterValues("menuId");
-					for (int i = 0; i < menuId.length; i++) {
-						menuIdStr = menuIdStr + "," + menuId[i];
-						menuIdList.add(Integer.parseInt(menuId[i]));
-					}
-				  int catId=Integer.parseInt(request.getParameter("catId"));
-					MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-				    map.add("catId", catId);
-				    map.add("menuId", menuIdStr);
-				    map.add("deliveryDate",DateConvertor.convertToYMD(deliveryDate));
-					ParameterizedTypeReference<List<OrderDispatchRepDao>> typeRef = new ParameterizedTypeReference<List<OrderDispatchRepDao>>() {
-					};
+			int flag = 0;
+			if (deliveryDate != null) {
+				String menuIdStr = "";
+				List<Integer> menuIdList = new ArrayList<>();
+				String[] menuId = request.getParameterValues("menuId");
+				for (int i = 0; i < menuId.length; i++) {
+					menuIdStr = menuIdStr + "," + menuId[i];
+					menuIdList.add(Integer.parseInt(menuId[i]));
+				}
+				int catId = Integer.parseInt(request.getParameter("catId"));
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("catId", catId);
+				map.add("menuId", menuIdStr);
+				map.add("deliveryDate", DateConvertor.convertToYMD(deliveryDate));
+				ParameterizedTypeReference<List<OrderDispatchRepDao>> typeRef = new ParameterizedTypeReference<List<OrderDispatchRepDao>>() {
+				};
 
-					ResponseEntity<List<OrderDispatchRepDao>> responseEntity = restTemplate.exchange(
-							Constants.url + "getOrderDispatchReport", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+				ResponseEntity<List<OrderDispatchRepDao>> responseEntity = restTemplate.exchange(
+						Constants.url + "getOrderDispatchReport", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
-					 dispatchList = responseEntity.getBody();
-				    model.addObject("todaysDate", deliveryDate);
-				    model.addObject("dispatchList", dispatchList);
-				    
-					FranchiseeAndMenuList	franchiseeAndMenuList = restTemplate.getForObject(Constants.url + "getFranchiseeAndMenu",
-							FranchiseeAndMenuList.class);
+				dispatchList = responseEntity.getBody();
+				model.addObject("todaysDate", deliveryDate);
+				model.addObject("dispatchList", dispatchList);
 
-					model.addObject("menuList", franchiseeAndMenuList.getAllMenu());
-					
-					flag=1;
-					
-					// exportToExcel
-					List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+				FranchiseeAndMenuList franchiseeAndMenuList = restTemplate
+						.getForObject(Constants.url + "getFranchiseeAndMenu", FranchiseeAndMenuList.class);
 
-					ExportToExcel expoExcel = new ExportToExcel();
-					List<String> rowData = new ArrayList<String>();
+				model.addObject("menuList", franchiseeAndMenuList.getAllMenu());
 
-					rowData.add("Sr.No.");
-					rowData.add("Item Name");
-					rowData.add("Op Stock Qty");
-					rowData.add("Order Qty");
+				flag = 1;
 
-					rowData.add("Take from Opening");
-					rowData.add("Take from Fresh");
-					expoExcel.setRowData(rowData);
-					exportToExcelList.add(expoExcel);
-					if (!dispatchList.isEmpty()) {
-						for (int i = 0; i < dispatchList.size(); i++) {
-							int index = 1;
-							index = index + i;
-							expoExcel = new ExportToExcel();
-							rowData = new ArrayList<String>();
+				// exportToExcel
+				List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
-							rowData.add("" + index);
-							rowData.add("" + dispatchList.get(i).getItemName());
-							rowData.add("" + dispatchList.get(i).getOpTotal());
-							rowData.add("" + dispatchList.get(i).getOrderQty());
-							float op=0;
-							float fresh=0;
-							if(dispatchList.get(i).getOrderQty()<=dispatchList.get(i).getOpTotal() && dispatchList.get(i).getOrderQty()>0)
-							{
-								op=dispatchList.get(i).getOrderQty();
-								fresh=0;
-							}
-							else
-							if(dispatchList.get(i).getOrderQty()>dispatchList.get(i).getOpTotal())
-							{
-								fresh=dispatchList.get(i).getOrderQty()-dispatchList.get(i).getOpTotal();
-								op=dispatchList.get(i).getOpTotal();
-							}
-							rowData.add(""+op);
-							rowData.add(""+fresh);
-							expoExcel.setRowData(rowData);
-							exportToExcelList.add(expoExcel);
+				ExportToExcel expoExcel = new ExportToExcel();
+				List<String> rowData = new ArrayList<String>();
 
+				rowData.add("Sr.No.");
+				rowData.add("Item Name");
+				rowData.add("Op Stock Qty");
+				rowData.add("Order Qty");
+
+				rowData.add("Take from Opening");
+				rowData.add("Take from Fresh");
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				if (!dispatchList.isEmpty()) {
+					for (int i = 0; i < dispatchList.size(); i++) {
+						int index = 1;
+						index = index + i;
+						expoExcel = new ExportToExcel();
+						rowData = new ArrayList<String>();
+
+						rowData.add("" + index);
+						rowData.add("" + dispatchList.get(i).getItemName());
+						rowData.add("" + dispatchList.get(i).getOpTotal());
+						rowData.add("" + dispatchList.get(i).getOrderQty());
+						float op = 0;
+						float fresh = 0;
+						if (dispatchList.get(i).getOrderQty() <= dispatchList.get(i).getOpTotal()
+								&& dispatchList.get(i).getOrderQty() > 0) {
+							op = dispatchList.get(i).getOrderQty();
+							fresh = 0;
+						} else if (dispatchList.get(i).getOrderQty() > dispatchList.get(i).getOpTotal()) {
+							fresh = dispatchList.get(i).getOrderQty() - dispatchList.get(i).getOpTotal();
+							op = dispatchList.get(i).getOpTotal();
 						}
-					}
+						rowData.add("" + op);
+						rowData.add("" + fresh);
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
 
-					HttpSession session = request.getSession();
-					session.setAttribute("exportExcelList", exportToExcelList);
-					session.setAttribute("excelName", "OrderDispatchReport");
-					model.addObject("catId", catId);
-					model.addObject("menuIdList", menuIdList);
-            }else
-            {
-            	model.addObject("todaysDate",todaysDate);
-            }
-				model.addObject("flag",flag);
+					}
+				}
+
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "OrderDispatchReport");
+				model.addObject("catId", catId);
+				model.addObject("menuIdList", menuIdList);
+			} else {
+				model.addObject("todaysDate", todaysDate);
+			}
+			model.addObject("flag", flag);
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return model;
 	}
+
 	@RequestMapping(value = "/showOrderDispatchReportPdf", method = RequestMethod.GET)
 	public void showOrderDispatchReportPdf(HttpServletRequest request, HttpServletResponse response) {
 
@@ -4633,65 +4757,65 @@ public class SalesReportController {
 			float takeFromFresh = 0;
 			int index = 0;
 			if (!dispatchList.isEmpty()) {
-			for (OrderDispatchRepDao dispatch : dispatchList) {
-				index++;
-				PdfPCell cell;
+				for (OrderDispatchRepDao dispatch : dispatchList) {
+					index++;
+					PdfPCell cell;
 
-				cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
-				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-				cell.setPadding(4);
-				table.addCell(cell);
+					cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+					cell.setPadding(4);
+					table.addCell(cell);
 
-				cell = new PdfPCell(new Phrase(dispatch.getItemName(), headFont));
-				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
-				cell.setPaddingRight(2);
-				cell.setPadding(4);
-				table.addCell(cell);
-				
-				cell = new PdfPCell(new Phrase(String.valueOf(dispatch.getOpTotal()), headFont));
-				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-				cell.setPaddingRight(2);
-				cell.setPadding(4);
-				table.addCell(cell);
+					cell = new PdfPCell(new Phrase(dispatch.getItemName(), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+					cell.setPaddingRight(2);
+					cell.setPadding(4);
+					table.addCell(cell);
 
-				cell = new PdfPCell(new Phrase(String.valueOf(dispatch.getOrderQty()), headFont));
-				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-				cell.setPaddingRight(2);
-				cell.setPadding(4);
-				table.addCell(cell);
-				float fresh=0;float op=0;
-				 if(dispatch.getOrderQty()<=dispatch.getOpTotal() && dispatch.getOrderQty()>0) {
-				        op=dispatch.getOrderQty();
-						fresh=0;
-			     }else if(dispatch.getOrderQty()>dispatch.getOpTotal())
-			     {
-				  fresh=dispatch.getOrderQty()-dispatch.getOpTotal();
-			 	  op=dispatch.getOpTotal();
-			     }
-				cell = new PdfPCell(new Phrase(String.valueOf(op), headFont));
-				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-				cell.setPaddingRight(2);
-				cell.setPadding(4);
-				table.addCell(cell);
+					cell = new PdfPCell(new Phrase(String.valueOf(dispatch.getOpTotal()), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+					cell.setPaddingRight(2);
+					cell.setPadding(4);
+					table.addCell(cell);
 
-				cell = new PdfPCell(new Phrase(String.valueOf(fresh), headFont));
-				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-				cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
-				cell.setPaddingRight(2);
-				cell.setPadding(4);
+					cell = new PdfPCell(new Phrase(String.valueOf(dispatch.getOrderQty()), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+					cell.setPaddingRight(2);
+					cell.setPadding(4);
+					table.addCell(cell);
+					float fresh = 0;
+					float op = 0;
+					if (dispatch.getOrderQty() <= dispatch.getOpTotal() && dispatch.getOrderQty() > 0) {
+						op = dispatch.getOrderQty();
+						fresh = 0;
+					} else if (dispatch.getOrderQty() > dispatch.getOpTotal()) {
+						fresh = dispatch.getOrderQty() - dispatch.getOpTotal();
+						op = dispatch.getOpTotal();
+					}
+					cell = new PdfPCell(new Phrase(String.valueOf(op), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+					cell.setPaddingRight(2);
+					cell.setPadding(4);
+					table.addCell(cell);
 
-				table.addCell(cell);
+					cell = new PdfPCell(new Phrase(String.valueOf(fresh), headFont));
+					cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+					cell.setHorizontalAlignment(Element.ALIGN_RIGHT);
+					cell.setPaddingRight(2);
+					cell.setPadding(4);
 
-				 opStockQty = opStockQty+dispatch.getOpTotal();
-				 orderQty = orderQty+dispatch.getOrderQty();
-				 takeFromOp = takeFromOp+op;
-				 takeFromFresh =takeFromFresh+fresh;
-			}
+					table.addCell(cell);
+
+					opStockQty = opStockQty + dispatch.getOpTotal();
+					orderQty = orderQty + dispatch.getOrderQty();
+					takeFromOp = takeFromOp + op;
+					takeFromFresh = takeFromFresh + fresh;
+				}
 			}
 			PdfPCell cell;
 
@@ -4737,12 +4861,10 @@ public class SalesReportController {
 
 			table.addCell(cell);
 
-
 			document.open();
 			document.add(table);
 			document.close();
 
-		
 			// Atul Sir code to open a Pdf File
 			if (file != null) {
 
@@ -4785,6 +4907,7 @@ public class SalesReportController {
 		}
 
 	}
+
 	// pdf function
 	private Dimension format = PD4Constants.A4;
 	private boolean landscapeValue = false;
@@ -4805,8 +4928,8 @@ public class SalesReportController {
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 
-		 File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
-		 //File f = new File("/home/ats-12/report.pdf");
+		File f = new File(Constants.REPORT_SAVE);
+		// File f = new File("/home/ats-12/report.pdf");
 
 		try {
 			runConverter(Constants.ReportURL + url, f, request, response);
@@ -4820,7 +4943,7 @@ public class SalesReportController {
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
+		String filePath = Constants.REPORT_SAVE;
 
 		// String filePath ="/home/ats-12/report.pdf";
 
@@ -4916,7 +5039,7 @@ public class SalesReportController {
 		String url = request.getParameter("url");
 		System.out.println("URL " + url);
 
-		File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
+		File f = new File(Constants.REPORT_SAVE);
 		// File f = new File("/opt/tomcat-latest/webapps/uploads/report.pdf");
 
 		try {
@@ -4931,7 +5054,7 @@ public class SalesReportController {
 		// get absolute path of the application
 		ServletContext context = request.getSession().getServletContext();
 		String appPath = context.getRealPath("");
-		String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
+		String filePath = Constants.REPORT_SAVE;
 
 		// String filePath = "/opt/tomcat-latest/webapps/uploads/report.pdf";
 
