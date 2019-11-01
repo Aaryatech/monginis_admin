@@ -274,6 +274,13 @@ public class SalesReportController {
 				HttpSession session = request.getSession();
 				session.setAttribute("exportExcelList", exportToExcelList);
 				session.setAttribute("excelName", "itemwisegrnreport");
+			}else {
+				
+				Date dt = new Date();
+				SimpleDateFormat sf = new SimpleDateFormat("dd-MM-yyyy");
+				
+				model.addObject("fromDate", sf.format(dt));
+				model.addObject("toDate", sf.format(dt));
 			}
 
 		} catch (Exception e) {
