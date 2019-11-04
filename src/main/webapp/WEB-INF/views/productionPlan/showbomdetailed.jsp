@@ -166,8 +166,9 @@
 														<th>Name</th>
 														<th>Auto Request Qty</th>
 														<th>Request Qty</th>
+														<c:if test="${billOfMaterialHeader.toDeptName=='MIX'}">
 														<th>Single Cut</th>
-														<th>Double Cut</th>
+														<th>Double Cut</th></c:if>
 														<th>Issue Qty</th>
 														<c:choose>
 															<c:when test="${billOfMaterialHeader.status!=0}">
@@ -191,8 +192,10 @@
 															<td><c:out value="${bomwithdetaild.rmName}" /></td>
 															<td><c:out value="${bomwithdetaild.autoRmReqQty}" /></td>
 															<td><c:out value="${bomwithdetaild.rmReqQty}" /></td>
+																<c:if test="${billOfMaterialHeader.toDeptName=='MIX'}">
                                                              <td><c:out value="${bomwithdetaild.exVarchar1}" /></td>
 															  <td><c:out value="${bomwithdetaild.exVarchar2}" /></td>
+															  </c:if>
 															<c:choose>
 																<c:when test="${billOfMaterialHeader.status==0}">
 																	<td><input type="text"

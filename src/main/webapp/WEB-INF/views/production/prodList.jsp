@@ -68,6 +68,7 @@
                             
 								<input type="hidden" name="mode_add" id="mode_add"
 									value="add_att">
+									
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">From
 										Date</label>
@@ -126,7 +127,7 @@
 										<tbody>
 
 											<c:forEach items="${planHeader}" var="planHeader">
-
+<input type="hidden" name="prodStatus" id="prodStatus${planHeader.productionHeaderId}" value="${planHeader.productionStatus}"/>
 												<tr>
 
 													<td align="left"><c:out
@@ -181,6 +182,8 @@
 																		class="glyphicon glyphicon-info-sign"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
 																</c:when>
 																<c:when test="${type==2}">
+															<c:choose>
+														    <c:when test="${planHeader.productionStatus!=5}">
 																	<div class="text-center">
  																 <a href="" onclick="showDetailsForCp(${planHeader.productionHeaderId},'${planHeader.productionDate}')" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm">CP</a>&nbsp;&nbsp;
 																 <a href="" onclick="showDetailsForLayering(${planHeader.productionHeaderId},'${planHeader.productionDate}')" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm2">Layering</a>
@@ -188,6 +191,17 @@
 																 <a href="" onclick="showDetailsForIssue(${planHeader.productionHeaderId},'${planHeader.productionDate}')" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm4">Issue</a>
 															  <a href="" onclick="showDetailsForManual(${planHeader.productionHeaderId},'${planHeader.productionDate}')" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm5">Manual Prod</a>
  															</div>
+ 															</c:when>
+ 															 <c:when test="${planHeader.productionStatus==5}">
+																	<div class="text-center">
+ 																 <a href="#"  class="btn btn-default btn-rounded"  style="color:green;">CP</a>&nbsp;&nbsp;
+																 <a href="#" class="btn btn-default btn-rounded" style="color:green;">Layering</a>
+																 <a href="#"  class="btn btn-default btn-rounded" style="color:green;">Coating</a>
+																 <a href="" onclick="showDetailsForIssue(${planHeader.productionHeaderId},'${planHeader.productionDate}')" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm4">Issue</a>
+															  <a href="" onclick="showDetailsForManual(${planHeader.productionHeaderId},'${planHeader.productionDate}')" class="btn btn-default btn-rounded" data-toggle="modal" data-target="#elegantModalForm5">Manual Prod</a>
+ 															</div>
+ 															</c:when>
+ 															</c:choose>
 															    </c:when>
 																
 																<c:otherwise>
@@ -886,7 +900,7 @@
   		 						  	tr.append($('<td></td>').html("SF"+"<input type=hidden name=rmType"+data.sfDid+" id=rmType"+data.sfDid+" value=2 />"));
   		 					  	tr.append($('<td></td>').html(actQty+"<input type=hidden name=prevRmQty"+data.sfDid+" id=prevRmQty"+data.sfDid+" value="+data.rmQty+" />"));
   		 					  	tr.append($('<td></td>').html("<input type=text onkeypress='return IsNumeric(event);' style='width:99px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control'  name=rmQty2"+ data.sfDid+"  id=rmQty2"
-  		 								+ data.sfDid+" value="+actQty+" /> &nbsp;  <input type=hidden id=rmId"+data.sfDid+"  name=rmId"+data.sfDid+"  value="+data.rmId+" />" ));
+  		 								+ data.sfDid+" value="+actQty+" readonly   /> &nbsp;  <input type=hidden id=rmId"+data.sfDid+"  name=rmId"+data.sfDid+"  value="+data.rmId+" />" ));
   		 						tr.append($('<td></td>').html(uom+""+"<input type=hidden value='"+uom+"'  id=uomRm"+data.sfDid+"  name=uomRm"+data.sfDid+"  >"));
   		 						$('#modeltable2 tbody').append(tr);
   	     		});
@@ -1091,7 +1105,7 @@
   		 						  	tr.append($('<td></td>').html("SF"+"<input type=hidden name=rmType"+data.sfDid+" id=rmType"+data.sfDid+" value=2 />"));
   		 					  	tr.append($('<td></td>').html(actQty+"<input type=hidden name=prevRmQty"+data.sfDid+" id=prevRmQty"+data.sfDid+" value="+data.rmQty+" />"));
   		 					  	tr.append($('<td></td>').html("<input type=text onkeypress='return IsNumeric(event);' style='width:100px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control'  name=rmQty2"+ data.sfDid+"  id=rmQty2"
-  		 								+ data.sfDid+" value="+actQty+" /> &nbsp;  <input type=hidden id=rmId"+data.sfDid+"  name=rmId"+data.sfDid+"  value="+data.rmId+" />" ));
+  		 								+ data.sfDid+" value="+actQty+" readonly /> &nbsp;  <input type=hidden id=rmId"+data.sfDid+"  name=rmId"+data.sfDid+"  value="+data.rmId+" />" ));
   		 						tr.append($('<td></td>').html(uom+""+"<input type=hidden value='"+uom+"'  id=uomRm"+data.sfDid+"  name=uomRm"+data.sfDid+"  >"));
   		 						$('#modeltable4 tbody').append(tr);
   	     		});
@@ -1154,7 +1168,7 @@
   		 						  	tr.append($('<td></td>').html("SF"+"<input type=hidden name=rmType"+data.sfDid+" id=rmType"+data.sfDid+" value=2 />"));
   		 					  	tr.append($('<td></td>').html(actQty+"<input type=hidden name=prevRmQty"+data.sfDid+" id=prevRmQty"+data.sfDid+" value="+data.rmQty+" />"));
   		 					  	tr.append($('<td></td>').html("<input type=text onkeypress='return IsNumeric(event);' style='width:100px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control'  name=rmQty2"+ data.sfDid+"  id=rmQty2"
-  		 								+ data.sfDid+" value="+actQty+" /> &nbsp;  <input type=hidden id=rmId"+data.sfDid+"  name=rmId"+data.sfDid+"  value="+data.rmId+" />" ));
+  		 								+ data.sfDid+" value="+actQty+" readonly /> &nbsp;  <input type=hidden id=rmId"+data.sfDid+"  name=rmId"+data.sfDid+"  value="+data.rmId+" />" ));
   		 						tr.append($('<td></td>').html(uom+""+"<input type=hidden value='"+uom+"'  id=uomRm"+data.sfDid+"  name=uomRm"+data.sfDid+"  >"));
   		 						$('#modeltable6 tbody').append(tr);
   	     		});
@@ -1228,6 +1242,9 @@
 <script type="text/javascript">
 
             function onGrpChange(isManual) { 
+            	var isManual = $("input[name='stated']:checked").val();
+            	$('#modeltable7 td').remove();
+            	$("#sbtbtn4").prop("disabled", true);
             	var grpId=$('#grpId').val();
             	$('#items')
 			    .find('option')
@@ -1272,8 +1289,10 @@
  function onAllGrpSelect() { 
             	
 	 var items=$('#items').val();
+	 
 	 if(items.includes("-1")){
-		 
+		 $('#modeltable7 td').remove();
+     	$("#sbtbtn4").prop("disabled", true);
             	var prodHeaderId=$('#prodHeaderId4').val();
             	var grpId=$('#grpId').val();
                 $.getJSON('${findItemsByGrpId}', {
@@ -1378,6 +1397,17 @@ if(items.includes("-1")){
     {
     
     	$('#modeltable7 td').remove();
+    	$("#sbtbtn4").prop("disabled", true);
+    	var prodStatus=document.getElementById("prodStatus"+prodHeaderId).value;
+    	if(prodStatus==5)
+    		{
+    		$('input[id=on]').attr("disabled",true);
+    		$("#off").prop("checked", true);
+    		}else
+    			{
+    			$('input[id=on]').attr("disabled",false);
+    			$("#on").prop("checked", true);
+    			}
     	document.getElementById("dept4").value="PROD";
     	document.getElementById("prodHeaderId4").value=prodHeaderId;
     	document.getElementById("prodIdSpan4").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodHeaderId;
@@ -1437,7 +1467,7 @@ $('#searchIssueItems').click(function(){
   							  	tr.append($('<td></td>').html("SF"+"<input type=hidden name=rmType"+data.itemDetailId+" id=rmType"+data.itemDetailId+" value='2' />"));
   						  	tr.append($('<td></td>').html(actQty+""+"<input type=hidden value="+actQty+"  id=prevRmQty"+data.itemDetailId+"  name=prevRmQty"+data.itemDetailId+"  >"));
   						  	tr.append($('<td></td>').html("<input type=text onkeypress='return IsNumeric(event);' style='width:100px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control' name='rmQty"+data.itemDetailId+"'  id=rmQty"
-  									+ data.itemDetailId+" value="+actQty+" /> &nbsp;  <input type=hidden id=sfId"+data.itemDetailId+"  name=sfId"+data.itemDetailId+"  value="+data.rmId+" />" ));
+  									+ data.itemDetailId+" value="+actQty+" readonly /> &nbsp;  <input type=hidden id=sfId"+data.itemDetailId+"  name=sfId"+data.itemDetailId+"  value="+data.rmId+" />" ));
   							tr.append($('<td></td>').html(data.uom+""+"<input type=hidden value='"+data.uom+"'  id=uom"+data.itemDetailId+"  name=uom"+data.itemDetailId+"  >"));
 
   							$('#modeltable7 tbody').append(tr);
@@ -1626,7 +1656,7 @@ $('#searchIssueItems').click(function(){
   		 						  	tr.append($('<td></td>').html("SF"+"<input type=hidden name=rmType"+data.sfDid+" id=rmType"+data.sfDid+" value=2 />"));
   		 					  	tr.append($('<td></td>').html(actQty+"<input type=hidden name=prevRmQty"+data.sfDid+" id=prevRmQty"+data.sfDid+" value="+data.rmQty+" />"));
   		 					  	tr.append($('<td></td>').html("<input type=text onkeypress='return IsNumeric(event);' style='width:100px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control'  name=rmQty2"+ data.sfDid+"  id=rmQty2"
-  		 								+ data.sfDid+" value="+actQty+" /> &nbsp;  <input type=hidden id=rmId"+data.sfDid+"  name=rmId"+data.sfDid+"  value="+data.rmId+" />" ));
+  		 								+ data.sfDid+" value="+actQty+" readonly /> &nbsp;  <input type=hidden id=rmId"+data.sfDid+"  name=rmId"+data.sfDid+"  value="+data.rmId+" />" ));
   		 						tr.append($('<td></td>').html(uom+""+"<input type=hidden value='"+uom+"'  id=uomRm"+data.sfDid+"  name=uomRm"+data.sfDid+"  >"));
   		 						$('#modeltable9 tbody').append(tr);
   	     		});

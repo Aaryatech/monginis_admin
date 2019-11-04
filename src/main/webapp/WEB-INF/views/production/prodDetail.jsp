@@ -430,7 +430,7 @@
 												<div
 													class="col-sm-1 col-sm-offset-1 col-lg-12 col-lg-offset-0">
 													<c:choose>
-														<c:when test="${planHeader.isStoreBom==0}">
+														<c:when test="${planHeader.isStoreBom==0 && planHeader.productionStatus!=5}">
 															<a
 																href="${pageContext.request.contextPath}/showBom/${planHeader.productionHeaderId}/1/${planHeader.productionDate}/${planHeader.isPlanned}/${planHeader.catId}/PROD/STORE">
 																<button type="button" class="btn btn-primary">
@@ -446,7 +446,7 @@
 														</c:otherwise>
 														</c:choose>
 														<c:choose>
-														<c:when test="${planHeader.isMixing==0}">
+														<c:when test="${planHeader.isMixing==0 && planHeader.productionStatus!=5}">
 															<a
 																href="${pageContext.request.contextPath}/showBom/${planHeader.productionHeaderId}/1/${planHeader.productionDate}/${planHeader.isPlanned}/${planHeader.catId}/PROD/MIX">
 																<button type="button" class="btn btn-primary">
