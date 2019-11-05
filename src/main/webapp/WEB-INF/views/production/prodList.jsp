@@ -249,7 +249,7 @@
       	<form name="modalfrm" id="modalfrm"  method="post"> 
       			<label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Production Id :<span id="prodIdSpan"></span></label>
       		    <label class="col-sm-3 col-lg-4 control-label" style="color:#e20b31;">Production Date :<span id="prodDateSpan"></span></label>
-      		    
+      		     <label class="col-sm-3 col-lg-4 control-label" style="color:blue;">DEPT :<span id="dep1">  BMS to BMS </span></label>
      		 <input type="hidden" name="dept" id="dept"  />
      		  <input type="hidden" name="prodHeaderId" id="prodHeaderId"  />
      			<div class="component">
@@ -332,7 +332,7 @@
      		 <input type="hidden" name="dept2" id="dept2"  />
      		 	<label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Production Id :<span id="prodIdSpan2"></span></label>
       		    <label class="col-sm-3 col-lg-4 control-label" style="color:#e20b31;">Production Date :<span id="prodDateSpan2"></span></label>
-      		    
+      		      <label class="col-sm-3 col-lg-4 control-label" style="color:blue;">DEPT :<span id="dep1">  BMS to BMS </span></label>
      		 <input type="hidden" name="prodHeaderId2" id="prodHeaderId2"  />
      		  <input type="hidden" name="itemDetailId2" id="itemDetailId2"  />
      		 
@@ -418,7 +418,7 @@
      		 <input type="hidden" name="dept3" id="dept3"  />
      		 	<label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Production Id :<span id="prodIdSpan3"></span></label>
       		    <label class="col-sm-3 col-lg-4 control-label" style="color:#e20b31;">Production Date :<span id="prodDateSpan3"></span></label>
-      		    
+      		      <label class="col-sm-3 col-lg-4 control-label" style="color:blue;">DEPT :<span id="dep1">  BMS to BMS </span></label>
      		 <input type="hidden" name="prodHeaderId3" id="prodHeaderId3"  />
      		  <input type="hidden" name="itemDetailId3" id="itemDetailId3"  />
      		 
@@ -511,6 +511,7 @@
       
       	 <div class="form-group">	<label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Production Id :<span id="prodIdSpan4"></span></label>
       		    <label class="col-sm-3 col-lg-4 control-label" style="color:#e20b31;">Production Date :<span id="prodDateSpan4"></span></label>
+      		   <label class="col-sm-3 col-lg-4 control-label" style="color:blue;">DEPT :<span id="dep1">  Production to BMS </span></label>
       		   </div> <br><br>
      		 <input type="hidden" name="dept4" id="dept4"  />
      		 <input type="hidden" name="prodHeaderId4" id="prodHeaderId4"  />
@@ -606,6 +607,7 @@
       	 <div class="form-group">
       		<label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Production Id :<span id="prodIdSpan5"></span></label>
       		    <label class="col-sm-3 col-lg-4 control-label" style="color:#e20b31;">Production Date :<span id="prodDateSpan5"></span></label>
+       <label class="col-sm-3 col-lg-4 control-label" style="color:blue;">DEPT :<span id="dep1">  BMS to BMS </span></label>
       	</div>   <br><br>
      		 <input type="hidden" name="dept5" id="dept5"  />
      		 <input type="hidden" name="prodHeaderId5" id="prodHeaderId5"  />

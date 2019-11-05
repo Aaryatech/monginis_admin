@@ -79,27 +79,27 @@ public class ViewMixingController {
 	public MixingHeader mixingHeader=new MixingHeader();
 	 
 	
-	@RequestMapping(value = "/getMixingList", method = RequestMethod.GET)
-	public ModelAndView getMixingList(HttpServletRequest request, HttpServletResponse response) {
+	@RequestMapping(value = "/getMixingList/{deptId}", method = RequestMethod.GET)
+	public ModelAndView getMixingList(@PathVariable("deptId")int deptId,HttpServletRequest request, HttpServletResponse response) {
 		Constants.mainAct =6;
 		Constants.subAct=42;
 		
 		ModelAndView model = new ModelAndView("productionPlan/getMixinglist");//
          RestTemplate rest = new RestTemplate();
-		
-			GetMixingList getMixingList= rest.getForObject(Constants.url + "/gettodaysMixingRequest", GetMixingList.class);
-			
-			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			String settingKey1 = new String();
-			settingKey1 = "MIX";
-			map.add("settingKeyList", settingKey1);
+            MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+					
+			//map.add("settingKeyList", "MIX");
 			RestTemplate restTemplate = new RestTemplate();
-			FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
-					FrItemStockConfigureList.class);
+			//FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+			//		FrItemStockConfigureList.class);
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("deptId",deptId);
+			GetMixingList getMixingList= rest.postForObject(Constants.url + "/getMixingReqList",map, GetMixingList.class);
 			System.out.println("getMixingList "+getMixingList.toString());
 		
 		model.addObject("todaysmixrequest",getMixingList.getMixingHeaderList());
-		model.addObject("flag",settingList1.getFrItemStockConfigure().get(0).getSettingValue());
+		model.addObject("flag",deptId);
 		return model;
 
 	}
@@ -110,27 +110,18 @@ public class ViewMixingController {
 		Constants.subAct=184;*/
 		
 		ModelAndView model = new ModelAndView("productionPlan/getMixinglist");//
-
-		
-		
-		RestTemplate rest = new RestTemplate();
+        RestTemplate rest = new RestTemplate();
 		
 			GetMixingList getMixingList= rest.getForObject(Constants.url + "/gettodaysMixingRequest", GetMixingList.class);
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			String settingKey1 = new String();
-			settingKey1 = "PROD";
-			map.add("settingKeyList", settingKey1);
+			map.add("settingKeyList",  "PROD");
 			RestTemplate restTemplate = new RestTemplate();
 			FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
 					FrItemStockConfigureList.class);
 			 
-			System.out.println("flag "+settingList1.getFrItemStockConfigure().get(0).getSettingValue());
-		
-		
 		model.addObject("todaysmixrequest",getMixingList.getMixingHeaderList());
 		model.addObject("flag",settingList1.getFrItemStockConfigure().get(0).getSettingValue());
 		return model;
-
 	}
 	
 	@RequestMapping(value = "/getMixingListWithDate", method = RequestMethod.GET)
@@ -141,21 +132,26 @@ public class ViewMixingController {
 		
 		String frmdate=request.getParameter("from_date");
 		String todate=request.getParameter("to_date");
-		
+		int deptId=Integer.parseInt(request.getParameter("deptId"));
 		System.out.println("in getMixingListWithDate   "+frmdate+todate);
 		String frdate=DateConvertor.convertToYMD(frmdate);
 		String tdate=DateConvertor.convertToYMD(todate);
 		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		//map.add("settingKeyList", "MIX");
+		//FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+		//		FrItemStockConfigureList.class);
+		//map = new LinkedMultiValueMap<String, Object>();
 		map.add("frmdate",frdate);
 		map.add("todate",tdate);
+		map.add("deptId", deptId);
 		System.out.println("in getMixingListWithDate   "+frdate+tdate);
 		
 
 		RestTemplate rest = new RestTemplate();
 		try
 		{
-			GetMixingList getMixingList= rest.postForObject(Constants.url + "/getMixingHeaderList",map, GetMixingList.class);
+			GetMixingList getMixingList= rest.postForObject(Constants.url + "/getMixingHeaderListByDept",map, GetMixingList.class);
 			 
 			mixingHeaderList = new ArrayList<MixingHeader>();
 			System.out.println("getMixingList"+getMixingList.getMixingHeaderList().toString());
@@ -187,17 +183,25 @@ public class ViewMixingController {
 		Constants.subAct=184;*/
 		String frmdate=request.getParameter("from_date");
 		String todate=request.getParameter("to_date");
-		
+		int deptId=Integer.parseInt(request.getParameter("deptId"));
 		System.out.println("in getMixingListWithDate   "+frmdate+todate);
 		String frdate=DateConvertor.convertToYMD(frmdate);
 		String tdate=DateConvertor.convertToYMD(todate);
 		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		
+	//	map.add("settingKeyList", "MIX");
+	//	RestTemplate restTemplate = new RestTemplate();
+	//	FrItemStockConfigureList settingList1 = restTemplate.postForObject(Constants.url + "getDeptSettingValue", map,
+	//			FrItemStockConfigureList.class);
+	//	map = new LinkedMultiValueMap<String, Object>();
+		
 		map.add("frmdate",frdate);
 		map.add("todate",tdate);
+		map.add("deptId",deptId);
 		System.out.println("in getMixingListWithDate   "+frdate+tdate);
 		RestTemplate rest = new RestTemplate();
-		GetMixingList getMixingList= rest.postForObject(Constants.url + "/getMixingHeaderList",map, GetMixingList.class);
+		GetMixingList getMixingList= rest.postForObject(Constants.url + "/getMixingHeaderListByDept",map, GetMixingList.class);
 		getMixingListall  = getMixingList.getMixingHeaderList();
 		return getMixingListall;
 	

@@ -36,10 +36,16 @@
 					<h1>
 					<c:choose>
 						<c:when test="${flag==15}">
-						<i class="fa fa-file-o"></i> Search Mixing Todays List
+						<i class="fa fa-file-o"></i> Mixing Todays List
 						</c:when>
 						<c:when test="${flag==14}">
-						<i class="fa fa-file-o"></i> Search Mixing List For Production Department
+						<i class="fa fa-file-o"></i> Mixing List For Production Department
+						</c:when>
+						<c:when test="${flag==10}">
+						<i class="fa fa-file-o"></i> Mixing List
+						</c:when>
+						<c:when test="${flag==11}">
+						<i class="fa fa-file-o"></i> BMS Mixing List
 						</c:when>
 					</c:choose>
 						
@@ -124,7 +130,7 @@
 																</td>
 																
 																
-						<td><a href="${pageContext.request.contextPath}/viewDetailMixRequest?mixId=${todaysmixrequest.mixId}&deptId=${flag}" class="action_btn" >
+						<td><a href="${pageContext.request.contextPath}/viewDetailMixRequest?mixId=${todaysmixrequest.mixId}&deptId=${flag}" class="action_btn" target="_blank" >
 						<abbr title="Edit"><i class="fa fa-list"></i></abbr></a></td>
 						
 																</tr>
@@ -155,9 +161,9 @@
 						<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">From Date:</label>
 									<div class="col-sm-5 col-lg-2 controls">
-										<input class="form-control date-picker" id="from_date" size="16" autocomplete="off"
+										<input class="form-control date-picker" id="from_date" size="16" autocomplete="off" placeholder="From Date"
 											 type="text" name="from_date" required />
-											 <input class="form-control " id="deptId" size="16" placeholder="From Date"
+											 <input class="form-control " id="deptId" size="16" 
 											 type="hidden" name="deptId" value="${flag}" required />
 									
 										</div>
@@ -322,13 +328,9 @@
 		var deptId=$("#deptId").val();
 		function searchMix() {
 
-		 
-
-			  
 				var from_date = $("#from_date").val();
 				var to_date = $("#to_date").val();
-				
-				
+				var deptId = $("#deptId").val();
 				$('#loader').show();
 
 				$
@@ -338,7 +340,7 @@
 								{
 									 
 									from_date : from_date,
-									to_date : to_date,
+									to_date : to_date,deptId:deptId,
 									ajax : 'true'
 
 								},
@@ -369,10 +371,10 @@
 												  	tr.append($('<td></td>').html(itemList.mixDate));
 												  	
 
-												  	tr.append($('<td></td>').html(itemList.productionBatch));
+												  	tr.append($('<td></td>').html(itemList.productionId));
 												  	tr.append($('<td></td>').html(itemList.timeSlot));
 												  	tr.append($('<td></td>').html(sts));
-												  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailMixRequest?mixId="+itemList.mixId+"&deptId="+deptId+"'  class='action_btn'> <abbr title='detailes'> <i class='fa fa-list' ></i></abbr> "));
+												  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailMixRequest?mixId="+itemList.mixId+"&deptId="+deptId+"'  class='action_btn' target='_blank' > <abbr title='detailes' > <i class='fa fa-list' ></i></abbr> "));
 												  	 
 													$('#table_grid tbody').append(tr);
 													
@@ -389,7 +391,7 @@
 		function searchmixall() {
 			var from_date = $("#from_date").val();
 			var to_date = $("#to_date").val();
-			
+			var deptId = $("#deptId").val();
 			
 			$('#loader').show();
 
@@ -400,7 +402,7 @@
 							{
 								 
 								from_date : from_date,
-								to_date : to_date,
+								to_date : to_date,deptId:deptId,
 								ajax : 'true'
 
 							},
@@ -429,16 +431,16 @@
 												}
 											else if(itemList.status==2)
 												{
-												var sts="Production Complete";
+												var sts="Production Completed";
 												}
 												
 												var tr = $('<tr></tr>');
 											  	tr.append($('<td></td>').html(key+1));
 											  	tr.append($('<td></td>').html(itemList.mixDate));
-											  	tr.append($('<td></td>').html(itemList.productionBatch));
+											  	tr.append($('<td></td>').html(itemList.productionId));
 											  	tr.append($('<td></td>').html(itemList.timeSlot));
 											  	tr.append($('<td></td>').html(sts));
-											  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailMixRequest?mixId="+itemList.mixId+"&deptId="+deptId+"' class='action_btn'> <abbr title='detailes'> <i class='fa fa-list' ></i></abbr> "));
+											  	tr.append($('<td></td>').html("<a href='${pageContext.request.contextPath}/viewDetailMixRequest?mixId="+itemList.mixId+"&deptId="+deptId+"' class='action_btn' target='_blank' > <abbr title='detailes'> <i class='fa fa-list' ></i></abbr> "));
 												
 												$('#table_grid tbody').append(tr);
 
