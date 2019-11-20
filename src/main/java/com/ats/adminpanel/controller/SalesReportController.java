@@ -1119,7 +1119,7 @@ public class SalesReportController {
 
 		}
 
-		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+		/*List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
 		ExportToExcel expoExcel = new ExportToExcel();
 		List<String> rowData = new ArrayList<String>();
@@ -1292,7 +1292,7 @@ public class SalesReportController {
 
 		HttpSession session = request.getSession();
 		session.setAttribute("exportExcelList", exportToExcelList);
-		session.setAttribute("excelName", "SaleBillWiseDate");
+		session.setAttribute("excelName", "SaleBillWiseDate");*/
 
 		return subCatFrReportListData;
 	}

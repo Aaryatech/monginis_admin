@@ -224,11 +224,11 @@
 
 
 
-						<div class="col-sm-3  controls">
+						<!-- <div class="col-sm-3  controls">
 							<input type="button" id="expExcel" class="btn btn-primary"
 								value="EXPORT TO Excel" onclick="exportToExcel();"
 								disabled="disabled">
-						</div>
+						</div> -->
 					</div>
 				</div>
 
@@ -281,7 +281,7 @@
 
 								if (data == "") {
 									alert("No records found !!");
-									document.getElementById("expExcel").disabled = true;
+									//document.getElementById("expExcel").disabled = true;
 								}
 
 								$
@@ -456,10 +456,10 @@
 																									AmtPer = AmtPer
 																											+ report.retAmtPer;
 
-																									document
-																											.getElementById("expExcel").disabled = false;
-																									document
-																											.getElementById('range').style.display = 'block';
+																									/* document
+																											.getElementById("expExcel").disabled = false; */
+																								/* 	document
+																											.getElementById('range').style.display = 'block'; */
 																									index = index + 1;
 																									//var tr = "<tr>";
 
