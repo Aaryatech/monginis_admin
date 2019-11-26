@@ -1,6 +1,7 @@
 package com.ats.adminpanel.controller;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
@@ -244,9 +245,26 @@ public class ItemSfController {
 			List<RmItemGroup> rmItemGroupList=restTemplate.getForObject(Constants.url + "rawMaterial/getAllRmItemGroup", List.class);
 
 		model.addObject("rmDetailList",rawMaterialDetailsList.getRawMaterialDetailsList());
-		System.out.println("sf header List "+itemHeaderList.toString());
+		
+		
+		 rawMaterialUomList=new ArrayList<>();
+		 RawMaterialUom[]  rawMaterialUomListRes = restTemplate.getForObject(Constants.url + "rawMaterial/getRmUom",
+					RawMaterialUom[].class);
+		 rawMaterialUomList=Arrays.asList(rawMaterialUomListRes);
+			model.addObject("rmUomList", rawMaterialUomList);
 		
 		sfDetailList=sfDetaiListItems.getSfItemDetail();
+		
+		for(int i=0;i<sfDetailList.size();i++)
+		{
+			String uom="";
+			for(int j=0;j<rawMaterialUomList.size();j++)
+			{
+				if(rawMaterialUomList.get(j).getUomId()==sfDetailList.get(i).getRmUnit())
+				uom=rawMaterialUomList.get(j).getUom();
+			}
+			sfDetailList.get(i).setUom(uom);
+		}
 		
 		model.addObject("rmItemGroupList", rmItemGroupList);
 		model.addObject("sfDetailList",sfDetailList);
@@ -291,19 +309,17 @@ public class ItemSfController {
 		 System.out.println("LIst :"+rawMaterialDetailsList.toString());
 		
 		model.addObject("rmDetailList",rawMaterialDetailsList.getRawMaterialDetailsList());
-		
 		System.out.println("sf header List "+itemHeaderList.toString());
+			
+		rawMaterialUomList=new ArrayList<>();
+		rawMaterialUomList = restTemplate.getForObject(Constants.url + "rawMaterial/getRmUom",List.class);
+		model.addObject("rmUomList", rawMaterialUomList);
 		
+		map = new LinkedMultiValueMap<String, Object>();
 		
-		 map = new LinkedMultiValueMap<String, Object>();
-
-		 rawMaterialUomList=new ArrayList<>();
-		rawMaterialUomList = restTemplate.getForObject(Constants.url + "rawMaterial/getRmUom",
-				List.class);
-		
-			map.add("delStatus", 0);
-			sfTypeList=new ArrayList<>();
-		 sfTypeList=restTemplate.postForObject(Constants.url+"getSfType",map,List.class);
+		map.add("delStatus", 0);
+		sfTypeList=new ArrayList<>();
+		sfTypeList=restTemplate.postForObject(Constants.url+"getSfType",map,List.class);
 		
 			
 			MDeptList mDeptList = restTemplate.getForObject(Constants.url + "/spProduction/mDeptList", MDeptList.class);
@@ -427,19 +443,27 @@ public class ItemSfController {
 			float qty=Float.parseFloat(request.getParameter("qty"));
 			
 			String matName=request.getParameter("mat_name");
+			
+			int seqNo=Integer.parseInt(request.getParameter("seqNo"));
 			System.out.println("mat name "+matName);
 			//int unitOM=Integer.parseInt(request.getParameter("unit_o_M"));
 			int unitOM=0;
-			
+			String uom="";
 			for(int i=0;i<commonConfs.size();i++) {
-				
 				if(commonConfs.get(i).getId()==materialNameId) {
-					
 					unitOM=commonConfs.get(i).getRmUomId();
 				}
-				
 			}
 			
+			RestTemplate restTemplate=new RestTemplate();
+			RawMaterialUom[]  rawMaterialUomListRes = restTemplate.getForObject(Constants.url + "rawMaterial/getRmUom",
+					RawMaterialUom[].class);
+			List<RawMaterialUom> uomList=Arrays.asList(rawMaterialUomListRes);
+			for(int i=0;i<uomList.size();i++) {
+				if(uomList.get(i).getUomId()==unitOM) {
+					uom=uomList.get(i).getUom();
+			}
+			}
 			sfDetail.setDelStatus(0);
 			sfDetail.setRmType(materialType);
 			sfDetail.setRmId(materialNameId);
@@ -448,7 +472,8 @@ public class ItemSfController {
 			sfDetail.setRmWeight(sfWeight);
 			sfDetail.setSfId(globalSfId);
 			sfDetail.setRmUnit(unitOM);
-			
+			sfDetail.setUom(uom);
+			sfDetail.setSeqNo(seqNo);
 			sfDetailList.add(sfDetail);// end of add new Item
 			}
 			else if(Integer.parseInt(request.getParameter("key"))!=-1 && Integer.parseInt(request.getParameter("editKey"))==-2 ) {
@@ -497,7 +522,7 @@ public class ItemSfController {
 		ModelAndView model=new ModelAndView("masters/rawMaterial/itemSfDetail");
 		
 		int unitOM=0;
-		
+		String uom="";
 		int key=Integer.parseInt(request.getParameter("key"));
 		
 		try {
@@ -513,6 +538,7 @@ public class ItemSfController {
 			
 			String matName=request.getParameter("mat_name");
 			
+			int seqNo=Integer.parseInt(request.getParameter("seqNo"));
 			System.out.println("mat name "+matName);
 
 			
@@ -523,7 +549,15 @@ public class ItemSfController {
 					unitOM=commonConfs.get(i).getRmUomId();
 				}
 			}
-			
+			RestTemplate restTemplate=new RestTemplate();
+			RawMaterialUom[]  rawMaterialUomListRes = restTemplate.getForObject(Constants.url + "rawMaterial/getRmUom",
+					RawMaterialUom[].class);
+			List<RawMaterialUom> uomList=Arrays.asList(rawMaterialUomListRes);
+			for(int i=0;i<uomList.size();i++) {
+				if(uomList.get(i).getUomId()==unitOM) {
+					uom=uomList.get(i).getUom();
+			}
+			}
 			System.out.println("inside If material Id matched");
 			
 			 sfDetailList.get(key).setDelStatus(0);;
@@ -535,7 +569,8 @@ public class ItemSfController {
 			 sfDetailList.get(key).setRmWeight(sfWeight);
 			 sfDetailList.get(key).setSfId(globalSfId);
 			 sfDetailList.get(key).setRmUnit(unitOM);;
-			
+			 sfDetailList.get(key).setUom(uom);
+			 sfDetailList.get(key).setSeqNo(seqNo);
 		}catch (Exception e) {
 			
 			System.out.println("Failed To receive Item Detail "+e.getMessage());
@@ -637,5 +672,32 @@ public class ItemSfController {
 	}
 	
 	return commonConfList;
+	}
+	
+	@RequestMapping(value = "/getRmListByCatIdForSf", method = RequestMethod.GET)
+	public @ResponseBody List<RawMaterialDetails> getRmListByCatIdForSf(HttpServletRequest request,
+		HttpServletResponse response) {
+		List<CommonConf> commonConfList=new ArrayList<CommonConf>();
+		int catId=Integer.parseInt(request.getParameter("catId"));
+		
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String,Object>();
+		map.add("catId", catId);
+		
+		RestTemplate rest=new RestTemplate();
+		RawMaterialDetailsList rawMaterialDetailsList=  rest.postForObject(Constants.url + "rawMaterial/getRawMaterialByCategory",map,
+				RawMaterialDetailsList.class);
+		System.out.println("rawMaterialDetailsList"+rawMaterialDetailsList.getRawMaterialDetailsList());
+		  for(RawMaterialDetails rawMaterialDetails:rawMaterialDetailsList.getRawMaterialDetailsList())
+		   {
+			   CommonConf commonConf=new CommonConf();
+			   
+			   commonConf.setId(rawMaterialDetails.getRmId());
+			   commonConf.setName(rawMaterialDetails.getRmName());
+			   commonConf.setRmUomId(rawMaterialDetails.getRmUomId());
+			   
+			   commonConfList.add(commonConf);
+			   commonConfs.add(commonConf);
+		   }
+		return rawMaterialDetailsList.getRawMaterialDetailsList();
 	}
 }

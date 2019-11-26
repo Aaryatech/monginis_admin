@@ -134,7 +134,7 @@ public class ItemController {
 		for (int x = 0; x < mCategoryList.size(); x++) {
 			System.out.println("mCategoryList.get(x).getCatId(" + mCategoryList.get(x).getCatId());
 			if (mCategoryList.get(x).getCatId() == catId) {
-				subCatList = mCategoryList.get(x).getSubCategoryList();
+				subCatList = mCategoryList.get(x).getSubCategory();
 				System.out.println("SubCat List" + subCatList);
 			}
 
@@ -783,7 +783,7 @@ public class ItemController {
 
 		for (int i = 0; i < mCategoryList.size(); i++) {
 			if (item.getItemGrp1() == (mCategoryList.get(i).getCatId()))
-				subCategoryList = mCategoryList.get(i).getSubCategoryList();
+				subCategoryList = mCategoryList.get(i).getSubCategory();
 
 		}
 

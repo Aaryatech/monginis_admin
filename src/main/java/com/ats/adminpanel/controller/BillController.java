@@ -1539,6 +1539,13 @@ public class BillController {
 			subCat.setSubCatId(0);
 			subCat.setDelStatus(0);
 			subCatAList.add(subCat);
+			
+			subCat=new SubCategory();
+			subCat.setCatId(0);
+			subCat.setSubCatName("Regular Sp Cake");
+			subCat.setSubCatId(8);
+			subCat.setDelStatus(0);
+			subCatAList.add(subCat);
 
 			System.out.println("subCatAList:" + subCatAList.toString());
 		
