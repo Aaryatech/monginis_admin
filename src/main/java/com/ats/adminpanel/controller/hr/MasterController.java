@@ -35,6 +35,7 @@ import com.ats.adminpanel.model.hr.LocDisplay;
 import com.ats.adminpanel.model.hr.Location;
 import com.ats.adminpanel.model.hr.Salary;
 import com.ats.adminpanel.model.hr.Settings;
+import com.ats.adminpanel.model.AppEmp;
 import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.hr.Company;
 import com.ats.adminpanel.model.hr.EmpDept;
@@ -1108,6 +1109,16 @@ public class MasterController {
 
 					System.err.println("Response: " + saveEmp.toString());
 
+					if (saveEmp != null) {
+
+						AppEmp appEmp = new AppEmp(0, saveEmp.getEmpId(), saveEmp.getEmpDsc(), "", "", "", "", "", "",
+								"", "", 0, 0, "", "");
+
+						AppEmp saveAppEmp = restTemplate.postForObject(Constants.url + "saveAppEmp", appEmp,
+								AppEmp.class);
+
+					}
+
 				} else if (editCodeMatch && !editDSCMatch) {
 
 					if (isValidDSC) {
@@ -1115,6 +1126,16 @@ public class MasterController {
 								Constants.security_app_url + "master/saveEmployee", emp1, Employee.class);
 
 						System.err.println("Response: " + saveEmp.toString());
+
+						if (saveEmp != null) {
+
+							AppEmp appEmp = new AppEmp(0, saveEmp.getEmpId(), saveEmp.getEmpDsc(), "", "", "", "", "",
+									"", "", "", 0, 0, "", "");
+
+							AppEmp saveAppEmp = restTemplate.postForObject(Constants.url + "saveAppEmp", appEmp,
+									AppEmp.class);
+
+						}
 
 					}
 
@@ -1126,6 +1147,16 @@ public class MasterController {
 
 						System.err.println("Response: " + saveEmp.toString());
 
+						if (saveEmp != null) {
+
+							AppEmp appEmp = new AppEmp(0, saveEmp.getEmpId(), saveEmp.getEmpDsc(), "", "", "", "", "",
+									"", "", "", 0, 0, "", "");
+
+							AppEmp saveAppEmp = restTemplate.postForObject(Constants.url + "saveAppEmp", appEmp,
+									AppEmp.class);
+
+						}
+
 					}
 
 				} else {
@@ -1136,6 +1167,16 @@ public class MasterController {
 								Constants.security_app_url + "master/saveEmployee", emp1, Employee.class);
 
 						System.err.println("Response: " + saveEmp.toString());
+
+						if (saveEmp != null) {
+
+							AppEmp appEmp = new AppEmp(0, saveEmp.getEmpId(), saveEmp.getEmpDsc(), "", "", "", "", "",
+									"", "", "", 0, 0, "", "");
+
+							AppEmp saveAppEmp = restTemplate.postForObject(Constants.url + "saveAppEmp", appEmp,
+									AppEmp.class);
+
+						}
 					}
 
 				}
@@ -1147,71 +1188,19 @@ public class MasterController {
 							emp1, Employee.class);
 
 					System.err.println("Response: " + saveEmp.toString());
+
+					if (saveEmp != null) {
+
+						AppEmp appEmp = new AppEmp(0, saveEmp.getEmpId(), saveEmp.getEmpDsc(), "", "", "", "", "", "",
+								"", "", 0, 0, "", "");
+
+						AppEmp saveAppEmp = restTemplate.postForObject(Constants.url + "saveAppEmp", appEmp,
+								AppEmp.class);
+
+					}
 				}
 
 			}
-
-			/*
-			 * if (isValidCode && isValidDSC) {
-			 * 
-			 * Employee saveEmp = restTemplate.postForObject(Constants.security_app_url +
-			 * "master/saveEmployee", emp1, Employee.class);
-			 * 
-			 * System.err.println("Response: " + saveEmp.toString());
-			 */
-			// --------DSC--------
-
-			/*
-			 * if (empId == 0) { System.err.
-			 * println("IF EMP ID=0------------------------------------------------------");
-			 * 
-			 * MultiValueMap<String, Object> map2 = new LinkedMultiValueMap<String,
-			 * Object>(); map2.add("key", "dsc");
-			 * 
-			 * Settings settings = restTemplate.postForObject( Constants.security_app_url +
-			 * "master/getSettingsByKey", map2, Settings.class);
-			 * 
-			 * String dscNo = settings.getSettingValue();
-			 * 
-			 * emp1.setEmpDsc(dscNo);
-			 * 
-			 * System.err.println("IF SAVE EMP--------------------" + emp1);
-			 * 
-			 * Employee saveEmp = restTemplate.postForObject(Constants.security_app_url +
-			 * "master/saveEmployee", emp1, Employee.class);
-			 * 
-			 * System.err.println("Response: " + saveEmp.toString());
-			 * 
-			 * if (saveEmp.getEmpId() > 0) {
-			 * 
-			 * int val = Integer.parseInt(settings.getSettingValue()); val = val + 1;
-			 * 
-			 * String newVal = String.format("%03d", val);
-			 * System.err.println("NEW VAL ------------------- " + newVal);
-			 * 
-			 * MultiValueMap<String, Object> map3 = new LinkedMultiValueMap<String,
-			 * Object>(); map3.add("settingsId", settings.getSettingId()); map3.add("value",
-			 * newVal);
-			 * 
-			 * Info info = restTemplate.postForObject( Constants.security_app_url +
-			 * "master/updateSettingsValueByKey", map3, Info.class);
-			 * 
-			 * System.err.println("DSC UPDATE ------------ " + info);
-			 * 
-			 * }
-			 * 
-			 * } else {
-			 * 
-			 * System.err.println("ELSE------------------------------------- ");
-			 * 
-			 * Employee saveEmp = restTemplate.postForObject(Constants.security_app_url +
-			 * "master/saveEmployee", emp1, Employee.class);
-			 * 
-			 * System.err.println("Response: " + saveEmp.toString()); }
-			 */
-			// }
-
-			// return "redirect:/showAddHrEmp";
 
 		} catch (Exception e) {
 			System.out.println("Exception In Add Emp Process:" + e.getMessage());
