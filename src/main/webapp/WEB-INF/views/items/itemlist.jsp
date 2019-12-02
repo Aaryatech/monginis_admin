@@ -103,7 +103,7 @@
 						<div class="box-content">
 
 							<form name="searchItem" id="searchItem" class="form-horizontal"
-								method="post" action="searchItem">
+								method="post" action="${pageContext.request.contextPath}/searchItem">
 								<input type="hidden" name="mod_ser" id="mod_ser"
 									value="search_result">
 
@@ -323,14 +323,14 @@
 				</div>
 				
 						</div>
-						
-						
+						<c:set var="flag" value=""></c:set>
+						<c:if test="${catId!=0}"><c:set var="flag" value="disabled"></c:set></c:if>
 						<div class="form-group"  id="range">
 								 
 											 
 											 
 											<div class="col-sm-3  controls">
-											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();">
+											 <input type="button" id="expExcel" ${flag}  class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();">
 											</div>
 											</div>
 					</div>
