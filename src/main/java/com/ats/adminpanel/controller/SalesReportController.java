@@ -3400,7 +3400,16 @@ public class SalesReportController {
 			try {
 
 				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+				StringBuilder frId = new StringBuilder();
 
+				for(int i=0;i<allFrIdNameList.getFrIdNamesList().size();i++)
+               {
+					frId = frId.append(allFrIdNameList.getFrIdNamesList().get(i).getFrId()+ ",");
+					
+				 }
+				String strFrId = frId.toString();
+				strFrId = strFrId.substring(0, strFrId.length() - 1);
+				model.addObject("strFrId", strFrId);
 			} catch (Exception e) {
 				System.out.println("Exception in getAllFrIdName" + e.getMessage());
 				e.printStackTrace();

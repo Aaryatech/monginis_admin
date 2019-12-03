@@ -115,7 +115,7 @@
 								class="form-control chosen" multiple="multiple" tabindex="6"
 								id="selectFr" name="selectFr" onchange="disableRoute()">
 
-								<option value="-1"><c:out value="All"/></option>
+								<option value="${strFrId}"><c:out value="All"/></option>
 
 								<c:forEach items="${unSelectedFrList}" var="fr"
 									varStatus="count">
