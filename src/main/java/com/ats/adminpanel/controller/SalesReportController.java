@@ -5921,10 +5921,8 @@ public class SalesReportController {
 				float netVal2 = (netVal1) - (saleReportList.get(i).getGrnValue());
 				float inLac = (netVal2) / 100000;
 				float retPer = 0.0f;
-				System.err.println("GRnValyesssssssssssssssssssss"+saleReportList.get(i).getGrnValue());
 				if (saleReportList.get(i).getGrnValue() > 0) {
 					retPer = ((saleReportList.get(i).getGrnValue()) / (saleReportList.get(i).getSaleValue() / 100));
-				System.err.println("Valuesssss"+retPer);
 				}
 				rowData.add("" + roundUp(netVal1));
 				rowData.add("" + roundUp(saleReportList.get(i).getGrnValue()));
