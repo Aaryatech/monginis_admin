@@ -85,6 +85,8 @@ public class ItemController {
 	ArrayList<Item> itemList;ArrayList<StockItem> tempStockItemList;
 
 	public static List<GetPrevItemStockResponse> getPrevItemStockResponsesList;
+	
+	public static List<GetPrevItemStockResponse> TEMPgetPrevItemStockResponsesList;
 
 	ArrayList<String> tempItemList;
 	public  int  catId = 0; 
@@ -253,6 +255,13 @@ public class ItemController {
 			model.addObject("ItemIdCategory", itemsWithCategoriesList);
 			model.addObject("catId", catId);
 			model.addObject("itemList", getPrevItemStockResponsesList);
+			
+			
+			System.err.println("DATA -------------- "+getPrevItemStockResponsesList);
+			
+			System.err.println("getPrevItemStockResponsesList ---------- "+TEMPgetPrevItemStockResponsesList);
+			
+			
 
 		} catch (Exception e) {
 
@@ -324,8 +333,13 @@ public class ItemController {
 					Constants.url + "getAllFrItemConfPost", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 			getPrevItemStockResponsesList = responseEntity.getBody();
-
+			
+			System.out.println("getPrevItemStockResponsesList--------------: " + getPrevItemStockResponsesList);
+			
+			
 			if (getPrevItemStockResponsesList.size() < tempItemList.size()) {
+				
+			
 
 				List<GetPrevItemStockResponse> tempPrevItemStockList = new ArrayList<GetPrevItemStockResponse>();
 
@@ -354,12 +368,37 @@ public class ItemController {
 					}
 
 					tempItemStockResponse.setStockDetails(stockDetailsList);
+					
+					
 
 					for (int j = 0; j < getPrevItemStockResponsesList.size(); j++) {
 
 						if (getPrevItemStockResponsesList.get(j).getItemId() == tempItemList.get(i).getId()) {
 
-							tempItemStockResponse = getPrevItemStockResponsesList.get(j);
+							//tempItemStockResponse = getPrevItemStockResponsesList.get(j);
+							
+							List<StockDetail> details=tempItemStockResponse.getStockDetails();
+							
+							
+							for(int k=0;k<details.size();k++) {
+								
+								for(int m=0;m<getPrevItemStockResponsesList.get(j).getStockDetails().size();m++) {
+									
+									if(details.get(k).getType()==getPrevItemStockResponsesList.get(j).getStockDetails().get(m).getType()) {
+										
+										details.get(k).setFrStockId(getPrevItemStockResponsesList.get(j).getStockDetails().get(m).getFrStockId());
+										details.get(k).setMaxQty(getPrevItemStockResponsesList.get(j).getStockDetails().get(m).getMaxQty());
+										details.get(k).setMinQty(getPrevItemStockResponsesList.get(j).getStockDetails().get(m).getMinQty());
+										details.get(k).setType(getPrevItemStockResponsesList.get(j).getStockDetails().get(m).getType());
+										details.get(k).setReorderQty(getPrevItemStockResponsesList.get(j).getStockDetails().get(m).getReorderQty());
+										
+										break;
+									}
+									
+								}
+								
+							}
+							
 						}
 
 					}
@@ -367,6 +406,11 @@ public class ItemController {
 					tempPrevItemStockList.add(tempItemStockResponse);
 
 				}
+				
+				
+			
+				
+				
 
 				System.out.println("\n\n ####### Updated Stock List is: " + tempPrevItemStockList.toString());
 
@@ -389,8 +433,11 @@ public class ItemController {
 			e.printStackTrace();
 		}
 
+		
+		
+		
 		return "redirect:/showFrItemConfiguration";
-
+		//return getPrevItemStockResponsesList.toString();
 	}
 	
 	
