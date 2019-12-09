@@ -6,12 +6,23 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
- <link rel="stylesheet"
+<head>
+  <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <link rel="stylesheet"
-	href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
+	href="${pageContext.request.contextPath}/resources/css/tableSearch.css"> 
 	
-<%--  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/component.css" />  --%>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/component.css" />
+
+<style type="text/css">
+   .table-responsive th {
+    padding: 22px 0px;
+    vertical-align: top;
+    background: #DCDCDC !important;
+    color: #696969 !important;
+}
+</style>
+</head>  
 <body>
 
 
@@ -537,6 +548,9 @@
 															.split('#');
 
 													var tr = $('<tr></tr>');
+													tr.append($('<td></td>')
+															.html(""));
+													
 													if(chkYes==0){
 														tr
 														.append($(
@@ -682,7 +696,7 @@
 										tr.append($('<td></td>').html(flvrRawMtrl.rmName));
 										tr.append($('<td></td>').html(rmType));
 										tr.append($('<td></td>').html(flvrRawMtrl.ttlQty));
-										tr.append($('<td></td>').html('<input type="text"  value='+flvrRawMtrl.ttlQty+' id='+0+'/>'));
+										tr.append($('<td></td>').html('<input type="text"  value='+flvrRawMtrl.ttlQty+' id='+0+' style="width:100px;border-radius:25px; font-weight:bold;text-align:center;"   ondrop="return false;" min="0"  onpaste="return false;" class="form-control"/>'));
 										$('#modeltable tbody').append(tr);
 									})
 									document.getElementById("prodDateSpan").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodDate;
@@ -796,13 +810,13 @@
 																.append($(
 																		'<td></td>')
 																		.html(
-																				'<a href="${pageContext.request.contextPath}/showHtmlViewSpcakeOrder/'+spCakeOrder.spOrderNo+'" target="blank"><i class="fa fa-file-text-o" style="font-size:24px;"></i></a>'));
+																				'<a href="${pageContext.request.contextPath}/showHtmlViewSpcakeOrder/'+spCakeOrder.spOrderNo+'" target="blank"><i title="view" class="fa fa-file-text-o" style="font-size:24px;"></i></a>'));
 
 														tr
 																.append($(
 																		'<td></td>')
 																		.html(
-																				'<a href="${pageContext.request.contextPath}/showSpcakeOrderPdf/'+spCakeOrder.spOrderNo+'" target="blank"><i class="fa fa-file-pdf-o" style="font-size:24px;"></i></a>'));
+																				'<a href="${pageContext.request.contextPath}/showSpcakeOrderPdf/'+spCakeOrder.spOrderNo+'" target="blank"><i title="pdf" class="fa fa-file-pdf-o" style="font-size:24px;"></i></a>'));
 
 														$('#table1 tbody')
 																.append(tr);
@@ -878,7 +892,6 @@
 											<tr>
 											<th width="130" align="left">Sr No</th>
 														<!-- <th width="87" align="left">Action</th> -->
-
 														<th>RM Name</th>
 														<th>RM Type</th>
 														<th>Total Qty.</th>
