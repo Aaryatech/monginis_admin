@@ -151,9 +151,9 @@ public class FlavourController {
 			flavourDetail.setSequenceNo(seq);
 			
 			
-			flavourDetail.setInt1(int1);//Multiplication Factor
+			flavourDetail.setInt1(int1);//isMultiplication Factor  0=No, 1=Yes
 			flavourDetail.setInt2(int2);//new
-			flavourDetail.setVarchar1(varchar1);//new
+			flavourDetail.setVarchar1(varchar1);//Multiplication Factor
 			flavourDetail.setVarchar2("NA");//new
 			flavourDetail.setBoll1(0);
 			flavourDetail.setBoll2(0);
