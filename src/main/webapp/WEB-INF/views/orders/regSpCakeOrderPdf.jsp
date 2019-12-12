@@ -46,7 +46,7 @@
   </tr>
   
   <tr>
-    <td  style=" font-size:14px;padding:5px 7px;font-weight:bold;">Special instructions </td>
+    <td  style=" font-size:14px;padding:5px 7px;font-weight:bold;">Message </td>
     <td style=" font-size:18px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">${regularSpCkOrders.rspCustName}</td>
   </tr>
 </table>
