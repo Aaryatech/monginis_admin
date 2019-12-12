@@ -40,9 +40,14 @@
     <td colspan="2" style=" font-size:18px; border-bottom:1px solid #000000;border-left: 1px solid  #000000; padding:5px 7px;font-weight:bold;" >Happy Birthday Anushka</td>
   </tr> -->
   <tr>
-    <td  style=" font-size:14px;padding:5px 7px;font-weight:bold;">Date of Delivery </td>
-    <td style=" font-size:18px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">${regularSpCkOrders.rspDeliveryDt}</td>
-    <td  style=" font-size:18px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">Place of Delivery-- ${regularSpCkOrders.rspPlace}</td>
+    <td  style=" font-size:14px; border-bottom:1px solid #000000; padding:5px 7px;font-weight:bold;">Date of Delivery </td>
+    <td style=" font-size:18px; border-bottom:1px solid #000000; padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">${regularSpCkOrders.rspDeliveryDt}</td>
+    <td  style=" font-size:18px; border-bottom:1px solid #000000; padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">Place of Delivery-- ${regularSpCkOrders.rspPlace}</td>
+  </tr>
+  
+  <tr>
+    <td  style=" font-size:14px;padding:5px 7px;font-weight:bold;">Special instructions </td>
+    <td style=" font-size:18px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000">${regularSpCkOrders.rspCustName}</td>
   </tr>
 </table>
 <c:set var="from" value="${from+1}"/>

@@ -255,30 +255,14 @@
 
 															<td align="left"><c:out value="${rate * qty}"></c:out></td>
 
-															<c:choose>
-																<c:when test="${isView eq '1'}">
-																	<td align="left"><a
-																		href="${pageContext.request.contextPath}/showHtmlViewRegSpcakeOrder/${spCakeOrderList.rspId}"
-																		target="blank"><i class="fa fa-file-text-o"
-																			style="font-size: 24px;"></i></a></td>
-
-																</c:when>
-
-																<c:otherwise>
-																	<td align="left"><a
-																		href="${pageContext.request.contextPath}/showHtmlViewRegSpcakeOrder/${spCakeOrderList.rspId}" class="disableClick"
-																		target="blank"><i class="fa fa-file-text-o"
-																			style="font-size: 24px;"></i></a></td>
-
-																</c:otherwise>
-															</c:choose>
+															
 
 
 															<c:choose>
 																<c:when test="${isView eq '1'}">
 																	<td align="left"><a
 																		href="${pageContext.request.contextPath}/showRegSpcakeOrderPdf/${spCakeOrderList.rspId}"
-																		target="blank"><i class="fa fa-file-pdf-o"
+																		target="blank"><i class="fa fa-file-text-o"
 																			style="font-size: 24px;"></i></a></td>
 
 																</c:when>
@@ -286,6 +270,24 @@
 																<c:otherwise>
 																	<td align="left"><a
 																		href="${pageContext.request.contextPath}/showRegSpcakeOrderPdf/${spCakeOrderList.rspId}"  class="disableClick"
+																		target="blank"><i class="fa fa-file-text-o"
+																			style="font-size: 24px;"></i></a></td> 
+
+																</c:otherwise>
+															</c:choose>
+															
+															<c:choose>
+																<c:when test="${isView eq '1'}">
+																	<td align="left"><a
+																		href="${pageContext.request.contextPath}/showHtmlViewRegSpcakeOrder/${spCakeOrderList.rspId}"
+																		target="blank"><i class="fa fa-file-pdf-o"
+																			style="font-size: 24px;"></i></a></td>
+
+																</c:when>
+
+																<c:otherwise>
+																	<td align="left"><a
+																		href="${pageContext.request.contextPath}/showHtmlViewRegSpcakeOrder/${spCakeOrderList.rspId}" class="disableClick"
 																		target="blank"><i class="fa fa-file-pdf-o"
 																			style="font-size: 24px;"></i></a></td>
 

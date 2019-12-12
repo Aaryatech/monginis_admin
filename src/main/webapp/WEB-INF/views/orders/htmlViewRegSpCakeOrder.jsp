@@ -175,8 +175,8 @@ document.body.onload = function()
       </td>
     </tr>
     <tr>
-      <td width="200" style="border-top:1px solid #E7E7E7; padding:5px 7px;"><strong>Customer Name : </strong> ${regularSpCkOrdersList.rspCustName}</td>
-      
+      <td width="200" style="border-top:1px solid #E7E7E7; padding:5px 7px;"><strong>Special Instructions : </strong> ${regularSpCkOrdersList.rspCustName}</td>
+       
     </tr>
     <tr>
       <td width="200" style="border-top:1px solid #E7E7E7; padding:5px 7px;"><strong>Customer Phone : </strong> ${regularSpCkOrdersList.rspCustMobileNo}</td>
