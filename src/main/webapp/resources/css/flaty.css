@@ -2459,7 +2459,10 @@ a.tile:hover {
 .tile-blue       {background-color: #0a59c0;}
 .tile-dark-blue  {background-color: #381095;}
 .tile-red        {background-color: #b9231f;}
-.tile-orange     {background-color: #e79712;}
+.tile-orange     {box-shadow: 0 6px 20px 0 rgba(255, 111, 0, 0.3);
+    background: #ff6f00;
+    background: -webkit-linear-gradient(45deg, #ff6f00 0%, #ffca28 100%);
+    background: linear-gradient(45deg, #d66f3f 0%, #e696ca 100%);}
 .tile-pink       {background-color: #c7266c;}
 .tile-magenta    {background-color: #8b4787;}
 .tile-green {background-color: #31a221;}
