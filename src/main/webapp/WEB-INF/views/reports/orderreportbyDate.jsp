@@ -72,6 +72,29 @@
 						</div>
 
 					</div>
+					<br>
+					<div class="row">
+
+
+						<label class="col-sm-3 col-lg-2 control-label">Select
+							Franchisee</label>
+						<div class="col-sm-6 col-lg-4">
+
+							<select data-placeholder="Choose Franchisee"
+								class="form-control chosen" multiple="multiple" tabindex="6"
+								id="selectFr" name="selectFr">
+
+								<option value="-1"><c:out value="All" /></option>
+
+								<c:forEach items="${unSelectedFrList}" var="fr"
+									varStatus="count">
+									<option value="${fr.frId}"><c:out value="${fr.frName}" /></option>
+								</c:forEach>
+							</select>
+
+						</div>
+
+					</div>
 
 
 					<br>
@@ -84,8 +107,8 @@
 
 
 						<div class="col-md-12" style="text-align: center;">
-							<button class="btn btn-info" onclick="exel()" id="expExcel">Export to
-								Excel</button>
+							<button class="btn btn-info" onclick="exel()" id="expExcel">Export
+								to Excel</button>
 
 						</div>
 					</div>
@@ -123,6 +146,9 @@
 
 			var from_date = $("#fromDate").val();
 			var to_date = $("#toDate").val();
+			var selectedFr = $("#selectFr").val();
+			
+			//alert("FR -- "+selectedFr);
 
 			$('#loader').show();
 
@@ -132,6 +158,7 @@
 
 				from_date : from_date,
 				to_date : to_date,
+				selectedFr : JSON.stringify(selectedFr),
 				ajax : 'true'
 
 			}, function(data) {

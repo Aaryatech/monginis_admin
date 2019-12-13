@@ -20,6 +20,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -43,6 +45,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
+import com.ats.adminpanel.model.AllFrIdName;
 import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.ExportToExcel;
@@ -52,6 +55,7 @@ import com.ats.adminpanel.model.SalesVoucherList;
 import com.ats.adminpanel.model.billing.FrBillHeaderForPrint;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
+import com.ats.adminpanel.model.franchisee.Menu;
 import com.ats.adminpanel.model.ggreports.GGReportByDateAndFr;
 import com.ats.adminpanel.model.ggreports.GGReportGrpByFrId;
 import com.ats.adminpanel.model.ggreports.GGReportGrpByMonthDate;
@@ -639,6 +643,7 @@ public class GrnGvnReportController {
 			model.addObject("routeList", allRouteListResponse.getRoute());
 			model.addObject("todaysDate", todaysDate);
 			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
+			
 
 		} catch (Exception e) {
 			System.out.println("Exce inshowGGReportDateWise " + e.getMessage());
@@ -662,7 +667,128 @@ public class GrnGvnReportController {
 
 			String fromDate = request.getParameter("from_date");
 			String toDate = request.getParameter("to_date");
+			
+			String[] frIds = request.getParameterValues("selectedFr");
+			String frIdss = request.getParameter("selectedFr");
+			System.err.println("STR FR---- = "+frIdss.replace("\"", ""));
+			
+			String tempFrId=frIdss.replace("\"", "");
+			tempFrId=tempFrId.substring(1,(tempFrId.length()-1));
+			
+			List<Integer> frIdArrayList = Stream.of(tempFrId.split(",")).map(Integer::parseInt)
+					.collect(Collectors.toList());
+			
+			System.err.println("STR FR LIST---- = "+frIdArrayList);
+			
+			map = new LinkedMultiValueMap<String, Object>();
 
+			map.add("fromDate", fromDate);
+			map.add("toDate", toDate);
+			map.add("frIds", tempFrId);
+
+			ItemListWithDateRecord[] itemListWithDateRecord = restTemplate.postForObject(
+					Constants.url + "getOrderReportByDateAndFr", map, ItemListWithDateRecord[].class);
+
+			 list = new ArrayList<>(Arrays.asList(itemListWithDateRecord));
+
+			List<Date> dates = new ArrayList<Date>();
+
+			DateFormat formatter;
+
+			formatter = new SimpleDateFormat("dd-MM-yyyy");
+
+			Date startDate = (Date) formatter.parse(fromDate);
+
+			Date endDate = (Date) formatter.parse(toDate);
+
+			long interval = 24 * 1000 * 60 * 60;
+
+			long endTime = endDate.getTime();
+
+			long curTime = startDate.getTime();
+
+			while (curTime <= endTime) {
+
+				dates.add(new Date(curTime));
+
+				curTime += interval;
+
+			}
+
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+
+			rowData.add("Sr. No.");
+			rowData.add("Item Name");
+
+			for (int i = 0; i < dates.size(); i++) {
+
+				Date lDate = (Date) dates.get(i);
+				String ds = formatter.format(lDate);
+				rowData.add(ds);
+				// System.out.println(" Date -" + ds);
+
+			}
+			rowData.add("Total");
+			
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+
+			for (int i = 0; i < list.size(); i++) {
+
+				float total=0;
+				
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+				rowData.add("" + (i + 1));
+				rowData.add("" + list.get(i).getItemName());
+
+				for (int j = 0; j < list.get(i).getList().size(); j++) {
+
+					rowData.add("" + list.get(i).getList().get(j).getQty());
+					total=total+list.get(i).getList().get(j).getQty();
+				}
+				rowData.add("" + total);
+				
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+
+			}
+
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "Item Order report by date");
+
+		} catch (Exception e) {
+
+			// System.out.println("Ex in getting /getgGReportByDate List Ajax call" +
+			// e.getMessage());
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+	
+	
+	//-----ANMOL---->12-12-2019---------------------------
+	@RequestMapping(value = "/orderReportByDateAndFrExcel", method = RequestMethod.GET)
+	@ResponseBody
+	public List<ItemListWithDateRecord> orderReportByDateAndFrExcel(HttpServletRequest request, HttpServletResponse response) {
+
+		List<ItemListWithDateRecord> list = new ArrayList<>();
+
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			String fromDate = request.getParameter("from_date");
+			String toDate = request.getParameter("to_date");
+			
 			map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("fromDate", fromDate);
@@ -753,6 +879,8 @@ public class GrnGvnReportController {
 		return list;
 
 	}
+	
+	
 
 	// consume R1 web Service
 	@RequestMapping(value = "/getGrnGvnByDatewise", method = RequestMethod.GET)
