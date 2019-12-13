@@ -621,7 +621,7 @@
 													tr.append($('<td></td>')
 															.html(totalValue));
 
-													tr
+												/* 	tr
 															.append($(
 																	'<td></td>')
 																	.html(
@@ -630,7 +630,23 @@
 																					+ '/'
 																					+ (key + 1)
 																					+ '" target="blank"><i class="fa fa-file-pdf-o" style="font-size:18px;"></i></a>'));
+											 */		tr
+													.append($(
+															'<td></td>')
+															.html(
+																	'<a href="${pageContext.request.contextPath}/showHtmlViewSpcakeAlbumOrder/'+spCakeOrder.spOrderNo+'" target="blank"><i title="view" class="fa fa-file-text-o" style="font-size:24px;"></i></a>'));
 
+											tr
+													.append($(
+															'<td></td>')
+															.html(
+																	'<a href="${pageContext.request.contextPath}/showSpcakeAlbumOrderPdf/'
+																					+ spCakeOrder.spOrderNo
+																					+ '/'
+																					+ (key + 1)
+																					+ '" target="blank"><i class="fa fa-file-pdf-o" style="font-size:18px;"></i></a>'));
+
+									
 													$('#table1 tbody').append(
 															tr);
 
@@ -806,16 +822,20 @@
 																				totalValue));
 
 														tr
-																.append($(
-																		'<td></td>')
-																		.html(
-																				'<a href="${pageContext.request.contextPath}/showHtmlViewSpcakeOrder/'+spCakeOrder.spOrderNo+'" target="blank"><i title="view" class="fa fa-file-text-o" style="font-size:24px;"></i></a>'));
+														.append($(
+																'<td></td>')
+																.html(
+																		'<a href="${pageContext.request.contextPath}/showHtmlViewSpcakeAlbumOrder/'+spCakeOrder.spOrderNo+'" target="blank"><i title="view" class="fa fa-file-text-o" style="font-size:24px;"></i></a>'));
 
-														tr
-																.append($(
-																		'<td></td>')
-																		.html(
-																				'<a href="${pageContext.request.contextPath}/showSpcakeOrderPdf/'+spCakeOrder.spOrderNo+'" target="blank"><i title="pdf" class="fa fa-file-pdf-o" style="font-size:24px;"></i></a>'));
+												tr
+														.append($(
+																'<td></td>')
+																.html(
+																		'<a href="${pageContext.request.contextPath}/showSpcakeAlbumOrderPdf/'
+																						+ spCakeOrder.spOrderNo
+																						+ '/'
+																						+ (key + 1)
+																						+ '" target="blank"><i class="fa fa-file-pdf-o" style="font-size:18px;"></i></a>'));
 
 														$('#table1 tbody')
 																.append(tr);
