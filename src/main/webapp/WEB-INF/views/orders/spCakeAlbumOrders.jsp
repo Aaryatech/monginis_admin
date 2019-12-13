@@ -12,8 +12,6 @@
 <link rel="stylesheet"
 	href="${pageContext.request.contextPath}/resources/css/tableSearch.css"> 
 	
-<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/component.css" />
-
 <style type="text/css">
    .table-responsive th {
     padding: 22px 0px;
@@ -282,9 +280,7 @@
 
 									
 										<div class="table-responsive" style="border: 0">
-											<table width="100%" class="table table-advance" id="table1" style=" display: block;
-    overflow-x: auto;
-    white-space: nowrap;">
+											<table width="100%" class="table table-advance" id="table1" >
 												<thead>
 													<tr>
 												<!-- 	<th width="17" style="width: 18px"><input type="checkbox" id="selCheck" name="selCheck" style="display: none;"/>  </th> -->
