@@ -175,7 +175,7 @@ td.user-name {
     color:blue;
 }
 input[type=checkbox] {
-  display: none;
+  display: block;
 }
 
 input[type=checkbox] + label:before {
