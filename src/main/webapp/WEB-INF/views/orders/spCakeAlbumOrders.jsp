@@ -280,12 +280,14 @@
 
 									<div class="box-content">
 
-										<div class="clearfix"></div>
+									
 										<div class="table-responsive" style="border: 0">
-											<table width="100%" class="table table-advance" id="table1">
+											<table width="100%" class="table table-advance" id="table1" style=" display: block;
+    overflow-x: auto;
+    white-space: nowrap;">
 												<thead>
 													<tr>
-														<th width="17" style="width: 18px"><input type="checkbox" id="selCheck" name="selCheck" style="display: none;"/>  </th>
+												<!-- 	<th width="17" style="width: 18px"><input type="checkbox" id="selCheck" name="selCheck" style="display: none;"/>  </th> -->
 														<th width="130" align="left">Sr No</th>
 														<th width="87" align="left">Action</th>
 
@@ -303,6 +305,7 @@
 														<th width="91" align="left">Total</th>
 														<th width="87" align="left">View</th>
 														<th width="87" align="left">PDF</th>
+													
 
 													</tr>
 												</thead>
@@ -509,7 +512,7 @@
 
 			var chkYes = document.getElementById("select_way").value;
 			if(chkYes==0)
-			document.getElementById("range_fields").style.display = "none";
+			document.getElementById("range_fields").style.display = "block";
 			else
 				document.getElementById("range_fields").style.display = "block";
 			var frIds = $("#fr_id").val();
@@ -535,6 +538,8 @@
 									alert("No Orders Found");
 									document.getElementById("expExcel").disabled = true;
 								}
+								
+							
 								$
 										.each(
 												data,
@@ -548,16 +553,16 @@
 															.split('#');
 
 													var tr = $('<tr></tr>');
-													tr.append($('<td></td>')
-															.html(""));
+													/* tr.append($('<td></td>')
+															.html("")); */
 													
-													if(chkYes==0){
+												/* 	if(chkYes==0){
 														tr
 														.append($(
 																'<td></td>')
 																.html(
 																		'<input type="checkbox" name="selCheck" value='+spCakeOrder.spOrderNo+' id='+key+'/>'));
-													}												
+													}	 */											
 
 													tr.append($('<td></td>')
 															.html(key + 1));
@@ -620,17 +625,11 @@
 															.append($(
 																	'<td></td>')
 																	.html(
-																			'<a href="${pageContext.request.contextPath}/showHtmlViewSpcakeAlbumOrder/'+spCakeOrder.spOrderNo+'" target="blank"><i class="fa fa-file-text-o" style="font-size:24px;"></i></a>'));
-
-													tr
-															.append($(
-																	'<td></td>')
-																	.html(
-																			'<a href="${pageContext.request.contextPath}/showSpcakeAlbumOrderPdf/'
+																			'<a href="${pageContext.request.contextPath}/showHtmlViewSpcakeAlbumOrder/'+spCakeOrder.spOrderNo+'" target="blank"><i class="fa fa-file-text-o" style="font-size:18px;"></i></a>&nbsp;&nbsp;<a href="${pageContext.request.contextPath}/showSpcakeAlbumOrderPdf/'
 																					+ spCakeOrder.spOrderNo
 																					+ '/'
 																					+ (key + 1)
-																					+ '" target="blank"><i class="fa fa-file-pdf-o" style="font-size:24px;"></i></a>'));
+																					+ '" target="blank"><i class="fa fa-file-pdf-o" style="font-size:18px;"></i></a>'));
 
 													$('#table1 tbody').append(
 															tr);

@@ -15,7 +15,9 @@
     .switch-toggle {
   width: 14em;
 }
-
+input[type="checkbox"] {
+    display: none;
+}
 </style>
 <body>
 <c:url var="showDetailsForLayering" value="/showDetailsForLayering"/>
