@@ -89,7 +89,7 @@
 						<i class="fa fa-file-o"></i>Plan Production
 					</h1>
 
-					
+
 				</div>
 			</div>
 			<!-- END Page Title -->
@@ -281,6 +281,10 @@
 																		onblur=" return getProdQty(5,5)" />
 																</div>
 															</th>
+
+
+
+
 														</tr>
 													</thead>
 													<tbody>
@@ -292,41 +296,44 @@
 										</div>
 									</div>
 								</div>
+								<br>
+
+								<div align="center" class="form-group">
+									<div class="col-sm-5 col-lg-10 controls">
+
+										Select Time Slot <select data-placeholder="Choose Time Slot"
+											tabindex="-1" name="selectTime" id="selectTime"
+											data-rule-required="true">
+
+
+											<c:forEach items="${productionTimeSlot}" var="productionTime"
+												varStatus="count">
+												<option value="${productionTime}"><c:out
+														value="Time Slot ${productionTime}" /></option>
+											</c:forEach>
+
+
+										</select>
+									</div>
+									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
+										<input type="button" class="btn btn-info" name="plandetail"
+											id="plandetail" value="PLAN DETAILS"
+											onclick="searchPlanDetails()" />
+										<!-- </div>
+									<div
+										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0"> -->
+										<input type="submit" class="btn btn-primary" value="Submit"
+											id="callSubmit">
+
+
+									</div>
+								</div>
 							</form>
 						</div>
 					</div>
 
-					<div align="center" class="form-group">
-						<div class="col-sm-5 col-lg-10 controls">
-
-							Select Time Slot <select data-placeholder="Choose Time Slot"
-								tabindex="-1" name="selectTime" id="selectTime"
-								data-rule-required="true">
 
 
-								<c:forEach items="${productionTimeSlot}" var="productionTime"
-									varStatus="count">
-									<option value="${productionTime}"><c:out
-											value="Time Slot ${productionTime}" /></option>
-								</c:forEach>
-
-
-							</select>
-						</div>
-						<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-							<input type="button" class="btn btn-info" name="plandetail"
-								id="plandetail" value="PLAN DETAILS"
-								onclick="searchPlanDetails()" />
-							<!-- </div>
-									<div
-										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0"> -->
-							<input type="submit" class="btn btn-primary" value="Submit"
-								id="callSubmit">
-
-
-						</div>
-					</div>
-					</form>
 				</div>
 			</div>
 
@@ -621,13 +628,28 @@
 													/* 													var qty5 = "<td align=center><input type=text min=0 max=500 class=form-control  id= qty5"+ item.id+ " name=qty5"+item.id+" value = "+0+ " disabled></td>";
 													 */
 
-													var qty5 = "<td align=center colspan='2'><input type=number  class=form-control  id= qty5"
-															+ item.id
-															+ " name=qty5"
-															+ item.id
-															+ " value = "
-															+ (item.totalLimit - item.curOpeQty)
-															+ "></td>";
+													if ((item.totalLimit
+															- item.curOpeQty < 0)) {
+
+														var qty5 = "<td align=center colspan='2'><input type=number  class=form-control  id= qty5"
+																+ item.id
+																+ " name=qty5"
+																+ item.id
+																+ " value = "
+																+ 0
+																+ "></td>";
+
+													} else {
+
+														var qty5 = "<td align=center colspan='2'><input type=number  class=form-control  id= qty5"
+																+ item.id
+																+ " name=qty5"
+																+ item.id
+																+ " value = "
+																+ (item.totalLimit - item.curOpeQty)
+																+ "></td>";
+
+													}
 
 													var trclosed = "</tr>";
 
@@ -716,49 +738,78 @@
 
 			//  alert("Your typed in " + prodDate);
 
-			$.getJSON('${getItemsProdQty}', {
+			if (id == 5) {
+				//alert("5"+window.getComputedStyle(thLimit)['display']);
 
-				prodDate : prodDate,
-				catId : selectedCatId,
-				id : token,
-				ajax : 'true'
+				if (window.getComputedStyle(thLimit)['display'] == "none") {
+					//alert("hide");
 
-			}, function(data) {
+					$
+							.getJSON(
+									'${getItemsProdQty}',
+									{
 
-				var len = data.length;
-				$
-						.each(data.itemList,
-								function(key, item) {
-									document.getElementById('qty' + id + ''
-											+ item.id).value = 0;
+										prodDate : prodDate,
+										catId : selectedCatId,
+										id : token,
+										ajax : 'true'
 
-								})
+									},
+									function(data) {
 
-				var prodQtyListLength = data.getProductionItemQtyList.length;
-				if (prodQtyListLength > 0) {
-					$.each(data.getProductionItemQtyList, function(key, prod) {
+										var len = data.length;
+										$.each(data.itemList, function(key,
+												item) {
+											document.getElementById('qty' + id
+													+ '' + item.id).value = 0;
 
-						$.each(data.itemList, function(key, item) {
+										})
 
-							if (prod.itemId == item.id) {
-								document.getElementById('qty' + id + ''
-										+ prod.itemId).value = prod.qty;
-							}
+										var prodQtyListLength = data.getProductionItemQtyList.length;
+										if (prodQtyListLength > 0) {
+											$
+													.each(
+															data.getProductionItemQtyList,
+															function(key, prod) {
 
-						})
+																$
+																		.each(
+																				data.itemList,
+																				function(
+																						key,
+																						item) {
 
-					})
-				} else {
-					$.each(data.itemList,
-							function(key, item) {
-								document.getElementById('qty' + id + ''
-										+ item.id).value = 0;
+																					if (prod.itemId == item.id) {
+																						document
+																								.getElementById('qty'
+																										+ id
+																										+ ''
+																										+ prod.itemId).value = prod.qty;
+																					}
 
-							})
+																				})
+
+															})
+										} else {
+											$
+													.each(
+															data.itemList,
+															function(key, item) {
+																document
+																		.getElementById('qty'
+																				+ id
+																				+ ''
+																				+ item.id).value = 0;
+
+															})
+
+										}
+
+									});
 
 				}
 
-			});
+			}
 
 		}
 	</script>
