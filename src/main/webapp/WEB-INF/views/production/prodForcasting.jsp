@@ -445,6 +445,9 @@
 			$('#loader').show();
 			$('#thLimit').hide();
 			$('#table1 td').remove();
+			
+			$("#datepicker2").val('');
+			$("#datepicker3").val('');
 
 			$
 					.getJSON(
@@ -572,6 +575,11 @@
 			$('#loader').show();
 			$('#thLimit').show();
 			$('#table1 td').remove();
+			
+			$("#datepicker2").val('');
+			$("#datepicker3").val('');
+			
+			
 
 			$
 					.getJSON(
@@ -598,6 +606,7 @@
 										.each(
 												data,
 												function(key, item) {
+													
 
 													var index = key + 1;
 
@@ -809,6 +818,71 @@
 
 				}
 
+			}else{
+				
+				$
+				.getJSON(
+						'${getItemsProdQty}',
+						{
+
+							prodDate : prodDate,
+							catId : selectedCatId,
+							id : token,
+							ajax : 'true'
+
+						},
+						function(data) {
+
+							var len = data.length;
+							$.each(data.itemList, function(key,
+									item) {
+								document.getElementById('qty' + id
+										+ '' + item.id).value = 0;
+
+							})
+
+							var prodQtyListLength = data.getProductionItemQtyList.length;
+							if (prodQtyListLength > 0) {
+								$
+										.each(
+												data.getProductionItemQtyList,
+												function(key, prod) {
+
+													$
+															.each(
+																	data.itemList,
+																	function(
+																			key,
+																			item) {
+
+																		if (prod.itemId == item.id) {
+																			document
+																					.getElementById('qty'
+																							+ id
+																							+ ''
+																							+ prod.itemId).value = prod.qty;
+																		}
+
+																	})
+
+												})
+							} else {
+								$
+										.each(
+												data.itemList,
+												function(key, item) {
+													document
+															.getElementById('qty'
+																	+ id
+																	+ ''
+																	+ item.id).value = 0;
+
+												})
+
+							}
+
+						});
+				
 			}
 
 		}
