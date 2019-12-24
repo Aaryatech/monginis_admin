@@ -89,7 +89,10 @@
 						<i class="fa fa-file-o"></i>Plan Production
 					</h1>
 
-
+<div class="alert1 info" >
+  <span class="closebtn">&times;</span>  
+  <strong><p style="text-align: center;" id="planData" ></p></strong> 
+</div>
 				</div>
 			</div>
 			<!-- END Page Title -->
