@@ -1818,6 +1818,7 @@ public class GrnGvnController {
 						if (detail.getGrnType() == 1) {
 
 							grnRate = detail.getBaseRate() * 65 / 100;
+							
 						}
 
 						if (detail.getGrnType() == 2 || detail.getGrnType() == 4) {
