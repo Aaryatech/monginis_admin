@@ -165,11 +165,28 @@
 									</div>
 							  </div>
 							   <div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Base Weight</label>
+									<label class="col-sm-3 col-lg-2 control-label">Item Cream Type</label>
 									<div class="col-sm-9 col-lg-3 controls">
-										<input type="text" name="base_weight" id="base_weight"
+										<%-- <input type="text" name="base_weight" id="base_weight"
 											placeholder="Base Weight" class="form-control"
-											data-rule-required="true" data-rule-number="true" value="${itemSupp.baseWeight}"/>
+											data-rule-required="true" data-rule-number="true" value="${itemSupp.baseWeight}"/> --%>
+									
+									<select name="base_weight" id="base_weight" class="form-control" placeholder="Item Cream Type"
+												 data-rule-required="true" onchange="uomChanged()">
+											<option value="">Select Item Cream Type</option>
+											<c:forEach items="${itemCreamList}" var="itemCreamList"
+													varStatus="count">
+													<c:choose>
+													<c:when test="${itemCreamList.itemCreamId==itemSupp.baseWeight}">
+														<option value="${itemCreamList.itemCreamId}" selected><c:out value="${itemCreamList.itemCreamName}"/></option>
+													</c:when>
+													<c:otherwise>
+														<option value="${itemCreamList.itemCreamId}"><c:out value="${itemCreamList.itemCreamName}"/></option>
+													</c:otherwise>
+													</c:choose>
+												</c:forEach>
+										</select>
+									
 									</div>
 							  </div>
 							  <div class="col2">

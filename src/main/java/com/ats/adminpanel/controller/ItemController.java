@@ -41,6 +41,7 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.ItemCreamType;
 import com.ats.adminpanel.model.MiniSubCategory;
 import com.ats.adminpanel.model.StockItem;
 import com.ats.adminpanel.model.TrayType;
@@ -997,6 +998,10 @@ public class ItemController {
 		try
 		{		
 			RestTemplate restTemplate = new RestTemplate();
+			
+			ItemCreamType[] itemCreamArr = restTemplate.getForObject(Constants.url + "getItmeCreamTypeList", ItemCreamType[].class);
+			List<ItemCreamType> itemCreamList = new ArrayList<ItemCreamType>(Arrays.asList(itemCreamArr));
+			model.addObject("itemCreamList", itemCreamList);
 
 			categoryListResponse = restTemplate.getForObject(Constants.url + "showAllCategory",
 					CategoryListResponse.class);
@@ -1178,7 +1183,11 @@ public class ItemController {
 			    mav.addObject("rmUomList", rawMaterialUomList);
 			    List<TrayType> trayTypeList=restTemplate.getForObject(Constants.url+"/getTrayTypes", List.class);
 	              
-	              mav.addObject("trayTypes", trayTypeList);
+			    ItemCreamType[] itemCreamArr = restTemplate.getForObject(Constants.url + "getItmeCreamTypeList", ItemCreamType[].class);
+				List<ItemCreamType> itemCreamList = new ArrayList<ItemCreamType>(Arrays.asList(itemCreamArr));
+				mav.addObject("itemCreamList", itemCreamList);
+			    
+	            mav.addObject("trayTypes", trayTypeList);
 			    mav.addObject("itemSupp", itemSupRes);
 				mav.addObject("isEdit", 1);
 
@@ -1282,6 +1291,82 @@ public class ItemController {
 			return "redirect:/showFrItemConfP";
 
 		}
+		
+		@RequestMapping(value = "/showItemCreamType", method = RequestMethod.GET)
+		public ModelAndView showItemCreamType(HttpServletRequest request, HttpServletResponse response) {
+			ModelAndView model = new ModelAndView("items/itemCreamTypeList");			
+			try {
+				RestTemplate rest = new RestTemplate();
+				ItemCreamType[] itemCreamArr = rest.getForObject(Constants.url + "getItmeCreamTypeList", ItemCreamType[].class);
+				
+				List<ItemCreamType> itemCreamList = new ArrayList<ItemCreamType>(Arrays.asList(itemCreamArr));
+				model.addObject("itemCreamList", itemCreamList);
 
+			} catch (Exception e) {
+
+				e.printStackTrace();
+			}
+			return model;
+		}
+		
+		
+		
+		@RequestMapping(value = "/newItemCreamType", method = RequestMethod.GET)
+		public ModelAndView newItemCreamType(HttpServletRequest request, HttpServletResponse response) {
+			ModelAndView model = new ModelAndView("items/addItemCreamType");			
+			try {
+				ItemCreamType itemCream = new ItemCreamType();
+				RestTemplate rest = new RestTemplate();
+				ItemCreamType[] itemCreamArr = rest.getForObject(Constants.url + "getItmeCreamTypeList", ItemCreamType[].class);
+				
+				List<ItemCreamType> itemCreamList = new ArrayList<ItemCreamType>(Arrays.asList(itemCreamArr));
+				
+				
+				categoryListResponse = rest.getForObject(Constants.url + "showAllCategory",
+						CategoryListResponse.class);
+				mCategoryList = categoryListResponse.getmCategoryList();
+				List<MCategoryList> resCatList=new ArrayList<MCategoryList>();
+				for(MCategoryList mCat:mCategoryList)
+				{
+					if(mCat.getCatId()!=5)
+					{
+						resCatList.add(mCat);
+					}
+				}			   
+
+				model.addObject("mCategoryList", resCatList);				
+				model.addObject("itemCreamList", itemCreamList);
+				model.addObject("itemCream", itemCream);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			return model;
+		}
+		
+		@RequestMapping(value = "/addItemCreamType", method = RequestMethod.POST)
+		public String addItemCreamType(HttpServletRequest request, HttpServletResponse response) {
+			try {
+				RestTemplate rest = new RestTemplate();
+				ItemCreamType itemCream = new ItemCreamType();
+
+				itemCream.setItemCreamId(Integer.parseInt(request.getParameter("item_cream_id")));
+				itemCream.setCategoryId(Integer.parseInt(request.getParameter("cat_id")));
+				itemCream.setDelStatus(0);
+				itemCream.setItemCreamName(request.getParameter("item_cream_name"));
+				itemCream.setSequenceNo(Integer.parseInt(request.getParameter("sequence_no")));
+				
+				ItemCreamType saveItemCream = rest.postForObject(Constants.url + "saveItemCreamType", itemCream,
+						ItemCreamType.class);
+				if(saveItemCream!=null) {
+					logger.info("Cream Type Saved-------------"+saveItemCream);
+				}else {
+					logger.info("Failed");
+				}
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			return "redirect:/showItemCreamType";
+			
+		}
 }
 

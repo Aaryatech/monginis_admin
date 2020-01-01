@@ -50,6 +50,7 @@ import com.ats.adminpanel.model.ConfigureFrListResponse;
 import com.ats.adminpanel.model.ConfiguredSpDayCkResponse;
 import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.GetConfiguredSpDayCk;
+import com.ats.adminpanel.model.InauguratedFranchisee;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.ItemIdOnly;
 import com.ats.adminpanel.model.ItemNameId;
@@ -2633,5 +2634,65 @@ public class FranchiseeController {
 		return itemList;
 
 	}
+	/************************************************************************/
+	//Mahendra
+	//01-01-2020
+	List<InauguratedFranchisee> franchisee = null;
+	@RequestMapping(value = "getInauguratedFranchisee", method = RequestMethod.GET)
+	public ModelAndView getInauguratedFranchisee(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = null;
+		try {
+			mav = new ModelAndView("franchisee/inaguratedFranchiseeList");
+			RestTemplate restTemplate = new RestTemplate();
+			InauguratedFranchisee[] frListArr = restTemplate.getForObject(Constants.url + "getAllFranchiseeByOpnDate",
+					InauguratedFranchisee[].class);	
 
+			franchisee = new ArrayList<InauguratedFranchisee>(Arrays.asList(frListArr));
+			logger.info("Franchisee List:" + franchisee.toString());
+			mav.addObject("franchisee", franchisee);
+			
+			// exportToExcel		
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+
+			rowData.add("Sr. No.");
+			rowData.add("Franchisee Code");
+			rowData.add("Franchisee Name");
+			rowData.add("Address");
+			rowData.add("City");
+			rowData.add("Contact No.");
+			rowData.add("GSTIN");
+			rowData.add("Opening Date");
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			
+			for (int i = 0; i < franchisee.size(); i++) {
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+
+				rowData.add("" + (i + 1));
+				rowData.add(franchisee.get(i).getFrCode());
+				rowData.add(franchisee.get(i).getFrName());
+				rowData.add(franchisee.get(i).getFrAddress());
+				rowData.add(franchisee.get(i).getFrCity());
+				rowData.add(franchisee.get(i).getFrMob());
+				rowData.add(franchisee.get(i).getFrGstNo());
+				rowData.add(franchisee.get(i).getFrOpeningDate());
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+
+			}
+
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "franchisee");
+		}catch(Exception e) {
+		
+			logger.info("Exception in getInauguratedFranchisee" + e.getMessage());
+		}
+		return mav;
+	}
 }
