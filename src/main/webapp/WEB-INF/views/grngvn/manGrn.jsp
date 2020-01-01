@@ -348,8 +348,8 @@
 				 if(grnType==1){
 
 						var grnRate=rate;
-						grnBaseRate = baseRate * 90 / 100;
-						grnRate=(rate * 90) / 100;
+						grnBaseRate = baseRate * 65 / 100;
+						grnRate=(rate * 65) / 100;
 					
 						}
 				 

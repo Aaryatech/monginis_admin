@@ -319,8 +319,8 @@ month=month+1;
 				}
 
 				if (selectedGrn.get(i).getGrnType() == 1) {
-					grnBaseRate = baseRate * 90 / 100;
-					grnRate = (selectedGrn.get(i).getRate() * 90) / 100;
+					grnBaseRate = baseRate * 65 / 100;
+					grnRate = (selectedGrn.get(i).getRate() * 65) / 100;
 					// postGrnGvn.setGrnGvnAmt(roundUp(grnAmt));
 				}
 

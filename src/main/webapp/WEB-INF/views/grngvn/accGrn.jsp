@@ -919,7 +919,7 @@ function calcGrn(grnType,baseRate,grnId,sgstPer,cgstPer,grnQty,curQty){
 	}
 	
 	if(grnType==1){
-		grnRate=baseRate*90/100;
+		grnRate=baseRate*65/100;
 	}
 	
 	if(grnType==2 || grnType==4){
