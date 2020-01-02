@@ -65,9 +65,16 @@
 									<label class="col-sm-3 col-lg-2 control-label">Category</label>
 									<div class="col-sm-9 col-lg-3 controls">
 									<select name="cat_id" id="cat_id" class="form-control" placeholder="Select Category">
-											<option value="-1">Select Category</option>
+											<option value="-1">Select Category</option>											
 										 <c:forEach items="${mCategoryList}" var="mCategoryList">
-										            	  <option value="${mCategoryList.catId}"><c:out value="${mCategoryList.catName}"></c:out></option>
+											<c:choose>
+											 	<c:when test="${itemCream.categoryId==mCategoryList.catId}">
+											       <option selected="selected" value="${mCategoryList.catId}"><c:out value="${mCategoryList.catName}"></c:out></option>
+												</c:when>
+												<c:otherwise>
+													<option value="${mCategoryList.catId}"><c:out value="${mCategoryList.catName}"></c:out></option>
+												</c:otherwise>
+											</c:choose>
 										</c:forEach> 
 												
 								</select>	

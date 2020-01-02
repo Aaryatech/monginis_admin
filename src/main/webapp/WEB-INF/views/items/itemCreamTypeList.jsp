@@ -73,7 +73,7 @@
 														<th align="left">Sr. No.</th>
 														<th>Name</th>
 														<th>Sequence No.</th>
-														<!-- <th>Action</th> -->
+														<th>Action</th>
 													</tr>
 												</thead>
 												<tbody style="padding-top: 100px">
@@ -87,6 +87,12 @@
 																	value="${itemCreamList.itemCreamName}" /></td>
 															<td align="left"><c:out
 																	value="${itemCreamList.sequenceNo}" /></td>
+															<td align="left"><a
+																		href="editItemCreamType?itemCreamId=${itemCreamList.itemCreamId}"><span
+																			class="glyphicon glyphicon-edit" title="Edit"></span></a>&nbsp; <a
+																		href="deleteItemCreamType?itemCreamId=${itemCreamList.itemCreamId}"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove" title="Delete"></span></a></td>
 														</tr>
 
 													</c:forEach> 

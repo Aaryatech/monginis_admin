@@ -711,24 +711,33 @@
 				</c:choose>
 			</c:forEach>
 		</table>
-
+		
 		<table width="100%" border="0" cellpadding="0" cellspacing="0"
 			style="border-top: 1px solid #313131; border-right: 1px solid #313131;">
 			<tr>
-				<td colspan="6" width="60%"
-					style="border-left: 1px solid #313131; border-right: 1px solid #313131; padding: 8px; color: #000; font-size: 12px;">
+				<td colspan="2"
+					style="border-top: 1px solid #313131; border-left: 1px solid #313131; border-right: 1px solid #313131; padding: 8px; color: #000; font-size: 12px;">
 					<p
 						style="color: #000; font-size: 12px; text-align: left; margin: 0px;">FDA
-						Declaration:${frDetails.company.fdaDeclaration} FDA Lic. No: ${frDetails.company.fdaLicenceNo}</p>
-				</td>
-
-
-				<td colspan="5" width="40%" rowspan="2"
-					style="border-left: 1px solid #313131; color: #000; font-size: 12px;">
-
-					
-				</td>
+						Declaration : ${frDetails.company.fdaDeclaration} FDA Lic. No : ${frDetails.company.fdaLicenceNo}</p></td>
+						
+				
 			</tr>
+			
+			<tr>
+				<td colspan="2"
+					style="border-top: 1px solid #313131; border-left: 1px solid #313131; border-right: 1px solid #313131; padding: 8px; color: #000; font-size: 12px;">
+					<p
+						style="color: #000; font-size: 12px; text-align: left; margin: 0px;">NOTE : Tax is not payable on Reverse Charge Basis</p></td>
+						
+				
+			</tr>
+		</table>
+		
+
+		<table width="100%" border="0" cellpadding="0" cellspacing="0"
+			style="border-top: 1px solid #313131; border-right: 1px solid #313131;">
+			
 			<tr>
 				<td colspan="6" width="50%"
 					style="border-top: 1px solid #313131; border-left: 1px solid #313131; border-right: 1px solid #313131; padding: 8px; color: #000; font-size: 12px;"><p>Certified

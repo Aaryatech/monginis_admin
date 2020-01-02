@@ -1368,5 +1368,74 @@ public class ItemController {
 			return "redirect:/showItemCreamType";
 			
 		}
+		
+		@RequestMapping(value = "/editItemCreamType", method = RequestMethod.GET)
+		public ModelAndView editItemCreamType(HttpServletRequest request, HttpServletResponse response) {
+			ModelAndView model = new ModelAndView("items/addItemCreamType");			
+			try {
+				
+				RestTemplate rest = new RestTemplate();
+				int itemCreamId = Integer.parseInt(request.getParameter("itemCreamId"));
+				
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("itemCreamId", itemCreamId);
+				
+				ItemCreamType itemCream = rest.postForObject(Constants.url + "getItmeCreamTypeById", map,
+						ItemCreamType.class);
+				
+				ItemCreamType[] itemCreamArr = rest.getForObject(Constants.url + "getItmeCreamTypeList", ItemCreamType[].class);
+				List<ItemCreamType> itemCreamList = new ArrayList<ItemCreamType>(Arrays.asList(itemCreamArr));
+								
+				categoryListResponse = rest.getForObject(Constants.url + "showAllCategory",
+						CategoryListResponse.class);
+				mCategoryList = categoryListResponse.getmCategoryList();
+				List<MCategoryList> resCatList=new ArrayList<MCategoryList>();
+				for(MCategoryList mCat:mCategoryList)
+				{
+					if(mCat.getCatId()!=5)
+					{
+						resCatList.add(mCat);
+					}
+				}			   
+
+				model.addObject("mCategoryList", resCatList);				
+				model.addObject("itemCreamList", itemCreamList);
+				model.addObject("itemCream", itemCream);				
+			
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			return model;
+			
+		}
+		
+		
+		
+		@RequestMapping(value = "/deleteItemCreamType", method = RequestMethod.GET)
+		public String deleteItemCreamType(HttpServletRequest request, HttpServletResponse response) {
+			
+			try {
+				Info info = new Info();
+				RestTemplate rest = new RestTemplate();
+				int itemCreamId = Integer.parseInt(request.getParameter("itemCreamId"));
+				
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("itemCreamId", itemCreamId);
+				
+				info = rest.postForObject(Constants.url + "deleteItemCreamTypeById", map,
+						Info.class);				
+				if (info.getError()==false) {
+					logger.info("Sucess");
+				} else {
+					logger.info("Failed");
+				}
+				
+			}catch (Exception e) {
+				e.printStackTrace();
+			}
+			return "redirect:/showItemCreamType";
+			
+		}
+		
 }
 
