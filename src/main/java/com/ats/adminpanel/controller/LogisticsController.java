@@ -5,10 +5,12 @@ import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URLConnection;
+import java.text.DateFormat;
 import java.text.Format;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -16,6 +18,7 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
@@ -58,6 +61,7 @@ import com.ats.adminpanel.model.logistics.MachineOrVehicle;
 import com.ats.adminpanel.model.logistics.MachineServicing;
 import com.ats.adminpanel.model.logistics.Make;
 import com.ats.adminpanel.model.logistics.MechType;
+import com.ats.adminpanel.model.logistics.RouteTargetReport;
 import com.ats.adminpanel.model.logistics.ServDetail;
 import com.ats.adminpanel.model.logistics.ServDetailAddPart;
 import com.ats.adminpanel.model.logistics.ServHeader;
@@ -67,7 +71,19 @@ import com.ats.adminpanel.model.logistics.TrayManagementReport;
 import com.ats.adminpanel.model.logistics.Variant;
 import com.ats.adminpanel.model.logistics.VehicalMaster;
 import com.ats.adminpanel.model.logistics.VehicalType;
-import com.ats.adminpanel.model.logistics.VehicleDcoument; 
+import com.ats.adminpanel.model.logistics.VehicleDcoument;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.PageSize;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 
 @Controller
 @Scope("session")
@@ -3437,6 +3453,232 @@ public class LogisticsController {
 			pd4ml.setHtmlWidth(userSpaceWidth);
 
 			pd4ml.render(urlstring, fos);
+		}
+	}
+	
+	/******************************************************************************/
+	//Mahendra
+	//28-12-2019//showSaleReportItemwise
+	List<Integer> routeIds=new ArrayList<>();
+	
+	List<RouteTargetReport> route = null;
+	@RequestMapping(value = "/showRouteTargetReport", method = RequestMethod.GET)
+	public ModelAndView showSaleReportItemwise(HttpServletRequest request, HttpServletResponse response) {
+		
+		ModelAndView model = null;
+
+		try {
+			model = new ModelAndView("logistics/reportPdf/routeTargetReport");
+			
+			RouteTargetReport[] routeArr =  restTemplate.getForObject(Constants.url + "getRouteTargetReport",
+					RouteTargetReport[].class);
+			 route = new ArrayList<RouteTargetReport>(Arrays.asList(routeArr));
+			 System.out.println("Target Route--------"+route);
+			model.addObject("route", route);
+			
+			TreeSet<Integer> ts1 = new TreeSet<Integer>(); 
+			for(int i=0;i<route.size();i++) {
+				ts1.add(route.get(i).getRouteId());
+			}
+			
+			routeIds=new ArrayList<>();
+			routeIds.addAll(ts1);
+			model.addObject("routeIds", routeIds);
+			
+			  
+			
+
+		} catch (Exception e) {
+
+			System.out.println("Exc in showSaleReportItemwise  " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+
+	}
+	
+	
+	
+	@RequestMapping(value = "/pdf/showRouteTargetReportPdf", method = RequestMethod.GET)
+	public void getHsnWisePdf(HttpServletRequest request,
+			HttpServletResponse response) throws FileNotFoundException {
+
+		com.itextpdf.text.Document document = new com.itextpdf.text.Document(PageSize.A4);
+		
+		document.setPageSize(PageSize.A4.rotate());
+		// ByteArrayOutputStream out = new ByteArrayOutputStream();
+
+		DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy HH:mm:ss");
+		Calendar cal = Calendar.getInstance();
+
+		System.out.println("getHsnWisePdf PDF ==" + dateFormat.format(cal.getTime()));
+		String timeStamp = dateFormat.format(cal.getTime());
+		String FILE_PATH = Constants.REPORT_SAVE;
+		File file = new File(FILE_PATH);
+
+		PdfWriter writer = null;
+
+		FileOutputStream out = new FileOutputStream(FILE_PATH);
+
+		try {
+			writer = PdfWriter.getInstance(document, out);
+		} catch (DocumentException e) {
+
+			e.printStackTrace();
+		}
+
+		PdfPTable table = new PdfPTable(4);
+		table.setHeaderRows(1);
+		try {
+			System.out.println("Inside PDF Table try");
+			table.setWidthPercentage(100);
+			table.setWidths(new float[] { 0.7f, 1.1f, 0.9f, 1.2f});
+			Font headFont = new Font(FontFamily.HELVETICA, 8, Font.NORMAL, BaseColor.BLACK);
+			Font headFont1 = new Font(FontFamily.HELVETICA, 10, Font.BOLD, BaseColor.BLACK);
+			Font f = new Font(FontFamily.TIMES_ROMAN, 10.0f, Font.UNDERLINE, BaseColor.BLUE);
+
+			PdfPCell hcell;
+			hcell = new PdfPCell(new Phrase("Sr.", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Route Name", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Franchisee Name", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+			table.addCell(hcell);
+
+			hcell = new PdfPCell(new Phrase("Franchisee Target", headFont1));
+			hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			hcell.setBackgroundColor(BaseColor.PINK);
+			table.addCell(hcell);
+
+			int index = 0;
+			
+			PdfPCell cell;
+			for (int i = 0; i < routeIds.size(); i++) {
+				int total = 0;
+				index++;
+			for (int j = 0; j < route.size(); j++) {
+				if(routeIds.get(i)==route.get(j).getRouteId()) {
+
+				
+				total= total+route.get(j).getFrTarget();
+
+				cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+				table.addCell(cell);
+
+				cell = new PdfPCell(new Phrase("" + route.get(j).getRouteName(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(1);
+				table.addCell(cell);
+				
+				cell = new PdfPCell(new Phrase("" + route.get(j).getFrName(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(1);
+				table.addCell(cell);
+				
+			
+				
+				cell = new PdfPCell(new Phrase("" + route.get(j).getFrTarget(), headFont));
+				cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+				cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+				cell.setPaddingRight(1);
+				table.addCell(cell);
+				
+				}
+			}
+			//PdfPCell cell;
+			cell = new PdfPCell(new Phrase(String.valueOf(index), headFont));
+
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(cell);
+
+			cell = new PdfPCell(new Phrase("", headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setPaddingRight(1);
+			table.addCell(cell);
+			
+			cell = new PdfPCell(new Phrase("TOTAL" , headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setPaddingRight(1);
+			table.addCell(cell);
+			
+		
+			
+			cell = new PdfPCell(new Phrase("" + total, headFont));
+			cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			cell.setHorizontalAlignment(Element.ALIGN_LEFT);
+			cell.setPaddingRight(1);
+			table.addCell(cell);
+			
+			}
+			document.open();
+
+			Paragraph heading = new Paragraph(
+					"Tray Target Report");
+			heading.setAlignment(Element.ALIGN_CENTER);
+			document.add(heading);
+
+			DateFormat DF = new SimpleDateFormat("dd-MM-yyyy");
+			String reportDate = DF.format(new Date());
+
+			document.add(new Paragraph("\n"));
+
+			document.add(table);
+
+			document.close();
+
+			if (file != null) {
+
+				String mimeType = URLConnection.guessContentTypeFromName(file.getName());
+
+				if (mimeType == null) {
+
+					mimeType = "application/pdf";
+
+				}
+
+				response.setContentType(mimeType);
+
+				response.addHeader("content-disposition", String.format("inline; filename=\"%s\"", file.getName()));
+
+				// response.setHeader("Content-Disposition", String.format("attachment;
+				// filename=\"%s\"", file.getName()));
+
+				response.setContentLength((int) file.length());
+
+				InputStream inputStream = new BufferedInputStream(new FileInputStream(file));
+
+				try {
+					FileCopyUtils.copy(inputStream, response.getOutputStream());
+				} catch (IOException e) {
+					System.out.println("Excep in Opening a Pdf File");
+					e.printStackTrace();
+				}
+
+			}
+
+		} catch (DocumentException ex) {
+
+			System.out.println("Pdf Generation Error: Prod From Orders" + ex.getMessage());
+
+			ex.printStackTrace();
+
 		}
 	}
 }
