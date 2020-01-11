@@ -10,6 +10,7 @@
 <body>
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<c:url var="getFinGoodStock" value="/getFinGoodStock"></c:url>
+	<c:url var="validateEndDate" value="/validateEndDate"></c:url>
 
 
 
@@ -290,12 +291,13 @@
 										</div>
 
 									</div>
+									</div>
 							</form>
 						</div>
 
 
-					</div>
-					</form>
+					</div><!-- 
+					</form> -->
 				</div>
 
 			</div>
@@ -535,14 +537,68 @@
 	</script>
 
 	<script type="text/javascript">
-		$('#dayEndButton')
+	$('#dayEndButton')
+	.click(
+			function() {
+				
+				var endDate = $("#setDate").val();
+				
+				$
+				.getJSON(
+						'${validateEndDate}',
+						{
+							endDate : endDate,							
+							ajax : 'true',
+
+						},
+						function(data) {										
+
+							if (data == 0) {
+								alert("No records found !!");
+								
+								var option = $("#selectStock").val();
+								if (option == 1) {
+									var dayEnd = confirm("Do you want to do Day End?");
+									if (dayEnd == true) {
+										document.getElementById("dayEndButton").disabled = true;
+										
+										var form = document
+												.getElementById("validation-form")
+
+										// alert(form);
+										form.action = "${pageContext.request.contextPath}/finishedGoodDayEnd";
+										form.submit();
+
+									}
+
+								}//Inner If
+
+								else {
+
+									alert("Please Select Current Stock");
+
+								}
+
+							}//Outer If
+							else{
+								alert("Date already exist!");
+							}
+
+						});
+				
+			});
+	
+	
+		/* $('#dayEndButton')
 				.click(
 						function() {
 
 							var option = $("#selectStock").val();
 							if (option == 1) {
-								var dayEnd = confirm("Day End ");
+								var dayEnd = confirm("Do you want to do Day End?");
 								if (dayEnd == true) {
+									document.getElementById("dayEndButton").disabled = true;
+									
 									var form = document
 											.getElementById("validation-form")
 
@@ -559,7 +615,7 @@
 								alert("Please Select Current Stock");
 
 							}
-						});
+						}); */
 
 		function genPdf() {
 

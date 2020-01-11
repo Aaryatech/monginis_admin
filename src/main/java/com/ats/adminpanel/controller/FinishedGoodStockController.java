@@ -605,6 +605,7 @@ public class FinishedGoodStockController {
 				Date stockDate = stockHeader.getFinGoodStockDate();
 
 				bean.setStockDate(new SimpleDateFormat("dd-MM-yyyy").format(stockDate));
+				System.out.println("GetDate-----------"+bean.getStockDate());
 				String timestamp = stockHeader.getTimestamp();
 
 				Date curDate = new Date();
@@ -1346,5 +1347,31 @@ public class FinishedGoodStockController {
 			pd4ml.render(urlstring, fos);
 		}
 	}
-
+/****************************************************************************/
+	
+	@RequestMapping(value = "/validateEndDate", method = RequestMethod.GET)
+	@ResponseBody
+	public int validateEndDate(HttpServletRequest request, HttpServletResponse response) {
+		int res = 0;
+		try {
+			RestTemplate restTemplate= new RestTemplate();
+			String endDate = request.getParameter("endDate");
+			System.out.println("endDateFound------------------"+endDate);
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			
+			map.add("endDate", endDate);
+			FinishedGoodStock finshGood = restTemplate.postForObject(Constants.url + "getFinGoodStockHeaderByEndDate",
+					map, FinishedGoodStock.class);
+			if(finshGood!=null) {
+				res=1;
+			}else {
+				res=0;
+			}
+		}catch (Exception e) {
+			System.out.println("Excep in validateEndDate " + e.getMessage());
+		}
+		
+		return res;
+		
+	}
 }
