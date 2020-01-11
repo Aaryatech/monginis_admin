@@ -387,7 +387,6 @@
 			document.getElementById("selectedCatId").value = catId;
 			//var to_datepicker = document.getElementById("to_datepicker").value ;
 			//var from_datepicker= document.getElementById("from_datepicker").value ;
-
 			var to_datepicker = $('#to_datepicker').val();
 
 			var from_datepicker = $('#from_datepicker').val();
@@ -408,11 +407,11 @@
 
 							},
 							function(data) {
-
+								//alert("Day End " +JSON.stringify(data));
 								$('#table1 td').remove();
 
 								$('#loader').hide();
-								//alert("Day End " +data.isDayEndEnable);
+								
 								document.getElementById("setDate").value = data.stockDate;
 								if (data.isDayEndEnable == 1) {
 									if (option == 1 && catId == -1) {
@@ -537,7 +536,7 @@
 	</script>
 
 	<script type="text/javascript">
-	$('#dayEndButton')
+	/* $('#dayEndButton')
 	.click(
 			function() {
 				
@@ -586,10 +585,10 @@
 
 						});
 				
-			});
+			});  */
 	
 	
-		/* $('#dayEndButton')
+		  $('#dayEndButton')
 				.click(
 						function() {
 
@@ -615,7 +614,7 @@
 								alert("Please Select Current Stock");
 
 							}
-						}); */
+						});  
 
 		function genPdf() {
 
