@@ -732,6 +732,14 @@
 						
 				
 			</tr>
+			<tr>
+				<td colspan="2"
+					style="border-top: 1px solid #313131; border-left: 1px solid #313131; border-right: 1px solid #313131; padding: 8px; color: #000; font-size: 12px;">
+					<p
+						style="color: #000; font-size: 12px; text-align: left; margin: 0px;">The above Invoice amount shall be collected immediately on next date itself. In case of non realization of above amount (due to cheque bounce or whatever), supplying party has full rights to levy a fine of Rs-200 to Rs-1000 per non realization or per cheque bounce or per invoice. The supplying party may also take call as per its discretion to levy interest @ rate of 5 % per month on outstanding amount.</p></td>
+						
+				
+			</tr>
 		</table>
 		
 
@@ -740,7 +748,7 @@
 			
 			<tr>
 				<td colspan="6" width="50%"
-					style="border-top: 1px solid #313131; border-left: 1px solid #313131; border-right: 1px solid #313131; padding: 8px; color: #000; font-size: 12px;"><p>Certified
+					style="border-left: 1px solid #313131; border-right: 1px solid #313131; padding: 8px; color: #000; font-size: 12px;"><p>Certified
 						that the particulars given above are true and correct.</p></td>
 			</tr>
 			<tr>
