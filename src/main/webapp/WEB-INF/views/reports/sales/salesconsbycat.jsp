@@ -42,14 +42,14 @@
 		<!-- END Page Title -->
 
 		<!-- BEGIN Breadcrumb -->
-		<div id="breadcrumbs">
+	<%-- 	<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
 				<li class="active">Bill Report</li>
 			</ul>
-		</div>
+		</div> --%>
 		<!-- END Breadcrumb -->
 
 		<!-- BEGIN Main Content -->
@@ -231,9 +231,9 @@
 			</div>
 		
 		<!-- END Main Content -->
-
+</div>
 		<footer>
-			<p>2017 © Monginis.</p>
+			<p>2020 © Monginis.</p>
 		</footer>
 
 		<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -374,25 +374,25 @@
 																										report.item_name));
 																				tr
 																						.append($(
-																								'<td></td>')
+																								'<td style="text-align:right;"></td>')
 																								.html(
 																										report.tBillQty));
 																				tr
 																						.append($(
-																								'<td></td>')
+																								'<td style="text-align:right;"></td>')
 																								.html(
 																										(report.tBillTaxableAmt).toFixed(2)));
 
 																				tr
 																						.append($(
-																								'<td></td>')
+																								'<td style="text-align:right;"></td>')
 																								.html(
 																										report.tGrnQty));
 																				tr
 																						.append($(
-																								'<td></td>')
+																								'<td style="text-align:right;"></td>')
 																								.html(
-																										report.tGrnTaxableAmt));
+																										report.tGrnTaxableAmt.toFixed(2)));
 																				tr
 																						.append($(
 																								'<td></td>')
@@ -400,9 +400,9 @@
 																										report.tGvnQty));
 																				tr
 																						.append($(
-																								'<td></td>')
+																								'<td style="text-align:right;"></td>')
 																								.html(
-																										report.tGvnTaxableAmt));
+																										report.tGvnTaxableAmt.toFixed(2)));
 
 																				var netQty = report.tBillQty
 																						- (report.tGrnQty + report.tGvnQty);
@@ -416,12 +416,12 @@
 
 																				tr
 																						.append($(
-																								'<td></td>')
+																								'<td style="text-align:right;"></td>')
 																								.html(
 																										netQty));
 																				tr
 																						.append($(
-																								'<td></td>')
+																								'<td style="text-align:right;"></td>')
 																								.html(
 																										netValue));
 

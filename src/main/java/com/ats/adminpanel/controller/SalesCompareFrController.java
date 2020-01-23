@@ -119,87 +119,60 @@ public class SalesCompareFrController {
 			System.err.println("Year " + year + "Month " + m);
 
 			if (Integer.parseInt(month) == 13) {
-				System.err.println("a 13");
 				m = "1";
 			} else if (Integer.parseInt(month) == 20) {
-				System.err.println("a 20");
 				m = "2";
 			} else if (Integer.parseInt(month) == 30) {
-				System.err.println("a 30");
 				m = "3";
 			} else if (Integer.parseInt(month) == 40) {
-				System.err.println("a 40");
 				m = "4";
 			} else if (Integer.parseInt(month) == 50) {
-				System.err.println("a 50");
 				m = "5";
 			} else if (Integer.parseInt(month) == 60) {
-				System.err.println("a 60");
 				m = "6";
 			} else if (Integer.parseInt(month) == 70) {
-				System.err.println("a 70");
 				m = "7";
 			} else if (Integer.parseInt(month) == 80) {
-				System.err.println("a 80");
 				m = "8";
 			} else if (Integer.parseInt(month) == 90) {
-				System.err.println("a 90");
 				m = "9";
 			} else if (Integer.parseInt(month) == 100) {
-				System.err.println("a 100");
 				m = "10";
 			} else if (Integer.parseInt(month) == 110) {
-				System.err.println("a 110");
 				m = "11";
 			} else if (Integer.parseInt(month) == 120) {
-				System.err.println("a 120");
 				m = "12";
 			} else {
 				m = month;
-				System.err.println("m Else final ");
 			}
 
 			if (Integer.parseInt(month_next) == 13) {
-				System.err.println("a 13");
 				m_next = "1";
 			} else if (Integer.parseInt(month_next) == 20) {
-				System.err.println("a 20");
 				m_next = "2";
 			} else if (Integer.parseInt(month_next) == 30) {
-				System.err.println("a 30");
 				m_next = "3";
 			} else if (Integer.parseInt(month_next) == 40) {
-				System.err.println("a 40");
 				m_next = "4";
 			} else if (Integer.parseInt(month_next) == 50) {
-				System.err.println("a 50");
 				m_next = "5";
 			} else if (Integer.parseInt(month_next) == 60) {
-				System.err.println("a 60");
 				m_next = "6";
 			} else if (Integer.parseInt(month_next) == 70) {
-				System.err.println("a 70");
 				m_next = "7";
 			} else if (Integer.parseInt(month_next) == 80) {
-				System.err.println("a 80");
 				m_next = "8";
 			} else if (Integer.parseInt(month_next) == 90) {
-				System.err.println("a 90");
 				m_next = "9";
 			} else if (Integer.parseInt(month_next) == 100) {
-				System.err.println("a 100");
 				m_next = "10";
 			} else if (Integer.parseInt(month_next) == 110) {
-				System.err.println("a 110");
 				m_next = "11";
 			} else if (Integer.parseInt(month_next) == 120) {
-				System.err.println("a 120");
 				m_next = "12";
 			} else {
 				m_next = month_next;
-				System.err.println("m Else final ");
 			}
-
 			System.err.println("Year " + year_next + "Month " + m_next);
 			System.err.println("Year " + year + "Month " + m);
 
@@ -228,22 +201,19 @@ public class SalesCompareFrController {
 				firstList.setFrId(billTotalList.get(j).getFrId());
 
 				firstList.setPerMonthSale(total);
-
+                 if(grnGvnTotalList.size()>0) {
 				for (int i = 0; i < grnGvnTotalList.size(); i++) {
 
 					if (grnGvnTotalList.get(i).getFrId() == billTotalList.get(j).getFrId()) {
 
 						firstList.setFrId(billTotalList.get(j).getFrId());
 
-						//float finalGrnTotal = (float) (((grnGvnTotalList.get(i).getBillTotal() / 100)) * 25);
-
-						//System.out.println("finalGrnTotal*********" + finalGrnTotal);
-
 						firstList.setPerMonthSale(billTotalList.get(j).getBillTotal() - grnGvnTotalList.get(i).getBillTotal());
 
 					}
 
 				}
+                 }
 				System.out.println(firstList);
 
 				firstList.setFrName(billTotalList.get(j).getFrName());
@@ -278,23 +248,14 @@ public class SalesCompareFrController {
 				float total = billTotalListPrev.get(j).getBillTotal();
 				prevList = new SalesComparison();
 				prevList.setFrId(billTotalListPrev.get(j).getFrId());
-
-				prevList.setPrevMonthSale(total);
+				prevList.setPrevMonthSale(total); 
+				if(grnGvnTotalList.size()>0) {
 				for (int i = 0; i < grnGvnTotalListPrevMonth.size(); i++) {
-
-					if (grnGvnTotalListPrevMonth.get(i).getFrId() == billTotalListPrev.get(j).getFrId()) {
-
 					
-						prevList.setFrId(billTotalListPrev.get(j).getFrId());
-
-						/*float finalGrnPrevTotal = (float) (((grnGvnTotalListPrevMonth.get(i).getBillTotal() / 100))
-								* 25);*/
-
-						//System.out.println("finalGrnTotal*********" + finalGrnPrevTotal);
-
+					if (grnGvnTotalListPrevMonth.get(i).getFrId() == billTotalListPrev.get(j).getFrId()) {
 						prevList.setPrevMonthSale((billTotalListPrev.get(j).getBillTotal() - grnGvnTotalListPrevMonth.get(i).getBillTotal()));
-
 					}
+				}
 
 				}
 
@@ -310,45 +271,46 @@ public class SalesCompareFrController {
 
 			List<SalesComparison> saleCompFinal = new ArrayList<SalesComparison>();
 			SalesComparison sales;
+            System.err.println(saleCompListFirst.toString());
+            System.err.println(saleCompListPrev.toString());
 
-			for (int i = 0; i < saleCompListFirst.size(); i++) {
+			for (int i = 0; i < saleCompListFirst.size(); i++) { System.err.println("ii"+saleCompListFirst.get(i).toString());
 				sales = new SalesComparison();
+				float prevMonthSale=0;	float onePer = 0;int routeId=0;String routeName="";
+
+				sales.setFrId(saleCompListFirst.get(i).getFrId());
+				sales.setFrName(saleCompListFirst.get(i).getFrName());
+				sales.setPerMonthSale(saleCompListFirst.get(i).getPerMonthSale());
+				if(!saleCompListPrev.isEmpty()) {
 				for (int j = 0; j < saleCompListPrev.size(); j++) {
 
 					if (saleCompListFirst.get(i).getFrId() == saleCompListPrev.get(j).getFrId()) {
 
-						sales.setFrId(saleCompListFirst.get(i).getFrId());
+						prevMonthSale=saleCompListPrev.get(j).getPrevMonthSale();
 
-						sales.setFrName(saleCompListFirst.get(i).getFrName());
-
-						sales.setPerMonthSale(saleCompListFirst.get(i).getPerMonthSale());
-
-						sales.setPrevMonthSale(saleCompListPrev.get(j).getPrevMonthSale());
-
-						sales.setLastMonthDiff((saleCompListFirst.get(i).getPerMonthSale()
-								- saleCompListPrev.get(j).getPrevMonthSale()));
-						float onePer = 0;
 						if (saleCompListPrev.get(j).getPrevMonthSale() > 0) {
 							onePer = (saleCompListPrev.get(j).getPrevMonthSale() / 100);
 						} else {
 							onePer = 1;
 						}
 
-						float diff = saleCompListFirst.get(i).getPerMonthSale()
-								- saleCompListPrev.get(j).getPrevMonthSale();
+						routeId=saleCompListPrev.get(j).getRouteId();
 
-						float per = (diff / onePer);
-
-						sales.setMonthDiffInPer(per);
-
-						sales.setRouteId(saleCompListPrev.get(j).getRouteId());
-
-						sales.setRouteName(saleCompListPrev.get(j).getRouteName());
-						saleCompFinal.add(sales);
+						routeName=saleCompListPrev.get(j).getRouteName();
 						break;
 					}
 
-				}
+				}}
+				sales.setPrevMonthSale(prevMonthSale);
+
+				sales.setLastMonthDiff((saleCompListFirst.get(i).getPerMonthSale()-prevMonthSale));
+				float diff = saleCompListFirst.get(i).getPerMonthSale()-prevMonthSale;
+
+				float per = (diff / onePer);
+				sales.setMonthDiffInPer(per);
+				sales.setRouteId(routeId);
+				sales.setRouteName(routeName);
+				saleCompFinal.add(sales);
 
 			}
 

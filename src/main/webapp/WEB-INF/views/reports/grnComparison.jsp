@@ -7,6 +7,7 @@
 
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body>
+	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<c:url var="getGrnGvnByDatewise" value="/getGrnReportComparison"></c:url>
 <div class="container" id="main-container">
 	<!-- BEGIN Sidebar -->
@@ -37,14 +38,14 @@
 		<!-- END Page Title -->
 
 		<!-- BEGIN Breadcrumb -->
-		<div id="breadcrumbs">
+	<%-- 	<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
 				<li class="active">Grn  Report</li>
 			</ul>
-		</div>
+		</div> --%>
 		<!-- END Breadcrumb -->
 
 		<!-- BEGIN Main Content -->
@@ -176,7 +177,7 @@
 	<!-- END Main Content -->
 
 	<footer>
-		<p>2018 © Monginis.</p>
+		<p>2020 © Monginis.</p>
 	</footer>
 
 

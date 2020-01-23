@@ -215,7 +215,7 @@
 	<!-- END Main Content -->
 
 	<footer>
-	<p>2017 © Monginis.</p>
+	<p>2020 © Monginis.</p>
 	</footer>
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -268,20 +268,20 @@
 														var tr = $('<tr></tr>');
 													  	tr.append($('<td></td>').html(key+1));
 													  	tr.append($('<td></td>').html(report.month));
-													  	tr.append($('<td></td>').html(report.taxableAmt));
+													  	tr.append($('<td style="text-align:right;"></td>').html(report.taxableAmt));
 													  	
-														if(report.isSameState==1){
-														  	tr.append($('<td></td>').html(report.cgstSum));
-														  	tr.append($('<td></td>').html(report.sgstSum));
-														  	tr.append($('<td></td>').html(0));
+														/* if(report.isSameState==1){ */
+														  	tr.append($('<td style="text-align:right;"></td>').html(report.cgstSum));
+														  	tr.append($('<td style="text-align:right;"></td>').html(report.sgstSum));
+														/*   	tr.append($('<td style="text-align:right;"></td>').html(0));
 														}
 														else{
-															tr.append($('<td></td>').html(0));
-														  	tr.append($('<td></td>').html(0));
-														  	tr.append($('<td></td>').html(report.igstSum));
-														}
+															tr.append($('<td style="text-align:right;"></td>').html(0));
+														  	tr.append($('<td style="text-align:right;"></td>').html(0)); */
+														  	tr.append($('<td style="text-align:right;"></td>').html(report.igstSum));
+														/* } */
 													  	//tr.append($('<td></td>').html(report.igstSum));
-														tr.append($('<td></td>').html(report.roundOff));
+														tr.append($('<td style="text-align:right;"></td>').html(report.roundOff));
 														var total;
 														
 														if(report.isSameState==1){
@@ -292,7 +292,7 @@
 															 total=report.taxableAmt+report.igstSum;
 														}
 
-													  	tr.append($('<td></td>').html(total));
+													  	tr.append($('<td style="text-align:right;"></td>').html(total.toFixed(2)));
 
 														$('#table_grid tbody')
 																.append(
@@ -537,7 +537,7 @@ function genPdf()
 function exportToExcel()
 {
 	 
-	window.open("${pageContext.request.contextPath}/exportToExcel");
+	window.open("${pageContext.request.contextPath}/exportToExcelNew");
 			document.getElementById("expExcel").disabled=true;
 }
 </script>

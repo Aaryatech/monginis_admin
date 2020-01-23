@@ -127,7 +127,7 @@
 
 				<form id="openingStockForm"
 					action="${pageContext.request.contextPath}/saveFrOpeningStockProcess"
-					method="post">
+					method="post" onsubmit="submitStock.disabled = true; return confirm('Do you want to Save ?');">
 					<div class=" box-content">
 						<div class="row">
 							<div class="col-md-12 table-responsive">

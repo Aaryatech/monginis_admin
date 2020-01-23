@@ -273,7 +273,7 @@
 		<!-- END Main Content -->
 
 		<footer>
-			<p>2018 © Monginis.</p>
+			<p>2020 © Monginis.</p>
 		</footer>
 
 
@@ -447,13 +447,13 @@
 															.append($(
 																	'<td colspan="2" style="text-align:right; color:blue;" ></td>')
 																	.html(
-																			(prevMonthRouteSale)
+																			(currMonthRouteSale)
 																					.toFixed(2)));
 													tr
 															.append($(
 																	'<td colspan="2" style="text-align:right; color:blue;"></td>')
 																	.html(
-																			(currMonthRouteSale)
+																			(prevMonthRouteSale)
 																					.toFixed(2)));
 													tr
 															.append($(

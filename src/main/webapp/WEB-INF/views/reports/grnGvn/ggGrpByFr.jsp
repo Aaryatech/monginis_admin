@@ -39,14 +39,14 @@
 		<!-- END Page Title -->
 
 		<!-- BEGIN Breadcrumb -->
-		<div id="breadcrumbs">
+		<%-- <div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
 				<li class="active">Bill Report</li>
 			</ul>
-		</div>
+		</div> --%>
 		<!-- END Breadcrumb -->
 
 		<!-- BEGIN Main Content -->
@@ -237,7 +237,7 @@
 	<!-- END Main Content -->
 	
 	<footer>
-	<p>2017 © Monginis.</p>
+	<p>2020 © Monginis.</p>
 	</footer>
 	
 
@@ -307,12 +307,12 @@
 													  	tr.append($('<td></td>').html(key+1));
 														tr.append($('<td></td>').html(type));
 													  	tr.append($('<td></td>').html(report.frName));
-													  	tr.append($('<td></td>').html(report.reqQty));
-													  	tr.append($('<td></td>').html(report.totalAmt));
-													  	tr.append($('<td></td>').html(report.aprQty));
-													  	tr.append($('<td></td>').html(report.aprGrandTotal));
+													  	tr.append($('<td style="text-align:right;"></td>').html(report.reqQty));
+													  	tr.append($('<td style="text-align:right;"></td>').html(report.totalAmt));
+													  	tr.append($('<td style="text-align:right;"></td>').html(report.aprQty));
+													  	tr.append($('<td style="text-align:right;"></td>').html(report.aprGrandTotal));
 													  	
-													  	tr.append($('<td></td>').html(report.frContr.toFixed(2)));
+													  	tr.append($('<td style="text-align:right;"></td>').html(report.frContr.toFixed(2)));
 
 														$('#table_grid tbody')
 																.append(

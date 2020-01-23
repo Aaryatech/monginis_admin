@@ -38,14 +38,14 @@
 		<!-- END Page Title -->
 
 		<!-- BEGIN Breadcrumb -->
-		<div id="breadcrumbs">
+	<%-- 	<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
 				<li class="active">Bill Report</li>
 			</ul>
-		</div>
+		</div> --%>
 		<!-- END Breadcrumb -->
 
 		<!-- BEGIN Main Content -->
@@ -203,7 +203,7 @@
 	<!-- END Main Content -->
 
 	<footer>
-	<p>2017 © Monginis.</p>
+	<p>2020 © Monginis.</p>
 	</footer>
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -271,30 +271,30 @@
 
 													  	tr.append($('<td></td>').html(report.frGstNo));
 
-													  	tr.append($('<td></td>').html(report.taxableAmt));
+													  	tr.append($('<td style="text-align:right;"></td>').html(report.taxableAmt));
 													  	
 													  	if(report.isSameState==1){
-														  	tr.append($('<td></td>').html(report.cgstSum));
-														  	tr.append($('<td></td>').html(report.sgstSum));
-														  	tr.append($('<td></td>').html(0));
+														  	tr.append($('<td style="text-align:right;"></td>').html(report.cgstSum));
+														  	tr.append($('<td style="text-align:right;"></td>').html(report.sgstSum));
+														  	tr.append($('<td  style="text-align:right;"></td>').html(0));
 														}
 														else{
-															tr.append($('<td></td>').html(0));
-														  	tr.append($('<td></td>').html(0));
-														  	tr.append($('<td></td>').html(report.igstSum));
+															tr.append($('<td  style="text-align:right;"></td>').html(0));
+														  	tr.append($('<td  style="text-align:right;"></td>').html(0));
+														  	tr.append($('<td style="text-align:right;"></td>').html(report.igstSum));
 														}
-														tr.append($('<td></td>').html(report.roundOff));
+														tr.append($('<td style="text-align:right;"></td>').html(report.roundOff));
 														var total;
 														
 														if(report.isSameState==1){
-															 total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum);
+															 total=parseFloat(report.taxableAmt)+parseFloat(report.totalTax);
 														}
 														else{
 															
 															 total=report.taxableAmt+report.igstSum;
 														}
 
-													  	tr.append($('<td></td>').html(total));
+													  	tr.append($('<td style="text-align:right;"></td>').html(total.toFixed(2)));
 
 														$('#table_grid tbody')
 																.append(
@@ -406,7 +406,7 @@ function disableRoute(){
 function exportToExcel()
 {
 	 
-	window.open("${pageContext.request.contextPath}/exportToExcel");
+	window.open("${pageContext.request.contextPath}/exportToExcelNew");
 			document.getElementById("expExcel").disabled=true;
 }
 

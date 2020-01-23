@@ -7,6 +7,7 @@
 
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body>
+	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<c:url var="getGrnGvnByDatewise" value="/getSalesReportComparion"></c:url>
 	<div class="container" id="main-container">
 		<!-- BEGIN Sidebar -->
@@ -37,14 +38,14 @@
 			<!-- END Page Title -->
 
 			<!-- BEGIN Breadcrumb -->
-			<div id="breadcrumbs">
+			<%-- <div id="breadcrumbs">
 				<ul class="breadcrumb">
 					<li><i class="fa fa-home"></i> <a
 						href="${pageContext.request.contextPath}/home">Home</a> <span
 						class="divider"><i class="fa fa-angle-right"></i></span></li>
 					<li class="active">Sales Compare Report</li>
 				</ul>
-			</div>
+			</div> --%>
 			<!-- END Breadcrumb -->
 
 			<!-- BEGIN Main Content -->
@@ -63,7 +64,7 @@
 						<div class="form-group">
 							<label class="col-sm-3 col-lg-2	 control-label">Select
 								First Month</label>
-							<div class="col-sm-6 col-lg-4 controls date_select">
+							<div class="col-sm-6 col-lg-2 controls date_select">
 								<select class="form-control chosen" name="sel_month"
 									id="sel_month">
 
@@ -102,7 +103,7 @@
 
 							<label class="col-sm-3 col-lg-2	 control-label">Select
 								Second Month</label>
-							<div class="col-sm-6 col-lg-4 controls date_select">
+							<div class="col-sm-6 col-lg-2 controls date_select">
 								<select class="form-control chosen" name="sel_month_next"
 									id="sel_month_next">
 
@@ -142,10 +143,8 @@
 
 
 
-							<label class="col-sm-3 col-lg-2	 control-label"></label>
-							<div class="col-sm-6 col-lg-4 controls date_select">
-								<button class="btn btn-info" onclick="searchReport()">Search
-									Report</button>
+							<div class="col-sm-6 col-lg-3 controls date_select">
+								<button class="btn btn-info" onclick="searchReport()">Search</button>
 								<button class="btn btn-primary" value="PDF" id="PDFButton"
 									onclick="genPdf()" disabled="disabled">PDF</button>
 							</div>

@@ -63,7 +63,7 @@
 				</div>
 			</form>
 			<form action="${pageContext.request.contextPath}/insertCreditNote"
-				class="form-horizontal" method="post" id="validation-form">
+				class="form-horizontal" method="post" id="validation-form" onsubmit="submitCRNote.disabled = true; return confirm('Do you want to Generate Credit Note ?');">
 
 
 
@@ -173,7 +173,7 @@
 									<div
 										class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
 										<input type="submit" class="btn btn-primary"
-											value="Generate Credit Note" />
+											value="Generate Credit Note"  id="submitCRNote"  />
 									</div>
 								</div>
 							</div>

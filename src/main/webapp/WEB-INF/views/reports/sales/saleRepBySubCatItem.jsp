@@ -425,9 +425,9 @@ function tableToExcel(table, name, filename) {
 																								key1,
 																								report) {
 																							if (subCat.subCatId == report.subCatId) {
-
+																								
 																								if (fr.frId == report.frId) {
-
+																									
 																									SoldQty = SoldQty
 																											+ report.soldQty;
 																									SoldAmt = SoldAmt
@@ -463,7 +463,7 @@ function tableToExcel(table, name, filename) {
 																											+ report.netQty;
 																									totalNetAmt = totalNetAmt
 																											+ report.netAmt;
-																									AmtPer = AmtPer
+																									retAmtPer = retAmtPer
 																											+ report.retAmtPer;
 
 																									/* document
@@ -492,60 +492,60 @@ function tableToExcel(table, name, filename) {
 																													'<td style="text-align:right;"></td>')
 																													.html(
 																															report.soldQty
-																																	.toFixed(2)));
+																																	));
 
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
 																															report.soldAmt
-																																	.toFixed(2)));
+																																	));
 
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
 																															report.varQty
-																																	.toFixed(2)));
+																																	));
 
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
 																															report.varAmt
-																																	.toFixed(2)));
+																																	));
 
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
 																															report.retQty
-																																	.toFixed(2)));
+																																	));
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
 																															report.retAmt
-																																	.toFixed(2)));
+																																	));
 
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
 																															report.netQty
-																																	.toFixed(2)));
+																																	));
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
-																															report.netAmt
-																																	.toFixed(2)));
+																															parseFloat(report.netAmt).toFixed(2)
+																																	));
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
-																															report.retAmtPer
-																																	.toFixed(2)));
+																															parseFloat(report.retAmtPer).toFixed(2)
+																																	));
 
 																									$(
 																											'#table_grid tbody')
@@ -574,58 +574,58 @@ function tableToExcel(table, name, filename) {
 																				.append($(
 																						'<td style="text-align:right;"></td>')
 																						.html(
-																								SoldQty
-																										.toFixed(2)));
+																								parseFloat(SoldQty).toFixed(2)
+																										));
 																		tr
 																				.append($(
 																						'<td style="text-align:right;"></td>')
 																						.html(
-																								SoldAmt
-																										.toFixed(2)));
+																								parseFloat(SoldAmt).toFixed(2)
+																										));
 																		tr
 																				.append($(
 																						'<td style="text-align:right;"></td>')
 																						.html(
-																								VarQty
-																										.toFixed(2)));
+																								parseFloat(VarQty).toFixed(2)
+																										));
 																		tr
 																				.append($(
 																						'<td style="text-align:right;"></td>')
 																						.html(
-																								VarAmt
-																										.toFixed(2)));
+																								parseFloat(VarAmt).toFixed(2)
+																										));
 																		tr
 																				.append($(
 																						'<td style="text-align:right;"></td>')
 																						.html(
-																								RetQty
-																										.toFixed(2)));
+																								parseFloat(RetQty).toFixed(2)
+																										));
 																		tr
 																				.append($(
 																						'<td style="text-align:right;"></td>')
 																						.html(
-																								RetAmt
-																										.toFixed(2)));
+																								parseFloat(RetAmt).toFixed(2)
+																										));
 
 																		tr
 																				.append($(
 																						'<td style="text-align:right;"></td>')
 																						.html(
-																								NetQty
-																										.toFixed(2)));
+																								parseFloat(NetQty).toFixed(2)
+																										));
 																		tr
 																				.append($(
 																						'<td style="text-align:right;"></td>')
 																						.html(
-																								NetAmt
-																										.toFixed(2)));
+																								parseFloat(NetAmt).toFixed(2)
+																										));
 
 																		tr
 																				.append($(
 																						'<td style="text-align:right;"></td>')
 																						.html(
-																								AmtPer
-																										.toFixed(2)));
+																								parseFloat(AmtPer).toFixed(2)
+																										));
 
 																		$(
 																				'#table_grid tbody')
@@ -648,58 +648,58 @@ function tableToExcel(table, name, filename) {
 															.append($(
 																	'<td style="text-align:right;"></td>')
 																	.html(
-																			totalSoldQty
-																					.toFixed(2)));
+																			parseFloat(totalSoldQty).toFixed(2)
+																					));
 													tr
 															.append($(
 																	'<td style="text-align:right;"></td>')
 																	.html(
-																			totalSoldAmt
-																					.toFixed(2)));
+																			parseFloat(totalSoldAmt).toFixed(2)
+																					));
 													tr
 															.append($(
 																	'<td style="text-align:right;"></td>')
 																	.html(
-																			totalVarQty
-																					.toFixed(2)));
+																			parseFloat(totalVarQty).toFixed(2)
+																					));
 													tr
 															.append($(
 																	'<td style="text-align:right;"></td>')
 																	.html(
-																			totalVarAmt
-																					.toFixed(2)));
+																			parseFloat(totalVarAmt).toFixed(2)
+																					));
 													tr
 															.append($(
 																	'<td style="text-align:right;"></td>')
 																	.html(
-																			totalRetQty
-																					.toFixed(2)));
+																			parseFloat(totalRetQty).toFixed(2)
+																					));
 													tr
 															.append($(
 																	'<td style="text-align:right;"></td>')
 																	.html(
-																			totalRetAmt
-																					.toFixed(2)));
+																			parseFloat(totalRetAmt).toFixed(2)
+																					));
 
 													tr
 															.append($(
 																	'<td style="text-align:right;"></td>')
 																	.html(
-																			totalNetQty
-																					.toFixed(2)));
+																			parseFloat(totalNetQty).toFixed(2)
+																					));
 													tr
 															.append($(
 																	'<td style="text-align:right;"></td>')
 																	.html(
-																			totalNetAmt
-																					.toFixed(2)));
+																			parseFloat(totalNetAmt).toFixed(2)
+																					));
 
 													tr
 															.append($(
 																	'<td style="text-align:right;"></td>')
 																	.html(
-																			retAmtPer
-																					.toFixed(2)));
+																			 parseFloat(retAmtPer).toFixed(2)
+																					));
 
 													$('#table_grid tbody')
 															.append(tr);

@@ -39,14 +39,14 @@
 		<!-- END Page Title -->
 
 		<!-- BEGIN Breadcrumb -->
-		<div id="breadcrumbs">
+		<%-- <div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
 				<li class="active">Bill Report</li>
 			</ul>
-		</div>
+		</div> --%>
 		<!-- END Breadcrumb -->
 
 		<!-- BEGIN Main Content -->
@@ -197,6 +197,7 @@
 											 
 											 
 											<div class="col-sm-3  controls">
+											
 											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
 											</div>
 											</div>
@@ -209,7 +210,7 @@
 	<!-- END Main Content -->
 
 	<footer>
-	<p>2017 © Monginis.</p>
+	<p>2020 © Monginis.</p>
 	</footer>
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -294,13 +295,13 @@
 														//tr.append($('<td></td>').html(cat.catName));
 													  	tr.append($('<td></td>').html(srNo));
 													  	tr.append($('<td></td>').html(report.item_name));
-													  	tr.append($('<td></td>').html(report.tBillQty));
-													  	tr.append($('<td></td>').html(report.tBillTaxableAmt));
+													  	tr.append($('<td style="text-align:right;"></td>').html(report.tBillQty));
+													  	tr.append($('<td style="text-align:right;"></td>').html(report.tBillTaxableAmt));
 													  	
-													  	tr.append($('<td></td>').html(report.tGrnQty));
-														tr.append($('<td></td>').html(report.tGrnTaxableAmt));
-													  	tr.append($('<td></td>').html(report.tGvnQty));
-													  	tr.append($('<td></td>').html(report.tGvnTaxableAmt));
+													  	tr.append($('<td style="text-align:right;"></td>').html(report.tGrnQty));
+														tr.append($('<td style="text-align:right;"></td>').html(report.tGrnTaxableAmt));
+													  	tr.append($('<td style="text-align:right;"></td>').html(report.tGvnQty));
+													  	tr.append($('<td style="text-align:right;"></td>').html(report.tGvnTaxableAmt));
 													  	
 													  	var netQty=report.tBillQty-(report.tGrnQty+report.tGvnQty);
 													  	netQty=netQty.toFixed(2);
@@ -308,15 +309,15 @@
 														var netValue=report.tBillTaxableAmt-(report.tGrnTaxableAmt+report.tGvnTaxableAmt);
 														netValue=netValue.toFixed();
 														
-													  	tr.append($('<td></td>').html(netQty));
-													  	tr.append($('<td></td>').html(netValue));
+													  	tr.append($('<td style="text-align:right;"></td>').html(netQty));
+													  	tr.append($('<td style="text-align:right;"></td>').html(netValue));
 													  	
-													  	tr.append($('<td></td>').html(royPer));
+													  	tr.append($('<td style="text-align:right;"></td>').html(royPer));
 													  	
 													  	rAmt=netValue*royPer/100;
 													  	rAmt=rAmt.toFixed(2);
 													  	
-													  	tr.append($('<td></td>').html(rAmt));
+													  	tr.append($('<td style="text-align:right;"></td>').html(rAmt));
 													  	
 														$('#table_grid tbody')
 																.append(
@@ -427,7 +428,7 @@ function genPdf()
 function exportToExcel()
 {
 	 
-	window.open("${pageContext.request.contextPath}/exportToExcel");
+	window.open("${pageContext.request.contextPath}/exportToExcelNew");
 			document.getElementById("expExcel").disabled=true;
 }
 </script>

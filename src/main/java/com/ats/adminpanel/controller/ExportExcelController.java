@@ -181,7 +181,7 @@ public class ExportExcelController {
 				Sheet sheet = workbook.getSheetAt(i);
 				if (sheet.getPhysicalNumberOfRows() > 0) {
 					Row row = sheet.getRow(index);
-					row.setHeight((short) 700);
+					row.setHeight((short) 500);
 
 					Iterator<Cell> cellIterator = row.cellIterator();
 					while (cellIterator.hasNext()) {
@@ -206,7 +206,7 @@ public class ExportExcelController {
 			style.setAlignment(CellStyle.ALIGN_CENTER);
 
 			Row titleRow = sheet.createRow(0);
-			titleRow.setHeightInPoints(25);
+			titleRow.setHeightInPoints(20);
 			titleRow.setRowStyle(style);
 			Cell titleCell = titleRow.createCell(0);
 

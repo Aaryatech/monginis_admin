@@ -552,7 +552,7 @@ function deleteItem(key){
 function generateBill()
 {
 	$('#loader1').show();
-
+	document.getElementById("Submit").disabled = true;
 	$.getJSON(
 					'${generateManualBill}',
 					{

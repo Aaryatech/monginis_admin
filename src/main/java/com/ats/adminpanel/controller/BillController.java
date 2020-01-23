@@ -1838,7 +1838,7 @@ public class BillController {
 
 			List<PostBillDetail> postBillDetailsList = new ArrayList<>();
 
-			float sumTaxableAmt = 0, sumTotalTax = 0, sumGrandTotal = 0, sumTotalCgst = 0,sumTotalSgst = 0;
+			float sumTaxableAmt = 0, sumTotalTax = 0, sumGrandTotal = 0, sumTotalCgst = 0,sumTotalSgst = 0,sumTotalIgst = 0;
 
 			PostBillDetail postBillDetail = new PostBillDetail();
 			PostBillHeader postBillHeader = new PostBillHeader();
@@ -1848,17 +1848,32 @@ public class BillController {
 						.parseInt(request.getParameter("billQty" + billDetailsList.get(i).getBillDetailNo()));
 				float newBillRate = Float
 						.parseFloat(request.getParameter("billRate" + billDetailsList.get(i).getBillDetailNo()));
-				float newSgstPer =  Float
-						.parseFloat(request.getParameter("sgstPer" + billDetailsList.get(i).getBillDetailNo()));
-				float newCgstPer =  Float
-						.parseFloat(request.getParameter("cgstPer" + billDetailsList.get(i).getBillDetailNo()));
+				int isIgstBill=Integer.parseInt(request.getParameter("isIgstBill"));
+				GetBillDetail getBillDetail = billDetailsList.get(i);
+				float newSgstPer=getBillDetail.getSgstPer();
+				float newCgstPer=getBillDetail.getCgstPer();
+				float newIgstPer =getBillDetail.getIgstPer();
+				float newBaserate=0;
+				if(isIgstBill==0) {
 
+				 newSgstPer =  Float
+						.parseFloat(request.getParameter("sgstPer" + billDetailsList.get(i).getBillDetailNo()));
+				 newCgstPer =  Float
+						.parseFloat(request.getParameter("cgstPer" + billDetailsList.get(i).getBillDetailNo()));
+				 newIgstPer =getBillDetail.getIgstPer();
+				 newBaserate=Float.valueOf(df.format((newBillRate*100)/(100+newSgstPer+newCgstPer)));
+				}else {
+				  
+				   newIgstPer =  Float
+						.parseFloat(request.getParameter("igstPer" + billDetailsList.get(i).getBillDetailNo()));
+				 newSgstPer=getBillDetail.getSgstPer();
+			     newCgstPer=getBillDetail.getCgstPer();
+			     newBaserate=Float.valueOf(df.format((newBillRate*100)/(100+newIgstPer)));
+				}
 				System.out.println("new bill qty = " + newBillQty);
 				System.out.println("new BillRate = " + newBillRate);
 				System.out.println("new  SgstPer = " + newSgstPer);
-				System.out.println("new  CgstPer = " + newCgstPer);
-
-				GetBillDetail getBillDetail = billDetailsList.get(i);
+				System.out.println("new  CgstPer = " + newCgstPer);		
 
 				 
 					postBillDetail = new PostBillDetail();
@@ -1866,12 +1881,11 @@ public class BillController {
 					postBillDetail.setBillNo(getBillDetail.getBillNo());
 					postBillDetail.setRate(newBillRate);
 					postBillDetail.setBillQty(newBillQty);
-					float newBaserate=Float.valueOf(df.format((newBillRate*100)/(100+newSgstPer+newCgstPer)));
 					postBillDetail.setBaseRate(newBaserate); 
 					postBillDetail.setCatId(getBillDetail.getCatId());
 					postBillDetail.setSgstPer(newSgstPer);
 					postBillDetail.setCgstPer(newCgstPer);
-					postBillDetail.setIgstPer(newSgstPer+newCgstPer);
+					postBillDetail.setIgstPer(newIgstPer);//
 					postBillDetail.setDelStatus(0); 
 					postBillDetail.setItemId(getBillDetail.getItemId());
 					postBillDetail.setMenuId(getBillDetail.getMenuId());
@@ -1893,16 +1907,29 @@ public class BillController {
 					float sgstRs = (taxableAmt * postBillDetail.getSgstPer()) / 100;
 					float cgstRs = (taxableAmt * postBillDetail.getCgstPer()) / 100;
 					float igstRs = (taxableAmt * getBillDetail.getIgstPer()) / 100;
-
-					sgstRs = roundUp(sgstRs);
-					cgstRs = roundUp(cgstRs);
-					igstRs = 0;
+					float totalTax=0;
+					
+					if(isIgstBill==0) {
 					
 					sumTotalSgst = sumTotalSgst + sgstRs;
 					sumTotalCgst = sumTotalCgst + cgstRs;
+					
+					sgstRs = roundUp(sgstRs);
+					cgstRs = roundUp(cgstRs);
+					igstRs = 0;
+                         totalTax = sgstRs + cgstRs;
+					     totalTax = roundUp(totalTax);
+					}
+					else
+					{
+						sgstRs = 0;
+						cgstRs = 0;
+						sumTotalIgst = sumTotalIgst + igstRs;
+						igstRs = roundUp(igstRs);
+                           totalTax = igstRs;
+						   totalTax = roundUp(totalTax);
+					}
 
-					float totalTax = sgstRs + cgstRs;
-					totalTax = roundUp(totalTax);
 
 					float grandTotal = totalTax + taxableAmt;
 					grandTotal = roundUp(grandTotal);
@@ -1959,6 +1986,7 @@ public class BillController {
 					postBillHeader.setRemark(billHeadersList.get(j).getRemark());
 					postBillHeader.setSgstSum(sumTotalSgst);
 					postBillHeader.setCgstSum(sumTotalCgst);
+					postBillHeader.setIgstSum(sumTotalIgst);
 					postBillHeader.setTime(billHeadersList.get(j).getTime());
 					break;
 				} // end of if

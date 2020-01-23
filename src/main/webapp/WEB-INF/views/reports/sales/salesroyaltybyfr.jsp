@@ -42,14 +42,14 @@
 		<!-- END Page Title -->
 
 		<!-- BEGIN Breadcrumb -->
-		<div id="breadcrumbs">
+		<%-- <div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
 					class="divider"><i class="fa fa-angle-right"></i></span></li>
 				<li class="active">Bill Report</li>
 			</ul>
-		</div>
+		</div> --%>
 		<!-- END Breadcrumb -->
 
 		<!-- BEGIN Main Content -->
@@ -207,7 +207,7 @@
 	<!-- END Main Content -->
 
 	<footer>
-		<p>2017 © Monginis.</p>
+		<p>2020 © Monginis.</p>
 	</footer>
 
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
@@ -266,23 +266,23 @@
 													  	tr.append($('<td></td>').html(srNo));
 													  	tr.append($('<td></td>').html(report.frName));
 													  	tr.append($('<td></td>').html(report.frCity));
-													  	tr.append($('<td></td>').html(report.tBillTaxableAmt));
-														tr.append($('<td></td>').html(report.tGrnTaxableAmt));
+													  	tr.append($('<td  style="text-align:right;"></td>').html(report.tBillTaxableAmt.toFixed(2)));
+														tr.append($('<td  style="text-align:right;"></td>').html(report.tGrnTaxableAmt.toFixed(2)));
 														
-													  	tr.append($('<td></td>').html(royPer));
-													  	tr.append($('<td></td>').html(report.tGvnTaxableAmt));
+													  	tr.append($('<td  style="text-align:right;"></td>').html(royPer));
+													  	tr.append($('<td  style="text-align:right;"></td>').html(report.tGvnTaxableAmt.toFixed(2)));
 
 													  	var netValue=report.tBillTaxableAmt-(report.tGrnTaxableAmt+report.tGvnTaxableAmt);
 														netValue=netValue.toFixed(2);
 														
-													  	tr.append($('<td></td>').html(netValue));
+													  	tr.append($('<td  style="text-align:right;"></td>').html(netValue));
 													  	//alert("netVAlue"+netValue);
 													  	//alert("Per"+royPer);
 													  	rAmt=parseFloat(netValue) * parseFloat(royPer)/100;
 													  //	alert("Amt="+rAmt)
 													  	rAmt=rAmt.toFixed(2);
 													  	
-													  	tr.append($('<td></td>').html(rAmt));
+													  	tr.append($('<td  style="text-align:right;"></td>').html(rAmt));
 													  	
 														$('#table_grid tbody')
 																.append(

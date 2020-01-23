@@ -2,7 +2,7 @@ package com.ats.adminpanel.model.salesreport;
 
 public class SubCatItemReport {
 
-	private int crndId;
+	private String crndId;
 	private int itemId;
 	private String itemName;
 	private int subCatId;
@@ -25,11 +25,11 @@ public class SubCatItemReport {
 	private float netAmt;
 	private float retAmtPer;
 
-	public int getCrndId() {
+	public String getCrndId() {
 		return crndId;
 	}
 
-	public void setCrndId(int crndId) {
+	public void setCrndId(String crndId) {
 		this.crndId = crndId;
 	}
 

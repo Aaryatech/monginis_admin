@@ -345,12 +345,12 @@ public class SalesReportController {
 			HttpServletResponse response) {
 
 		List<SalesReportBillwise> saleList = new ArrayList<>();
-
+		String fromDate="";String toDate="";
 		try {
 			System.out.println("Inside get Sale Bill Wise");
 			String selectedFr = request.getParameter("fr_id_list");
-			String fromDate = request.getParameter("fromDate");
-			String toDate = request.getParameter("toDate");
+			 fromDate = request.getParameter("fromDate");
+			 toDate = request.getParameter("toDate");
 			String routeId = request.getParameter("route_id");
 
 			boolean isAllFrSelected = false;
@@ -453,8 +453,8 @@ public class SalesReportController {
 		rowData.add("cgst sum");
 		rowData.add("igst sum");
 		rowData.add("Total Tax");
-		rowData.add("Grand Total");
 		rowData.add("Taxable Amt");
+		rowData.add("Grand Total");
 
 		expoExcel.setRowData(rowData);
 		exportToExcelList.add(expoExcel);
@@ -475,18 +475,21 @@ public class SalesReportController {
 			rowData.add("" + saleList.get(i).getCgstSum());
 			rowData.add("" + saleList.get(i).getIgstSum());
 			rowData.add("" + saleList.get(i).getTotalTax());
-			rowData.add("" + saleList.get(i).getGrandTotal());
 			rowData.add("" + saleList.get(i).getTaxableAmt());
-
+			rowData.add("" + saleList.get(i).getGrandTotal());
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
 
 		}
 
 		HttpSession session = request.getSession();
-		session.setAttribute("exportExcelList", exportToExcelList);
-		session.setAttribute("excelName", "SaleBillWiseDate");
-
+		session.setAttribute("exportExcelListNew", exportToExcelList);
+		session.setAttribute("excelNameNew", "SaleBillWiseDate");
+		session.setAttribute("reportNameNew", "Billwise Report");
+		session.setAttribute("searchByNew", "From Date: " + fromDate + "  To Date: " + toDate + " ");
+		session.setAttribute("mergeUpto1", "$A$1:$M$1");
+		session.setAttribute("mergeUpto2", "$A$2:$M$2");
+	
 		return saleList;
 	}
 
@@ -654,12 +657,12 @@ public class SalesReportController {
 			HttpServletResponse response) {
 
 		List<SalesReportBillwise> saleList = new ArrayList<>();
-
+		String fromDate=""; String toDate="";
 		try {
 			System.out.println("Inside get Sale Bill Wise");
 			String selectedFr = request.getParameter("fr_id_list");
-			String fromDate = request.getParameter("fromDate");
-			String toDate = request.getParameter("toDate");
+			 fromDate = request.getParameter("fromDate");
+			 toDate = request.getParameter("toDate");
 			String routeId = request.getParameter("route_id");
 
 			boolean isAllFrSelected = false;
@@ -781,8 +784,8 @@ public class SalesReportController {
 		rowData.add("cgst sum");
 		rowData.add("igst sum");
 		rowData.add("Total Tax");
-		rowData.add("Grand Total");
 		rowData.add("Taxable Amt");
+		rowData.add("Grand Total");
 
 		expoExcel.setRowData(rowData);
 		exportToExcelList.add(expoExcel);
@@ -803,17 +806,21 @@ public class SalesReportController {
 			rowData.add("" + saleList.get(i).getCgstSum());
 			rowData.add("" + saleList.get(i).getIgstSum());
 			rowData.add("" + saleList.get(i).getTotalTax());
-			rowData.add("" + saleList.get(i).getGrandTotal());
+			
 			rowData.add("" + saleList.get(i).getTaxableAmt());
-
+			rowData.add("" + saleList.get(i).getGrandTotal());
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
 
 		}
 
 		HttpSession session = request.getSession();
-		session.setAttribute("exportExcelList", exportToExcelList);
-		session.setAttribute("excelName", "SaleBillWiseFr");
+		session.setAttribute("exportExcelListNew", exportToExcelList);
+		session.setAttribute("excelNameNew", "SaleBillWiseFr");
+		session.setAttribute("reportNameNew", "Billwise Report by Franchise");
+		session.setAttribute("searchByNew", "From Date: " + fromDate + "  To Date: " + toDate + " ");
+		session.setAttribute("mergeUpto1", "$A$1:$M$1");
+		session.setAttribute("mergeUpto2", "$A$2:$M$2");
 		return saleList;
 	}
 
@@ -1534,12 +1541,12 @@ public class SalesReportController {
 			HttpServletResponse response) {
 
 		List<SalesReportBillwise> saleList = new ArrayList<>();
-
+		String fromDate="";String toDate="";
 		try {
 			System.out.println("Inside get Sale Bill Wise");
 			String selectedFr = request.getParameter("fr_id_list");
-			String fromDate = request.getParameter("fromDate");
-			String toDate = request.getParameter("toDate");
+			 fromDate = request.getParameter("fromDate");
+			 toDate = request.getParameter("toDate");
 			String routeId = request.getParameter("route_id");
 
 			boolean isAllFrSelected = false;
@@ -1647,8 +1654,9 @@ public class SalesReportController {
 		rowData.add("cgst sum");
 		rowData.add("igst sum");
 		rowData.add("Total Tax");
-		rowData.add("Grand Total");
+		
 		rowData.add("Taxable Amt");
+		rowData.add("Grand Total");
 
 		expoExcel.setRowData(rowData);
 		exportToExcelList.add(expoExcel);
@@ -1669,17 +1677,21 @@ public class SalesReportController {
 			rowData.add("" + saleList.get(i).getCgstSum());
 			rowData.add("" + saleList.get(i).getIgstSum());
 			rowData.add("" + saleList.get(i).getTotalTax());
-			rowData.add("" + saleList.get(i).getGrandTotal());
 			rowData.add("" + saleList.get(i).getTaxableAmt());
-
+			rowData.add("" + saleList.get(i).getGrandTotal());
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
 
 		}
 
 		HttpSession session = request.getSession();
-		session.setAttribute("exportExcelList", exportToExcelList);
-		session.setAttribute("excelName", "BillWiseGroupByDate");
+		session.setAttribute("exportExcelListNew", exportToExcelList);
+		session.setAttribute("excelNameNew", "BillWiseGroupByDate");
+		session.setAttribute("reportNameNew", "Billwise Report Grp By Date");
+		session.setAttribute("searchByNew", "From Date: " + fromDate + "  To Date: " + toDate + " ");
+		session.setAttribute("mergeUpto1", "$A$1:$M$1");
+		session.setAttribute("mergeUpto2", "$A$2:$M$2");
+		
 		return saleList;
 
 	}
@@ -1861,12 +1873,12 @@ public class SalesReportController {
 			HttpServletResponse response) {
 
 		List<SalesReportBillwise> saleList = new ArrayList<>();
-
+		String fromDate="";String toDate="";
 		try {
 			System.out.println("Inside get Sale Bill Wise");
 			String selectedFr = request.getParameter("fr_id_list");
-			String fromDate = request.getParameter("fromDate");
-			String toDate = request.getParameter("toDate");
+			 fromDate = request.getParameter("fromDate");
+			 toDate = request.getParameter("toDate");
 			String routeId = request.getParameter("route_id");
 
 			boolean isAllFrSelected = false;
@@ -1972,9 +1984,8 @@ public class SalesReportController {
 		rowData.add("cgst sum");
 		rowData.add("igst sum");
 		rowData.add("Total Tax");
-		rowData.add("Grand Total");
 		rowData.add("Taxable Amt");
-
+		rowData.add("Grand Total");
 		expoExcel.setRowData(rowData);
 		exportToExcelList.add(expoExcel);
 		for (int i = 0; i < saleList.size(); i++) {
@@ -1994,17 +2005,20 @@ public class SalesReportController {
 			rowData.add("" + saleList.get(i).getCgstSum());
 			rowData.add("" + saleList.get(i).getIgstSum());
 			rowData.add("" + saleList.get(i).getTotalTax());
-			rowData.add("" + saleList.get(i).getGrandTotal());
 			rowData.add("" + saleList.get(i).getTaxableAmt());
-
+			rowData.add("" + saleList.get(i).getGrandTotal());
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
 
 		}
 
 		HttpSession session = request.getSession();
-		session.setAttribute("exportExcelList", exportToExcelList);
-		session.setAttribute("excelName", "SaleBillWiseByMonth");
+		session.setAttribute("exportExcelListNew", exportToExcelList);
+		session.setAttribute("excelNameNew", "SaleBillWiseByMonth");
+		session.setAttribute("reportNameNew", "Billwise Report Grp By Month");
+		session.setAttribute("searchByNew", "From Date: " + fromDate + "  To Date: " + toDate + " ");
+		session.setAttribute("mergeUpto1", "$A$1:$M$1");
+		session.setAttribute("mergeUpto2", "$A$2:$M$2");
 		return saleList;
 
 	}
@@ -2109,69 +2123,44 @@ public class SalesReportController {
 		model.addObject("report", saleListForPdf);
 		return model;
 	}
-
 	// *******************************************************************//
 	// Royalty Sale
-
 	@RequestMapping(value = "/showSaleRoyaltyByCat", method = RequestMethod.GET)
 	public ModelAndView showSaleRoyaltyByCat(HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("reports/sales/salesroyaltybycat");
 
-		// Constants.mainAct =2;
-		// Constants.subAct =20;
-
 		try {
 			ZoneId z = ZoneId.of("Asia/Calcutta");
-
 			LocalDate date = LocalDate.now(z);
 			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
 			todaysDate = date.format(formatters);
-
 			RestTemplate restTemplate = new RestTemplate();
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-
-			// get Routes
-
 			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
 					AllRoutesListResponse.class);
-
 			List<Route> routeList = new ArrayList<Route>();
-
 			routeList = allRouteListResponse.getRoute();
-
-			// end get Routes
-
 			allFrIdNameList = new AllFrIdNameList();
 			try {
-
 				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
-
 			} catch (Exception e) {
-				System.out.println("Exception in getAllFrIdName" + e.getMessage());
+				//System.out.println("Exception in getAllFrIdName" + e.getMessage());
 				e.printStackTrace();
-
 			}
 			List<AllFrIdName> selectedFrListAll = new ArrayList();
 			List<Menu> selectedMenuList = new ArrayList<Menu>();
-
-			System.out.println(" Fr " + allFrIdNameList.getFrIdNamesList());
-
+			//System.out.println(" Fr " + allFrIdNameList.getFrIdNamesList());
 			model.addObject("todaysDate", todaysDate);
 			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
-
 			model.addObject("routeList", routeList);
 			model.addObject("royPer", getRoyPer());
-
 		} catch (Exception e) {
-
-			System.out.println("Exc in show sales report bill wise  " + e.getMessage());
+			//System.out.println("Exc in show sales report bill wise  " + e.getMessage());
 			e.printStackTrace();
 		}
-
 		return model;
-
 	}
 
 	@RequestMapping(value = "/getSaleRoyaltyByCat", method = RequestMethod.GET)
@@ -2180,12 +2169,11 @@ public class SalesReportController {
 		List<SalesReportBillwise> saleList = new ArrayList<>();
 		List<SalesReportRoyalty> royaltyList = new ArrayList<>();
 		RoyaltyListBean royaltyBean = new RoyaltyListBean();
-
+		String  fromDate="";String toDate="";
 		try {
-			System.out.println("Inside get Sale Bill Wise");
 			String selectedFr = request.getParameter("fr_id_list");
-			String fromDate = request.getParameter("fromDate");
-			String toDate = request.getParameter("toDate");
+			 fromDate = request.getParameter("fromDate");
+			 toDate = request.getParameter("toDate");
 			String routeId = request.getParameter("route_id");
 
 			boolean isAllFrSelected = false;
@@ -2234,8 +2222,6 @@ public class SalesReportController {
 
 				System.out.println("Inside If all fr Selected ");
 
-				// web serviece: getSalesReportRoyaltyAllFr
-
 				map.add("fromDate", fromDate);
 				map.add("toDate", toDate);
 
@@ -2283,6 +2269,8 @@ public class SalesReportController {
 			e.printStackTrace();
 
 		}
+		float royPer=getRoyPer();
+
 		// exportToExcel
 		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
@@ -2307,6 +2295,8 @@ public class SalesReportController {
 		expoExcel.setRowData(rowData);
 		exportToExcelList.add(expoExcel);
 		if (!royaltyBean.getSalesReportRoyalty().isEmpty()) {
+			royaltyList.sort((SalesReportRoyalty s1, SalesReportRoyalty s2)->s1.getCatId()-s2.getCatId()); 
+
 			for (int i = 0; i < royaltyList.size(); i++) {
 				int index = 1;
 				index = index + i;
@@ -2332,7 +2322,7 @@ public class SalesReportController {
 
 				float netValue = royaltyList.get(i).gettBillTaxableAmt()
 						- (royaltyList.get(i).gettGrnTaxableAmt() + royaltyList.get(i).gettGvnTaxableAmt());
-				float royPer = getRoyPer();
+				
 				float rAmt = netValue * royPer / 100;
 
 				rowData.add("" + roundUp(netQty));
@@ -2347,9 +2337,12 @@ public class SalesReportController {
 		}
 
 		HttpSession session = request.getSession();
-		session.setAttribute("exportExcelList", exportToExcelList);
-		session.setAttribute("excelName", "RoyaltyByCatList");
-
+		session.setAttribute("exportExcelListNew", exportToExcelList);
+		session.setAttribute("excelNameNew", "RoyaltyByCatList");
+		session.setAttribute("reportNameNew", "Royalty Report By Category");
+		session.setAttribute("searchByNew", "From Date: " + fromDate + "  To Date: " + toDate + " ");
+		session.setAttribute("mergeUpto1", "$A$1:$M$1");
+		session.setAttribute("mergeUpto2", "$A$2:$M$2");
 		return royaltyBean;
 
 	}
@@ -2624,7 +2617,7 @@ public class SalesReportController {
 			e.printStackTrace();
 
 		}
-
+         float royPer=getRoyPer();
 		// exportToExcel
 		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
@@ -2635,10 +2628,12 @@ public class SalesReportController {
 		rowData.add("Franchisee Code");
 		rowData.add("Franchisee Name");
 		rowData.add("Franchisee City");
-
-		rowData.add("Grn Taxable Amt");
-		rowData.add("Gvn Taxable Amt");
-		rowData.add("Taxable Amt");
+		rowData.add("Sale Value");
+		rowData.add("GRN Value");
+		rowData.add("GVN Value");
+		rowData.add("Royalty %");
+		rowData.add("Net Amount");
+		rowData.add("Royalty Amt");
 
 		expoExcel.setRowData(rowData);
 		exportToExcelList.add(expoExcel);
@@ -2652,11 +2647,15 @@ public class SalesReportController {
 			rowData.add(royaltyFrList.get(i).getFrName());
 
 			rowData.add(royaltyFrList.get(i).getFrCity());
+			rowData.add("" + royaltyFrList.get(i).gettBillTaxableAmt());
 
 			rowData.add("" + royaltyFrList.get(i).gettGrnTaxableAmt());
 			rowData.add("" + royaltyFrList.get(i).gettGvnTaxableAmt());
-			rowData.add("" + royaltyFrList.get(i).gettBillTaxableAmt());
-
+			rowData.add("" + royPer);
+			float netValue=royaltyFrList.get(i).gettBillTaxableAmt()-(royaltyFrList.get(i).gettGrnTaxableAmt()+royaltyFrList.get(i).gettGvnTaxableAmt());
+			float royaltyAmt=netValue * royPer/100;
+			rowData.add("" + roundUp(netValue));
+			rowData.add("" + roundUp(royaltyAmt));
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
 
@@ -4361,6 +4360,7 @@ public class SalesReportController {
 
 		expoExcel.setRowData(rowData);
 		exportToExcelList.add(expoExcel);
+		float royPer = getRoyPer();
 		if (!royaltyBean.getSalesReportRoyalty().isEmpty()) {
 			for (int i = 0; i < royaltyList.size(); i++) {
 				int index = 1;
@@ -4387,15 +4387,11 @@ public class SalesReportController {
 
 				float netValue = royaltyList.get(i).gettBillTaxableAmt()
 						- (royaltyList.get(i).gettGrnTaxableAmt() + royaltyList.get(i).gettGvnTaxableAmt());
-				float royPer = getRoyPer();
 
 				float rAmt = netValue * royPer / 100;
 
 				rowData.add("" + roundUp(netQty));
 				rowData.add("" + roundUp(netValue));
-				/*
-				 * rowData.add(""+roundUp(royPer)); rowData.add(""+roundUp(rAmt));
-				 */
 
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
