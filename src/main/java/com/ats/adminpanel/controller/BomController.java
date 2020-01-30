@@ -516,11 +516,11 @@ int globalIsPlan;
 			e.printStackTrace();
 		}
 		
-		 PdfPTable table = new PdfPTable(6);
+		 PdfPTable table = new PdfPTable(7);
 		 try {
 		 System.out.println("Inside PDF Table try");
 		 table.setWidthPercentage(100);
-	     table.setWidths(new float[]{0.5f, 1.4f, 1.4f, 1.4f,1.4f, 1.4f});
+	     table.setWidths(new float[]{0.5f, 2.7f, 1.4f, 1.4f,1.0f, 1.0f, 1.0f});
 	     Font headFont = new Font(FontFamily.HELVETICA, 10, Font.NORMAL, BaseColor.BLACK);
 	     Font headFont1 = new Font(FontFamily.HELVETICA, 11, Font.BOLD, BaseColor.BLACK);
 	     Font f=new Font(FontFamily.TIMES_ROMAN,12.0f,Font.UNDERLINE,BaseColor.BLUE);
@@ -538,10 +538,13 @@ int globalIsPlan;
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	     table.addCell(hcell);
 	     */
-	     hcell = new PdfPCell(new Phrase("Requested Qty", headFont1));
+	     hcell = new PdfPCell(new Phrase("Auto Req Qty", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	     table.addCell(hcell);
 	     
+	     hcell = new PdfPCell(new Phrase("Req Qty", headFont1));
+	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	     table.addCell(hcell);
 	     
 	     hcell = new PdfPCell(new Phrase("Single Cut", headFont1));
 	     hcell.setHorizontalAlignment(Element.ALIGN_CENTER);
@@ -564,6 +567,7 @@ int globalIsPlan;
 	        cell = new PdfPCell(new Phrase(String.valueOf(index),headFont));
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setFixedHeight(30f);
 	         table.addCell(cell);
 
 	        
@@ -571,34 +575,36 @@ int globalIsPlan;
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_LEFT);
 	         cell.setPaddingRight(2);
+	         cell.setFixedHeight(30f);
 	         table.addCell(cell);
-	         
-	        /* cell = new PdfPCell(new Phrase(String.valueOf(bomDetail.getRmIssueQty()),headFont));
-	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
-	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
-	         cell.setPaddingRight(2);
-	         table.addCell(cell);*/
-	         
 	         
 	         cell = new PdfPCell(new Phrase(String.valueOf(bomDetail.getAutoRmReqQty()),headFont));
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	         cell.setPaddingRight(2);
+	         cell.setFixedHeight(30f);
 	         table.addCell(cell);
 	         
+	         
+	         cell = new PdfPCell(new Phrase(String.valueOf(bomDetail.getRmReqQty()),headFont));
+	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+	         cell.setPaddingRight(2);
+	         cell.setFixedHeight(30f);
+	         table.addCell(cell);
 	         
 	         cell = new PdfPCell(new Phrase(String.valueOf(bomDetail.getExVarchar1()),headFont));
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	         cell.setPaddingRight(2);
+	         cell.setFixedHeight(30f);
 	         table.addCell(cell);
-	         
-	         
 	         
 	         cell = new PdfPCell(new Phrase(String.valueOf(bomDetail.getExVarchar2()),headFont));
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	         cell.setPaddingRight(2);
+	         cell.setFixedHeight(30f);
 	         table.addCell(cell);
 	         
 	         
@@ -606,10 +612,9 @@ int globalIsPlan;
 	         cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
 	         cell.setHorizontalAlignment(Element.ALIGN_CENTER);
 	         cell.setPaddingRight(2);
+	         cell.setFixedHeight(30f);
 	         table.addCell(cell);
 	        	         
-	         //FooterTable footerEvent = new FooterTable(table);
-	        // writer.setPageEvent(footerEvent);
 	     }
 
 	     document.open();

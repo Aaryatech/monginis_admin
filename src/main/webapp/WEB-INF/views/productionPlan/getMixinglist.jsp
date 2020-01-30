@@ -362,7 +362,8 @@
 														{
 														var sts="Pending";
 														}
-													  
+				
+		  
 													//alert("with satus 0");
 													var tr = $('<tr></tr>');
 
@@ -415,8 +416,9 @@
 									alert("No records found !!");
 
 								}
-							 
-
+							 var date="";
+                             var srNo=1;
+                             var styleCode="";
 							  $.each(
 											data,
 											function(key, itemList) {
@@ -433,10 +435,19 @@
 												{
 												var sts="Production Completed";
 												}
-												
+											    
+											    if(date==(itemList.mixDate).trim()){
+											    	styleCode="style='text-decoration: underline;'";
+											    	srNo=srNo+1;
+											    }else
+											    	{
+											    	 srNo=1;
+											    	 styleCode="style='color:green;font-weight:bold;'";
+											    	 date=(itemList.mixDate).trim();
+											    	}
 												var tr = $('<tr></tr>');
 											  	tr.append($('<td></td>').html(key+1));
-											  	tr.append($('<td></td>').html(itemList.mixDate));
+											  	tr.append($('<td></td>').html(itemList.mixDate+"<span "+styleCode+"> P-"+srNo+"</span>"));
 											  	tr.append($('<td></td>').html(itemList.productionId));
 											  	tr.append($('<td></td>').html(itemList.timeSlot));
 											  	tr.append($('<td></td>').html(sts));

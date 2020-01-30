@@ -24,6 +24,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.ModelAndView;
@@ -37,6 +38,7 @@ import com.ats.adminpanel.model.RawMaterial.GetItemSfHeader;
 import com.ats.adminpanel.model.RawMaterial.GetSfType;
 import com.ats.adminpanel.model.RawMaterial.ItemSfDetail;
 import com.ats.adminpanel.model.RawMaterial.SfItemDetailList;
+import com.ats.adminpanel.model.franchisee.Menu;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.login.UserResponse;
@@ -54,7 +56,23 @@ import com.ats.adminpanel.model.productionplan.MixingHeader;
 @Scope("session")
 public class ProductionApplController {
 
-	
+	@RequestMapping(value = "/getItemsByProductionIdCatId", method = RequestMethod.GET)
+	public @ResponseBody List<Item> getItemsByProductionIdCatId(@RequestParam(value = "prodHeaderId", required = true) int prodHeaderId) {
+		ArrayList<Item> itemList=new ArrayList<>();
+		RestTemplate restTemplate = new RestTemplate();
+		try {
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("prodHeaderId", prodHeaderId);
+
+		Item[] item = restTemplate.postForObject(Constants.url + "getItemsByProductionIdCatId", map, Item[].class);
+		 itemList = new ArrayList<Item>(Arrays.asList(item));
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+		return itemList;
+		
+	}
 	@RequestMapping(value = "/generateMixingForProduction/{type}", method = RequestMethod.GET)
 	public ModelAndView prodListForGenerateMixingForProd(@PathVariable("type")int type,HttpServletRequest request, HttpServletResponse response) {
 
@@ -159,7 +177,24 @@ public class ProductionApplController {
 	return sfPlanDetailForBom;
 
 	}
-	
+	@RequestMapping(value = "/getItemDetailsForManualProduction", method = RequestMethod.POST)
+	public @ResponseBody List<GetSFPlanDetailForMixing> getItemDetailsForManualProduction(@RequestBody List<GetSfData> data) throws ParseException {
+		List<GetSFPlanDetailForMixing> sfPlanDetailForBom=null;
+		try {
+			RestTemplate restTemplate = new RestTemplate();
+
+			GetSFPlanDetailForMixingList getSFPlanDetailForBomList = restTemplate
+					.postForObject(Constants.url + "showDetailsForManualProduction", data,
+						GetSFPlanDetailForMixingList.class);
+
+		sfPlanDetailForBom = getSFPlanDetailForBomList.getSfPlanDetailForMixing();
+		System.err.println(sfPlanDetailForBom);
+		
+	} catch (Exception e) {
+		e.printStackTrace();
+    }
+    return sfPlanDetailForBom;
+	}
 	@RequestMapping(value = "/showDetailsForLayering", method = RequestMethod.GET)
 	public @ResponseBody List<GetSFPlanDetailForMixing> showDetailsForLayering(HttpServletRequest request, HttpServletResponse response) throws ParseException {
 		

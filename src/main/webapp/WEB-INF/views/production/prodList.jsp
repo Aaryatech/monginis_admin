@@ -7,6 +7,8 @@
   
  <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
  <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+ <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
+ 
  <link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath}/resources/css/component.css" />
  <style type="text/css">
     a[disabled="disabled"] {
@@ -26,6 +28,9 @@ input[type="checkbox"] {
 <c:url var="findItemsByGrpId" value="/findItemsByGrpIdForRmIssue"/>
 <c:url var="findSfByTypeId" value="/findSfsByTypeId"/>
 <c:url var="showDetailItemLayering" value="/showDetailItemLayering"/>
+<c:url var="getItemDetailsForManualProduction" value="/getItemDetailsForManualProduction"/>
+
+<c:url var="getItemsByProductionIdCatId" value="/getItemsByProductionIdCatId"/>
 	<div class="container" id="main-container">
 		<!-- BEGIN Sidebar -->
 		<div id="sidebar" class="navbar-collapse collapse">
@@ -588,7 +593,7 @@ input[type="checkbox"] {
 <!----------------------------------------------End Model 4----------------------------------------------->
 <!------------------------------------------ MODEL 5-------------------------------------------------->
 <div class="modal fade" id="elegantModalForm5" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-  aria-hidden="true" >
+  aria-hidden="true"  >
 <div id="overlay7">
 	<div class="clock"></div>
 </div>
@@ -628,12 +633,12 @@ input[type="checkbox"] {
 
 												</select>
 											</div> --%>
-											<label class="col-sm-3 col-lg-2 control-label">Type</label>
-											<div class="col-sm-9 col-lg-3 controls">
+											<label class="col-sm-3 col-lg-1 control-label">Type</label>
+											<div class="col-sm-9 col-lg-3 controls"> 
 												<select data-placeholder="Select Type" name="typeId"
-													class="form-control chosen" tabindex="-1" id="typeId" onchange="onTypeChange(this.value)"
-													data-rule-required="true"  >
-						<option value="" disabled="disabled" selected style="text-align: left;">Select Type</option>
+													class="form-control chosen" tabindex="-1" id="typeId" 
+													data-rule-required="true" onchange="onTypeChange(this.value)"  >    
+						<option value=""  selected style="text-align: left;">Select Type</option>
 												
 	                                       <c:forEach items="${sfTypeList}" var="sfTypeList">
 	                                       <c:choose>
@@ -645,28 +650,30 @@ input[type="checkbox"] {
 												
 											</c:forEach> 
 												</select>
-											</div>
-										<!-- </div>
+										</div>	
+										<div class="col-sm-9 col-lg-1 controls">	
+											 <input type="button"  value="Search" id="searchItemsByType" class='btn btn-default btn-rounded' data-toggle='modal' data-target='#elegantModalForm7' onclick="onItemGetManualProd()"/>
+									</div>	<!-- </div>
                                             <br><br><br>
 											<div class="form-group"> -->
 											<label class="col-sm-3 col-lg-1 control-label">Product</label>
 											<div class="col-sm-9 col-lg-3 controls">
 												<select data-placeholder="Select Products" name="sfitems"
 													class="form-control chosen" tabindex="-1" id="sfitems" 
-													data-rule-required="true" onchange='onAllSfSelect()'>
+													data-rule-required="true" onchange='onProductChange(this.value)'>
                                                    
 												</select>
 												
 											</div>
-											<label class="col-sm-3 col-lg-1 control-label">Kg</label>
-											<div class="col-sm-9 col-lg-1 controls">
-												<input type="text" name="no_of_kg" id="no_of_kg" value="0" class="form-control" />
+											<label class="col-sm-3 col-lg-1 control-label" style="width: 4.333333%;">Kg</label>
+											<div class="col-sm-9 col-lg-2 controls" style="width: 10.333333%;">
+												<input type="text" name="no_of_kg" id="no_of_kg" readonly style="font-size:10px;" value="0" class="form-control" />
 												
 											</div>
 										<!-- </div><br>
 										 <div class="form-group"> -->
 										 	<div class="col-sm-9 col-lg-1 controls">
-										 <input type="button" class="btn bn-primary" value="Search" id="searchManualItems" onclick="onSfAddManualProdLayering()"/>
+										 <input type="button" class="btn bn-primary" value="Details" id="searchManualItems" onclick="onSfAddManualProdLayering()"/>
 										 </div>
 										 </div>
      		 	<div class="component" >
@@ -771,6 +778,75 @@ input[type="checkbox"] {
 </div>
 </div>
 <!----------------------------------------------End Model 6---------------------------------------------->
+
+<!------------------------------------------ MODEL 7-------------------------------------------------->
+<div class="modal fade" id="elegantModalForm7" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+  aria-hidden="true" >
+  <!-- SAVE LOADER -->
+<div id="overlay8">
+	<div class="clock"></div>
+</div>
+
+  <div class="modal-dialog" role="document" style="width:50%;height:50%; margin-right: 20px; margin-top: 5px;">
+    <!--Content-->
+    <div class="modal-content form-elegant">
+      <!--Header-->
+      <div class="modal-header text-center">
+<!--         <h3 class="modal-title w-100 dark-grey-text font-weight-bold my-3" id="myModalLabel" style="color:#ea4973;"><strong>Items</strong></h3>
+ -->       
+            <a href="#" class="close" data-dismiss="modal" aria-label="Close" id="closeHrefModel7">
+      <img src="${pageContext.request.contextPath}/resources/img/close.png" alt="X" class="imageclass"/>
+    </a> 
+   <!--   <div>
+      </div> -->
+       <div class="modal-body mx-6" >
+      	<form name="modalfrm7" id="modalfrm7"  method="post"> 
+      	 <div class="form-group">	
+      	 <label class="col-sm-3 col-lg-3 control-label" style="color:#e20b31;">Prod.Id :<span id="prodIdSpan7"></span></label>
+      		    <label class="col-sm-3 col-lg-6 control-label" style="color:#e20b31;">Type :<span id="itemNameSpan7"></span></label>
+      		   </div>
+     		 <input type="hidden" name="dept7" id="dept7"  />
+     		 <input type="hidden" name="prodHeaderId7" id="prodHeaderId7"  />
+     		  <input type="hidden" name="itemDetailId7" id="itemDetailId7"  />
+     			<div class="component">
+     			<div class="col-md-7" ></div> 
+     		<label for="search" class="col-md-5" id="search">
+    <i class="fa fa-search" style="font-size:20px"></i>
+									<input type="text"  id="myInput" onkeyup="myFunction()" placeholder="Search items by Name" title="Type in a name" style="border-radius:25px;">
+										</label>  
+									<table width="80%"  id="modeltable10" style="font-size: 13px; font-weight:bold; border: 1px solid;border-color: #91d6b8;"  >
+										<thead>
+											<tr>
+												<th width="17" style="width: 18px">Sr No</th>
+												<th width="120" align="left">Item Name</th>
+												<th width="120" align="left">Qty</th>
+												<th width="100" align="left">UOM</th>
+												
+											</tr>
+										</thead>
+										<tbody>
+											
+										</tbody>
+									</table>
+									
+								</div>
+								
+								</form>	
+						</div>			
+      <!--Body-->
+     <!--  <div class="modal-body mx-4" >
+        Body
+        <div class="text-center mb-1">
+          <button type="button" class="btn btn-primary" id="sbtbtn6" disabled="disabled">Submit</button>
+        </div>         
+      </div> -->
+      <!--Footer-->    
+    </div>
+    <!--/.Content-->
+  </div>
+</div>
+</div>
+<!----------------------------------------------End Model 7---------------------------------------------->
 	<!-- END Main Content -->
 	<footer>
 	<p>2019 © MONGINIS.</p>
@@ -1336,7 +1412,9 @@ input[type="checkbox"] {
 	 }
 }
  function onTypeChange(typeId) { 
- 
+	 $('#modeltable9 td').remove();
+ 	document.getElementById("no_of_kg").value =0;
+
  	var prodHeaderId=$('#prodHeaderId4').val();
      $.getJSON('${findSfByTypeId}', {
     	 typeId : typeId,
@@ -1344,6 +1422,9 @@ input[type="checkbox"] {
          ajax : 'true'
      }, function(data) {
  
+    	 if(typeId==4){
+    		 document.getElementById("searchItemsByType").style.display="none";
+    		 document.getElementById("no_of_kg").readOnly = false;
          var len = data.length;
 
 			$('#sfitems')
@@ -1358,7 +1439,20 @@ input[type="checkbox"] {
                  );
          }
 
-         $("#sfitems").trigger("chosen:updated");
+         $("#sfitems").trigger("chosen:updated"); 
+    	 }else
+    		 {
+    	
+    		 document.getElementById("no_of_kg").readOnly = true;
+    		 document.getElementById("searchItemsByType").style.display="block";
+
+    			$('#sfitems')
+    		    .find('option')
+    		    .remove()
+    		    .end();
+    	         $("#sfitems").trigger("chosen:updated"); 
+
+    		 }
      });
  }
 function onAllSfSelect() { 
@@ -1520,7 +1614,6 @@ $('#searchIssueItems').click(function(){
     function showDetailsForLayerDetails(prodHeaderId,rmId,itemDetailId,prodDate,actQty,rmName)
     {
     	 var itemIds=document.getElementById("layer"+itemDetailId).value;
-         
 
     	 var itemIdsArr;
     	 if(itemIds!=null && itemIds!="")
@@ -1582,6 +1675,131 @@ $('#searchIssueItems').click(function(){
     		
     	});
     	}
+    }
+    </script>
+    <script type="text/javascript">
+    function onItemGetManualProd() 
+    {
+    	document.getElementById("myInput").value="";
+    	var itemDetailId=document.getElementById("itemDetailId5").value;
+    	var dept=document.getElementById("dept5").value;
+    	var prodHeaderId=document.getElementById("prodHeaderId5").value;
+    	var typeId=document.getElementById("typeId").value;
+    	var typeName=$("#typeId option:selected").text();
+    	$("#addManualProdItem").prop("disabled", false);
+    	 $.getJSON('${getItemsByProductionIdCatId}', {
+             prodHeaderId : prodHeaderId,
+             ajax : 'true'
+         }, function(data) {
+     
+             var len = data.length;
+             if(len>0)
+            	 {
+            		$('#modeltable10 td').remove();
+            		document.getElementById("dept7").value="BMS";
+            		document.getElementById("prodHeaderId7").value=prodHeaderId;
+
+            		document.getElementById("prodIdSpan7").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+prodHeaderId;
+            		document.getElementById("itemNameSpan7").innerHTML="&nbsp;&nbsp;&nbsp;&nbsp;"+typeName;
+            		var approveStatusStyle="";var styleClass="";
+                    $.each(data,function(key, data) {
+                    
+        				
+        						var tr = $('<tr id="modeltable10'+data.id+'" ></tr>');
+        					//	if(data.doubleCut==1){
+        						
+        						/* }else{
+        						tr.append($('<td></td>').html("<input type='checkbox'  onclick='showTotalQty()'   name='chkmanualitems'  value="+data.id+"   id=cmi"+data.id+"  >  <label for='cmi"+data.id+"' ></label>"));
+        						} */
+        					  	tr.append($('<td style="padding: 0.3em 0.5em;"></td>').html(key+1));
+        					  	tr.append($('<td style="padding: 0.3em 0.5em;"></td>').html(data.itemName));
+        					 	tr.append($('<td style="padding: 0.3em 0.5em;"></td>').html("<input type='number' onkeypress='return IsNumeric(event);' style='width:100px;border-radius:25px; font-weight:bold;text-align:center;'   ondrop='return false;' min='0'  onpaste='return false;' style='text-align: center;' class='form-control' name='manualItemQty"+data.id+"'  id=manualItemQty"+data.id+" value=0  /> "));
+        					 	tr.append($('<td> style="padding: 0.3em 0.5em;"</td>').html("NOS."));
+        						$('#modeltable10 tbody').append(tr);
+            		});
+                    var tr = $('<tr></tr>');
+        			tr.append($('<td colspan="4" style="text-align:right;"></td>').html(" <button type='button' "+approveStatusStyle+"  class='btn btn-primary' id='addManualProdItem' onclick='onManualProdItemAdd("+typeId+")'  >Add</button>"));
+        			$('#modeltable10 tbody').append(tr); 
+            	 }else
+            		 {
+            		   alert("Items Not Found")
+            		 }
+             
+         });
+    	
+    }
+    function onManualProdItemAdd(itemDetailId)
+    {
+    	localStorage.clear();
+    	$("#addManualProdItem").prop("disabled", true);
+    	$("#overlay8").fadeIn(300);
+    	var prodHeaderId=document.getElementById("prodHeaderId5").value;
+    	var typeId=document.getElementById("typeId").value;
+
+    	$.getJSON('${getItemsByProductionIdCatId}', {
+            prodHeaderId : prodHeaderId,
+            ajax : 'true'
+        }, function(data) {
+        	 var len = data.length;
+             if(len>0)
+            	 {
+    	var sfItems=[];
+    	  $.each(data,function(key, data) {
+    	var manualItemQty= $("#manualItemQty"+data.id).val();
+    	if(manualItemQty>0){
+    	var sf = {
+				  "sfId":data.id,
+				  "rmQty":manualItemQty,
+				  "type":typeId
+				}
+		sfItems.push(sf);
+    	}
+    	  });
+    	
+    	   
+    	$.ajax({
+	             type: "POST",
+	             contentType: "application/json",
+	             url: "${pageContext.request.contextPath}/getItemDetailsForManualProduction",
+	             data: JSON.stringify(sfItems),
+	             dataType: 'json',
+	             timeout: 600000,
+	             success: function (data1) {
+	            	 if(data1.length>0){
+	            			$('#sfitems')
+            			    .find('option')
+            			    .remove()
+            			    .end()
+            			 $("#sfitems").append($("<option style='text-align: left;'></option>").attr( "value","").text("Select Product"));
+            	        
+	            		 $.each(data1,function(key1, data1) {
+	            			 
+	            	        var total=parseFloat((data1.total/1000)).toFixed(3);
+	            	         localStorage.setItem(""+data1.rmId, total);
+	            	             $("#sfitems").append(
+	            	                     $("<option style='text-align: left;'></option>").attr(
+	            	                         "value", data1.rmId).text(data1.rmName+" - "+total)
+	            	                 );
+	            	        
+
+	            		 });
+            	         $("#sfitems").trigger("chosen:updated");
+            	         $('#modeltable10 td').remove();
+            				$("#overlay8").fadeOut(300);
+            				$("#closeHrefModel7")[0].click();
+	            	 }
+	            	 else
+	            		 {
+	            		 $("#overlay8").fadeOut(300);
+	            		    alert("Please Enter Valid Qty!!")
+	            		 }
+	             },
+		             error: function (e) {
+		            	 $("#overlay8").fadeOut(300);
+		             }
+			});
+            	 }
+        });
     }
     </script>
     <script type="text/javascript">
@@ -1679,7 +1897,12 @@ $('#searchIssueItems').click(function(){
     <script type="text/javascript">
     $('#sbtbtn7').click(function(){
 		$("#overlay7").fadeIn(300);
-		
+	/* 	var typeId=document.getElementById("typeId").value;
+		var itemId=0;
+		if(typeId!=4)
+			{
+			itemId=document.getElementById("sfItems").value;
+			} */
 		$.ajax({
 			    type: "POST",
 	             url: "${pageContext.request.contextPath}/postManualData",
@@ -1689,9 +1912,16 @@ $('#searchIssueItems').click(function(){
 				if(data>=1)
 					{
 					$('#modeltable9 td').remove();
-					alert("Mixing and Bom Done")
+					alert("Mixing and Bom Done");
+					document.getElementById("no_of_kg").value = 0;
+		    		  document.getElementById("sfitems").value="";
+		    		  document.getElementById("typeId").value="";
+	    	        
+	    	    	// window.localStorage.removeItem(''+itemId);
+	    	    	 //$("#sfitems option[value="+itemId+"]").remove();
+	    	    	 $("#sfitems").trigger("chosen:updated"); 
 					$("#overlay7").fadeOut(300);
-					$("#closeHrefModel5")[0].click()
+					//$("#closeHrefModel5")[0].click()
 					}
 			}
 		}).done(function() {
@@ -1720,6 +1950,37 @@ $('#searchIssueItems').click(function(){
     	$('#modeltable2 td').remove();
     }
     </script>
+    <script>
+    function onProductChange(id)
+    {
+    	document.getElementById("no_of_kg").value =  localStorage.getItem(""+id);
+
+    }
+    </script>
+    <script>
+	localStorage.clear();
+
+function myFunction() {
+  var input, filter, table, tr, td,td1, i;
+  input = document.getElementById("myInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("modeltable10");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }//end of for
+  
+ 
+  
+}
+</script>
 	<!--basic scripts-->
  <script
 		src="//ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script> 

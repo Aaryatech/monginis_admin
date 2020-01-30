@@ -170,7 +170,7 @@
 														<th>Single Cut</th>
 														<th>Double Cut</th></c:if>
 														<th>Issue Qty</th>
-														<c:choose>
+													<%-- 	<c:choose>
 															<c:when test="${billOfMaterialHeader.status!=0}">
 																<th>Return Qty</th>
 																<th>Reject Qty</th>
@@ -178,7 +178,7 @@
 														</c:choose>
 
 
-
+ --%>
 													</tr>
 												</thead>
 												<tbody>
@@ -210,7 +210,7 @@
 																</c:otherwise>
 															</c:choose>
                                                            
-															<c:choose>
+								<%-- 							<c:choose>
 																<c:when test="${billOfMaterialHeader.status!=0}">
 
 																	<td><c:out value="${bomwithdetaild.returnQty}" /></td>
@@ -219,7 +219,7 @@
 
 
 																</c:when>
-															</c:choose>
+															</c:choose> --%>
 													</c:forEach>
 
 
@@ -238,79 +238,54 @@
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 
 												<input type="submit" class="btn btn-primary"
-													value="Approved">
+													value="Approve">
 											</div>
 										</div>
 									</c:when>
 									
-									<c:when test="${billOfMaterialHeader.status==1}">
+								<%-- 	<c:when test="${billOfMaterialHeader.status==1}">
 										<div align="center" class="form-group">
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 
-												<%-- <a href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"><input type="button" class="btn btn-primary"
-													value="For The Rejection And Return"></a>  --%>
+												<a href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"><input type="button" class="btn btn-primary"
+													value="For The Rejection And Return"></a> 
 												<a href="${pageContext.request.contextPath}/approveRejected?reqId=${billOfMaterialHeader.reqId}"
 													id="disableMe"><input type="button" class="btn btn-primary"
 													value="Approve Rejected" disabled></a>
 
 											</div>
 										</div>
-
-
-									</c:when>
-
-
-
+									</c:when> --%>
+<%-- 
 
 									<c:when test="${billOfMaterialHeader.status ==2}">
 										<div align="center" class="form-group">
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
 
-												<%-- <a href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"><input type="button" class="btn btn-primary"
-													value="For The Rejection And Return"></a> --%> 
-												<a href="${pageContext.request.contextPath}/approveRejected?reqId=${billOfMaterialHeader.reqId}"><input type="button" class="btn btn-primary"
+													<a href="${pageContext.request.contextPath}/approveRejected?reqId=${billOfMaterialHeader.reqId}"><input type="button" class="btn btn-primary"
 													value="Approve Rejected"></a>
 
 											</div>
 										</div>
-
-
-									</c:when>
-
-
-
-									<c:when test="${billOfMaterialHeader.status eq '3'}">
+									</c:when> --%>
+								<%-- 	<c:when test="${billOfMaterialHeader.status eq '3'}">
 										<div align="center" class="form-group">
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-
-												<%-- <a href="${pageContext.request.contextPath}/rejectiontoBms?reqId=${billOfMaterialHeader.reqId}"
-													id="disableMe"><input type="button" class="btn btn-primary"
-													value="For The Rejection And Return" disabled></a>  --%>
 												<a href="${pageContext.request.contextPath}/approveRejected?reqId=${billOfMaterialHeader.reqId}"
 													id="disableMe"><input type="button" class="btn btn-primary"
 													value="Approve Rejected" disabled></a>
-
 											</div>
 										</div>
-
-
-									</c:when>
-
+									</c:when> --%>
 								</c:choose>
-
-
-
-
 								<div class="box-content">
 								</div>
 								<br>
 								<br>
 								<br>
-
-
 							</form>
 						</div>
 					</div>

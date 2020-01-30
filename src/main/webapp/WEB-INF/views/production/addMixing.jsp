@@ -118,9 +118,9 @@
 												class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-0">
 												<input type="submit" class="btn btn-primary"
 													value="Add to Production" id="search">
-                                 &nbsp;&nbsp;   &nbsp;&nbsp;   &nbsp;&nbsp;   &nbsp;&nbsp;
+                                
 								<a href="${pageContext.request.contextPath}/showMixPDF"
-								target="_blank">PDF</a></div>
+								target="_blank" class="btn btn-primary">PDF</a></div>
 											<br>
 										</div>
 							<%-- 		</c:when>
