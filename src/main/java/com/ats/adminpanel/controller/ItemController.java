@@ -766,6 +766,78 @@ public class ItemController {
 			mav.addObject("itemsList", tempItemsList);
 
 			mav.addObject("url", Constants.ITEM_IMAGE_URL);
+			
+			//Sachin 31-01-2020
+			//Sachin 31-0-2020 for Item List Excel Export GFPL Admin
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			map.add("catId", catId);
+			
+			ItemList itemResponse = restTemplate.postForObject(Constants.url + "tally/getAllExcelItemsByCatId",map, ItemList.class);
+
+			List<ExportToExcel> exportToExcelList=new ArrayList<ExportToExcel>();
+				
+				ExportToExcel expoExcel=new ExportToExcel();
+				List<String> rowData=new ArrayList<String>();
+				 
+				
+				rowData.add("Sr. No.");
+				 rowData.add("Id");
+				 rowData.add("Item Code");
+				rowData.add("Item Name");
+				rowData.add("Category");
+				rowData.add("Group1");
+				rowData.add("Group2");
+				rowData.add("HsnCode");
+				rowData.add("UOM");
+				rowData.add("Rate1");
+				rowData.add("Rate2");
+				rowData.add("Rate3");
+				rowData.add("Mrp1");
+				rowData.add("Mrp2");
+				rowData.add("Mrp3");
+				rowData.add("Sgst %");
+				rowData.add("Cgst %");
+				rowData.add("Igst %");
+				rowData.add("Cess %");
+			
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				List<TallyItem> excelItems=itemResponse.getItemList();
+				for(int i=0;i<excelItems.size();i++)
+				{
+					  expoExcel=new ExportToExcel();
+					 rowData=new ArrayList<String>();
+						rowData.add(""+(i+1));
+					rowData.add(""+excelItems.get(i).getId());
+					rowData.add(excelItems.get(i).getItemCode());
+					rowData.add(excelItems.get(i).getItemName());
+					rowData.add(excelItems.get(i).getItemGroup());
+					rowData.add(excelItems.get(i).getSubGroup());
+					rowData.add(excelItems.get(i).getSubSubGroup());
+					rowData.add(excelItems.get(i).getHsnCode());
+					
+					rowData.add(excelItems.get(i).getUom());
+					rowData.add(""+excelItems.get(i).getItemRate1());
+					rowData.add(""+excelItems.get(i).getItemRate2());
+					rowData.add(""+excelItems.get(i).getItemRate3());
+					rowData.add(""+excelItems.get(i).getItemMrp1());
+					rowData.add(""+excelItems.get(i).getItemMrp2());
+					rowData.add(""+excelItems.get(i).getItemMrp3());
+					rowData.add(""+excelItems.get(i).getSgstPer());
+					rowData.add(""+excelItems.get(i).getCgstPer());
+					rowData.add(""+excelItems.get(i).getIgstPer());
+					rowData.add(""+excelItems.get(i).getCessPer());
+					
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					
+				}
+			
+				
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelList", exportToExcelList);
+				session.setAttribute("excelName", "itemsList");
 		} catch (Exception e) {
 			System.out.println("exce in listing filtered group itme" + e.getMessage());
 		}

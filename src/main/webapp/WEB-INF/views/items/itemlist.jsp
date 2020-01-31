@@ -330,7 +330,7 @@
 											 
 											 
 											<div class="col-sm-3  controls">
-											 <input type="button" id="expExcel" ${flag}  class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();">
+											 <input type="button" id="expExcel"  class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();">
 											</div>
 											</div>
 					</div>
