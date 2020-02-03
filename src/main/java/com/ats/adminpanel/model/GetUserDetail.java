@@ -17,7 +17,9 @@ public class GetUserDetail {
     private String roleName;
     
     private String typeName;
-
+    private String email;
+	
+    private String contact;
 	
 
 
@@ -113,13 +115,33 @@ public class GetUserDetail {
 	}
 
 
+	public String getEmail() {
+		return email;
+	}
+
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+
+	public String getContact() {
+		return contact;
+	}
+
+
+	public void setContact(String contact) {
+		this.contact = contact;
+	}
+
+
 	@Override
 	public String toString() {
 		return "GetUserDetail [id=" + id + ", username=" + username + ", password=" + password + ", usertype="
 				+ usertype + ", delStatus=" + delStatus + ", deptId=" + deptId + ", roleId=" + roleId + ", deptName="
-				+ deptName + ", roleName=" + roleName + ", typeName=" + typeName + "]";
+				+ deptName + ", roleName=" + roleName + ", typeName=" + typeName + ", email=" + email + ", contact="
+				+ contact + "]";
 	}
-
 
 	
 }

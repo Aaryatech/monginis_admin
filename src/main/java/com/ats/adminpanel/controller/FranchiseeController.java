@@ -63,6 +63,7 @@ import com.ats.adminpanel.model.franchisee.AllFranchiseeAndMenu;
 import com.ats.adminpanel.model.franchisee.AllFranchiseeList;
 import com.ats.adminpanel.model.franchisee.AllMenuResponse;
 import com.ats.adminpanel.model.franchisee.CommonConf;
+import com.ats.adminpanel.model.franchisee.FrRoutListBean;
 import com.ats.adminpanel.model.franchisee.FrTarget;
 import com.ats.adminpanel.model.franchisee.FrTargetList;
 import com.ats.adminpanel.model.franchisee.FrTotalSale;
@@ -2707,5 +2708,45 @@ public class FranchiseeController {
 			logger.info("Exception in getInauguratedFranchisee" + e.getMessage());
 		}
 		return mav;
+	}
+	
+	/**************************************************************/
+	//listAllFranchisee
+	@RequestMapping(value = "/getFranchiseeListByStatus", method=RequestMethod.GET )
+	public @ResponseBody FrRoutListBean getFranchiseeListByStatus(HttpServletRequest request, HttpServletResponse response) {
+		RestTemplate rest = new RestTemplate();
+		
+		FrRoutListBean frRoute = new FrRoutListBean();
+		try {
+			int status = Integer.parseInt(request.getParameter("status"));
+			logger.info("Status is----------" + status);
+			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("status", status);
+			FranchiseeList[] frArr = rest.postForObject(Constants.url + "getAllFranchiseeByStatus", map, 
+					FranchiseeList[].class);
+			List<FranchiseeList> frList = new ArrayList<FranchiseeList>(Arrays.asList(frArr));
+			/*
+			 * AllFranchiseeList allFranchiseeList = rest.postForObject(Constants.url +
+			 * "getAllFranchiseeByStatus", map, AllFranchiseeList.class);
+			 */
+			System.err.println(frList);
+			
+			Route[] routeArr = rest.getForObject(Constants.url + "showFrRouteList",
+					Route[].class);
+			List<Route> route = new ArrayList<Route>(Arrays.asList(routeArr));
+
+			
+			
+			
+			frRoute.setFr(frList);
+			frRoute.setRoute(route);
+			
+			logger.info("FrRoutListBean ---------" + frRoute);
+		}catch (Exception e) {
+			logger.info("Exception in getFranchiseeListByStatus" + e.getMessage());
+		}
+		return frRoute;
+		
 	}
 }

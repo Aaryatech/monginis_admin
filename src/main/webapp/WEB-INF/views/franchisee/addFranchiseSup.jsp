@@ -173,7 +173,7 @@
 									<div class="col-sm-9 col-lg-3 controls">
 										<input type="text" name="pass1" id="pass1"
 											placeholder="User1 Password" class="form-control"
-											data-rule-required="true" value="${frSup.pass1}" readonly />
+											data-rule-required="true" value="${frSup.pass1}" />
 									</div>
 								</div>
 								<div class="form-group">

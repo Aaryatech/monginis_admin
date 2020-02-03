@@ -6,6 +6,7 @@
 
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
 <body>
+<c:url var="getFranchiseeListByStatus" value="/getFranchiseeListByStatus" />
 
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
@@ -39,7 +40,7 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
-
+			
 
 			<c:set var="isEdit" value="0">
 			</c:set>
@@ -96,65 +97,88 @@
 											class="fa fa-chevron-up"></i></a>
 									</div>
 								</div>
+								
 								<div class="box-content">
+								
 									<div class="col-md-9"></div>
 									<label for="search" class="col-md-3" id="search"> <i
 										class="fa fa-search" style="font-size: 20px"></i> <input
 										type="text" id="myInput" onkeyup="myFunction()"
 										placeholder="Search.." title="Type in a name">
 									</label>
+									<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Franchisee</label>
+											<div class="col-sm-9 col-lg-10 controls">
+												<label class="radio-inline"> <input type="radio" onclick="showFranchisee(this.value)" 
+													name="fr_state" id="optionsRadios1" value="-1" checked />
+													All
+												</label> <label class="radio-inline"> <input type="radio"
+													name="fr_state" id="optionsRadios1" value="0" onclick="showFranchisee(this.value)" >
+													Active
+												</label>
+												
+												<label class="radio-inline"> <input type="radio"
+													name="fr_state" id="optionsRadios1" value="1" onclick="showFranchisee(this.value)" >
+													Inactive
+												</label>
+												<label class="radio-inline"> <input type="radio"
+													name="fr_state" id="optionsRadios1" value="2" onclick="showFranchisee(this.value)" >
+													Non-Regular Party
+												</label>
+											</div>
+										</div>
 									<div class="clearfix"></div>
+									
 									<div id="table-scroll" class="table-scroll">
-										<div id="faux-table" class="faux-table" aria="hidden">
+										<!-- <div id="faux-table" class="faux-table" aria="hidden">
 											<table id="table2" class="main-table">
 												<thead>
 													<tr class="bgpink">
 														<th width="158" style="width: 18px" align="left">#</th>
-														<th class="col-md-2">Code</th>
+														<th class="col-md-2">Code2</th>
 														<th class="col-md-2">Name</th>
 														<th class="col-md-2">Image</th>
 														<th class="col-md-2">Owner</th>
 														<th class="col-md-2">City</th>
 														<th class="col-md-2">Mobile No.</th>
 														<th class="col-md-2">Route</th>
-														<!--  <th width="70" align="left">Rate Type</th> -->
-														<!--  <th class="col-md-2">GST Type</th> -->
-														<th class="col-md-2">Stock Type</th>
+														<th class="col-md-2">Password</th>
 														<th class="col-md-2">Rating</th>
-														<!--                 <th class="col-md-2">Status</th>
- -->
+														<th class="col-md-2">Status</th>
+
 														<th class="col-md-2" width="90px">Action</th>
 													</tr>
 												</thead>
+												
 											</table>
 
-										</div>
-										<div class="table-wrap">
+										</div> -->
+										
+										<!-- 1 All Franchisee-->
+										<div class="table-wrap" id="tab1">
 
 											<table id="table1" class="table table-advance">
 												<thead>
 													<tr class="bgpink">
 														<th width="138" style="width: 18px" align="left">#</th>
-														<th class="col-md-2">Code</th>
+														<th class="col-md-2">Code1</th>
 														<th class="col-md-2">Name</th>
 														<th class="col-md-2">Image</th>
 														<th class="col-md-2">Owner</th>
 														<th class="col-md-2">City</th>
 														<th class="col-md-2">Mobile No.</th>
 														<th class="col-md-2">Route</th>
-														<!--    <th class="col-md-2">Rate Type</th>
-                                          <th class="col-md-2">GST Type</th> -->
-														<th class="col-md-2">Stock Type</th>
-														<th class="col-md-2">Rating</th>
-														<!--   <th class="col-md-2">Status</th> -->
+														<th class="col-md-2">Password</th>
+														<!-- <th class="col-md-2">Rating</th> -->
+														<!--<th class="col-md-2">Status</th> -->
 														<th class="col-md-2" width="90px">Action</th>
 													</tr>
 												</thead>
-												<tbody style="padding-top: 100px">
-
+												<tbody style="padding-top: 100px" >
+	
 													<c:forEach items="${franchiseeList}" var="franchiseeList"
 														varStatus="count">
-
+														
 														<tr>
 															<td><c:out value="${count.index+1}"></c:out></td>
 															<td align="left"><c:out
@@ -186,37 +210,13 @@
 																		<c:otherwise></c:otherwise>
 																	</c:choose>
 																</c:forEach></td>
-															<%--   <td align="left">
-               <c:choose>
-                    <c:when test="${franchiseeList.frRateCat==1}">
-                          <c:out value="Local Rate"/> 
-                    </c:when>
-                    <c:when test="${franchiseeList.frRateCat==2}">
-                          <c:out value="Outstation Rate"/> 
-                    </c:when>
-                    <c:when test="${franchiseeList.frRateCat==3}">
-                          <c:out value="Special Rate"/> 
-                    </c:when>
-                    <c:otherwise></c:otherwise>
-              </c:choose>
-             </td> --%>
+																
+																<td align="left"><c:out
+																	value="${franchiseeList.frPassword}" /></td>
+															
 
-															<%--    <td align="left">
-                 <c:choose>
-                    <c:when test="${franchiseeList.frGstType==0}">
-                          <c:out value="Non-Registered"/> 
-                    </c:when>
-                     <c:when test="${franchiseeList.frGstType==2000000}">
-                          <c:out value="Composite"/> 
-                    </c:when>
-                     <c:when test="${franchiseeList.frGstType==10000000}">
-                          <c:out value="Above 75 lakh"/> 
-                    </c:when>
-                <c:otherwise><c:out value="Above 75 lakh"/> </c:otherwise>
-              </c:choose>
-                
-               </td> --%>
-															<td align="left"><c:choose>
+														
+															<%-- <td align="left"><c:choose>
 																	<c:when test="${franchiseeList.stockType==1}">
 																		<c:out value="Type1" />
 																	</c:when>
@@ -239,8 +239,8 @@
 																		<c:out value="Type7" />
 																	</c:when>
 																	<c:otherwise></c:otherwise>
-																</c:choose></td>
-															<td align="left"><c:choose>
+																</c:choose></td> --%>
+														<%-- 	<td align="left"><c:choose>
 																	<c:when test="${franchiseeList.frRate==0}">0.5</c:when>
 																	<c:when test="${franchiseeList.frRate==1}">1</c:when>
 																	<c:when test="${franchiseeList.frRate==2}">1.5</c:when>
@@ -251,45 +251,30 @@
 																	<c:when test="${franchiseeList.frRate==7}">4</c:when>
 																	<c:when test="${franchiseeList.frRate==8}">4.5</c:when>
 																	<c:when test="${franchiseeList.frRate==9}">5</c:when>
-																</c:choose></td>
-															<%--   <td align="left">
-             <c:choose>
-  <c:when test="${franchiseeList.delStatus==0}">
-  Active    
-  </c:when>
- 
-  <c:otherwise>
- In-Active
-  </c:otherwise>
-</c:choose>
-              </td> --%>
-
-
-
-
-
-
+																</c:choose></td> --%>
 
 															<c:choose>
 																<c:when test="${isEdit==1 and isDelete==1}">
 
 																	<td align="left"><a
 																		href="updateFranchisee/${franchiseeList.frId}"><span
-																			class="glyphicon glyphicon-edit"></span></a>&nbsp; <a
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp;
+																			 <%-- <a
 																		href="deleteFranchisee/${franchiseeList.frId}"
 																		onClick="return confirm('Are you sure want to delete this record');"><span
-																			class="glyphicon glyphicon-remove"></span></a></td>
+																			class="glyphicon glyphicon-remove"></span></a> --%>
+																			</td>
 																</c:when>
 
 																<c:when test="${isEdit==1 and isDelete==0}">
 
 																	<td align="left"><a
 																		href="updateFranchisee/${franchiseeList.frId}"><span
-																			class="glyphicon glyphicon-edit"></span></a>&nbsp; <a
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp; <%-- <a
 																		href="deleteFranchisee/${franchiseeList.frId}"
 																		class="disableClick"
 																		onClick="return confirm('Are you sure want to delete this record');"><span
-																			class="glyphicon glyphicon-remove"></span></a></td>
+																			class="glyphicon glyphicon-remove"></span></a> --%></td>
 																</c:when>
 
 																<c:when test="${isEdit==0 and isDelete==1}">
@@ -297,10 +282,12 @@
 																	<td align="left"><a
 																		href="updateFranchisee/${franchiseeList.frId}"
 																		class="disableClick"><span
-																			class="glyphicon glyphicon-edit"></span></a>&nbsp; <a
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp;
+																			 <%-- <a
 																		href="deleteFranchisee/${franchiseeList.frId}"
 																		onClick="return confirm('Are you sure want to delete this record');"><span
-																			class="glyphicon glyphicon-remove"></span></a></td>
+																			class="glyphicon glyphicon-remove">EEEE</span></a> --%>
+																			</td>
 																</c:when>
 
 																<c:otherwise>
@@ -309,11 +296,13 @@
 																	<td align="left"><a
 																		href="updateFranchisee/${franchiseeList.frId}"
 																		class="disableClick"><span
-																			class="glyphicon glyphicon-edit"></span></a>&nbsp; <a
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp; 
+																			<%-- <a
 																		href="deleteFranchisee/${franchiseeList.frId}"
 																		class="disableClick"
 																		onClick="return confirm('Are you sure want to delete this record');"><span
-																			class="glyphicon glyphicon-remove"></span></a></td>
+																			class="glyphicon glyphicon-remove"></span></a> --%>
+																			</td>
 
 																</c:otherwise>
 															</c:choose>
@@ -332,6 +321,523 @@
 
 											</table>
 										</div>
+										<!-- 1 -->
+										
+											<!-- 2 Active Franchisee-->
+											<c:set value="0" var="srno"/>
+										<div class="table-wrap" id="tab2" style="display: none;">
+
+											<table id="table1" class="table table-advance">
+												<thead>
+													<tr class="bgpink">
+														<th width="138" style="width: 18px" align="left">#</th>
+														<th class="col-md-2">Code1</th>
+														<th class="col-md-2">Name</th>
+														<th class="col-md-2">Image</th>
+														<th class="col-md-2">Owner</th>
+														<th class="col-md-2">City</th>
+														<th class="col-md-2">Mobile No.</th>
+														<th class="col-md-2">Route</th>
+														<th class="col-md-2">Password</th>
+														<!-- <th class="col-md-2">Rating</th> -->
+														<!--<th class="col-md-2">Status</th> -->
+														<th class="col-md-2" width="90px">Action</th>
+													</tr>
+												</thead>
+												<tbody style="padding-top: 100px" >
+	
+													<c:forEach items="${franchiseeList}" var="franchiseeList"
+														varStatus="count">
+														<%-- <c:set value="${count.index+1}" var="sr"/> --%>
+														<c:if test="${franchiseeList.delStatus==0}">
+														<tr>														
+															<td><c:out value="${srno=srno+1}"/></td>
+															
+															<td align="left"><c:out
+																	value="${franchiseeList.frCode}" /></td>
+															<td align="left"><c:out
+																	value="${franchiseeList.frName}" /></td>
+															<td align="left"><img
+																src="${url}${franchiseeList.frImage}" height="80"
+																width="80"
+																onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';" />
+
+
+															</td>
+															<td align="left"><c:out
+																	value="${franchiseeList.frOwner}" /></td>
+															<td align="left"><c:out
+																	value="${franchiseeList.frCity}" /></td>
+															<td align="left"><c:out
+																	value="${franchiseeList.frMob}" /></td>
+															<td align="left"><c:forEach items="${routeList}"
+																	var="routeList">
+
+																	<c:choose>
+																		<c:when
+																			test="${routeList.routeId==franchiseeList.frRouteId}">
+																			<c:out value="${routeList.routeName}" />
+																		</c:when>
+
+																		<c:otherwise></c:otherwise>
+																	</c:choose>
+																</c:forEach></td>
+																
+																<td align="left"><c:out
+																	value="${franchiseeList.frPassword}" /></td>
+															
+
+														
+															<%-- <td align="left"><c:choose>
+																	<c:when test="${franchiseeList.stockType==1}">
+																		<c:out value="Type1" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==2}">
+																		<c:out value="Type2" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==3}">
+																		<c:out value="Type3" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==4}">
+																		<c:out value="Type4" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==5}">
+																		<c:out value="Type5" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==6}">
+																		<c:out value="Type6" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==7}">
+																		<c:out value="Type7" />
+																	</c:when>
+																	<c:otherwise></c:otherwise>
+																</c:choose></td> --%>
+														<%-- 	<td align="left"><c:choose>
+																	<c:when test="${franchiseeList.frRate==0}">0.5</c:when>
+																	<c:when test="${franchiseeList.frRate==1}">1</c:when>
+																	<c:when test="${franchiseeList.frRate==2}">1.5</c:when>
+																	<c:when test="${franchiseeList.frRate==3}">2</c:when>
+																	<c:when test="${franchiseeList.frRate==4}">2.5</c:when>
+																	<c:when test="${franchiseeList.frRate==5}">3</c:when>
+																	<c:when test="${franchiseeList.frRate==6}">3.5</c:when>
+																	<c:when test="${franchiseeList.frRate==7}">4</c:when>
+																	<c:when test="${franchiseeList.frRate==8}">4.5</c:when>
+																	<c:when test="${franchiseeList.frRate==9}">5</c:when>
+																</c:choose></td> --%>
+
+															<c:choose>
+																<c:when test="${isEdit==1 and isDelete==1}">
+
+																	<td align="left"><a
+																		href="updateFranchisee/${franchiseeList.frId}"><span
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp;
+																			 <%-- <a
+																		href="deleteFranchisee/${franchiseeList.frId}"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove"></span></a> --%>
+																			</td>
+																</c:when>
+
+																<c:when test="${isEdit==1 and isDelete==0}">
+
+																	<td align="left"><a
+																		href="updateFranchisee/${franchiseeList.frId}"><span
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp; <%-- <a
+																		href="deleteFranchisee/${franchiseeList.frId}"
+																		class="disableClick"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove"></span></a> --%></td>
+																</c:when>
+
+																<c:when test="${isEdit==0 and isDelete==1}">
+
+																	<td align="left"><a
+																		href="updateFranchisee/${franchiseeList.frId}"
+																		class="disableClick"><span
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp;
+																			 <%-- <a
+																		href="deleteFranchisee/${franchiseeList.frId}"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove">EEEE</span></a> --%>
+																			</td>
+																</c:when>
+
+																<c:otherwise>
+
+
+																	<td align="left"><a
+																		href="updateFranchisee/${franchiseeList.frId}"
+																		class="disableClick"><span
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp; 
+																			<%-- <a
+																		href="deleteFranchisee/${franchiseeList.frId}"
+																		class="disableClick"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove"></span></a> --%>
+																			</td>
+
+																</c:otherwise>
+															</c:choose>
+
+															<%-- <td align="left"><a
+																href="updateFranchisee/${franchiseeList.frId}"><span
+																	class="glyphicon glyphicon-edit"></span></a>&nbsp; <a
+																href="deleteFranchisee/${franchiseeList.frId}"
+																onClick="return confirm('Are you sure want to delete this record');"><span
+																	class="glyphicon glyphicon-remove"></span></a></td> --%>
+														</tr>
+</c:if>
+													</c:forEach>
+
+												</tbody>
+
+											</table>
+										</div>
+										<!-- 2 -->
+										
+											<!-- 3 Inactive Franchisee-->
+											<c:set value="0" var="srno"/>
+										<div class="table-wrap" id="tab3" style="display: none;">
+
+											<table id="table1" class="table table-advance">
+												<thead>
+													<tr class="bgpink">
+														<th width="138" style="width: 18px" align="left">#</th>
+														<th class="col-md-2">Code1</th>
+														<th class="col-md-2">Name</th>
+														<th class="col-md-2">Image</th>
+														<th class="col-md-2">Owner</th>
+														<th class="col-md-2">City</th>
+														<th class="col-md-2">Mobile No.</th>
+														<th class="col-md-2">Route</th>
+														<th class="col-md-2">Password</th>
+														<!-- <th class="col-md-2">Rating</th> -->
+														<!--<th class="col-md-2">Status</th> -->
+														<th class="col-md-2" width="90px">Action</th>
+													</tr>
+												</thead>
+												<tbody style="padding-top: 100px" >
+												
+													<c:forEach items="${franchiseeList}" var="franchiseeList"
+														varStatus="count">
+														<c:if test="${franchiseeList.delStatus==1}">
+														<tr>														
+															<td><c:out value="${srno=srno+1}"/></td>
+															
+															<td align="left"><c:out
+																	value="${franchiseeList.frCode}" /></td>
+															<td align="left"><c:out
+																	value="${franchiseeList.frName}" /></td>
+															<td align="left"><img
+																src="${url}${franchiseeList.frImage}" height="80"
+																width="80"
+																onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';" />
+
+
+															</td>
+															<td align="left"><c:out
+																	value="${franchiseeList.frOwner}" /></td>
+															<td align="left"><c:out
+																	value="${franchiseeList.frCity}" /></td>
+															<td align="left"><c:out
+																	value="${franchiseeList.frMob}" /></td>
+															<td align="left"><c:forEach items="${routeList}"
+																	var="routeList">
+
+																	<c:choose>
+																		<c:when
+																			test="${routeList.routeId==franchiseeList.frRouteId}">
+																			<c:out value="${routeList.routeName}" />
+																		</c:when>
+
+																		<c:otherwise></c:otherwise>
+																	</c:choose>
+																</c:forEach></td>
+																
+																<td align="left"><c:out
+																	value="${franchiseeList.frPassword}" /></td>
+															
+
+														
+															<%-- <td align="left"><c:choose>
+																	<c:when test="${franchiseeList.stockType==1}">
+																		<c:out value="Type1" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==2}">
+																		<c:out value="Type2" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==3}">
+																		<c:out value="Type3" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==4}">
+																		<c:out value="Type4" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==5}">
+																		<c:out value="Type5" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==6}">
+																		<c:out value="Type6" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==7}">
+																		<c:out value="Type7" />
+																	</c:when>
+																	<c:otherwise></c:otherwise>
+																</c:choose></td> --%>
+														<%-- 	<td align="left"><c:choose>
+																	<c:when test="${franchiseeList.frRate==0}">0.5</c:when>
+																	<c:when test="${franchiseeList.frRate==1}">1</c:when>
+																	<c:when test="${franchiseeList.frRate==2}">1.5</c:when>
+																	<c:when test="${franchiseeList.frRate==3}">2</c:when>
+																	<c:when test="${franchiseeList.frRate==4}">2.5</c:when>
+																	<c:when test="${franchiseeList.frRate==5}">3</c:when>
+																	<c:when test="${franchiseeList.frRate==6}">3.5</c:when>
+																	<c:when test="${franchiseeList.frRate==7}">4</c:when>
+																	<c:when test="${franchiseeList.frRate==8}">4.5</c:when>
+																	<c:when test="${franchiseeList.frRate==9}">5</c:when>
+																</c:choose></td> --%>
+
+															<c:choose>
+																<c:when test="${isEdit==1 and isDelete==1}">
+
+																	<td align="left"><a
+																		href="updateFranchisee/${franchiseeList.frId}"><span
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp;
+																			 <%-- <a
+																		href="deleteFranchisee/${franchiseeList.frId}"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove"></span></a> --%>
+																			</td>
+																</c:when>
+
+																<c:when test="${isEdit==1 and isDelete==0}">
+
+																	<td align="left"><a
+																		href="updateFranchisee/${franchiseeList.frId}"><span
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp; <%-- <a
+																		href="deleteFranchisee/${franchiseeList.frId}"
+																		class="disableClick"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove"></span></a> --%></td>
+																</c:when>
+
+																<c:when test="${isEdit==0 and isDelete==1}">
+
+																	<td align="left"><a
+																		href="updateFranchisee/${franchiseeList.frId}"
+																		class="disableClick"><span
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp;
+																			 <%-- <a
+																		href="deleteFranchisee/${franchiseeList.frId}"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove">EEEE</span></a> --%>
+																			</td>
+																</c:when>
+
+																<c:otherwise>
+
+
+																	<td align="left"><a
+																		href="updateFranchisee/${franchiseeList.frId}"
+																		class="disableClick"><span
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp; 
+																			<%-- <a
+																		href="deleteFranchisee/${franchiseeList.frId}"
+																		class="disableClick"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove"></span></a> --%>
+																			</td>
+
+																</c:otherwise>
+															</c:choose>
+
+															<%-- <td align="left"><a
+																href="updateFranchisee/${franchiseeList.frId}"><span
+																	class="glyphicon glyphicon-edit"></span></a>&nbsp; <a
+																href="deleteFranchisee/${franchiseeList.frId}"
+																onClick="return confirm('Are you sure want to delete this record');"><span
+																	class="glyphicon glyphicon-remove"></span></a></td> --%>
+														</tr>
+</c:if>
+													</c:forEach>
+
+												</tbody>
+
+											</table>
+										</div>
+										<!-- 3 -->
+										
+											<!-- 4 Non-Regular Party-->
+											<c:set value="0" var="srno"/>
+										<div class="table-wrap" id="tab4" style="display: none;">
+
+											<table id="table1" class="table table-advance">
+												<thead>
+													<tr class="bgpink">
+														<th width="138" style="width: 18px" align="left">#</th>
+														<th class="col-md-2">Code1</th>
+														<th class="col-md-2">Name</th>
+														<th class="col-md-2">Image</th>
+														<th class="col-md-2">Owner</th>
+														<th class="col-md-2">City</th>
+														<th class="col-md-2">Mobile No.</th>
+														<th class="col-md-2">Route</th>
+														<th class="col-md-2">Password</th>
+														<!-- <th class="col-md-2">Rating</th> -->
+														<!--<th class="col-md-2">Status</th> -->
+														<th class="col-md-2" width="90px">Action</th>
+													</tr>
+												</thead>
+												<tbody style="padding-top: 100px" >
+	
+													<c:forEach items="${franchiseeList}" var="franchiseeList"
+														varStatus="count">
+														
+														<c:if test="${franchiseeList.delStatus==2}">
+														<tr>
+															<td><c:out value="${srno=srno+1}"/></td>
+															<td align="left"><c:out
+																	value="${franchiseeList.frCode}" /></td>
+															<td align="left"><c:out
+																	value="${franchiseeList.frName}" /></td>
+															<td align="left"><img
+																src="${url}${franchiseeList.frImage}" height="80"
+																width="80"
+																onerror="this.src='${pageContext.request.contextPath}/resources/img/No_Image_Available.jpg';" />
+
+
+															</td>
+															<td align="left"><c:out
+																	value="${franchiseeList.frOwner}" /></td>
+															<td align="left"><c:out
+																	value="${franchiseeList.frCity}" /></td>
+															<td align="left"><c:out
+																	value="${franchiseeList.frMob}" /></td>
+															<td align="left"><c:forEach items="${routeList}"
+																	var="routeList">
+
+																	<c:choose>
+																		<c:when
+																			test="${routeList.routeId==franchiseeList.frRouteId}">
+																			<c:out value="${routeList.routeName}" />
+																		</c:when>
+
+																		<c:otherwise></c:otherwise>
+																	</c:choose>
+																</c:forEach></td>
+																
+																<td align="left"><c:out
+																	value="${franchiseeList.frPassword}" /></td>
+															
+
+														
+															<%-- <td align="left"><c:choose>
+																	<c:when test="${franchiseeList.stockType==1}">
+																		<c:out value="Type1" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==2}">
+																		<c:out value="Type2" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==3}">
+																		<c:out value="Type3" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==4}">
+																		<c:out value="Type4" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==5}">
+																		<c:out value="Type5" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==6}">
+																		<c:out value="Type6" />
+																	</c:when>
+																	<c:when test="${franchiseeList.stockType==7}">
+																		<c:out value="Type7" />
+																	</c:when>
+																	<c:otherwise></c:otherwise>
+																</c:choose></td> --%>
+														<%-- 	<td align="left"><c:choose>
+																	<c:when test="${franchiseeList.frRate==0}">0.5</c:when>
+																	<c:when test="${franchiseeList.frRate==1}">1</c:when>
+																	<c:when test="${franchiseeList.frRate==2}">1.5</c:when>
+																	<c:when test="${franchiseeList.frRate==3}">2</c:when>
+																	<c:when test="${franchiseeList.frRate==4}">2.5</c:when>
+																	<c:when test="${franchiseeList.frRate==5}">3</c:when>
+																	<c:when test="${franchiseeList.frRate==6}">3.5</c:when>
+																	<c:when test="${franchiseeList.frRate==7}">4</c:when>
+																	<c:when test="${franchiseeList.frRate==8}">4.5</c:when>
+																	<c:when test="${franchiseeList.frRate==9}">5</c:when>
+																</c:choose></td> --%>
+
+															<c:choose>
+																<c:when test="${isEdit==1 and isDelete==1}">
+
+																	<td align="left"><a
+																		href="updateFranchisee/${franchiseeList.frId}"><span
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp;
+																			 <%-- <a
+																		href="deleteFranchisee/${franchiseeList.frId}"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove"></span></a> --%>
+																			</td>
+																</c:when>
+
+																<c:when test="${isEdit==1 and isDelete==0}">
+
+																	<td align="left"><a
+																		href="updateFranchisee/${franchiseeList.frId}"><span
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp; <%-- <a
+																		href="deleteFranchisee/${franchiseeList.frId}"
+																		class="disableClick"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove"></span></a> --%></td>
+																</c:when>
+
+																<c:when test="${isEdit==0 and isDelete==1}">
+
+																	<td align="left"><a
+																		href="updateFranchisee/${franchiseeList.frId}"
+																		class="disableClick"><span
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp;
+																			 <%-- <a
+																		href="deleteFranchisee/${franchiseeList.frId}"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove">EEEE</span></a> --%>
+																			</td>
+																</c:when>
+
+																<c:otherwise>
+
+
+																	<td align="left"><a
+																		href="updateFranchisee/${franchiseeList.frId}"
+																		class="disableClick"><span
+																			class="glyphicon glyphicon-edit"></span></a>&nbsp; 
+																			<%-- <a
+																		href="deleteFranchisee/${franchiseeList.frId}"
+																		class="disableClick"
+																		onClick="return confirm('Are you sure want to delete this record');"><span
+																			class="glyphicon glyphicon-remove"></span></a> --%>
+																			</td>
+
+																</c:otherwise>
+															</c:choose>
+
+															<%-- <td align="left"><a
+																href="updateFranchisee/${franchiseeList.frId}"><span
+																	class="glyphicon glyphicon-edit"></span></a>&nbsp; <a
+																href="deleteFranchisee/${franchiseeList.frId}"
+																onClick="return confirm('Are you sure want to delete this record');"><span
+																	class="glyphicon glyphicon-remove"></span></a></td> --%>
+														</tr>
+														</c:if>
+
+													</c:forEach>
+
+												</tbody>
+
+											</table>
+										</div>
+										<!-- 4 -->
+										
 									</div>
 
 								</div>
@@ -427,6 +933,115 @@
 
 
 </body>
+
+<script type="text/javascript">
+function showFranchisee(status) {
+	//var url = ${url}
+	
+	if(status==0){
+		//alert("option-----" + status+"  "+"Active");
+		document.getElementById("tab2").style.display = "block";
+		
+		document.getElementById("tab1").style.display = "none";
+		document.getElementById("tab3").style.display = "none";
+		document.getElementById("tab4").style.display = "none";
+		
+	}else if(status==1){
+		//alert("option-----" + status+"  "+"Inactive");
+		document.getElementById("tab3").style.display = "block";
+		
+		document.getElementById("tab1").style.display = "none";
+		document.getElementById("tab2").style.display = "none";
+		document.getElementById("tab4").style.display = "none";
+	}
+	else if(status==2){
+		//alert("option-----" + status+"  "+"Non Regular");
+		document.getElementById("tab4").style.display = "block";
+		
+		document.getElementById("tab1").style.display = "none";
+		document.getElementById("tab2").style.display = "none";
+		document.getElementById("tab3").style.display = "none";
+	}
+	else{
+		//alert("option-----" + status+"  "+"All");
+		document.getElementById("tab1").style.display = "block";
+		document.getElementById("tab2").style.display = "none";
+		document.getElementById("tab3").style.display = "none";
+		document.getElementById("tab4").style.display = "none";
+	}
+	
+		/* $
+				.getJSON(
+						'${getFranchiseeListByStatus}',
+						{
+							status : status,
+							ajax : 'true',
+
+						},
+						function(data) {
+
+							alert("franchiseeList-----"+JSON.stringify(data.fr));
+							alert("route-------"+JSON.stringify(data.route.routeName));
+
+							$('#table1 td').remove();
+							
+							
+
+							 $
+									.each(
+											data.fr,
+											function(key, item) {
+												alert("IN-------"+JSON.stringify(item));
+											
+									
+									var tr = $('<tr></tr>');
+
+												tr.append($('<td></td>').html(
+														key + 1));
+
+												tr.append($('<td></td>').html(
+														item.frCode));
+
+												tr.append($('<td></td>').html(
+														item.frName));
+
+												tr.append($('<td></td>').html(
+														item.frImage));
+
+												tr.append($('<td></td>').html(
+														item.frOwner));
+
+												tr.append($('<td></td>').html(
+														item.frCity));
+
+												tr.append($('<td></td>').html(
+														item.frMob));
+												
+												tr.append($('<td></td>').html(
+														item.frRouteId));
+
+												tr.append($('<td></td>').html(
+														item.frPassword));
+
+												tr
+														.append($('<td></td>')
+																.html(
+																		"<a href='#' class='action_btn' onclick=editItemDetail("
+																				+ key
+																				+ ")> <abbr title='edit'> <i class='fa fa-edit  fa-lg' ></i></abbr> </a> <a href='#' class='action_btn'onclick=deleteItemDetail("
+																				+ key
+																				+ ")><abbr title='Delete'><i class='fa fa-trash-o  fa-lg'></i></abbr></a>"));
+ 
+									
+												$('#table1 tbody').append(tr);
+
+											});
+
+						 }); */
+
+	}
+</script>
+
 
 <script>
 function myFunction() {

@@ -532,6 +532,11 @@
 															name="fr_status" id="optionsRadios1" 
 															value="1" checked/> In-Active
 														</label>
+														
+														  <label class="radio-inline"> <input type="radio"
+															name="fr_status" id="optionsRadios1" value="2" />
+															Non-Regular Party
+															</label>
 
 													</c:when>
 													<c:when test="${strFrStatus.equals('0')}">
@@ -544,7 +549,29 @@
 															name="fr_status" id="optionsRadios1" value="1" />
 															In-Active
 														</label>
+														<label class="radio-inline"> <input type="radio"
+															name="fr_status" id="optionsRadios1" value="2" />
+															Non-Regular Party
+															</label>
 													</c:when>
+													
+														<c:when test="${strFrStatus.equals('2')}">
+													
+														<label class="radio-inline"> <input type="radio"
+															name="fr_status" id="optionsRadios1" 
+															value="0" /> Active
+														</label>
+														<label class="radio-inline"> <input type="radio"
+															name="fr_status" id="optionsRadios1" value="1" />
+															In-Active
+														</label>
+														<label class="radio-inline"> <input type="radio"
+															name="fr_status" id="optionsRadios1" value="2" checked/>
+															Non-Regular Party
+															</label>
+													</c:when>
+													
+													
 
 												</c:choose>
 

@@ -449,6 +449,9 @@
 												</label> <label class="radio-inline"> <input type="radio"
 													name="fr_status" id="optionsRadios1" value="1" />
 													In-active
+												</label> <label class="radio-inline"> <input type="radio"
+													name="fr_status" id="optionsRadios1" value="2" />
+													Non-Regular Party
 												</label>
 											</div>
 										</div>
