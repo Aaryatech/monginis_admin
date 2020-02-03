@@ -444,6 +444,9 @@ public class OrderController {
 
 			model.addObject("todayDate", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 			model.addObject("franchiseeList", franchiseeList);
+			
+		
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -475,6 +478,14 @@ public class OrderController {
 
 			model.addObject("todayDate", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 			model.addObject("franchiseeList", franchiseeList);
+			AllMenuResponse allMenuResponse = restTemplate.getForObject(Constants.url + "getAllMenu",
+					AllMenuResponse.class);
+
+			menuList = new ArrayList<Menu>();
+			menuList = allMenuResponse.getMenuConfigurationPage();
+
+			System.out.println("MENU LIST= " + menuList.toString());
+			model.addObject("frMenuList", menuList);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -685,6 +696,7 @@ public class OrderController {
 		String frIdString = request.getParameter("fr_id_list");
 		String prodDate = request.getParameter("prod_date");
 		int routeId = Integer.parseInt(request.getParameter("route_id"));
+		int spMenuId = Integer.parseInt(request.getParameter("spMenuId"));
 		List<String> franchIds = new ArrayList();
 
 		if (frIdString != null) {
@@ -724,7 +736,7 @@ public class OrderController {
 
 			map.add("frId", frIdString);
 			map.add("prodDate", prodDate);
-
+			map.add("spMenuId", spMenuId);
 			SpCakeOrdersBeanResponse orderListResponse = restTemplate1
 					.postForObject(Constants.url + "getSpCakeAlbumOrderLists", map, SpCakeOrdersBeanResponse.class); // s
 																												// added
@@ -738,7 +750,7 @@ public class OrderController {
 			System.out.println("all fr selected");
 
 			map.add("prodDate", prodDate);
-
+			map.add("spMenuId", spMenuId);
 			orderListResponse = restTemplate1.postForObject(Constants.url + "getAllFrSpCakeAlbumOrderList", map,
 					SpCakeOrdersBeanResponse.class);
 
@@ -757,7 +769,7 @@ public class OrderController {
 
 			map.add("frId", frIdString);
 			map.add("prodDate", prodDate);
-
+			map.add("spMenuId", spMenuId);
 			SpCakeOrdersBeanResponse orderListResponse = restTemplate1
 					.postForObject(Constants.url + "getSpCakeAlbumOrderLists", map, SpCakeOrdersBeanResponse.class); // s
 																												// added

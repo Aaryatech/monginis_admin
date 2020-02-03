@@ -2457,12 +2457,25 @@ public class FranchiseeController {
 			map.add("frIdList", frIdList);
 			map.add("menuId", menuId);
 			map.add("catId", selectedCatId);
+			
+			String 	addorremove=request.getParameter("addorremove");
+			
+			if(addorremove.equals("1")) {
+		
 			Info errorMessage = rest.postForObject(Constants.url + "updateConfiguredItems", map, Info.class);
-
 			if (errorMessage.getError() == false) {
 				System.err.println("stock");
 			}
 
+			}else {
+				Info errorMessage = rest.postForObject(Constants.url + "updateConfiguredItemsRemove", map, Info.class);
+				if (errorMessage.getError() == false) {
+					System.err.println("stock");
+				}
+
+			}
+
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

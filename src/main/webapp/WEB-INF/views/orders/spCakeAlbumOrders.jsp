@@ -197,7 +197,26 @@
 										</div>
 									</div> --%>
 
+<div class="form-group">
 
+<label class="col-sm-3 col-lg-2 control-label">Menu
+									</label>
+									<div class="col-sm-3 col-lg-4 controls">
+										<select name="spMenuId" class="form-control chosen"
+											data-placeholder="Menu" id="spMenuId" required>
+											<option disabled value="">Select Menu</option>
+											<c:forEach items="${frMenuList}" var="frMenuList">
+												<c:choose>
+													<c:when test="${frMenuList.mainCatId==5 &&frMenuList.isSameDayApplicable==4}">
+														<option value="${frMenuList.menuId}">
+															<c:out value="${frMenuList.menuTitle}" /></option>
+													</c:when>
+												</c:choose>
+											</c:forEach>
+										</select>
+									</div>
+									
+</div>
 
 
 								<div class="form-group">
@@ -208,7 +227,6 @@
 											id="dp2" size="16" type="text" name="prod_date"
 											data-rule-required="true" />
 									</div>
-									
 									
 									<label class="col-sm-1 col-lg-1 control-label">By</label>
 									<div class="col-sm-1 col-lg-3 controls">
@@ -506,6 +524,9 @@
 			var isDelete = document.getElementById("isDelete").value;
 			var isEdit = document.getElementById("isEdit").value;
 
+			
+			var spMenuId = $("#spMenuId").val();
+			
 			var chkYes = document.getElementById("select_way").value;
 			if(chkYes==0)
 			document.getElementById("range_fields").style.display = "block";
@@ -525,6 +546,7 @@
 								fr_id_list : JSON.stringify(frIds),
 								prod_date : prodDate,
 								route_id : routeIds,
+								spMenuId : spMenuId,
 								ajax : 'true',
 							},
 							function(data) {

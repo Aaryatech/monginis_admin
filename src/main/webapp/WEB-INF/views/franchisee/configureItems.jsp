@@ -228,6 +228,20 @@ select {
 										</div>
 										&nbsp;
 										<div class="form-group">
+											<label class="col-sm-2 col-lg-2 control-label">Select to</label>
+											<div class="col-sm-1 col-lg-1 controls">
+												<input type="radio" checked="checked" required id="addorremove_add" name="addorremove" value="1">Add
+                                                   
+											</div>
+											
+											<div class="col-sm-1 col-lg-1 controls">
+                                                <input type="radio" id="addorremove_rm" name="addorremove" value="0">Remove
+                                                   
+											</div>
+										</div>
+										
+										&nbsp;
+										<div class="form-group">
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">
 												<input type="submit" class="btn btn-primary"
