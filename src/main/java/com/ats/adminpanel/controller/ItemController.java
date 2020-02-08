@@ -1509,5 +1509,30 @@ public class ItemController {
 			
 		}
 		
+		
+		
+		@RequestMapping(value = "/checkUniqueCode", method = RequestMethod.GET)
+		public @ResponseBody Integer checkUniqueCode(HttpServletRequest request, HttpServletResponse response) {
+			String responseYesNo = new String();
+			try {
+				System.err.println("In checkUniqueCode ");
+				RestTemplate rest = new RestTemplate();
+				int tableId = Integer.parseInt(request.getParameter("tableId"));
+				String code=request.getParameter("code");
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				map.add("tableId", tableId);
+				map.add("code", code);
+				
+				responseYesNo = rest.postForObject(Constants.url + "getAlbumCode1", map,
+						String.class);				
+				
+			}catch (Exception e) {
+				System.err.println("mm " +e.getMessage());
+				e.printStackTrace();
+			}
+			return 1;
+			
+		}
+		
 }
 
