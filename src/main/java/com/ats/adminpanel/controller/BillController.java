@@ -1795,11 +1795,8 @@ public class BillController {
 		ModelAndView model = new ModelAndView("billing/editBillDetails");
 
 		try {
-
 			RestTemplate restTemplate = new RestTemplate();
-
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-
 			map.add("billNo", billNo);
 
 			GetBillDetailsResponse billDetailsResponse = restTemplate.postForObject(Constants.url + "getBillDetails",
@@ -1814,7 +1811,7 @@ public class BillController {
 			model.addObject("billNo", billDetailsList.get(0).getBillNo());
 			model.addObject("billDate", billDetailsList.get(0).getBillDate());
 			model.addObject("billDetails", billDetailsList);
-
+			model.addObject("isSameState",billDetailsResponse.getInfo().getMessage());
 		} catch (Exception e) {
 
 			System.out.println("exce in showing  Bill update page " + e.getMessage());
@@ -1848,13 +1845,13 @@ public class BillController {
 						.parseInt(request.getParameter("billQty" + billDetailsList.get(i).getBillDetailNo()));
 				float newBillRate = Float
 						.parseFloat(request.getParameter("billRate" + billDetailsList.get(i).getBillDetailNo()));
-				int isIgstBill=Integer.parseInt(request.getParameter("isIgstBill"));
+				int isSameState=Integer.parseInt(request.getParameter("isSameState"));
 				GetBillDetail getBillDetail = billDetailsList.get(i);
 				float newSgstPer=getBillDetail.getSgstPer();
 				float newCgstPer=getBillDetail.getCgstPer();
 				float newIgstPer =getBillDetail.getIgstPer();
 				float newBaserate=0;
-				if(isIgstBill==0) {
+				if(isSameState==1) {
 
 				 newSgstPer =  Float
 						.parseFloat(request.getParameter("sgstPer" + billDetailsList.get(i).getBillDetailNo()));
@@ -1899,9 +1896,9 @@ public class BillController {
 					postBillDetail.setExpiryDate(getBillDetail.getExpiryDate());
 					postBillDetail.setIsGrngvnApplied(getBillDetail.getIsGrngvnApplied());
 
-					float baseRate = postBillDetail.getBaseRate();
+					postBillDetail.getBaseRate();
 
-					float taxableAmt = baseRate * newBillQty;
+					float taxableAmt = newBaserate * newBillQty;
 					taxableAmt = roundUp(taxableAmt);
 
 					float sgstRs = (taxableAmt * postBillDetail.getSgstPer()) / 100;
@@ -1909,7 +1906,7 @@ public class BillController {
 					float igstRs = (taxableAmt * getBillDetail.getIgstPer()) / 100;
 					float totalTax=0;
 					
-					if(isIgstBill==0) {
+					if(isSameState==1) {
 					
 					sumTotalSgst = sumTotalSgst + sgstRs;
 					sumTotalCgst = sumTotalCgst + cgstRs;
@@ -1944,7 +1941,7 @@ public class BillController {
 					postBillDetail.setTaxableAmt(Float.valueOf(df.format(taxableAmt)));
 					postBillDetail.setTotalTax(Float.valueOf(df.format(totalTax)));
 					postBillDetail.setGrandTotal(Float.valueOf(df.format(grandTotal)));
-					System.out.println("base rate " + baseRate);
+					System.out.println("base rate " + newBaserate);
 					System.out.println("set rate " + postBillDetail.getRate() + "new rate " + newBillRate);
 					System.out.println("set getTaxableAmt " + postBillDetail.getTaxableAmt()+ "new taxableAmt " + taxableAmt);
 					System.out.println("set sgst " + postBillDetail.getSgstPer() + "new newSgstPer " + newSgstPer);

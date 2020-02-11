@@ -4,36 +4,43 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 
-<!---------------Script For Translate Special Instructions------->
-<script type="text/javascript">
-	// Load the Google Transliterate API
-	google.load("elements", "1", {
-		packages : "transliteration"
-	});
+	 <!---------------Script For Translate Special Instructions------->   
+    <script type="text/javascript">
+      // Load the Google Transliterate API
+      google.load("elements", "1", {
+            packages: "transliteration"
+          });
 
-	function onLoad() {
-		var options = {
-			sourceLanguage : google.elements.transliteration.LanguageCode.ENGLISH,
-			destinationLanguage : [ google.elements.transliteration.LanguageCode.MARATHI ],
-			shortcutKey : 'ctrl+g',
-			transliterationEnabled : true
-		};
+      function onLoad() {
+        var options = {
+            sourceLanguage:
+                google.elements.transliteration.LanguageCode.ENGLISH,
+            destinationLanguage:
+                [google.elements.transliteration.LanguageCode.MARATHI],
+            shortcutKey: 'ctrl+g',
+            transliterationEnabled: true
+        };
 
-		// Create an instance on TransliterationControl with the required
-		// options.
-		var control = new google.elements.transliteration.TransliterationControl(
-				options);
+        // Create an instance on TransliterationControl with the required
+        // options.
+        var control =
+            new google.elements.transliteration.TransliterationControl(options);
 
-		// Enable transliteration in the textbox with id
-		// 'transliterateTextarea'.
-		control.makeTransliteratable([ 'transliterateTextarea' ]);
-		control.makeTransliteratable([ 'transliterateTextarea1' ]);
-	}
-	google.setOnLoadCallback(onLoad);
-</script>
+        // Enable transliteration in the textbox with id
+        // 'transliterateTextarea'.
+        control.makeTransliteratable(['transliterateTextarea']);
+        control.makeTransliteratable(['transliterateTextarea1']);
+      }
+      google.setOnLoadCallback(onLoad);
+    </script>
+
+ 
+
+
+
 <!--------------------------------END------------------------------------>
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-<body>
+<body onload="onLoad()">
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<c:url var="getFrByTypeId" value="/getFrByTypeId"></c:url>
 

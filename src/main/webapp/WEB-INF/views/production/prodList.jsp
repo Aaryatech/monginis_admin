@@ -783,8 +783,9 @@ input[type="checkbox"] {
 <div class="modal fade" id="elegantModalForm7" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
   aria-hidden="true" >
   <!-- SAVE LOADER -->
-<div id="overlay8">
-	<div class="clock"></div>
+<div id="overlay8" style="   background-image: url(${pageContext.request.contextPath}/resources/img/loader1.gif);background-repeat: no-repeat;
+     background-position: center;">
+	
 </div>
 
   <div class="modal-dialog" role="document" style="width:50%;height:50%; margin-right: 20px; margin-top: 5px;">
@@ -1913,10 +1914,11 @@ $('#searchIssueItems').click(function(){
 					{
 					$('#modeltable9 td').remove();
 					alert("Mixing and Bom Done");
-					document.getElementById("no_of_kg").value = 0;
-		    		  document.getElementById("sfitems").value="";
+					  document.getElementById("no_of_kg").value = 0;
 		    		  document.getElementById("typeId").value="";
-	    	        
+		    		    $("#sfitems").find('option:selected').css('background-color', 'red');
+			    		  document.getElementById("sfitems").value="";
+
 	    	    	// window.localStorage.removeItem(''+itemId);
 	    	    	 //$("#sfitems option[value="+itemId+"]").remove();
 	    	    	 $("#sfitems").trigger("chosen:updated"); 

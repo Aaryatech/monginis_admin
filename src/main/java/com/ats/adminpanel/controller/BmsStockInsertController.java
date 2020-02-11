@@ -51,13 +51,25 @@ public class BmsStockInsertController {
 		Constants.subAct=122;
 		int deptIdJsp=deptId;
 		ModelAndView model = new ModelAndView("productionPlan/bmsstock");//
-		
-		try {
+     try {
 			
 			deptIdJsp= Integer.parseInt(request.getParameter("deptId"));
 			model.addObject("deptId", deptIdJsp);
-			
+					
 		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		try {
+			   RestTemplate rest = new RestTemplate();
+			   MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		        map.add("type",2);
+		        map.add("deptId", deptId);
+			   bmsStockHeaderedit = rest.postForObject(Constants.url + "getBmsStockForEdit", map,
+					BmsStockHeader.class);
+			model.addObject("date", bmsStockHeaderedit.getBmsStockDate());
+			System.out.println("bmsStockHeader" + bmsStockHeaderedit);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		

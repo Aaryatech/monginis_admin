@@ -117,7 +117,7 @@
 													<th width="100" align="left">MRP</th>
 													<th width="100" align="left">Rate</th>
 													<c:choose>
-													<c:when test="${billDetails[0].igstRs>0}">
+													<c:when test="${isSameState==0}">
 														<th width="105" align="left">IGST %</th>
 													</c:when>
 													<c:otherwise>
@@ -138,7 +138,7 @@
 											</thead>
 
 											<tbody>
-  <c:set var="isIgstBill" value="0"></c:set>
+
 												<c:forEach items="${billDetails}" var="billDetails"
 													varStatus="count">
                                           
@@ -168,8 +168,8 @@
 															id="billRate${billDetails.billDetailNo}" style="width: 60px"
 															value="${billDetails.rate}" onkeyup="changeValues(${billDetails.billDetailNo})"/></td>
 <c:choose>
-													<c:when test="${billDetails.igstRs>0}">
-													  <c:set var="isIgstBill" value="1"></c:set>
+													<c:when test="${isSameState==0}">
+													
 											 <td align="left" > 
                                                        <input type="text"class="form-control"
 															data-rule-number="true"
@@ -208,7 +208,7 @@
 													</tr>
 													
 												</c:forEach>
-                                            <input type="hidden" name="isIgstBill" id="isIgstBill" value="${isIgstBill}"/>
+                                            <input type="hidden" name="isSameState" id="isSameState" value="${isSameState}"/>
 											</tbody>
 										</table>
 									</div>
@@ -309,8 +309,8 @@
 
 	<script>
 		function changeValues(detailNo) { 
-			var isIgstBill=parseFloat($("#isIgstBill"+detailNo).val()); 
-			if(isIgstBill==0){
+			var isSameState=parseFloat($("#isSameState"+detailNo).val()); 
+			if(isSameState==1){
 			var billQty=parseFloat($("#billQty"+detailNo).val()); 
 			var billRate=parseFloat($("#billRate"+detailNo).val()); 
 			var sgstPer=parseFloat($("#sgstPer"+detailNo).val()); 

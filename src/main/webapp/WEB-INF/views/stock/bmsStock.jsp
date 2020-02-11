@@ -116,8 +116,8 @@
 												<c:when test="${sType==1}">
 													<option value="1" id="currentStock" selected>Get
 														Current Stock</option>
-													<option value="2" id="monthStock">Get Stock
-														Between Month</option>
+													<!-- <option value="2" id="monthStock">Get Stock
+														Between Month</option> -->
 													<option value="3" id="dateStock">Get Stock Between
 														Dates</option>
 
@@ -125,8 +125,8 @@
 												<c:when test="${sType==2}">
 													<option value="1" id="currentStock">Get Current
 														Stock</option>
-													<option value="2" id="monthStock" selected>Get
-														Stock Between Month</option>
+												<!-- 	<option value="2" id="monthStock" selected>Get
+														Stock Between Month</option> -->
 													<option value="3" id="dateStock">Get Stock Between
 														Dates</option>
 
@@ -134,8 +134,8 @@
 												<c:when test="${sType==3}">
 													<option value="1" id="currentStock">Get Current
 														Stock</option>
-													<option value="2" id="monthStock">Get Stock
-														Between Month</option>
+<!-- 													<option value="2" id="monthStock">Get Stock
+														Between Month</option> -->
 													<option value="3" id="dateStock" selected>Get
 														Stock Between Dates</option>
 
@@ -143,8 +143,8 @@
 												<c:otherwise>
 													<option value="1" id="currentStock">Get Current
 														Stock</option>
-													<option value="2" id="monthStock">Get Stock
-														Between Month</option>
+												<!-- 	<option value="2" id="monthStock">Get Stock
+														Between Month</option> -->
 													<option value="3" id="dateStock">Get Stock Between
 														Dates</option>
 
@@ -202,11 +202,17 @@
 									<div class="col-md-3" style="color: green;">
 										<b>Stock Date:</b> ${stockDate}
 									</div>
-									<div class="col-sm-9 col-sm-offset-3 col-lg-5 col-lg-offset-3">
+									<div class="col-sm-9 col-sm-offset-3 col-lg-1 col-lg-offset-3">
 
 										<input type="submit" class="btn btn-primary" value="Search">
+										
 									</div>
+									    <div class="col-sm-3">
+                    <input type="button"  class="btn btn-primary" onclick="tableToExcel('table1', 'name', 'Stock.xls')"
+							value="Export to Excel">
+               </div>
 								</div>
+								
 							</form>
 
 
@@ -523,7 +529,21 @@
 											});
 						});
 	</script> -->
+<script type="text/javascript">
+function tableToExcel(table, name, filename) {
+        let uri = 'data:application/vnd.ms-excel;base64,', 
+        template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><title></title><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>', 
+        base64 = function(s) { return window.btoa(decodeURIComponent(encodeURIComponent(s))) },         format = function(s, c) { return s.replace(/{(\w+)}/g, function(m, p) { return c[p]; })}
+        
+        if (!table.nodeType) table = document.getElementById(table)
+        var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML}
 
+        var link = document.createElement('a');
+        link.download = filename;
+        link.href = uri + base64(format(template, ctx));
+        link.click();
+}
+</script>
 </body>
 </html>
 

@@ -115,7 +115,7 @@ public class AlbumController {
 			String albumName = request.getParameter("albumName");
 			// String msgImage=request.getParameter("msg_image");
 			String desc = request.getParameter("desc");
-
+			System.err.println("desc -------------------- " + desc);
 			int isActive = Integer.parseInt(request.getParameter("is_active"));
 			int spId = Integer.parseInt(request.getParameter("spId"));
 			// String[] flavourIds = request.getParameterValues("flavourId");
@@ -236,9 +236,9 @@ public class AlbumController {
 			album.setSpId(spId);
 
 			System.out.println("albumalbumalbumalbumalbumalbum" + album.toString());
-			Album errorResponse = rest.postForObject(Constants.url + "saveAlbum", album, Album.class);
-			System.out.println(errorResponse.toString());
-
+		//	Album errorResponse = rest.postForObject(Constants.url + "saveAlbum", album, Album.class);
+			//System.out.println(errorResponse.toString());
+			Album errorResponse =null;
 			if (errorResponse != null) {
 
 				int albumId = 0;

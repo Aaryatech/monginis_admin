@@ -81,7 +81,8 @@
 										</select>
 
 
-									</div>
+									</div>	<div class="col-md-4"> </div>
+									<div class="col-md-2"> <b>Date  : <fmt:formatDate pattern = "dd-MM-yyyy"   value = "${date}" /> </b></div>
 
 								</div>
 								<br> <br> <br> <input type="hidden" id="deptId"
