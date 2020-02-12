@@ -236,9 +236,8 @@ public class AlbumController {
 			album.setSpId(spId);
 
 			System.out.println("albumalbumalbumalbumalbumalbum" + album.toString());
-		//	Album errorResponse = rest.postForObject(Constants.url + "saveAlbum", album, Album.class);
-			//System.out.println(errorResponse.toString());
-			Album errorResponse =null;
+			Album errorResponse = rest.postForObject(Constants.url + "saveAlbum", album, Album.class);
+			System.out.println(errorResponse.toString());
 			if (errorResponse != null) {
 
 				int albumId = 0;
