@@ -1522,15 +1522,21 @@ public class ItemController {
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 				map.add("tableId", tableId);
 				map.add("code", code);
+				System.out.println(map);
+				responseYesNo = rest.postForObject(Constants.url + "/checkUniqueCode", map,
+						String.class);	
 				
-				responseYesNo = rest.postForObject(Constants.url + "getAlbumCode1", map,
-						String.class);				
-				
+				if(responseYesNo.equals("Yes")) {
+					return 1;
+				}
+				else {
+					return 0;
+				}
 			}catch (Exception e) {
 				System.err.println("mm " +e.getMessage());
 				e.printStackTrace();
 			}
-			return 1;
+			return 0;
 			
 		}
 		

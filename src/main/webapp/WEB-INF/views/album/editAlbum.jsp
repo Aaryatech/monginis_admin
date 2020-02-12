@@ -224,7 +224,7 @@
 										Code </label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="albumCode" id="albumCode"
-											placeholder="Album Code" class="form-control"
+											placeholder="Album Code" class="form-control" readonly
 											value="${album.albumCode}" data-rule-required="true" />
 									</div>
 								</div>

@@ -68,7 +68,7 @@
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Item Id</label>
 									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="item_id" value="${item.itemId}"
+										<input type="text" name="item_id" readonly value="${item.itemId}"
 											id="item_id" placeholder="Item Id" class="form-control"
 											data-rule-required="true" /> <input type="hidden"
 											name="itemId" value="${item.id}">

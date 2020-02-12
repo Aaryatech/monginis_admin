@@ -228,6 +228,54 @@ select {
 										&nbsp;
 
 										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Order Frequency</label>
+											<div class="col-sm-9 col-lg-10 controls">
+												<select data-placeholder="Select Type" name="typeselector"
+													class="form-control chosen" tabindex="-1"
+													data-rule-required="true" id="typeselector">
+													<option value=""> </option>
+													<optgroup label="Types">
+														<option value=""></option>
+														<option value="1">Daily Basis</option>
+														<option value="2">Date Basis</option>
+														<option value="3">Day Basis</option>
+													</optgroup>
+
+												</select>
+											</div>
+										</div>
+							
+	<div id="2" class="formgroup" style="display: none">
+											<label class="col-sm-3 col-lg-2 control-label">Date</label>
+											<div class="col-sm-9 col-lg-10 controls">
+											<select class="form-control chosen" name="date[]" id="date" multiple="multiple">
+													<option value="0">Select Date</option>
+													 <c:forEach var = "i" begin = "1" end = "32">
+       													<option value="${i}">${i}</option>
+                                                     </c:forEach>
+												</select>
+											</div>
+										</div>
+	<div id="3" class="formgroup" style="display: none">
+											<label class="col-sm-3 col-lg-2 control-label">Day</label>
+											<div class="col-sm-9 col-lg-10 controls">
+												<select class="form-control chosen" name="day[]" id="day" multiple="multiple">
+													<option value="">Select Day</option>
+													<option value="1">Sunday</option>
+													<option value="2">Monday</option>
+													<option value="3">Tuesday</option>
+													<option value="4">Wednesday</option>
+													<option value="5">Thursday</option>
+													<option value="6">Friday</option>
+													<option value="7">Saturday</option>
+												</select>
+											</div>
+
+										</div>
+										
+														&nbsp;
+
+										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">From
 												Time</label>
 											<div class="col-sm-9 col-lg-10 controls">
@@ -274,7 +322,9 @@ select {
 												</select>
 											</div>
 										</div>
-										<div class="form-group">
+										
+										
+											<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">To
 												Time</label>
 											<div class="col-sm-9 col-lg-10 controls">
@@ -323,7 +373,7 @@ select {
 												</select>
 											</div>
 										</div>
-
+										
 										<div class="form-group">
 											<div
 												class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-2">

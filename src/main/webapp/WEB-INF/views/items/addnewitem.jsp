@@ -10,6 +10,7 @@
 
 	<c:url var="getGroup2ByCatId" value="/getGroup2ByCatId" />
 	<c:url var="getGroup3ByGroup2" value="/getGroup3ByGroup2" />
+	<c:url var="checkUniqueCode" value="/checkUniqueCode" />
 
 
 	<div class="container" id="main-container">
@@ -121,7 +122,7 @@
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Item Id</label>
 									<div class="col-sm-9 col-lg-10 controls">
-										<input type="text" name="item_id" id="item_id"
+										<input type="text" name="item_id" id="item_id" onblur="checkDuplicate()"
 											placeholder="Item Id" class="form-control"
 											data-rule-required="true" value="${itemId}" />
 									</div>
@@ -550,6 +551,33 @@
 			document.getElementById("total_gst_appli").setAttribute('value',
 					totGst);
 		}
+	</script>
+	<script type="text/javascript">
+	
+	function checkDuplicate(){
+		var itemCode = document.getElementById("item_id").value;
+		//alert(itemCode)
+		//alert(itemCode.length)
+		if(itemCode.length>0){
+		$ .getJSON(
+				'${checkUniqueCode}',
+				{
+					code : itemCode,
+					tableId : 1,
+					ajax : 'true',
+				},
+				function(data) {
+					//alert(data);
+					if(data==1){
+						alert("Item Code: OK")
+					}else{
+						document.getElementById("item_id").value="";
+						alert("Item Code: Duplicate")
+						document.getElementById("item_id").focus();
+					}
+				});
+		}
+	}
 	</script>
 
 

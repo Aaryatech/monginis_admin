@@ -755,4 +755,42 @@ public class TrayBillController {
 			}
 		return model;
 		}
+		
+		//Sachin 11-02-2020 Update vehicle report by admin in/out and diesel
+		
+		//			Info info=restTemplate.postForObject(Constants.url +"/traymgt/saveTrayMgtDetailForBill" , trayMgtDetailBeanList, Info.class);
+
+		
+		@RequestMapping(value = "/updateVehDetailByAdmin", method = RequestMethod.GET)
+		public @ResponseBody Info getItemCode(HttpServletRequest request, HttpServletResponse response) {
+			
+			RestTemplate restTemplate = new RestTemplate();
+			Info info = new Info();
+			try {
+				
+				int tranId = Integer.parseInt(request.getParameter("tranId"));
+				float  vehOutkm = Float.parseFloat(request.getParameter("vehOutkm"));
+				float  vehInkm = Float.parseFloat(request.getParameter("vehInkm"));
+				float  diesel = Float.parseFloat(request.getParameter("diesel"));
+				int paramKey =Integer.parseInt(request.getParameter("paramKey"));
+				
+
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+				
+				map.add("tranId", tranId);
+				map.add("vehOutkm", vehOutkm);
+				map.add("vehInkm", vehInkm);
+				map.add("diesel", diesel);
+				map.add("paramKey", paramKey);
+
+
+				System.out.println(map);
+				 info=restTemplate.postForObject(Constants.url +"/traymgt/updateVehDetailByAdmin" , map, Info.class);
+				 
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+			return info;
+		}
 }

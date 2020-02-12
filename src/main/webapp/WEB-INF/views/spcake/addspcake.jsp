@@ -50,10 +50,10 @@
 
 </head> --%>
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
-
 <body>
 
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+<c:url var="checkUniqueCode" value="/checkUniqueCode" />
 
 
 
@@ -114,7 +114,7 @@
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Code</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<input type="text" name="spc_code" id="spc_code"
+												<input type="text" name="spc_code" id="spc_code" onblur="checkDuplicate()"
 													placeholder="Code" class="form-control"
 													data-rule-required="true" />
 											</div>
@@ -172,7 +172,7 @@
 											<label class="col-sm-3 col-lg-2 control-label">Type</label>
 
 											<div class="col-sm-9 col-lg-10 controls">
-												<select class="form-control input-sm" name="spc_type" id=""spc_type"">
+												<select class="form-control input-sm" name="spc_type" id="spc_type">
 
 													<option name="Chocolate" value="1">Chocolate</option>
 
@@ -548,7 +548,6 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script> --%>
 
-</body>
 
 <script>
 	function calTotalGst() {
@@ -562,5 +561,32 @@
 				.setAttribute('value', totGst);
 	}
 </script>
+<script type="text/javascript">
+	function checkDuplicate(){
+		var itemCode = document.getElementById("spc_code").value;
+		//alert(itemCode)
+		//alert(itemCode.length)
+		if(itemCode.length>0){
+		$ .getJSON(
+				'${checkUniqueCode}',
+				{
+					code : itemCode,
+					tableId : 2,
+					ajax : 'true',
+				},
+				function(data) {
+					//alert(data);
+					if(data==1){
+						alert("SP Code: OK")
+					}else{
+						document.getElementById("spc_code").value="";
+						alert("SP Code: Duplicate")
+						document.getElementById("spc_code").focus();
+					}
+				});
+		}
+	}
+	</script>
+</body>
 
 </html>

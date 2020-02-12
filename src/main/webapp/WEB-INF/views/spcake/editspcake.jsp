@@ -111,7 +111,7 @@
 											<label class="col-sm-3 col-lg-2 control-label">Code</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<input type="text" name="spc_code" id="spc_code"
-													placeholder="Code" class="form-control"
+													placeholder="Code" class="form-control" readonly
 													value="${specialCake.spCode}" data-rule-required="true"
 													 />
 											</div>

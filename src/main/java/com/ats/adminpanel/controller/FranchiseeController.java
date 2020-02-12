@@ -194,6 +194,114 @@ public class FranchiseeController {
 	@RequestMapping(value = "/updateFrMenuTime")
 	public String updateFrMenuTimeProcess(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView("franchisee/confFrMenuTime");
+		try {
+		String date[];
+		String day[];
+		String convertedDate = "0";
+		String convertedDays = "0";
+		String fromTime = request.getParameter("frm_time");
+
+		System.out.println(fromTime);
+		String toTime = request.getParameter("to_time");
+
+		System.out.println(toTime);
+
+		SimpleDateFormat format = new SimpleDateFormat("hh:mm a"); // if 24 hour format
+
+		java.util.Date d1 = (java.util.Date) format.parse(fromTime);
+		java.util.Date d2 = (java.util.Date) format.parse(toTime);
+
+		java.sql.Time sqlFromTime = new java.sql.Time(d1.getTime());
+		java.sql.Time sqlToTime = new java.sql.Time(d2.getTime());
+
+		System.out.println("Converted From Time: " + sqlFromTime.toString() + " To time: " + sqlToTime.toString());
+
+		
+		String frId = new String();
+		String[] frIdList = request.getParameterValues("fr_id");
+
+		if (frIdList[0].equalsIgnoreCase("-1")) {
+			System.err.println("fr id contains -1");
+			frId = frId + "," + "0";
+		}
+
+		else {
+			for (int i = 0; i < frIdList.length; i++) {
+
+				System.out.println("fr Id " + frIdList[i]);
+				frId = frId + "," + frIdList[i];
+				System.err.println("Fr Id s " + frId.toString());
+			}
+		}
+		System.out.println("FRID" + frIdList.toString());
+		System.err.println("Fr Id s " + frId.toString());
+		frId = frId.substring(1);
+		int menuId = Integer.parseInt(request.getParameter("menu"));
+		System.out.println("menuId" + menuId);
+		
+		int settingType = Integer.parseInt(request.getParameter("typeselector"));
+		System.out.println("settingType" + settingType);
+
+		if (settingType == 1) {
+			// date ="0";
+			// day = "0";
+		} else if (settingType == 2) {
+			date = request.getParameterValues("date[]");
+
+			StringBuilder sbForDate = new StringBuilder();
+
+			for (int i = 0; i < date.length; i++) {
+				sbForDate = sbForDate.append(date[i] + ",");
+
+			}
+			convertedDate = sbForDate.toString();
+			convertedDate = convertedDate.substring(0, convertedDate.length() - 1);
+
+			System.out.println("date" + convertedDate);
+			// day ="0";
+		} else {
+			day = request.getParameterValues("day[]");
+
+			StringBuilder sbForDay = new StringBuilder();
+
+			for (int i = 0; i < day.length; i++) {
+				sbForDay = sbForDay.append(day[i] + ",");
+
+			}
+			convertedDays = sbForDay.toString();
+			convertedDays = convertedDays.substring(0, convertedDays.length() - 1);
+			System.out.println("day:" + convertedDays);
+
+			// date ="0";
+		}
+
+
+		RestTemplate rest = new RestTemplate();
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("fromTime", sqlFromTime.toString());
+		map.add("toTime", sqlToTime.toString());
+		map.add("frIdList", frId);
+		map.add("menuId", menuId);
+		
+		map.add("settingType", settingType);
+		map.add("date", convertedDate);
+		map.add("day", convertedDays);
+		
+		Info errorMessage = rest.postForObject(Constants.url + "updateFrConfMenuTime", map, Info.class);
+
+		System.err.println("Update Response " + errorMessage.toString());
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		return "redirect:/showUpdateFrMenuTime";
+
+	}
+	
+	/* Previous Method before above changed by Sachin -11-02-2020
+	 //// 23 March updateFrMenuTime
+	@RequestMapping(value = "/updateFrMenuTime")
+	public String updateFrMenuTimeProcess(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = new ModelAndView("franchisee/confFrMenuTime");
 		String fromTime = request.getParameter("frm_time");
 
 		System.out.println(fromTime);
@@ -257,6 +365,7 @@ public class FranchiseeController {
 		return "redirect:/showUpdateFrMenuTime";
 
 	}
+	 */
 
 	// -------------------------CONFIGURE FRANCHISEE FORM
 	// SHOW-------------------------------
