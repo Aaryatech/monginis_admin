@@ -105,24 +105,26 @@
 										class="fa fa-search" style="font-size: 20px"></i> <input
 										type="text" id="myInput" onkeyup="myFunction()"
 										placeholder="Search.." title="Type in a name">
+										<input type="hidden" id="activeTable" name="activeTable" value="table1">
+										
 									</label>
 									<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Franchisee</label>
 											<div class="col-sm-9 col-lg-10 controls">
-												<label class="radio-inline"> <input type="radio" onclick="showFranchisee(this.value)" 
+												<label class="radio-inline"> <input type="radio" onclick="showFranchisee(this.value,'table1')" 
 													name="fr_state" id="optionsRadios1" value="-1" checked />
 													All
 												</label> <label class="radio-inline"> <input type="radio"
-													name="fr_state" id="optionsRadios1" value="0" onclick="showFranchisee(this.value)" >
+													name="fr_state" id="optionsRadios1" value="0" onclick="showFranchisee(this.value,'table2')" >
 													Active
 												</label>
 												
 												<label class="radio-inline"> <input type="radio"
-													name="fr_state" id="optionsRadios1" value="1" onclick="showFranchisee(this.value)" >
+													name="fr_state" id="optionsRadios1" value="1" onclick="showFranchisee(this.value,'table3')" >
 													Inactive
 												</label>
 												<label class="radio-inline"> <input type="radio"
-													name="fr_state" id="optionsRadios1" value="2" onclick="showFranchisee(this.value)" >
+													name="fr_state" id="optionsRadios1" value="2" onclick="showFranchisee(this.value,'table4')" >
 													Non-Regular Party
 												</label>
 											</div>
@@ -157,7 +159,7 @@
 										<!-- 1 All Franchisee-->
 										<div class="table-wrap" id="tab1">
 
-											<table id="table1" class="table table-advance">
+											<table id="table1" class="sachin table table-advance">
 												<thead>
 													<tr class="bgpink">
 														<th width="138" style="width: 18px" align="left">#</th>
@@ -325,9 +327,9 @@
 										
 											<!-- 2 Active Franchisee-->
 											<c:set value="0" var="srno"/>
-										<div class="table-wrap" id="tab2" style="display: none;">
+										<div class="sachintable-wrap" id="tab2" style="display: none;">
 
-											<table id="table1" class="table table-advance">
+											<table id="table2" class="sachin table table-advance">
 												<thead>
 													<tr class="bgpink">
 														<th width="138" style="width: 18px" align="left">#</th>
@@ -497,9 +499,9 @@
 										
 											<!-- 3 Inactive Franchisee-->
 											<c:set value="0" var="srno"/>
-										<div class="table-wrap" id="tab3" style="display: none;">
+										<div class="sachin table-wrap" id="tab3" style="display: none;">
 
-											<table id="table1" class="table table-advance">
+											<table id="table3" class="sachin table table-advance">
 												<thead>
 													<tr class="bgpink">
 														<th width="138" style="width: 18px" align="left">#</th>
@@ -670,7 +672,7 @@
 											<c:set value="0" var="srno"/>
 										<div class="table-wrap" id="tab4" style="display: none;">
 
-											<table id="table1" class="table table-advance">
+											<table id="table4" class="sachin table table-advance">
 												<thead>
 													<tr class="bgpink">
 														<th width="138" style="width: 18px" align="left">#</th>
@@ -935,7 +937,7 @@
 </body>
 
 <script type="text/javascript">
-function showFranchisee(status) {
+function showFranchisee(status,tableClass) {
 	//var url = ${url}
 	
 	if(status==0){
@@ -970,6 +972,7 @@ function showFranchisee(status) {
 		document.getElementById("tab4").style.display = "none";
 	}
 	
+	$("#activeTable").val(tableClass);
 		/* $
 				.getJSON(
 						'${getFranchiseeListByStatus}',
@@ -1046,10 +1049,12 @@ function showFranchisee(status) {
 <script>
 function myFunction() {
 	
-  var input, filter, table, tr, td,td1, i;
+  var input, filter, table,idtable1, tr, td,td1, i;
   input = document.getElementById("myInput");
   filter = input.value.toUpperCase();
-  table = document.getElementById("table1");
+  idtable1 = document.getElementById("activeTable").value;
+  table = document.getElementById(idtable1);
+ //alert(table);
   tr = table.getElementsByTagName("tr");
   for (i = 0; i < tr.length; i++) {
     td = tr[i].getElementsByTagName("td")[1];

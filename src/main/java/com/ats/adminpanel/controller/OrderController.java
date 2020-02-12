@@ -1452,8 +1452,9 @@ public class OrderController {
 
 					map.add("menuId", menuId);
 					map.add("date", date);
+					map.add("itemId", itemId);
 					List<OrderItemSubCatTotal> orderItemSubCatTotalList = restTemplate1
-							.postForObject(Constants.url + "getSubCatOrderTotalAllFr", map, List.class);
+							.postForObject(Constants.url + "getSubCatOrderTotalAllFrSpecItemId", map, List.class);
 					getOrdersResponse.setOrderItemSubCatTotalList(orderItemSubCatTotalList);
 					System.out.println(
 							"orderItemSubCatTotalListorderItemSubCatTotalListorderItemSubCatTotalList list count is"
@@ -1501,9 +1502,9 @@ public class OrderController {
 					map.add("date", date);
 					map.add("menuId", menuId);
 					map.add("frId", frIdString);
-
+					map.add("itemId", itemId);
 					List<OrderItemSubCatTotal> orderItemSubCatTotalList = restTemplate1
-							.postForObject(Constants.url + "getSubCatOrderTotal", map, List.class);
+							.postForObject(Constants.url + "getSubCatOrderTotalSpecItemId", map, List.class);
 					getOrdersResponse.setOrderItemSubCatTotalList(orderItemSubCatTotalList);
 					System.out.println(
 							"orderItemSubCatTotalListorderItemSubCatTotalListorderItemSubCatTotalList list count is"
