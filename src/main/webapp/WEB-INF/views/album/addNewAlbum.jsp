@@ -43,6 +43,8 @@
 <body onload="onLoad()">
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<c:url var="getFrByTypeId" value="/getFrByTypeId"></c:url>
+	<c:url var="checkUniqueCode" value="/checkUniqueCode" />
+	
 
 	<%@ page import="java.util.Calendar"%>
 	<%@ page import="java.util.Date"%>
@@ -168,7 +170,7 @@
 										Code </label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<input type="text" name="albumCode" id="albumCode"
-											placeholder="Album Code" class="form-control"
+											placeholder="Album Code" class="form-control" onblur="checkDuplicate()"
 											data-rule-required="true" />
 									</div>
 								</div>
@@ -434,7 +436,32 @@
 		}
 	</script>
 
-
+<script type="text/javascript">
+	function checkDuplicate(){
+		var itemCode = document.getElementById("albumCode").value;
+		//alert(itemCode)
+		//alert(itemCode.length)
+		if(itemCode.length>0){
+		$ .getJSON(
+				'${checkUniqueCode}',
+				{
+					code : itemCode,
+					tableId : 3,
+					ajax : 'true',
+				},
+				function(data) {
+					//alert(data);
+					if(data==1){
+						alert("ALBUM Code: OK")
+					}else{
+						document.getElementById("albumCode").value="";
+						alert("ALBUM Code: Duplicate")
+						document.getElementById("albumCode").focus();
+					}
+				});
+		}
+	}
+	</script>
 
 
 
