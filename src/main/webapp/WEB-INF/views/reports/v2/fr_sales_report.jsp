@@ -275,19 +275,19 @@
 													  	totalInLac=totalInLac+inLac;
 													  	totalRetPer=totalRetPer+retPer;
 													  	
-													  	tr.append($('<td style="text-align:right;"></td>').html(report.saleValue.toFixed(2)));
-													  	tr.append($('<td style="text-align:right;"></td>').html(report.gvnValue.toFixed(2)));
+													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.saleValue.toFixed(2))));
+													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.gvnValue.toFixed(2))));
 													  	
-													  	tr.append($('<td style="text-align:right;"></td>').html(netVal1.toFixed(2)));
+													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(netVal1.toFixed(2))));
 													 
-														tr.append($('<td style="text-align:right;"></td>').html((report.grnValue).toFixed(2)));
-														tr.append($('<td style="text-align:right;"></td>').html(netVal2.toFixed(2)));
+														tr.append($('<td style="text-align:right;"></td>').html(addCommas((report.grnValue).toFixed(2))));
+														tr.append($('<td style="text-align:right;"></td>').html(addCommas(netVal2.toFixed(2))));
 														
 //alert("In Lac  " +inLac)
-														tr.append($('<td style="text-align:right;"></td>').html(inLac.toFixed(2)));
+														tr.append($('<td style="text-align:right;"></td>').html(addCommas(inLac.toFixed(2))));
 														  	
 														
-														 tr.append($('<td style="text-align:right;"></td>').html(retPer.toFixed(2)));
+														 tr.append($('<td style="text-align:right;"></td>').html(addCommas(retPer.toFixed(2))));
 														
 														$('#table_grid tbody')
 																.append(
@@ -308,15 +308,15 @@
 													$('#table_grid tbody').append(tr); */
 													var tr = $('<tr></tr>');
 
-									tr.append($('<td></td>').html("Total"));
+									tr.append($('<td style="text-align:center;font-weight:bold;"></td>').html("Total"));
 									tr.append($('<td></td>').html(""));
-									tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(""+totalSaleValue.toFixed(2)));
-									tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(""+totalGvnValue.toFixed(2)));
-									tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(""+totalNetVal1.toFixed(2)));
-									tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(""+totalGrnValue.toFixed(2)));
-									tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(""+totalNetVal2.toFixed(2)));
-									tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(""+totalInLac.toFixed(2)));
-									tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(""+totalRetPer.toFixed(2)));
+									tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(""+addCommas(totalSaleValue.toFixed(2))));
+									tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(""+addCommas(totalGvnValue.toFixed(2))));
+									tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(""+addCommas(totalNetVal1.toFixed(2))));
+									tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(""+addCommas(totalGrnValue.toFixed(2))));
+									tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(""+addCommas(totalNetVal2.toFixed(2))));
+									tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(""+addCommas(totalInLac.toFixed(2))));
+									tr.append($('<td style="text-align:right;font-weight:bold;"></td>').html(""+addCommas(totalRetPer.toFixed(2))));
 									$('#table_grid tbody')
 									.append(
 											tr);
@@ -328,6 +328,22 @@
 			
 		}
 	</script>
+	<script type="text/javascript">
+function addCommas(x){
+
+	x=String(x).toString();
+	 var afterPoint = '';
+	 if(x.indexOf('.') > 0)
+	    afterPoint = x.substring(x.indexOf('.'),x.length);
+	 x = Math.floor(x);
+	 x=x.toString();
+	 var lastThree = x.substring(x.length-3);
+	 var otherNumbers = x.substring(0,x.length-3);
+	 if(otherNumbers != '')
+	     lastThree = ',' + lastThree;
+	 return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+	}
+</script>
 
 		<script type="text/javascript">
 	function validate() {

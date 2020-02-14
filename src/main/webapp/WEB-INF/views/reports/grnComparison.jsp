@@ -234,10 +234,10 @@
 													  
 													  	tr.append($('<td style="text-align:left;"></td>').html(report.frName));
 													  
-														tr.append($('<td style="text-align:right;"></td>').html((report.billTotal).toFixed(2)));
-													 	tr.append($('<td style="text-align:right;"></td>').html((report.grnAmt).toFixed(2)));
-													 	tr.append($('<td style="text-align:right;"></td>').html((report.grnAmt/(report.billTotal/100)).toFixed(2)));
-														tr.append($('<td style="text-align:right;"></td>').html((report.grnAmt/30).toFixed(2)));
+														tr.append($('<td style="text-align:right;"></td>').html(addCommas((report.billTotal).toFixed(2))));
+													 	tr.append($('<td style="text-align:right;"></td>').html(addCommas((report.grnAmt).toFixed(2))));
+													 	tr.append($('<td style="text-align:right;"></td>').html(addCommas((report.grnAmt/(report.billTotal/100)).toFixed(2))));
+														tr.append($('<td style="text-align:right;"></td>').html(addCommas((report.grnAmt/30).toFixed(2))));
 														$('#table_grid tbody').append(tr);
 														saleValue=saleValue+(report.billTotal);
 														grnValue=grnValue+(report.grnAmt);
@@ -245,12 +245,12 @@
 														perDayAmt=perDayAmt+(report.grnAmt/30);
 											})
 											var tr = $('<tr></tr>');
-											tr.append($('<td style="text-align:left;"></td>').html("Total"));
+											tr.append($('<td style="text-align:left; font-weight: 700;"></td>').html("Total"));
 									  
-									tr.append($('<td style="text-align:right;"></td>').html((saleValue).toFixed(2)));
-								  	tr.append($('<td style="text-align:right;"></td>').html((grnValue).toFixed(2)));
-								 	tr.append($('<td style="text-align:right;"></td>').html((grnValue/(saleValue/100)).toFixed(2)));
-								 	tr.append($('<td style="text-align:right;"></td>').html((perDayAmt).toFixed(2)));
+									tr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas((saleValue).toFixed(2))));
+								  	tr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas((grnValue).toFixed(2))));
+								 	tr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas((grnValue/(saleValue/100)).toFixed(2))));
+								 	tr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas((perDayAmt).toFixed(2))));
 									$('#table_grid tbody').append(tr);
 											
 								});
@@ -258,7 +258,22 @@
 			
 		}
 	</script>
+<script type="text/javascript">
+function addCommas(x){
 
+	x=String(x).toString();
+	 var afterPoint = '';
+	 if(x.indexOf('.') > 0)
+	    afterPoint = x.substring(x.indexOf('.'),x.length);
+	 x = Math.floor(x);
+	 x=x.toString();
+	 var lastThree = x.substring(x.length-3);
+	 var otherNumbers = x.substring(0,x.length-3);
+	 if(otherNumbers != '')
+	     lastThree = ',' + lastThree;
+	 return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+	}
+</script>
 	<script type="text/javascript">
 		function validate() {
 

@@ -223,7 +223,7 @@
 					<div class="form-group" id="range">
                 <div class="col-sm-3">
                     <input type="button" onclick="tableToExcel('table_grid', 'name', 'Report.xls')"
-							value="Export to Excel">
+							value="Export to Excel" class="btn btn-primary">
                </div>
 						<!-- <div class="col-sm-3  controls">
 							<input type="button" id="expExcel" class="btn btn-primary"
@@ -491,60 +491,60 @@ function tableToExcel(table, name, filename) {
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
-																															report.soldQty
+																															addCommas(report.soldQty)
 																																	));
 
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
-																															report.soldAmt
+																															addCommas(report.soldAmt)
 																																	));
 
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
-																															report.varQty
+																															addCommas(report.varQty)
 																																	));
 
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
-																															report.varAmt
+																															addCommas(report.varAmt)
 																																	));
 
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
-																															report.retQty
+																															addCommas(report.retQty)
 																																	));
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
-																															report.retAmt
+																															addCommas(report.retAmt)
 																																	));
 
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
-																															report.netQty
+																															addCommas(report.netQty)
 																																	));
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
-																															parseFloat(report.netAmt).toFixed(2)
+																															addCommas(parseFloat(report.netAmt).toFixed(2))
 																																	));
 																									tr
 																											.append($(
 																													'<td style="text-align:right;"></td>')
 																													.html(
-																															parseFloat(report.retAmtPer).toFixed(2)
+																															addCommas(parseFloat(report.retAmtPer).toFixed(2))
 																																	));
 
 																									$(
@@ -572,59 +572,59 @@ function tableToExcel(table, name, filename) {
 																								"Total"));
 																		tr
 																				.append($(
-																						'<td style="text-align:right;"></td>')
+																						'<td style="text-align:right; font-weight:bold;"></td>')
 																						.html(
-																								parseFloat(SoldQty).toFixed(2)
+																								addCommas(addCommas(parseFloat(SoldQty).toFixed(2))
+																										)));
+																		tr
+																				.append($(
+																						'<td style="text-align:right; font-weight:bold;"></td>')
+																						.html(
+																								addCommas(parseFloat(SoldAmt).toFixed(2))
+																										));
+																		tr
+																				.append($(
+																						'<td style="text-align:right; font-weight:bold;"></td>')
+																						.html(
+																								addCommas(parseFloat(VarQty).toFixed(2))
+																										));
+																		tr
+																				.append($(
+																						'<td style="text-align:right; font-weight:bold;"></td>')
+																						.html(
+																								addCommas(parseFloat(VarAmt).toFixed(2))
 																										));
 																		tr
 																				.append($(
 																						'<td style="text-align:right;"></td>')
 																						.html(
-																								parseFloat(SoldAmt).toFixed(2)
+																								addCommas(parseFloat(RetQty).toFixed(2))
 																										));
 																		tr
 																				.append($(
-																						'<td style="text-align:right;"></td>')
+																						'<td style="text-align:right; font-weight:bold;"></td>')
 																						.html(
-																								parseFloat(VarQty).toFixed(2)
-																										));
-																		tr
-																				.append($(
-																						'<td style="text-align:right;"></td>')
-																						.html(
-																								parseFloat(VarAmt).toFixed(2)
-																										));
-																		tr
-																				.append($(
-																						'<td style="text-align:right;"></td>')
-																						.html(
-																								parseFloat(RetQty).toFixed(2)
-																										));
-																		tr
-																				.append($(
-																						'<td style="text-align:right;"></td>')
-																						.html(
-																								parseFloat(RetAmt).toFixed(2)
-																										));
-
-																		tr
-																				.append($(
-																						'<td style="text-align:right;"></td>')
-																						.html(
-																								parseFloat(NetQty).toFixed(2)
-																										));
-																		tr
-																				.append($(
-																						'<td style="text-align:right;"></td>')
-																						.html(
-																								parseFloat(NetAmt).toFixed(2)
+																								addCommas(parseFloat(RetAmt).toFixed(2))
 																										));
 
 																		tr
 																				.append($(
-																						'<td style="text-align:right;"></td>')
+																						'<td style="text-align:right; font-weight:bold;"></td>')
 																						.html(
-																								parseFloat(AmtPer).toFixed(2)
+																								addCommas(parseFloat(NetQty).toFixed(2))
+																										));
+																		tr
+																				.append($(
+																						'<td style="text-align:right; font-weight:bold;"></td>')
+																						.html(
+																								addCommas(parseFloat(NetAmt).toFixed(2))
+																										));
+
+																		tr
+																				.append($(
+																						'<td style="text-align:right; font-weight:bold;"></td>')
+																						.html(
+																								addCommas(parseFloat(AmtPer).toFixed(2))
 																										));
 
 																		$(
@@ -646,59 +646,59 @@ function tableToExcel(table, name, filename) {
 																			"Franchisee Total"));
 													tr
 															.append($(
-																	'<td style="text-align:right;"></td>')
+																	'<td style="text-align:right; font-weight:bold;"></td>')
 																	.html(
-																			parseFloat(totalSoldQty).toFixed(2)
+																			addCommas(parseFloat(totalSoldQty).toFixed(2))
+																					));
+													tr
+															.append($(
+																	'<td style="text-align:right; font-weight:bold;"></td>')
+																	.html(
+																			addCommas(parseFloat(totalSoldAmt).toFixed(2))
+																					));
+													tr
+															.append($(
+																	'<td style="text-align:right; font-weight:bold;"></td>')
+																	.html(
+																			addCommas(parseFloat(totalVarQty).toFixed(2))
 																					));
 													tr
 															.append($(
 																	'<td style="text-align:right;"></td>')
 																	.html(
-																			parseFloat(totalSoldAmt).toFixed(2)
+																			addCommas(parseFloat(totalVarAmt).toFixed(2))
 																					));
 													tr
 															.append($(
-																	'<td style="text-align:right;"></td>')
+																	'<td style="text-align:right; font-weight:bold;"></td>')
 																	.html(
-																			parseFloat(totalVarQty).toFixed(2)
+																			addCommas(parseFloat(totalRetQty).toFixed(2))
 																					));
 													tr
 															.append($(
-																	'<td style="text-align:right;"></td>')
+																	'<td style="text-align:right; font-weight:bold;"></td>')
 																	.html(
-																			parseFloat(totalVarAmt).toFixed(2)
-																					));
-													tr
-															.append($(
-																	'<td style="text-align:right;"></td>')
-																	.html(
-																			parseFloat(totalRetQty).toFixed(2)
-																					));
-													tr
-															.append($(
-																	'<td style="text-align:right;"></td>')
-																	.html(
-																			parseFloat(totalRetAmt).toFixed(2)
-																					));
-
-													tr
-															.append($(
-																	'<td style="text-align:right;"></td>')
-																	.html(
-																			parseFloat(totalNetQty).toFixed(2)
-																					));
-													tr
-															.append($(
-																	'<td style="text-align:right;"></td>')
-																	.html(
-																			parseFloat(totalNetAmt).toFixed(2)
+																			addCommas(parseFloat(totalRetAmt).toFixed(2))
 																					));
 
 													tr
 															.append($(
-																	'<td style="text-align:right;"></td>')
+																	'<td style="text-align:right; font-weight:bold;"></td>')
 																	.html(
-																			 parseFloat(retAmtPer).toFixed(2)
+																			addCommas(parseFloat(totalNetQty).toFixed(2))
+																					));
+													tr
+															.append($(
+																	'<td style="text-align:right; font-weight:bold;"></td>')
+																	.html(
+																			addCommas(parseFloat(totalNetAmt).toFixed(2))
+																					));
+
+													tr
+															.append($(
+																	'<td style="text-align:right; font-weight:bold;"></td>')
+																	.html(
+																			addCommas(parseFloat(retAmtPer).toFixed(2))
 																					));
 
 													$('#table_grid tbody')
@@ -711,7 +711,22 @@ function tableToExcel(table, name, filename) {
 	</script>
 
 
+<script type="text/javascript">
+function addCommas(x){
 
+	x=String(x).toString();
+	 var afterPoint = '';
+	 if(x.indexOf('.') > 0)
+	    afterPoint = x.substring(x.indexOf('.'),x.length);
+	 x = Math.floor(x);
+	 x=x.toString();
+	 var lastThree = x.substring(x.length-3);
+	 var otherNumbers = x.substring(0,x.length-3);
+	 if(otherNumbers != '')
+	     lastThree = ',' + lastThree;
+	 return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+	}
+</script>
 	<script>
 		$('.datepicker').datepicker({
 			format : {

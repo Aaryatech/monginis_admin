@@ -225,29 +225,29 @@
 					tr.append($('<td></td>').html(report.subCatName));
 
 					tr.append($('<td style="text-align:right;"></td>').html(
-							report.soldQty.toFixed(2)));
+							addCommas(report.soldQty.toFixed(2))));
 
 					tr.append($('<td style="text-align:right;"></td>').html(
-							report.soldAmt.toFixed(2)));
+							addCommas(report.soldAmt.toFixed(2))));
 
 					tr.append($('<td style="text-align:right;"></td>').html(
-							report.varQty.toFixed(2)));
+							addCommas(report.varQty.toFixed(2))));
 
 					tr.append($('<td style="text-align:right;"></td>').html(
-							report.varAmt.toFixed(2)));
+							addCommas(report.varAmt.toFixed(2))));
 
 					tr.append($('<td style="text-align:right;"></td>').html(
-							report.retQty.toFixed(2)));
+							addCommas(report.retQty.toFixed(2))));
 
 					tr.append($('<td style="text-align:right;"></td>').html(
-							report.retAmt.toFixed(2)));
+							addCommas(report.retAmt.toFixed(2))));
 
 					tr.append($('<td style="text-align:right;"></td>').html(
-							report.netQty.toFixed(2)));
+							addCommas(report.netQty.toFixed(2))));
 					tr.append($('<td style="text-align:right;"></td>').html(
-							report.netAmt.toFixed(2)));
+							addCommas(report.netAmt.toFixed(2))));
 					tr.append($('<td style="text-align:right;"></td>').html(
-							report.retAmtPer.toFixed(2)));
+							addCommas(report.retAmtPer.toFixed(2))));
 
 					$('#table_grid tbody').append(tr);
 
@@ -259,26 +259,26 @@
 
 				tr.append($('<td style="font-weight:bold;"></td>')
 						.html("Total"));
-				tr.append($('<td style="text-align:right;"></td>').html(
-						totalSoldQty.toFixed(2)));
-				tr.append($('<td style="text-align:right;"></td>').html(
-						totalSoldAmt.toFixed(2)));
-				tr.append($('<td style="text-align:right;"></td>').html(
-						totalVarQty.toFixed(2)));
-				tr.append($('<td style="text-align:right;"></td>').html(
-						totalVarAmt.toFixed(2)));
-				tr.append($('<td style="text-align:right;"></td>').html(
-						totalRetQty.toFixed(2)));
-				tr.append($('<td style="text-align:right;"></td>').html(
-						totalRetAmt.toFixed(2)));
+				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+						addCommas(totalSoldQty.toFixed(2))));
+				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+						addCommas(totalSoldAmt.toFixed(2))));
+				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+						addCommas(totalVarQty.toFixed(2))));
+				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+						addCommas(totalVarAmt.toFixed(2))));
+				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+						addCommas(totalRetQty.toFixed(2))));
+				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+						addCommas(totalRetAmt.toFixed(2))));
 
-				tr.append($('<td style="text-align:right;"></td>').html(
-						totalNetQty.toFixed(2)));
-				tr.append($('<td style="text-align:right;"></td>').html(
-						totalNetAmt.toFixed(2)));
+				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+						addCommas(totalNetQty.toFixed(2))));
+				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+						addCommas(totalNetAmt.toFixed(2))));
 
-				tr.append($('<td style="text-align:right;"></td>').html(
-						retAmtPer.toFixed(2)));
+				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+						addCommas(retAmtPer.toFixed(2))));
 
 				$('#table_grid tbody').append(tr);
 
@@ -286,6 +286,23 @@
 
 		}
 	</script>
+	
+		<script type="text/javascript">
+function addCommas(x){
+
+	x=String(x).toString();
+	 var afterPoint = '';
+	 if(x.indexOf('.') > 0)
+	    afterPoint = x.substring(x.indexOf('.'),x.length);
+	 x = Math.floor(x);
+	 x=x.toString();
+	 var lastThree = x.substring(x.length-3);
+	 var otherNumbers = x.substring(0,x.length-3);
+	 if(otherNumbers != '')
+	     lastThree = ',' + lastThree;
+	 return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+	}
+</script>
 
 	<script type="text/javascript">
 		function validate() {

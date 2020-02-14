@@ -191,6 +191,7 @@
 									<c:set var="finalBillAmt" value="0.0" />
 									<c:set var="finalGrnValue" value="0.0" />
 									<c:set var="finalGvnValue" value="0.0" />
+									<fmt:setLocale value="en_IN"/>
 									<c:forEach items="${subCatList}" var="subCatList"
 										varStatus="count">
 										<c:set var="grandTotal" value="0.0" />
@@ -208,6 +209,7 @@
 
 													<c:choose>
 														<c:when test="${rep.subCatId==subCatList.subCatId}">
+														
 															<td style="text-align: right;"><fmt:formatNumber
 																	type="number" minFractionDigits="2"
 																	maxFractionDigits="2" value="${rep.grandTotal}" /></td>
@@ -247,6 +249,7 @@
 											<c:set var="finalGvnValue" value="${gvnQty+finalGvnValue}" />
 										</tr>
 									</c:forEach>
+										<fmt:setLocale value="en_IN"/>
 									<tr>
 										<th rowspan="2"></th>
 										<th rowspan="2">Total</th>
@@ -254,17 +257,17 @@
 											varStatus="cnt">
 											<th style="text-align: right;"><fmt:formatNumber
 													type="number" maxFractionDigits="2" minFractionDigits="2"
-													groupingUsed="false" value="${report.value.totBillAmt}" /></th>
+													 value="${report.value.totBillAmt}" /></th>
 
 											<th style="text-align: right;"><fmt:formatNumber
 													type="number" maxFractionDigits="2" minFractionDigits="2"
-													groupingUsed="false" value="${report.value.totGvnQty}" /></th>
+													 value="${report.value.totGvnQty}" /></th>
 											<th style="text-align: right;"><fmt:formatNumber
 													type="number" maxFractionDigits="2" minFractionDigits="2"
-													groupingUsed="false" value="${report.value.totGrnQty}" /></th>
+													 value="${report.value.totGrnQty}" /></th>
 											<th style="text-align: right;"><fmt:formatNumber
 													type="number" maxFractionDigits="2" minFractionDigits="2"
-													groupingUsed="false"
+													
 													value="${report.value.totBillAmt-(report.value.totGrnQty+report.value.totGvnQty)}" /></th>
 
 										</c:forEach>
@@ -273,10 +276,10 @@
 												groupingUsed="false" value="${finalBillAmt}" /></th>
 										<th style="text-align: right;"><fmt:formatNumber
 												type="number" maxFractionDigits="2" minFractionDigits="2"
-												groupingUsed="false" value="${finalGrnValue}" /></th>
+												value="${finalGrnValue}" /></th>
 										<th style="text-align: right;"><fmt:formatNumber
 												type="number" maxFractionDigits="2" minFractionDigits="2"
-												groupingUsed="false" value="${finalGvnValue}" /></th>
+												 value="${finalGvnValue}" /></th>
 									</tr>
 								</tbody>
 							</table>

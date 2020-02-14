@@ -276,27 +276,42 @@
 					var tr = $('<tr></tr>');
 					tr.append($('<td></td>').html(key + 1));
 					tr.append($('<td style="text-align:right;"></td>').html(
-							report.spSelectedWt));
+							addCommas(report.spSelectedWt)));
 					totalCount = totalCount + report.count;
 					tr.append($('<td style="text-align:right;"></td>').html(
-							report.count));
+							addCommas(report.count)));
 
 					$('#table_grid tbody').append(tr);
 
 				})
 				var tr = $('<tr></tr>');
 				tr.append($('<td style="text-align:right;"></td>').html(" "));
-				tr.append($('<td style="text-align:right;"></td>')
+				tr.append($('<td style="text-align:right; font-weight: 700;"></td>')
 						.html("Total"));
-				tr.append($('<td style="text-align:right;"></td>').html(
-						totalCount));
+				tr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(
+						addCommas(totalCount)));
 				$('#table_grid tbody').append(tr);
 
 			});
 
 		}
 	</script>
+<script type="text/javascript">
+function addCommas(x){
 
+	x=String(x).toString();
+	 var afterPoint = '';
+	 if(x.indexOf('.') > 0)
+	    afterPoint = x.substring(x.indexOf('.'),x.length);
+	 x = Math.floor(x);
+	 x=x.toString();
+	 var lastThree = x.substring(x.length-3);
+	 var otherNumbers = x.substring(0,x.length-3);
+	 if(otherNumbers != '')
+	     lastThree = ',' + lastThree;
+	 return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+	}
+</script>
 	<script type="text/javascript">
 		function validate() {
 

@@ -225,6 +225,14 @@
 				
 				var from_date = $("#fromDate").val();
 				var to_date = $("#toDate").val();
+				
+				var ttlTaxRate = 0;
+				var ttlQty = 0;
+				var ttlTaxabel = 0;
+				var ttlCgst = 0;
+				var ttlSgst = 0;
+				var ttlIgst = 0;
+				var grandTotal = 0;
 
 				$('#loader').show();
 
@@ -264,8 +272,8 @@
 													  	tr.append($('<td></td>').html(report.itemName));
 													  	tr.append($('<td></td>').html(report.itemHsncd));
 													  	
-													  	tr.append($('<td style="text-align:right;"></td>').html(report.itemTax1 + report.itemTax2));
-													  	tr.append($('<td style="text-align:right;"></td>').html(report.billQtySum));
+													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.itemTax1 + report.itemTax2)));
+													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.billQtySum)));
 													  	
 														/* if(report.isSameState==1){
 														  	tr.append($('<td></td>').html(report.cgstSum));
@@ -278,10 +286,10 @@
 														  	tr.append($('<td></td>').html(report.igstSum));
 														} */
 													  	//tr.append($('<td></td>').html(report.igstSum));
-														tr.append($('<td style="text-align:right;"></td>').html(report.taxableAmtSum.toFixed(2)));
-														tr.append($('<td style="text-align:right;"></td>').html(report.cgstRsSum.toFixed(2)));
-														tr.append($('<td style="text-align:right;"></td>').html(report.sgstRsSum.toFixed(2)));
-														tr.append($('<td style="text-align:right;"></td>').html(report.igstRsSum.toFixed(2)));
+														tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.taxableAmtSum.toFixed(2))));
+														tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.cgstRsSum.toFixed(2))));
+														tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.sgstRsSum.toFixed(2))));
+														tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.igstRsSum.toFixed(2))));
 														
 														var total=report.taxableAmtSum+report.sgstRsSum+report.cgstRsSum+report.igstRsSum;
 														total=total.toFixed(2);
@@ -291,15 +299,51 @@
 														$('#table_grid tbody')
 																.append(
 																		tr);
-														
+														ttlTaxRate = ttlTaxRate + (report.itemTax1 + report.itemTax2);
+														ttlQty = ttlQty + report.billQtySum;
+														ttlTaxabel = ttlTaxabel + report.taxableAmtSum;
+														ttlCgst	= ttlCgst + report.cgstRsSum;
+														ttlSgst = ttlSgst + report.sgstRsSum;
+														ttlIgst = ttlIgst + report.igstRsSum;
+														grandTotal = grandTotal+parseFloat(total);  
 
 													})
+													var trr =$('<tr></tr>');
+									trr.append($('<td style="text-align:center; font-weight: 700;"></td>').html('Total'));
+									trr.append($('<td></td>').html(''));
+									trr.append($('<td></td>').html(''));
+									
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlTaxRate.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlQty.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlTaxabel.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlCgst.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlSgst.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlIgst.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(grandTotal.toFixed(2))));
+									$('#table_grid tbody')
+									.append(trr);
 
 								});
 
 			
 		}
 	</script>
+	<script type="text/javascript">
+function addCommas(x){
+
+	x=String(x).toString();
+	 var afterPoint = '';
+	 if(x.indexOf('.') > 0)
+	    afterPoint = x.substring(x.indexOf('.'),x.length);
+	 x = Math.floor(x);
+	 x=x.toString();
+	 var lastThree = x.substring(x.length-3);
+	 var otherNumbers = x.substring(0,x.length-3);
+	 if(otherNumbers != '')
+	     lastThree = ',' + lastThree;
+	 return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+	}
+</script>
 
 	<script type="text/javascript">
 		function validate() {

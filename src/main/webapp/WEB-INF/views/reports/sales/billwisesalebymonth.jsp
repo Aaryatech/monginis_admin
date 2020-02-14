@@ -232,6 +232,14 @@
 				var from_date = $("#fromDate").val();
 				var to_date = $("#toDate").val();
 
+				var total = 0;
+				
+				var ttlBaseVal = 0;
+				var ttlCgst = 0;
+				var ttlSgst = 0;
+				var ttlIgst = 0;
+				var grandTotal = 0;
+				
 				$('#loader').show();
 
 				$
@@ -268,22 +276,21 @@
 														var tr = $('<tr></tr>');
 													  	tr.append($('<td></td>').html(key+1));
 													  	tr.append($('<td></td>').html(report.month));
-													  	tr.append($('<td style="text-align:right;"></td>').html(report.taxableAmt));
+													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.taxableAmt.toFixed(2))));
 													  	
 														/* if(report.isSameState==1){ */
-														  	tr.append($('<td style="text-align:right;"></td>').html(report.cgstSum));
-														  	tr.append($('<td style="text-align:right;"></td>').html(report.sgstSum));
+														  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.cgstSum.toFixed(2))));
+														  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.sgstSum.toFixed(2))));
 														/*   	tr.append($('<td style="text-align:right;"></td>').html(0));
 														}
 														else{
 															tr.append($('<td style="text-align:right;"></td>').html(0));
 														  	tr.append($('<td style="text-align:right;"></td>').html(0)); */
-														  	tr.append($('<td style="text-align:right;"></td>').html(report.igstSum));
+														  	tr.append($('<td style="text-align:right;"></td>').html(report.igstSum.toFixed(2)));
 														/* } */
 													  	//tr.append($('<td></td>').html(report.igstSum));
 														tr.append($('<td style="text-align:right;"></td>').html(report.roundOff));
-														var total;
-														
+																												
 														if(report.isSameState==1){
 															 total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum);
 														}
@@ -292,21 +299,53 @@
 															 total=report.taxableAmt+report.igstSum;
 														}
 
-													  	tr.append($('<td style="text-align:right;"></td>').html(total.toFixed(2)));
+													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(total.toFixed(2))));
 
 														$('#table_grid tbody')
 																.append(
 																		tr);
-														
+														ttlBaseVal = ttlBaseVal + report.taxableAmt;
+														ttlCgst	= ttlCgst + report.cgstSum;
+														ttlSgst = ttlSgst + report.sgstSum;
+														ttlIgst = ttlIgst + report.igstSum;
+														grandTotal = grandTotal + total; 
 
 													})
+													
+													var trr =$('<tr></tr>');
+													trr.append($('<td style="text-align:center; font-weight: 700;"></td>').html('Total'));
+													trr.append($('<td></td>').html(''));
+													
+													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlBaseVal.toFixed(2))));
+													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlCgst.toFixed(2))));
+													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlSgst.toFixed(2))));
+													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlIgst.toFixed(2))));
+													trr.append($('<td style="text-align:right;"></td>').html(''));
+													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(grandTotal.toFixed(2))));
+													$('#table_grid tbody')
+													.append(trr);
 
 								});
 
 			
 		}
 	</script>
+<script type="text/javascript">
+function addCommas(x){
 
+	x=String(x).toString();
+	 var afterPoint = '';
+	 if(x.indexOf('.') > 0)
+	    afterPoint = x.substring(x.indexOf('.'),x.length);
+	 x = Math.floor(x);
+	 x=x.toString();
+	 var lastThree = x.substring(x.length-3);
+	 var otherNumbers = x.substring(0,x.length-3);
+	 if(otherNumbers != '')
+	     lastThree = ',' + lastThree;
+	 return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+	}
+</script>
 	<script type="text/javascript">
 		function validate() {
 

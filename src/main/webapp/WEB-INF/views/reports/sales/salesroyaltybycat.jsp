@@ -226,6 +226,17 @@
 				
 				var from_date = $("#fromDate").val();
 				var to_date = $("#toDate").val();
+				
+				var ttlSalQty = 0;
+				var ttlSalVal = 0;
+				var ttlBillTaxable = 0;
+				var ttlGrnTaxable = 0;
+				var ttlGrnQty = 0;
+				var ttlGvnTaxable = 0;
+				var ttlGvnQty = 0;
+				var ttlNetQty = 0;
+				var ttlNetVal = 0;
+				var ttlRoyalty= 0;
 
 				$('#loader').show();
 
@@ -322,18 +333,68 @@
 														$('#table_grid tbody')
 																.append(
 																		tr);
+														
+														ttlSalQty = ttlSalQty + parseFloat(report.tBillQty);	
+														ttlSalVal = ttlSalVal + parseFloat(report.tBillTaxableAmt);
+														
+														ttlGrnQty = ttlGrnQty+parseFloat(report.tGrnQty);
+														ttlGrnTaxable = ttlGrnTaxable + parseFloat(report.tGrnTaxableAmt);
+														
+														ttlGvnQty = ttlGvnQty+parseFloat(report.tGvnQty);
+														ttlGvnTaxable = ttlGvnTaxable + parseFloat(report.tGvnTaxableAmt);
+														
+														ttlNetQty = ttlNetQty+parseFloat(netQty);
+														ttlNetVal = ttlNetVal + parseFloat(netValue);
+														
+														ttlRoyalty = ttlRoyalty + parseFloat(rAmt);
 														 
 														}//end of if
 														
 													})
+													
 											})
+											var trr =$('<tr></tr>');
+									trr.append($('<td style="text-align:center; font-weight: 700;"></td>').html('Total'));
+									trr.append($('<td></td>').html(''));
+									
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlSalQty.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlSalVal.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlGrnQty.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlGrnTaxable.toFixed(2))));
+									
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlGvnQty.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlGvnTaxable.toFixed(2))));
+									
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlNetQty.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlNetVal.toFixed(2))));
+									
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(''));													
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlRoyalty.toFixed(2))));
+									
+									$('#table_grid tbody')
+									.append(trr); 
 
 								});
 
 			
 		}
 	</script>
+<script type="text/javascript">
+function addCommas(x){
 
+	x=String(x).toString();
+	 var afterPoint = '';
+	 if(x.indexOf('.') > 0)
+	    afterPoint = x.substring(x.indexOf('.'),x.length);
+	 x = Math.floor(x);
+	 x=x.toString();
+	 var lastThree = x.substring(x.length-3);
+	 var otherNumbers = x.substring(0,x.length-3);
+	 if(otherNumbers != '')
+	     lastThree = ',' + lastThree;
+	 return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+	}
+</script>
 	<script type="text/javascript">
 		function validate() {
 

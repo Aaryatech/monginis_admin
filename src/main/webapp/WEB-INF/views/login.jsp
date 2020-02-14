@@ -70,7 +70,7 @@
 						<span class="txt1" >
 							<!-- Forgot -->
 							<a href="${pageContext.request.contextPath}/forgetPwd"><span class="links" style="color:white;">
-							Forget Password</span></a>
+							Forgot Password</span></a>
 						</span>
 
 						<a href="#" class="txt2 hov1">

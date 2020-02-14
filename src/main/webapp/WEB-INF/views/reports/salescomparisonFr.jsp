@@ -370,61 +370,61 @@
 																			tr
 																					.append($(
 																							'<td style="text-align:left;"></td>')
-																							.html(
-																									report.frName));
+																							.html(addCommas(
+																									report.frName)));
 																			tr
 																					.append($(
 																							'<td colspan="2" style="text-align:right;"></td>')
-																							.html(
+																							.html(addCommas(
 																									(report.perMonthSale)
-																											.toFixed(2)));
+																											.toFixed(2))));
 																			tr
 																					.append($(
 																							'<td colspan="2" style="text-align:right;"></td>')
-																							.html(
+																							.html(addCommas(
 																									(report.prevMonthSale)
-																											.toFixed(2)));
+																											.toFixed(2))));
 																			tr
 																					.append($(
 																							'<td colspan="2" style="text-align:right;"></td>')
-																							.html(
+																							.html(addCommas(
 																									(report.lastMonthDiff)
-																											.toFixed(2)));
+																											.toFixed(2))));
 																			tr
 																					.append($(
 																							'<td style="text-align:right;"></td>')
-																							.html(
+																							.html(addCommas(
 																									(report.monthDiffInPer)
-																											.toFixed(2)));
+																											.toFixed(2))));
 																			tr
 																					.append($(
 																							'<td style="text-align:left;"></td>')
-																							.html(
-																									report.routeName));
+																							.html(addCommas(
+																									report.routeName)));
 																			tr
 																					.append($(
 																							'<td style="text-align:right;"></td>')
 																							.html(
-																									(report.perMonthSale / 30)
-																											.toFixed(2)));
+																									addCommas((report.perMonthSale / 30)
+																											.toFixed(2))));
 																			tr
 																					.append($(
 																							'<td style="text-align:right;"></td>')
 																							.html(
-																									(report.perMonthSale * 11.11 / 100)
-																											.toFixed(2)));
+																									addCommas((report.perMonthSale * 11.11 / 100)
+																											.toFixed(2))));
 																			tr
 																					.append($(
 																							'<td style="text-align:right;"></td>')
 																							.html(
-																									(report.perMonthSale * 14.9 / 100)
-																											.toFixed(2)));
+																									addCommas((report.perMonthSale * 14.9 / 100)
+																											.toFixed(2))));
 																			tr
 																					.append($(
 																							'<td style="text-align:right;"></td>')
 																							.html(
-																									(report.perMonthSale * 17.6 / 100)
-																											.toFixed(2)));
+																									addCommas((report.perMonthSale * 17.6 / 100)
+																											.toFixed(2))));
 																			$(
 																					'#table_grid tbody')
 																					.append(
@@ -447,14 +447,14 @@
 															.append($(
 																	'<td colspan="2" style="text-align:right; color:blue;" ></td>')
 																	.html(
-																			(currMonthRouteSale)
-																					.toFixed(2)));
+																			addCommas((currMonthRouteSale)
+																					.toFixed(2))));
 													tr
 															.append($(
 																	'<td colspan="2" style="text-align:right; color:blue;"></td>')
 																	.html(
-																			(prevMonthRouteSale)
-																					.toFixed(2)));
+																			addCommas((prevMonthRouteSale)
+																					.toFixed(2))));
 													tr
 															.append($(
 																	'<td colspan="2"></td>')
@@ -479,7 +479,22 @@
 
 		}
 	</script>
+<script type="text/javascript">
+function addCommas(x){
 
+	x=String(x).toString();
+	 var afterPoint = '';
+	 if(x.indexOf('.') > 0)
+	    afterPoint = x.substring(x.indexOf('.'),x.length);
+	 x = Math.floor(x);
+	 x=x.toString();
+	 var lastThree = x.substring(x.length-3);
+	 var otherNumbers = x.substring(0,x.length-3);
+	 if(otherNumbers != '')
+	     lastThree = ',' + lastThree;
+	 return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+	}
+</script>
 	<script type="text/javascript">
 		function validate() {
 

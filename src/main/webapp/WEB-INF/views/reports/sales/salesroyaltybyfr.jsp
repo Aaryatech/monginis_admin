@@ -213,7 +213,22 @@
 	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
 		class="fa fa-chevron-up"></i></a>
 </div></div>
+<script type="text/javascript">
+function addCommas(x){
 
+	x=String(x).toString();
+	 var afterPoint = '';
+	 if(x.indexOf('.') > 0)
+	    afterPoint = x.substring(x.indexOf('.'),x.length);
+	 x = Math.floor(x);
+	 x=x.toString();
+	 var lastThree = x.substring(x.length-3);
+	 var otherNumbers = x.substring(0,x.length-3);
+	 if(otherNumbers != '')
+	     lastThree = ',' + lastThree;
+	 return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+	}
+</script>
 	<script type="text/javascript">
 		function searchReport() {
 		//	var isValid = validate();
@@ -224,6 +239,12 @@
 				var from_date = $("#fromDate").val();
 				var to_date = $("#toDate").val();
 
+				var ttlSaleVal = 0;
+				var ttlGrnVal = 0;
+				var ttlGvnVal = 0;
+				var ttlNetVal = 0;
+				var ttlRoyltVal = 0;
+				
 				$('#loader').show();
 
 				$
@@ -287,11 +308,26 @@
 														$('#table_grid tbody')
 																.append(
 																		tr);
-														 
-														
+														ttlSaleVal = ttlSaleVal + parseFloat(report.tBillTaxableAmt);
+														 ttlGrnVal = ttlGrnVal + parseFloat(report.tGrnTaxableAmt);
+														 ttlGvnVal = ttlGvnVal + parseFloat(report.tGvnTaxableAmt);
+														 ttlNetVal = ttlNetVal + parseFloat(netValue);
+														 ttlRoyltVal = ttlRoyltVal + parseFloat(rAmt);															
 														
 													})
-											
+									var trr =$('<tr></tr>');
+									trr.append($('<td style="text-align:center; font-weight: 700;"></td>').html('Total'));
+									trr.append($('<td></td>').html(''));
+									trr.append($('<td></td>').html(''));
+									
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlSaleVal.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlGrnVal.toFixed(2))));
+									trr.append($('<td style="text-align:right;"></td>').html(''));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlGvnVal.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlNetVal.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlRoyltVal.toFixed(2))));
+									$('#table_grid tbody')
+									.append(trr);
 
 								});
 

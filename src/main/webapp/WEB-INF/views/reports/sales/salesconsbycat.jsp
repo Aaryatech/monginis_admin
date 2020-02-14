@@ -256,7 +256,17 @@
 
 				var from_date = $("#fromDate").val();
 				var to_date = $("#toDate").val();
-
+				
+				var ttlSalesQty = 0;
+				var ttlSalesVal = 0;
+				var ttlGrnQty = 0;
+				var ttlGrnVal = 0;
+				var ttlGvnQty = 0;
+				var ttlGvnVal = 0;
+				var ttlNetQty = 0;
+				var ttlNetVal= 0;
+				
+				
 				$('#loader').show();
 
 				$
@@ -376,33 +386,33 @@
 																						.append($(
 																								'<td style="text-align:right;"></td>')
 																								.html(
-																										report.tBillQty));
+																										addCommas(report.tBillQty)));
 																				tr
 																						.append($(
 																								'<td style="text-align:right;"></td>')
 																								.html(
-																										(report.tBillTaxableAmt).toFixed(2)));
+																										addCommas((report.tBillTaxableAmt).toFixed(2))));
 
 																				tr
 																						.append($(
 																								'<td style="text-align:right;"></td>')
 																								.html(
-																										report.tGrnQty));
+																										addCommas(report.tGrnQty)));
 																				tr
 																						.append($(
 																								'<td style="text-align:right;"></td>')
 																								.html(
-																										report.tGrnTaxableAmt.toFixed(2)));
+																										addCommas(report.tGrnTaxableAmt.toFixed(2))));
 																				tr
 																						.append($(
 																								'<td></td>')
 																								.html(
-																										report.tGvnQty));
+																										addCommas(report.tGvnQty)));
 																				tr
 																						.append($(
 																								'<td style="text-align:right;"></td>')
 																								.html(
-																										report.tGvnTaxableAmt.toFixed(2)));
+																										addCommas(report.tGvnTaxableAmt.toFixed(2))));
 
 																				var netQty = report.tBillQty
 																						- (report.tGrnQty + report.tGvnQty);
@@ -418,29 +428,75 @@
 																						.append($(
 																								'<td style="text-align:right;"></td>')
 																								.html(
-																										netQty));
+																										addCommas(netQty)));
 																				tr
 																						.append($(
 																								'<td style="text-align:right;"></td>')
 																								.html(
-																										netValue));
+																										addCommas(netValue)));
 
 																				$(
 																						'#table_grid tbody')
 																						.append(
 																								tr);
-
-																			}//end of if
-
+																				
+																				ttlSalesQty = ttlSalesQty + parseFloat(report.tBillQty);
+																				ttlSalesVal = ttlSalesVal + parseFloat(report.tBillTaxableAmt);
+																				
+																				ttlGrnQty = ttlGrnQty + parseFloat(report.tGrnQty);
+																				ttlGrnVal = ttlGrnVal + parseFloat(report.tGrnTaxableAmt);
+																				
+																				ttlGvnQty = ttlGvnVal + parseFloat(report.tGvnQty);
+																				ttlGvnVal = ttlGvnVal+parseFloat(report.tGvnTaxableAmt);
+																				
+																				ttlNetQty = ttlNetQty + parseFloat(netQty);
+																				ttlNetVal= ttlNetVal + parseFloat(netValue);
+																				
+																			}//end of if																		
+																			
 																		})
+																		
+																		
 													})
+													var trr =$('<tr></tr>');
+									trr.append($('<td style="text-align:center; font-weight: 700;"></td>').html('Total'));
+									trr.append($('<td></td>').html(''));
+									
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlSalesQty.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlSalesVal.toFixed(2))));
+									
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlGrnQty.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlGrnVal.toFixed(2))));
+									
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlGvnQty.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlGvnVal.toFixed(2)))); 
+									
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlNetQty.toFixed(2))));
+									trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlNetVal.toFixed(2))));
+									$('#table_grid tbody')
+									.append(trr);
 
 								});
 
 			}
 		</script>
 
-	
+	<script type="text/javascript">
+function addCommas(x){
+
+	x=String(x).toString();
+	 var afterPoint = '';
+	 if(x.indexOf('.') > 0)
+	    afterPoint = x.substring(x.indexOf('.'),x.length);
+	 x = Math.floor(x);
+	 x=x.toString();
+	 var lastThree = x.substring(x.length-3);
+	 var otherNumbers = x.substring(0,x.length-3);
+	 if(otherNumbers != '')
+	     lastThree = ',' + lastThree;
+	 return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
+	}
+</script>
 		<script type="text/javascript">
 			function showChart() {
 
