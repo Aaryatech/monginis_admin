@@ -333,13 +333,13 @@
 	}
 	
 	function submitUser(){
-	alert("in fun");
+	//alert("in fun");
 		var valid=validate();
 	 if(!valid)
 		 {
-		 alert("in If");
+		// alert("in If");
 		 var form= document.getElementById("validation-form");
-		 alert("form = " +form);
+		 //alert("form = " +form);
 		 form.action='${pageContext.request.contextPath}/editUserProcess';
 		 form.submit();
 		

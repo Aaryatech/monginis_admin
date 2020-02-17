@@ -67,7 +67,7 @@
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">User Name</label>
 									<div class="col-sm-6 col-lg-4 controls">
-										<input type="text" name="uname" id="uname" onkeyup="sameUser()" class="form-control"placeholder="User Name"data-rule-required="true" />
+										<input type="text" name="uname" id="uname" onkeyup="sameUser()" class="form-control"placeholder="User Name" data-rule-required="true" />
 									</div>
 									<input type="hidden" name="umo_id" id="umo_id" />
 									
@@ -286,6 +286,22 @@
 				src="${pageContext.request.contextPath}/resources/assets/jquery-validation/dist/additional-methods.min.js"></script>
 	
 	<script>
+	
+	$("#uname").keypress(function(e) {
+		$("#error_sp_msg").remove();
+		var k 			= e.keyCode,
+				$return = ((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32  || (k >= 48 && k <= 57));
+	      if(!$return) {
+	      	$("<span/>",{
+	        	"id" : "error_sp_msg",
+	         /*  "html" 	: "Special characters not allowed !!!!!" */
+	        }).insertAfter($(this));
+	      	return false;
+	      }
+	      
+	})
+	
+	
 function validateEmail(email) {
     
 	var eml = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
