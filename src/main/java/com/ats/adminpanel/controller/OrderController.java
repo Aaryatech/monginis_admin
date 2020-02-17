@@ -4,6 +4,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -27,6 +28,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ats.adminpanel.commons.Commons;
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.model.AllRoutesListResponse;
+import com.ats.adminpanel.model.ChangeOrderRecord;
 import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.GetOrder;
 import com.ats.adminpanel.model.GetOrderListResponse;
@@ -49,6 +51,7 @@ import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
 import com.ats.adminpanel.model.franchisee.FranchiseeList;
 import com.ats.adminpanel.model.franchisee.Menu;
+import com.ats.adminpanel.model.login.UserResponse;
 
 @Controller
 @Scope("session")
@@ -1062,12 +1065,53 @@ public class OrderController {
 		try {
 			System.out.println("/inside delete order process  ");
 			int orderId = Integer.parseInt(request.getParameter("order_id"));
-
+			HttpSession session=request.getSession();
+			UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
+			
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("orderId", orderId);
 			RestTemplate restTemp = new RestTemplate();
+			
+				if (!orderList.isEmpty()) {
+					for (int i = 0; i < orderList.size(); i++) {
+						if (orderList.get(i).getOrderId().equals(orderId)) {
+							DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							Calendar cal = Calendar.getInstance();
+							String curDateTime = dateFormat.format(cal.getTime());
+							Date date = new Date();
+							String modifiedDate= new SimpleDateFormat("dd-MM-yyyy").format(date);
+System.err.println("modifiedDate delete function " +modifiedDate);
+							ChangeOrderRecord reqBody=new ChangeOrderRecord();
+							reqBody.setDeliveryDate(new SimpleDateFormat("dd-MM-yyyy").format(orderList.get(i).getDeliveryDate()));
+							reqBody.setChangeDate(modifiedDate);
+							reqBody.setChangeId(0);
+							reqBody.setChangeName("Deleted");
+							reqBody.setChangeQty(orderList.get(i).getOrderQty());
+							reqBody.setChangeType(0);
+							reqBody.setDateTime(curDateTime);
+							reqBody.setExVar1("na");
+							reqBody.setFrId(0);
+							reqBody.setFrName(orderList.get(i).getFrName());
+							reqBody.setItemId(0);
+							reqBody.setItemName(orderList.get(i).getItemName());
+							reqBody.setOrderId(orderList.get(i).getOrderId());
+							reqBody.setOrigQty(orderList.get(i).getOrderQty());
+							
+							reqBody.setUserId(userResponse.getUser().getId());
+							reqBody.setUserName(userResponse.getUser().getUsername());
+							
+							
+							
+							ChangeOrderRecord orderChangeRes = restTemp.postForObject(Constants.url + "saveChangeOrderRecord", reqBody, ChangeOrderRecord.class);
+							
+							break;
+							
+						}
+					}
+				}
 			Integer isDeleted = restTemp.postForObject(Constants.url + "DeleteOrder", map, Integer.class);
 
+			
 			if (isDeleted != 0) {
 				if (!orderList.isEmpty()) {
 					for (int i = 0; i < orderList.size(); i++) {
@@ -1171,7 +1215,9 @@ public class OrderController {
 
 		String orderId = request.getParameter("order_id");
 		String orderQty = request.getParameter("order_qty");
-
+		HttpSession session=request.getSession();
+		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
+		
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("orderId", orderId);
 		map.add("orderQty", orderQty);
@@ -1179,6 +1225,47 @@ public class OrderController {
 		RestTemplate restTemp = new RestTemplate();
 
 		String s = restTemp.postForObject(Constants.url + "updateOrderQty", map, String.class);
+		
+		
+		for (int i = 0; i < orderList.size(); i++) {
+			if (orderList.get(i).getOrderId().equals(Integer.parseInt(orderId))) {
+				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				Calendar cal = Calendar.getInstance();
+				String curDateTime = dateFormat.format(cal.getTime());
+				Date date = new Date();
+				String modifiedDate= new SimpleDateFormat("dd-MM-yyyy").format(date);
+                 System.err.println("modifiedDate callChangeQty"  +modifiedDate);
+				ChangeOrderRecord reqBody=new ChangeOrderRecord();
+				reqBody.setDeliveryDate(new SimpleDateFormat("dd-MM-yyyy").format(orderList.get(i).getDeliveryDate()));
+
+				reqBody.setChangeDate(modifiedDate);
+				reqBody.setChangeId(0);
+				reqBody.setChangeName("Edited");
+				reqBody.setChangeQty(Integer.parseInt(orderQty));
+				reqBody.setChangeType(1);
+				reqBody.setDateTime(curDateTime);
+				reqBody.setExVar1("na");
+				reqBody.setFrId(0);
+				reqBody.setFrName(orderList.get(i).getFrName());
+				reqBody.setItemId(0);
+				reqBody.setItemName(orderList.get(i).getItemName());
+				reqBody.setOrderId(orderList.get(i).getOrderId());
+				reqBody.setOrigQty(orderList.get(i).getOrderQty());
+				
+				reqBody.setUserId(userResponse.getUser().getId());
+				reqBody.setUserName(userResponse.getUser().getUsername());
+				
+				
+				
+				ChangeOrderRecord orderChangeRes = restTemp.postForObject(Constants.url + "saveChangeOrderRecord", reqBody, ChangeOrderRecord.class);
+				
+				break;
+				
+			}else {
+				
+			}
+		}
+	
 
 		// return "Success";
 	}
