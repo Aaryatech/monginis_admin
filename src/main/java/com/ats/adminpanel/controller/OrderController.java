@@ -1062,7 +1062,7 @@ public class OrderController {
 	@RequestMapping(value = "/callDeleteOrder", method = RequestMethod.GET)
 	public @ResponseBody List<GetOrder> deleteOrder(HttpServletRequest request, HttpServletResponse response) {
 
-		try {
+		try { 
 			System.out.println("/inside delete order process  ");
 			int orderId = Integer.parseInt(request.getParameter("order_id"));
 			HttpSession session=request.getSession();
