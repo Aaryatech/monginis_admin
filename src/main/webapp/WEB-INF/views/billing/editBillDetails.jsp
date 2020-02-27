@@ -476,7 +476,7 @@ function onCatIdChangeForManOrder(menuId) {
 		}
 		$("#itemId").trigger("chosen:updated");
 
-	});
+ 	}); 
 
 }
 </script>
