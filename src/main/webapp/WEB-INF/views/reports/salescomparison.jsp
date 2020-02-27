@@ -368,8 +368,8 @@
 																			tr
 																					.append($(
 																							'<td style="text-align:left;"></td>')
-																							.html(addCommas(
-																									report.frName)));
+																							.html(
+																									report.frName));
 																			tr
 																					.append($(
 																							'<td colspan="2" style="text-align:right;"></td>')
@@ -397,8 +397,8 @@
 																			tr
 																					.append($(
 																							'<td style="text-align:left;"></td>')
-																							.html(addCommas(
-																									report.routeName)));
+																							.html(
+																									report.routeName));
 																			tr
 																					.append($(
 																							'<td style="text-align:right;"></td>')
