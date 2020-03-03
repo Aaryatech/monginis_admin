@@ -43,7 +43,9 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
+import com.ats.adminpanel.commons.DateConvertor;
 import com.ats.adminpanel.commons.VpsImageUpload;
+import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.ConfigureFrBean;
 import com.ats.adminpanel.model.ConfigureFrListResponse;
@@ -81,6 +83,7 @@ import com.ats.adminpanel.model.masters.FrListForSupp;
 import com.ats.adminpanel.model.mastexcel.Franchisee;
 import com.ats.adminpanel.model.mastexcel.ItemList;
 import com.ats.adminpanel.model.modules.ErrorMessage;
+import com.ats.adminpanel.model.salesreport.GetBillWiseSpCakeRep;
 
 @Controller
 public class FranchiseeController {
@@ -2858,4 +2861,77 @@ public class FranchiseeController {
 		return frRoute;
 		
 	}
+	
+	/**********************************************************************************/
+	//mahendra 29-02-2020
+	
+		@RequestMapping(value = "/getSpCakeBillWiseReport", method = RequestMethod.GET)//getspCakeReport
+		public ModelAndView getspCakeReport(HttpServletRequest request, HttpServletResponse response) {
+			ModelAndView mav = null;
+			List<GetBillWiseSpCakeRep> spCakeList = new ArrayList<GetBillWiseSpCakeRep>();
+			
+			try {
+				mav = new ModelAndView("franchisee/spCakeBillWiseRep");
+				
+				String fromDate = request.getParameter("fromDate");
+				String toDate = request.getParameter("toDate");
+				int isBill = Integer.parseInt(request.getParameter("isBill"));
+				String[] frIdString =  request.getParameterValues("fr_id_list");	
+				
+				RestTemplate restTemplate = new RestTemplate();
+				
+				AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
+				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+				mav.addObject("frList", allFrIdNameList.getFrIdNamesList());
+				
+				MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+				String result = ""; 
+				
+				StringBuilder sb = new StringBuilder(); 
+				if (frIdString.length > 0)				{ 
+					
+					for (String s : frIdString) {
+						sb.append(s).append(","); 
+					}
+				} 
+				result = sb.deleteCharAt(sb.length() - 1).toString();
+				
+				
+				
+
+				System.err.println("frId string " + result+" "+fromDate+" "+toDate+" "+isBill);
+				List<String> franchIds = new ArrayList();
+
+				franchIds = Arrays.asList(frIdString);
+				if (franchIds.contains("-1")) {
+					map.add("frIdList", -1);
+
+				} else {
+
+					map.add("frIdList", result);
+				}
+				System.err.println("frId string " + frIdString);
+				map.add("isBill", isBill);
+				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+				map.add("toDate", DateConvertor.convertToYMD(toDate));
+				GetBillWiseSpCakeRep[] spArr = restTemplate.postForObject(Constants.url + "getSpCakeRepBillWise",map,
+						GetBillWiseSpCakeRep[].class);	
+
+				spCakeList = new ArrayList<GetBillWiseSpCakeRep>(Arrays.asList(spArr));
+				logger.info("SpCake List Cat 5-----------:" + spCakeList.toString());
+				mav.addObject("spCakeList", spCakeList);
+				
+				
+				mav.addObject("fromDate", fromDate);
+				mav.addObject("toDate", toDate);
+				
+			}catch(Exception e) {
+			
+				logger.info("Exception in getSpCakeBillWiseReport" + e.getMessage());
+				e.printStackTrace();
+			}
+			return mav;
+		}
+		
+		
 }
