@@ -2873,10 +2873,7 @@ public class FranchiseeController {
 			try {
 				mav = new ModelAndView("franchisee/spCakeBillWiseRep");
 				
-				String fromDate = request.getParameter("fromDate");
-				String toDate = request.getParameter("toDate");
-				int isBill = Integer.parseInt(request.getParameter("isBill"));
-				String[] frIdString =  request.getParameterValues("fr_id_list");	
+			
 				
 				RestTemplate restTemplate = new RestTemplate();
 				
@@ -2886,6 +2883,11 @@ public class FranchiseeController {
 				
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 				String result = ""; 
+				
+				String fromDate = request.getParameter("fromDate");
+				String toDate = request.getParameter("toDate");
+				int isBill = Integer.parseInt(request.getParameter("isBill"));
+				String[] frIdString =  request.getParameterValues("fr_id_list");
 				
 				StringBuilder sb = new StringBuilder(); 
 				if (frIdString.length > 0)				{ 
