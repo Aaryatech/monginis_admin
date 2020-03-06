@@ -2960,9 +2960,10 @@ public class FranchiseeController {
 				for (int j = 0; j < allFrIdNameList.getFrIdNamesList().size(); j++) {
 					
 					float frTotal = 0;
-					grandTotal = 0;
+					
 					int cnt=1;
 					if(frIdList.contains(allFrIdNameList.getFrIdNamesList().get(j).getFrId())) {
+					grandTotal = 0;
 					expoExcel = new ExportToExcel();
 					rowData = new ArrayList<String>();
 					
@@ -3006,7 +3007,8 @@ public class FranchiseeController {
 					expoExcel.setRowData(rowData);
 					exportToExcelList.add(expoExcel);
 				
-				
+					}
+				}
 				expoExcel = new ExportToExcel();
 				rowData = new ArrayList<String>();
 				rowData.add("" + "Grand Total");
@@ -3017,13 +3019,13 @@ public class FranchiseeController {
 				rowData.add("" + grandTotal);
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
-				
+					
 				HttpSession session = request.getSession();
 				session.setAttribute("exportExcelList", exportToExcelList);
 				session.setAttribute("excelName", "SpCakeBillWise");
 				
-					}
-				}
+					
+				
 				
 			}catch(Exception e) {
 			
