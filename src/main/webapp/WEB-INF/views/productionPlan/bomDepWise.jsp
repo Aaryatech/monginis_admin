@@ -77,7 +77,7 @@
 									<tr>
 										<th>Sr.No.</th>
 										
-										<th>Department Name</th>
+										<th>To Department Name</th>
 										<th>Request Date</th>
 										
 										<th>Status</th>
@@ -121,13 +121,18 @@
 
 														<c:set var="prod" value="PROD"></c:set>
 														<c:set var="mix" value="MIX"></c:set>
+														<c:set var="store" value="STORE"></c:set>
 															<c:choose>
-															 	<c:when test="${getbomList.fromDeptName==prod}">
+															 	<c:when test="${getbomList.toDeptName==prod}">
 															 	<c:set var="depname" value="Production"></c:set>
 															 	
 															 	</c:when>
-															 	<c:when test="${getbomList.fromDeptName==mix}">
+															 	<c:when test="${getbomList.toDeptName==mix}">
 															 	<c:set var="depname" value="Mixing"></c:set>
+															 	
+															 	</c:when>
+															 	<c:when test="${getbomList.toDeptName==store}">
+															 	<c:set var="depname" value="Store"></c:set>
 															 	
 															 	</c:when>
 															</c:choose>
@@ -241,7 +246,7 @@
 									<tr>
 										<th>Sr.No.</th>
 										
-										<th>Department Name</th>
+										<th>To Department Name</th>
 										<th>Request Date</th>
 										
 										<th>Status</th>
@@ -380,14 +385,18 @@
 												var stats;
 												var bgcolor;
 												var deptname;
-												if(itemList.fromDeptName=='PROD')
+												if(itemList.toDeptName=='PROD')
 													{
 														deptname="Production";
 													}
-												else if(itemList.fromDeptName=='MIX')
+												else if(itemList.toDeptName=='MIX')
 													{
 														deptname="Mixing";
 													}
+												else if(itemList.toDeptName=='STORE')
+												{
+													deptname="Store";
+												}
 												
 											if(itemList.status==0)
 												{

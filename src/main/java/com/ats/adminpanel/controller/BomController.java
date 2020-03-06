@@ -921,21 +921,22 @@ int globalIsPlan;
 		{
 			
 			 map = new LinkedMultiValueMap<String, Object>();
-			 String fromdep = new String(); 
-			 fromdep = "PROD"; 
-				map.add("settingKeyList", fromdep);
-				 fromsettingvalue = rest.postForObject(Constants.url + "getDeptSettingValue", map,
+			
+			map.add("settingKeyList",  "PROD");
+			fromsettingvalue = rest.postForObject(Constants.url + "getDeptSettingValue", map,
 						FrItemStockConfigureList.class);
 			map = new LinkedMultiValueMap<String, Object>();
-			String todep = new String(); 
-			todep = "MIX"; 
-			map.add("settingKeyList", todep);
+		
+			map.add("settingKeyList",  "MIX");
 			tosettingvalue = rest.postForObject(Constants.url + "getDeptSettingValue", map,
 					FrItemStockConfigureList.class);
-		 	
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("settingKeyList",  "STORE");
+			FrItemStockConfigureList tosettingvalue1 = rest.postForObject(Constants.url + "getDeptSettingValue", map,
+					FrItemStockConfigureList.class);
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("fromDept",fromsettingvalue.getFrItemStockConfigure().get(0).getSettingValue());         
-			map.add("toDept",tosettingvalue.getFrItemStockConfigure().get(0).getSettingValue());           
+			map.add("toDept",tosettingvalue.getFrItemStockConfigure().get(0).getSettingValue()+","+tosettingvalue1.getFrItemStockConfigure().get(0).getSettingValue());           
 			map.add("status","0,1,2,3,4");   
 			
 			System.out.println("map"+map);
