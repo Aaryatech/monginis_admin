@@ -69,7 +69,7 @@
 												<div class="col-sm-6 col-lg-4 controls date_select">
 													<input class="form-control date-picker" id="fromDate"
 														autocomplete="off" name="fromDate" size="30" type="text"
-														value="${fromDate}" />
+														value="${fromDate}" required="required" />
 												</div>
 
 
@@ -78,7 +78,7 @@
 												<div class="col-sm-6 col-lg-4 controls date_select">
 													<input class="form-control date-picker" id="toDate"
 														autocomplete="off" name="toDate" size="30" type="text"
-														value="${toDate}" />
+														value="${toDate}" required="required" />
 												</div>
 											</div>
 
@@ -87,34 +87,55 @@
 
 										<br>
 										<div class="row">
+											
 											<label class="col-sm-3 col-lg-2 control-label"><b></b>Select
-												Franchisee</label>
+												Franchise</label>
 											<div class="col-sm-6 col-lg-4">
 
 												<select data-placeholder="Choose Franchisee"
 													class="form-control chosen" multiple="multiple"
 													tabindex="6" id="fr_id_list" name="fr_id_list">
-
-													<option value="-1" selected="selected"><c:out
-															value="All" /></option>
-
+													 	
+															<option value="-1" ><c:out
+																		value="All" /></option>
+															
+															
 													<c:forEach items="${frList}" var="fr" varStatus="count">
-														<option value="${fr.frId}"><c:out
-																value="${fr.frName}" /></option>
+														<c:set var="findIds" value="0"></c:set>
+														<c:forEach items="${selIds}" var="selIds">
+															<c:choose>
+																<c:when test="${fr.frId==selIds}">
+																	
+																	<c:set var="findIds" value="1"></c:set>
+																</c:when>
+															</c:choose>
+															
+														</c:forEach>
+                                                            <c:if test="${findIds==0}">
+																<option value="${fr.frId}"><c:out
+																		value="${fr.frName}" /></option>
+															</c:if>
+                                                          <c:if test="${findIds==1}">
+																<option value="${fr.frId}" selected><c:out
+																		value="${fr.frName}" /></option>
+															</c:if>
+
 													</c:forEach>
 												</select>
 
 											</div>
 
 											<div class="form-group">
-												<label class="col-sm-3 col-lg-2 control-label">Bill
-													No. Wise</label>
+												<label class="col-sm-3 col-lg-2 control-label">Franchise
+													Wise </label>
 												<div class="col-sm-6 col-lg-4 controls">
 													<label class="radio-inline"> <input type="radio"
+														${isBillSel==1 ? 'checked' : '' } required="required"
 														name="isBill" id="optionsRadios1" value="1" />Yes
 
 													</label> <label class="radio-inline"> <input type="radio"
-														name="isBill" id="optionsRadios1" value="0" checked />No
+														${isBillSel==0 ? 'checked' : '' } required="required"
+														name="isBill" id="optionsRadios1" value="0" />No
 
 													</label>
 
@@ -123,9 +144,9 @@
 										</div>
 
 										<div class="row">
-											<div class="col-sm-6 col-lg-10" style="text-align: center; margin-top: 10px;">
-												<button class="btn btn-info" onclick="searchReport()">Search
-													Report</button>
+											<div class="col-sm-6 col-lg-10"
+												style="text-align: center; margin-top: 10px;">
+												<button class="btn btn-info">Search Report</button>
 												<!-- <button class="btn search_btn" onclick="showChart()">Graph</button> -->
 
 
@@ -183,78 +204,159 @@
 										<div class="table-wrap" style="overflow: auto;">
 
 											<table id="table1" class="table table-advance">
-												<thead>
-													<tr class="bgpink">
-														<th width="158" style="width: 18px" align="left">Sr.
-															No.</th>
-														<th class="col-md-2">Item Name</th>
-														<th class="col-md-2">Invoice No.</th>
-														<th class="col-md-2">Invoice Date</th>
-														<th class="col-md-2">Sold Qty</th>
-														<th class="col-md-2">Sold Amt</th>
-													</tr>
-												</thead>
-												<tbody style="padding-top: 100px">
-													<c:forEach items="${frList}" var="frList">
-														<c:set value="0" var="sr"></c:set>
-														<c:set value="0" var="ttlAmt"></c:set>
-														<c:set value="0" var="finalTtlAmt"></c:set>
-														<tr>
-															<td><c:out value="${frList.frName}"></c:out></td>
-															<td></td>
-															<td></td>
-															<td></td>
-															<td></td>
-															<td></td>
 
-														</tr>
-														<c:forEach items="${spCakeList}" var="spCakeList"
-															varStatus="count">
-															<c:if test="${spCakeList.frId==frList.frId}">
+												<c:choose>
+													<c:when test="${isBillSel==0}">
+														<thead>
+															<tr class="bgpink">
+																<th width="158" style="width: 18px" align="left">Sr.
+																	No.</th>
+																<th class="col-md-2">Item Name</th>
+																<th class="col-md-2"><span>Invoice No.</span></th>
+																<th class="col-md-2"><span>Invoice Date</span></th>
+																<th class="col-md-2">Sold Qty</th>
+																<th class="col-md-2">Sold Amt</th>
+															</tr>
+														</thead>
+														<tbody style="padding-top: 100px">
+															<c:forEach items="${frList}" var="frList">
+																<c:set value="0" var="sr"></c:set>
+																<c:set value="0" var="ttlAmt"></c:set>
+																<c:set value="0" var="finalTtlAmt"></c:set>
+																<tr>
+																	<td><c:out value="${frList.frName}"></c:out></td>
+																	<td></td>
+																	<td></td>
+																	<td></td>
+																	<td></td>
+																	<td></td>
+
+																</tr>
+																<c:forEach items="${spCakeList}" var="spCakeList"
+																	varStatus="count">
+																	<c:if test="${spCakeList.frId==frList.frId}">
+
+																		<tr>
+																			<td><c:out value="${sr+1}"></c:out></td>
+																			<c:set value="${sr+1}" var="sr"></c:set>
+																			<td align="left"><c:out
+																					value="${spCakeList.itemName}" /></td>
+																			<td align="left"><c:out
+																					value="${spCakeList.invoiceNo}" /></td>
+																			<td align="left"><c:out
+																					value="${spCakeList.billDate}" /></td>
+																			<td align="left"><c:out
+																					value="${spCakeList.qty}" /></td>
+																			<td align="right"><fmt:formatNumber
+																					type="number" pattern="#"
+																					value="${spCakeList.grandTotal}" /></td>
+																			<c:set value="${ttlAmt+spCakeList.grandTotal}"
+																				var="ttlAmt"></c:set>
+																		</tr>
+																	</c:if>
+																	<c:set value="${finalTtlAmt+spCakeList.grandTotal}"
+																		var="finalTtlAmt"></c:set>
+																</c:forEach>
 
 																<tr>
-																	<td><c:out value="${sr+1}"></c:out></td>
-																	<c:set value="${sr+1}" var="sr"></c:set>
-																	<td align="left"><c:out
-																			value="${spCakeList.itemName}" /></td>
-																	<td align="left"><c:out
+																	<td style="color: red;">Total</td>
+																	<td></td>
+																	<td></td>
+																	<td></td>
+																	<td></td>
+																	<td style="color: blue;"><fmt:formatNumber
+																			type="number" pattern="#" value="${ttlAmt}" /></td>
+
+																</tr>
+
+															</c:forEach>
+															<tr>
+																<td style="color: red;">Grand Total</td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td></td>
+																<td style="color: blue;"><fmt:formatNumber
+																		type="number" pattern="#" value="${finalTtlAmt}" /></td>
+															</tr>
+														</tbody>
+													</c:when>
+													<c:otherwise>
+														<thead>
+															<tr class="bgpink">
+																<th width="158" style="width: 18px" align="left">Sr.
+																	No.</th>
+																<th class="col-md-3">Item Name</th>
+																<!-- <th class="col-md-2"><span>Invoice No.</span></th>
+														<th class="col-md-2"><span>Invoice Date</span></th> -->
+																<th class="col-md-3">Sold Qty</th>
+																<th class="col-md-3">Sold Amt</th>
+															</tr>
+														</thead>
+														<tbody style="padding-top: 100px">
+															<c:forEach items="${frList}" var="frList">
+																<c:set value="0" var="sr"></c:set>
+																<c:set value="0" var="ttlAmt"></c:set>
+																<c:set value="0" var="finalTtlAmt"></c:set>
+																<tr>
+																	<td><c:out value="${frList.frName}"></c:out></td>
+																	<td></td>
+																	<!-- <td></td>
+															<td></td> -->
+																	<td></td>
+																	<td></td>
+
+																</tr>
+																<c:forEach items="${spCakeList}" var="spCakeList"
+																	varStatus="count">
+																	<c:if test="${spCakeList.frId==frList.frId}">
+
+																		<tr>
+																			<td><c:out value="${sr+1}"></c:out></td>
+																			<c:set value="${sr+1}" var="sr"></c:set>
+																			<td align="left"><c:out
+																					value="${spCakeList.itemName}" /></td>
+																			<%-- <td align="left"><c:out
 																			value="${spCakeList.invoiceNo}" /></td>
 																	<td align="left"><c:out
-																			value="${spCakeList.billDate}" /></td>
-																	<td align="left"><c:out value="${spCakeList.qty}" /></td>
-																	<td align="right"><fmt:formatNumber type="number"
-																			pattern="#" value="${spCakeList.grandTotal}" /></td>
-																	<c:set value="${ttlAmt+spCakeList.grandTotal}"
-																		var="ttlAmt"></c:set>
+																			value="${spCakeList.billDate}" /></td> --%>
+																			<td align="left"><c:out
+																					value="${spCakeList.qty}" /></td>
+																			<td align="right"><fmt:formatNumber
+																					type="number" pattern="#"
+																					value="${spCakeList.grandTotal}" /></td>
+																			<c:set value="${ttlAmt+spCakeList.grandTotal}"
+																				var="ttlAmt"></c:set>
+																		</tr>
+																	</c:if>
+																	<c:set value="${finalTtlAmt+spCakeList.grandTotal}"
+																		var="finalTtlAmt"></c:set>
+																</c:forEach>
+
+																<tr>
+																	<td style="color: red;">Total</td>
+																	<td></td>
+																	<!-- <td></td>
+															<td></td> -->
+																	<td></td>
+																	<td style="color: blue;"><fmt:formatNumber
+																			type="number" pattern="#" value="${ttlAmt}" /></td>
+
 																</tr>
-															</c:if>
-															<c:set value="${finalTtlAmt+spCakeList.grandTotal}"
-																var="finalTtlAmt"></c:set>
-														</c:forEach>
 
-														<tr>
-															<td style="color: red;">Total</td>
-															<td></td>
-															<td></td>
-															<td></td>
-															<td></td>
-															<td style="color: blue;"><fmt:formatNumber
-																	type="number" pattern="#" value="${ttlAmt}" /></td>
-
-														</tr>
-
-													</c:forEach>
-													<tr>
-														<td style="color: red;">Grand Total</td>
-														<td></td>
-														<td></td>
-														<td></td>
-														<td></td>
-														<td style="color: blue;"><fmt:formatNumber
-																type="number" pattern="#" value="${finalTtlAmt}" /></td>
-													</tr>
-												</tbody>
-
+															</c:forEach>
+															<tr>
+																<td style="color: red;">Grand Total</td>
+																<td></td>
+																<!-- <td></td>
+														<td></td> -->
+																<td></td>
+																<td style="color: blue;"><fmt:formatNumber
+																		type="number" pattern="#" value="${finalTtlAmt}" /></td>
+															</tr>
+														</tbody>
+													</c:otherwise>
+												</c:choose>
 											</table>
 										</div>
 									</div>
@@ -352,33 +454,6 @@
 
 
 </body>
-
-
-<script type="text/javascript">
-	function tableToExcel(table, name, filename) {
-		let uri = 'data:application/vnd.ms-excel;base64,', template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><title></title><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>', base64 = function(
-				s) {
-			return window.btoa(decodeURIComponent(encodeURIComponent(s)))
-		}, format = function(s, c) {
-			return s.replace(/{(\w+)}/g, function(m, p) {
-				return c[p];
-			})
-		}
-
-		if (!table.nodeType)
-			table = document.getElementById(table)
-		var ctx = {
-			worksheet : name || 'Worksheet',
-			table : table.innerHTML
-		}
-
-		var link = document.createElement('a');
-		link.download = filename;
-		link.href = uri + base64(format(template, ctx));
-		link.click();
-	}
-</script>
-
 <script>
 	function myFunction() {
 		var input, filter, table, tr, td, i;

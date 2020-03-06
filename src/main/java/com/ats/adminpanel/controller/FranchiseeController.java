@@ -2906,8 +2906,8 @@ public class FranchiseeController {
 					e.getMessage();
 					isBill = 0;
 				}
-
-				System.err.println("frId string " + result+" "+fromDate+" "+toDate+" "+isBill);
+				System.err.println("frId-------" + result);
+				System.err.println("Dates ----------"+fromDate+" "+toDate+" "+isBill);
 				List<String> franchIds = new ArrayList();
 
 				franchIds = Arrays.asList(frIdString);
@@ -2918,7 +2918,7 @@ public class FranchiseeController {
 
 					map.add("frIdList", result);
 				}
-				System.err.println("frId string " + frIdString);
+				System.err.println("frId string " + frIdString.toString());
 				map.add("isBill", isBill);
 				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 				map.add("toDate", DateConvertor.convertToYMD(toDate));
@@ -2927,18 +2927,23 @@ public class FranchiseeController {
 
 				spCakeList = new ArrayList<GetBillWiseSpCakeRep>(Arrays.asList(spArr));
 				logger.info("SpCake List Cat 5-----------:" + spCakeList.toString());
-				mav.addObject("spCakeList", spCakeList);
-				
+				mav.addObject("spCakeList", spCakeList);				
 				
 				mav.addObject("fromDate", fromDate);
 				mav.addObject("toDate", toDate);
-				
-				
+				mav.addObject("isBillSel", isBill);
+			/*
+			 * List<Character> selIds = new ArrayList<>(); for (char str :
+			 * result.toCharArray()) {
+			 * 
+			 * selIds.add(str); } System.out.println("Ids List---------------"+selIds);
+			 */
+				mav.addObject("selIds", frIdString);
 				List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
 				ExportToExcel expoExcel = new ExportToExcel();
 				List<String> rowData = new ArrayList<String>();
-				
+				if(isBill==0) {
 				rowData.add("Sr. No.");
 				rowData.add("Item Name");
 				rowData.add("Invoice No.");
@@ -3024,7 +3029,86 @@ public class FranchiseeController {
 				session.setAttribute("exportExcelList", exportToExcelList);
 				session.setAttribute("excelName", "SpCakeBillWise");
 				
+				}else {
+
+					rowData.add("Sr. No.");
+					rowData.add("Item Name");
+					rowData.add("Sold Qty");
+					rowData.add("Sold Amt");
+
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					float grandTotal = 0;
+					List<Integer> frIdList = new  ArrayList<Integer>();
+					for (int x = 0; x < spCakeList.size(); x++) {
+						frIdList.add(spCakeList.get(x).getFrId());
+					}
+					HashSet<Integer> tempFrId = new HashSet<Integer>();
+					tempFrId.addAll(frIdList);
+					frIdList.clear();
+					frIdList.addAll(tempFrId);
+					for (int j = 0; j < allFrIdNameList.getFrIdNamesList().size(); j++) {
+						
+						float frTotal = 0;
+						
+						int cnt=1;
+						if(frIdList.contains(allFrIdNameList.getFrIdNamesList().get(j).getFrId())) {
+						grandTotal = 0;
+						expoExcel = new ExportToExcel();
+						rowData = new ArrayList<String>();
+						
+						rowData.add("" + allFrIdNameList.getFrIdNamesList().get(j).getFrName());// Franchisee Name						
+						rowData.add("");
+						rowData.add("");
+						rowData.add("");
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
+						
+						for (int i = 0; i < spCakeList.size(); i++) {
+							if(spCakeList.get(i).getFrId()==allFrIdNameList.getFrIdNamesList().get(j).getFrId()) {
+							
+							expoExcel = new ExportToExcel();
+							rowData = new ArrayList<String>();
+		
+							rowData.add("" + (cnt));						
+							rowData.add("" + spCakeList.get(i).getItemName());						
+							rowData.add("" + spCakeList.get(i).getQty());
+							rowData.add("" + spCakeList.get(i).getGrandTotal());	
+							
+							frTotal = frTotal+spCakeList.get(i).getGrandTotal();
+							expoExcel.setRowData(rowData);
+							exportToExcelList.add(expoExcel);
+							cnt = cnt+1;
+							}						
+							grandTotal = grandTotal + spCakeList.get(i).getGrandTotal();						
+						}
+						expoExcel = new ExportToExcel();
+						rowData = new ArrayList<String>();
+						rowData.add("" + "Total");						
+						rowData.add("");
+						rowData.add("");
+						rowData.add("" + frTotal);
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
 					
+						}
+					}
+					expoExcel = new ExportToExcel();
+					rowData = new ArrayList<String>();
+					rowData.add("" + "Grand Total");
+					
+					rowData.add("");
+					rowData.add("");
+					rowData.add("" + grandTotal);
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+						
+					HttpSession session = request.getSession();
+					session.setAttribute("exportExcelList", exportToExcelList);
+					session.setAttribute("excelName", "SpCakeBillWise");
+					
+					
+				}
 				
 				
 			}catch(Exception e) {
