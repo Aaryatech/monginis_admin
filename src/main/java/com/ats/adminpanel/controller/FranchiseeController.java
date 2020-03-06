@@ -13,6 +13,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -2888,29 +2889,23 @@ public class FranchiseeController {
 				String toDate = request.getParameter("toDate");				
 				String[] frIdString =  request.getParameterValues("fr_id_list");
 				int isBill = 0;
-				try {
+			try {
 					isBill = Integer.parseInt(request.getParameter("isBill"));
-				}catch (Exception e) {
-					e.printStackTrace();
+	
+					StringBuilder sb = new StringBuilder();
+	
+					if (frIdString.length > 0) {
+	
+						for (String s : frIdString) {
+							sb.append(s).append(",");
+						}
+					}
+	
+					result = sb.deleteCharAt(sb.length() - 1).toString();
+				}catch (NumberFormatException e) {
+					e.getMessage();
 					isBill = 0;
 				}
-				
-				
-				StringBuilder sb = new StringBuilder(); 
-			try {
-				if (frIdString.length > 0) {
-
-					for (String s : frIdString) {
-						sb.append(s).append(",");
-					}
-				}
-			}catch (NumberFormatException e) {
-					e.getMessage();
-				}
-				result = sb.deleteCharAt(sb.length() - 1).toString();
-				
-				
-				
 
 				System.err.println("frId string " + result+" "+fromDate+" "+toDate+" "+isBill);
 				List<String> franchIds = new ArrayList();
@@ -2954,11 +2949,20 @@ public class FranchiseeController {
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
 				float grandTotal = 0;
+				List<Integer> frIdList = new  ArrayList<Integer>();
+				for (int x = 0; x < spCakeList.size(); x++) {
+					frIdList.add(spCakeList.get(x).getFrId());
+				}
+				HashSet<Integer> tempFrId = new HashSet<Integer>();
+				tempFrId.addAll(frIdList);
+				frIdList.clear();
+				frIdList.addAll(tempFrId);
 				for (int j = 0; j < allFrIdNameList.getFrIdNamesList().size(); j++) {
+					
 					float frTotal = 0;
 					grandTotal = 0;
 					int cnt=1;
-					
+					if(frIdList.contains(allFrIdNameList.getFrIdNamesList().get(j).getFrId())) {
 					expoExcel = new ExportToExcel();
 					rowData = new ArrayList<String>();
 					
@@ -3002,7 +3006,7 @@ public class FranchiseeController {
 					expoExcel.setRowData(rowData);
 					exportToExcelList.add(expoExcel);
 				
-				}
+				
 				expoExcel = new ExportToExcel();
 				rowData = new ArrayList<String>();
 				rowData.add("" + "Grand Total");
@@ -3018,8 +3022,8 @@ public class FranchiseeController {
 				session.setAttribute("exportExcelList", exportToExcelList);
 				session.setAttribute("excelName", "SpCakeBillWise");
 				
-				
-				
+					}
+				}
 				
 			}catch(Exception e) {
 			
