@@ -177,9 +177,9 @@
 									</label>
 									<div class="clearfix"></div>
 									<div id="table-scroll" class="table-scroll">
-										<input type="button"
+										<!-- <input type="button"
 											onclick="tableToExcel('table1', 'name', 'Billwise_Special_Cake_Report.xls')"
-											value="Export to Excel">
+											value="Export to Excel"> -->
 										<div class="table-wrap" style="overflow: auto;">
 
 											<table id="table1" class="table table-advance">
@@ -267,10 +267,10 @@
 
 
 
-								<!-- <div class="col-sm-3  controls">
+								<div class="col-sm-3  controls">
 									<input type="button" id="expExcel" class="btn btn-primary"
 										value="EXPORT TO Excel" onclick="exportToExcel();">
-								</div> -->
+								</div>
 							</div>
 						</div>
 					</div>
