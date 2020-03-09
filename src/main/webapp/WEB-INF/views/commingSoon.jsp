@@ -123,7 +123,7 @@ div.panel {
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Comming Soon
+						<i class="fa fa-file-o"></i>Coming Soon
 					</h1>
 
 				</div>
@@ -138,7 +138,7 @@ div.panel {
 					<div class="box">
 						<div class="box-title">
 							<h3>
-								<i class="fa fa-bars"></i>Comming Soon
+								<i class="fa fa-bars"></i>Coming Soon
 							</h3>
 							<div class="box-tool">
 								<a href="">Back to List</a> <a data-action="collapse" href="#"><i
@@ -150,7 +150,7 @@ div.panel {
 						<div align="center" id="loader" >
 
 	<span>
-	<h4><font color="#343690"><b>Comming Soon</b></font></h4></span>
+	<h4><font color="#343690"><b>Coming Soon</b></font></h4></span>
 	 
 	 
 	</div>
