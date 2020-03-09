@@ -2945,6 +2945,7 @@ public class FranchiseeController {
 				List<String> rowData = new ArrayList<String>();
 				if(isBill==0) {
 				rowData.add("Sr. No.");
+				rowData.add("Franchise");
 				rowData.add("Item Name");
 				rowData.add("Invoice No.");
 				rowData.add("Invoice Date");
@@ -2971,7 +2972,7 @@ public class FranchiseeController {
 					grandTotal = 0;
 					expoExcel = new ExportToExcel();
 					rowData = new ArrayList<String>();
-					
+					rowData.add("");
 					rowData.add("" + allFrIdNameList.getFrIdNamesList().get(j).getFrName());// Franchisee Name
 					rowData.add("");
 					rowData.add("");
@@ -2987,10 +2988,11 @@ public class FranchiseeController {
 						expoExcel = new ExportToExcel();
 						rowData = new ArrayList<String>();
 	
-						rowData.add("" + (cnt));						
-						rowData.add("" + spCakeList.get(i).getItemName());
-						rowData.add("" + spCakeList.get(i).getInvoiceNo());
-						rowData.add("" + spCakeList.get(i).getBillDate());
+						rowData.add("" + (cnt));		
+						rowData.add("");
+						rowData.add(spCakeList.get(i).getItemName());
+						rowData.add(spCakeList.get(i).getInvoiceNo());
+						rowData.add(spCakeList.get(i).getBillDate());
 						rowData.add("" + spCakeList.get(i).getQty());
 						rowData.add("" + spCakeList.get(i).getGrandTotal());	
 						
@@ -3008,6 +3010,7 @@ public class FranchiseeController {
 					rowData.add("");
 					rowData.add("");
 					rowData.add("");
+					rowData.add("");
 					rowData.add("" + frTotal);
 					expoExcel.setRowData(rowData);
 					exportToExcelList.add(expoExcel);
@@ -3021,17 +3024,23 @@ public class FranchiseeController {
 				rowData.add("");
 				rowData.add("");
 				rowData.add("");
+				rowData.add("");
 				rowData.add("" + grandTotal);
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
 					
 				HttpSession session = request.getSession();
-				session.setAttribute("exportExcelList", exportToExcelList);
-				session.setAttribute("excelName", "SpCakeBillWise");
+				session.setAttribute("exportExcelListNew", exportToExcelList);
+				session.setAttribute("excelNameNew", "SpCakeBillWise");
+				session.setAttribute("reportNameNew", "Billwise Sp Cake Report ");
+				session.setAttribute("searchByNew", "");
+				session.setAttribute("mergeUpto1", "$A$1:$G$1");
+				session.setAttribute("mergeUpto2", "$A$1:$G$1");
 				
 				}else {
 
 					rowData.add("Sr. No.");
+					rowData.add("Franchise");
 					rowData.add("Item Name");
 					rowData.add("Sold Qty");
 					rowData.add("Sold Amt");
@@ -3056,7 +3065,7 @@ public class FranchiseeController {
 						grandTotal = 0;
 						expoExcel = new ExportToExcel();
 						rowData = new ArrayList<String>();
-						
+						rowData.add("");
 						rowData.add("" + allFrIdNameList.getFrIdNamesList().get(j).getFrName());// Franchisee Name						
 						rowData.add("");
 						rowData.add("");
@@ -3070,8 +3079,9 @@ public class FranchiseeController {
 							expoExcel = new ExportToExcel();
 							rowData = new ArrayList<String>();
 		
-							rowData.add("" + (cnt));						
-							rowData.add("" + spCakeList.get(i).getItemName());						
+							rowData.add("" + (cnt));
+							rowData.add("");
+							rowData.add(spCakeList.get(i).getItemName());						
 							rowData.add("" + spCakeList.get(i).getQty());
 							rowData.add("" + spCakeList.get(i).getGrandTotal());	
 							
@@ -3087,6 +3097,7 @@ public class FranchiseeController {
 						rowData.add("" + "Total");						
 						rowData.add("");
 						rowData.add("");
+						rowData.add("");
 						rowData.add("" + frTotal);
 						expoExcel.setRowData(rowData);
 						exportToExcelList.add(expoExcel);
@@ -3096,7 +3107,7 @@ public class FranchiseeController {
 					expoExcel = new ExportToExcel();
 					rowData = new ArrayList<String>();
 					rowData.add("" + "Grand Total");
-					
+					rowData.add("");
 					rowData.add("");
 					rowData.add("");
 					rowData.add("" + grandTotal);
@@ -3104,10 +3115,12 @@ public class FranchiseeController {
 					exportToExcelList.add(expoExcel);
 						
 					HttpSession session = request.getSession();
-					session.setAttribute("exportExcelList", exportToExcelList);
-					session.setAttribute("excelName", "SpCakeBillWise");
-					
-					
+					session.setAttribute("exportExcelListNew", exportToExcelList);
+					session.setAttribute("excelNameNew", "SpCakeBillWise");
+					session.setAttribute("reportNameNew", "Billwise Sp Cake Report ");
+					session.setAttribute("searchByNew", "");
+					session.setAttribute("mergeUpto1", "$A$1:$E$1");
+					session.setAttribute("mergeUpto2", "$A$1:$E$1");
 				}
 				
 				

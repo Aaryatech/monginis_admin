@@ -92,7 +92,7 @@
 												Franchise</label>
 											<div class="col-sm-6 col-lg-4">
 
-												<select data-placeholder="Choose Franchisee"
+												<select data-placeholder="Choose Franchisee" required="required"
 													class="form-control chosen" multiple="multiple"
 													tabindex="6" id="fr_id_list" name="fr_id_list">
 													 	
@@ -111,7 +111,7 @@
 															</c:choose>
 															
 														</c:forEach>
-                                                            <c:if test="${findIds==0}">
+                                                            <c:if test="${findIds==0}">                                                            
 																<option value="${fr.frId}"><c:out
 																		value="${fr.frName}" /></option>
 															</c:if>
@@ -475,7 +475,7 @@
 </script>
 <script type="text/javascript">
 	function exportToExcel() {
-		window.open("${pageContext.request.contextPath}/exportToExcel");
+		window.open("${pageContext.request.contextPath}/exportToExcelNew");
 		document.getElementById("expExcel").disabled = true;
 	}
 </script>
