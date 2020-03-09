@@ -382,13 +382,13 @@ td:hover::after, th:hover::after {
 										<div>
 											<label class=" col-md-2">Production Date</label>
 											<div class="col-md-2">
-												<input class="form-control" name="production_date"
-													id="production_date" type="date" />
+												<input class="form-control date-picker" name="production_date"
+													id="production_date" type="text" />
 											</div>
 											<label class=" col-md-2">Delivery Date</label>
 											<div class="col-md-2">
-												<input class="form-control" name="delivery_date"
-													id="delivery_date" type="date" />
+												<input class="form-control date-picker" name="delivery_date"
+													id="delivery_date" type="text" />
 											</div>
 
 										</div>

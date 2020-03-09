@@ -1765,7 +1765,7 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		String delDate = request.getParameter("delDate");
 		String prodDate = request.getParameter("prodDate");
 
-		System.out.println("--------------------------" + prodDate);
+		System.out.println(DateConvertor.convertToYMD(delDate)+"--------------------------" + prodDate);
 		System.out.println("********************" + delDate);
 
 		/*
@@ -1777,8 +1777,8 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		 */
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("orderIds", ids);
-		map.add("delDate", delDate);
-		map.add("prodDate", prodDate);
+		map.add("delDate", DateConvertor.convertToYMD(delDate));
+		map.add("prodDate",DateConvertor.convertToYMD(prodDate));
 		System.err.println(map.toString());
 		RestTemplate restTemp = new RestTemplate();
 
