@@ -296,7 +296,7 @@ public class BmsStockInsertController {
 		Constants.subAct=184;*/
 			
 		BmsStockHeader bmsStockHeader= new BmsStockHeader();
-		
+		int deptId = Integer.parseInt(request.getParameter("deptId"));
 		try
 		{
 			if(bmsStockHeaderedit.getBmsStockId()!=0)
@@ -377,7 +377,7 @@ public class BmsStockInsertController {
 					 bmsStockHeader.setRmType(1);
 				 else
 					 bmsStockHeader.setRmType(2);
-				 bmsStockHeader.setExInt(0);
+				 bmsStockHeader.setExInt(deptId);
 				 bmsStockHeader.setExInt1(0);
 				 bmsStockHeader.setExBoll(0);
 				 bmsStockHeader.setExBoll1(0);
@@ -427,7 +427,7 @@ public class BmsStockInsertController {
 		
 		
 
-		return "redirect:/bmsstock";
+		return "redirect:/bmsstock/"+deptId;
 
 	}
 	

@@ -185,8 +185,8 @@ public class DumpOrderController {
 				{
 					selectedMainCatId=menuList.get(i).getMainCatId();
 				}
-			}
-			
+			} 
+		
 			
 		System.out.println("Before Rest of Items   and mennu id is  :  "+selectedMenu);
 		
