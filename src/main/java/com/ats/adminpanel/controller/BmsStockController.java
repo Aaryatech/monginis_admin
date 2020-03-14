@@ -354,7 +354,7 @@ public class BmsStockController {
 
 				}
 
-				else if (globalRmType == 2) {
+				else if (rmType == 2) {
 					// get SF Stock Bet Date
 
 					System.out.println("It is SF Stock Betw Date");
