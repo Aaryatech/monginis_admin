@@ -91,7 +91,10 @@
 												<th  align="left">Album Code</th>
 												<th  align="left">Album Name</th>
 												<th  align="left">Photo1</th>
-												<th style="width: 100px;" align="left">Desc</th>
+												<th  align="left">Min Wt</th>
+												<th  align="left">Max Wt</th>
+												<th  align="left">Status</th>
+												<!-- <th style="width: 100px;" align="left">Desc</th> -->
 												<th align="center">Action</th>
 											</tr>
 										</thead>
@@ -107,7 +110,20 @@
 														onerror="this.src='resources/img/No_Image_Available.jpg';" /></td>
 
 
-													<td style="width: 100px;"  align="left"><c:out value="${message.albumDesc}" /></td>
+													<%-- <td style="width: 100px;"  align="left"><c:out value="${message.albumDesc}" /></td> --%>
+													
+													<td  align="left"><c:out value="${message.minWt}" /></td>
+													<td  align="left"><c:out value="${message.maxWt}" /></td>
+													
+													<c:choose>
+													<c:when test="${message.isActive==1}">
+													<td  align="left"><c:out value="Active" /></td>
+													</c:when>
+													<c:otherwise>
+													<td   align="left"><c:out value="In Active" /></td>
+													</c:otherwise>
+													</c:choose>
+													
 
 													<td align="center"><a
 														href="updateAlbum/${message.albumId}"><span
