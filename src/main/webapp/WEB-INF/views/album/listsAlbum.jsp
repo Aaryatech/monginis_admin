@@ -4,6 +4,15 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+
+<style>
+.table-responsive{
+    width: 100%;
+    overflow-x: scroll;
+}
+
+</style>
+
 <body>
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<div class="container" id="main-container">
@@ -55,40 +64,35 @@
 							<jsp:include page="/WEB-INF/views/include/tableSearch.jsp"></jsp:include>
 
 
-							<div class="clearfix"></div>
 
+							<!-- <div id="table-scroll" class="table-scroll"> -->
 
-
-
-
-							<div id="table-scroll" class="table-scroll">
-
-								<div id="faux-table" class="faux-table" aria="hidden">
+								<!-- <div id="faux-table" class="faux-table" aria="hidden">
 									<table id="table2" class="main-table">
 										<thead>
 											<tr class="bgpink">
-												<th width="17" style="width: 18px">#</th>
-												<th width="221" align="left">Album Code</th>
-												<th width="301" align="left">Album Name</th>
-												<th width="185" align="left">Photo1</th>
-												<th width="291" align="left">Desc</th>
-												<th width="190" align="center">Action</th>
+												<th >#</th>
+												<th  align="left">Album Code</th>
+												<th  align="left">Album Name</th>
+												<th  align="left">Photo1</th>
+												<th align="left">Desc</th>
+												<th align="center">Action</th>
 											</tr>
 										</thead>
 									</table>
 
-								</div>
-								<div class="table-wrap">
+								</div> -->
+								<div class="table-responsive" >
 
 									<table id="table1" class="table table-advance">
 										<thead>
-											<tr class="bgpink">
-												<th width="17" style="width: 18px">#</th>
-												<th width="221" align="left">Album Code</th>
-												<th width="301" align="left">Album Name</th>
-												<th width="185" align="left">Photo1</th>
-												<th width="291" align="left">Desc</th>
-												<th width="190" align="center">Action</th>
+											<tr>
+												<th>#</th>
+												<th  align="left">Album Code</th>
+												<th  align="left">Album Name</th>
+												<th  align="left">Photo1</th>
+												<th style="width: 100px;" align="left">Desc</th>
+												<th align="center">Action</th>
 											</tr>
 										</thead>
 										<tbody>
@@ -103,7 +107,7 @@
 														onerror="this.src='resources/img/No_Image_Available.jpg';" /></td>
 
 
-													<td align="left"><c:out value="${message.albumDesc}" /></td>
+													<td style="width: 100px;"  align="left"><c:out value="${message.albumDesc}" /></td>
 
 													<td align="center"><a
 														href="updateAlbum/${message.albumId}"><span
@@ -120,7 +124,7 @@
 
 									</table>
 								</div>
-							</div>
+							<!-- </div> -->
 
 						</div>
 						<%-- 
