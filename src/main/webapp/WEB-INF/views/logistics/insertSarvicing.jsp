@@ -84,7 +84,7 @@
 						
 						<div class="box-content">
 
-							<form id="submitMaterialStore" action="${pageContext.request.contextPath}/submitServicing" method="post"
+							<form id="submitMaterialStore" action="${pageContext.request.contextPath}/submitServicing" method="post" class="once-only"
 							enctype="multipart/form-data">
 							<div class="box-content">
 							
@@ -437,7 +437,7 @@
 								
 							<div class="form-group">
 									<div class="col-sm-9 col-sm-offset-3 col-lg-10 col-lg-offset-5">
-										<input type="submit" class="btn btn-primary" value="Submit" onclick="check();">
+										<input type="submit" class="btn btn-primary" value="Submit" id="subButton" onclick="check();">
 <!-- 										<button type="button" class="btn">Cancel</button>
  -->									</div>
 								</div><br><br>
@@ -527,7 +527,12 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 		<script type="text/javascript">
-		
+		$(document).ready(function(){
+		    $('.once-only').submit(function(){
+		    	 $("#subButton").attr("disabled", true);
+
+		    });
+		});
 		var editItem=0;
 		function addPart() {
 
@@ -1350,6 +1355,8 @@ $(document).ready(function() {
 		})
 		 		 
 });
+
+
 </script>
 	
 								

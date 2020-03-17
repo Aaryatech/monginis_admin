@@ -51,7 +51,6 @@ import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.pushorderdata.GetOrderDataForPushOrder;
 import com.ats.adminpanel.model.pushorderdata.GetOrderDataForPushOrderList;
 import com.ats.adminpanel.model.pushorderdata.PushOrderList;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
 
 @Controller
 @Scope("session")
@@ -94,7 +93,7 @@ public class PushOrderController {
 		selectedMenuList = new ArrayList<Menu>();
 
 		for (int i = 0; i < menuList.size(); i++) {
-			if (menuList.get(i).getMenuId() == 26 || menuList.get(i).getMenuId() == 31
+			if (menuList.get(i).getMenuId() == 74 || menuList.get(i).getMenuId() == 31
 					|| menuList.get(i).getMenuId() == 33 || menuList.get(i).getMenuId() == 34|| menuList.get(i).getMenuId() == 32) {
 				selectedMenuList.add(menuList.get(i));
 			}
