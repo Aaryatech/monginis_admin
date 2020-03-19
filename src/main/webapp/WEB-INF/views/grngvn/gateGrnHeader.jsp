@@ -123,14 +123,14 @@
 									</div>
 
 
-
+<input type="button" onclick="printGrn()" value="Print GRN" class="btn btn-primary">
 								</div>
 
 							</form>
 
-							<!-- <form action="" class="form-horizontal" method="post"
-								id="validation-form">
- -->
+						 <form  class="form-horizontal" method="post"
+								id="validation-form1">
+ 
 								<div class="box">
 									<div class="box-title">
 										<h3>
@@ -173,7 +173,9 @@
 															<td class="col-md-1"><c:out
 																	value="${grnList.grngvnSrno}" /> <input type="hidden"
 																name="headerId" id="headerId"
-																value="${grnList.grnGvnHeaderId}"></td>
+																value="${grnList.grnGvnHeaderId}"> <input type="checkbox" name="select_to_agree"
+																		  id="${grnList.grnGvnHeaderId}"
+																		value="${grnList.grnGvnHeaderId}"></td>
 															<td class="col-md-1"><c:out
 																	value="${grnList.grngvnDate}" /></td>
 															<td class="col-md-1"><c:out
@@ -235,8 +237,8 @@
 									</div>
 								</div>
 
-<!-- 							</form>
- -->						</div>
+							</form>
+					</div>
 					</div>
 				</div>
 			</div>
@@ -337,7 +339,13 @@ function getDate(){
 );
 
 }
+function printGrn(){
+	 var form = document.getElementById("validation-form1");
+	// form.attribute("method","post")
 
+	    form.action ="${pageContext.request.contextPath}/GrnGvnAdminPrint/";
+	    form.submit();
+}
 </script>
 
 

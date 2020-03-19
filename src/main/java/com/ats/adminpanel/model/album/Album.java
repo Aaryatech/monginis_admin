@@ -1,5 +1,8 @@
 package com.ats.adminpanel.model.album;
 
+import java.util.List;
+
+
 public class Album {
 
 	private int albumId;
@@ -22,6 +25,15 @@ public class Album {
 	private int isActive;
 	private String albumDesc;
 	private int isVisibleToAlbum;
+	
+	
+	private int enqNo;
+	private int status;
+	private List<Integer> menuList;
+	List<Integer> frIds;
+	
+private String token;
+
 
 	public int getAlbumId() {
 		return albumId;
@@ -130,6 +142,46 @@ public class Album {
 	}
 	
 	
+
+	public int getEnqNo() {
+		return enqNo;
+	}
+
+	public void setEnqNo(int enqNo) {
+		this.enqNo = enqNo;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public List<Integer> getMenuList() {
+		return menuList;
+	}
+
+	public void setMenuList(List<Integer> menuList) {
+		this.menuList = menuList;
+	}
+
+	public List<Integer> getFrIds() {
+		return frIds;
+	}
+
+	public void setFrIds(List<Integer> frIds) {
+		this.frIds = frIds;
+	}
+
+	public String getToken() {
+		return token;
+	}
+
+	public void setToken(String token) {
+		this.token = token;
+	}
 
 	@Override
 	public String toString() {

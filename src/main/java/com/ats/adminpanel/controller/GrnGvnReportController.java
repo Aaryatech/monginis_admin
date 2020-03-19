@@ -50,16 +50,20 @@ import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.ItemListWithDateRecord;
+import com.ats.adminpanel.model.MiniSubCategory;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.SalesVoucherList;
 import com.ats.adminpanel.model.billing.FrBillHeaderForPrint;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
 import com.ats.adminpanel.model.franchisee.Menu;
+import com.ats.adminpanel.model.ggreports.GGDetailApr;
+import com.ats.adminpanel.model.ggreports.GGHeaderApr;
 import com.ats.adminpanel.model.ggreports.GGReportByDateAndFr;
 import com.ats.adminpanel.model.ggreports.GGReportGrpByFrId;
 import com.ats.adminpanel.model.ggreports.GGReportGrpByMonthDate;
 import com.ats.adminpanel.model.ggreports.GrnGvnReportByGrnType;
+import com.ats.adminpanel.model.grngvn.ResponseBean;
 import com.ats.adminpanel.model.mastexcel.TallyItem;
 import com.ats.adminpanel.model.production.GetProdDetailBySubCat;
 import com.ats.adminpanel.model.production.GetProdDetailBySubCatList;
@@ -643,7 +647,6 @@ public class GrnGvnReportController {
 			model.addObject("routeList", allRouteListResponse.getRoute());
 			model.addObject("todaysDate", todaysDate);
 			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
-			
 
 		} catch (Exception e) {
 			System.out.println("Exce inshowGGReportDateWise " + e.getMessage());
@@ -655,7 +658,8 @@ public class GrnGvnReportController {
 
 	@RequestMapping(value = "/orderreportbyDateExel", method = RequestMethod.GET)
 	@ResponseBody
-	public List<ItemListWithDateRecord> orderreportbyDateExel(HttpServletRequest request, HttpServletResponse response) {
+	public List<ItemListWithDateRecord> orderreportbyDateExel(HttpServletRequest request,
+			HttpServletResponse response) {
 
 		List<ItemListWithDateRecord> list = new ArrayList<>();
 
@@ -667,29 +671,29 @@ public class GrnGvnReportController {
 
 			String fromDate = request.getParameter("from_date");
 			String toDate = request.getParameter("to_date");
-			
+
 			String[] frIds = request.getParameterValues("selectedFr");
 			String frIdss = request.getParameter("selectedFr");
-			System.err.println("STR FR---- = "+frIdss.replace("\"", ""));
-			
-			String tempFrId=frIdss.replace("\"", "");
-			tempFrId=tempFrId.substring(1,(tempFrId.length()-1));
-			
+			System.err.println("STR FR---- = " + frIdss.replace("\"", ""));
+
+			String tempFrId = frIdss.replace("\"", "");
+			tempFrId = tempFrId.substring(1, (tempFrId.length() - 1));
+
 			List<Integer> frIdArrayList = Stream.of(tempFrId.split(",")).map(Integer::parseInt)
 					.collect(Collectors.toList());
-			
-			System.err.println("STR FR LIST---- = "+frIdArrayList);
-			
+
+			System.err.println("STR FR LIST---- = " + frIdArrayList);
+
 			map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("fromDate", fromDate);
 			map.add("toDate", toDate);
 			map.add("frIds", tempFrId);
 
-			ItemListWithDateRecord[] itemListWithDateRecord = restTemplate.postForObject(
-					Constants.url + "getOrderReportByDateAndFr", map, ItemListWithDateRecord[].class);
+			ItemListWithDateRecord[] itemListWithDateRecord = restTemplate
+					.postForObject(Constants.url + "getOrderReportByDateAndFr", map, ItemListWithDateRecord[].class);
 
-			 list = new ArrayList<>(Arrays.asList(itemListWithDateRecord));
+			list = new ArrayList<>(Arrays.asList(itemListWithDateRecord));
 
 			List<Date> dates = new ArrayList<Date>();
 
@@ -732,14 +736,14 @@ public class GrnGvnReportController {
 
 			}
 			rowData.add("Total");
-			
+
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
 
 			for (int i = 0; i < list.size(); i++) {
 
-				float total=0;
-				
+				float total = 0;
+
 				expoExcel = new ExportToExcel();
 				rowData = new ArrayList<String>();
 				rowData.add("" + (i + 1));
@@ -748,10 +752,10 @@ public class GrnGvnReportController {
 				for (int j = 0; j < list.get(i).getList().size(); j++) {
 
 					rowData.add("" + list.get(i).getList().get(j).getQty());
-					total=total+list.get(i).getList().get(j).getQty();
+					total = total + list.get(i).getList().get(j).getQty();
 				}
 				rowData.add("" + total);
-				
+
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
 
@@ -771,12 +775,12 @@ public class GrnGvnReportController {
 		return list;
 
 	}
-	
-	
-	//-----ANMOL---->12-12-2019---------------------------
+
+	// -----ANMOL---->12-12-2019---------------------------
 	@RequestMapping(value = "/orderReportByDateAndFrExcel", method = RequestMethod.GET)
 	@ResponseBody
-	public List<ItemListWithDateRecord> orderReportByDateAndFrExcel(HttpServletRequest request, HttpServletResponse response) {
+	public List<ItemListWithDateRecord> orderReportByDateAndFrExcel(HttpServletRequest request,
+			HttpServletResponse response) {
 
 		List<ItemListWithDateRecord> list = new ArrayList<>();
 
@@ -788,7 +792,7 @@ public class GrnGvnReportController {
 
 			String fromDate = request.getParameter("from_date");
 			String toDate = request.getParameter("to_date");
-			
+
 			map = new LinkedMultiValueMap<String, Object>();
 
 			map.add("fromDate", fromDate);
@@ -797,7 +801,7 @@ public class GrnGvnReportController {
 			ItemListWithDateRecord[] itemListWithDateRecord = restTemplate.postForObject(
 					Constants.url + "getorderreportByItemIdandDate", map, ItemListWithDateRecord[].class);
 
-			 list = new ArrayList<>(Arrays.asList(itemListWithDateRecord));
+			list = new ArrayList<>(Arrays.asList(itemListWithDateRecord));
 
 			List<Date> dates = new ArrayList<Date>();
 
@@ -840,14 +844,14 @@ public class GrnGvnReportController {
 
 			}
 			rowData.add("Total");
-			
+
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
 
 			for (int i = 0; i < list.size(); i++) {
 
-				float total=0;
-				
+				float total = 0;
+
 				expoExcel = new ExportToExcel();
 				rowData = new ArrayList<String>();
 				rowData.add("" + (i + 1));
@@ -856,10 +860,10 @@ public class GrnGvnReportController {
 				for (int j = 0; j < list.get(i).getList().size(); j++) {
 
 					rowData.add("" + list.get(i).getList().get(j).getQty());
-					total=total+list.get(i).getList().get(j).getQty();
+					total = total + list.get(i).getList().get(j).getQty();
 				}
 				rowData.add("" + total);
-				
+
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
 
@@ -879,8 +883,6 @@ public class GrnGvnReportController {
 		return list;
 
 	}
-	
-	
 
 	// consume R1 web Service
 	@RequestMapping(value = "/getGrnGvnByDatewise", method = RequestMethod.GET)
@@ -2073,4 +2075,371 @@ public class GrnGvnReportController {
 		return model;
 	}
 
+	// Sachin 19-03-2020
+	@RequestMapping(value = "/showGGAprReport", method = RequestMethod.GET)
+	public ModelAndView showGGAprReport(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/grnGvn/ggAprReport");
+
+		try {
+
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			String todaysDate = date.format(formatters);
+
+			allFrIdNameList = getFrNameId();
+
+			allRouteListResponse = getAllRoute();
+
+			model.addObject("routeList", allRouteListResponse.getRoute());
+			model.addObject("todaysDate", todaysDate);
+			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
+
+		} catch (Exception e) {
+			System.out.println("Exce inshowGGReportDateWise " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+
+	@RequestMapping(value = "/getGrnGvnAprHistory", method = RequestMethod.GET)
+
+	public @ResponseBody Object getGrnGvnAprHistory(HttpServletRequest request, HttpServletResponse response) {
+		int x = 1;
+		List<GGReportGrpByMonthDate> grnGvnGrpByMonthList = new ArrayList<>();
+
+		try {
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			String routeId = "0";
+			String frIdString = "";
+
+			System.out.println("inside getGrnGvnByDatewise ajax call");
+
+			// frIdString = request.getParameter("fr_id_list");
+			String fromDate = request.getParameter("from_date");
+			String toDate = request.getParameter("to_date");
+			// routeId = request.getParameter("route_id");
+			String isGrn = request.getParameter("is_grn");
+
+			String grnType;
+			if (isGrn.equalsIgnoreCase("2")) {
+
+				System.err.println("Is Grn =2");
+				grnType = "1" + "," + "0";
+
+				map.add("isGrn", grnType);
+			} else {
+				System.err.println("Is Grn not =2");
+				grnType = isGrn;
+				map.add("isGrn", isGrn);
+
+			}
+
+			System.out.println("fromDate= " + fromDate);
+
+			/*
+			 * boolean isAllFrSelected = false;
+			 * 
+			 * frIdString = frIdString.substring(1, frIdString.length() - 1); frIdString =
+			 * frIdString.replaceAll("\"", "");
+			 * 
+			 * List<String> franchIds = new ArrayList(); franchIds =
+			 * Arrays.asList(frIdString);
+			 * 
+			 * System.out.println("fr Id ArrayList " + franchIds.toString());
+			 * 
+			 * if (franchIds.contains("-1")) { isAllFrSelected = true;
+			 * 
+			 * }
+			 * 
+			 * if (!routeId.equalsIgnoreCase("0")) {
+			 * 
+			 * map.add("routeId", routeId);
+			 * 
+			 * FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url
+			 * + "getFrNameIdByRouteId", map, FrNameIdByRouteIdResponse.class);
+			 * 
+			 * List<FrNameIdByRouteId> frNameIdByRouteIdList =
+			 * frNameId.getFrNameIdByRouteIds();
+			 * 
+			 * System.out.println("route wise franchisee " +
+			 * frNameIdByRouteIdList.toString());
+			 * 
+			 * StringBuilder sbForRouteFrId = new StringBuilder(); for (int i = 0; i <
+			 * frNameIdByRouteIdList.size(); i++) {
+			 * 
+			 * sbForRouteFrId =
+			 * sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() +
+			 * ",");
+			 * 
+			 * }
+			 * 
+			 * String strFrIdRouteWise = sbForRouteFrId.toString(); frIdString =
+			 * strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+			 * System.out.println("fr Id Route WISE = " + frIdString);
+			 * 
+			 * } // end of if
+			 * 
+			 * map = new LinkedMultiValueMap<String, Object>(); if (isAllFrSelected) {
+			 * 
+			 * System.out.println("Inside IF  is All fr Selected " + isAllFrSelected);
+			 * 
+			 * map.add("frIdList", 0); //
+			 * model.addObject("billHeadersList",billHeadersListForPrint);
+			 * 
+			 * } else { // few franchisee selected
+			 * 
+			 * System.out.println("Inside Else: Few Fr Selected "); map.add("frIdList",
+			 * frIdString);
+			 * 
+			 * }
+			 */
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+			map.add("isGrn", grnType);
+			map.add("frIdList", 0);
+
+			GGHeaderApr[] ggAprArray = restTemplate.postForObject(Constants.url + "/getGGHeaderApprReport", map,
+					GGHeaderApr[].class);
+
+			List<GGHeaderApr> ggAprArrayList = new ArrayList<GGHeaderApr>(Arrays.asList(ggAprArray));
+
+			// System.err.println("ggAprArrayList" + ggAprArrayList.toString());
+
+			List<String> statusNames = new ArrayList<String>();
+			statusNames.add(0, "-");
+			statusNames.add(1, "Pending");
+			statusNames.add(2, "Approved From Dispatch");
+			statusNames.add(3, "Rejected From Dispatch");
+			statusNames.add(4, "Approved From Sales");
+			statusNames.add(5, "Rejected From Sales");
+			statusNames.add(6, "Approved From Account");
+			statusNames.add(7, "Rejected From Account");
+			statusNames.add(8, "Partially Approved");
+
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+			int srno = 1;
+			for (int i = 0; i < ggAprArrayList.size(); i++) {
+				ExportToExcel expoExcel = new ExportToExcel();
+				GGHeaderApr header = ggAprArrayList.get(i);
+				List<String> rowData = new ArrayList<String>();
+
+				rowData.add("Sr No");
+				rowData.add("Franchise Name");
+				rowData.add("Grn-Gvn SrNo");
+				rowData.add("Request Date");
+				rowData.add("Current Status");
+
+				rowData.add("");
+				rowData.add("");
+				rowData.add("");
+				rowData.add("");
+
+				expoExcel.setRowData(rowData);
+
+				exportToExcelList.add(expoExcel);
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+
+				rowData.add("" + srno);
+				rowData.add(header.getFrName());
+				rowData.add(header.getGrngvnSrno());
+				rowData.add(header.getGrngvnDate());
+				// rowData.add(""+header.getGrngvnStatus());
+
+				String status = "";
+
+				switch (header.getGrngvnStatus()) {
+				case 1:
+					status = statusNames.get(1);
+					break;
+				case 2:
+					status = statusNames.get(2);
+					break;
+				case 3:
+					status = statusNames.get(3);
+					break;
+				case 4:
+					status = statusNames.get(4);
+					break;
+				case 5:
+					status = statusNames.get(5);
+					break;
+				case 6:
+					status = statusNames.get(6);
+					break;
+				case 7:
+					status = statusNames.get(7);
+					break;
+				case 8:
+					status = statusNames.get(8);
+					break;
+
+				default:
+					break;
+				}
+
+				rowData.add(status);
+
+				rowData.add("");
+				rowData.add("");
+				rowData.add("");
+				rowData.add("");
+
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+
+				rowData.add("Sr No");
+				rowData.add("Item Name");
+				rowData.add("Req Qty");
+				rowData.add("Status");
+
+				rowData.add("Appr Qty Acc");
+
+				rowData.add("Dispatch Verif Date");
+				rowData.add("Sales Verif Date");
+				rowData.add("Account Verif Date");
+				rowData.add("Type");
+
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+
+				int sr = 1;
+				for (int j = 0; j < header.getGgDetailList().size(); j++) {
+					expoExcel = new ExportToExcel();
+
+					GGDetailApr detail = header.getGgDetailList().get(j);
+					rowData = new ArrayList<String>();
+
+					String detailStatus = "";
+
+					switch (detail.getStatus()) {
+					case 1:
+						detailStatus = statusNames.get(1);
+						break;
+					case 2:
+						detailStatus = statusNames.get(2);
+						break;
+					case 3:
+						detailStatus = statusNames.get(3);
+						break;
+					case 4:
+						detailStatus = statusNames.get(4);
+						break;
+					case 5:
+						detailStatus = statusNames.get(5);
+						break;
+					case 6:
+						detailStatus = statusNames.get(6);
+						break;
+					case 7:
+						detailStatus = statusNames.get(7);
+						break;
+					case 8:
+						detailStatus = statusNames.get(8);
+						break;
+
+					default:
+						break;
+					}
+
+					rowData.add("" + sr);
+					rowData.add(detail.getItemName());
+					rowData.add("" + detail.getGrnGvnQty());
+					rowData.add("" + detailStatus);
+
+					rowData.add("" + detail.getAprQtyAcc());
+
+					rowData.add(detail.getAprDateGate());
+					if (detail.getIsGrn() != 1) {
+						rowData.add(detail.getAprDateStore());
+					} else {
+						rowData.add("-");
+					}
+					rowData.add(detail.getAprDateAcc());
+					if (detail.getIsGrn() == 1) {
+						// rowData.add("Type"+detail.getBillNo());
+						rowData.add("GRN");
+					} else {
+						rowData.add("GVN");
+					}
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					sr = sr + 1;
+				}
+				srno = srno + 1;
+			}
+
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "GGApprovalHistory");
+		} catch (Exception e) {
+
+			System.out.println("Ex in getting /getGrnGvnAprHistory List  Ajax call" + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return x;
+
+	}
+
+	// Grn Gvn Admin Pdf same of fr -sachin 19-03-2020
+
+	@RequestMapping(value = "/GrnGvnAdminPrint", method = RequestMethod.POST)
+	public ModelAndView GrnGvnAdminPrint(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("grngvn/accGrnHeader");
+		model = new ModelAndView("grngvn/pdf/grnPdf");
+		String[] grnIdList = request.getParameterValues("select_to_agree");
+		try {
+		System.err.println("grnIdList "+grnIdList[0]+"1- " +grnIdList[1]);
+		}catch (Exception e) {
+			System.err.println("In catch");
+		}
+		//String[] grnIdList = new String[4];//{"100","150","200","145","960","850","4411","4202"};
+		StringBuilder sb = new StringBuilder();
+
+		for (int i = 0; i < grnIdList.length; i++) {
+			sb = sb.append(grnIdList[i] + ",");
+
+			System.out.println("grnIdList id are**" + grnIdList[i]);
+
+		}
+
+		String grnGvnHeaderIdList = sb.toString();
+
+		grnGvnHeaderIdList = grnGvnHeaderIdList.substring(0, grnGvnHeaderIdList.length() - 1);
+	
+		try {
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+
+			ResponseBean resBean = new ResponseBean();
+			try {
+				//map.add("grnGvnHeaderIdList", "100,150,200,145,60,850,4411,4202");
+				map.add("grnGvnHeaderIdList", grnGvnHeaderIdList);
+				resBean = restTemplate.postForObject(Constants.url + "getGGHeaderByHeaderIdList",map, ResponseBean.class);
+				System.err.println("resBean " + resBean.toString());
+			} catch (Exception e) {
+				System.out.println("Exception in GrnGvnAdminPrint" + e.getMessage());
+				e.printStackTrace();
+			}
+			model.addObject("resBean", resBean);
+		} catch (Exception e) {
+
+		}
+		return model;
+	}
 }
