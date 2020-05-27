@@ -128,7 +128,8 @@
 									<th>Ret Amt</th>
 									<th>Net Qty</th>
 									<th>Net Amt</th>
-									<th>Ret Amt</th>
+									<th>Ret Amt %</th>
+									<th>Contribution %</th>
 								</tr>
 							</thead>
 							<tbody>
@@ -191,6 +192,13 @@
 					document.getElementById("expExcel").disabled = true;
 				}
 
+				//drawGraph();
+
+				var netTotalForContri = 0;
+				$.each(data, function(key, report) {
+					netTotalForContri = netTotalForContri + report.netAmt;
+				})
+
 				var totalSoldQty = 0;
 				var totalSoldAmt = 0;
 				var totalVarQty = 0;
@@ -200,6 +208,7 @@
 				var totalNetQty = 0;
 				var totalNetAmt = 0;
 				var retAmtPer = 0;
+				var contriTotal = 0;
 
 				$.each(data, function(key, report) {
 
@@ -211,7 +220,10 @@
 					totalRetAmt = totalRetAmt + report.retAmt;
 					totalNetQty = totalNetQty + report.netQty;
 					totalNetAmt = totalNetAmt + report.netAmt;
-					retAmtPer = retAmtPer + report.retAmtPer;
+
+					if (!isNaN(report.retAmtPer)) {
+						retAmtPer = retAmtPer + report.retAmtPer;
+					}
 
 					document.getElementById("expExcel").disabled = false;
 					document.getElementById('range').style.display = 'block';
@@ -246,8 +258,22 @@
 							addCommas(report.netQty.toFixed(2))));
 					tr.append($('<td style="text-align:right;"></td>').html(
 							addCommas(report.netAmt.toFixed(2))));
+
+					if (isNaN(report.retAmtPer)) {
+						tr.append($('<td style="text-align:right;"></td>')
+								.html("0.00%"));
+					} else {
+						tr.append($('<td style="text-align:right;"></td>')
+								.html(
+										addCommas(report.retAmtPer.toFixed(2))
+												+ "%"));
+					}
+
+					var contri = (report.netAmt * 100) / netTotalForContri;
+					contriTotal = contriTotal + contri;
+
 					tr.append($('<td style="text-align:right;"></td>').html(
-							addCommas(report.retAmtPer.toFixed(2))));
+							contri.toFixed(2)));
 
 					$('#table_grid tbody').append(tr);
 
@@ -259,26 +285,29 @@
 
 				tr.append($('<td style="font-weight:bold;"></td>')
 						.html("Total"));
-				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+				tr.append($('<td style="text-align:right;"></td>').html(
 						addCommas(totalSoldQty.toFixed(2))));
-				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+				tr.append($('<td style="text-align:right;"></td>').html(
 						addCommas(totalSoldAmt.toFixed(2))));
-				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+				tr.append($('<td style="text-align:right;"></td>').html(
 						addCommas(totalVarQty.toFixed(2))));
-				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+				tr.append($('<td style="text-align:right;"></td>').html(
 						addCommas(totalVarAmt.toFixed(2))));
-				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+				tr.append($('<td style="text-align:right;"></td>').html(
 						addCommas(totalRetQty.toFixed(2))));
-				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+				tr.append($('<td style="text-align:right;"></td>').html(
 						addCommas(totalRetAmt.toFixed(2))));
 
-				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+				tr.append($('<td style="text-align:right;"></td>').html(
 						addCommas(totalNetQty.toFixed(2))));
-				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
+				tr.append($('<td style="text-align:right;"></td>').html(
 						addCommas(totalNetAmt.toFixed(2))));
 
-				tr.append($('<td style="text-align:right; font-weight:bold;"></td>').html(
-						addCommas(retAmtPer.toFixed(2))));
+				tr.append($('<td style="text-align:right;"></td>').html(
+						addCommas(retAmtPer.toFixed(2)) + "%"));
+
+				tr.append($('<td style="text-align:right;"></td>').html(
+						contriTotal.toFixed(2)));
 
 				$('#table_grid tbody').append(tr);
 
@@ -286,23 +315,25 @@
 
 		}
 	</script>
-	
-		<script type="text/javascript">
-function addCommas(x){
 
-	x=String(x).toString();
-	 var afterPoint = '';
-	 if(x.indexOf('.') > 0)
-	    afterPoint = x.substring(x.indexOf('.'),x.length);
-	 x = Math.floor(x);
-	 x=x.toString();
-	 var lastThree = x.substring(x.length-3);
-	 var otherNumbers = x.substring(0,x.length-3);
-	 if(otherNumbers != '')
-	     lastThree = ',' + lastThree;
-	 return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
-	}
-</script>
+
+	<script type="text/javascript">
+		function addCommas(x) {
+
+			x = String(x).toString();
+			var afterPoint = '';
+			if (x.indexOf('.') > 0)
+				afterPoint = x.substring(x.indexOf('.'), x.length);
+			x = Math.floor(x);
+			x = x.toString();
+			var lastThree = x.substring(x.length - 3);
+			var otherNumbers = x.substring(0, x.length - 3);
+			if (otherNumbers != '')
+				lastThree = ',' + lastThree;
+			return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",")
+					+ lastThree + afterPoint;
+		}
+	</script>
 
 	<script type="text/javascript">
 		function validate() {

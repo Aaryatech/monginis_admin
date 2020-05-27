@@ -11,6 +11,8 @@
     <c:url var="setAllFrIdSelected"  value="/setAllFrIdSelected" />
 
 	<c:url var="getBillList" value="/getSaleBillwiseGrpByMonth"></c:url>
+	<c:url var="getFrListofAllFr" value="/setAllFrIdSelected"></c:url>
+	
 <div class="container" id="main-container">
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
@@ -185,7 +187,6 @@
 										<th>CGST</th>
 										<th>SGST</th>
 										<th>IGST</th>
-										<th>Round Off</th>
 										<th>Total</th>
 									</tr>
 								</thead>
@@ -289,15 +290,17 @@
 														  	tr.append($('<td style="text-align:right;"></td>').html(report.igstSum.toFixed(2)));
 														/* } */
 													  	//tr.append($('<td></td>').html(report.igstSum));
-														tr.append($('<td style="text-align:right;"></td>').html(report.roundOff));
+														//tr.append($('<td style="text-align:right;"></td>').html(report.roundOff));
 																												
-														if(report.isSameState==1){
+														/* if(report.isSameState==1){
 															 total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum);
 														}
 														else{
 															
 															 total=report.taxableAmt+report.igstSum;
-														}
+														} */
+														
+														total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum+report.igstSum);
 
 													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(total.toFixed(2))));
 
@@ -320,7 +323,7 @@
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlCgst.toFixed(2))));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlSgst.toFixed(2))));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlIgst.toFixed(2))));
-													trr.append($('<td style="text-align:right;"></td>').html(''));
+													//trr.append($('<td style="text-align:right;"></td>').html(''));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(grandTotal.toFixed(2))));
 													$('#table_grid tbody')
 													.append(trr);
@@ -372,6 +375,37 @@ function addCommas(x){
 			}
 			return isValid;
 
+		}
+	</script>
+	
+	<script>
+		function setAllFrSelected(frId) {
+			//alert("frId" + frId);
+			//alert("hii")
+			if (frId == -1) {
+
+				$.getJSON('${getFrListofAllFr}', {
+
+					ajax : 'true'
+				},
+						function(data) {
+
+							var len = data.length;
+
+							//alert(len);
+
+							$('#selectFr').find('option').remove().end()
+							$("#selectFr").append(
+									$("<option value='-1'>All</option>"));
+							for (var i = 0; i < len; i++) {
+								$("#selectFr").append(
+										$("<option selected ></option>").attr(
+												"value", data[i].frId).text(
+												data[i].frName));
+							}
+							$("#selectFr").trigger("chosen:updated");
+						});
+			}
 		}
 	</script>
 
