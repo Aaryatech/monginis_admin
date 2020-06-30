@@ -37,6 +37,7 @@ import com.ats.adminpanel.model.GetOrdersResponse;
 import com.ats.adminpanel.model.GetRegSpCakeOrders;
 import com.ats.adminpanel.model.GetSpCakeOrders;
 import com.ats.adminpanel.model.GetSpCkOrder;
+import com.ats.adminpanel.model.GetSpCkOrderAlbum;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.Order;
 import com.ats.adminpanel.model.OrderItemSubCatTotal;
@@ -1441,7 +1442,11 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		RestTemplate restTemp = new RestTemplate();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("spOrderNo", spOrderNo);
-		List<GetSpCkOrder> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map,
+//		List<GetSpCkOrder> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map,
+//				List.class);
+		
+		//Mahendra 30-06-2020
+		List<GetSpCkOrderAlbum> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map,
 				List.class);
 
 		model.addObject("from", key);
@@ -1449,6 +1454,8 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		model.addObject("spCakeOrder", orderListResponse);
 		model.addObject("imgUrl", Constants.SP_CAKE_FOLDER);
 		model.addObject("imgUrl2", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
+		model.addObject("albumUrl", Constants.Album_IMAGE_URL);
+		model.addObject("noImgUrl", Constants.noImg);
 		return model;
 	}
 
@@ -1494,7 +1501,11 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 
 		orderId.setLength(orderId.length() - 1);
 		map.add("spOrderNo", orderId);
-		List<GetSpCkOrder> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map,
+//		List<GetSpCkOrder> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map,
+//				List.class);
+		
+		//Mahendra 30-06-2020
+		List<GetSpCkOrderAlbum> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map,
 				List.class);
 
 		System.out.println("SpOrder" + orderListResponse.toString());
@@ -1502,6 +1513,9 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		model.addObject("from", from);
 		model.addObject("imgUrl", Constants.SP_CAKE_FOLDER);
 		model.addObject("imgUrl2", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
+		model.addObject("albumUrl", Constants.Album_IMAGE_URL);
+		model.addObject("noImgUrl", Constants.noImg);
+		
 		return model;
 	}
 	
