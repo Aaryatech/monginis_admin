@@ -2127,7 +2127,7 @@ public class GrnGvnReportController {
 			String toDate = request.getParameter("to_date");
 			// routeId = request.getParameter("route_id");
 			String isGrn = request.getParameter("is_grn");
-
+System.err.println(isGrn + "isGrn");
 			String grnType;
 			if (isGrn.equalsIgnoreCase("2")) {
 

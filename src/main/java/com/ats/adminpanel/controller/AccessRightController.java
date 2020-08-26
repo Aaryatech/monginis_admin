@@ -376,10 +376,13 @@ public class AccessRightController {
 		
 		for(int i=0;i<accessRightModuleListRes.size();i++)
 		{	
+//System.err.println("accessRightModuleListRes at index " +i+"Module Id "+accessRightModuleListRes.get(i).getModuleId());
+			Integer isFound=0;
 			for(int j=0;j<newModuleList.size();j++)
 			{
 				if(newModuleList.get(j).getModuleId()==accessRightModuleListRes.get(i).getModuleId())
 				{
+					isFound=1;
 				   for(int l=0;l<accessRightModuleListRes.get(i).getAccessRightSubModuleList().size();l++)
 				   {
 					   boolean flag=false;
@@ -408,9 +411,34 @@ public class AccessRightController {
 				   }
 					
 				}
-				
 			}
-			
+				if(isFound.equals(0)) {
+					
+					ModuleJson mod=new ModuleJson();
+					mod.setModuleDesc(accessRightModuleListRes.get(i).getModuleDesc());
+					mod.setModuleId(accessRightModuleListRes.get(i).getModuleId());
+					mod.setModuleName(accessRightModuleListRes.get(i).getModuleName());
+					
+					List<SubModuleJson> subModuleJsonList=new ArrayList<SubModuleJson>();
+					
+					   for(int l=0;l<accessRightModuleListRes.get(i).getAccessRightSubModuleList().size();l++)
+					   {
+						   SubModuleJson sub=new SubModuleJson();
+					   sub.setSubModuleId(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getSubModuleId());
+					   sub.setView("hidden");
+					   sub.setSubModuleMapping(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getSubModuleMapping());
+					   sub.setEditReject("hidden");
+					   sub.setSubModuleDesc(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getSubModuleDesc());
+					   sub.setSubModulName(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getSubModulName());
+					   sub.setType(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getType());
+					   sub.setModuleId(accessRightModuleListRes.get(i).getAccessRightSubModuleList().get(l).getModuleId());
+					   sub.setDeleteRejectApprove("hidden");
+					   sub.setAddApproveConfig("hidden");
+					   subModuleJsonList.add(sub);
+					   }
+					   mod.setSubModuleJsonList(subModuleJsonList);
+					   newModuleList.add(mod);	   
+				}
 		}
 		model.addObject("moduleJsonList", newModuleList);
 		model.addObject("userName", userName);
