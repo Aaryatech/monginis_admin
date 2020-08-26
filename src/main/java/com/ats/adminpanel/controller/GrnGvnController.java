@@ -20,6 +20,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -31,7 +32,11 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.Firebase;
 import com.ats.adminpanel.model.AllFrIdName;
 import com.ats.adminpanel.model.AllFrIdNameList;
+import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.Info;
+import com.ats.adminpanel.model.Route;
+import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
+import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
 import com.ats.adminpanel.model.franchisee.Menu;
 import com.ats.adminpanel.model.grngvn.GetGrnGvnDetails;
 import com.ats.adminpanel.model.grngvn.GetGrnGvnDetailsList;
@@ -44,12 +49,11 @@ import com.ats.adminpanel.model.login.UserResponse;
 import com.ats.adminpanel.model.remarks.GetAllRemarks;
 import com.ats.adminpanel.model.remarks.GetAllRemarksList;
 import com.itextpdf.text.pdf.PdfStructTreeController.returnType;
-   
 
 @Controller
 @Scope("session")
 public class GrnGvnController {
- 
+
 	public static float roundUp(float d) {
 		return BigDecimal.valueOf(d).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
 	}
@@ -133,9 +137,18 @@ public class GrnGvnController {
 				e.printStackTrace();
 
 			}
+
 			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
 
-			if (gateGrnHeaderFromDate == "" || gateGrnHeaderFromDate == null) {
+			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
+					AllRoutesListResponse.class);
+
+			List<Route> routeList = new ArrayList<Route>();
+
+			routeList = allRouteListResponse.getRoute();
+			model.addObject("routeList", routeList);
+
+			/*if (gateGrnHeaderFromDate == "" || gateGrnHeaderFromDate == null) {
 
 				String statusList = new String();
 
@@ -165,7 +178,8 @@ public class GrnGvnController {
 				System.out.println("Grn Gate Header List ON load  " + grnGateHeaderList.toString());
 
 			} // end of if onload call
-
+			*/
+if(1==2) {}
 			else {
 
 				if (frList.contains("-1")) {
@@ -202,10 +216,17 @@ public class GrnGvnController {
 					map.add("fromDate", gateGrnHeaderFromDate);
 					map.add("toDate", gateGrnHeaderToDate);
 					map.add("isGrn", 1);
+					map.add("statusList", "1");
 
 					grnGateHeaderList = new ArrayList<>();
 
-					headerList = restTemplate.postForObject(Constants.url + "getGrnGvnHeader", map,
+					/*
+					 * headerList = restTemplate.postForObject(Constants.url + "getGrnGvnHeader",
+					 * map, GrnGvnHeaderList.class);
+					 */
+					//Sachin 23-03-2020 Work From Home Corona Holiday
+
+					headerList = restTemplate.postForObject(Constants.url + "findGGHeaderForDispatch", map,
 							GrnGvnHeaderList.class);
 
 					grnGateHeaderList = headerList.getGrnGvnHeader();
@@ -227,6 +248,25 @@ public class GrnGvnController {
 		}
 
 		return model;
+	}
+
+	// Get Franchise from Route Id
+
+	@RequestMapping(value = "/getFrListByRouteId", method = RequestMethod.GET)
+	public @ResponseBody List<FrNameIdByRouteId> getFrListByRouteId(HttpServletRequest request,
+			HttpServletResponse response) {
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		String routeId = request.getParameter("route_id");
+		RestTemplate restTemplate = new RestTemplate();
+
+		map.add("routeId", routeId);
+
+		FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId", map,
+				FrNameIdByRouteIdResponse.class);
+
+		List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+		return frNameIdByRouteIdList;
+
 	}
 
 	// getGateGrnDetail
@@ -269,9 +309,7 @@ public class GrnGvnController {
 
 			getAllRemarks = new ArrayList<>();
 			getAllRemarks = getAllRemarksList.getGetAllRemarks();
-			
-			
-			
+
 			GrnGvnHeader gateHeader = new GrnGvnHeader();
 
 			for (int i = 0; i < grnGateHeaderList.size(); i++) {
@@ -286,7 +324,6 @@ public class GrnGvnController {
 			}
 			modelAndView.addObject("srNo", gateHeader.getGrngvnSrno());
 
-
 		} catch (Exception e) {
 
 			e.printStackTrace();
@@ -297,8 +334,6 @@ public class GrnGvnController {
 		modelAndView.addObject("grnList", grnGateDetailList);
 		modelAndView.addObject("grnDate", grnDate);
 
-
-		
 		modelAndView.addObject("remarkList", getAllRemarks);
 
 		return modelAndView;
@@ -908,8 +943,7 @@ public class GrnGvnController {
 
 		return model;
 	}
-	
-	
+
 	List<Integer> statuses;
 
 	@RequestMapping(value = "/getAccGrnDetail/{headerId}", method = RequestMethod.GET)
@@ -939,14 +973,14 @@ public class GrnGvnController {
 			grnAccDetailList = detailList.getGrnGvnDetails();
 
 			System.out.println("GRN Detail   " + grnAccDetailList.toString());
-			statuses=new ArrayList<Integer>();
-			for(int i=0;i<grnAccDetailList.size();i++) {
-				
+			statuses = new ArrayList<Integer>();
+			for (int i = 0; i < grnAccDetailList.size(); i++) {
+
 				System.err.println("In For ");
-				if(grnAccDetailList.get(i).getGrnGvnStatus()==7 || grnAccDetailList.get(i).getGrnGvnStatus()==2) {
+				if (grnAccDetailList.get(i).getGrnGvnStatus() == 7 || grnAccDetailList.get(i).getGrnGvnStatus() == 2) {
 					System.err.println("In If ");
 
-				statuses.add(i);
+					statuses.add(i);
 				}
 			}
 
@@ -959,8 +993,7 @@ public class GrnGvnController {
 
 			getAllRemarks = new ArrayList<>();
 			getAllRemarks = getAllRemarksList.getGetAllRemarks();
-			
-			
+
 			GrnGvnHeader gateHeader = new GrnGvnHeader();
 
 			for (int i = 0; i < grnAccHeaderList.size(); i++) {
@@ -974,7 +1007,6 @@ public class GrnGvnController {
 				}
 			}
 			modelAndView.addObject("srNo", gateHeader.getGrngvnSrno());
-
 
 		} catch (Exception e) {
 
@@ -1072,18 +1104,13 @@ public class GrnGvnController {
 		return modelAndView;
 	}
 
-	
-	
-	
-	
 	@RequestMapping(value = "/getStatus", method = RequestMethod.GET)
 	public @ResponseBody List<Integer> getStatus(HttpServletRequest request, HttpServletResponse response) {
 
 		return statuses;
-		
+
 	}
-	
-	
+
 	// Acc GRN started
 
 	// A] --//Acc Grn Process Agree
@@ -1203,20 +1230,18 @@ public class GrnGvnController {
 					data.setAprGrandTotal(roundUp(grandTotal));
 
 					dataList.add(data);
-					
-					
+
 					detail.setAprGrandTotal(data.getAprGrandTotal());
 					detail.setAprTaxableAmt(data.getAprTaxableAmt());
 					detail.setAprTotalTax(data.getAprTotalTax());
-					
+
 					detail.setAprCgstRs(data.getAprCgstRs());
 					detail.setAprSgstRs(data.getAprSgstRs());
 					detail.setAprIgstRs(data.getAprIgstRs());
-					
-					detail.setAprROff(data.getAprROff());
-					
-					grnAccDetailList.set(i, detail);
 
+					detail.setAprROff(data.getAprROff());
+
+					grnAccDetailList.set(i, detail);
 
 					break;
 
@@ -1384,24 +1409,25 @@ public class GrnGvnController {
 			System.out.println("GRN HEADER rESPONSE " + accHeader.toString());
 
 			//
-			
-			//-----------------------For Notification-----------------
-			String frToken="";
-		
+
+			// -----------------------For Notification-----------------
+			String frToken = "";
+
 			try {
 				map = new LinkedMultiValueMap<String, Object>();
-				  map.add("frId",accHeader.getFrId());
-				   
-                 frToken= restTemplate.postForObject(Constants.url+"getFrToken", map, String.class);
-		         Firebase.sendPushNotifForCommunication(frToken,"","GRN no"+accHeader.getGrngvnSrno()+"punched by you has been cleared by Accounts"+accHeader.getAprGrandTotal() + " Thank You..Team Monginis","inbox");
-		   	
-		        }
-		        catch(Exception e2)
-		        {
-			      e2.printStackTrace();
-		        }
-			
-			//-----------------------------------------------------
+				map.add("frId", accHeader.getFrId());
+
+				frToken = restTemplate.postForObject(Constants.url + "getFrToken", map, String.class);
+				Firebase.sendPushNotifForCommunication(frToken, "",
+						"GRN no" + accHeader.getGrngvnSrno() + "punched by you has been cleared by Accounts"
+								+ accHeader.getAprGrandTotal() + " Thank You..Team Monginis",
+						"inbox");
+
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+
+			// -----------------------------------------------------
 
 		} catch (Exception e) {
 
@@ -1537,20 +1563,18 @@ public class GrnGvnController {
 					data.setAprGrandTotal(roundUp(grandTotal));
 
 					dataList.add(data);
-					
-					
+
 					detail.setAprGrandTotal(data.getAprGrandTotal());
 					detail.setAprTaxableAmt(data.getAprTaxableAmt());
 					detail.setAprTotalTax(data.getAprTotalTax());
-					
+
 					detail.setAprCgstRs(data.getAprCgstRs());
 					detail.setAprSgstRs(data.getAprSgstRs());
 					detail.setAprIgstRs(data.getAprIgstRs());
-					
-					detail.setAprROff(data.getAprROff());
-					
-					grnAccDetailList.set(i, detail);
 
+					detail.setAprROff(data.getAprROff());
+
+					grnAccDetailList.set(i, detail);
 
 					break;
 
@@ -1711,27 +1735,27 @@ public class GrnGvnController {
 			System.out.println("GRN HEADER rESPONSE " + accHeader.toString());
 
 			System.out.println("LIST SIZE ACC GRN : " + grnAccDetailList.size());
-			
+
 			//
-			
-			
-			//-----------------------For Notification-----------------
-			String frToken="";
-		
+
+			// -----------------------For Notification-----------------
+			String frToken = "";
+
 			try {
 				map = new LinkedMultiValueMap<String, Object>();
-				  map.add("frId",accHeader.getFrId());
-				   
-                 frToken= restTemplate.postForObject(Constants.url+"getFrToken", map, String.class);
-		         Firebase.sendPushNotifForCommunication(frToken,"","GRN no"+accHeader.getGrngvnSrno()+"punched by you has been rejected by Accounts" + " Thank You..Team Monginis","inbox");
-		   	
-		        }
-		        catch(Exception e2)
-		        {
-			      e2.printStackTrace();
-		        }
-			
-			//-----------------------------------------------------
+				map.add("frId", accHeader.getFrId());
+
+				frToken = restTemplate.postForObject(Constants.url + "getFrToken", map, String.class);
+				Firebase.sendPushNotifForCommunication(
+						frToken, "", "GRN no" + accHeader.getGrngvnSrno()
+								+ "punched by you has been rejected by Accounts" + " Thank You..Team Monginis",
+						"inbox");
+
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+
+			// -----------------------------------------------------
 
 		} catch (Exception e) {
 
@@ -1799,7 +1823,7 @@ public class GrnGvnController {
 
 					if (grnAccDetailList.get(i).getGrnGvnId() == Integer.parseInt(grnIdList[j])) {
 
-						//System.out.println("GRN ID MAtched " + grnIdList[j]);
+						// System.out.println("GRN ID MAtched " + grnIdList[j]);
 
 						detail = new GetGrnGvnDetails();
 						data = new TempGrnGvnBeanUp();
@@ -1818,7 +1842,7 @@ public class GrnGvnController {
 						if (detail.getGrnType() == 1) {
 
 							grnRate = detail.getBaseRate() * 65 / 100;
-							
+
 						}
 
 						if (detail.getGrnType() == 2 || detail.getGrnType() == 4) {
@@ -1877,20 +1901,17 @@ public class GrnGvnController {
 						data.setAprTotalTax(roundUp(aprTotalTax));
 
 						data.setAprGrandTotal(roundUp(grandTotal));
-						
-						
-						
 
 						detail.setAprGrandTotal(data.getAprGrandTotal());
 						detail.setAprTaxableAmt(data.getAprTaxableAmt());
 						detail.setAprTotalTax(data.getAprTotalTax());
-						
+
 						detail.setAprCgstRs(data.getAprCgstRs());
 						detail.setAprSgstRs(data.getAprSgstRs());
 						detail.setAprIgstRs(data.getAprIgstRs());
-						
+
 						detail.setAprROff(data.getAprROff());
-						
+
 						grnAccDetailList.set(i, detail);
 
 					} // end of matching grnId
@@ -2039,7 +2060,8 @@ public class GrnGvnController {
 					accHeader.setAprTaxableAmt(
 							accHeader.getAprTaxableAmt() + grnAccDetailList.get(i).getAprTaxableAmt());
 					accHeader.setAprTotalTax(accHeader.getAprTotalTax() + grnAccDetailList.get(i).getAprTotalTax());
-					accHeader.setAprGrandTotal(accHeader.getAprGrandTotal() + grnAccDetailList.get(i).getAprGrandTotal());
+					accHeader.setAprGrandTotal(
+							accHeader.getAprGrandTotal() + grnAccDetailList.get(i).getAprGrandTotal());
 					accHeader.setAprCgstRs(accHeader.getAprCgstRs() + grnAccDetailList.get(i).getAprCgstRs());
 					accHeader.setAprSgstRs(accHeader.getAprSgstRs() + grnAccDetailList.get(i).getAprSgstRs());
 					accHeader.setAprIgstRs(accHeader.getAprIgstRs() + grnAccDetailList.get(i).getAprIgstRs());
@@ -2058,26 +2080,25 @@ public class GrnGvnController {
 			System.out.println("GRN HEADER rESPONSE " + accHeader.toString());
 
 			//
-			
-			
-			//-----------------------For Notification-----------------
-			String frToken="";
-		
+
+			// -----------------------For Notification-----------------
+			String frToken = "";
+
 			try {
 				map = new LinkedMultiValueMap<String, Object>();
-				  map.add("frId",accHeader.getFrId());
-				   
-                 frToken= restTemplate.postForObject(Constants.url+"getFrToken", map, String.class);
-		         Firebase.sendPushNotifForCommunication(frToken,"","GRN no"+accHeader.getGrngvnSrno()+"punched by you has been cleared by Accounts"+accHeader.getAprGrandTotal() + " Thank You..Team Monginis","inbox");
-		   	
-		        }
-		        catch(Exception e2)
-		        {
-			      e2.printStackTrace();
-		        }
-			
-			//-----------------------------------------------------
+				map.add("frId", accHeader.getFrId());
 
+				frToken = restTemplate.postForObject(Constants.url + "getFrToken", map, String.class);
+				Firebase.sendPushNotifForCommunication(frToken, "",
+						"GRN no" + accHeader.getGrngvnSrno() + "punched by you has been cleared by Accounts"
+								+ accHeader.getAprGrandTotal() + " Thank You..Team Monginis",
+						"inbox");
+
+			} catch (Exception e2) {
+				e2.printStackTrace();
+			}
+
+			// -----------------------------------------------------
 
 		} catch (Exception e) {
 

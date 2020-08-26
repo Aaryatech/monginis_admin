@@ -9,6 +9,7 @@
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
 	<c:url var="getDateForGateHeader" value="/getDateForGateHeader" />
+	<c:url var="getFrListByRouteId" value="/getFrListByRouteId" />
 
 	<div class="container" id="main-container">
 
@@ -88,41 +89,55 @@
 									</div>
 								</div>
 
-								<div class="form-group">
-									<label class="col-sm-3 col-lg-2 control-label">Franchise</label>
+									<label class="col-sm-3 col-lg-2 control-label">Route</label>
 
 									<div class="col-sm-5 col-lg-3 controls">
 
-										<select data-placeholder="Choose Franchisee"
+					
+											<select data-placeholder="Select Route"
+								class="form-control chosen" name="selectRoute" id="selectRoute"
+								onchange="getFrNamesByRouteId()">
+								<option value="0">Select Route</option>
+								<c:forEach items="${routeList}" var="route" varStatus="count">
+									<option value="${route.routeId}"><c:out value="${route.routeName}"/> </option>
+
+								</c:forEach>
+							</select>
+									</div>
+
+					<div class="form-group">
+						<label class="col-sm-3 col-lg-2 control-label">Select
+							Franchise</label>
+						<div class="col-sm-6 col-lg-4 controls">
+											<select data-placeholder="Choose Franchisee"
 											class="form-control chosen" multiple="multiple" tabindex="6"
 											id="selectFr" name="selectFr" onchange="getDate()">
-											<option value="-1"><c:out value="All"/></option>
+											<%-- <option value="-1"><c:out value="All"/></option>
 
 
 
 											<c:forEach items="${unSelectedFrList}" var="fr"
 												varStatus="count2">
 
-											<%--	<c:forEach items="${selectedFr}" var="selFr"
+												<c:forEach items="${selectedFr}" var="selFr"
 													varStatus="count2">
 													 <c:choose>
 														<c:when test="${selFr==fr.frId}">
 															<option selected value="${fr.frId}"><c:out value="${fr.frName}"/></option>
 														</c:when>
-														<c:otherwise> --%>
+														<c:otherwise>
 															<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
 
 
-														<%-- </c:otherwise>
+														</c:otherwise>
 														</c:choose>
 												</c:forEach>
- --%>
+
 											</c:forEach>
-
+ --%>
 										</select>
-									</div>
-
-
+							
+						</div>
 <input type="button" onclick="printGrn()" value="Print GRN" class="btn btn-primary">
 								</div>
 
@@ -339,6 +354,53 @@ function getDate(){
 );
 
 }
+
+function getFrNamesByRouteId(){
+	var html ="" ;
+	$('#selectFr').html(html);
+	$("#selectFr").trigger("chosen:updated");
+var route_id = $("#selectRoute").val();
+	$.getJSON('${getFrListByRouteId}',
+			{
+		route_id : route_id,
+				ajax : 'true',
+			},
+	function(data){
+		//alert(JSON.stringify(data));
+		//'<option selected value="-1"  selected >All Franchise</option>';
+		var html ="" ;
+		localStorage.setItem("frList",data);
+		var len = data.length;
+		for ( var i = 0; i < len; i++) {
+			html += '<option selected value="' + data[i].frId + '">'
+					+ data[i].frName + '</option>';
+		}
+		html += '</option>';
+		$('#selectFr').html(html);
+		$("#selectFr").trigger("chosen:updated");
+		getDate();
+	});
+	
+}
+
+$(document).ready(function() { 
+	$('#selectFr1').change(
+			function() {
+				
+				var frId=$(this).val();
+				if(frId<0){
+					
+					var data=localStorage.getItem("frList")
+					alert(JSON.stringify(data));
+					var len = data.length;
+					for ( var i = 0; i < len; i++) {
+						alert(data[i].frName);
+					}
+				}
+			});
+});
+
+
 function printGrn(){
 	 var form = document.getElementById("validation-form1");
 	// form.attribute("method","post")
