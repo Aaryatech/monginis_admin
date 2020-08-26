@@ -13,36 +13,38 @@
 
 
 	<c:url var="getBillList" value="/getSaleBillwiseGrpByDate"></c:url>
-<div class="container" id="main-container">
-	<!-- BEGIN Sidebar -->
-	<div id="sidebar" class="navbar-collapse collapse">
+	<c:url var="setAllFrIdSelected" value="/setAllFrIdSelected"></c:url>
 
-		<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
+	<div class="container" id="main-container">
+		<!-- BEGIN Sidebar -->
+		<div id="sidebar" class="navbar-collapse collapse">
 
-		<div id="sidebar-collapse" class="visible-lg">
-			<i class="fa fa-angle-double-left"></i>
-		</div>
-		<!-- END Sidebar Collapse Button -->
-	</div>
-	<!-- END Sidebar -->
+			<jsp:include page="/WEB-INF/views/include/navigation.jsp"></jsp:include>
 
-
-
-	<!-- BEGIN Content -->
-	<div id="main-content">
-		<!-- BEGIN Page Title -->
-		<div class="page-title">
-			<div>
-				<h1>
-					<i class="fa fa-file-o"></i>Billwise Report Grp By Date
-				</h1>
-				<h4></h4>
+			<div id="sidebar-collapse" class="visible-lg">
+				<i class="fa fa-angle-double-left"></i>
 			</div>
+			<!-- END Sidebar Collapse Button -->
 		</div>
-		<!-- END Page Title -->
+		<!-- END Sidebar -->
 
-		<!-- BEGIN Breadcrumb -->
-	<%-- 	<div id="breadcrumbs">
+
+
+		<!-- BEGIN Content -->
+		<div id="main-content">
+			<!-- BEGIN Page Title -->
+			<div class="page-title">
+				<div>
+					<h1>
+						<i class="fa fa-file-o"></i>Billwise Report Grp By Date
+					</h1>
+					<h4></h4>
+				</div>
+			</div>
+			<!-- END Page Title -->
+
+			<!-- BEGIN Breadcrumb -->
+			<%-- 	<div id="breadcrumbs">
 			<ul class="breadcrumb">
 				<li><i class="fa fa-home"></i> <a
 					href="${pageContext.request.contextPath}/home">Home</a> <span
@@ -50,232 +52,255 @@
 				<li class="active">Bill Report</li>
 			</ul>
 		</div> --%>
-		<!-- END Breadcrumb -->
+			<!-- END Breadcrumb -->
 
-		<!-- BEGIN Main Content -->
-		<div class="box">
-			<div class="box-title">
-				<h3>
-					<i class="fa fa-bars"></i>View Billwise Sale Grp By Date
-				</h3>
+			<!-- BEGIN Main Content -->
+			<div class="box">
+				<div class="box-title">
+					<h3>
+						<i class="fa fa-bars"></i>View Billwise Sale Grp By Date
+					</h3>
 
-			</div>
+				</div>
 
-			<div class="box-content">
-				<div class="row">
+				<div class="box-content">
+					<div class="row">
 
 
-					<div class="form-group">
-						<label class="col-sm-3 col-lg-2	 control-label">From Date</label>
-						<div class="col-sm-6 col-lg-4 controls date_select">
-							<input class="form-control date-picker" id="fromDate"
-								name="fromDate" size="30" type="text" value="${todaysDate}" />
-						</div>
+						<div class="form-group">
+							<label class="col-sm-3 col-lg-2	 control-label">From Date</label>
+							<div class="col-sm-6 col-lg-4 controls date_select">
+								<input class="form-control date-picker" id="fromDate"
+									name="fromDate" size="30" type="text" value="${todaysDate}" />
+							</div>
 
-						<!-- </div>
+							<!-- </div>
 
 					<div class="form-group  "> -->
 
-						<label class="col-sm-3 col-lg-2	 control-label">To Date</label>
-						<div class="col-sm-6 col-lg-4 controls date_select">
-							<input class="form-control date-picker" id="toDate" name="toDate"
-								size="30" type="text" value="${todaysDate}" />
+							<label class="col-sm-3 col-lg-2	 control-label">To Date</label>
+							<div class="col-sm-6 col-lg-4 controls date_select">
+								<input class="form-control date-picker" id="toDate"
+									name="toDate" size="30" type="text" value="${todaysDate}" />
+							</div>
 						</div>
+
 					</div>
 
-				</div>
 
+					<br>
 
-				<br>
-
-				<!-- <div class="col-sm-9 col-lg-5 controls">
+					<!-- <div class="col-sm-9 col-lg-5 controls">
  -->
-				<div class="row">
-					<div class="form-group">
-						<label class="col-sm-3 col-lg-2 control-label">Select
-							Route</label>
-						<div class="col-sm-6 col-lg-4 controls">
-							<select data-placeholder="Select Route"
-								class="form-control chosen" name="selectRoute" id="selectRoute"
-								onchange="disableFr()">
-								<option value="0">Select Route</option>
-								<c:forEach items="${routeList}" var="route" varStatus="count">
-									<option value="${route.routeId}"><c:out value="${route.routeName}"/> </option>
+					<div class="row">
+						<div class="form-group">
+							<label class="col-sm-3 col-lg-2 control-label">Select
+								Route</label>
+							<div class="col-sm-6 col-lg-10 controls">
+								<select data-placeholder="Select Route"
+									class="form-control chosen" name="selectRoute" id="selectRoute"
+									onchange="disableFr()">
+									<option value="0">Select Route</option>
+									<c:forEach items="${routeList}" var="route" varStatus="count">
+										<option value="${route.routeId}"><c:out
+												value="${route.routeName}" />
+										</option>
 
-								</c:forEach>
-							</select>
+									</c:forEach>
+								</select>
 
-						</div>
+							</div>
 
-						<label class="col-sm-3 col-lg-2 control-label"><b>OR</b>Select
-							Franchisee</label>
-						<div class="col-sm-6 col-lg-4">
-
-							<select data-placeholder="Choose Franchisee"
-								class="form-control chosen" multiple="multiple" tabindex="6"
-								id="selectFr" name="selectFr" onchange="disableRoute()">
-
-								<option value="-1"><c:out value="All"/></option>
-
-								<c:forEach items="${unSelectedFrList}" var="fr"
-									varStatus="count">
-									<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
-								</c:forEach>
-							</select>
-
+						
 						</div>
 					</div>
-				</div>
+<br>
+					<div class="row">
+						<div class="form-group">
+							<label class="col-sm-3 col-lg-2 control-label"><b>OR</b>Select
+								Franchisee</label>
+							<div class="col-sm-6 col-lg-10">
 
-				<br>
-				<div class="row">
-					<div class="col-md-12" style="text-align: center;">
-						<button class="btn btn-info" onclick="searchReport()">Search
-							Billwise Report</button>
+								<select data-placeholder="Choose Franchisee"
+									class="form-control chosen" multiple="multiple" tabindex="6"
+									id="selectFr" name="selectFr" onchange="disableRoute()">
 
-						<button class="btn search_btn" onclick="showChart()">Graph</button>
+									<option value="-1"><c:out value="All" /></option>
 
-						<button class="btn btn-primary" value="PDF" id="PDFButton"
-							onclick="genPdf()">PDF</button>
+									<c:forEach items="${unSelectedFrList}" var="fr"
+										varStatus="count">
+										<option value="${fr.frId}"><c:out
+												value="${fr.frName}" /></option>
+									</c:forEach>
+								</select>
 
-						<%-- <a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseGrpByDatePdf"
+							</div>
+						</div>
+					</div>
+
+					<br>
+					<div class="row">
+						<div class="col-md-12" style="text-align: center;">
+							<button class="btn btn-info" onclick="searchReport()">Search
+								Billwise Report</button>
+
+							<button class="btn search_btn" onclick="showChart()">Graph</button>
+
+							<button class="btn btn-primary" value="PDF" id="PDFButton"
+								onclick="genPdf()">PDF</button>
+
+							<%-- <a href="${pageContext.request.contextPath}/pdfForReport?url=showSaleBillwiseGrpByDatePdf"
 								target="_blank">PDF</a> --%>
 
-					</div>
-				</div>
-
-
-				<div align="center" id="loader" style="display: none">
-
-					<span>
-						<h4>
-							<font color="#343690">Loading</font>
-						</h4>
-					</span> <span class="l-1"></span> <span class="l-2"></span> <span
-						class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
-					<span class="l-6"></span>
-				</div>
-
-			</div>
-		</div>
-
-
-		<div class="box">
-			<div class="box-title">
-				<h3>
-					<i class="fa fa-list-alt"></i>Bill Report
-				</h3>
-
-			</div>
-
-			<form id="submitBillForm"
-				action="${pageContext.request.contextPath}/submitNewBill"
-				method="post">
-				<div class="box-content">
-					<div class="row">
-						<div class="col-md-12 table-responsive">
-							<table class="table table-bordered table-striped fill-head "
-								style="width: 100%" id="table_grid">
-								<thead>
-									<tr>
-										<th>Sr.No.</th>
-										<th>Date</th>
-										<th>Basic Value</th>
-										<th>CGST</th>
-										<th>SGST</th>
-										<th>IGST</th>
-										<th>Round Off</th>
-										<th>Total</th>
-									</tr>
-								</thead>
-								<tbody>
-
-								</tbody>
-							</table>
 						</div>
-						<div class="form-group" style="display: none;" id="range">
-								 
-											 
-											 
-											<div class="col-sm-3  controls">
-											 <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
-											</div>
-											</div>
+					</div>
+
+
+					<div align="center" id="loader" style="display: none">
+
+						<span>
+							<h4>
+								<font color="#343690">Loading</font>
+							</h4>
+						</span> <span class="l-1"></span> <span class="l-2"></span> <span
+							class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
+						<span class="l-6"></span>
 					</div>
 
 				</div>
-				<div id="chart_div" style="width: 100%; height: 700px;"></div>
-				<div id="PieChart_div" style="width: 100%; height: 700px;"></div>
-			</form>
+			</div>
+
+
+			<div class="box">
+				<div class="box-title">
+					<h3>
+						<i class="fa fa-list-alt"></i>Bill Report
+					</h3>
+
+				</div>
+
+				<form id="submitBillForm"
+					action="${pageContext.request.contextPath}/submitNewBill"
+					method="post">
+					<div class="box-content">
+						<div class="row">
+							<div class="col-md-12 table-responsive">
+								<table class="table table-bordered table-striped fill-head "
+									style="width: 100%" id="table_grid">
+									<thead>
+										<tr>
+											<th>Sr.No.</th>
+											<th>Date</th>
+											<th>Basic Value</th>
+											<th>CGST</th>
+											<th>SGST</th>
+											<th>IGST</th>
+											<!-- <th>Round Off</th> -->
+											<th>Total</th>
+										</tr>
+									</thead>
+									<tbody>
+
+									</tbody>
+								</table>
+							</div>
+							<div class="form-group" style="display: none;" id="range">
+
+
+
+								<div class="col-sm-3  controls">
+									<input type="button" id="expExcel" class="btn btn-primary"
+										value="EXPORT TO Excel" onclick="exportToExcel();"
+										disabled="disabled">
+								</div>
+							</div>
+						</div>
+
+					</div>
+					<div id="chart_div" style="width: 100%; height: 700px;"></div>
+					<div id="PieChart_div" style="width: 100%; height: 700px;"></div>
+				</form>
+			</div>
+
+			<!-- END Main Content -->
+
+			<footer>
+				<p>2020 © Monginis.</p>
+			</footer>
+
+			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+				class="fa fa-chevron-up"></i></a>
 		</div>
-
-	<!-- END Main Content -->
-
-	<footer>
-		<p>2020 © Monginis.</p>
-	</footer>
-
-	<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-		class="fa fa-chevron-up"></i></a>
-</div></div>
+	</div>
 
 	<script type="text/javascript">
 		function searchReport() {
-		//	var isValid = validate();
+			//	var isValid = validate();
 
-				var selectedFr = $("#selectFr").val();
-				var routeId=$("#selectRoute").val();
-				
-				var from_date = $("#fromDate").val();
-				var to_date = $("#toDate").val();
-				
-				var total = 0;
-				
-				var ttlBaseVal = 0;
-				var ttlCgst = 0;
-				var ttlSgst = 0;
-				var ttlIgst = 0;
-				var grandTotal = 0;
+			var selectedFr = $("#selectFr").val();
+			var routeId = $("#selectRoute").val();
 
-				$('#loader').show();
+			var from_date = $("#fromDate").val();
+			var to_date = $("#toDate").val();
 
-				$
-						.getJSON(
-								'${getBillList}',
+			var total = 0;
 
-								{
-									fr_id_list : JSON.stringify(selectedFr),
-									fromDate : from_date,
-									toDate : to_date,
-									route_id:routeId,
-									ajax : 'true'
+			var ttlBaseVal = 0;
+			var ttlCgst = 0;
+			var ttlSgst = 0;
+			var ttlIgst = 0;
+			var grandTotal = 0;
 
-								},
-								function(data) {
+			$('#loader').show();
 
-									$('#table_grid td').remove();
-									$('#loader').hide();
+			$
+					.getJSON(
+							'${getBillList}',
 
-									if (data == "") {
-										alert("No records found !!");
-										  document.getElementById("expExcel").disabled=true;
+							{
+								fr_id_list : JSON.stringify(selectedFr),
+								fromDate : from_date,
+								toDate : to_date,
+								route_id : routeId,
+								ajax : 'true'
 
-									}
+							},
+							function(data) {
 
-									$
-											.each(
-													data,
-													function(key, report) {
-														  document.getElementById("expExcel").disabled=false;
-															document.getElementById('range').style.display = 'block';
-														var index = key + 1;
-														//var tr = "<tr>";
-														var tr = $('<tr></tr>');
-													  	tr.append($('<td></td>').html(key+1));
-													  	tr.append($('<td></td>').html(report.billDate));
-													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.taxableAmt)));
-													  	
-														if(report.isSameState==1){
+								$('#table_grid td').remove();
+								$('#loader').hide();
+
+								if (data == "") {
+									alert("No records found !!");
+									document.getElementById("expExcel").disabled = true;
+
+								}
+
+								$
+										.each(
+												data,
+												function(key, report) {
+													document
+															.getElementById("expExcel").disabled = false;
+													document
+															.getElementById('range').style.display = 'block';
+													var index = key + 1;
+													//var tr = "<tr>";
+													var tr = $('<tr></tr>');
+													tr.append($('<td></td>')
+															.html(key + 1));
+													tr
+															.append($(
+																	'<td></td>')
+																	.html(
+																			report.billDate));
+													tr
+															.append($(
+																	'<td style="text-align:right;"></td>')
+																	.html(
+																			addCommas(report.taxableAmt)));
+
+													/* 	if(report.isSameState==1){
 														  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.cgstSum.toFixed(2))));
 														  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.sgstSum.toFixed(2))));
 														  	tr.append($('<td style="text-align:right;"></td>').html(0));
@@ -289,62 +314,127 @@
 														  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.igstSum.toFixed(2))));
 														  	
 														  	ttlIgst = ttlIgst + report.igstSum;
-														}
-													  	//tr.append($('<td></td>').html(report.igstSum));
-														tr.append($('<td style="text-align:right;"></td>').html(report.roundOff));														
+														} */
+
+													tr
+															.append($(
+																	'<td style="text-align:right;"></td>')
+																	.html(
+																			addCommas(report.cgstSum
+																					.toFixed(2))));
+													tr
+															.append($(
+																	'<td style="text-align:right;"></td>')
+																	.html(
+																			addCommas(report.sgstSum
+																					.toFixed(2))));
+													tr
+															.append($(
+																	'<td style="text-align:right;"></td>')
+																	.html(
+																			addCommas(report.igstSum
+																					.toFixed(2))));
+
+													ttlIgst = ttlIgst
+															+ report.igstSum;
+													ttlCgst = ttlCgst
+															+ report.cgstSum;
+													ttlSgst = ttlSgst
+															+ report.sgstSum;
+
+													//tr.append($('<td></td>').html(report.igstSum));
+													//tr.append($('<td style="text-align:right;"></td>').html(report.roundOff));														
+
+													/*  if(report.isSameState==1){
+														 total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum);
+													}
+													else{
 														
-														if(report.isSameState==1){
-															 total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum);
-														}
-														else{
-															
-															 total=report.taxableAmt+report.igstSum;
-														}
+														 total=report.taxableAmt+report.igstSum;
+													}  */
 
-													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(total.toFixed(2))));
+													total = parseFloat(report.taxableAmt)
+															+ parseFloat(report.cgstSum
+																	+ report.sgstSum
+																	+ report.igstSum);
 
-														$('#table_grid tbody')
-																.append(
-																		tr);
-														ttlBaseVal = ttlBaseVal + report.taxableAmt;
-														grandTotal = grandTotal + total; 
+													tr
+															.append($(
+																	'<td style="text-align:right;"></td>')
+																	.html(
+																			addCommas(total
+																					.toFixed(2))));
 
-													})
-													
-													var trr =$('<tr></tr>');
-													trr.append($('<td style="text-align:center; font-weight: 700;"></td>').html('Total'));
-													trr.append($('<td></td>').html(''));
-													
-													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlBaseVal.toFixed(2))));
-													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlCgst.toFixed(2))));
-													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlSgst.toFixed(2))));
-													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlIgst.toFixed(2))));
-													trr.append($('<td style="text-align:right;"></td>').html(''));
-													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(grandTotal.toFixed(2))));
 													$('#table_grid tbody')
-													.append(trr);
+															.append(tr);
+													ttlBaseVal = ttlBaseVal
+															+ report.taxableAmt;
+													grandTotal = grandTotal
+															+ total;
 
-								});
+												})
 
-			
+								var trr = $('<tr></tr>');
+								trr
+										.append($(
+												'<td style="text-align:center; font-weight: 700;"></td>')
+												.html('Total'));
+								trr.append($('<td></td>').html(''));
+
+								trr
+										.append($(
+												'<td style="text-align:right; font-weight: 700;"></td>')
+												.html(
+														addCommas(ttlBaseVal
+																.toFixed(2))));
+								trr
+										.append($(
+												'<td style="text-align:right; font-weight: 700;"></td>')
+												.html(
+														addCommas(ttlCgst
+																.toFixed(2))));
+								trr
+										.append($(
+												'<td style="text-align:right; font-weight: 700;"></td>')
+												.html(
+														addCommas(ttlSgst
+																.toFixed(2))));
+								trr
+										.append($(
+												'<td style="text-align:right; font-weight: 700;"></td>')
+												.html(
+														addCommas(ttlIgst
+																.toFixed(2))));
+								//trr.append($('<td style="text-align:right;"></td>').html(''));
+								trr
+										.append($(
+												'<td style="text-align:right; font-weight: 700;"></td>')
+												.html(
+														addCommas(grandTotal
+																.toFixed(2))));
+								$('#table_grid tbody').append(trr);
+
+							});
+
 		}
 	</script>
-<script type="text/javascript">
-function addCommas(x){
+	<script type="text/javascript">
+		function addCommas(x) {
 
-	x=String(x).toString();
-	 var afterPoint = '';
-	 if(x.indexOf('.') > 0)
-	    afterPoint = x.substring(x.indexOf('.'),x.length);
-	 x = Math.floor(x);
-	 x=x.toString();
-	 var lastThree = x.substring(x.length-3);
-	 var otherNumbers = x.substring(0,x.length-3);
-	 if(otherNumbers != '')
-	     lastThree = ',' + lastThree;
-	 return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",") + lastThree + afterPoint;
-	}
-</script>
+			x = String(x).toString();
+			var afterPoint = '';
+			if (x.indexOf('.') > 0)
+				afterPoint = x.substring(x.indexOf('.'), x.length);
+			x = Math.floor(x);
+			x = x.toString();
+			var lastThree = x.substring(x.length - 3);
+			var otherNumbers = x.substring(0, x.length - 3);
+			if (otherNumbers != '')
+				lastThree = ',' + lastThree;
+			return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ",")
+					+ lastThree + afterPoint;
+		}
+	</script>
 	<script type="text/javascript">
 		function validate() {
 
@@ -352,17 +442,16 @@ function addCommas(x){
 			var selectedMenu = $("#selectMenu").val();
 			var selectedRoute = $("#selectRoute").val();
 
-
 			var isValid = true;
 
-			if (selectedFr == "" || selectedFr == null  ) {
- 
-				if(selectedRoute=="" || selectedRoute ==null ) {
+			if (selectedFr == "" || selectedFr == null) {
+
+				if (selectedRoute == "" || selectedRoute == null) {
 					alert("Please Select atleast one ");
 					isValid = false;
 				}
 				//alert("Please select Franchise/Route");
- 
+
 			} else if (selectedMenu == "" || selectedMenu == null) {
 
 				isValid = false;
@@ -377,206 +466,295 @@ function addCommas(x){
 
 
 	<script type="text/javascript">
+		function disableFr() {
 
-function disableFr(){
+			//alert("Inside Disable Fr ");
+			document.getElementById("selectFr").disabled = true;
 
-	//alert("Inside Disable Fr ");
-document.getElementById("selectFr").disabled = true;
+		}
 
-}
+		function disableRoute() {
 
-function disableRoute(){
+			//alert("Inside Disable route ");
+			var x = document.getElementById("selectRoute")
+			//alert(x.options.length);
+			var i;
+			for (i = 0; i < x; i++) {
+				document.getElementById("selectRoute").options[i].disabled;
+				//document.getElementById("pets").options[2].disabled = true;
+			}
+			//document.getElementById("selectRoute").disabled = true;
 
-	//alert("Inside Disable route ");
-	var x=document.getElementById("selectRoute")
-	//alert(x.options.length);
-	var i;
-	for(i=0;i<x;i++){
-		document.getElementById("selectRoute").options[i].disabled;
-		 //document.getElementById("pets").options[2].disabled = true;
-	}
-//document.getElementById("selectRoute").disabled = true;
-
-}
-
-</script>
+		}
+	</script>
 
 
 	<script type="text/javascript">
-function showChart(){
-	
-	//alert("Hi");
-		
-	$("#PieChart_div").empty();
-	$("#chart_div").empty();
-		//document.getElementById('chart').style.display = "block";
-		   document.getElementById("table_grid").style="display:none";
-		 
-		   var selectedFr = $("#selectFr").val();
-			var routeId=$("#selectRoute").val();
-			
+		function showChart() {
+
+			//alert("Hi");
+
+			$("#PieChart_div").empty();
+			$("#chart_div").empty();
+			//document.getElementById('chart').style.display = "block";
+			document.getElementById("table_grid").style = "display:none";
+
+			var selectedFr = $("#selectFr").val();
+			var routeId = $("#selectRoute").val();
+
 			var from_date = $("#fromDate").val();
 			var to_date = $("#toDate").val();
 			//alert("fr "+selectedFr);
 			//alert(from_date);
 			//alert(to_date);
 			//alert(routeId);
-			
-				  //document.getElementById('btn_pdf').style.display = "block";
-			$.getJSON(
-					'${getBillList}',
 
-					{
-						fr_id_list : JSON.stringify(selectedFr),
-						fromDate : from_date,
-						toDate : to_date,
-						route_id:routeId,
-						ajax : 'true'
+			//document.getElementById('btn_pdf').style.display = "block";
+			$
+					.getJSON(
+							'${getBillList}',
 
-					},
-					function(data) {
+							{
+								fr_id_list : JSON.stringify(selectedFr),
+								fromDate : from_date,
+								toDate : to_date,
+								route_id : routeId,
+								ajax : 'true'
+
+							},
+							function(data) {
 
 								//alert(data);
-							 if (data == "") {
+								if (data == "") {
 									alert("No records found !!");
 
 								}
-							 var i=0;
-							 
-							 google.charts.load('current', {'packages':['corechart', 'bar']});
-							 google.charts.setOnLoadCallback(drawStuff);
+								var i = 0;
 
-							 function drawStuff() {
-								 
-								// alert("Inside DrawStuff");
- 
-							   var chartDiv = document.getElementById('chart_div');
-							   document.getElementById("chart_div").style.border = "thin dotted red";
-							   
-							   
-							   var PiechartDiv = document.getElementById('PieChart_div');
-							   document.getElementById("PieChart_div").style.border = "thin dotted red";
-							   
-							   
-						       var dataTable = new google.visualization.DataTable();
-						       dataTable.addColumn('string', 'Date'); // Implicit domain column.
-						     //  dataTable.addColumn('number', 'Base Value'); // Implicit data column.
-						       dataTable.addColumn('number', 'Total');
-						       
-						       var piedataTable = new google.visualization.DataTable();
-						       piedataTable.addColumn('string', 'Date'); // Implicit domain column.
-						       piedataTable.addColumn('number', 'Total');
-						       
-						       
-						       $.each(data,function(key, report) {
+								google.charts.load('current', {
+									'packages' : [ 'corechart', 'bar' ]
+								});
+								google.charts.setOnLoadCallback(drawStuff);
 
-						    	   
-						    	  // alert("In Data")
-						    	//   var baseValue=report.taxableAmt;
-									
-						    	  
-						    	   var total;
-									
-									if(report.isSameState==1){
-										 total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum);
+								function drawStuff() {
+
+									// alert("Inside DrawStuff");
+
+									var chartDiv = document
+											.getElementById('chart_div');
+									document.getElementById("chart_div").style.border = "thin dotted red";
+
+									var PiechartDiv = document
+											.getElementById('PieChart_div');
+									document.getElementById("PieChart_div").style.border = "thin dotted red";
+
+									var dataTable = new google.visualization.DataTable();
+									dataTable.addColumn('string', 'Date'); // Implicit domain column.
+									//  dataTable.addColumn('number', 'Base Value'); // Implicit data column.
+									dataTable.addColumn('number', 'Total');
+
+									var piedataTable = new google.visualization.DataTable();
+									piedataTable.addColumn('string', 'Date'); // Implicit domain column.
+									piedataTable.addColumn('number', 'Total');
+
+									$
+											.each(
+													data,
+													function(key, report) {
+
+														// alert("In Data")
+														//   var baseValue=report.taxableAmt;
+
+														var total;
+
+														if (report.isSameState == 1) {
+															total = parseFloat(report.taxableAmt)
+																	+ parseFloat(report.cgstSum
+																			+ report.sgstSum);
+														} else {
+
+															total = report.taxableAmt
+																	+ report.igstSum;
+														}
+
+														var date = report.billDate;
+														//var date= item.billDate+'\nTax : ' + item.tax_per + '%';
+
+														dataTable.addRows([
+
+														[ date, total ],
+
+														// ["Sai", 12,14],
+														//["Sai", 12,16],
+														// ["Sai", 12,18],
+														// ["Sai", 12,19],
+
+														]);
+
+														piedataTable.addRows([
+
+														[ date, total ],
+
+														]);
+													}) // end of  $.each(data,function(key, report) {-- function
+
+									// Instantiate and draw the chart.
+
+									var materialOptions = {
+
+										width : 500,
+										chart : {
+											title : 'Date wise Tax Graph',
+											subtitle : 'Total tax & Taxable Amount per day',
+
+										},
+										series : {
+											0 : {
+												axis : 'distance'
+											}, // Bind series 0 to an axis named 'distance'.
+											1 : {
+												axis : 'brightness'
+											}
+										// Bind series 1 to an axis named 'brightness'.
+										},
+										axes : {
+											y : {
+												distance : {
+													label : 'Total Tax'
+												}, // Left y-axis.
+												brightness : {
+													side : 'right',
+													label : 'Taxable Amount'
+												}
+											// Right y-axis.
+											}
+										}
+									};
+
+									function drawMaterialChart() {
+										var materialChart = new google.charts.Bar(
+												chartDiv);
+
+										// alert("mater chart "+materialChart);
+										materialChart
+												.draw(
+														dataTable,
+														google.charts.Bar
+																.convertOptions(materialOptions));
+										// button.innerText = 'Change to Classic';
+										// button.onclick = drawClassicChart;
 									}
-									else{
-										
-										 total=report.taxableAmt+report.igstSum;
-									}
-						    	  
-						    	  var date=report.billDate;						    	
-									//var date= item.billDate+'\nTax : ' + item.tax_per + '%';
-									
-								   dataTable.addRows([
-									 
-									   
-									   [date,total],
-									   
-								            // ["Sai", 12,14],
-								             //["Sai", 12,16],
-								            // ["Sai", 12,18],
-								            // ["Sai", 12,19],
-								             
-								           ]);
-								   
-								   
-								   
-								   piedataTable.addRows([
-									 
-									   
-									   [date, total],
-									   
-								          
-								           ]);
-								     }) // end of  $.each(data,function(key, report) {-- function
 
-            // Instantiate and draw the chart.
-          						    
- var materialOptions = {
-						    	
-          width: 500,
-          chart: {
-            title: 'Date wise Tax Graph',
-            subtitle: 'Total tax & Taxable Amount per day',
-           
+									var chart = new google.visualization.ColumnChart(
+											document
+													.getElementById('chart_div'));
 
-          },
-          series: {
-            0: { axis: 'distance' }, // Bind series 0 to an axis named 'distance'.
-            1: { axis: 'brightness' } // Bind series 1 to an axis named 'brightness'.
-          },
-          axes: {
-            y: {
-              distance: {label: 'Total Tax'}, // Left y-axis.
-              brightness: {side: 'right', label: 'Taxable Amount'} // Right y-axis.
-            }
-          }
-        };
-						       
-						       function drawMaterialChart() {
-						           var materialChart = new google.charts.Bar(chartDiv);
-						           
-						          // alert("mater chart "+materialChart);
-						           materialChart.draw(dataTable, google.charts.Bar.convertOptions(materialOptions));
-						          // button.innerText = 'Change to Classic';
-						          // button.onclick = drawClassicChart;
-						         }
-						       
-						        var chart = new google.visualization.ColumnChart(
-						                document.getElementById('chart_div'));
-						        
-						        var Piechart = new google.visualization.PieChart(
-						                document.getElementById('PieChart_div'));
-						       chart.draw(dataTable,
-						          {width: 1150, height: 600, title: 'Sales Summary Group By Date'});
-						       
-						       
-						       Piechart.draw(piedataTable,
-								          {width: 1150, height: 600, title: 'Sales Summary Group By Date',is3D:true});
-						      // drawMaterialChart();
-							 };
-							 
-										
-							  	});
-			
-}
-function genPdf()
-{   var selectedFr = $("#selectFr").val();
-    var routeId=$("#selectRoute").val();
-	var from_date = $("#fromDate").val();
-	var to_date = $("#toDate").val();
-	
-	window.open('pdfForReport?url=pdf/showSaleBillwiseGrpByDatePdf/'+from_date+'/'+to_date+'/'+selectedFr+'/'+routeId+'/');
-	
-	}
-function exportToExcel()
-{
-	 
-	window.open("${pageContext.request.contextPath}/exportToExcelNew");
-			document.getElementById("expExcel").disabled=true;
-}
-</script>
+									var Piechart = new google.visualization.PieChart(
+											document
+													.getElementById('PieChart_div'));
+									chart.draw(dataTable, {
+										width : 1150,
+										height : 600,
+										title : 'Sales Summary Group By Date'
+									});
+
+									Piechart.draw(piedataTable, {
+										width : 1150,
+										height : 600,
+										title : 'Sales Summary Group By Date',
+										is3D : true
+									});
+									// drawMaterialChart();
+								}
+								;
+
+							});
+
+		}
+		function genPdf() {
+			var selectedFr = $("#selectFr").val();
+			var routeId = $("#selectRoute").val();
+			var from_date = $("#fromDate").val();
+			var to_date = $("#toDate").val();
+
+			window.open('pdfForReport?url=pdf/showSaleBillwiseGrpByDatePdf/'
+					+ from_date + '/' + to_date + '/' + selectedFr + '/'
+					+ routeId + '/');
+
+		}
+		function exportToExcel() {
+
+			window.open("${pageContext.request.contextPath}/exportToExcelNew");
+			document.getElementById("expExcel").disabled = true;
+		}
+	</script>
+
+
+	<script type="text/javascript">
+		$(document)
+				.ready(
+						function() { // if all label selected set all items selected
+
+							$('#selectFr')
+									.change(
+											function() {
+												var selected = $('#selectFr')
+														.val();
+
+												if (selected == -1) {
+													$
+															.getJSON(
+																	'${setAllFrIdSelected}',
+																	{
+																		//	selected : selected,
+																		ajax : 'true'
+																	},
+																	function(
+																			data) {
+																		var html = '<option value="">Select Franchise</option>';
+
+																		var len = data.length;
+
+																		$(
+																				'#selectFr')
+																				.find(
+																						'option')
+																				.remove()
+																				.end()
+																		$(
+																				"#selectFr")
+																				.append(
+																						$(
+																								"<option></option>")
+																								.attr(
+																										"value",
+																										-1)
+																								.text(
+																										"ALL"));
+
+																		for (var i = 0; i < len; i++) {
+
+																			$(
+																					"#selectFr")
+																					.append(
+																							$(
+																									"<option selected></option>")
+																									.attr(
+																											"value",
+																											data[i].frId)
+																									.text(
+																											data[i].frName));
+																		}
+
+																		$(
+																				"#selectFr")
+																				.trigger(
+																						"chosen:updated");
+																	});
+												}
+											});
+						});
+	</script>
 
 	<!--basic scripts-->
 	<script

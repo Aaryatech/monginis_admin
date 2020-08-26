@@ -11,7 +11,7 @@
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>Sales Report Billwise PDF</title>
+<title>Purchase Report Billwise PDF</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -50,8 +50,8 @@ th {
 	<h3 align="center">${FACTORYNAME}</h3>
 	<p align="center">${FACTORYADDRESS}</p>
 	<div align="center">
-		<h5>Sub Category-wise Report &nbsp;&nbsp;&nbsp;&nbsp; From
-			&nbsp; ${fromDate} &nbsp;To &nbsp; ${toDate}</h5>
+		<h5>Purchase Report (Sub Category Wise) &nbsp;&nbsp;&nbsp;&nbsp;
+			From &nbsp; ${fromDate} &nbsp;To &nbsp; ${toDate}</h5>
 	</div>
 	<table align="center" border="1" cellspacing="0" cellpadding="1"
 		id="table_grid" class="table table-bordered">
@@ -67,7 +67,8 @@ th {
 				<th>Ret Amt</th>
 				<th>Net Qty</th>
 				<th>Net Amt</th>
-				<th>Ret Amt</th>
+				<th>Ret Amt %</th>
+				<th>Contribution %</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -81,6 +82,16 @@ th {
 			<c:set var="totalNetQty" value="${0}" />
 			<c:set var="totalNetAmt" value="${0}" />
 			<c:set var="retAmtPer" value="${0}" />
+			<c:set var="contriTotal" value="${0}" />
+
+			<c:set var="netTotalForcontri" value="${0}" />
+
+			<c:forEach items="${subCatReportList}" var="report" varStatus="count">
+				<c:set var="netTotalForcontri"
+					value="${netTotalForcontri+(report.netAmt)}" />
+			</c:forEach>
+
+
 			<tr>
 
 
@@ -88,7 +99,7 @@ th {
 			<c:forEach items="${subCatReportList}" var="report" varStatus="count">
 				<tr>
 
-					<td width="0"><c:out value="${count.index+1}" /></td>
+					<td width="10"><c:out value="${count.index+1}" /></td>
 					<td width="200"><c:out value="${report.subCatName}" /></td>
 					<td width="10" align="right"><fmt:formatNumber type="number"
 							maxFractionDigits="2" minFractionDigits="2"
@@ -128,10 +139,29 @@ th {
 							maxFractionDigits="2" minFractionDigits="2"
 							value="${report.netAmt}" /></td>
 
-					<td width="10" align="right"><fmt:formatNumber type="number"
-							maxFractionDigits="2" minFractionDigits="2"
-							value="${report.retAmtPer}" /></td>
+					<c:choose>
 
+						<c:when test="${report.retAmtPer == 'NaN'}">
+							<td width="10" align="right"><fmt:formatNumber type="number"
+									maxFractionDigits="2" minFractionDigits="2" value="0.00" /></td>
+
+						</c:when>
+
+						<c:otherwise>
+							<td width="10" align="right"><fmt:formatNumber type="number"
+									maxFractionDigits="2" minFractionDigits="2"
+									value="${report.retAmtPer}" /></td>
+
+						</c:otherwise>
+
+					</c:choose>
+
+					<c:set var="contri"
+						value="${(report.netAmt*100)/netTotalForcontri}" />
+					<c:set var="contriTotal" value="${contriTotal+contri}" />
+
+					<td width="10" align="right"><fmt:formatNumber type="number"
+							maxFractionDigits="2" minFractionDigits="2" value="${contri}" /></td>
 
 					<c:set var="totalSoldQty" value="${totalSoldQty+(report.soldQty)}" />
 					<c:set var="totalSoldAmt" value="${totalSoldAmt+(report.soldAmt)}" />
@@ -141,8 +171,10 @@ th {
 					<c:set var="totalRetAmt" value="${totalRetAmt+(report.retAmt)}" />
 					<c:set var="totalNetQty" value="${totalNetQty+(report.netQty)}" />
 					<c:set var="totalNetAmt" value="${totalNetAmt+(report.netAmt)}" />
-					<c:set var="retAmtPer" value="${retAmtPer+(report.retAmtPer)}" />
 
+					<c:if test="${report.retAmtPer != 'NaN'}">
+						<c:set var="retAmtPer" value="${retAmtPer+(report.retAmtPer)}" />
+					</c:if>
 
 
 
@@ -196,6 +228,10 @@ th {
 				<td width="10" align="right"><b><fmt:formatNumber
 							type="number" maxFractionDigits="2" minFractionDigits="2"
 							value="${retAmtPer}" /></b></td>
+
+				<td width="10" align="right"><b><fmt:formatNumber
+							type="number" maxFractionDigits="2" minFractionDigits="2"
+							value="${contriTotal}" /></b></td>
 
 
 

@@ -104,6 +104,7 @@
 											<th>${report.value.month}</th>
 											<th>%</th>
 										</c:forEach>
+										<th>Total</th>
 
 									</tr>
 
@@ -116,6 +117,9 @@
 										<c:set var="grandTotal" value="0.0" />
 										<c:set var="grnQty" value="0.0" />
 										<c:set var="gvnQty" value="0.0" />
+
+										<c:set var="horizontalTotal" value="0.0" />
+
 										<tr>
 											<td>${count.index+1}</td>
 											<td>${subCatList.subCatName}</td>
@@ -130,22 +134,23 @@
 														<c:when test="${rep.subCatId==subCatList.subCatId}">
 
 
-															<td style="text-align: right;"><fmt:formatNumber type="number"
-																	minFractionDigits="2" maxFractionDigits="2"
-																	value="${rep.grandTotal-(rep.gvnQty+rep.grnQty)}" />
-															<td style="text-align: right;">
-															<c:choose>
-															<c:when test="${report.value.totBillAmt>0}">
-															<fmt:formatNumber type="number"
-																	minFractionDigits="2" maxFractionDigits="2"
-																	value="${(rep.grandTotal-(rep.gvnQty+rep.grnQty))*100/report.value.totBillAmt}" />
-															
-															</c:when>
-															<c:otherwise>
+															<td style="text-align: right;"><fmt:formatNumber
+																	type="number" minFractionDigits="2"
+																	maxFractionDigits="2"
+																	value="${rep.grandTotal-(rep.gvnQty+rep.grnQty)}" /> <c:set
+																	var="horizontalTotal"
+																	value="${horizontalTotal+(rep.grandTotal-(rep.gvnQty+rep.grnQty))}" />
+															<td style="text-align: right;"><c:choose>
+																	<c:when test="${report.value.totBillAmt>0}">
+																		<fmt:formatNumber type="number" minFractionDigits="2"
+																			maxFractionDigits="2"
+																			value="${(rep.grandTotal-(rep.gvnQty+rep.grnQty))*100/report.value.totBillAmt}" />
+
+																	</c:when>
+																	<c:otherwise>
 															0.00
 															</c:otherwise>
-															</c:choose>
-															</td>
+																</c:choose></td>
 														</c:when>
 														<c:otherwise>
 
@@ -155,16 +160,37 @@
 												</c:forEach>
 											</c:forEach>
 
+											<td style="text-align: right;"><fmt:formatNumber
+													type="number" minFractionDigits="2" maxFractionDigits="2"
+													value="${horizontalTotal}" />
 										</tr>
 									</c:forEach>
-									 <tr>
-                                        <th rowspan="2"></th>
+									<tr>
+										<th rowspan="2"></th>
 										<th rowspan="2">Total</th>
-										<c:forEach var="report" items="${salesReturnValueReport}" varStatus="cnt">
-										<th style="text-align: right;"> <fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2"  groupingUsed="false"  value="${report.value.totBillAmt}" /></th>
-										
-										<th style="text-align: right;"><fmt:formatNumber type="number" maxFractionDigits="2" minFractionDigits="2"  groupingUsed="false"  value="0.00" /></th>
-												
+										<c:forEach var="report" items="${salesReturnValueReport}"
+											varStatus="cnt">
+											<th style="text-align: right;"><fmt:formatNumber
+													type="number" maxFractionDigits="2" minFractionDigits="2"
+													value="${report.value.totBillAmt}" /></th>
+
+
+											<c:choose>
+												<c:when test="${report.value.totBillAmt<=0}">
+													<th style="text-align: right;"><fmt:formatNumber
+															type="number" maxFractionDigits="2" minFractionDigits="2"
+															groupingUsed="false" value="0.00" /></th>
+												</c:when>
+												<c:otherwise>
+													<th style="text-align: right;"><fmt:formatNumber
+															type="number" maxFractionDigits="2" minFractionDigits="2"
+															groupingUsed="false" value="100.00" /></th>
+												</c:otherwise>
+
+											</c:choose>
+
+
+
 										</c:forEach>
 									</tr>
 								</tbody>
@@ -234,7 +260,7 @@
 	<script type="text/javascript">
 		function exportToExcel() {
 
-			window.open("${pageContext.request.contextPath}/exportToExcel");
+			window.open("${pageContext.request.contextPath}/exportToExcelNew");
 			document.getElementById("expExcel").disabled = true;
 		}
 	</script>

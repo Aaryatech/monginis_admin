@@ -300,11 +300,13 @@
 														
 														
 														if(report.isSameState==1){
-															 total=parseFloat(report.taxableAmt)+parseFloat(addCommas(report.totalTax));
+															// total=parseFloat(report.taxableAmt)+parseFloat(addCommas(report.totalTax));
+															total=parseFloat((report.taxableAmt)+(report.cgstSum)+(report.sgstSum));
+															
 														}
 														else{
 															
-															 total=report.taxableAmt+report.igstSum;
+															 total=parseFloat(report.taxableAmt+report.igstSum);
 														}
 
 													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(total.toFixed(2))));
