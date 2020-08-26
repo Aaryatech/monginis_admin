@@ -217,7 +217,7 @@ if(1==2) {}
 					map.add("toDate", gateGrnHeaderToDate);
 					map.add("isGrn", 1);
 					map.add("statusList", "1");
-
+ 
 					grnGateHeaderList = new ArrayList<>();
 
 					/*
