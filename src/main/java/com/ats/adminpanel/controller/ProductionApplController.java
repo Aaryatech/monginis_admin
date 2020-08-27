@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.codehaus.jackson.map.ObjectMapper;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -34,6 +35,7 @@ import com.ats.adminpanel.controller.model.GetSfData;
 import com.ats.adminpanel.model.DepartmentList;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.MiniSubCategory;
+import com.ats.adminpanel.model.SettingNew;
 import com.ats.adminpanel.model.RawMaterial.GetItemSfHeader;
 import com.ats.adminpanel.model.RawMaterial.GetSfType;
 import com.ats.adminpanel.model.RawMaterial.ItemSfDetail;
@@ -139,6 +141,15 @@ public class ProductionApplController {
 			model.addObject("toDate", toDate);
 			model.addObject("type", type);
 			model.addObject("planHeader", prodPlanHeaderList);
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			 map.add("settingKey", "UOM_CONVERT");
+			 SettingNew newSettingDataUOM = restTemplate.postForObject(Constants.url + "getSettingValueByKey", map,
+					 SettingNew.class);
+			 ObjectMapper om=new ObjectMapper();
+			 
+			 model.addObject("newSettingDataUOM", om.writeValueAsString(newSettingDataUOM));
+	            		
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

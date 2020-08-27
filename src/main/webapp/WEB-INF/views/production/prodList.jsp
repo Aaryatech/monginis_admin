@@ -101,9 +101,9 @@ input[type="checkbox"] {
 
 
 								<div class="clearfix"></div>
-								<div id="table-scroll" class="table-scroll">
+								<!-- <div id="table-scroll" class="table-scroll"> -->
 							 
-									<div id="faux-table" class="faux-table" aria="hidden">
+									<!-- <div id="faux-table" class="faux-table" aria="hidden">
 									<table id="table2" class="main-table">
 											<thead>
 												<tr class="bgpink">
@@ -117,7 +117,7 @@ input[type="checkbox"] {
 												</thead>
 												</table>
 									
-									</div>
+									</div> -->
 									<div class="table-wrap">
 									
 										<table id="table1" class="table table-advance">
@@ -223,7 +223,7 @@ input[type="checkbox"] {
 									</table>
 								</div>
 
-							</div>
+							<!-- </div> -->
 							</form>
 						</div>
 					</div>
@@ -1534,6 +1534,11 @@ if(items.includes("-1")){
     }
     </script>
      <script type="text/javascript">
+     var x=${newSettingDataUOM}
+     uomArray=[];
+     
+     uomArray=x.settingValue1.split(',');
+     alert(uomArray);
 $('#searchIssueItems').click(function(){
 	
     document.getElementById("searchIssueItems").value="Searching...";
@@ -1555,7 +1560,12 @@ $('#searchIssueItems').click(function(){
                    
   		     		 var actQty=0;
   					 if(data.total>0)
-  	    			 actQty=(data.total/1000).toFixed(3);
+  						 if(uomArray.includes(data.uom)){
+  							
+  							 actQty=(data.total/1000).toFixed(3);
+  						 }else{
+  							actQty= (data.total).toFixed(3);
+  						 }
   							var tr = $('<tr id="modeltable7'+data.itemDetailId+'" ></tr>');
   						  	tr.append($('<td></td>').html((key+1)+"<input type=hidden name='itemDetailId'  value="+data.itemDetailId+"   id="+ data.itemDetailId+"  />   <input type=hidden name='itemId"+ data.itemDetailId+"'  value="+data.itemId+"   id="+ data.itemDetailId+"  > "));
   						  	tr.append($('<td></td>').html(data.rmName+""+"<input type=hidden value='"+data.rmName+"'  id=rmName"+data.itemDetailId+"  name=rmName"+data.itemDetailId+"  >"));
