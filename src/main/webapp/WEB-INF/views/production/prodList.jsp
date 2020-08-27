@@ -1538,7 +1538,7 @@ if(items.includes("-1")){
      uomArray=[];
      
      uomArray=x.settingValue1.split(',');
-     alert(uomArray);
+    // alert(uomArray);
 $('#searchIssueItems').click(function(){
 	
     document.getElementById("searchIssueItems").value="Searching...";
