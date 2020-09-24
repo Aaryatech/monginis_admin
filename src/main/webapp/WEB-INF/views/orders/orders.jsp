@@ -47,8 +47,7 @@ td:hover::after, th:hover::after {
 	<c:url var="callDeleteOrder" value="/callDeleteOrder" />
 	<c:url var="excelOrderByItem" value="/excelOrderByItem" />
 
-
-
+	<c:url var="updateShiftOrder" value="/updateShiftOrder" />
 
 	<div class="container" id="main-container">
 
@@ -234,8 +233,9 @@ td:hover::after, th:hover::after {
 									<label class="col-sm-3 col-lg-2 control-label">Items</label>
 									<div class="col-sm-9 col-lg-10 controls">
 										<select data-placeholder="Select Items" name="items[]"
-											class="form-control chosen" tabindex="-1" id="item"
-											multiple="multiple" data-rule-required="true">
+											onchange="hideUpdateBtn();setDropdown(this.value)" class="form-control chosen"
+											tabindex="-1" id="item" multiple="multiple"
+											data-rule-required="true">
 											<option value=""></option>
 											<optgroup label="All Items">
 												<option value=""></option>
@@ -379,27 +379,41 @@ td:hover::after, th:hover::after {
 
 									<div class="form-group" align="left" style="display: none;"
 										id="opt">
-										<div>
-											<label class=" col-md-2">Production Date</label>
-											<div class="col-md-2">
-												<input class="form-control date-picker" name="production_date"
-													id="production_date" type="text" />
-											</div>
-											<label class=" col-md-2">Delivery Date</label>
-											<div class="col-md-2">
-												<input class="form-control date-picker" name="delivery_date"
-													id="delivery_date" type="text" />
-											</div>
 
+										<label class=" col-md-2">Production Date</label>
+										<div class="col-md-2">
+											<input class="form-control date-picker"
+												name="production_date" id="production_date" type="text" />
+										</div>
+										<label class=" col-md-2">Delivery Date</label>
+										<div class="col-md-2">
+											<input class="form-control date-picker" name="delivery_date"
+												id="delivery_date" type="text" />
 										</div>
 
-										<div class="col-md-1">
+
+										<div class="col-md-4" style="display: flex;">
 											<input type="button" class="btn btn-primary" value="Update"
 												disabled="disabled" id="callupdate"
-												onclick="updateDetails()">
+												onclick="updateDetails()"> &nbsp; <input
+												type="button" class="btn btn-primary" value="Update All"
+												disabled="disabled" id="callupdateAll"
+												onclick="updateShiftOrder()">
 
 										</div>
 									</div>
+
+									<div align="center" id="loader1" style="display: none">
+
+										<span>
+											<h4>
+												<font color="#343690">Loading</font>
+											</h4>
+										</span> <span class="l-1"></span> <span class="l-2"></span> <span
+											class="l-3"></span> <span class="l-4"></span> <span
+											class="l-5"></span> <span class="l-6"></span>
+									</div>
+
 									<div class="form-group"
 										style="display: <c:out value="${dis}" />;" id="range">
 
@@ -564,8 +578,12 @@ td:hover::after, th:hover::after {
 														$("#opt").css(
 																"display",
 																"block");
+														document.getElementById("callupdateAll").style.display="block";
+														
 														document
 																.getElementById("callupdate").disabled = false;
+														document
+																.getElementById("callupdateAll").disabled = false;
 														document
 																.getElementById("expExcel1").disabled = false;
 														document
@@ -716,8 +734,13 @@ td:hover::after, th:hover::after {
 														$("#opt").css(
 																"display",
 																"block");
+														
+														document.getElementById("callupdateAll").style.display="block";
+														
 														document
 																.getElementById("callupdate").disabled = false;
+														document
+																.getElementById("callupdateAll").disabled = false;
 
 														document
 																.getElementById("expExcel").disabled = false;
@@ -725,6 +748,8 @@ td:hover::after, th:hover::after {
 																.getElementById("expExcel1").disabled = false;
 														document
 																.getElementById("callupdate").disabled = false;
+														document
+																.getElementById("callupdateAll").disabled = false;
 
 														document
 																.getElementById('range').style.display = 'block';
@@ -1106,6 +1131,7 @@ td:hover::after, th:hover::after {
 	<script>
 		function getItemsByMenuId() {
 			//alert("hii");
+			hideUpdateBtn();
 
 			var menuIds = $("#item_id").val();
 			//var frId = $("#fr_id").val();
@@ -1186,6 +1212,86 @@ td:hover::after, th:hover::after {
 				}
 			}
 		}
+
+		function updateShiftOrder() {
+
+			var itemIds = $("#item_id").val();
+			var itemId = $("#item").val();
+			var routeIds = $("#selectRoute").val();
+			var frIds = $("#fr_id").val();
+			var date = $("#date").val();
+
+				  var selected = [];
+				  for (var option of document.getElementById('item').options) {
+				    if (option.selected) {
+				      selected.push(option.value);
+				      if(option.value == -1){
+				    	  allItems=1;
+				      }
+				    }
+				  }
+				 // alert(selected);
+				 // alert("ALL - "+allItems);
+				  
+				
+			
+			
+			var delDate = $("#delivery_date").val();
+			var prodDate = $("#production_date").val();
+			if (prodDate == "") {
+				alert("Please Select Production Date");
+			} else if (delDate == "") {
+				alert("Please Select Delivery Date");
+			} else {
+				
+				if(allItems==1){
+					
+					$('#loader1').show();
+					
+
+					$.getJSON('${updateShiftOrder}', {
+
+						fr_id_list : JSON.stringify(frIds),
+						item_id_list : JSON.stringify(itemIds),
+						itemId : JSON.stringify(itemId),
+						route_id : routeIds,
+						date : date,
+						delDate : delDate,
+						prodDate : prodDate,
+						ajax : 'true'
+
+					}, function(data) {
+						$('#loader1').hide();
+						if (data.error == false) {
+							alert("Delivery Date updated Successfully.");
+							callSearch();
+						} else {
+							alert("Delivery Date Not Updated.");
+						}
+
+					});
+					
+				}
+
+			}
+
+		}
+		
+		
+		function hideUpdateBtn(){
+			document.getElementById("callupdateAll").style.display="none";
+		}
+		
+		function setDropdown(itemId){
+			
+			if(itemId==-1){
+				document.getElementById("item").selectedIndex = 0;
+			}
+			
+			$("#item").trigger("chosen:updated");
+			
+		}
+		
 	</script>
 	<script type="text/javascript">
 		function validate() {

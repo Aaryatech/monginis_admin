@@ -7,6 +7,8 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -449,17 +451,15 @@ public class OrderController {
 
 			model.addObject("todayDate", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
 			model.addObject("franchiseeList", franchiseeList);
-			
-		
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
 		return model;
 	}
-	
-	//------ANMOL 13-7-2019---------------------------
+
+	// ------ANMOL 13-7-2019---------------------------
 	@RequestMapping(value = "/spCakeAlbumOrders")
 	public ModelAndView searchSpCakeAlbumOrder(HttpServletRequest request, HttpServletResponse response) {
 
@@ -497,7 +497,6 @@ public class OrderController {
 
 		return model;
 	}
-	
 
 	@RequestMapping(value = "/regularSpCakeOrderProcess")
 	public ModelAndView regularSpCakeOrderProcess(HttpServletRequest request, HttpServletResponse response) {
@@ -590,12 +589,11 @@ public class OrderController {
 																												// added
 
 			spCakeOrderList = orderListResponse.getSpCakeOrdersBean();
-		/*	
-			for(int i=0;i<spCakeOrderList.size();i++)
-			{
-				String[] arryOfStr=spCakeOrderList.get(i).getItemId().split("#",3);
-				spCakeOrderList.get(i).setName(arryOfStr[]);
-			}*/
+			/*
+			 * for(int i=0;i<spCakeOrderList.size();i++) { String[]
+			 * arryOfStr=spCakeOrderList.get(i).getItemId().split("#",3);
+			 * spCakeOrderList.get(i).setName(arryOfStr[]); }
+			 */
 			model.addObject("spCakeOrderList", spCakeOrderList);
 
 		} else
@@ -683,9 +681,8 @@ public class OrderController {
 		session.setAttribute("excelName", "SpCakeOrders");
 		return spCakeOrderList;
 	}
-	
-	
-	//-----Anmol 13-7-2019----------------
+
+	// -----Anmol 13-7-2019----------------
 	@RequestMapping(value = "/spCakeAlbumOrderProcess", method = RequestMethod.GET)
 	public @ResponseBody List<SpCakeOrdersBean> spCakeAlbumOrderProcess(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -744,7 +741,7 @@ public class OrderController {
 			map.add("spMenuId", spMenuId);
 			SpCakeOrdersBeanResponse orderListResponse = restTemplate1
 					.postForObject(Constants.url + "getSpCakeAlbumOrderLists", map, SpCakeOrdersBeanResponse.class); // s
-																												// added
+			// added
 
 			spCakeOrderList = orderListResponse.getSpCakeOrdersBean();
 			model.addObject("spCakeOrderList", spCakeOrderList);
@@ -777,7 +774,7 @@ public class OrderController {
 			map.add("spMenuId", spMenuId);
 			SpCakeOrdersBeanResponse orderListResponse = restTemplate1
 					.postForObject(Constants.url + "getSpCakeAlbumOrderLists", map, SpCakeOrdersBeanResponse.class); // s
-																												// added
+			// added
 
 			spCakeOrderList = orderListResponse.getSpCakeOrdersBean();
 			System.out.println("order list is" + spCakeOrderList.toString());
@@ -814,18 +811,17 @@ public class OrderController {
 			rowData = new ArrayList<String>();
 			rowData.add("" + spCakeOrderList.get(i).getSpOrderNo());
 			rowData.add(spCakeOrderList.get(i).getFrName());
-			
-			String itemCode="";
+
+			String itemCode = "";
 			try {
-				
-				String[] arr=spCakeOrderList.get(i).getItemId().split("#",3);
-				itemCode=arr[1];
-				
-			}catch(Exception e) {
+
+				String[] arr = spCakeOrderList.get(i).getItemId().split("#", 3);
+				itemCode = arr[1];
+
+			} catch (Exception e) {
 				e.printStackTrace();
-				itemCode=spCakeOrderList.get(i).getItemId();
+				itemCode = spCakeOrderList.get(i).getItemId();
 			}
-			
 
 			rowData.add(itemCode);
 			rowData.add(spCakeOrderList.get(i).getSpCode());
@@ -846,10 +842,6 @@ public class OrderController {
 		session.setAttribute("excelName", "SpCakeAlbumOrders");
 		return spCakeOrderList;
 	}
-	
-	
-	
-	
 
 	boolean isDelete = false;
 	public String[] frIds = null;
@@ -1064,56 +1056,55 @@ public class OrderController {
 	@RequestMapping(value = "/callDeleteOrder", method = RequestMethod.GET)
 	public @ResponseBody List<GetOrder> deleteOrder(HttpServletRequest request, HttpServletResponse response) {
 
-		try { 
+		try {
 			System.out.println("/inside delete order process  ");
 			int orderId = Integer.parseInt(request.getParameter("order_id"));
-			HttpSession session=request.getSession();
-			UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
-			
+			HttpSession session = request.getSession();
+			UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
+
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			map.add("orderId", orderId);
 			RestTemplate restTemp = new RestTemplate();
-			
-				if (!orderList.isEmpty()) {
-					for (int i = 0; i < orderList.size(); i++) {
-						if (orderList.get(i).getOrderId().equals(orderId)) {
-							DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-							Calendar cal = Calendar.getInstance();
-							String curDateTime = dateFormat.format(cal.getTime());
-							Date date = new Date();
-							String modifiedDate= new SimpleDateFormat("dd-MM-yyyy").format(date);
-System.err.println("modifiedDate delete function " +modifiedDate);
-							ChangeOrderRecord reqBody=new ChangeOrderRecord();
-							reqBody.setDeliveryDate(new SimpleDateFormat("dd-MM-yyyy").format(orderList.get(i).getDeliveryDate()));
-							reqBody.setChangeDate(modifiedDate);
-							reqBody.setChangeId(0);
-							reqBody.setChangeName("Deleted");
-							reqBody.setChangeQty(orderList.get(i).getOrderQty());
-							reqBody.setChangeType(0);
-							reqBody.setDateTime(curDateTime);
-							reqBody.setExVar1("na");
-							reqBody.setFrId(0);
-							reqBody.setFrName(orderList.get(i).getFrName());
-							reqBody.setItemId(0);
-							reqBody.setItemName(orderList.get(i).getItemName());
-							reqBody.setOrderId(orderList.get(i).getOrderId());
-							reqBody.setOrigQty(orderList.get(i).getOrderQty());
-							
-							reqBody.setUserId(userResponse.getUser().getId());
-							reqBody.setUserName(userResponse.getUser().getUsername());
-							
-							
-							
-							ChangeOrderRecord orderChangeRes = restTemp.postForObject(Constants.url + "saveChangeOrderRecord", reqBody, ChangeOrderRecord.class);
-							
-							break;
-							
-						}
+
+			if (!orderList.isEmpty()) {
+				for (int i = 0; i < orderList.size(); i++) {
+					if (orderList.get(i).getOrderId().equals(orderId)) {
+						DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+						Calendar cal = Calendar.getInstance();
+						String curDateTime = dateFormat.format(cal.getTime());
+						Date date = new Date();
+						String modifiedDate = new SimpleDateFormat("dd-MM-yyyy").format(date);
+						System.err.println("modifiedDate delete function " + modifiedDate);
+						ChangeOrderRecord reqBody = new ChangeOrderRecord();
+						reqBody.setDeliveryDate(
+								new SimpleDateFormat("dd-MM-yyyy").format(orderList.get(i).getDeliveryDate()));
+						reqBody.setChangeDate(modifiedDate);
+						reqBody.setChangeId(0);
+						reqBody.setChangeName("Deleted");
+						reqBody.setChangeQty(orderList.get(i).getOrderQty());
+						reqBody.setChangeType(0);
+						reqBody.setDateTime(curDateTime);
+						reqBody.setExVar1("na");
+						reqBody.setFrId(0);
+						reqBody.setFrName(orderList.get(i).getFrName());
+						reqBody.setItemId(0);
+						reqBody.setItemName(orderList.get(i).getItemName());
+						reqBody.setOrderId(orderList.get(i).getOrderId());
+						reqBody.setOrigQty(orderList.get(i).getOrderQty());
+
+						reqBody.setUserId(userResponse.getUser().getId());
+						reqBody.setUserName(userResponse.getUser().getUsername());
+
+						ChangeOrderRecord orderChangeRes = restTemp.postForObject(
+								Constants.url + "saveChangeOrderRecord", reqBody, ChangeOrderRecord.class);
+
+						break;
+
 					}
 				}
+			}
 			Integer isDeleted = restTemp.postForObject(Constants.url + "DeleteOrder", map, Integer.class);
 
-			
 			if (isDeleted != 0) {
 				if (!orderList.isEmpty()) {
 					for (int i = 0; i < orderList.size(); i++) {
@@ -1130,37 +1121,37 @@ System.err.println("modifiedDate delete function " +modifiedDate);
 	}
 
 	@RequestMapping(value = "/showModifiedOrders", method = RequestMethod.GET)
-	public ModelAndView showModifiedOrders(HttpServletRequest request,
-			HttpServletResponse response) {
+	public ModelAndView showModifiedOrders(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("orders/changed_orders");
 		try {
-		RestTemplate restTemplate = new RestTemplate();
-		AllFranchiseeList allFranchiseeList = restTemplate.getForObject(Constants.url + "getAllFranchisee",
-				AllFranchiseeList.class);
+			RestTemplate restTemplate = new RestTemplate();
+			AllFranchiseeList allFranchiseeList = restTemplate.getForObject(Constants.url + "getAllFranchisee",
+					AllFranchiseeList.class);
 
-		// franchiseeList= new ArrayList<FranchiseeList>();
-		franchiseeList = allFranchiseeList.getFranchiseeList();
-		AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
-				AllRoutesListResponse.class);
+			// franchiseeList= new ArrayList<FranchiseeList>();
+			franchiseeList = allFranchiseeList.getFranchiseeList();
+			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
+					AllRoutesListResponse.class);
 
-		List<Route> routeList = new ArrayList<Route>();
+			List<Route> routeList = new ArrayList<Route>();
 
-		routeList = allRouteListResponse.getRoute();
-		model.addObject("routeList", routeList);
+			routeList = allRouteListResponse.getRoute();
+			model.addObject("routeList", routeList);
 
-		model.addObject("todayDate", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
-		model.addObject("franchiseeList", franchiseeList);
-		}catch (Exception e) {
+			model.addObject("todayDate", new SimpleDateFormat("dd-MM-yyyy").format(new Date()));
+			model.addObject("franchiseeList", franchiseeList);
+		} catch (Exception e) {
 			System.err.println("Exce in /showModifiedOrders at OrderController ");
 		}
-		
+
 		return model;
 	}
-	
-	//-GET DATA for Deleted/Edited t_order Data Sachin 18-02-2020
+
+	// -GET DATA for Deleted/Edited t_order Data Sachin 18-02-2020
 	@RequestMapping(value = "/getModifiedOrdersData", method = RequestMethod.GET)
-	public @ResponseBody  List<ChangeOrderRecord> getModifiedOrdersData(HttpServletRequest request, HttpServletResponse response) {
-		
+	public @ResponseBody List<ChangeOrderRecord> getModifiedOrdersData(HttpServletRequest request,
+			HttpServletResponse response) {
+
 		MultiValueMap<String, Object> mvm = new LinkedMultiValueMap<String, Object>();
 
 		RestTemplate restTemplate = new RestTemplate();
@@ -1169,9 +1160,9 @@ System.err.println("modifiedDate delete function " +modifiedDate);
 		String fromDate = request.getParameter("fromDate");
 		String toDate = request.getParameter("toDate");
 		int routeId = Integer.parseInt(request.getParameter("route_id"));
-		fromDate=DateConvertor.convertToYMD(fromDate);
-		toDate=DateConvertor.convertToYMD(toDate);
-		
+		fromDate = DateConvertor.convertToYMD(fromDate);
+		toDate = DateConvertor.convertToYMD(toDate);
+
 		List<String> franchIds = new ArrayList();
 
 		if (frIdString != null) {
@@ -1224,21 +1215,20 @@ System.err.println("modifiedDate delete function " +modifiedDate);
 
 			System.out.println("few fr selected" + frIdString.toString());
 			mvm = new LinkedMultiValueMap<String, Object>();
-			
+
 			mvm.add("frIdList", frIdString);
 			mvm.add("fromDate", fromDate);
 			mvm.add("toDate", toDate);
 		} // end of else
-System.err.println("Mvm map " +mvm);
-		
-List<ChangeOrderRecord> changeOrList = restTemplate
-				.postForObject(Constants.url + "getChangedOrdersRecordList", mvm, List.class);
-		
+		System.err.println("Mvm map " + mvm);
+
+		List<ChangeOrderRecord> changeOrList = restTemplate.postForObject(Constants.url + "getChangedOrdersRecordList",
+				mvm, List.class);
+
 		return changeOrList;
 
-		
 	}
-	
+
 	@RequestMapping(value = "/deleteSpOrder", method = RequestMethod.GET)
 	public @ResponseBody List<SpCakeOrdersBean> deleteSpOrder(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -1265,10 +1255,6 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		}
 		return spCakeOrderList;
 	}
-	
-	
-	
-	
 
 	@RequestMapping(value = "/deleteRegSpOrder/{rspId}", method = RequestMethod.GET)
 	public ModelAndView deleteRegSpOrder(@PathVariable int rspId, HttpServletRequest request,
@@ -1327,9 +1313,9 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 
 		String orderId = request.getParameter("order_id");
 		String orderQty = request.getParameter("order_qty");
-		HttpSession session=request.getSession();
-		UserResponse userResponse =(UserResponse) session.getAttribute("UserDetail");
-		
+		HttpSession session = request.getSession();
+		UserResponse userResponse = (UserResponse) session.getAttribute("UserDetail");
+
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("orderId", orderId);
 		map.add("orderQty", orderQty);
@@ -1337,17 +1323,16 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		RestTemplate restTemp = new RestTemplate();
 
 		String s = restTemp.postForObject(Constants.url + "updateOrderQty", map, String.class);
-		
-		
+
 		for (int i = 0; i < orderList.size(); i++) {
 			if (orderList.get(i).getOrderId().equals(Integer.parseInt(orderId))) {
 				DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 				Calendar cal = Calendar.getInstance();
 				String curDateTime = dateFormat.format(cal.getTime());
 				Date date = new Date();
-				String modifiedDate= new SimpleDateFormat("dd-MM-yyyy").format(date);
-                 System.err.println("modifiedDate callChangeQty"  +modifiedDate);
-				ChangeOrderRecord reqBody=new ChangeOrderRecord();
+				String modifiedDate = new SimpleDateFormat("dd-MM-yyyy").format(date);
+				System.err.println("modifiedDate callChangeQty" + modifiedDate);
+				ChangeOrderRecord reqBody = new ChangeOrderRecord();
 				reqBody.setDeliveryDate(new SimpleDateFormat("dd-MM-yyyy").format(orderList.get(i).getDeliveryDate()));
 
 				reqBody.setChangeDate(modifiedDate);
@@ -1363,21 +1348,19 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 				reqBody.setItemName(orderList.get(i).getItemName());
 				reqBody.setOrderId(orderList.get(i).getOrderId());
 				reqBody.setOrigQty(orderList.get(i).getOrderQty());
-				
+
 				reqBody.setUserId(userResponse.getUser().getId());
 				reqBody.setUserName(userResponse.getUser().getUsername());
-				
-				
-				
-				ChangeOrderRecord orderChangeRes = restTemp.postForObject(Constants.url + "saveChangeOrderRecord", reqBody, ChangeOrderRecord.class);
-				
+
+				ChangeOrderRecord orderChangeRes = restTemp.postForObject(Constants.url + "saveChangeOrderRecord",
+						reqBody, ChangeOrderRecord.class);
+
 				break;
-				
-			}else {
-				
+
+			} else {
+
 			}
 		}
-	
 
 		// return "Success";
 	}
@@ -1397,18 +1380,18 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		model.addObject("spCakeOrder", orderListResponse.get(0));
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/showHtmlViewSpcakeAlbumOrder/{spOrderNo}", method = RequestMethod.GET)
-	public ModelAndView showHtmlViewSpcakeAlbumOrder(@PathVariable("spOrderNo") int spOrderNo, HttpServletRequest request,
-			HttpServletResponse response) {
+	public ModelAndView showHtmlViewSpcakeAlbumOrder(@PathVariable("spOrderNo") int spOrderNo,
+			HttpServletRequest request, HttpServletResponse response) {
 
 		ModelAndView model = new ModelAndView("orders/htmlViewSpCakeOrder");
 
 		RestTemplate restTemp = new RestTemplate();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("spOrderNo", spOrderNo);
-		List<GetSpCakeOrders> orderListResponse = restTemp.postForObject(Constants.url + "getSpCakeAlbumOrderBySpOrderNo",
-				map, List.class);
+		List<GetSpCakeOrders> orderListResponse = restTemp
+				.postForObject(Constants.url + "getSpCakeAlbumOrderBySpOrderNo", map, List.class);
 
 		model.addObject("spCakeOrder", orderListResponse.get(0));
 		return model;
@@ -1432,8 +1415,8 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		model.addObject("imgUrl2", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
 		return model;
 	}
-	
-	//----------ANMOL 13-7-2019
+
+	// ----------ANMOL 13-7-2019
 	@RequestMapping(value = "/showSpcakeAlbumOrderPdf/{spOrderNo}/{key}", method = RequestMethod.GET)
 	public ModelAndView showSpcakeAlbumOrderPdf(@PathVariable("spOrderNo") int spOrderNo, @PathVariable("key") int key,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -1444,10 +1427,10 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		map.add("spOrderNo", spOrderNo);
 //		List<GetSpCkOrder> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map,
 //				List.class);
-		
-		//Mahendra 30-06-2020
-		List<GetSpCkOrderAlbum> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map,
-				List.class);
+
+		// Mahendra 30-06-2020
+		List<GetSpCkOrderAlbum> orderListResponse = restTemp
+				.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map, List.class);
 
 		model.addObject("from", key);
 		System.out.println("SpOrder" + orderListResponse.toString());
@@ -1483,10 +1466,8 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		model.addObject("imgUrl2", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
 		return model;
 	}
-	
-	
-	
-	//------------ANMOL 13-7-2019------------------
+
+	// ------------ANMOL 13-7-2019------------------
 	@RequestMapping(value = "/showSpcakeAlbumOrderPdfInRange/{from}/{to}", method = RequestMethod.GET)
 	public ModelAndView showSpcakeAbumOrderPdfInRange(@PathVariable("from") int from, @PathVariable("to") int to,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -1503,10 +1484,10 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		map.add("spOrderNo", orderId);
 //		List<GetSpCkOrder> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map,
 //				List.class);
-		
-		//Mahendra 30-06-2020
-		List<GetSpCkOrderAlbum> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map,
-				List.class);
+
+		// Mahendra 30-06-2020
+		List<GetSpCkOrderAlbum> orderListResponse = restTemp
+				.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map, List.class);
 
 		System.out.println("SpOrder" + orderListResponse.toString());
 		model.addObject("spCakeOrder", orderListResponse);
@@ -1515,11 +1496,9 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		model.addObject("imgUrl2", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
 		model.addObject("albumUrl", Constants.Album_IMAGE_URL);
 		model.addObject("noImgUrl", Constants.noImg);
-		
+
 		return model;
 	}
-	
-	 
 
 	@RequestMapping(value = "/showHtmlViewRegSpcakeOrder/{orderNo}", method = RequestMethod.GET)
 	public ModelAndView showHtmlViewRegSpcakeOrder(@PathVariable("orderNo") int orderNo, HttpServletRequest request,
@@ -1779,7 +1758,7 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		String delDate = request.getParameter("delDate");
 		String prodDate = request.getParameter("prodDate");
 
-		System.out.println(DateConvertor.convertToYMD(delDate)+"--------------------------" + prodDate);
+		System.out.println(DateConvertor.convertToYMD(delDate) + "--------------------------" + prodDate);
 		System.out.println("********************" + delDate);
 
 		/*
@@ -1792,7 +1771,7 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		map.add("orderIds", ids);
 		map.add("delDate", DateConvertor.convertToYMD(delDate));
-		map.add("prodDate",DateConvertor.convertToYMD(prodDate));
+		map.add("prodDate", DateConvertor.convertToYMD(prodDate));
 		System.err.println(map.toString());
 		RestTemplate restTemp = new RestTemplate();
 
@@ -1803,66 +1782,176 @@ List<ChangeOrderRecord> changeOrList = restTemplate
 		return info;
 	}
 
-	//-------------------------------------------------------------------------------//
-	//Mahendra Singh
-	//03-10-2019
-	
+	// -------------------------------------------------------------------------------//
+	// Mahendra Singh
+	// 03-10-2019
+
 	@RequestMapping(value = "/showSpcakeRawMaterialInfo", method = RequestMethod.POST)
-	@ResponseBody public List<FlavourRawMaterialInfo> showSpcakeRawMaterialInfo(HttpServletRequest request, HttpServletResponse response, Model model) {
-		
+	@ResponseBody
+	public List<FlavourRawMaterialInfo> showSpcakeRawMaterialInfo(HttpServletRequest request,
+			HttpServletResponse response, Model model) {
+
 		String date = request.getParameter("prod_date");
 		int from = 0;
-		int to=0;
-		
+		int to = 0;
+
 		int value = Integer.parseInt(request.getParameter("select_way"));
-		
-		List<FlavourRawMaterialInfo> flvrRawMtrl  = new ArrayList<FlavourRawMaterialInfo>();
-		//ModelAndView model = new ModelAndView("orders/flavourRawMatrlDetail");
+
+		List<FlavourRawMaterialInfo> flvrRawMtrl = new ArrayList<FlavourRawMaterialInfo>();
+		// ModelAndView model = new ModelAndView("orders/flavourRawMatrlDetail");
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 		RestTemplate restTemp = new RestTemplate();
 
-		if(value==1) {
-			 from = Integer.parseInt(request.getParameter("from"));
-			
-			 to = Integer.parseInt(request.getParameter("to"));
-			System.out.println("input------"+date+" / "+from+" / "+to+" / "+value);
+		if (value == 1) {
+			from = Integer.parseInt(request.getParameter("from"));
 
-		StringBuffer orderId = new StringBuffer("0,");
-		for (int i = from - 1; i < to && i < spCakeOrderList.size(); i++) {
-			orderId.append(Integer.toString(spCakeOrderList.get(i).getSpOrderNo()) + ",");
-		}
+			to = Integer.parseInt(request.getParameter("to"));
+			System.out.println("input------" + date + " / " + from + " / " + to + " / " + value);
 
-		orderId.setLength(orderId.length() - 1);
-		map.add("spOrderNo", orderId);
-		FlavourRawMaterialInfo[] arr = restTemp.postForObject(Constants.url + "getRawMaterialDetails", map,
-				FlavourRawMaterialInfo[].class);
-		
-		 flvrRawMtrl = new ArrayList<>(Arrays.asList(arr));
-		System.out.println("AlbumList------------------"+flvrRawMtrl);
-		}else {
+			StringBuffer orderId = new StringBuffer("0,");
+			for (int i = from - 1; i < to && i < spCakeOrderList.size(); i++) {
+				orderId.append(Integer.toString(spCakeOrderList.get(i).getSpOrderNo()) + ",");
+			}
+
+			orderId.setLength(orderId.length() - 1);
+			map.add("spOrderNo", orderId);
+			FlavourRawMaterialInfo[] arr = restTemp.postForObject(Constants.url + "getRawMaterialDetails", map,
+					FlavourRawMaterialInfo[].class);
+
+			flvrRawMtrl = new ArrayList<>(Arrays.asList(arr));
+			System.out.println("AlbumList------------------" + flvrRawMtrl);
+		} else {
 			System.out.println("In Else");
-			
-			
-			  String[] rawMatril = request.getParameterValues("selCheck");
-			  String matrilList = new String(); 
-				  for (int i = 0; i < rawMatril.length; i++) {
-					  matrilList = rawMatril[i] + "," + matrilList; 
-					  } 
-				  matrilList = matrilList.substring(0, matrilList.length() - 1);
-			  
-			  System.out.println("selected bills for Printing " + matrilList);
-			  
-			  map.add("spOrderNo", matrilList); 
-			  FlavourRawMaterialInfo[] arr = restTemp.postForObject(Constants.url + "getRawMaterialDetails", map, FlavourRawMaterialInfo[].class);
-			  
-			  flvrRawMtrl = new ArrayList<>(Arrays.asList(arr));
-			 
+
+			String[] rawMatril = request.getParameterValues("selCheck");
+			String matrilList = new String();
+			for (int i = 0; i < rawMatril.length; i++) {
+				matrilList = rawMatril[i] + "," + matrilList;
+			}
+			matrilList = matrilList.substring(0, matrilList.length() - 1);
+
+			System.out.println("selected bills for Printing " + matrilList);
+
+			map.add("spOrderNo", matrilList);
+			FlavourRawMaterialInfo[] arr = restTemp.postForObject(Constants.url + "getRawMaterialDetails", map,
+					FlavourRawMaterialInfo[].class);
+
+			flvrRawMtrl = new ArrayList<>(Arrays.asList(arr));
+
 		}
-		
-		model.addAttribute("flvrRawMtrl",flvrRawMtrl );
+
+		model.addAttribute("flvrRawMtrl", flvrRawMtrl);
 		model.addAttribute("from", from);
 		model.addAttribute("to", to);
 		model.addAttribute("date", date);
 		return flvrRawMtrl;
 	}
+
+	// Anmol - 23-09-2020
+	@RequestMapping(value = "/updateShiftOrder", method = RequestMethod.GET)
+	public @ResponseBody Info updateShiftOrder(HttpServletRequest request, HttpServletResponse response) {
+
+		Info info = null;
+		RestTemplate restTemplate = new RestTemplate();
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		
+		try {
+			String itemId = request.getParameter("itemId");
+			String menuId = request.getParameter("item_id_list");
+			String frIdString = request.getParameter("fr_id_list");
+			String date = request.getParameter("date");
+			String delDate = request.getParameter("delDate");
+			String prodDate = request.getParameter("prodDate");
+			int routeId = 0;// Integer.parseInt(request.getParameter("route_id"));
+			try {
+				routeId=Integer.parseInt(request.getParameter("route_id"));
+			}catch(Exception e) {}
+
+			menuId = menuId.substring(1, menuId.length() - 1);
+			menuId = menuId.replaceAll("\"", "");
+			//System.out.println("menu Ids New =" + menuId);
+
+			frIdString = frIdString.substring(1, frIdString.length() - 1);
+			frIdString = frIdString.replaceAll("\"", "");
+			//System.out.println("frIds  New =" + frIdString);
+
+			itemId = itemId.substring(1, itemId.length() - 1);
+			itemId = itemId.replaceAll("\"", "");
+			//System.out.println("Item Ids =" + itemId);
+
+			List<String> franchIds = new ArrayList();
+			franchIds = Arrays.asList(frIdString);
+
+			//System.out.println("fr Id ArrayList " + franchIds.toString());
+
+			if (routeId != 0) {
+
+				map = new LinkedMultiValueMap<String, Object>();
+				map.add("routeId", routeId);
+
+				FrNameIdByRouteIdResponse frNameId = restTemplate.postForObject(Constants.url + "getFrNameIdByRouteId",
+						map, FrNameIdByRouteIdResponse.class);
+
+				List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
+
+				//System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+
+				StringBuilder sbForRouteFrId = new StringBuilder();
+				for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
+
+					sbForRouteFrId = sbForRouteFrId.append(frNameIdByRouteIdList.get(i).getFrId().toString() + ",");
+
+				}
+				String strFrIdRouteWise = sbForRouteFrId.toString();
+				frIdString = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
+				//System.out.println("fr Id Route WISE = " + frIdString);
+
+			}else {
+				if(!frIdString.isEmpty()) {
+					
+					List<Integer> frIds = Stream.of(frIdString.split(",")).map(Integer::parseInt)
+							.collect(Collectors.toList());
+					
+					if(frIds.contains(0)) {
+						
+						try {
+							StringBuilder sbForFrId = new StringBuilder();
+							for (int i = 0; i < franchiseeList.size(); i++) {
+									sbForFrId = sbForFrId.append(franchiseeList.get(i).getFrId() + ",");
+							}
+							String strAllFrId = sbForFrId.toString();
+							frIdString = strAllFrId.substring(0, strAllFrId.length() - 1);
+						} catch (NullPointerException e) {
+						} 
+					}
+				}
+			} 
+			
+			System.err.println("FR IDS --> "+frIdString);
+			System.err.println("PROD DATE --> "+prodDate);
+			System.err.println("DELIVERY DATE --> "+delDate);
+			System.err.println("DATE --> "+date);
+			System.err.println("MENU IDS --> "+menuId);
+			System.err.println("ITEM IDS --> "+itemId);
+			System.err.println("ROUTE ID --> "+routeId);
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("frIds", frIdString);
+			map.add("menuIds", menuId);
+			map.add("delDate", DateConvertor.convertToYMD(delDate));
+			map.add("prodDate", DateConvertor.convertToYMD(prodDate));
+			map.add("pDate", DateConvertor.convertToYMD(date));
+			System.err.println(map.toString());
+			RestTemplate restTemp = new RestTemplate();
+
+			info = restTemp.postForObject(Constants.url + "updateShiftOrder", map, Info.class);
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+		return info;
+	}
+
 }
