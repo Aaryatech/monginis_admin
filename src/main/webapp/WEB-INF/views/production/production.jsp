@@ -3,25 +3,26 @@
 	pageEncoding="UTF-8"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
- 
- <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
- <jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
+
+<jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 <body>
-<script>
-  $( function() {
-    $( "#datepicker" ).datepicker({ dateFormat: 'dd-mm-yy' });
-  } );
-  $( function() {
-    $( "#datepicker2" ).datepicker({ dateFormat: 'dd-mm-yy' });
-  } );
-  
-  </script>
+	<script>
+		$(function() {
+			$("#datepicker").datepicker({
+				dateFormat : 'dd-mm-yy'
+			});
+		});
+		$(function() {
+			$("#datepicker2").datepicker({
+				dateFormat : 'dd-mm-yy'
+			});
+		});
+	</script>
 	<c:url var="getProductionOrder" value="/getProductionOrder" />
-	<c:url var="getMenu" value="/getMenu" />	
+	<c:url var="getMenu" value="/getMenu" />
 	<c:url var="getProductionRegSpCakeOrder" value="/getProductionRegSpCakeOrder" />
-
-	 
-
+	<c:url var="getNonProductionFrList" value="/getNonProductionFrList" />
 
 	<div class="container" id="main-container">
 
@@ -53,19 +54,19 @@
 
 
 			<!-- BEGIN Main Content -->
-		 
-				
-						<div class="box">
-			<div class="box-title">
-				<h3>
-					<i class="fa fa-bars"></i> Search Production Order
-				</h3>
 
-			</div>
 
-			<div class="box-content">
-				<div class="row">	 
-				<!-- 		<div class="box-title">
+			<div class="box">
+				<div class="box-title">
+					<h3>
+						<i class="fa fa-bars"></i> Search Production Order
+					</h3>
+
+				</div>
+
+				<div class="box-content">
+					<div class="row">
+						<!-- 		<div class="box-title">
 							<h3>
 								<i class="fa fa-bars"></i> Search Production Order
 							</h3>
@@ -82,133 +83,130 @@
 
 			<div class="box-content">
 						<div class="row" > -->
-					
-					<div class="form-group col-md-8" align="left">
-					<label class=" col-md-3 control-label franchisee_label"></label>
-				<label class=" col-md-3 control-label menu_label">Select
-										Category </label>
-									<div class="col-md-6 controls">
 
-										<select class="form-control chosen" data-placeholder="Choose Category"
-											 name="selectCategory" id="selectCategory" tabindex="-1" data-rule-required="true">
+						<div class="form-group col-md-8" align="left">
+							<label class=" col-md-3 control-label franchisee_label"></label>
+							<label class=" col-md-3 control-label menu_label">Select
+								Category </label>
+							<div class="col-md-6 controls">
 
-										<option value="-1"><c:out value=""/></option>
-											
-											<c:forEach items="${unSelectedCatList}" var="unSelectedCat"
-													varStatus="count">
-													<c:choose>
-         
-                                                      <c:when test = "${unSelectedCat.catId==5 || unSelectedCat.catId==3}">
-                                                      </c:when>
-                                                      <c:otherwise>
-												<option value="${unSelectedCat.catId}"><c:out value="${unSelectedCat.catName}"/></option>
-												</c:otherwise>
-												</c:choose>
-												</c:forEach>
+								<select class="form-control chosen"
+									data-placeholder="Choose Category" name="selectCategory"
+									id="selectCategory" tabindex="-1" data-rule-required="true">
 
-										</select>
-									</div>
+									<option value="-1"><c:out value="" /></option>
 
+									<c:forEach items="${unSelectedCatList}" var="unSelectedCat"
+										varStatus="count">
+										<c:choose>
 
-								</div>
-							
-							<div class="form-group col-md-8" align="left">
-					<label class=" col-md-3 control-label franchisee_label"></label>
-				<label class=" col-md-3 control-label menu_label">Menu</label>
-									<div class="col-md-6 controls">
-										<select data-placeholder="Select Menu" multiple="multiple"
-											class="form-control chosen-select chosen" name="selectMenu"
-											tabindex="-1" id="selectMenu" data-rule-required="true">
-										<option value="-1">ALL</option>
-										</select>
-									</div>
+											<c:when
+												test="${unSelectedCat.catId==5 || unSelectedCat.catId==3}">
+											</c:when>
+											<c:otherwise>
+												<option value="${unSelectedCat.catId}"><c:out
+														value="${unSelectedCat.catName}" /></option>
+											</c:otherwise>
+										</c:choose>
+									</c:forEach>
+
+								</select>
+							</div>
 
 
-								</div>
-<br/>
-								<div class="form-group col-md-8" align="left">
-					<label class=" col-md-3 control-label franchisee_label"></label>
-				<label class=" col-md-3 control-label menu_label">Production
-										Date</label>
-									<div class="col-md-6 controls">
-										<input value="${todayDate}" class="form-control date-picker" id="datepicker" size="16"
-											 type="text" name="production_date" required />
-									</div>
+						</div>
+
+						<div class="form-group col-md-8" align="left">
+							<label class=" col-md-3 control-label franchisee_label"></label>
+							<label class=" col-md-3 control-label menu_label">Menu</label>
+							<div class="col-md-6 controls">
+								<select data-placeholder="Select Menu" multiple="multiple"
+									class="form-control chosen-select chosen" name="selectMenu"
+									tabindex="-1" id="selectMenu" data-rule-required="true">
+									<option value="-1">ALL</option>
+								</select>
+							</div>
 
 
+						</div>
+						<br />
+						<div class="form-group col-md-8" align="left">
+							<label class=" col-md-3 control-label franchisee_label"></label>
+							<label class=" col-md-3 control-label menu_label">Production
+								Date</label>
+							<div class="col-md-6 controls">
+								<input value="${todayDate}" class="form-control date-picker"
+									id="datepicker" size="16" type="text" name="production_date"
+									required />
+							</div>
+						</div>
+					</div>
+					<div class="row" align="center">
+						<div class="col-md-12">
+							<input type="button" class="btn btn-info" value="Search"
+								id="callsearch" onclick="searchOrder()">
+
+						</div>
+					</div>
+				</div>
+				<div align="center" id="loader" style="display: none">
+					<span>
+						<h4>
+							<font color="#343690">Loading</font>
+						</h4>
+					</span> <span class="l-1"></span> <span class="l-2"></span> <span
+						class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
+					<span class="l-6"></span>
+				</div>
+			</div>
+
+			<div class="box">
+				<div class="box-title">
+					<h3>
+						<i class="fa fa-table"></i> Production List
+					</h3>
+					<div class="box-tool">
+						<a data-action="collapse" href="#"><i class="fa fa-chevron-up"></i></a>
+						<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
+					</div>
+				</div>
 
 
+				<form action="submitProduction" method="post" id="submitInsert">
+					<!-- submitProduction -->
 
-								</div>
-	</div>
-								<div class="row" align="center">
-									<div
-										class="col-md-12">
-										<input type="button" class="btn btn-info" value="Search" id="callsearch"
-											onclick="searchOrder()">
 
-									</div>
-								</div>
+					<div class="box-content">
+						<div id="table-scroll" class="table-scroll">
 
-</div>
-								<div align="center" id="loader" style="display: none">
+							<div id="faux-table" class="faux-table" aria="hidden">
+								<table id="table2" class="main-table">
+									<thead>
+										<tr class="bgpink">
+											<th width="10" style="width: 10px">Sr No</th>
+											<th width="90">Item Id</th>
+											<th width="150">Item Name</th>
+											<th width="100">Current Opening Qty</th>
+											<th width="100">Order Quantity</th>
+										</tr>
+									</thead>
+								</table>
 
-									<span>
-										<h4>
-											<font color="#343690">Loading</font>
-										</h4>
-									</span> <span class="l-1"></span> <span class="l-2"></span> <span
-										class="l-3"></span> <span class="l-4"></span> <span
-										class="l-5"></span> <span class="l-6"></span>
-								</div>
-</div>
-								 
-								<div class="box">
-									<div class="box-title">
-										<h3>
-											<i class="fa fa-table"></i>  Production List
-										</h3>
-										<div class="box-tool">
-											<a data-action="collapse" href="#"><i
-												class="fa fa-chevron-up"></i></a>
-											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
-										</div>
-									</div>
-									
-									
-								 <form action="submitProduction" method ="post">
-						
+							</div>
+							<div class="table-wrap">
 
-									<div class="box-content">
-<div id="table-scroll" class="table-scroll">
-							 
-									<div id="faux-table" class="faux-table" aria="hidden">
-									<table id="table2" class="main-table">
-											<thead>
-												<tr class="bgpink">
-	                                                    <th width="10" style="width: 10px">Sr No</th>
-														<th width="90">Item Id</th>
-														<th width="150">Item Name</th> 
-														<th width="100">Current Opening Qty</th>
-														<th width="100">Order Quantity</th></tr>
-												</thead>
-												</table>
-									
-									</div>
-									<div class="table-wrap">
-									
-										<table id="table1" class="table table-advance">
-											<thead>
-												<tr class="bgpink">
+								<table id="table1" class="table table-advance">
+									<thead>
+										<tr class="bgpink">
 											<th width="60" style="width: 50px">Sr No</th>
-														<th width="100">Item Id</th>
-														<th width="170">Item Name</th> 
-														<th width="100">Current Opening Qty</th>
-														<th width="100">Order Quantity</th>
-												</tr>
-												</thead>
-								
-										<!-- <div class="col-md-12 table-responsive" >
+											<th width="100">Item Id</th>
+											<th width="170">Item Name</th>
+											<th width="100">Current Opening Qty</th>
+											<th width="100">Order Quantity</th>
+										</tr>
+									</thead>
+
+									<!-- <div class="col-md-12 table-responsive" >
 										 
 											<table width="60%" class="table table-advance " id="table1" name="table1" align="left">
 												<thead>
@@ -220,53 +218,48 @@
 														<th width="100">Order Quantity</th>
 													</tr>
 												</thead> -->
-												<tbody>
-												
-												</tbody>
-												
-											</table>
-										</div>
-									<br/>
+									<tbody>
+
+									</tbody>
+
+								</table>
+							</div>
+							<br /> <br /> <br />
+							<div class="form-group col-md-8" align="left">
+								<label class=" col-md-3   "></label> <label class=" col-md-3   ">Select
+									Time Slot </label>
+								<div class="col-md-6 controls">
+
+									<select class="form-control chosen"
+										data-placeholder="Choose Time Slot" name="selectTime"
+										id="selectTime" tabindex="-1" data-rule-required="true">
 
 
 
-
-<br/><br/>
-									<div class="form-group col-md-8" align="left">
-										<label class=" col-md-3   "></label>
-										<label class=" col-md-3   ">Select
-											Time Slot </label>
-										<div class="col-md-6 controls">
-
-											<select class="form-control chosen"
-												data-placeholder= "Choose Time Slot" name="selectTime"
-												id="selectTime" tabindex="-1" data-rule-required="true">
-
-												 
-
-												<c:forEach items="${productionTimeSlot}" var="productionTime"
-													varStatus="count">
-												<option value="${productionTime}"><c:out value="Time Slot ${productionTime}"/></option>
-												</c:forEach>
-											</select>
-										</div>
+										<c:forEach items="${productionTimeSlot}" var="productionTime"
+											varStatus="count">
+											<option value="${productionTime}"><c:out
+													value="Time Slot ${productionTime}" /></option>
+										</c:forEach>
+									</select>
+								</div>
 
 
-									 
-</div>
 
-				 <br/>
+							</div>
+
+							<br />
 							<div class="row" align="center">
-									<div
-										class="col-md-12">
-								<input type="submit" class="btn btn-primary"
-								  value="Submit" disabled id="callSubmit">
-								   <input type="button" id="expExcel" class="btn btn-primary" value="EXPORT TO Excel" onclick="exportToExcel();" disabled="disabled">
-						 </div>
-</div>
+								<div class="col-md-12">
+									<input type="submit" class="btn btn-primary" value="Submit"
+										disabled id="callSubmit"> <input type="button"
+										id="expExcel" class="btn btn-primary" value="EXPORT TO Excel"
+										onclick="exportToExcel();" disabled="disabled">
+								</div>
+							</div>
 
 
-<%-- 
+							<%-- 
 									<div align="center" class="form-group">
 								<div class="col-sm-5 " align="center">
 
@@ -288,30 +281,165 @@
 
 
 									</div>--%>
-								</div> 
-						</form>		
 						</div>
-						 
-						
-				 
+					</div>
+				</form>
 			</div>
-			<!-- END Main Content -->
-			<footer>
-			<p>2017 © MONGINIS.</p>
-			</footer>
 
 
-			<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
-				class="fa fa-chevron-up"></i></a>
+
 		</div>
-		<!-- END Content -->
+		<!-- END Main Content -->
+		<footer>
+		<p>2017 © MONGINIS.</p>
+		</footer>
+
+
+		<a id="btn-scrollup" class="btn btn-circle btn-lg" href="#"><i
+			class="fa fa-chevron-up"></i></a>
 	</div>
+	<!-- END Content -->
 	<!-- END Container -->
 
 	<!--basic scripts-->
+	<!-- ------------------------------------------------------------------------------------------------------ -->
+	<!-- Modal -->
+	<div id="myModal" class="modal fade" role="dialog">
+		<div class="modal-dialog">
+
+			<!-- Modal content-->
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">No Order Found For Franchise</h4>
+				</div>
+				<div align="center" id="loader" style="display: none">
+					<span>
+						<h4>
+							<font color="#343690">Loading</font>
+						</h4>
+					</span> <span class="l-1"></span> <span class="l-2"></span> <span
+						class="l-3"></span> <span class="l-4"></span> <span class="l-5"></span>
+					<span class="l-6"></span>
+				</div>
+				
+				<div class="modal-body">
+				<label for="search" class="col-md-6" id="search"
+					style="float: right;"> <i class="fa fa-search"
+					style="font-size: 20px; float: left; margin: 6px 10px 0 0px;"></i> 
+					<input type="text" id="myInput"
+					onkeyup="myFunction()" placeholder="Search By Franchise"  class="form-control
+					title="Type a Franchise" style="float: left; width: 88%;">
+				</label>
+						<table class="table table-advance" id="modeltable">
+						<thead>
+							<tr>
+								<th>Sr No</th>
+								<th>Franchise</th>
+							</tr>
+						</thead>
+						<tbody>
+						</tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary" id="sbtbtn" onclick="onProceed()">Proceed</button>
+				</div>
+			</div>
+		</div>
+	</div>
 
 
 
+	<script>
+		$(function() {
+			$("#callSubmit").click(function() {
+				
+				var selectedMenu = $("#selectMenu").val();
+				var productionDate = $("#datepicker").val();
+				
+				$('#loader').show();
+				
+				$('#modeltable td').remove();				
+
+				$
+						.getJSON(
+								'${getNonProductionFrList}',
+								{
+									menu_id : JSON
+									.stringify(selectedMenu),
+									productionDate : productionDate,
+									ajax : 'true',
+								},
+								function(data) {
+									$('#loader').hide();
+									
+								
+									if (data == "") {
+										alert("No records found !!");
+										document.getElementById("callSubmit").disabled = true;
+										onProceed();
+									}
+
+
+										$
+												.each(
+														data,
+														function(key, order) {															
+															var tr = $('<tr></tr>');
+
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					key + 1));
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					order.frName));
+															
+
+															$('#modeltable tbody')
+																	.append(tr);
+
+														});
+								});
+				$("#myModal").modal("show");				
+				
+				return false;
+			});
+		});		
+		
+		function onProceed(){			
+			document.getElementById("submitInsert").submit();
+		}
+		
+		function myFunction() {
+			  var input, filter, table, tr, td,td1, i;
+			  input = document.getElementById("myInput");
+			  filter = input.value.toUpperCase();
+			  table = document.getElementById("modeltable");
+			  tr = table.getElementsByTagName("tr");
+			  for (i = 0; i < tr.length; i++) {
+			    td = tr[i].getElementsByTagName("td")[1];
+			    td1 = tr[i].getElementsByTagName("td")[0];
+			    if (td || td1) {
+			      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+			        tr[i].style.display = "";
+			      }else if (td1.innerHTML.toUpperCase().indexOf(filter) > -1) {
+			        tr[i].style.display = "";
+			      }  else {
+			        tr[i].style.display = "none";
+			      }
+			    }       
+			  }//end of for
+			  
+			 
+			  
+			}
+	</script>
 
 
 
@@ -380,233 +508,296 @@
 	<script type="text/javascript"
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 	<script type="text/javascript">
-$(document).ready(function() { 
-	$('#selectCategory').change(
-			function() {
-				$.getJSON('${getMenu}', {
-					selectedCat : $(this).val(),
-					ajax : 'true'
-				}, function(data) {
-					
-					var len = data.length;
-					$('#selectMenu').find('option').remove().end()
-					var html = '<option value="-1">ALL</option>';
-					
-					for ( var i = 0; i < len; i++) {
+		$(document)
+				.ready(
+						function() {
+							$('#selectCategory')
+									.change(
+											function() {
+												$
+														.getJSON(
+																'${getMenu}',
+																{
+																	selectedCat : $(
+																			this)
+																			.val(),
+																	ajax : 'true'
+																},
+																function(data) {
 
-						html += '<option value="' +data[i].menuId+ '">'
-						+ data[i].menuTitle + '</option>';
+																	var len = data.length;
+																	$(
+																			'#selectMenu')
+																			.find(
+																					'option')
+																			.remove()
+																			.end()
+																	var html = '<option value="-1">ALL</option>';
 
-						/*  $("#selectMenu").append(
+																	for (var i = 0; i < len; i++) {
 
-		                           $("<option ></option>").attr(
+																		html += '<option value="' +data[i].menuId+ '">'
+																				+ data[i].menuTitle
+																				+ '</option>';
 
-		                               "value", data[i].menuId).text(data[i].menuTitle)
+																		/*  $("#selectMenu").append(
 
-		                       ); */
+																		           $("<option ></option>").attr(
 
-					} 
-					html += '</option>';
-					$("#selectMenu").html(html);
+																		               "value", data[i].menuId).text(data[i].menuTitle)
 
-					$("#selectMenu").trigger("chosen:updated");
+																		       ); */
 
-				});
-			});
-});
-</script>
-<script type="text/javascript">
-	function searchOrder()
-	{ 
-		
-		$('#table1 td').remove();
-		
-		var autoindex=0;
-		var isValid = validate();
-		
-		if (isValid) {
-			
-			document.getElementById("callsearch").disabled=true;
-			var productionDate = document.getElementById("datepicker").value;
-			var selectedMenu=$("#selectMenu").val();
-			$('#loader').show();
-			
-			
-			$.getJSON('${getProductionOrder}',{
-				
-								selectedMenu_list : JSON.stringify(selectedMenu),
-								productionDate : productionDate,
-								ajax : 'true',
+																	}
+																	html += '</option>';
+																	$(
+																			"#selectMenu")
+																			.html(
+																					html);
 
-							},
-							function(data) {
+																	$(
+																			"#selectMenu")
+																			.trigger(
+																					"chosen:updated");
 
-								//$('#table_grid td').remove();
-								
-								document.getElementById("callsearch").disabled=false;
-								$('#loader').hide();
-								  if (data == "") {
-									//alert("No records found !!");
-									document.getElementById("callSubmit").disabled=true;
-								} 
-								  
-								//alert(data);
-								else{
-									
-								
-								$.each(data,function(key, order) {
-									if(order.qty>0){
-										document.getElementById("callSubmit").disabled=false;
+																});
+											});
+						});
+	</script>
+	<script type="text/javascript">
+		function searchOrder() {
+
+			$('#table1 td').remove();
+
+			var autoindex = 0;
+			var isValid = validate();
+
+			if (isValid) {
+
+				document.getElementById("callsearch").disabled = true;
+				var productionDate = document.getElementById("datepicker").value;
+				var selectedMenu = $("#selectMenu").val();
+				$('#loader').show();
+
+				$
+						.getJSON(
+								'${getProductionOrder}',
+								{
+
+									selectedMenu_list : JSON
+											.stringify(selectedMenu),
+									productionDate : productionDate,
+									ajax : 'true',
+
+								},
+								function(data) {
+
+									//$('#table_grid td').remove();
+
+									document.getElementById("callsearch").disabled = false;
+									$('#loader').hide();
+									if (data == "") {
+										alert("No records found !!");
+										document.getElementById("callSubmit").disabled = true;
 									}
-/* 
-									autoindex = autoindex +1 ;
 
-													var tr = "<tr>";
+									//alert(data);
+									else {
+										
+										$
+												.each(
+														data,
+														function(key, order) {
+															if (order.qty > 0) {
+																document
+																		.getElementById("callSubmit").disabled = false;
+															}
+															/* 
+															 autoindex = autoindex +1 ;
 
-													var index = "<td>&nbsp;&nbsp;&nbsp;"
-														+ autoindex + "</td>";
+															 var tr = "<tr>";
 
-													var itemId = "<td>&nbsp;&nbsp;&nbsp;"
-															+ order.itemId
-															+ "</td>";
-															var itemName = "<td>&nbsp;&nbsp;&nbsp;"
-																+ order.itemName
-																+ "</td>";
-																var Qty = "<td>&nbsp;&nbsp;&nbsp;"
-																	+ order.qty
-																	+ "</td>";
-																	
+															 var index = "<td>&nbsp;&nbsp;&nbsp;"
+															 + autoindex + "</td>";
+
+															 var itemId = "<td>&nbsp;&nbsp;&nbsp;"
+															 + order.itemId
+															 + "</td>";
+															 var itemName = "<td>&nbsp;&nbsp;&nbsp;"
+															 + order.itemName
+															 + "</td>";
+															 var Qty = "<td>&nbsp;&nbsp;&nbsp;"
+															 + order.qty
+															 + "</td>";
+															
 
 
-													var trclosed = "</tr>";
+															 var trclosed = "</tr>";
 
-												
-													$('#table1 tbody').append(tr);
-													$('#table1 tbody').append(index);
-													$('#table1 tbody').append(order.itemId);
-													$('#table1 tbody').append(order.itemName);
-													$('#table1 tbody').append(Qty);
-													
-													$('#table1 tbody').append(trclosed);
-													
-													
+															
+															 $('#table1 tbody').append(tr);
+															 $('#table1 tbody').append(index);
+															 $('#table1 tbody').append(order.itemId);
+															 $('#table1 tbody').append(order.itemName);
+															 $('#table1 tbody').append(Qty);
+															
+															 $('#table1 tbody').append(trclosed);
+															
+															
 
-												})
-													 */
-													 document.getElementById("expExcel").disabled=false;		
-												var tr = $('<tr></tr>');
+															 })
+															 */
+															document
+																	.getElementById("expExcel").disabled = false;
+															var tr = $('<tr></tr>');
 
-							  	tr.append($('<td></td>').html(key+1));			  	
-							  	tr.append($('<td></td>').html(order.itemId));
-								tr.append($('<td></td>').html(order.itemName)); 
-								tr.append($('<td></td>').html(order.curOpeQty));
-								
-								tr.append($('<td></td>').html(order.qty));
-								 
-								 
-								 
-							$('#table1 tbody').append(tr);
-							
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					key + 1));
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					order.itemId));
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					order.itemName));
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					order.curOpeQty));
+
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					order.qty));
+
+															$('#table1 tbody')
+																	.append(tr);
+
 														})
-							}
-														
+									}
 
-							});
-			
-			$.getJSON('${getProductionRegSpCakeOrder}',{
-				
-				selectedMenu_list : JSON.stringify(selectedMenu),
-				productionDate : productionDate,
-				ajax : 'true',
+								});
 
-			},
-			function(data) {
-				
-				//$('#table_grid td').remove();
-				
-				
-				$('#loader').hide();
-				 if (data == "") {
-					alert("No records found !!");
-					document.getElementById("callSubmit").disabled=true;
+				$
+						.getJSON(
+								'${getProductionRegSpCakeOrder}',
+								{
 
-				} 
-				//alert(data);
-				else{
-				
-				$.each(data,function(key, order) {
-					document.getElementById("callSubmit").disabled=false;
-					
-					if(order.qty>0){
-						document.getElementById("callSubmit").disabled=false;
-					}
-					autoindex =  autoindex +1;
+									selectedMenu_list : JSON
+											.stringify(selectedMenu),
+									productionDate : productionDate,
+									ajax : 'true',
 
-								/* 	var tr = "<tr>";
+								},
+								function(data) {
 
-									var index = "<td>&nbsp;&nbsp;&nbsp;"
-										+ autoindex + "</td>";
+									//$('#table_grid td').remove();
 
-									var itemId = "<td>&nbsp;&nbsp;&nbsp;"
-											+ order.itemId
-											+ "</td>";
-											var itemName = "<td>&nbsp;&nbsp;&nbsp;"
-												+ order.itemName
-												+ "</td>";
-												var Qty = "<td>&nbsp;&nbsp;&nbsp;"
-													+ order.qty
-													+ "</td>";
-													
+									$('#loader').hide();
+									if (data == "") {
+										//alert("No records found !!");
+										document.getElementById("callSubmit").disabled = true;
 
-
-									var trclosed = "</tr>";
-
-								
-									$('#table1 tbody').append(tr);
-									$('#table1 tbody').append(index);
-									$('#table1 tbody').append(itemId);
-									$('#table1 tbody').append(itemName);
-									$('#table1 tbody').append(Qty);
+									}
 									
-									$('#table1 tbody').append(trclosed); */
+									else {		
 									
-									
-									var tr = $('<tr></tr>');
-									tr.append($('<td></td>').html(autoindex));
-									tr.append($('<td></td>').html(order.itemId));
-									tr.append($('<td></td>').html(order.itemName));
-									tr.append($('<td></td>').html(order.qty));
-									
-									$('#table1 tbody').append(tr);
-								})
-				}
-									
+										$
+												.each(
+														data,
+														function(key, order) {
+															document
+																	.getElementById("callSubmit").disabled = false;
 
-			});
+															if (order.qty > 0) {
+																document
+																		.getElementById("callSubmit").disabled = false;
+															}
+															autoindex = autoindex + 1;
+
+															/* 	var tr = "<tr>";
+
+																var index = "<td>&nbsp;&nbsp;&nbsp;"
+																	+ autoindex + "</td>";
+
+																var itemId = "<td>&nbsp;&nbsp;&nbsp;"
+																		+ order.itemId
+																		+ "</td>";
+																		var itemName = "<td>&nbsp;&nbsp;&nbsp;"
+																			+ order.itemName
+																			+ "</td>";
+																			var Qty = "<td>&nbsp;&nbsp;&nbsp;"
+																				+ order.qty
+																				+ "</td>";
+																				
 
 
+																var trclosed = "</tr>";
+
+															
+																$('#table1 tbody').append(tr);
+																$('#table1 tbody').append(index);
+																$('#table1 tbody').append(itemId);
+																$('#table1 tbody').append(itemName);
+																$('#table1 tbody').append(Qty);
+																
+																$('#table1 tbody').append(trclosed); */
+
+															var tr = $('<tr></tr>');
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					autoindex));
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					order.itemId));
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					order.itemName));
+															tr
+																	.append($(
+																			'<td></td>')
+																			.html(
+																					order.qty));
+
+															$('#table1 tbody')
+																	.append(tr);
+														})
+									}
+
+								});
+
+			}
 		}
-	}
 	</script>
 	<script type="text/javascript">
 		function validate() {
-		
+
 			var selectedMenu = $("#selectMenu").val();
-			
-			var selectOrderDate =$("#datepicker").val();
-			
+
+			var selectOrderDate = $("#datepicker").val();
 
 			var isValid = true;
 
-			
-
-			 if (selectedMenu == "" || selectedMenu == null) {
+			if (selectedMenu == "" || selectedMenu == null) {
 
 				isValid = false;
 				alert("Please select Menu");
 
-			}
-			else if (selectOrderDate == "" || selectOrderDate == null) {
+			} else if (selectOrderDate == "" || selectOrderDate == null) {
 
 				isValid = false;
 				alert("Please select Order Date");
@@ -614,22 +805,22 @@ $(document).ready(function() {
 			return isValid;
 
 		}
-		
+
 		var specialKeys = new Array();
-        specialKeys.push(8); //Backspace
-        function IsNumeric(e) {
-            var keyCode = e.which ? e.which : e.keyCode
-            var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys.indexOf(keyCode) != -1);
-            
-            return ret;
-        }
-        
-        function exportToExcel()
-        {
-        	 
-        	window.open("${pageContext.request.contextPath}/exportToExcel");
-        			document.getElementById("expExcel").disabled=true;
-        }
+		specialKeys.push(8); //Backspace
+		function IsNumeric(e) {
+			var keyCode = e.which ? e.which : e.keyCode
+			var ret = ((keyCode >= 48 && keyCode <= 57) || specialKeys
+					.indexOf(keyCode) != -1);
+
+			return ret;
+		}
+
+		function exportToExcel() {
+
+			window.open("${pageContext.request.contextPath}/exportToExcel");
+			document.getElementById("expExcel").disabled = true;
+		}
 	</script>
 
 

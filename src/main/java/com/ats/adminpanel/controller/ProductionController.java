@@ -58,6 +58,7 @@ import org.zefer.html.doc.q;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
+import com.ats.adminpanel.model.AllFrIdName;
 import com.ats.adminpanel.model.AllFrIdNameList;
 import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.ExportToExcel;
@@ -170,6 +171,46 @@ public class ProductionController {
 
 		return model;
 	}
+	
+	/*------------------------------------------------------------------------------------------*/
+	@RequestMapping(value = "/getNonProductionFrList", method = RequestMethod.GET)
+    public @ResponseBody List<AllFrIdName> getNonProductionFrList(HttpServletRequest request,
+        HttpServletResponse response) {
+		
+		String selectedMenuList = request.getParameter("menu_id");
+		
+		if (selectedMenuList.contains("-1")) {
+			System.out.println("selectedMenuList" + selectedMenuList.toString());
+
+			List<String> ids = new ArrayList<>();
+			for (int i = 0; i < menuList.size(); i++) {
+				ids.add(String.valueOf(menuList.get(i).getMenuId()));
+			}
+			String idList = ids.toString();
+			selectedMenuList = idList.substring(1, idList.length() - 1);
+			selectedMenuList = selectedMenuList.replaceAll("\"", "");
+			System.out.println("selectedMenuList" + selectedMenuList.toString());
+		} else {
+			selectedMenuList = selectedMenuList.substring(1, selectedMenuList.length() - 1);
+			selectedMenuList = selectedMenuList.replaceAll("\"", "");
+		}
+		
+        String productionDate=request.getParameter("productionDate");
+      
+        
+        MultiValueMap<String, Object> map=new LinkedMultiValueMap<String, Object>();
+        map.add("productionDate", DateConvertor.convertToYMD(productionDate));
+        map.add("menuId", selectedMenuList);
+        RestTemplate restTemplate = new RestTemplate();
+        try {
+        allFrIdNameList = restTemplate.postForObject(Constants.url + "getNonProductionFr",map, AllFrIdNameList.class);
+        
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return allFrIdNameList.getFrIdNamesList();
+    }
+	/*-------------------------------------------------------------------------------------------*/
 
 	@RequestMapping(value = "/prodBarcodePrinting", method = RequestMethod.GET)
 	public ModelAndView prodBarcodePrinting(HttpServletRequest request, HttpServletResponse response) {
