@@ -198,12 +198,13 @@
 											<thead>
 												<tr class="bgpink">
 														<th class="col-md-1">Sr No</th>
-											<th class="col-md-2">Item Id</th>
+											<th class="col-md-1">Item Id</th>
 											<th class="col-md-3">Item Name</th>
 <!-- 											<th class="col-md-2">Image</th>
  -->											<th class="col-md-2">Rate</th>
 											<th class="col-md-2">MRP</th>
-											<th class="col-md-1">Action</th>
+											<th class="col-md-2">TAX %</th>
+											<th class="col-md-2">Action</th>
 												</tr>
 												</thead>
 												</table>
@@ -215,12 +216,13 @@
 											<thead>
 												<tr class="bgpink">
 													<th class="col-md-1">Sr No</th>
-											<th class="col-md-2">Item Id</th>
+											<th class="col-md-1">Item Id</th>
 											<th class="col-md-3">Item Name</th>
 <!-- 											<th class="col-md-2">Image</th>
  -->											<th class="col-md-2">Rate</th>
 											<th class="col-md-2">MRP</th>
-											<th class="col-md-1">Action</th>
+											<th class="col-md-2">TAX %</th>
+											<th class="col-md-2">Action</th>
 												</tr>
 												</thead>
 												<tbody>
@@ -239,6 +241,8 @@
 												</td> --%>
 												<td align="left"><c:out value="${itemsList.itemRate1}" /></td>
 												<td align="left"><c:out value="${itemsList.itemMrp1}" /></td>
+												
+												<td align="left"><c:out value="${itemsList.itemTax1+itemsList.itemTax2}" /></td>
 												
 												
 												

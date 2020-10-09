@@ -91,29 +91,30 @@
 								<div class="form-group">
 									<label class="col-sm-3 col-lg-2 control-label">Franchise</label>
 
-									<div class="col-sm-5 col-lg-3 controls">
+									<div class="col-sm-5 col-lg-8 controls">
 
 										<select data-placeholder="Choose Franchisee"
 											class="form-control chosen" multiple="multiple" tabindex="6"
 											id="selectFr" name="selectFr" onchange="getDate()">
-											<option value="-1"><c:out value="All"/></option>
+											<option value="-1"><c:out value="All" /></option>
 
 
 
 											<c:forEach items="${unSelectedFrList}" var="fr"
 												varStatus="count2">
 
-											<%--	<c:forEach items="${selectedFr}" var="selFr"
+												<%--	<c:forEach items="${selectedFr}" var="selFr"
 													varStatus="count2">
 													 <c:choose>
 														<c:when test="${selFr==fr.frId}">
 															<option selected value="${fr.frId}"><c:out value="${fr.frName}"/></option>
 														</c:when>
 														<c:otherwise> --%>
-															<option value="${fr.frId}"><c:out value="${fr.frName}"/></option>
+												<option value="${fr.frId}"><c:out
+														value="${fr.frName}" /></option>
 
 
-														<%-- </c:otherwise>
+												<%-- </c:otherwise>
 														</c:choose>
 												</c:forEach>
  --%>
@@ -122,121 +123,134 @@
 										</select>
 									</div>
 
-
+									<input type="button" onclick="printGvn()" value="Print GRN"
+										class="btn btn-primary">
 
 								</div>
 
+
+
 							</form>
 
-							<!-- <form action="" class="form-horizontal" method="post"
-								id="validation-form">
- -->
-								<div class="box">
-									<div class="box-title">
-										<h3>
-											<i class="fa fa-table"></i> GRN List
-										</h3>
-										<div class="box-tool">
-											<a data-action="collapse" href="#"><i
-												class="fa fa-chevron-up"></i></a>
-											<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
-										</div>
+							 <form action="" class="form-horizontal" method="post"
+								id="validation-form1">
+
+							<div class="box">
+								<div class="box-title">
+									<h3>
+										<i class="fa fa-table"></i> GVN List
+									</h3>
+									<div class="box-tool">
+										<a data-action="collapse" href="#"><i
+											class="fa fa-chevron-up"></i></a>
+										<!--<a data-action="close" href="#"><i class="fa fa-times"></i></a>-->
 									</div>
+								</div>
 
-									<div class="box-content">
+								<div class="box-content">
 
-										<div class="clearfix"></div>
-										<div class="table-responsive" style="border: 0">
-											<table width="100%"
-												class="table table-advance table-responsive table-position"
-												id="table1">
-												<thead>
+									<div class="clearfix"></div>
+									<div class="table-responsive" style="border: 0">
+										<table width="100%"
+											class="table table-advance table-responsive table-position"
+											id="table1">
+											<thead>
+												<tr>
+													<th class="col-md-2">GvnSr No</th>
+													<th class="col-md-1">Date</th>
+													<th class="col-md-2">Taxable Amt</th>
+													<th class="col-md-2">Tax Amt</th>
+													<th class="col-md-2">Amount</th>
+													<th class="col-md-2">Approved Amt</th>
+													<th class="col-md-2">Status</th>
+													<th class="col-md-2">Action</th>
+
+												</tr>
+
+											</thead>
+											<tbody>
+												<c:forEach items="${grnList}" var="grnList"
+													varStatus="count">
+
 													<tr>
-														<th class="col-md-2">GvnSr No</th>
-														<th class="col-md-1">Date</th>
-														<th class="col-md-2">Taxable Amt</th>
-														<th class="col-md-2">Tax Amt</th>
-														<th class="col-md-2">Amount</th>
-														<th class="col-md-2">Approved Amt</th>
-														<th class="col-md-2">Status</th>
-														<th class="col-md-2">Action</th>
+													<tr>
+														<td class="col-md-1"><c:out
+																value="${grnList.grngvnSrno}" /> <input type="hidden"
+															name="headerId" id="headerId"
+															value="${grnList.grnGvnHeaderId}">
+															 <input type="checkbox" name="select_to_agree"
+																		  id="${grnList.grnGvnHeaderId}"
+																		value="${grnList.grnGvnHeaderId}">
+															</td>
+														<td class="col-md-1"><c:out
+																value="${grnList.grngvnDate}" /></td>
+														<td class="col-md-1"><c:out
+																value="${grnList.taxableAmt}" /></td>
+														<td class="col-md-1"><c:out value="${grnList.taxAmt}" /></td>
+														<td class="col-md-1"><c:out
+																value="${grnList.totalAmt}" /></td>
+
+														<td class="col-md-1"><fmt:formatNumber type="number"
+																minFractionDigits="2" maxFractionDigits="2"
+																value="${grnList.apporvedAmt}" /> <%-- <c:out value="${grnList.taxableAmt}" /> --%></td>
+
+														<c:choose>
+															<c:when test="${grnList.grngvnStatus==1}">
+																<td class="col-md-1"><c:out value="Pending"></c:out></td>
+															</c:when>
+															<c:when test="${grnList.grngvnStatus==2}">
+																<td class="col-md-1"><c:out
+																		value="Approved From Dispatch"></c:out></td>
+															</c:when>
+															<c:when test="${grnList.grngvnStatus==3}">
+																<td class="col-md-1"><c:out
+																		value="Reject From Dispatch"></c:out></td>
+															</c:when>
+
+															<c:when test="${grnList.grngvnStatus==8}">
+																<td class="col-md-1"><c:out
+																		value="Partially Approved"></c:out></td>
+															</c:when>
+
+															<c:when test="${grnList.grngvnStatus==5}">
+																<td class="col-md-1"><c:out
+																		value="Reject From Sales"></c:out></td>
+															</c:when>
+															<c:when test="${grnList.grngvnStatus==6}">
+																<td class="col-md-1"><c:out
+																		value="Approved From Account"></c:out></td>
+															</c:when>
+															<c:when test="${grnList.grngvnStatus==7}">
+																<td class="col-md-1"><c:out
+																		value="Reject From Account"></c:out></td>
+															</c:when>
+
+														</c:choose>
+														<td class="col-md-1"><a
+															href="${pageContext.request.contextPath}/getGateGvnDetail/${grnList.grnGvnHeaderId}"
+															class="btn bnt-primary"> <i class="fa fa-list"></i></a></td>
 
 													</tr>
 
-												</thead>
-												<tbody>
-													<c:forEach items="${grnList}" var="grnList"
-														varStatus="count">
+												</c:forEach>
+											</tbody>
+										</table>
+									</div>
 
-														<tr>
-														<tr>
-															<td class="col-md-1"><c:out
-																	value="${grnList.grngvnSrno}" /> <input type="hidden"
-																name="headerId" id="headerId"
-																value="${grnList.grnGvnHeaderId}"></td>
-															<td class="col-md-1"><c:out
-																	value="${grnList.grngvnDate}" /></td>
-															<td class="col-md-1"><c:out
-																	value="${grnList.taxableAmt}" /></td>
-															<td class="col-md-1"><c:out
-																	value="${grnList.taxAmt}" /></td>
-															<td class="col-md-1"><c:out
-																	value="${grnList.totalAmt}" /></td>
-
-															<td class="col-md-1"><fmt:formatNumber type="number"
-																	minFractionDigits="2" maxFractionDigits="2"
-																	value="${grnList.apporvedAmt}" /> <%-- <c:out value="${grnList.taxableAmt}" /> --%></td>
-
-															<c:choose>
-																<c:when test="${grnList.grngvnStatus==1}">
-																	<td class="col-md-1"><c:out value="Pending"></c:out></td>
-																</c:when>
-																<c:when test="${grnList.grngvnStatus==2}">
-																	<td class="col-md-1"><c:out value="Approved From Dispatch"></c:out></td>
-																</c:when>
-																<c:when test="${grnList.grngvnStatus==3}">
-																	<td class="col-md-1"><c:out
-																			value="Reject From Dispatch"></c:out></td>
-																</c:when>
-
-																<c:when test="${grnList.grngvnStatus==8}">
-																	<td class="col-md-1"><c:out value="Partially Approved"></c:out></td>
-																</c:when>
-
-																<c:when test="${grnList.grngvnStatus==5}">
-																	<td class="col-md-1"><c:out
-																			value="Reject From Sales"></c:out></td>
-																</c:when>
-																<c:when test="${grnList.grngvnStatus==6}">
-																	<td class="col-md-1"><c:out value="Approved From Account"></c:out></td>
-																</c:when>
-																<c:when test="${grnList.grngvnStatus==7}">
-																	<td class="col-md-1"><c:out value="Reject From Account"></c:out></td>
-																</c:when>
-
-															</c:choose>
-<td class="col-md-1"><a href="${pageContext.request.contextPath}/getGateGvnDetail/${grnList.grnGvnHeaderId}"class="btn bnt-primary"> <i class="fa fa-list"></i></a></td>
-
-														</tr>
-													
-													</c:forEach>
-												</tbody>
-											</table>
-										</div>
-
-<!-- 
+									<!-- 
 										<div
 											class="col-sm-25 col-sm-offset-3 col-lg-30 col-lg-offset-5">
 											<input type="submit" value="Submit" class="btn btn-primary">
 
 										</div> -->
-										<!-- </form> -->
+									<!-- </form> -->
 
-									</div>
 								</div>
+							</div>
 
-<!-- 							</form>
- -->						</div>
+														</form>
+ 
+						</div>
 					</div>
 				</div>
 			</div>
@@ -318,27 +332,32 @@
 		src="${pageContext.request.contextPath}/resources/assets/bootstrap-daterangepicker/daterangepicker.js"></script>
 
 	<script type="text/javascript">
+		function getDate() {
 
-function getDate(){
-	
-	var fromDate=$("#from_date").val();
-	var toDate=$("#to_date").val();
-	var selectedFr = $("#selectFr").val();
+			var fromDate = $("#from_date").val();
+			var toDate = $("#to_date").val();
+			var selectedFr = $("#selectFr").val();
 
-	
-	$.getJSON('${getDateForGateGvnHeader}',
-			{
-			fromDate : fromDate,
-			toDate:toDate,
-			fr_id_list : JSON.stringify(selectedFr),
+			$.getJSON('${getDateForGateGvnHeader}', {
+				fromDate : fromDate,
+				toDate : toDate,
+				fr_id_list : JSON.stringify(selectedFr),
 				ajax : 'true',
 
-}
-);
+			});
 
-}
+		}
+		
+		
+		function printGvn(){
+			 var form = document.getElementById("validation-form1");
+			// form.attribute("method","post")
 
-</script>
+			    form.action ="${pageContext.request.contextPath}/GrnGvnAdminPrint/";
+			    form.submit();
+		}
+		
+	</script>
 
 </body>
 </html>
