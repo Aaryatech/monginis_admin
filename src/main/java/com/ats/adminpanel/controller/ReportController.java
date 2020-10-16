@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.context.annotation.Scope;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
@@ -43,11 +44,15 @@ import org.springframework.web.servlet.ModelAndView;
 
 import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.DateConvertor;
+import com.ats.adminpanel.commons.ExceUtil;
+import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.GetRegSpCakeOrderForProdApp;
 import com.ats.adminpanel.model.GetSpCakeOrderForProdApp;
+import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.SpCakeWtCount;
 import com.ats.adminpanel.model.franchisee.AllMenuResponse;
+import com.ats.adminpanel.model.salesreport.RouteFrBillDateAnalysis;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -93,9 +98,8 @@ public class ReportController {
 		return model;
 
 	}
-	
-	
-	//-------Anmol 13-7-2019---------------------
+
+	// -------Anmol 13-7-2019---------------------
 	@RequestMapping(value = "/showTSPCakeAlbumOrderForApp", method = RequestMethod.GET)
 	public ModelAndView showTSPCakeAlbumOrderForApp(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView model = new ModelAndView("reports/tspCakeAlbumForAppReport");
@@ -121,9 +125,6 @@ public class ReportController {
 		return model;
 
 	}
-
-	
-	
 
 	List<GetSpCakeOrderForProdApp> getSpCakeOrderForProdAppLsit = new ArrayList<>();
 
@@ -167,10 +168,9 @@ public class ReportController {
 			}
 			ParameterizedTypeReference<List<GetSpCakeOrderForProdApp>> typeRef = new ParameterizedTypeReference<List<GetSpCakeOrderForProdApp>>() {
 			};
-			ResponseEntity<List<GetSpCakeOrderForProdApp>> responseEntity = restTemplate
-					.exchange(Constants.url + "getSpCakeAlbumOrdersForApp", HttpMethod.POST, new HttpEntity<>(map), typeRef);
- 
-			
+			ResponseEntity<List<GetSpCakeOrderForProdApp>> responseEntity = restTemplate.exchange(
+					Constants.url + "getSpCakeAlbumOrdersForApp", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
 			getSpCakeOrderForProdAppLsit = responseEntity.getBody();
 
 			System.out.println("sales List Bill Wise " + spCakeList.toString());
@@ -233,9 +233,8 @@ public class ReportController {
 
 		return getSpCakeOrderForProdAppLsit;
 	}
-	
-	
-	//------------ANMOL 13-7-2019--------------------
+
+	// ------------ANMOL 13-7-2019--------------------
 	@RequestMapping(value = "/getSpCakeAlbumListAjax", method = RequestMethod.GET)
 	public @ResponseBody List<GetSpCakeOrderForProdApp> getSpCakeAlbumListAjax(HttpServletRequest request,
 			HttpServletResponse response) {
@@ -276,8 +275,8 @@ public class ReportController {
 			}
 			ParameterizedTypeReference<List<GetSpCakeOrderForProdApp>> typeRef = new ParameterizedTypeReference<List<GetSpCakeOrderForProdApp>>() {
 			};
-			ResponseEntity<List<GetSpCakeOrderForProdApp>> responseEntity = restTemplate
-					.exchange(Constants.url + "getSpCakeAlbumOrdersForApp", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+			ResponseEntity<List<GetSpCakeOrderForProdApp>> responseEntity = restTemplate.exchange(
+					Constants.url + "getSpCakeAlbumOrdersForApp", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 			getSpCakeOrderForProdAppLsit = responseEntity.getBody();
 
@@ -341,8 +340,6 @@ public class ReportController {
 
 		return getSpCakeOrderForProdAppLsit;
 	}
-
-	
 
 	@RequestMapping(value = "/excelForTspCake/{checkboxes}", method = RequestMethod.GET)
 	@ResponseBody
@@ -865,4 +862,161 @@ public class ReportController {
 		}
 	}
 
+	// Sachin 16-10-2020
+
+	@RequestMapping(value = "/getRouteFrBillDateAnalysReport/{fromDate}/{toDate}", method = RequestMethod.GET)
+	public void getRouteFrBillDateAnalysReport(@PathVariable String fromDate, @PathVariable String toDate,
+			HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		RestTemplate restTemplate = new RestTemplate();
+
+		map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+		map.add("toDate", DateConvertor.convertToYMD(toDate));
+
+		ParameterizedTypeReference<List<RouteFrBillDateAnalysis>> typeRef = new ParameterizedTypeReference<List<RouteFrBillDateAnalysis>>() {
+		};
+		ResponseEntity<List<RouteFrBillDateAnalysis>> responseEntity = restTemplate.exchange(
+				Constants.url + "getRouteFrBillDateAnalysReport", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+		List<RouteFrBillDateAnalysis> dataList = responseEntity.getBody();
+
+		System.out.println("dataList " + dataList.toString());
+		
+		AllRoutesListResponse allRouteListResponse=restTemplate
+				.getForObject(Constants.url+"showRouteList", AllRoutesListResponse.class);
+		
+		List<Route> routeList=new  ArrayList<Route>();
+		routeList=allRouteListResponse.getRoute();
+		
+		
+		SimpleDateFormat dmyDateFmt = new SimpleDateFormat("dd-MM-yyyy");
+		Calendar c = Calendar.getInstance();
+		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+		try {
+		
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+			rowData.add("Route");
+			rowData.add("Date");
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			if(1==2) {
+			for (Date date = dmyDateFmt.parse(fromDate); date.compareTo(dmyDateFmt.parse(toDate)) <= 0;) {
+
+				System.err.println("date " + dmyDateFmt.format(date));
+				
+				for(int i=0;i<routeList.size();i++) {
+					
+					Route route=routeList.get(i);
+					
+					expoExcel = new ExportToExcel();
+
+					rowData = new ArrayList<String>();
+					rowData.add("Route -" + route.getRouteName());
+					rowData.add("Date - " + dmyDateFmt.format(date));
+
+					expoExcel.setRowData(rowData);
+					exportToExcelList.add(expoExcel);
+					
+						for(int j=0;j<dataList.size();j++) {
+							
+							RouteFrBillDateAnalysis  data=dataList.get(j);
+							
+							Integer isRouteMatch=Integer.compare(route.getRouteId(),data.getFrRouteId());
+							
+							if(isRouteMatch.equals(0)) {
+								
+								if(dmyDateFmt.format(date).equalsIgnoreCase(data.getBillDate())) {
+									expoExcel = new ExportToExcel();
+
+									rowData = new ArrayList<String>();
+									rowData.add(data.getFrName());
+									rowData.add(""+data.getGrandTotal());
+
+									expoExcel.setRowData(rowData);
+									exportToExcelList.add(expoExcel);
+								}
+							}//end of if routeId Match
+					}//end of dataList for
+				}//end of route For
+				c.setTime(date);
+				date.setTime(date.getTime() + 1000 * 60 * 60 * 24);
+			}//end of Date for
+			}
+			else {
+				
+				for(int i=0;i<routeList.size();i++) {
+
+				for (Date date = dmyDateFmt.parse(fromDate); date.compareTo(dmyDateFmt.parse(toDate)) <= 0;) {
+
+				//	System.err.println("date " + dmyDateFmt.format(date));
+					
+						
+						Route route=routeList.get(i);
+						
+						expoExcel = new ExportToExcel();
+
+						rowData = new ArrayList<String>();
+						rowData.add("Route -" + route.getRouteName());
+						rowData.add("Date - " + dmyDateFmt.format(date));
+
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
+						
+							for(int j=0;j<dataList.size();j++) {
+								
+								RouteFrBillDateAnalysis  data=dataList.get(j);
+								
+								Integer isRouteMatch=Integer.compare(route.getRouteId(),data.getFrRouteId());
+								
+								if(isRouteMatch.equals(0)) {
+									
+									if(dmyDateFmt.format(date).equalsIgnoreCase(data.getBillDate())) {
+										expoExcel = new ExportToExcel();
+
+										rowData = new ArrayList<String>();
+										rowData.add(data.getFrName());
+										rowData.add(""+data.getGrandTotal());
+
+										expoExcel.setRowData(rowData);
+										exportToExcelList.add(expoExcel);
+									}
+								}//end of if routeId Match
+						}//end of dataList for
+							
+							c.setTime(date);
+							date.setTime(date.getTime() + 1000 * 60 * 60 * 24);
+					}//end of route For
+					
+				}//end of Date for
+				
+			}
+			XSSFWorkbook wb = null;
+			try {
+
+				wb = ExceUtil.createWorkbook(exportToExcelList, "", "Billing Analysis Date-Routewise",
+						" " +" " + " From Date:" + fromDate + "   To Date:" + toDate + "", "",
+						'B');
+
+				ExceUtil.autoSizeColumns(wb, 3);
+				response.setContentType("application/vnd.ms-excel");
+				String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+				response.setHeader("Content-disposition", "attachment; filename=" +"Billing Analysis" + "-" + date + ".xlsx");
+				wb.write(response.getOutputStream());
+
+			} catch (IOException ioe) {
+				throw new RuntimeException("Error writing spreadsheet to output stream");
+			} finally {
+				if (wb != null) {
+					wb.close();
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }
