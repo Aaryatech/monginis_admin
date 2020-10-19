@@ -53,6 +53,7 @@ import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.SpCakeWtCount;
 import com.ats.adminpanel.model.franchisee.AllMenuResponse;
 import com.ats.adminpanel.model.salesreport.RouteFrBillDateAnalysis;
+import com.ats.adminpanel.model.salesreport.SpCakeImageReport;
 import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
@@ -862,161 +863,237 @@ public class ReportController {
 		}
 	}
 
-	// Sachin 16-10-2020
-
-	@RequestMapping(value = "/getRouteFrBillDateAnalysReport/{fromDate}/{toDate}", method = RequestMethod.GET)
-	public void getRouteFrBillDateAnalysReport(@PathVariable String fromDate, @PathVariable String toDate,
-			HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
-
-		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-		RestTemplate restTemplate = new RestTemplate();
-
-		map.add("fromDate", DateConvertor.convertToYMD(fromDate));
-		map.add("toDate", DateConvertor.convertToYMD(toDate));
-
-		ParameterizedTypeReference<List<RouteFrBillDateAnalysis>> typeRef = new ParameterizedTypeReference<List<RouteFrBillDateAnalysis>>() {
-		};
-		ResponseEntity<List<RouteFrBillDateAnalysis>> responseEntity = restTemplate.exchange(
-				Constants.url + "getRouteFrBillDateAnalysReport", HttpMethod.POST, new HttpEntity<>(map), typeRef);
-
-		List<RouteFrBillDateAnalysis> dataList = responseEntity.getBody();
-
-		System.out.println("dataList " + dataList.toString());
-		
-		AllRoutesListResponse allRouteListResponse=restTemplate
-				.getForObject(Constants.url+"showRouteList", AllRoutesListResponse.class);
-		
-		List<Route> routeList=new  ArrayList<Route>();
-		routeList=allRouteListResponse.getRoute();
-		
-		
-		SimpleDateFormat dmyDateFmt = new SimpleDateFormat("dd-MM-yyyy");
-		Calendar c = Calendar.getInstance();
-		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
-
+	// Sachin 19-10-2020 show Page left mapping
+	@RequestMapping(value = "/showRouteFrBillDateAnalysReport", method = RequestMethod.GET)
+	public ModelAndView showRouteFrBillDateAnalysReport(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView model = new ModelAndView("reports/showRoutewiseBillAnalysis");
 		try {
-		
-			ExportToExcel expoExcel = new ExportToExcel();
-			List<String> rowData = new ArrayList<String>();
-			rowData.add("Route");
-			rowData.add("Date");
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			todaysDate = date.format(formatters);
+			
+			model.addObject("fromDate", todaysDate);
+			model.addObject("toDate", todaysDate);
+		} catch (Exception e) {
+			System.out.println("Exc in show Report showRouteFrBillDateAnalysReport  " + e.getMessage());
+			e.printStackTrace();
+		}
+		return model;
+	}
+	
+	// Sachin 16-10-2020 get data and download excel
 
-			expoExcel.setRowData(rowData);
-			exportToExcelList.add(expoExcel);
-			if(1==2) {
-			for (Date date = dmyDateFmt.parse(fromDate); date.compareTo(dmyDateFmt.parse(toDate)) <= 0;) {
+	@RequestMapping(value = "/getRouteFrBillDateAnalysReport", method = RequestMethod.POST)
+	public void getRouteFrBillDateAnalysReport(
+			HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
 
-				System.err.println("date " + dmyDateFmt.format(date));
-				
-				for(int i=0;i<routeList.size();i++) {
-					
-					Route route=routeList.get(i);
-					
-					expoExcel = new ExportToExcel();
+			String fromDate = request.getParameter("fromDate");
+			String toDate = request.getParameter("toDate");
+			
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
 
-					rowData = new ArrayList<String>();
-					rowData.add("Route -" + route.getRouteName());
-					rowData.add("Date - " + dmyDateFmt.format(date));
+			ParameterizedTypeReference<List<RouteFrBillDateAnalysis>> typeRef = new ParameterizedTypeReference<List<RouteFrBillDateAnalysis>>() {
+			};
+			ResponseEntity<List<RouteFrBillDateAnalysis>> responseEntity = restTemplate.exchange(
+					Constants.url + "getRouteFrBillDateAnalysReport", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
-					expoExcel.setRowData(rowData);
-					exportToExcelList.add(expoExcel);
-					
-						for(int j=0;j<dataList.size();j++) {
-							
-							RouteFrBillDateAnalysis  data=dataList.get(j);
-							
-							Integer isRouteMatch=Integer.compare(route.getRouteId(),data.getFrRouteId());
-							
-							if(isRouteMatch.equals(0)) {
-								
-								if(dmyDateFmt.format(date).equalsIgnoreCase(data.getBillDate())) {
-									expoExcel = new ExportToExcel();
+			List<RouteFrBillDateAnalysis> dataList = responseEntity.getBody();
 
-									rowData = new ArrayList<String>();
-									rowData.add(data.getFrName());
-									rowData.add(""+data.getGrandTotal());
+			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
+					AllRoutesListResponse.class);
 
-									expoExcel.setRowData(rowData);
-									exportToExcelList.add(expoExcel);
-								}
-							}//end of if routeId Match
-					}//end of dataList for
-				}//end of route For
-				c.setTime(date);
-				date.setTime(date.getTime() + 1000 * 60 * 60 * 24);
-			}//end of Date for
-			}
-			else {
-				
-				for(int i=0;i<routeList.size();i++) {
+			List<Route> routeList = new ArrayList<Route>();
+			routeList = allRouteListResponse.getRoute();
 
-				for (Date date = dmyDateFmt.parse(fromDate); date.compareTo(dmyDateFmt.parse(toDate)) <= 0;) {
+			SimpleDateFormat dmyDateFmt = new SimpleDateFormat("dd-MM-yyyy");
+			Calendar c = Calendar.getInstance();
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
-				//	System.err.println("date " + dmyDateFmt.format(date));
-					
-						
-						Route route=routeList.get(i);
-						
-						expoExcel = new ExportToExcel();
+			try {
 
-						rowData = new ArrayList<String>();
-						rowData.add("Route -" + route.getRouteName());
-						rowData.add("Date - " + dmyDateFmt.format(date));
+				ExportToExcel expoExcel = new ExportToExcel();
+				List<String> rowData = new ArrayList<String>();
+				rowData.add("Route");
+				rowData.add("Date");
 
-						expoExcel.setRowData(rowData);
-						exportToExcelList.add(expoExcel);
-						
-							for(int j=0;j<dataList.size();j++) {
-								
-								RouteFrBillDateAnalysis  data=dataList.get(j);
-								
-								Integer isRouteMatch=Integer.compare(route.getRouteId(),data.getFrRouteId());
-								
-								if(isRouteMatch.equals(0)) {
-									
-									if(dmyDateFmt.format(date).equalsIgnoreCase(data.getBillDate())) {
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				if (1 == 2) {
+					for (Date date = dmyDateFmt.parse(fromDate); date.compareTo(dmyDateFmt.parse(toDate)) <= 0;) {
+
+						System.err.println("date " + dmyDateFmt.format(date));
+
+						for (int i = 0; i < routeList.size(); i++) {
+
+							Route route = routeList.get(i);
+
+							expoExcel = new ExportToExcel();
+
+							rowData = new ArrayList<String>();
+							rowData.add("Route -" + route.getRouteName());
+							rowData.add("Date - " + dmyDateFmt.format(date));
+
+							expoExcel.setRowData(rowData);
+							exportToExcelList.add(expoExcel);
+
+							for (int j = 0; j < dataList.size(); j++) {
+
+								RouteFrBillDateAnalysis data = dataList.get(j);
+
+								Integer isRouteMatch = Integer.compare(route.getRouteId(), data.getFrRouteId());
+
+								if (isRouteMatch.equals(0)) {
+
+									if (dmyDateFmt.format(date).equalsIgnoreCase(data.getBillDate())) {
 										expoExcel = new ExportToExcel();
 
 										rowData = new ArrayList<String>();
 										rowData.add(data.getFrName());
-										rowData.add(""+data.getGrandTotal());
+										rowData.add("" + data.getGrandTotal());
 
 										expoExcel.setRowData(rowData);
 										exportToExcelList.add(expoExcel);
 									}
-								}//end of if routeId Match
-						}//end of dataList for
-							
+								} // end of if routeId Match
+							} // end of dataList for
+						} // end of route For
+						c.setTime(date);
+						date.setTime(date.getTime() + 1000 * 60 * 60 * 24);
+					} // end of Date for
+				} else {
+
+					for (int i = 0; i < routeList.size(); i++) {
+
+						for (Date date = dmyDateFmt.parse(fromDate); date.compareTo(dmyDateFmt.parse(toDate)) <= 0;) {
+
+							// System.err.println("date " + dmyDateFmt.format(date));
+
+							Route route = routeList.get(i);
+
+							expoExcel = new ExportToExcel();
+
+							rowData = new ArrayList<String>();
+							rowData.add("Route -" + route.getRouteName());
+							rowData.add("Date - " + dmyDateFmt.format(date));
+
+							expoExcel.setRowData(rowData);
+							exportToExcelList.add(expoExcel);
+
+							for (int j = 0; j < dataList.size(); j++) {
+
+								RouteFrBillDateAnalysis data = dataList.get(j);
+
+								Integer isRouteMatch = Integer.compare(route.getRouteId(), data.getFrRouteId());
+
+								if (isRouteMatch.equals(0)) {
+
+									if (dmyDateFmt.format(date).equalsIgnoreCase(data.getBillDate())) {
+										expoExcel = new ExportToExcel();
+
+										rowData = new ArrayList<String>();
+										rowData.add(data.getFrName());
+										rowData.add("" + data.getGrandTotal());
+
+										expoExcel.setRowData(rowData);
+										exportToExcelList.add(expoExcel);
+									}
+								} // end of if routeId Match
+							} // end of dataList for
+
 							c.setTime(date);
 							date.setTime(date.getTime() + 1000 * 60 * 60 * 24);
-					}//end of route For
-					
-				}//end of Date for
-				
-			}
-			XSSFWorkbook wb = null;
-			try {
+						} // end of route For
 
-				wb = ExceUtil.createWorkbook(exportToExcelList, "", "Billing Analysis Date-Routewise",
-						" " +" " + " From Date:" + fromDate + "   To Date:" + toDate + "", "",
-						'B');
+					} // end of Date for
 
-				ExceUtil.autoSizeColumns(wb, 3);
-				response.setContentType("application/vnd.ms-excel");
-				String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
-				response.setHeader("Content-disposition", "attachment; filename=" +"Billing Analysis" + "-" + date + ".xlsx");
-				wb.write(response.getOutputStream());
-
-			} catch (IOException ioe) {
-				throw new RuntimeException("Error writing spreadsheet to output stream");
-			} finally {
-				if (wb != null) {
-					wb.close();
 				}
+				XSSFWorkbook wb = null;
+				try {
+
+					wb = ExceUtil.createWorkbook(exportToExcelList, "", "Billing Analysis Date-Routewise",
+							" " + " " + " From Date:" + fromDate + "   To Date:" + toDate + "", "", 'B');
+
+					ExceUtil.autoSizeColumns(wb, 3);
+					response.setContentType("application/vnd.ms-excel");
+					String date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+					response.setHeader("Content-disposition",
+							"attachment; filename=" + "Billing Analysis" + "-" + date + ".xlsx");
+					wb.write(response.getOutputStream());
+
+				} catch (IOException ioe) {
+					throw new RuntimeException("Error writing spreadsheet to output stream");
+				} finally {
+					if (wb != null) {
+						wb.close();
+					}
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			
 		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+
+	// Sachin 19-10-2020 get Data and show
+	@RequestMapping(value = "/getSpCakeImageReportBetFdTd", method = RequestMethod.POST)
+	public ModelAndView getSpCakeImageReportBetFdTd(HttpServletRequest request, HttpServletResponse response)
+			throws FileNotFoundException {
+		ModelAndView model = new ModelAndView("reports/tspCakeImageReport");
+
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+			String fromDate = request.getParameter("fromDate");
+			String toDate = request.getParameter("toDate");
+
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+
+			ParameterizedTypeReference<List<SpCakeImageReport>> typeRef = new ParameterizedTypeReference<List<SpCakeImageReport>>() {
+			};
+
+			ResponseEntity<List<SpCakeImageReport>> responseEntity = restTemplate.exchange(
+					Constants.url + "getSpCakeImageReportBetFdTd", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			List<SpCakeImageReport> spOrderImgList = responseEntity.getBody();
+
+			model.addObject("spOrderImgList", spOrderImgList);
+
+			model.addObject("fromDate", fromDate);
+			model.addObject("toDate", toDate);
+			
+			model.addObject("custChoiceImgUrl", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
+			model.addObject("spCakeImgUrl", Constants.SP_CAKE_FOLDER);
+
+		} catch (Exception e) {
+			System.err.println("In Exce getSpCakeImageReportBetFdTd " + e.getStackTrace());
+		}
+
+		return model;
+	}
+	// Sachin 19-10-2020 show Page left mapping
+	@RequestMapping(value = "/showSpOrderImages", method = RequestMethod.GET)
+	public ModelAndView showSpOrderImages(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView model = new ModelAndView("reports/tspCakeImageReport");
+		try {
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			todaysDate = date.format(formatters);
+			
+			model.addObject("fromDate", todaysDate);
+			model.addObject("toDate", todaysDate);
+		} catch (Exception e) {
+			System.out.println("Exc in show Report showSpOrderImages  " + e.getMessage());
 			e.printStackTrace();
 		}
+		return model;
 	}
 }
