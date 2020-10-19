@@ -56,7 +56,7 @@
 			<div class="page-title">
 				<div>
 					<h1>
-						<i class="fa fa-file-o"></i>Date wise Route Bill Analysis Report
+						<i class="fa fa-file-o"></i>Date wise Route Bill Analysis Report (Download Excel)
 					</h1>
 					<h4></h4>
 				</div>
@@ -89,6 +89,8 @@
 								<input class="form-control date-picker" id="toDate"
 									name="toDate" required size="30" type="text" value="${toDate}" />
 							</div>
+							
+							
 						</div>
 
 <div class="col-sm-2 col-lg-2 control-label" style="text-align: center;">
