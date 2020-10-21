@@ -35,6 +35,59 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
+			
+			
+							<c:set var="isEdit" value="0">
+					</c:set>
+					<c:set var="isView" value="0">
+					</c:set>
+					<c:set var="isDelete" value="0">
+					</c:set>
+
+					<c:forEach items="${sessionScope.newModuleList}" var="modules">
+						<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+							
+							<c:choose>
+								<c:when test="${subModule.subModuleMapping eq 'addAndShowEvents'}">
+							
+							
+										
+									<c:choose>
+										<c:when test="${subModule.editReject=='visible'}">
+											<c:set var="isEdit" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isEdit" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+									<c:choose>
+										<c:when test="${subModule.view=='visible'}">
+											<c:set var="isView" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isView" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+
+
+									<c:choose>
+										<c:when test="${subModule.deleteRejectApprove=='visible'}">
+											<c:set var="isDelete" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isDelete" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+								</c:when>
+							</c:choose>
+						</c:forEach>
+					</c:forEach>
 
 
 
@@ -100,46 +153,7 @@
 										<div class="clearfix"></div>
 										<div id="table-scroll" class="table-scroll">
 
-											<c:set var="isEdit" value="0">
-											</c:set>
-
-											<c:set var="isDelete" value="0">
-											</c:set>
-
-											<c:forEach items="${sessionScope.newModuleList}"
-												var="modules">
-												<c:forEach items="${modules.subModuleJsonList}"
-													var="subModule">
-													<c:choose>
-														<c:when
-															test="${subModule.subModuleMapping eq 'addAndShowEvents'}">
-													
-													<c:choose>
-																<c:when test="${subModule.editReject=='visible'}">
-																	<c:set var="isEdit" value="1">
-																	</c:set>
-																</c:when>
-																<c:otherwise>
-																	<c:set var="isEdit" value="0">
-																	</c:set>
-																</c:otherwise>
-															</c:choose>
-															<c:choose>
-																<c:when
-																	test="${subModule.deleteRejectApprove=='visible'}">
-																	<c:set var="isDelete" value="1">
-																	</c:set>
-																</c:when>
-																<c:otherwise>
-																	<c:set var="isDelete" value="0">
-																	</c:set>
-																</c:otherwise>
-															</c:choose>
-														</c:when>
-													</c:choose>
-
-												</c:forEach>
-											</c:forEach>
+										
 
 
 

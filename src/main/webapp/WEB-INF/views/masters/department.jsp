@@ -34,6 +34,71 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
+			showAddDepartment
+				<c:set var="isAdd" value="0">
+			</c:set>
+			<c:set var="isEdit" value="0">
+			</c:set>
+			<c:set var="isView" value="0">
+			</c:set>
+			<c:set var="isDelete" value="0">
+			</c:set>
+
+			<c:forEach items="${sessionScope.newModuleList}" var="modules">
+				<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+
+					<c:choose>
+						<c:when test="${subModule.subModuleMapping eq 'showAddDepartment'}">
+							<c:out value="${ subModule}"></c:out>
+							<c:choose>
+								<c:when test="${subModule.editReject=='visible'}">
+									<c:set var="isEdit" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isEdit" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+							<c:choose>
+								<c:when test="${subModule.view=='visible'}">
+									<c:set var="isView" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isView" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+
+							<c:choose>
+								<c:when test="${subModule.deleteRejectApprove=='visible'}">
+									<c:set var="isDelete" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isDelete" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+							<c:choose>
+								<c:when test="${subModule.addApproveConfig=='visible'}">
+									<c:set var="isAdd" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isAdd" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+
+						</c:when>
+					</c:choose>
+				</c:forEach>
+			</c:forEach>
 
 			<!-- BEGIN Main Content -->
 			<div class="row">
@@ -170,12 +235,37 @@
 																	value="Active"></c:out></td>	
 															</c:when>		
 															</c:choose>		
-															<td align="left"><a href="updateDept/${deptList.deptId}"><span
+															<td align="left">
+															<c:choose>
+															<c:when test="${isEdit==1 }">
+																<a href="updateDept/${deptList.deptId}"><span
 														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
-                                                        
+															</c:when>
+															<c:otherwise>
+																<a href="updateDept/${deptList.deptId}" class="disableClick"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
+															
+															</c:otherwise>
+															</c:choose>
+															<c:choose>
+															<c:when test="${isDelete==1 }">
+															
                                                         <a href="deleteDept/${deptList.deptId}"
 													    onClick="return confirm('Are you sure want to delete this record');"><span
-														class="glyphicon glyphicon-remove"></span></a></td>	
+														class="glyphicon glyphicon-remove"></span></a>
+															
+															</c:when>
+															<c:otherwise>
+															
+                                                        <a href="deleteDept/${deptList.deptId}"
+													    onClick="return confirm('Are you sure want to delete this record');" class="disableClick"><span
+														class="glyphicon glyphicon-remove"></span></a>
+															
+															</c:otherwise>
+															</c:choose>
+														
+                                                        
+													</td>	
 														</tr>
 													</c:forEach> 
 												</tbody>

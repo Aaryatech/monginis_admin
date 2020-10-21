@@ -39,6 +39,57 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
+			<c:set var="isEdit" value="0">
+					</c:set>
+					<c:set var="isView" value="0">
+					</c:set>
+					<c:set var="isDelete" value="0">
+					</c:set>
+
+					<c:forEach items="${sessionScope.newModuleList}" var="modules">
+						<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+							
+							<c:choose>
+								<c:when test="${subModule.subModuleMapping eq 'showProdHeader'}">
+										<c:out value="${ subModule}"></c:out>
+													
+									<c:choose>
+										<c:when test="${subModule.editReject=='visible'}">
+											<c:set var="isEdit" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isEdit" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+									<c:choose>
+										<c:when test="${subModule.view=='visible'}">
+											<c:set var="isView" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isView" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+
+
+									<c:choose>
+										<c:when test="${subModule.deleteRejectApprove=='visible'}">
+											<c:set var="isDelete" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isDelete" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+								</c:when>
+							</c:choose>
+						</c:forEach>
+					</c:forEach>
+			
 
 
 
@@ -195,9 +246,21 @@
 													</c:choose>
 
 
-													<td align="left"><a
+													<td align="left">
+													<c:choose>
+													<c:when test="${isEdit==1 }">
+															<a
 														href="${pageContext.request.contextPath}/getProdDetail/${planHeader.productionHeaderId}"><span
-															class="glyphicon glyphicon-info-sign"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+															class="glyphicon glyphicon-info-sign"></span></a>&nbsp;&nbsp;&nbsp;&nb
+													</c:when>
+													<c:otherwise>
+															<a
+														href="${pageContext.request.contextPath}/getProdDetail/${planHeader.productionHeaderId}" class="disableClick"><span
+															class="glyphicon glyphicon-info-sign"></span></a>&nbsp;&nbsp;&nbsp;&nb
+													</c:otherwise>
+													</c:choose>
+													
+												sp;
 
 													</td>
 												</tr>

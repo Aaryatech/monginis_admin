@@ -43,6 +43,61 @@ border:1px solid grey;
 				</div>
 			</div>
 			<!-- END Page Title -->
+			
+			
+			
+						<c:set var="isEdit" value="0">
+					</c:set>
+					<c:set var="isView" value="0">
+					</c:set>
+					<c:set var="isDelete" value="0">
+					</c:set>
+
+					<c:forEach items="${sessionScope.newModuleList}" var="modules">
+						<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+							
+							<c:choose>
+								<c:when test="${subModule.subModuleMapping eq 'showAfeQue'}">
+								
+								<c:out value="${ subModule}"></c:out>
+										
+									<c:choose>
+										<c:when test="${subModule.editReject=='visible'}">
+											<c:set var="isEdit" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isEdit" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+									<c:choose>
+										<c:when test="${subModule.view=='visible'}">
+											<c:set var="isView" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isView" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+
+
+									<c:choose>
+										<c:when test="${subModule.deleteRejectApprove=='visible'}">
+											<c:set var="isDelete" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isDelete" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+								</c:when>
+							</c:choose>
+						</c:forEach>
+					</c:forEach>
+			
 
 			<!-- BEGIN Main Content -->
 			<div class="row">
@@ -167,11 +222,20 @@ border:1px solid grey;
 														<td class="col-md-2"><c:out value="${que.quePoint}" /></td>
 														<td class="col-md-3"><c:out value="${que.queDate}" /></td> --%>
 
-														<td  class="col-md-2" onmouseover="callme()"><a
+														<td  class="col-md-2" onmouseover="callme()">
+														<c:choose>
+														<c:when test="${isDelete==1 }">
+														<a
 															href="${pageContext.request.contextPath}/deleteQuestion/${que.queId}"
 															class="btn bnt-primary" style="color: violet; background-color: amber;"
 															onClick="return confirm('Are you sure want to delete this record');"><span
-																class="glyphicon glyphicon-trash"></span></a></td>
+																class="glyphicon glyphicon-trash"></span></a>
+														
+														</c:when>
+														
+													
+														</c:choose>		
+														</td>
 													</tr>
 												</c:forEach>
 											</tbody>

@@ -24,6 +24,61 @@
 			<!-- END Sidebar Collapse Button -->
 		</div>
 		<!-- END Sidebar -->
+		
+		
+		
+		
+				<c:set var="isEdit" value="0">
+					</c:set>
+					<c:set var="isView" value="0">
+					</c:set>
+					<c:set var="isDelete" value="0">
+					</c:set>
+
+					<c:forEach items="${sessionScope.newModuleList}" var="modules">
+						<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+							
+							<c:choose>
+								<c:when test="${subModule.subModuleMapping eq 'showItemSupList'}">
+							
+										
+									<c:choose>
+										<c:when test="${subModule.editReject=='visible'}">
+											<c:set var="isEdit" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isEdit" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+									<c:choose>
+										<c:when test="${subModule.view=='visible'}">
+											<c:set var="isView" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isView" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+
+
+									<c:choose>
+										<c:when test="${subModule.deleteRejectApprove=='visible'}">
+											<c:set var="isDelete" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isDelete" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+								</c:when>
+							</c:choose>
+						</c:forEach>
+					</c:forEach>
+			
 
 
 		<!-- BEGIN Content -->
@@ -158,9 +213,20 @@
 												<td align="left"><c:out value="YES" /></td>
 												</c:when>
 												</c:choose> --%>
+												<c:choose>
+												<c:when test="${isEdit==1}">
 													<td align="left"><a
 														href="updateItemSup/${itemsList.id}"><span
 															class="glyphicon glyphicon-edit"></span></a></td>
+												</c:when>
+												<c:otherwise>
+												<td align="left"><a
+														href="updateItemSup/${itemsList.id}" class="disableClick"><span
+															class="glyphicon glyphicon-edit"></span></a></td>
+												
+												</c:otherwise>
+												</c:choose>
+												
 												</tr>
 
 											</c:forEach>

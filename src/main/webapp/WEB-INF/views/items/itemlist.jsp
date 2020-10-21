@@ -46,9 +46,10 @@
 
 					<c:forEach items="${sessionScope.newModuleList}" var="modules">
 						<c:forEach items="${modules.subModuleJsonList}" var="subModule">
-
+							
 							<c:choose>
 								<c:when test="${subModule.subModuleMapping eq 'itemList'}">
+						
 
 									<c:choose>
 										<c:when test="${subModule.editReject=='visible'}">

@@ -64,6 +64,59 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
+			<c:set var="isEdit" value="0">
+					</c:set>
+					<c:set var="isView" value="0">
+					</c:set>
+					<c:set var="isDelete" value="0">
+					</c:set>
+
+					<c:forEach items="${sessionScope.newModuleList}" var="modules">
+						<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+							
+							<c:choose>
+								<c:when test="${subModule.subModuleMapping eq 'insertSarvicing'}">
+										
+						
+
+									<c:choose>
+										<c:when test="${subModule.editReject=='visible'}">
+											<c:set var="isEdit" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isEdit" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+									<c:choose>
+										<c:when test="${subModule.view=='visible'}">
+											<c:set var="isView" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isView" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+
+
+									<c:choose>
+										<c:when test="${subModule.deleteRejectApprove=='visible'}">
+											<c:set var="isDelete" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isDelete" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+								</c:when>
+							</c:choose>
+						</c:forEach>
+					</c:forEach>
+			
+			<input type="hidden" id="isEdit" value="${isEdit }">
 
 			<div class="row">
 				<div class="col-md-12">
@@ -638,8 +691,13 @@
 													  		 
 													  		totSparePart=totSparePart+itemList.total;
 													  		}
-														  	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
-														    $('#table_grid tbody').append(tr);
+														  	
+														  	if(document.getElementById("isEdit").value){
+														  		
+														  	 	tr.append($('<td></td>').html('<span class="glyphicon glyphicon-edit" id="edit'+key+'" onclick="edit('+key+');"> </span><span style="visibility: hidden;" class="glyphicon glyphicon-ok" onclick="submit('+key+');" id="ok'+key+'"></span><span class="glyphicon glyphicon-remove"  onclick="del('+key+')" id="del'+key+'"></span>'));
+															    $('#table_grid tbody').append(tr);
+														  	}
+														 
 
 															 
 		 

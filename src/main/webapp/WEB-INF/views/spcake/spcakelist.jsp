@@ -54,7 +54,7 @@
 
 					<c:choose>
 						<c:when test="${subModule.subModuleMapping eq 'showSpecialCake'}">
-
+							
 							<c:choose>
 								<c:when test="${subModule.editReject=='visible'}">
 									<c:set var="isEdit" value="1">

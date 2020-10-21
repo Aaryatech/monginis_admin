@@ -56,6 +56,73 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
+			
+			
+			
+				<c:set var="isAdd" value="0">
+			</c:set>
+			<c:set var="isEdit" value="0">
+			</c:set>
+			<c:set var="isView" value="0">
+			</c:set>
+			<c:set var="isDelete" value="0">
+			</c:set>
+
+			<c:forEach items="${sessionScope.newModuleList}" var="modules">
+				<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+
+					<c:choose>
+						<c:when test="${subModule.subModuleMapping eq 'showRawMaterial'}">
+							
+							<c:choose>
+								<c:when test="${subModule.editReject=='visible'}">
+									<c:set var="isEdit" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isEdit" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+							<c:choose>
+								<c:when test="${subModule.view=='visible'}">
+									<c:set var="isView" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isView" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+
+							<c:choose>
+								<c:when test="${subModule.deleteRejectApprove=='visible'}">
+									<c:set var="isDelete" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isDelete" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+							<c:choose>
+								<c:when test="${subModule.addApproveConfig=='visible'}">
+									<c:set var="isAdd" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isAdd" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+
+						</c:when>
+					</c:choose>
+				</c:forEach>
+			</c:forEach>
 
 
 
@@ -190,15 +257,55 @@
 												
 												
 
-													<td align="left"><a href="updateItem/${itemsList.id}" ><span
+													<td align="left">
+													
+													<c:choose>
+													<c:when test="${isEdit==1 }">
+													
+													<a href="updateItem/${itemsList.id}" ><span
 														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
-                                                     
+													</c:when>
+													<c:otherwise>
+													
+													<a href="updateItem/${itemsList.id}" class="disableClick"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
+													</c:otherwise>
+													</c:choose>
+													<c:choose>
+													<c:when test="${isDelete==1 }">
+													   
 													<a href="${pageContext.request.contextPath}/deleteItem/${itemsList.id}" 
 													onClick="return confirm('Are you sure want to delete this record');"><span
 														class="glyphicon glyphicon-remove"></span></a>
 														
+													</c:when>
+													<c:otherwise>
+													   
+													<a href="${pageContext.request.contextPath}/deleteItem/${itemsList.id}"  class="disableClick"
+													onClick="return confirm('Are you sure want to delete this record');"><span
+														class="glyphicon glyphicon-remove"></span></a>
+														
+													
+													</c:otherwise>
+													
+													</c:choose>
+													
+												<c:choose>
+												<c:when test="${isView==1 }">
+												                                                  
 <a href="${pageContext.request.contextPath}/showRmRateVerification/${grpId}/${itemsList.id}" class="action_btn" >
-						<abbr title="Rate Verification" style="  cursor: default;"><i class="fa fa-list fa-lg"></i></abbr></a></td>
+						<abbr title="Rate Verification" style="  cursor: default;"><i class="fa fa-list fa-lg"></i></abbr></a>
+												</c:when>
+			
+												
+												</c:choose>
+												
+												
+													
+
+						
+						
+						</td>
 											</tr>
 
 										</c:forEach>

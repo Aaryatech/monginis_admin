@@ -36,6 +36,7 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
+			
 
 
 			<c:set var="isEdit" value="0">
@@ -47,7 +48,8 @@
 					<c:choose>
 						<c:when
 							test="${subModule.subModuleMapping eq 'configureFranchiseesList'}">
-
+					
+									
 							<c:choose>
 								<c:when test="${subModule.editReject=='visible'}">
 									<c:set var="isEdit" value="1">

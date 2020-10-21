@@ -50,10 +50,13 @@
 
 			<c:forEach items="${sessionScope.newModuleList}" var="modules">
 				<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+			
+				
 					<c:choose>
 						<c:when
 							test="${subModule.subModuleMapping eq 'listAllFranchisee'}">
-
+									<c:out value="${subModule}"></c:out>
+								
 							<c:choose>
 								<c:when test="${subModule.editReject=='visible'}">
 									<c:set var="isEdit" value="1">
@@ -258,19 +261,23 @@
 															<c:choose>
 																<c:when test="${isEdit==1 and isDelete==1}">
 
-																	<td align="left"><a
+																	<td align="left">
+																	<c:out value="If e1 d1"></c:out>
+																	<a
 																		href="updateFranchisee/${franchiseeList.frId}"><span
 																			class="glyphicon glyphicon-edit"></span></a>&nbsp;
 																			 <%-- <a
 																		href="deleteFranchisee/${franchiseeList.frId}"
 																		onClick="return confirm('Are you sure want to delete this record');"><span
 																			class="glyphicon glyphicon-remove"></span></a> --%>
-																			</td>
+																	</td>
 																</c:when>
 
 																<c:when test="${isEdit==1 and isDelete==0}">
 
-																	<td align="left"><a
+																	<td align="left">
+																		<c:out value="If e1 d0"></c:out>
+																		<a
 																		href="updateFranchisee/${franchiseeList.frId}"><span
 																			class="glyphicon glyphicon-edit"></span></a>&nbsp; <%-- <a
 																		href="deleteFranchisee/${franchiseeList.frId}"
@@ -281,7 +288,9 @@
 
 																<c:when test="${isEdit==0 and isDelete==1}">
 
-																	<td align="left"><a
+																	<td align="left">
+																		<c:out value="If e0 d1"></c:out>
+																		<a
 																		href="updateFranchisee/${franchiseeList.frId}"
 																		class="disableClick"><span
 																			class="glyphicon glyphicon-edit"></span></a>&nbsp;
@@ -295,7 +304,9 @@
 																<c:otherwise>
 
 
-																	<td align="left"><a
+																	<td align="left">
+																		<c:out value="Otherwise"></c:out>
+																	<a
 																		href="updateFranchisee/${franchiseeList.frId}"
 																		class="disableClick"><span
 																			class="glyphicon glyphicon-edit"></span></a>&nbsp; 
@@ -333,7 +344,7 @@
 												<thead>
 													<tr class="bgpink">
 														<th width="138" style="width: 18px" align="left">#</th>
-														<th class="col-md-2">Code1</th>
+														<th class="col-md-2">Code2</th>
 														<th class="col-md-2">Name</th>
 														<th class="col-md-2">Image</th>
 														<th class="col-md-2">Owner</th>
@@ -505,7 +516,7 @@
 												<thead>
 													<tr class="bgpink">
 														<th width="138" style="width: 18px" align="left">#</th>
-														<th class="col-md-2">Code1</th>
+														<th class="col-md-2">Code3</th>
 														<th class="col-md-2">Name</th>
 														<th class="col-md-2">Image</th>
 														<th class="col-md-2">Owner</th>
@@ -676,7 +687,7 @@
 												<thead>
 													<tr class="bgpink">
 														<th width="138" style="width: 18px" align="left">#</th>
-														<th class="col-md-2">Code1</th>
+														<th class="col-md-2">Code4</th>
 														<th class="col-md-2">Name</th>
 														<th class="col-md-2">Image</th>
 														<th class="col-md-2">Owner</th>

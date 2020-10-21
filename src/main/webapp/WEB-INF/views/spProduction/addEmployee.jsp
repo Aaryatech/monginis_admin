@@ -35,6 +35,72 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
+			
+			
+				<c:set var="isAdd" value="0">
+			</c:set>
+			<c:set var="isEdit" value="0">
+			</c:set>
+			<c:set var="isView" value="0">
+			</c:set>
+			<c:set var="isDelete" value="0">
+			</c:set>
+
+			<c:forEach items="${sessionScope.newModuleList}" var="modules">
+				<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+
+					<c:choose>
+						<c:when test="${subModule.subModuleMapping eq 'showAddEmployee'}">
+						
+							<c:choose>
+								<c:when test="${subModule.editReject=='visible'}">
+									<c:set var="isEdit" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isEdit" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+							<c:choose>
+								<c:when test="${subModule.view=='visible'}">
+									<c:set var="isView" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isView" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+
+							<c:choose>
+								<c:when test="${subModule.deleteRejectApprove=='visible'}">
+									<c:set var="isDelete" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isDelete" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+							<c:choose>
+								<c:when test="${subModule.addApproveConfig=='visible'}">
+									<c:set var="isAdd" value="1">
+									</c:set>
+								</c:when>
+								<c:otherwise>
+									<c:set var="isAdd" value="0">
+									</c:set>
+								</c:otherwise>
+							</c:choose>
+
+
+						</c:when>
+					</c:choose>
+				</c:forEach>
+			</c:forEach>
 
 			<!-- BEGIN Main Content -->
 			<div class="row">
@@ -322,12 +388,39 @@
 																	value="YES"></c:out></td>
 															</c:when>
 															</c:choose>		 --%>	
-															<td align="left"><a href="${pageContext.request.contextPath}/updateEmp/${employeeList.empId}"><span
+															<td align="left">
+															
+															<c:choose>
+															<c:when test="${isEdit==1 }">
+																<a href="${pageContext.request.contextPath}/updateEmp/${employeeList.empId}"><span
 														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
-                                                        
+															</c:when>
+															<c:otherwise>
+																<a href="${pageContext.request.contextPath}/updateEmp/${employeeList.empId}" class="disableClick"><span
+														class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;
+															
+															</c:otherwise>
+															</c:choose>
+															<c:choose>
+															<c:when test="${isDelete==1 }">
+															  
                                                         <a href="${pageContext.request.contextPath}/deleteEmp/${employeeList.empId}"
 													    onClick="return confirm('Are you sure want to delete this record');"><span
-														class="glyphicon glyphicon-remove"></span></a></td>	
+														class="glyphicon glyphicon-remove"></span></a>
+															</c:when>
+															<c:otherwise>
+															  
+                                                        <a href="${pageContext.request.contextPath}/deleteEmp/${employeeList.empId}"
+													    onClick="return confirm('Are you sure want to delete this record');" class="disableClick"><span
+														class="glyphicon glyphicon-remove"></span></a>
+															
+															</c:otherwise>
+															</c:choose>
+															
+															
+														
+                                                      
+														</td>	
 														 
 														</tr>
 

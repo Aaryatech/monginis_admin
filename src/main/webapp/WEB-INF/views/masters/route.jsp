@@ -35,6 +35,58 @@
 				</div>
 			</div>
 			<!-- END Page Title -->
+			
+							<c:set var="isEdit" value="0">
+					</c:set>
+					<c:set var="isView" value="0">
+					</c:set>
+					<c:set var="isDelete" value="0">
+					</c:set>
+
+					<c:forEach items="${sessionScope.newModuleList}" var="modules">
+						<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+							
+							<c:choose>
+								<c:when test="${subModule.subModuleMapping eq 'addroute'}">
+								
+							
+										
+									<c:choose>
+										<c:when test="${subModule.editReject=='visible'}">
+											<c:set var="isEdit" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isEdit" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+									<c:choose>
+										<c:when test="${subModule.view=='visible'}">
+											<c:set var="isView" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isView" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+
+
+									<c:choose>
+										<c:when test="${subModule.deleteRejectApprove=='visible'}">
+											<c:set var="isDelete" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isDelete" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+								</c:when>
+							</c:choose>
+						</c:forEach>
+					</c:forEach>
 
 
 
@@ -128,13 +180,35 @@
 																	
 																	<td align="left"><c:out
 																	value="${routeList.routeSeqNo}"></c:out></td>
-															<td align="left"><a
+															<td align="left">
+															<c:choose>
+															<c:when test="${isEdit==1}">
+															<a
 																href="${pageContext.request.contextPath}/updateRoute/${routeList.routeId }"><span
 																	class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
-
+															</c:when>
+															<c:otherwise>
+															<a
+																href="${pageContext.request.contextPath}/updateRoute/${routeList.routeId }" class="disableClick"><span
+																	class="glyphicon glyphicon-edit"></span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+															</c:otherwise>
+															</c:choose>
+															<c:choose>
+															<c:when test="${isDelete==1}">
+																
 																<a href="${pageContext.request.contextPath}/deleteRoute/${routeList.routeId}"
 																onClick="return confirm('Are you sure want to delete this record');"><span
-																	class="glyphicon glyphicon-remove"></span></a></td>
+																	class="glyphicon glyphicon-remove"></span></a>
+															</c:when>
+															<c:otherwise>
+															
+															<a href="${pageContext.request.contextPath}/deleteRoute/${routeList.routeId}"
+																onClick="return confirm('Are you sure want to delete this record');" class="disableClick"><span
+																	class="glyphicon glyphicon-remove"></span></a>
+															</c:otherwise>
+															</c:choose>
+																	
+																	</td>
 														</tr>
 
 													</c:forEach>

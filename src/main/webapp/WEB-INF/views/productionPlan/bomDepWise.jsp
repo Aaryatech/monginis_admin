@@ -51,6 +51,62 @@
 				
 			</div>
 			<!-- END Page Title -->
+			
+			
+			
+			
+			<c:set var="isEdit" value="0">
+					</c:set>
+					<c:set var="isView" value="0">
+					</c:set>
+					<c:set var="isDelete" value="0">
+					</c:set>
+
+					<c:forEach items="${sessionScope.newModuleList}" var="modules">
+						<c:forEach items="${modules.subModuleJsonList}" var="subModule">
+							
+							<c:choose>
+								<c:when test="${subModule.subModuleMapping eq 'getBomListforProduction'}">
+								
+						
+
+									<c:choose>
+										<c:when test="${subModule.editReject=='visible'}">
+											<c:set var="isEdit" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isEdit" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+									<c:choose>
+										<c:when test="${subModule.view=='visible'}">
+											<c:set var="isView" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isView" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+
+
+									<c:choose>
+										<c:when test="${subModule.deleteRejectApprove=='visible'}">
+											<c:set var="isDelete" value="1">
+											</c:set>
+										</c:when>
+										<c:otherwise>
+											<c:set var="isDelete" value="0">
+											</c:set>
+										</c:otherwise>
+									</c:choose>
+								</c:when>
+							</c:choose>
+						</c:forEach>
+					</c:forEach>
+			
 
 			<div class="row">
 				<div class="col-md-12">
@@ -147,8 +203,22 @@
 																</td>
 																
 																
-						<td><a href="${pageContext.request.contextPath}/bomDetailDepWise?reqId=${getbomList.reqId}&fromDept=${fromDept}" class="action_btn" >
-						<abbr title="detailed"><i class="fa fa-list"></i></abbr></a></td>
+						<td>
+						
+						
+						<c:choose>
+						<c:when test="${isView==1 }">
+						<a href="${pageContext.request.contextPath}/bomDetailDepWise?reqId=${getbomList.reqId}&fromDept=${fromDept}" class="action_btn" >
+						<abbr title="detailed"><i class="fa fa-list"></i></abbr>
+						</a>
+						
+						</c:when>
+						</c:choose>
+						
+						
+						
+						
+						</td>
 						
 																</tr>
 												</c:forEach>
