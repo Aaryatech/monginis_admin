@@ -157,6 +157,8 @@ public class AlbumController {
 				 */
 
 				upload.saveUploadedFiles(file1, Constants.ALBUM_IMAGE_TYPE, img1Name);
+				
+				upload.saveUploadedFiles(file1, Constants.ALBUM_NOTIFICATION_IMAGE_TYPE, img1Name);
 
 				System.out.println("upload method called " + file1.toString());
 

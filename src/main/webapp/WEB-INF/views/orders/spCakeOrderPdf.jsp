@@ -61,7 +61,7 @@
   <tr>
     <td  style=" font-size:12px;padding:5px 7px;font-weight:bold;border-bottom:1px solid #000000;">Date of Delivery </td>
     <td style=" font-size:16px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;">${spCakeOrder.spDeliveryDate}</td>
-    <td  style=" font-size:16px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;">Place of Delivery-- ${spCakeOrder.spDeliveryPlace}</td>
+    <td  style=" font-size:16px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;"><div style=" display: flex;"></div><span>Place of Delivery-- ${spCakeOrder.spDeliveryPlace}</span>  -- <span style="font-size: 22px;">${spCakeOrder.frName}</span></td>
   </tr>
 
 <c:set var="from" value="${from+1}"/>
@@ -69,7 +69,7 @@
 <td style=" font-size:12px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;">Album Photo</td>
 <td style="text-align:left; font-size:16px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;">Photo 1 :<img src="${albumUrl}${spCakeOrder.albumPhoto1}" height="60" width="60" style="border:medium;" alt="${noImgUrl}resources/img/No_Image_Available.jpg"></td>
 
-<td  style=" text-align:left;font-size:16px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;">Photo 2 :<img src="${albumUrl}${spCakeOrder.albumPhoto2}" height="60" width="60" alt="${noImgUrl}resources/img/No_Image_Available.jpg"></td>
+<td  style=" text-align:left;font-size:16px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;">Photo 2 :<img src="${albumUrl}${spCakeOrder.albumPhoto2}" height="60" width="60" alt="${noImgUrl}resources/img/No_Image_Available.jpg"  ></td>
 </tr>
 <tr >
 <td style=" font-size:12px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;">Photo</td>
