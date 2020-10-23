@@ -4334,7 +4334,7 @@ public class SalesReportController {
 		rowData.add("Sr.No.");
 		rowData.add("Category Name");
 		rowData.add("Item Name");
-		rowData.add("Base Weight");
+		rowData.add("Actual Weight");
 		rowData.add("Sale Qty");
 		rowData.add("Sale Value");
 
@@ -4485,7 +4485,7 @@ public class SalesReportController {
 							try {
 								for (int s = 0; s < itemSupList.size(); s++) {
 									if (royaltyList.get(i).getId() == itemSupList.get(s).getItemId()) {
-										baseWeight = "" + itemSupList.get(s).getBaseWeight();
+										baseWeight = "" + itemSupList.get(s).getActualWeight();
 										//System.err.println("MATCH ====> " + itemSupList.get(s).getItemId());
 										break;
 									}
