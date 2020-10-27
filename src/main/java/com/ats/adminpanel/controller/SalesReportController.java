@@ -65,6 +65,7 @@ import com.ats.adminpanel.model.DispatchReport;
 import com.ats.adminpanel.model.DispatchReportList;
 import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.ItemWiseGrnGvnReport;
+import com.ats.adminpanel.model.MiniSubCategory;
 import com.ats.adminpanel.model.Orders;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
@@ -76,6 +77,7 @@ import com.ats.adminpanel.model.ggreports.GrnGvnReportByGrnType;
 import com.ats.adminpanel.model.item.AllItemsListResponse;
 import com.ats.adminpanel.model.item.CategoryListResponse;
 import com.ats.adminpanel.model.item.FrItemStockConfigureList;
+import com.ats.adminpanel.model.item.GetItemSup;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.item.MCategoryList;
 import com.ats.adminpanel.model.production.OrderDispatchRepDao;
@@ -1657,17 +1659,17 @@ public class SalesReportController {
 
 			rowData.add("" + grandTot);
 
-			taxableTot =taxableTot+saleList.get(i).getTaxableAmt();
-			cgstTot = cgstTot+saleList.get(i).getCgstSum();
-			sgstTot = sgstTot+saleList.get(i).getSgstSum();
-			igstTot = igstTot+saleList.get(i).getIgstSum();
-			tot = tot+grandTot;
+			taxableTot = taxableTot + saleList.get(i).getTaxableAmt();
+			cgstTot = cgstTot + saleList.get(i).getCgstSum();
+			sgstTot = sgstTot + saleList.get(i).getSgstSum();
+			igstTot = igstTot + saleList.get(i).getIgstSum();
+			tot = tot + grandTot;
 
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
 
 		}
-		
+
 		expoExcel = new ExportToExcel();
 		rowData = new ArrayList<String>();
 
@@ -4154,6 +4156,7 @@ public class SalesReportController {
 		int type = 1;
 		List<String> catList = new ArrayList<>();
 		String frDisplay = "";
+		RestTemplate restTemplate = new RestTemplate();
 
 		try {
 			System.out.println("Inside get Sale Bill Wise");
@@ -4190,7 +4193,7 @@ public class SalesReportController {
 
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
-				RestTemplate restTemplate = new RestTemplate();
+				// RestTemplate restTemplate = new RestTemplate();
 
 				map.add("routeId", routeId);
 
@@ -4223,7 +4226,6 @@ public class SalesReportController {
 			}
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			RestTemplate restTemplate = new RestTemplate();
 
 			// new code
 
@@ -4305,13 +4307,24 @@ public class SalesReportController {
 			}
 			frDisplay = String.join(", ", set);
 
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			System.out.println("get sale Report royaltyList by cat " + e.getMessage());
 			e.printStackTrace();
-
 		}
+
+		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+		map.add("del", 0);
+
+		ParameterizedTypeReference<List<GetItemSup>> typeRef = new ParameterizedTypeReference<List<GetItemSup>>() {
+		};
+
+		ResponseEntity<List<GetItemSup>> responseEntity = restTemplate.exchange(Constants.url + "getAllItemSupData",
+				HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+		List<GetItemSup> itemSupList = responseEntity.getBody();
+
+		//System.err.println("ITEM SUP ----------*********************** > " + itemSupList);
+
 		// exportToExcel
 		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
@@ -4321,6 +4334,7 @@ public class SalesReportController {
 		rowData.add("Sr.No.");
 		rowData.add("Category Name");
 		rowData.add("Item Name");
+		rowData.add("Actual Weight");
 		rowData.add("Sale Qty");
 		rowData.add("Sale Value");
 
@@ -4467,6 +4481,20 @@ public class SalesReportController {
 
 							rowData.add("" + royaltyList.get(i).getItem_name());
 
+							String baseWeight = "";
+							try {
+								for (int s = 0; s < itemSupList.size(); s++) {
+									if (royaltyList.get(i).getId() == itemSupList.get(s).getItemId()) {
+										baseWeight = "" + itemSupList.get(s).getActualWeight();
+										//System.err.println("MATCH ====> " + itemSupList.get(s).getItemId());
+										break;
+									}
+								}
+							} catch (Exception e) {
+								//System.err.println("ERROR -----------------------------> " + e.getMessage());
+							}
+							rowData.add("" + baseWeight);
+
 							rowData.add("" + roundUp(royaltyList.get(i).getBillQty()));
 
 							rowData.add("" + roundUp(billVal));
@@ -4499,13 +4527,13 @@ public class SalesReportController {
 								sumRet = ((grnVal + gvnVal) * 100) / billVal;
 							}
 
-							System.err.println("GRN - " + grnVal);
-							System.err.println("GVN - " + gvnVal);
-							System.err.println("BILL - " + billVal);
+							//System.err.println("GRN - " + grnVal);
+							//System.err.println("GVN - " + gvnVal);
+							//System.err.println("BILL - " + billVal);
 
-							System.err.println("RET GRN - " + grnRet);
-							System.err.println("RET GVN - " + gvnRet);
-							System.err.println("SUM - " + sumRet);
+							//System.err.println("RET GRN - " + grnRet);
+							//System.err.println("RET GVN - " + gvnRet);
+							//System.err.println("SUM - " + sumRet);
 
 							rowData.add("" + grnRet);
 							rowData.add("" + roundUp(gvnRet));
@@ -4553,6 +4581,7 @@ public class SalesReportController {
 				rowData.add("");
 				rowData.add("Total");
 				rowData.add("");
+				rowData.add("");
 
 				rowData.add("" + roundUp(saleQtyCat));
 				rowData.add("" + roundUp(saleValueCat));
@@ -4568,6 +4597,20 @@ public class SalesReportController {
 				float grnRet = (grnValueCat * 100) / saleValueCat;
 				float gvnRet = (gvnValueCat * 100) / saleValueCat;
 				float sumRet = ((grnValueCat + gvnValueCat) * 100) / saleValueCat;
+
+				//System.err.println("************** > " + grnRet);
+
+				if (new Float(grnRet).isNaN()) {
+					grnRet = 0;
+				}
+
+				if (new Float(gvnRet).isNaN()) {
+					gvnRet = 0;
+				}
+
+				if (new Float(sumRet).isNaN()) {
+					sumRet = 0;
+				}
 
 				rowData.add("" + roundUp(grnRet));
 				rowData.add("" + roundUp(gvnRet));
@@ -4585,6 +4628,7 @@ public class SalesReportController {
 
 		rowData.add("");
 		rowData.add("Total");
+		rowData.add("");
 		rowData.add("");
 
 		rowData.add("" + roundUp(saleQty));
@@ -4624,7 +4668,7 @@ public class SalesReportController {
 			searchType = "CRN";
 		}
 
-		System.out.println("exportToExcelList" + exportToExcelList);
+		//System.out.println("exportToExcelList" + exportToExcelList);
 		HttpSession session = request.getSession();
 		session.setAttribute("exportExcelListNew", exportToExcelList);
 		session.setAttribute("excelNameNew", "RoyaltyConsolidatedCatList");
@@ -4632,8 +4676,8 @@ public class SalesReportController {
 				+ "  To Date: " + toDate + "   And Search By: " + searchBy + "  and  " + searchType);
 		session.setAttribute("searchByNew", "Franchisee: " + frDisplay);
 
-		session.setAttribute("mergeUpto1", "$A$1:$Q$1");
-		session.setAttribute("mergeUpto2", "$A$2:$Q$2");
+		session.setAttribute("mergeUpto1", "$A$1:$R$1");
+		session.setAttribute("mergeUpto2", "$A$2:$R$2");
 
 		return royaltyBean;
 
