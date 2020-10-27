@@ -300,7 +300,7 @@
 <td class="col-md-1">
 
 <c:choose>
-<c:when test="">
+<c:when test="${isView==1 }">
 <a href="${pageContext.request.contextPath}/getGateGrnDetail/${grnList.grnGvnHeaderId}"class="btn bnt-primary"> 
 
 <i class="fa fa-list"></i></a>
