@@ -55,7 +55,7 @@
 					<c:choose>
 						<c:when
 							test="${subModule.subModuleMapping eq 'listAllFranchisee'}">
-									<c:out value="${subModule}"></c:out>
+
 								
 							<c:choose>
 								<c:when test="${subModule.editReject=='visible'}">
@@ -262,7 +262,7 @@
 																<c:when test="${isEdit==1 and isDelete==1}">
 
 																	<td align="left">
-																	<c:out value="If e1 d1"></c:out>
+																	
 																	<a
 																		href="updateFranchisee/${franchiseeList.frId}"><span
 																			class="glyphicon glyphicon-edit"></span></a>&nbsp;
@@ -276,7 +276,7 @@
 																<c:when test="${isEdit==1 and isDelete==0}">
 
 																	<td align="left">
-																		<c:out value="If e1 d0"></c:out>
+																		
 																		<a
 																		href="updateFranchisee/${franchiseeList.frId}"><span
 																			class="glyphicon glyphicon-edit"></span></a>&nbsp; <%-- <a
@@ -289,7 +289,7 @@
 																<c:when test="${isEdit==0 and isDelete==1}">
 
 																	<td align="left">
-																		<c:out value="If e0 d1"></c:out>
+																	
 																		<a
 																		href="updateFranchisee/${franchiseeList.frId}"
 																		class="disableClick"><span
@@ -305,7 +305,7 @@
 
 
 																	<td align="left">
-																		<c:out value="Otherwise"></c:out>
+																	
 																	<a
 																		href="updateFranchisee/${franchiseeList.frId}"
 																		class="disableClick"><span
