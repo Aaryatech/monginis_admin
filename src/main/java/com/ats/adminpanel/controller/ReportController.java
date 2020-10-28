@@ -923,7 +923,7 @@ public class ReportController {
 
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
-				if (1 == 2) {
+				if (1 == 1) {
 					for (Date date = dmyDateFmt.parse(fromDate); date.compareTo(dmyDateFmt.parse(toDate)) <= 0;) {
 
 						System.err.println("date " + dmyDateFmt.format(date));
@@ -965,53 +965,59 @@ public class ReportController {
 						c.setTime(date);
 						date.setTime(date.getTime() + 1000 * 60 * 60 * 24);
 					} // end of Date for
-				} else {
-
-					for (int i = 0; i < routeList.size(); i++) {
-
-						for (Date date = dmyDateFmt.parse(fromDate); date.compareTo(dmyDateFmt.parse(toDate)) <= 0;) {
-
-							// System.err.println("date " + dmyDateFmt.format(date));
-
-							Route route = routeList.get(i);
-
-							expoExcel = new ExportToExcel();
-
-							rowData = new ArrayList<String>();
-							rowData.add("Route -" + route.getRouteName());
-							rowData.add("Date - " + dmyDateFmt.format(date));
-
-							expoExcel.setRowData(rowData);
-							exportToExcelList.add(expoExcel);
-
-							for (int j = 0; j < dataList.size(); j++) {
-
-								RouteFrBillDateAnalysis data = dataList.get(j);
-
-								Integer isRouteMatch = Integer.compare(route.getRouteId(), data.getFrRouteId());
-
-								if (isRouteMatch.equals(0)) {
-
-									if (dmyDateFmt.format(date).equalsIgnoreCase(data.getBillDate())) {
-										expoExcel = new ExportToExcel();
-
-										rowData = new ArrayList<String>();
-										rowData.add(data.getFrName());
-										rowData.add("" + data.getGrandTotal());
-
-										expoExcel.setRowData(rowData);
-										exportToExcelList.add(expoExcel);
-									}
-								} // end of if routeId Match
-							} // end of dataList for
-
-							c.setTime(date);
-							date.setTime(date.getTime() + 1000 * 60 * 60 * 24);
-						} // end of route For
-
-					} // end of Date for
-
-				}
+				} 
+				
+				
+//				else {
+//
+//					for (int i = 0; i < routeList.size(); i++) {
+//
+//						for (Date date = dmyDateFmt.parse(fromDate); date.compareTo(dmyDateFmt.parse(toDate)) <= 0;) {
+//
+//							// System.err.println("date " + dmyDateFmt.format(date));
+//
+//							Route route = routeList.get(i);
+//
+//							expoExcel = new ExportToExcel();
+//
+//							rowData = new ArrayList<String>();
+//							rowData.add("Route -" + route.getRouteName());
+//							rowData.add("Date - " + dmyDateFmt.format(date));
+//
+//							expoExcel.setRowData(rowData);
+//							exportToExcelList.add(expoExcel);
+//
+//							for (int j = 0; j < dataList.size(); j++) {
+//
+//								RouteFrBillDateAnalysis data = dataList.get(j);
+//
+//								Integer isRouteMatch = Integer.compare(route.getRouteId(), data.getFrRouteId());
+//
+//								if (isRouteMatch.equals(0)) {
+//
+//									if (dmyDateFmt.format(date).equalsIgnoreCase(data.getBillDate())) {
+//										expoExcel = new ExportToExcel();
+//
+//										rowData = new ArrayList<String>();
+//										rowData.add(data.getFrName());
+//										rowData.add("" + data.getGrandTotal());
+//
+//										expoExcel.setRowData(rowData);
+//										exportToExcelList.add(expoExcel);
+//									}
+//								} // end of if routeId Match
+//							} // end of dataList for
+//
+//							c.setTime(date);
+//							date.setTime(date.getTime() + 1000 * 60 * 60 * 24);
+//						} // end of route For
+//
+//					} // end of Date for
+//
+//				}
+				
+				
+				
 				XSSFWorkbook wb = null;
 				try {
 

@@ -96,6 +96,16 @@
 											</div>
 										</div>
 										
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label" for="fr_name">Franchisee
+												Name (Marathi)</label>
+											<div class="col-sm-6 col-lg-4 controls">
+												<input type="text" name="fr_name_mr"
+													value="${franchiseeList.notShowItems}" id="fr_name_mr"
+													class="form-control" data-rule-required="true" />
+											</div>
+										</div>
+										
                                    <div class="form-group">
 	                             	<label class="col-sm-3 col-lg-2 control-label" for="fr_name">Franchisee
 												Address</label>

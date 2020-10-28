@@ -128,6 +128,16 @@
 													placeholder="Name" required />
 											</div>
 										</div>
+										
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label" for="fr_name">Franchisee
+												Name (Marathi)</label>
+											<div class="col-sm-6 col-lg-4 controls">
+												<input type="text" name="fr_name_mr" id="fr_name_mr"
+													data-rule-required="true" class="form-control"
+													placeholder="Name" required />
+											</div>
+										</div>
 
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label" for="fr_name">Franchisee

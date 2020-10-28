@@ -509,6 +509,8 @@ public class FranchiseeController {
 
 		String frName = request.getParameter("fr_name");
 		System.out.println("1] fr name- " + frName);
+		
+		String frNameMr = request.getParameter("fr_name_mr");
 
 		String frCode = request.getParameter("fr_code");
 		System.out.println("2] Fr code - " + frCode);
@@ -622,6 +624,7 @@ public class FranchiseeController {
 		map.add("frCode", frCode);
 		map.add("frOpeningDate", frOpeningDate);
 		map.add("frName", frName);
+		map.add("frNameMr", frNameMr);
 		map.add("frImage", curTimeStamp + "-" + file.get(0).getOriginalFilename());
 		map.add("frRouteId", frRouteId);
 		map.add("frRateCat", frRateCat);
@@ -648,7 +651,8 @@ public class FranchiseeController {
 		map.add("frTarget", frTarget);
 		map.add("isSameState", isSameState);
 
-		ErrorMessage errorMessage = rest.postForObject(Constants.url + "saveFranchisee", map, ErrorMessage.class);
+		ErrorMessage errorMessage = rest.postForObject(Constants.url + "saveFranchiseeNew", map, ErrorMessage.class);
+		//ErrorMessage errorMessage = rest.postForObject(Constants.url + "saveFranchisee", map, ErrorMessage.class);
 		if (errorMessage.getError()) {
 			return "redirect:/listAllFranchisee";
 		} else {
@@ -1579,6 +1583,8 @@ public class FranchiseeController {
 		try {
 			String frName = request.getParameter("fr_name");
 			System.out.println("18] frName " + frName);
+			
+			String frNameMr = request.getParameter("fr_name_mr");
 
 			String frCode = request.getParameter("fr_code");
 			System.out.println("18] frCode " + frCode);
@@ -1701,6 +1707,7 @@ public class FranchiseeController {
 			map.add("frCode", frCode);
 			map.add("frOpeningDate", frOpeningDate);
 			map.add("frName", frName);
+			map.add("frNameMr", frNameMr);
 			map.add("frImage", frImage);
 			map.add("frRouteId", frRouteId);
 			map.add("frRateCat", frRateCat);
@@ -1726,7 +1733,9 @@ public class FranchiseeController {
 			map.add("frAddress", frAddr);
 			map.add("frTarget", frTarget);
 			map.add("isSameState", isSameState);
-			ErrorMessage errorMessage = rest.postForObject(Constants.url + "updateFranchisee", map, ErrorMessage.class);
+			
+			ErrorMessage errorMessage = rest.postForObject(Constants.url + "updateFranchiseeNew", map, ErrorMessage.class);
+			//ErrorMessage errorMessage = rest.postForObject(Constants.url + "updateFranchisee", map, ErrorMessage.class);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
