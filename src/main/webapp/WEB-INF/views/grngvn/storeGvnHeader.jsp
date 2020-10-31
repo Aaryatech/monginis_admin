@@ -48,10 +48,11 @@
 
 			<c:forEach items="${sessionScope.newModuleList}" var="modules">
 				<c:forEach items="${modules.subModuleJsonList}" var="subModule">
-
+					<c:set var="Mapping" value=""></c:set>
 					<c:choose>
 						<c:when test="${subModule.subModuleMapping eq 'getGvnHeaderForStore'}">
-								<c:out value="${ subModule}"></c:out>
+						
+								<%-- <c:out value="${subModule}"></c:out> --%>
 
 							<c:choose>
 								<c:when test="${subModule.editReject=='visible'}">
@@ -99,6 +100,9 @@
 
 
 						</c:when>
+						<c:otherwise>
+					<%-- 	<c:out value="${ subModule.subModuleMapping}"></c:out> --%>
+						</c:otherwise>
 					</c:choose>
 				</c:forEach>
 			</c:forEach>
@@ -289,14 +293,14 @@
 															</c:choose>
 															<td class="col-md-1">
 															
-															<c:choose>
-																	<c:when test="${isView==1 }">
+															<%-- <c:choose> --%>
+																	<%-- <c:when test="${isView==1 }"> --%>
 																	<a href="${pageContext.request.contextPath}/getStoreGvnDetail/${grnList.grnGvnHeaderId}"class="btn bnt-primary"> <i class="fa fa-list"></i>
 																</a>
 																	
-																	</c:when>
+															<%-- 		</c:when> --%>
 																
-															</c:choose>
+													<%-- 		</c:choose> --%>
 															
 																
 														
