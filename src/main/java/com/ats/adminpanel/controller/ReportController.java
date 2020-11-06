@@ -49,6 +49,7 @@ import com.ats.adminpanel.model.AllRoutesListResponse;
 import com.ats.adminpanel.model.ExportToExcel;
 import com.ats.adminpanel.model.GetRegSpCakeOrderForProdApp;
 import com.ats.adminpanel.model.GetSpCakeOrderForProdApp;
+import com.ats.adminpanel.model.GetSpCkOrderAlbum;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.SpCakeWtCount;
 import com.ats.adminpanel.model.franchisee.AllMenuResponse;
@@ -99,6 +100,11 @@ public class ReportController {
 		return model;
 
 	}
+	
+	
+	
+
+	
 
 	// -------Anmol 13-7-2019---------------------
 	@RequestMapping(value = "/showTSPCakeAlbumOrderForApp", method = RequestMethod.GET)

@@ -45,6 +45,7 @@ public class GetSpCakeOrderForProdApp {
 	private String spEventsName;
 
 	private int isAllocated;
+	private int spOrderNo;
 
 	public int getIsAllocated() {
 		return isAllocated;
@@ -270,6 +271,14 @@ public class GetSpCakeOrderForProdApp {
 		this.spEventsName = spEventsName;
 	}
 
+	public int getSpOrderNo() {
+		return spOrderNo;
+	}
+
+	public void setSpOrderNo(int spOrderNo) {
+		this.spOrderNo = spOrderNo;
+	}
+
 	@Override
 	public String toString() {
 		return "GetSpCakeOrderForProdApp [tSpCakeSupNo=" + tSpCakeSupNo + ", srNo=" + srNo + ", date=" + date
@@ -280,7 +289,7 @@ public class GetSpCakeOrderForProdApp {
 				+ ", spInstructions=" + spInstructions + ", spDeliveryDate=" + spDeliveryDate + ", startTimeStamp="
 				+ startTimeStamp + ", endTimeStamp=" + endTimeStamp + ", orderPhoto=" + orderPhoto + ", orderPhoto2="
 				+ orderPhoto2 + ", isCharUsed=" + isCharUsed + ", spEvents=" + spEvents + ", spEventsName="
-				+ spEventsName + ", isAllocated=" + isAllocated + "]";
+				+ spEventsName + ", isAllocated=" + isAllocated + ", spOrderNo=" + spOrderNo + "]";
 	}
 
 }

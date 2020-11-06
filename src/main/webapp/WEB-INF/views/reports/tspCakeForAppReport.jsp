@@ -9,6 +9,19 @@
 	src="https://www.gstatic.com/charts/loader.js"></script>
  -->
 <jsp:include page="/WEB-INF/views/include/header.jsp"></jsp:include>
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="${pageContext.request.contextPath}/resources/css/tableSearch.css">
+<style type="text/css">
+.table-responsive th {
+	padding: 22px 0px;
+	vertical-align: top;
+	background: #DCDCDC !important;
+	color: #696969 !important;
+}
+</style>
 <body>
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 	<c:url var="getSpCakeList" value="/getSpCakeListAjax"></c:url>
@@ -190,6 +203,7 @@
 											<th>Weight</th>
 											<th>Flavour</th>
 											<th>Delivery At</th>
+											<th>Print</th>
 
 										</tr>
 									</thead>
@@ -203,6 +217,11 @@
 
 									<input type="button" id="expExcel" class="btn btn-primary"
 										value="EXPORT TO Excel" onclick="createExel();">
+
+									<!--  -->
+
+									<input type="button" id="expPdf" class="btn btn-primary"
+										value="PDF" onclick="createPDF();">
 								</div>
 							</div>
 							<div align="center" id="showchart" style="display: none"></div>
@@ -293,6 +312,15 @@
 																	.html(
 																			"<input type='checkbox' name='select_to_print' value="+report.tSpCakeSupNo+">"));
 
+													
+													tr
+													.append($(
+															'<td class="col-sm-1" style="display:none;"></td>')
+															.html(
+																	"<input type='text' id='select_to_print_pdf"+report.tSpCakeSupNo+"' name='select_to_print_pdf"+report.tSpCakeSupNo+"' value="+report.spOrderNo+">"));
+
+													
+													
 													tr
 															.append($(
 																	'<td style="text-align:left;  color:'+colorName+';"></td>')
@@ -341,6 +369,15 @@
 																	.html(
 																			report.spDeliveryPlace));
 
+													var print = '<a href="${pageContext.request.contextPath}/showSpcakeAlbumOrderPdf/'
+														+ report.spOrderNo
+														+ '/'
+														+ index
+														+ '" target="blank"><i class="fa fa-file-pdf-o" style="font-size:18px;"></i></a>';
+
+													tr.append($('<td></td>')
+															.html(print));
+
 													$('#table_grid tbody')
 															.append(tr);
 
@@ -378,7 +415,53 @@
 			}
 
 		}
+
+		function createPDF() {
+			var select_to_print = document.forms[0];
+			
+			//alert(JSON.stringify(select_to_print))
+			//alert("Hii");
+			var txt = "";
+			var i;
+			var flag = 0;
+			var all = 0;
+
+			for (i = 0; i < select_to_print.length; i++) {
+				
+				if (select_to_print[i].checked
+						&& select_to_print[i].value != "on") {
+					//txt = txt + select_to_print_pdf[i].value + ",";
+					
+					if(document.getElementById("select_to_print_pdf"+select_to_print[i].value).value!=null){
+						//alert(i+"  -  "+document.getElementById("select_to_print_pdf"+select_to_print[i].value).value)
+						txt = txt + document.getElementById("select_to_print_pdf"+select_to_print[i].value).value + ",";
+					}
+					
+					
+					flag = 1;
+				}
+				
+			}
+
+			if (flag == 1) {
+
+				//alert(txt);
+				 window
+						.open("${pageContext.request.contextPath}/showSpcakeAlbumOrderPdfListNew/"
+								+ txt); 
+			} else {
+				alert("Please select checkbox ");
+			}
+
+		}
 	</script>
+
+
+
+
+
+
+
 	<!-- 
 	<script type="text/javascript">
 		function createExel() {
