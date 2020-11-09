@@ -1442,6 +1442,43 @@ public class OrderController {
 		return model;
 	}
 
+	// 5-11-2020
+	@RequestMapping(value = "/showSpcakeAlbumOrderPdfListNew/{spOrderNo}", method = RequestMethod.GET)
+	public ModelAndView showSpcakeAlbumOrderPdfListNew(@PathVariable("spOrderNo") String spOrderNo,
+			HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView model = new ModelAndView("orders/spCakeOrderPdf");
+
+		try {
+
+			RestTemplate restTemp = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("spOrderNo", spOrderNo);
+
+			System.err.println("sp order no -------11212113121----> " + spOrderNo);
+
+//		List<GetSpCkOrder> orderListResponse = restTemp.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map,
+//				List.class);
+
+			// Mahendra 30-06-2020
+			List<GetSpCkOrderAlbum> orderListResponse = restTemp
+					.postForObject(Constants.url + "getSpCKAlbumOrderBySpOrderNo", map, List.class);
+
+			System.err.println("res -----------> " + orderListResponse);
+
+			model.addObject("from", 1);
+			System.out.println("SpOrder" + orderListResponse.toString());
+			model.addObject("spCakeOrder", orderListResponse);
+			model.addObject("imgUrl", Constants.SP_CAKE_FOLDER);
+			model.addObject("imgUrl2", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
+			model.addObject("albumUrl", Constants.Album_IMAGE_URL);
+			model.addObject("noImgUrl", Constants.noImg);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return model;
+	}
+
 	@RequestMapping(value = "/showSpcakeOrderPdfInRange/{from}/{to}", method = RequestMethod.GET)
 	public ModelAndView showSpcakeOrderPdfInRange(@PathVariable("from") int from, @PathVariable("to") int to,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -1854,7 +1891,7 @@ public class OrderController {
 		Info info = null;
 		RestTemplate restTemplate = new RestTemplate();
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-		
+
 		try {
 			String itemId = request.getParameter("itemId");
 			String menuId = request.getParameter("item_id_list");
@@ -1864,25 +1901,26 @@ public class OrderController {
 			String prodDate = request.getParameter("prodDate");
 			int routeId = 0;// Integer.parseInt(request.getParameter("route_id"));
 			try {
-				routeId=Integer.parseInt(request.getParameter("route_id"));
-			}catch(Exception e) {}
+				routeId = Integer.parseInt(request.getParameter("route_id"));
+			} catch (Exception e) {
+			}
 
 			menuId = menuId.substring(1, menuId.length() - 1);
 			menuId = menuId.replaceAll("\"", "");
-			//System.out.println("menu Ids New =" + menuId);
+			// System.out.println("menu Ids New =" + menuId);
 
 			frIdString = frIdString.substring(1, frIdString.length() - 1);
 			frIdString = frIdString.replaceAll("\"", "");
-			//System.out.println("frIds  New =" + frIdString);
+			// System.out.println("frIds New =" + frIdString);
 
 			itemId = itemId.substring(1, itemId.length() - 1);
 			itemId = itemId.replaceAll("\"", "");
-			//System.out.println("Item Ids =" + itemId);
+			// System.out.println("Item Ids =" + itemId);
 
 			List<String> franchIds = new ArrayList();
 			franchIds = Arrays.asList(frIdString);
 
-			//System.out.println("fr Id ArrayList " + franchIds.toString());
+			// System.out.println("fr Id ArrayList " + franchIds.toString());
 
 			if (routeId != 0) {
 
@@ -1894,7 +1932,8 @@ public class OrderController {
 
 				List<FrNameIdByRouteId> frNameIdByRouteIdList = frNameId.getFrNameIdByRouteIds();
 
-				//System.out.println("route wise franchisee " + frNameIdByRouteIdList.toString());
+				// System.out.println("route wise franchisee " +
+				// frNameIdByRouteIdList.toString());
 
 				StringBuilder sbForRouteFrId = new StringBuilder();
 				for (int i = 0; i < frNameIdByRouteIdList.size(); i++) {
@@ -1904,37 +1943,37 @@ public class OrderController {
 				}
 				String strFrIdRouteWise = sbForRouteFrId.toString();
 				frIdString = strFrIdRouteWise.substring(0, strFrIdRouteWise.length() - 1);
-				//System.out.println("fr Id Route WISE = " + frIdString);
+				// System.out.println("fr Id Route WISE = " + frIdString);
 
-			}else {
-				if(!frIdString.isEmpty()) {
-					
+			} else {
+				if (!frIdString.isEmpty()) {
+
 					List<Integer> frIds = Stream.of(frIdString.split(",")).map(Integer::parseInt)
 							.collect(Collectors.toList());
-					
-					if(frIds.contains(0)) {
-						
+
+					if (frIds.contains(0)) {
+
 						try {
 							StringBuilder sbForFrId = new StringBuilder();
 							for (int i = 0; i < franchiseeList.size(); i++) {
-									sbForFrId = sbForFrId.append(franchiseeList.get(i).getFrId() + ",");
+								sbForFrId = sbForFrId.append(franchiseeList.get(i).getFrId() + ",");
 							}
 							String strAllFrId = sbForFrId.toString();
 							frIdString = strAllFrId.substring(0, strAllFrId.length() - 1);
 						} catch (NullPointerException e) {
-						} 
+						}
 					}
 				}
-			} 
-			
-			System.err.println("FR IDS --> "+frIdString);
-			System.err.println("PROD DATE --> "+prodDate);
-			System.err.println("DELIVERY DATE --> "+delDate);
-			System.err.println("DATE --> "+date);
-			System.err.println("MENU IDS --> "+menuId);
-			System.err.println("ITEM IDS --> "+itemId);
-			System.err.println("ROUTE ID --> "+routeId);
-			
+			}
+
+			System.err.println("FR IDS --> " + frIdString);
+			System.err.println("PROD DATE --> " + prodDate);
+			System.err.println("DELIVERY DATE --> " + delDate);
+			System.err.println("DATE --> " + date);
+			System.err.println("MENU IDS --> " + menuId);
+			System.err.println("ITEM IDS --> " + itemId);
+			System.err.println("ROUTE ID --> " + routeId);
+
 			map = new LinkedMultiValueMap<String, Object>();
 			map.add("frIds", frIdString);
 			map.add("menuIds", menuId);
