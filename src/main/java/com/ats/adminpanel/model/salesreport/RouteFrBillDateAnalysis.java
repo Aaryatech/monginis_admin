@@ -60,7 +60,7 @@ public class RouteFrBillDateAnalysis {
 		return frCity;
 	}
 	public void setFrCity(String frCity) {
-		this.frCity = frCity;
+		this.frCity = frCity; 
 	}
 	@Override
 	public String toString() {
