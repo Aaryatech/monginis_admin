@@ -872,7 +872,7 @@ public class ReportController {
 			LocalDate date = LocalDate.now(z);
 			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
 			todaysDate = date.format(formatters);
-			
+
 			model.addObject("fromDate", todaysDate);
 			model.addObject("toDate", todaysDate);
 		} catch (Exception e) {
@@ -881,19 +881,19 @@ public class ReportController {
 		}
 		return model;
 	}
-	
+
 	// Sachin 16-10-2020 get data and download excel
 
 	@RequestMapping(value = "/getRouteFrBillDateAnalysReport", method = RequestMethod.POST)
-	public void getRouteFrBillDateAnalysReport(
-			HttpServletRequest request, HttpServletResponse response) throws FileNotFoundException {
+	public void getRouteFrBillDateAnalysReport(HttpServletRequest request, HttpServletResponse response)
+			throws FileNotFoundException {
 		try {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
 
 			String fromDate = request.getParameter("fromDate");
 			String toDate = request.getParameter("toDate");
-			
+
 			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
 			map.add("toDate", DateConvertor.convertToYMD(toDate));
 
@@ -918,56 +918,123 @@ public class ReportController {
 
 				ExportToExcel expoExcel = new ExportToExcel();
 				List<String> rowData = new ArrayList<String>();
-				rowData.add("Route");
 				rowData.add("Date");
-
+				rowData.add("Route Name");
+				rowData.add("Franchise Visited");
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
-				if (1 == 1) {
-					for (Date date = dmyDateFmt.parse(fromDate); date.compareTo(dmyDateFmt.parse(toDate)) <= 0;) {
 
-						System.err.println("date " + dmyDateFmt.format(date));
+				for (Date date = dmyDateFmt.parse(fromDate); date.compareTo(dmyDateFmt.parse(toDate)) <= 0;) {
 
-						for (int i = 0; i < routeList.size(); i++) {
+					for (int i = 0; i < routeList.size(); i++) {
+						rowData = new ArrayList<String>();
+						expoExcel = new ExportToExcel();
 
-							Route route = routeList.get(i);
+						rowData.add("" + dmyDateFmt.format(date));
+						Route route = routeList.get(i);
 
-							expoExcel = new ExportToExcel();
+						rowData.add("" + route.getRouteName());
 
-							rowData = new ArrayList<String>();
-							rowData.add("Route -" + route.getRouteName());
-							rowData.add("Date - " + dmyDateFmt.format(date));
+						for (int j = 0; j < dataList.size(); j++) {
 
-							expoExcel.setRowData(rowData);
-							exportToExcelList.add(expoExcel);
+							RouteFrBillDateAnalysis data = dataList.get(j);
 
-							for (int j = 0; j < dataList.size(); j++) {
+							Integer isRouteMatch = Integer.compare(route.getRouteId(), data.getFrRouteId());
 
-								RouteFrBillDateAnalysis data = dataList.get(j);
+							if (isRouteMatch.equals(0) && date.compareTo(dmyDateFmt.parse(data.getBillDate())) == 0) {
 
-								Integer isRouteMatch = Integer.compare(route.getRouteId(), data.getFrRouteId());
+								rowData.add(data.getFrName() + " - "+data.getFrCity() + " ("+data.getGrandTotal()+")");
 
-								if (isRouteMatch.equals(0)) {
+							} // end of if routeId Match
+						} // end of dataList for
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
+					} // end of route For
 
-									if (dmyDateFmt.format(date).equalsIgnoreCase(data.getBillDate())) {
-										expoExcel = new ExportToExcel();
+					c.setTime(date);
+					date.setTime(date.getTime() + 1000 * 60 * 60 * 24);
+				} // end of Date for
 
-										rowData = new ArrayList<String>();
-										rowData.add(data.getFrName());
-										rowData.add("" + data.getGrandTotal());
+				/*
+				 * for (Date date = dmyDateFmt.parse(fromDate);
+				 * date.compareTo(dmyDateFmt.parse(toDate)) <= 0;) {
+				 * 
+				 * System.err.println("date " + dmyDateFmt.format(date)); rowData = new
+				 * ArrayList<String>(); expoExcel = new ExportToExcel();
+				 * 
+				 * rowData.add("Date - " + dmyDateFmt.format(date));
+				 * 
+				 * expoExcel.setRowData(rowData); // exportToExcelList.add(expoExcel);
+				 * 
+				 * for (int i = 0; i < routeList.size(); i++) {
+				 * 
+				 * Route route = routeList.get(i);
+				 * 
+				 * expoExcel = new ExportToExcel(); rowData = new ArrayList<String>();
+				 * rowData.add("route - " + route.getRouteName());
+				 * expoExcel.setRowData(rowData); // exportToExcelList.add(expoExcel);
+				 * 
+				 * for (int j = 0; j < dataList.size(); j++) {
+				 * 
+				 * RouteFrBillDateAnalysis data = dataList.get(j);
+				 * 
+				 * Integer isRouteMatch = Integer.compare(route.getRouteId(),
+				 * data.getFrRouteId());
+				 * 
+				 * if (isRouteMatch.equals(0)) {
+				 * 
+				 * if (dmyDateFmt.format(date).equalsIgnoreCase(data.getBillDate())) { expoExcel
+				 * = new ExportToExcel();
+				 * 
+				 * // rowData = new ArrayList<String>();
+				 * 
+				 * rowData.add(data.getFrName() + " -" + data.getGrandTotal()); //
+				 * rowData.add("" + data.getGrandTotal()); expoExcel.setRowData(rowData); //
+				 * 
+				 * } } // end of if routeId Match } // end of dataList for
+				 * exportToExcelList.add(expoExcel); } // end of route For
+				 * 
+				 * c.setTime(date); date.setTime(date.getTime() + 1000 * 60 * 60 * 24); } // end
+				 * of Date for
+				 */
+				/*
+				 * if (1 == 1) { for (Date date = dmyDateFmt.parse(fromDate);
+				 * date.compareTo(dmyDateFmt.parse(toDate)) <= 0;) {
+				 * 
+				 * System.err.println("date " + dmyDateFmt.format(date));
+				 * 
+				 * for (int i = 0; i < routeList.size(); i++) {
+				 * 
+				 * Route route = routeList.get(i);
+				 * 
+				 * expoExcel = new ExportToExcel();
+				 * 
+				 * rowData = new ArrayList<String>(); rowData.add("Route -" +
+				 * route.getRouteName()); rowData.add("Date - " + dmyDateFmt.format(date));
+				 * 
+				 * expoExcel.setRowData(rowData); exportToExcelList.add(expoExcel);
+				 * 
+				 * for (int j = 0; j < dataList.size(); j++) {
+				 * 
+				 * RouteFrBillDateAnalysis data = dataList.get(j);
+				 * 
+				 * Integer isRouteMatch = Integer.compare(route.getRouteId(),
+				 * data.getFrRouteId());
+				 * 
+				 * if (isRouteMatch.equals(0)) {
+				 * 
+				 * if (dmyDateFmt.format(date).equalsIgnoreCase(data.getBillDate())) { expoExcel
+				 * = new ExportToExcel();
+				 * 
+				 * rowData = new ArrayList<String>(); rowData.add(data.getFrName());
+				 * rowData.add("" + data.getGrandTotal());
+				 * 
+				 * expoExcel.setRowData(rowData); exportToExcelList.add(expoExcel); } } // end
+				 * of if routeId Match } // end of dataList for } // end of route For
+				 * c.setTime(date); date.setTime(date.getTime() + 1000 * 60 * 60 * 24); } // end
+				 * of Date for }
+				 */
 
-										expoExcel.setRowData(rowData);
-										exportToExcelList.add(expoExcel);
-									}
-								} // end of if routeId Match
-							} // end of dataList for
-						} // end of route For
-						c.setTime(date);
-						date.setTime(date.getTime() + 1000 * 60 * 60 * 24);
-					} // end of Date for
-				} 
-				
-				
 //				else {
 //
 //					for (int i = 0; i < routeList.size(); i++) {
@@ -1015,9 +1082,7 @@ public class ReportController {
 //					} // end of Date for
 //
 //				}
-				
-				
-				
+
 				XSSFWorkbook wb = null;
 				try {
 
@@ -1042,7 +1107,9 @@ public class ReportController {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			// TODO: handle exception
 		}
 	}
@@ -1074,7 +1141,7 @@ public class ReportController {
 
 			model.addObject("fromDate", fromDate);
 			model.addObject("toDate", toDate);
-			
+
 			model.addObject("custChoiceImgUrl", Constants.CUST_CHOICE_PHOTO_CAKE_FOLDER);
 			model.addObject("spCakeImgUrl", Constants.SP_CAKE_FOLDER);
 
@@ -1084,6 +1151,7 @@ public class ReportController {
 
 		return model;
 	}
+
 	// Sachin 19-10-2020 show Page left mapping
 	@RequestMapping(value = "/showSpOrderImages", method = RequestMethod.GET)
 	public ModelAndView showSpOrderImages(HttpServletRequest request, HttpServletResponse response) {
@@ -1093,7 +1161,7 @@ public class ReportController {
 			LocalDate date = LocalDate.now(z);
 			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
 			todaysDate = date.format(formatters);
-			
+
 			model.addObject("fromDate", todaysDate);
 			model.addObject("toDate", todaysDate);
 		} catch (Exception e) {

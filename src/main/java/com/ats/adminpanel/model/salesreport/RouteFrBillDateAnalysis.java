@@ -12,6 +12,7 @@ public class RouteFrBillDateAnalysis {
 	private String billDate;
 	private float grandTotal;
 	
+	private String frCity; //Sachin 09-11-2020
 	
 	public String getUniqueId() {
 		return uniqueId;
@@ -55,11 +56,17 @@ public class RouteFrBillDateAnalysis {
 	public void setGrandTotal(float grandTotal) {
 		this.grandTotal = grandTotal;
 	}
-	
+	public String getFrCity() {
+		return frCity;
+	}
+	public void setFrCity(String frCity) {
+		this.frCity = frCity;
+	}
 	@Override
 	public String toString() {
 		return "RouteFrBillDateAnalysis [uniqueId=" + uniqueId + ", frId=" + frId + ", frName=" + frName + ", frCode="
-				+ frCode + ", frRouteId=" + frRouteId + ", billDate=" + billDate + ", grandTotal=" + grandTotal + "]";
+				+ frCode + ", frRouteId=" + frRouteId + ", billDate=" + billDate + ", grandTotal=" + grandTotal
+				+ ", frCity=" + frCity + "]";
 	}
 }
 
