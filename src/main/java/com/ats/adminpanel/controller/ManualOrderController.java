@@ -309,7 +309,8 @@ public class ManualOrderController {
 				RestTemplate restTemplate = new RestTemplate();
 				if(orderList!=null || !orderList.isEmpty())
 				{
-					orderListResponse = restTemplate.postForObject(Constants.url + "placeOrder", orderList,List.class);
+					//orderListResponse = restTemplate.postForObject(Constants.url + "placeOrder", orderList,List.class);
+					orderListResponse = restTemplate.postForObject(Constants.url + "placeOrderNew", orderList,List.class);
 					orderList=new ArrayList<Orders>();
 		       System.out.println("Place Order Response" + orderListResponse.toString());
 				}
