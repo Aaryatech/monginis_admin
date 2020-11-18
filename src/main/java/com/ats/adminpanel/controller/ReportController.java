@@ -949,7 +949,7 @@ public class ReportController {
 
 							if (isRouteMatch.equals(0) && date.compareTo(dmyDateFmt.parse(data.getBillDate())) == 0) {
 
-								rowData.add(data.getFrName() + " - "+data.getFrCity() + " ("+data.getGrandTotal()+")");
+								rowData.add(data.getFrCity() );
 
 							} // end of if routeId Match
 						} // end of dataList for
