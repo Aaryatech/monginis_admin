@@ -61,7 +61,18 @@
   <tr>
     <td  style=" font-size:12px;padding:5px 7px;font-weight:bold;border-bottom:1px solid #000000;">Date of Delivery </td>
     <td style=" font-size:16px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;">${spCakeOrder.spDeliveryDate}</td>
-    <td  style=" font-size:16px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;"><div style=" display: flex;"></div><span>Place of Delivery-- ${spCakeOrder.spDeliveryPlace}</span>  -- <span style="font-size: 22px;">${spCakeOrder.frNameMr}</span></td>
+    
+    <c:choose>
+    <c:when test="${spCakeOrder.spDeliveryPlace == ''}">
+    <td  style=" font-size:16px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;"><div style=" display: flex;"></div><span>Place of Delivery--</span>  <span style="font-size: 22px;">${spCakeOrder.frNameMr}</span></td>
+    </c:when>
+    
+    <c:otherwise>
+    <td  style=" font-size:16px;padding:5px 7px;font-weight:bold;border-left: 1px solid  #000000;border-bottom:1px solid #000000;"><div style=" display: flex;"></div><span>Place of Delivery-- ${spCakeOrder.spDeliveryPlace}</span></td>
+    </c:otherwise>
+    
+    </c:choose>
+    
   </tr>
 
 <c:set var="from" value="${from+1}"/>

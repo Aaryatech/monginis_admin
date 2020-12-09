@@ -4,18 +4,21 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -57,6 +60,7 @@ import com.ats.adminpanel.model.InauguratedFranchisee;
 import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.ItemIdOnly;
 import com.ats.adminpanel.model.ItemNameId;
+import com.ats.adminpanel.model.MenuOrderLimit;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.SpCakeResponse;
 import com.ats.adminpanel.model.SpDayConfigure;
@@ -81,10 +85,13 @@ import com.ats.adminpanel.model.item.FrItemStockConfigure;
 import com.ats.adminpanel.model.item.Item;
 import com.ats.adminpanel.model.item.ItemSup;
 import com.ats.adminpanel.model.masters.FrListForSupp;
+import com.ats.adminpanel.model.masters.GetSpCkSupplement;
 import com.ats.adminpanel.model.mastexcel.Franchisee;
 import com.ats.adminpanel.model.mastexcel.ItemList;
 import com.ats.adminpanel.model.modules.ErrorMessage;
 import com.ats.adminpanel.model.salesreport.GetBillWiseSpCakeRep;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 @Controller
 public class FranchiseeController {
@@ -178,14 +185,14 @@ public class FranchiseeController {
 
 			mav.addObject("allFranchiseeAndMenuList", franchiseeAndMenuList);
 			mav.addObject("menuList", franchiseeAndMenuList.getAllMenu());
-			
+
 			// get Routes
 			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
-								AllRoutesListResponse.class);
+					AllRoutesListResponse.class);
 
 			List<Route> routeList = new ArrayList<Route>();
 			routeList = allRouteListResponse.getRoute();
-			mav.addObject("routeList",routeList);
+			mav.addObject("routeList", routeList);
 
 		} catch (Exception e) {
 			System.out.println("Franchisee Controller Exception " + e.getMessage());
@@ -199,176 +206,160 @@ public class FranchiseeController {
 	public String updateFrMenuTimeProcess(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = new ModelAndView("franchisee/confFrMenuTime");
 		try {
-		String date[];
-		String day[];
-		String convertedDate = "0";
-		String convertedDays = "0";
-		String fromTime = request.getParameter("frm_time");
+			String date[];
+			String day[];
+			String convertedDate = "0";
+			String convertedDays = "0";
+			String fromTime = request.getParameter("frm_time");
 
-		System.out.println(fromTime);
-		String toTime = request.getParameter("to_time");
+			System.out.println(fromTime);
+			String toTime = request.getParameter("to_time");
 
-		System.out.println(toTime);
+			System.out.println(toTime);
 
-		SimpleDateFormat format = new SimpleDateFormat("hh:mm a"); // if 24 hour format
+			SimpleDateFormat format = new SimpleDateFormat("hh:mm a"); // if 24 hour format
 
-		java.util.Date d1 = (java.util.Date) format.parse(fromTime);
-		java.util.Date d2 = (java.util.Date) format.parse(toTime);
+			java.util.Date d1 = (java.util.Date) format.parse(fromTime);
+			java.util.Date d2 = (java.util.Date) format.parse(toTime);
 
-		java.sql.Time sqlFromTime = new java.sql.Time(d1.getTime());
-		java.sql.Time sqlToTime = new java.sql.Time(d2.getTime());
+			java.sql.Time sqlFromTime = new java.sql.Time(d1.getTime());
+			java.sql.Time sqlToTime = new java.sql.Time(d2.getTime());
 
-		System.out.println("Converted From Time: " + sqlFromTime.toString() + " To time: " + sqlToTime.toString());
+			System.out.println("Converted From Time: " + sqlFromTime.toString() + " To time: " + sqlToTime.toString());
 
-		
-		String frId = new String();
-		String[] frIdList = request.getParameterValues("fr_id");
+			String frId = new String();
+			String[] frIdList = request.getParameterValues("fr_id");
 
-		if (frIdList[0].equalsIgnoreCase("-1")) {
-			System.err.println("fr id contains -1");
-			frId = frId + "," + "0";
-		}
-
-		else {
-			for (int i = 0; i < frIdList.length; i++) {
-
-				System.out.println("fr Id " + frIdList[i]);
-				frId = frId + "," + frIdList[i];
-				System.err.println("Fr Id s " + frId.toString());
+			if (frIdList[0].equalsIgnoreCase("-1")) {
+				System.err.println("fr id contains -1");
+				frId = frId + "," + "0";
 			}
-		}
-		System.out.println("FRID" + frIdList.toString());
-		System.err.println("Fr Id s " + frId.toString());
-		frId = frId.substring(1);
-		int menuId = Integer.parseInt(request.getParameter("menu"));
-		System.out.println("menuId" + menuId);
-		
-		int settingType = Integer.parseInt(request.getParameter("typeselector"));
-		System.out.println("settingType" + settingType);
 
-		if (settingType == 1) {
-			// date ="0";
-			// day = "0";
-		} else if (settingType == 2) {
-			date = request.getParameterValues("date[]");
+			else {
+				for (int i = 0; i < frIdList.length; i++) {
 
-			StringBuilder sbForDate = new StringBuilder();
-
-			for (int i = 0; i < date.length; i++) {
-				sbForDate = sbForDate.append(date[i] + ",");
-
+					System.out.println("fr Id " + frIdList[i]);
+					frId = frId + "," + frIdList[i];
+					System.err.println("Fr Id s " + frId.toString());
+				}
 			}
-			convertedDate = sbForDate.toString();
-			convertedDate = convertedDate.substring(0, convertedDate.length() - 1);
+			System.out.println("FRID" + frIdList.toString());
+			System.err.println("Fr Id s " + frId.toString());
+			frId = frId.substring(1);
+			int menuId = Integer.parseInt(request.getParameter("menu"));
+			System.out.println("menuId" + menuId);
 
-			System.out.println("date" + convertedDate);
-			// day ="0";
-		} else {
-			day = request.getParameterValues("day[]");
+			int settingType = Integer.parseInt(request.getParameter("typeselector"));
+			System.out.println("settingType" + settingType);
 
-			StringBuilder sbForDay = new StringBuilder();
+			if (settingType == 1) {
+				// date ="0";
+				// day = "0";
+			} else if (settingType == 2) {
+				date = request.getParameterValues("date[]");
 
-			for (int i = 0; i < day.length; i++) {
-				sbForDay = sbForDay.append(day[i] + ",");
+				StringBuilder sbForDate = new StringBuilder();
 
+				for (int i = 0; i < date.length; i++) {
+					sbForDate = sbForDate.append(date[i] + ",");
+
+				}
+				convertedDate = sbForDate.toString();
+				convertedDate = convertedDate.substring(0, convertedDate.length() - 1);
+
+				System.out.println("date" + convertedDate);
+				// day ="0";
+			} else {
+				day = request.getParameterValues("day[]");
+
+				StringBuilder sbForDay = new StringBuilder();
+
+				for (int i = 0; i < day.length; i++) {
+					sbForDay = sbForDay.append(day[i] + ",");
+
+				}
+				convertedDays = sbForDay.toString();
+				convertedDays = convertedDays.substring(0, convertedDays.length() - 1);
+				System.out.println("day:" + convertedDays);
+
+				// date ="0";
 			}
-			convertedDays = sbForDay.toString();
-			convertedDays = convertedDays.substring(0, convertedDays.length() - 1);
-			System.out.println("day:" + convertedDays);
 
-			// date ="0";
-		}
+			RestTemplate rest = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			map.add("fromTime", sqlFromTime.toString());
+			map.add("toTime", sqlToTime.toString());
+			map.add("frIdList", frId);
+			map.add("menuId", menuId);
 
+			map.add("settingType", settingType);
+			map.add("date", convertedDate);
+			map.add("day", convertedDays);
 
-		RestTemplate rest = new RestTemplate();
-		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-		map.add("fromTime", sqlFromTime.toString());
-		map.add("toTime", sqlToTime.toString());
-		map.add("frIdList", frId);
-		map.add("menuId", menuId);
-		
-		map.add("settingType", settingType);
-		map.add("date", convertedDate);
-		map.add("day", convertedDays);
-		
-		Info errorMessage = rest.postForObject(Constants.url + "updateFrConfMenuTime", map, Info.class);
+			Info errorMessage = rest.postForObject(Constants.url + "updateFrConfMenuTime", map, Info.class);
 
-		System.err.println("Update Response " + errorMessage.toString());
-		}catch (Exception e) {
+			System.err.println("Update Response " + errorMessage.toString());
+		} catch (Exception e) {
 			// TODO: handle exception
 		}
 		return "redirect:/showUpdateFrMenuTime";
 
 	}
-	
-	/* Previous Method before above changed by Sachin -11-02-2020
-	 //// 23 March updateFrMenuTime
-	@RequestMapping(value = "/updateFrMenuTime")
-	public String updateFrMenuTimeProcess(HttpServletRequest request, HttpServletResponse response) {
-		ModelAndView mav = new ModelAndView("franchisee/confFrMenuTime");
-		String fromTime = request.getParameter("frm_time");
 
-		System.out.println(fromTime);
-		String toTime = request.getParameter("to_time");
-
-		System.out.println(toTime);
-
-		SimpleDateFormat format = new SimpleDateFormat("hh:mm a"); // if 24 hour format
-
-		java.util.Date d1 = null;
-		try {
-			d1 = (java.util.Date) format.parse(fromTime);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		java.util.Date d2 = null;
-		try {
-			d2 = (java.util.Date) format.parse(toTime);
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		java.sql.Time sqlFromTime = new java.sql.Time(d1.getTime());
-		java.sql.Time sqlToTime = new java.sql.Time(d2.getTime());
-
-		System.out.println("Converted From Time: " + sqlFromTime.toString() + " To time: " + sqlToTime.toString());
-		String frId = new String();
-		String[] frIdList = request.getParameterValues("fr_id");
-
-		if (frIdList[0].equalsIgnoreCase("-1")) {
-			System.err.println("fr id contains -1");
-			frId = frId + "," + "0";
-		}
-
-		else {
-			for (int i = 0; i < frIdList.length; i++) {
-
-				System.out.println("fr Id " + frIdList[i]);
-				frId = frId + "," + frIdList[i];
-				System.err.println("Fr Id s " + frId.toString());
-			}
-		}
-		System.out.println("FRID" + frIdList.toString());
-		System.err.println("Fr Id s " + frId.toString());
-		frId = frId.substring(1);
-		int menuId = Integer.parseInt(request.getParameter("menu"));
-		System.out.println("menuId" + menuId);
-
-		RestTemplate rest = new RestTemplate();
-		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-		map.add("fromTime", sqlFromTime.toString());
-		map.add("toTime", sqlToTime.toString());
-		map.add("frIdList", frId);
-		map.add("menuId", menuId);
-
-		Info errorMessage = rest.postForObject(Constants.url + "updateFrConfMenuTime", map, Info.class);
-
-		System.err.println("Update Response " + errorMessage.toString());
-		return "redirect:/showUpdateFrMenuTime";
-
-	}
+	/*
+	 * Previous Method before above changed by Sachin -11-02-2020 //// 23 March
+	 * updateFrMenuTime
+	 * 
+	 * @RequestMapping(value = "/updateFrMenuTime") public String
+	 * updateFrMenuTimeProcess(HttpServletRequest request, HttpServletResponse
+	 * response) { ModelAndView mav = new ModelAndView("franchisee/confFrMenuTime");
+	 * String fromTime = request.getParameter("frm_time");
+	 * 
+	 * System.out.println(fromTime); String toTime =
+	 * request.getParameter("to_time");
+	 * 
+	 * System.out.println(toTime);
+	 * 
+	 * SimpleDateFormat format = new SimpleDateFormat("hh:mm a"); // if 24 hour
+	 * format
+	 * 
+	 * java.util.Date d1 = null; try { d1 = (java.util.Date) format.parse(fromTime);
+	 * } catch (ParseException e) { // TODO Auto-generated catch block
+	 * e.printStackTrace(); } java.util.Date d2 = null; try { d2 = (java.util.Date)
+	 * format.parse(toTime); } catch (ParseException e) { // TODO Auto-generated
+	 * catch block e.printStackTrace(); }
+	 * 
+	 * java.sql.Time sqlFromTime = new java.sql.Time(d1.getTime()); java.sql.Time
+	 * sqlToTime = new java.sql.Time(d2.getTime());
+	 * 
+	 * System.out.println("Converted From Time: " + sqlFromTime.toString() +
+	 * " To time: " + sqlToTime.toString()); String frId = new String(); String[]
+	 * frIdList = request.getParameterValues("fr_id");
+	 * 
+	 * if (frIdList[0].equalsIgnoreCase("-1")) {
+	 * System.err.println("fr id contains -1"); frId = frId + "," + "0"; }
+	 * 
+	 * else { for (int i = 0; i < frIdList.length; i++) {
+	 * 
+	 * System.out.println("fr Id " + frIdList[i]); frId = frId + "," + frIdList[i];
+	 * System.err.println("Fr Id s " + frId.toString()); } }
+	 * System.out.println("FRID" + frIdList.toString());
+	 * System.err.println("Fr Id s " + frId.toString()); frId = frId.substring(1);
+	 * int menuId = Integer.parseInt(request.getParameter("menu"));
+	 * System.out.println("menuId" + menuId);
+	 * 
+	 * RestTemplate rest = new RestTemplate(); MultiValueMap<String, Object> map =
+	 * new LinkedMultiValueMap<String, Object>(); map.add("fromTime",
+	 * sqlFromTime.toString()); map.add("toTime", sqlToTime.toString());
+	 * map.add("frIdList", frId); map.add("menuId", menuId);
+	 * 
+	 * Info errorMessage = rest.postForObject(Constants.url +
+	 * "updateFrConfMenuTime", map, Info.class);
+	 * 
+	 * System.err.println("Update Response " + errorMessage.toString()); return
+	 * "redirect:/showUpdateFrMenuTime";
+	 * 
+	 * }
 	 */
 
 	// -------------------------CONFIGURE FRANCHISEE FORM
@@ -509,7 +500,7 @@ public class FranchiseeController {
 
 		String frName = request.getParameter("fr_name");
 		System.out.println("1] fr name- " + frName);
-		
+
 		String frNameMr = request.getParameter("fr_name_mr");
 
 		String frCode = request.getParameter("fr_code");
@@ -652,7 +643,8 @@ public class FranchiseeController {
 		map.add("isSameState", isSameState);
 
 		ErrorMessage errorMessage = rest.postForObject(Constants.url + "saveFranchiseeNew", map, ErrorMessage.class);
-		//ErrorMessage errorMessage = rest.postForObject(Constants.url + "saveFranchisee", map, ErrorMessage.class);
+		// ErrorMessage errorMessage = rest.postForObject(Constants.url +
+		// "saveFranchisee", map, ErrorMessage.class);
 		if (errorMessage.getError()) {
 			return "redirect:/listAllFranchisee";
 		} else {
@@ -942,7 +934,6 @@ public class FranchiseeController {
 	public ModelAndView updateFranchiseeConf(@PathVariable int settingId) {
 
 		ModelAndView model = new ModelAndView("franchisee/editConfigureFr");
-		
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
@@ -1043,9 +1034,11 @@ public class FranchiseeController {
 
 					model.addObject("remItems", tempAllSpCkList);
 					model.addObject("catId", menuList.get(i).getMainCatId());
-					
-					System.err.println("ALBUM ___________FR CONF-----------------------------*****************************-------- "+selectedSpCk);
-					
+
+					System.err.println(
+							"ALBUM ___________FR CONF-----------------------------*****************************-------- "
+									+ selectedSpCk);
+
 				} else if (menuList.get(i).getMainCatId() == 5) {
 
 					System.err.println("MENU--------------------------------------------------------------------- 5");
@@ -1321,14 +1314,15 @@ public class FranchiseeController {
 				System.out.println("spCommonConf" + commonConf.toString());
 			}
 
-		/*	for (Album albumCake : albumCakeList) {
-
-				CommonConf commonConf = new CommonConf();
-				commonConf.setId(albumCake.getSpId());
-				commonConf.setName(albumCake.getAlbumCode() + "-" + albumCake.getAlbumName());
-				commonConfList.add(commonConf);
-				System.out.println("spCommonConf" + commonConf.toString());
-			}*/
+			/*
+			 * for (Album albumCake : albumCakeList) {
+			 * 
+			 * CommonConf commonConf = new CommonConf();
+			 * commonConf.setId(albumCake.getSpId());
+			 * commonConf.setName(albumCake.getAlbumCode() + "-" +
+			 * albumCake.getAlbumName()); commonConfList.add(commonConf);
+			 * System.out.println("spCommonConf" + commonConf.toString()); }
+			 */
 
 			System.out.println("------------------------");
 		} else if (selectedCatId == 5) {
@@ -1583,7 +1577,7 @@ public class FranchiseeController {
 		try {
 			String frName = request.getParameter("fr_name");
 			System.out.println("18] frName " + frName);
-			
+
 			String frNameMr = request.getParameter("fr_name_mr");
 
 			String frCode = request.getParameter("fr_code");
@@ -1733,9 +1727,11 @@ public class FranchiseeController {
 			map.add("frAddress", frAddr);
 			map.add("frTarget", frTarget);
 			map.add("isSameState", isSameState);
-			
-			ErrorMessage errorMessage = rest.postForObject(Constants.url + "updateFranchiseeNew", map, ErrorMessage.class);
-			//ErrorMessage errorMessage = rest.postForObject(Constants.url + "updateFranchisee", map, ErrorMessage.class);
+
+			ErrorMessage errorMessage = rest.postForObject(Constants.url + "updateFranchiseeNew", map,
+					ErrorMessage.class);
+			// ErrorMessage errorMessage = rest.postForObject(Constants.url +
+			// "updateFranchisee", map, ErrorMessage.class);
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
@@ -2580,17 +2576,17 @@ public class FranchiseeController {
 			map.add("frIdList", frIdList);
 			map.add("menuId", menuId);
 			map.add("catId", selectedCatId);
-			
-			String 	addorremove=request.getParameter("addorremove");
-			
-			if(addorremove.equals("1")) {
-		
-			Info errorMessage = rest.postForObject(Constants.url + "updateConfiguredItems", map, Info.class);
-			if (errorMessage.getError() == false) {
-				System.err.println("stock");
-			}
 
-			}else {
+			String addorremove = request.getParameter("addorremove");
+
+			if (addorremove.equals("1")) {
+
+				Info errorMessage = rest.postForObject(Constants.url + "updateConfiguredItems", map, Info.class);
+				if (errorMessage.getError() == false) {
+					System.err.println("stock");
+				}
+
+			} else {
 				Info errorMessage = rest.postForObject(Constants.url + "updateConfiguredItemsRemove", map, Info.class);
 				if (errorMessage.getError() == false) {
 					System.err.println("stock");
@@ -2598,7 +2594,6 @@ public class FranchiseeController {
 
 			}
 
-			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -2770,10 +2765,12 @@ public class FranchiseeController {
 		return itemList;
 
 	}
+
 	/************************************************************************/
-	//Mahendra
-	//01-01-2020
+	// Mahendra
+	// 01-01-2020
 	List<InauguratedFranchisee> franchisee = null;
+
 	@RequestMapping(value = "getInauguratedFranchisee", method = RequestMethod.GET)
 	public ModelAndView getInauguratedFranchisee(HttpServletRequest request, HttpServletResponse response) {
 		ModelAndView mav = null;
@@ -2781,13 +2778,13 @@ public class FranchiseeController {
 			mav = new ModelAndView("franchisee/inaguratedFranchiseeList");
 			RestTemplate restTemplate = new RestTemplate();
 			InauguratedFranchisee[] frListArr = restTemplate.getForObject(Constants.url + "getAllFranchiseeByOpnDate",
-					InauguratedFranchisee[].class);	
+					InauguratedFranchisee[].class);
 
 			franchisee = new ArrayList<InauguratedFranchisee>(Arrays.asList(frListArr));
 			logger.info("Franchisee List:" + franchisee.toString());
 			mav.addObject("franchisee", franchisee);
-			
-			// exportToExcel		
+
+			// exportToExcel
 			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
 			ExportToExcel expoExcel = new ExportToExcel();
@@ -2804,7 +2801,7 @@ public class FranchiseeController {
 
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
-			
+
 			for (int i = 0; i < franchisee.size(); i++) {
 				expoExcel = new ExportToExcel();
 				rowData = new ArrayList<String>();
@@ -2825,27 +2822,28 @@ public class FranchiseeController {
 			HttpSession session = request.getSession();
 			session.setAttribute("exportExcelList", exportToExcelList);
 			session.setAttribute("excelName", "franchisee");
-		}catch(Exception e) {
-		
+		} catch (Exception e) {
+
 			logger.info("Exception in getInauguratedFranchisee" + e.getMessage());
 		}
 		return mav;
 	}
-	
+
 	/**************************************************************/
-	//listAllFranchisee
-	@RequestMapping(value = "/getFranchiseeListByStatus", method=RequestMethod.GET )
-	public @ResponseBody FrRoutListBean getFranchiseeListByStatus(HttpServletRequest request, HttpServletResponse response) {
+	// listAllFranchisee
+	@RequestMapping(value = "/getFranchiseeListByStatus", method = RequestMethod.GET)
+	public @ResponseBody FrRoutListBean getFranchiseeListByStatus(HttpServletRequest request,
+			HttpServletResponse response) {
 		RestTemplate rest = new RestTemplate();
-		
+
 		FrRoutListBean frRoute = new FrRoutListBean();
 		try {
 			int status = Integer.parseInt(request.getParameter("status"));
 			logger.info("Status is----------" + status);
-			
+
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
 			map.add("status", status);
-			FranchiseeList[] frArr = rest.postForObject(Constants.url + "getAllFranchiseeByStatus", map, 
+			FranchiseeList[] frArr = rest.postForObject(Constants.url + "getAllFranchiseeByStatus", map,
 					FranchiseeList[].class);
 			List<FranchiseeList> frList = new ArrayList<FranchiseeList>(Arrays.asList(frArr));
 			/*
@@ -2853,106 +2851,100 @@ public class FranchiseeController {
 			 * "getAllFranchiseeByStatus", map, AllFranchiseeList.class);
 			 */
 			System.err.println(frList);
-			
-			Route[] routeArr = rest.getForObject(Constants.url + "showFrRouteList",
-					Route[].class);
+
+			Route[] routeArr = rest.getForObject(Constants.url + "showFrRouteList", Route[].class);
 			List<Route> route = new ArrayList<Route>(Arrays.asList(routeArr));
 
-			
-			
-			
 			frRoute.setFr(frList);
 			frRoute.setRoute(route);
-			
+
 			logger.info("FrRoutListBean ---------" + frRoute);
-		}catch (Exception e) {
+		} catch (Exception e) {
 			logger.info("Exception in getFranchiseeListByStatus" + e.getMessage());
 		}
 		return frRoute;
-		
+
 	}
-	
+
 	/**********************************************************************************/
-	//mahendra 29-02-2020
-	
-		@RequestMapping(value = "/getSpCakeBillWiseReport", method = RequestMethod.GET)//getspCakeReport
-		public ModelAndView getspCakeReport(HttpServletRequest request, HttpServletResponse response) {
-			ModelAndView mav = null;
-			List<GetBillWiseSpCakeRep> spCakeList = new ArrayList<GetBillWiseSpCakeRep>();
-			
+	// mahendra 29-02-2020
+
+	@RequestMapping(value = "/getSpCakeBillWiseReport", method = RequestMethod.GET) // getspCakeReport
+	public ModelAndView getspCakeReport(HttpServletRequest request, HttpServletResponse response) {
+		ModelAndView mav = null;
+		List<GetBillWiseSpCakeRep> spCakeList = new ArrayList<GetBillWiseSpCakeRep>();
+
+		try {
+			mav = new ModelAndView("franchisee/spCakeBillWiseRep");
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
+			allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+			mav.addObject("frList", allFrIdNameList.getFrIdNamesList());
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			String result = "";
+
+			String fromDate = request.getParameter("fromDate");
+			String toDate = request.getParameter("toDate");
+			String[] frIdString = request.getParameterValues("fr_id_list");
+			int isBill = 0;
 			try {
-				mav = new ModelAndView("franchisee/spCakeBillWiseRep");
-				
-			
-				
-				RestTemplate restTemplate = new RestTemplate();
-				
-				AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
-				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
-				mav.addObject("frList", allFrIdNameList.getFrIdNamesList());
-				
-				MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
-				String result = ""; 
-				
-				String fromDate = request.getParameter("fromDate");
-				String toDate = request.getParameter("toDate");				
-				String[] frIdString =  request.getParameterValues("fr_id_list");
-				int isBill = 0;
-			try {
-					isBill = Integer.parseInt(request.getParameter("isBill"));
-	
-					StringBuilder sb = new StringBuilder();
-	
-					if (frIdString.length > 0) {
-	
-						for (String s : frIdString) {
-							sb.append(s).append(",");
-						}
+				isBill = Integer.parseInt(request.getParameter("isBill"));
+
+				StringBuilder sb = new StringBuilder();
+
+				if (frIdString.length > 0) {
+
+					for (String s : frIdString) {
+						sb.append(s).append(",");
 					}
-	
-					result = sb.deleteCharAt(sb.length() - 1).toString();
-				}catch (NumberFormatException e) {
-					e.getMessage();
-					isBill = 0;
 				}
-				System.err.println("frId-------" + result);
-				System.err.println("Dates ----------"+fromDate+" "+toDate+" "+isBill);
-				List<String> franchIds = new ArrayList();
 
-				franchIds = Arrays.asList(frIdString);
-				if (franchIds.contains("-1")) {
-					map.add("frIdList", -1);
+				result = sb.deleteCharAt(sb.length() - 1).toString();
+			} catch (NumberFormatException e) {
+				e.getMessage();
+				isBill = 0;
+			}
+			System.err.println("frId-------" + result);
+			System.err.println("Dates ----------" + fromDate + " " + toDate + " " + isBill);
+			List<String> franchIds = new ArrayList();
 
-				} else {
+			franchIds = Arrays.asList(frIdString);
+			if (franchIds.contains("-1")) {
+				map.add("frIdList", -1);
 
-					map.add("frIdList", result);
-				}
-				System.err.println("frId string " + frIdString.toString());
-				map.add("isBill", isBill);
-				map.add("fromDate", DateConvertor.convertToYMD(fromDate));
-				map.add("toDate", DateConvertor.convertToYMD(toDate));
-				GetBillWiseSpCakeRep[] spArr = restTemplate.postForObject(Constants.url + "getSpCakeRepBillWise",map,
-						GetBillWiseSpCakeRep[].class);	
+			} else {
 
-				spCakeList = new ArrayList<GetBillWiseSpCakeRep>(Arrays.asList(spArr));
-				logger.info("SpCake List Cat 5-----------:" + spCakeList.toString());
-				mav.addObject("spCakeList", spCakeList);				
-				
-				mav.addObject("fromDate", fromDate);
-				mav.addObject("toDate", toDate);
-				mav.addObject("isBillSel", isBill);
+				map.add("frIdList", result);
+			}
+			System.err.println("frId string " + frIdString.toString());
+			map.add("isBill", isBill);
+			map.add("fromDate", DateConvertor.convertToYMD(fromDate));
+			map.add("toDate", DateConvertor.convertToYMD(toDate));
+			GetBillWiseSpCakeRep[] spArr = restTemplate.postForObject(Constants.url + "getSpCakeRepBillWise", map,
+					GetBillWiseSpCakeRep[].class);
+
+			spCakeList = new ArrayList<GetBillWiseSpCakeRep>(Arrays.asList(spArr));
+			logger.info("SpCake List Cat 5-----------:" + spCakeList.toString());
+			mav.addObject("spCakeList", spCakeList);
+
+			mav.addObject("fromDate", fromDate);
+			mav.addObject("toDate", toDate);
+			mav.addObject("isBillSel", isBill);
 			/*
 			 * List<Character> selIds = new ArrayList<>(); for (char str :
 			 * result.toCharArray()) {
 			 * 
 			 * selIds.add(str); } System.out.println("Ids List---------------"+selIds);
 			 */
-				mav.addObject("selIds", frIdString);
-				List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+			mav.addObject("selIds", frIdString);
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
-				ExportToExcel expoExcel = new ExportToExcel();
-				List<String> rowData = new ArrayList<String>();
-				if(isBill==0) {
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+			if (isBill == 0) {
 				rowData.add("Sr. No.");
 				rowData.add("Franchise");
 				rowData.add("Item Name");
@@ -2964,7 +2956,7 @@ public class FranchiseeController {
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
 				float grandTotal = 0;
-				List<Integer> frIdList = new  ArrayList<Integer>();
+				List<Integer> frIdList = new ArrayList<Integer>();
 				for (int x = 0; x < spCakeList.size(); x++) {
 					frIdList.add(spCakeList.get(x).getFrId());
 				}
@@ -2973,57 +2965,57 @@ public class FranchiseeController {
 				frIdList.clear();
 				frIdList.addAll(tempFrId);
 				for (int j = 0; j < allFrIdNameList.getFrIdNamesList().size(); j++) {
-					
+
 					float frTotal = 0;
-					
-					int cnt=1;
-					if(frIdList.contains(allFrIdNameList.getFrIdNamesList().get(j).getFrId())) {
-					grandTotal = 0;
-					expoExcel = new ExportToExcel();
-					rowData = new ArrayList<String>();
-					rowData.add("");
-					rowData.add("" + allFrIdNameList.getFrIdNamesList().get(j).getFrName());// Franchisee Name
-					rowData.add("");
-					rowData.add("");
-					rowData.add("");
-					rowData.add("");
-					rowData.add("");
-					expoExcel.setRowData(rowData);
-					exportToExcelList.add(expoExcel);
-					
-					for (int i = 0; i < spCakeList.size(); i++) {
-						if(spCakeList.get(i).getFrId()==allFrIdNameList.getFrIdNamesList().get(j).getFrId()) {
-						
+
+					int cnt = 1;
+					if (frIdList.contains(allFrIdNameList.getFrIdNamesList().get(j).getFrId())) {
+						grandTotal = 0;
 						expoExcel = new ExportToExcel();
 						rowData = new ArrayList<String>();
-	
-						rowData.add("" + (cnt));		
 						rowData.add("");
-						rowData.add(spCakeList.get(i).getItemName());
-						rowData.add(spCakeList.get(i).getInvoiceNo());
-						rowData.add(spCakeList.get(i).getBillDate());
-						rowData.add("" + spCakeList.get(i).getQty());
-						rowData.add("" + spCakeList.get(i).getGrandTotal());	
-						
-						frTotal = frTotal+spCakeList.get(i).getGrandTotal();
+						rowData.add("" + allFrIdNameList.getFrIdNamesList().get(j).getFrName());// Franchisee Name
+						rowData.add("");
+						rowData.add("");
+						rowData.add("");
+						rowData.add("");
+						rowData.add("");
 						expoExcel.setRowData(rowData);
 						exportToExcelList.add(expoExcel);
-						cnt = cnt+1;
-						}						
-						grandTotal = grandTotal + spCakeList.get(i).getGrandTotal();						
-					}
-					expoExcel = new ExportToExcel();
-					rowData = new ArrayList<String>();
-					rowData.add("" + "Total");
-					rowData.add("");
-					rowData.add("");
-					rowData.add("");
-					rowData.add("");
-					rowData.add("");
-					rowData.add("" + frTotal);
-					expoExcel.setRowData(rowData);
-					exportToExcelList.add(expoExcel);
-				
+
+						for (int i = 0; i < spCakeList.size(); i++) {
+							if (spCakeList.get(i).getFrId() == allFrIdNameList.getFrIdNamesList().get(j).getFrId()) {
+
+								expoExcel = new ExportToExcel();
+								rowData = new ArrayList<String>();
+
+								rowData.add("" + (cnt));
+								rowData.add("");
+								rowData.add(spCakeList.get(i).getItemName());
+								rowData.add(spCakeList.get(i).getInvoiceNo());
+								rowData.add(spCakeList.get(i).getBillDate());
+								rowData.add("" + spCakeList.get(i).getQty());
+								rowData.add("" + spCakeList.get(i).getGrandTotal());
+
+								frTotal = frTotal + spCakeList.get(i).getGrandTotal();
+								expoExcel.setRowData(rowData);
+								exportToExcelList.add(expoExcel);
+								cnt = cnt + 1;
+							}
+							grandTotal = grandTotal + spCakeList.get(i).getGrandTotal();
+						}
+						expoExcel = new ExportToExcel();
+						rowData = new ArrayList<String>();
+						rowData.add("" + "Total");
+						rowData.add("");
+						rowData.add("");
+						rowData.add("");
+						rowData.add("");
+						rowData.add("");
+						rowData.add("" + frTotal);
+						expoExcel.setRowData(rowData);
+						exportToExcelList.add(expoExcel);
+
 					}
 				}
 				expoExcel = new ExportToExcel();
@@ -3037,7 +3029,7 @@ public class FranchiseeController {
 				rowData.add("" + grandTotal);
 				expoExcel.setRowData(rowData);
 				exportToExcelList.add(expoExcel);
-					
+
 				HttpSession session = request.getSession();
 				session.setAttribute("exportExcelListNew", exportToExcelList);
 				session.setAttribute("excelNameNew", "SpCakeBillWise");
@@ -3045,101 +3037,228 @@ public class FranchiseeController {
 				session.setAttribute("searchByNew", "");
 				session.setAttribute("mergeUpto1", "$A$1:$G$1");
 				session.setAttribute("mergeUpto2", "$A$1:$G$1");
-				
-				}else {
 
-					rowData.add("Sr. No.");
-					rowData.add("Franchise");
-					rowData.add("Item Name");
-					rowData.add("Sold Qty");
-					rowData.add("Sold Amt");
+			} else {
 
-					expoExcel.setRowData(rowData);
-					exportToExcelList.add(expoExcel);
-					float grandTotal = 0;
-					List<Integer> frIdList = new  ArrayList<Integer>();
-					for (int x = 0; x < spCakeList.size(); x++) {
-						frIdList.add(spCakeList.get(x).getFrId());
-					}
-					HashSet<Integer> tempFrId = new HashSet<Integer>();
-					tempFrId.addAll(frIdList);
-					frIdList.clear();
-					frIdList.addAll(tempFrId);
-					for (int j = 0; j < allFrIdNameList.getFrIdNamesList().size(); j++) {
-						
-						float frTotal = 0;
-						
-						int cnt=1;
-						if(frIdList.contains(allFrIdNameList.getFrIdNamesList().get(j).getFrId())) {
+				rowData.add("Sr. No.");
+				rowData.add("Franchise");
+				rowData.add("Item Name");
+				rowData.add("Sold Qty");
+				rowData.add("Sold Amt");
+
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+				float grandTotal = 0;
+				List<Integer> frIdList = new ArrayList<Integer>();
+				for (int x = 0; x < spCakeList.size(); x++) {
+					frIdList.add(spCakeList.get(x).getFrId());
+				}
+				HashSet<Integer> tempFrId = new HashSet<Integer>();
+				tempFrId.addAll(frIdList);
+				frIdList.clear();
+				frIdList.addAll(tempFrId);
+				for (int j = 0; j < allFrIdNameList.getFrIdNamesList().size(); j++) {
+
+					float frTotal = 0;
+
+					int cnt = 1;
+					if (frIdList.contains(allFrIdNameList.getFrIdNamesList().get(j).getFrId())) {
 						grandTotal = 0;
 						expoExcel = new ExportToExcel();
 						rowData = new ArrayList<String>();
 						rowData.add("");
-						rowData.add("" + allFrIdNameList.getFrIdNamesList().get(j).getFrName());// Franchisee Name						
+						rowData.add("" + allFrIdNameList.getFrIdNamesList().get(j).getFrName());// Franchisee Name
 						rowData.add("");
 						rowData.add("");
 						rowData.add("");
 						expoExcel.setRowData(rowData);
 						exportToExcelList.add(expoExcel);
-						
+
 						for (int i = 0; i < spCakeList.size(); i++) {
-							if(spCakeList.get(i).getFrId()==allFrIdNameList.getFrIdNamesList().get(j).getFrId()) {
-							
-							expoExcel = new ExportToExcel();
-							rowData = new ArrayList<String>();
-		
-							rowData.add("" + (cnt));
-							rowData.add("");
-							rowData.add(spCakeList.get(i).getItemName());						
-							rowData.add("" + spCakeList.get(i).getQty());
-							rowData.add("" + spCakeList.get(i).getGrandTotal());	
-							
-							frTotal = frTotal+spCakeList.get(i).getGrandTotal();
-							expoExcel.setRowData(rowData);
-							exportToExcelList.add(expoExcel);
-							cnt = cnt+1;
-							}						
-							grandTotal = grandTotal + spCakeList.get(i).getGrandTotal();						
+							if (spCakeList.get(i).getFrId() == allFrIdNameList.getFrIdNamesList().get(j).getFrId()) {
+
+								expoExcel = new ExportToExcel();
+								rowData = new ArrayList<String>();
+
+								rowData.add("" + (cnt));
+								rowData.add("");
+								rowData.add(spCakeList.get(i).getItemName());
+								rowData.add("" + spCakeList.get(i).getQty());
+								rowData.add("" + spCakeList.get(i).getGrandTotal());
+
+								frTotal = frTotal + spCakeList.get(i).getGrandTotal();
+								expoExcel.setRowData(rowData);
+								exportToExcelList.add(expoExcel);
+								cnt = cnt + 1;
+							}
+							grandTotal = grandTotal + spCakeList.get(i).getGrandTotal();
 						}
 						expoExcel = new ExportToExcel();
 						rowData = new ArrayList<String>();
-						rowData.add("" + "Total");						
+						rowData.add("" + "Total");
 						rowData.add("");
 						rowData.add("");
 						rowData.add("");
 						rowData.add("" + frTotal);
 						expoExcel.setRowData(rowData);
 						exportToExcelList.add(expoExcel);
-					
-						}
+
 					}
-					expoExcel = new ExportToExcel();
-					rowData = new ArrayList<String>();
-					rowData.add("" + "Grand Total");
-					rowData.add("");
-					rowData.add("");
-					rowData.add("");
-					rowData.add("" + grandTotal);
-					expoExcel.setRowData(rowData);
-					exportToExcelList.add(expoExcel);
-						
-					HttpSession session = request.getSession();
-					session.setAttribute("exportExcelListNew", exportToExcelList);
-					session.setAttribute("excelNameNew", "SpCakeBillWise");
-					session.setAttribute("reportNameNew", "Billwise Sp Cake Report ");
-					session.setAttribute("searchByNew", "");
-					session.setAttribute("mergeUpto1", "$A$1:$E$1");
-					session.setAttribute("mergeUpto2", "$A$1:$E$1");
 				}
-				
-				
-			}catch(Exception e) {
-			
-				logger.info("Exception in getSpCakeBillWiseReport" + e.getMessage());
-				e.printStackTrace();
+				expoExcel = new ExportToExcel();
+				rowData = new ArrayList<String>();
+				rowData.add("" + "Grand Total");
+				rowData.add("");
+				rowData.add("");
+				rowData.add("");
+				rowData.add("" + grandTotal);
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+
+				HttpSession session = request.getSession();
+				session.setAttribute("exportExcelListNew", exportToExcelList);
+				session.setAttribute("excelNameNew", "SpCakeBillWise");
+				session.setAttribute("reportNameNew", "Billwise Sp Cake Report ");
+				session.setAttribute("searchByNew", "");
+				session.setAttribute("mergeUpto1", "$A$1:$E$1");
+				session.setAttribute("mergeUpto2", "$A$1:$E$1");
 			}
-			return mav;
+
+		} catch (Exception e) {
+
+			logger.info("Exception in getSpCakeBillWiseReport" + e.getMessage());
+			e.printStackTrace();
 		}
-		
-		
+		return mav;
+	}
+
+	List<MenuOrderLimit> menuListGlb = new ArrayList<>();
+
+	@RequestMapping(value = "/setOrderLimitAdmin")
+	public ModelAndView setOrderLimitAdmin(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView mav = new ModelAndView("franchisee/setOrderLimit");
+		RestTemplate restTemplate = new RestTemplate();
+		try {
+
+			MenuOrderLimit[] messageResponse = restTemplate.getForObject(Constants.url + "/getMenuWiseSubCatForLimit",
+					MenuOrderLimit[].class);
+			menuListGlb = new ArrayList<MenuOrderLimit>(Arrays.asList(messageResponse));
+
+			//System.out.println("menuList>>>>>>>>>>>>" + menuListGlb);
+			//System.err.println("LIST >>>>." + menuListGlb);
+
+			mav.addObject("menuList", menuListGlb);
+
+			Set<Integer> uniqueIds = new HashSet<Integer>();
+
+			for (MenuOrderLimit m : menuListGlb) {
+				uniqueIds.add(m.getMenuId());
+			}
+
+			List<Integer> idList = new ArrayList<>();
+			idList.addAll(uniqueIds);
+			Collections.sort(idList);
+
+			mav.addObject("menuIds", idList);
+
+		} catch (Exception e) {
+			System.out.println("Franchisee Controller Exception " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return mav;
+	}
+
+	@RequestMapping(value = "/saveOrderLimitAdmin")
+	public Info saveOrderLimitAdmin(HttpServletRequest request, HttpServletResponse response) {
+
+		Info info = new Info();
+
+		RestTemplate restTemplate = new RestTemplate();
+		try {
+
+			String jsonStr = request.getParameter("jsonStr");
+
+			System.err.println("SAVE JSON -----> " + jsonStr);
+
+			Gson gson = new Gson();
+
+			Type userListType = new TypeToken<ArrayList<MenuOrderLimit>>() {
+			}.getType();
+
+			ArrayList<MenuOrderLimit> jsonList = gson.fromJson(jsonStr, userListType);
+
+			System.err.println("SAVE JSON LIST -----> " + jsonList);
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();
+			map.add("settingKey", "MENULIMIT");
+			map.add("value", jsonStr);
+
+			info = restTemplate.postForObject(Constants.url + "updateSettingValueByKey", map, Info.class);
+
+			if (info == null) {
+				info = new Info();
+			}
+
+		} catch (Exception e) {
+			System.out.println("Franchisee Controller Exception " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return info;
+	}
+
+	@RequestMapping(value = "/saveMenuOrderLimitAdmin", method = RequestMethod.POST)
+	public String saveMenuOrderLimitAdmin(HttpServletRequest request, HttpServletResponse response) {
+		try {
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			List<MenuOrderLimit> saveList = new ArrayList<>();
+			
+			//System.err.println("LIST PREV -> " + menuListGlb);
+
+			if (menuListGlb != null) {
+
+				//System.err.println("LIST -> " + menuListGlb);
+
+				for (MenuOrderLimit m : menuListGlb) {
+
+					int limit = 0;
+					if (request.getParameter("" + m.getMenuId() + "#" + m.getSubCatId()) != null) {
+						limit = Integer.parseInt(request.getParameter("" + m.getMenuId() + "#" + m.getSubCatId()));
+					}
+					
+					//System.err.println("LIMIT - "+limit);
+
+					MenuOrderLimit mod = new MenuOrderLimit();
+					mod.setId(m.getId());
+					mod.setMenuId(m.getMenuId());
+					mod.setMenuTitle(m.getMenuTitle());
+					mod.setCatId(m.getCatId());
+					mod.setSubCatId(m.getSubCatId());
+					mod.setSubCatName(m.getSubCatName());
+					mod.setQtyLimit(limit);
+
+					saveList.add(mod);
+
+				}
+
+				//System.err.println("SAVE LIST ----------> " + saveList);
+
+				Info info = restTemplate.postForObject(Constants.url + "updateMenuOrderLimitValue", saveList,
+						Info.class);
+
+				//System.err.println("INFo ----------------> " + info);
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/setOrderLimitAdmin";
+
+	}
+
 }
