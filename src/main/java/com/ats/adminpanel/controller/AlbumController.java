@@ -28,6 +28,7 @@ import com.ats.adminpanel.commons.Constants;
 import com.ats.adminpanel.commons.VpsImageUpload;
 import com.ats.adminpanel.model.ConfigureFranchisee;
 import com.ats.adminpanel.model.album.Album;
+import com.ats.adminpanel.model.album.AlbumNew;
 import com.ats.adminpanel.model.album.TypeWiseFr;
 import com.ats.adminpanel.model.album.TypeWiseFrDisplay;
 import com.ats.adminpanel.model.flavours.AllFlavoursListResponse;
@@ -94,12 +95,16 @@ public class AlbumController {
 
 		RestTemplate restTemplate = new RestTemplate();
 		Album[] messageResponse = restTemplate.getForObject(Constants.url + "/getAlbumList", Album[].class);
-
+		
+		AlbumNew[] newList=restTemplate.getForObject(Constants.url + "/getAlbumListWithCatAndMrp", AlbumNew[].class);
+		List<AlbumNew> newAlbumList = new ArrayList<AlbumNew>(Arrays.asList(newList));
+		
 		ModelAndView mav = new ModelAndView("album/listsAlbum");
 		List<Album> message = new ArrayList<Album>(Arrays.asList(messageResponse));
 
-		mav.addObject("message", message);
-		System.out.println("List Of Messages:" + message.toString());
+		//mav.addObject("message", message);
+		mav.addObject("message", newAlbumList);
+		System.out.println("List Of Messages:" + newAlbumList.toString());
 
 		mav.addObject("url", Constants.Album_IMAGE_URL);
 		return mav;

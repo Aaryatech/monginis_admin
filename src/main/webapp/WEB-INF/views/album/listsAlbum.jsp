@@ -90,6 +90,8 @@
 												<th>#</th>
 												<th  align="left">Album Code</th>
 												<th  align="left">Album Name</th>
+												<th  align="left">Category</th>
+												<th  align="left">MRP</th>
 												<th  align="left">Photo1</th>
 												<th  align="left">Min Wt</th>
 												<th  align="left">Max Wt</th>
@@ -104,6 +106,8 @@
 													<td><c:out value="${count.index+1}" /></td>
 													<td align="left"><c:out value="${message.albumCode}" /></td>
 													<td align="left"><c:out value="${message.albumName}" /></td>
+													<td align="left"><c:out value="${message.category}" /></td>
+													<td align="left"><c:out value="${message.mrp}" /></td>
 
 													<td align="left"><img src="${url}${message.photo1}"
 														width="120" height="100"
