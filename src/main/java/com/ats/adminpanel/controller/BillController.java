@@ -459,12 +459,14 @@ public class BillController {
 					float tcsPer = Float.parseFloat(getTcsVal.getSettingValue1());				
 					float calTcs = ((sumTaxableAmt + sumTotalTax) * tcsPer) / 100;
 					float grandTotal = sumTaxableAmt + sumTotalTax + calTcs;
-			//		System.out.println(tcsPer+" / "+sumTaxableAmt+" / "+sumTotalTax+" / "+calTcs+" / "+grandTotal);
+					System.out.println(tcsPer+" / "+sumTaxableAmt+" / "+sumTotalTax+" / "+roundUp(calTcs)+" / "+grandTotal);
 			//		System.err.println("sumof grand total beofre " + grandTotal);
+					header.setRoundOff(roundUp(calTcs));
 					header.setGrandTotal(Math.round(grandTotal));
 			//		System.err.println("Math round up Sum " + header.getGrandTotal());
 				}else {			
-					header.setGrandTotal(Math.round(sumGrandTotal));								
+					header.setRoundOff(0);
+					header.setGrandTotal(Math.round(sumGrandTotal));
 				}
 				header.setPostBillDetailsList(postBillDetailsList);
 

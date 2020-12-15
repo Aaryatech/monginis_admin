@@ -53,6 +53,7 @@ public class PostBillHeader {
 	private float sgstSum;
 	private float cgstSum;
 	private float igstSum;
+	private float roundOff;
 
 
 	
@@ -203,19 +204,23 @@ public class PostBillHeader {
 		this.igstSum = igstSum;
 	}
 
+	public float getRoundOff() {
+		return roundOff;
+	}
+
+	public void setRoundOff(float roundOff) {
+		this.roundOff = roundOff;
+	}
+
 	@Override
 	public String toString() {
 		return "PostBillHeader [billNo=" + billNo + ", taxApplicable=" + taxApplicable + ", invoiceNo=" + invoiceNo
 				+ ", billDate=" + billDate + ", frId=" + frId + ", frCode=" + frCode + ", grandTotal=" + grandTotal
 				+ ", taxableAmt=" + taxableAmt + ", totalTax=" + totalTax + ", status=" + status + ", DelStatus="
 				+ DelStatus + ", remark=" + remark + ", time=" + time + ", sgstSum=" + sgstSum + ", cgstSum=" + cgstSum
-				+ ", igstSum=" + igstSum + ", postBillDetailsList=" + postBillDetailsList + "]";
+				+ ", igstSum=" + igstSum + ", roundOff=" + roundOff + ", postBillDetailsList=" + postBillDetailsList
+				+ "]";
 	}
 
-	
-	
-
-	
-	
 	
 }
