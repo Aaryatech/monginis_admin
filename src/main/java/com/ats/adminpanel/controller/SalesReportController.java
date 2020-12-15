@@ -199,8 +199,8 @@ public class SalesReportController {
 			allFrIdNameList = new AllFrIdNameList();
 			try {
 
-				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
-
+				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFranchises", AllFrIdNameList.class);
+				//getAllFrIdName
 			} catch (Exception e) {
 				System.out.println("Exception in getAllFrIdName" + e.getMessage());
 				e.printStackTrace();
@@ -637,7 +637,7 @@ public class SalesReportController {
 			allFrIdNameList = new AllFrIdNameList();
 			try {
 
-				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFranchises", AllFrIdNameList.class);
 
 			} catch (Exception e) {
 				System.out.println("Exception in getAllFrIdName" + e.getMessage());
@@ -985,7 +985,7 @@ public class SalesReportController {
 			allFrIdNameList = new AllFrIdNameList();
 			try {
 
-				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFranchises", AllFrIdNameList.class);
 
 			} catch (Exception e) {
 				System.out.println("Exception in getAllFrIdName" + e.getMessage());
@@ -1466,7 +1466,7 @@ public class SalesReportController {
 			allFrIdNameList = new AllFrIdNameList();
 			try {
 
-				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFranchises", AllFrIdNameList.class);
 
 			} catch (Exception e) {
 				System.out.println("Exception in getAllFrIdName" + e.getMessage());
@@ -1833,7 +1833,7 @@ public class SalesReportController {
 			allFrIdNameList = new AllFrIdNameList();
 			try {
 
-				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFranchises", AllFrIdNameList.class);
 
 			} catch (Exception e) {
 				System.out.println("Exception in getAllFrIdName" + e.getMessage());
@@ -2186,7 +2186,7 @@ public class SalesReportController {
 			routeList = allRouteListResponse.getRoute();
 			allFrIdNameList = new AllFrIdNameList();
 			try {
-				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFranchises", AllFrIdNameList.class);
 			} catch (Exception e) {
 				// System.out.println("Exception in getAllFrIdName" + e.getMessage());
 				e.printStackTrace();
@@ -2534,7 +2534,7 @@ public class SalesReportController {
 			allFrIdNameList = new AllFrIdNameList();
 			try {
 
-				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFranchises", AllFrIdNameList.class);
 
 			} catch (Exception e) {
 				System.out.println("Exception in getAllFrIdName" + e.getMessage());
@@ -3465,7 +3465,7 @@ public class SalesReportController {
 			allFrIdNameList = new AllFrIdNameList();
 			try {
 
-				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFranchises", AllFrIdNameList.class);
 				StringBuilder frId = new StringBuilder();
 
 				for (int i = 0; i < allFrIdNameList.getFrIdNamesList().size(); i++) {
@@ -6114,7 +6114,7 @@ public class SalesReportController {
 			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
 			String todaysDate = date.format(formatters);
 
-			allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+			allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFranchises", AllFrIdNameList.class);
 
 			model.addObject("todaysDate", todaysDate);
 			model.addObject("allFrIdNameList", allFrIdNameList.getFrIdNamesList());

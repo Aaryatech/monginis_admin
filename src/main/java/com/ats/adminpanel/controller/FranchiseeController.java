@@ -2880,7 +2880,7 @@ public class FranchiseeController {
 			RestTemplate restTemplate = new RestTemplate();
 
 			AllFrIdNameList allFrIdNameList = new AllFrIdNameList();
-			allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
+			allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFranchises", AllFrIdNameList.class);
 			mav.addObject("frList", allFrIdNameList.getFrIdNamesList());
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<>();

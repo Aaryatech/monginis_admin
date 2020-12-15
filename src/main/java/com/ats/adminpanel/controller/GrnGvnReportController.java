@@ -95,8 +95,8 @@ public class GrnGvnReportController {
 	AllFrIdNameList getFrNameId() {
 
 		RestTemplate restTemplate = new RestTemplate();
-		return allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
-	}
+		return allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFranchises", AllFrIdNameList.class);
+	}//getAllFrIdName
 
 	AllRoutesListResponse getAllRoute() {
 
