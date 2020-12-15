@@ -74,6 +74,7 @@ import com.ats.adminpanel.model.Info;
 import com.ats.adminpanel.model.Orders;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.SalesVoucherList;
+import com.ats.adminpanel.model.SettingNew;
 import com.ats.adminpanel.model.RawMaterial.GetItemSfHeader;
 import com.ats.adminpanel.model.billing.FrBillHeaderForPrint;
 import com.ats.adminpanel.model.billing.FrBillPrint;
@@ -231,14 +232,23 @@ public class BillController {
 
 			List<Integer> frIdList = new ArrayList(set);
 			List<PostBillDetail> postBillDetailsList = new ArrayList();
-
+			
+			map = new LinkedMultiValueMap<String, Object>();
+			map.add("settingKey", "TCS Value");
+			SettingNew getTcsVal = restTemplate.postForObject(Constants.url + "getSettingValueByKey", map,
+			SettingNew.class);
+		
 			for (int i = 0; i < frIdList.size(); i++) {
 
 				PostBillHeader header = new PostBillHeader();
 				// System.out.println("Invoice No= " + invoiceNo);
 				int frId = frIdList.get(i);
-
-				// System.out.println("Outer For frId " + frId);
+				
+				map = new LinkedMultiValueMap<String, Object>();
+				map.add("frId", frId);
+				int isTcs = restTemplate.postForObject(Constants.url + "getFrTcsVal", map,
+						Integer.class);
+				
 				header.setFrId(frId);
 				postBillDetailsList = new ArrayList();
 
@@ -292,12 +302,12 @@ public class BillController {
 */
 					GenerateBill gBill = tempGenerateBillList.get(j);
 
-					System.out.println("Inner For frId " + gBill.getFrId());
+					//System.out.println("Inner For frId " + gBill.getFrId());
 
 					if (gBill.getFrId() == frId) {
 						// map.add(frId,"sd");
 
-						System.out.println("If condn true " + gBill.getFrId());
+						//System.out.println("If condn true " + gBill.getFrId());
 
 						PostBillDetail billDetail = new PostBillDetail();
 
@@ -440,15 +450,22 @@ public class BillController {
 				// header.setSgstSum(sumT1);
 				// header.setCgstSum(sumT2);
 				// header.setIgstSum(sumT3);
-				header.setTaxableAmt(sumTaxableAmt);
-				header.setGrandTotal(Math.round(sumGrandTotal));
-				
-				System.err.println("sumof grand total beofre "+sumGrandTotal);
-				
-				System.err.println("Math round up Sum " +header.getGrandTotal());
-				header.setTotalTax(sumTotalTax);
 				
 				header.setStatus(1);
+				header.setTotalTax(sumTotalTax);
+				header.setTaxableAmt(sumTaxableAmt);
+				
+				if (isTcs == 1) {
+					float tcsPer = Float.parseFloat(getTcsVal.getSettingValue1());				
+					float calTcs = ((sumTaxableAmt + sumTotalTax) * tcsPer) / 100;
+					float grandTotal = sumTaxableAmt + sumTotalTax + calTcs;
+			//		System.out.println(tcsPer+" / "+sumTaxableAmt+" / "+sumTotalTax+" / "+calTcs+" / "+grandTotal);
+			//		System.err.println("sumof grand total beofre " + grandTotal);
+					header.setGrandTotal(Math.round(grandTotal));
+			//		System.err.println("Math round up Sum " + header.getGrandTotal());
+				}else {			
+					header.setGrandTotal(Math.round(sumGrandTotal));								
+				}
 				header.setPostBillDetailsList(postBillDetailsList);
 
 				ZoneId zoneId = ZoneId.of("Asia/Calcutta");
@@ -476,8 +493,7 @@ public class BillController {
 
 			System.out.println("Test data : " + postBillDataCommon.toString());
 
-		Info info = restTemplate.postForObject(Constants.url + "insertBillData", postBillDataCommon, Info.class);
-
+			Info info = restTemplate.postForObject(Constants.url + "insertBillData", postBillDataCommon, Info.class);
 			System.out.println("Info Data " + info.toString());
 
 			// model.addObject("postBillDataCommon","");
