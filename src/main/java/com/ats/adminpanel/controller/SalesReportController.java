@@ -6718,5 +6718,288 @@ public class SalesReportController {
 		return model;
 
 	}
+	
+	
+	
+	@RequestMapping(value = "/showTcsReportByDate", method = RequestMethod.GET)
+	public ModelAndView showTcsReportByDate(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/sales/tcsbydate");
+
+		try {
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			todaysDate = date.format(formatters);
+
+			RestTemplate restTemplate = new RestTemplate();			
+
+			allFrIdNameList = new AllFrIdNameList();
+			try {
+
+				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFranchises", AllFrIdNameList.class);
+				//getAllFrIdName
+			} catch (Exception e) {
+				System.out.println("Exception in getAllFrIdName" + e.getMessage());
+				e.printStackTrace();
+
+			}			
+
+			System.out.println(" Fr " + allFrIdNameList.getFrIdNamesList());
+
+			model.addObject("todaysDate", todaysDate);
+			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
+
+		} catch (Exception e) {
+
+			System.out.println("Exc in show sales report bill wise  " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/getTcsFrDatewise", method = RequestMethod.GET)
+	public @ResponseBody List<SalesReportBillwise> getTcsFrDatewise(HttpServletRequest request,
+			HttpServletResponse response) {
+
+		List<SalesReportBillwise> saleList = new ArrayList<>();
+		String fromDate = "";
+		String toDate = "";
+		try {
+			System.out.println("Inside get TCS Report Fr Wise");
+			String selectedFr = request.getParameter("fr_id_list");
+			fromDate = request.getParameter("fromDate");
+			toDate = request.getParameter("toDate");
+			
+			boolean isAllFrSelected = false;
+			selectedFr = selectedFr.substring(1, selectedFr.length() - 1);
+			selectedFr = selectedFr.replaceAll("\"", "");
+
+			frList = new ArrayList<>();
+			frList = Arrays.asList(selectedFr);
+
+			if (frList.contains("-1")) {
+				isAllFrSelected = true;
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+
+			if (isAllFrSelected) {
+
+				System.out.println("Inside If all fr Selected ");
+
+				map.add("fromDate", fromDate);
+				map.add("toDate", toDate);
+				ParameterizedTypeReference<List<SalesReportBillwise>> typeRef = new ParameterizedTypeReference<List<SalesReportBillwise>>() {
+				};
+				ResponseEntity<List<SalesReportBillwise>> responseEntity = restTemplate.exchange(
+						Constants.url + "getTcsReportByAllFr", HttpMethod.POST, new HttpEntity<>(map),
+						typeRef);
+
+				saleList = responseEntity.getBody();
+				saleListForPdf = new ArrayList<>();
+				saleListForPdf = saleList;
+				System.out.println("sales List Bill Wise " + saleList.toString());
+
+			} else {
+				System.out.println("Inside else Few fr Selected ");
+
+				map.add("frIdList", selectedFr);
+				map.add("fromDate", fromDate);
+				map.add("toDate", toDate);
+
+				ParameterizedTypeReference<List<SalesReportBillwise>> typeRef = new ParameterizedTypeReference<List<SalesReportBillwise>>() {
+				};
+				ResponseEntity<List<SalesReportBillwise>> responseEntity = restTemplate.exchange(
+						Constants.url + "getTcsReportSelectedFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+				saleList = responseEntity.getBody();
+				saleListForPdf = new ArrayList<>();
+				saleListForPdf = saleList;
+				System.out.println("sales List Bill Wise " + saleList.toString());
+
+			}
+		} catch (Exception e) {
+			System.out.println("get sale Report Bill Wise " + e.getMessage());
+			e.printStackTrace();
+
+		}
+		
+		float ttlTaxable = 0;
+		float ttlCgst = 0;
+		float ttlSgst = 0;
+		float ttlIgst = 0;
+		float ttlTcs = 0;
+		float ttlTax = 0;
+		
+		float total = 0;
+		float grandTotal = 0;
+
+		// exportToExcel
+		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+		ExportToExcel expoExcel = new ExportToExcel();
+		List<String> rowData = new ArrayList<String>();
+
+		rowData.add("Bill No");
+		rowData.add("Invoice No");
+		rowData.add("Bill Date");
+		rowData.add("Franchisee Code");
+		rowData.add("Franchisee Name");
+		rowData.add("Franchisee City");
+		rowData.add("Franchisee Gst No");
+		rowData.add("Sgst Sum");
+		rowData.add("Cgst Sum");
+		rowData.add("Igst Sum");
+		rowData.add("Total Tax");
+		rowData.add("Taxable Amt");
+		rowData.add("Tcs Amt");
+		rowData.add("Grand Total");
+
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+		for (int i = 0; i < saleList.size(); i++) {
+			expoExcel = new ExportToExcel();
+			rowData = new ArrayList<String>();
+			
+			total = saleList.get(i).getTaxableAmt()+saleList.get(i).getCgstSum()+saleList.get(i).getSgstSum()+saleList.get(i).getRoundOff();
+
+			rowData.add("" + saleList.get(i).getBillNo());
+			rowData.add(saleList.get(i).getInvoiceNo());
+			rowData.add(saleList.get(i).getBillDate());
+
+			rowData.add("" + saleList.get(i).getFrId());
+			rowData.add(saleList.get(i).getFrName());
+
+			rowData.add(saleList.get(i).getFrCity());
+			rowData.add(saleList.get(i).getFrGstNo());
+			rowData.add("" + saleList.get(i).getSgstSum());
+			rowData.add("" + saleList.get(i).getCgstSum());
+			rowData.add("" + saleList.get(i).getIgstSum());
+			rowData.add("" + saleList.get(i).getTotalTax());
+			rowData.add("" + saleList.get(i).getTaxableAmt());
+			rowData.add("" + saleList.get(i).getRoundOff());
+			rowData.add("" + total);			
+			
+			ttlTaxable = ttlTaxable + saleList.get(i).getTaxableAmt();
+			ttlCgst = ttlCgst + saleList.get(i).getCgstSum();
+			ttlSgst = ttlSgst + saleList.get(i).getCgstSum();
+			ttlIgst = ttlIgst + saleList.get(i).getIgstSum();
+			ttlTcs = ttlTcs + saleList.get(i).getRoundOff();
+			ttlTax = ttlTax + saleList.get(i).getTotalTax();
+			grandTotal = grandTotal + total;
+			
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			
+			
+
+		}
+		
+		expoExcel = new ExportToExcel();
+		rowData = new ArrayList<String>();
+
+		rowData.add("Total");
+		rowData.add("");
+		rowData.add("");
+		rowData.add("");
+		rowData.add("");
+		rowData.add("");
+		rowData.add("");
+		
+		rowData.add("" + roundUp(ttlSgst));
+		rowData.add("" + roundUp(ttlCgst));
+		rowData.add("" + roundUp(ttlIgst));
+		rowData.add("" + roundUp(ttlTax));
+		rowData.add("" + roundUp(ttlTaxable));
+		rowData.add("" + roundUp(ttlTcs));
+		rowData.add("" + roundUp(grandTotal));
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+
+
+		HttpSession session = request.getSession();
+		session.setAttribute("exportExcelListNew", exportToExcelList);
+		session.setAttribute("excelNameNew", "TCSReport");
+		session.setAttribute("reportNameNew", "TCS Report");
+		session.setAttribute("searchByNew", "From Date: " + fromDate + "  To Date: " + toDate + " ");
+		session.setAttribute("mergeUpto1", "$A$1:$M$1");
+		session.setAttribute("mergeUpto2", "$A$2:$M$2");
+
+		return saleList;
+	}
+	
+	@RequestMapping(value = "pdf/showTcsReportByDatePdf/{fDate}/{tDate}/{selectedFr}", method = RequestMethod.GET)
+	public ModelAndView showTcsReportByDatePdf(@PathVariable String fDate, @PathVariable String tDate,
+			@PathVariable String selectedFr, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/sales/pdf/tcsbydatePdf");
+
+		List<SalesReportBillwise> saleList = new ArrayList<>();
+
+		boolean isAllFrSelected = false;
+		try {
+
+			if (selectedFr.equalsIgnoreCase("-1")) {
+				isAllFrSelected = true;
+			}
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+
+			if (isAllFrSelected) {
+
+				System.out.println("Inside If all fr Selected ");
+
+				map.add("fromDate", fDate);
+				map.add("toDate", tDate);
+				ParameterizedTypeReference<List<SalesReportBillwise>> typeRef = new ParameterizedTypeReference<List<SalesReportBillwise>>() {
+				};
+				ResponseEntity<List<SalesReportBillwise>> responseEntity = restTemplate.exchange(
+						Constants.url + "getTcsReportByAllFr", HttpMethod.POST, new HttpEntity<>(map),
+						typeRef);
+
+				saleList = responseEntity.getBody();
+				saleListForPdf = new ArrayList<>();
+				saleListForPdf = saleList;
+				System.out.println("sales List Bill Wise " + saleList.toString());
+
+			} else {
+				System.out.println("Inside else Few fr Selected ");
+
+				map.add("frIdList", selectedFr);
+				map.add("fromDate", fDate);
+				map.add("toDate", tDate);
+
+				ParameterizedTypeReference<List<SalesReportBillwise>> typeRef = new ParameterizedTypeReference<List<SalesReportBillwise>>() {
+				};
+				ResponseEntity<List<SalesReportBillwise>> responseEntity = restTemplate.exchange(
+						Constants.url + "getTcsReportSelectedFr", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+				saleList = responseEntity.getBody();
+				saleListForPdf = new ArrayList<>();
+				saleListForPdf = saleList;
+				System.out.println("sales List Bill Wise " + saleList.toString());
+
+			}
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+		model.addObject("fromDate", fDate);
+
+		model.addObject("toDate", tDate);
+
+		model.addObject("report", saleList);
+
+		return model;
+	}
 
 }
