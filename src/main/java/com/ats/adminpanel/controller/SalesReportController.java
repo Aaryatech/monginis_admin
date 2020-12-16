@@ -421,9 +421,8 @@ public class SalesReportController {
 						typeRef);
 				saleList = responseEntity.getBody();
 				
-				for (int i = 0; i < saleList.size(); i++) {					
-					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
-					saleList.get(i).setTcsAmt(roundUp(calTcs));
+				for (int i = 0; i < saleList.size(); i++) {		
+					saleList.get(i).setTcsAmt(saleList.get(i).getRoundOff());
 				}
 				saleListForPdf = new ArrayList<>();
 				saleListForPdf = saleList;
@@ -444,8 +443,7 @@ public class SalesReportController {
 				saleList = responseEntity.getBody();
 				
 				for (int i = 0; i < saleList.size(); i++) {	
-					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
-					saleList.get(i).setTcsAmt(roundUp(calTcs));
+					saleList.get(i).setTcsAmt(saleList.get(i).getRoundOff());
 				}
 				saleListForPdf = new ArrayList<>();
 				saleListForPdf = saleList;
@@ -623,8 +621,7 @@ public class SalesReportController {
 
 				saleList = responseEntity.getBody();
 				for (int i = 0; i < saleList.size(); i++) {					
-					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
-					saleList.get(i).setTcsAmt(roundUp(calTcs));
+					saleList.get(i).setTcsAmt(saleList.get(i).getRoundOff());
 				}
 				saleListForPdf = new ArrayList<>();
 				saleListForPdf = saleList;
@@ -644,8 +641,7 @@ public class SalesReportController {
 
 				saleList = responseEntity.getBody();
 				for (int i = 0; i < saleList.size(); i++) {					
-					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
-					saleList.get(i).setTcsAmt(roundUp(calTcs));
+					saleList.get(i).setTcsAmt(saleList.get(i).getRoundOff());
 				}
 				saleListForPdf = new ArrayList<>();
 				saleListForPdf = saleList;
@@ -1631,9 +1627,8 @@ public class SalesReportController {
 
 				saleList = responseEntity.getBody();
 				
-				for (int i = 0; i < saleList.size(); i++) {					
-					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
-					saleList.get(i).setTcsAmt(roundUp(calTcs));
+				for (int i = 0; i < saleList.size(); i++) {	
+					saleList.get(i).setTcsAmt(saleList.get(i).getRoundOff());
 				}
 				
 				saleListForPdf = new ArrayList<>();
@@ -1657,8 +1652,7 @@ public class SalesReportController {
 				saleList = responseEntity.getBody();
 				
 				for (int i = 0; i < saleList.size(); i++) {					
-					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
-					saleList.get(i).setTcsAmt(roundUp(calTcs));
+					saleList.get(i).setTcsAmt(saleList.get(i).getRoundOff());
 				}
 				
 				saleListForPdf = new ArrayList<>();
@@ -1843,8 +1837,7 @@ public class SalesReportController {
 
 				saleList = responseEntity.getBody();
 				for (int i = 0; i < saleList.size(); i++) {					
-					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
-					saleList.get(i).setTcsAmt(roundUp(calTcs));
+					saleList.get(i).setTcsAmt(saleList.get(i).getRoundOff());
 				}
 				saleListForPdf = new ArrayList<>();
 
@@ -1866,8 +1859,7 @@ public class SalesReportController {
 
 				saleList = responseEntity.getBody();
 				for (int i = 0; i < saleList.size(); i++) {					
-					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
-					saleList.get(i).setTcsAmt(roundUp(calTcs));
+					saleList.get(i).setTcsAmt(saleList.get(i).getRoundOff());
 				}
 				saleListForPdf = new ArrayList<>();
 
@@ -2047,9 +2039,8 @@ public class SalesReportController {
 
 			saleList = responseEntity.getBody();
 			
-			for (int i = 0; i < saleList.size(); i++) {					
-				float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
-				saleList.get(i).setTcsAmt(roundUp(calTcs));
+			for (int i = 0; i < saleList.size(); i++) {	
+				saleList.get(i).setTcsAmt(saleList.get(i).getRoundOff());
 			}
 			
 			saleListForPdf = new ArrayList<>();
@@ -2232,8 +2223,7 @@ public class SalesReportController {
 				saleList = responseEntity.getBody();
 				
 				for (int i = 0; i < saleList.size(); i++) {					
-					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
-					saleList.get(i).setTcsAmt(roundUp(calTcs));
+					saleList.get(i).setTcsAmt(saleList.get(i).getRoundOff());
 				}
 				
 				saleListForPdf = new ArrayList<>();
@@ -2258,8 +2248,7 @@ public class SalesReportController {
 				saleList = responseEntity.getBody();
 				
 				for (int i = 0; i < saleList.size(); i++) {					
-					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
-					saleList.get(i).setTcsAmt(roundUp(calTcs));
+					saleList.get(i).setTcsAmt(saleList.get(i).getRoundOff());
 				}
 				
 				saleListForPdf = new ArrayList<>();
