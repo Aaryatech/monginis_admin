@@ -195,7 +195,7 @@
 											<th>CGST</th>
 											<th>SGST</th>
 											<th>IGST</th>
-											<!-- <th>Round Off</th> -->
+											<th>TCS</th>
 											<th>Total</th>
 										</tr>
 									</thead>
@@ -249,6 +249,7 @@
 			var ttlCgst = 0;
 			var ttlSgst = 0;
 			var ttlIgst = 0;
+			var ttlTcs = 0;
 			var grandTotal = 0;
 
 			$('#loader').show();
@@ -341,6 +342,7 @@
 															+ report.cgstSum;
 													ttlSgst = ttlSgst
 															+ report.sgstSum;
+													ttlTcs = ttlTcs + report.tcsAmt;
 
 													//tr.append($('<td></td>').html(report.igstSum));
 													//tr.append($('<td style="text-align:right;"></td>').html(report.roundOff));														
@@ -353,10 +355,17 @@
 														 total=report.taxableAmt+report.igstSum;
 													}  */
 
+													tr
+													.append($(
+															'<td style="text-align:right;"></td>')
+															.html(
+																	addCommas(report.tcsAmt.toFixed(2))));
+													
 													total = parseFloat(report.taxableAmt)
 															+ parseFloat(report.cgstSum
 																	+ report.sgstSum
-																	+ report.igstSum);
+																	+ report.igstSum + report.tcsAmt);
+													
 
 													tr
 															.append($(
@@ -405,7 +414,9 @@
 												.html(
 														addCommas(ttlIgst
 																.toFixed(2))));
-								//trr.append($('<td style="text-align:right;"></td>').html(''));
+							
+								trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlTcs.toFixed(2))));
+								
 								trr
 										.append($(
 												'<td style="text-align:right; font-weight: 700;"></td>')
@@ -570,7 +581,7 @@
 														if (report.isSameState == 1) {
 															total = parseFloat(report.taxableAmt)
 																	+ parseFloat(report.cgstSum
-																			+ report.sgstSum);
+																			+ report.sgstSum + report.tcsAmt);
 														} else {
 
 															total = report.taxableAmt

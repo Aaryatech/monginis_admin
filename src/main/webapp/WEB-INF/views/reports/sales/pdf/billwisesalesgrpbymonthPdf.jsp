@@ -64,7 +64,7 @@ th {
 				<th>CGST</th>
 				<th>SGST</th>
 				<th>IGST</th>
-				<!-- <th>Round Off</th> -->
+				<th>TCS</th>
 				<th>Total</th>
 			</tr>
 		</thead>
@@ -73,7 +73,9 @@ th {
 			<c:set var="igst" value="${0 }" />
 			<c:set var="cgst" value="${0 }" />
 			<c:set var="sgst" value="${0 }" />
+			<c:set var="ttlTcs" value="${0 }" />
 			<c:set var="grandTotal" value="${0 }" />
+			
 			<c:forEach items="${report}" var="report" varStatus="count">
 				<tr>
 					<td width="10"><c:out value="${count.index+1}" /></td>
@@ -94,11 +96,12 @@ th {
 							value="${report.igstSum}" /></td>
 
 					<c:set var="total"
-						value="${report.cgstSum +report.sgstSum +report.igstSum+ report.taxableAmt}" />
+						value="${report.cgstSum +report.sgstSum +report.igstSum+ report.taxableAmt + report.tcsAmt}" />
 
 					<c:set var="sgst" value="${sgst + report.sgstSum }" />
 					<c:set var="cgst" value="${cgst + report.cgstSum }" />
 					<c:set var="igst" value="${igst + report.igstSum}" />
+					<c:set var="ttlTcs" value="${ttlTcs + report.tcsAmt}" />
 
 					<%-- <c:choose>
 						<c:when test="${report.isSameState eq 1}">
@@ -129,12 +132,13 @@ th {
 						</c:when>
 					</c:choose> --%>
 
+					
 					<c:set var="taxAmount" value="${taxAmount + report.taxableAmt}" />
 
 					<c:set var="grandTotal" value="${grandTotal+total}" />
-					<%-- <td width="100" align="right"><fmt:formatNumber type="number"
-								maxFractionDigits="2" minFractionDigits="2"  value="${report.roundOff}" /></td> --%>
-					<%-- <td><c:out value="${total}" /></td> --%>
+					
+					<td width="100" align="right"><fmt:formatNumber type="number"
+								maxFractionDigits="2" minFractionDigits="2"  value="${report.tcsAmt}" /></td>					
 
 					<td width="100" align="right"><fmt:formatNumber type="number"
 							maxFractionDigits="2" minFractionDigits="2" value="${total}" /></td>
@@ -157,6 +161,10 @@ th {
 							type="number" maxFractionDigits="2" minFractionDigits="2"
 							value="${igst}" /></b></td>
 				<!-- <td width="100" align="right"></td> -->
+				<td width="100" align="right"><b><fmt:formatNumber
+							type="number" maxFractionDigits="2" minFractionDigits="2"
+							value="${ttlTcs}" /></b></td>
+							
 				<td width="100" align="right"><b><fmt:formatNumber
 							type="number" maxFractionDigits="2" minFractionDigits="2"
 							value="${grandTotal}" /></b></td>

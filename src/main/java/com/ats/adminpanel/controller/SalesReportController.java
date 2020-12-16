@@ -68,6 +68,7 @@ import com.ats.adminpanel.model.ItemWiseGrnGvnReport;
 import com.ats.adminpanel.model.MiniSubCategory;
 import com.ats.adminpanel.model.Orders;
 import com.ats.adminpanel.model.Route;
+import com.ats.adminpanel.model.SettingNew;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteId;
 import com.ats.adminpanel.model.franchisee.FrNameIdByRouteIdResponse;
 import com.ats.adminpanel.model.franchisee.FranchiseeAndMenuList;
@@ -406,7 +407,7 @@ public class SalesReportController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
-
+			float tcsPer = getTcsPer();
 			if (isAllFrSelected) {
 
 				System.out.println("Inside If all fr Selected ");
@@ -418,8 +419,12 @@ public class SalesReportController {
 				ResponseEntity<List<SalesReportBillwise>> responseEntity = restTemplate.exchange(
 						Constants.url + "getSaleReportBillwiseAllFrSelected", HttpMethod.POST, new HttpEntity<>(map),
 						typeRef);
-
 				saleList = responseEntity.getBody();
+				
+				for (int i = 0; i < saleList.size(); i++) {					
+					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
+					saleList.get(i).setTcsAmt(roundUp(calTcs));
+				}
 				saleListForPdf = new ArrayList<>();
 				saleListForPdf = saleList;
 				System.out.println("sales List Bill Wise " + saleList.toString());
@@ -437,6 +442,11 @@ public class SalesReportController {
 						Constants.url + "getSaleReportBillwise", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 				saleList = responseEntity.getBody();
+				
+				for (int i = 0; i < saleList.size(); i++) {	
+					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
+					saleList.get(i).setTcsAmt(roundUp(calTcs));
+				}
 				saleListForPdf = new ArrayList<>();
 				saleListForPdf = saleList;
 				System.out.println("sales List Bill Wise " + saleList.toString());
@@ -448,6 +458,16 @@ public class SalesReportController {
 
 		}
 
+		float ttlTaxable = 0;
+		float ttlCgst = 0;
+		float ttlSgst = 0;
+		float ttlIgst = 0;
+		float ttlTcs = 0;
+		float ttlTax = 0;
+		
+		float total = 0;
+		float grandTotal = 0;
+		
 		// exportToExcel
 		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
@@ -461,11 +481,12 @@ public class SalesReportController {
 		rowData.add("Franchisee Name");
 		rowData.add("Franchisee City");
 		rowData.add("Franchisee Gst No");
-		rowData.add("sgst sum");
-		rowData.add("cgst sum");
-		rowData.add("igst sum");
+		rowData.add("Sgst sum");
+		rowData.add("Cgst sum");
+		rowData.add("Igst sum");
 		rowData.add("Total Tax");
 		rowData.add("Taxable Amt");
+		rowData.add("TCS Amt");
 		rowData.add("Grand Total");
 
 		expoExcel.setRowData(rowData);
@@ -473,6 +494,9 @@ public class SalesReportController {
 		for (int i = 0; i < saleList.size(); i++) {
 			expoExcel = new ExportToExcel();
 			rowData = new ArrayList<String>();
+			
+			total = saleList.get(i).getTaxableAmt()+saleList.get(i).getCgstSum()+saleList.get(i).getSgstSum()+saleList.get(i).getTcsAmt();
+
 
 			rowData.add("" + saleList.get(i).getBillNo());
 			rowData.add(saleList.get(i).getInvoiceNo());
@@ -488,11 +512,42 @@ public class SalesReportController {
 			rowData.add("" + saleList.get(i).getIgstSum());
 			rowData.add("" + saleList.get(i).getTotalTax());
 			rowData.add("" + saleList.get(i).getTaxableAmt());
-			rowData.add("" + saleList.get(i).getGrandTotal());
+			rowData.add("" + saleList.get(i).getTcsAmt());
+			rowData.add("" + total);
+			
+			ttlTaxable = ttlTaxable + saleList.get(i).getTaxableAmt();
+			ttlCgst = ttlCgst + saleList.get(i).getCgstSum();
+			ttlSgst = ttlSgst + saleList.get(i).getCgstSum();
+			ttlIgst = ttlIgst + saleList.get(i).getIgstSum();
+			ttlTcs = ttlTcs + saleList.get(i).getTcsAmt();
+			ttlTax = ttlTax + saleList.get(i).getTotalTax();
+			grandTotal = grandTotal + total;
+			
 			expoExcel.setRowData(rowData);
 			exportToExcelList.add(expoExcel);
 
 		}
+		
+		expoExcel = new ExportToExcel();
+		rowData = new ArrayList<String>();
+
+		rowData.add("Total");
+		rowData.add("");
+		rowData.add("");
+		rowData.add("");
+		rowData.add("");
+		rowData.add("");
+		rowData.add("");
+		
+		rowData.add("" + roundUp(ttlSgst));
+		rowData.add("" + roundUp(ttlCgst));
+		rowData.add("" + roundUp(ttlIgst));
+		rowData.add("" + roundUp(ttlTax));
+		rowData.add("" + roundUp(ttlTaxable));
+		rowData.add("" + roundUp(ttlTcs));
+		rowData.add("" + roundUp(grandTotal));
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
 
 		HttpSession session = request.getSession();
 		session.setAttribute("exportExcelListNew", exportToExcelList);
@@ -505,6 +560,7 @@ public class SalesReportController {
 		return saleList;
 	}
 
+	
 	@RequestMapping(value = "pdf/showSaleReportByDatePdf/{fDate}/{tDate}/{selectedFr}/{routeId}", method = RequestMethod.GET)
 	public ModelAndView showSaleReportByDatePdf(@PathVariable String fDate, @PathVariable String tDate,
 			@PathVariable String selectedFr, @PathVariable String routeId, HttpServletRequest request,
@@ -517,6 +573,7 @@ public class SalesReportController {
 		boolean isAllFrSelected = false;
 		try {
 
+			float tcsPer = getTcsPer();	
 			if (!routeId.equalsIgnoreCase("0")) {
 
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -565,6 +622,10 @@ public class SalesReportController {
 						typeRef);
 
 				saleList = responseEntity.getBody();
+				for (int i = 0; i < saleList.size(); i++) {					
+					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
+					saleList.get(i).setTcsAmt(roundUp(calTcs));
+				}
 				saleListForPdf = new ArrayList<>();
 				saleListForPdf = saleList;
 				System.out.println("sales List Bill Wise " + saleList.toString());
@@ -582,6 +643,10 @@ public class SalesReportController {
 						Constants.url + "getSaleReportBillwise", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 				saleList = responseEntity.getBody();
+				for (int i = 0; i < saleList.size(); i++) {					
+					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
+					saleList.get(i).setTcsAmt(roundUp(calTcs));
+				}
 				saleListForPdf = new ArrayList<>();
 				saleListForPdf = saleList;
 				System.out.println("sales List Bill Wise " + saleList.toString());
@@ -1513,7 +1578,7 @@ public class SalesReportController {
 
 			frList = new ArrayList<>();
 			frList = Arrays.asList(selectedFr);
-
+			
 			if (!routeId.equalsIgnoreCase("0")) {
 
 				MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
@@ -1549,6 +1614,8 @@ public class SalesReportController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
 
+			float tcsPer = getTcsPer();
+			
 			if (isAllFrSelected) {
 
 				System.out.println("Inside If all fr Selected ");
@@ -1563,6 +1630,12 @@ public class SalesReportController {
 						typeRef);
 
 				saleList = responseEntity.getBody();
+				
+				for (int i = 0; i < saleList.size(); i++) {					
+					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
+					saleList.get(i).setTcsAmt(roundUp(calTcs));
+				}
+				
 				saleListForPdf = new ArrayList<>();
 
 				saleListForPdf = saleList;
@@ -1582,6 +1655,12 @@ public class SalesReportController {
 						Constants.url + "getSaleReportBillwiseByDate", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 				saleList = responseEntity.getBody();
+				
+				for (int i = 0; i < saleList.size(); i++) {					
+					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
+					saleList.get(i).setTcsAmt(roundUp(calTcs));
+				}
+				
 				saleListForPdf = new ArrayList<>();
 
 				saleListForPdf = saleList;
@@ -1606,6 +1685,7 @@ public class SalesReportController {
 		rowData.add("CGST");
 		rowData.add("SGST");
 		rowData.add("IGST");
+		rowData.add("TCS");
 		rowData.add("Total");
 
 //		rowData.add("Bill No");
@@ -1626,7 +1706,7 @@ public class SalesReportController {
 		expoExcel.setRowData(rowData);
 		exportToExcelList.add(expoExcel);
 
-		float taxableTot = 0, cgstTot = 0, sgstTot = 0, igstTot = 0, tot = 0;
+		float taxableTot = 0, cgstTot = 0, sgstTot = 0, igstTot = 0, tot = 0, ttlTcs = 0;
 
 		for (int i = 0; i < saleList.size(); i++) {
 			expoExcel = new ExportToExcel();
@@ -1653,9 +1733,10 @@ public class SalesReportController {
 			rowData.add("" + saleList.get(i).getCgstSum());
 			rowData.add("" + saleList.get(i).getSgstSum());
 			rowData.add("" + saleList.get(i).getIgstSum());
+			rowData.add("" + saleList.get(i).getTcsAmt());
 
 			float grandTot = saleList.get(i).getTaxableAmt() + saleList.get(i).getCgstSum()
-					+ saleList.get(i).getSgstSum() + saleList.get(i).getIgstSum();
+					+ saleList.get(i).getSgstSum() + saleList.get(i).getIgstSum() + saleList.get(i).getTcsAmt();
 
 			rowData.add("" + grandTot);
 
@@ -1663,6 +1744,7 @@ public class SalesReportController {
 			cgstTot = cgstTot + saleList.get(i).getCgstSum();
 			sgstTot = sgstTot + saleList.get(i).getSgstSum();
 			igstTot = igstTot + saleList.get(i).getIgstSum();
+			ttlTcs = ttlTcs + saleList.get(i).getTcsAmt();
 			tot = tot + grandTot;
 
 			expoExcel.setRowData(rowData);
@@ -1678,6 +1760,7 @@ public class SalesReportController {
 		rowData.add("" + cgstTot);
 		rowData.add("" + sgstTot);
 		rowData.add("" + igstTot);
+		rowData.add("" + ttlTcs);
 		rowData.add("" + tot);
 
 		expoExcel.setRowData(rowData);
@@ -1685,8 +1768,8 @@ public class SalesReportController {
 
 		HttpSession session = request.getSession();
 		session.setAttribute("exportExcelListNew", exportToExcelList);
-		session.setAttribute("excelNameNew", "BillWiseGroupByDate");
-		session.setAttribute("reportNameNew", "Sales Report Datewise");
+		session.setAttribute("excelNameNew", "SalesReportGroupByDate");
+		session.setAttribute("reportNameNew", "Sales Report Group By Date");
 		session.setAttribute("searchByNew", "From Date: " + fromDate + "  To Date: " + toDate + " ");
 		session.setAttribute("mergeUpto1", "$A$1:$F$1");
 		session.setAttribute("mergeUpto2", "$A$2:$F$2");
@@ -1744,7 +1827,7 @@ public class SalesReportController {
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
-
+			float tcsPer = getTcsPer();
 			if (isAllFrSelected) {
 
 				System.out.println("Inside If all fr Selected ");
@@ -1759,6 +1842,10 @@ public class SalesReportController {
 						typeRef);
 
 				saleList = responseEntity.getBody();
+				for (int i = 0; i < saleList.size(); i++) {					
+					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
+					saleList.get(i).setTcsAmt(roundUp(calTcs));
+				}
 				saleListForPdf = new ArrayList<>();
 
 				saleListForPdf = saleList;
@@ -1778,6 +1865,10 @@ public class SalesReportController {
 						Constants.url + "getSaleReportBillwiseByDate", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 				saleList = responseEntity.getBody();
+				for (int i = 0; i < saleList.size(); i++) {					
+					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
+					saleList.get(i).setTcsAmt(roundUp(calTcs));
+				}
 				saleListForPdf = new ArrayList<>();
 
 				saleListForPdf = saleList;
@@ -1920,6 +2011,8 @@ public class SalesReportController {
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 			RestTemplate restTemplate = new RestTemplate();
 
+			float tcsPer = getTcsPer();
+			
 //			if (isAllFrSelected) {
 //
 //				System.out.println("Inside If all fr Selected ");
@@ -1953,6 +2046,12 @@ public class SalesReportController {
 					Constants.url + "getSaleReportBillwiseByMonth", HttpMethod.POST, new HttpEntity<>(map), typeRef);
 
 			saleList = responseEntity.getBody();
+			
+			for (int i = 0; i < saleList.size(); i++) {					
+				float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
+				saleList.get(i).setTcsAmt(roundUp(calTcs));
+			}
+			
 			saleListForPdf = new ArrayList<>();
 
 			saleListForPdf = saleList;
@@ -1977,6 +2076,7 @@ public class SalesReportController {
 		rowData.add("CGST");
 		rowData.add("SGST");
 		rowData.add("IGST");
+		rowData.add("TCS");
 		rowData.add("Total");
 
 //		rowData.add("Bill No");
@@ -1996,7 +2096,7 @@ public class SalesReportController {
 		expoExcel.setRowData(rowData);
 		exportToExcelList.add(expoExcel);
 
-		float taxableTotal = 0, cgstTotal = 0, sgstTotal = 0, igstTotal = 0, tot = 0;
+		float taxableTotal = 0, cgstTotal = 0, sgstTotal = 0, igstTotal = 0, tot = 0, ttlTcs = 0;
 
 		for (int i = 0; i < saleList.size(); i++) {
 			expoExcel = new ExportToExcel();
@@ -2023,14 +2123,16 @@ public class SalesReportController {
 			rowData.add("" + saleList.get(i).getCgstSum());
 			rowData.add("" + saleList.get(i).getSgstSum());
 			rowData.add("" + saleList.get(i).getIgstSum());
+			rowData.add("" + saleList.get(i).getTcsAmt());
 
 			taxableTotal = taxableTotal + saleList.get(i).getTaxableAmt();
 			cgstTotal = cgstTotal + saleList.get(i).getCgstSum();
 			sgstTotal = sgstTotal + saleList.get(i).getSgstSum();
 			igstTotal = igstTotal + saleList.get(i).getIgstSum();
+			ttlTcs = ttlTcs + saleList.get(i).getTcsAmt();
 
 			float grandTot = saleList.get(i).getTaxableAmt() + saleList.get(i).getCgstSum()
-					+ saleList.get(i).getSgstSum() + saleList.get(i).getIgstSum();
+					+ saleList.get(i).getSgstSum() + saleList.get(i).getIgstSum() + saleList.get(i).getTcsAmt();
 			rowData.add("" + grandTot);
 
 			tot = tot + grandTot;
@@ -2048,6 +2150,7 @@ public class SalesReportController {
 		rowData.add("" + cgstTotal);
 		rowData.add("" + sgstTotal);
 		rowData.add("" + igstTotal);
+		rowData.add("" + ttlTcs);
 		rowData.add("" + tot);
 
 		expoExcel.setRowData(rowData);
@@ -2109,7 +2212,9 @@ public class SalesReportController {
 			}
 
 			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
-			RestTemplate restTemplate = new RestTemplate();
+			RestTemplate restTemplate = new RestTemplate();			
+
+			float tcsPer = getTcsPer();
 
 			if (isAllFrSelected) {
 
@@ -2125,6 +2230,12 @@ public class SalesReportController {
 						typeRef);
 
 				saleList = responseEntity.getBody();
+				
+				for (int i = 0; i < saleList.size(); i++) {					
+					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
+					saleList.get(i).setTcsAmt(roundUp(calTcs));
+				}
+				
 				saleListForPdf = new ArrayList<>();
 
 				saleListForPdf = saleList;
@@ -2145,6 +2256,12 @@ public class SalesReportController {
 						typeRef);
 
 				saleList = responseEntity.getBody();
+				
+				for (int i = 0; i < saleList.size(); i++) {					
+					float calTcs = ((saleList.get(i).getTaxableAmt()+ saleList.get(i).getTotalTax())*tcsPer)/100;
+					saleList.get(i).setTcsAmt(roundUp(calTcs));
+				}
+				
 				saleListForPdf = new ArrayList<>();
 
 				saleListForPdf = saleList;
@@ -7001,5 +7118,22 @@ public class SalesReportController {
 
 		return model;
 	}
+	
+	private float getTcsPer() {
+		float tcsPer = 0;
+		try{			
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+			
+			map.add("settingKey", "TCS Value");
+			SettingNew getTcsVal = restTemplate.postForObject(Constants.url + "getSettingValueByKey", map,
+			SettingNew.class);	
+			tcsPer = Float.parseFloat(getTcsVal.getSettingValue1());
+		}catch (Exception e) {
+			e.getMessage();
+		}
+		return tcsPer;
+	}
+
 
 }

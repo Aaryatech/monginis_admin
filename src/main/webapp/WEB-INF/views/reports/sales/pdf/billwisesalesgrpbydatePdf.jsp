@@ -63,7 +63,7 @@ th {
 				<th>CGST</th>
 				<th>SGST</th>
 				<th>IGST</th>
-				<!-- <th>Round Off</th> -->
+				<th>TCS</th>
 				<th>Total</th>
 			</tr>
 		</thead>
@@ -73,6 +73,7 @@ th {
 			<c:set var="cgst" value="${0 }" />
 			<c:set var="sgst" value="${0 }" />
 			<c:set var="rOff" value="${0}" />
+			<c:set var="ttlTcs" value="${0}" />
 			<c:set var="grandTotal" value="${0 }" />
 			<c:forEach items="${report}" var="report" varStatus="count">
 				<tr>
@@ -89,7 +90,7 @@ th {
 					<td width="100" align="right"><fmt:formatNumber type="number"
 								maxFractionDigits="2"  minFractionDigits="2"  value="${report.igstSum}" /></td>
 					
-					<c:set var="total" value="${report.cgstSum +report.sgstSum+report.igstSum + report.taxableAmt}" />
+					<c:set var="total" value="${report.cgstSum +report.sgstSum+report.igstSum + report.taxableAmt + report.tcsAmt}" />
 										<c:set var="sgst" value="${sgst + report.sgstSum }" />
 					
 					<c:set var="cgst" value="${cgst + report.cgstSum }" />
@@ -131,6 +132,12 @@ th {
 					<%-- <td><c:out value="${total}" /></td> --%>
 						<c:set var="rOff"
 						value="${rOff+report.roundOff}" />
+						
+						<c:set var="ttlTcs"
+						value="${ttlTcs+report.tcsAmt}" />
+						
+					<td width="100" align="right"><fmt:formatNumber type="number"
+								maxFractionDigits="2"  minFractionDigits="2"  value="${report.tcsAmt}" /></td>
 					<td width="100" align="right"><fmt:formatNumber type="number"
 								maxFractionDigits="2"  minFractionDigits="2"  value="${total}" /></td>
 				</tr>
@@ -147,8 +154,8 @@ th {
 								maxFractionDigits="2"  minFractionDigits="2"  value="${sgst}" /></b></td>
 					<td width="100" align="right"><b><fmt:formatNumber type="number"
 								maxFractionDigits="2"  minFractionDigits="2"  value="${igst}" /></b></td>
-					<%-- <td  width="100" align="right"><b><fmt:formatNumber type="number"
-								maxFractionDigits="2"  minFractionDigits="2"  value="${rOff}" /></b></td> --%>
+					 <td  width="100" align="right"><b><fmt:formatNumber type="number"
+								maxFractionDigits="2"  minFractionDigits="2"  value="${ttlTcs}" /></b></td>
 					<td width="100" align="right"><b><fmt:formatNumber type="number"
 								maxFractionDigits="2"  minFractionDigits="2"  value="${grandTotal}" /></b></td>
 					<!--  <td><b>Total</b></td> -->

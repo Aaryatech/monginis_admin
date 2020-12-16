@@ -176,7 +176,7 @@
 										<th>CGST</th>
 										<th>SGST</th>
 										<th>IGST</th>
-										<th>Round Off</th>
+										<th>TCS</th>
 										<th>Total</th>
 
 									</tr>
@@ -226,6 +226,7 @@
 				var ttlCgst = 0;
 				var ttlSgst = 0;
 				var ttlIgst = 0;
+				var ttlTcs = 0;
 				var grandTotal = 0;
 				
 				$('#loader').show();
@@ -243,8 +244,7 @@
 
 								},
 								function(data) {
-									
-								
+																	
 									$('#table_grid td').remove();
 									$('#loader').hide();
 
@@ -296,17 +296,17 @@
 														  	
 														  	ttlIgst = ttlIgst + report.igstSum;
 														}
-														tr.append($('<td style="text-align:right;"></td>').html(report.roundOff));
+														tr.append($('<td style="text-align:right;"></td>').html(report.tcsAmt));
 														
 														
 														if(report.isSameState==1){
 															// total=parseFloat(report.taxableAmt)+parseFloat(addCommas(report.totalTax));
-															total=parseFloat((report.taxableAmt)+(report.cgstSum)+(report.sgstSum));
+															total=parseFloat((report.taxableAmt)+(report.cgstSum)+(report.sgstSum)+(report.tcsAmt));
 															
 														}
 														else{
 															
-															 total=parseFloat(report.taxableAmt+report.igstSum);
+															 total=parseFloat(report.taxableAmt+report.igstSum+report.tcsAmt);
 														}
 
 													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(total.toFixed(2))));
@@ -317,6 +317,7 @@
 														
 														
 														ttlBaseVal = ttlBaseVal + report.taxableAmt;
+														ttlTcs = ttlTcs + report.tcsAmt;
 														grandTotal = grandTotal + total; 
 
 													})
@@ -332,7 +333,7 @@
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlCgst.toFixed(2))));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlSgst.toFixed(2))));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlIgst.toFixed(2))));
-													trr.append($('<td style="text-align:right;"></td>').html(''));
+													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlTcs.toFixed(2))));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(grandTotal.toFixed(2))));
 													$('#table_grid tbody')
 													.append(trr);

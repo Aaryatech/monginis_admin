@@ -40,6 +40,8 @@ public class SalesReportBillwise {
 	
 	String month;
 	
+	private float tcsAmt;
+	
 
 	public int getBillNo() {
 		return billNo;
@@ -185,13 +187,22 @@ public class SalesReportBillwise {
 		this.month = month;
 	}
 
+	public float getTcsAmt() {
+		return tcsAmt;
+	}
+
+	public void setTcsAmt(float tcsAmt) {
+		this.tcsAmt = tcsAmt;
+	}
+
 	@Override
 	public String toString() {
 		return "SalesReportBillwise [billNo=" + billNo + ", taxApplicable=" + taxApplicable + ", invoiceNo=" + invoiceNo
 				+ ", billDate=" + billDate + ", frName=" + frName + ", frId=" + frId + ", frCode=" + frCode
 				+ ", grandTotal=" + grandTotal + ", taxableAmt=" + taxableAmt + ", totalTax=" + totalTax + ", sgstSum="
 				+ sgstSum + ", cgstSum=" + cgstSum + ", igstSum=" + igstSum + ", roundOff=" + roundOff + ", frCity="
-				+ frCity + ", frGstNo=" + frGstNo + ", isSameState=" + isSameState + ", month=" + month + "]";
+				+ frCity + ", frGstNo=" + frGstNo + ", isSameState=" + isSameState + ", month=" + month + ", tcsAmt="
+				+ tcsAmt + "]";
 	}
 
 }

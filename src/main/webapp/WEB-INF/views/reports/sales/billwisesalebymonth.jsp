@@ -187,6 +187,7 @@
 										<th>CGST</th>
 										<th>SGST</th>
 										<th>IGST</th>
+										<th>TCS</th>
 										<th>Total</th>
 									</tr>
 								</thead>
@@ -239,6 +240,7 @@
 				var ttlCgst = 0;
 				var ttlSgst = 0;
 				var ttlIgst = 0;
+				var ttlTcs = 0;
 				var grandTotal = 0;
 				
 				$('#loader').show();
@@ -300,7 +302,9 @@
 															 total=report.taxableAmt+report.igstSum;
 														} */
 														
-														total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum+report.igstSum);
+														tr.append($('<td style="text-align:right;"></td>').html(report.tcsAmt.toFixed(2)));
+														
+														total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum+report.igstSum+report.tcsAmt);
 
 													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(total.toFixed(2))));
 
@@ -311,6 +315,7 @@
 														ttlCgst	= ttlCgst + report.cgstSum;
 														ttlSgst = ttlSgst + report.sgstSum;
 														ttlIgst = ttlIgst + report.igstSum;
+														ttlTcs = ttlTcs + report.tcsAmt;
 														grandTotal = grandTotal + total; 
 
 													})
@@ -323,7 +328,7 @@
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlCgst.toFixed(2))));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlSgst.toFixed(2))));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlIgst.toFixed(2))));
-													//trr.append($('<td style="text-align:right;"></td>').html(''));
+													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlIgst.ttlTcs(2))));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(grandTotal.toFixed(2))));
 													$('#table_grid tbody')
 													.append(trr);
@@ -516,7 +521,7 @@ function showChart(){
 						    	   var total;
 									
 									if(report.isSameState==1){
-										 total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum);
+										 total=parseFloat(report.taxableAmt)+parseFloat(report.cgstSum+report.sgstSum+report.tcsAmt);
 									}
 									else{
 										

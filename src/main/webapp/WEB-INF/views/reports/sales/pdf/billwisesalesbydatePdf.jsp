@@ -56,15 +56,16 @@ th {
 		id="table_grid" class="table table-bordered">
 		<thead>
 			<tr class="bgpink">
-				<th >Sr. No.</th>
-				<th >Bill No</th>
-				<th >Date</th>
-				<th >Party Name</th>
-				<th  >City</th>
-				<th >Basic Value</th>
-				<th  >CGST</th>
-				<th  >SGST</th>
-				<th >Total</th>
+				<th>Sr. No.</th>
+				<th>Bill No</th>
+				<th>Date</th>
+				<th>Party Name</th>
+				<th>City</th>
+				<th>Basic Value</th>
+				<th>CGST</th>
+				<th>SGST</th>
+				<th>TCS</th>
+				<th>Total</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -72,6 +73,7 @@ th {
 			<c:set var="igst" value="${0 }" />
 			<c:set var="cgst" value="${0 }" />
 			<c:set var="sgst" value="${0 }" />
+			<c:set var="ttlTcs" value="${0 }" />
 			<c:set var="grandTotal" value="${0 }" />
 			<c:forEach items="${report}" var="report" varStatus="count">
 				<tr>
@@ -89,7 +91,7 @@ th {
 								maxFractionDigits="2"  minFractionDigits="2"  value="${report.cgstSum}" /></td>
 					<td width="100" align="right"><fmt:formatNumber type="number"
 								maxFractionDigits="2"  minFractionDigits="2"  value="${report.sgstSum}" /></td>
-					<c:set var="total" value="${report.cgstSum +report.sgstSum + report.taxableAmt}" />
+					<c:set var="total" value="${report.cgstSum +report.sgstSum + report.taxableAmt + report.tcsAmt}" />
 										<c:set var="sgst" value="${sgst + report.sgstSum }" />
 					
 					<c:set var="cgst" value="${cgst + report.cgstSum }" />
@@ -107,8 +109,11 @@ th {
 					
 					<c:set var="grandTotal"
 						value="${grandTotal+total}" />
-					<%-- <td><c:out value="${total}" /></td> --%>
+					<c:set var="ttlTcs"
+						value="${ttlTcs + report.tcsAmt}" />
 					
+					<td width="100"align="right"><fmt:formatNumber type="number"
+								maxFractionDigits="2"  minFractionDigits="2"  value="${report.tcsAmt}" /></td>
 					<td width="100"align="right"><fmt:formatNumber type="number"
 								maxFractionDigits="2"  minFractionDigits="2"  value="${total}" /></td>
 				</tr>
@@ -123,7 +128,8 @@ th {
 								maxFractionDigits="2"  minFractionDigits="2"  value="${cgst}" /></b></td>
 					<td width="100"align="right"><b><fmt:formatNumber type="number"
 								maxFractionDigits="2"  minFractionDigits="2"  value="${sgst}" /></b></td>
-				
+					<td width="100" align="right"><b><fmt:formatNumber type="number"
+								maxFractionDigits="2"  minFractionDigits="2"  value="${ttlTcs}" /></b></td>
 					<td width="100" align="right"><b><fmt:formatNumber type="number"
 								maxFractionDigits="2"  minFractionDigits="2"  value="${grandTotal}" /></b></td>
 					<!--  <td><b>Total</b></td> -->
