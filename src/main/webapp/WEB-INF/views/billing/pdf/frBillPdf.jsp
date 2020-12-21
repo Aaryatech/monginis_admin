@@ -467,6 +467,7 @@
 							
 							</c:when>
 						</c:choose>
+						<c:set var="ttlTaxVal" value="${0}" />
 						<c:set var="srCnt" value="${srCnt+1}" />
 							<c:set var="totalRowCount" value="${totalRowCount+1}" />
 							<tr>
@@ -537,6 +538,8 @@
 										type="number" maxFractionDigits="2" minFractionDigits="2"
 										value="${billDetails.sgstRs}" /></td>
 								<c:set var="totalSgst" value="${totalSgst+billDetails.sgstRs}" />
+								
+								<c:set var="ttlTaxVal" value="${totalCgst+totalSgst}" />
 								</c:when>
 								<c:otherwise>
 								<td align="right"
@@ -548,6 +551,7 @@
 										type="number" maxFractionDigits="2" minFractionDigits="2"
 										value="${billDetails.igstRs}" /></td>
 								<c:set var="totalIgst" value="${totalIgst+billDetails.igstRs}" />
+								<c:set var="ttlTaxVal" value="${totalIgst}" />
 								</c:otherwise>
 								</c:choose>
 							</tr>
@@ -603,7 +607,8 @@
 				</c:choose>
 			</tr>
 			<tr>
-				<c:set var="finalAmt" value="${totalAmt+totalCgst+totalSgst}"></c:set>
+				<%-- <c:set var="finalAmt" value="${totalAmt+totalCgst+totalSgst}"></c:set> --%>
+				 <c:set var="finalAmt" value="${totalAmt+ttlTaxVal+frDetails.tcsAmt}"></c:set>
 				<%
 					double fAmt = 0;// (Double)pageContext.getAttribute("finalAmt");
 						fAmt = Math.round(fAmt);
@@ -628,7 +633,87 @@
 				<td style="border-bottom: 1px solid #313131; font-size: 12px;"><b>Total:</b></td>
 				<td align="right"
 					style="border-left: 1px solid #313131; border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 12px;"><b>
-						<fmt:formatNumber type="number" value="${frDetails.grandTotal}" />
+						<fmt:formatNumber type="number" value="${finalAmt}" maxFractionDigits="2" minFractionDigits="2"/>
+				</b></td>
+			</tr>
+			<!-- TCS -->
+			<tr>				
+				<td align="right"
+					style="border-left: 1px solid #313131; border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 0px;">-</td>
+				<td align="right"
+					style="border-left: 1px solid #313131; border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				<td
+					style="border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				<c:choose>
+				<c:when test="${frDetails.isSameState==1}">	
+				<td
+					style="border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				</c:when>
+				</c:choose>
+				<td style="border-bottom: 1px solid #313131; font-size: 12px;"><b>TCS:</b></td>
+				<td align="right"
+					style="border-left: 1px solid #313131; border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 12px;"><b>
+						<fmt:formatNumber type="number" value="${frDetails.tcsAmt}" maxFractionDigits="2" minFractionDigits="2"/>
+				</b></td>
+			</tr>
+			
+			<!-- Round Off -->
+			<tr>
+				 <c:set var="calTotalAmt" value="${totalAmt+ttlTaxVal}"></c:set>
+				 <c:set var="calRndAmt" value="${Math.round(calTotalAmt)}"></c:set>
+				 <c:set var="finlRndAmt" value="${calTotalAmt-calRndAmt}"></c:set>				
+				<td align="right"
+					style="border-left: 1px solid #313131; border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 0px;">-</td>
+				<td align="right"
+					style="border-left: 1px solid #313131; border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				<td
+					style="border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				<c:choose>
+				<c:when test="${frDetails.isSameState==1}">	
+				<td
+					style="border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				</c:when>
+				</c:choose>
+				<td style="border-bottom: 1px solid #313131; font-size: 12px;"><b>Round Off:</b></td>
+				<td align="right"
+					style="border-left: 1px solid #313131; border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 12px;"><b>
+						<fmt:formatNumber type="number" value="${finlRndAmt}" maxFractionDigits="2" minFractionDigits="2"/>
+				</b></td>
+			</tr>
+			
+			<!-- Grand Total -->
+			<tr>				
+				<td align="right"
+					style="border-left: 1px solid #313131; border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 0px;">-</td>
+				<td align="right"
+					style="border-left: 1px solid #313131; border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				<td
+					style="border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				<c:choose>
+				<c:when test="${frDetails.isSameState==1}">	
+				<td
+					style="border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 0px;">-</td>
+				<td style="border-bottom: 1px solid #313131; font-size: 0px;">-</td>
+				</c:when>
+				</c:choose>
+				<td style="border-bottom: 1px solid #313131; font-size: 12px;"><b>Grand Total:</b></td>
+				<td align="right"
+					style="border-left: 1px solid #313131; border-bottom: 1px solid #313131; padding: 4px; color: #000; font-size: 12px;"><b>
+						<fmt:formatNumber type="number" value="${frDetails.grandTotal}" maxFractionDigits="2" minFractionDigits="2"/>
 				</b></td>
 			</tr>
 		</table>

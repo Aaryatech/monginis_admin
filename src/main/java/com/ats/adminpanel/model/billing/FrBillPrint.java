@@ -21,6 +21,7 @@ public class FrBillPrint {
 	String amtInWords;
 	
 	float grandTotal;
+	float tcsAmt;
 	
 	public List<SubCategory> subCatList;
 	
@@ -102,14 +103,18 @@ public class FrBillPrint {
 	public void setGrandTotal(float grandTotal) {
 		this.grandTotal = grandTotal;
 	}
+	public float getTcsAmt() {
+		return tcsAmt;
+	}
+	public void setTcsAmt(float tcsAmt) {
+		this.tcsAmt = tcsAmt;
+	}
 	@Override
 	public String toString() {
 		return "FrBillPrint [billDetailsList=" + billDetailsList + ", frId=" + frId + ", billNo=" + billNo + ", frName="
 				+ frName + ", frAddress=" + frAddress + ", invoiceNo=" + invoiceNo + ", isSameState=" + isSameState
-				+ ", billDate=" + billDate + ", amtInWords=" + amtInWords + ", grandTotal=" + grandTotal
-				+ ", subCatList=" + subCatList + "]";
+				+ ", billDate=" + billDate + ", amtInWords=" + amtInWords + ", grandTotal=" + grandTotal + ", tcsAmt="
+				+ tcsAmt + ", subCatList=" + subCatList + ", company=" + company + "]";
 	}
 	
-	
-
 }

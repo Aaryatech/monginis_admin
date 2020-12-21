@@ -1011,7 +1011,7 @@ public class BillController {
 				rowData.add("Cess Rs");
 				rowData.add("Item Discount Per");
 				rowData.add("Total Discount");
-				rowData.add("Rount Off"); 
+			//	rowData.add("Rount Off"); 
 				rowData.add("Total Amt"); 
 				rowData.add("Total Taxable Amt");
 				rowData.add("Cgst sum");
@@ -1022,6 +1022,7 @@ public class BillController {
 				rowData.add("Remark");
 				rowData.add("Erp Link");
 				rowData.add("Is Album");
+				rowData.add("TCS Amount"); 
 			 
 					
 				expoExcel.setRowData(rowData);
@@ -1060,7 +1061,7 @@ public class BillController {
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getCessRs());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getItemDiscPer());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getTotalDisc()); 
-					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getRoundOff()); 
+				//	rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getRoundOff()); 
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getTotalAmt());
 					
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getTotalTaxableAmt());
@@ -1072,6 +1073,7 @@ public class BillController {
 					rowData.add(salesVoucherList.getSalesVoucherList().get(i).getRemark());
 					rowData.add(salesVoucherList.getSalesVoucherList().get(i).getErpLink());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getIsAlbum());
+					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getRoundOff());
 					
 					
 					expoExcel.setRowData(rowData);
@@ -1608,6 +1610,7 @@ public class BillController {
 						billPrint.setBillDate(billHeadersListForPrint.get(i).getBillDate());
 						billPrint.setGrandTotal(billHeadersListForPrint.get(i).getGrandTotal());
 						billPrint.setCompany(billHeadersListForPrint.get(i).getCompany());
+						billPrint.setTcsAmt(billHeadersListForPrint.get(i).getRoundOff());
 						billDetails.add(billDetailsListForPrint.get(j));
 
 						for (int a = 0; a < subCatAList.size(); a++) {

@@ -13,6 +13,7 @@ public class FrBillHeaderForPrint {
 	private float grandTotal;
 	private float taxableAmt;
 	private float totalTax;
+	private float roundOff;
 	private Integer status;
 	private String remark;
 	private Integer delStatus;
@@ -153,15 +154,21 @@ public class FrBillHeaderForPrint {
 		this.billDate = billDate;
 	}
 
+	public float getRoundOff() {
+		return roundOff;
+	}
+
+	public void setRoundOff(float roundOff) {
+		this.roundOff = roundOff;
+	}
+
 	@Override
 	public String toString() {
 		return "FrBillHeaderForPrint [billNo=" + billNo + ", frName=" + frName + ", taxApplicable=" + taxApplicable
 				+ ", invoiceNo=" + invoiceNo + ", billDate=" + billDate + ", frId=" + frId + ", frCode=" + frCode
-				+ ", grandTotal=" + grandTotal + ", taxableAmt=" + taxableAmt + ", totalTax=" + totalTax + ", status="
-				+ status + ", remark=" + remark + ", delStatus=" + delStatus + ", isSameState=" + isSameState
-				+ ", frAddress=" + frAddress + "]";
+				+ ", grandTotal=" + grandTotal + ", taxableAmt=" + taxableAmt + ", totalTax=" + totalTax + ", roundOff="
+				+ roundOff + ", status=" + status + ", remark=" + remark + ", delStatus=" + delStatus + ", isSameState="
+				+ isSameState + ", frAddress=" + frAddress + ", company=" + company + "]";
 	}
-
-	
 
 }
