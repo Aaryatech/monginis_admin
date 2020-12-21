@@ -87,7 +87,7 @@
 
 
 										<div class="form-group">
-											<label class="col-sm-3 col-lg-2 control-label" for="fr_name">Franchisee
+											<label class="col-sm-3 col-lg-2 control-label" for="fr_name">Franchise
 												Name</label>
 											<div class="col-sm-6 col-lg-4 controls">
 												<input type="text" name="fr_name"
@@ -452,6 +452,19 @@
                                                                 </c:if>
                                                              </c:forEach>
 												</select>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Is
+												TCS Applicable?</label>
+											<div class="col-sm-9 col-lg-10 controls">
+												<label class="radio-inline"> <input type="radio"
+													name="tcsApply" id="yRadio" value="1" ${franchiseeList.frOpening==1 ? 'checked' : ''}/>
+													YES
+												</label> <label class="radio-inline"> <input type="radio"
+													name="tcsApply" id="nRadio" value="0" ${franchiseeList.frOpening==0 ? 'checked' : ''}>
+													NO
+												</label>
 											</div>
 										</div>
 	

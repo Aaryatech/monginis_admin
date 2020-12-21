@@ -664,7 +664,7 @@
 			
 			<!-- Round Off -->
 			<tr>
-				 <c:set var="calTotalAmt" value="${totalAmt+ttlTaxVal}"></c:set>
+				 <c:set var="calTotalAmt" value="${finalAmt}"></c:set>
 				 <c:set var="calRndAmt" value="${Math.round(calTotalAmt)}"></c:set>
 				 <c:set var="finlRndAmt" value="${calTotalAmt-calRndAmt}"></c:set>				
 				<td align="right"

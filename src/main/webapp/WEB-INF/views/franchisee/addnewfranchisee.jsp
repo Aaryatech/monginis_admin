@@ -424,6 +424,19 @@
 										</div>
 										<div class="form-group">
 											<label class="col-sm-3 col-lg-2 control-label">Is
+												TCS Applicable?</label>
+											<div class="col-sm-9 col-lg-10 controls">
+												<label class="radio-inline"> <input type="radio"
+													name="tcsApply" id="yRadio" value="1"  />
+													YES
+												</label> <label class="radio-inline"> <input type="radio"
+													name="tcsApply" id="nRadio" value="0" checked>
+													NO
+												</label>
+											</div>
+										</div>
+										<div class="form-group">
+											<label class="col-sm-3 col-lg-2 control-label">Is
 												Same State?</label>
 											<div class="col-sm-9 col-lg-10 controls">
 												<label class="radio-inline"> <input type="radio"

@@ -641,6 +641,7 @@ public class FranchiseeController {
 		map.add("frAddress", frAddr);
 		map.add("frTarget", frTarget);
 		map.add("isSameState", isSameState);
+		map.add("isTcs", Integer.parseInt(request.getParameter("tcsApply")));
 
 		ErrorMessage errorMessage = rest.postForObject(Constants.url + "saveFranchiseeNew", map, ErrorMessage.class);
 		// ErrorMessage errorMessage = rest.postForObject(Constants.url +
@@ -1727,6 +1728,7 @@ public class FranchiseeController {
 			map.add("frAddress", frAddr);
 			map.add("frTarget", frTarget);
 			map.add("isSameState", isSameState);
+			map.add("isTcs", Integer.parseInt(request.getParameter("tcsApply")));
 
 			ErrorMessage errorMessage = rest.postForObject(Constants.url + "updateFranchiseeNew", map,
 					ErrorMessage.class);
