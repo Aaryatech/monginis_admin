@@ -26,7 +26,7 @@
 	src="${pageContext.request.contextPath}/resources/js/jquery-1.10.2.min.js"></script>
 
 
- 	<c:forEach items="${spCakeOrder}" var="spCakeOrder"
+ 	<c:forEach items="${frMob}" var="spCakeOrder"
 														varStatus="count"> 
 														
 <table width="100%" style="font-family:arial; font-size:12px; border:1px solid #000000; margin-bottom:40px;">
