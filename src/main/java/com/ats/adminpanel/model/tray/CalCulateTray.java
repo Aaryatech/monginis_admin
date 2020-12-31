@@ -19,6 +19,10 @@ public class CalCulateTray {
 	private float orderQty;
 
 	private float trayQty;
+	
+	private int frTarget;
+	
+	
 
 	public int getOrderId() {
 		return orderId;
@@ -92,11 +96,21 @@ public class CalCulateTray {
 		this.trayQty = trayQty;
 	}
 
+	public int getFrTarget() {
+		return frTarget;
+	}
+
+	public void setFrTarget(int frTarget) {
+		this.frTarget = frTarget;
+	}
+
 	@Override
 	public String toString() {
 		return "CalCulateTray [orderId=" + orderId + ", frId=" + frId + ", subCatId=" + subCatId + ", frRouteId="
 				+ frRouteId + ", routeName=" + routeName + ", frName=" + frName + ", subCatName=" + subCatName
-				+ ", orderQty=" + orderQty + ", trayQty=" + trayQty + "]";
+				+ ", orderQty=" + orderQty + ", trayQty=" + trayQty + ", frTarget=" + frTarget + "]";
 	}
+
+	
 
 }

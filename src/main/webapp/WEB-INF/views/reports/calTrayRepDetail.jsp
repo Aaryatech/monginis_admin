@@ -93,7 +93,7 @@
 													</div>
 												</div>
 
-
+									
 												<table class="table table-bordered  " style="width: 100%"
 													id="table_gridFR" border="1">
 													<thead style="background-color: #f3b5db;">
@@ -103,8 +103,11 @@
 															<th width="20%">SubCategory Name</th>
 															<th width="10%">Qty</th>
 															<th width="10%">Tray Qty</th>
+															<th width="10%">Franchisee Target</th>
+															
 														</tr>
 													</thead>
+													
 													<tbody>
 
 
@@ -155,6 +158,8 @@
 																							value="${calListForFr.orderQty}" /></td>
 																					<td align="right"><c:out
 																							value="${calListForFr.trayQty}" /></td>
+																					<td align="right"><c:out
+																							value="${calListForFr.frTarget}" /></td>
 																				</tr>
 
 
@@ -244,6 +249,7 @@
 														<th width="70%">Franchisee Name</th>
 														<th width="10%">Qty</th>
 														<th width="10%">Tray Qty</th>
+														<th width="10%">Franchisee Target</th>
 													</tr>
 												</thead>
 												<tbody>
@@ -270,6 +276,9 @@
 
 																	<c:set var="totalFRTrayQty"
 																		value="${totalFRTrayQty+calListForFr.trayQty}" />
+																		
+																		<c:set var="FrTarget"
+																		value="${calListForFr.frTarget}" />
 																</c:when>
 															</c:choose>
 
@@ -293,7 +302,8 @@
 
 															<td align="right"><c:out value="${totalFROrderQty}" /></td>
 															<td align="right"><c:out value="${totalFRTrayQty}" /></td>
-
+															<td align="right"><c:out
+																value="${FrTarget}" /></td>
 
 														</tr>
 													</c:forEach>
@@ -306,8 +316,9 @@
 																value="${totalFRFinalOrderQty}" /></td>
 														<td align="right"><c:out
 																value="${totalFRFinalTrayQty}" /></td>
+														
 
-
+																
 													</tr>
 
 

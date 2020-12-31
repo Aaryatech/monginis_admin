@@ -134,11 +134,16 @@
 
 							<div class="form-group" align="center">
 
-								<input type="submit" id="submit1" class="btn btn-primary"
-									value="Calculate Tray fr_sub" name="submit1"> <input
-									type="submit" id="submit2" class="btn btn-primary" value="FR"
-									name="submit2"> <input type="submit" id="submit3"
-									class="btn btn-primary" value="Route" name="submit3"> <input
+								<input type="submit" id="submit1" formtarget="_blank" class="btn btn-primary"
+									value="Calculate Tray fr_sub" name="submit1"> 
+									<input
+									type="submit" id="submit2" formtarget="_blank" class="btn btn-primary" value="FR"
+									name="submit2">
+									
+									 <input type="submit" id="submit3" formtarget="_blank"
+									class="btn btn-primary" value="Route" name="submit3"> 
+									
+									<input formtarget="_blank"
 									type="submit" id="submit4" class="btn btn-primary"
 									value="route Sub" name="submit4">
 
