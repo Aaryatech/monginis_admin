@@ -21,7 +21,7 @@ public class FrMenu implements Serializable {
     private Integer catId;
     private String time;
     private Integer isSameDayApplicable;
-	private int day;
+	private String day;
 	private String date;
 
     
@@ -139,11 +139,11 @@ public class FrMenu implements Serializable {
 	}
 
 
-	public int getDay() {
+	public String getDay() {
 		return day;
 	}
 
-	public void setDay(int day) {
+	public void setDay(String day) {
 		this.day = day;
 	}
 
