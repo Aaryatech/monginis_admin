@@ -8,7 +8,7 @@
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
-	<c:url var="getBillList" value="/getCrnSalesReportByDate"></c:url>
+	<c:url var="getBillList" value="/getConsldtCrnSalesReportByDate"></c:url>
 <div class="container" id="main-container">
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
@@ -30,7 +30,7 @@
 		<div class="page-title">
 			<div>
 				<h1>
-					<i class="fa fa-file-o"></i>Date Wise CRN Sales Report
+					<i class="fa fa-file-o"></i>Consolidated CRN Sales Report
 				</h1>
 				<h4></h4>
 			</div>
@@ -52,7 +52,7 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-bars"></i>View Date Wise CRN Sales Report
+					<i class="fa fa-bars"></i>View Consolidated CRN Sales Report
 				</h3>
 
 			</div>
@@ -166,8 +166,10 @@
 								style="width: 100%" id="table_grid">
 								<thead>
 									<tr>
-										<th>Sr.No.</th>
-										<th>CRN Date</th>
+										<!-- <th>Sr.No.</th> -->
+										<th>CRN No.</th>
+										<th>CRN Date</th>										
+										<th>Franchise Name</th>
 										<th>Taxable Amt</th>
 										<th>Tax Amt</th>
 										<th>Total</th>
@@ -248,9 +250,13 @@
 														
 														var tr = $('<tr></tr>');
 
-													  	tr.append($('<td></td>').html(key+1));
+													  /* 	tr.append($('<td></td>').html(key+1)); */
+													  	
+													  	tr.append($('<td></td>').html(report.crnNo));
 
 													  	tr.append($('<td></td>').html(report.crnDate));
+
+													  	tr.append($('<td></td>').html(report.frName));
 
 													  	tr.append($('<td style="text-align: right;"></td>').html(addCommas(report.crnTaxableAmt)));													  	
 													  	
@@ -271,7 +277,8 @@
 													});
 													var trr =$('<tr></tr>');
 													trr.append($('<td style="text-align:center; font-weight: 700;"></td>').html('Total'));
-													trr.append($('<td></td>').html(''));												
+													trr.append($('<td></td>').html(''));
+													trr.append($('<td></td>').html(''));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlTaxable.toFixed(2))));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlTax.toFixed(2))));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(grandTotal.toFixed(2))));
@@ -363,7 +370,7 @@ function genPdf()
 	var selectedFr = $("#selectFr").val();
 	var routeId=$("#selectRoute").val();
 
-   window.open('${pageContext.request.contextPath}/pdfForReport?url=pdf/showCrnSaleByDatePdf/'+from_date+'/'+to_date+'/'+selectedFr+'/');
+   window.open('${pageContext.request.contextPath}/pdfForReport?url=pdf/showConsoldtdCrnPdf/'+from_date+'/'+to_date+'/'+selectedFr+'/');
 	}
 
 

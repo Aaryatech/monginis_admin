@@ -7125,6 +7125,187 @@ public class SalesReportController {
 		return tcsPer;
 	}
 	
+	
+	@RequestMapping(value = "/showConsolidatedCrnReport", method = RequestMethod.GET)
+	public ModelAndView showConsolidatedCrnReportByDate(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/sales/consoldtdcrn");
+
+		try {
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			todaysDate = date.format(formatters);
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			allFrIdNameList = new AllFrIdNameList();
+			try {
+
+				allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFranchises", AllFrIdNameList.class);
+				// getAllFrIdName
+			} catch (Exception e) {
+				System.out.println("Exception in getAllFrIdName" + e.getMessage());
+				e.printStackTrace();
+
+			}
+
+			model.addObject("todaysDate", todaysDate);
+			model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
+
+		} catch (Exception e) {
+
+			System.out.println("Exc in /showConsolidatedCrnReportByDate  " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+	}
+	
+	@RequestMapping(value = "/getConsldtCrnSalesReportByDate", method = RequestMethod.GET)
+	public @ResponseBody List<CrnSalesReportDateWise> getConsldtCrnSalesReportByDate(HttpServletRequest request,
+			HttpServletResponse response) {
+		List<CrnSalesReportDateWise> crnSalesList = new ArrayList<CrnSalesReportDateWise>();
+		String fromDate = "";
+		String toDate = "";
+		try {
+			System.out.println("Inside get Sale Bill Wise");
+			
+			String selectedFr = request.getParameter("fr_id_list");
+			fromDate = request.getParameter("fromDate");
+			toDate = request.getParameter("toDate");
+			
+			selectedFr = selectedFr.substring(1, selectedFr.length() - 1);
+			selectedFr = selectedFr.replaceAll("\"", "");
+
+
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+
+			System.out.println("Inside else Few fr Selected ");
+
+			map.add("frIdList", selectedFr);
+			map.add("fromDate", fromDate);
+			map.add("toDate", toDate);
+
+			ParameterizedTypeReference<List<CrnSalesReportDateWise>> typeRef = new ParameterizedTypeReference<List<CrnSalesReportDateWise>>() {
+			};
+			ResponseEntity<List<CrnSalesReportDateWise>> responseEntity = restTemplate.exchange(
+					Constants.url + "getConsolidatedCrnReport", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+
+			crnSalesList = responseEntity.getBody();
+			
+			System.out.println("sales List Bill Wise " + saleList.toString());
+
+		} catch (Exception e) {
+			System.out.println("get sale Report Bill Wise " + e.getMessage());
+			e.printStackTrace();
+
+		}
+
+		// exportToExcel
+		List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+
+		ExportToExcel expoExcel = new ExportToExcel();
+		List<String> rowData = new ArrayList<String>();
+
+		rowData.add("CRN No.");
+		rowData.add("CRN Date");
+		rowData.add("Franchise");
+		rowData.add("Taxable Amt");
+		rowData.add("Tax Amt");
+		rowData.add("Total Amt");
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+
+		float taxableTotal = 0, taxTotal = 0, tot = 0;
+		int srNo = 1;
+		for (int i = 0; i < crnSalesList.size(); i++) {
+			expoExcel = new ExportToExcel();
+			rowData = new ArrayList<String>();
+
+			rowData.add("" + srNo);
+			rowData.add("" + crnSalesList.get(i).getCrnNo());
+			rowData.add("" + crnSalesList.get(i).getCrnDate());
+			rowData.add("" + crnSalesList.get(i).getFrName());
+			rowData.add("" + crnSalesList.get(i).getCrnTaxableAmt());
+			rowData.add("" + crnSalesList.get(i).getCrnTotalTax());
+			rowData.add("" + crnSalesList.get(i).getCrnGrandTotal());
+
+			taxableTotal = taxableTotal + crnSalesList.get(i).getCrnTaxableAmt();			
+			taxTotal = taxTotal + crnSalesList.get(i).getCrnTotalTax();
+			tot = tot + crnSalesList.get(i).getCrnGrandTotal();
+
+			srNo = srNo+1;
+			
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+
+		}
+
+		expoExcel = new ExportToExcel();
+		rowData = new ArrayList<String>();
+
+		rowData.add("TOTAL");
+		rowData.add("");
+		rowData.add("");
+		rowData.add("" + taxableTotal);
+		rowData.add("" + taxTotal);
+		rowData.add("" + tot);
+
+		expoExcel.setRowData(rowData);
+		exportToExcelList.add(expoExcel);
+
+		HttpSession session = request.getSession();
+		session.setAttribute("exportExcelListNew", exportToExcelList);
+		session.setAttribute("excelNameNew", "ConsolidateCRNReport");
+		session.setAttribute("reportNameNew", "Consolidate CRN Report");
+		session.setAttribute("searchByNew", "From Date: " + fromDate + "  To Date: " + toDate + " ");
+		session.setAttribute("mergeUpto1", "$A$1:$F$1");
+		session.setAttribute("mergeUpto2", "$A$2:$F$2");
+		return crnSalesList;
+
+	}
+
+	@RequestMapping(value = "pdf/showConsoldtdCrnPdf/{fDate}/{tDate}/{selectedFr}", method = RequestMethod.GET)
+	public ModelAndView showConsoldtdCrnPdf(@PathVariable String fDate, @PathVariable String tDate,
+			@PathVariable String selectedFr, HttpServletRequest request,
+			HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/sales/pdf/cncldtdcrnPdf");
+
+		List<CrnSalesReportDateWise> crnPdfList = new ArrayList<CrnSalesReportDateWise>();
+		
+		try {
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			RestTemplate restTemplate = new RestTemplate();
+			
+				map.add("frIdList", selectedFr);
+				map.add("fromDate", fDate);
+				map.add("toDate", tDate);
+
+				ParameterizedTypeReference<List<CrnSalesReportDateWise>> typeRef = new ParameterizedTypeReference<List<CrnSalesReportDateWise>>() {
+				};
+				ResponseEntity<List<CrnSalesReportDateWise>> responseEntity = restTemplate.exchange(
+						Constants.url + "getConsolidatedCrnReport", HttpMethod.POST, new HttpEntity<>(map), typeRef);
+				crnPdfList = responseEntity.getBody();
+				
+
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+
+		model.addObject("fromDate", fDate);
+
+		model.addObject("toDate", tDate);
+
+		model.addObject("report", crnPdfList);
+
+		return model;
+	}
+	
 	@RequestMapping(value = "/showCrnSalesReportByDate", method = RequestMethod.GET)
 	public ModelAndView showCrnSalesReportByDate(HttpServletRequest request, HttpServletResponse response) {
 
@@ -7212,7 +7393,6 @@ public class SalesReportController {
 
 		rowData.add("Sr No.");
 		rowData.add("CRN Date");
-		rowData.add("Franchise");
 		rowData.add("Taxable Amt");
 		rowData.add("Tax Amt");
 		rowData.add("Total Amt");
@@ -7228,7 +7408,6 @@ public class SalesReportController {
 
 			rowData.add("" + srNo);
 			rowData.add("" + crnSalesList.get(i).getCrnDate());
-			rowData.add("" + crnSalesList.get(i).getFrName());
 			rowData.add("" + crnSalesList.get(i).getCrnTaxableAmt());
 			rowData.add("" + crnSalesList.get(i).getCrnTotalTax());
 			rowData.add("" + crnSalesList.get(i).getCrnGrandTotal());
@@ -7247,7 +7426,6 @@ public class SalesReportController {
 		rowData = new ArrayList<String>();
 
 		rowData.add("TOTAL");
-		rowData.add("");
 		rowData.add("");
 		rowData.add("" + taxableTotal);
 		rowData.add("" + taxTotal);

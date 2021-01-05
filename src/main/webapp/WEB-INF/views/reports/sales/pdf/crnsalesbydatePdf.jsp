@@ -81,7 +81,7 @@ th {
 								maxFractionDigits="2"  minFractionDigits="2"  value="${report.crnGrandTotal}" /></td>
 					
 					
-					<c:set var="ttlTaxable" value="${taxAmount + report.crnTaxableAmt}" />					
+					<c:set var="ttlTaxable" value="${ttlTaxable + report.crnTaxableAmt}" />					
 					<c:set var="ttlTax" value="${ttlTax + report.crnTotalTax}" />
 					<c:set var="grandTotal" value="${grandTotal + report.crnGrandTotal}" />		
 				</tr>

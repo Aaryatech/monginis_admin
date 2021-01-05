@@ -11,7 +11,7 @@
 
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-<title>CRN Sales Report Monthwise PDF</title>
+<title>CRN Sales Report Billwise PDF</title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -51,13 +51,14 @@ th {
 <h3 align="center">Galdhar Foods Pvt Ltd</h3>
 <p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
 
-<div align="center"> <h5> CRN Sales Report (Month Wise)  &nbsp;&nbsp;&nbsp;&nbsp; From &nbsp; ${fromDate}  &nbsp;To &nbsp; ${toDate}</h5></div>
+<div align="center"> <h5> CRN Sales Report (Date Wise)  &nbsp;&nbsp;&nbsp;&nbsp; From &nbsp; ${fromDate}  &nbsp;To &nbsp; ${toDate}</h5></div>
 	<table  align="center" border="1" cellspacing="0" cellpadding="1" 
 		id="table_grid" class="table table-bordered">
 		<thead>
 			<tr class="bgpink">
 				<th>Sr.No.</th>
-				<th>Month</th>
+				<th>CRN No.</th>
+				<th>CRN Date</th>
 				<th>Franchise Name</th>
 				<th>Taxable Amt</th>
 				<th>Tax Amt</th>
@@ -71,7 +72,8 @@ th {
 			<c:forEach items="${report}" var="report" varStatus="count">
 				<tr>
 					<td width="0" ><c:out value="${count.index+1}" /></td>
-					<td width="100" align="left"><c:out value="${report.monthName}" /></td>
+					<td width="100" align="center"><c:out value="${report.crnDate}" /></td>
+					<td width="100" align="right"><c:out value="${report.crnNo}" /></td>
 					<td width="100"><c:out value="${report.frName}" /></td>
 					<td width="80" align="right"><fmt:formatNumber type="number"
 								maxFractionDigits="2"  minFractionDigits="2"  value="${report.crnTaxableAmt}" /></td>
@@ -90,6 +92,7 @@ th {
 				<tr>
 				
 					<td width="100" align="left"><b>Total</b></td>
+					<td></td>
 					<td></td>
 					<td></td>				
 					<td width="100" align="right"><b><fmt:formatNumber type="number"
