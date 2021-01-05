@@ -8,7 +8,7 @@
 	
 	<jsp:include page="/WEB-INF/views/include/logout.jsp"></jsp:include>
 
-	<c:url var="getBillList" value="/getSaleBillwise"></c:url>
+	<c:url var="getBillList" value="/getCrnSalesReportByDate"></c:url>
 <div class="container" id="main-container">
 	<!-- BEGIN Sidebar -->
 	<div id="sidebar" class="navbar-collapse collapse">
@@ -53,6 +53,7 @@
 			<div class="box-title">
 				<h3>
 					<i class="fa fa-bars"></i>View Date Wise CRN Sales Report
+				</h3>
 
 			</div>
 
@@ -87,7 +88,7 @@
  -->
 				<div class="row">
 					<div class="form-group">
-						<label class="col-sm-3 col-lg-2 control-label">Select
+						<%-- <label class="col-sm-3 col-lg-2 control-label">Select
 							Route</label>
 						<div class="col-sm-6 col-lg-4 controls">
 							<select data-placeholder="Select Route"
@@ -100,9 +101,9 @@
 								</c:forEach>
 							</select>
 
-						</div>
+						</div> --%>
 
-						<label class="col-sm-3 col-lg-2 control-label"><b>OR</b>Select
+						<label class="col-sm-3 col-lg-2 control-label">Select
 							Franchisee</label>
 						<div class="col-sm-6 col-lg-4">
 
@@ -126,7 +127,7 @@
 				<div class="row">
 					<div class="col-md-12" style="text-align: center;">
 						<button class="btn btn-info" onclick="searchReport()">Search
-							Billwise Report</button>
+							CRN Sales Report</button>
 					<button class="btn btn-primary" value="PDF" id="PDFButton" onclick="genPdf()">PDF</button>
 					</div>
 				</div>
@@ -166,18 +167,11 @@
 								<thead>
 									<tr>
 										<th>Sr.No.</th>
-										<th>Bill No</th>
-										<th>Date</th>
-										<th>Party Name</th>
-										<th>City</th>
-										<th>GSTIN</th>
-										<th>Basic Value</th>
-										<th>CGST</th>
-										<th>SGST</th>
-										<th>IGST</th>
-										<th>TCS</th>
+										<th>CRN Date</th>
+										<th>Franchise Name</th>
+										<th>Taxable Amt</th>
+										<th>Tax Amt</th>
 										<th>Total</th>
-
 									</tr>
 								</thead>
 								<tbody>
@@ -211,21 +205,13 @@
 
 	<script type="text/javascript">
 		function searchReport() {
-		//	var isValid = validate();
-
-				var selectedFr = $("#selectFr").val();
-				var routeId=$("#selectRoute").val();
-				
+			if(validate()){
+				var selectedFr = $("#selectFr").val();				
 				var from_date = $("#fromDate").val();
 				var to_date = $("#toDate").val();
 				
-				var total = 0;
-				
-				var ttlBaseVal = 0;
-				var ttlCgst = 0;
-				var ttlSgst = 0;
-				var ttlIgst = 0;
-				var ttlTcs = 0;
+				var ttlTaxable = 0;
+				var ttlTax = 0;
 				var grandTotal = 0;
 				
 				$('#loader').show();
@@ -238,12 +224,10 @@
 									fr_id_list : JSON.stringify(selectedFr),
 									fromDate : from_date,
 									toDate : to_date,
-									route_id:routeId,
 									ajax : 'true'
-
 								},
 								function(data) {
-																	
+												
 									$('#table_grid td').remove();
 									$('#loader').hide();
 
@@ -267,79 +251,40 @@
 
 													  	tr.append($('<td></td>').html(key+1));
 
-													  	tr.append($('<td></td>').html(report.invoiceNo));
-
-													  	tr.append($('<td></td>').html(report.billDate));
+													  	tr.append($('<td></td>').html(report.crnDate));
 
 													  	tr.append($('<td></td>').html(report.frName));
+
+													  	tr.append($('<td style="text-align: right;"></td>').html(addCommas(report.crnTaxableAmt)));													  	
 													  	
-													  	
-													  	tr.append($('<td></td>').html(report.frCity));
+													  	tr.append($('<td style="text-align: right;"></td>').html(addCommas(report.crnTotalTax)));
 
-													  	tr.append($('<td></td>').html(report.frGstNo));
+													  	tr.append($('<td style="text-align: right;"></td>').html(addCommas(report.crnGrandTotal)));
 
-													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.taxableAmt)));
-													  	
-													  	if(report.isSameState==1){
-														  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.cgstSum)));
-														  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.sgstSum)));
-														  	tr.append($('<td  style="text-align:right;"></td>').html(0));
-														  	
-														  	ttlCgst	= ttlCgst + report.cgstSum;
-															ttlSgst = ttlSgst + report.sgstSum;
-														}
-														else{
-															tr.append($('<td  style="text-align:right;"></td>').html(0));
-														  	tr.append($('<td  style="text-align:right;"></td>').html(0));
-														  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(report.igstSum)));
-														  	
-														  	ttlIgst = ttlIgst + report.igstSum;
-														}
-														tr.append($('<td style="text-align:right;"></td>').html(report.tcsAmt));
-														
-														
-														if(report.isSameState==1){
-															// total=parseFloat(report.taxableAmt)+parseFloat(addCommas(report.totalTax));
-															total=parseFloat((report.taxableAmt)+(report.cgstSum)+(report.sgstSum)+(report.tcsAmt));
-															
-														}
-														else{
-															
-															 total=parseFloat(report.taxableAmt+report.igstSum+report.tcsAmt);
-														}
-
-													  	tr.append($('<td style="text-align:right;"></td>').html(addCommas(total.toFixed(2))));
-
+													  
 														$('#table_grid tbody')
 																.append(
 																		tr);
 														
 														
-														ttlBaseVal = ttlBaseVal + report.taxableAmt;
-														ttlTcs = ttlTcs + report.tcsAmt;
-														grandTotal = grandTotal + total; 
+														ttlTaxable = ttlTaxable + report.crnTaxableAmt;
+														ttlTax = ttlTax + report.crnTotalTax;
+														grandTotal = grandTotal + report.crnGrandTotal; 
 
-													})
+													});
 													var trr =$('<tr></tr>');
 													trr.append($('<td style="text-align:center; font-weight: 700;"></td>').html('Total'));
 													trr.append($('<td></td>').html(''));
-													trr.append($('<td></td>').html(''));
-													trr.append($('<td></td>').html(''));
-													trr.append($('<td></td>').html(''));
-													trr.append($('<td></td>').html(''));
-													
-													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlBaseVal.toFixed(2))));
-													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlCgst.toFixed(2))));
-													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlSgst.toFixed(2))));
-													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlIgst.toFixed(2))));
-													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlTcs.toFixed(2))));
+													trr.append($('<td></td>').html(''));													
+													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlTaxable.toFixed(2))));
+													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlTax.toFixed(2))));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(grandTotal.toFixed(2))));
 													$('#table_grid tbody')
 													.append(trr);
 
 								});
 
-			
+			}
 		}
 	</script>
 
@@ -363,25 +308,26 @@ function addCommas(x){
 		function validate() {
 
 			var selectedFr = $("#selectFr").val();
-			var selectedMenu = $("#selectMenu").val();
-			var selectedRoute = $("#selectRoute").val();
+			var from_date = $("#fromDate").val();
+			var to_date = $("#toDate").val();
 
 
 			var isValid = true;
+			
+			if (from_date == "" || from_date == null) {
 
-			if (selectedFr == "" || selectedFr == null  ) {
- 
-				if(selectedRoute=="" || selectedRoute ==null ) {
-					alert("Please Select atleast one ");
-					isValid = false;
-				}
-				//alert("Please select Franchise/Route");
- 
-			} else if (selectedMenu == "" || selectedMenu == null) {
-
+				alert("Please Select from date ");
 				isValid = false;
-				alert("Please select Menu");
+			}
+			if (to_date == "" || to_date == null) {
 
+				alert("Please Select to date ");
+				isValid = false;
+			}
+			if (selectedFr == "" || selectedFr == null) {
+
+				alert("Please Select franchise one ");
+				isValid = false;
 			}
 			return isValid;
 
@@ -421,10 +367,7 @@ function genPdf()
 	var selectedFr = $("#selectFr").val();
 	var routeId=$("#selectRoute").val();
 
-   window.open('${pageContext.request.contextPath}/pdfForReport?url=pdf/showSaleReportByDatePdf/'+from_date+'/'+to_date+'/'+selectedFr+'/'+routeId+'/');
-
-	//window.open("${pageContext.request.contextPath}/pdfForReport?url=showSaleReportByDatePdf/"+from_date+"/"+to_date);
-	
+   window.open('${pageContext.request.contextPath}/pdfForReport?url=pdf/showCrnSaleByDatePdf/'+from_date+'/'+to_date+'/'+selectedFr+'/');
 	}
 
 
