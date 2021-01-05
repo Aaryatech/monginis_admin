@@ -151,7 +151,7 @@
 		<div class="box">
 			<div class="box-title">
 				<h3>
-					<i class="fa fa-list-alt"></i>Bill Report
+					<i class="fa fa-list-alt"></i>CRN Sales Report 
 				</h3>
 
 			</div>
