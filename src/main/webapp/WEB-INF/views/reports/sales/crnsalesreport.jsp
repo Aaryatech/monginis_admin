@@ -250,7 +250,7 @@
 
 													  	tr.append($('<td></td>').html(key+1));
 
-													  	tr.append($('<td></td>').html(report.crnDate));
+													  	tr.append($('<td style="text-align: center;"></td>').html(report.crnDate));
 
 													  	tr.append($('<td style="text-align: right;"></td>').html(addCommas(report.crnTaxableAmt)));													  	
 													  	

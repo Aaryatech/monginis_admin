@@ -58,7 +58,6 @@ th {
 			<tr class="bgpink">
 				<th>Sr.No.</th>
 				<th>Month</th>
-				<th>Franchise Name</th>
 				<th>Taxable Amt</th>
 				<th>Tax Amt</th>
 				<th>Total</th>
@@ -71,8 +70,7 @@ th {
 			<c:forEach items="${report}" var="report" varStatus="count">
 				<tr>
 					<td width="0" ><c:out value="${count.index+1}" /></td>
-					<td width="100" align="left"><c:out value="${report.monthName}" /></td>
-					<td width="100"><c:out value="${report.frName}" /></td>
+					<td width="100" align="left"><c:out value="${report.monthName}-${report.frName}" /></td>
 					<td width="80" align="right"><fmt:formatNumber type="number"
 								maxFractionDigits="2"  minFractionDigits="2"  value="${report.crnTaxableAmt}" /></td>
 					<td width="80" align="right"><fmt:formatNumber type="number"
@@ -90,8 +88,7 @@ th {
 				<tr>
 				
 					<td width="100" align="left"><b>Total</b></td>
-					<td></td>
-					<td></td>				
+					<td></td>			
 					<td width="100" align="right"><b><fmt:formatNumber type="number"
 								maxFractionDigits="2"  minFractionDigits="2"  value="${ttlTaxable}" /></b></td>
 					<td width="100" align="right"><b><fmt:formatNumber type="number"

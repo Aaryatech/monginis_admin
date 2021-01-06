@@ -7210,6 +7210,7 @@ public class SalesReportController {
 		ExportToExcel expoExcel = new ExportToExcel();
 		List<String> rowData = new ArrayList<String>();
 
+		rowData.add("Sr. No.");
 		rowData.add("CRN No.");
 		rowData.add("CRN Date");
 		rowData.add("Franchise");
@@ -7248,6 +7249,7 @@ public class SalesReportController {
 		rowData = new ArrayList<String>();
 
 		rowData.add("TOTAL");
+		rowData.add("");
 		rowData.add("");
 		rowData.add("");
 		rowData.add("" + taxableTotal);
@@ -7571,7 +7573,6 @@ public class SalesReportController {
 
 		rowData.add("Sr No.");
 		rowData.add("Month");
-		rowData.add("Franchise");
 		rowData.add("Taxable Amt");
 		rowData.add("Tax Amt");
 		rowData.add("Total Amt");
@@ -7586,8 +7587,7 @@ public class SalesReportController {
 			rowData = new ArrayList<String>();
 
 			rowData.add("" + srNo);
-			rowData.add("" + crnSalesList.get(i).getMonthName());
-			rowData.add("" + crnSalesList.get(i).getFrName());
+			rowData.add("" + crnSalesList.get(i).getMonthName()+"-"+crnSalesList.get(i).getFrName());
 			rowData.add("" + crnSalesList.get(i).getCrnTaxableAmt());
 			rowData.add("" + crnSalesList.get(i).getCrnTotalTax());
 			rowData.add("" + crnSalesList.get(i).getCrnGrandTotal());
@@ -7606,7 +7606,6 @@ public class SalesReportController {
 		rowData = new ArrayList<String>();
 
 		rowData.add("TOTAL");
-		rowData.add("");
 		rowData.add("");
 		rowData.add("" + taxableTotal);
 		rowData.add("" + taxTotal);

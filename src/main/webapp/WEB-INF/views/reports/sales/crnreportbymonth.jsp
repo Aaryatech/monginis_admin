@@ -168,7 +168,6 @@
 									<tr>
 										<th>Sr.No.</th>
 										<th>Month</th>
-										<th>Year</th>
 										<th>Taxable Amt</th>
 										<th>Tax Amt</th>
 										<th>Total</th>
@@ -251,8 +250,7 @@
 
 													  	tr.append($('<td></td>').html(key+1));
 
-													  	tr.append($('<td></td>').html(report.monthName));
-													  	tr.append($('<td></td>').html(report.frName));
+													  	tr.append($('<td></td>').html(report.monthName+'-'+report.frName));
 
 													  	tr.append($('<td style="text-align: right;"></td>').html(addCommas(report.crnTaxableAmt)));													  	
 													  	
@@ -273,8 +271,7 @@
 													});
 													var trr =$('<tr></tr>');
 													trr.append($('<td style="text-align:center; font-weight: 700;"></td>').html('Total'));
-													trr.append($('<td></td>').html(''));	
-													trr.append($('<td></td>').html(''));	
+													trr.append($('<td></td>').html(''));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlTaxable.toFixed(2))));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlTax.toFixed(2))));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(grandTotal.toFixed(2))));

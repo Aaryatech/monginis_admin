@@ -166,7 +166,7 @@
 								style="width: 100%" id="table_grid">
 								<thead>
 									<tr>
-										<!-- <th>Sr.No.</th> -->
+										<th>Sr.No.</th>
 										<th>CRN No.</th>
 										<th>CRN Date</th>										
 										<th>Franchise Name</th>
@@ -250,13 +250,13 @@
 														
 														var tr = $('<tr></tr>');
 
-													  /* 	tr.append($('<td></td>').html(key+1)); */
+													    tr.append($('<td></td>').html(key+1));
 													  	
 													  	tr.append($('<td></td>').html(report.crnNo));
 
-													  	tr.append($('<td></td>').html(report.crnDate));
+													  	tr.append($('<td style="text-align: center;"></td>').html(report.crnDate));
 
-													  	tr.append($('<td></td>').html(report.frName));
+													  	tr.append($('<td style="text-align: left;"></td>').html(report.frName));
 
 													  	tr.append($('<td style="text-align: right;"></td>').html(addCommas(report.crnTaxableAmt)));													  	
 													  	
@@ -277,6 +277,7 @@
 													});
 													var trr =$('<tr></tr>');
 													trr.append($('<td style="text-align:center; font-weight: 700;"></td>').html('Total'));
+													trr.append($('<td></td>').html(''));
 													trr.append($('<td></td>').html(''));
 													trr.append($('<td></td>').html(''));
 													trr.append($('<td style="text-align:right; font-weight: 700;"></td>').html(addCommas(ttlTaxable.toFixed(2))));

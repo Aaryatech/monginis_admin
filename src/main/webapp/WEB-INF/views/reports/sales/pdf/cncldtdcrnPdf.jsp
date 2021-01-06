@@ -71,9 +71,9 @@ th {
 			<c:set var="grandTotal" value="${0 }" />
 			<c:forEach items="${report}" var="report" varStatus="count">
 				<tr>
-					<td width="0" ><c:out value="${count.index+1}" /></td>
+					<td width="0" ><c:out value="${count.index+1}" /></td>					
+					<td width="100" align="left"><c:out value="${report.crnNo}" /></td>
 					<td width="100" align="center"><c:out value="${report.crnDate}" /></td>
-					<td width="100" align="right"><c:out value="${report.crnNo}" /></td>
 					<td width="100"><c:out value="${report.frName}" /></td>
 					<td width="80" align="right"><fmt:formatNumber type="number"
 								maxFractionDigits="2"  minFractionDigits="2"  value="${report.crnTaxableAmt}" /></td>
