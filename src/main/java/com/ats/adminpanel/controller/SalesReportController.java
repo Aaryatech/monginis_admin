@@ -8028,6 +8028,7 @@ public class SalesReportController {
 				exportToExcelList.add(expoExcel);
 
 			}
+			
 			expoExcel = new ExportToExcel();
 			rowData = new ArrayList<String>();
 			rowData.add("Total");
