@@ -7856,13 +7856,11 @@ public class SalesReportController {
 	public @ResponseBody List<CrNoteRegItem> getCRNoteRegisterDone(HttpServletRequest request,
 			HttpServletResponse response) throws FileNotFoundException {
 
-		String frIdString = "";
 
 		MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
 
 		RestTemplate restTemplate = new RestTemplate();
 
-		System.out.println("inside getCRNoteRegister ajax call");
 
 		String fromDate = request.getParameter("fromDate");
 		String toDate = request.getParameter("toDate");
@@ -7877,8 +7875,8 @@ public class SalesReportController {
 
 			CrNoteRegisterList crnArray = restTemplate.postForObject(Constants.url + "getCrNoteRegisterDone", map,
 					CrNoteRegisterList.class);
-			System.out.println("Data1---------->"+crnArray.getCrNoteRegItemList());
-			System.out.println("Data2---------->"+crnArray.getCrNoteRegSpList());
+			//System.out.println("Data1---------->"+crnArray.getCrNoteRegItemList());
+			//System.out.println("Data2---------->"+crnArray.getCrNoteRegSpList());
 			List<CrNoteRegSp> crnRegSpList = new ArrayList<>();
 
 			crNoteRegItemList = crnArray.getCrNoteRegItemList();
@@ -7914,7 +7912,7 @@ public class SalesReportController {
 
 				if (flag == 0) {
 
-					System.err.println("New hsn code item found ");
+					//System.err.println("New hsn code item found ");
 
 					CrNoteRegItem regItem = new CrNoteRegItem();
 
@@ -7945,7 +7943,7 @@ public class SalesReportController {
 				}
 			}
 
-			System.err.println("crNoteRegItemList combined  " + crNoteRegItemList.toString());
+			//System.err.println("crNoteRegItemList combined  " + crNoteRegItemList.toString());
 
 			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
 
