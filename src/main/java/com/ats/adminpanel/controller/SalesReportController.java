@@ -500,7 +500,19 @@ public class SalesReportController {
 			expoExcel = new ExportToExcel();
 			rowData = new ArrayList<String>();
 			
-			total = saleList.get(i).getTaxableAmt()+saleList.get(i).getCgstSum()+saleList.get(i).getSgstSum()+saleList.get(i).getTcsAmt();
+			
+			if(saleList.get(i).getIsSameState()==1) {
+				total = saleList.get(i).getTaxableAmt()+saleList.get(i).getCgstSum()+saleList.get(i).getSgstSum()+saleList.get(i).getTcsAmt();	
+			
+				ttlCgst = ttlCgst + saleList.get(i).getCgstSum();
+				ttlSgst = ttlSgst + saleList.get(i).getCgstSum();
+
+			}else {
+				total = saleList.get(i).getTaxableAmt()+saleList.get(i).getIgstSum()+saleList.get(i).getTcsAmt();
+			
+				ttlIgst = ttlIgst + saleList.get(i).getIgstSum();
+			}
+			
 
 
 			rowData.add("" + saleList.get(i).getBillNo());
@@ -521,9 +533,9 @@ public class SalesReportController {
 			rowData.add("" + total);
 			
 			ttlTaxable = ttlTaxable + saleList.get(i).getTaxableAmt();
-			ttlCgst = ttlCgst + saleList.get(i).getCgstSum();
-			ttlSgst = ttlSgst + saleList.get(i).getCgstSum();
-			ttlIgst = ttlIgst + saleList.get(i).getIgstSum();
+			//ttlCgst = ttlCgst + saleList.get(i).getCgstSum();
+			//ttlSgst = ttlSgst + saleList.get(i).getCgstSum();
+			//ttlIgst = ttlIgst + saleList.get(i).getIgstSum();
 			ttlTcs = ttlTcs + saleList.get(i).getTcsAmt();
 			ttlTax = ttlTax + saleList.get(i).getTotalTax();
 			grandTotal = grandTotal + total;
