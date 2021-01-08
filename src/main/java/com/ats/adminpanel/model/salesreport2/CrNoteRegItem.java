@@ -38,7 +38,9 @@ private int crndId;
 	
 	private float ttlTaxable;
 	private float ttlTaxAmt;
-	private float ttlCrnAmt;
+	private float ttlCrnAmt;	
+	private int isSameState;
+	private int isGrn;
 
 	public String getHsnCode() {
 		return hsnCode;
@@ -200,6 +202,22 @@ private int crndId;
 		this.ttlCrnAmt = ttlCrnAmt;
 	}
 
+	public int getIsSameState() {
+		return isSameState;
+	}
+
+	public void setIsSameState(int isSameState) {
+		this.isSameState = isSameState;
+	}
+
+	public int getIsGrn() {
+		return isGrn;
+	}
+
+	public void setIsGrn(int isGrn) {
+		this.isGrn = isGrn;
+	}
+
 	@Override
 	public String toString() {
 		return "CrNoteRegItem [crndId=" + crndId + ", hsnCode=" + hsnCode + ", crnId=" + crnId + ", crnDate=" + crnDate
@@ -207,8 +225,6 @@ private int crndId;
 				+ ", frGstNo=" + frGstNo + ", crnQty=" + crnQty + ", crnTaxable=" + crnTaxable + ", cgstPer=" + cgstPer
 				+ ", sgstPer=" + sgstPer + ", igstPer=" + igstPer + ", cgstAmt=" + cgstAmt + ", sgstAmt=" + sgstAmt
 				+ ", igstAmt=" + igstAmt + ", crnAmt=" + crnAmt + ", ttlTaxable=" + ttlTaxable + ", ttlTaxAmt="
-				+ ttlTaxAmt + ", ttlCrnAmt=" + ttlCrnAmt + "]";
+				+ ttlTaxAmt + ", ttlCrnAmt=" + ttlCrnAmt + ", isSameState=" + isSameState + ", isGrn=" + isGrn + "]";
 	}
-
-	
 }

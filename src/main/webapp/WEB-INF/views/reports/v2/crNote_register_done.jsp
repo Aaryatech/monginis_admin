@@ -82,11 +82,10 @@
 							Note Type</label>
 						<div class="col-sm-6 col-lg-2  controls">
 
-							<select data-placeholder="Select Type"
+							<select data-placeholder="Select Credit Note Type"
 								class="form-control chosen" id="Credittype" name="Credittype"
 								required>
-								<option value="">Select Credit Note Type</option>
-
+								<option value="-1">All</option>							
 								<option value="1">GRN</option>
 								<option value="0">GVN</option>
 							</select>
@@ -184,6 +183,7 @@
 							<thead style="background-color: #f3b5db;">
 								<tr>
 									<th>Sr No</th>
+									<th>CRN Type</th>
 									<th>CRN No</th>
 									<th>CRN Date</th>
 									<th>Invoice No</th>
@@ -291,6 +291,7 @@
 					//var tr = "<tr>";
 					var tr = $('<tr></tr>');
 					tr.append($('<td></td>').html("" + index));
+					tr.append($('<td></td>').html(report.isGrn==1 ? 'GRN' : 'GVN'));
 					tr.append($('<td></td>').html(report.frCode));
 					tr.append($('<td></td>').html(report.crnDate));
 					tr.append($('<td></td>').html(report.invoiceNo));
@@ -337,6 +338,7 @@
 
 				})
 				var tr = $('<tr></tr>');
+				tr.append($('<td></td>').html(""));
 				tr.append($('<td></td>').html(""));
 				tr.append($('<td></td>').html(""));
 				tr.append($('<td></td>').html(""));
