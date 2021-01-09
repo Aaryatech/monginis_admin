@@ -458,6 +458,7 @@ form.submit();
 								if (data == "") {
 									alert("No Bill Found");
 								}
+								document.getElementById("expExcel").disabled = false;
 
 								$
 										.each(
@@ -649,10 +650,7 @@ form.submit();
 								ajax : 'true'
 							},
 							function(data) {
-								
-							 alert("Excel Ready");
-								 exportToExcel();
-							 
+								 exportToExcel();							 
 							});
 				 }
 			 else
@@ -664,8 +662,8 @@ form.submit();
 		
 		function exportToExcel()
 		{
-			alert("Export Excel");
 			window.open("${pageContext.request.contextPath}/exportToExcel"); 
+			document.getElementById("expExcel").disabled = true;
 		}
 	</script>
 

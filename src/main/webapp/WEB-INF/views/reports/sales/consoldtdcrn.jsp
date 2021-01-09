@@ -168,6 +168,7 @@
 									<tr>
 										<th>Sr.No.</th>
 										<th>CRN No.</th>
+										<th>CRN Type</th>
 										<th>CRN Date</th>										
 										<th>Franchise Name</th>
 										<th>Taxable Amt</th>
@@ -253,6 +254,8 @@
 													    tr.append($('<td></td>').html(key+1));
 													  	
 													  	tr.append($('<td></td>').html(report.crnNo));
+													  	
+													  	tr.append($('<td></td>').html(report.isGrn==1 ? 'GRN' : 'GVN'));
 
 													  	tr.append($('<td style="text-align: center;"></td>').html(report.crnDate));
 
@@ -277,6 +280,7 @@
 													});
 													var trr =$('<tr></tr>');
 													trr.append($('<td style="text-align:center; font-weight: 700;"></td>').html('Total'));
+													trr.append($('<td></td>').html(''));
 													trr.append($('<td></td>').html(''));
 													trr.append($('<td></td>').html(''));
 													trr.append($('<td></td>').html(''));

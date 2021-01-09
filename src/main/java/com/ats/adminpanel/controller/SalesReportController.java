@@ -7230,6 +7230,7 @@ public class SalesReportController {
 
 		rowData.add("Sr. No.");
 		rowData.add("CRN No.");
+		rowData.add("CRN Type");
 		rowData.add("CRN Date");
 		rowData.add("Franchise");
 		rowData.add("Taxable Amt");
@@ -7246,6 +7247,7 @@ public class SalesReportController {
 
 			rowData.add("" + srNo);
 			rowData.add("" + crnSalesList.get(i).getCrnNo());
+			rowData.add(crnSalesList.get(i).getIsGrn()==1 ? "GRN" : "GVN");
 			rowData.add("" + crnSalesList.get(i).getCrnDate());
 			rowData.add("" + crnSalesList.get(i).getFrName());
 			rowData.add("" + crnSalesList.get(i).getCrnTaxableAmt());
@@ -7267,6 +7269,7 @@ public class SalesReportController {
 		rowData = new ArrayList<String>();
 
 		rowData.add("TOTAL");
+		rowData.add("");
 		rowData.add("");
 		rowData.add("");
 		rowData.add("");

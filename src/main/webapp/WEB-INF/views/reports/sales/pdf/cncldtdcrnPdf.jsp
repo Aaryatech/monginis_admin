@@ -58,6 +58,7 @@ th {
 			<tr class="bgpink">
 				<th>Sr.No.</th>
 				<th>CRN No.</th>
+				<th>CRN Type</th>
 				<th>CRN Date</th>
 				<th>Franchise Name</th>
 				<th>Taxable Amt</th>
@@ -73,6 +74,7 @@ th {
 				<tr>
 					<td width="0" ><c:out value="${count.index+1}" /></td>					
 					<td width="100" align="left"><c:out value="${report.crnNo}" /></td>
+					<td width="100" align="left"><c:out value="${report.isGrn == 1 ? 'GRN' : 'GVN'}" /></td>
 					<td width="100" align="center"><c:out value="${report.crnDate}" /></td>
 					<td width="100"><c:out value="${report.frName}" /></td>
 					<td width="80" align="right"><fmt:formatNumber type="number"
@@ -92,6 +94,7 @@ th {
 				<tr>
 				
 					<td width="100" align="left"><b>Total</b></td>
+					<td></td>
 					<td></td>
 					<td></td>
 					<td></td>				

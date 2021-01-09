@@ -1011,7 +1011,7 @@ public class BillController {
 				rowData.add("Cess Rs");
 				rowData.add("Item Discount Per");
 				rowData.add("Total Discount");
-			//	rowData.add("Rount Off"); 
+				rowData.add("Rount Off"); 
 				rowData.add("Total Amt"); 
 				rowData.add("Total Taxable Amt");
 				rowData.add("Cgst sum");
@@ -1061,7 +1061,7 @@ public class BillController {
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getCessRs());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getItemDiscPer());
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getTotalDisc()); 
-				//	rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getRoundOff()); 
+					rowData.add(""+0); 
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getTotalAmt());
 					
 					rowData.add(""+salesVoucherList.getSalesVoucherList().get(i).getTotalTaxableAmt());
