@@ -62,8 +62,8 @@
 
 
 					<div class="form-group">
-						<label class="col-sm-1 col-lg-1	 control-label">From Date:</label>
-						<div class="col-sm-2 col-lg-1 controls date_select">
+						<label class="col-sm-1 col-lg-1	 control-label">From Date</label>
+						<div class="col-sm-2 col-lg-2 controls date_select">
 							<input class="form-control date-picker" id="fromDate"
 								name="fromDate" size="30" type="text" value="${todaysDate}" />
 						</div>
@@ -73,14 +73,14 @@
 					<div class="form-group  "> -->
 
 						<label class="col-sm-1 col-lg-1	 control-label">To Date</label>
-						<div class="col-sm-2 col-lg-1 controls date_select">
+						<div class="col-sm-2 col-lg-2 controls date_select">
 							<input class="form-control date-picker" id="toDate" name="toDate"
 								size="30" type="text" value="${todaysDate}" />
 
 						</div>
-						<label class="col-sm-1 col-lg-1	 control-label">Credit
-							Note Type</label>
-						<div class="col-sm-6 col-lg-2  controls">
+						<label class="col-sm-1 col-lg-1	 control-label">CRN
+						Type</label>
+						<div class="col-sm-6 col-lg-1  controls">
 
 							<select data-placeholder="Select Credit Note Type"
 								class="form-control chosen" id="Credittype" name="Credittype"
