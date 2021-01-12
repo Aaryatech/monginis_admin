@@ -7750,6 +7750,7 @@ public class SalesReportController {
 				rowData.add("SGST Amt");
 				rowData.add("IGST Amt");
 				rowData.add("Cess Amount");
+				rowData.add("TSC Amount");
 				rowData.add("Invoice Total");
 
 				expoExcel.setRowData(rowData);
@@ -7774,7 +7775,7 @@ public class SalesReportController {
 					
 					for (int j = 0; j < taxReportList.size(); j++) {
 						if (taxReportList.get(j).getBillNo() == taxReportList.get(i).getBillNo()) {
-							invoiceTotal = invoiceTotal+finalTotal;
+							invoiceTotal = taxReportList.get(i).getTcsAmt()+finalTotal;
 						}
 					}
 
@@ -7809,7 +7810,8 @@ public class SalesReportController {
 					rowData.add("" + taxReportList.get(i).getSgstAmt());
 					rowData.add("" + taxReportList.get(i).getIgstAmt());					
 					rowData.add("0");
-					rowData.add(" " + invoiceTotal);
+					rowData.add("" + taxReportList.get(i).getTcsAmt());
+					rowData.add(" " + Math.round(invoiceTotal));
 					expoExcel.setRowData(rowData);
 					exportToExcelList.add(expoExcel);
 
@@ -7834,6 +7836,7 @@ public class SalesReportController {
 				rowData.add("" + roundUp(cgstSum));
 				rowData.add("" + roundUp(sgstSum));
 				rowData.add("" + roundUp(igstSum));
+				rowData.add("");
 				rowData.add("");
 				rowData.add("");
 
