@@ -26,7 +26,7 @@
 	src="${pageContext.request.contextPath}/resources/js/jquery-1.10.2.min.js"></script>
 
 
- 	<c:forEach items="${frMob}" var="spCakeOrder"
+ 	<c:forEach items="${spCakeOrder}" var="spCakeOrder"
 														varStatus="count"> 
 														
 <table width="100%" style="font-family:arial; font-size:12px; border:1px solid #000000; margin-bottom:40px;">
@@ -35,7 +35,7 @@
   </tr>
   <tr >
   
-    <td width="15%"  style="border-bottom:1px solid #000000; padding:8px 20px; ">${from}</td>
+    <td width="15%"  style="border-bottom:1px solid #000000; padding:8px 20px; ">${spCakeOrder.frMob}</td>
     <td width="45%"  style="font-family:arial; font-size:16px; border-left: 1px solid  #000000;border-bottom:1px solid #000000; padding:8px 20px;font-weight:bold;" align="center">${spCakeOrder.frName}</td>
     <td width="40%"  style="border-bottom:1px solid #000000; padding:8px; border-left: 1px solid  #000000;">${spCakeOrder.orderDate}</td>
   </tr>
