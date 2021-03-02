@@ -34,9 +34,12 @@ import com.ats.adminpanel.model.NonRegFrReports;
 import com.ats.adminpanel.model.Route;
 import com.ats.adminpanel.model.franchisee.AllMenuResponse;
 import com.ats.adminpanel.model.franchisee.Menu;
+import com.ats.adminpanel.model.salesreport.SpCakeDispatchReport;
 @Controller
 @Scope("session")
 public class NonRegFrReportController {
+	AllFrIdNameList	allFrIdNameList = new AllFrIdNameList();
+	
 	public static float roundUp(float d) {
 		return BigDecimal.valueOf(d).setScale(2, BigDecimal.ROUND_HALF_UP).floatValue();
 	}
@@ -181,83 +184,135 @@ public class NonRegFrReportController {
 
 	}
 	
-	
 
-//	@RequestMapping(value = "/getNonRegFrReports")
-//	public ModelAndView getNonRegFrReports(HttpServletRequest request, HttpServletResponse response) {
-//		ModelAndView model = new ModelAndView("billing/nonrgfr");
-//		
-//		RestTemplate restTemplate = new RestTemplate();
-//	
-//		
-//		try {
-//
-//			AllMenuResponse allMenuResponse = restTemplate.getForObject(Constants.url + "getNonRegFrReports",
-//					AllMenuResponse.class);
-//
-//		} catch (Exception e) {
-//			System.out.println("Exception in getAllFrIdName" + e.getMessage());
-//			e.printStackTrace();
-//
-//		}
-//		
-//		model.addObject("allMenuResponse", allMenuResponse);
-//		List<NonRegFrReports> FrReport= new ArrayList<>();
-//		return model;
-//	
-//	}
+
+	@RequestMapping(value = "/getSpCakeDispatchReport", method = RequestMethod.GET)
+	public ModelAndView showSaleReportByDate(HttpServletRequest request, HttpServletResponse response) {
+
+		ModelAndView model = new ModelAndView("reports/sales/spCakeDispatchReport");
+
+		try {
+			ZoneId z = ZoneId.of("Asia/Calcutta");
+
+			LocalDate date = LocalDate.now(z);
+			DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
+			todaysDate = date.format(formatters);
+
+			RestTemplate restTemplate = new RestTemplate();
+
+			// get Routes
+
+			AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
+					AllRoutesListResponse.class);
+
+			List<Route> routeList = new ArrayList<Route>();
+
+			routeList = allRouteListResponse.getRoute();	
+			
+			model.addObject("todaysDate", todaysDate);
+
+			model.addObject("routeList", routeList);
+
+		} catch (Exception e) {
+
+			System.out.println("Exc in getSpCakeDispatchReport  " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+
+	}
+	
+	@RequestMapping(value = "/getSpecialCakeDispatchDtl", method = RequestMethod.GET)
+	public @ResponseBody List<SpCakeDispatchReport> getSpecialCakeDispatchDtl(HttpServletRequest request, HttpServletResponse response) {
+
+		List<SpCakeDispatchReport> list = new ArrayList<SpCakeDispatchReport>();
+		
+		try {
+			String fromDate = request.getParameter("fromDate");
+			int routId = Integer.parseInt(request.getParameter("routeId"));
+			
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			
+			map.add("spCakeDelDate", DateConvertor.convertToYMD(fromDate));
+			map.add("routId", routId);
+			
+			SpCakeDispatchReport[] nonGenFr = restTemplate.postForObject(Constants.url + "getSpecialCakeDispatchReports", map,
+					SpCakeDispatchReport[].class);
+			list = new ArrayList<SpCakeDispatchReport>(Arrays.asList(nonGenFr));
+			
+			
+			// exportToExcel
+			List<ExportToExcel> exportToExcelList = new ArrayList<ExportToExcel>();
+			
+			ExportToExcel expoExcel = new ExportToExcel();
+			List<String> rowData = new ArrayList<String>();
+			rowData.add("Sr No.");
+			rowData.add("Party Name");
+			rowData.add("Sp Cake Sr.No.");
+			rowData.add("Delivery Place");
+
+			expoExcel.setRowData(rowData);
+			exportToExcelList.add(expoExcel);
+			int index = 0;
+			for (int i = 0; i < list.size(); i++) {
+				expoExcel = new ExportToExcel();
+				index = index + 1;
+				rowData = new ArrayList<String>();
+
+				rowData.add("" + index);
+				rowData.add("" + list.get(i).getFrName()+"-"+list.get(i).getFrCode());
+				rowData.add("" + list.get(i).getSrNo());
+				rowData.add("" + list.get(i).getSpDeliveryPlace());				
+				
+				expoExcel.setRowData(rowData);
+				exportToExcelList.add(expoExcel);
+
+			}			
+
+			HttpSession session = request.getSession();
+			session.setAttribute("exportExcelList", exportToExcelList);
+			session.setAttribute("excelName", "Special Cake Dispatch");
+		} catch (Exception e) {
+
+			System.out.println("Exc in getSpecialCakeDispatchDtl  " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return list;
+
+	}
+	
+	@RequestMapping(value = "pdf/getSpCakeDispatchPdf/{fromDate}/{routeId}", method = RequestMethod.GET)
+	public ModelAndView getSpCakeDispatchPdf(HttpServletRequest request, HttpServletResponse response, @PathVariable String fromDate,  @PathVariable int routeId) {
+		
+		ModelAndView model = new ModelAndView("reports/sales/pdf/spCakeDispPdf");
+		List<SpCakeDispatchReport> list = new ArrayList<SpCakeDispatchReport>();
+		
+		try {			
+			
+			RestTemplate restTemplate = new RestTemplate();
+			MultiValueMap<String, Object> map = new LinkedMultiValueMap<String, Object>();
+			
+			map.add("spCakeDelDate", DateConvertor.convertToYMD(fromDate));
+			map.add("routId", routeId);
+			
+			SpCakeDispatchReport[] nonGenFr = restTemplate.postForObject(Constants.url + "getSpecialCakeDispatchReports", map,
+					SpCakeDispatchReport[].class);
+			list = new ArrayList<SpCakeDispatchReport>(Arrays.asList(nonGenFr));
+			model.addObject("list", list);
+			
+			model.addObject("fromDate", fromDate);
+		} catch (Exception e) {
+
+			System.out.println("Exc in getSpCakeDispatchPdf  " + e.getMessage());
+			e.printStackTrace();
+		}
+
+		return model;
+
+	}
+
+	
 }
-// getSpecialCakeDispatchReports
-//
-//@RequestMapping(value = "/showGenerateBill")
-//public ModelAndView showGenerateBill(HttpServletRequest request, HttpServletResponse response) {
-//
-//	
-//	try {
-//				LocalDate date = LocalDate.now(z);
-//		DateTimeFormatter formatters = DateTimeFormatter.ofPattern("d-MM-uuuu");
-//		String todaysDate = date.format(formatters);
-//	AllMenuResponse allMenuResponse = restTemplate.getForObject(Constants.url + "getAllMenu",
-//				AllMenuResponse.class);
-//		menuList = allMenuResponse.getMenuConfigurationPage();
-//
-//		// get Routes
-//
-//		AllRoutesListResponse allRouteListResponse = restTemplate.getForObject(Constants.url + "showRouteList",
-//				AllRoutesListResponse.class);
-//
-//		List<Route> routeList = new ArrayList<Route>();
-//
-//		routeList = allRouteListResponse.getRoute();
-//
-//		// end get Routes
-//
-//		allFrIdNameList = new AllFrIdNameList();
-//		try {
-//
-//			allFrIdNameList = restTemplate.getForObject(Constants.url + "getAllFrIdName", AllFrIdNameList.class);
-//
-//		} catch (Exception e) {
-//			System.out.println("Exception in getAllFrIdName" + e.getMessage());
-//			e.printStackTrace();
-//
-//		}
-//		List<AllFrIdName> selectedFrListAll = new ArrayList();
-//		List<Menu> selectedMenuList = new ArrayList<Menu>();
-//
-//		System.out.println(" Fr " + allFrIdNameList.getFrIdNamesList());
-//
-//		model.addObject("todaysDate", todaysDate);
-//		model.addObject("unSelectedMenuList", menuList);
-//		model.addObject("unSelectedFrList", allFrIdNameList.getFrIdNamesList());
-//
-//		model.addObject("routeList", routeList);
-//
-//	} catch (Exception e) {
-//
-//		System.out.println("Exc in show generate bill " + e.getMessage());
-//		e.printStackTrace();
-//	}
-//
-//	return model;
-//}
