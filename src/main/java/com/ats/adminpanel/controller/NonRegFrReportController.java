@@ -153,7 +153,7 @@ public class NonRegFrReportController {
 	}
 	
 	
-	@RequestMapping(value = "pdf//getNonRegFrPdf/{fromDate}/{toDate}", method = RequestMethod.GET)
+	@RequestMapping(value = "pdf/getNonRegFrPdf/{fromDate}/{toDate}", method = RequestMethod.GET)
 	public ModelAndView getNonRegFrPdf(HttpServletRequest request, HttpServletResponse response, @PathVariable String fromDate, @PathVariable String toDate) {
 		
 		ModelAndView model = new ModelAndView("reports/sales/pdf/nonRegFrPdf");
