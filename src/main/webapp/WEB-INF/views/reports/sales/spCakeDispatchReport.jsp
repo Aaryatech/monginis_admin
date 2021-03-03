@@ -130,6 +130,7 @@
 									<tr>
 										<th>Sr.No.</th>
 										<th>Party Name</th>
+										<th>Total No Of Sp Cake</th>
 										<th>Sp Cake Sr.No.</th>
 										<th>Delivery Place</th>
 
@@ -211,6 +212,9 @@
 													  	tr.append($('<td></td>').html(key+1));
 
 													  	tr.append($('<td></td>').html(report.frName+"-"+report.frCode));
+													  	
+
+													  	tr.append($('<td></td>').html(report.spId));
 
 													  	tr.append($('<td></td>').html(report.srNo));
 
@@ -307,7 +311,7 @@ function genPdf()
 	var from_date = $("#fromDate").val();
 	var routeId=$("#selectRoute").val();
 
-   window.open('${pageContext.request.contextPath}/pdfForReport?url=pdf/getSpCakeDispatchPdf/'+from_date+'/'+routeId+'/');
+   window.open('${pageContext.request.contextPath}/pdf/getSpCakeDispatchPdf/'+from_date+'/'+routeId+'/');
 	
 	}
 

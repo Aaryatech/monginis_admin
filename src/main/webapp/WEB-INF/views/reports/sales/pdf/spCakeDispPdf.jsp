@@ -39,10 +39,10 @@ th {
 
 </head>
 <body onload="myFunction()">
-<h3 align="center">Galdhar Foods Pvt Ltd</h3>
-<p align="center">A-89, Shendra M.I.D.C., Aurangabad</p>
+<!-- <h3 align="center">Galdhar Foods Pvt Ltd</h3> -->
+<!-- <p align="center">A-89, Shendra M.I.D.C., Aurangabad</p> -->
 <div align="center"> <h5> Special Cake Dispatch Report</h5></div>
-<div align="center"> <h5> Date : ${sDate}</h5></div>
+<div align="center"> <h5> Date : ${fromDate}</h5></div>
 	<table  align="center" border="1" cellspacing="0" cellpadding="1" 
 		id="table_grid" class="table table-bordered">
 	
@@ -51,6 +51,7 @@ th {
 									
 									<th style="text-align:center;height: 25px">Sr.No.</th>
 										<th style="text-align:center;">Party Name</th>
+										<th style="text-align:center;">Total No Of Sp Cake</th>
 										<th style="text-align:center;">Sp Cake Sr.No.</th>
 										<th style="text-align:center;">Delivery Place</th>   
 								  </tr>
@@ -64,6 +65,7 @@ th {
 													<td ><c:out value="${count.index+1}" /></td>
 													 
 													<td><c:out value="${list.frName}-${list.frCode}" /></td> 
+													<td style="text-align:right"><c:out value="${list.spId}" /></td>
 													<td style="text-align:right"><c:out value="${list.srNo}" /></td> 
 													<td style="text-align:right"><c:out value="${list.spDeliveryPlace}" /></td> 
 													

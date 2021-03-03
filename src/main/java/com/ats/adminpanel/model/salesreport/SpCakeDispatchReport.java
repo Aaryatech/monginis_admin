@@ -5,7 +5,7 @@ public class SpCakeDispatchReport {
 private String frCode;
 private String frName;
 private int spId;
-private int srNo;
+private String srNo;
 private String spDeliveryPlace;
 
 public String getFrCode() {
@@ -26,10 +26,10 @@ public int getSpId() {
 public void setSpId(int spId) {
 	this.spId = spId;
 }
-public int getSrNo() {
+public String getSrNo() {
 	return srNo;
 }
-public void setSrNo(int srNo) {
+public void setSrNo(String srNo) {
 	this.srNo = srNo;
 }
 public String getSpDeliveryPlace() {

@@ -249,8 +249,9 @@ public class NonRegFrReportController {
 			ExportToExcel expoExcel = new ExportToExcel();
 			List<String> rowData = new ArrayList<String>();
 			rowData.add("Sr No.");
-			rowData.add("Party Name");
+			rowData.add("Party Name");		
 			rowData.add("Sp Cake Sr.No.");
+			rowData.add("Total No Of Sp Cake");
 			rowData.add("Delivery Place");
 
 			expoExcel.setRowData(rowData);
@@ -263,6 +264,7 @@ public class NonRegFrReportController {
 
 				rowData.add("" + index);
 				rowData.add("" + list.get(i).getFrName()+"-"+list.get(i).getFrCode());
+				rowData.add("" + list.get(i).getSpId());
 				rowData.add("" + list.get(i).getSrNo());
 				rowData.add("" + list.get(i).getSpDeliveryPlace());				
 				
