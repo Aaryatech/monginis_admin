@@ -131,10 +131,10 @@
 											<thead>
 												<tr class="bgpink">
 												<th width="10" align="left">Sr No</th>
-														<th width="130" align="left">Item Name</th>
-														<th width="80">T1</th>
-														<th width="80">T2</th>
-														<th width="80">T3</th>
+														<th width="130">Item Name</th>
+														<th width="80" style="text-align: right;">T1</th>
+														<th width="80" style="text-align: right;">T2</th>
+														<th width="80" style="text-align: right;">T3</th>
 												</tr>
 												</thead>
 												</table>
@@ -142,7 +142,7 @@
 									</div>
 									<div class="table-wrap">
 									
-									<!-- 	<table id="table1" class="table table-advance">
+										<table id="table1" class="table table-advance">
 											 <thead>
 												<tr class="bgpink">
 											<th width="30" align="left">Sr No</th>
@@ -151,7 +151,7 @@
 														<th width="100">T2</th>
 														<th width="100">T3</th>
 												</tr>
-												</thead>  -->
+												</thead>  
 									<div class="table-responsive" style="border: 0">
 											<!-- <table width="100%" class="table table-advance" id="table1">
 												<thead>
