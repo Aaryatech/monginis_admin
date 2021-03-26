@@ -130,11 +130,11 @@
 									<table id="table2" class="main-table">
 											<thead>
 												<tr class="bgpink">
-												<th width="30" align="left">Sr No</th>
-														<th width="120" align="left">Item Name</th>
-														<th width="100">T1</th>
-														<th width="100">T2</th>
-														<th width="100">T3</th>
+												<th width="10" align="left">Sr No</th>
+														<th width="130" align="left">Item Name</th>
+														<th width="80">T1</th>
+														<th width="80">T2</th>
+														<th width="80">T3</th>
 												</tr>
 												</thead>
 												</table>
@@ -142,8 +142,8 @@
 									</div>
 									<div class="table-wrap">
 									
-										<table id="table1" class="table table-advance">
-											<thead>
+									<!-- 	<table id="table1" class="table table-advance">
+											 <thead>
 												<tr class="bgpink">
 											<th width="30" align="left">Sr No</th>
 														<th width="120" align="left">Item Name</th>
@@ -151,9 +151,9 @@
 														<th width="100">T2</th>
 														<th width="100">T3</th>
 												</tr>
-												</thead>
-									<!-- 	<div class="table-responsive" style="border: 0">
-											<table width="100%" class="table table-advance" id="table1">
+												</thead>  -->
+									<div class="table-responsive" style="border: 0">
+											<!-- <table width="100%" class="table table-advance" id="table1">
 												<thead>
 													<tr>
 														<th width="30" align="left">Sr No</th>
@@ -163,8 +163,8 @@
 														<th width="50">T3</th>
 
 													</tr>
-												</thead> -->
-												<tbody>
+												</thead>
+												<tbody> -->
 											
 											<c:choose>
 												<c:when test="${catId==0}">
@@ -552,8 +552,8 @@ if(option==1){
 		}
 		function getPdf()
 		{
-		    
-			    	window.open('${pageContext.request.contextPath}/finishedGoodStockPdfFnction?url=pdf/finishedGoodStockPdf');
+		    var cat_id = $("#catId").val();
+			    	window.open('${pageContext.request.contextPath}/finishedGoodStockPdfFnction?url=pdf/finishedGoodStockPdf/'+cat_id);
 			 
 		   
 		    }
